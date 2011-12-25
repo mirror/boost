@@ -40,6 +40,8 @@
 #include <boost/config.hpp>          // for BOOST_STATIC_CONSTANT, etc.
 #include <boost/cstdint.hpp>         // for UINTMAX_C
 #include <boost/integer.hpp>         // for boost::uint_t
+#include <boost/mpl/bool.hpp>        // for boost::mpl::true_, ...false_
+#include <boost/mpl/if.hpp>          // for boost::mpl::if_c
 #include <boost/mpl/integral_c.hpp>  // for boost::mpl::integral_c
 
 #include <climits>  // for CHAR_BIT, etc.
@@ -155,6 +157,10 @@ namespace detail
     template < std::size_t Bits >
         class crc_helper< Bits, false >;
     #endif
+
+    //! Mix-in class to add a possibly-reflecting member function
+    template < int BitLength, bool DoIt, int Id = 0 >
+        class possible_reflector;
 
 }  // namespace detail
 //! \endcond
@@ -333,22 +339,15 @@ public:
     value_type  operator ()() const;
 
 private:
-    // The implementation of output reflection depends on both reflect states.
-    BOOST_STATIC_CONSTANT( bool, reflect_output = (ReflectRem != ReflectIn) );
-
-    #ifndef __BORLANDC__
-    #define BOOST_CRC_REF_OUT_VAL  reflect_output
-    #else
-    typedef crc_optimal  self_type;
-    #define BOOST_CRC_REF_OUT_VAL  (self_type::reflect_output)
-    #endif
-
-    // More implementation types
+    // Implementation types
+    // (Processing for reflected input gives reflected remainders, so you only
+    // have to apply output-reflection if Reflect-Remainder doesn't match
+    // Reflect-Input.)
+    typedef detail::possible_reflector<Bits, ReflectIn>      reflect_i_type;
+    typedef detail::possible_reflector<Bits, ReflectRem != ReflectIn>
+      reflect_o_type;
     typedef detail::crc_table_t<Bits, TruncPoly, ReflectIn>  crc_table_type;
     typedef detail::crc_helper<Bits, ReflectIn>              helper_type;
-    typedef detail::crc_helper<Bits, BOOST_CRC_REF_OUT_VAL>  reflect_out_type;
-
-    #undef BOOST_CRC_REF_OUT_VAL
 
     // Member data
     value_type  rem_;
@@ -734,10 +733,6 @@ namespace detail
         typedef typename uint_t<Bits>::fast  value_type;
 
     #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        // Possibly reflect a remainder
-        static  value_type  reflect( value_type x )
-            { return reflect_unsigned(x, Bits); }
-
         // Compare a byte to the remainder's highest byte
         static  unsigned char  index( value_type rem, unsigned char x )
             { return x ^ rem; }
@@ -746,10 +741,6 @@ namespace detail
         static  value_type  shift( value_type rem )
             { return rem >> CHAR_BIT; }
     #else
-        // Possibly reflect a remainder
-        static  value_type  reflect( value_type x )
-            { return DoReflect ? reflect_unsigned(x, Bits) : x; }
-
         // Compare a byte to the remainder's highest byte
         static  unsigned char  index( value_type rem, unsigned char x )
             { return x ^ ( DoReflect ? rem :
@@ -771,10 +762,6 @@ namespace detail
         // Type
         typedef typename uint_t<Bits>::fast  value_type;
 
-        // Possibly reflect a remainder
-        static  value_type  reflect( value_type x )
-            { return x; }
-
         // Compare a byte to the remainder's highest byte
         static  unsigned char  index( value_type rem, unsigned char x )
             { return x ^ remainder<Bits,(Bits>CHAR_BIT)>::align_msb( rem ); }
@@ -785,6 +772,127 @@ namespace detail
 
     };  // boost::detail::crc_helper
     #endif
+
+    /** \brief  A mix-in class that returns its argument
+
+        This class template makes a function object that returns its argument
+        as-is.  It's one case for #possible_reflector.
+
+        \pre  0 \< \a BitLength \<= \c std\::numeric_limits\<uintmax_t\>
+          \::digits
+
+        \tparam BitLength  How many significant bits arguments have.
+     */
+    template < int BitLength >
+    class non_reflector
+    {
+    public:
+        /** \brief  The type to check for specialization
+
+            This is a Boost.MPL integral constant indicating that this class
+            does not reflect its input values.
+         */
+        typedef boost::mpl::false_                 is_reflecting_type;
+        /** \brief  The type to check for register bit length
+
+            This is a Boost.MPL integral constant indicating how many
+            significant bits won't actually be reflected.
+         */
+        typedef boost::mpl::integral_c< int, BitLength >      width_c;
+        /** \brief  The type of (not-)reflected values
+
+            This type is the input and output type for the (possible-)
+            reflection function, which does nothing here.
+         */
+        typedef typename boost::uint_t< BitLength >::fast  value_type;
+
+        /** \brief  Does nothing
+
+            Returns the given value, not reflecting any part of it.
+
+            \param x  The value to not be reflected.
+
+            \return  \a x
+         */
+        inline  static  value_type  reflect_q( value_type x )
+        { return x; }
+    };
+
+    /** \brief  A mix-in class that reflects (the lower part of) its argument
+
+        This class template makes a function object that returns its argument
+        after reflecting its lower-order bits.  It's one case for
+        #possible_reflector.
+
+        \pre  0 \< \a BitLength \<= \c std\::numeric_limits\<uintmax_t\>
+          \::digits
+
+        \tparam BitLength  How many significant bits arguments have.
+     */
+    template < int BitLength >
+    class reflector
+    {
+    public:
+        /** \brief  The type to check for specialization
+
+            This is a Boost.MPL integral constant indicating that this class
+            does reflect its input values.
+         */
+        typedef boost::mpl::true_                  is_reflecting_type;
+        /** \brief  The type to check for register bit length
+
+            This is a Boost.MPL integral constant indicating how many
+            significant bits will be reflected.
+         */
+        typedef boost::mpl::integral_c< int, BitLength >      width_c;
+        /** \brief  The type of reflected values
+
+            This is both the input and output type for the reflection function.
+         */
+        typedef typename boost::uint_t< BitLength >::fast  value_type;
+
+        /** \brief  Reflect (part of) the given value
+
+            Reverses the order of the given number of bits within a value,
+            using #reflect_unsigned.
+
+            \param x  The value to be (partially) reflected.
+
+            \return  ( <var>x</var> &amp;
+              ~(2<sup><var>width_c</var>\::value</sup> - 1) ) | REFLECT(
+              <var>x</var> &amp; (2<sup><var>width_c</var>\::value</sup> -
+              1) )
+         */
+        inline  static  value_type  reflect_q( value_type x )
+        { return reflect_unsigned(x, width_c::value); }
+    };
+
+    /** This class template adds a member function #reflect_q that will
+        conditionally reflect its first argument, controlled by a compile-time
+        parameter.
+
+        \pre  0 \< \a BitLength \<= \c std\::numeric_limits\<uintmax_t\>
+          \::digits
+
+        \tparam BitLength  How many significant bits arguments have.
+        \tparam DoIt  \c true if #reflect_q will reflect, \c false if it should
+          return its argument unchanged.
+        \tparam Id  An extra differentiator if multiple copies of this class
+          template are mixed-in as base classes.  Defaults to 0 if omitted.
+     */
+    template < int BitLength, bool DoIt, int Id >
+    class possible_reflector
+        : public boost::mpl::if_c< DoIt, reflector<BitLength>,
+          non_reflector<BitLength> >::type
+    {
+    public:
+        /** \brief  The type to check for ID
+
+            This is a Boost.MPL integral constant indicating what ID number this
+            instantiation used.
+         */
+        typedef boost::mpl::integral_c<int, Id>  id_type;
+    };
 
 
 }  // namespace detail
@@ -1203,7 +1311,7 @@ BOOST_CRC_OPTIMAL_NAME::crc_optimal
 (
     value_type  init_rem  // = initial_remainder
 )
-    : rem_( helper_type::reflect(init_rem) )
+    : rem_( reflect_i_type::reflect_q(init_rem) )
 {
     crc_table_type::init_table();
 }
@@ -1284,7 +1392,7 @@ BOOST_CRC_OPTIMAL_NAME::get_interim_remainder
 ) const
 {
     // Interim remainder should be _un_-reflected, so we have to undo it.
-    return helper_type::reflect( rem_ ) &
+    return reflect_i_type::reflect_q( rem_ ) &
      detail::low_bits_mask_c<bit_count>::value;
 }
 
@@ -1312,7 +1420,7 @@ BOOST_CRC_OPTIMAL_NAME::reset
     value_type  new_rem  // = initial_remainder
 )
 {
-    rem_ = helper_type::reflect( new_rem );
+    rem_ = reflect_i_type::reflect_q( new_rem );
 }
 
 /** \copydetails  boost::crc_basic::process_byte
@@ -1396,7 +1504,7 @@ BOOST_CRC_OPTIMAL_NAME::checksum
 (
 ) const
 {
-    return ( reflect_out_type::reflect(rem_) ^ get_final_xor_value() )
+    return ( reflect_o_type::reflect_q(rem_) ^ get_final_xor_value() )
      & detail::low_bits_mask_c<bit_count>::value;
 }
 
