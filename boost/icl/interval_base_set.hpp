@@ -11,13 +11,12 @@ Copyright (c) 1999-2006: Cortex Software GmbH, Kantstrasse 57, Berlin
 
 #include <boost/icl/impl_config.hpp>
 
-#if defined(ICL_USE_BOOST_INTERPROCESS_IMPLEMENTATION)
-#include <boost/interprocess/containers/set.hpp>
-#elif defined(ICL_USE_BOOST_MOVE_IMPLEMENTATION)
-#include <boost/container/set.hpp>
-#include <boost/move/move.hpp> //MOV JODO URG
-#else 
-#include <set>
+#if defined(ICL_USE_BOOST_MOVE_IMPLEMENTATION)
+#   include <boost/container/set.hpp>
+#elif defined(ICL_USE_STD_IMPLEMENTATION)
+#   include <set>
+#else // Default for implementing containers
+#   include <boost/container/set.hpp>
 #endif
 
 #include <limits>
@@ -163,14 +162,39 @@ public:
     interval_base_set(){}
 
     /** Copy constructor */
-    interval_base_set(const interval_base_set& src): _set(src._set){}
+    interval_base_set(const interval_base_set& src): _set(src._set)
+    {
+        BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
+        BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));
+    }
 
-    /** Assignment operator */
-    interval_base_set& operator = (const interval_base_set& src) 
+    //==========================================================================
+    //= Move emulation
+    //==========================================================================
+
+    /** Move constructor */
+    interval_base_set(BOOST_RV_REF(interval_base_set) src): _map(boost::move(src._map))
+    {
+        BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
+        BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));
+    }
+
+    /** Move assignment operator */
+    interval_base_set& operator = (BOOST_RV_REF(interval_base_set) src) 
+    { 
+        this->_set = boost::move(src._set);
+        return *this; 
+    }
+
+    /** Copy assignment operator */
+    interval_base_set& operator = (BOOST_COPY_ASSIGN_REF(interval_base_set) src) 
     { 
         this->_set = src._set;
         return *this; 
     }
+
+    //==========================================================================
+
 
     /** swap the content of containers */
     void swap(interval_base_set& operand) { _set.swap(operand._set); }

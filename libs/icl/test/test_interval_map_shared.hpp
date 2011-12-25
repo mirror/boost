@@ -1525,24 +1525,23 @@ template
 #endif
     class T, class U
 >
-void interval_map_move_4_bicremental_types()
+void interval_map_move_4_discrete_types()
 {
     typedef IntervalMap<T,U> IntervalMapT;
     typedef typename IntervalMapT::interval_type   IntervalT;
 
-#   ifdef BOOST_ICL_IS_MOVE_AWARE
     IntervalMapT map_A(boost::move(static_cast<IntervalMapT&>(IntervalMapT(IDv(0,4,2)))));
     IntervalMapT map_B(boost::move(static_cast<IntervalMapT&>(IntervalMapT(IDv(0,2,1)).add(IDv(2,4,1)).add(IDv(0,4,1)))));
 
-    BOOST_CHECK_EQUAL( map_A, map_B );
+    BOOST_CHECK( icl::is_element_equal(map_A, map_B) );
+    BOOST_CHECK_EQUAL( map_A, join(map_B) );
 
-    map_A = boost::move(static_cast<IntervalMapT&>(IntervalMapT(IIv(1,4,2)))); //JODO not yet moving
+    map_A = boost::move(static_cast<IntervalMapT&>(IntervalMapT(IIv(1,4,2))));
     map_B = boost::move(static_cast<IntervalMapT&>(IntervalMapT(CIv(0,2,1)).insert(IDv(3,5,1)).add(CDv(0,5,1))));
 
-    BOOST_CHECK_EQUAL( map_A, map_B );
-#   endif //BOOST_ICL_IS_MOVE_AWARE
+    BOOST_CHECK( icl::is_element_equal(map_A, map_B) );
+    BOOST_CHECK_EQUAL( map_A, join(map_B) );
 }
-
 
 
 #endif // LIBS_ICL_TEST_TEST_INTERVAL_MAP_SHARED_HPP_JOFA_081005

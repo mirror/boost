@@ -87,6 +87,8 @@ public:
 
     enum { fineness = 1 };
 
+    BOOST_COPYABLE_AND_MOVABLE(interval_set)
+
 public:
     //==========================================================================
     //= Construct, copy, destruct
@@ -135,6 +137,21 @@ public:
             prior_ = this->add(prior_, *it_);
     }
 
+    //==========================================================================
+    //= Move emulation
+    //==========================================================================
+
+    /// Move constructor
+    interval_set(BOOST_RV_REF(interval_set) src)
+        : base_type(boost::move(static_cast<base_type&>(src)))
+    {}
+
+    /// Move assignment operator
+    interval_set& operator = (BOOST_RV_REF(interval_set) src)
+    { 
+        base_type::operator=(boost::move(static_cast<base_type&>(src)));
+        return *this;
+    }
 
 private:
     // Private functions that shall be accessible by the baseclass:

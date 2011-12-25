@@ -68,9 +68,7 @@ public:
 
     enum { fineness = 1 };
 
-#   ifdef BOOST_ICL_IS_MOVE_AWARE
     BOOST_COPYABLE_AND_MOVABLE(interval_map)
-#   endif
 
 public:
     //==========================================================================
@@ -82,12 +80,6 @@ public:
 
     /// Copy constructor
     interval_map(const interval_map& src): base_type(src) {}
-
-#   ifdef BOOST_ICL_IS_MOVE_AWARE
-    /// Move constructor
-    interval_map(BOOST_RV_REF(interval_map) src)
-        : base_type(boost::move(static_cast<base_type&>(src))){}
-#   endif //BOOST_ICL_IS_MOVE_AWARE
 
     /// Copy constructor for base_type
     template<class SubType>
@@ -102,11 +94,9 @@ public:
     explicit interval_map(const value_type& value_pair): base_type()
     { this->add(value_pair); }
 
+
     /// Assignment operator
-    template<class SubType>
-    interval_map& operator =
-        (const interval_base_map<SubType,DomainT,CodomainT,
-                                 Traits,Compare,Combine,Section,Interval,Alloc>& src)
+    interval_map& operator = (const split_type& src)
     { this->assign(src); return *this; }
 
     /// Assignment from a base interval_map.
@@ -120,6 +110,29 @@ public:
         iterator prior_ = this->_map.end();
         ICL_const_FORALL(typename base_map_type, it_, src) 
             prior_ = this->add(prior_, *it_); 
+    }
+
+    //==========================================================================
+    //= Move emulation
+    //==========================================================================
+
+    /// Move constructor
+    interval_map(BOOST_RV_REF(interval_map) src)
+        : base_type(boost::move(static_cast<base_type&>(src)))
+    {}
+
+    /// Move assignment operator
+    interval_map& operator = (BOOST_RV_REF(interval_map) src)
+    { 
+        base_type::operator=(boost::move(static_cast<base_type&>(src)));
+        return *this;
+    }
+
+    /// Copy assignment operator
+    interval_map& operator = (BOOST_COPY_ASSIGN_REF(interval_map) src) 
+    { 
+        base_type::operator=(src);
+        return *this; 
     }
 
 private:
