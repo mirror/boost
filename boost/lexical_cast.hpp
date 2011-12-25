@@ -18,7 +18,7 @@
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
 //        Alexander Nasonov, Antony Polukhin, Justin Viiret, Michael Hofmann,
-//        Cheng Yang and other Boosters
+//        Cheng Yang, Matthew Bradbury and other Boosters
 // when:  November 2000, March 2003, June 2005, June 2006, March 2011
 
 #include <climits>
@@ -744,6 +744,26 @@ namespace boost
                                , L'(', L')');
         }
 #endif
+#ifndef BOOST_NO_CHAR16_T
+        template <class T>
+        bool parse_inf_nan(const char16_t* begin, const char16_t* end, T& value)
+        {
+            return parse_inf_nan_impl(begin, end, value
+                               , u"NAN", u"nan"
+                               , u"INFINITY", u"infinity"
+                               , u'(', u')');
+        }
+#endif
+#ifndef BOOST_NO_CHAR32_T
+        template <class T>
+        bool parse_inf_nan(const char32_t* begin, const char32_t* end, T& value)
+        {
+            return parse_inf_nan_impl(begin, end, value
+                               , U"NAN", U"nan"
+                               , U"INFINITY", U"infinity"
+                               , U'(', U')');
+        }
+#endif
 
         template <class CharT, class T>
         bool parse_inf_nan(const CharT* begin, const CharT* end, T& value)
@@ -864,7 +884,7 @@ namespace boost
             CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
             CharT const decimal_point = np.decimal_point();
             bool found_grouping = false;
-            unsigned int last_grouping_pos = grouping_size - 1;
+            std::string::size_type last_grouping_pos = grouping_size - 1;
 #else
             CharT const decimal_point = lcast_char_constants<CharT>::c_decimal_separator;
 #endif
