@@ -1,6 +1,6 @@
 /*-----------------------------------------------------------------------------+
 Author: Joachim Faulhaber
-Copyright (c) 2009-2009: Joachim Faulhaber
+Copyright (c) 2009-2011: Joachim Faulhaber
 +------------------------------------------------------------------------------+
    Distributed under the Boost Software License, Version 1.0.
       (See accompanying file LICENCE.txt or copy at
