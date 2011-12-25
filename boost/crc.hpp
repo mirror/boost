@@ -479,6 +479,21 @@ namespace detail
         return table[ x ];
     }
 
+    /** \brief  Reflects some bits within a single byte
+
+        Like #reflect_unsigned, except it takes advantage of any (long-term)
+        speed gains #reflect_byte may bring.
+
+        \pre  0 \< \a word_length \<= \c CHAR_BIT
+
+        \param x  The value to be (partially) reflected.
+        \param word_length  The number of low-order bits to reflect.
+
+        \return  The (partially) reflected value.
+     */
+    inline  unsigned char  reflect_sub_byte( unsigned char x, int word_length )
+    { return reflect_byte(x) >> (CHAR_BIT - word_length); }
+
     /** \brief  Possibly reflects the bits of a number
 
         Reverses the order of the given number of bits within a value.  For
@@ -818,19 +833,20 @@ namespace detail
         { return x; }
     };
 
-    /** \brief  A mix-in class that reflects (the lower part of) its argument
+    /** \brief  A mix-in class that reflects (the lower part of) its argument,
+          generally for types larger than a byte
 
         This class template makes a function object that returns its argument
-        after reflecting its lower-order bits.  It's one case for
+        after reflecting its lower-order bits.  It's one sub-case for
         #possible_reflector.
 
-        \pre  0 \< \a BitLength \<= \c std\::numeric_limits\<uintmax_t\>
-          \::digits
+        \pre  \c CHAR_BIT \< \a BitLength \<= \c std\::numeric_limits\<uintmax_t
+          \>\::digits
 
         \tparam BitLength  How many significant bits arguments have.
      */
     template < int BitLength >
-    class reflector
+    class super_byte_reflector
     {
     public:
         /** \brief  The type to check for specialization
@@ -866,6 +882,72 @@ namespace detail
         inline  static  value_type  reflect_q( value_type x )
         { return reflect_unsigned(x, width_c::value); }
     };
+
+    /** \brief  A mix-in class that reflects (the lower part of) its argument,
+          generally for bytes
+
+        This class template makes a function object that returns its argument
+        after reflecting its lower-order bits.  It's one sub-case for
+        #possible_reflector.
+
+        \pre  0 \< \a BitLength \<= \c CHAR_BIT
+
+        \tparam BitLength  How many significant bits arguments have.
+     */
+    template < int BitLength >
+    class sub_type_reflector
+    {
+    public:
+        /** \brief  The type to check for specialization
+
+            This is a Boost.MPL integral constant indicating that this class
+            does reflect its input values.
+         */
+        typedef boost::mpl::true_              is_reflecting_type;
+        /** \brief  The type to check for register bit length
+
+            This is a Boost.MPL integral constant indicating how many
+            significant bits will be reflected.
+         */
+        typedef boost::mpl::integral_c< int, BitLength >  width_c;
+        /** \brief  The type of reflected values
+
+            This is both the input and output type for the reflection function.
+         */
+        typedef unsigned char                          value_type;
+
+        /** \brief  Reflect (part of) the given value
+
+            Reverses the order of the given number of bits within a value,
+            using #reflect_sub_byte.
+
+            \param x  The value to be (partially) reflected.
+
+            \return  ( <var>x</var> &amp;
+              ~(2<sup><var>width_c</var>\::value</sup> - 1) ) | REFLECT(
+              <var>x</var> &amp; (2<sup><var>width_c</var>\::value</sup> -
+              1) )
+         */
+        inline  static  value_type  reflect_q( value_type x )
+        { return reflect_sub_byte(x, width_c::value); }
+    };
+
+    /** \brief  A mix-in class that reflects (the lower part of) its argument
+
+        This class template makes a function object that returns its argument
+        after reflecting its lower-order bits.  It's one case for
+        #possible_reflector.
+
+        \pre  0 \< \a BitLength \<= \c std\::numeric_limits\<uintmax_t\>
+          \::digits
+
+        \tparam BitLength  How many significant bits arguments have.
+     */
+    template < int BitLength >
+    class reflector
+        : public boost::mpl::if_c< (BitLength > CHAR_BIT),
+          super_byte_reflector<BitLength>, sub_type_reflector<BitLength> >::type
+    { };
 
     /** This class template adds a member function #reflect_q that will
         conditionally reflect its first argument, controlled by a compile-time
