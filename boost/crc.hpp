@@ -168,7 +168,7 @@ namespace detail
     the use of pre-computation tables.  Said division uses the altered
     algorithm, so any data has to be unaugmented.
 
-    \pre  0 \< \a Bits \<= \c std::numeric_limits&lt;uintmax_t&gt;::digits
+    \pre  0 \< \a Bits \<= \c std\::numeric_limits\<uintmax_t\>\::digits
 
     \tparam Bits  The order of the modulo-2 polynomial divisor.  (\e Width from
       the RMCA)
@@ -247,7 +247,7 @@ private:
     of pre-computation tables.  Said division uses the altered algorithm, so any
     data has to be unaugmented.
 
-    \pre  0 \< \a Bits \<= \c std::numeric_limits&lt;uintmax_t&gt;::digits
+    \pre  0 \< \a Bits \<= \c std\::numeric_limits\<uintmax_t\>\::digits
 
     \tparam Bits  The order of the modulo-2 polynomial divisor.  (\e Width from
       the RMCA)
@@ -361,16 +361,37 @@ private:
 //! \cond
 namespace detail
 {
-    // Single-bit mask constant, MPL-style
-    // (Template parameter is the 0-based index of the bit, i.e. 2**index.)
+    /** \brief  Meta-programming integral constant for a single-bit bit-mask
+
+        Generates a compile-time constant for a bit-mask that affects a single
+        bit.  The \c value will be 2<sup><var>BitIndex</var></sup>.  The \c type
+        will be the smallest built-in unsigned integer type that can contain the
+        value, unless there's a built-in type that the system can handle easier,
+        then the \c type will be smallest fast-handled unsigned integer type.
+
+        \pre  0 \<= BitIndex \< \c std\::numeric_limits\<uintmax_t\>\::digits
+
+        \tparam BitIndex  The place of the sole set bit.
+     */
     template < int BitIndex >
     struct high_bit_mask_c
         : boost::mpl::integral_c<typename boost::uint_t< BitIndex + 1 >::fast,
            ( UINTMAX_C(1) << BitIndex )>
     {};
 
-    // Lowest-bits mask constant, MPL-style
-    // (Template parameter is the number of low bits set, i.e. 2**count - 1.)
+    /** \brief  Meta-programming integral constant for a lowest-bits bit-mask
+
+        Generates a compile-time constant for a bit-mask that affects the lowest
+        bits.  The \c value will be 2<sup><var>BitCount</var></sup> - 1.  The
+        \c type will be the smallest built-in unsigned integer type that can
+        contain the value, unless there's a built-in type that the system can
+        handle easier, then the \c type will be smallest fast-handled unsigned
+        integer type.
+
+        \pre  0 \<= BitCount \<= \c std\::numeric_limits\<uintmax_t\>\::digits
+
+        \tparam BitCount  The number of lowest-placed bits set.
+     */
     template < int BitCount >
     struct low_bits_mask_c
         : boost::mpl::integral_c<typename boost::uint_t< BitCount >::fast, (
@@ -378,7 +399,27 @@ namespace detail
            UINTMAX_C( 1 )) : 0u )>
     {};
 
-    // Bit-reflection functions
+    /** \brief  Reflects the bits of a number
+
+        Reverses the order of the given number of bits within a value.  For
+        instance, if the given reflect count is 5, then the bit values for the
+        16- and 1-place will switch and the 8- and 2-place will switch, leaving
+        the other bits alone.  (The 4-place bit is in the middle, so it wouldn't
+        change.)
+
+        \pre  \a Unsigned is a built-in unsigned integer type
+        \pre  0 \< word_length \<= \c std\::numeric_limits\<Unsigned\>\::digits
+
+        \tparam Unsigned  The type of \a x.
+
+        \param x  The value to be (partially) reflected.
+        \param word_length  The number of low-order bits to reflect.  Defaults
+          to the total number of value bits in \a Unsigned.
+
+        \return  The (partially) reflected value.
+
+        \todo  Check if this is the fastest way.
+     */
     template < typename Unsigned >
     Unsigned  reflect_unsigned( Unsigned x, int word_length
      = std::numeric_limits<Unsigned>::digits )
@@ -395,6 +436,15 @@ namespace detail
         return x;
     }
 
+    /** \brief  Make a byte-to-byte-reflection map
+
+        Creates a mapping array so the results can be cached.  Uses
+        #reflect_unsigned to generate the element values.
+
+        \return  An array <var>a</var> such that, for a given byte value
+          <var>i</var>, <code><var>a</var>[ <var>i</var> ]</code> resolves to
+          the reflected value of <var>i</var>.
+     */
     boost::array< unsigned char, (UINTMAX_C( 1 ) << CHAR_BIT) >
     make_byte_reflection_table()
     {
@@ -407,6 +457,21 @@ namespace detail
         return result;
     }
 
+    /** \brief  Reflects the bits of a single byte
+
+        Reverses the order of all the bits within a value.  For instance, the
+        bit values for the 2<sup><code>CHAR_BIT</code> - 1</sup>- and 1-place
+        will switch and the 2<sup><code>CHAR_BIT</code> - 2</sup>- and 2-place
+        will switch, etc.
+
+        \param x  The byte value to be reflected.
+
+        \return  The reflected value.
+
+        \note  Since this could be the most common type of reflection, and the
+          number of states is relatively small, the implementation pre-computes
+          and uses a table of all the results.
+     */
     unsigned char  reflect_byte( unsigned char x )
     {
         static  boost::array<unsigned char, ( UINTMAX_C(1) << CHAR_BIT )> const
@@ -415,15 +480,84 @@ namespace detail
         return table[ x ];
     }
 
+    /** \brief  Possibly reflects the bits of a number
+
+        Reverses the order of the given number of bits within a value.  For
+        instance, if the given reflect count is 5, then the bit values for the
+        16- and 1-place will switch and the 8- and 2-place will switch, leaving
+        the other bits alone.  (The 4-place bit is in the middle, so it wouldn't
+        change.)  This variant function allows the reflection be controlled by
+        an extra parameter, in case the decision to use reflection is made at
+        run-time.
+
+        \pre  \a Unsigned is a built-in unsigned integer type
+        \pre  0 \< word_length \<= \c std\::numeric_limits\<Unsigned\>\::digits
+
+        \tparam Unsigned  The type of \a x.
+
+        \param x  The value to be (partially) reflected.
+        \param reflect  Controls whether \a x is actually reflected (\c true) or
+          left alone (\c false).
+        \param word_length  The number of low-order bits to reflect.  Defaults
+          to the total number of value bits in \a Unsigned.
+
+        \return  The possibly (partially) reflected value.
+     */
     template < typename Unsigned >
+    inline
     Unsigned  reflect_optionally( Unsigned x, bool reflect, int word_length
      = std::numeric_limits<Unsigned>::digits )
     { return reflect ? reflect_unsigned(x, word_length) : x; }
 
+    /** \brief  Possibly reflects the bits of a single byte
+
+        Uses #reflect_byte (if \a reflect is \c true).
+
+        \param x  The byte value to be (possibly) reflected.
+        \param reflect  Whether (\c true) or not (\c false) \a x is reflected.
+
+        \return  <code><var>reflect</var> ? reflect_byte(<var>x</var>) :
+          <var>x</var></code>
+     */
+    inline
     unsigned char  reflect_byte_optionally( unsigned char x, bool reflect )
     { return reflect ? reflect_byte(x) : x; }
 
-    // Encapsulate the core CRC computation routines
+    /** \brief  Update a CRC remainder by a single bit, assuming a non-augmented
+          message
+
+        Performs the next step of division required by the CRC algorithm, giving
+        a new remainder polynomial based on the divisor polynomial and the
+        synthesized dividend polynomial (from the old remainder and the
+        newly-provided input).  The computations assume that the CRC is directly
+        exposed from the remainder, without any zero-valued bits augmented to
+        the message bits.
+
+        \pre  \a Register is a built-in unsigned integer type
+        \pre  0 \< \a Bits \<= std\::numeric_limits\<\a Register\>\::digits
+
+        \tparam Bits  The order of the modulo-2 polynomial divisor
+        \tparam Register  The type used for representing the remainder and
+          divisor modulo-2 polynomials.  The bit at <code>2<sup>i</sup></code>
+          is used as the coefficient of <i>x<sup>i</sup></i>.
+
+        \param[in,out] remainder  The upper part of the dividend polynomial
+          before division, and the remainder polynomial after.
+        \param[in]     new_dividend_bit  The coefficient for the constant term
+          of the dividend polynomial.
+        \param[in]     truncated_divisor  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+
+        \return  The quotient of the division (usually useless).
+
+        \note  This routine performs a modulo-2 polynomial division variant.
+          The exclusive-or operations are applied in a different order, since
+          that kind of operation is commutative and associative.  It also
+          assumes that the zero-valued augment string was applied before this
+          step, which means that the updated remainder can be directly used as
+          the final CRC.
+     */
     template < int Bits, typename Register >
     bool  crc_modulo_update( Register &remainder, bool new_dividend_bit,
      Register truncated_divisor )
@@ -439,6 +573,50 @@ namespace detail
         return quotient;
     }
 
+    /** \brief  Update a CRC remainder by several bits, assuming a non-augmented
+          message
+
+        Performs several steps of division required by the CRC algorithm, giving
+        a new remainder polynomial based on the divisor polynomial and the
+        synthesized dividend polynomial (from the old remainder and the
+        newly-provided input).  The computations assume that the CRC is directly
+        exposed from the remainder, without any zero-valued bits augmented to
+        the message bits.
+
+        \pre  \a Register and \Word are both built-in unsigned integer types
+        \pre  0 \< \a Bits \<= std\::numeric_limits\<\a Register\>\::digits
+        \pre  0 \< \a word_length \<= std\::numeric_limits\<\a Word\>\::digits
+
+        \tparam Bits  The order of the modulo-2 polynomial divisor
+        \tparam Register  The type used for representing the remainder and
+          divisor modulo-2 polynomials.  The bit at <code>2<sup>i</sup></code>
+          is used as the coefficient of <i>x<sup>i</sup></i>.
+        \tparam Word  The type used for storing the incoming terms of the
+          dividend modulo-2 polynomial.  The bit at <code>2<sup>i</sup></code>
+          is used as the coefficient of <i>x<sup>i</sup></i> when \a reflect is
+          \c false, and the coefficient of <i>x<sup><var>word_length</var> - 1 -
+          i</sup></i> otherwise.
+
+        \param[in,out] remainder  The upper part of the dividend polynomial
+          before division, and the remainder polynomial after.
+        \param[in]     new_dividend_bits  The coefficients for the next
+          \a word_length lowest terms of the dividend polynomial.
+        \param[in]     truncated_divisor  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+        \param[in]     word_length  The number of lowest-order bits to read from
+          \a new_dividend_bits.
+        \param[in]     reflect  If \c false, read from the highest-order marked
+          bit from \a new_dividend_bits and go down, as normal.  Otherwise,
+          proceed from the lowest-order bit and go up.
+
+        \note  This routine performs a modulo-2 polynomial division variant.
+          The exclusive-or operations are applied in a different order, since
+          that kind of operation is commutative and associative.  It also
+          assumes that the zero-valued augment string was applied before this
+          step, which means that the updated remainder can be directly used as
+          the final CRC.
+     */
     template < int Bits, typename Register, typename Word >
     void  crc_modulo_word_update( Register &remainder, Word new_dividend_bits,
      Register truncated_divisor, int word_length, bool reflect )
@@ -1291,7 +1469,7 @@ BOOST_CRC_OPTIMAL_NAME::operator ()
     without need to augment the memory block with scratch-space bytes.  The
     first byte is considered the highest order, going down for subsequent bytes.
 
-    \pre  0 \< \a Bits \<= \c std::numeric_limits&lt;uintmax_t&gt;::digits
+    \pre  0 \< \a Bits \<= \c std\::numeric_limits\<uintmax_t\>\::digits
 
     \tparam Bits  The order of the modulo-2 polynomial divisor.  (\e Width from
       the RMCA)
@@ -1349,7 +1527,7 @@ crc
     \e RefIn = \c False in the RMCA).  Check the other parts of this function's
     documentation to see how a checksum can be gained and/or used.
 
-    \pre  0 \< \a Bits \<= \c std::numeric_limits&lt;uintmax_t&gt;::digits
+    \pre  0 \< \a Bits \<= \c std\::numeric_limit\<uintmax_t\>\::digits
 
     \tparam Bits  The order of the modulo-2 polynomial divisor.  (\e Width from
       the RMCA)
