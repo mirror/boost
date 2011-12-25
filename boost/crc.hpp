@@ -537,56 +537,6 @@ namespace detail
     unsigned char  reflect_byte_optionally( unsigned char x, bool reflect )
     { return reflect ? reflect_byte(x) : x; }
 
-    /** \brief  Update a CRC remainder by a single bit, assuming a non-augmented
-          message
-
-        Performs the next step of division required by the CRC algorithm, giving
-        a new remainder polynomial based on the divisor polynomial and the
-        synthesized dividend polynomial (from the old remainder and the
-        newly-provided input).  The computations assume that the CRC is directly
-        exposed from the remainder, without any zero-valued bits augmented to
-        the message bits.
-
-        \pre  \a Register is a built-in unsigned integer type
-        \pre  0 \< \a Bits \<= std\::numeric_limits\<\a Register\>\::digits
-
-        \tparam Bits  The order of the modulo-2 polynomial divisor
-        \tparam Register  The type used for representing the remainder and
-          divisor modulo-2 polynomials.  The bit at <code>2<sup>i</sup></code>
-          is used as the coefficient of <i>x<sup>i</sup></i>.
-
-        \param[in,out] remainder  The upper part of the dividend polynomial
-          before division, and the remainder polynomial after.
-        \param[in]     new_dividend_bit  The coefficient for the constant term
-          of the dividend polynomial.
-        \param[in]     truncated_divisor  The lowest coefficients of the divisor
-          polynomial.  The highest-order coefficient is omitted and always
-          assumed to be 1.
-
-        \return  The quotient of the division (usually useless).
-
-        \note  This routine performs a modulo-2 polynomial division variant.
-          The exclusive-or operations are applied in a different order, since
-          that kind of operation is commutative and associative.  It also
-          assumes that the zero-valued augment string was applied before this
-          step, which means that the updated remainder can be directly used as
-          the final CRC.
-     */
-    template < int Bits, typename Register >
-    bool  crc_modulo_update( Register &remainder, bool new_dividend_bit,
-     Register truncated_divisor )
-    {
-        // compare the new bit with the remainder's highest
-        remainder ^= new_dividend_bit ? high_bit_mask_c<Bits - 1>::value : 0u;
-
-        // perform modulo-2 division
-        bool const  quotient = remainder & high_bit_mask_c<Bits - 1>::value;
-
-        remainder <<= 1;
-        remainder ^= quotient ? truncated_divisor : 0u;
-        return quotient;
-    }
-
     /** \brief  Update a CRC remainder by several bits, assuming a non-augmented
           message
 
@@ -598,10 +548,10 @@ namespace detail
         the message bits.
 
         \pre  \a Register and \Word are both built-in unsigned integer types
-        \pre  0 \< \a Bits \<= std\::numeric_limits\<\a Register\>\::digits
+        \pre  0 \< \a register_length \<= std\::numeric_limits\<\a Register\>
+          \::digits
         \pre  0 \< \a word_length \<= std\::numeric_limits\<\a Word\>\::digits
 
-        \tparam Bits  The order of the modulo-2 polynomial divisor
         \tparam Register  The type used for representing the remainder and
           divisor modulo-2 polynomials.  The bit at <code>2<sup>i</sup></code>
           is used as the coefficient of <i>x<sup>i</sup></i>.
@@ -611,6 +561,9 @@ namespace detail
           \c false, and the coefficient of <i>x<sup><var>word_length</var> - 1 -
           i</sup></i> otherwise.
 
+        \param[in]     register_length  The number of significant low-order bits
+          to be used from \a Register values.  It is the order of the modulo-2
+          polynomial remainder and one less than the divisor's order.
         \param[in,out] remainder  The upper part of the dividend polynomial
           before division, and the remainder polynomial after.
         \param[in]     new_dividend_bits  The coefficients for the next
@@ -631,25 +584,78 @@ namespace detail
           step, which means that the updated remainder can be directly used as
           the final CRC.
      */
-    template < int Bits, typename Register, typename Word >
-    void  crc_modulo_word_update( Register &remainder, Word new_dividend_bits,
-     Register truncated_divisor, int word_length, bool reflect )
+    template < typename Register, typename Word >
+    void  crc_modulo_word_update( int register_length, Register &remainder, Word
+     new_dividend_bits, Register truncated_divisor, int word_length, bool
+     reflect )
     {
+        // Create this masking constant outside the loop.
+        Register const  high_bit_mask = UINTMAX_C(1) << (register_length - 1);
+
         // The natural reading order for division is highest digit/bit first.
         // The "reflect" parameter switches this.  However, building a bit mask
         // for the lowest bit is the easiest....
         new_dividend_bits = reflect_optionally( new_dividend_bits, not reflect,
          word_length );
 
-        // Perform modulo-2 division
+        // Perform modulo-2 division for each new dividend input bit
         for ( int  i = word_length ; i ; --i, new_dividend_bits >>= 1 )
-            crc_modulo_update<Bits>( remainder, new_dividend_bits & 1u,
-             truncated_divisor );
+        {
+            // compare the new bit with the remainder's highest
+            remainder ^= ( new_dividend_bits & 1u ) ? high_bit_mask : 0u;
 
-        // Note that the quotient isn't stored, since you usually won't need it,
-        // and calculating it slows you down.  If you want it, just do this loop
-        // manually.  Start with Word: Quotient := 0, then for each step do:
-        //   Quotient <- (Quotient << 1) | crc_modulo_update(...)
+            // perform modulo-2 division
+            bool const  quotient = remainder & high_bit_mask;
+
+            remainder <<= 1;
+            remainder ^= quotient ? truncated_divisor : 0u;
+
+            // The quotient isn't used for anything, so don't keep it.
+        }
+    }
+
+    /** \brief  Update a CRC remainder by a single bit, assuming a non-augmented
+          message
+
+        Performs the next step of division required by the CRC algorithm, giving
+        a new remainder polynomial based on the divisor polynomial and the
+        synthesized dividend polynomial (from the old remainder and the
+        newly-provided input).  The computations assume that the CRC is directly
+        exposed from the remainder, without any zero-valued bits augmented to
+        the message bits.
+
+        \pre  \a Register is a built-in unsigned integer type
+        \pre  0 \< \a register_length \<= std\::numeric_limits\<\a Register\>
+          \::digits
+
+        \tparam Register  The type used for representing the remainder and
+          divisor modulo-2 polynomials.  The bit at <code>2<sup>i</sup></code>
+          is used as the coefficient of <i>x<sup>i</sup></i>.
+
+        \param[in]     register_length  The number of significant low-order bits
+          to be used from \a Register values.  It is the order of the modulo-2
+          polynomial remainder and one less than the divisor's order.
+        \param[in,out] remainder  The upper part of the dividend polynomial
+          before division, and the remainder polynomial after.
+        \param[in]     new_dividend_bit  The coefficient for the constant term
+          of the dividend polynomial.
+        \param[in]     truncated_divisor  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+
+        \note  This routine performs a modulo-2 polynomial division variant.
+          The exclusive-or operations are applied in a different order, since
+          that kind of operation is commutative and associative.  It also
+          assumes that the zero-valued augment string was applied before this
+          step, which means that the updated remainder can be directly used as
+          the final CRC.
+     */
+    template < typename Register >
+    inline  void  crc_modulo_update( int register_length, Register &remainder,
+     bool new_dividend_bit, Register truncated_divisor )
+    {
+        crc_modulo_word_update( register_length, remainder,
+         static_cast<unsigned>(new_dividend_bit), truncated_divisor, 1, false );
     }
 
 
@@ -704,7 +710,7 @@ namespace detail
         {
             value_type  remainder = 0u;
 
-            crc_modulo_word_update<Bits>( remainder, dividend,
+            crc_modulo_word_update( Bits, remainder, dividend,
              truncated_polynomial, CHAR_BIT, false );
 
             table_[ reflect_byte_optionally(dividend, Reflect) ]
@@ -1206,7 +1212,7 @@ crc_basic<Bits>::process_bit
     bool  bit
 )
 {
-    detail::crc_modulo_update<bit_count>( rem_, bit, poly_ );
+    detail::crc_modulo_update( bit_count, rem_, bit, poly_ );
 }
 
 /** Updates the interim remainder with several altered-CRC-division steps.  Each
