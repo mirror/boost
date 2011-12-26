@@ -8,8 +8,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_CONTAINERS_FLAT_TREE_HPP
-#define BOOST_CONTAINERS_FLAT_TREE_HPP
+#ifndef BOOST_CONTAINER_FLAT_TREE_HPP
+#define BOOST_CONTAINER_FLAT_TREE_HPP
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -37,7 +37,7 @@ namespace boost {
 
 namespace container {
 
-namespace containers_detail {
+namespace container_detail {
 
 template<class Compare, class Value, class KeyOfValue>
 class flat_tree_value_compare
@@ -47,6 +47,10 @@ class flat_tree_value_compare
    typedef Value              second_argument_type;
    typedef bool               return_type;
    public:     
+   flat_tree_value_compare()
+      : Compare()
+   {}
+
    flat_tree_value_compare(const Compare &pred) 
       : Compare(pred)
    {}
@@ -67,9 +71,9 @@ class flat_tree_value_compare
 template<class Pointer>
 struct get_flat_tree_iterators
 {
-   typedef typename containers_detail::
+   typedef typename container_detail::
       vector_iterator<Pointer>                        iterator;
-   typedef typename containers_detail::
+   typedef typename container_detail::
       vector_const_iterator<Pointer>                  const_iterator;
    typedef std::reverse_iterator<iterator>            reverse_iterator;
    typedef std::reverse_iterator<const_iterator>      const_reverse_iterator;
@@ -90,23 +94,29 @@ class flat_tree
       //Inherit from value_compare to do EBO
       : public value_compare
    {
-      private:
       BOOST_COPYABLE_AND_MOVABLE(Data)
+
       public:
+      Data()
+         : value_compare(), m_vect()
+      {}
+
       Data(const Data &d)
          : value_compare(d), m_vect(d.m_vect)
       {}
-      Data(const Compare &comp,
-           const vector_t &vect) 
-         : value_compare(comp), m_vect(vect){}
 
-      Data(const value_compare &comp,
-           const vector_t &vect) 
-         : value_compare(comp), m_vect(vect){}
+      Data(BOOST_RV_REF(Data) d)
+         : value_compare(boost::move(d)), m_vect(boost::move(d.m_vect))
+      {}
+
+      Data(const Compare &comp) 
+         : value_compare(comp), m_vect()
+      {}
 
       Data(const Compare &comp,
            const allocator_t &alloc) 
-         : value_compare(comp), m_vect(alloc){}
+         : value_compare(comp), m_vect(alloc)
+      {}
 
       Data& operator=(BOOST_COPY_ASSIGN_REF(Data) d)
       {
@@ -120,6 +130,13 @@ class flat_tree
          this->value_compare::operator=(boost::move(static_cast<value_compare &>(d)));
          m_vect = boost::move(d.m_vect);
          return *this;
+      }
+
+      void swap(Data &d)
+      {
+         value_compare& mycomp    = *this, & othercomp = d;
+         container_detail::do_swap(mycomp, othercomp);
+         this->m_vect.swap(d.m_vect);
       }
 
       vector_t m_vect;
@@ -138,23 +155,30 @@ class flat_tree
    typedef Key                                        key_type;
    typedef Compare                                    key_compare;
    typedef typename vector_t::allocator_type          allocator_type;
-   typedef allocator_type                             stored_allocator_type;
-   typedef typename allocator_type::size_type         size_type;
-   typedef typename allocator_type::difference_type   difference_type;
+   typedef typename vector_t::size_type               size_type;
+   typedef typename vector_t::difference_type         difference_type;
    typedef typename vector_t::iterator                iterator;
    typedef typename vector_t::const_iterator          const_iterator;
-   typedef std::reverse_iterator<iterator>            reverse_iterator;
-   typedef std::reverse_iterator<const_iterator>      const_reverse_iterator;
-   
+   typedef typename vector_t::reverse_iterator        reverse_iterator;
+   typedef typename vector_t::const_reverse_iterator  const_reverse_iterator;
 
-   // allocation/deallocation
-   flat_tree(const Compare& comp     = Compare(), 
-             const allocator_type& a = allocator_type())
+   //!Standard extension
+   typedef allocator_type                             stored_allocator_type;
+
+   flat_tree()
+      : m_data()
+   { }
+
+   explicit flat_tree(const Compare& comp)
+      : m_data(comp)
+   { }
+
+   flat_tree(const Compare& comp, const allocator_type& a)
       : m_data(comp, a)
    { }
 
    flat_tree(const flat_tree& x) 
-      :  m_data(x.m_data, x.m_data.m_vect)
+      :  m_data(x.m_data)
    { }
 
    flat_tree(BOOST_RV_REF(flat_tree) x)
@@ -237,14 +261,7 @@ class flat_tree
    { return this->m_data.m_vect.max_size(); }
 
    void swap(flat_tree& other) 
-   {
-      value_compare& mycomp    = this->m_data;
-      value_compare& othercomp = other.m_data;
-      containers_detail::do_swap(mycomp, othercomp);
-      vector_t & myvect    = this->m_data.m_vect;
-      vector_t & othervect = other.m_data.m_vect;
-      myvect.swap(othervect);
-   }
+   {  this->m_data.swap(other.m_data);  }
 
    public:
    // insert/erase
@@ -332,7 +349,7 @@ class flat_tree
       priv_insert_equal(first, last, ItCat());
    }
 
-   #ifdef BOOST_CONTAINERS_PERFECT_FORWARDING
+   #ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    template <class... Args>
    iterator emplace_unique(Args&&... args)
@@ -377,100 +394,69 @@ class flat_tree
       return priv_insert_commit(data, boost::move(val));
    }
 
-   #else //#ifdef BOOST_CONTAINERS_PERFECT_FORWARDING
-
-   iterator emplace_unique()
-   {
-      containers_detail::value_init<value_type> vval;
-      value_type &val = vval.m_t;
-      insert_commit_data data;
-      std::pair<iterator,bool> ret =
-         priv_insert_unique_prepare(val, data);
-      if(ret.second){
-         ret.first = priv_insert_commit(data, boost::move(val));
-      }
-      return ret.first;
-   }
-
-   iterator emplace_hint_unique(const_iterator hint)
-   {
-      containers_detail::value_init<value_type> vval;
-      value_type &val = vval.m_t;
-      insert_commit_data data;
-      std::pair<iterator,bool> ret = priv_insert_unique_prepare(hint, val, data);
-      if(ret.second){
-         ret.first = priv_insert_commit(data, boost::move(val));
-      }
-      return ret.first;
-   }
-
-   iterator emplace_equal()
-   {
-      containers_detail::value_init<value_type> vval;
-      value_type &val = vval.m_t;
-      iterator i = this->upper_bound(KeyOfValue()(val));
-      i = this->m_data.m_vect.insert(i, boost::move(val));
-      return i;
-   }
-
-   iterator emplace_hint_equal(const_iterator hint)
-   {
-      containers_detail::value_init<value_type> vval;
-      value_type &val = vval.m_t;
-      insert_commit_data data;
-      priv_insert_equal_prepare(hint, val, data);
-      return priv_insert_commit(data, boost::move(val));
-   }
+   #else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                        \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                             \
-   iterator emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))         \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
+   iterator emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))           \
    {                                                                                      \
-      value_type val(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _));           \
+      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type        \
+         BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
+            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n); \
+      value_type &val = vval;                                                             \
       insert_commit_data data;                                                            \
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(val, data);               \
       if(ret.second){                                                                     \
-         ret.first = priv_insert_commit(data, boost::move(val)); \
+         ret.first = priv_insert_commit(data, boost::move(val));                          \
       }                                                                                   \
       return ret.first;                                                                   \
    }                                                                                      \
                                                                                           \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                             \
-   iterator emplace_hint_unique(const_iterator hint,                                      \
-      BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))                              \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
+   iterator emplace_hint_unique(const_iterator hint                                       \
+                        BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))     \
    {                                                                                      \
-      value_type val(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _));           \
+      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type        \
+         BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
+            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n); \
+      value_type &val = vval;                                                             \
       insert_commit_data data;                                                            \
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(hint, val, data);         \
       if(ret.second){                                                                     \
-         ret.first = priv_insert_commit(data, boost::move(val));        \
+         ret.first = priv_insert_commit(data, boost::move(val));                          \
       }                                                                                   \
       return ret.first;                                                                   \
    }                                                                                      \
                                                                                           \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                             \
-   iterator emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))          \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
+   iterator emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))            \
    {                                                                                      \
-      value_type val(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _));           \
+      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type        \
+         BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
+            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n); \
+      value_type &val = vval;                                                             \
       iterator i = this->upper_bound(KeyOfValue()(val));                                  \
-      i = this->m_data.m_vect.insert(i, boost::move(val));       \
+      i = this->m_data.m_vect.insert(i, boost::move(val));                                \
       return i;                                                                           \
    }                                                                                      \
                                                                                           \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                             \
-   iterator emplace_hint_equal(const_iterator hint,                                       \
-      BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))                              \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
+   iterator emplace_hint_equal(const_iterator hint                                        \
+                      BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))       \
    {                                                                                      \
-      value_type val(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _));           \
+      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type        \
+         BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
+            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n); \
+      value_type &val = vval;                                                             \
       insert_commit_data data;                                                            \
       priv_insert_equal_prepare(hint, val, data);                                         \
-      return priv_insert_commit(data, boost::move(val));                \
+      return priv_insert_commit(data, boost::move(val));                                  \
    }                                                                                      \
    //!
-   #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINERS_MAX_CONSTRUCTOR_PARAMETERS)
+   #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
    #include BOOST_PP_LOCAL_ITERATE()
 
-   #endif   //#ifdef BOOST_CONTAINERS_PERFECT_FORWARDING
+   #endif   //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    iterator erase(const_iterator position)
    {  return this->m_data.m_vect.erase(position);  }
@@ -571,8 +557,6 @@ class flat_tree
       //         insert val before pos
       //      else
       //         insert val before upper_bound(val)
-      //   else if pos+1 == end || val <= *(pos+1)
-      //      insert val after pos
       //   else
       //      insert val before lower_bound(val)
       const value_compare &value_comp = this->m_data;
@@ -586,10 +570,6 @@ class flat_tree
                this->priv_upper_bound(this->cbegin(), pos, KeyOfValue()(val));
          }
       }
-      //Works, but increases code complexity
-      //else if (++pos == this->end() || !value_comp(*pos, val)){
-      //   return this->m_data.m_vect.insert(pos, val);
-      //}
       else{
          data.position = 
             this->priv_lower_bound(pos, this->cend(), KeyOfValue()(val));
@@ -838,7 +818,7 @@ swap(flat_tree<Key,Value,KeyOfValue,Compare,A>& x,
      flat_tree<Key,Value,KeyOfValue,Compare,A>& y)
    {  x.swap(y);  }
 
-}  //namespace containers_detail {
+}  //namespace container_detail {
 
 }  //namespace container {
 /*
@@ -846,7 +826,7 @@ swap(flat_tree<Key,Value,KeyOfValue,Compare,A>& x,
 //!specialization for optimizations
 template <class K, class V, class KOV, 
 class C, class A>
-struct has_trivial_destructor_after_move<boost::container::containers_detail::flat_tree<K, V, KOV, C, A> >
+struct has_trivial_destructor_after_move<boost::container::container_detail::flat_tree<K, V, KOV, C, A> >
 {
    static const bool value = has_trivial_destructor<A>::value && has_trivial_destructor<C>::value;
 };
@@ -855,4 +835,4 @@ struct has_trivial_destructor_after_move<boost::container::containers_detail::fl
 
 #include <boost/container/detail/config_end.hpp>
 
-#endif // BOOST_CONTAINERS_FLAT_TREE_HPP
+#endif // BOOST_CONTAINER_FLAT_TREE_HPP

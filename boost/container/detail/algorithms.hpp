@@ -10,8 +10,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_CONTAINERS_DETAIL_ALGORITHMS_HPP
-#define BOOST_CONTAINERS_DETAIL_ALGORITHMS_HPP
+#ifndef BOOST_CONTAINER_DETAIL_ALGORITHMS_HPP
+#define BOOST_CONTAINER_DETAIL_ALGORITHMS_HPP
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -23,7 +23,6 @@
 #include <boost/type_traits/has_trivial_copy.hpp>
 #include <boost/type_traits/has_trivial_assign.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
-#include <boost/get_pointer.hpp>
 
 #include <boost/container/detail/type_traits.hpp>
 #include <boost/container/detail/mpl.hpp>
@@ -33,56 +32,25 @@
 #include <cstring>
 
 namespace boost {
-namespace container { 
+namespace container {
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
-template<class T>
-struct has_own_construct_from_it
+template<class A, class T, class InpIt>
+inline void construct_in_place(A &a, T* dest, InpIt source)
+{     boost::container::allocator_traits<A>::construct(a, dest, *source);  }
+//#endif
+
+template<class A, class T, class U, class D>
+inline void construct_in_place(A &a, T *dest, default_construct_iterator<U, D>)
 {
-   static const bool value = false;
-};
-
-namespace containers_detail  {
-
-template<class T, class InpIt>
-inline void construct_in_place_impl(T* dest, const InpIt &source, containers_detail::true_)
-{
-   T::construct(dest, *source);
+   boost::container::allocator_traits<A>::construct(a, dest);
 }
 
-template<class T, class InpIt>
-inline void construct_in_place_impl(T* dest, const InpIt &source, containers_detail::false_)
+template<class A, class T, class U, class EF, class D>
+inline void construct_in_place(A &a, T *dest, emplace_iterator<U, EF, D> ei)
 {
-   new((void*)dest)T(*source);
+   ei.construct_in_place(a, dest);
 }
-
-}  //namespace containers_detail   {
-
-template<class T, class InpIt>
-inline void construct_in_place(T* dest, InpIt source)
-{
-   typedef containers_detail::bool_<has_own_construct_from_it<T>::value> boolean_t;
-   containers_detail::construct_in_place_impl(dest, source, boolean_t());
-}
-
-#else
-template<class T, class InpIt>
-inline void construct_in_place(T* dest, InpIt source)
-{     ::new((void*)dest)T(*source);   }
-#endif
-
-template<class T, class U, class D>
-inline void construct_in_place(T *dest, default_construct_iterator<U, D>)
-{
-   ::new((void*)dest)T();
-}
-
-template<class T, class U, class E, class D>
-inline void construct_in_place(T *dest, emplace_iterator<U, E, D> ei)
-{
-   ei.construct_in_place(dest);
-}
-
+/*
 template<class InIt, class OutIt>
 struct optimize_assign
 {
@@ -118,7 +86,7 @@ struct optimize_copy<T*, T*>
 {};
 
 template<class InIt, class OutIt> inline
-OutIt copy_n_dispatch(InIt first, typename std::iterator_traits<InIt>::difference_type length, OutIt dest, containers_detail::bool_<false>)
+OutIt copy_n_dispatch(InIt first, typename std::iterator_traits<InIt>::difference_type length, OutIt dest, container_detail::bool_<false>)
 {
    for (; length--; ++dest, ++first)
       *dest = *first;
@@ -126,7 +94,7 @@ OutIt copy_n_dispatch(InIt first, typename std::iterator_traits<InIt>::differenc
 }
 
 template<class T> inline
-T *copy_n_dispatch(const T *first, typename std::iterator_traits<const T*>::difference_type length, T *dest, containers_detail::bool_<true>)
+T *copy_n_dispatch(const T *first, typename std::iterator_traits<const T*>::difference_type length, T *dest, container_detail::bool_<true>)
 {
    std::size_t size = length*sizeof(T);
    return (static_cast<T*>(std::memmove(dest, first, size))) + size;
@@ -136,14 +104,14 @@ template<class InIt, class OutIt> inline
 OutIt copy_n(InIt first, typename std::iterator_traits<InIt>::difference_type length, OutIt dest)
 {
    const bool do_optimized_assign = optimize_assign<InIt, OutIt>::value;
-   return copy_n_dispatch(first, length, dest, containers_detail::bool_<do_optimized_assign>());
+   return copy_n_dispatch(first, length, dest, container_detail::bool_<do_optimized_assign>());
 }
 
 template<class InIt, class FwdIt> inline
 FwdIt uninitialized_copy_n_dispatch
    (InIt first, 
     typename std::iterator_traits<InIt>::difference_type count,
-    FwdIt dest, containers_detail::bool_<false>)
+    FwdIt dest, container_detail::bool_<false>)
 {
    typedef typename std::iterator_traits<FwdIt>::value_type value_type;
    //Save initial destination position
@@ -153,14 +121,14 @@ FwdIt uninitialized_copy_n_dispatch
    BOOST_TRY{
       //Try to build objects
       for (; --new_count; ++dest, ++first){
-         construct_in_place(containers_detail::get_pointer(&*dest), first);
+         construct_in_place(container_detail::to_raw_pointer(&*dest), first);
       }
    }
    BOOST_CATCH(...){
       //Call destructors
       new_count = count - new_count;
       for (; new_count--; ++dest_init){
-         containers_detail::get_pointer(&*dest_init)->~value_type();
+         container_detail::to_raw_pointer(&*dest_init)->~value_type();
       }
       BOOST_RETHROW
    }
@@ -168,7 +136,7 @@ FwdIt uninitialized_copy_n_dispatch
    return dest;
 }
 template<class T> inline
-T *uninitialized_copy_n_dispatch(const T *first, typename std::iterator_traits<const T*>::difference_type length, T *dest, containers_detail::bool_<true>)
+T *uninitialized_copy_n_dispatch(const T *first, typename std::iterator_traits<const T*>::difference_type length, T *dest, container_detail::bool_<true>)
 {
    std::size_t size = length*sizeof(T);
    return (static_cast<T*>(std::memmove(dest, first, size))) + size;
@@ -181,7 +149,7 @@ FwdIt uninitialized_copy_n
     FwdIt dest)
 {
    const bool do_optimized_copy = optimize_copy<InIt, FwdIt>::value;
-   return uninitialized_copy_n_dispatch(first, count, dest, containers_detail::bool_<do_optimized_copy>());
+   return uninitialized_copy_n_dispatch(first, count, dest, container_detail::bool_<do_optimized_copy>());
 }
 
 // uninitialized_copy_copy
@@ -199,17 +167,17 @@ FwdIt uninitialized_copy_copy
    }
    BOOST_CATCH(...){
       for(;result != mid; ++result){
-         containers_detail::get_pointer(&*result)->~value_type();
+         container_detail::to_raw_pointer(&*result)->~value_type();
       }
       BOOST_RETHROW
    }
    BOOST_CATCH_END
 }
-
+*/
 }  //namespace container { 
 }  //namespace boost {
 
 #include <boost/container/detail/config_end.hpp>
 
-#endif   //#ifndef BOOST_CONTAINERS_DETAIL_ALGORITHMS_HPP
+#endif   //#ifndef BOOST_CONTAINER_DETAIL_ALGORITHMS_HPP
 

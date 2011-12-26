@@ -8,8 +8,8 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_CONTAINERS_FLAT_SET_HPP
-#define BOOST_CONTAINERS_FLAT_SET_HPP
+#ifndef BOOST_CONTAINER_FLAT_SET_HPP
+#define BOOST_CONTAINER_FLAT_SET_HPP
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -74,9 +74,9 @@ class flat_set
    /// @cond
    private:
    BOOST_COPYABLE_AND_MOVABLE(flat_set)
-   typedef containers_detail::flat_tree<T, T, containers_detail::identity<T>, Pred, A> tree_t;
+   typedef container_detail::flat_tree<T, T, container_detail::identity<T>, Pred, A> tree_t;
    tree_t m_flat_tree;  // flat tree representing flat_set
-   typedef typename containers_detail::
+   typedef typename container_detail::
       move_const_ref_type<T>::type insert_const_ref_type;
    /// @endcond
 
@@ -100,11 +100,18 @@ class flat_set
    typedef typename tree_t::allocator_type         allocator_type;
    typedef typename tree_t::stored_allocator_type  stored_allocator_type;
 
+   //! <b>Effects</b>: Defatuls constructs an empty flat_map.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   explicit flat_set()
+      : m_flat_tree()
+   {}
+
    //! <b>Effects</b>: Constructs an empty flat_map using the specified
    //! comparison object and allocator.
    //! 
    //! <b>Complexity</b>: Constant.
-   explicit flat_set(const Pred& comp = Pred(),
+   explicit flat_set(const Pred& comp,
                      const allocator_type& a = allocator_type())
       : m_flat_tree(comp, a)
    {}
@@ -317,7 +324,6 @@ class flat_set
       { return m_flat_tree.max_size(); }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type() allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!
@@ -335,7 +341,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    std::pair<iterator, bool> insert(insert_const_ref_type x) 
    {  return priv_insert(x); }
 
@@ -344,7 +350,7 @@ class flat_set
    { return this->insert(const_cast<const T &>(x)); }
 
    template<class U>
-   std::pair<iterator, bool> insert(const U &u, typename containers_detail::enable_if_c<containers_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
+   std::pair<iterator, bool> insert(const U &u, typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
    {  return priv_insert(u); }
    #endif
 
@@ -358,7 +364,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    std::pair<iterator,bool> insert(BOOST_RV_REF(value_type) x) 
    {  return m_flat_tree.insert_unique(boost::move(x));  }
 
@@ -372,7 +378,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator p, insert_const_ref_type x) 
    {  return priv_insert(p, x); }
 
@@ -381,7 +387,7 @@ class flat_set
    { return this->insert(position, const_cast<const T &>(x)); }
 
    template<class U>
-   iterator insert(const_iterator position, const U &u, typename containers_detail::enable_if_c<containers_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
+   iterator insert(const_iterator position, const U &u, typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
    {  return priv_insert(position, u); }
    #endif
 
@@ -393,7 +399,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x) 
    {  return m_flat_tree.insert_unique(position, boost::move(x)); }
 
@@ -405,12 +411,12 @@ class flat_set
    //! <b>Complexity</b>: At most N log(size()+N) (N is the distance from first to last)
    //!   search time plus N*size() insertion time.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class InputIterator>
    void insert(InputIterator first, InputIterator last) 
       {  m_flat_tree.insert_unique(first, last);  }
 
-   #if defined(BOOST_CONTAINERS_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+   #if defined(BOOST_CONTAINER_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
 
    //! <b>Effects</b>: Inserts an object of type T constructed with
    //!   std::forward<Args>(args)... if and only if there is no element in the container 
@@ -423,7 +429,7 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace(Args&&... args)
    {  return m_flat_tree.emplace_unique(boost::forward<Args>(args)...); }
@@ -439,32 +445,28 @@ class flat_set
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace_hint(const_iterator hint, Args&&... args)
    {  return m_flat_tree.emplace_hint_unique(hint, boost::forward<Args>(args)...); }
 
-   #else //#ifdef BOOST_CONTAINERS_PERFECT_FORWARDING
+   #else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
-   iterator emplace()
-   {  return m_flat_tree.emplace_unique(); }
-
-   iterator emplace_hint(const_iterator hint)
-   {  return m_flat_tree.emplace_hint_unique(hint); }
-
-   #define BOOST_PP_LOCAL_MACRO(n)                                                                             \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                                                  \
-   iterator emplace(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))                                     \
-   {  return m_flat_tree.emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _)); }           \
-                                                                                                               \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                                                  \
-   iterator emplace_hint(const_iterator hint, BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))           \
-   {  return m_flat_tree.emplace_hint_unique(hint, BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _)); }\
+   #define BOOST_PP_LOCAL_MACRO(n)                                                                 \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)          \
+   iterator emplace(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                           \
+   {  return m_flat_tree.emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)); } \
+                                                                                                   \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)          \
+   iterator emplace_hint(const_iterator hint                                                       \
+                         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))             \
+   {  return m_flat_tree.emplace_hint_unique                                                       \
+            (hint BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)); }              \
    //!
-   #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINERS_MAX_CONSTRUCTOR_PARAMETERS)
+   #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
    #include BOOST_PP_LOCAL_ITERATE()
 
-   #endif   //#ifdef BOOST_CONTAINERS_PERFECT_FORWARDING
+   #endif   //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    //! <b>Effects</b>: Erases the element pointed to by position.
    //!
@@ -702,9 +704,9 @@ class flat_multiset
    /// @cond
    private:
    BOOST_COPYABLE_AND_MOVABLE(flat_multiset)
-   typedef containers_detail::flat_tree<T, T, containers_detail::identity<T>, Pred, A> tree_t;
+   typedef container_detail::flat_tree<T, T, container_detail::identity<T>, Pred, A> tree_t;
    tree_t m_flat_tree;  // flat tree representing flat_multiset
-   typedef typename containers_detail::
+   typedef typename container_detail::
       move_const_ref_type<T>::type insert_const_ref_type;
    /// @endcond
 
@@ -727,8 +729,14 @@ class flat_multiset
    typedef typename tree_t::allocator_type         allocator_type;
    typedef typename tree_t::stored_allocator_type  stored_allocator_type;
 
-   // allocation/deallocation
-   explicit flat_multiset(const Pred& comp = Pred(),
+   //! <b>Effects</b>: Defatuls constructs an empty flat_map.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   explicit flat_multiset()
+      : m_flat_tree()
+   {}
+
+   explicit flat_multiset(const Pred& comp,
                           const allocator_type& a = allocator_type())
       : m_flat_tree(comp, a) {}
 
@@ -920,7 +928,6 @@ class flat_multiset
       { return m_flat_tree.max_size(); }
 
    //! <b>Effects</b>: Swaps the contents of *this and x.
-   //!   If this->allocator_type() != x.allocator_type() allocators are also swapped.
    //!
    //! <b>Throws</b>: Nothing.
    //!
@@ -934,7 +941,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(insert_const_ref_type x) 
    {  return priv_insert(x); }
 
@@ -943,7 +950,7 @@ class flat_multiset
    { return this->insert(const_cast<const T &>(x)); }
 
    template<class U>
-   iterator insert(const U &u, typename containers_detail::enable_if_c<containers_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
+   iterator insert(const U &u, typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
    {  return priv_insert(u); }
    #endif
 
@@ -953,7 +960,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(BOOST_RV_REF(value_type) x) 
    {  return m_flat_tree.insert_equal(boost::move(x));   }
 
@@ -966,7 +973,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator p, insert_const_ref_type x) 
    {  return priv_insert(p, x); }
 
@@ -975,7 +982,7 @@ class flat_multiset
    { return this->insert(position, const_cast<const T &>(x)); }
 
    template<class U>
-   iterator insert(const_iterator position, const U &u, typename containers_detail::enable_if_c<containers_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
+   iterator insert(const_iterator position, const U &u, typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
    {  return priv_insert(position, u); }
    #endif
 
@@ -988,7 +995,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x) 
    {  return m_flat_tree.insert_equal(position, boost::move(x));  }
 
@@ -999,12 +1006,12 @@ class flat_multiset
    //! <b>Complexity</b>: At most N log(size()+N) (N is the distance from first to last)
    //!   search time plus N*size() insertion time.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class InputIterator>
    void insert(InputIterator first, InputIterator last) 
       {  m_flat_tree.insert_equal(first, last);  }
 
-   #if defined(BOOST_CONTAINERS_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+   #if defined(BOOST_CONTAINER_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
 
    //! <b>Effects</b>: Inserts an object of type T constructed with
    //!   std::forward<Args>(args)... and returns the iterator pointing to the
@@ -1013,7 +1020,7 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time plus linear insertion
    //!   to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace(Args&&... args)
    {  return m_flat_tree.emplace_equal(boost::forward<Args>(args)...); }
@@ -1028,32 +1035,28 @@ class flat_multiset
    //! <b>Complexity</b>: Logarithmic search time (constant if x is inserted
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
-   //! <b>Note</b>: If an element it's inserted it might invalidate elements.
+   //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace_hint(const_iterator hint, Args&&... args)
    {  return m_flat_tree.emplace_hint_equal(hint, boost::forward<Args>(args)...); }
 
-   #else //#ifdef BOOST_CONTAINERS_PERFECT_FORWARDING
+   #else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
-   iterator emplace()
-   {  return m_flat_tree.emplace_equal(); }
-
-   iterator emplace_hint(const_iterator hint)
-   {  return m_flat_tree.emplace_hint_equal(hint); }
-
-   #define BOOST_PP_LOCAL_MACRO(n)                                                                             \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                                                  \
-   iterator emplace(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))                                     \
-   {  return m_flat_tree.emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _)); }            \
-                                                                                                               \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                                                  \
-   iterator emplace_hint(const_iterator hint, BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_LIST, _))           \
-   {  return m_flat_tree.emplace_hint_equal(hint, BOOST_PP_ENUM(n, BOOST_CONTAINERS_PP_PARAM_FORWARD, _)); } \
+   #define BOOST_PP_LOCAL_MACRO(n)                                                                 \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)          \
+   iterator emplace(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                           \
+   {  return m_flat_tree.emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)); }  \
+                                                                                                   \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)          \
+   iterator emplace_hint(const_iterator hint                                                       \
+                         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))             \
+   {  return m_flat_tree.emplace_hint_equal                                                        \
+            (hint BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)); }              \
    //!
-   #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINERS_MAX_CONSTRUCTOR_PARAMETERS)
+   #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
    #include BOOST_PP_LOCAL_ITERATE()
 
-   #endif   //#ifdef BOOST_CONTAINERS_PERFECT_FORWARDING
+   #endif   //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    //! <b>Effects</b>: Erases the element pointed to by position.
    //!
@@ -1258,4 +1261,4 @@ namespace container {
 
 #include <boost/container/detail/config_end.hpp>
 
-#endif /* BOOST_CONTAINERS_FLAT_SET_HPP */
+#endif /* BOOST_CONTAINER_FLAT_SET_HPP */

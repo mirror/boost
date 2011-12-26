@@ -1,12 +1,12 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2009-2009.
+// (C) Copyright Ion Gaztanaga  2009-2011.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 //
-// See http://www.boost.org/libs/intrusive for documentation.
+// See http://www.boost.org/libs/container for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
 //  This code was modified from the code posted by Alexandre Courpron in his
@@ -19,13 +19,13 @@
 // provided that this copyright notice appears on all copies of the software.
 ///////////////////////////////////////////////////////////////////////////////
 
-#ifndef BOOST_INTRUSIVE_DETAIL_FUNCTION_DETECTOR_HPP
-#define BOOST_INTRUSIVE_DETAIL_FUNCTION_DETECTOR_HPP
+#ifndef BOOST_CONTAINER_DETAIL_FUNCTION_DETECTOR_HPP
+#define BOOST_CONTAINER_DETAIL_FUNCTION_DETECTOR_HPP
 
-#include <boost/intrusive/detail/config_begin.hpp>
+#include <boost/container/detail/config_begin.hpp>
 
 namespace boost {
-namespace intrusive {
+namespace container {
 namespace function_detector {
 
     typedef char NotFoundType;
@@ -39,12 +39,12 @@ namespace function_detector {
          };
 
 }  //namespace boost {
-}  //namespace intrusive {
+}  //namespace container {
 }  //namespace function_detector {
 
-#define BOOST_INTRUSIVE_CREATE_FUNCTION_DETECTOR(Identifier, InstantiationKey) \
+#define BOOST_CONTAINER_CREATE_FUNCTION_DETECTOR(Identifier, InstantiationKey) \
    namespace boost { \
-   namespace intrusive { \
+   namespace container { \
    namespace function_detector { \
    template < class T, \
             class NonStaticType, \
@@ -74,15 +74,15 @@ namespace function_detector {
    public : \
       static const int check = NotFound + (sizeof(Test<T>(0, 0)) - sizeof(NotFoundType));\
    };\
-}}} //namespace boost::intrusive::function_detector { 
+}}} //namespace boost::container::function_detector { 
 
-#define BOOST_INTRUSIVE_DETECT_FUNCTION(Class, InstantiationKey, ReturnType, Identifier, Params) \
-    ::boost::intrusive::function_detector::DetectMember_##InstantiationKey_##Identifier< Class,\
+#define BOOST_CONTAINER_DETECT_FUNCTION(Class, InstantiationKey, ReturnType, Identifier, Params) \
+    ::boost::container::function_detector::DetectMember_##InstantiationKey_##Identifier< Class,\
                                          ReturnType (Class::*)Params,\
                                          ReturnType (Class::*)Params const,\
                                          ReturnType (*)Params \
                                        >::check
 
-#include <boost/intrusive/detail/config_end.hpp>
+#include <boost/container/detail/config_end.hpp>
 
-#endif   //@ifndef BOOST_INTRUSIVE_DETAIL_FUNCTION_DETECTOR_HPP
+#endif   //@ifndef BOOST_CONTAINER_DETAIL_FUNCTION_DETECTOR_HPP
