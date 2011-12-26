@@ -116,8 +116,7 @@ public:
     template<class SubType>
     void assign(const interval_base_set<SubType,DomainT,Compare,Interval,Alloc>& src)
     {
-        typedef typename
-        interval_base_set<SubType,DomainT,Compare,Interval,Alloc> src_type;
+        typedef interval_base_set<SubType,DomainT,Compare,Interval,Alloc> src_type;
 
         this->clear();
         //this->_set.insert(src.begin(), src.end()); //JODO range-insert is not working with Boost.Containers

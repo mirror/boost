@@ -90,8 +90,8 @@ public:
     void assign(const interval_base_map<SubType,DomainT,CodomainT,
                                         Traits,Compare,Combine,Section,Interval,Alloc>& src)
     {
-        typedef typename
-        interval_base_map<SubType,DomainT,CodomainT,Traits,Compare,Combine,Section,Interval,Alloc> src_type;
+        typedef interval_base_map<SubType,DomainT,CodomainT,Traits
+                                 ,Compare,Combine,Section,Interval,Alloc> src_type;
 
         this->clear();
         //this->_map.insert(src.begin(), src.end()); //JODO range-insert is not working with Boost.Containers
