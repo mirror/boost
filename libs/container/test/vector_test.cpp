@@ -7,7 +7,6 @@
 // See http://www.boost.org/libs/container for documentation.
 //
 //////////////////////////////////////////////////////////////////////////////
-
 #include <boost/container/detail/config_begin.hpp>
 #include <algorithm>
 #include <memory>
@@ -16,18 +15,31 @@
 #include <functional>
 
 #include <boost/container/vector.hpp>
+#include <boost/move/move.hpp>
 #include "check_equal_containers.hpp"
 #include "movable_int.hpp"
 #include "expand_bwd_test_allocator.hpp"
 #include "expand_bwd_test_template.hpp"
 #include "dummy_test_allocator.hpp"
+#include "propagate_allocator_test.hpp"
 #include "vector_test.hpp"
 
 using namespace boost::container;
 
+namespace boost {
+namespace container {
+
 //Explicit instantiation to detect compilation errors
 template class boost::container::vector<test::movable_and_copyable_int, 
+   test::simple_allocator<test::movable_and_copyable_int> >;
+
+template class boost::container::vector<test::movable_and_copyable_int, 
    test::dummy_test_allocator<test::movable_and_copyable_int> >;
+
+template class boost::container::vector<test::movable_and_copyable_int, 
+   std::allocator<test::movable_and_copyable_int> >;
+
+}}
 
 int test_expand_bwd()
 {
@@ -81,7 +93,6 @@ enum Test
    zero, one, two, three, four, five, six
 };
 
-
 int main()
 {
    recursive_vector_test();
@@ -98,7 +109,6 @@ int main()
    typedef vector<test::movable_and_copyable_int> MyCopyMoveVector;
    typedef vector<test::copyable_int> MyCopyVector;
    typedef vector<Test> MyEnumVector;
-
 
    if(test::vector_test<MyVector>())
       return 1;
@@ -122,6 +132,9 @@ int main()
       < vector<test::EmplaceInt>, Options>())
       return 1;
 
+   if(!boost::container::test::test_propagate_allocator<vector>())
+      return 1;
+  
    return 0;
 }
 #include <boost/container/detail/config_end.hpp>

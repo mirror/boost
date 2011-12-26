@@ -26,26 +26,39 @@
 #include <boost/container/detail/type_traits.hpp>
 #include <string>
 #include "emplace_test.hpp"
+#include "propagate_allocator_test.hpp"
 #include "vector_test.hpp"
 
-
 using namespace boost::container;
+
+namespace boost {
+namespace container {
 
 //Explicit instantiation to detect compilation errors
 template class boost::container::deque
  < test::movable_and_copyable_int
+ , test::simple_allocator<test::movable_and_copyable_int> >;
+
+template class boost::container::deque
+ < test::movable_and_copyable_int
  , test::dummy_test_allocator<test::movable_and_copyable_int> >;
+
+template class boost::container::deque
+ < test::movable_and_copyable_int
+ , std::allocator<test::movable_and_copyable_int> >;
+
+}}
 
 //Function to check if both sets are equal
 template<class V1, class V2>
-bool deque_copyable_only(V1 *, V2 *, containers_detail::false_type)
+bool deque_copyable_only(V1 *, V2 *, container_detail::false_type)
 {
    return true;
 }
 
 //Function to check if both sets are equal
 template<class V1, class V2>
-bool deque_copyable_only(V1 *cntdeque, V2 *stddeque, containers_detail::true_type)
+bool deque_copyable_only(V1 *cntdeque, V2 *stddeque, container_detail::true_type)
 {
    typedef typename V1::value_type IntType;
    std::size_t size = cntdeque->size();
@@ -100,6 +113,10 @@ bool deque_copyable_only(V1 *cntdeque, V2 *stddeque, containers_detail::true_typ
 class recursive_deque
 {
 public:
+
+   recursive_deque & operator=(const recursive_deque &x)
+   {  this->deque_ = x.deque_;   return *this; }
+
    int id_;
    deque<recursive_deque> deque_;
 };
@@ -161,6 +178,7 @@ bool do_test()
 
       typename MyCntDeque::iterator it;
       typename MyCntDeque::const_iterator cit = it;
+      (void)cit;
 
       cntdeque->erase(cntdeque->begin()++);
       stddeque->erase(stddeque->begin()++);
@@ -212,7 +230,7 @@ bool do_test()
       }
 
       if(!deque_copyable_only(cntdeque, stddeque
-                     ,containers_detail::bool_<boost::container::test::is_copyable<IntType>::value>())){
+                     ,container_detail::bool_<boost::container::test::is_copyable<IntType>::value>())){
          return false;
       }
 
@@ -268,6 +286,21 @@ int main ()
    if(!do_test<test::movable_int>())
       return 1;
 
+   if(!do_test<test::movable_and_copyable_int>())
+      return 1;
+
+   if(!do_test<test::copyable_int>())
+      return 1;
+
+   //Test non-copy-move operations
+   {
+      deque<test::non_copymovable_int> d;
+      d.emplace_back();
+      d.emplace_front(1);
+      d.resize(10);
+      d.resize(1);
+   }
+
    {
       typedef deque<int> MyDeque;
       typedef deque<test::movable_int> MyMoveDeque;
@@ -287,6 +320,9 @@ int main ()
 
    if(!boost::container::test::test_emplace
       < deque<test::EmplaceInt>, Options>())
+      return 1;
+
+   if(!boost::container::test::test_propagate_allocator<deque>())
       return 1;
 
    return 0;

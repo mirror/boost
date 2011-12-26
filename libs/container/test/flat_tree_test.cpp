@@ -17,9 +17,105 @@
 #include "movable_int.hpp"
 #include "set_test.hpp"
 #include "map_test.hpp"
+#include "propagate_allocator_test.hpp"
 #include "emplace_test.hpp"
 
 using namespace boost::container;
+
+namespace boost {
+namespace container {
+
+//Explicit instantiation to detect compilation errors
+
+//flat_map
+template class flat_map
+   < test::movable_and_copyable_int
+   , test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , test::dummy_test_allocator
+      < std::pair<test::movable_and_copyable_int, test::movable_and_copyable_int> >
+   >;
+
+template class flat_map
+   < test::movable_and_copyable_int
+   , test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , test::simple_allocator
+      < std::pair<test::movable_and_copyable_int, test::movable_and_copyable_int> >
+   >;
+
+template class flat_map
+   < test::movable_and_copyable_int
+   , test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , std::allocator
+      < std::pair<test::movable_and_copyable_int, test::movable_and_copyable_int> >
+   >;
+
+//flat_multimap
+template class flat_multimap
+   < test::movable_and_copyable_int
+   , test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , test::dummy_test_allocator
+      < std::pair<test::movable_and_copyable_int, test::movable_and_copyable_int> >
+   >;
+
+template class flat_multimap
+   < test::movable_and_copyable_int
+   , test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , test::simple_allocator
+      < std::pair<test::movable_and_copyable_int, test::movable_and_copyable_int> >
+   >;
+
+template class flat_multimap
+   < test::movable_and_copyable_int
+   , test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , std::allocator
+      < std::pair<test::movable_and_copyable_int, test::movable_and_copyable_int> >
+   >;
+//flat_set
+template class flat_set
+   < test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , test::dummy_test_allocator<test::movable_and_copyable_int>
+   >;
+
+template class flat_set
+   < test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , test::simple_allocator<test::movable_and_copyable_int>
+   >;
+
+template class flat_set
+   < test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , std::allocator<test::movable_and_copyable_int>
+   >;
+
+//flat_multiset
+template class flat_multiset
+   < test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , test::dummy_test_allocator<test::movable_and_copyable_int>
+   >;
+
+template class flat_multiset
+   < test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , test::simple_allocator<test::movable_and_copyable_int>
+   >;
+
+template class flat_multiset
+   < test::movable_and_copyable_int
+   , std::less<test::movable_and_copyable_int>
+   , std::allocator<test::movable_and_copyable_int>
+   >;
+
+}} //boost::container
+
 
 //Alias allocator type
 typedef std::allocator<int> allocator_t;
@@ -82,7 +178,6 @@ typedef flat_map<test::copyable_int, test::copyable_int
 typedef flat_multimap<test::copyable_int, test::copyable_int
                 ,std::less<test::copyable_int>
                 ,copy_pair_allocator_t>                        MyCopyBoostMultiMap;
-
 
 
 //Test recursive structures
@@ -178,6 +273,36 @@ void test_move()
    move_assign.swap(original);
 }
 
+template<class T, class A>
+class flat_tree_propagate_test_wrapper
+   : public container_detail::flat_tree<T, T, container_detail::identity<T>, std::less<T>, A>
+{
+   BOOST_COPYABLE_AND_MOVABLE(flat_tree_propagate_test_wrapper)
+   typedef container_detail::flat_tree<T, T, container_detail::identity<T>, std::less<T>, A> Base;
+   public:
+   flat_tree_propagate_test_wrapper()
+      : Base()
+   {}
+
+   flat_tree_propagate_test_wrapper(const flat_tree_propagate_test_wrapper &x)
+      : Base(x)
+   {}
+
+   flat_tree_propagate_test_wrapper(BOOST_RV_REF(flat_tree_propagate_test_wrapper) x)
+      : Base(boost::move(static_cast<Base&>(x)))
+   {}
+
+   flat_tree_propagate_test_wrapper &operator=(BOOST_COPY_ASSIGN_REF(flat_tree_propagate_test_wrapper) x)
+   {  this->Base::operator=(x);  return *this; }
+
+   flat_tree_propagate_test_wrapper &operator=(BOOST_RV_REF(flat_tree_propagate_test_wrapper) x)
+   {  this->Base::operator=(boost::move(static_cast<Base&>(x)));  return *this; }
+
+   void swap(flat_tree_propagate_test_wrapper &x)
+   {  this->Base::swap(x);  }
+};
+
+
 int main()
 {
    using namespace boost::container::test;
@@ -272,13 +397,13 @@ int main()
       return 1;
    }
 
-//   if (0 != map_test<
-//                  MyMovableBoostMap
-//                  ,MyStdMap
-//                  ,MyMovableBoostMultiMap
-//                  ,MyStdMultiMap>()){
-//      return 1;
-//   }
+   if (0 != map_test<
+                  MyMovableBoostMap
+                  ,MyStdMap
+                  ,MyMovableBoostMultiMap
+                  ,MyStdMultiMap>()){
+      return 1;
+   }
 
    if (0 != map_test<
                   MyMoveCopyBoostMap
@@ -319,14 +444,17 @@ int main()
    const test::EmplaceOptions SetOptions = (test::EmplaceOptions)(test::EMPLACE_HINT | test::EMPLACE_ASSOC);
    const test::EmplaceOptions MapOptions = (test::EmplaceOptions)(test::EMPLACE_HINT_PAIR | test::EMPLACE_ASSOC_PAIR);
 
-//   if(!boost::container::test::test_emplace<flat_map<test::EmplaceInt, test::EmplaceInt>, MapOptions>())
-//      return 1;
+   if(!boost::container::test::test_emplace<flat_map<test::EmplaceInt, test::EmplaceInt>, MapOptions>())
+      return 1;
    if(!boost::container::test::test_emplace<flat_multimap<test::EmplaceInt, test::EmplaceInt>, MapOptions>())
       return 1;
    if(!boost::container::test::test_emplace<flat_set<test::EmplaceInt>, SetOptions>())
       return 1;
    if(!boost::container::test::test_emplace<flat_multiset<test::EmplaceInt>, SetOptions>())
       return 1;
+   if(!boost::container::test::test_propagate_allocator<flat_tree_propagate_test_wrapper>())
+      return 1;
+
    return 0;
 }
 
