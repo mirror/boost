@@ -3824,6 +3824,15 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [section:release_notes Release Notes]
 
+[section:release_notes_boost_1_49_00 Boost 1.49 Release]
+
+*  Fixed bugs
+  [@https://svn.boost.org/trac/boost/ticket/6223 #6223],
+  [@https://svn.boost.org/trac/boost/ticket/6153 #6153].
+
+
+[endsect]
+
 [section:release_notes_boost_1_48_00 Boost 1.48 Release]
 
 *  Fixed bugs
@@ -3927,15 +3936,9 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [*Boost.Intrusive] has been tested on the following compilers/platforms:
 
-*  Visual 7.1/WinXP
-*  Visual 8.0/WinXP
-*  Visual 9.0/WinXP
-*  GCC 4.1.1/MinGW
-*  GCC 3.4.4/Cygwin
-*  Intel 9.1/WinXP
-*  GCC 4.1.2/Linux
-*  GCC 3.4.3/Solaris 11
-*  GCC 4.0/Mac Os 10.4.1
+*  Visual >= 7.1
+*  GCC >= 4.1
+*  Intel 11
 
 [endsect]
 
