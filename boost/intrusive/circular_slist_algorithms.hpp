@@ -74,9 +74,9 @@ class circular_slist_algorithms
    //! 
    //! <b>Effects</b>: Returns true is "this_node" is the only node of a circular list:
    //!  or it's a not inserted node:
-   //!  <tt>return !NodeTraits::get_next(this_node) || NodeTraits::get_next(this_node) == this_node</tt>
+   //!  <tt>return false == NodeTraits::get_next(this_node) || NodeTraits::get_next(this_node) == this_node</tt>
    //! 
-   //! <b>Complexity</b>: Constant 
+   //! <b>Complexity</b>: Constant
    //! 
    //! <b>Throws</b>: Nothing.
    static bool unique(const_node_ptr this_node);

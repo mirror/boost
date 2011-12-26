@@ -38,14 +38,14 @@ template <typename Ptr>
 struct pointer_traits
 {
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+      //!The pointer type
+      //!queried by this pointer_traits instantiation
+      typedef Ptr             pointer;
+
       //!Ptr::element_type if such a type exists; otherwise, T if Ptr is a class
       //!template instantiation of the form SomePointer<T, Args>, where Args is zero or
       //!more type arguments ; otherwise , the specialization is ill-formed.
       typedef unspecified_type element_type;
-
-      //!Ptr::difference_type if such a type exists; otherwise,
-      //!std::ptrdiff_t.
-      typedef unspecified_type difference_type;
 
       //!Ptr::difference_type if such a type exists; otherwise,
       //!std::ptrdiff_t.
@@ -86,10 +86,10 @@ struct pointer_traits
       #endif
    #endif   //#if !defined(BOOST_NO_TEMPLATE_ALIASES)
 
-   //!<b>Remark</b>: If element_type is (possibly cv-qualified) void, r type is unspecified; otherwise,
+   //! <b>Remark</b>: If element_type is (possibly cv-qualified) void, r type is unspecified; otherwise,
    //!   it is element_type &.
-   //
-   //!<b>Returns</b>: A dereferenceable pointer to r obtained by calling Ptr::pointer_to(r).
+   //!
+   //! <b>Returns</b>: A dereferenceable pointer to r obtained by calling Ptr::pointer_to(r).
    //!   Non-standard extension: If such function does not exist, returns pointer(addressof(r));
    static pointer pointer_to(reference r)
    {
@@ -102,9 +102,9 @@ struct pointer_traits
       return pointer_traits::priv_pointer_to(flag, r);
    }
 
-   //!<b>Remark</b>: Non-standard extension.
-   //
-   //!<b>Returns</b>: A dereferenceable pointer to r obtained by calling Ptr::static_cast_from(r).
+   //! <b>Remark</b>: Non-standard extension.
+   //!
+   //! <b>Returns</b>: A dereferenceable pointer to r obtained by calling Ptr::static_cast_from(r).
    //!   If such function does not exist, returns pointer_to(static_cast<element_type&>(*uptr))
    template<class UPtr>
    static pointer static_cast_from(const UPtr &uptr)
@@ -116,9 +116,9 @@ struct pointer_traits
       return pointer_traits::priv_static_cast_from(flag, uptr);
    }
 
-   //!<b>Remark</b>: Non-standard extension.
-   //
-   //!<b>Returns</b>: A dereferenceable pointer to r obtained by calling Ptr::const_cast_from(r).
+   //! <b>Remark</b>: Non-standard extension.
+   //!
+   //! <b>Returns</b>: A dereferenceable pointer to r obtained by calling Ptr::const_cast_from(r).
    //!   If such function does not exist, returns pointer_to(const_cast<element_type&>(*uptr))
    template<class UPtr>
    static pointer const_cast_from(const UPtr &uptr)
@@ -130,9 +130,9 @@ struct pointer_traits
       return pointer_traits::priv_const_cast_from(flag, uptr);
    }
 
-   //!<b>Remark</b>: Non-standard extension.
-   //
-   //!<b>Returns</b>: A dereferenceable pointer to r obtained by calling Ptr::dynamic_cast_from(r).
+   //! <b>Remark</b>: Non-standard extension.
+   //!
+   //! <b>Returns</b>: A dereferenceable pointer to r obtained by calling Ptr::dynamic_cast_from(r).
    //!   If such function does not exist, returns pointer_to(*dynamic_cast<element_type*>(&*uptr))
    template<class UPtr>
    static pointer dynamic_cast_from(const UPtr &uptr)
