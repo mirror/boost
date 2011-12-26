@@ -807,7 +807,7 @@ private:
         if (it != trees.end())
             BOOST_HEAP_ASSERT(static_cast<node_pointer>(&*it)->child_count() >= n->child_count());
 
-        for (;;) {
+        while(true) {
             BOOST_HEAP_ASSERT(!n->is_linked());
             if (it == trees.end())
                 break;

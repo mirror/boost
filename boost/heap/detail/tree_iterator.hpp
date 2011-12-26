@@ -349,7 +349,7 @@ public:
 
             ++next;
 
-            for (;;) {
+            while (true) {
                 if (parent == NULL || next != parent->children.end())
                     break;
 
