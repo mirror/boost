@@ -379,7 +379,7 @@ class deque_base
       :  members_(a)
    { this->priv_initialize_map(num_elements); }
 
-   deque_base(const allocator_type& a) 
+   explicit deque_base(const allocator_type& a) 
       :  members_(a)
    {}
 
