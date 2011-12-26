@@ -325,17 +325,14 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_rebalance
       >::type assoc_type;
    typedef std::vector<value_type> orig_set_t;
    typedef typename orig_set_t::iterator iterator_t;
-   std::size_t num_values;
    orig_set_t original_testset;
    {
       assoc_type testset (values.begin(), values.end());
-      num_values = testset.size();
       original_testset.insert(original_testset.end(), testset.begin(), testset.end());
    }
    {
       assoc_type testset(values.begin(), values.end());
       testset.rebalance();
-      iterator_t it = original_testset.begin();
       TEST_INTRUSIVE_SEQUENCE_EXPECTED(original_testset, testset.begin());
    }
 

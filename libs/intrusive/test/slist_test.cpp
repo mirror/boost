@@ -13,7 +13,7 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/slist.hpp>
-#include <boost/intrusive/detail/pointer_to_other.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 #include "itestvalue.hpp"
 #include "smart_ptr.hpp"
 #include "common_functors.hpp"

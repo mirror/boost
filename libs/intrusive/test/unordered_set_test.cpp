@@ -12,7 +12,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/unordered_set.hpp>
-#include <boost/intrusive/detail/pointer_to_other.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 #include "itestvalue.hpp"
 #include "smart_ptr.hpp"
 #include "common_functors.hpp"
@@ -101,7 +101,9 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    typedef typename unordered_set_type::bucket_traits bucket_traits;
    {
       typename unordered_set_type::bucket_type buckets [BucketSize];
-      unordered_set_type testset(bucket_traits(buckets, BucketSize));
+      unordered_set_type testset(bucket_traits(
+         pointer_traits<typename unordered_set_type::bucket_ptr>::
+            pointer_to(buckets[0]), BucketSize));
       testset.insert(values.begin(), values.end());
       test::test_container(testset);
       testset.clear();
@@ -143,7 +145,9 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::test
       values[i].value_ = i; 
 
    typename unordered_set_type::bucket_type buckets [BucketSize];
-   unordered_set_type testset(bucket_traits(buckets, BucketSize));
+   unordered_set_type testset(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+            pointer_to(buckets[0]), BucketSize));
    for (int i = 0; i < 5; ++i)
       testset.insert (values[i]);
 
@@ -171,7 +175,9 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
    typename unordered_set_type::bucket_type buckets [BucketSize];
-   unordered_set_type testset1(values.begin(), values.end(), bucket_traits(buckets, BucketSize));
+   unordered_set_type testset1(values.begin(), values.end(), bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets[0]), BucketSize));
    BOOST_TEST (5 == std::distance(testset1.begin(), testset1.end()));
 
    if(Incremental){
@@ -204,7 +210,9 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
    typename unordered_set_type::bucket_type buckets [BucketSize];
-   unordered_set_type testset(bucket_traits(buckets, BucketSize));
+   unordered_set_type testset(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets[0]), BucketSize));
    testset.insert(&values[0] + 2, &values[0] + 5);
 
    const unordered_set_type& const_testset = testset;
@@ -263,8 +271,12 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
 
    typename unordered_set_type::bucket_type buckets1 [BucketSize];
    typename unordered_set_type::bucket_type buckets2 [BucketSize];
-   unordered_set_type testset1(&values[0], &values[0] + 2, bucket_traits(buckets1, BucketSize));
-   unordered_set_type testset2(bucket_traits(buckets2, BucketSize));
+   unordered_set_type testset1(&values[0], &values[0] + 2, bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize));
+   unordered_set_type testset2(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets2[0]), BucketSize));
 
    testset2.insert (&values[0] + 2, &values[0] + 6);
    testset1.swap (testset2);
@@ -307,7 +319,9 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    //Build a uset
    typename unordered_set_type::bucket_type buckets1 [BucketSize];
    typename unordered_set_type::bucket_type buckets2 [BucketSize*2];
-   unordered_set_type testset1(&values[0], &values[0] + 6, bucket_traits(buckets1, BucketSize));
+   unordered_set_type testset1(&values[0], &values[0] + 6, bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize));
    //Test current state
    BOOST_TEST(testset1.split_count() == BucketSize/2);
    {  int init_values [] = { 4, 5, 1, 2, 3 };
@@ -334,21 +348,27 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    //Try incremental hashing specifying a new bucket traits pointing to the same array
    //
    //This incremental rehash should fail because the new size is not twice the original
-   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets1, BucketSize)) == false);
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize)) == false);
    BOOST_TEST(testset1.split_count() == BucketSize);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
    TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //This incremental rehash should success because the new size is twice the original
    //and split_count is the same as the old bucket count
-   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets1, BucketSize*2)) == true);
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize*2)) == true);
    BOOST_TEST(testset1.split_count() == BucketSize);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
    TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //This incremental rehash should also success because the new size is half the original
    //and split_count is the same as the new bucket count
-   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets1, BucketSize)) == true);
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize)) == true);
    BOOST_TEST(testset1.split_count() == BucketSize);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
    TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
@@ -357,39 +377,51 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    //Try incremental hashing specifying a new bucket traits pointing to the same array
    //
    //This incremental rehash should fail because the new size is not twice the original
-   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets2, BucketSize)) == false);
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets2[0]), BucketSize)) == false);
    BOOST_TEST(testset1.split_count() == BucketSize);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
    TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //This incremental rehash should success because the new size is twice the original
    //and split_count is the same as the old bucket count
-   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets2, BucketSize*2)) == true);
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets2[0]), BucketSize*2)) == true);
    BOOST_TEST(testset1.split_count() == BucketSize);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
    TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //This incremental rehash should also success because the new size is half the original
    //and split_count is the same as the new bucket count
-   BOOST_TEST(testset1.incremental_rehash(bucket_traits(buckets1, BucketSize)) == true);
+   BOOST_TEST(testset1.incremental_rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize)) == true);
    BOOST_TEST(testset1.split_count() == BucketSize);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
    TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //Full shrink rehash
-   testset1.rehash(bucket_traits(buckets1, 4));
+   testset1.rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), 4));
    BOOST_TEST (testset1.size() == values.size()-1);
    BOOST_TEST (testset1.incremental_rehash() == false);
    {  int init_values [] = { 4, 5, 1, 2, 3 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
    //Full shrink rehash again
-   testset1.rehash(bucket_traits(buckets1, 2));
+   testset1.rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), 2));
    BOOST_TEST (testset1.size() == values.size()-1);
    BOOST_TEST (testset1.incremental_rehash() == false);
    {  int init_values [] = { 2, 4, 3, 5, 1 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
    //Full growing rehash
-   testset1.rehash(bucket_traits(buckets1, BucketSize));
+   testset1.rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize));
    BOOST_TEST (testset1.size() == values.size()-1);
    BOOST_TEST (testset1.incremental_rehash() == false);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
@@ -439,29 +471,39 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    typename unordered_set_type::bucket_type buckets2 [2];
    typename unordered_set_type::bucket_type buckets3 [BucketSize*2];
 
-   unordered_set_type testset1(&values[0], &values[0] + 6, bucket_traits(buckets1, BucketSize));
+   unordered_set_type testset1(&values[0], &values[0] + 6, bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize));
    BOOST_TEST (testset1.size() == values.size()-1);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
-   testset1.rehash(bucket_traits(buckets2, 2));
+   testset1.rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets2[0]), 2));
    BOOST_TEST (testset1.size() == values.size()-1);
    {  int init_values [] = { 4, 2, 5, 3, 1 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
-   testset1.rehash(bucket_traits(buckets3, BucketSize*2));
+   testset1.rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets3[0]), BucketSize*2));
    BOOST_TEST (testset1.size() == values.size()-1);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //Now rehash reducing the buckets
-   testset1.rehash(bucket_traits(buckets3, 2));
+   testset1.rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets3[0]), 2));
    BOOST_TEST (testset1.size() == values.size()-1);
    {  int init_values [] = { 4, 2, 5, 3, 1 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
 
    //Now rehash increasing the buckets
-   testset1.rehash(bucket_traits(buckets3, BucketSize*2));
+   testset1.rehash(bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets3[0]), BucketSize*2));
    BOOST_TEST (testset1.size() == values.size()-1);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
@@ -485,7 +527,9 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    typedef typename unordered_set_type::bucket_traits bucket_traits;
 
    typename unordered_set_type::bucket_type buckets [BucketSize];
-   unordered_set_type testset (values.begin(), values.end(), bucket_traits(buckets, BucketSize));
+   unordered_set_type testset (values.begin(), values.end(), bucket_traits(
+      pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets[0]), BucketSize));
    typedef typename unordered_set_type::iterator iterator;
 
    value_type cmp_val;
@@ -521,8 +565,12 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>
       //Test with equal bucket arrays
       typename unordered_set_type::bucket_type buckets1 [BucketSize];
       typename unordered_set_type::bucket_type buckets2 [BucketSize];
-      unordered_set_type testset1 (values.begin(), values.end(), bucket_traits(buckets1, BucketSize));
-      unordered_set_type testset2 (bucket_traits(buckets2, BucketSize));
+      unordered_set_type testset1 (values.begin(), values.end(), bucket_traits(
+         pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize));
+      unordered_set_type testset2 (bucket_traits(
+         pointer_traits<typename unordered_set_type::bucket_ptr>::
+            pointer_to(buckets2[0]), BucketSize));
 
       testset2.clone_from(testset1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
       //Ordering is not guarantee in the cloning so insert data in a set and test
@@ -538,8 +586,12 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>
       //Test with bigger source bucket arrays
       typename unordered_set_type::bucket_type buckets1 [BucketSize*2];
       typename unordered_set_type::bucket_type buckets2 [BucketSize];
-      unordered_set_type testset1 (values.begin(), values.end(), bucket_traits(buckets1, BucketSize*2));
-      unordered_set_type testset2 (bucket_traits(buckets2, BucketSize));
+      unordered_set_type testset1 (values.begin(), values.end(), bucket_traits(
+         pointer_traits<typename unordered_set_type::bucket_ptr>::
+         pointer_to(buckets1[0]), BucketSize*2));
+      unordered_set_type testset2 (bucket_traits(
+         pointer_traits<typename unordered_set_type::bucket_ptr>::
+            pointer_to(buckets2[0]), BucketSize));
 
       testset2.clone_from(testset1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
       //Ordering is not guaranteed in the cloning so insert data in a set and test
@@ -555,8 +607,12 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>
       //Test with smaller source bucket arrays
       typename unordered_set_type::bucket_type buckets1 [BucketSize];
       typename unordered_set_type::bucket_type buckets2 [BucketSize*2];
-      unordered_set_type testset1 (values.begin(), values.end(), bucket_traits(buckets1, BucketSize));
-      unordered_set_type testset2 (bucket_traits(buckets2, BucketSize*2));
+      unordered_set_type testset1 (values.begin(), values.end(), bucket_traits(
+         pointer_traits<typename unordered_set_type::bucket_ptr>::
+            pointer_to(buckets1[0]), BucketSize));
+      unordered_set_type testset2 (bucket_traits(
+         pointer_traits<typename unordered_set_type::bucket_ptr>::
+            pointer_to(buckets2[0]), BucketSize*2));
 
       testset2.clone_from(testset1, test::new_cloner<value_type>(), test::delete_disposer<value_type>());
       //Ordering is not guarantee in the cloning so insert data in a set and test

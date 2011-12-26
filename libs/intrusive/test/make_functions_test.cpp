@@ -18,6 +18,7 @@
 #include <boost/intrusive/splay_set.hpp>
 #include <boost/intrusive/treap_set.hpp>
 #include <boost/intrusive/detail/mpl.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 #include "smart_ptr.hpp"
 #include <vector>
 
@@ -92,7 +93,8 @@ int main()
    List  my_list;
    Slist my_slist;
    Set   my_set;
-   USet  my_uset(USet::bucket_traits(buckets, 100));
+   USet  my_uset(USet::bucket_traits
+      (pointer_traits<USet::bucket_ptr>::pointer_to(buckets[0]), 100));
 
    AvlSet      my_avlset;
    SplaySet    my_splayset;

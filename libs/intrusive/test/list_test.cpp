@@ -12,7 +12,7 @@
 /////////////////////////////////////////////////////////////////////////////
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/list.hpp>
-#include <boost/intrusive/detail/pointer_to_other.hpp>
+#include <boost/intrusive/pointer_traits.hpp>
 #include "itestvalue.hpp"
 #include "smart_ptr.hpp"
 #include "common_functors.hpp"
@@ -221,7 +221,7 @@ void test_list<ValueTraits>
 
    {
    typename list_type::const_iterator ci = typename list_type::iterator();
-   //typename list_type::iterator i = typename list_type::const_iterator();
+   (void)ci;
    }
 
    testlist.insert (i, values[0]);
@@ -495,6 +495,5 @@ int main( int, char* [] )
    test_main_template<smart_ptr<void>, false>()();
    test_main_template<void*, true>()();
    test_main_template<smart_ptr<void>, true>()();
-
    return boost::report_errors();
 }
