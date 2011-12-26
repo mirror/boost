@@ -1530,13 +1530,17 @@ void interval_map_move_4_discrete_types()
     typedef IntervalMap<T,U> IntervalMapT;
     typedef typename IntervalMapT::interval_type   IntervalT;
 
-    IntervalMapT map_A(boost::move(static_cast<IntervalMapT&>(IntervalMapT(IDv(0,4,2)))));
+    //JODO static_cast fails for gcc compilers
+    //IntervalMapT map_A(boost::move(static_cast<IntervalMapT&>(IntervalMapT(IDv(0,4,2)))));
+    IntervalMapT map_A(boost::move(static_cast<IntervalMapT&>(IntervalMapT(IDv(0,4,2)).add(IDv(0,0,0)) )));
     IntervalMapT map_B(boost::move(static_cast<IntervalMapT&>(IntervalMapT(IDv(0,2,1)).add(IDv(2,4,1)).add(IDv(0,4,1)))));
 
     BOOST_CHECK( icl::is_element_equal(map_A, map_B) );
     BOOST_CHECK_EQUAL( map_A, join(map_B) );
 
-    map_A = boost::move(static_cast<IntervalMapT&>(IntervalMapT(IIv(1,4,2))));
+    //JODO static_cast fails for gcc compilers
+    //map_A = boost::move(static_cast<IntervalMapT&>(IntervalMapT(IIv(1,4,2))));
+    map_A = boost::move(static_cast<IntervalMapT&>(IntervalMapT(IIv(1,4,2)).add(IDv(0,0,0)) ));
     map_B = boost::move(static_cast<IntervalMapT&>(IntervalMapT(CIv(0,2,1)).insert(IDv(3,5,1)).add(CDv(0,5,1))));
 
     BOOST_CHECK( icl::is_element_equal(map_A, map_B) );
