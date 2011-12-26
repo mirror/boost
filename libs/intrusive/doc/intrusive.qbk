@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2007-2010 Ion Gaztanaga
+ / Copyright (c) 2006-2011 Ion Gaztanaga
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,7 @@
 [library Boost.Intrusive
     [quickbook 1.4]
     [authors [Krzikalla, Olaf], [Gaztanaga, Ion]]
-    [copyright 2005 Olaf Krzikalla, 2006-2010 Ion Gaztanaga]
+    [copyright 2005 Olaf Krzikalla, 2006-2011 Ion Gaztanaga]
     [id intrusive]
     [dirname intrusive]
     [purpose Intrusive containers]
@@ -2313,13 +2313,13 @@ and [*Boost.Intrusive]:
 
 [section:smart_pointers_requirements Requirements for smart pointers compatible with Boost.Intrusive]
 
-Not every smart pointer is compatible with [*Boost.Intrusive]; the smart pointer must
-have the following features:
+Not every smart pointer is compatible with [*Boost.Intrusive]:
 
-*  It must support the same operations as a raw pointer, except casting.
-*  It must be convertible to a raw pointer and constructible from a raw pointer.
-*  It must have the same ownership semantics as a raw pointer. This means that
-   resource management smart pointers (like `boost::shared_ptr`) can't be used.
+   * It must be compatible with C++11 [@http://en.cppreference.com/w/cpp/memory/pointer_traits `std::pointer_traits`]
+      requirements. [*Boost.Intrusive] uses its own [classref boost::intrusive::pointer_traits pointer_traits]
+      class to implement those features in both C++11 and C++03 compilers.
+   * It must  have the same ownership semantics as a raw pointer. This means that
+      resource management smart pointers (like `boost::shared_ptr`) can't be used.
 
 The conversion from the smart pointer to a raw pointer will be implemented as a recursive call to
 `operator->()` until the function returns a raw pointer.
