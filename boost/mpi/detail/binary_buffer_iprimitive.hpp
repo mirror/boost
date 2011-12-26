@@ -21,6 +21,7 @@
 #include <vector>
 #include <boost/mpi/allocator.hpp>
 #include <cstring> // for memcpy
+#include <cassert>
 
 namespace boost { namespace mpi {
 
