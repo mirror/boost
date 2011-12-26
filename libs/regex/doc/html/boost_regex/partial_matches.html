@@ -262,10 +262,10 @@
       <span class="identifier">next_pos</span> <span class="special">=</span> <span class="identifier">buf</span> <span class="special">+</span> <span class="keyword">sizeof</span><span class="special">(</span><span class="identifier">buf</span><span class="special">);</span>
       <span class="comment">// and then iterate:</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cregex_iterator</span> <span class="identifier">a</span><span class="special">(</span>
-         <span class="identifier">buf</span><span class="special">,</span> 
-         <span class="identifier">buf</span> <span class="special">+</span> <span class="identifier">read</span> <span class="special">+</span> <span class="identifier">leftover</span><span class="special">,</span> 
-         <span class="identifier">e</span><span class="special">,</span> 
-         <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_default</span> <span class="special">|</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_partial</span><span class="special">);</span> 
+         <span class="identifier">buf</span><span class="special">,</span>
+         <span class="identifier">buf</span> <span class="special">+</span> <span class="identifier">read</span> <span class="special">+</span> <span class="identifier">leftover</span><span class="special">,</span>
+         <span class="identifier">e</span><span class="special">,</span>
+         <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_default</span> <span class="special">|</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">match_partial</span><span class="special">);</span>
       <span class="identifier">boost</span><span class="special">::</span><span class="identifier">cregex_iterator</span> <span class="identifier">b</span><span class="special">;</span>
 
       <span class="keyword">while</span><span class="special">(</span><span class="identifier">a</span> <span class="special">!=</span> <span class="identifier">b</span><span class="special">)</span>
@@ -281,7 +281,7 @@
             <span class="comment">// full match:</span>
             <span class="special">++</span><span class="identifier">tags</span><span class="special">;</span>
          <span class="special">}</span>
-         
+
          <span class="comment">// move to next match:</span>
          <span class="special">++</span><span class="identifier">a</span><span class="special">;</span>
       <span class="special">}</span>

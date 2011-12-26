@@ -49,7 +49,7 @@
     </p>
 <pre class="programlisting"><span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">{</span>
 
-<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span> 
+<span class="keyword">template</span> <span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">charT</span><span class="special">,</span>
          <span class="keyword">class</span> <span class="identifier">traits</span> <span class="special">=</span> <span class="identifier">regex_traits</span><span class="special">&lt;</span><span class="identifier">charT</span><span class="special">&gt;</span> <span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">basic_regex</span><span class="special">;</span>
 
@@ -72,7 +72,7 @@
       leaves us with the following regular expression to validate credit card number
       formats:
     </p>
-<pre class="programlisting">(\d{4}<span class="strikethrough"></span>){3}\d{4}</pre>
+<pre class="programlisting">(\d{4}[- ]){3}\d{4}</pre>
 <p>
       Here the parenthesis act to group (and mark for future reference) sub-expressions,
       and the {4} means "repeat exactly 4 times". This is an example of
@@ -146,7 +146,7 @@
 <span class="keyword">typedef</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">char</span><span class="special">*&gt;</span>                  <span class="identifier">cmatch</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="keyword">wchar_t</span><span class="special">*&gt;</span>               <span class="identifier">wcmatch</span><span class="special">;</span>
 <span class="keyword">typedef</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">::</span><span class="identifier">const_iterator</span><span class="special">&gt;</span>  <span class="identifier">smatch</span><span class="special">;</span>
-<span class="keyword">typedef</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">wstring</span><span class="special">::</span><span class="identifier">const_iterator</span><span class="special">&gt;</span> <span class="identifier">wsmatch</span><span class="special">;</span> 
+<span class="keyword">typedef</span> <span class="identifier">match_results</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">wstring</span><span class="special">::</span><span class="identifier">const_iterator</span><span class="special">&gt;</span> <span class="identifier">wsmatch</span><span class="special">;</span>
 
 <span class="special">}</span>
 </pre>
