@@ -38,7 +38,7 @@
 
 #include <boost/array.hpp>           // for boost::array
 #include <boost/config.hpp>          // for BOOST_STATIC_CONSTANT, etc.
-#include <boost/cstdint.hpp>         // for UINTMAX_C
+#include <boost/cstdint.hpp>         // for UINTMAX_C, boost::uintmax_t
 #include <boost/integer.hpp>         // for boost::uint_t
 #include <boost/mpl/bool.hpp>        // for boost::mpl::true_, ...false_
 #include <boost/mpl/if.hpp>          // for boost::mpl::if_c
@@ -147,20 +147,14 @@ typedef crc_optimal<32, 0x04C11DB7, 0xFFFFFFFF, 0xFFFFFFFF, true, true>
 //! \cond
 namespace detail
 {
-    template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly, bool Reflect >
-        struct crc_table_t;
-
-    template < std::size_t Bits, bool DoReflect >
-        class crc_helper;
-
-    #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    template < std::size_t Bits >
-        class crc_helper< Bits, false >;
-    #endif
-
     //! Mix-in class to add a possibly-reflecting member function
     template < int BitLength, bool DoIt, int Id = 0 >
         class possible_reflector;
+
+    //! Mix-in class for byte-fed, table-driven CRC algorithms
+    template < int Order, boost::uintmax_t TruncatedPolynomial, bool Reflect,
+     int Id = 0 >
+    class crc_driver;
 
 }  // namespace detail
 //! \endcond
@@ -343,11 +337,10 @@ private:
     // (Processing for reflected input gives reflected remainders, so you only
     // have to apply output-reflection if Reflect-Remainder doesn't match
     // Reflect-Input.)
-    typedef detail::possible_reflector<Bits, ReflectIn>      reflect_i_type;
+    typedef detail::possible_reflector<Bits, ReflectIn>     reflect_i_type;
+    typedef detail::crc_driver<Bits, TruncPoly, ReflectIn>  crc_table_type;
     typedef detail::possible_reflector<Bits, ReflectRem != ReflectIn>
       reflect_o_type;
-    typedef detail::crc_table_t<Bits, TruncPoly, ReflectIn>  crc_table_type;
-    typedef detail::crc_helper<Bits, ReflectIn>              helper_type;
 
     // Member data
     value_type  rem_;
@@ -658,141 +651,119 @@ namespace detail
          static_cast<unsigned>(new_dividend_bit), truncated_divisor, 1, false );
     }
 
+    /** \brief  Update a CRC remainder by several bits, assuming an augmented
+          message
 
-    // CRC table generator
-    template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly, bool Reflect >
-    struct crc_table_t
+        Performs several steps of division required by the CRC algorithm, giving
+        a new remainder polynomial based on the divisor polynomial and the
+        synthesized dividend polynomial (from the old remainder and the
+        newly-provided input).  The computations assume that a zero-valued
+        string of bits will be appended to the message before extracting the
+        CRC.
+
+        \pre  \a Register and \Word are both built-in unsigned integer types
+        \pre  0 \< \a register_length \<= std\::numeric_limits\<\a Register\>
+          \::digits
+        \pre  0 \< \a word_length \<= std\::numeric_limits\<\a Word\>\::digits
+
+        \tparam Register  The type used for representing the remainder and
+          divisor modulo-2 polynomials.  The bit at <code>2<sup>i</sup></code>
+          is used as the coefficient of <i>x<sup>i</sup></i>.
+        \tparam Word  The type used for storing the incoming terms of the
+          dividend modulo-2 polynomial.  The bit at <code>2<sup>i</sup></code>
+          is used as the coefficient of <i>x<sup>i</sup></i> when \a reflect is
+          \c false, and the coefficient of <i>x<sup><var>word_length</var> - 1 -
+          i</sup></i> otherwise.
+
+        \param[in]     register_length  The number of significant low-order bits
+          to be used from \a Register values.  It is the order of the modulo-2
+          polynomial remainder and one less than the divisor's order.
+        \param[in,out] remainder  The upper part of the dividend polynomial
+          before division, and the remainder polynomial after.
+        \param[in]     new_dividend_bits  The coefficients for the next
+          \a word_length lowest terms of the dividend polynomial.
+        \param[in]     truncated_divisor  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+        \param[in]     word_length  The number of lowest-order bits to read from
+          \a new_dividend_bits.
+        \param[in]     reflect  If \c false, read from the highest-order marked
+          bit from \a new_dividend_bits and go down, as normal.  Otherwise,
+          proceed from the lowest-order bit and go up.
+
+        \note  This routine performs straight-forward modulo-2 polynomial
+          division.  It assumes that an augment string will be processed at the
+          end of the message bits before doing CRC analysis.
+        \todo  Use this function somewhere so I can test it.
+     */
+    template < typename Register, typename Word >
+    void  augmented_crc_modulo_word_update( int register_length, Register
+     &remainder, Word new_dividend_bits, Register truncated_divisor, int
+     word_length, bool reflect )
     {
-        BOOST_STATIC_CONSTANT( std::size_t, byte_combos = (1ul << CHAR_BIT) );
+        // Create this masking constant outside the loop.
+        Register const  high_bit_mask = UINTMAX_C(1) << (register_length - 1);
 
-        typedef typename boost::uint_t<Bits>::fast  value_type;
+        // The natural reading order for division is highest digit/bit first.
+        // The "reflect" parameter switches this.  However, building a bit mask
+        // for the lowest bit is the easiest....
+        new_dividend_bits = reflect_optionally( new_dividend_bits, not reflect,
+         word_length );
 
-        BOOST_STATIC_CONSTANT( value_type, truncated_polynomial = TruncPoly );
-#if defined(__BORLANDC__) && defined(_M_IX86) && (__BORLANDC__ == 0x560)
-        // for some reason Borland's command line compiler (version 0x560)
-        // chokes over this unless we do the calculation for it:
-        typedef value_type                   table_type[ 0x100 ];
-#elif defined(__GNUC__)
-        // old versions of GCC (before 4.0.2) choke on using byte_combos
-        // as a constant expression when compiling with -pedantic.
-        typedef value_type                   table_type[1ul << CHAR_BIT];
-#else
-        typedef value_type                   table_type[ byte_combos ];
-#endif
-
-        static  void  init_table();
-
-        static  table_type  table_;
-
-    };  // boost::detail::crc_table_t
-
-    // CRC table generator static data member definition
-    // (Some compilers [Borland C++] require the initializer to be present.)
-    template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly, bool Reflect >
-    typename crc_table_t<Bits, TruncPoly, Reflect>::table_type
-    crc_table_t<Bits, TruncPoly, Reflect>::table_
-     = { 0 };
-
-    // Populate CRC lookup table
-    template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly, bool Reflect >
-    void
-    crc_table_t<Bits, TruncPoly, Reflect>::init_table
-    (
-    )
-    {
-        // compute table only on the first run
-        static  bool  did_init = false;
-        if ( did_init )  return;
-
-        // Loop over every possible dividend value
-        for ( boost::uint_t<CHAR_BIT + 1>::fast  dividend = 0u ; dividend <=
-         UCHAR_MAX ; ++dividend )
+        // Perform modulo-2 division for each new dividend input bit
+        for ( int  i = word_length ; i ; --i, new_dividend_bits >>= 1 )
         {
-            value_type  remainder = 0u;
+            bool const  quotient = remainder & high_bit_mask;
 
-            crc_modulo_word_update( Bits, remainder, dividend,
-             truncated_polynomial, CHAR_BIT, false );
+            remainder <<= 1;
+            remainder |= new_dividend_bits & 1u;
+            remainder ^= quotient ? truncated_divisor : 0u;
 
-            table_[ reflect_byte_optionally(dividend, Reflect) ]
-             = reflect_optionally( remainder, Reflect, Bits );
+            // The quotient isn't used for anything, so don't keep it.
         }
-
-        did_init = true;
     }
 
-    #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    // Align the msb of the remainder to a byte
-    template < std::size_t Bits, bool RightShift >
-    class remainder
+    /** \brief  Update a CRC remainder by a single bit, assuming an augmented
+          message
+
+        Performs the next step of division required by the CRC algorithm, giving
+        a new remainder polynomial based on the divisor polynomial and the
+        synthesized dividend polynomial (from the old remainder and the
+        newly-provided input).  The computations assume that a zero-valued
+        string of bits will be appended to the message before extracting the
+        CRC.
+
+        \pre  \a Register is a built-in unsigned integer type
+        \pre  0 \< \a register_length \<= std\::numeric_limits\<\a Register\>
+          \::digits
+
+        \tparam Register  The type used for representing the remainder and
+          divisor modulo-2 polynomials.  The bit at <code>2<sup>i</sup></code>
+          is used as the coefficient of <i>x<sup>i</sup></i>.
+
+        \param[in]     register_length  The number of significant low-order bits
+          to be used from \a Register values.  It is the order of the modulo-2
+          polynomial remainder and one less than the divisor's order.
+        \param[in,out] remainder  The upper part of the dividend polynomial
+          before division, and the remainder polynomial after.
+        \param[in]     new_dividend_bit  The coefficient for the constant term
+          of the dividend polynomial.
+        \param[in]     truncated_divisor  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+
+        \note  This routine performs straight-forward modulo-2 polynomial
+          division.  It assumes that an augment string will be processed at the
+          end of the message bits before doing CRC analysis.
+        \todo  Use this function somewhere so I can test it.
+     */
+    template < typename Register >
+    inline  void  augmented_crc_modulo_update( int register_length, Register
+     &remainder, bool new_dividend_bit, Register truncated_divisor )
     {
-    public:
-        typedef typename uint_t<Bits>::fast  value_type;
-
-        static unsigned char align_msb( value_type rem )
-            { return rem >> (Bits - CHAR_BIT); }
-    };
-
-    // Specialization for the case that the remainder has less
-    // bits than a byte: align the remainder msb to the byte msb
-    template < std::size_t Bits >
-    class remainder< Bits, false >
-    {
-    public:
-        typedef typename uint_t<Bits>::fast  value_type;
-
-        static unsigned char align_msb( value_type rem )
-            { return rem << (CHAR_BIT - Bits); }
-    };
-    #endif
-
-    // CRC helper routines
-    template < std::size_t Bits, bool DoReflect >
-    class crc_helper
-    {
-    public:
-        // Type
-        typedef typename uint_t<Bits>::fast  value_type;
-
-    #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        // Compare a byte to the remainder's highest byte
-        static  unsigned char  index( value_type rem, unsigned char x )
-            { return x ^ rem; }
-
-        // Shift out the remainder's highest byte
-        static  value_type  shift( value_type rem )
-            { return rem >> CHAR_BIT; }
-    #else
-        // Compare a byte to the remainder's highest byte
-        static  unsigned char  index( value_type rem, unsigned char x )
-            { return x ^ ( DoReflect ? rem :
-                                ((Bits>CHAR_BIT)?( rem >> (Bits - CHAR_BIT) ) :
-                                    ( rem << (CHAR_BIT - Bits) ))); }
-
-        // Shift out the remainder's highest byte
-        static  value_type  shift( value_type rem )
-            { return DoReflect ? rem >> CHAR_BIT : rem << CHAR_BIT; }
-    #endif
-
-    };  // boost::detail::crc_helper
-
-    #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    template < std::size_t Bits >
-    class crc_helper<Bits, false>
-    {
-    public:
-        // Type
-        typedef typename uint_t<Bits>::fast  value_type;
-
-        // Compare a byte to the remainder's highest byte
-        static  unsigned char  index( value_type rem, unsigned char x )
-            { return x ^ remainder<Bits,(Bits>CHAR_BIT)>::align_msb( rem ); }
-
-        // Shift out the remainder's highest byte
-        static  value_type  shift( value_type rem )
-            { return rem << CHAR_BIT; }
-
-    };  // boost::detail::crc_helper
-    #endif
+        augmented_crc_modulo_word_update( register_length, remainder,
+         static_cast<unsigned>(new_dividend_bit), truncated_divisor, 1, false );
+    }
 
     /** \brief  A mix-in class that returns its argument
 
@@ -972,6 +943,594 @@ namespace detail
     class possible_reflector
         : public boost::mpl::if_c< DoIt, reflector<BitLength>,
           non_reflector<BitLength> >::type
+    {
+    public:
+        /** \brief  The type to check for ID
+
+            This is a Boost.MPL integral constant indicating what ID number this
+            instantiation used.
+         */
+        typedef boost::mpl::integral_c<int, Id>  id_type;
+    };
+
+    /** \brief  Find the composite remainder update effect from a fixed bit
+          sequence, for each potential sequence combination.
+
+        For each value between 0 and 2<sup><var>SubOrder</var></sup> - 1,
+        computes the XOR mask corresponding to the composite effect they update
+        the incoming remainder, which is the upper part of the dividend that
+        gets (partially) pushed out of its register by the incoming value's
+        bits.  The composite value merges the \"partial products\" from each bit
+        of the value being updated individually.
+
+        \pre  \a Register is a built-in unsigned integer type
+        \pre  0 \< \a SubOrder \<= \a register_length \<=
+          std\::numeric_limits\<\a Register\>\::digits
+
+        \tparam SubOrder  The number of low-order significant bits of the trial
+          new dividends.
+        \tparam Register  The type used for representing the remainder and
+          divisor modulo-2 polynomials.  The bit at <code>2<sup>i</sup></code>
+          is used as the coefficient of <i>x<sup>i</sup></i>.
+
+        \param[in] register_length  The number of significant low-order bits
+          to be used from \a Register values.  It is the order of the modulo-2
+          polynomial remainder and one less than the divisor's order.
+        \param[in] truncated_divisor  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+        \param[in] reflect  If \c false, read from the highest-order marked
+          bit from a new dividend's bits and go down, as normal.  Otherwise,
+          proceed from the lowest-order bit and go up.
+
+        \return  An array such that the element at index <var>i</var> is the
+          composite effect XOR mask for value <var>i</var>.
+
+        \note  This routine performs a modulo-2 polynomial division variant.
+          The exclusive-or operations are applied in a different order, since
+          that kind of operation is commutative and associative.  It also
+          assumes that the zero-valued augment string was applied before this
+          step, which means that the updated remainder can be directly used as
+          the final CRC.
+        \todo  Check that using the unaugmented-CRC division routines give the
+          same composite mask table as using augmented-CRC routines.
+     */
+    template < int SubOrder, typename Register >
+    boost::array< Register, (UINTMAX_C( 1 ) << SubOrder) >
+    make_partial_xor_products_table( int register_length, Register
+     truncated_divisor, bool reflect )
+    {
+        boost::array<Register, ( UINTMAX_C(1) << SubOrder )>  result;
+
+        // Loop over every possible dividend value
+        for ( typename boost::uint_t<SubOrder + 1>::fast  dividend = 0u;
+         dividend < result.size() ; ++dividend )
+        {
+            Register  remainder = 0u;
+
+            crc_modulo_word_update( register_length, remainder, dividend,
+             truncated_divisor, SubOrder, false );
+            result[ reflect_optionally(dividend, reflect, SubOrder) ] =
+             reflect_optionally( remainder, reflect, register_length );
+        }
+        return result;
+    }
+
+    /** \brief  A mix-in class for the table of table-driven CRC algorithms
+
+        Encapsulates the parameters need to make a global (technically,
+        class-static) table usuable in CRC algorithms, and generates said
+        table.
+
+        \pre  0 \< \a SubOrder \<= Order \<=
+          std\::numeric_limits\<uintmax_t\>\::digits
+
+        \tparam Order  The order of the modulo-2 polynomial remainder and one
+          less than the divisor's order.
+        \tparam SubOrder  The number of low-order significant bits of the trial
+          new dividends.
+        \tparam TruncatedPolynomial  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+        \tparam Reflect  If \c false, read from the highest-order marked
+          bit from a new dividend's bits and go down, as normal.  Otherwise,
+          proceed from the lowest-order bit and go up.
+     */
+    template < int Order, int SubOrder, boost::uintmax_t TruncatedPolynomial,
+     bool Reflect >
+    class crc_table_t
+    {
+    public:
+        /** \brief  The type to check for register bit length
+
+            This is a Boost.MPL integral constant indicating how many
+            significant bits are in the remainder and (truncated) divisor.
+         */
+        typedef boost::mpl::integral_c< int, Order >              width_c;
+        /** \brief  The type to check for index-unit bit length
+
+            This is a Boost.MPL integral constant indicating how many
+            significant bits are in the trial new dividends.
+         */
+        typedef boost::mpl::integral_c< int, SubOrder >      unit_width_c;
+        /** \brief  The type of registers
+
+            This is the output type for the partial-product map.
+         */
+        typedef typename boost::uint_t< Order >::fast          value_type;
+        /** \brief  The type to check the divisor
+
+            This is a Boost.MPL integral constant representing the (truncated)
+            divisor.
+         */
+        typedef boost::mpl::integral_c< value_type, TruncatedPolynomial >
+          poly_c;
+        /** \brief  The type to check for reflection
+
+            This is a Boost.MPL integral constant representing whether input
+            units should be read in reverse order.
+         */
+        typedef boost::mpl::integral_c< bool, Reflect >           refin_c;
+        /** \brief  The type to check for map size
+
+            This is a Boost.MPL integral constant representing the number of
+            elements in the partial-product map, based on the unit size.
+         */
+        typedef high_bit_mask_c< SubOrder >                  table_size_c;
+        /** \brief  The type of the unit TO partial-product map
+
+            This is the array type that takes units as the index and said unit's
+            composite partial-product mask as the element.
+         */
+        typedef boost::array<value_type, table_size_c::value>  array_type;
+        /** \brief  Create a global array for the mapping table
+
+            Creates an instance of a partial-product array with this class's
+            parameters.
+
+            \return  A reference to a immutable array giving the partial-product
+              update XOR map for each potential sub-unit value.
+         */
+        static  array_type const &  get_table()
+        {
+            static  array_type const  table =
+             make_partial_xor_products_table<unit_width_c::value>(
+             width_c::value, poly_c::value, refin_c::value );
+
+            return table;
+        }
+    };
+
+    /** \brief  A mix-in class that handles direct (i.e. non-reflected) byte-fed
+          table-driven CRC algorithms
+
+        This class template adds member functions #augmented_crc_update and
+        #crc_update to update remainders from new input bytes.  The bytes aren't
+        reflected before processing.
+
+        \pre  \c CHAR_BIT \<= \a Order \<= \c std\::numeric_limits\<uintmax_t\>
+          \::digits
+
+        \tparam Order  The order of the modulo-2 polynomial remainder and one
+          less than the divisor's order.
+        \tparam TruncatedPolynomial  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+     */
+    template < int Order, boost::uintmax_t TruncatedPolynomial >
+    class direct_byte_table_driven_crcs
+        : public crc_table_t<Order, CHAR_BIT, TruncatedPolynomial, false>
+    {
+        typedef crc_table_t<Order, CHAR_BIT, TruncatedPolynomial, false>
+          base_type;
+
+    public:
+        typedef typename base_type::value_type  value_type;
+        typedef typename base_type::array_type  array_type;
+
+        /** \brief  Compute the updated remainder after reading some bytes
+
+            The implementation reads from a table to speed-up applying
+            augmented-CRC updates byte-wise.
+
+            \param remainder  The pre-update remainder
+            \param new_dividend_bytes  The address where the new bytes start
+            \param new_dividend_byte_count  The number of new bytes to read
+
+            \return  The updated remainder
+         */
+        static  value_type  augmented_crc_update( value_type remainder, unsigned
+         char const *new_dividend_bytes, std::size_t new_dividend_byte_count)
+        {
+            static  array_type const &  table = base_type::get_table();
+
+            while ( new_dividend_byte_count-- )
+            {
+                // Locates the merged partial product based on the leading byte
+                unsigned char const  index = ( remainder >> (Order - CHAR_BIT) )
+                 & UCHAR_MAX;
+
+                // Complete the multi-bit modulo-2 polynomial division
+                remainder <<= CHAR_BIT;
+                remainder |= *new_dividend_bytes++;
+                remainder ^= table.elems[ index ];
+            }
+
+            return remainder;
+        }
+
+        /** \brief  Compute the updated remainder after reading some bytes
+
+            The implementation reads from a table to speed-up applying
+            unaugmented-CRC updates byte-wise.
+
+            \param remainder  The pre-update remainder
+            \param new_dividend_bytes  The address where the new bytes start
+            \param new_dividend_byte_count  The number of new bytes to read
+
+            \return  The updated remainder
+         */
+        static  value_type  crc_update( value_type remainder, unsigned char
+         const *new_dividend_bytes, std::size_t new_dividend_byte_count)
+        {
+            static  array_type const &  table = base_type::get_table();
+
+            while ( new_dividend_byte_count-- )
+            {
+                // Locates the merged partial product based on comparing the
+                // leading and incoming bytes
+                unsigned char const  index = ( (remainder >> ( Order - CHAR_BIT
+                 )) & UCHAR_MAX ) ^ *new_dividend_bytes++;
+
+                // Complete the multi-bit altered modulo-2 polynomial division
+                remainder <<= CHAR_BIT;
+                remainder ^= table.elems[ index ];
+            }
+
+            return remainder;
+        }
+    };
+
+    /** \brief  A mix-in class that handles reflected byte-fed, table-driven CRC
+          algorithms
+
+        This class template adds member functions #augmented_crc_update and
+        #crc_update to update remainders from new input bytes.  The bytes are
+        reflected before processing.
+
+        \pre  \c CHAR_BIT \<= \a Order \<= \c std\::numeric_limits\<uintmax_t\>
+          \::digits
+
+        \tparam Order  The order of the modulo-2 polynomial remainder and one
+          less than the divisor's order.
+        \tparam TruncatedPolynomial  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+     */
+    template < int Order, boost::uintmax_t TruncatedPolynomial >
+    class reflected_byte_table_driven_crcs
+        : public crc_table_t<Order, CHAR_BIT, TruncatedPolynomial, true>
+    {
+        typedef crc_table_t<Order, CHAR_BIT, TruncatedPolynomial, true>
+          base_type;
+
+    public:
+        typedef typename base_type::value_type  value_type;
+        typedef typename base_type::array_type  array_type;
+
+        /** \brief  Compute the updated remainder after reading some bytes
+
+            The implementation reads from a table to speed-up applying
+            reflecting augmented-CRC updates byte-wise.
+
+            \param remainder  The pre-update remainder; since the bytes are
+              being reflected, this remainder also has to be reflected
+            \param new_dividend_bytes  The address where the new bytes start
+            \param new_dividend_byte_count  The number of new bytes to read
+
+            \return  The updated, reflected remainder
+         */
+        static  value_type  augmented_crc_update( value_type remainder, unsigned
+         char const *new_dividend_bytes, std::size_t new_dividend_byte_count)
+        {
+            static  array_type const &  table = base_type::get_table();
+
+            while ( new_dividend_byte_count-- )
+            {
+                // Locates the merged partial product based on the leading byte
+                // (which is at the low-order end for reflected remainders)
+                unsigned char const  index = remainder & UCHAR_MAX;
+
+                // Complete the multi-bit reflected modulo-2 polynomial division
+                remainder >>= CHAR_BIT;
+                remainder |= static_cast<value_type>( *new_dividend_bytes++ )
+                 << ( Order - CHAR_BIT );
+                remainder ^= table.elems[ index ];
+            }
+
+            return remainder;
+        }
+
+        /** \brief  Compute the updated remainder after reading some bytes
+
+            The implementation reads from a table to speed-up applying
+            reflected unaugmented-CRC updates byte-wise.
+
+            \param remainder  The pre-update remainder; since the bytes are
+              being reflected, this remainder also has to be reflected
+            \param new_dividend_bytes  The address where the new bytes start
+            \param new_dividend_byte_count  The number of new bytes to read
+
+            \return  The updated, reflected remainder
+         */
+        static  value_type  crc_update( value_type remainder, unsigned char
+         const *new_dividend_bytes, std::size_t new_dividend_byte_count)
+        {
+            static  array_type const &  table = base_type::get_table();
+
+            while ( new_dividend_byte_count-- )
+            {
+                // Locates the merged partial product based on comparing the
+                // leading and incoming bytes
+                unsigned char const  index = ( remainder & UCHAR_MAX ) ^
+                 *new_dividend_bytes++;
+
+                // Complete the multi-bit reflected altered modulo-2 polynomial
+                // division
+                remainder >>= CHAR_BIT;
+                remainder ^= table.elems[ index ];
+            }
+
+            return remainder;
+        }
+    };
+
+    /** \brief  Mix-in class for byte-fed, table-driven CRC algorithms with
+          parameter values at least a byte in width
+
+        This class template adds member functions #augmented_crc_update and
+        #crc_update to update remainders from new input bytes.  The bytes may be
+        reflected before processing, controlled by a compile-time parameter.
+
+        \pre  \c CHAR_BIT \<= \a Order \<= \c std\::numeric_limits\<uintmax_t\>
+          \::digits
+
+        \tparam Order  The order of the modulo-2 polynomial remainder and one
+          less than the divisor's order.
+        \tparam TruncatedPolynomial  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+        \tparam Reflect  If \c false, read from the highest-order bit from a new
+          input byte and go down, as normal.  Otherwise, proceed from the
+          lowest-order bit and go up.
+     */
+    template < int Order, boost::uintmax_t TruncatedPolynomial, bool Reflect >
+    class byte_table_driven_crcs
+        : public boost::mpl::if_c< Reflect,
+          reflected_byte_table_driven_crcs<Order, TruncatedPolynomial>,
+          direct_byte_table_driven_crcs<Order, TruncatedPolynomial> >::type
+    { };
+
+    /** \brief  A mix-in class that handles direct (i.e. non-reflected) byte-fed
+          CRC algorithms for sub-byte parameters
+
+        This class template adds member functions #augmented_crc_update and
+        #crc_update to update remainders from new input bytes.  The bytes aren't
+        reflected before processing.
+
+        \pre  0 \< \a Order \< \c CHAR_BIT
+
+        \tparam Order  The order of the modulo-2 polynomial remainder and one
+          less than the divisor's order.
+        \tparam TruncatedPolynomial  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+     */
+    template < int Order, boost::uintmax_t TruncatedPolynomial >
+    class direct_sub_byte_crcs
+        : public crc_table_t<Order, Order, TruncatedPolynomial, false>
+    {
+        typedef crc_table_t<Order, Order, TruncatedPolynomial, false>
+          base_type;
+
+    public:
+        typedef typename base_type::width_c     width_c;
+        typedef typename base_type::value_type  value_type;
+        typedef typename base_type::poly_c       poly_c;
+        typedef typename base_type::array_type  array_type;
+
+        /** \brief  Compute the updated remainder after reading some bytes
+
+            The implementation reads from a table to speed-up applying
+            augmented-CRC updates byte-wise.
+
+            \param remainder  The pre-update remainder
+            \param new_dividend_bytes  The address where the new bytes start
+            \param new_dividend_byte_count  The number of new bytes to read
+
+            \return  The updated remainder
+
+            \todo  Use this function somewhere so I can test it.
+         */
+        static  value_type  augmented_crc_update( value_type remainder, unsigned
+         char const *new_dividend_bytes, std::size_t new_dividend_byte_count)
+        {
+            //static  array_type const &  table = base_type::get_table();
+
+            while ( new_dividend_byte_count-- )
+            {
+                // Without a table, process each byte explicitly
+                augmented_crc_modulo_word_update( width_c::value, remainder,
+                 *new_dividend_bytes++, poly_c::value, CHAR_BIT, false );
+            }
+
+            return remainder;
+        }
+
+        /** \brief  Compute the updated remainder after reading some bytes
+
+            The implementation reads from a table to speed-up applying
+            unaugmented-CRC updates byte-wise.
+
+            \param remainder  The pre-update remainder
+            \param new_dividend_bytes  The address where the new bytes start
+            \param new_dividend_byte_count  The number of new bytes to read
+
+            \return  The updated remainder
+         */
+        static  value_type  crc_update( value_type remainder, unsigned char
+         const *new_dividend_bytes, std::size_t new_dividend_byte_count)
+        {
+            //static  array_type const &  table = base_type::get_table();
+
+            while ( new_dividend_byte_count-- )
+            {
+                // Without a table, process each byte explicitly
+                crc_modulo_word_update( width_c::value, remainder,
+                 *new_dividend_bytes++, poly_c::value, CHAR_BIT, false );
+            }
+
+            return remainder;
+        }
+    };
+
+    /** \brief  A mix-in class that handles reflected byte-fed, CRC algorithms
+          for sub-byte parameters
+
+        This class template adds member functions #augmented_crc_update and
+        #crc_update to update remainders from new input bytes.  The bytes are
+        reflected before processing.
+
+        \pre  0 \< \a Order \< \c CHAR_BIT
+
+        \tparam Order  The order of the modulo-2 polynomial remainder and one
+          less than the divisor's order.
+        \tparam TruncatedPolynomial  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+     */
+    template < int Order, boost::uintmax_t TruncatedPolynomial >
+    class reflected_sub_byte_crcs
+        : public crc_table_t<Order, Order, TruncatedPolynomial, true>
+    {
+        typedef crc_table_t<Order, Order, TruncatedPolynomial, true>
+          base_type;
+
+    public:
+        typedef typename base_type::width_c     width_c;
+        typedef typename base_type::value_type  value_type;
+        typedef typename base_type::poly_c       poly_c;
+        typedef typename base_type::array_type  array_type;
+
+        /** \brief  Compute the updated remainder after reading some bytes
+
+            The implementation reads from a table to speed-up applying
+            reflecting augmented-CRC updates byte-wise.
+
+            \param remainder  The pre-update remainder; since the bytes are
+              being reflected, this remainder also has to be reflected
+            \param new_dividend_bytes  The address where the new bytes start
+            \param new_dividend_byte_count  The number of new bytes to read
+
+            \return  The updated, reflected remainder
+
+            \todo  Use this function somewhere so I can test it.
+         */
+        static  value_type  augmented_crc_update( value_type remainder, unsigned
+         char const *new_dividend_bytes, std::size_t new_dividend_byte_count)
+        {
+            //static  array_type const &  table = base_type::get_table();
+
+            remainder = reflect_sub_byte( remainder, width_c::value );
+            while ( new_dividend_byte_count-- )
+            {
+                // Without a table, process each byte explicitly
+                augmented_crc_modulo_word_update( width_c::value, remainder,
+                 *new_dividend_bytes++, poly_c::value, CHAR_BIT, true );
+            }
+            remainder = reflect_sub_byte( remainder, width_c::value );
+
+            return remainder;
+        }
+
+        /** \brief  Compute the updated remainder after reading some bytes
+
+            The implementation reads from a table to speed-up applying
+            reflected unaugmented-CRC updates byte-wise.
+
+            \param remainder  The pre-update remainder; since the bytes are
+              being reflected, this remainder also has to be reflected
+            \param new_dividend_bytes  The address where the new bytes start
+            \param new_dividend_byte_count  The number of new bytes to read
+
+            \return  The updated, reflected remainder
+         */
+        static  value_type  crc_update( value_type remainder, unsigned char
+         const *new_dividend_bytes, std::size_t new_dividend_byte_count)
+        {
+            //static  array_type const &  table = base_type::get_table();
+
+            remainder = reflect_sub_byte( remainder, width_c::value );
+            while ( new_dividend_byte_count-- )
+            {
+                // Without a table, process each byte explicitly
+                crc_modulo_word_update( width_c::value, remainder,
+                 *new_dividend_bytes++, poly_c::value, CHAR_BIT, true );
+            }
+            remainder = reflect_sub_byte( remainder, width_c::value );
+
+            return remainder;
+        }
+    };
+
+    /** \brief  Mix-in class for byte-fed, table-driven CRC algorithms with
+          sub-byte parameters
+
+        This class template adds member functions #augmented_crc_update and
+        #crc_update to update remainders from new input bytes.  The bytes may be
+        reflected before processing, controlled by a compile-time parameter.
+
+        \pre  0 \< \a Order \< \c CHAR_BIT
+
+        \tparam Order  The order of the modulo-2 polynomial remainder and one
+          less than the divisor's order.
+        \tparam TruncatedPolynomial  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+        \tparam Reflect  If \c false, read from the highest-order bit from a new
+          input byte and go down, as normal.  Otherwise, proceed from the
+          lowest-order bit and go up.
+     */
+    template < int Order, boost::uintmax_t TruncatedPolynomial, bool Reflect >
+    class sub_byte_crcs
+        : public boost::mpl::if_c< Reflect,
+          reflected_sub_byte_crcs<Order, TruncatedPolynomial>,
+          direct_sub_byte_crcs<Order, TruncatedPolynomial> >::type
+    { };
+
+    /** This class template adds member functions #augmented_crc_update and
+        #crc_update to update remainders from new input bytes.  The bytes may be
+        reflected before processing, controlled by a compile-time parameter.
+
+        \pre  0 \< \a Order \<= \c std\::numeric_limits\<uintmax_t\>\::digits
+
+        \tparam Order  The order of the modulo-2 polynomial remainder and one
+          less than the divisor's order.
+        \tparam TruncatedPolynomial  The lowest coefficients of the divisor
+          polynomial.  The highest-order coefficient is omitted and always
+          assumed to be 1.
+        \tparam Reflect  If \c false, read from the highest-order bit from a new
+          input byte and go down, as normal.  Otherwise, proceed from the
+          lowest-order bit and go up.
+        \tparam Id  An extra differentiator if multiple copies of this class
+          template are mixed-in as base classes.  Defaults to 0 if omitted.
+     */
+    template < int Order, boost::uintmax_t TruncatedPolynomial, bool Reflect,
+     int Id >
+    class crc_driver
+        : public boost::mpl::if_c< (Order < CHAR_BIT), sub_byte_crcs<Order,
+          TruncatedPolynomial, Reflect>, byte_table_driven_crcs<Order,
+          TruncatedPolynomial, Reflect> >::type
     {
     public:
         /** \brief  The type to check for ID
@@ -1401,7 +1960,6 @@ BOOST_CRC_OPTIMAL_NAME::crc_optimal
 )
     : rem_( reflect_i_type::reflect_q(init_rem) )
 {
-    crc_table_type::init_table();
 }
 
 //! \copydetails  boost::crc_basic::get_truncated_polynominal
@@ -1539,6 +2097,7 @@ BOOST_CRC_OPTIMAL_NAME::process_byte
 template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly,
            BOOST_CRC_PARM_TYPE InitRem, BOOST_CRC_PARM_TYPE FinalXor,
            bool ReflectIn, bool ReflectRem >
+inline
 void
 BOOST_CRC_OPTIMAL_NAME::process_block
 (
@@ -1546,18 +2105,8 @@ BOOST_CRC_OPTIMAL_NAME::process_block
     void const *  bytes_end
 )
 {
-    // Recompute the CRC for each byte passed
-    for ( unsigned char const * p
-     = static_cast<unsigned char const *>(bytes_begin) ; p < bytes_end ; ++p )
-    {
-        // Compare the new byte with the remainder's higher bits to
-        // get the new bits, shift out the remainder's current higher
-        // bits, and update the remainder with the polynominal division
-        // of the new bits.
-        unsigned char const  byte_index = helper_type::index( rem_, *p );
-        rem_ = helper_type::shift( rem_ );
-        rem_ ^= crc_table_type::table_[ byte_index ];
-    }
+    process_bytes( bytes_begin, static_cast<unsigned char const *>(bytes_end) -
+     static_cast<unsigned char const *>(bytes_begin) );
 }
 
 /** \copydetails  boost::crc_basic::process_bytes
@@ -1577,9 +2126,8 @@ BOOST_CRC_OPTIMAL_NAME::process_bytes
     std::size_t  byte_count
 )
 {
-    unsigned char const * const  b = static_cast<unsigned char const *>(
-     buffer );
-    process_block( b, b + byte_count );
+    rem_ = crc_table_type::crc_update( rem_, static_cast<unsigned char const
+     *>(buffer), byte_count );
 }
 
 //! \copydetails  boost::crc_basic::checksum
@@ -1772,26 +2320,10 @@ augmented_crc
     BOOST_ACRC_DUMMY_INIT
 )
 {
-    typedef unsigned char                                byte_type;
-    typedef detail::crc_table_t<Bits, TruncPoly, false>  crc_table_type;
-
-    typename uint_t<Bits>::fast  rem = initial_remainder;
-    byte_type const * const      b = static_cast<byte_type const *>( buffer );
-    byte_type const * const      e = b + byte_count;
-
-    crc_table_type::init_table();
-    for ( byte_type const * p = b ; p < e ; ++p )
-    {
-        // Use the current top byte as the table index to the next
-        // "partial product."  Shift out that top byte, shifting in
-        // the next augmented-message byte.  Complete the division.
-        byte_type const  byte_index = rem >> ( Bits - CHAR_BIT );
-        rem <<= CHAR_BIT;
-        rem |= *p;
-        rem ^= crc_table_type::table_[ byte_index ];
-    }
-
-    return rem & detail::low_bits_mask_c<Bits>::value;
+    return detail::low_bits_mask_c<Bits>::value &
+     detail::byte_table_driven_crcs<Bits, TruncPoly, false>::
+     augmented_crc_update( initial_remainder, static_cast<unsigned char const
+     *>(buffer), byte_count );
 }
 
 
