@@ -168,33 +168,34 @@ public:
         BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));
     }
 
+    /** Assignment operator */
+    interval_base_set& operator = (const interval_base_set& src) 
+    { 
+        this->_set = src._set;
+        return *this; 
+    }
+
+#   ifndef BOOST_NO_RVALUE_REFERENCES
     //==========================================================================
-    //= Move emulation
+    //= Move semantics
     //==========================================================================
 
     /** Move constructor */
-    interval_base_set(BOOST_RV_REF(interval_base_set) src): _set(boost::move(src._set))
+    interval_base_set(interval_base_set&& src): _set(boost::move(src._set))
     {
         BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
         BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));
     }
 
     /** Move assignment operator */
-    interval_base_set& operator = (BOOST_RV_REF(interval_base_set) src) 
+    interval_base_set& operator = (interval_base_set&& src) 
     { 
         this->_set = boost::move(src._set);
         return *this; 
     }
 
-    /** Copy assignment operator */
-    interval_base_set& operator = (BOOST_COPY_ASSIGN_REF(interval_base_set) src) 
-    { 
-        this->_set = src._set;
-        return *this; 
-    }
-
     //==========================================================================
-
+#   endif // BOOST_NO_RVALUE_REFERENCES
 
     /** swap the content of containers */
     void swap(interval_base_set& operand) { _set.swap(operand._set); }

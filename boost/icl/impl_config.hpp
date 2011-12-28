@@ -25,7 +25,7 @@ Copyright (c) 2009-2011: Joachim Faulhaber
 |     STL.                                                                     |
 |                                                                              |
 | ICL_USE_BOOST_MOVE_IMPLEMENTATION:                                           |
-|     Move aware containers from boost::container.                             |
+|     Use move aware containers from boost::container.                         |
 |                                                                              |
 | NOTE: ICL_USE_BOOST_INTERPROCESS_IMPLEMENTATION: This define has been        |
 |     available until boost version 1.48.0 and is no longer supported.         |
@@ -39,9 +39,6 @@ Copyright (c) 2009-2011: Joachim Faulhaber
 #   define ICL_IMPL_SPACE std
 #endif
 
-/*-----------------------------------------------------------------------------+
-|             Move emulation is used since version 1.49.0                      |
-+-----------------------------------------------------------------------------*/
 #include <boost/move/move.hpp>
 
 #endif // BOOST_ICL_IMPL_CONFIG_HPP_JOFA_091225

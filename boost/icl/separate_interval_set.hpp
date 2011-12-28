@@ -84,8 +84,6 @@ public:
 
     enum { fineness = 2 };
 
-    BOOST_COPYABLE_AND_MOVABLE(separate_interval_set)
-
 public:
     //==========================================================================
     //= Construct, copy, destruct
@@ -121,33 +119,28 @@ public:
     template<class SubType>
     void assign(const interval_base_set<SubType,DomainT,Compare,Interval,Alloc>& src)
     {
-        typedef interval_base_set<SubType,DomainT,Compare,Interval,Alloc> src_type;
-
         this->clear();
-        //this->_set.insert(src.begin(), src.end()); //JODO range-insert is not working with Boost.Containers
-        iterator prior_ = this->end(); 
-        typename src_type::const_iterator it_ = src.begin();
-
-        while(it_ != src.end())
-            prior_ = this->_set.insert(prior_, *it_++);
+        this->_set.insert(src.begin(), src.end());
     }
 
+#   ifndef BOOST_NO_RVALUE_REFERENCES
     //==========================================================================
-    //= Move emulation
+    //= Move semantics
     //==========================================================================
 
     /// Move constructor
-    separate_interval_set(BOOST_RV_REF(separate_interval_set) src)
-        : base_type(boost::move(static_cast<base_type&>(src)))
+    separate_interval_set(separate_interval_set&& src)
+        : base_type(boost::move(src))
     {}
 
     /// Move assignment operator
-    separate_interval_set& operator = (BOOST_RV_REF(separate_interval_set) src)
+    separate_interval_set& operator = (separate_interval_set&& src)
     { 
-        base_type::operator=(boost::move(static_cast<base_type&>(src)));
+        base_type::operator=(boost::move(src));
         return *this;
     }
-
+    //==========================================================================
+#   endif // BOOST_NO_RVALUE_REFERENCES
 
 private:
     // Private functions that shall be accessible by the baseclass:
