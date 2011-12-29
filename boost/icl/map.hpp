@@ -155,8 +155,6 @@ public:
 
     BOOST_STATIC_CONSTANT(int, fineness = 4); 
 
-    BOOST_COPYABLE_AND_MOVABLE(map)
-
 public:
     //==========================================================================
     //= Construct, copy, destruct
@@ -194,12 +192,19 @@ public:
         insert(key_value_pair); 
     }
 
-    //=============================================================================
-    //= Move emulation
-    //=============================================================================
+    map& operator = (map& src) 
+    { 
+        base_type::operator=(src);
+        return *this; 
+    } 
 
-    map(BOOST_RV_REF(map) src)
-        : base_type(boost::move(static_cast<base_type&>(src)))
+#   ifndef BOOST_NO_RVALUE_REFERENCES
+    //==========================================================================
+    //= Move semantics
+    //==========================================================================
+
+    map(map&& src)
+        : base_type(boost::move(src))
     {
         BOOST_CONCEPT_ASSERT((DefaultConstructibleConcept<DomainT>));
         BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));
@@ -207,18 +212,13 @@ public:
         BOOST_CONCEPT_ASSERT((EqualComparableConcept<CodomainT>));
     }
 
-    map& operator = (BOOST_RV_REF(map) src) 
+    map& operator = (map&& src) 
     { 
-        base_type::operator=(static_cast<base_type&>(src));
-        return *this; 
-    } 
-
-    map& operator = (BOOST_COPY_ASSIGN_REF(map) src) 
-    { 
-        base_type::operator=(static_cast<const base_type&>(src));
+        base_type::operator=(src);
         return *this; 
     } 
     //==========================================================================
+#   endif // BOOST_NO_RVALUE_REFERENCES
 
     void swap(map& src) { base_type::swap(src); }
 
