@@ -590,7 +590,9 @@ use [*Boost.Container]? There are several reasons for that:
 *  Fixed bugs
   [@https://svn.boost.org/trac/boost/ticket/6205 #6205],
   [@https://svn.boost.org/trac/boost/ticket/6287 #6287],
-  [@https://svn.boost.org/trac/boost/ticket/4383 #4383].
+  [@https://svn.boost.org/trac/boost/ticket/4383 #4383],
+  [@https://svn.boost.org/trac/boost/ticket/6336 #6336],
+  [@https://svn.boost.org/trac/boost/ticket/6335 #6335].
 
 *  Added `allocator_traits` support for both C++11 and C++03
    compilers through an internal `allocator_traits` clone.

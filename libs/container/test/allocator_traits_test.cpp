@@ -15,6 +15,7 @@
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/container/detail/function_detector.hpp>
 #include <boost/move/move.hpp>
+#include <memory>
 
 template<class T>
 class SimpleAllocator
@@ -63,7 +64,7 @@ class SimpleSmartPtr
    T *ptr_;
 };
 
-template<class T, class Arg>
+template<class T>
 class ComplexAllocator
 {
    bool allocate_called_;
@@ -76,17 +77,19 @@ class ComplexAllocator
 
    public:
    typedef T value_type;
-   typedef SimpleSmartPtr<T>           pointer;
-   typedef SimpleSmartPtr<const T>     const_pointer;
-   typedef T &                         reference;
-   typedef const T &                   const_reference;
-   typedef SimpleSmartPtr<void>        void_pointer;
-   typedef SimpleSmartPtr<const void>  const_void_pointer;
-   typedef signed short                difference_type;
-   typedef unsigned short              size_type;
-   typedef boost::true_type            propagate_on_container_copy_assignment;
-   typedef boost::true_type            propagate_on_container_move_assignment;
-   typedef boost::true_type            propagate_on_container_swap;
+   typedef SimpleSmartPtr<T>                    pointer;
+   typedef SimpleSmartPtr<const T>              const_pointer;
+   typedef typename boost::container::
+      container_detail::unvoid<T>::type &       reference;
+   typedef const typename boost::container::
+      container_detail::unvoid<T>::type &       const_reference;
+   typedef SimpleSmartPtr<void>                 void_pointer;
+   typedef SimpleSmartPtr<const void>           const_void_pointer;
+   typedef signed short                         difference_type;
+   typedef unsigned short                       size_type;
+   typedef boost::true_type                     propagate_on_container_copy_assignment;
+   typedef boost::true_type                     propagate_on_container_move_assignment;
+   typedef boost::true_type                     propagate_on_container_swap;
 
    ComplexAllocator()
       : allocate_called_(false)
@@ -120,10 +123,10 @@ class ComplexAllocator
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                              \
    template<class U  BOOST_PP_ENUM_TRAILING_PARAMS(n, class P) >                                \
-   void construct(U *p BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))            \
+   void construct(U *p BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))             \
    {                                                                                            \
       construct_called_ = true;                                                                 \
-      ::new (p) U (BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));                     \
+      ::new (p) U (BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));                      \
    }                                                                                            \
    //
    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
@@ -187,8 +190,17 @@ class copymovable
    {  return moved_;  }
 };
 
+void test_void_allocator()
+{
+   boost::container::allocator_traits<std::allocator<void>   > stdtraits; (void)stdtraits;
+   boost::container::allocator_traits<SimpleAllocator<void>  > simtraits; (void)simtraits;
+   boost::container::allocator_traits<ComplexAllocator<void> > comtraits; (void)comtraits;
+}
+
 int main()
 {
+   test_void_allocator();
+
    //SimpleAllocator
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
                        < SimpleAllocator<int> >::value_type, int>::value ));
@@ -219,33 +231,33 @@ int main()
 
    //ComplexAllocator
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::value_type, int>::value ));
+                       < ComplexAllocator<int> >::value_type, int>::value ));
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::pointer,  SimpleSmartPtr<int> >::value ));
+                       < ComplexAllocator<int> >::pointer,  SimpleSmartPtr<int> >::value ));
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::const_pointer, SimpleSmartPtr<const int> >::value ));
+                       < ComplexAllocator<int> >::const_pointer, SimpleSmartPtr<const int> >::value ));
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::void_pointer, SimpleSmartPtr<void> >::value ));
+                       < ComplexAllocator<int> >::void_pointer, SimpleSmartPtr<void> >::value ));
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::const_void_pointer, SimpleSmartPtr<const void> >::value ));
+                       < ComplexAllocator<int> >::const_void_pointer, SimpleSmartPtr<const void> >::value ));
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::difference_type, signed short>::value ));
+                       < ComplexAllocator<int> >::difference_type, signed short>::value ));
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::size_type, unsigned short>::value ));
+                       < ComplexAllocator<int> >::size_type, unsigned short>::value ));
    BOOST_STATIC_ASSERT(( boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::propagate_on_container_copy_assignment::value == true ));
+                       < ComplexAllocator<int> >::propagate_on_container_copy_assignment::value == true ));
    BOOST_STATIC_ASSERT(( boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::propagate_on_container_move_assignment::value == true ));
+                       < ComplexAllocator<int> >::propagate_on_container_move_assignment::value == true ));
    BOOST_STATIC_ASSERT(( boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::propagate_on_container_swap::value == true ));
+                       < ComplexAllocator<int> >::propagate_on_container_swap::value == true ));
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::rebind_traits<double>::allocator_type
-                       , ComplexAllocator<double, void> >::value ));
+                       < ComplexAllocator<int> >::rebind_traits<double>::allocator_type
+                       , ComplexAllocator<double> >::value ));
    BOOST_STATIC_ASSERT(( boost::is_same<boost::container::allocator_traits
-                       < ComplexAllocator<int, void> >::rebind_alloc<double>::value_type
+                       < ComplexAllocator<int> >::rebind_alloc<double>::value_type
                        , double >::value ));
 
-   typedef ComplexAllocator<int, void> CAlloc;
+   typedef ComplexAllocator<int> CAlloc;
    typedef SimpleAllocator<int> SAlloc;
    typedef boost::container::allocator_traits<CAlloc> CAllocTraits;
    typedef boost::container::allocator_traits<SAlloc> SAllocTraits;
