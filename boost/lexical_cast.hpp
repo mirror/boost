@@ -18,7 +18,7 @@
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
 //        Alexander Nasonov, Antony Polukhin, Justin Viiret, Michael Hofmann,
-//        Cheng Yang and other Boosters
+//        Cheng Yang, Matthew Bradbury and other Boosters
 // when:  November 2000, March 2003, June 2005, June 2006, March 2011
 
 #include <climits>
@@ -586,7 +586,7 @@ namespace boost
             --end;
             value = 0;
 
-            if ( *end < czero || *end >= czero + 10 || begin > end)
+            if (begin > end || *end < czero || *end >= czero + 10)
                 return false;
             value = *end - czero;
             --end;
@@ -684,6 +684,7 @@ namespace boost
             , const CharT opening_brace, const CharT closing_brace)
         {
             using namespace std;
+            if (begin == end) return false;
             const CharT minus = lcast_char_constants<CharT>::minus;
             const CharT plus = lcast_char_constants<CharT>::plus;
             const int inifinity_size = 8;
@@ -741,6 +742,26 @@ namespace boost
                                , L"NAN", L"nan"
                                , L"INFINITY", L"infinity"
                                , L'(', L')');
+        }
+#endif
+#ifndef BOOST_NO_CHAR16_T
+        template <class T>
+        bool parse_inf_nan(const char16_t* begin, const char16_t* end, T& value)
+        {
+            return parse_inf_nan_impl(begin, end, value
+                               , u"NAN", u"nan"
+                               , u"INFINITY", u"infinity"
+                               , u'(', u')');
+        }
+#endif
+#ifndef BOOST_NO_CHAR32_T
+        template <class T>
+        bool parse_inf_nan(const char32_t* begin, const char32_t* end, T& value)
+        {
+            return parse_inf_nan_impl(begin, end, value
+                               , U"NAN", U"nan"
+                               , U"INFINITY", U"infinity"
+                               , U'(', U')');
         }
 #endif
 
@@ -863,7 +884,7 @@ namespace boost
             CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
             CharT const decimal_point = np.decimal_point();
             bool found_grouping = false;
-            unsigned int last_grouping_pos = grouping_size - 1;
+            std::string::size_type last_grouping_pos = grouping_size - 1;
 #else
             CharT const decimal_point = lcast_char_constants<CharT>::c_decimal_separator;
 #endif
@@ -1183,7 +1204,7 @@ namespace boost
                 bool const result = !(stream << input).fail();
                 start = stringbuffer.pbase();
                 finish = stringbuffer.pptr();
-                return result && (start != finish);
+                return result;
             }
 
             template <class T>
@@ -1358,6 +1379,7 @@ namespace boost
             template <typename Type>
             bool shr_unsigned(Type& output)
             {
+                if (start == finish) return false;
                 CharT const minus = lcast_char_constants<CharT>::minus;
                 CharT const plus = lcast_char_constants<CharT>::plus;
                 bool has_minus = false;
@@ -1392,6 +1414,7 @@ namespace boost
             template <typename Type>
             bool shr_signed(Type& output)
             {
+                if (start == finish) return false;
                 CharT const minus = lcast_char_constants<CharT>::minus;
                 CharT const plus = lcast_char_constants<CharT>::plus;
                 typedef BOOST_DEDUCED_TYPENAME make_unsigned<Type>::type utype;
