@@ -118,9 +118,9 @@ struct allocator_traits
          pointer, value_type*)
             pointer;
       //const_pointer
-      typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT(boost::container::container_detail::, Alloc, 
+      typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_EVAL_DEFAULT(boost::container::container_detail::, Alloc, 
          const_pointer, typename boost::intrusive::pointer_traits<pointer>::template
-            rebind_pointer<const value_type>::type)
+            rebind_pointer<const value_type>)
                const_pointer;
       //reference
       typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT(boost::container::container_detail::, Alloc,
@@ -131,14 +131,14 @@ struct allocator_traits
          const_reference, const value_type&)
                const_reference;
       //void_pointer
-      typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT(boost::container::container_detail::, Alloc, 
+      typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_EVAL_DEFAULT(boost::container::container_detail::, Alloc, 
          void_pointer, typename boost::intrusive::pointer_traits<pointer>::template
-            rebind_pointer<void>::type)
+            rebind_pointer<void>)
                void_pointer;
       //const_void_pointer
-      typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT(boost::container::container_detail::, Alloc,
+      typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_EVAL_DEFAULT(boost::container::container_detail::, Alloc,
          const_void_pointer, typename boost::intrusive::pointer_traits<pointer>::template
-            rebind_pointer<const void>::type)
+            rebind_pointer<const void>)
                const_void_pointer;
       //difference_type
       typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT(boost::container::container_detail::, Alloc,
