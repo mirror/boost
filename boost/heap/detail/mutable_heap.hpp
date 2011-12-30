@@ -149,13 +149,17 @@ protected:
 
 #ifdef BOOST_HAS_RVALUE_REFS
     priority_queue_mutable_wrapper (priority_queue_mutable_wrapper && rhs):
-        q_(std::move(rhs.q_)), objects(std::move(rhs.objects))
-    {}
+        q_(std::move(rhs.q_))
+    {
+        /// FIXME: msvc seems to invalidate iterators when moving std::list
+        std::swap(objects, rhs.objects);
+    }
 
     priority_queue_mutable_wrapper & operator=(priority_queue_mutable_wrapper && rhs)
     {
         q_ = std::move(rhs.q_);
-        objects = std::move(rhs.objects);
+        objects.clear();
+        std::swap(objects, rhs.objects);
         return *this;
     }
 #endif
