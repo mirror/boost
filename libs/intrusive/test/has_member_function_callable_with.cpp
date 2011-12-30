@@ -10,6 +10,8 @@
 
 #include <boost/intrusive/detail/config_begin.hpp>
 #include <boost/intrusive/detail/workaround.hpp>
+//Just for BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED
+#include <boost/intrusive/detail/has_member_function_callable_with.hpp>
 #include <cstddef>
 #include <boost/move/move.hpp>
 
@@ -94,6 +96,8 @@ class has_member_function_named_func
 
       #if !defined(_MSC_VER) || (_MSC_VER != 1600)
 
+         #if !defined(BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED)
+
          template<class F, std::size_t N = sizeof(boost::move_detail::declval<F>().func(), 0)>
          struct zeroarg_checker_func
          {
@@ -123,6 +127,17 @@ class has_member_function_named_func
             static const bool value = sizeof(Test< Fun >(0))
                                  == sizeof(has_member_function_callable_with::yes_type);
          };
+
+         #else
+
+         template<typename Fun>
+         struct has_member_function_callable_with_func_impl
+            <Fun, true , void , void , void>
+         {
+            static const bool value = true;
+         };
+
+         #endif
 
       #else
 
@@ -380,6 +395,7 @@ int main()
 {
    using namespace boost::intrusive::intrusive_detail;
 
+   #if !defined(BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED)
    {
    int check1[ has_member_function_callable_with_func<functor>::value  ? 1 : -1];
    int check2[!has_member_function_callable_with_func<functor2>::value ? 1 : -1];
@@ -390,6 +406,7 @@ int main()
    (void)check3;
    (void)check4;
    }
+   #endif
 
    {
    int check1[ has_member_function_callable_with_func<functor,  int>::value   ? 1 : -1];
