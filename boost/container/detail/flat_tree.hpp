@@ -352,7 +352,7 @@ class flat_tree
    #ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    template <class... Args>
-   iterator emplace_unique(Args&&... args)
+   std::pair<iterator, bool> emplace_unique(Args&&... args)
    {
       value_type && val = value_type(boost::forward<Args>(args)...);
       insert_commit_data data;
@@ -361,7 +361,7 @@ class flat_tree
       if(ret.second){
          ret.first = priv_insert_commit(data, boost::move(val));
       }
-      return ret.first;
+      return ret;
    }
 
    template <class... Args>
@@ -398,27 +398,28 @@ class flat_tree
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                        \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
-   iterator emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))           \
+   std::pair<iterator, bool>                                                              \
+      emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                  \
    {                                                                                      \
-      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type        \
+      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type         \
          BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
-            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n); \
+            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
       value_type &val = vval;                                                             \
       insert_commit_data data;                                                            \
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(val, data);               \
       if(ret.second){                                                                     \
          ret.first = priv_insert_commit(data, boost::move(val));                          \
       }                                                                                   \
-      return ret.first;                                                                   \
+      return ret;                                                                         \
    }                                                                                      \
                                                                                           \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
    iterator emplace_hint_unique(const_iterator hint                                       \
-                        BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))     \
+                        BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))      \
    {                                                                                      \
-      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type        \
+      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type         \
          BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
-            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n); \
+            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
       value_type &val = vval;                                                             \
       insert_commit_data data;                                                            \
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(hint, val, data);         \
@@ -429,11 +430,11 @@ class flat_tree
    }                                                                                      \
                                                                                           \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
-   iterator emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))            \
+   iterator emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))             \
    {                                                                                      \
-      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type        \
+      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type         \
          BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
-            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n); \
+            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
       value_type &val = vval;                                                             \
       iterator i = this->upper_bound(KeyOfValue()(val));                                  \
       i = this->m_data.m_vect.insert(i, boost::move(val));                                \
@@ -442,11 +443,11 @@ class flat_tree
                                                                                           \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
    iterator emplace_hint_equal(const_iterator hint                                        \
-                      BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))       \
+                      BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))        \
    {                                                                                      \
-      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type        \
+      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type         \
          BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
-            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n); \
+            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
       value_type &val = vval;                                                             \
       insert_commit_data data;                                                            \
       priv_insert_equal_prepare(hint, val, data);                                         \
@@ -743,23 +744,6 @@ class flat_tree
       for ( ; first != last; ++first)
          this->insert_equal(*first);
    }
-
-/*
-   template <class FwdIt>
-   void priv_insert_unique(FwdIt first, FwdIt last, std::forward_iterator_tag)
-   {
-      size_type len = static_cast<size_type>(std::distance(first, last));
-      this->reserve(this->size()+len);
-      priv_insert_unique(first, last, std::input_iterator_tag());
-   }
-
-   template <class InIt>
-   void priv_insert_unique(InIt first, InIt last, std::input_iterator_tag)
-   {
-      for ( ; first != last; ++first)
-         this->insert_unique(*first);
-   }
-*/
 };
 
 template <class Key, class Value, class KeyOfValue, 

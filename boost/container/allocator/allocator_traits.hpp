@@ -26,6 +26,7 @@
 #include <boost/intrusive/pointer_traits.hpp>
 #include <boost/container/allocator/memory_util.hpp>
 #include <boost/type_traits/integral_constant.hpp>
+#include <boost/container/detail/mpl.hpp>
 #include <boost/move/move.hpp>
 #include <limits> //numeric_limits<>::max()
 #include <new>    //placement new
@@ -124,11 +125,11 @@ struct allocator_traits
                const_pointer;
       //reference
       typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT(boost::container::container_detail::, Alloc,
-         reference, value_type&)
+         reference, typename container_detail::unvoid<value_type>::type&)
             reference;
       //const_reference
       typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT(boost::container::container_detail::, Alloc, 
-         const_reference, const value_type&)
+         const_reference, const typename container_detail::unvoid<value_type>::type&)
                const_reference;
       //void_pointer
       typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_EVAL_DEFAULT(boost::container::container_detail::, Alloc, 

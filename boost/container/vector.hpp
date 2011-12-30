@@ -1045,32 +1045,32 @@ class vector : private container_detail::vector_alloc_holder<A>
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                              \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)       \
-   void emplace_back(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                       \
+   void emplace_back(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                        \
    {                                                                                            \
-      T* back_pos = container_detail::to_raw_pointer                                              \
+      T* back_pos = container_detail::to_raw_pointer                                            \
          (this->members_.m_start) + this->members_.m_size;                                      \
       if (this->members_.m_size < this->members_.m_capacity){                                   \
          allocator_traits_type::construct (this->alloc()                                        \
-            , back_pos BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );       \
+            , back_pos BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );        \
          ++this->members_.m_size;                                                               \
       }                                                                                         \
       else{                                                                                     \
-         container_detail::BOOST_PP_CAT(BOOST_PP_CAT(advanced_insert_aux_emplace, n), arg)     \
+         container_detail::BOOST_PP_CAT(BOOST_PP_CAT(advanced_insert_aux_emplace, n), arg)      \
             <A, T* BOOST_PP_ENUM_TRAILING_PARAMS(n, P)> proxy                                   \
-            (this->alloc() BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));    \
+            (this->alloc() BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));     \
          priv_range_insert(back_pos, 1, proxy);                                                 \
       }                                                                                         \
    }                                                                                            \
                                                                                                 \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)       \
    iterator emplace(const_iterator pos                                                          \
-                    BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))               \
+                    BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                \
    {                                                                                            \
       size_type pos_n = pos - cbegin();                                                         \
-         container_detail::BOOST_PP_CAT(BOOST_PP_CAT(advanced_insert_aux_emplace, n), arg)     \
+         container_detail::BOOST_PP_CAT(BOOST_PP_CAT(advanced_insert_aux_emplace, n), arg)      \
             <A, T* BOOST_PP_ENUM_TRAILING_PARAMS(n, P)> proxy                                   \
-            (this->alloc() BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));    \
-      priv_range_insert(container_detail::to_raw_pointer(pos.get_ptr()), 1, proxy);               \
+            (this->alloc() BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));     \
+      priv_range_insert(container_detail::to_raw_pointer(pos.get_ptr()), 1, proxy);             \
       return iterator(this->members_.m_start + pos_n);                                          \
    }                                                                                            \
    //!
