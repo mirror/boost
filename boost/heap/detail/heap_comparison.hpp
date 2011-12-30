@@ -70,7 +70,7 @@ struct heap_equivalence_copy
         Heap1 lhs_copy(lhs);
         Heap2 rhs_copy(rhs);
 
-        for (;;) {
+        while (true) {
             if (!value_equality(lhs_copy, rhs_copy, lhs_copy.top(), rhs_copy.top()))
                 return false;
 
@@ -112,7 +112,7 @@ struct heap_equivalence_iteration
         typename Heap1::ordered_iterator it1_end = lhs.ordered_end();
         typename Heap1::ordered_iterator it2 = rhs.ordered_begin();
         typename Heap1::ordered_iterator it2_end = rhs.ordered_end();
-        for(;;) {
+        while (true) {
             if (!value_equality(lhs, rhs, *it1, *it2))
                 return false;
 
@@ -165,7 +165,7 @@ struct heap_compare_iteration
         typename Heap1::ordered_iterator it1_end = lhs.ordered_end();
         typename Heap1::ordered_iterator it2 = rhs.ordered_begin();
         typename Heap1::ordered_iterator it2_end = rhs.ordered_end();
-        for(;;) {
+        while (true) {
             if (value_compare(lhs, rhs, *it1, *it2))
                 return true;
 
@@ -202,7 +202,7 @@ struct heap_compare_copy
         Heap1 lhs_copy(lhs);
         Heap2 rhs_copy(rhs);
 
-        for (;;) {
+        while (true) {
             if (value_compare(lhs_copy, rhs_copy, lhs_copy.top(), rhs_copy.top()))
                 return true;
 

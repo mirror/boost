@@ -61,7 +61,8 @@ class priority_queue:
 
     typedef typename heap_base_maker::type super_t;
     typedef typename super_t::internal_type internal_type;
-    typedef std::vector<internal_type, typename heap_base_maker::allocator_argument> container_type;
+    typedef typename heap_base_maker::allocator_argument::template rebind<internal_type>::other internal_type_allocator;
+    typedef std::vector<internal_type, internal_type_allocator> container_type;
 
     template <typename Heap1, typename Heap2>
     friend struct detail::heap_merge_emulate;

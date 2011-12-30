@@ -48,7 +48,7 @@ public:
 private:
     typedef std::pair<value_type, size_type> node_type;
 
-    typedef std::list<node_type, allocator_type> object_list;
+    typedef std::list<node_type, typename allocator_type::template rebind<node_type>::other> object_list;
 
     typedef typename object_list::iterator list_iterator;
     typedef typename object_list::const_iterator const_list_iterator;
@@ -149,13 +149,17 @@ protected:
 
 #ifdef BOOST_HAS_RVALUE_REFS
     priority_queue_mutable_wrapper (priority_queue_mutable_wrapper && rhs):
-        q_(std::move(rhs.q_)), objects(std::move(rhs.objects))
-    {}
+        q_(std::move(rhs.q_))
+    {
+        /// FIXME: msvc seems to invalidate iterators when moving std::list
+        std::swap(objects, rhs.objects);
+    }
 
     priority_queue_mutable_wrapper & operator=(priority_queue_mutable_wrapper && rhs)
     {
         q_ = std::move(rhs.q_);
-        objects = std::move(rhs.objects);
+        objects.clear();
+        std::swap(objects, rhs.objects);
         return *this;
     }
 #endif
@@ -274,7 +278,10 @@ public:
             }
         }
 
-        std::priority_queue<iterator, std::vector<iterator, allocator_type>, indirect_cmp> unvisited_nodes;
+        std::priority_queue<iterator,
+                            std::vector<iterator, typename allocator_type::template rebind<iterator>::other >,
+                            indirect_cmp
+                           > unvisited_nodes;
         const priority_queue_mutable_wrapper * q_;
     };
 

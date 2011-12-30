@@ -418,14 +418,14 @@ public:
         return push_helper::push(this, v);
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
     /**
      * \b Effects: Adds a new element to the priority queue. The element is directly constructed in-place.
      *
      * \b Complexity: Logarithmic (amortized).
      *
      * */
-    template <class... Args>
+    template <typename... Args>
     typename mpl::if_c<is_mutable, handle_type, void>::type emplace(Args&&... args)
     {
         typedef typename mpl::if_c<is_mutable, push_handle, push_void>::type push_helper;
@@ -756,7 +756,7 @@ private:
             self->push_internal(v);
         }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
         template <class... Args>
         static void emplace(skew_heap * self, Args&&... args)
         {
@@ -772,7 +772,7 @@ private:
             return handle_type(self->push_internal(v));
         }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
         template <class... Args>
         static handle_type emplace(skew_heap * self, Args&&... args)
         {
