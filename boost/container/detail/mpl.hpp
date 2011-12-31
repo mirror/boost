@@ -148,6 +148,10 @@ struct ls_zeros<1>
    static const std::size_t value = 0;
 };
 
+template <typename T> struct unvoid { typedef T type; };
+template <> struct unvoid<void> { struct type { }; };
+template <> struct unvoid<const void> { struct type { }; };
+
 }  //namespace container_detail { 
 }  //namespace container { 
 }  //namespace boost {

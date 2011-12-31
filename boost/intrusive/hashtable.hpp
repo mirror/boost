@@ -30,6 +30,7 @@
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/intrusive/detail/ebo_functor_holder.hpp>
 #include <boost/intrusive/detail/clear_on_destructor_base.hpp>
+#include <boost/intrusive/detail/utilities.hpp>
 //Implementation utilities
 #include <boost/intrusive/trivial_value_traits.hpp>
 #include <boost/intrusive/unordered_set_hook.hpp>
@@ -1131,7 +1132,7 @@ class hashtable_impl
             typedef node_cast_adaptor<detail::node_cloner<Cloner, hashtable_impl> > NodeCloner;
             NodeDisposer node_disp(disposer, this);
    
-            detail::exception_array_disposer<bucket_type, NodeDisposer>
+            detail::exception_array_disposer<bucket_type, NodeDisposer, size_type>
                rollback(dst_buckets[0], node_disp, constructed);
             for( constructed = 0
                ; constructed < dst_bucket_count
@@ -2080,10 +2081,12 @@ class hashtable_impl
       //is harmless, because all elements have been already unlinked and destroyed
       typedef detail::init_disposer<node_algorithms> NodeDisposer;
       NodeDisposer node_disp;
-      detail::exception_array_disposer<bucket_type, NodeDisposer>
-         rollback1(new_buckets[0], node_disp, new_buckets_len);
-      detail::exception_array_disposer<bucket_type, NodeDisposer>
-         rollback2(old_buckets[0], node_disp, old_buckets_len);
+      bucket_type & newbuck = new_buckets[0];
+      bucket_type & oldbuck = old_buckets[0];
+      detail::exception_array_disposer<bucket_type, NodeDisposer, size_type>
+         rollback1(newbuck, node_disp, new_buckets_len);
+      detail::exception_array_disposer<bucket_type, NodeDisposer, size_type>
+         rollback2(oldbuck, node_disp, old_buckets_len);
 
       //Put size in a safe value for rollback exception
       size_type size_backup = this->priv_size_traits().get_size();

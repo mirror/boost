@@ -638,7 +638,8 @@ class slist
    void push_front(T &x) { push_front(const_cast<const T &>(x)); }
 
    template<class U>
-   void push_front(const U &u, typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
+   void push_front(const U &u
+      , typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
    {  return priv_push_front(u); }
    #endif
 
@@ -700,7 +701,8 @@ class slist
    { return this->insert_after(position, const_cast<const T &>(x)); }
 
    template<class U>
-   iterator insert_after(const_iterator position, const U &u, typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
+   iterator insert_after( const_iterator position, const U &u
+                        , typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
    {  return this->priv_insert_after(position, u); }
    #endif
 
@@ -768,7 +770,8 @@ class slist
    { return this->insert(position, const_cast<const T &>(x)); }
 
    template<class U>
-   iterator insert(const_iterator position, const U &u, typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
+   iterator insert( const_iterator position, const U &u
+                  , typename container_detail::enable_if_c<container_detail::is_same<T, U>::value && !::boost::has_move_emulation_enabled<U>::value >::type* =0)
    {  return this->priv_insert(position, u); }
    #endif
 

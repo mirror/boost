@@ -7,13 +7,14 @@
 // See http://www.boost.org/libs/container for documentation.
 //
 //////////////////////////////////////////////////////////////////////////////
-/* Stable vector.
- *
- * Copyright 2008 Joaquin M Lopez Munoz.
- * Distributed under the Boost Software License, Version 1.0.
- * (See accompanying file LICENSE_1_0.txt or copy at
- * http://www.boost.org/LICENSE_1_0.txt)
- */
+// Stable vector.
+//
+// Copyright 2008 Joaquin M Lopez Munoz.
+// Distributed under the Boost Software License, Version 1.0.
+// (See accompanying file LICENSE_1_0.txt or copy at
+// http://www.boost.org/LICENSE_1_0.txt)
+//
+//////////////////////////////////////////////////////////////////////////////
 
 #ifndef BOOST_CONTAINER_STABLE_VECTOR_HPP
 #define BOOST_CONTAINER_STABLE_VECTOR_HPP
@@ -140,8 +141,8 @@ struct node_type
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                           \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)    \
-   node_type(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                            \
-      : value(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))                        \
+   node_type(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                             \
+      : value(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))                         \
    {}                                                                                        \
    //!
    #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)

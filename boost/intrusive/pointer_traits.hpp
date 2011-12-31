@@ -67,9 +67,9 @@ struct pointer_traits
    #else
       typedef Ptr                                                             pointer;
       //
-      typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT
+      typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_EVAL_DEFAULT
          ( boost::intrusive::detail::, Ptr, element_type
-         , typename boost::intrusive::detail::first_param<Ptr>::type)         element_type;
+         , boost::intrusive::detail::first_param<Ptr>)                        element_type;
       //
       typedef BOOST_INTRUSIVE_OBTAIN_TYPE_WITH_DEFAULT
          (boost::intrusive::detail::, Ptr, difference_type, std::ptrdiff_t)   difference_type;

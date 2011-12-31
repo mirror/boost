@@ -208,14 +208,14 @@ struct key_nodeptr_comp
    };
 
    template<class T>
-   typename enable_if_c<is_node_ptr<T>::value, const value_type &>::type
-      key_forward(const T &node) const
+   const value_type & key_forward
+      (const T &node, typename enable_if_c<is_node_ptr<T>::value>::type * = 0) const
    {  return *cont_->get_real_value_traits().to_value_ptr(node);  }
 
    template<class T>
-   typename enable_if_c<!is_node_ptr<T>::value, const T &>::type
-      key_forward(const T &key) const
-   {  return key;}
+   const T & key_forward(const T &key, typename enable_if_c<!is_node_ptr<T>::value>::type* = 0) const
+   {  return key;  }
+
 
    template<class KeyType, class KeyType2>
    bool operator()(const KeyType &key1, const KeyType2 &key2) const
@@ -596,20 +596,20 @@ class exception_disposer
    }
 };
 
-template<class Container, class Disposer>
+template<class Container, class Disposer, class SizeType>
 class exception_array_disposer
 {
    Container *cont_;
    Disposer  &disp_;
-   typename Container::size_type  &constructed_;
+   SizeType  &constructed_;
 
    exception_array_disposer(const exception_array_disposer&);
    exception_array_disposer &operator=(const exception_array_disposer&);
 
    public:
-   typedef typename Container::size_type size_type;
+
    exception_array_disposer
-      (Container &cont, Disposer &disp, size_type &constructed)
+      (Container &cont, Disposer &disp, SizeType &constructed)
       :  cont_(&cont), disp_(disp), constructed_(constructed)
    {}
 
@@ -618,7 +618,7 @@ class exception_array_disposer
 
    ~exception_array_disposer()
    {
-      size_type n = constructed_;
+      SizeType n = constructed_;
       if(cont_){
          while(n--){
             cont_[n].clear_and_dispose(disp_);

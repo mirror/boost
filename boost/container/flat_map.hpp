@@ -515,8 +515,8 @@ class flat_map
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x)
-      { return container_detail::force_copy<iterator>(
-         m_flat_tree.insert_unique(container_detail::force<impl_const_iterator>(position), boost::move(container_detail::force<impl_value_type>(x)))); }
+      { return container_detail::force_copy<iterator>
+         (m_flat_tree.insert_unique(container_detail::force<impl_const_iterator>(position), boost::move(container_detail::force<impl_value_type>(x)))); }
 
    //! <b>Effects</b>: Inserts an element move constructed from x in the container.
    //!   p is a hint pointing to where the insert should start to search.
@@ -548,7 +548,7 @@ class flat_map
 
    #if defined(BOOST_CONTAINER_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
 
-   //! <b>Effects</b>: Inserts an object of type T constructed with
+   //! <b>Effects</b>: Inserts an object x of type T constructed with
    //!   std::forward<Args>(args)... if and only if there is no element in the container 
    //!   with key equivalent to the key of x.
    //!
@@ -561,8 +561,8 @@ class flat_map
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
-   iterator emplace(Args&&... args)
-   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_unique(boost::forward<Args>(args)...)); }
+   std::pair<iterator,bool> emplace(Args&&... args)
+   {  return container_detail::force_copy< std::pair<iterator, bool> >(m_flat_tree.emplace_unique(boost::forward<Args>(args)...)); }
 
    //! <b>Effects</b>: Inserts an object of type T constructed with
    //!   std::forward<Args>(args)... in the container if and only if there is 
@@ -578,22 +578,23 @@ class flat_map
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
    template <class... Args>
    iterator emplace_hint(const_iterator hint, Args&&... args)
-   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_hint_unique(container_detail::force<impl_const_iterator>(hint), boost::forward<Args>(args)...)); }
+   {  return container_detail::force_copy<iterator>
+      (m_flat_tree.emplace_hint_unique(container_detail::force<impl_const_iterator>(hint), boost::forward<Args>(args)...)); }
 
    #else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                                 \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)          \
-   iterator emplace(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                           \
-   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_unique                                       \
-               (BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))); }                        \
+   std::pair<iterator,bool> emplace(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))            \
+   {  return container_detail::force_copy< std::pair<iterator, bool> >                             \
+         (m_flat_tree.emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))); }    \
                                                                                                    \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)          \
    iterator emplace_hint(const_iterator hint                                                       \
-                         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))             \
-   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_hint_unique                                  \
-            (container_detail::force<impl_const_iterator>(hint)                                                      \
-               BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))); }                \
+                         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))              \
+   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_hint_unique                \
+            (container_detail::force<impl_const_iterator>(hint)                                    \
+               BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))); }                 \
    //!
    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
    #include BOOST_PP_LOCAL_ITERATE()
@@ -631,7 +632,8 @@ class flat_map
    //! <b>Complexity</b>: Logarithmic search time plus erasure time
    //!   linear to the elements with bigger keys.
    iterator erase(const_iterator first, const_iterator last)
-      { return container_detail::force_copy<iterator>(m_flat_tree.erase(container_detail::force<impl_const_iterator>(first), container_detail::force<impl_const_iterator>(last))); }
+      { return container_detail::force_copy<iterator>
+         (m_flat_tree.erase(container_detail::force<impl_const_iterator>(first), container_detail::force<impl_const_iterator>(last))); }
 
    //! <b>Effects</b>: erase(a.begin(),a.end()).
    //!
@@ -1151,7 +1153,8 @@ class flat_multimap
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, const value_type& x) 
-      { return container_detail::force_copy<iterator>(m_flat_tree.insert_equal(container_detail::force<impl_const_iterator>(position), container_detail::force<impl_value_type>(x))); }
+      { return container_detail::force_copy<iterator>
+         (m_flat_tree.insert_equal(container_detail::force<impl_const_iterator>(position), container_detail::force<impl_value_type>(x))); }
 
    //! <b>Effects</b>: Inserts a value move constructed from x in the container.
    //!   p is a hint pointing to where the insert should start to search.
@@ -1237,16 +1240,16 @@ class flat_multimap
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                                 \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)          \
-   iterator emplace(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                           \
-   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_equal                                        \
-               (BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))); }                        \
+   iterator emplace(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                            \
+   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_equal                      \
+               (BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))); }                         \
                                                                                                    \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)          \
    iterator emplace_hint(const_iterator hint                                                       \
-                         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))             \
-   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_hint_equal                                   \
-            (container_detail::force<impl_const_iterator>(hint)                                                      \
-               BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))); }                \
+                         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))              \
+   {  return container_detail::force_copy<iterator>(m_flat_tree.emplace_hint_equal                 \
+            (container_detail::force<impl_const_iterator>(hint)                                    \
+               BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))); }                 \
    //!
    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
    #include BOOST_PP_LOCAL_ITERATE()
@@ -1284,7 +1287,8 @@ class flat_multimap
    //! <b>Complexity</b>: Logarithmic search time plus erasure time
    //!   linear to the elements with bigger keys.
    iterator erase(const_iterator first, const_iterator last)
-      { return container_detail::force_copy<iterator>(m_flat_tree.erase(container_detail::force<impl_const_iterator>(first), container_detail::force<impl_const_iterator>(last))); }
+      { return container_detail::force_copy<iterator>
+         (m_flat_tree.erase(container_detail::force<impl_const_iterator>(first), container_detail::force<impl_const_iterator>(last))); }
 
    //! <b>Effects</b>: erase(a.begin(),a.end()).
    //!

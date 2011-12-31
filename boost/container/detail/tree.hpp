@@ -753,7 +753,7 @@ class rbtree
    }
 
    private:
-   iterator emplace_unique_impl(NodePtr p)
+   std::pair<iterator, bool> emplace_unique_impl(NodePtr p)
    {
       value_type &v = p->get_data();
       insert_commit_data data;
@@ -761,9 +761,11 @@ class rbtree
          this->insert_unique_check(KeyOfValue()(v), data);
       if(!ret.second){
          Destroyer(this->node_alloc())(p);
-         return ret.first;
+         return ret;
       }
-      return iterator(iiterator(this->icont().insert_unique_commit(*p, data)));
+      return std::pair<iterator,bool>
+         ( iterator(iiterator(this->icont().insert_unique_commit(*p, data)))
+         , true );
    }
 
    iterator emplace_unique_hint_impl(const_iterator hint, NodePtr p)
@@ -784,7 +786,7 @@ class rbtree
    #ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    template <class... Args>
-   iterator emplace_unique(Args&&... args)
+   std::pair<iterator, bool> emplace_unique(Args&&... args)
    {  return this->emplace_unique_impl(AllocHolder::create_node(boost::forward<Args>(args)...));   }
 
    template <class... Args>
@@ -809,32 +811,32 @@ class rbtree
 
    #define BOOST_PP_LOCAL_MACRO(n)                                                                          \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)                   \
-   iterator emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                             \
+   std::pair<iterator, bool> emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))             \
    {                                                                                                        \
       return this->emplace_unique_impl                                                                      \
-         (AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));                \
+         (AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));                 \
    }                                                                                                        \
                                                                                                             \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)                   \
    iterator emplace_hint_unique(const_iterator hint                                                         \
-                       BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                        \
+                       BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                         \
    {                                                                                                        \
       return this->emplace_unique_hint_impl                                                                 \
-         (hint, AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));          \
+         (hint, AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));           \
    }                                                                                                        \
                                                                                                             \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)                   \
-   iterator emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                              \
+   iterator emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                               \
    {                                                                                                        \
-      NodePtr p(AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));          \
+      NodePtr p(AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));           \
       return iterator(this->icont().insert_equal(this->icont().end(), *p));                                 \
    }                                                                                                        \
                                                                                                             \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)                   \
    iterator emplace_hint_equal(const_iterator hint                                                          \
-                       BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                        \
+                       BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                         \
    {                                                                                                        \
-      NodePtr p(AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));          \
+      NodePtr p(AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));           \
       return iterator(this->icont().insert_equal(hint.get(), *p));                                          \
    }                                                                                                        \
    //!
