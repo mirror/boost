@@ -124,8 +124,8 @@ class has_member_function_named_func
             template <class U> 
             static has_member_function_callable_with::no_type Test(...);
             
-            static const bool value = sizeof(Test< Fun >(0))
-                                 == sizeof(has_member_function_callable_with::yes_type);
+            static const bool value
+               = sizeof(Test< Fun >(0)) == sizeof(has_member_function_callable_with::yes_type);
          };
 
          #else
@@ -134,6 +134,7 @@ class has_member_function_named_func
          struct has_member_function_callable_with_func_impl
             <Fun, true , void , void , void>
          {
+            //GCC [3.4-4.3) gives ICE when instantiating the 0 arg version so it is not supported.
             static const bool value = true;
          };
 
