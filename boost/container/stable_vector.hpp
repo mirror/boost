@@ -446,7 +446,7 @@ class stable_vector
    template<class AllocatorVersion>
    node_type_ptr_t allocate_one(AllocatorVersion,
       typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v2>
+         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
             ::value>::type * = 0)
    {  return node_alloc().allocate_one();   }
 
@@ -463,7 +463,7 @@ class stable_vector
    template<class AllocatorVersion>
    void deallocate_one(node_type_ptr_t p, AllocatorVersion,
       typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v2>
+         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
             ::value>::type * = 0)
    {  node_alloc().deallocate_one(p);   }
 
@@ -1316,7 +1316,7 @@ class stable_vector
    template<class AllocatorVersion>
    void clear_pool(AllocatorVersion,
       typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v2>
+         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
             ::value>::type * = 0)
    {
       if(!impl.empty() && impl.back()){
@@ -1355,7 +1355,7 @@ class stable_vector
    template<class AllocatorVersion>
    void add_to_pool(size_type n, AllocatorVersion,
       typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v2>
+         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
             ::value>::type * = 0)
    {
       void_ptr &pool_first_ref = impl.end()[-2];
@@ -1473,7 +1473,7 @@ class stable_vector
    template<class AllocatorVersion>
    iterator priv_erase(const_iterator first, const_iterator last, AllocatorVersion,
       typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v2>
+         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
             ::value>::type * = 0)
    {
       STABLE_VECTOR_CHECK_INVARIANT;
@@ -1542,7 +1542,8 @@ class stable_vector
    void delete_node(const void_ptr &p)
    {
       node_type_ptr_t n(node_ptr_cast(p));
-      n->~node_type_t();
+      allocator_traits<node_allocator_type>::
+         destroy(this->node_alloc(), container_detail::to_raw_pointer(n));
       this->put_in_pool(n);
    }
 
