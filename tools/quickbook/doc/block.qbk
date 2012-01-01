@@ -428,19 +428,19 @@ sf_logo
 
 [tip It's a good idea to use macro identifiers that are distinguishable.
 For instance, in this document, macro identifiers have two leading and
-trailing underscores (e.g. `__spirit__`). The reason is to avoid
+trailing underscores (e.g. [^\__spirit__]). The reason is to avoid
 unwanted macro replacement.]
 
 Links (URLS) and images are good candidates for macros. *1*) They tend to
 change a lot. It is a good idea to place all links and images in one place near the top
 to make it easy to make changes. *2*) The syntax is not pretty. It's easier to read and
-write, e.g. `__spirit__` than `[@http://spirit.sourceforge.net Spirit]`.
+write, e.g. [^\__spirit__] than `[@http://spirit.sourceforge.net Spirit]`.
 
 Some more examples:
 
 ```
-[def :-)            [$theme/smiley.png]]
-[def __spirit__     [@http://spirit.sourceforge.net Spirit]]
+[def ``\:-)``            [$theme/smiley.png]]
+[def ``\__spirit__``     [@http://spirit.sourceforge.net Spirit]]
 ```
 
 (See __images__ and __links__)
@@ -448,7 +448,7 @@ Some more examples:
 Invoking these macros:
 
 ```
-Hi __spirit__  :-)
+Hi ``\__spirit__``  ``\:-)``
 ```
 
 will generate this:
@@ -462,10 +462,10 @@ Hi __spirit__ :-)
 Quickbook has some predefined macros that you can already use.
 
 [table Predefined Macros
-    [[Macro]                [Meaning]                       [Example]]
-    [[[^'''__DATE__''']]    [Today's date]                  [__DATE__]]
-    [[[^'''__TIME__''']]    [The current time]              [__TIME__]]
-    [[[^'''__FILENAME__''']][Quickbook source filename]     [__FILENAME__]]
+    [[Macro]           [Meaning]                       [Example]]
+    [[[^\__DATE__]]    [Today's date]                  [__DATE__]]
+    [[[^\__TIME__]]    [The current time]              [__TIME__]]
+    [[[^\__FILENAME__]][Quickbook source filename]     [__FILENAME__]]
 ]
 
 [endsect] [/Predefined Macros]
@@ -753,7 +753,7 @@ We will have:
 [section Blurbs]
 
 ```
-[blurb :-) [*An eye catching advertisement or note...]
+[blurb ``\:-)`` [*An eye catching advertisement or note...]
 
     __spirit__ is an object-oriented recursive-descent parser generator framework
     implemented using template meta-programming techniques. Expression templates
@@ -870,7 +870,7 @@ Here's how to have preformatted blocks of code in a table cell:
     [[Comment] [Code]]
     [
         [My first program]
-        [``
+        [``\`\`\ ``
             #include <iostream>
 
             int main()
@@ -878,7 +878,7 @@ Here's how to have preformatted blocks of code in a table cell:
                 std::cout << "Hello, World!" << std::endl;
                 return 0;
             }
-        ``]
+        ``\`\`\ ``]
     ]
 ]
 ```
