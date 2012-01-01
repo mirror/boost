@@ -667,6 +667,8 @@ namespace quickbook
                                                 [actions.escape_unicode]
             |   "\\U" >> cl::repeat_p(8) [cl::chset<>("0-9a-fA-F")]
                                                 [actions.escape_unicode]
+            |   ('\\' >> cl::anychar_p)         [actions.error("Invalid escape.")]
+                                                [actions.raw_char]
             |   ("'''" >> !eol)                 [actions.error("Boostbook escape invalid here.")]
             >>  (*(cl::anychar_p - "'''"))
             >>  (   cl::str_p("'''")
