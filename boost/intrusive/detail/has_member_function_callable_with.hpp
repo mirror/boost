@@ -25,6 +25,8 @@
       //wrong SFINAE for GCC 4.2/4.3
       #if defined(__GNUC__) && !defined(__clang__) && ((__GNUC__*100 + __GNUC_MINOR__*10) >= 340) && ((__GNUC__*100 + __GNUC_MINOR__*10) <= 430)
       #define BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED
+      #elif defined(BOOST_INTEL) && (BOOST_INTEL < 1200 )
+      #define BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED
       #endif
 
       namespace boost_intrusive_has_member_function_callable_with {
@@ -125,6 +127,7 @@
             };
 
             #else
+
             //Special case for 0 args
             template< class F
                   , std::size_t N = 
