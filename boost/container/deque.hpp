@@ -1069,7 +1069,10 @@ class deque : protected deque_base<T, A>
    {
       if (this->members_.m_finish.m_cur != this->members_.m_finish.m_first) {
          --this->members_.m_finish.m_cur;
-         container_detail::to_raw_pointer(this->members_.m_finish.m_cur)->~value_type();
+         allocator_traits_type::destroy
+            ( this->alloc()
+            , container_detail::to_raw_pointer(this->members_.m_finish.m_cur)
+            );
       }
       else
          this->priv_pop_back_aux();
@@ -1083,7 +1086,10 @@ class deque : protected deque_base<T, A>
    void pop_front() BOOST_CONTAINER_NOEXCEPT
    {
       if (this->members_.m_start.m_cur != this->members_.m_start.m_last - 1) {
-         container_detail::to_raw_pointer(this->members_.m_start.m_cur)->~value_type();
+         allocator_traits_type::destroy
+            ( this->alloc()
+            , container_detail::to_raw_pointer(this->members_.m_start.m_cur)
+            );
          ++this->members_.m_start.m_cur;
       }
       else 
@@ -1598,14 +1604,22 @@ class deque : protected deque_base<T, A>
 
    void priv_destroy_range(iterator p, iterator p2)
    {
-      for(;p != p2; ++p)
-         container_detail::to_raw_pointer(&*p)->~value_type();
+      for(;p != p2; ++p){
+         allocator_traits_type::destroy
+            ( this->alloc()
+            , container_detail::to_raw_pointer(&*p)
+            );
+      }
    }
 
    void priv_destroy_range(pointer p, pointer p2)
    {
-      for(;p != p2; ++p)
-         container_detail::to_raw_pointer(&*p)->~value_type();
+      for(;p != p2; ++p){
+         allocator_traits_type::destroy
+            ( this->alloc()
+            , container_detail::to_raw_pointer(&*p)
+            );
+      }
    }
 
    template <class Integer>
@@ -1827,7 +1841,10 @@ class deque : protected deque_base<T, A>
       this->priv_deallocate_node(this->members_.m_finish.m_first);
       this->members_.m_finish.priv_set_node(this->members_.m_finish.m_node - 1);
       this->members_.m_finish.m_cur = this->members_.m_finish.m_last - 1;
-      container_detail::to_raw_pointer(this->members_.m_finish.m_cur)->~value_type();
+      allocator_traits_type::destroy
+         ( this->alloc()
+         , container_detail::to_raw_pointer(this->members_.m_finish.m_cur)
+         );
    }
 
    // Called only if this->members_.m_start.m_cur == this->members_.m_start.m_last - 1.  Note that 
@@ -1836,7 +1853,10 @@ class deque : protected deque_base<T, A>
    // must have at least two nodes.
    void priv_pop_front_aux()
    {
-      container_detail::to_raw_pointer(this->members_.m_start.m_cur)->~value_type();
+      allocator_traits_type::destroy
+         ( this->alloc()
+         , container_detail::to_raw_pointer(this->members_.m_start.m_cur)
+         );
       this->priv_deallocate_node(this->members_.m_start.m_first);
       this->members_.m_start.priv_set_node(this->members_.m_start.m_node + 1);
       this->members_.m_start.m_cur = this->members_.m_start.m_first;

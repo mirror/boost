@@ -127,7 +127,10 @@ class basic_string_base
    {  
       if(!this->is_short()){
          this->deallocate_block(); 
-         static_cast<long_t*>(static_cast<void*>(&this->members_.m_repr.r))->~long_t();
+         allocator_traits_type::destroy
+            ( this->alloc()
+            , static_cast<long_t*>(static_cast<void*>(&this->members_.m_repr.r))
+            );
       }
    }
 
@@ -240,10 +243,16 @@ class basic_string_base
    void is_short(bool yes)
    {  
       if(yes && !this->is_short()){
-         static_cast<long_t*>(static_cast<void*>(&this->members_.m_repr.r))->~long_t();
+         allocator_traits_type::destroy
+            ( this->alloc()
+            , static_cast<long_t*>(static_cast<void*>(&this->members_.m_repr.r))
+            );
       }
       else{
-         new(static_cast<void*>(&this->members_.m_repr.r))long_t();
+         allocator_traits_type::construct
+            ( this->alloc()
+            , static_cast<long_t*>(static_cast<void*>(&this->members_.m_repr.r))
+            );
       }
       this->members_.m_repr.s.h.is_short = yes;
    }
@@ -314,16 +323,31 @@ class basic_string_base
    }
 
    void construct(pointer p, const value_type &value = value_type())
-   {  new((void*)container_detail::to_raw_pointer(p)) value_type(value);   }
+   {
+      allocator_traits_type::construct
+         ( this->alloc()
+         , container_detail::to_raw_pointer(p)
+         , value
+         );
+   }
 
    void destroy(pointer p, size_type n)
    {
-      for(; n--; ++p)
-         container_detail::to_raw_pointer(p)->~value_type();
+      for(; n--; ++p){
+         allocator_traits_type::destroy
+            ( this->alloc()
+            , container_detail::to_raw_pointer(p)
+            );
+      }
    }
 
    void destroy(pointer p)
-   {  container_detail::to_raw_pointer(p)->~value_type(); }
+   {
+      allocator_traits_type::destroy
+         ( this->alloc()
+         , container_detail::to_raw_pointer(p)
+         );
+   }
 
    void allocate_initial_block(size_type n)
    {

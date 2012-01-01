@@ -1328,7 +1328,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    template<class AllocVersion>
    void priv_shrink_to_fit(AllocVersion
                           , typename container_detail::enable_if_c<
-                              container_detail::is_same<AllocVersion, allocator_v2>::value >::type * = 0)
+                              !container_detail::is_same<AllocVersion, allocator_v1>::value >::type * = 0)
    {
       if(this->members_.m_capacity){
          if(!size()){
