@@ -477,7 +477,7 @@
           : proto::pod_generator<llexpr>
         {};
 
-        // The domain for the lambda library. It
+        // The domain for the lambda library.
         struct lldomain
           : proto::domain<Generator, Grammar, proto::default_domain>
         {

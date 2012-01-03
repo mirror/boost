@@ -1160,6 +1160,7 @@
   <xi:include href="reference/repeat.xml"/>
   <xi:include href="reference/tags.xml"/>
   <xi:include href="reference/traits.xml"/>
+  <xi:include href="reference/transform.xml"/>
   <xi:include href="reference/transform/arg.xml"/>
   <xi:include href="reference/transform/call.xml"/>
   <xi:include href="reference/transform/default.xml"/>
@@ -1171,6 +1172,7 @@
   <xi:include href="reference/transform/make.xml"/>
   <xi:include href="reference/transform/pass_through.xml"/>
   <xi:include href="reference/transform/when.xml"/>
+  <xi:include href="reference/context.xml"/>
   <xi:include href="reference/context/callable.xml"/>
   <xi:include href="reference/context/default.xml"/>
   <xi:include href="reference/context/null.xml"/>
