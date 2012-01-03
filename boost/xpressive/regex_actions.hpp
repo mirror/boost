@@ -707,6 +707,7 @@ namespace boost { namespace xpressive
         typedef typename proto::terminal<Fun>::type type;
     };
 
+    function<op::at>::type const at = {{}};
     function<op::push>::type const push = {{}};
     function<op::push_back>::type const push_back = {{}};
     function<op::push_front>::type const push_front = {{}};
@@ -909,6 +910,7 @@ namespace boost { namespace xpressive
     {
         inline void ignore_unused_regex_actions()
         {
+            detail::ignore_unused(xpressive::at);
             detail::ignore_unused(xpressive::push);
             detail::ignore_unused(xpressive::push_back);
             detail::ignore_unused(xpressive::push_front);
@@ -925,6 +927,7 @@ namespace boost { namespace xpressive
             detail::ignore_unused(xpressive::str);
             detail::ignore_unused(xpressive::insert);
             detail::ignore_unused(xpressive::make_pair);
+            detail::ignore_unused(xpressive::unwrap_reference);
             detail::ignore_unused(xpressive::check);
             detail::ignore_unused(xpressive::let);
         }
