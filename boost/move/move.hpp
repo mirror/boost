@@ -283,6 +283,10 @@
       : BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
    {};
 
+   template <class T>
+   struct has_move_emulation_enabled_aux 
+     : has_move_emulation_enabled<T> {};
+     
    template <class T> 
    struct has_nothrow_move
       : public BOOST_MOVE_BOOST_NS::integral_constant<bool, false>
@@ -293,8 +297,9 @@
    //                            move()
    //
    //////////////////////////////////////////////////////////////////////////////
+    
    template <class T>
-   typename BOOST_MOVE_BOOST_NS::disable_if<has_move_emulation_enabled<T>, T&>::type move(T& x)
+   typename BOOST_MOVE_BOOST_NS::disable_if<has_move_emulation_enabled_aux<T>, T&>::type move(T& x)
    {
       return x;
    }
