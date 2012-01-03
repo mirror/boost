@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+  Copyright 2012 Eric Niebler
+
+  Distributed under the Boost
+  Software License, Version 1.0. (See accompanying
+  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+  -->
 <header name="boost/proto/matches.hpp">
   <para>
     Contains definition of the
@@ -441,7 +448,7 @@ struct IsIntegral2 :
           An expression type <computeroutput>E</computeroutput> matches
             <computeroutput>proto::switch_&lt;C,T&gt;</computeroutput> if
           <computeroutput>E</computeroutput> matches
-            <computeroutput>C::case_&lt;boost::result_of&lt;T(E)&gt;::type&gt;</computeroutput>.
+            <computeroutput>C::case_&lt;boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>proto::_</classname>,T&gt;(E)&gt;::type&gt;</computeroutput>.
           </para>
         <para>
           When applying <computeroutput>proto::switch_&lt;C,T&gt;</computeroutput> as a
@@ -449,7 +456,7 @@ struct IsIntegral2 :
             <computeroutput>E</computeroutput>, state <computeroutput>s</computeroutput> of
             type <computeroutput>S</computeroutput> and data <computeroutput>d</computeroutput>
             of type <computeroutput>D</computeroutput>, it is equivalent to
-            <computeroutput>C::case_&lt;boost::result_of&lt;T(E,S,D)&gt;::type&gt;()(e, s, d)</computeroutput>.
+            <computeroutput>C::case_&lt;boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>proto::_</classname>,T&gt;(E,S,D)&gt;::type&gt;()(e, s, d)</computeroutput>.
           </para>
         </description>
         <struct name="impl">
@@ -699,14 +706,15 @@ struct Function :
                   <computeroutput>
                     <classname>proto::switch_</classname>&lt;C, T&gt;
                   </computeroutput> if
-                  <computeroutput>E</computeroutput> matches <computeroutput>C::case_&lt;boost::result_of&lt;T(E)&gt;::type&gt;</computeroutput>.
+                  <computeroutput>E</computeroutput> matches <computeroutput>C::case_&lt;boost::result_of&lt;<classname>proto::when</classname>&lt;<classname>proto::_</classname>,T&gt;(E)&gt;::type&gt;</computeroutput>.
                   Note: <computeroutput>T</computeroutput> defaults to <computeroutput><classname>proto::tag_of</classname>&lt;<classname>proto::_</classname>&gt;()</computeroutput>
                 </para>
               </listitem>
             </itemizedlist>
           </para>
           <para>
-            A terminal expression
+            A terminal expression can trivially match the grammar <classname>proto::_</classname>. In addition,
+            a terminal expression
             <computeroutput>
               <classname>proto::basic_expr</classname>&lt;AT,
               <classname>proto::term</classname>&lt;A&gt; &gt;
