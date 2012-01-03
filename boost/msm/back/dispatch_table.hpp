@@ -70,7 +70,7 @@ struct dispatch_table
                  // try the first guard
                  typedef typename ::boost::mpl::front<Sequence>::type first_row;
                  HandledEnum res = first_row::execute(fsm,region_index,state,evt);
-                 if (HANDLED_TRUE!=res)
+                 if (HANDLED_TRUE!=res && HANDLED_DEFERRED!=res)
                  {
                     // if the first rejected, move on to the next one
                     HandledEnum sub_res = 
