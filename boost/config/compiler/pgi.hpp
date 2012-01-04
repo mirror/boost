@@ -8,7 +8,7 @@
 //  PGI C++ compiler setup:
 
 #define BOOST_COMPILER_VERSION __PGIC__##__PGIC_MINOR__
-#define BOOST_COMPILER "PGI compiler version " BOOST_STRINGIZE(_COMPILER_VERSION)
+#define BOOST_COMPILER "PGI compiler version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
 
 //
 // Threading support:
