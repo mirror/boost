@@ -19,7 +19,7 @@
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
 //        Alexander Nasonov, Antony Polukhin, Justin Viiret, Michael Hofmann,
 //        Cheng Yang, Matthew Bradbury and other Boosters
-// when:  November 2000, March 2003, June 2005, June 2006, March 2011
+// when:  November 2000, March 2003, June 2005, June 2006, March 2011 - 2012
 
 #include <climits>
 #include <cstddef>
@@ -1822,6 +1822,24 @@ namespace boost
                     deduce_char_traits<char_type,Target,Source>::type traits;
 
                 typedef BOOST_DEDUCED_TYPENAME remove_pointer<src >::type removed_ptr_t;
+
+                // is_char_types_match variable value can be computed via
+                // sizeof(char_type) == sizeof(removed_ptr_t). But when
+                // removed_ptr_t is an incomplete type or void*, compilers
+                // produce warnings or errors.
+                const bool is_char_types_match =
+                (::boost::type_traits::ice_or<
+                    ::boost::type_traits::ice_and<
+                        ::boost::type_traits::ice_eq<sizeof(char_type), sizeof(char) >::value,
+                        ::boost::type_traits::ice_or<
+                            ::boost::is_same<char, removed_ptr_t>::value,
+                            ::boost::is_same<unsigned char, removed_ptr_t>::value,
+                            ::boost::is_same<signed char, removed_ptr_t>::value
+                        >::value
+                    >::value,
+                    is_same<char_type, removed_ptr_t>::value
+                >::value);
+
                 const bool requires_stringbuf =
                         !(
                              ::boost::type_traits::ice_or<
@@ -1830,10 +1848,7 @@ namespace boost
                                  ::boost::type_traits::ice_and<
                                      is_pointer<src >::value,
                                      is_char_or_wchar<removed_ptr_t >::value,
-                                     ::boost::type_traits::ice_eq<
-                                        sizeof(char_type),
-                                        sizeof(removed_ptr_t)
-                                     >::value
+                                     is_char_types_match
                                  >::value
                              >::value
                         );
@@ -2111,7 +2126,7 @@ namespace boost
 
 // Copyright Kevlin Henney, 2000-2005.
 // Copyright Alexander Nasonov, 2006-2010.
-// Copyright Antony Polukhin, 2011.
+// Copyright Antony Polukhin, 2011-2012.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
