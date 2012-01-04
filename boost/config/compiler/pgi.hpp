@@ -16,9 +16,6 @@
 // if no threading API is detected.
 //
 
-// PGI 10.x doesn't seem to define __PGIC__
-
-// versions earlier than 10.x do define __PGIC__
 #if __PGIC__ >= 10
 
 // options requested by configure --enable-test
