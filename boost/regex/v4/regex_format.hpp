@@ -180,7 +180,7 @@ private:
    }
    inline int toi(ForwardIter& i, ForwardIter j, int base)
    {
-#if defined(_MSC_VER) && defined(__INTEL_COMPILER) && (__INTEL_COMPILER == 9999)
+#if defined(_MSC_VER) && defined(__INTEL_COMPILER) && ((__INTEL_COMPILER == 9999) || (__INTEL_COMPILER == 1210))
       // Workaround for Intel support issue #656654.
       // See also https://svn.boost.org/trac/boost/ticket/6359
       return toi(i, j, base, mpl::false_());
