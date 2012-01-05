@@ -57,6 +57,10 @@
   [classref  boost::proto::default_domain `proto::default_domain`]]
 [def _extends_              
   [classref  boost::proto::extends `proto::extends<>`]]
+[def _external_transform_              
+  [classref  boost::proto::external_transform `proto::external_transform`]]
+[def _external_transforms_              
+  [classref  boost::proto::external_transforms `proto::external_transforms<>`]]
 [def _as_expr_              
   [funcref   boost::proto::as_expr `proto::as_expr()`]]
 [def _as_child_             

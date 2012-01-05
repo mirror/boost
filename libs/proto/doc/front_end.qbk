@@ -602,6 +602,8 @@ The type `proto::not_< proto::address_of< _ > >` is a very simple grammar that m
 [section:per_domain_as_child Controlling How Child Expressions Are Captured]
 [/=========================================================================]
 
+[note This is an advanced topic. Feel free to skip this if you're just getting started with Proto.]
+
 Proto's operator overloads build expressions from sub-expressions. The sub-expressions become children of the new expression. By default, the children are stored in the parent by reference. This section describes how to change that default.
 
 [/-----------------------------------------]
@@ -614,9 +616,9 @@ To wit: _as_expr_ is typically used by /you/ to turn an object into a Proto expr
 
     auto l = proto::as_expr(x); // Turn x into a Proto expression, hold the result in a local
 
-The above works regardless of whether `x` is already a Proto expression or not. The object `l` is guaranteed to be a valid Proto expression. If `x` is a non-Proto object, it is turned into terminal expression that hold `x` /by value/.[footnote It's not always possible to hold something by value. By default, _as_expr_ makes an exception for functions, abstract types, and iostreams (types derived from `std::ios_base`). These objects are held by reference. All others are held by value, even arrays.] If `x` is a Proto object already, _as_expr_ returns it /by value/ unmodified.
+The above works regardless of whether `x` is already a Proto expression or not. The object `l` is guaranteed to be a valid Proto expression. If `x` is a non-Proto object, it is turned into a terminal expression that holds `x` /by value/.[footnote It's not always possible to hold something by value. By default, _as_expr_ makes an exception for functions, abstract types, and iostreams (types derived from `std::ios_base`). These objects are held by reference. All others are held by value, even arrays.] If `x` is a Proto object already, _as_expr_ returns it /by value/ unmodified.
 
-In contrast, _as_child_ is used internally by Proto to pre-process some object before making it a child of another expression. Since it's internal to Proto, you don't see it explicitly, but it's there behind the scenes in expressions like this:
+In contrast, _as_child_ is used internally by Proto to pre-process objects before making them children of another expression. Since it's internal to Proto, you don't see it explicitly, but it's there behind the scenes in expressions like this:
 
     x + y; // Consider that y is a Proto expression, but x may or may not be.
 
@@ -629,6 +631,8 @@ The table below summarizes the above description.
 [[[^proto::as_expr(t)]] [Return (by value) a new Proto terminal holding [^t] by value.] [Return [^t] by value unmodified.]]
 [[[^proto::as_child(t)]] [Return (by value) a new Proto terminal holding [^t] by reference.] [Return [^t] by reference unmodified.]]
 ]
+
+[note There is one important place where Proto uses both `as_expr` /and/ `as_child`: _make_expr_. The _make_expr_ function requires you to specify for each child whether it should be held by value or by reference. Proto uses _as_expr_ to pre-process the children to be held by value, and _as_child_ for the ones to be held by reference.]
 
 Now that you know what _as_child_ and _as_expr_ are, where they are used, and what they do by default, you may decide that one or both of these functions should have different behavior for your domain. For instance, given the above description of _as_child_, the following code is always wrong:
 
@@ -742,13 +746,15 @@ For another example, see the definition of `lldomain` in [^libs/proto/example/la
 [section:subdomains EDSL Interoperatability: Sub-Domains]
 [/======================================================]
 
+[note This is an advanced topic. Feel free to skip this if you're just getting started with Proto.]
+
 The ability to /compose/ different EDSLs is one of their most exciting features. Consider how you build a parser using yacc. You write your grammar rules in yacc's domain-specific language. Then you embed semantic actions written in C within your grammar. Boost's Spirit parser generator gives you the same ability. You write grammar rules using Spirit.Qi and embed semantic actions using the Phoenix library. Phoenix and Spirit are both Proto-based domain-specific languages with their own distinct syntax and semantics. But you can freely embed Phoenix expressions within Spirit expressions. This section describes Proto's /sub-domain/ feature that lets you define famalies of interoperable domains.
 
 [/======================]
 [heading Dueling Domains]
 [/======================]
 
-Sub-domains solve a specific problem that only comes up when you try to create an expression from two sub-expressions in different domains: what is the domain of the resulting expression? Consider the following code:
+When you try to create an expression from two sub-expressions in different domains, what is the domain of the resulting expression? This is the fundamental problem that is addressed by sub-domains. Consider the following code:
 
     #include <boost/proto/proto.hpp>
     namespace proto = boost::proto;
