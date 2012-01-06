@@ -26,8 +26,8 @@
       a standard wrong.  However, the mistaken <code>typedef</code>s are still
       there for backwards compatibility.
     \note  There are references to the <i>Rocksoft&trade; Model CRC
-      Algorithm</i>, as described within \"<cite>A Painless Guide to CRC Error
-      Detection Algorithms</cite>,\" linked from \"<a
+      Algorithm</i>, as described within \"A Painless Guide to CRC Error
+      Detection Algorithms,\" linked from \"<a
       href="http://www.ross.net/crc/crcpaper.html">CRC: A Paper On CRCs</a>\" by
       Ross Williams.  It will be abbreviated \"RMCA\" in other documentation
       blocks.
@@ -540,7 +540,7 @@ namespace detail
         exposed from the remainder, without any zero-valued bits augmented to
         the message bits.
 
-        \pre  \a Register and \Word are both built-in unsigned integer types
+        \pre  \a Register and \a Word are both built-in unsigned integer types
         \pre  0 \< \a register_length \<= std\::numeric_limits\<\a Register\>
           \::digits
         \pre  0 \< \a word_length \<= std\::numeric_limits\<\a Word\>\::digits
@@ -661,7 +661,7 @@ namespace detail
         string of bits will be appended to the message before extracting the
         CRC.
 
-        \pre  \a Register and \Word are both built-in unsigned integer types
+        \pre  \a Register and \a Word are both built-in unsigned integer types
         \pre  0 \< \a register_length \<= std\::numeric_limits\<\a Register\>
           \::digits
         \pre  0 \< \a word_length \<= std\::numeric_limits\<\a Word\>\::digits
@@ -1601,11 +1601,12 @@ crc_basic<Bits>::crc_basic
 
 /** Returns a representation of the polynomial divisor.  The value of the
     2<sup>i</sup> bit is the value of the coefficient of the polynomial's
-    x<sup>i</sup> term.  The omitted bit for x<sup>#bit_count</sup> is always 1.
+    x<sup>i</sup> term.  The omitted bit for x<sup>(#bit_count)</sup> term is
+    always 1.
 
     \return  The bit-packed list of coefficients.  If the bit-length of
       #value_type exceeds #bit_count, the values of higher-placed bits should be
-      ignored (even any for x<sup>#bit_count</sup>) since they're unregulated.
+      ignored (even any for x<sup>(#bit_count)</sup>) since they're unregulated.
  */
 template < std::size_t Bits >
 inline
@@ -1874,7 +1875,7 @@ crc_basic<Bits>::process_block
     the highest place down if <code>this-&gt;get_reflect_input()</code> is
     \c false, and lowest place up otherwise.  The bytes themselves are processed
     starting from the one pointed by \a buffer, forward-iterated (as if the
-    pointed-to objects were of <code>unsigned char<code>) until \a byte_count
+    pointed-to objects were of <code>unsigned char</code>) until \a byte_count
     bytes are read.
 
     \pre  \a byte_count has to equal 0 if \a buffer is \c NULL or otherwise
