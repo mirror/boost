@@ -208,4 +208,19 @@
       <xsl:with-param name="allow-anchors" select="$allow-anchors"/>
     </xsl:apply-templates>
   </xsl:template>
+  
+  
+  <!--  Adds the section ID as a class to the section DIV so that we
+        can style sections individually. -->
+  <xsl:template match="section" mode="class.value">
+    <xsl:param name="class" select="local-name(.)"/>
+    <xsl:param name="node" select="."/>
+    <xsl:variable name="id">
+      <xsl:call-template name="object.id">
+        <xsl:with-param name="object" select="$node"/>
+      </xsl:call-template>
+    </xsl:variable>
+    <xsl:value-of select="concat($class,' ',translate($id, '.', '_'))"/>
+  </xsl:template>
+  
 </xsl:stylesheet>
