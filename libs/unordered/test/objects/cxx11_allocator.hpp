@@ -168,10 +168,10 @@ namespace test
             new(p) T(t);
         }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
         template<typename... Args> void construct(T* p, Args&&... args) {
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
-            new(p) T(std::forward<Args>(args)...);
+            new(p) T(boost::forward<Args>(args)...);
         }
 #endif
 

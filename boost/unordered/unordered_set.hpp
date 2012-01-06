@@ -231,17 +231,17 @@ namespace unordered
 
         // emplace
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
         template <class... Args>
         std::pair<iterator, bool> emplace(Args&&... args)
         {
-            return table_.emplace(std::forward<Args>(args)...);
+            return table_.emplace(boost::forward<Args>(args)...);
         }
 
         template <class... Args>
         iterator emplace_hint(const_iterator, Args&&... args)
         {
-            return table_.emplace(std::forward<Args>(args)...).first;
+            return table_.emplace(boost::forward<Args>(args)...).first;
         }
 #else
 
@@ -702,17 +702,17 @@ namespace unordered
 
         // emplace
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
         template <class... Args>
         iterator emplace(Args&&... args)
         {
-            return table_.emplace(std::forward<Args>(args)...);
+            return table_.emplace(boost::forward<Args>(args)...);
         }
 
         template <class... Args>
         iterator emplace_hint(const_iterator, Args&&... args)
         {
-            return table_.emplace(std::forward<Args>(args)...);
+            return table_.emplace(boost::forward<Args>(args)...);
         }
 #else
 
