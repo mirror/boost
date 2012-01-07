@@ -236,6 +236,17 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 //#  undef  BOOST_NO_SCOPED_ENUMS 
 #endif
 
+#if defined(_MSC_VER) && (_MSC_VER <= 1700)
+//
+// Although the Intel compiler is capable of supporting these, it appears not to in MSVC compatibility mode:
+//
+#  define  BOOST_NO_INITIALIZER_LISTS
+#  define  BOOST_NO_VARIADIC_TEMPLATES
+#  define  BOOST_NO_DELETED_FUNCTIONS
+#  define  BOOST_NO_DEFAULTED_FUNCTIONS
+#  define  BOOST_NO_TEMPLATE_ALIASES
+#endif
+
 #if (BOOST_INTEL_CXX_VERSION < 1200)
 //
 // fenv.h appears not to work with Intel prior to 12.0:
