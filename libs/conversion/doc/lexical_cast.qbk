@@ -172,7 +172,8 @@ limitation of compiler options that you use.
 [section Changes]
 * [*boost 1.49.0 :]
   
-    * Restored work with typedefed wchar_t (compilation flag /Zc:wchar_t- for Visual Studio).    
+    * Restored work with typedefed wchar_t (compilation flag /Zc:wchar_t- for Visual Studio). 
+    * Better performance and less memory usage for `boost::container::basic_string` conversions.
     
 * [*boost 1.48.0 :]
   
