@@ -35,6 +35,7 @@ test-suite conversion
     [ run lexical_cast_inf_nan_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
     [ run lexical_cast_containers_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
     [ run lexical_cast_empty_input_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
+    [ run lexical_cast_pointers_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
     [ compile lexical_cast_typedefed_wchar_test.cpp : <toolset>msvc:<nowchar>on ]
     [ run lexical_cast_typedefed_wchar_test_runtime.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <toolset>msvc:<nowchar>on ]
   ;

@@ -18,8 +18,8 @@
 //        with additional fixes and suggestions from Gennaro Prota,
 //        Beman Dawes, Dave Abrahams, Daryle Walker, Peter Dimov,
 //        Alexander Nasonov, Antony Polukhin, Justin Viiret, Michael Hofmann,
-//        Cheng Yang, Matthew Bradbury and other Boosters
-// when:  November 2000, March 2003, June 2005, June 2006, March 2011
+//        Cheng Yang, Matthew Bradbury, David W. Birdsall and other Boosters
+// when:  November 2000, March 2003, June 2005, June 2006, March 2011 - 2012
 
 #include <climits>
 #include <cstddef>
@@ -591,6 +591,7 @@ namespace boost
             value = *end - czero;
             --end;
             T multiplier = 1;
+            bool multiplier_overflowed = false;
 
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
             std::locale loc;
@@ -613,12 +614,17 @@ namespace boost
                     for(;end>=begin; --end)
                     {
                         if (remained) {
-                            T const new_sub_value = multiplier * 10 * (*end - czero);
+                            T const multiplier_10 = multiplier * 10;
+                            if (multiplier_10 / 10 != multiplier) multiplier_overflowed = true;
+
+                            T const dig_value = *end - czero;
+                            T const new_sub_value = multiplier_10 * dig_value;
 
                             if (*end < czero || *end >= czero + 10
                                     /* detecting overflow */
-                                    || new_sub_value/10 != multiplier * (*end - czero)
+                                    || (dig_value && new_sub_value / dig_value != multiplier_10)
                                     || static_cast<T>((std::numeric_limits<T>::max)()-new_sub_value) < value
+                                    || (multiplier_overflowed && dig_value)
                                     )
                                 return false;
 
@@ -656,12 +662,17 @@ namespace boost
             {
                 while ( begin <= end )
                 {
-                    T const new_sub_value = multiplier * 10 * (*end - czero);
+                    T const multiplier_10 = multiplier * 10;
+                    if (multiplier_10 / 10 != multiplier) multiplier_overflowed = true;
+
+                    T const dig_value = *end - czero;
+                    T const new_sub_value = multiplier_10 * dig_value;
 
                     if (*end < czero || *end >= czero + 10
                             /* detecting overflow */
-                            || new_sub_value/10 != multiplier * (*end - czero)
+                            || (dig_value && new_sub_value / dig_value != multiplier_10)
                             || static_cast<T>((std::numeric_limits<T>::max)()-new_sub_value) < value
+                            || (multiplier_overflowed && dig_value)
                             )
                         return false;
 
@@ -1822,6 +1833,24 @@ namespace boost
                     deduce_char_traits<char_type,Target,Source>::type traits;
 
                 typedef BOOST_DEDUCED_TYPENAME remove_pointer<src >::type removed_ptr_t;
+
+                // is_char_types_match variable value can be computed via
+                // sizeof(char_type) == sizeof(removed_ptr_t). But when
+                // removed_ptr_t is an incomplete type or void*, compilers
+                // produce warnings or errors.
+                const bool is_char_types_match =
+                (::boost::type_traits::ice_or<
+                    ::boost::type_traits::ice_and<
+                        ::boost::type_traits::ice_eq<sizeof(char_type), sizeof(char) >::value,
+                        ::boost::type_traits::ice_or<
+                            ::boost::is_same<char, removed_ptr_t>::value,
+                            ::boost::is_same<unsigned char, removed_ptr_t>::value,
+                            ::boost::is_same<signed char, removed_ptr_t>::value
+                        >::value
+                    >::value,
+                    is_same<char_type, removed_ptr_t>::value
+                >::value);
+
                 const bool requires_stringbuf =
                         !(
                              ::boost::type_traits::ice_or<
@@ -1830,10 +1859,7 @@ namespace boost
                                  ::boost::type_traits::ice_and<
                                      is_pointer<src >::value,
                                      is_char_or_wchar<removed_ptr_t >::value,
-                                     ::boost::type_traits::ice_eq<
-                                        sizeof(char_type),
-                                        sizeof(removed_ptr_t)
-                                     >::value
+                                     is_char_types_match
                                  >::value
                              >::value
                         );
@@ -2111,7 +2137,7 @@ namespace boost
 
 // Copyright Kevlin Henney, 2000-2005.
 // Copyright Alexander Nasonov, 2006-2010.
-// Copyright Antony Polukhin, 2011.
+// Copyright Antony Polukhin, 2011-2012.
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
