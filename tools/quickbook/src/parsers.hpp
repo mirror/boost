@@ -28,7 +28,7 @@ namespace quickbook {
     // Impl is a struct with the methods:
     //
     // void start();
-    // void success();
+    // void success(parse_iterator, parse_iterator);
     // void failure();
     // void cleanup();
     //
@@ -83,10 +83,10 @@ namespace quickbook {
                 return in_progress_;
             }
             
-            void success()
+            void success(parse_iterator f, parse_iterator l)
             {
                 in_progress_ = false;
-                impl_.success();
+                impl_.success(f, l);
             }
 
             void failure()
@@ -121,7 +121,8 @@ namespace quickbook {
             bool success = scope.impl_.result(result, scan);
 
             if (success) {
-                scope.success();
+                scope.success(save, scan.first);
+
                 if (result) {
                     return scan.create_match(result.length(), cl::nil_t(), save, scan.first);
                 }

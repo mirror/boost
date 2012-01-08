@@ -9,6 +9,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 #include "actions_class.hpp"
+#include "actions_state.hpp"
 #include "quickbook.hpp"
 #include "grammar.hpp"
 #include "input_path.hpp"
@@ -20,60 +21,43 @@
 namespace quickbook
 {
     actions::actions(fs::path const& filein_, fs::path const& xinclude_base_,
-            string_stream& out_, id_generator& ids)
+            string_stream& out_, id_manager& ids)
         : grammar_()
 
-    // header info
-        , doc_type()
-        , doc_title_qbk()
-        , doc_id()
-
-    // main output stream
-        , out(out_)
-
-    // auxilliary streams
-        , phrase()
-
-    // value actions
-        , values()
-        , to_value(*this)
-        , docinfo_value(*this)
-        , scoped_cond_phrase(*this)
-        , scoped_output(*this)
-        , scoped_no_eols(*this)
-        , scoped_context(*this)
-
-    // state
-        , filename(filein_)
-        , filename_relative(filein_.filename())
         , xinclude_base(xinclude_base_)
-        , macro_change_depth(0)
-        , macro()
-        , section_level(0)
-        , min_section_level(0)
-        , section_id()
-        , qualified_section_id()
-        , source_mode("c++")
 
-    // temporary or global state
-        , template_depth(0)
         , templates()
         , error_count(0)
         , anchors()
-        , no_eols(true)
-        , suppress(false)
         , warned_about_breaks(false)
-        , context(0)
+        , conditional(true)
         , ids(ids)
 
-    // actions
+        , imported(false)
+        , macro()
+        , source_mode("c++")
+        , current_file(0)
+        , filename_relative(filein_.filename())
+
+        , template_depth(0)
+        , min_section_level(1)
+
+        , out(out_)
+        , phrase()
+        , values(&current_file)
+
+        , to_value(*this)
+        , scoped_cond_phrase(*this)
+
         , element(*this)
         , error(*this)
-        , code(out, phrase, *this)
-        , code_block(phrase, phrase, *this)
-        , inline_code(phrase, *this)
+        , code(code_action::block, *this)
+        , code_block(code_action::inline_block, *this)
+        , inline_code(code_action::inline_, *this)
         , paragraph(*this)
-        , space_char(phrase)
+        , list_item(*this)
+        , phrase_end(*this)
+        , raw_char(phrase)
         , plain_char(phrase, *this)
         , escape_unicode(phrase, *this)
 
@@ -95,69 +79,58 @@ namespace quickbook
             new quickbook_grammar(*this));
         grammar_.swap(g);
     }
-    
-    void actions::push()
-    {
-        state_stack.push(
-            boost::make_tuple(
-                filename
-              , xinclude_base
-              , macro_change_depth
-              , section_level
-              , min_section_level
-              , section_id
-              , qualified_section_id
-              , source_mode
-            )
-        );
 
-        out.push();
-        phrase.push();
-        templates.push();
-        values.builder.save();
-    }
-    
-    // Pushing and popping the macro symbol table is pretty expensive, so
-    // instead implement a sort of 'stack on write'. Call this whenever a
-    // change is made to the macro table, and it'll stack the current macros
-    // if necessary. Would probably be better to implement macros in a less
-    // expensive manner.
-    void actions::copy_macros_for_write()
-    {
-        if(macro_change_depth != state_stack.size())
-        {
-            macro_stack.push(macro);
-            macro_change_depth = state_stack.size();
-        }
-    }
-
-    void actions::pop()
-    {
-        if(macro_change_depth == state_stack.size())
-        {
-            macro = macro_stack.top();
-            macro_stack.pop();
-        }
-    
-        boost::tie(
-            filename
-          , xinclude_base
-          , macro_change_depth
-          , section_level
-          , min_section_level
-          , section_id
-          , qualified_section_id
-          , source_mode
-        ) = state_stack.top();
-        state_stack.pop();
-
-        out.pop();
-        phrase.pop();
-        templates.pop();
-        values.builder.restore();
-    }
-    
     quickbook_grammar& actions::grammar() const {
         return *grammar_;
+    }
+
+    file_state::file_state(actions& a, scope_flags scope)
+        : a(a)
+        , scope(scope)
+        , qbk_version(qbk_version_n)
+        , imported(a.imported)
+        , current_file(a.current_file)
+        , filename_relative(a.filename_relative)
+        , xinclude_base(a.xinclude_base)
+        , source_mode(a.source_mode)
+        , macro()
+    {
+        if (scope & scope_macros) macro = a.macro;
+        if (scope & scope_templates) a.templates.push();
+        if (scope & scope_output) {
+            a.out.push();
+            a.phrase.push();
+        }
+        a.values.builder.save();
+    }
+
+    file_state::~file_state()
+    {
+        a.values.builder.restore();
+        boost::swap(qbk_version_n, qbk_version);
+        boost::swap(a.imported, imported);
+        boost::swap(a.current_file, current_file);
+        boost::swap(a.filename_relative, filename_relative);
+        boost::swap(a.xinclude_base, xinclude_base);
+        boost::swap(a.source_mode, source_mode);
+        if (scope & scope_output) {
+            a.out.pop();
+            a.phrase.pop();
+        }
+        if (scope & scope_templates) a.templates.pop();
+        if (scope & scope_macros) a.macro = macro;
+    }
+    
+    template_state::template_state(actions& a)
+        : file_state(a, file_state::scope_all)
+        , template_depth(a.template_depth)
+        , min_section_level(a.min_section_level)
+    {
+    }
+
+    template_state::~template_state()
+    {
+        boost::swap(a.template_depth, template_depth);
+        boost::swap(a.min_section_level, min_section_level);
     }
 }

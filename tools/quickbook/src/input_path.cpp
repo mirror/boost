@@ -10,6 +10,7 @@
 #include <iostream>
 #include "input_path.hpp"
 #include "utils.hpp"
+#include "files.hpp"
 
 #if QUICKBOOK_WIDE_PATHS || QUICKBOOK_WIDE_STREAMS
 #include <boost/scoped_ptr.hpp>
@@ -112,13 +113,13 @@ namespace detail {
         if (size < 0)
             throw conversion_error("Error converting cygwin path to windows.");
 
-        // TODO: size is in bytes.
-        boost::scoped_array<wchar_t> result(new wchar_t[size]);
+        boost::scoped_array<char> result(new char[size]);
+        void* ptr = result.get();
 
-        if(cygwin_conv_path(flags, path.c_str(), result.get(), size))
+        if(cygwin_conv_path(flags, path.c_str(), ptr, size))
             throw conversion_error("Error converting cygwin path to windows.");
 
-        return fs::path(result.get());
+        return fs::path(static_cast<wchar_t*>(ptr));
     }
     
     stream_string path_to_stream(fs::path const& path)
@@ -229,6 +230,11 @@ namespace detail {
         }
     }
 
+    ostream& outerr(file_ptr const& f, string_iterator pos)
+    {
+        return outerr(f->path, f->position_of(pos).line);
+    }
+
     ostream& outwarn(fs::path const& file, int line)
     {
         if (line >= 0)
@@ -242,5 +248,10 @@ namespace detail {
         {
             return error_stream() << path_to_stream(file) << ": warning: ";
         }
+    }
+
+    ostream& outwarn(file_ptr const& f, string_iterator pos)
+    {
+        return outwarn(f->path, f->position_of(pos).line);
     }
 }}

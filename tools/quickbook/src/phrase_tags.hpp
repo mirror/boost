@@ -22,6 +22,7 @@ namespace quickbook
         (footnote)
         (escape)
         (break_mark)
+        (role)
     )
     
     QUICKBOOK_VALUE_NAMED_TAGS(source_mode_tags, 0x550,

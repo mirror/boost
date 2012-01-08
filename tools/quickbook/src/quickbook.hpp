@@ -17,6 +17,7 @@
 #include <string>
 #include <boost/filesystem/v3/path.hpp>
 #include "fwd.hpp"
+#include "values.hpp"
 
 namespace quickbook
 {
@@ -25,11 +26,14 @@ namespace quickbook
     extern tm* current_time; // the current time
     extern tm* current_gm_time; // the current UTC time
     extern bool debug_mode;
+    extern bool self_linked_headers;
     extern std::vector<fs::path> include_path;
     extern std::vector<std::string> preset_defines;
+    extern fs::path image_location;
 
-    int parse_file(fs::path const& filein_, actions& actor, bool ignore_docinfo = false);
-    
+    void parse_file(actions& actor,
+            value include_doc_id = value(),
+            bool nested_file = false);
     // Some initialisation methods
     //
     // Declared here to avoid including other headers
