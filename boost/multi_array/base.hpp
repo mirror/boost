@@ -81,7 +81,8 @@ class sub_array;
 template <typename T, std::size_t NumDims, typename TPtr = const T*>
 class const_sub_array;
 
-template <typename T, typename TPtr, typename NumDims, typename Reference>
+  template <typename T, typename TPtr, typename NumDims, typename Reference,
+            typename IteratorCategory>
 class array_iterator;
 
 template <typename T, std::size_t NumDims, typename TPtr = const T*>
@@ -252,6 +253,14 @@ struct associated_types
 /////////////////////////////////////////////////////////////////////////
 
 
+struct mutable_iterator_tag
+ : boost::random_access_traversal_tag, std::input_iterator_tag
+{
+  operator std::output_iterator_tag() const {
+    return std::output_iterator_tag();
+  }
+};
+
 
 ////////////////////////////////////////////////////////////////////////
 // multi_array_base
@@ -301,8 +310,10 @@ public:
   //
   // iterator support
   //
-  typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference> iterator;
-  typedef array_iterator<T,T const*,mpl::size_t<NumDims>,const_reference> const_iterator;
+  typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
+                         mutable_iterator_tag> iterator;
+  typedef array_iterator<T,T const*,mpl::size_t<NumDims>,const_reference,
+                         boost::random_access_traversal_tag> const_iterator;
 
   typedef ::boost::reverse_iterator<iterator> reverse_iterator;
   typedef ::boost::reverse_iterator<const_iterator> const_reverse_iterator;
