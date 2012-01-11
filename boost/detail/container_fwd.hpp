@@ -38,7 +38,11 @@
 #    define BOOST_DETAIL_NO_CONTAINER_FWD
 #  elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
      // GNU libstdc++ 3
-#    if defined(_GLIBCXX_DEBUG) \
+     //
+     // Disable forwarding for all recent versions, as the library has a
+     // versioned namespace mode, and I don't know how to detect it.
+#    if __GLIBCXX__ >= 20070513 \
+        || defined(_GLIBCXX_DEBUG) \
         || defined(_GLIBCXX_PARALLEL) \
         || defined(_GLIBCXX_PROFILE)
 #      define BOOST_DETAIL_NO_CONTAINER_FWD
