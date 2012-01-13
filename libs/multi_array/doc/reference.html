@@ -616,13 +616,16 @@ public:
   typedef multi_array_types::extent_gen         extent_gen;
   typedef multi_array_types::extent_range       extent_range;
   typedef *unspecified*                         storage_order_type;
-  
+
 
   // template typedefs
   template &lt;std::size_t Dims&gt; struct            subarray;
   template &lt;std::size_t Dims&gt; struct            const_subarray;
   template &lt;std::size_t Dims&gt; struct            array_view;
   template &lt;std::size_t Dims&gt; struct            const_array_view;
+  
+
+  static const std::size_t dimensionality = NumDims;
   
 
   // constructors and destructors
@@ -851,7 +854,10 @@ public:
   template &lt;std::size_t Dims&gt; struct            const_array_view;
   
 
-  // structors
+  static const std::size_t dimensionality = NumDims;
+
+
+  // constructors and destructors
 
   template &lt;typename ExtentList&gt;
   explicit multi_array_ref(element* data, const ExtentList&amp; sizes,
