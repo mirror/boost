@@ -19,6 +19,8 @@
 #if __PGIC__ >= 11
 
 // options requested by configure --enable-test
+#define BOOST_HAS_PTHREADS
+#undef BOOST_HAS_PTHREAD_YIELD
 #define BOOST_HAS_NRVO
 #define BOOST_HAS_LONG_LONG
 

@@ -81,6 +81,11 @@
 //  example) also #define _MSC_VER
 #  error "Compiler threading support is not turned on. Please set the correct command line options for threading: either /MT /MTd /MD or /MDd"
 
+#elif defined __PGIC__
+// PGI
+//
+// No compiler support for threading 
+
 #else
 
 #  error "Compiler threading support is not turned on.  Please consult your compiler's documentation for the appropriate options to use"
