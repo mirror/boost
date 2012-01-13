@@ -14,6 +14,7 @@
 #include <boost/locale/boundary/segment.hpp>
 #include <boost/locale/boundary/boundary_point.hpp>
 #include <boost/iterator/iterator_facade.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/assert.hpp>
