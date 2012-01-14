@@ -1322,7 +1322,7 @@ Now, let's implement checked division. The rest should be unsurprising.
         std::cout << "caught division by zero!\n";
     }
 
-The above code demonstrates how a single grammar can be used with different transforms specified externally. This makes it possibly to reuse a grammar to drive several different computations.
+The above code demonstrates how a single grammar can be used with different transforms specified externally. This makes it possible to reuse a grammar to drive several different computations.
 
 [endsect]
 

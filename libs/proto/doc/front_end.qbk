@@ -748,7 +748,7 @@ For another example, see the definition of `lldomain` in [^libs/proto/example/la
 
 [note This is an advanced topic. Feel free to skip this if you're just getting started with Proto.]
 
-The ability to /compose/ different EDSLs is one of their most exciting features. Consider how you build a parser using yacc. You write your grammar rules in yacc's domain-specific language. Then you embed semantic actions written in C within your grammar. Boost's Spirit parser generator gives you the same ability. You write grammar rules using Spirit.Qi and embed semantic actions using the Phoenix library. Phoenix and Spirit are both Proto-based domain-specific languages with their own distinct syntax and semantics. But you can freely embed Phoenix expressions within Spirit expressions. This section describes Proto's /sub-domain/ feature that lets you define famalies of interoperable domains.
+The ability to /compose/ different EDSLs is one of their most exciting features. Consider how you build a parser using yacc. You write your grammar rules in yacc's domain-specific language. Then you embed semantic actions written in C within your grammar. Boost's Spirit parser generator gives you the same ability. You write grammar rules using Spirit.Qi and embed semantic actions using the Phoenix library. Phoenix and Spirit are both Proto-based domain-specific languages with their own distinct syntax and semantics. But you can freely embed Phoenix expressions within Spirit expressions. This section describes Proto's /sub-domain/ feature that lets you define families of interoperable domains.
 
 [/======================]
 [heading Dueling Domains]
@@ -767,7 +767,7 @@ When you try to create an expression from two sub-expressions in different domai
     struct spirit_domain  : proto::domain<proto::generator<spirit_expr> > {};
     struct phoenix_domain : proto::domain<proto::generator<phoenix_expr> > {};
 
-    // Implement the two expresison wrappers
+    // Implement the two expression wrappers
     template<typename E>
     struct spirit_expr
       : proto::extends<E, spirit_expr<E>, spirit_domain>
@@ -787,7 +787,7 @@ When you try to create an expression from two sub-expressions in different domai
         proto::literal<int, spirit_domain> sp(0);
         proto::literal<int, phoenix_domain> phx(0);
 
-        // Whoops! What does it mean to add two expression in different domains?
+        // Whoops! What does it mean to add two expressions in different domains?
         sp + phx; // ERROR
     }
 
@@ -795,7 +795,7 @@ Above, we define two domains called `spirit_domain` and `phoenix_domain` and dec
 
 [def __spirit_domain__ [*spirit_domain]]
 
-    // Declare that phoenix_domain is a sub-somain of spirit_domain
+    // Declare that phoenix_domain is a sub-domain of spirit_domain
     struct phoenix_domain
       : proto::domain<proto::generator<phoenix_expr>, proto::_, __spirit_domain__>
     {};
@@ -808,7 +808,7 @@ The third template parameter to _domain_ is the super-domain. By defining `phoen
 [heading Domain Resolution]
 [/------------------------]
 
-When there are multiple domains in play within a given expression, Proto uses some rules to figure out which domain "wins". The rules are loosly modeled on the rules for C++ inheritance. `Phoenix_domain` is a sub-domain of `spirit_domain`. You can liken that to a derived/base relationship that gives Phoenix expressions a kind of implicit conversion to Spirit expressions. And since Phoenix expressions can be "converted" to Spirit expressions, they can be freely combined with Spirit expressions and the result is a Spirit expression.
+When there are multiple domains in play within a given expression, Proto uses some rules to figure out which domain "wins". The rules are loosely modeled on the rules for C++ inheritance. `Phoenix_domain` is a sub-domain of `spirit_domain`. You can liken that to a derived/base relationship that gives Phoenix expressions a kind of implicit conversion to Spirit expressions. And since Phoenix expressions can be "converted" to Spirit expressions, they can be freely combined with Spirit expressions and the result is a Spirit expression.
 
 [note Super- and sub-domains are not actually implemented using inheritance. This is only a helpful mental model.]
 
@@ -828,11 +828,11 @@ When you don't assign a Proto expression to a particular domain, Proto considers
         sp + 1;
     }
 
-In light of the above discussion about sub-domains, one could think of `proto::default_domain` as a sub-domain of /every other domain/. Expressions in the default domain have a kind of implicit conversion to every other domain type. That's exactly how Proto sees it! What's more, you can define your domain to be a sub-domain of the default domain. In so doing, you give expression in your domain conversions to expressions in every other domain. This is like a "free love" domain, because it will freely mix with all other domains.
+Expressions in the default domain (or non-expressions like [^1]) have a kind of implicit conversion to expressions every other domain type. What's more, you can define your domain to be a sub-domain of the default domain. In so doing, you give expressions in your domain conversions to expressions in every other domain. This is like a ["free love] domain, because it will freely mix with all other domains.
 
-Let's think again about the Phoenix EDSL. Since it provides generally useful lambda functionionality, it's reasonable to assume that lots of other EDSLs besides Spirit might want the ability to embed Phoenix expressions. In other words, `phoenix_domain` should be a sub-domain of `proto::default_domain`, not `spirit_domain`:
+Let's think again about the Phoenix EDSL. Since it provides generally useful lambda functionality, it's reasonable to assume that lots of other EDSLs besides Spirit might want the ability to embed Phoenix expressions. In other words, `phoenix_domain` should be a sub-domain of `proto::default_domain`, not `spirit_domain`:
 
-    // Declare that phoenix_domain is a sub-somain of proto::default_domain
+    // Declare that phoenix_domain is a sub-domain of proto::default_domain
     struct phoenix_domain
       : proto::domain<proto::generator<phoenix_expr>, proto::_, proto::default_domain>
     {};
