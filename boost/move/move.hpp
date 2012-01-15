@@ -225,19 +225,40 @@
 
    namespace boost {
 
+   namespace move_detail {
+      template<class T>
+      struct is_class_or_union
+      {
+         struct twochar { char _[2]; };
+         template <class U>
+         static char is_class_or_union_tester(void(U::*)(void));
+         template <class U>
+         static twochar is_class_or_union_tester(...);
+         static const bool value = sizeof(is_class_or_union_tester<T>(0)) == sizeof(char);
+      };
+      struct empty{};
+   }
+
    //////////////////////////////////////////////////////////////////////////////
    //
    //                            struct rv
    //
    //////////////////////////////////////////////////////////////////////////////
    template <class T>
-   class rv : public T
+   class rv
+      : public BOOST_MOVE_MPL_NS::if_c
+         < ::boost::move_detail::is_class_or_union<T>::value
+         , T
+         , ::boost::move_detail::empty
+         >::type
    {
       rv();
       ~rv();
       rv(rv const&);
       void operator=(rv const&);
    } BOOST_MOVE_ATTRIBUTE_MAY_ALIAS;
+
+
 
    //////////////////////////////////////////////////////////////////////////////
    //
