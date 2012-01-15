@@ -737,6 +737,20 @@
                             <functionname>is_xdigit()</functionname>
                         </entry>
                     </row>
+                    <row>
+                        <entry>is_any_of</entry>
+                        <entry>Recognize any of a sequence of characters</entry>
+                        <entry>
+                            <functionname>is_any_of()</functionname>
+                        </entry>
+                    </row>
+                    <row>
+                        <entry>is_from_range</entry>
+                        <entry>Recognize characters inside a min..max range</entry>
+                        <entry>
+                            <functionname>is_from_range()</functionname>
+                        </entry>
+                    </row>
                 </tbody>
             </tgroup>
         </table>
