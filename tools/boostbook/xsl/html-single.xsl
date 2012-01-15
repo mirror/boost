@@ -15,6 +15,10 @@
     href="http://docbook.sourceforge.net/release/xsl/current/html/docbook.xsl"/>
   <xsl:import
     href="http://docbook.sourceforge.net/release/xsl/current/html/math.xsl"/>
+
+  <!-- Override the encoding to the more universally usefull utf8. -->
+  <xsl:output method="html" encoding="UTF-8" indent="no"/>
+  
   <!-- We have to make sure that our templates override all
        docbook templates.  Therefore, we include our own templates
        instead of importing them.  In order for this to work,
