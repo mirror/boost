@@ -367,9 +367,9 @@ namespace minimal
 
         void construct(T* p, T const& t) { new((void*)p) T(t); }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
         template<class... Args> void construct(T* p, Args&&... args) {
-            new((void*)p) T(std::forward<Args>(args)...);
+            new((void*)p) T(boost::forward<Args>(args)...);
         }
 #endif
 
@@ -439,9 +439,9 @@ namespace minimal
 
         void construct(T* p, T const& t) { new((void*)p) T(t); }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
         template<class... Args> void construct(T* p, Args&&... args) {
-            new((void*)p) T(std::forward<Args>(args)...);
+            new((void*)p) T(boost::forward<Args>(args)...);
         }
 #endif
 

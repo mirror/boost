@@ -357,11 +357,11 @@ namespace exception
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
         }
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
         template<class... Args> void construct(T* p, Args&&... args) {
             UNORDERED_SCOPE(allocator::construct(pointer, Args&&...)) {
                 UNORDERED_EPOINT("Mock allocator construct function.");
-                new(p) T(std::forward<Args>(args)...);
+                new(p) T(boost::forward<Args>(args)...);
             }
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
         }

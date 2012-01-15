@@ -9,6 +9,23 @@
 #include <boost/unordered_map.hpp>
 #include "../helpers/test.hpp"
 
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#   if defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)
+#   elif defined(__STD_RWCOMPILER_H__) || defined(_RWSTD_VER)
+#   elif defined(_LIBCPP_VERSION)
+#       define BOOST_UNORDERED_VARIADIC_MOVE
+#   elif defined(__GLIBCPP__) || defined(__GLIBCXX__)
+#       if defined(__GLIBCXX__) && __GLIBCXX__ >= 20090804
+#           define BOOST_UNORDERED_VARIADIC_MOVE
+#       endif
+#    elif defined(__STL_CONFIG_H)
+#    elif defined(__MSL_CPP__)
+#    elif defined(__IBMCPP__)
+#    elif defined(MSIPL_COMPILE_H)
+#    elif (defined(_YVALS) && !defined(__IBMCPP__)) || defined(_CPPLIB_VER)
+#   endif
+#endif
+
 namespace unnecessary_copy_tests
 {
     struct count_copies
@@ -243,9 +260,7 @@ namespace unnecessary_copy_tests
         // the existing element.
         reset();
         x.emplace();
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
-        COPY_COUNT(1); MOVE_COUNT(0);
-#elif !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         // source_cost doesn't make much sense here, but it seems to fit.
         COPY_COUNT(1); MOVE_COUNT(source_cost);
 #else
