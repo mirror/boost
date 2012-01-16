@@ -477,19 +477,19 @@
          //! This function provides a way to convert a reference into a rvalue reference
          //! in compilers with rvalue references. For other compilers converts T & into
          //! <i>::boost::rv<T> &</i> so that move emulation is activated.
-         template <class T> inline 
+         template <class T> 
          rvalue_reference move (input_reference);
 
       #elif defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
 
          //Old move approach, lvalues could bind to rvalue references
-         template <class T> inline
+         template <class T>
          inline typename remove_reference<T>::type && move(T&& t)
          {  return t;   }
 
       #else //Old move
 
-         template <class T> inline
+         template <class T>
          inline typename remove_reference<T>::type && move(T&& t)
          { return static_cast<typename remove_reference<T>::type &&>(t); } 
 
@@ -514,12 +514,12 @@
          //!   ::boost::rev<T> &
          //!
          //! * Else, input_reference is equal to output_reference is equal to input_reference.
-         template <class T> inline output_reference forward(input_reference);
+         template <class T> output_reference forward(input_reference);
       #elif defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
 
          //Old move approach, lvalues could bind to rvalue references
 
-         template <class T> inline
+         template <class T>
          inline T&& forward (typename BOOST_MOVE_MPL_NS::identity<T>::type&& t)
          {  return t;   }
 
