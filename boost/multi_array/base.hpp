@@ -332,7 +332,8 @@ protected:
                            const size_type* extents,
                            const index* strides,
                            const index* index_bases) const {
-
+    boost::function_requires<
+      CollectionConcept<IndexList> >();
     ignore_unused_variable_warning(index_bases);
     ignore_unused_variable_warning(extents);
 #if !defined(NDEBUG) && !defined(BOOST_DISABLE_ASSERTS)
@@ -343,9 +344,15 @@ protected:
 #endif
 
     index offset = 0;
-    for (size_type n = 0; n != NumDims; ++n) 
-      offset += indices[n] * strides[n];
-    
+    {
+      typename IndexList::const_iterator i = indices.begin();
+      size_type n = 0; 
+      while (n != NumDims) {
+        offset += (*i) * strides[n];
+        ++n;
+        ++i;
+      }
+    }
     return base[offset];
   }
 
