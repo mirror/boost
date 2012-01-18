@@ -3827,6 +3827,7 @@ all the objects to be inserted in intrusive containers in containers like `std::
 [section:release_notes_boost_1_49_00 Boost 1.49 Release]
 
 *  Fixed bugs
+  [@https://svn.boost.org/trac/boost/ticket/6347 #6347],
   [@https://svn.boost.org/trac/boost/ticket/6223 #6223],
   [@https://svn.boost.org/trac/boost/ticket/6153 #6153].
 
