@@ -9,19 +9,37 @@
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
-
+//
 //  Microsoft Visual C++ compiler setup:
+//
+//  We need to be careful with the checks in this file, as contrary
+//  to popular belief there are versions with _MSC_VER with the final
+//  digit non-zero (mainly the MIPS cross compiler).
+//
+//  So we either test _MSC_VER >= XXXX or else _MSC_VER < XXXX.
+//  No other comparisons (==, >, or <=) are safe.
+//
 
 #define BOOST_MSVC _MSC_VER
 
+//
+// Helper macro BOOST_MSVC_FULL_VER for use in Boost code:
+//
 #if _MSC_FULL_VER > 100000000
 #  define BOOST_MSVC_FULL_VER _MSC_FULL_VER
 #else
 #  define BOOST_MSVC_FULL_VER (_MSC_FULL_VER * 10)
 #endif
 
-// turn off the warnings before we #include anything
+// Attempt to suppress VC6 warnings about the length of decorated names (obsolete):
 #pragma warning( disable : 4503 ) // warning: decorated name length exceeded
+
+//
+// versions check:
+// we don't support Visual C++ prior to version 6:
+#if _MSC_VER < 1200
+#  error "Compiler not supported or configured - please reconfigure"
+#endif
 
 #if _MSC_VER < 1300  // 1200 == VC++ 6.0, 1200-1202 == eVC++4
 #  pragma warning( disable : 4786 ) // ident trunc to '255' chars in debug info
@@ -29,18 +47,16 @@
 #  define BOOST_NO_VOID_RETURNS
 #  define BOOST_NO_EXCEPTION_STD_NAMESPACE
 
-#  if BOOST_MSVC == 1202
+#  if _MSC_VER == 1202
 #    define BOOST_NO_STD_TYPEINFO
 #  endif
 
-   // disable min/max macro defines on vc6:
-   //
 #endif
 
 /// Visual Studio has no fenv.h
 #define BOOST_NO_FENV_H
 
-#if (_MSC_VER <= 1300)  // 1300 == VC++ 7.0
+#if (_MSC_VER < 1310)  // 130X == VC++ 7.0
 
 #  if !defined(_MSC_EXTENSIONS) && !defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS)      // VC7 bug with /Za
 #    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
@@ -72,7 +88,7 @@
 #  define BOOST_NO_IS_ABSTRACT
 #  define BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
 // TODO: what version is meant here? Have there really been any fixes in cl 12.01 (as e.g. shipped with eVC4)?
-#  if (_MSC_VER > 1200)
+#  if (_MSC_VER >= 1300)
 #     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
 #  endif
 
@@ -93,17 +109,17 @@
 #  define BOOST_NO_SWPRINTF
 #endif
 
-#if _MSC_VER <= 1400  // 1400 == VC++ 8.0
+#if _MSC_VER < 1500  // 140X == VC++ 8.0
 #  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
 #endif
 
-#if _MSC_VER == 1500  // 1500 == VC++ 9.0
+#if _MSC_VER < 1600  // 150X == VC++ 9.0
    // A bug in VC9:
 #  define BOOST_NO_ADL_BARRIER
 #endif
 
 
-#if (_MSC_VER <= 1600)
+#if (_MSC_VER < 1700)
 // MSVC (including the latest checked version) has not yet completely 
 // implemented value-initialization, as is reported:
 // "VC++ does not value-initialize members of derived classes without 
@@ -117,10 +133,10 @@
 // https://connect.microsoft.com/VisualStudio/feedback/details/100744
 // See also: http://www.boost.org/libs/utility/value_init.htm#compiler_issues
 // (Niels Dekker, LKEB, May 2010)
-#define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+#  define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
 #endif
 
-#if _MSC_VER <= 1500  || !defined(BOOST_STRICT_CONFIG) // 1500 == VC++ 9.0
+#if _MSC_VER < 1600  || !defined(BOOST_STRICT_CONFIG) // 150X == VC++ 9.0
 #  define BOOST_NO_INITIALIZER_LISTS
 #endif
 
@@ -177,17 +193,17 @@
 // C++ features supported by VC++ 10 (aka 2010)
 //
 #if _MSC_VER < 1600
-#define BOOST_NO_AUTO_DECLARATIONS
-#define BOOST_NO_AUTO_MULTIDECLARATIONS
-#define BOOST_NO_LAMBDAS
-#define BOOST_NO_RVALUE_REFERENCES
-#define BOOST_NO_STATIC_ASSERT
-#define BOOST_NO_NULLPTR
-#define BOOST_NO_DECLTYPE
+#  define BOOST_NO_AUTO_DECLARATIONS
+#  define BOOST_NO_AUTO_MULTIDECLARATIONS
+#  define BOOST_NO_LAMBDAS
+#  define BOOST_NO_RVALUE_REFERENCES
+#  define BOOST_NO_STATIC_ASSERT
+#  define BOOST_NO_NULLPTR
+#  define BOOST_NO_DECLTYPE
 #endif // _MSC_VER < 1600
 
 #if _MSC_VER >= 1600
-#define BOOST_HAS_STDINT_H
+#  define BOOST_HAS_STDINT_H
 #endif
 
 // C++0x features not supported by any versions
@@ -270,12 +286,6 @@
 
 #define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
 
-//
-// versions check:
-// we don't support Visual C++ prior to version 6:
-#if _MSC_VER < 1200
-#error "Compiler not supported or configured - please reconfigure"
-#endif
 //
 // last known and checked version is 1700 (VC11, aka 2011):
 #if (_MSC_VER > 1700)
