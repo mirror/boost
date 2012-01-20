@@ -21,6 +21,32 @@
 //        Cheng Yang, Matthew Bradbury, David W. Birdsall and other Boosters
 // when:  November 2000, March 2003, June 2005, June 2006, March 2011 - 2012
 
+#include <boost/config.hpp>
+#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_WSTRING)
+#define BOOST_LCAST_NO_WCHAR_T
+#endif
+
+#if (defined(__MINGW32__) || defined(__MINGW64__)) && (__GNUC__ == 4) \
+ && ((__GNUC_MINOR__ == 4) || (__GNUC_MINOR__ == 5)) && defined(__STRICT_ANSI__) \
+ && !defined(BOOST_LCAST_NO_WCHAR_T)
+
+// workaround for a mingw bug
+// http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
+#include <_mingw.h>
+#if (__GNUC_MINOR__ == 4)
+extern "C" {
+_CRTIMP int __cdecl swprintf(wchar_t * __restrict__ , const wchar_t * __restrict__ , ...);
+_CRTIMP int __cdecl vswprintf(wchar_t * __restrict__ , const wchar_t * __restrict__ , ...);
+}
+#endif
+#if (__GNUC_MINOR__ == 5)
+extern "C" {
+_CRTIMP int __cdecl swprintf(wchar_t * __restrict__ , const wchar_t * __restrict__ , ...);
+_CRTIMP int __cdecl vswprintf(wchar_t * __restrict__ , const wchar_t * __restrict__ , va_list);
+}
+#endif
+#endif
+
 #include <climits>
 #include <cstddef>
 #include <istream>
@@ -30,7 +56,6 @@
 #include <typeinfo>
 #include <exception>
 #include <cmath>
-#include <boost/config.hpp>
 #include <boost/limits.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/throw_exception.hpp>
@@ -65,10 +90,6 @@
 #include <strstream>
 #else
 #include <sstream>
-#endif
-
-#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_WSTRING)
-#define BOOST_LCAST_NO_WCHAR_T
 #endif
 
 #ifdef BOOST_NO_TYPEID
