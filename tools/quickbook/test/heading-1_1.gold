@@ -37,6 +37,12 @@
   <bridgehead renderas="sect1" id="._also_not_an_id">
     :also not an id
   </bridgehead>
+  <bridgehead renderas="sect1" id="._anchor_id__anchor___anchor_heading">
+    <anchor id="anchor"/>Anchor heading
+  </bridgehead>
+  <bridgehead renderas="sect1" id="._link_linkend__anchor__link_heading__link_">
+    <link linkend="anchor">Link heading</link>
+  </bridgehead>
   <bridgehead renderas="sect1" id=".h1">
     H1
   </bridgehead>

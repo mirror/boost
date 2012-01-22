@@ -22,6 +22,12 @@
 [h1:notanid]
 [h1:also not an id]
 
+[/ Test how ids are generated for headings containing things like anchors
+   and links ]
+
+[h1 [#anchor]Anchor heading]
+[h1 [link anchor Link heading]]
+
 [/ Test how heading ids are generated inside sections]
 
 [heading H1]

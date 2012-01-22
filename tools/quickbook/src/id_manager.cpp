@@ -30,6 +30,8 @@ namespace quickbook
 
     struct id_placeholder;
     struct id_data;
+    std::string replace_ids(id_state& state, std::string const& xml,
+            bool use_resolved_ids = true);
     std::string process_ids(id_state&, std::string const&);
 
     static const std::size_t max_size = 32;
@@ -46,6 +48,9 @@ namespace quickbook
         state_enum generation_state;
                                 // Placeholder's position in generation
                                 // process.
+        std::string unresolved_id;
+                                // The id that would be generated without any
+                                // duplicate handling.
         std::string id;         // The id so far.
         id_placeholder* parent; // Placeholder of the parent id.
                                 // Only when generation_state == child
@@ -69,6 +74,7 @@ namespace quickbook
                 id_placeholder* parent_ = 0)
           : index(index),
             generation_state(parent_ ? child : unresolved),
+            unresolved_id(parent_ ? parent_->unresolved_id + '.' + id : id),
             id(id),
             parent(parent_),
             category(category),
@@ -283,6 +289,12 @@ private:
     std::string id_manager::add_anchor(std::string const& id, id_category category)
     {
         return state->add_placeholder(id, category)->to_string();
+    }
+
+    std::string id_manager::replace_placeholders_with_unresolved_ids(
+            std::string const& xml) const
+    {
+        return replace_ids(*state, xml, false);
     }
 
     std::string id_manager::replace_placeholders(std::string const& xml) const
@@ -868,7 +880,6 @@ private:
     placeholder_index index_placeholders(id_state&, std::string const& xml);
     void resolve_id(id_placeholder&, allocated_ids&);
     void generate_id(id_placeholder&, allocated_ids&);
-    std::string replace_ids(id_state& state, std::string const& xml);
 
     std::string process_ids(id_state& state, std::string const& xml)
     {
@@ -1081,11 +1092,13 @@ private:
     struct replace_ids_callback : xml_processor::callback
     {
         id_state& state;
+        bool use_resolved_ids;
         std::string::const_iterator source_pos;
         std::string result;
 
-        replace_ids_callback(id_state& state)
+        replace_ids_callback(id_state& state, bool resolved)
           : state(state),
+            use_resolved_ids(resolved),
             source_pos(),
             result()
         {}
@@ -1099,10 +1112,13 @@ private:
         {
             if (id_placeholder* p = state.get_placeholder(value))
             {
-                assert(p->check_state(id_placeholder::generated));
+                assert(!use_resolved_ids ||
+                    p->check_state(id_placeholder::generated));
+                std::string const& id = use_resolved_ids ?
+                    p->id : p->unresolved_id;
 
                 result.append(source_pos, value.begin());
-                result.append(p->id.begin(), p->id.end());
+                result.append(id.begin(), id.end());
                 source_pos = value.end();
             }
         }
@@ -1114,10 +1130,11 @@ private:
         }
     };
 
-    std::string replace_ids(id_state& state, std::string const& xml)
+    std::string replace_ids(id_state& state, std::string const& xml,
+            bool use_unresolved_ids)
     {
         xml_processor processor;
-        replace_ids_callback callback(state);
+        replace_ids_callback callback(state, use_unresolved_ids);
         processor.parse(xml, callback);
         return callback.result;
     }
