@@ -562,13 +562,13 @@ struct BuildActions
 {};
 
 // attributes building
-#define BOOST_MSM_EUML_DECLARE_ATTRIBUTE(attr_type,attr_name)                                           \
-struct attr_name ## _                                                                                   \
-    : proto::extends< proto::terminal<msm::front::action_tag>::type, attr_name ## _, sm_domain>         \
-    {typedef  attr_name ## _ action_name;                                                               \
-        typedef ::boost::fusion::pair<attr_name ## _,attr_type> attribute_type;                         \
-        attr_name ## _ (){}                                                                             \
-    };                                                                                                  \
+#define BOOST_MSM_EUML_DECLARE_ATTRIBUTE(attr_type,attr_name)                                                           \
+struct attr_name ## _                                                                                                   \
+    : proto::extends< proto::terminal< ::boost::msm::front::action_tag>::type, attr_name ## _, boost::msm::sm_domain>   \
+    {typedef  attr_name ## _ action_name;                                                                               \
+        typedef ::boost::fusion::pair<attr_name ## _,attr_type> attribute_type;                                         \
+        attr_name ## _ (){}                                                                                             \
+    };                                                                                                                  \
 attr_name ## _ const attr_name = attr_name ## _();
 
 struct make_attributes_tag
@@ -597,7 +597,7 @@ struct attribute
    BOOST_PROTO_BASIC_EXTENDS(
        proto::terminal<make_attributes_tag>::type
      , attribute
-     , sm_domain
+     , boost::msm::sm_domain
    )
    typedef ::boost::fusion::pair<int,int> attribute_type;
 };
@@ -668,7 +668,7 @@ struct configure
    BOOST_PROTO_BASIC_EXTENDS(
        proto::terminal<make_configure_tag>::type
      , configure
-     , sm_domain
+     , boost::msm::sm_domain
    )
 };
 
@@ -700,7 +700,7 @@ struct define_init
    BOOST_PROTO_BASIC_EXTENDS(
        proto::terminal<state_tag>::type
      , define_init
-     , sm_domain
+     , boost::msm::sm_domain
    )
 };
 

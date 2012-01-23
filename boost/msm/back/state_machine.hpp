@@ -52,6 +52,7 @@
 
 #include <boost/msm/active_state_switching_policies.hpp>
 #include <boost/msm/row_tags.hpp>
+#include <boost/msm/msm_grammar.hpp>
 #include <boost/msm/back/fold_to_list.hpp>
 #include <boost/msm/back/metafunctions.hpp>
 #include <boost/msm/back/history_policies.hpp>
@@ -73,6 +74,7 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(history_policy)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(fsm_check)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(compile_policy)
 BOOST_MPL_HAS_XXX_TRAIT_DEF(queue_container_policy)
+BOOST_MPL_HAS_XXX_TRAIT_DEF(using_declared_table)
 
 #ifndef BOOST_MSM_CONSTRUCTOR_ARG_SIZE
 #define BOOST_MSM_CONSTRUCTOR_ARG_SIZE 5 // default max number of arguments for constructors
@@ -120,7 +122,16 @@ typedef ::boost::parameter::parameters<
     >
 > state_machine_signature;
 
-
+// just here to disable use of proto when not needed
+template <class T, class F,class Enable=void>
+struct make_euml_terminal;
+template <class T,class F>
+struct make_euml_terminal<T,F,typename ::boost::disable_if<has_using_declared_table<F> >::type>
+{};
+template <class T,class F>
+struct make_euml_terminal<T,F,typename ::boost::enable_if<has_using_declared_table<F> >::type>
+    : public proto::extends<typename proto::terminal< boost::msm::state_tag>::type, T, boost::msm::state_domain>
+{};
 
 // library-containing class for state machines.  Pass the actual FSM class as
 // the Concrete parameter.
@@ -136,6 +147,11 @@ class state_machine : //public Derived
     public ::boost::parameter::binding<
             typename state_machine_signature::bind<A0,A1,A2,A3,A4>::type, ::boost::msm::back::tag::front_end
     >::type
+    , public make_euml_terminal<state_machine<A0,A1,A2,A3,A4>,
+                         typename ::boost::parameter::binding<
+                                    typename state_machine_signature::bind<A0,A1,A2,A3,A4>::type, ::boost::msm::back::tag::front_end
+                         >::type   
+      >
 {
 public:
     // Create ArgumentPack
