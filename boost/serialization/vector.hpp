@@ -32,7 +32,7 @@
 
 // default is being compatible with version 1.34.1 files, not 1.35 files
 #ifndef BOOST_SERIALIZATION_VECTOR_VERSIONED
-#define BOOST_SERIALIZATION_VECTOR_VERSIONED(V) (V>4)
+#define BOOST_SERIALIZATION_VECTOR_VERSIONED(V) (V==4 || V==5)
 #endif
 
 namespace boost { 
