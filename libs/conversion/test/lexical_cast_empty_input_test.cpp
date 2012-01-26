@@ -148,8 +148,7 @@ struct my_string {
 void test_empty_zero_terminated_string()
 {
     my_string st;
-    std::string st2 = boost::lexical_cast<std::string>(st);
-    (void)st2;
+    BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(st), std::string());;
 }
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
