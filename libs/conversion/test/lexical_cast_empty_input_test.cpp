@@ -138,6 +138,20 @@ void test_empty_vector()
     BOOST_CHECK_THROW(lexical_cast<signed char>(v), bad_lexical_cast);
 }
 
+
+struct my_string {
+    friend std::ostream &operator<<(std::ostream& sout, my_string const&/* st*/) {
+            return sout << "";
+    }
+};
+
+void test_empty_zero_terminated_string()
+{
+    my_string st;
+    std::string st2 = boost::lexical_cast<std::string>(st);
+    (void)st2;
+}
+
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
     unit_test::test_suite *suite =
@@ -146,6 +160,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_empty_string));
     suite->add(BOOST_TEST_CASE(&test_empty_user_class));
     suite->add(BOOST_TEST_CASE(&test_empty_vector));
+    suite->add(BOOST_TEST_CASE(&test_empty_zero_terminated_string));
 
     return suite;
 }
