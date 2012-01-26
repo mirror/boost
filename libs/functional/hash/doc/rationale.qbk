@@ -8,7 +8,7 @@
 The rationale can be found in the original design
 [footnote issue 6.18 of the __issues__ (page 63)].
 
-[heading:quality Quality of the hash function]
+[heading Quality of the hash function]
 
 Many hash functions strive to have little correlation between the input
 and output values. They attempt to uniformally distribute the output
