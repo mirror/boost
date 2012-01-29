@@ -73,6 +73,8 @@ namespace quickbook
         std::string add_id(std::string const&, id_category);
         std::string add_anchor(std::string const&, id_category);
 
+        std::string replace_placeholders_with_unresolved_ids(
+                std::string const&) const;
         std::string replace_placeholders(std::string const&) const;
         
         unsigned compatibility_version() const;

@@ -392,7 +392,9 @@ namespace quickbook
             // version and the generation version are less then 103u.
 
             std::string anchor = actions.ids.old_style_id(
-                detail::make_identifier(content.get_encoded()),
+                detail::make_identifier(
+                    actions.ids.replace_placeholders_with_unresolved_ids(
+                        content.get_encoded())),
                 id_category::generated_heading);
 
             write_bridgehead(actions, level,
@@ -405,7 +407,8 @@ namespace quickbook
                 detail::make_identifier(
                     actions.ids.compatibility_version() >= 106 ?
                         content.get_quickbook() :
-                        content.get_encoded()
+                        actions.ids.replace_placeholders_with_unresolved_ids(
+                            content.get_encoded())
                 ),
                 id_category::generated_heading);
 

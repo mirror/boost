@@ -17,6 +17,12 @@
 [h1 *Bold*]
 [h1 [/]Comment[/]]
 
+[/ Test how ids are generated for headings containing things like anchors
+   and links ]
+
+[h1 [#anchor]Anchor heading]
+[h1 [link anchor Link heading]]
+
 [/ Test how heading ids are generated inside sections]
 
 [h1 H1]

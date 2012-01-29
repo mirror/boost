@@ -45,7 +45,16 @@
     <phrase id="heading_test_1_5._also_not_an_id"/><link linkend="heading_test_1_5._also_not_an_id">:also
     not an id</link>
   </bridgehead>
-  <bridgehead renderas="sect2" id="heading_test_1_5.h13">
+  <bridgehead renderas="sect1" id="heading_test_1_5.h13">
+    <phrase id="heading_test_1_5._anchor_id__anchor___anchor_heading"/><link linkend="heading_test_1_5._anchor_id__anchor___anchor_heading"><anchor
+    id="anchor"/>Anchor heading</link>
+  </bridgehead>
+  <bridgehead renderas="sect1" id="heading_test_1_5.h14">
+    <phrase id="heading_test_1_5._link_linkend__anchor__link_heading__link_"/><link
+    linkend="heading_test_1_5._link_linkend__anchor__link_heading__link_"><link linkend="anchor">Link
+    heading</link></link>
+  </bridgehead>
+  <bridgehead renderas="sect2" id="heading_test_1_5.h15">
     <phrase id="heading_test_1_5.h1"/><link linkend="heading_test_1_5.h1">H1</link>
   </bridgehead>
   <section id="heading_test_1_5.s1">
@@ -72,7 +81,7 @@
       <phrase id="heading_test_1_5.s1.h6"/><link linkend="heading_test_1_5.s1.h6">H6</link>
     </bridgehead>
   </section>
-  <bridgehead renderas="sect1" id="heading_test_1_5.h14">
+  <bridgehead renderas="sect1" id="heading_test_1_5.h16">
     <phrase id="heading_test_1_5.h7"/><link linkend="heading_test_1_5.h7">H7</link>
   </bridgehead>
 </article>
