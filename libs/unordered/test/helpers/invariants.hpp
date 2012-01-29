@@ -38,7 +38,7 @@ namespace test
             it = x1.begin(), end = x1.end();
         BOOST_DEDUCED_TYPENAME X::size_type size = 0;
         while(it != end) {
-            // First test that the current key has not occured before, required
+            // First test that the current key has not occurred before, required
             // to test either that keys are unique or that equivalent keys are
             // adjacent. (6.3.1/6)
             key_type key = get_key<X>(*it);
