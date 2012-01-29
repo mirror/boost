@@ -246,13 +246,20 @@
       // Note: these are so far off, they are not really supported
 #   elif _MSC_VER < 1300 // eVC++ 4 comes with 1200-1202
 #     define BOOST_COMPILER_VERSION evc4.0
-#   elif _MSC_VER == 1400
+#   elif _MSC_VER < 1400
+      // Note: I'm not aware of any CE compiler with version 13xx
+#      if defined(BOOST_ASSERT_CONFIG)
+#         error "Unknown EVC++ compiler version - please run the configure tests and report the results"
+#      else
+#         pragma message("Unknown EVC++ compiler version - please run the configure tests and report the results")
+#      endif
+#   elif _MSC_VER < 1500
 #     define BOOST_COMPILER_VERSION evc8
-#   elif _MSC_VER == 1500
+#   elif _MSC_VER < 1600
 #     define BOOST_COMPILER_VERSION evc9
-#   elif _MSC_VER == 1600
+#   elif _MSC_VER < 1700
 #     define BOOST_COMPILER_VERSION evc10
-#   elif _MSC_VER == 1700 
+#   elif _MSC_VER < 1800 
 #     define BOOST_COMPILER_VERSION evc11 
 #   else
 #      if defined(BOOST_ASSERT_CONFIG)
@@ -267,17 +274,17 @@
 #     define BOOST_COMPILER_VERSION 5.0
 #   elif _MSC_VER < 1300
 #       define BOOST_COMPILER_VERSION 6.0
-#   elif _MSC_VER == 1300
+#   elif _MSC_VER < 1310
 #     define BOOST_COMPILER_VERSION 7.0
-#   elif _MSC_VER == 1310
+#   elif _MSC_VER < 1400
 #     define BOOST_COMPILER_VERSION 7.1
-#   elif _MSC_VER == 1400
+#   elif _MSC_VER < 1500
 #     define BOOST_COMPILER_VERSION 8.0
-#   elif _MSC_VER == 1500
+#   elif _MSC_VER < 1600
 #     define BOOST_COMPILER_VERSION 9.0
-#   elif _MSC_VER == 1600
+#   elif _MSC_VER < 1700
 #     define BOOST_COMPILER_VERSION 10.0
-#   elif _MSC_VER == 1700 
+#   elif _MSC_VER < 1800 
 #     define BOOST_COMPILER_VERSION 11.0 
 #   else
 #     define BOOST_COMPILER_VERSION _MSC_VER
