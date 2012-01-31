@@ -13,335 +13,335 @@ namespace boost { namespace numeric {
     struct numeric_cast_traits
         <
             char
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             char
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             signed char
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             signed char
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             unsigned char
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             unsigned char
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             short
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             short
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             unsigned short
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             unsigned short
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             int
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             int
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             unsigned int
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             unsigned int
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             long
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             long
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             unsigned long
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             unsigned long
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             float
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             float
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             double
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             double
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             long double
-          , long long
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
             long double
-          , unsigned long long
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
-            long long
-          , long long
+            boost::long_long_type
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
-            long long
-          , unsigned long long
+            boost::long_long_type
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
-            unsigned long long
-          , long long
+            boost::ulong_long_type
+          , boost::long_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<long long> rounding_policy;
+        typedef Trunc<boost::long_long_type> rounding_policy;
     }; 
     
     template <>
     struct numeric_cast_traits
         <
-            unsigned long long
-          , unsigned long long
+            boost::ulong_long_type
+          , boost::ulong_long_type
         >
     {
         typedef def_overflow_handler overflow_policy;
         typedef UseInternalRangeChecker range_checking_policy;
-        typedef Trunc<unsigned long long> rounding_policy;
+        typedef Trunc<boost::ulong_long_type> rounding_policy;
     }; 
 }}
