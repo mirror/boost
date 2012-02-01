@@ -927,7 +927,7 @@ class stable_vector
       }
    }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a reference to the nth element 
    //!   from the beginning of the container.
@@ -937,7 +937,7 @@ class stable_vector
    //! <b>Complexity</b>: Constant.
    reference operator[](size_type n){return value(impl[n]);}
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a const reference to the nth element 
    //!   from the beginning of the container.
@@ -947,7 +947,7 @@ class stable_vector
    //! <b>Complexity</b>: Constant.
    const_reference operator[](size_type n)const{return value(impl[n]);}
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a reference to the nth element 
    //!   from the beginning of the container.
@@ -962,12 +962,12 @@ class stable_vector
       return operator[](n);
    }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a const reference to the nth element 
    //!   from the beginning of the container.
    //! 
-   //! <b>Throws</b>: Nothing.
+   //! <b>Throws</b>: std::range_error if n >= size()
    //! 
    //! <b>Complexity</b>: Constant.
    const_reference at(size_type n)const

@@ -715,7 +715,7 @@ class deque : protected deque_base<T, A>
    const_reverse_iterator crend() const BOOST_CONTAINER_NOEXCEPT
       { return const_reverse_iterator(this->members_.m_start); }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a reference to the nth element 
    //!   from the beginning of the container.
@@ -726,7 +726,7 @@ class deque : protected deque_base<T, A>
    reference operator[](size_type n) BOOST_CONTAINER_NOEXCEPT
       { return this->members_.m_start[difference_type(n)]; }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a const reference to the nth element 
    //!   from the beginning of the container.
@@ -737,7 +737,7 @@ class deque : protected deque_base<T, A>
    const_reference operator[](size_type n) const BOOST_CONTAINER_NOEXCEPT
       { return this->members_.m_start[difference_type(n)]; }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a reference to the nth element 
    //!   from the beginning of the container.
@@ -748,7 +748,7 @@ class deque : protected deque_base<T, A>
    reference at(size_type n)
       { this->priv_range_check(n); return (*this)[n]; }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a const reference to the nth element 
    //!   from the beginning of the container.
