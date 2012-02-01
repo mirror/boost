@@ -15,6 +15,7 @@
 
 #include <boost/intrusive/link_mode.hpp>
 #include <boost/pointer_cast.hpp>
+#include <boost/pointer_to_other.hpp>
 #include <iterator>
 
 namespace boost {
