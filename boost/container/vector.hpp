@@ -758,7 +758,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    bool empty() const BOOST_CONTAINER_NOEXCEPT
    { return !this->members_.m_size; }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a reference to the nth element 
    //!   from the beginning of the container.
@@ -769,7 +769,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    reference operator[](size_type n)         
    { return this->members_.m_start[n]; }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a const reference to the nth element 
    //!   from the beginning of the container.
@@ -780,7 +780,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    const_reference operator[](size_type n) const BOOST_CONTAINER_NOEXCEPT
    { return this->members_.m_start[n]; }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a reference to the nth element 
    //!   from the beginning of the container.
@@ -791,7 +791,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    reference at(size_type n) 
    { this->priv_check_range(n); return this->members_.m_start[n]; }
 
-   //! <b>Requires</b>: size() < n.
+   //! <b>Requires</b>: size() > n.
    //!
    //! <b>Effects</b>: Returns a const reference to the nth element 
    //!   from the beginning of the container.
