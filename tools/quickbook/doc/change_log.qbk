@@ -208,3 +208,43 @@ Boost 1.46.1:
 * Close open sections at end of document (still warns about them).
 * New anchor markup for headers, will hopefully generate better pdfs.
 * Remove some whitespace around code from post processed output.
+
+[heading Version 1.5.7 - Boost 1.49]
+
+* Several internal changes.
+* Some improved error messages.
+* Better handling of block templates expanded in a phrase context.
+* Avoids empty simple markup (i.e. \/\/ is not treated as an italic empty
+  space.
+* Better anchor markup for headers, which should be better for printing
+  - suggested by John Maddock.
+* Further improvements to the id generator.
+* If sections are left unopened at the end of a document, then close them
+  in the generated markup.
+* Try to handle whitespace better at the beginning and end of code blocks.
+* Handle lists that come immediately after an anchor.
+* Make horizontal rules followed by multi-line comments a little more
+  sensible.
+* Better support for empty ids and titles in docinfo.
+* Fix some minor regressions in SVG handling.
+* Better handling of invalid command line macros.
+* When auto-building quickbook, build the release version.
+* Lots of changes for 1.6:
+  * Scope templates in included files.
+  * Support import of templates and macros.
+  * Including top level quickbook blocks from source files.
+  * Use doc info blocks in included quickbook files.
+  * Better handling of macros with the same name.
+  * `block` element.
+  * Better handling of significant punctuation (e.g. escapes, square brackets).
+  * Support escapes in links, anchors, images, includes etc.
+  * Improved table title syntax.
+  * Paragraphs nested in lists.
+  * New docinfo attributes:
+    * `compatibility-mode` to make it possible to upgrade documents without
+      breaking ids.
+    * `xmlbase` for escaped `xi:include`s.
+  * Allow some docinfo attributes to be used before, or without, a doc info
+    block (`quickbook`, `compatibility-mode`, `source-mode`).
+  * Only add explicit alt text to images.
+  * Don't put 'inline' code blocks inside paragraphs.
