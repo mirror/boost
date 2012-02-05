@@ -333,7 +333,7 @@ namespace minimal
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
         typedef void_ptr void_pointer;
-        typedef void_const_ptr void_const_pointer;
+        typedef void_const_ptr const_void_pointer;
         typedef ptr<T> pointer;
         typedef const_ptr<T> const_pointer;
         typedef T& reference;

@@ -51,7 +51,13 @@ void test_simple_allocator()
     //BOOST_MPL_ASSERT((boost::is_same<typename traits::const_void_pointer, void const*>));
 
     BOOST_MPL_ASSERT((boost::is_same<typename traits::difference_type, std::ptrdiff_t>));
+
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
+    BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type,
+        std::make_unsigned<std::ptrdiff_t>::type>));
+#else
     BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type, std::size_t>));
+#endif
 
     BOOST_TEST(!traits::propagate_on_container_copy_assignment::value);
     BOOST_TEST(!traits::propagate_on_container_move_assignment::value);

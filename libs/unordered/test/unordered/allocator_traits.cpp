@@ -90,7 +90,12 @@ void test_empty_allocator()
 {
     typedef empty_allocator<int> allocator;
     typedef boost::unordered::detail::allocator_traits<allocator> traits;
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
+    BOOST_MPL_ASSERT((boost::is_same<traits::size_type,
+        std::make_unsigned<std::ptrdiff_t>::type>));
+#else
     BOOST_MPL_ASSERT((boost::is_same<traits::size_type, std::size_t>));
+#endif
     BOOST_MPL_ASSERT((boost::is_same<traits::difference_type, std::ptrdiff_t>));
     BOOST_MPL_ASSERT((boost::is_same<traits::pointer, int*>));
     BOOST_MPL_ASSERT((boost::is_same<traits::const_pointer, int const*>));
@@ -123,7 +128,12 @@ void test_allocator1()
 {
     typedef allocator1<int> allocator;
     typedef boost::unordered::detail::allocator_traits<allocator> traits;
-    BOOST_MPL_ASSERT((boost::is_same<traits::size_type, std::size_t>));
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
+    BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type,
+        std::make_unsigned<std::ptrdiff_t>::type>));
+#else
+    BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type, std::size_t>));
+#endif
     BOOST_MPL_ASSERT((boost::is_same<traits::difference_type, std::ptrdiff_t>));
     BOOST_MPL_ASSERT((boost::is_same<traits::pointer, int*>));
     BOOST_MPL_ASSERT((boost::is_same<traits::const_pointer, int const*>));
@@ -184,6 +194,20 @@ struct ptr
     
     ptr(void* v) : value_((T*) v) {}
     T& operator*() const { return *value_; }
+};
+
+template <>
+struct ptr<void>
+{
+    void* value_;
+    ptr(void* v) : value_(v) {}
+};
+
+template <>
+struct ptr<const void>
+{
+    void const* value_;
+    ptr(void const* v) : value_(v) {}
 };
 
 template <typename T>

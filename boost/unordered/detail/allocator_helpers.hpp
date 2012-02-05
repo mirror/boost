@@ -202,7 +202,8 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Alloc, typename T>
     struct rebind_wrap
     {
-        typedef typename std::allocator_traits<Alloc>::rebind_alloc<T> type;
+        typedef typename std::allocator_traits<Alloc>::
+            template rebind_alloc<T> type;
     };
 
 #else
