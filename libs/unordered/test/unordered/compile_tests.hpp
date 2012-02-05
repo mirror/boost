@@ -22,6 +22,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 #include <boost/limits.hpp>
+#include <boost/utility/swap.hpp>
 #include "../helpers/check_return_type.hpp"
 
 typedef long double comparison_type;
