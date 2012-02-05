@@ -26,6 +26,10 @@
 #include <boost/assert.hpp>
 #include <boost/utility/addressof.hpp>
 
+#if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
+#define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 0
+#endif
+
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
 #  include <memory>
 #endif
