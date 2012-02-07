@@ -94,7 +94,7 @@ struct heap_merge_same
 
 /** merge rhs into lhs
  *
- *  \b Effect: lhs contains all elements that have been part of rhs, lhs is empty.
+ *  \b Effect: lhs contains all elements that have been part of rhs, rhs is empty.
  *
  * */
 template <typename Heap1,
