@@ -17,8 +17,6 @@
 #include <fstream>
 #include <cstdlib> // for rand()
 #include <cmath> // for fabs()
-#include <limits> 
-
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
@@ -31,6 +29,7 @@ namespace std{
 }
 #endif
 
+#include <boost/limits.hpp> 
 #include <boost/archive/archive_exception.hpp>
 #include "test_tools.hpp"
 
