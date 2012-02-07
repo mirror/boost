@@ -51,13 +51,6 @@ namespace detail {
             return v;
         }
 
-#if BOOST_UNORDERED_USE_RV_REF
-        static key_type const& extract(BOOST_RV_REF(key_type) v)
-        {
-            return v;
-        }
-#endif
-
         static no_key extract()
         {
             return no_key();
@@ -69,7 +62,6 @@ namespace detail {
         {
             return no_key();
         }
-
 #else
         template <class Arg>
         static no_key extract(Arg const&)
@@ -105,13 +97,6 @@ namespace detail {
         {
             return v;
         }
-
-        // TODO: Why does this cause errors?
-        //
-        //static key_type const& extract(BOOST_RV_REF(key_type) v)
-        //{
-        //    return v;
-        //}
 
         template <class Second>
         static key_type const& extract(std::pair<key_type, Second> const& v)

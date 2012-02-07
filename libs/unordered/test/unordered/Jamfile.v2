@@ -9,6 +9,8 @@ project unordered-test/unordered
     : requirements
         <warnings>all
         <toolset>intel:<warnings>on
+        # Would be nice to define -Wundef, but I'm getting warnings from
+        # Boost.Preprocessor on trunk.
         <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion -Wno-long-long"
         <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion"
         #<toolset>gcc:<define>_GLIBCXX_DEBUG
