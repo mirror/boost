@@ -108,7 +108,7 @@ struct dispatch_table < Fsm, Stt, Event, ::boost::msm::back::favor_compile_time>
         std::deque<cell> one_state;
     };
     template <class TransitionState>
-    static HandledEnum call_submachine(Fsm& fsm, int region, int state, Event const& evt)
+    static HandledEnum call_submachine(Fsm& fsm, int , int , Event const& evt)
     {
         return (fsm.template get_state<TransitionState&>()).process_any_event( ::boost::any(evt));
     }
