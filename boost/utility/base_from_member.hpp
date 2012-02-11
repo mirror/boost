@@ -1,6 +1,6 @@
 //  boost utility/base_from_member.hpp header file  --------------------------//
 
-//  Copyright 2001, 2003, 2004 Daryle Walker.  Use, modification, and
+//  Copyright 2001, 2003, 2004, 2012 Daryle Walker.  Use, modification, and
 //  distribution are subject to the Boost Software License, Version 1.0.  (See
 //  accompanying file LICENSE_1_0.txt or a copy at
 //  <http://www.boost.org/LICENSE_1_0.txt>.)
@@ -10,6 +10,7 @@
 #ifndef BOOST_UTILITY_BASE_FROM_MEMBER_HPP
 #define BOOST_UTILITY_BASE_FROM_MEMBER_HPP
 
+#include <boost/config.hpp>
 #include <boost/preprocessor/arithmetic/inc.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -68,12 +69,21 @@ class base_from_member
 protected:
     MemberType  member;
 
+#if defined(BOOST_HAS_RVALUE_REFS) && defined(BOOST_HAS_VARIADIC_TMPL)
+    template <typename ...T>
+    explicit BOOST_CONSTEXPR base_from_member( T&& ...x )
+        BOOST_NOEXCEPT_IF( BOOST_NOEXCEPT_EXPR(::new ((void*) 0) MemberType(
+         static_cast<T&&>(x)... )) )  // no std::is_nothrow_constructible...
+        : member( static_cast<T&&>(x)... )     // ...nor std::forward needed
+        {}
+#else
     base_from_member()
         : member()
         {}
 
     BOOST_PP_REPEAT_FROM_TO( 1, BOOST_PP_INC(BOOST_BASE_FROM_MEMBER_MAX_ARITY),
      BOOST_PRIVATE_CTR_DEF, _ )
+#endif
 
 };  // boost::base_from_member
 
