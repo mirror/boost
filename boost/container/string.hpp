@@ -2045,7 +2045,7 @@ class basic_string
    //!
    //! <b>Returns</b>: basic_string(*this, pos, n1).compare(basic_string(s, n2)).
    int compare(size_type pos1, size_type n1,
-               const CharT* s, size_type n2 = npos) const 
+               const CharT* s, size_type n2) const 
    {
       if (pos1 > size())
          this->throw_out_of_range();
