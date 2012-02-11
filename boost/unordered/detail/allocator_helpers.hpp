@@ -27,7 +27,14 @@
 #include <boost/utility/addressof.hpp>
 
 #if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
-#define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 0
+#   if defined(__GXX_EXPERIMENTAL_CXX0X__) && \
+            (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7))
+#       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
+#   endif
+#endif
+
+#if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
+#   define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 0
 #endif
 
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS

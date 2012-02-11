@@ -132,7 +132,7 @@ void test_allocator1()
     BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type,
         std::make_unsigned<std::ptrdiff_t>::type>));
 #else
-    BOOST_MPL_ASSERT((boost::is_same<traits::size_type, std::size_t>));
+    BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type, std::size_t>));
 #endif
     BOOST_MPL_ASSERT((boost::is_same<traits::difference_type, std::ptrdiff_t>));
     BOOST_MPL_ASSERT((boost::is_same<traits::pointer, int*>));
