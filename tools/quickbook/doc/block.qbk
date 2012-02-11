@@ -14,6 +14,7 @@
     [source-mode teletype]
 ]
 
+[#quickbook.ref.xinclude]
 [section:xinclude xinclude]
 
 You can include another XML file with:
@@ -27,6 +28,7 @@ reference section.
 
 [endsect] [/xinclude]
 
+[#quickbook.ref.paragraphs]
 [section:paragraphs Paragraphs]
 
 Paragraphs start left-flushed and are terminated by two or more newlines. No
@@ -38,7 +40,9 @@ This is a new paragraph...
 
 [endsect] [/paragraphs]
 
+[#quickbook.ref.lists]
 [section:lists Lists]
+[#quickbook.ref.ordered_lists]
 [section:ordered_lists Ordered lists]
 
 [pre
@@ -54,6 +58,7 @@ will generate:
 # Three
 
 [endsect] [/ordered_lists]
+[#quickbook.ref.list_hierarchies]
 [section:list_hierarchies List Hierarchies]
 
 List hierarchies are supported. Example:
@@ -87,6 +92,7 @@ will generate:
 # Five
 
 [endsect] [/list_hierarchies]
+[#quickbook.ref.long_list_lines]
 [section:long_list_lines Long List Lines]
 
 Long lines will be wrapped appropriately. Example:
@@ -110,6 +116,7 @@ Long lines will be wrapped appropriately. Example:
 # A short item.
 
 [endsect] [/long_list_lines]
+[#quickbook.ref.unordered_lists]
 [section:unordered_lists Unordered lists]
 
 ```
@@ -125,6 +132,7 @@ will generate:
 * Third
 
 [endsect] [/unordered_lists]
+[#quickbook.ref.mixed_lists]
 [section:mixed_lists Mixed lists]
 
 Mixed lists (ordered and unordered) are supported. Example:
@@ -184,6 +192,7 @@ will generate:
 [endsect] [/mixed_lists]
 [endsect] [/lists]
 
+[#quickbook.ref.code]
 [section:code Code]
 
 Preformatted code starts with a space or a tab. The code will be
@@ -229,6 +238,7 @@ Generates:
 
 [endsect] [/code]
 
+[#quickbook.ref.escape_back]
 [section:escape_back Escaping Back To QuickBook]
 
 Inside code, code blocks and inline code, QuickBook does not allow any
@@ -254,6 +264,7 @@ allowed. Block level markups like lists, tables etc. are not allowed.
 
 [endsect] [/escaping_back_to_quickbook]
 
+[#quickbook.ref.preformatted]
 [section:preformatted Preformatted]
 
 Sometimes, you don't want some preformatted text to be parsed as source code. In such
@@ -290,6 +301,7 @@ inside =pre= blocks.
 
 [endsect] [/preformatted]
 
+[#quickbook.ref.blockquote]
 [section:blockquote Blockquote]
 
 [pre
@@ -300,6 +312,7 @@ inside =pre= blocks.
 
 [endsect] [/blockquote]
 
+[#quickbook.ref.admonitions]
 [section:admonitions Admonitions]
 
 ```
@@ -324,6 +337,7 @@ to produce the desired effect.
 
 [endsect] [/admonitions]
 
+[#quickbook.ref.headings]
 [section:headings Headings]
 
 ```
@@ -358,6 +372,7 @@ to link to them. See __anchor_links__ and __section__ for more info.
 
 [endsect] [/headings]
 
+[#quickbook.ref.generic_heading]
 [section:generic_heading Generic Heading]
 
 In cases when you don't want to care about the heading level (1 to 6), you
@@ -404,6 +419,7 @@ redundant. /h1/../h6/ might be deprecated in the future.
 
 [endsect] [/generic_heading]
 
+[#quickbook.ref.macros]
 [section:macros Macros]
 
 ```
@@ -457,6 +473,7 @@ Hi __spirit__ :-)
 
 [endsect] [/macros]
 
+[#quickbook.ref.predefined_macros]
 [section:predefined_macros Predefined Macros]
 
 Quickbook has some predefined macros that you can already use.
@@ -470,6 +487,7 @@ Quickbook has some predefined macros that you can already use.
 
 [endsect] [/predefined_macros]
 
+[#quickbook.ref.templates]
 [section:templates Templates]
 
 Templates provide a more versatile text substitution mechanism. Templates
@@ -496,6 +514,7 @@ Hi, my name is [name]. I am [age] years old. I am a [what].
 
 ]
 
+[#quickbook.ref.template_identifier]
 [heading Template Identifier]
 
 Template identifiers can either consist of:
@@ -513,7 +532,7 @@ alphanumeric characters or the underscore. This is similar to your typical
 C/C++ identifier.
 
 A template formal argument temporarily hides a template of the same name at
-the point where the [link quickbook.syntax.block.templates.template_expansion
+the point where the [link quickbook.ref.template_expansion
 template is expanded]. Note that the body of the [^person] template above
 refers to [^name] [^age] and [^what] as [^\[name\]] [^\[age\]] and
 [^\[what\]]. [^name] [^age] and [^what] are actually templates that exist
@@ -620,7 +639,7 @@ Some squiggles...[*[alpha][beta]]
 
 The difference with macros are
 
-* The explicit [link quickbook.syntax.block.templates.template_expansion
+* The explicit [link quickbook.ref.template_expansion
   template expansion syntax]. This is an advantage because, now, we don't
   have to use obscure naming conventions like double underscores (e.g.
   \_\_alpha\_\_) to avoid unwanted
@@ -729,7 +748,7 @@ With templates, one of our objectives is to allow us to rewrite QuickBook
 in QuickBook (as a qbk library). For that to happen, we need to accommodate
 single character punctuation templates which are fairly common in
 QuickBook. You might have noticed that single character punctuations are
-allowed as [link quickbook.syntax.block.templates.template_identifier
+allowed as [link quickbook.ref.template_identifier
 template identifiers]. Example:
 
 ```
@@ -750,6 +769,7 @@ We will have:
 
 [endsect] [/templates]
 
+[#quickbook.ref.blurbs]
 [section:blurbs Blurbs]
 
 ```
@@ -772,11 +792,12 @@ will generate this:
     (EBNF) completely in C++.
 ]
 
-[note Prefer [link quickbook.syntax.block.admonitions admonitions] wherever
+[note Prefer [link quickbook.ref.admonitions admonitions] wherever
 appropriate.]
 
 [endsect] [/blurbs]
 
+[#quickbook.ref.tables]
 [section:tables Tables]
 
 ```
@@ -901,6 +922,7 @@ Here's how to have preformatted blocks of code in a table cell:
 
 [endsect] [/tables]
 
+[#quickbook.ref.variable_lists]
 [section:variable_lists Variable Lists]
 
 ```
@@ -934,6 +956,7 @@ will recognize this as a "definition list".
 
 [endsect] [/variable_lists]
 
+[#quickbook.ref.include]
 [section:include Include]
 
 You can include one QuickBook file from another. The syntax is simply:
@@ -965,6 +988,7 @@ it with [^\[link someid.intro The Intro\]].
 
 [endsect] [/include]
 
+[#quickbook.ref.import]
 [section:import Import]
 
 When documenting code, you'd surely need to present code from actual source

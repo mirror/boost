@@ -28,6 +28,7 @@ Phrases in each block cannot contain a block terminator. This way, syntax errors
 such as un-matched closing brackets do not go haywire and corrupt anything past
 a single block.
 
+[#quickbook.ref.comments]
 [section:comments Comments]
 
 Can be placed anywhere.
@@ -51,4 +52,3 @@ Can be placed anywhere.
 [/ for testing [*only ] ]
 
 [endsect] [/comments]
-

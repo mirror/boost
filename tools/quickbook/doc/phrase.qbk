@@ -14,6 +14,7 @@
     [source-mode teletype]
 ]
 
+[#quickbook.ref.font_styles]
 [section:font_styles Font Styles]
 
 ```
@@ -36,6 +37,7 @@ will generate:
 
 [endsect] [/font_styles]
 
+[#quickbook.ref.replaceable]
 [section:replaceable Replaceable]
 
 When you want content that may or must be replaced by the user, use the syntax:
@@ -50,6 +52,7 @@ This will generate:
 
 [endsect] [/replaceable]
 
+[#quickbook.ref.quotations]
 [section:quotations Quotations]
 
 ```
@@ -78,6 +81,7 @@ That's the true business precept.]
 
 [endsect] [/quotations]
 
+[#quickbook.ref.simple_formatting]
 [section:simple_formatting Simple formatting]
 
 Simple markup for formatting text, common in many applications, is now supported:
@@ -161,6 +165,7 @@ And one for the little boy who lives down the lane.
 
 [endsect] [/simple_formatting]
 
+[#quickbook.ref.inline_code]
 [section:inline_code Inline code]
 
 Inlining code in paragraphs is quite common when writing C++ documentation. We
@@ -181,6 +186,7 @@ single quote: `"'"`. Note too that [^\`some code\`] is preferred over
 
 [endsect] [/inline_code]
 
+[#quickbook.ref.code_blocks]
 [section:code_blocks Code blocks]
 
 Preformatted code simply starts with a space or a tab (See __code__).
@@ -237,6 +243,7 @@ will generate:
 
 [endsect] [/code_blocks]
 
+[#quickbook.ref.source_mode]
 [section:source_mode Source Mode]
 
 If a document contains more than one type of source code then the source
@@ -272,7 +279,7 @@ C++ comment `// looks like this` whereas a Python comment [python]
 
 [endsect] [/source_mode]
 
-[#ref-line-break]
+[#quickbook.ref.line_break]
 [section:line_break line-break]
 
 ```
@@ -285,6 +292,7 @@ processor.]
 
 [endsect] [/line_break]
 
+[#quickbook.ref.anchors]
 [section:anchors Anchors]
 
 ```
@@ -301,6 +309,7 @@ other sections.
 
 [endsect] [/anchors]
 
+[#quickbook.ref.links]
 [section:links Links]
 
 ```
@@ -341,6 +350,7 @@ Note that this is only available when using BoostBook, and only for links
 
 [endsect] [/links]
 
+[#quickbook.ref.anchor_links]
 [section:anchor_links Anchor links]
 
 You can link within a document using:
@@ -353,6 +363,7 @@ See sections __section__ and __heading__ for more info.
 
 [endsect] [/anchor_links]
 
+[#quickbook.ref.refentry_links]
 [section:refentry_links refentry links]
 
 In addition, you can link internally to an XML refentry like:
@@ -374,6 +385,7 @@ This gets converted into [^<link linkend="xml.refentry">xml.refentry</link>].
 
 [endsect] [/refentry_links]
 
+[#quickbook.ref.code_links]
 [section:code_links Code Links]
 
 If you want to link to a function, class, member, enum, concept, global, or header in
@@ -402,6 +414,7 @@ would have "boost::bar::baz" as the link text.
 
 [endsect] [/code_links]
 
+[#quickbook.ref.escape]
 [section:escape Escape]
 
 The escape mark-up is used when we don't want to do any processing.
@@ -429,6 +442,7 @@ __boostbook__/__docbook__ syntax.]
 
 [endsect] [/escape]
 
+[#quickbook.ref.single_char_escape]
 [section:single_char_escape Single char escape]
 
 The backslash may be used to escape a single punctuation character. The
@@ -439,7 +453,7 @@ For example, how do you escape the triple quote? Simple: [^\\'\\'\\']
 
 `\n` has a special meaning. It is used to generate line breaks.
 
-[warning `\n` is now deprecated, use [link ref-line-break `[br]`]
+[warning `\n` is now deprecated, use [link quickbook.ref.line_break `[br]`]
 instead. Although, use it sparingly as it can generated invalid docbook]
 
 The escaped space: `\ ` also has a special meaning. The escaped space is removed
@@ -447,6 +461,7 @@ from the output.
 
 [endsect] [/single_char_escape]
 
+[#quickbook.ref.unicode_escape]
 [section:unicode_escape Unicode escape]
 
 You can enter any 16-bit unicode character by using `\u` followed by its 4 digit
@@ -465,6 +480,7 @@ will generate:
 
 [endsect] [/unicode_escape]
 
+[#quickbook.ref.images]
 [section:images Images]
 
 ```
@@ -481,6 +497,7 @@ DocBook imagedata attributes]:
 
 [endsect] [/images]
 
+[#quickbook.ref.footnotes]
 [section:footnotes Footnotes]
 
 As of version 1.3, QuickBook supports footnotes. Just put the text of the
@@ -495,6 +512,7 @@ will generate this[footnote A sample footnote].
 
 [endsect] [/footnotes]
 
+[#quickbook.ref.macro_expansion]
 [section:macro_expansion Macro Expansion]
 
 ```
@@ -505,6 +523,7 @@ See __macros__ for details.
 
 [endsect] [/macro_expansion]
 
+[#quickbook.ref.template_expansion]
 [section:template_expansion Template Expansion]
 
 ```
@@ -515,6 +534,7 @@ See __templates__ for details.
 
 [endsect] [/template_expansion]
 
+[#quickbook.ref.cond]
 [section:cond Conditional Generation]
 
 Like C++ `#ifdef`, you can generate phrases depending on the presence of
