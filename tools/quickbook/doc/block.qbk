@@ -14,7 +14,7 @@
     [source-mode teletype]
 ]
 
-[section xinclude]
+[section:xinclude xinclude]
 
 You can include another XML file with:
 
@@ -27,7 +27,7 @@ reference section.
 
 [endsect] [/xinclude]
 
-[section Paragraphs]
+[section:paragraphs Paragraphs]
 
 Paragraphs start left-flushed and are terminated by two or more newlines. No
 markup is needed for paragraphs. QuickBook automatically detects paragraphs from
@@ -36,10 +36,10 @@ the context. Block markups \[section, endsect, h1, h2, h3, h4, h5, h6, blurb,
  [/ <-- There's a space here. Don't remove. this is intentianal, for testing]
 This is a new paragraph...
 
-[endsect] [/Paragraphs]
+[endsect] [/paragraphs]
 
-[section Lists]
-[section Ordered lists]
+[section:lists Lists]
+[section:ordered_lists Ordered lists]
 
 [pre
 # One
@@ -53,8 +53,8 @@ will generate:
 # Two
 # Three
 
-[endsect] [/Ordered lists]
-[section List Hierarchies]
+[endsect] [/ordered_lists]
+[section:list_hierarchies List Hierarchies]
 
 List hierarchies are supported. Example:
 
@@ -86,8 +86,8 @@ will generate:
         # Four.a.ii
 # Five
 
-[endsect] [/List Hierarchies]
-[section Long List Lines]
+[endsect] [/list_hierarchies]
+[section:long_list_lines Long List Lines]
 
 Long lines will be wrapped appropriately. Example:
 
@@ -109,8 +109,8 @@ Long lines will be wrapped appropriately. Example:
   A very long item. A very long item. A very long item.
 # A short item.
 
-[endsect] [/Long list lines]
-[section Unordered lists]
+[endsect] [/long_list_lines]
+[section:unordered_lists Unordered lists]
 
 ```
 * First
@@ -124,8 +124,8 @@ will generate:
 * Second
 * Third
 
-[endsect] [/Unordered lists]
-[section Mixed lists]
+[endsect] [/unordered_lists]
+[section:mixed_lists Mixed lists]
 
 Mixed lists (ordered and unordered) are supported. Example:
 
@@ -181,10 +181,10 @@ will generate:
             * 2.b.2.a
             * 2.b.2.b
 
-[endsect] [/Mixed lists]
-[endsect] [/Lists]
+[endsect] [/mixed_lists]
+[endsect] [/lists]
 
-[section Code]
+[section:code Code]
 
 Preformatted code starts with a space or a tab. The code will be
 syntax highlighted according to the current __source_mode__:
@@ -227,7 +227,7 @@ Generates:
 
     using __boost__::__array__;
 
-[endsect] [/Code]
+[endsect] [/code]
 
 [section:escape_back Escaping Back To QuickBook]
 
@@ -252,9 +252,9 @@ Will generate:
 When escaping from code to QuickBook, only phrase level markups are
 allowed. Block level markups like lists, tables etc. are not allowed.
 
-[endsect] [/Escaping back to quickbook]
+[endsect] [/escaping_back_to_quickbook]
 
-[section Preformatted]
+[section:preformatted Preformatted]
 
 Sometimes, you don't want some preformatted text to be parsed as source code. In such
 cases, use the [^\[pre ... \]] markup block.
@@ -288,9 +288,9 @@ Some *preformatted* text                    Some *preformatted* text
 Notice that unlike Code, phrase markup such as font style is still permitted
 inside =pre= blocks.
 
-[endsect] [/Preformatted]
+[endsect] [/preformatted]
 
-[section Blockquote]
+[section:blockquote Blockquote]
 
 [pre
 '''[:sometext...]'''
@@ -298,9 +298,9 @@ inside =pre= blocks.
 
 [:Indents the paragraph. This applies to one paragraph only.]
 
-[endsect] [/Blockquote]
+[endsect] [/blockquote]
 
-[section Admonitions]
+[section:admonitions Admonitions]
 
 ```
 [note This is a note]
@@ -322,9 +322,9 @@ These are the only admonitions supported by __docbook__. So,
 for example [^\[information This is some information\]] is unlikely
 to produce the desired effect.
 
-[endsect] [/Admonitions]
+[endsect] [/admonitions]
 
-[section Headings]
+[section:headings Headings]
 
 ```
 [h1 Heading 1]
@@ -356,9 +356,9 @@ For example: Heading 1 in section Section 2 will be normalized to
 
 to link to them. See __anchor_links__ and __section__ for more info.
 
-[endsect] [/Headings]
+[endsect] [/headings]
 
-[section Generic Heading]
+[section:generic_heading Generic Heading]
 
 In cases when you don't want to care about the heading level (1 to 6), you
 can use the /Generic Heading/:
@@ -402,9 +402,9 @@ at will without any extra work to ensure correct heading levels. In fact,
 with /section/ and /heading/, you have all you need. /h1/../h6/ becomes
 redundant. /h1/../h6/ might be deprecated in the future.
 
-[endsect] [/Generic Heading]
+[endsect] [/generic_heading]
 
-[section Macros]
+[section:macros Macros]
 
 ```
 [def macro_identifier some text]
@@ -455,9 +455,9 @@ will generate this:
 
 Hi __spirit__ :-)
 
-[endsect] [/Macros]
+[endsect] [/macros]
 
-[section Predefined Macros]
+[section:predefined_macros Predefined Macros]
 
 Quickbook has some predefined macros that you can already use.
 
@@ -468,9 +468,9 @@ Quickbook has some predefined macros that you can already use.
     [[[^\__FILENAME__]][Quickbook source filename]     [__FILENAME__]]
 ]
 
-[endsect] [/Predefined Macros]
+[endsect] [/predefined_macros]
 
-[section Templates]
+[section:templates Templates]
 
 Templates provide a more versatile text substitution mechanism. Templates
 come in handy when you need to create parameterizable, multi-line,
@@ -748,9 +748,9 @@ We will have:
 <hey>baz</hey>
 ]
 
-[endsect] [/Templates]
+[endsect] [/templates]
 
-[section Blurbs]
+[section:blurbs Blurbs]
 
 ```
 [blurb ``\:-)`` [*An eye catching advertisement or note...]
@@ -775,9 +775,9 @@ will generate this:
 [note Prefer [link quickbook.syntax.block.admonitions admonitions] wherever
 appropriate.]
 
-[endsect] [/Blurbs]
+[endsect] [/blurbs]
 
-[section Tables]
+[section:tables Tables]
 
 ```
 [table:id A Simple Table
@@ -899,9 +899,9 @@ Here's how to have preformatted blocks of code in a table cell:
     ]
 ]
 
-[endsect] [/Tables]
+[endsect] [/tables]
 
-[section Variable Lists]
+[section:variable_lists Variable Lists]
 
 ```
 [variablelist A Variable List
@@ -932,9 +932,9 @@ only 2 "columns" are allowed. The first column contains the terms, and
 the second column contains the definitions. Those familiar with HTML
 will recognize this as a "definition list".
 
-[endsect] [/Variable Lists]
+[endsect] [/variable_lists]
 
-[section Include]
+[section:include Include]
 
 You can include one QuickBook file from another. The syntax is simply:
 
@@ -963,9 +963,9 @@ for instance, if there is a top section in someother.qbk named "Intro", the
 named anchor for that section will be "someid.intro", and you can link to
 it with [^\[link someid.intro The Intro\]].
 
-[endsect] [/Include]
+[endsect] [/include]
 
-[section Import]
+[section:import Import]
 
 When documenting code, you'd surely need to present code from actual source
 files. While it is possible to copy some code and paste them in your QuickBook
@@ -1110,4 +1110,4 @@ Example:
 
 See the actual code here: [@boost:/tools/quickbook/test/stub.cpp]
 
-[endsect] [/Import]
+[endsect] [/import]
