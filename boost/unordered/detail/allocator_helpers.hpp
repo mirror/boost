@@ -31,14 +31,20 @@
             (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7))
 #       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
 #   endif
+#
+#   if defined(BOOST_MSVC) && BOOST_MSVC < 1400
+#       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 2
+#   endif
 #endif
 
 #if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
 #   define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 0
 #endif
 
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
 #  include <memory>
+#elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 2
+#  include <boost/container/allocator/allocator_traits.hpp>
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_TYPE_TRAITS)
@@ -201,7 +207,7 @@ namespace boost { namespace unordered { namespace detail {
     // Uses the standard versions if available.
     // (although untested as I don't have access to a standard version yet)
 
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
 
     template <typename Alloc>
     struct allocator_traits : std::allocator_traits<Alloc> {};
@@ -212,6 +218,18 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename std::allocator_traits<Alloc>::
             template rebind_alloc<T> type;
     };
+
+#elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 2
+
+    template <typename Alloc>
+    struct allocator_traits :
+        boost::container::allocator_traits<Alloc> {};
+
+    template <typename Alloc, typename T>
+    struct rebind_wrap :
+        boost::container::allocator_traits<Alloc>::
+            template portable_rebind_alloc<T>
+    {};
 
 #else
 

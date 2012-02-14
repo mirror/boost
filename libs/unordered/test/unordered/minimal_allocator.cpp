@@ -52,7 +52,7 @@ void test_simple_allocator()
 
     BOOST_MPL_ASSERT((boost::is_same<typename traits::difference_type, std::ptrdiff_t>));
 
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
     BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type,
         std::make_unsigned<std::ptrdiff_t>::type>));
 #else
