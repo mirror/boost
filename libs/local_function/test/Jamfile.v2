@@ -1,0 +1,45 @@
+
+# Copyright (C) 2009-2012 Lorenzo Caminiti
+# Distributed under the Boost Software License, Version 1.0
+# (see accompanying file LICENSE_1_0.txt or a copy at
+# http://www.boost.org/LICENSE_1_0.txt)
+# Home at http://www.boost.org/libs/local_function
+
+import testing ;
+
+project : requirements <library>/boost//unit_test_framework ;
+
+run add.cpp ;
+run add_classifiers.cpp ;
+run add_default.cpp ;
+run add_except.cpp ;
+run add_inline.cpp ;
+run add_lambda.cpp ;
+run add_params.cpp ;
+run add_template.cpp ;
+run add_this.cpp ;
+run add_typed.cpp ;
+run add_with_default.cpp ;
+
+run factorial.cpp ;
+run goto.cpp ;
+compile-fail goto_err.cpp ;
+run macro_commas.cpp ;
+run nesting.cpp ;
+run operator.cpp ;
+compile-fail operator_err.cpp ;
+run overload.cpp ;
+run ten_void.cpp ;
+run transform.cpp ;
+run typeof.cpp ;
+run typeof_template.cpp ;
+
+run return_assign.cpp ;
+run return_derivative.cpp ;
+run return_inc.cpp ;
+run return_setget.cpp ;
+run return_this.cpp ;
+
+run add_seq.cpp ;
+run seq.cpp ;
+
