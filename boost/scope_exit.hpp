@@ -1,122 +1,102 @@
-// Copyright Alexander Nasonov 2006-2009, 2011
-//
-// Distributed under the Boost Software License, Version 1.0. 
-// (See accompanying file LICENSE_1_0.txt or copy at 
+
+// Copyright (C) 2006-2009, 2012 Alexander Nasonov
+// Copyright (C) 2012 Lorenzo Caminiti
+// Distributed under the Boost Software License, Version 1.0
+// (see accompanying file LICENSE_1_0.txt or a copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+// Home at http://www.boost.org/libs/scope_exit
 
 #ifndef FILE_boost_scope_exit_hpp_INCLUDED
 #define FILE_boost_scope_exit_hpp_INCLUDED
 
+#ifndef DOXYGEN
+
+#include <boost/local_function/detail/preprocessor/line_counter.hpp>
+#include <boost/local_function/detail/preprocessor/void_list.hpp>
+#include <boost/local_function/detail/preprocessor/keyword/thisunderscore.hpp>
 #include <boost/config.hpp>
-
-#if !defined(BOOST_NO_LAMBDAS) \
- && !defined(BOOST_NO_AUTO_DECLARATIONS) \
- && !defined(BOOST_SCOPE_EXIT_FORCE_CXX98)
-#define BOOST_SCOPE_EXIT_AUX_CXX0X
-#endif
-
-#if defined(BOOST_SCOPE_EXIT_AUX_CXX0X)
-
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/seq/enum.hpp>
-
-namespace boost { namespace scope_exit {  namespace aux {
-
-template<class F>
-struct guard
-{
-    F fn_;
-    guard(F f) : fn_(f) {}
-    ~guard() { fn_(); }
-};
-
-struct guard_maker
-{
-    template<class F>
-    guard<F> operator%(F f) const
-    {
-        return guard<F>(f);
-    }
-};
-
-} } }
-
-#define BOOST_SCOPE_EXIT_AUX_IMPL(id, seq) \
-    auto BOOST_PP_CAT(boost_se_fn_, id) =  \
-        ::boost::scope_exit::aux::guard_maker() % \
-            [BOOST_PP_SEQ_ENUM(seq)]() mutable -> void
-
-#if defined(BOOST_MSVC)
-#define BOOST_SCOPE_EXIT(seq) BOOST_SCOPE_EXIT_AUX_IMPL(__COUNTER__, seq)
-#else
-#define BOOST_SCOPE_EXIT(seq) BOOST_SCOPE_EXIT_AUX_IMPL(__LINE__, seq)
-#endif
-
-#define BOOST_SCOPE_EXIT_TPL(seq) BOOST_SCOPE_EXIT(seq)
-
-#define BOOST_SCOPE_EXIT_END ;
-
-#else
-
 #include <boost/detail/workaround.hpp>
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/facilities/empty.hpp>
-#include <boost/preprocessor/punctuation/comma_if.hpp>
-#include <boost/preprocessor/seq/cat.hpp>
-#include <boost/preprocessor/seq/for_each_i.hpp>
-#include <boost/preprocessor/tuple/elem.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/function.hpp>
 #include <boost/typeof/typeof.hpp>
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/control/iif.hpp>
+#include <boost/preprocessor/control/expr_iif.hpp>
+#include <boost/preprocessor/logical/bitor.hpp>
+#include <boost/preprocessor/logical/bitand.hpp>
+#include <boost/preprocessor/facilities/empty.hpp>
+#include <boost/preprocessor/facilities/identity.hpp>
+#include <boost/preprocessor/punctuation/comma_if.hpp>
+#include <boost/preprocessor/punctuation/paren_if.hpp>
+#include <boost/preprocessor/seq/cat.hpp>
+#include <boost/preprocessor/tuple/elem.hpp>
+#include <boost/preprocessor/tuple/eat.hpp>
+#include <boost/preprocessor/list/append.hpp>
+#include <boost/preprocessor/list/fold_left.hpp>
+#include <boost/preprocessor/list/enum.hpp>
+#include <boost/preprocessor/list/adt.hpp>
+#include <boost/preprocessor/list/for_each_i.hpp>
 
+// PRIVATE/PROTECTED //
+
+// NOTE: AUX prefix and aux namespace mark private symbols that shall be used
+// only within this library; DETAIL prefix and detail namespace mark "protected"
+// symbols that can be used by other Boost libraries but not outside Boost.
+
+// BOOST_SCOPE_EXIT_AUX_GCC also used in regression tests.
 #if defined(__GNUC__) && !defined(BOOST_INTEL)
-# define BOOST_SCOPE_EXIT_AUX_GCC (__GNUC__ * 100 + __GNUC_MINOR__)
+#   define BOOST_SCOPE_EXIT_AUX_GCC (__GNUC__ * 100 + __GNUC_MINOR__)
 #else
-# define BOOST_SCOPE_EXIT_AUX_GCC 0
+#   define BOOST_SCOPE_EXIT_AUX_GCC 0
 #endif
 
 #if BOOST_WORKAROUND(BOOST_SCOPE_EXIT_AUX_GCC, BOOST_TESTED_AT(413))
-#define BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND
+#   define BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01 1
+#else
+#   define BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01 0
+#endif
+
+#if !defined(BOOST_NO_LAMBDAS) && !defined(BOOST_SCOPE_EXIT_CONFIG_NO_CPP11)
+#   define BOOST_SCOPE_EXIT_AUX_LAMBDAS_01 1
+#else
+#   define BOOST_SCOPE_EXIT_AUX_LAMBDAS_01 0
 #endif
 
 // Steven Watanabe's trick with a modification suggested by Kim Barrett
-namespace boost { namespace scope_exit { namespace aux {
+namespace boost { namespace scope_exit { namespace detail {
 
-    // Type of a local boost_scope_exit_args variable.
-    // First use in a local scope will declare the boost_scope_exit_args
-    // variable, subsequent uses will be resolved as two comparisons
-    // (cmp1 with 0 and cmp2 with boost_scope_exit_args).
-    template<int Dummy = 0>
-    struct declared
+// Type of a local BOOST_SCOPE_EXIT_AUX_ARGS variable.
+// First use in a local scope will declare the BOOST_SCOPE_EXIT_AUX_ARGS
+// variable, subsequent uses will be resolved as two comparisons
+// (cmp1 with 0 and cmp2 with BOOST_SCOPE_EXIT_AUX_ARGS).
+template<int Dummy = 0>
+struct declared
+{
+    void* value;
+    static int const cmp2 = 0;
+    friend void operator>(int, declared const&) {}
+};
+
+struct undeclared { declared<> dummy[2]; };
+
+template<int> struct resolve;
+
+template<>
+struct resolve<sizeof(declared<>)>
+{
+    static const int cmp1 = 0;
+};
+
+template<>
+struct resolve<sizeof(undeclared)>
+{
+    template<int>
+    struct cmp1
     {
-        void* value;
         static int const cmp2 = 0;
-        friend void operator>(int, declared const&) {}
     };
-
-    struct undeclared { declared<> dummy[2]; };
-
-    template<int> struct resolve;
-
-    template<>
-    struct resolve<sizeof(declared<>)>
-    {
-        static const int cmp1 = 0;
-    };
-
-    template<>
-    struct resolve<sizeof(undeclared)>
-    {
-        template<int>
-        struct cmp1
-        {
-            static int const cmp2 = 0;
-        };
-    };
-} } }
-
-extern boost::scope_exit::aux::undeclared boost_scope_exit_args; // undefined
-
-
-namespace boost { namespace scope_exit { namespace aux {
+};
 
 typedef void (*ref_tag)(int&);
 typedef void (*val_tag)(int );
@@ -127,7 +107,7 @@ template<class T>
 struct member<T,ref_tag>
 {
     T& value;
-#ifndef BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND
+#if !BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
     member(T& ref) : value(ref) {}
 #endif
 };
@@ -136,7 +116,7 @@ template<class T>
 struct member<T,val_tag>
 {
     T value;
-#ifndef BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND
+#if !BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
     member(T& val) : value(val) {}
 #endif
 };
@@ -155,163 +135,721 @@ template<class T> wrapper<T> wrap(T&);
 } } }
 
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::aux::wrapper, 1)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::scope_exit::detail::wrapper, 1)
 
-#define BOOST_SCOPE_EXIT_AUX_GUARD(id)     BOOST_PP_CAT(boost_se_guard_,    id)
-#define BOOST_SCOPE_EXIT_AUX_GUARD_T(id)   BOOST_PP_CAT(boost_se_guard_t_,  id)
-#define BOOST_SCOPE_EXIT_AUX_PARAMS(id)    BOOST_PP_CAT(boost_se_params_,   id)
-#define BOOST_SCOPE_EXIT_AUX_PARAMS_T(id)  BOOST_PP_CAT(boost_se_params_t_, id)
+#define BOOST_SCOPE_EXIT_AUX_ARGS boost_scope_exit_aux_args
+extern boost::scope_exit::detail::undeclared BOOST_SCOPE_EXIT_AUX_ARGS;
 
-#define BOOST_SCOPE_EXIT_AUX_TAG(id, i) \
+#define BOOST_SCOPE_EXIT_AUX_GUARD(id)   BOOST_PP_CAT(boost_se_guard_,   id)
+#define BOOST_SCOPE_EXIT_AUX_GUARD_T(id) BOOST_PP_CAT(boost_se_guard_t_, id)
+#define BOOST_SCOPE_EXIT_AUX_PARAMS(id)  BOOST_PP_CAT(boost_se_params_,  id)
+#define BOOST_SCOPE_EXIT_AUX_THIS_T(id)  BOOST_PP_CAT(boost_se_this_t_,  id)
+
+#define BOOST_SCOPE_EXIT_DETAIL_PARAMS_T(id) \
+    BOOST_PP_CAT(boost_se_params_t_, id)
+
+#define BOOST_SCOPE_EXIT_DETAIL_TAG(id, i) \
     BOOST_PP_SEQ_CAT( (boost_se_tag_)(i)(_)(id) )
 
-#define BOOST_SCOPE_EXIT_AUX_PARAM(id, i, var) \
+#define BOOST_SCOPE_EXIT_DETAIL_PARAM_THIS(id) \
+    BOOST_PP_SEQ_CAT( (boost_se_param_this_)(id) )
+
+#define BOOST_SCOPE_EXIT_DETAIL_PARAM(id, i, var) \
     BOOST_PP_SEQ_CAT( (boost_se_param_)(i)(_)(id) )
 
-#define BOOST_SCOPE_EXIT_AUX_PARAM_T(id, i, var) \
+#define BOOST_SCOPE_EXIT_DETAIL_PARAM_T(id, i, var) \
     BOOST_PP_SEQ_CAT( (boost_se_param_t_)(i)(_)(id) )
 
-#define BOOST_SCOPE_EXIT_AUX_CAPTURE_T(id, i, var) \
+#define BOOST_SCOPE_EXIT_DETAIL_CAPTURE_T(id, i, var) \
     BOOST_PP_SEQ_CAT( (boost_se_capture_t_)(i)(_)(id) )
 
 #define BOOST_SCOPE_EXIT_AUX_WRAPPED(id, i) \
     BOOST_PP_SEQ_CAT( (boost_se_wrapped_t_)(i)(_)(id) )
 
 #define BOOST_SCOPE_EXIT_AUX_DEREF(id, i, var) \
-    boost::scope_exit::aux::deref(var, (BOOST_SCOPE_EXIT_AUX_TAG(id,i))0)
+    ::boost::scope_exit::detail::deref(var, \
+            static_cast<BOOST_SCOPE_EXIT_DETAIL_TAG(id, i)>(0))
 
 #define BOOST_SCOPE_EXIT_AUX_MEMBER(r, id, i, var) \
-    boost::scope_exit::aux::member<                \
-        BOOST_SCOPE_EXIT_AUX_PARAM_T(id,i,var),    \
-        BOOST_SCOPE_EXIT_AUX_TAG(id,i)             \
-    > BOOST_SCOPE_EXIT_AUX_PARAM(id,i,var);
+    ::boost::scope_exit::detail::member< \
+        BOOST_SCOPE_EXIT_DETAIL_PARAM_T(id, i, var), \
+        BOOST_SCOPE_EXIT_DETAIL_TAG(id, i) \
+    > BOOST_SCOPE_EXIT_DETAIL_PARAM(id, i, var);
 
-// idty is (id,typename) or (id,BOOST_PP_EMPTY())
-#define BOOST_SCOPE_EXIT_AUX_ARG_DECL(r, idty, i, var)             \
-    BOOST_PP_COMMA_IF(i) BOOST_PP_TUPLE_ELEM(2,1,idty)             \
-    BOOST_SCOPE_EXIT_AUX_PARAMS_T(BOOST_PP_TUPLE_ELEM(2,0,idty)):: \
-    BOOST_SCOPE_EXIT_AUX_PARAM_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var) var
+#define BOOST_SCOPE_EXIT_AUX_ARG_DECL(r, id_ty, i, var) \
+    BOOST_PP_COMMA_IF(i) \
+    BOOST_PP_TUPLE_ELEM(2, 1, id_ty) \
+    BOOST_SCOPE_EXIT_DETAIL_PARAMS_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty)):: \
+            BOOST_SCOPE_EXIT_DETAIL_PARAM_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
+                    i, var) \
+    var
  
-#define BOOST_SCOPE_EXIT_AUX_ARG(r, id, i, var) BOOST_PP_COMMA_IF(i) \
-    boost_se_params_->BOOST_SCOPE_EXIT_AUX_PARAM(id,i,var).value
+#define BOOST_SCOPE_EXIT_AUX_ARG(r, id, i, var) \
+    BOOST_PP_COMMA_IF(i) \
+    boost_se_params_->BOOST_SCOPE_EXIT_DETAIL_PARAM(id, i, var).value
 
-#define BOOST_SCOPE_EXIT_AUX_TAG_DECL(r, id, i, var) \
-    typedef void (*BOOST_SCOPE_EXIT_AUX_TAG(id,i))(int var);
+#define BOOST_SCOPE_EXIT_DETAIL_TAG_DECL(r, id, i, var) \
+    typedef void (*BOOST_SCOPE_EXIT_DETAIL_TAG(id, i))(int var);
 
+// Adam Butcher's workaround to deduce `this` type on MSVC revision < 10.
+// Boost.Typeof for VC71's typeid-based workaround does not work to determine
+// `this` type due to error C2355 being incorrectly reported. The typical
+// avoidance strategy implemented below is to make an indirect compile-time
+// constant by assigning an enum and use that as type-index-- this only works
+// with the sizeof() approach and not with the typeid() approach. This does not
+// work in typeof emulation mode.
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1300) && /* MSVC 7.1 */ \
+        BOOST_WORKAROUND(BOOST_MSVC, <= 1400) && /* MSVC 8.0 */ \
+        !defined(BOOST_TYPEOF_EMULATION) /* doesn't work in typeof-emu mode */
 
-#ifdef BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND
+namespace boost { namespace scope_exit { namespace aux {
+        namespace msvc_typeof_this {
+    
+template<int Id>
+struct msvc_typeid_wrapper
+{
+    typedef typename boost::type_of::msvc_extract_type<boost::mpl::int_<Id>
+            >::id2type id2type;
+    typedef typename id2type::type type;
+};
 
-#define BOOST_SCOPE_EXIT_AUX_PARAMS_T_CTOR(id, seq)
+template<>
+struct msvc_typeid_wrapper<4>
+{
+    typedef msvc_typeid_wrapper<4> type;
+};
 
-#define BOOST_SCOPE_EXIT_AUX_PARAM_INIT(r, id, i, var) \
-    BOOST_PP_COMMA_IF(i) { BOOST_SCOPE_EXIT_AUX_DEREF(id,i,var) }
+template<typename T>
+struct encode_type
+{
+    BOOST_STATIC_CONSTANT(unsigned,
+            value = boost::type_of::encode_counter<T>::count);
+    typedef typename boost::type_of::msvc_register_type<T,
+            boost::mpl::int_<value> >::id2type type;
+    BOOST_STATIC_CONSTANT(unsigned, next = value + 1);
+};
 
-#define BOOST_SCOPE_EXIT_AUX_PARAMS_INIT(id, seq) \
-    = { BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_PARAM_INIT, id, seq) };
+template<class T>
+struct sizer
+{
+    typedef char(*type)[encode_type<T>::value];
+};
+
+template<typename T>
+typename boost::disable_if<
+      typename boost::is_function<T>::type
+    , typename sizer<T>::type
+>::type encode_start(T const&);
+
+template<typename T>
+typename boost::enable_if<
+      typename boost::is_function<T>::type
+    , typename sizer<T>::type
+>::type encode_start(T&);
+
+template<typename Organizer, typename T>
+boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
+        Organizer* = 0);
+
+} } } }
+
+#define BOOST_SCOPE_EXIT_AUX_TYPEDEF_TYPEOF_THIS_INDEX_(id) \
+    BOOST_PP_CAT(boost_se_thistype_index_, id)
+
+#define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, new_type) \
+    enum { \
+        BOOST_SCOPE_EXIT_AUX_TYPEDEF_TYPEOF_THIS_INDEX_(id) = sizeof( \
+            *::boost::scope_exit::aux::msvc_typeof_this::encode_start(this)) \
+    }; \
+    typedef ::boost::scope_exit::aux::msvc_typeof_this::msvc_typeid_wrapper< \
+            BOOST_SCOPE_EXIT_AUX_TYPEDEF_TYPEOF_THIS_INDEX_(id) \
+    >::type new_type;
+
+#else // typeof(this) on other compilers are OK.
+
+#define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, new_type) \
+    typedef BOOST_TYPEOF(this) new_type;
+
+#endif // typeof(this)
+
+#if BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
+
+#define BOOST_SCOPE_EXIT_AUX_PARAMS_T_CTOR(id, captures, has_this)
+
+#define BOOST_SCOPE_EXIT_DETAIL_PARAM_INIT(r, id, i, var) \
+    BOOST_PP_COMMA_IF(i) { BOOST_SCOPE_EXIT_AUX_DEREF(id, i, var) }
+
+#define BOOST_SCOPE_EXIT_AUX_PARAMS_INIT(id, captures, has_this) \
+    BOOST_PP_EXPR_IIF(BOOST_PP_LIST_IS_CONS(captures), = { ) \
+        BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_DETAIL_PARAM_INIT, id, \
+                captures) \
+        BOOST_PP_COMMA_IF(BOOST_PP_BITAND(BOOST_PP_LIST_IS_CONS(captures), \
+                has_this)) \
+        BOOST_PP_EXPR_IIF(has_this, this) /* no extra {...} needed here */ \
+    BOOST_PP_EXPR_IIF(BOOST_PP_LIST_IS_CONS(captures), } )
 
 #else
 
-#define BOOST_SCOPE_EXIT_AUX_CTOR_ARG(r, id, i, var) BOOST_PP_COMMA_IF(i) \
-    BOOST_SCOPE_EXIT_AUX_PARAM_T(id,i,var) & BOOST_PP_CAT(a,i)
+#define BOOST_SCOPE_EXIT_AUX_CTOR_ARG(r, id, i, var) \
+    BOOST_PP_COMMA_IF(i) \
+    BOOST_SCOPE_EXIT_DETAIL_PARAM_T(id, i, var) & BOOST_PP_CAT(a, i)
 
-#define BOOST_SCOPE_EXIT_AUX_MEMBER_INIT(r, id, i, var) BOOST_PP_COMMA_IF(i) \
-    BOOST_SCOPE_EXIT_AUX_PARAM(id,i,var) ( BOOST_PP_CAT(a,i) )
+#define BOOST_SCOPE_EXIT_AUX_MEMBER_INIT(r, id, i, var) \
+    BOOST_PP_COMMA_IF(i) \
+    BOOST_SCOPE_EXIT_DETAIL_PARAM(id, i, var) ( BOOST_PP_CAT(a, i) )
 
-#define BOOST_SCOPE_EXIT_AUX_PARAMS_T_CTOR(id, seq)                        \
-    BOOST_SCOPE_EXIT_AUX_PARAMS_T(id)(                                     \
-        BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_CTOR_ARG, id, seq ) ) \
-    : BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_MEMBER_INIT, id, seq) {}
+#define BOOST_SCOPE_EXIT_AUX_CTOR_ARG_THIS(id, comma01) \
+    BOOST_PP_COMMA_IF(comma01) \
+    BOOST_SCOPE_EXIT_AUX_THIS_T(id) /* ptr type so no & */ a_this
 
-#define BOOST_SCOPE_EXIT_AUX_PARAM_INIT(r, id, i, var) \
+#define BOOST_SCOPE_EXIT_AUX_MEMBER_THIS_INIT(id, comma01) \
+    BOOST_PP_COMMA_IF(comma01) \
+    BOOST_SCOPE_EXIT_DETAIL_PARAM_THIS(id) ( a_this )
+
+#define BOOST_SCOPE_EXIT_AUX_PARAMS_T_CTOR(id, captures, has_this) \
+    BOOST_SCOPE_EXIT_DETAIL_PARAMS_T(id)( \
+        BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_CTOR_ARG, id, captures) \
+        BOOST_PP_IIF(has_this, \
+            BOOST_SCOPE_EXIT_AUX_CTOR_ARG_THIS \
+        , \
+            BOOST_PP_TUPLE_EAT(2) \
+        )(id, BOOST_PP_LIST_IS_CONS(captures)) \
+    ) \
+        BOOST_PP_EXPR_IIF(BOOST_PP_BITOR(BOOST_PP_LIST_IS_CONS(captures), \
+                has_this), \
+            : \
+        ) \
+        BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_MEMBER_INIT, id, \
+                captures) \
+        BOOST_PP_IIF(has_this, \
+            BOOST_SCOPE_EXIT_AUX_MEMBER_THIS_INIT \
+        , \
+            BOOST_PP_TUPLE_EAT(2) \
+        )(id, BOOST_PP_LIST_IS_CONS(captures)) \
+    {}
+
+#define BOOST_SCOPE_EXIT_DETAIL_PARAM_INIT(r, id, i, var) \
     BOOST_PP_COMMA_IF(i) BOOST_SCOPE_EXIT_AUX_DEREF(id,i,var)
 
-#define BOOST_SCOPE_EXIT_AUX_PARAMS_INIT(id, seq) \
-    ( BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_PARAM_INIT, id, seq) );
+#define BOOST_SCOPE_EXIT_AUX_PARAMS_INIT(id, captures, has_this) \
+    BOOST_PP_LPAREN_IF(BOOST_PP_LIST_IS_CONS(captures)) \
+        BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_DETAIL_PARAM_INIT, id, \
+                captures)\
+        BOOST_PP_COMMA_IF(BOOST_PP_BITAND(BOOST_PP_LIST_IS_CONS(captures), \
+                has_this)) \
+        BOOST_PP_EXPR_IIF(has_this, this) \
+    BOOST_PP_RPAREN_IF(BOOST_PP_LIST_IS_CONS(captures))
 
 #endif
 
 #if defined(BOOST_TYPEOF_EMULATION)
 
-#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)                   \
-    struct BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2,0,idty), i)    \
-        : BOOST_TYPEOF(boost::scope_exit::aux::wrap(                         \
-        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var)))  \
-    {}; typedef BOOST_PP_TUPLE_ELEM(2,1,idty)                                \
-        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2,0,idty), i)::type \
-        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var);
+#define BOOST_SCOPE_EXIT_DETAIL_CAPTURE_DECL(r, id_ty, i, var) \
+    struct BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), i) \
+        : BOOST_TYPEOF(::boost::scope_exit::detail::wrap( \
+                BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
+                        i, var))) \
+    {}; \
+    typedef BOOST_PP_TUPLE_ELEM(2, 1,id_ty) \
+        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), i)::type\
+        BOOST_SCOPE_EXIT_DETAIL_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
+                i, var) \
+    ;
 
 #elif defined(BOOST_INTEL)
 
-#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)                 \
-    typedef BOOST_TYPEOF_KEYWORD(                                          \
-        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var)) \
-        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var);
+#define BOOST_SCOPE_EXIT_DETAIL_CAPTURE_DECL(r, id_ty, i, var) \
+    typedef \
+        BOOST_TYPEOF_KEYWORD(BOOST_SCOPE_EXIT_AUX_DEREF( \
+                BOOST_PP_TUPLE_ELEM(2, 0, id_ty), i, var)) \
+        BOOST_SCOPE_EXIT_DETAIL_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
+                i, var) \
+    ;
 
 #else
 
-#define BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL(r, idty, i, var)                   \
-    typedef BOOST_TYPEOF(boost::scope_exit::aux::wrap(                       \
-        BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var)))  \
-        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2,0,idty), i);      \
-    typedef BOOST_PP_TUPLE_ELEM(2,1,idty)                                    \
-        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2,0,idty), i)::type \
-        BOOST_SCOPE_EXIT_AUX_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var);
+#define BOOST_SCOPE_EXIT_DETAIL_CAPTURE_DECL(r, id_ty, i, var) \
+    typedef \
+        BOOST_TYPEOF(::boost::scope_exit::detail::wrap( \
+                BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
+                        i, var))) \
+        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), i) \
+    ; \
+    typedef BOOST_PP_TUPLE_ELEM(2, 1, id_ty) \
+        BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), i)::type\
+        BOOST_SCOPE_EXIT_DETAIL_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
+                i, var) \
+    ;
 
 #endif
 
-#define BOOST_SCOPE_EXIT_AUX_PARAM_DECL(r, idty, i, var) \
-    typedef BOOST_SCOPE_EXIT_AUX_CAPTURE_T(              \
-        BOOST_PP_TUPLE_ELEM(2,0,idty), i, var)           \
-        BOOST_SCOPE_EXIT_AUX_PARAM_T(BOOST_PP_TUPLE_ELEM(2,0,idty), i, var);
+#define BOOST_SCOPE_EXIT_DETAIL_PARAM_DECL(r, id_ty, i, var) \
+    typedef \
+        BOOST_SCOPE_EXIT_DETAIL_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
+                i, var) \
+        BOOST_SCOPE_EXIT_DETAIL_PARAM_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
+                i, var) \
+    ;
 
+// Traits.
 
-#define BOOST_SCOPE_EXIT_AUX_IMPL(id, seq, ty)                                 \
-    BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_TAG_DECL, id, seq)            \
-    BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_CAPTURE_DECL, (id,ty), seq)   \
-    struct BOOST_SCOPE_EXIT_AUX_PARAMS_T(id) {                                 \
-        BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_PARAM_DECL, (id,ty), seq) \
-        BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_MEMBER, id, seq)          \
-        BOOST_SCOPE_EXIT_AUX_PARAMS_T_CTOR(id, seq)                            \
-    } BOOST_SCOPE_EXIT_AUX_PARAMS(id) BOOST_SCOPE_EXIT_AUX_PARAMS_INIT(id,seq) \
-    boost::scope_exit::aux::declared< boost::scope_exit::aux::resolve<         \
-        sizeof(boost_scope_exit_args)>::cmp1<0>::cmp2 > boost_scope_exit_args; \
-    boost_scope_exit_args.value = &BOOST_SCOPE_EXIT_AUX_PARAMS(id);            \
-    struct BOOST_SCOPE_EXIT_AUX_GUARD_T(id) {                                  \
-        BOOST_SCOPE_EXIT_AUX_PARAMS_T(id)* boost_se_params_;                   \
-        BOOST_SCOPE_EXIT_AUX_GUARD_T(id) (void* boost_se_params)               \
-            : boost_se_params_(                                                \
-                  (BOOST_SCOPE_EXIT_AUX_PARAMS_T(id)*)boost_se_params)         \
-        {}                                                                     \
-        ~BOOST_SCOPE_EXIT_AUX_GUARD_T(id)() { boost_se_body(                   \
-            BOOST_PP_SEQ_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_ARG, id, seq) ); }    \
-        static void boost_se_body(BOOST_PP_SEQ_FOR_EACH_I(                     \
-            BOOST_SCOPE_EXIT_AUX_ARG_DECL, (id,ty), seq) )
+#define BOOST_SCOPE_EXIT_AUX_TRAITS_OP_CAPTURE(d, captures, this01, capture) \
+    (BOOST_PP_LIST_APPEND(captures, (capture, BOOST_PP_NIL)), this01)
 
-#if defined(BOOST_MSVC)
+#define BOOST_SCOPE_EXIT_AUX_TRAITS_OP_THIS(d, captures, this01, this_) \
+    (captures, 1 /* has this (note, no error if multiple this_) */)
 
-#define BOOST_SCOPE_EXIT_END } BOOST_SCOPE_EXIT_AUX_GUARD(__COUNTER__) ( \
-    boost_scope_exit_args.value);
+#define BOOST_SCOPE_EXIT_AUX_TRAITS_OP(d, captures_this, capture) \
+    BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_IS_THISUNDERSCORE_BACK(\
+            capture), \
+        BOOST_SCOPE_EXIT_AUX_TRAITS_OP_THIS \
+    , \
+        BOOST_SCOPE_EXIT_AUX_TRAITS_OP_CAPTURE \
+    )(d, BOOST_PP_TUPLE_ELEM(2, 0, captures_this), \
+            BOOST_PP_TUPLE_ELEM(2, 1, captures_this), capture)
 
-#define BOOST_SCOPE_EXIT(seq) \
-    BOOST_SCOPE_EXIT_AUX_IMPL(__COUNTER__, seq, BOOST_PP_EMPTY())
+// ref_val: & | =
+#define BOOST_SCOPE_EXIT_AUX_TRAITS_ALL_OP(ref_val, traits) \
+    ( \
+        BOOST_PP_LIST_APPEND((ref_val, BOOST_PP_NIL), \
+                BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
+    , \
+        BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits) \
+    )
 
-#else
+#define BOOST_SCOPE_EXIT_AUX_TRAITS(captures) \
+    BOOST_PP_LIST_FOLD_LEFT(BOOST_SCOPE_EXIT_AUX_TRAITS_OP, \
+            (BOOST_PP_NIL, 0), captures)
 
-#define BOOST_SCOPE_EXIT_END } BOOST_SCOPE_EXIT_AUX_GUARD(__LINE__) ( \
-    boost_scope_exit_args.value);
+#define BOOST_SCOPE_EXIT_AUX_TRAITS_ALL(captures) \
+    BOOST_SCOPE_EXIT_AUX_TRAITS_ALL_OP(BOOST_PP_LIST_FIRST(captures), \
+            BOOST_SCOPE_EXIT_AUX_TRAITS(BOOST_PP_LIST_REST(captures)))
 
-#define BOOST_SCOPE_EXIT(seq) \
-    BOOST_SCOPE_EXIT_AUX_IMPL(__LINE__, seq, BOOST_PP_EMPTY())
+#define BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits) \
+    BOOST_PP_TUPLE_ELEM(2, 0, traits)
 
-#endif
+#define BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits) \
+    BOOST_PP_TUPLE_ELEM(2, 1, traits)
 
-#ifdef BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND
-#define BOOST_SCOPE_EXIT_TPL(seq) \
-    BOOST_SCOPE_EXIT_AUX_IMPL(__LINE__, seq, typename)
-#else
-#define BOOST_SCOPE_EXIT_TPL(seq) BOOST_SCOPE_EXIT(seq)
-#endif
+#if BOOST_SCOPE_EXIT_AUX_LAMBDAS_01 // Lambdas.
 
-#endif // #if defined(BOOST_SCOPE_EXIT_AUX_CXX0X)
+namespace boost { namespace scope_exit { namespace aux {
+
+template<typename This = void>
+struct guard { // With object `this_` (for backward compatibility).
+    explicit guard(This _this) : this_(_this) {}
+    ~guard() { if(f_) f_(this_); }
+    template<typename Lambda>
+    void operator=(Lambda f) { f_ = f; }
+private:
+    This this_;
+    boost::function<void (This)> f_;
+};
+
+template<>
+struct guard<void> { // Without object `this_` (could capture `this` directly).
+    ~guard() { if(f_) f_(); }
+    template<typename Lambda>
+    void operator=(Lambda f) { f_ = f; }
+private:
+    boost::function<void (void)> f_;
+};
+
+} } }
+
+#define BOOST_SCOPE_EXIT_AUX_IMPL(id, traits, unused) \
+    ::boost::scope_exit::aux::guard< \
+        BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
+            /* no need for TYPEDEF THIS MSVC workaround on C++11 */ \
+            BOOST_TYPEOF /* delay expansion for commas in TYPEOF */ \
+        , \
+            BOOST_PP_TUPLE_EAT(1) \
+        )(this) \
+    > BOOST_SCOPE_EXIT_AUX_GUARD(id) \
+        BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
+            (this) \
+        ) \
+    ; \
+    BOOST_SCOPE_EXIT_AUX_GUARD(id) = [ \
+        BOOST_PP_LIST_ENUM(BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
+    ]( \
+        BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
+            /* no need for TYPEDEF THIS MSVC workaround on C++11 */ \
+            BOOST_TYPEOF /* delay expansion for commas in TYPEOF */ \
+        , \
+            BOOST_PP_TUPLE_EAT(1) \
+        )(this) \
+        BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), this_) \
+    ) mutable -> void
+
+#else // No lambdas.
+
+// ty: EMPTY() | typename
+#define BOOST_SCOPE_EXIT_AUX_IMPL(id, traits, ty) \
+    BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_DETAIL_TAG_DECL, id, \
+            BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
+    BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_DETAIL_CAPTURE_DECL, (id, ty), \
+            BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
+    BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
+        BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS \
+    , \
+        BOOST_PP_TUPLE_EAT(2) \
+    )(id, BOOST_SCOPE_EXIT_AUX_THIS_T(id)) \
+    struct BOOST_SCOPE_EXIT_DETAIL_PARAMS_T(id) { \
+        BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_DETAIL_PARAM_DECL, (id, ty), \
+                BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
+        BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_MEMBER, id, \
+                BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
+        BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
+            BOOST_SCOPE_EXIT_AUX_THIS_T(id) \
+                    BOOST_SCOPE_EXIT_DETAIL_PARAM_THIS(id) ; \
+        ) \
+        BOOST_SCOPE_EXIT_AUX_PARAMS_T_CTOR(id, \
+                BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits), \
+                BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits)) \
+    } BOOST_SCOPE_EXIT_AUX_PARAMS(id) \
+        BOOST_SCOPE_EXIT_AUX_PARAMS_INIT(id, \
+                BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits), \
+                BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits)) \
+    ; \
+    ::boost::scope_exit::detail::declared< \
+        ::boost::scope_exit::detail::resolve< \
+            sizeof(BOOST_SCOPE_EXIT_AUX_ARGS) \
+        >::cmp1<0>::cmp2 \
+    > BOOST_SCOPE_EXIT_AUX_ARGS; \
+    BOOST_SCOPE_EXIT_AUX_ARGS.value = &BOOST_SCOPE_EXIT_AUX_PARAMS(id); \
+    struct BOOST_SCOPE_EXIT_AUX_GUARD_T(id) { \
+        BOOST_SCOPE_EXIT_DETAIL_PARAMS_T(id)* boost_se_params_; \
+        BOOST_SCOPE_EXIT_AUX_GUARD_T(id) (void* boost_se_params) \
+            : boost_se_params_( \
+                    (BOOST_SCOPE_EXIT_DETAIL_PARAMS_T(id)*)boost_se_params) \
+        {} \
+        ~BOOST_SCOPE_EXIT_AUX_GUARD_T(id)() { \
+            boost_se_body( \
+                BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_ARG, id, \
+                        BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
+                BOOST_PP_COMMA_IF(BOOST_PP_BITAND(BOOST_PP_LIST_IS_CONS( \
+                        BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)), \
+                        BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits))) \
+                BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS( \
+                        traits), \
+                    boost_se_params_->BOOST_SCOPE_EXIT_DETAIL_PARAM_THIS(id) \
+                ) \
+            ); \
+        } \
+        static void boost_se_body( \
+            BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_AUX_ARG_DECL, (id, ty), \
+                    BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
+            BOOST_PP_COMMA_IF(BOOST_PP_BITAND(BOOST_PP_LIST_IS_CONS( \
+                    BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)), \
+                    BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits))) \
+            BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
+                BOOST_SCOPE_EXIT_AUX_THIS_T(id) this_ \
+            ) \
+        )
+
+#endif // Lambdas.
+
+// PUBLIC //
+
+#if defined(BOOST_NO_VARIADIC_MACROS) // No variadic macros (sequences only).
+#   define BOOST_SCOPE_EXIT(void_or_seq) \
+        BOOST_SCOPE_EXIT_AUX_IMPL( \
+              BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
+            , BOOST_SCOPE_EXIT_AUX_TRAITS( \
+                    BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(void_or_seq)) \
+            , BOOST_PP_EMPTY() \
+        )
+#   if BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01 && \
+            !BOOST_SCOPE_EXIT_AUX_LAMBDAS_01
+#       define BOOST_SCOPE_EXIT_TPL(void_or_seq) \
+            BOOST_SCOPE_EXIT_AUX_IMPL( \
+                  BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
+                , BOOST_SCOPE_EXIT_AUX_TRAITS( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(void_or_seq)) \
+                , typename \
+            )
+#   else // No TPL workaround or lambdas (for backward compatibility).
+#       define BOOST_SCOPE_EXIT_TPL(void_or_seq) \
+            BOOST_SCOPE_EXIT(void_or_seq)
+#   endif
+#   if defined(BOOST_SCOPE_EXIT_AUX_LAMBDAS) /* C++11 only */ \
+#       define BOOST_SCOPE_EXIT_ALL(seq) \
+            BOOST_SCOPE_EXIT_AUX_IMPL( \
+                  BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
+                , BOOST_SCOPE_EXIT_AUX_TRAITS_ALL( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_NON_VOID_LIST(seq)) \
+                , ~ /* unused on C++11 */ \
+            )
+#   endif
+#else // Variadic macros (both sequences and variadic tuples).
+#   define BOOST_SCOPE_EXIT(...) \
+        BOOST_SCOPE_EXIT_AUX_IMPL( \
+              BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
+            , BOOST_SCOPE_EXIT_AUX_TRAITS( \
+                    BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)) \
+            , BOOST_PP_EMPTY() \
+        )
+#   if BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01 && \
+            !BOOST_SCOPE_EXIT_AUX_LAMBDAS_01
+#       define BOOST_SCOPE_EXIT_TPL(...) \
+            BOOST_SCOPE_EXIT_AUX_IMPL( \
+                  BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
+                , BOOST_SCOPE_EXIT_AUX_TRAITS( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)) \
+                , typename \
+            )
+#   else // No TPL workaround or lambdas (for backward compatibility).
+#       define BOOST_SCOPE_EXIT_TPL(...) \
+            BOOST_SCOPE_EXIT(__VA_ARGS__)
+#   endif
+#   if BOOST_SCOPE_EXIT_AUX_LAMBDAS_01 /* C++11 only */
+#       define BOOST_SCOPE_EXIT_ALL(...) \
+            BOOST_SCOPE_EXIT_AUX_IMPL( \
+                  BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
+                , BOOST_SCOPE_EXIT_AUX_TRAITS_ALL( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_NON_VOID_LIST( \
+                                __VA_ARGS__)) \
+                , ~ /* unused on C++11 */ \
+            )
+#   endif
+#endif // Variadics.
+
+#if BOOST_SCOPE_EXIT_AUX_LAMBDAS_01 // Lambdas.
+#   define BOOST_SCOPE_EXIT_END \
+        ; /* for backward compatibility */
+#else // No lambdas.
+#   define BOOST_SCOPE_EXIT_END \
+        } BOOST_SCOPE_EXIT_AUX_GUARD( \
+            BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
+        )(BOOST_SCOPE_EXIT_AUX_ARGS.value);
+#endif // Lambdas.
+
+// DOCUMENTATION //
+
+#else // DOXYGEN
+
+/** @file
+@brief Scope exits allow to execute arbitrary code when the enclosing scope exits.
+*/
+
+/**
+@brief This macro declares a scope exit.
+
+The scope exit declaration schedules the execution of the scope exit body at the exit of the enclosing scope:
+
+@code
+    { // Some local scope.
+        ...
+        BOOST_SCOPE_EXIT(capture_list) {
+            ... // Body code.
+        } BOOST_SCOPE_EXIT_END
+        ...
+    }
+@endcode
+
+The enclosing scope must be local.
+If multiple scope exits are declared within the same enclosing scope, the scope exit bodies are executed in the reversed order of their declarations.
+Note how the end of the scope exit body must be marked by @RefMacro{BOOST_SCOPE_EXIT_END} (or by a <c>;</c> but only on C++11).
+
+@Params
+@Param{capture_list,
+On compilers that support variadic macros\, the capture list syntax is defined by the following grammar:
+@code
+    capture_list:
+            void | capture_tuple | capture_sequence
+    capture_tuple:
+            capture\, capture\, ...
+    capture_sequence:
+            (capture) (capture) ...
+    capture:
+            [&]variable | this_
+@endcode
+On compilers that do not support variadic macros\, <c>capture_tuple</c> cannot be used:
+@code
+    capture_list:
+            void | capture_sequence
+@endcode
+Finally\, on C++11 compilers <c>this</c> can be used instead of <c>this_</c>:
+@code
+    capture:
+            [&]variable | this_ | this
+@endcode
+
+Lexical conventions: <c>token1 | token2</c> means either <c>token1</c> or
+<c>token2</c>; <c>[token]</c> means either <c>token</c> or nothing;
+<c>{expression}</c> means the token resulting from the expression.
+}
+@EndParams
+
+Note that on compilers with variadic macro support (most of moder compliers and all C++11 compilers), the capture list can be specified as a comma-separated list of tokens.
+On all compilers, the same macro @RefMacro{BOOST_SCOPE_EXIT} also allows to specify the capture list as a Boost.Preprocessor sequence of tokens (for supporting compilers without variadic macros and for backward compatibility with older versions of this library).
+
+The name <c>variable</c> of each captured variable must be a valid name in the enclosing scope and it must appear exactly once in the capture list.
+If a capture starts with the ampersand sign <c>&</c>, the corresponding variable will be available by reference within the scope exit body; otherwise, a copy of the variable will be made at the point of the scope exit declaration and that copy will be available inside the scope exit body (in this case, the variable's type must be <c>CopyConstructible</c>).
+
+From within a member function, the object <c>this</c> can be captured using the special symbol <c>this_</c> in both the capture list and the scope exit body (using <c>this</c> instead of <c>this_</c> in the scope exit body leads to undefined behaviour).
+On C++11 it is possible (but not required) to use <c>this</c> instead of <c>this_</c>.
+
+It is possible to capture no variable by specifying the capture list as <c>void</c> (regardless of variadic macro support).
+
+Only variables listed in the capture list, static variables, <c>extern</c> variables, global variables, functions, and enumerations from the enclosing scope can be used inside the scope exit body.
+
+On various GCC versions the special macro @RefMacro{BOOST_SCOPE_EXIT_TPL} must be used instead of @RefMacro{BOOST_SCOPE_EXIT} within templates (this is not necessary on C++11).
+
+On C++11, it is possible capture all variables in scope without listing their names using the macro @RefMacro{BOOST_SCOPE_EXIT_ALL}.
+
+@Warning The implementation executes the scope exit body within a destructor thus the scope exit body must never throw in order to comply with STL exception safety requirements.
+
+@Note The implementation uses Boost.Typeof to automatically deduce the types of the captured variables.
+In order to compile code in type-of emulation mode, Boost.Typeof must be properly configured (see the @RefSectId{Getting_Started, Getting Started} section).
+
+@See @RefSect{Tutorial} section, @RefSectId{Getting_Started, Getting Started} section, @RefSectId{No_Variadic_Macros, No Variadic Macros} section, @RefMacro{BOOST_SCOPE_EXIT_TPL}, @RefMacro{BOOST_SCOPE_EXIT_ALL}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+*/
+#define BOOST_SCOPE_EXIT(capture_list)
+
+/**
+@brief This macro is a workaround to declare a scope exit for various versions of GCC.
+
+Various versions of the GCC compiler do not compile @RefMacro{BOOST_SCOPE_EXIT} inside function templates.
+As a workaround, @RefMacro{BOOST_SCOPE_EXIT_TPL} should be used instead of @RefMacro{BOOST_SCOPE_EXIT} in these cases:
+
+@code
+    { // Some local scope.
+        ...
+        BOOST_SCOPE_EXIT_TPL(capture_list) {
+            ... // Body code.
+        } BOOST_SCOPE_EXIT_END
+        ...
+    }
+@endcode
+
+The syntax of @RefMacro{BOOST_SCOPE_EXIT_TPL} is the exact same as the one of @RefMacro{BOOST_SCOPE_EXIT} (see @RefMacro{BOOST_SCOPE_EXIT} for more information).
+
+On C++11, @RefMacro{BOOST_SCOPE_EXIT_TPL} is not needed because @RefMacro{BOOST_SCOPE_EXIT} always compiles on GCC versions that support C++11 (that is also why there is no need for a <c>BOOST_SCOPE_EXIT_ALL_TPL</c> macro given that @RefMacro{BOOST_SCOPE_EXIT_ALL} is only available for C++11 compilers on which it always compiles correctly).
+However, @RefMacro{BOOST_SCOPE_EXIT_TPL} is still provided on C++11 so to write code that is portable between C++03 and C++11 compilers.
+
+@Note The problem boils down to the following code (see also <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=37920">GCC bug 37920</a>):
+@code
+    template<class T>
+    void f(T const& x) {
+        int i = 0;
+        struct local {
+            typedef __typeof__(i) typeof_i;
+            typedef __typeof__(x) typeof_x;
+        };
+        typedef local::typeof_i i_type;
+        typedef local::typeof_x x_type;
+    }
+
+    int main(void) { f(0); }
+@endcode
+This can be fixed by adding <c>typename</c> in front of <c>local::typeof_i</c> and <c>local::typeof_x</c> (which is the approach followed by the implementation of @RefMacro{BOOST_SCOPE_EXIT_TPL}).
+
+@Note Although @RefMacro{BOOST_SCOPE_EXIT_TPL} has the same suffix as <c>BOOST_TYPEOF_TPL</c>, it does not follow the Boost.Typeof convention.
+
+@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+*/
+#define BOOST_SCOPE_EXIT_TPL(capture_list)
+
+/**
+@brief This macro declares a scope exit that captures all variables in scope (C++11 only).
+
+This macro accepts a capture list starting with either <c>&</c> or <c>=</c> to capture all variables in scope by reference or value respectively (following the same syntax of C++11 lambdas).
+A part from that, this macro works like @RefMacro{BOOST_SCOPE_EXIT} (see @RefMacro{BOOST_SCOPE_EXIT} for more information).
+
+@code
+    { // Some local scope.
+        ...
+        BOOST_SCOPE_EXIT_ALL(capture_list) { // C++11 only.
+            ... // Body code.
+        }; // Use `;` instead of `BOOST_SCOPE_EXIT_END` (C++11 only).
+        ...
+    }
+@endcode
+
+@Warning This macro is only available on C++11 compilers.
+It is not defined on non-C++11 compilers so its use on non-C++11 compilers will generate a compiler error.
+
+@Params
+@Param{capture_list,
+@code
+capture_list:
+        capture_tuple | capture_sequence
+capture_tuple:
+        {& | =} [\, capture\, capture\, ...]
+capture_sequence:
+        {(&) | (=)} [(capture) (capture) ...]
+capture:
+        [&]variable | this_ | this
+@endcode
+
+Lexical conventions: <c>token1 | token2</c> means either <c>token1</c> or
+<c>token2</c>; <c>[token]</c> means either <c>token</c> or nothing;
+<c>{expression}</c> means the token resulting from the expression.
+}
+@EndParams
+
+For this macro, the capture list must always contain at least the leading <c>&</c> or <c>=</c> so it can never be <c>void</c>.
+
+Note that on compilers with variadic macro support (which should be all C++11 compilers), the capture list can be specified as a comma-separated list.
+On all compilers, the same macro @RefMacro{BOOST_SCOPE_EXIT_ALL} also allows to specify the capture list as a Boost.Preprocessor sequence (to allow to use a syntax consistent with the one of <c>BOOST_SCOPE_EXIT</c> when used on compilers without variadic macro support).
+The scope exit body declared by this macro can be terminated equivalently by either a semi-column <c>;</c> or by the macro @RefMacro{BOOST_SCOPE_EXIT_END}.
+The @RefMacro{BOOST_SCOPE_EXIT_ALL} macro is only available on C++11 where the terminating semi-column <c>;</c> can always be used without worrying about portability with C++03 (see @RefMacro{BOOST_SCOPE_EXIT_END} for more information).
+Similarly, this macro can always use <c>this</c> instead of <c>this_</c> to capture the enclosing object without worrying about portability with C++03 because this macro is only available on C++11 compilers.
+
+@Note In summary, this macro can take advantage of all syntax improvements allowed by C++11 but it optionally supports the same syntax required by C++03 so programmers can always program both @RefMacro{BOOST_SCOPE_EXIT_ALL} and @RefMacro{BOOST_SCOPE_EXIT} using the same syntax and for all compilers if they wish to do so.
+
+@Warning The implementation executes the scope exit body within a destructor thus the scope exit body must never throw in order to comply with STL exception safety requirements.
+
+@See @RefSect{Tutorial} section, @RefSectId{No_Variadic_Macros, No Variadic Macros} section, @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+*/
+#define BOOST_SCOPE_EXIT_ALL(capture_list)
+
+/**
+@brief This macro marks the end of a scope exit body.
+
+This macro must follow the closing curly bracket <c>}</c> that ends the scope exit body:
+
+@code
+    { // Some local scope.
+        ...
+        BOOST_SCOPE_EXIT(capture_list) {
+            ... // Body code.
+        } BOOST_SCOPE_EXIT_END
+        ...
+    }
+@endcode
+
+On C++11, this macro is not necessary and it can be replaced by a semi-column <c>;</c> :
+@code
+    { // Some local scope.
+        ...
+        BOOST_SCOPE_EXIT(capture_list) {
+            ... // Body code.
+        }; // C++11 only.
+        ...
+    }
+@endcode
+However, @RefMacro{BOOST_SCOPE_EXIT_END} is still provided on C++11 so to write code that is portable between C++03 and C++11 compilers.
+
+@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_TPL}, @RefMacro{BOOST_SCOPE_EXIT_ALL}.
+*/
+#define BOOST_SCOPE_EXIT_END
+
+/**
+@brief Force not to use C++11 features.
+
+If programmers define this configuration macro, C++11 features will not be used even on C++11 compilers (only C++03 features will be used).
+By default this macro is not defined.
+
+@Note This macro does not disable comma-separated capture lists on compilers that support variadic macros (programmers can simply use Boost.Preprocessor sequences if they do not wish to use comma-separated capture lists).
+
+@See @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_ALL}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+*/
+#define BOOST_SCOPE_EXIT_CONFIG_NO_CPP11
+
+#endif // DOXYGEN
 
 #endif // #ifndef FILE_boost_scope_exit_hpp_INCLUDED
+
