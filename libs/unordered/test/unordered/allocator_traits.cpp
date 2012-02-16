@@ -129,10 +129,10 @@ void test_allocator1()
     typedef allocator1<int> allocator;
     typedef boost::unordered::detail::allocator_traits<allocator> traits;
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
-    BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type,
+    BOOST_MPL_ASSERT((boost::is_same<traits::size_type,
         std::make_unsigned<std::ptrdiff_t>::type>));
 #else
-    BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type, std::size_t>));
+    BOOST_MPL_ASSERT((boost::is_same<traits::size_type, std::size_t>));
 #endif
     BOOST_MPL_ASSERT((boost::is_same<traits::difference_type, std::ptrdiff_t>));
     BOOST_MPL_ASSERT((boost::is_same<traits::pointer, int*>));
