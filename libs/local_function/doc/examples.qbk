@@ -9,7 +9,7 @@
 
 This section lists some examples that use this library.
 
-[section GCC Lambdas (Without C++11)]
+[section GCC Lambdas (without C++11)]
 
 Combing local functions with the [@http://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html statement expression] extension of GCC compilers, it is possible to implement lambda functions for GCC compilers even without __CPP11__ support.
 
@@ -46,7 +46,7 @@ For example, consider the following assertion where by mistake we programmed `op
 
 Ideally this code will not compile instead this example not only compiles but the assertion even passes the run-time check and no error is generated at all.
 The __N1613__ paper introduces the idea of a /const-block/ which could be used to wrap the assertion above and catch the programming error at compile-time.
-Similarly, the following code will generate a compile-time error when `operator=` is mistakenly used instead of `operator==` because both `x` and `y` are made constants (using local functions) within the block of code performing the assertion (see also [@../../example/const_block_err.cpp =const_block_err.cpp=]):
+Similarly, the following code will generate a compile-time error when `operator=` is mistakenly used instead of `operator==` because both `x` and `y` are made constants (using local functions) within the block of code performing the assertion (see also [@../../example/const_block_error.cpp =const_block_error.cpp=]):
 
 [table
     [ [With Local Functions] [N1613 Const-Blocks] ]
@@ -129,7 +129,7 @@ Therefore, in many cases creating the __Boost_Phoenix__ function from global fun
 
 [section Closures]
 
-The following are examples of [@http://en.wikipedia.org/wiki/Closure_(computer_science) closures] that illustrate how to return local functions to the calling scope (and the relative precautions to take).
+The following are examples of [@http://en.wikipedia.org/wiki/Closure_(computer_science) closures] that illustrate how to return local functions to the calling scope (note how extra care is taken in order to ensure that all bound variables remain valid at the calling scope):
 
 [table
     [ [Files] ]

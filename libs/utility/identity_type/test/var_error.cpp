@@ -7,7 +7,7 @@
 
 #include <map>
 
-//[var_err
+//[var_error
 #define VAR(type, n) type var ## n
 
 VAR( int, 1 );                  // OK.

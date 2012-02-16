@@ -11,7 +11,7 @@
 #include <boost/noncopyable.hpp>
 #include <cassert>
 
-//[noncopyable_lambda_err
+//[noncopyable_lambda_error
 struct n: boost::noncopyable {
     int i;
     n(int _i): i(_i) {}

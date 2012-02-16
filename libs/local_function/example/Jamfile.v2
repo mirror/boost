@@ -11,12 +11,11 @@ project : requirements <library>/boost//unit_test_framework ;
 
 run add_global_functor.cpp ;
 run add_local_functor.cpp ;
-# I'm not sure why this does not compile... I've asked Booster.
-#run add_phoenix.cpp ;
+run add_phoenix.cpp ;
 
 run const_block.cpp ;
-# Compilation fails for debug but not for release builds so commented out.
-#compile-fail const_block_err.cpp ;
+compile-fail const_block_error.cpp : <variant>debug : ;
+run const_block_error.cpp : <variant>release : ;
 
 run expensive_copy_lambda.cpp ;
 run expensive_copy_local_function.cpp ;
@@ -33,12 +32,13 @@ run impl_tparam_tricks.cpp ;
 run n2529_this.cpp ;
 run n2550_find_if.cpp ;
 
-compile-fail noncopyable_lambda_err.cpp ;
+compile-fail noncopyable_lambda_error.cpp ;
 run noncopyable_local_function.cpp ;
 
 run phoenix_factorial.cpp ;
 run phoenix_factorial_local.cpp ;
 
+# Only compile and do not run these programs (they take a long time to run).
 exe profile_global_functor : profile_global_functor.cpp
     :   <library>/boost/chrono//boost_chrono
         <library>/boost/system//boost_system

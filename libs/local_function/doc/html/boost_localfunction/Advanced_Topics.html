@@ -330,17 +330,21 @@
 <p>
         Note that:
       </p>
-<div class="important"><table border="0" summary="Important">
+<div class="warning"><table border="0" summary="Warning">
 <tr>
-<td rowspan="2" align="center" valign="top" width="25"><img alt="[Important]" src="../../../../../doc/src/images/important.png"></td>
-<th align="left">Important</th>
+<td rowspan="2" align="center" valign="top" width="25"><img alt="[Warning]" src="../../../../../doc/src/images/warning.png"></td>
+<th align="left">Warning</th>
 </tr>
 <tr><td align="left" valign="top"><p>
           As with <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
           lambda</a> functions, programmers are responsible to ensure that bound
-          references are valid in any scope where the local function object is called.
-          (This might be tricky to verify in a program when local functions are returned
-          and called outside the local scope of their declaration.)
+          variables are valid in any scope where the local function object is called.
+          Returning and calling a local function outside its declaration scope will
+          lead to undefined behaviour if any of the bound variable is no longer valid
+          in the scope where the local function is called (see the __Example__ section
+          for more examples on the extra care needed when returning a local function
+          closure). It is always safe instead to call a local function within its
+          declaration scope.
         </p></td></tr>
 </table></div>
 <p>
@@ -1137,7 +1141,7 @@
         will generate a compile-time error. <sup>[<a name="boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" href="#ftn.boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" class="footnote">26</a>]</sup>
       </p>
 <p>
-        For example, the following code will not compile:
+        For example, the following code will not compile (see also <a href="../../../test/operator_error.cpp" target="_top"><code class="literal">operator_error.cpp</code></a>):
       </p>
 <p>
 </p>
@@ -1167,7 +1171,7 @@
         from within a local function to a label defined in the enclosing scope.
       </p>
 <p>
-        For example, the following will not compile:
+        For example, the following will not compile (see also <a href="../../../test/goto_error.cpp" target="_top"><code class="literal">goto_error.cpp</code></a>):
       </p>
 <p>
 </p>

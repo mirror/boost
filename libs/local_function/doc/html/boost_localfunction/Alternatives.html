@@ -340,7 +340,7 @@
         </li>
 </ul></div>
 <p>
-      For example, for non-copyable objects (see also <a href="../../../example/noncopyable_lambda_err.cpp" target="_top"><code class="literal">noncopyable_lambda_err.cpp</code></a>
+      For example, for non-copyable objects (see also <a href="../../../example/noncopyable_lambda_error.cpp" target="_top"><code class="literal">noncopyable_lambda_error.cpp</code></a>
       and <a href="../../../example/noncopyable_local_function.cpp" target="_top"><code class="literal">noncopyable_local_function.cpp</code></a>):
     </p>
 <div class="informaltable"><table class="table">
@@ -485,11 +485,12 @@
       When constant binding functionality is needed for <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
       lambda</a> functions, the best alternative might be to bind an extra local
       variable declared constant and initialized to the original variable (for example,
-      <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">n</span><span class="special">&amp;</span> <span class="identifier">const_x</span> <span class="special">=</span> <span class="identifier">x</span></code> and then
-      bind <code class="computeroutput"><span class="identifier">const_x</span></code> instead of <code class="computeroutput"><span class="identifier">x</span></code> to the lambda function). In many cases
-      the use of the extra constant variable <code class="computeroutput"><span class="identifier">const_x</span></code>
-      can be acceptable but in other cases (e.g., <span class="emphasis"><em>constant blocks</em></span>
-      presented in the <a class="link" href="Examples.html" title="Examples">Examples</a>
+      <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">decltype</span><span class="special">(</span><span class="identifier">x</span><span class="special">)&amp;</span>
+      <span class="identifier">const_x</span> <span class="special">=</span>
+      <span class="identifier">x</span></code> and then bind <code class="computeroutput"><span class="identifier">const_x</span></code>
+      instead of <code class="computeroutput"><span class="identifier">x</span></code> to the lambda
+      function). In many cases the use of an extra constant variable <code class="computeroutput"><span class="identifier">const_x</span></code> can be acceptable but in other cases
+      (e.g., <span class="emphasis"><em>constant blocks</em></span> presented in the <a class="link" href="Examples.html" title="Examples">Examples</a>
       section) it might be preferable to maintain the same variable name <code class="computeroutput"><span class="identifier">x</span></code> within the function body.
     </p>
 <p>
@@ -692,7 +693,7 @@
     <span class="comment">// Passed to template, `factor` by constant, and defined in expression.</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">3</span><span class="special">,</span> <span class="identifier">let</span><span class="special">(</span><span class="identifier">_f</span> <span class="special">=</span> <span class="identifier">cref</span><span class="special">(</span><span class="identifier">factor</span><span class="special">))[</span>
         <span class="comment">// Unfortunately, body cannot use C++ statement syntax.</span>
-        <span class="identifier">ref</span><span class="special">(</span><span class="identifier">sum</span><span class="special">)</span> <span class="special">+=</span> <span class="identifier">_f</span> <span class="special">*</span> <span class="identifier">_1</span> <span class="comment">// Access `sum` by reference.</span>
+        <span class="identifier">ref</span><span class="special">(</span><span class="identifier">sum</span><span class="special">)</span> <span class="special">+=</span> <span class="identifier">_f</span> <span class="special">*</span> <span class="identifier">_1</span><span class="special">,</span> <span class="identifier">_1</span> <span class="comment">// Access `sum` by reference.</span>
     <span class="special">]);</span>
 
     <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span> <span class="special">);</span>

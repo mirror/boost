@@ -573,7 +573,7 @@ private:
 #       define BOOST_SCOPE_EXIT_TPL(void_or_seq) \
             BOOST_SCOPE_EXIT(void_or_seq)
 #   endif
-#   if defined(BOOST_SCOPE_EXIT_AUX_LAMBDAS) /* C++11 only */ \
+#   if defined(BOOST_SCOPE_EXIT_AUX_LAMBDAS) /* C++11 only */
 #       define BOOST_SCOPE_EXIT_ALL(seq) \
             BOOST_SCOPE_EXIT_AUX_IMPL( \
                   BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \

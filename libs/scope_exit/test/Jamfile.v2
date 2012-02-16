@@ -15,23 +15,31 @@ project
         <link>static
     ;
 
+# Compile sequence syntax also forcing no variadic macros.
 test-suite world_tests
     :   [ run world.cpp ]
         [ run world_seq.cpp ]
+        [ run world_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
+                : world_seq_no_variadics ]
         
         [ run world_void.cpp ]
         
         [ run world_this.cpp ]
-        [ run world_this_seq.cpp ]
+        [ run world_this_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
+                : world_this_seq_no_variadics ]
         
         [ run world_tpl.cpp ]
-        [ run world_tpl_seq.cpp ]
+        [ run world_tpl_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
+                : world_tpl_seq_no_variadics ]
         
         [ run world_checkpoint.cpp ]
-        [ run world_checkpoint_seq.cpp ]
+        [ run world_checkpoint_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
+                : world_checkpoint_seq_no_variadics ]
         
         [ run world_checkpoint_all.cpp ]
-        [ run world_checkpoint_all_seq.cpp ]
+        [ run world_checkpoint_all_seq.cpp : :
+                : <define>BOOST_NO_VARIADIC_MACROS
+                : world_checkpoint_all_seq_no_variadics ]
         
         [ run world_lambda.cpp ]
     ;

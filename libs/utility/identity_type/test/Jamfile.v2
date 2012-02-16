@@ -7,7 +7,7 @@
 
 import testing ;
 
-compile-fail var_err.cpp ;
+compile-fail var_error.cpp ;
 run var.cpp ;
 run template.cpp ;
 run tmp_assert.cpp ;

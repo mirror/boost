@@ -8,9 +8,15 @@
 
 import testing ;
 
+# Compile sequence syntax also forcing no varadic macros.
+
 run try_catch.cpp ;
 run try_catch_seq.cpp ;
+run try_catch_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
+        : try_catch_seq_no_variadics : ;
 
 run scope_guard.cpp ;
 run scope_guard_seq.cpp ;
+run scope_guard_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
+        : scope_guard_seq_no_variadics : ;
 

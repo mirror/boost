@@ -23,11 +23,11 @@ run add_with_default.cpp ;
 
 run factorial.cpp ;
 run goto.cpp ;
-compile-fail goto_err.cpp ;
+compile-fail goto_error.cpp ;
 run macro_commas.cpp ;
 run nesting.cpp ;
 run operator.cpp ;
-compile-fail operator_err.cpp ;
+compile-fail operator_error.cpp ;
 run overload.cpp ;
 run ten_void.cpp ;
 run transform.cpp ;
@@ -40,6 +40,11 @@ run return_inc.cpp ;
 run return_setget.cpp ;
 run return_this.cpp ;
 
+# Compile sequence syntax also forcing no variadic macros.
 run add_seq.cpp ;
+run add_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
+        : add_seq_no_variadics : ;
 run seq.cpp ;
+run seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
+        : seq_no_variadics : ;
 

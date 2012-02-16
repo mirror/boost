@@ -9,7 +9,7 @@
 #define BOOST_TEST_MODULE TestGotoErr
 #include <boost/test/unit_test.hpp>
 
-//[goto_err
+//[goto_error
 int error(int x, int y) {
     int BOOST_LOCAL_FUNCTION(int x) {
         if(x <= 0) goto failure;    // Error: Cannot jump to enclosing scope.

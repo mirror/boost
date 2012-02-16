@@ -157,9 +157,10 @@ For example (see also [@../../test/return_assign.cpp =return_assign.cpp=]):
 
 Note that:
 
-[important
-As with __CPP11_lambda__ functions, programmers are responsible to ensure that bound references are valid in any scope where the local function object is called.
-(This might be tricky to verify in a program when local functions are returned and called outside the local scope of their declaration.)
+[warning
+As with __CPP11_lambda__ functions, programmers are responsible to ensure that bound variables are valid in any scope where the local function object is called.
+Returning and calling a local function outside its declaration scope will lead to undefined behaviour if any of the bound variable is no longer valid in the scope where the local function is called (see the __Example__ section for more examples on the extra care needed when returning a local function closure).
+It is always safe instead to call a local function within its declaration scope.
 ]
 
 In addition, a local function can bind and call another local function.
@@ -446,17 +447,17 @@ Naming a local function `operator...` will generate a compile-time error.
 This is the because a local function name must be a valid local variable name (the local variable used to hold the local functor) and operators cannot be used as local variable names.
 ]
 
-For example, the following code will not compile:
+For example, the following code will not compile (see also [@../../test/operator_error.cpp =operator_error.cpp=]):
 
-[operator_err]
+[operator_error]
 
 [h5 Goto]
 
 It is not possible to jump with a `goto` from within a local function to a label defined in the enclosing scope.
 
-For example, the following will not compile:
+For example, the following will not compile (see also [@../../test/goto_error.cpp =goto_error.cpp=]):
 
-[goto_err]
+[goto_error]
 
 [endsect]
 

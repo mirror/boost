@@ -21,16 +21,16 @@
 
 This library allows to wrap type expressions within round parenthesis so they can be passed to macros even when they contain commas.
 
-[import ../test/var_err.cpp]
+[import ../test/var_error.cpp]
 [import ../test/var.cpp]
 [import ../test/template.cpp]
 [import ../test/tmp_assert.cpp]
 
 [section Motivation]
 
-Consider the following macro which declares a variable named `var`/n/ with the specified /type/ (see also [@../../test/var_err.cpp =var_err.cpp=]):
+Consider the following macro which declares a variable named `var`/n/ with the specified /type/ (see also [@../../test/var_error.cpp =var_error.cpp=]):
 
-[var_err]
+[var_error]
 
 The first macro invocation works correctly declaring a variable named `var1` of type `int`.
 However, the second macro invocation fails generating a preprocessor error similar to the following:

@@ -96,11 +96,11 @@ Because a variable cannot be bound by constant reference, __CPP11_lambda__ funct
 Both constant reference and non-constant value binding are instead supported by this library.
 However, __CPP11_lambda__ functions provide a short-hand syntax to bind all variables in scope at once (`&` or `=`).
 
-For example, for non-copyable objects (see also [@../../example/noncopyable_lambda_err.cpp =noncopyable_lambda_err.cpp=] and [@../../example/noncopyable_local_function.cpp =noncopyable_local_function.cpp=]):
+For example, for non-copyable objects (see also [@../../example/noncopyable_lambda_error.cpp =noncopyable_lambda_error.cpp=] and [@../../example/noncopyable_local_function.cpp =noncopyable_local_function.cpp=]):
 
 [table
     [ [C++11 Lambda] [Boost.LocalFunction] ]
-    [ [[noncopyable_lambda_err]] [[noncopyable_local_function]] ]
+    [ [[noncopyable_lambda_error]] [[noncopyable_local_function]] ]
 ]
 
 Or, for objects with expensive copy operations (see also [@../../example/expensive_copy_lambda.cpp =expensive_copy_lambda.cpp=] and [@../../example/expensive_copy_local_function.cpp =expensive_copy_local_function.cpp=]):
@@ -110,8 +110,8 @@ Or, for objects with expensive copy operations (see also [@../../example/expensi
     [ [[expensive_copy_lambda]] [[expensive_copy_local_function]] ]
 ]
 
-When constant binding functionality is needed for __CPP11_lambda__ functions, the best alternative might be to bind an extra local variable declared constant and initialized to the original variable (for example, `const n& const_x = x` and then bind `const_x` instead of `x` to the lambda function).
-In many cases the use of the extra constant variable `const_x` can be acceptable but in other cases (e.g., /constant blocks/ presented in the __Examples__ section) it might be preferable to maintain the same variable name `x` within the function body.
+When constant binding functionality is needed for __CPP11_lambda__ functions, the best alternative might be to bind an extra local variable declared constant and initialized to the original variable (for example, `const decltype(x)& const_x = x` and then bind `const_x` instead of `x` to the lambda function).
+In many cases the use of an extra constant variable `const_x` can be acceptable but in other cases (e.g., /constant blocks/ presented in the __Examples__ section) it might be preferable to maintain the same variable name `x` within the function body.
 
 [*Local Functor]
 
