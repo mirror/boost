@@ -732,6 +732,15 @@ namespace boost
 
     namespace detail
     {
+        template <class CharT>
+        bool lc_iequal(const CharT* val, const CharT* lcase, const CharT* ucase, unsigned int len) {
+            for( unsigned int i=0; i < len; ++i ) {
+                if ( val[i] != lcase[i] && val[i] != ucase[i] ) return false;
+            }
+
+            return true;
+        }
+
         /* Returns true and sets the correct value if found NaN or Inf. */
         template <class CharT, class T>
         inline bool parse_inf_nan_impl(const CharT* begin, const CharT* end, T& value
@@ -755,7 +764,7 @@ namespace boost
             else if( *begin == plus ) ++begin;
 
             if( end-begin < 3 ) return false;
-            if( !memcmp(begin, lc_nan, 3*sizeof(CharT)) || !memcmp(begin, lc_NAN, 3*sizeof(CharT)) )
+            if( lc_iequal(begin, lc_nan, lc_NAN, 3) )
             {
                 begin += 3;
                 if (end != begin) /* It is 'nan(...)' or some bad input*/
@@ -772,13 +781,13 @@ namespace boost
             if (( /* 'INF' or 'inf' */
                   end-begin==3
                   &&
-                  (!memcmp(begin, lc_infinity, 3*sizeof(CharT)) || !memcmp(begin, lc_INFINITY, 3*sizeof(CharT)))
+                  lc_iequal(begin, lc_infinity, lc_INFINITY, 3)
                 )
                 ||
                 ( /* 'INFINITY' or 'infinity' */
                   end-begin==inifinity_size
                   &&
-                  (!memcmp(begin, lc_infinity, inifinity_size)|| !memcmp(begin, lc_INFINITY, inifinity_size))
+                  lc_iequal(begin, lc_infinity, lc_INFINITY, inifinity_size)
                 )
              )
             {
