@@ -389,7 +389,7 @@ public:
 
         if (element->child_count()) {
             size_type sz = (1 << element->child_count()) - 1;
-            binomial_heap children(element->children, sz);
+            binomial_heap children(value_comp(), element->children, sz);
             if (trees.empty())
                 swap(children);
             else
@@ -827,8 +827,8 @@ private:
     }
 
     // private constructor, just used in pop()
-    explicit binomial_heap(node_list_type & child_list, size_type size):
-        super_t(value_compare())
+    explicit binomial_heap(value_compare const & cmp, node_list_type & child_list, size_type size):
+        super_t(cmp)
     {
         size_holder::set_size(size);
         if (size)
