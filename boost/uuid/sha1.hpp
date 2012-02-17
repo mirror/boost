@@ -8,6 +8,7 @@
 // Revision History
 //  29 May 2007 - Initial Revision
 //  25 Feb 2008 - moved to namespace boost::uuids::detail
+//  10 Jan 2012 - can now handle the full size of messages (2^64 - 1 bits)
 
 // This is a byte oriented implementation
 
