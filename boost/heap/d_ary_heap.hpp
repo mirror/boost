@@ -448,7 +448,7 @@ struct select_dary_heap
  * - \c boost::heap::stable<>, defaults to \c stable<false>
  * - \c boost::heap::stability_counter_type<>, defaults to \c stability_counter_type<boost::uintmax_t>
  * - \c boost::heap::allocator<>, defaults to \c allocator<std::allocator<T> >
- * - \c boost::heap::mutable<>, defaults to \c mutable<false>
+ * - \c boost::heap::mutable_<>, defaults to \c mutable_<false>
  *
  */
 #ifdef BOOST_DOXYGEN_INVOKED
