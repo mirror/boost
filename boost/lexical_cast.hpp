@@ -799,6 +799,41 @@ namespace boost
             return false;
         }
 
+        template <class CharT, class T>
+        bool put_inf_nan_impl(CharT* begin, CharT*& end, const T& value
+                         , const CharT* lc_nan
+                         , const CharT* lc_infinity)
+        {
+            using namespace std;
+            const CharT minus = lcast_char_constants<CharT>::minus;
+            if ( (boost::math::isnan)(value) )
+            {
+                if ( (boost::math::signbit)(value) )
+                {
+                    *begin = minus;
+                    ++ begin;
+                }
+
+                memcpy(begin, lc_nan, 3 * sizeof(CharT));
+                end = begin + 3;
+                return true;
+            } else if ( (boost::math::isinf)(value) )
+            {
+                if ( (boost::math::signbit)(value) )
+                {
+                    *begin = minus;
+                    ++ begin;
+                }
+
+                memcpy(begin, lc_infinity, 3 * sizeof(CharT));
+                end = begin + 3;
+                return true;
+            }
+
+            return false;
+        }
+
+
 #ifndef BOOST_LCAST_NO_WCHAR_T
         template <class T>
         bool parse_inf_nan(const wchar_t* begin, const wchar_t* end, T& value)
@@ -808,6 +843,13 @@ namespace boost
                                , L"INFINITY", L"infinity"
                                , L'(', L')');
         }
+
+        template <class T>
+        bool put_inf_nan(wchar_t* begin, wchar_t*& end, const T& value)
+        {
+            return put_inf_nan_impl(begin, end, value, L"nan", L"infinity");
+        }
+
 #endif
 #ifndef BOOST_NO_CHAR16_T
         template <class T>
@@ -817,6 +859,12 @@ namespace boost
                                , u"NAN", u"nan"
                                , u"INFINITY", u"infinity"
                                , u'(', u')');
+        }
+
+        template <class T>
+        bool put_inf_nan(char16_t* begin, char16_t*& end, const T& value)
+        {
+            return put_inf_nan_impl(begin, end, value, u"nan", u"infinity");
         }
 #endif
 #ifndef BOOST_NO_CHAR32_T
@@ -828,6 +876,12 @@ namespace boost
                                , U"INFINITY", U"infinity"
                                , U'(', U')');
         }
+
+        template <class T>
+        bool put_inf_nan(char32_t* begin, char32_t*& end, const T& value)
+        {
+            return put_inf_nan_impl(begin, end, value, U"nan", U"infinity");
+        }
 #endif
 
         template <class CharT, class T>
@@ -838,73 +892,12 @@ namespace boost
                                , "INFINITY", "infinity"
                                , '(', ')');
         }
-#ifndef BOOST_LCAST_NO_WCHAR_T
-        template <class T>
-        bool put_inf_nan(wchar_t* begin, wchar_t*& end, const T& value)
-        {
-            using namespace std;
-            if ( (boost::math::isnan)(value) )
-            {
-                if ( (boost::math::signbit)(value) )
-                {
-                    memcpy(begin,L"-nan", sizeof(L"-nan"));
-                    end = begin + 4;
-                } else
-                {
-                    memcpy(begin,L"nan", sizeof(L"nan"));
-                    end = begin + 3;
-                }
-                return true;
-            } else if ( (boost::math::isinf)(value) )
-            {
-                if ( (boost::math::signbit)(value) )
-                {
-                    memcpy(begin,L"-inf", sizeof(L"-inf"));
-                    end = begin + 4;
-                } else
-                {
-                    memcpy(begin,L"inf", sizeof(L"inf"));
-                    end = begin + 3;
-                }
-                return true;
-            }
 
-            return false;
-        }
-#endif
         template <class CharT, class T>
         bool put_inf_nan(CharT* begin, CharT*& end, const T& value)
         {
-            using namespace std;
-            if ( (boost::math::isnan)(value) )
-            {
-                if ( (boost::math::signbit)(value) )
-                {
-                    memcpy(begin,"-nan", sizeof("-nan"));
-                    end = begin + 4;
-                } else
-                {
-                    memcpy(begin,"nan", sizeof("nan"));
-                    end = begin + 3;
-                }
-                return true;
-            } else if ( (boost::math::isinf)(value) )
-            {
-                if ( (boost::math::signbit)(value) )
-                {
-                    memcpy(begin,"-inf", sizeof("-inf"));
-                    end = begin + 4;
-                } else
-                {
-                    memcpy(begin,"inf", sizeof("inf"));
-                    end = begin + 3;
-                }
-                return true;
-            }
-
-            return false;
+            return put_inf_nan_impl(begin, end, value, "nan", "infinity");
         }
-
     }
 
 
