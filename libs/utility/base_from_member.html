@@ -174,16 +174,18 @@ value of zero if it is omitted.  The class template has a protected
 data member called <var>member</var> that the derived class can use
 for later base classes (or itself).</p>
 
-<p>If the variadic template arguments and r-value reference features of C++2011
-are present, there will be a single constructor template.  It implements
-&quot;perfect forwarding&quot; to the best constructor call of
-<code>member</code> (if any).  The constructor template is marked both
-<code>constexpr</code> and <code>explicit</code>.  The former will be ignored
-if the corresponding inner constructor call (of <code>member</code>) does not
-have the marker.  The latter binds the other way; always taking effect, even
-when the inner constructor call does not have the marker.  The constructor
-template propagates the <code>noexcept</code> status of the inner constructor
-call.</p>
+<p>If the appropriate features of C++2011 are present, there will be a single
+constructor template.  It implements &quot;perfect forwarding&quot; to the best
+constructor call of <code>member</code> (if any).  The constructor template is
+marked both <code>constexpr</code> and <code>explicit</code>.  The former will
+be ignored if the corresponding inner constructor call (of <code>member</code>)
+does not have the marker.  The latter binds the other way; always taking
+effect, even when the inner constructor call does not have the marker.  The
+constructor template propagates the <code>noexcept</code> status of the inner
+constructor call.  (The constructor template has a trailing parameter with a
+default value that disables the template when its signature is too close to the
+signatures of the automatically-defined non-template copy- and/or
+move-constructors of <code>base_from_member</code>.)</p>
 
 <p>On earlier-standard compilers, there is a default constructor and several
 constructor member templates.  These constructor templates can take as many
@@ -385,7 +387,7 @@ a constructor call but <code>std::nullptr_t</code> cannot.)</p>
 
 <hr>
 
-<p>Revised: 11 February 2012</p>
+<p>Revised: 16 February 2012</p>
 
 <p>Copyright 2001, 2003, 2004, 2012 Daryle Walker.  Use, modification, and distribution
 are subject to the Boost Software License, Version 1.0.  (See accompanying
