@@ -193,10 +193,10 @@ void mutable_fixup_interface(void)
     pq.update(t3);
 
     *t5 = 7;
-    pq.increase(t5, 7);
+    pq.increase(t5);
 
     *t1 = 0;
-    pq.decrease(t1, 0);
+    pq.decrease(t1);
 
     cout << "Priority Queue: update with fixup" << endl;
     while (!pq.empty()) {
