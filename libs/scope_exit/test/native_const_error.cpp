@@ -10,7 +10,7 @@
 
 int main(void) {
     int const i = 0;
-    BOOST_SCOPE_EXIT(&i) {
+    BOOST_SCOPE_EXIT( (&i) ) {
         i = 5;
     } BOOST_SCOPE_EXIT_END
 }

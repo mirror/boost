@@ -29,7 +29,7 @@ void tpl_long(
     type const remember(tval);
 
     {
-        BOOST_SCOPE_EXIT_TPL(&tval, &t, &tc, &tv, &tcv, &i) {
+        BOOST_SCOPE_EXIT_TPL( (&tval) (&t) (&tc) (&tv) (&tcv) (&i) ) {
             tval = 1;
             ++t;
             ++tv;
@@ -52,7 +52,7 @@ void tpl_vector(
     Vector const remember(vval);
 
     {
-        BOOST_SCOPE_EXIT_TPL(&vval, &v, &vc) {
+        BOOST_SCOPE_EXIT_TPL( (&vval) (&v) (&vc) ) {
             v.push_back(-Value);
             vval.push_back(Value);
         } BOOST_SCOPE_EXIT_END

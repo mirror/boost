@@ -51,9 +51,9 @@ BOOST_AUTO_TEST_CASE( test_world_lambda ) {
     BOOST_CHECK( w.persons_.size() == 1 );
 }
 
-#else // No lambdas (trivial test).
+#else
 
-int main(void) { return 0; }
+int main(void) { return 0; } // Trivial test.
 
 #endif
 

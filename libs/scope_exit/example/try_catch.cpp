@@ -6,6 +6,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/scope_exit
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/scope_exit.hpp>
 #include <iostream>
 
@@ -55,4 +58,10 @@ int main(void) {
     good();
     return 0;
 }
+
+#else
+
+int main(void) { return 0; } // Trivial program.
+
+#endif
 

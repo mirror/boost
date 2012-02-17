@@ -6,6 +6,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/scope_exit
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/scope_exit.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/typeof/std/vector.hpp>
@@ -53,4 +56,10 @@ BOOST_AUTO_TEST_CASE( test_world_this ) {
     w.add_person(p);
     BOOST_CHECK( w.persons_.size() == 1 );
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

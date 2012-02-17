@@ -33,13 +33,13 @@ void test_non_local(void) {
         BOOST_CHECK( Holder<>::g_long == 3 );
     } BOOST_SCOPE_EXIT_END
 
-    BOOST_SCOPE_EXIT(i) {
+    BOOST_SCOPE_EXIT( (i) ) {
         BOOST_CHECK( i == 0 );
         BOOST_CHECK( Holder<>::g_long == 3 );
         BOOST_CHECK( g_str == "try: g_str" );
     } BOOST_SCOPE_EXIT_END
 
-    BOOST_SCOPE_EXIT(&i) {
+    BOOST_SCOPE_EXIT( (&i) ) {
         BOOST_CHECK( i == 3 );
         BOOST_CHECK( Holder<>::g_long == 3 );
         BOOST_CHECK( g_str == "try: g_str" );
@@ -49,12 +49,12 @@ void test_non_local(void) {
         g_str = "";
         Holder<>::g_long = 1;
 
-        BOOST_SCOPE_EXIT(&i) {
+        BOOST_SCOPE_EXIT( (&i) ) {
             i = 1;
             g_str = "g_str";
         } BOOST_SCOPE_EXIT_END
 
-        BOOST_SCOPE_EXIT(&i) {
+        BOOST_SCOPE_EXIT( (&i) ) {
             try {
                 i = 2;
                 Holder<>::g_long = 2;
@@ -71,25 +71,25 @@ void test_non_local(void) {
     BOOST_CHECK( g_str == "g_str" );
     BOOST_CHECK( i == 1 ); // Check that first declared is executed last.
 
-    BOOST_SCOPE_EXIT(&i) {
+    BOOST_SCOPE_EXIT( (&i) ) {
         BOOST_CHECK( i == 3 );
         BOOST_CHECK( Holder<>::g_long == 3 );
         BOOST_CHECK( g_str == "try: g_str" );
     } BOOST_SCOPE_EXIT_END
 
-    BOOST_SCOPE_EXIT(i) {
+    BOOST_SCOPE_EXIT( (i) ) {
         BOOST_CHECK( i == 1 );
         BOOST_CHECK( Holder<>::g_long == 3 );
         BOOST_CHECK( g_str == "try: g_str" );
     } BOOST_SCOPE_EXIT_END
 
     try {
-        BOOST_SCOPE_EXIT(&i) {
+        BOOST_SCOPE_EXIT( (&i) ) {
             i = 3;
             g_str = "try: g_str";
         } BOOST_SCOPE_EXIT_END
         
-        BOOST_SCOPE_EXIT(&i) {
+        BOOST_SCOPE_EXIT( (&i) ) {
             i = 4;
             Holder<>::g_long = 3;
         } BOOST_SCOPE_EXIT_END
@@ -116,7 +116,7 @@ void test_types(void) {
     bool results[2] = {};
 
     {
-        BOOST_SCOPE_EXIT(&results, &pf, &rf) {
+        BOOST_SCOPE_EXIT( (&results) (&pf) (&rf) ) {
             results[0] = pf();
             results[1] = rf();
         }
@@ -132,7 +132,7 @@ void test_types(void) {
     BOOST_CHECK( results[1] == true );
 
     {
-        BOOST_SCOPE_EXIT(&results, pf) {
+        BOOST_SCOPE_EXIT( (&results) (pf) ) {
             results[0] = !pf();
             results[1] = !pf();
             pf = &foo2; // modify a copy

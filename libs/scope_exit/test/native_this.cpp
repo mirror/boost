@@ -19,7 +19,7 @@ BOOST_TYPEOF_REGISTER_TYPE(this_tester) // Register before capture of `this_`.
 struct this_tester {
     void check(void) {
         int target;
-        BOOST_SCOPE_EXIT(&target, this_) {
+        BOOST_SCOPE_EXIT( (&target) (this_) ) {
             BOOST_CHECK( this_->value_ == target );
         } BOOST_SCOPE_EXIT_END
 #if !defined(BOOST_NO_LAMBDAS) && !defined(BOOST_SCOPE_EXIT_CONFIG_NO_CPP11)

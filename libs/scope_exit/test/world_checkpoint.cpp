@@ -6,6 +6,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/scope_exit
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/scope_exit.hpp>
 #include <boost/foreach.hpp>
 #include <boost/typeof/typeof.hpp>
@@ -106,4 +109,10 @@ BOOST_AUTO_TEST_CASE( test_world_checkpoint ) {
     std::cout << oss.str() << std::endl;
     BOOST_CHECK( oss.str() == "world(3, { person(1, 2),  person(2, 2), })" );
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

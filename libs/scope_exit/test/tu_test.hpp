@@ -14,7 +14,9 @@ int tu2(void);
 inline int inline_f(void) {
     int i = 99;
     {
-        BOOST_SCOPE_EXIT(&i) { i = -1; } BOOST_SCOPE_EXIT_END
+        BOOST_SCOPE_EXIT( (&i) ) {
+            i = -1;
+        } BOOST_SCOPE_EXIT_END
     }
     return i;
 }
@@ -23,14 +25,18 @@ inline int inline_f(void) {
 template<class Int>
 Int template_f(Int i) {
     {
-        BOOST_SCOPE_EXIT_TPL(&i) { ++i; } BOOST_SCOPE_EXIT_END
+        BOOST_SCOPE_EXIT_TPL( (&i) ) {
+            ++i;
+        } BOOST_SCOPE_EXIT_END
     }
     return i;
 }
 #else
 inline int template_f(int i) {
     {
-        BOOST_SCOPE_EXIT(&i) { ++i; } BOOST_SCOPE_EXIT_END
+        BOOST_SCOPE_EXIT( (&i) ) {
+            ++i;
+        } BOOST_SCOPE_EXIT_END
     }
     return i;
 }

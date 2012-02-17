@@ -13,7 +13,7 @@
 
 int main(void) {
     std::string const volatile s;
-    BOOST_SCOPE_EXIT(&s) {
+    BOOST_SCOPE_EXIT( (&s) ) {
         s = "";
     } BOOST_SCOPE_EXIT_END
 }
