@@ -12,6 +12,8 @@
 #ifndef BOOST_ALGORITHM_PARTITION_COPY_HPP
 #define BOOST_ALGORITHM_PARTITION_COPY_HPP
 
+#include <utility>  // for make_pair
+
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 

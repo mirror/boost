@@ -62,7 +62,7 @@ using std::is_sorted;       // Section 25.4.1.5
     ForwardIterator is_sorted_until ( ForwardIterator first, ForwardIterator last )
     {
         typedef typename std::iterator_traits<ForwardIterator>::value_type value_type;
-        return is_sorted_until ( first, last, std::less_equal<value_type>());
+        return boost::algorithm::is_sorted_until ( first, last, std::less_equal<value_type>());
     }
 
 
@@ -76,7 +76,7 @@ using std::is_sorted;       // Section 25.4.1.5
     template <typename ForwardIterator, typename Pred>
     bool is_sorted ( ForwardIterator first, ForwardIterator last, Pred p )
     {
-        return is_sorted_until (first, last, p) == last;
+        return boost::algorithm::is_sorted_until (first, last, p) == last;
     }
 
 /// \fn is_sorted ( ForwardIterator first, ForwardIterator last )
@@ -88,7 +88,7 @@ using std::is_sorted;       // Section 25.4.1.5
     template <typename ForwardIterator>
     bool is_sorted ( ForwardIterator first, ForwardIterator last )
     {
-        return is_sorted_until (first, last) == last;
+        return boost::algorithm::is_sorted_until (first, last) == last;
     }
 #endif
 
@@ -109,7 +109,7 @@ using std::is_sorted;       // Section 25.4.1.5
         typename boost::range_iterator<const R> 
     >::type is_sorted_until ( const R &range, Pred p )
     {
-        return is_sorted_until ( boost::begin ( range ), boost::end ( range ), p );
+        return boost::algorithm::is_sorted_until ( boost::begin ( range ), boost::end ( range ), p );
     }
 
 
@@ -121,7 +121,7 @@ using std::is_sorted;       // Section 25.4.1.5
     template <typename R>
     typename boost::range_iterator<const R>::type is_sorted_until ( const R &range )
     {
-        return is_sorted_until ( boost::begin ( range ), boost::end ( range ));
+        return boost::algorithm::is_sorted_until ( boost::begin ( range ), boost::end ( range ));
     }
 
 
@@ -135,7 +135,7 @@ using std::is_sorted;       // Section 25.4.1.5
     template <typename R, typename Pred>
     bool is_sorted ( const R &range, Pred p )
     {
-        return is_sorted ( boost::begin ( range ), boost::end ( range ), p );
+        return boost::algorithm::is_sorted ( boost::begin ( range ), boost::end ( range ), p );
     }
 
 
@@ -147,7 +147,7 @@ using std::is_sorted;       // Section 25.4.1.5
     template <typename R, typename Pred>
     bool is_sorted ( const R &range )
     {
-        return is_sorted ( boost::begin ( range ), boost::end ( range ));
+        return boost::algorithm::is_sorted ( boost::begin ( range ), boost::end ( range ));
     }
 
 
@@ -201,7 +201,7 @@ using std::is_sorted;       // Section 25.4.1.5
     bool is_decreasing ( ForwardIterator first, ForwardIterator last )
     {
         typedef typename std::iterator_traits<ForwardIterator>::value_type value_type;
-        return is_sorted (first, last, std::greater_equal<value_type>());
+        return boost::algorithm::is_sorted (first, last, std::greater_equal<value_type>());
     }
 
 /// \fn is_decreasing ( const R &range )
@@ -264,7 +264,7 @@ using std::is_sorted;       // Section 25.4.1.5
     bool is_strictly_decreasing ( ForwardIterator first, ForwardIterator last )
     {
         typedef typename std::iterator_traits<ForwardIterator>::value_type value_type;
-        return is_sorted (first, last, std::greater<value_type>());
+        return boost::algorithm::is_sorted (first, last, std::greater<value_type>());
     }
 
 /// \fn is_strictly_decreasing ( const R &range )
