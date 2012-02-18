@@ -22,6 +22,23 @@ import testing ;
 
 # Clamp tests
      [ run clamp_test.cpp        : : : : clamp_test ]
+   
+# Cxx11 tests
+     [ run all_of_test.cpp        : : : : all_of_test ]
+     [ run any_of_test.cpp        : : : : any_of_test ]
+     [ run none_of_test.cpp       : : : : none_of_test ]
+     [ run one_of_test.cpp        : : : : one_of_test ]
+     
+     [ run ordered_test.cpp       : : : : ordered_test ]
+     [ run find_if_not_test1.cpp  : : : : find_if_not_test1 ]
+     [ run copy_n_test1.cpp       : : : : copy_n_test1 ]
+     [ run iota_test1.cpp         : : : : iota_test1 ]
+
+     [ run is_permutation_test1.cpp        : : : : is_permutation_test1 ]
+     [ run partition_point_test1.cpp       : : : : partition_point_test1 ]
+     [ run is_partitioned_test1.cpp        : : : : is_partitioned_test1 ]
+     [ run partition_copy_test1.cpp        : : : : partition_copy_test1 ]
+
    ;
 }
 
