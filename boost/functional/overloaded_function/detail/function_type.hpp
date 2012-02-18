@@ -29,7 +29,8 @@ namespace boost { namespace overloaded_function_detail {
 // It does not assume F typedef result_type, arg1_type, ... but needs typeof.
 template<typename F>
 class functor_type {
-    typedef BOOST_TYPEOF_TPL(&(F::operator())) call_ptr;
+    // NOTE: clang does not accept extra parenthesis `&(...)`.
+    typedef BOOST_TYPEOF_TPL(&F::operator()) call_ptr;
 public:
     typedef
         typename boost::function_types::function_type<
