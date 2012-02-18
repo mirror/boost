@@ -22,6 +22,7 @@
 #include <boost/mpl/push_front.hpp>
 #include <boost/typeof/typeof.hpp>
 
+// Do not use namespace ::detail because overloaded_function is already a class.
 namespace boost { namespace overloaded_function_detail {
 
 // Requires: F is a monomorphic functor (i.e., has non-template `operator()`).

@@ -33,6 +33,7 @@
     R (BOOST_PP_ENUM(BOOST_FUNCTIONAL_DETAIL_arity, \
             BOOST_FUNCTIONAL_DETAIL_arg_type, ~))
 
+// Do not use namespace ::detail because overloaded_function is already a class.
 namespace boost { namespace overloaded_function_detail {
 
 template<typename F>
