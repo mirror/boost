@@ -132,6 +132,8 @@ namespace boost { namespace unordered { namespace detail {
 
         typedef boost::unordered::detail::table_impl<types> table;
         typedef boost::unordered::detail::set_extractor<value_type> extractor;
+
+        typedef boost::unordered::detail::pick_policy::type policy;
     };
 
     template <typename A, typename K, typename M, typename H, typename P>
@@ -156,6 +158,8 @@ namespace boost { namespace unordered { namespace detail {
         typedef boost::unordered::detail::table_impl<types> table;
         typedef boost::unordered::detail::map_extractor<key_type, value_type>
             extractor;
+
+        typedef boost::unordered::detail::pick_policy::type policy;
     };
 
     template <typename Types>
@@ -217,7 +221,7 @@ namespace boost { namespace unordered { namespace detail {
                 Key const& k,
                 Pred const& eq) const
         {
-            std::size_t bucket_index = hash % this->bucket_count_;
+            std::size_t bucket_index = this->to_bucket(this->bucket_count_, hash);
             node_pointer n = this->get_start(bucket_index);
 
             for (;;)
@@ -232,7 +236,7 @@ namespace boost { namespace unordered { namespace detail {
                 }
                 else
                 {
-                    if (node_hash % this->bucket_count_ != bucket_index)
+                    if (this->to_bucket(this->bucket_count_, node_hash) != bucket_index)
                         return node_pointer();
                 }
 
@@ -298,16 +302,16 @@ namespace boost { namespace unordered { namespace detail {
             node_pointer n = a.release();
             n->hash_ = hash;
     
-            bucket_pointer b = this->get_bucket(hash % this->bucket_count_);
+            bucket_pointer b = this->get_bucket(this->to_bucket(this->bucket_count_, hash));
 
             if (!b->next_)
             {
                 previous_pointer start_node = this->get_previous_start();
                 
                 if (start_node->next_) {
-                    this->get_bucket(
-                        static_cast<node_pointer>(start_node->next_)->hash_ %
-                            this->bucket_count_)->next_ = n;
+                    this->get_bucket(this->to_bucket(this->bucket_count_,
+                        static_cast<node_pointer>(start_node->next_)->hash_)
+                    )->next_ = n;
                 }
 
                 b->next_ = start_node;
@@ -328,7 +332,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             typedef typename value_type::second_type mapped_type;
     
-            std::size_t hash = this->hash_function()(k);
+            std::size_t hash = this->hash(k);
             node_pointer pos = this->find_node(hash, k);
     
             if (pos) return pos->value();
@@ -389,7 +393,7 @@ namespace boost { namespace unordered { namespace detail {
         emplace_return emplace_impl(key_type const& k,
             BOOST_UNORDERED_EMPLACE_ARGS)
         {
-            std::size_t hash = this->hash_function()(k);
+            std::size_t hash = this->hash(k);
             node_pointer pos = this->find_node(hash, k);
     
             if (pos) return emplace_return(iterator(pos), false);
@@ -409,7 +413,7 @@ namespace boost { namespace unordered { namespace detail {
         emplace_return emplace_impl_with_node(node_constructor& a)
         {
             key_type const& k = this->get_key(a.value());
-            std::size_t hash = this->hash_function()(k);
+            std::size_t hash = this->hash(k);
             node_pointer pos = this->find_node(hash, k);
 
             if (pos) return emplace_return(iterator(pos), false);
@@ -473,7 +477,7 @@ namespace boost { namespace unordered { namespace detail {
         void insert_range_empty(node_constructor& a, key_type const& k,
             InputIt i, InputIt j)
         {
-            std::size_t hash = this->hash_function()(k);
+            std::size_t hash = this->hash(k);
             a.construct_node();
             a.construct_value2(*i);
             this->reserve_for_insert(this->size_ +
@@ -486,7 +490,7 @@ namespace boost { namespace unordered { namespace detail {
             InputIt i, InputIt j)
         {
             // No side effects in this initial code
-            std::size_t hash = this->hash_function()(k);
+            std::size_t hash = this->hash(k);
             node_pointer pos = this->find_node(hash, k);
     
             if (!pos) {
@@ -523,8 +527,8 @@ namespace boost { namespace unordered { namespace detail {
         {
             if(!this->size_) return 0;
 
-            std::size_t hash = this->hash_function()(k);
-            std::size_t bucket_index = hash % this->bucket_count_;
+            std::size_t hash = this->hash(k);
+            std::size_t bucket_index = this->to_bucket(this->bucket_count_, hash);
             bucket_pointer bucket = this->get_bucket(bucket_index);
 
             previous_pointer prev = bucket->next_;
@@ -535,7 +539,7 @@ namespace boost { namespace unordered { namespace detail {
                 if (!prev->next_) return 0;
                 std::size_t node_hash =
                     static_cast<node_pointer>(prev->next_)->hash_;
-                if (node_hash % this->bucket_count_ != bucket_index)
+                if (this->to_bucket(this->bucket_count_, node_hash) != bucket_index)
                     return 0;
                 if (node_hash == hash &&
                         this->key_eq()(k, this->get_key(
@@ -557,7 +561,7 @@ namespace boost { namespace unordered { namespace detail {
             node_pointer next = static_cast<node_pointer>(r->next_);
 
             bucket_pointer bucket = this->get_bucket(
-                r->hash_ % this->bucket_count_);
+                this->to_bucket(this->bucket_count_, r->hash_));
             previous_pointer prev = unlink_node(*bucket, r);
 
             this->fix_buckets(bucket, prev, next);
@@ -571,7 +575,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             if (r1 == r2) return r2;
 
-            std::size_t bucket_index = r1->hash_ % this->bucket_count_;
+            std::size_t bucket_index = this->to_bucket(this->bucket_count_, r1->hash_);
             previous_pointer prev = unlink_nodes(
                 *this->get_bucket(bucket_index), r1, r2);
             this->fix_buckets_range(bucket_index, prev, r1, r2);
@@ -689,7 +693,8 @@ namespace boost { namespace unordered { namespace detail {
                 previous_pointer prev)
         {
             node_pointer n = static_cast<node_pointer>(prev->next_);
-            bucket_pointer b = dst.get_bucket(n->hash_ % dst.bucket_count_);
+            bucket_pointer b = dst.get_bucket(dst.to_bucket(dst.bucket_count_,
+                    n->hash_));
 
             if (!b->next_) {
                 b->next_ = prev;

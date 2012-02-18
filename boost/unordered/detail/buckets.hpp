@@ -18,6 +18,7 @@
 #include <boost/type_traits/alignment_of.hpp>
 #include <boost/swap.hpp>
 #include <boost/assert.hpp>
+#include <boost/limits.hpp>
 
 #if defined(BOOST_MSVC)
 #pragma warning(push)
@@ -29,7 +30,8 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Types> struct table;
     template <typename NodePointer> struct bucket;
     struct ptr_bucket;
-    template <typename A, typename Bucket, typename Node> struct buckets;
+    template <typename A, typename Bucket, typename Node, typename Policy>
+    struct buckets;
 
     ///////////////////////////////////////////////////////////////////
     //
@@ -181,10 +183,95 @@ namespace boost { namespace unordered { namespace detail {
 
     ///////////////////////////////////////////////////////////////////
     //
+    // Hash Policy
+    //
+    // Don't really want buckets to derive from this, but will for now.
+
+    template <typename SizeT>
+    struct prime_policy
+    {
+        template <typename Hash, typename T>
+        static inline SizeT apply_hash(Hash const& hf, T const& x) {
+            return hf(x);
+        }
+
+        static inline SizeT to_bucket(SizeT bucket_count, SizeT hash) {
+            return hash % bucket_count;
+        }
+
+        static inline SizeT new_bucket_count(SizeT min) {
+            return boost::unordered::detail::next_prime(min);
+        }
+
+        static inline SizeT prev_bucket_count(SizeT max) {
+            return boost::unordered::detail::prev_prime(max);
+        }
+    };
+
+    template <typename SizeT>
+    struct mix64_policy
+    {
+        template <typename Hash, typename T>
+        static inline SizeT apply_hash(Hash const& hf, T const& x) {
+            SizeT key = hf(x);
+            key = (~key) + (key << 21); // key = (key << 21) - key - 1;
+            key = key ^ (key >> 24);
+            key = (key + (key << 3)) + (key << 8); // key * 265
+            key = key ^ (key >> 14);
+            key = (key + (key << 2)) + (key << 4); // key * 21
+            key = key ^ (key >> 28);
+            key = key + (key << 31);
+            return key;
+        }
+
+        static inline SizeT to_bucket(SizeT bucket_count, SizeT hash) {
+            return hash & (bucket_count - 1);
+        }
+
+        static inline SizeT new_bucket_count(SizeT min) {
+            if (min <= 4) return 4;
+            --min;
+            min |= min >> 1;
+            min |= min >> 2;
+            min |= min >> 4;
+            min |= min >> 8;
+            min |= min >> 16;
+            min |= min >> 32;
+            return min + 1;
+        }
+
+        static inline SizeT prev_bucket_count(SizeT max) {
+            max |= max >> 1;
+            max |= max >> 2;
+            max |= max >> 4;
+            max |= max >> 8;
+            max |= max >> 16;
+            max |= max >> 32;
+            return (max >> 1) + 1;
+        }
+    };
+
+    template <int digits, int radix>
+    struct pick_policy_impl {
+        typedef prime_policy<std::size_t> type;
+    };
+
+    template <>
+    struct pick_policy_impl<64, 2> {
+        typedef mix64_policy<std::size_t> type;
+    };
+
+    struct pick_policy :
+        pick_policy_impl<
+            std::numeric_limits<std::size_t>::digits,
+            std::numeric_limits<std::size_t>::radix> {};
+
+    ///////////////////////////////////////////////////////////////////
+    //
     // Buckets
 
-    template <typename A, typename Bucket, typename Node>
-    struct buckets
+    template <typename A, typename Bucket, typename Node, typename Policy>
+    struct buckets : Policy
     {
     private:
         buckets(buckets const&);
@@ -247,7 +334,7 @@ namespace boost { namespace unordered { namespace detail {
         std::size_t max_bucket_count() const
         {
             // -1 to account for the start bucket.
-            return boost::unordered::detail::prev_prime(
+            return this->prev_bucket_count(
                 bucket_allocator_traits::max_size(bucket_alloc()) - 1);
         }
 
@@ -292,7 +379,7 @@ namespace boost { namespace unordered { namespace detail {
             if (!ptr) return 0;
 
             std::size_t count = 0;
-            while(ptr && ptr->hash_ % this->bucket_count_ == index)
+            while(ptr && this->to_bucket(this->bucket_count_, ptr->hash_) == index)
             {
                 ++count;
                 ptr = static_cast<node_pointer>(ptr->next_);
@@ -487,7 +574,7 @@ namespace boost { namespace unordered { namespace detail {
             else
             {
                 bucket_pointer next_bucket = this->get_bucket(
-                    next->hash_ % this->bucket_count_);
+                    this->to_bucket(this->bucket_count_, next->hash_));
 
                 if (next_bucket != bucket)
                 {
@@ -513,7 +600,7 @@ namespace boost { namespace unordered { namespace detail {
                     if (n == end) return;
     
                     std::size_t new_bucket_index =
-                        n->hash_ % this->bucket_count_;
+                        this->to_bucket(this->bucket_count_, n->hash_);
                     if (bucket_index != new_bucket_index) {
                         bucket_index = new_bucket_index;
                         break;
@@ -529,7 +616,7 @@ namespace boost { namespace unordered { namespace detail {
                 if (n == end) break;
     
                 std::size_t new_bucket_index =
-                    n->hash_ % this->bucket_count_;
+                    this->to_bucket(this->bucket_count_, n->hash_);
                 if (bucket_index != new_bucket_index) {
                     bucket_index = new_bucket_index;
                     this->get_bucket(bucket_index)->next_ = previous_pointer();
@@ -538,7 +625,7 @@ namespace boost { namespace unordered { namespace detail {
     
             // Finally fix the bucket containing the trailing node.
             if (n) {
-                this->get_bucket(n->hash_ % this->bucket_count_)->next_
+                this->get_bucket(this->to_bucket(this->bucket_count_, n->hash_))->next_
                     = prev;
             }
         }
