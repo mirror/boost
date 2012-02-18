@@ -20,30 +20,23 @@
 #include <iostream>
 #include <sstream>
 
-class person; BOOST_TYPEOF_REGISTER_TYPE(person)
-class person {
-    friend class world;
-public:
+struct person {
     typedef unsigned int id_t;
     typedef unsigned int evolution_t;
 
-    person(void) : id_(0), evolution_(0) {}
+    id_t id;
+    evolution_t evolution;
+
+    person(void) : id(0), evolution(0) {}
 
     friend std::ostream& operator<<(std::ostream& o, person const& p) {
-        return o << "person(" << p.id_ << ", " << p.evolution_ << ")";
+        return o << "person(" << p.id << ", " << p.evolution << ")";
     }
-private:
-    id_t id_;
-    evolution_t evolution_;
 };
+BOOST_TYPEOF_REGISTER_TYPE(person)
 
-class world; BOOST_TYPEOF_REGISTER_TYPE(world)
-class world {
-public:
-    typedef unsigned int id_t;
-
+struct world {
     world(void) : next_id_(1) {}
-
     void add_person(person const& a_person);
 
     friend std::ostream& operator<<(std::ostream& o, world const& w) {
@@ -53,10 +46,12 @@ public:
         }
         return o << "})";
     }
+
 private:
-    id_t next_id_;
+    person::id_t next_id_;
     std::vector<person> persons_;
 };
+BOOST_TYPEOF_REGISTER_TYPE(world)
 
 //[world_checkpoint_all_seq
 void world::add_person(person const& a_person) {
@@ -64,28 +59,28 @@ void world::add_person(person const& a_person) {
 
     // This block must be no-throw.
     person& p = persons_.back();
-    person::evolution_t checkpoint = p.evolution_;
+    person::evolution_t checkpoint = p.evolution;
     BOOST_SCOPE_EXIT_ALL( (&) (checkpoint) (this_) ) {
-        if(checkpoint == p.evolution_) this_->persons_.pop_back();
+        if(checkpoint == p.evolution) this_->persons_.pop_back();
     } BOOST_SCOPE_EXIT_END
 
     // ...
 
-    checkpoint = ++p.evolution_;
+    checkpoint = ++p.evolution;
 
     // Assign new identifier to the person.
-    world::id_t const prev_id = p.id_;
-    p.id_ = next_id_++;
+    person::id_t const prev_id = p.id;
+    p.id = next_id_++;
     BOOST_SCOPE_EXIT_ALL( (=) (&p) (this) ) {
-        if(checkpoint == p.evolution_) {
-            this->next_id_ = p.id_;
-            p.id_ = prev_id;
+        if(checkpoint == p.evolution) {
+            this->next_id_ = p.id;
+            p.id = prev_id;
         }
     };
 
     // ...
 
-    checkpoint = ++p.evolution_;
+    checkpoint = ++p.evolution;
 }
 //]
 

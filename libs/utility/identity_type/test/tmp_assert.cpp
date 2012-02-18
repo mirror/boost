@@ -19,7 +19,7 @@
 template<typename T, bool b>
 struct abstract {
     static const bool value = b;
-    virtual void f(T const& x) = 0;
+    virtual void f(T const& x) = 0;     // Pure virtual function.
 };
 
 TMP_ASSERT(
@@ -38,13 +38,15 @@ TMP_ASSERT(
     /* use `BOOST_IDENTITY_TYPE` in macro definition instead of invocation */ \
     BOOST_STATIC_ASSERT(BOOST_IDENTITY_TYPE(parenthesized_metafunction)::value)
 
+// Specify only extra parenthesis `((...))`.
 TMP_ASSERT_PAREN(( boost::is_const<std::map<int, char> const> ));
+// Specify both the extra parenthesis `((...))` and `BOOST_IDENTITY_TYPE` macro.
 TMP_ASSERT( BOOST_IDENTITY_TYPE((boost::is_const<std::map<int, char> const>)) );
 //]
 
 //[tmp_assert_alternative_always
-TMP_ASSERT_PAREN(( boost::is_const<int const> )); // Always extra `()`.
-TMP_ASSERT( boost::is_const<int const> ); // No extra `()` and no macro.
+TMP_ASSERT_PAREN(( boost::is_const<int const> )); // Always extra `((...))`.
+TMP_ASSERT( boost::is_const<int const> ); // No extra `((...))` and no macro.
 //]
 
 int main() { return 0; }

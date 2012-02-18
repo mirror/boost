@@ -17,15 +17,18 @@
 #include <boost/test/unit_test.hpp>
 #include <vector>
 
-struct person; BOOST_TYPEOF_REGISTER_TYPE(peron)
 struct person {};
+BOOST_TYPEOF_REGISTER_TYPE(peron)
 
-template<typename Person> struct world; BOOST_TYPEOF_REGISTER_TEMPLATE(world, 1)
 template<typename Person>
 struct world {
     void add_person(Person const& a_person);
+    size_t population(void) const { return persons_.size(); }
+
+private:
     std::vector<Person> persons_;
 };
+BOOST_TYPEOF_REGISTER_TEMPLATE(world, 1)
 
 //[world_tpl
 template<typename Person>
@@ -47,7 +50,7 @@ BOOST_AUTO_TEST_CASE( test_world_tpl ) {
     world<person> w;
     person p;
     w.add_person(p);
-    BOOST_CHECK( w.persons_.size() == 1 );
+    BOOST_CHECK( w.population() == 1 );
 }
 
 #else

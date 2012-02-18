@@ -14,8 +14,8 @@
 #include <boost/test/unit_test.hpp>
 #include <vector>
 
-struct person; BOOST_TYPEOF_REGISTER_TYPE(person)
 struct person {};
+BOOST_TYPEOF_REGISTER_TYPE(person)
 
 struct world_t; BOOST_TYPEOF_REGISTER_TYPE(world_t)
 //[world_void

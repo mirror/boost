@@ -18,14 +18,17 @@
 #include <boost/config.hpp>
 #include <vector>
 
-struct person; BOOST_TYPEOF_REGISTER_TYPE(person)
 struct person {};
+BOOST_TYPEOF_REGISTER_TYPE(person)
 
-struct world; BOOST_TYPEOF_REGISTER_TYPE(world)
 struct world {
     void add_person(person const& a_person);
+    size_t population(void) const { return persons_.size(); }
+
+private:
     std::vector<person> persons_;
 };
+BOOST_TYPEOF_REGISTER_TYPE(world)
 
 void world::add_person(person const& a_person) {
     bool commit = false;
@@ -54,7 +57,7 @@ BOOST_AUTO_TEST_CASE( test_world_this ) {
     world w;
     person p;
     w.add_person(p);
-    BOOST_CHECK( w.persons_.size() == 1 );
+    BOOST_CHECK( w.population() == 1 );
 }
 
 #else
