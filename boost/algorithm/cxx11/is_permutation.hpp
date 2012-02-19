@@ -14,8 +14,8 @@
 
 #include <algorithm>    // for std::less, tie, mismatch and is_permutation (if available)
 #include <utility>      // for std::make_pair
+#include <functional>   // for std::equal_to
 #include <iterator>
-#include <iostream>
 
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
