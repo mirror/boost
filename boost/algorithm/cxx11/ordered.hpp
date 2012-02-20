@@ -168,7 +168,7 @@ using std::is_sorted;       // Section 25.4.1.5
     bool is_increasing ( ForwardIterator first, ForwardIterator last )
     {
         typedef typename std::iterator_traits<ForwardIterator>::value_type value_type;
-        return is_sorted (first, last, std::less_equal<value_type>());
+        return boost::algorithm::is_sorted (first, last, std::less_equal<value_type>());
     }
 
 

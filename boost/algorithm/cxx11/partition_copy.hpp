@@ -50,7 +50,7 @@ partition_copy ( InputIterator first, InputIterator last,
             *out_true++ = *first;
         else
             *out_false++ = *first;
-    return std::make_pair<OutputIterator1, OutputIterator2> ( out_true, out_false );
+    return std::pair<OutputIterator1, OutputIterator2> ( out_true, out_false );
 }
 #endif
 

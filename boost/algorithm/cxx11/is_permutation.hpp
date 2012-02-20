@@ -97,13 +97,12 @@ bool is_permutation ( ForwardIterator1 first1, ForwardIterator1 last1,
 ///  We will use the standard one if it is available,
 ///     otherwise we have our own implementation.
 template< class ForwardIterator1, class ForwardIterator2 >
-bool is_permutation ( ForwardIterator1 first, ForwardIterator1 last,
-                            ForwardIterator2 first2 )
+bool is_permutation ( ForwardIterator1 first, ForwardIterator1 last, ForwardIterator2 first2 )
 {
 //  How should I deal with the idea that ForwardIterator1::value_type
 //  and ForwardIterator2::value_type could be different? Define my own comparison predicate?
     return boost::algorithm::is_permutation ( first, last, first2,
-                          std::equal_to<typename ForwardIterator1::value_type> ());
+                          std::equal_to<typename std::iterator_traits<ForwardIterator1>::value_type> ());
 }
 
 #endif
