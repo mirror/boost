@@ -13,13 +13,13 @@
 #include <iostream>
 
 struct file {
-    file() : open_(false) {}
+    file(void) : open_(false) {}
     file(char const* path) : open_(false) { open(path); }
 
     void open(char const* path) { open_ = true; }
     void close(void) { open_ = false; }
-    
     bool is_open(void) const { return open_; }
+
 private:
     bool open_;
 };

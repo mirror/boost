@@ -15,7 +15,7 @@
 #include <vector>
 
 struct person {};
-BOOST_TYPEOF_REGISTER_TYPE(person)
+BOOST_TYPEOF_REGISTER_TYPE(peron)
 
 template<typename Person>
 struct world {
@@ -27,7 +27,6 @@ private:
 };
 BOOST_TYPEOF_REGISTER_TEMPLATE(world, 1)
 
-//[world_tpl_seq
 template<typename Person>
 void world<Person>::add_person(Person const& a_person) {
     bool commit = false;
@@ -41,12 +40,11 @@ void world<Person>::add_person(Person const& a_person) {
 
     commit = true;
 }
-//]
 
-BOOST_AUTO_TEST_CASE( test_world_tpl_seq ) {
+BOOST_AUTO_TEST_CASE(test_world_tpl_seq) {
     world<person> w;
     person p;
     w.add_person(p);
-    BOOST_CHECK( w.population() == 1 );
+    BOOST_CHECK(w.population() == 1);
 }
 

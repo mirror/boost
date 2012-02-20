@@ -23,7 +23,7 @@
 struct person {
     typedef unsigned int id_t;
     typedef unsigned int evolution_t;
-
+    
     id_t id;
     evolution_t evolution;
 
@@ -53,7 +53,6 @@ private:
 };
 BOOST_TYPEOF_REGISTER_TYPE(world)
 
-//[world_checkpoint_all_seq
 void world::add_person(person const& a_person) {
     persons_.push_back(a_person);
 
@@ -76,25 +75,24 @@ void world::add_person(person const& a_person) {
             this->next_id_ = p.id;
             p.id = prev_id;
         }
-    };
+    }; // Use `;` instead of `SCOPE_EXIT_END` (C++11).
 
     // ...
 
     checkpoint = ++p.evolution;
 }
-//]
 
-BOOST_AUTO_TEST_CASE( test_world_checkpoint_all_seq ) {
+BOOST_AUTO_TEST_CASE(test_world_checkpoint_all_seq) {
     person adam, eva;
     std::ostringstream oss;
     oss << adam;
     std::cout << oss.str() << std::endl;
-    BOOST_CHECK( oss.str() == "person(0, 0)" );
+    BOOST_CHECK(oss.str() == "person(0, 0)");
 
     oss.str("");
     oss << eva;
     std::cout << oss.str() << std::endl;
-    BOOST_CHECK( oss.str() == "person(0, 0)" );
+    BOOST_CHECK(oss.str() == "person(0, 0)");
 
     world w;
     w.add_person(adam);
@@ -102,12 +100,12 @@ BOOST_AUTO_TEST_CASE( test_world_checkpoint_all_seq ) {
     oss.str("");
     oss << w;
     std::cout << oss.str() << std::endl;
-    BOOST_CHECK( oss.str() == "world(3, { person(1, 2),  person(2, 2), })" );
+    BOOST_CHECK(oss.str() == "world(3, { person(1, 2),  person(2, 2), })");
 }
 
-#else // No lambdas (trivial test).
+#else
 
-int main(void) { return 0; }
+int main(void) { return 0; } // Trivial test.
 
 #endif
 

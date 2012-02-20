@@ -45,11 +45,11 @@ void world::add_person(person const& a_person) {
 }
 //]
 
-BOOST_AUTO_TEST_CASE( test_world ) {
+BOOST_AUTO_TEST_CASE(test_world) {
     world w;
     person p;
     w.add_person(p);
-    BOOST_CHECK( w.population() == 1 );
+    BOOST_CHECK(w.population() == 1);
 }
 
 #else

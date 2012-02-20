@@ -53,11 +53,11 @@ void world::add_person(person const& a_person) {
     commit = true;
 }
 
-BOOST_AUTO_TEST_CASE( test_world_this ) {
+BOOST_AUTO_TEST_CASE(test_world_this) {
     world w;
     person p;
     w.add_person(p);
-    BOOST_CHECK( w.population() == 1 );
+    BOOST_CHECK(w.population() == 1);
 }
 
 #else

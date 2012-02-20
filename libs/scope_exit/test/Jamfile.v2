@@ -15,35 +15,23 @@ project
         <link>static
     ;
 
-# Compile sequence syntax also forcing no variadic macros.
+# Run variadic and sequence syntax (also forcing no variadic macros).
+rule run-vaseq ( file_name )
+{
+    run $(file_name).cpp ;
+    run $(file_name)_seq.cpp ;
+    run $(file_name)_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS :
+            $(file_name)_seq_nova : ;
+}
+
 test-suite world_tests
-    :   [ run world.cpp ]
-        [ run world_seq.cpp ]
-        [ run world_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
-                : world_seq_no_variadics ]
-        
-        [ run world_void.cpp ]
-        
-        [ run world_this.cpp ]
-        [ run world_this_seq.cpp ]
-        [ run world_this_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
-                : world_this_seq_no_variadics ]
-        
-        [ run world_tpl.cpp ]
-        [ run world_tpl_seq.cpp ]
-        [ run world_tpl_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
-                : world_tpl_seq_no_variadics ]
-        
-        [ run world_checkpoint.cpp ]
-        [ run world_checkpoint_seq.cpp ]
-        [ run world_checkpoint_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS
-                : world_checkpoint_seq_no_variadics ]
-        
-        [ run world_checkpoint_all.cpp ]
-        # SCOPE_EXIT_ALL requires C++11 so do not compile forcing no variadics.
-        [ run world_checkpoint_all_seq.cpp ]
-        
+    :   [ run-vaseq world ]
+        [ run-vaseq world_checkpoint ]
+        [ run-vaseq world_checkpoint_all ]
         [ run world_lambda.cpp ]
+        [ run-vaseq world_this ]
+        [ run-vaseq world_tpl ]
+        [ run world_void.cpp ]
     ;
 
 test-suite native_tests

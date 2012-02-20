@@ -32,17 +32,13 @@ void world::add_person(person const& a_person) {
 
     persons_.push_back(a_person);
 #ifdef BOOST_NO_LAMBDAS
-    //[world_this_
-    BOOST_SCOPE_EXIT( (&commit) (this_) ) { // Capture object `this_`.
+    BOOST_SCOPE_EXIT( (&commit) (this_) ) {
         if(!commit) this_->persons_.pop_back();
     } BOOST_SCOPE_EXIT_END
-    //]
 #else
-    //[world_this
-    BOOST_SCOPE_EXIT( (&commit) (this) ) { // Use `this` (C++11).
+    BOOST_SCOPE_EXIT( (&commit) (this) ) {
         if(!commit) this->persons_.pop_back();
-    }; // Use `;` instead of `BOOST_SCOPE_EXIT_END` (C++11).
-    //]
+    };
 #endif
 
     // ...
@@ -50,10 +46,10 @@ void world::add_person(person const& a_person) {
     commit = true;
 }
 
-BOOST_AUTO_TEST_CASE( test_world_this_seq ) {
+BOOST_AUTO_TEST_CASE(test_world_this_seq) {
     world w;
     person p;
     w.add_person(p);
-    BOOST_CHECK( w.population() == 1 );
+    BOOST_CHECK(w.population() == 1);
 }
 
