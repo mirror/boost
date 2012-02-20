@@ -46,9 +46,9 @@ The local function parameters are passed to the [macroref BOOST_LOCAL_FUNCTION] 
     BOOST_LOCAL_FUNCTION(``[^/parameter-type1 parameter-name1/]``,`` [^/parameter-type2 parameter-name2, .../]``)
 
 The maximum number of parameters that can be passed to a local function is controlled at compile-time by the configuration macro [macroref BOOST_LOCAL_FUNCTION_CONFIG_ARITY_MAX].
-For example, let's program a local function named `add` that adds together two integers `x` and `y` (see also [@../../test/add_params.cpp =add_params.cpp=]):
+For example, let's program a local function named `add` that adds together two integers `x` and `y` (see also [@../../test/add_params_only.cpp =add_params_only.cpp=]):
 
-[add_params]
+[add_params_only]
 
 If the local function has no parameter, it is possible to pass `void` to the [macroref BOOST_LOCAL_FUNCTION] macro (similarly to the C syntax that allows to use [^['result-type function-name]]`(void)` to declare a function with no parameter):
 [footnote

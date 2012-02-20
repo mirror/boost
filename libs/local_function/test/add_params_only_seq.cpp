@@ -6,10 +6,10 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestAddParamsSeq
+#define BOOST_TEST_MODULE TestAddParamsOnlySeq
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_add_params_seq) {
+BOOST_AUTO_TEST_CASE(test_add_params_only_seq) {
     int BOOST_LOCAL_FUNCTION( (int x) (int y) ) {
         return x + y;
     } BOOST_LOCAL_FUNCTION_NAME(add)

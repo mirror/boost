@@ -65,7 +65,7 @@
 [import ../test/add.cpp]
 [import ../test/add_seq.cpp]
 [import ../test/add_lambda.cpp]
-[import ../test/add_params.cpp]
+[import ../test/add_params_only.cpp]
 [import ../test/ten_void.cpp]
 [import ../test/add_this.cpp]
 [import ../test/add_template.cpp]

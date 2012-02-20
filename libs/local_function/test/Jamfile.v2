@@ -33,7 +33,7 @@ run-vaseq add_default ;
 run-vaseq add_except ;
 run-vaseq add_inline ;
 run add_lambda.cpp ;
-run-vaseq add_params ;
+run-vaseq add_params_only ;
 run-vaseq add_template ;
 run-vaseq add_this ;
 run-vaseq add_typed ;
