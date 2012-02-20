@@ -5,11 +5,14 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #define BOOST_TEST_MODULE TestAddExcept
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_CASE( test_except ) {
+BOOST_AUTO_TEST_CASE(test_except) {
     //[add_except
     double sum = 0.0;
     int factor = 10;
@@ -21,7 +24,13 @@ BOOST_AUTO_TEST_CASE( test_except ) {
 
     add(100);
     //]
-
-    BOOST_CHECK( sum == 1000 );
+    
+    BOOST_CHECK(sum == 1000);
 }
+
+#else
+
+int main(void) { return 0; }
+
+#endif
 

@@ -5,6 +5,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #define BOOST_TEST_MODULE TestFactorial
 #include <boost/test/unit_test.hpp>
@@ -32,14 +35,20 @@ struct calculator {
 };
 //]
 
-BOOST_AUTO_TEST_CASE( test_factorial ) {
+BOOST_AUTO_TEST_CASE(test_factorial) {
     std::vector<int> v(3);
     v[0] = 1; v[1] = 3; v[2] = 4;
 
     calculator calc;
     calc.factorials(v);
-    BOOST_CHECK( calc.results[0] ==  1 );
-    BOOST_CHECK( calc.results[1] ==  6 );
-    BOOST_CHECK( calc.results[2] == 24 );
+    BOOST_CHECK(calc.results[0] == 1);
+    BOOST_CHECK(calc.results[1] == 6);
+    BOOST_CHECK(calc.results[2] == 24);
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

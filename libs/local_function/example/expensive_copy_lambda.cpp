@@ -34,7 +34,7 @@ int main(void) {
 
 #else // NO_LAMBDAS
 
-int main(void) { return 0; } // Trivial program.
+int main(void) { return 0; } // Trivial test.
 
 #endif // NO_LAMBDAS
 

@@ -5,20 +5,23 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #define BOOST_TEST_MODULE TestTranform
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 #include <vector>
 
-BOOST_AUTO_TEST_CASE( test_transform ) {
+BOOST_AUTO_TEST_CASE(test_transform) {
     //[transform
     int offset = 5;
     std::vector<int> v;
     std::vector<int> w;
 
     for(int i = 1; i <= 2; ++i) v.push_back(i * 10);
-    BOOST_CHECK( v[0] == 10 ); BOOST_CHECK( v[1] == 20 );
+    BOOST_CHECK(v[0] == 10); BOOST_CHECK(v[1] == 20);
     w.resize(v.size());
 
     int BOOST_LOCAL_FUNCTION(const bind& offset, int i) {
@@ -26,7 +29,7 @@ BOOST_AUTO_TEST_CASE( test_transform ) {
     } BOOST_LOCAL_FUNCTION_NAME(inc)
     
     std::transform(v.begin(), v.end(), w.begin(), inc);
-    BOOST_CHECK( w[0] == 16 ); BOOST_CHECK( w[1] == 26 );
+    BOOST_CHECK(w[0] == 16); BOOST_CHECK(w[1] == 26);
 
     int BOOST_LOCAL_FUNCTION(bind& inc, int i, int j) {
         return inc(i + j); // Call the other bound local function.
@@ -34,7 +37,13 @@ BOOST_AUTO_TEST_CASE( test_transform ) {
     
     offset = 0;
     std::transform(v.begin(), v.end(), w.begin(), v.begin(), inc_sum);
-    BOOST_CHECK( v[0] == 27 ); BOOST_CHECK( v[1] == 47 );
+    BOOST_CHECK(v[0] == 27); BOOST_CHECK(v[1] == 47);
     //]
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

@@ -8,7 +8,7 @@
 #define BOOST_TEST_MODULE TestAddLocalFunctor
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_CASE( test_add_local_functor ) 
+BOOST_AUTO_TEST_CASE(test_add_local_functor) 
 //[add_local_functor
 {
     int sum = 0, factor = 10;
@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE( test_add_local_functor )
     // Unfortunately, cannot pass as template parameter to `std::for_each`.
     for(size_t i = 0; i < 2; ++i) add(nums[i]);
 
-    BOOST_CHECK( sum == 60 );
+    BOOST_CHECK(sum == 60);
 }
 //]
 

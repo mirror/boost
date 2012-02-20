@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <iostream>
     
-BOOST_AUTO_TEST_CASE( test_add_phoenix )
+BOOST_AUTO_TEST_CASE(test_add_phoenix)
 //[add_phoenix
 {
     using boost::phoenix::let;
@@ -29,7 +29,7 @@ BOOST_AUTO_TEST_CASE( test_add_phoenix )
         ref(sum) += _f * _1, _1 // Access `sum` by reference.
     ]);
 
-    BOOST_CHECK( sum == 60 );
+    BOOST_CHECK(sum == 60);
 }
 //]
 

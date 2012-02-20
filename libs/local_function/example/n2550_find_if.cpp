@@ -16,9 +16,9 @@ struct employee {
     explicit employee(const int& a_salary): salary(a_salary) {}
 };
 
-BOOST_AUTO_TEST_CASE( test_n2550_find_if ) {
+BOOST_AUTO_TEST_CASE(test_n2550_find_if) {
     std::vector<employee> employees;
-    employees.push_back(employee( 85000));
+    employees.push_back(employee(85000));
     employees.push_back(employee(100000));
     employees.push_back(employee(120000));
 
@@ -35,7 +35,7 @@ BOOST_AUTO_TEST_CASE( test_n2550_find_if ) {
     std::vector<employee>::iterator i = std::find_if(
             employees.begin(), employees.end(), between);
 
-    BOOST_CHECK( i != employees.end() );
-    BOOST_CHECK( i->salary >= min_salary && i->salary < u_limit );
+    BOOST_CHECK(i != employees.end());
+    BOOST_CHECK(i->salary >= min_salary && i->salary < u_limit);
 }
 

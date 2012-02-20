@@ -22,12 +22,12 @@ void hack(int* array, int size) {
     intermediate(store, size);
 }
 
-BOOST_AUTO_TEST_CASE( test_gcc_store ) {
+BOOST_AUTO_TEST_CASE(test_gcc_store) {
     int nums[] = {1, 2, 3};
     hack(nums, 3);
 
-    BOOST_CHECK( nums[0] ==  1 );
-    BOOST_CHECK( nums[1] ==  2 );
-    BOOST_CHECK( nums[2] == -1 );
+    BOOST_CHECK(nums[0] == 1);
+    BOOST_CHECK(nums[1] == 2);
+    BOOST_CHECK(nums[2] == -1);
 }
 

@@ -6,25 +6,25 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifdef BOOST_NO_AUTO_DECLARATIONS // No C++11 auto declarations.
+#if defined(BOOST_NO_AUTO_DECLARATIONS) && !defined(BOOST_NO_VARIADIC_MACROS)
 
 #include <boost/local_function.hpp>
 #define BOOST_TEST_MODULE TestAddClassifiers
 #include <boost/test/unit_test.hpp>
 
-BOOST_AUTO_TEST_CASE( test_add_classifiers ) {
+BOOST_AUTO_TEST_CASE(test_add_classifiers) {
     //[add_classifiers
     int BOOST_LOCAL_FUNCTION(auto int x, register int y) { // Classifiers.
         return x + y;
     } BOOST_LOCAL_FUNCTION_NAME(add)
     //]
 
-    BOOST_CHECK( add(1, 2) == 3 );
+    BOOST_CHECK(add(1, 2) == 3);
 }
 
-#else // C++11 auto declarations.
+#else
 
-int main(void) { return 0; } // Trivial program.
+int main(void) { return 0; } // Trivial test.
 
 #endif
 

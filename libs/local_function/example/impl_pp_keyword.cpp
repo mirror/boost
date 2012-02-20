@@ -20,9 +20,9 @@
         tokens \
     )))
 
-BOOST_AUTO_TEST_CASE( test_impl_pp_keyword ) {
-    BOOST_CHECK( IS_THIS_BACK(const bind this_) == 1 );
-    BOOST_CHECK( IS_THIS_BACK(const bind& x) == 0 );
+BOOST_AUTO_TEST_CASE(test_impl_pp_keyword) {
+    BOOST_CHECK(IS_THIS_BACK(const bind this_) == 1);
+    BOOST_CHECK(IS_THIS_BACK(const bind& x) == 0);
 }
 //]
 

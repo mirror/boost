@@ -5,14 +5,16 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
-//[ add_function_inline_cpp
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #define BOOST_TEST_MODULE TestAddInline
 #include <boost/test/unit_test.hpp>
 #include <vector>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE( test_add_inline ) {
+BOOST_AUTO_TEST_CASE(test_add_inline) {
     //[add_inline
     int sum = 0, factor = 10;
 
@@ -26,6 +28,12 @@ BOOST_AUTO_TEST_CASE( test_add_inline ) {
     for(size_t i = 0; i < v.size(); ++i) add(v[i]); // Cannot use for_each.
     //]
 
-    BOOST_CHECK( sum == 1000 );
+    BOOST_CHECK(sum == 1000);
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

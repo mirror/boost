@@ -34,7 +34,7 @@ private:
     interface* func_;
 };
 
-BOOST_AUTO_TEST_CASE( test_impl_tparam_tricks ) {
+BOOST_AUTO_TEST_CASE(test_impl_tparam_tricks) {
     int sum = 0, factor = 10;
 
     // Local class for local function.
@@ -62,11 +62,11 @@ BOOST_AUTO_TEST_CASE( test_impl_tparam_tricks ) {
     std::vector<int> v(10);
     std::fill(v.begin(), v.end(), 1);
     
-//  std::for_each(v.begin(), v.end(), add_local); // Error but OK on C++11.
+    // std::for_each(v.begin(), v.end(), add_local); // Error but OK on C++11.
     std::for_each(v.begin(), v.end(), add_casting); // OK.
     std::for_each(v.begin(), v.end(), add_virtual); // OK.
 
-    BOOST_CHECK( sum == 200 );
+    BOOST_CHECK(sum == 200);
 }
 //]
 

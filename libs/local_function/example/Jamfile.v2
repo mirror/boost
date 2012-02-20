@@ -38,7 +38,7 @@ run noncopyable_local_function.cpp ;
 run phoenix_factorial.cpp ;
 run phoenix_factorial_local.cpp ;
 
-# Only compile and do not run these programs (they take a long time to run).
+# Only compile but do not run profiling programs (they take a long time to run).
 exe profile_global_functor : profile_global_functor.cpp
     :   <library>/boost/chrono//boost_chrono
         <library>/boost/system//boost_system

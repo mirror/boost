@@ -29,9 +29,9 @@ BOOST_AUTO_TEST_CASE( test_add_lambda )
 }
 //]
 
-#else // NO_LAMBDAS
+#else
 
-int main(void) { return 0; } // Trivial program.
+int main(void) { return 0; } // Trivial test.
 
-#endif // NO_LAMBDAS
+#endif
 

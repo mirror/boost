@@ -27,14 +27,14 @@ struct factorial_impl { // Phoenix function from global functor.
     }
 };
 
-BOOST_AUTO_TEST_CASE( test_phoenix_factorial ) {
+BOOST_AUTO_TEST_CASE(test_phoenix_factorial) {
     using boost::phoenix::arg_names::arg1;
     
     boost::phoenix::function<factorial_impl> factorial;
     
     int i = 4;
-    BOOST_CHECK( factorial(i)() == 24 );        // Call.
-    BOOST_CHECK( factorial(arg1)(i) == 24 );    // Lazy call.
+    BOOST_CHECK(factorial(i)() == 24);      // Call.
+    BOOST_CHECK(factorial(arg1)(i) == 24);  // Lazy call.
 }
 //]
 

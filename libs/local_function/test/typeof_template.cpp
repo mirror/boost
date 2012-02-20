@@ -5,6 +5,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include "addable.hpp"
 #include <boost/local_function.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -30,7 +33,13 @@ T calculate(const T& factor) {
 }
 //]
 
-BOOST_AUTO_TEST_CASE( test_typeof_template ) {
-    BOOST_CHECK( calculate(10) == 60 );
+BOOST_AUTO_TEST_CASE(test_typeof_template) {
+    BOOST_CHECK(calculate(10) == 60);
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

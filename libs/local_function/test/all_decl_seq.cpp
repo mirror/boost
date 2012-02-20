@@ -7,7 +7,7 @@
 
 #include <boost/local_function.hpp>
 
-//[seq
+// Compile all local function declaration combinations.
 struct s {
     void f(double p = 1.23, double q = -1.23) {
         { // Only params.
@@ -157,8 +157,7 @@ struct s {
         }
     }
 };
-//]
-    
+
 int main(void) {
     s().f();
     return 0;

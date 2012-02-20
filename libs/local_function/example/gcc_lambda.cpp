@@ -13,7 +13,7 @@
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE( test_gcc_lambda ) {
+BOOST_AUTO_TEST_CASE(test_gcc_lambda) {
     //[gcc_lambda
     int val = 2;
     int nums[] = {1, 2, 3};
@@ -26,13 +26,13 @@ BOOST_AUTO_TEST_CASE( test_gcc_lambda ) {
     );
     //]
 
-    BOOST_CHECK( iter != end );
-    BOOST_CHECK( *iter == val );
+    BOOST_CHECK(iter != end);
+    BOOST_CHECK(*iter == val);
 }
 
-#else // GCC || !NO_LAMBDAS
+#else
 
-int main(void) { return 0; }
+int main(void) { return 0; } // Trivial test.
 
-#endif // GCC || !NO_LAMBDAS
+#endif
 

@@ -5,6 +5,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #define BOOST_TEST_MODULE TestGoto
 #include <boost/test/unit_test.hpp>
@@ -22,7 +25,13 @@ int error(int x, int y) {
 }
 //]
 
-BOOST_AUTO_TEST_CASE( test_goto ) {
+BOOST_AUTO_TEST_CASE(test_goto) {
     error(1, 2);
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

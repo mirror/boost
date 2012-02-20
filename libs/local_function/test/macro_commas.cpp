@@ -5,6 +5,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #include <boost/utility/identity_type.hpp>
 #include <boost/config.hpp>
@@ -22,7 +25,7 @@ struct key_sizeof {
 
 typedef int sign_t;
 
-BOOST_AUTO_TEST_CASE( test_macro_commas ) {
+BOOST_AUTO_TEST_CASE(test_macro_commas) {
     //[macro_commas
     void BOOST_LOCAL_FUNCTION(
         BOOST_IDENTITY_TYPE((const std::map<std::string, size_t>&)) m,
@@ -39,4 +42,10 @@ BOOST_AUTO_TEST_CASE( test_macro_commas ) {
     ::sign_t sign = -1;
     f(m, sign);
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

@@ -9,15 +9,15 @@
 #define BOOST_TEST_MODULE TestGccSquare
 #include <boost/test/unit_test.hpp>
 
-double add_square(double a, double b) {
-    double BOOST_LOCAL_FUNCTION(double z) {
+int add_square(int a, int b) {
+    int BOOST_LOCAL_FUNCTION(int z) {
         return z * z;
     } BOOST_LOCAL_FUNCTION_NAME(square)
 
     return square(a) + square(b);
 }
 
-BOOST_AUTO_TEST_CASE( test_gcc_square ) {
-    BOOST_CHECK( add_square(2.0, 4.0) == 20.0 );
+BOOST_AUTO_TEST_CASE(test_gcc_square) {
+    BOOST_CHECK(add_square(2, 4) == 20);
 }
 

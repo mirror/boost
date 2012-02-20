@@ -5,6 +5,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #define BOOST_TEST_MODULE TestAddTemplate
 #include <boost/test/unit_test.hpp>
@@ -28,7 +31,13 @@ T total(const T& x, const T& y, const T& z) {
 }
 //]
 
-BOOST_AUTO_TEST_CASE( test_add_template ) {
-    BOOST_CHECK( total(1, 2, 3) == 60 );
+BOOST_AUTO_TEST_CASE(test_add_template) {
+    BOOST_CHECK(total(1, 2, 3) == 60);
 }
+
+#else
+
+int main(void) { return 0; }
+
+#endif
 

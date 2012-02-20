@@ -5,6 +5,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
 #define BOOST_TEST_MODULE TestReturnSetGet
@@ -16,12 +19,12 @@ boost::function<const std::string& (void)> get;
 
 void action(void) {
     // State `message` hidden behind access functions from here.
-    BOOST_CHECK( get() == "abc" );
+    BOOST_CHECK(get() == "abc");
     set("xyz");
-    BOOST_CHECK( get() == "xyz" );
+    BOOST_CHECK(get() == "xyz");
 }
 
-BOOST_AUTO_TEST_CASE( test_return_setget ) {
+BOOST_AUTO_TEST_CASE(test_return_setget) {
     std::string message = "abc"; // Reference valid where closure used.
     
     void BOOST_LOCAL_FUNCTION(bind& message, const std::string& text) {
@@ -36,4 +39,10 @@ BOOST_AUTO_TEST_CASE( test_return_setget ) {
     
     action();
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

@@ -5,6 +5,9 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include "addable.hpp"
 #include <boost/local_function.hpp>
 #include <boost/type_traits/remove_reference.hpp>
@@ -13,15 +16,15 @@
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE( test_typeof ) {
+BOOST_AUTO_TEST_CASE(test_typeof) {
     //[typeof
     int sum = 0, factor = 10;
 
     void BOOST_LOCAL_FUNCTION(const bind factor, bind& sum, int num) {
-        // Typeof for concept checking.
+        // Type-of for concept checking.
         BOOST_CONCEPT_ASSERT((Addable<boost::remove_reference<
                 BOOST_LOCAL_FUNCTION_TYPEOF(sum)>::type>));
-        // Typeof for declarations.
+        // Type-of for declarations.
         boost::remove_reference<BOOST_LOCAL_FUNCTION_TYPEOF(
                 factor)>::type mult = factor * num;
         sum += mult;
@@ -29,6 +32,12 @@ BOOST_AUTO_TEST_CASE( test_typeof ) {
 
     add(6);
     //]
-    BOOST_CHECK( sum == 60 );
+    BOOST_CHECK(sum == 60);
 }
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

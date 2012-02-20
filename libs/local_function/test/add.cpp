@@ -5,12 +5,15 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
+#include <boost/config.hpp>
+#ifndef BOOST_NO_VARIADIC_MACROS
+
 #include <boost/local_function.hpp>
 #define BOOST_TEST_MODULE TestAdd
 #include <boost/test/unit_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE( test_add )
+BOOST_AUTO_TEST_CASE(test_add)
 //[add
 {                                           // Some local scope.
     int sum = 0, factor = 10;               // Variables in scope to bind.
@@ -23,7 +26,13 @@ BOOST_AUTO_TEST_CASE( test_add )
     int nums[] = {2, 3};
     std::for_each(nums, nums + 2, add);     // Pass it to an algorithm.
 
-    BOOST_CHECK( sum == 60 );               // Assert final summation value.
+    BOOST_CHECK(sum == 60);                 // Assert final summation value.
 }
 //]
+
+#else
+
+int main(void) { return 0; } // Trivial test.
+
+#endif
 

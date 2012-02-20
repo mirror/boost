@@ -25,7 +25,7 @@ struct v {
     }
 };
 
-BOOST_AUTO_TEST_CASE( test_n2529_this ) {
+BOOST_AUTO_TEST_CASE(test_n2529_this) {
     std::vector<int> n(3);
     n[0] = 1; n[1] = 2; n[2] = 3;
 
@@ -35,8 +35,8 @@ BOOST_AUTO_TEST_CASE( test_n2529_this ) {
     v vn(n);
     vn.change_sign_all(i);
     
-    BOOST_CHECK( vn.nums.at(0) == -1 );
-    BOOST_CHECK( vn.nums.at(1) ==  2 );
-    BOOST_CHECK( vn.nums.at(2) == -3 );
+    BOOST_CHECK(vn.nums.at(0) == -1);
+    BOOST_CHECK(vn.nums.at(1) == 2);
+    BOOST_CHECK(vn.nums.at(2) == -3);
 }
 
