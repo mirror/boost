@@ -14,9 +14,9 @@
 //[identity_make_checks
 template<typename F>
 void check(F identity) {
-    BOOST_CHECK( identity("abc") == "abc" );
-    BOOST_CHECK( identity(123) == 123 );
-    BOOST_CHECK( identity(1.23) == 1.23 );
+    BOOST_CHECK(identity("abc") == "abc");
+    BOOST_CHECK(identity(123) == 123);
+    BOOST_CHECK(identity(1.23) == 1.23);
 }
 //]
 
@@ -30,11 +30,11 @@ double identity_d_impl(double x) { return x; }
 boost::function<double (double)> identity_d = identity_d_impl; // Functor.
 //]
 
-BOOST_AUTO_TEST_CASE( test_identity ) {
+BOOST_AUTO_TEST_CASE(test_identity) {
     //[identity_calls
-    BOOST_CHECK( identity_s("abc") == "abc" );
-    BOOST_CHECK( identity_i(123) == 123 );
-    BOOST_CHECK( identity_d(1.23) == 1.23 );
+    BOOST_CHECK(identity_s("abc") == "abc");
+    BOOST_CHECK(identity_i(123) == 123);
+    BOOST_CHECK(identity_d(1.23) == 1.23);
     //]
 
     {
@@ -46,9 +46,9 @@ BOOST_AUTO_TEST_CASE( test_identity ) {
         > identity(identity_s, identity_i, identity_d);
 
         // All calls via single `identity` function.
-        BOOST_CHECK( identity("abc") == "abc" );
-        BOOST_CHECK( identity(123) == 123 );
-        BOOST_CHECK( identity(1.23) == 1.23 );
+        BOOST_CHECK(identity("abc") == "abc");
+        BOOST_CHECK(identity(123) == 123);
+        BOOST_CHECK(identity(1.23) == 1.23);
         //]
     }
     
@@ -57,9 +57,9 @@ BOOST_AUTO_TEST_CASE( test_identity ) {
         BOOST_AUTO(identity, boost::make_overloaded_function(
                 identity_s, identity_i, identity_d));
 
-        BOOST_CHECK( identity("abc") == "abc" );
-        BOOST_CHECK( identity(123) == 123 );
-        BOOST_CHECK( identity(1.23) == 1.23 );
+        BOOST_CHECK(identity("abc") == "abc");
+        BOOST_CHECK(identity(123) == 123);
+        BOOST_CHECK(identity(1.23) == 1.23);
         //]
     }
 

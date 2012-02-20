@@ -87,9 +87,9 @@
     </p>
 <p>
 </p>
-<pre class="programlisting"><span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">identity_s</span><span class="special">(</span><span class="string">"abc"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abc"</span> <span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">identity_i</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span> <span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">identity_d</span><span class="special">(</span><span class="number">1.23</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.23</span> <span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity_s</span><span class="special">(</span><span class="string">"abc"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abc"</span><span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity_i</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span><span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity_d</span><span class="special">(</span><span class="number">1.23</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.23</span><span class="special">);</span>
 </pre>
 <p>
     </p>
@@ -108,9 +108,9 @@
 <span class="special">&gt;</span> <span class="identifier">identity</span><span class="special">(</span><span class="identifier">identity_s</span><span class="special">,</span> <span class="identifier">identity_i</span><span class="special">,</span> <span class="identifier">identity_d</span><span class="special">);</span>
 
 <span class="comment">// All calls via single `identity` function.</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">identity</span><span class="special">(</span><span class="string">"abc"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abc"</span> <span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">identity</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span> <span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">identity</span><span class="special">(</span><span class="number">1.23</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.23</span> <span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="string">"abc"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abc"</span><span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span><span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="number">1.23</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.23</span><span class="special">);</span>
 </pre>
 <p>
     </p>
@@ -133,7 +133,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: February 17, 2012 at 20:42:39 GMT</small></p></td>
+<td align="left"><p><small>Last revised: February 20, 2012 at 20:10:59 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>
