@@ -23,6 +23,7 @@ void parseDate()
   boost::date_time::special_values_parser<boost::gregorian::date, wchar_t> svp;
 
   boost::gregorian::date date = parser.parse_date(L"", L"", svp);
+  (void)date;
 }
 
 

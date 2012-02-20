@@ -1167,7 +1167,7 @@ namespace boost
 
     namespace detail
     {
-        struct do_not_construct_stringbuffer_t{};
+        struct do_not_construct_out_stream_t{};
     }
 
     namespace detail // optimized stream wrapper
@@ -1179,25 +1179,27 @@ namespace boost
                 >
         class lexical_stream_limited_src
         {
-            typedef stl_buf_unlocker<std::basic_streambuf<CharT, Traits>, CharT > local_streambuffer_t;
 
 #if defined(BOOST_NO_STRINGSTREAM)
-            typedef stl_buf_unlocker<std::strstream, CharT > local_stringbuffer_t;
+            typedef std::ostrstream                         out_stream_t;
+            typedef stl_buf_unlocker<std::strstreambuf, char>  unlocked_but_t;
 #elif defined(BOOST_NO_STD_LOCALE)
-            typedef stl_buf_unlocker<std::stringstream, CharT > local_stringbuffer_t;
+            typedef std::ostringstream                      out_stream_t;
+            typedef stl_buf_unlocker<std::stringbuf, char>  unlocked_but_t;
 #else
-            typedef stl_buf_unlocker<std::basic_stringbuf<CharT, Traits>, CharT > local_stringbuffer_t;
+            typedef std::basic_ostringstream<CharT, Traits>       out_stream_t;
+            typedef stl_buf_unlocker<std::basic_stringbuf<CharT, Traits>, CharT> unlocked_but_t;
 #endif
             typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
                 RequiresStringbuffer,
-                local_stringbuffer_t,
-                do_not_construct_stringbuffer_t
-            >::type deduced_stringbuffer_t;
+                out_stream_t,
+                do_not_construct_out_stream_t
+            >::type deduced_out_stream_t;
 
             // A string representation of Source is written to [start, finish).
             CharT* start;
             CharT* finish;
-            deduced_stringbuffer_t stringbuffer;
+            deduced_out_stream_t out_stream;
 
         public:
             lexical_stream_limited_src(CharT* sta, CharT* fin)
@@ -1258,10 +1260,16 @@ namespace boost
             template<typename InputStreamable>
             bool shl_input_streamable(InputStreamable& input)
             {
-                std::basic_ostream<CharT> stream(&stringbuffer);
-                bool const result = !(stream << input).fail();
-                start = stringbuffer.pbase();
-                finish = stringbuffer.pptr();
+#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_LOCALE)
+                // If you have compilation error at this point, than your STL library
+                // unsupports such conversions. Try updating it.
+                BOOST_STATIC_ASSERT((boost::is_same<char, CharT>::value));
+#endif
+                bool const result = !(out_stream << input).fail();
+                const unlocked_but_t* const p
+                        = static_cast<unlocked_but_t*>(out_stream.rdbuf()) ;
+                start = p->pbase();
+                finish = p->pptr();
                 return result;
             }
 
@@ -1526,9 +1534,22 @@ namespace boost
                 if(is_pointer<InputStreamable>::value)
                     return false;
 
-                local_streambuffer_t bb;
-                bb.setg(start, start, finish);
-                std::basic_istream<CharT> stream(&bb);
+#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_LOCALE)
+                // If you have compilation error at this point, than your STL library
+                // unsupports such conversions. Try updating it.
+                BOOST_STATIC_ASSERT((boost::is_same<char, CharT>::value));
+#endif
+
+#if defined(BOOST_NO_STRINGSTREAM)
+                std::istrstream stream(start, finish - start);
+#elif defined(BOOST_NO_STD_LOCALE)
+                std::istringstream stream;
+#else
+                std::basic_istringstream<CharT, Traits> stream;
+#endif
+                static_cast<unlocked_but_t*>(stream.rdbuf())
+                        ->setg(start, start, finish);
+
                 stream.unsetf(std::ios::skipws);
                 lcast_set_precision(stream, static_cast<InputStreamable*>(0));
 #if (defined _MSC_VER)

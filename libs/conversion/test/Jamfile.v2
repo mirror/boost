@@ -38,5 +38,6 @@ test-suite conversion
     [ run lexical_cast_pointers_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
     [ compile lexical_cast_typedefed_wchar_test.cpp : <toolset>msvc:<nowchar>on ]
     [ run lexical_cast_typedefed_wchar_test_runtime.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <toolset>msvc:<nowchar>on ]
+    [ run lexical_cast_no_locale_test.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <define>BOOST_NO_STD_LOCALE ]
   ;
       
