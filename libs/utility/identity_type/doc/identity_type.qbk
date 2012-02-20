@@ -28,7 +28,7 @@ This library allows to wrap type expressions within round parenthesis so they ca
 
 [section Motivation]
 
-Consider the following macro which declares a variable named `var`/n/ with the specified /type/ (see also [@../../test/var_error.cpp =var_error.cpp=]):
+Consider the following macro which declares a variable named `var`[^['n]] with the specified [^['type]] (see also [@../../test/var_error.cpp =var_error.cpp=]):
 
 [var_error]
 
@@ -68,7 +68,7 @@ In fact, a total of two sets of round parenthesis must be used: The parenthesis 
 
 This macro works on any [@http://www.open-std.org/JTC1/SC22/WG21/docs/standards C++03] compiler (because it does not use [@http://en.wikipedia.org/wiki/Variadic_macro variadic macros]).
 [footnote
-Using variadic macros, it would be possible to use a single set of parenthesis `BOOST_IDENTITY_TYPE(`/type/`)` instead of two `BOOST_IDENTITY_TYPE((`/type/`))` but variadic macros are not part of C++03 (even if nowadays they are supported by most modern compilers and they are also part of C++11).
+Using variadic macros, it would be possible to require a single set of extra parenthesis `BOOST_IDENTITY_TYPE(`[^['type]]`)` instead of two `BOOST_IDENTITY_TYPE((`[^['type]]`))` but variadic macros are not part of C++03 (even if nowadays they are supported by most modern compilers and they are also part of C++11).
 ]
 
 [endsect]
@@ -76,15 +76,18 @@ Using variadic macros, it would be possible to use a single set of parenthesis `
 [section Templates]
 
 This macro must be prefixed by `typename` when used within templates.
-For example, let's program a macro that declares a function parameter named `arg`/n/ with the specified /type/ (see also [@../../test/template.cpp =template.cpp=]):
+For example, let's program a macro that declares a function parameter named `arg`[^['n]] with the specified [^['type]] (see also [@../../test/template.cpp =template.cpp=]):
 
 [template_f_decl]
 [template_f_call]
 
-However, note that the template parameter type `char` must be explicitly specified when invoking the function `f<char>(a)`.
-In fact, when the [macroref BOOST_IDENTITY_TYPE] macro is used to wrap a function template parameter, the template parameter can no longer be implicitly determined by the compiler form the function call as in `f(a)`.
+However, note that the template parameter `char` must be manually specified when invoking the function `f<char>(a)`.
+In fact, when the [macroref BOOST_IDENTITY_TYPE] macro is used to wrap a function template parameter, the template parameter can no longer be automatically deduced by the compiler form the function call as in `f(a)`.
+[footnote
+This is because the implementation of [macroref BOOST_IDENTITY_TYPE] wraps the specified type within a meta-function.
+]
 (This limitation does not apply to class templates because class template parameters must always be explicitly specified.)
-In other words, without using the [macroref BOOST_IDENTITY_TYPE] macro, C++ would normally be able to implicitly deduce the function template parameter as shown below:
+In other words, without using the [macroref BOOST_IDENTITY_TYPE] macro, C++ would normally be able to automatically deduce the function template parameter as shown below:
 
 [template_g_decl]
 [template_g_call]
@@ -93,7 +96,7 @@ In other words, without using the [macroref BOOST_IDENTITY_TYPE] macro, C++ woul
 
 [section Abstract Types]
 
-On some compilers (e.g., GCC), using this macro on abstract types (i.e., a class with one or more pure virtual functions) generates a compiler error.
+On some compilers (e.g., GCC), using this macro on abstract types (i.e., classes with one or more pure virtual functions) generates a compiler error.
 This can be worked around by manipulating the type adding and removing a reference to it.
 
 Let's program a macro that performs a static assertion on a [@http://en.wikipedia.org/wiki/Template_metaprogramming Template Meta-Programming] (TMP) meta-function (similarly to Boost.MPL [@http://www.boost.org/doc/libs/1_36_0/libs/mpl/doc/refmanual/assert.html `BOOST_MPL_ASSERT`]).
@@ -106,8 +109,8 @@ In this case, if the meta-function is an abstract type, it needs to be manipulat
 
 [section Annex: Usage]
 
-The [macroref BOOST_IDENTITY_TYPE] macro can be used either in the call of the user-defined macro (as shown by the examples so far), or internally to the definition of the user macro.
-When [macroref BOOST_IDENTITY_TYPE] is used internally, the call of the user macro will only have to specify the extra parenthesis (see also [@../../test/tmp_assert.cpp =tmp_assert.cpp=]):
+The [macroref BOOST_IDENTITY_TYPE] macro can be used either when calling a user-defined macro (as shown by the examples so far), or internally in the definition of a user-defined macro (as shown below).
+When [macroref BOOST_IDENTITY_TYPE] is used in the user macro definition, the call of the user macro will only have to specify the extra parenthesis (see also [@../../test/tmp_assert.cpp =tmp_assert.cpp=]):
 
 [tmp_assert_alternative]
 
@@ -115,7 +118,7 @@ However, note that the user will /always/ have to specify the extra parenthesis 
 
 [tmp_assert_alternative_always]
 
-In some cases, using [macroref BOOST_IDENTITY_TYPE] internally might provide the best syntax for the user.
+In some cases, using [macroref BOOST_IDENTITY_TYPE] within the user macro definition might provide the best syntax for the user.
 For example, this is the case for `BOOST_MPL_ASSERT` because the majority of template meta-programming expressions contain unwrapped commas so it is less confusing for the user to always specify the extra parenthesis `((...))` instead of using [macroref BOOST_IDENTITY_TYPE]:
 
     BOOST_MPL_ASSERT(( // Natural syntax.
@@ -125,14 +128,14 @@ For example, this is the case for `BOOST_MPL_ASSERT` because the majority of tem
         >
     ));
 
-However, in other situations it might be preferable to not require the extra parenthesis in common cases and handle commas as special cases using the [macroref BOOST_IDENTITY_TYPE].
-For example, this is the case for `BOOST_LOCAL_FUNCTION` for which always requiring the extra parenthesis `((...))` around the types would lead to an unnatural syntax for the local function parameter types:
+However, in other situations it might be preferable to not require the extra parenthesis in the common cases and handle commas as special cases using [macroref BOOST_IDENTITY_TYPE].
+For example, this is the case for [@http://www.boost.org/libs/local_function `BOOST_LOCAL_FUNCTION`] for which always requiring the extra parenthesis `((...))` around the types would lead to an unnatural syntax for the local function signature:
 
     int BOOST_LOCAL_FUNCTION( ((int&)) x, ((int&)) y ) { // Unnatural syntax.
         return x + y;
     } BOOST_LOCAL_FUNCTION_NAME(add)
 
-Instead requiring the user to specify [macroref BOOST_IDENTITY_TYPE] when needed allows for the more natural syntax `BOOST_LOCAL_FUNCTION(int& x, int& y)` in the common cases when the parameter types contain no comma.
+Instead requiring the user to specify [macroref BOOST_IDENTITY_TYPE] only when needed allows for the more natural syntax `BOOST_LOCAL_FUNCTION(int& x, int& y)` in the common cases when the parameter types contain no comma.
 
 [endsect]
 
@@ -149,9 +152,9 @@ This code is for explanatory purposes only.
     #define BOOST_IDENTITY_TYPE(parenthesized_type) \
         boost::function_traits<void parenthesized_type>::arg1_type
 
-Essentially, the type is wrapped between round parenthesis `(std::map<int, char>)` so it can be passed as a macro parameter even if it contain commas.
+Essentially, the type is wrapped between round parenthesis `(std::map<int, char>)` so it can be passed as a single macro parameter even if it contains commas.
 Then the parenthesized type is transformed into the type of a function returning `void` and with the specified type as the type of the first and only argument `void (std::map<int, char>)`.
-Finally, the type of the first argument `arg1_type` is extracted therefore obtaining the original type from the parenthesized type (effectively stripping the parenthesis from around the type).
+Finally, the type of the first argument `arg1_type` is extracted at compile-time using the `function_traits` meta-function therefore obtaining the original type from the parenthesized type (effectively stripping the extra parenthesis from around the specified type).
 
 [endsect]
 

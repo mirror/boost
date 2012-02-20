@@ -14,7 +14,7 @@
 
 template<typename T>
 void f( // Prefix macro with `typename` in templates.
-    ARG( typename BOOST_IDENTITY_TYPE((std::map<int, T>)), 1 )
+    ARG(typename BOOST_IDENTITY_TYPE((std::map<int, T>)), 1)
 ) {
     std::cout << arg1[0] << std::endl;
 }
@@ -34,13 +34,13 @@ int main() {
     std::map<int, char> a;
     a[0] = 'a';
     
-    f<char>(a); // OK.
-    // f(a);    // But error.
+    f<char>(a); // OK...
+    // f(a);    // ... but error.
     //]
 
     //[template_g_call
-    g<char>(a); // OK.
-    g(a);       // Also OK.
+    g<char>(a); // OK...
+    g(a);       // ... and also OK.
     //]
     
     return 0;

@@ -39,14 +39,14 @@ TMP_ASSERT(
     BOOST_STATIC_ASSERT(BOOST_IDENTITY_TYPE(parenthesized_metafunction)::value)
 
 // Specify only extra parenthesis `((...))`.
-TMP_ASSERT_PAREN(( boost::is_const<std::map<int, char> const> ));
+TMP_ASSERT_PAREN((boost::is_const<std::map<int, char> const>));
 // Specify both the extra parenthesis `((...))` and `BOOST_IDENTITY_TYPE` macro.
-TMP_ASSERT( BOOST_IDENTITY_TYPE((boost::is_const<std::map<int, char> const>)) );
+TMP_ASSERT(BOOST_IDENTITY_TYPE((boost::is_const<std::map<int, char> const>)));
 //]
 
 //[tmp_assert_alternative_always
-TMP_ASSERT_PAREN(( boost::is_const<int const> )); // Always extra `((...))`.
-TMP_ASSERT( boost::is_const<int const> ); // No extra `((...))` and no macro.
+TMP_ASSERT_PAREN((boost::is_const<int const>)); // Always extra `((...))`.
+TMP_ASSERT(boost::is_const<int const>); // No extra `((...))` and no macro.
 //]
 
 int main() { return 0; }
