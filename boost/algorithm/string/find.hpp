@@ -228,7 +228,7 @@ namespace boost {
         //! Find head algorithm
         /*!
             Get the head of the input. Head is a prefix of the string of the 
-            given size. If the input is shorter then required, whole input if considered 
+            given size. If the input is shorter then required, whole input is considered 
             to be the head.
 
             \param Input An input string
@@ -258,7 +258,7 @@ namespace boost {
         //! Find tail algorithm
         /*!
             Get the tail of the input. Tail is a suffix of the string of the 
-            given size. If the input is shorter then required, whole input if considered 
+            given size. If the input is shorter then required, whole input is considered 
             to be the tail.
 
             \param Input An input string
