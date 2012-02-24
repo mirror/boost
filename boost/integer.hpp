@@ -114,7 +114,7 @@ namespace boost
       typedef typename detail::int_least_helper
         <
 #ifdef BOOST_HAS_LONG_LONG
-          (Bits-1 <= (int)(sizeof(boost::long_long_type) * CHAR_BIT)) +
+          (Bits <= (int)(sizeof(boost::long_long_type) * CHAR_BIT)) +
 #else
            1 +
 #endif
@@ -144,7 +144,7 @@ namespace boost
         < 
           5 +
 #ifdef BOOST_HAS_LONG_LONG
-          (Bits-1 <= (int)(sizeof(boost::long_long_type) * CHAR_BIT)) +
+          (Bits <= (int)(sizeof(boost::long_long_type) * CHAR_BIT)) +
 #else
            1 +
 #endif
