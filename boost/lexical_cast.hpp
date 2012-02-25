@@ -104,7 +104,7 @@ _CRTIMP int __cdecl vswprintf(wchar_t * __restrict__ , const wchar_t * __restric
 namespace boost
 {
     // exception used to indicate runtime lexical_cast failure
-    class bad_lexical_cast :
+    class BOOST_SYMBOL_VISIBLE bad_lexical_cast :
     // workaround MSVC bug with std::bad_cast when _HAS_EXCEPTIONS == 0 
 #if defined(BOOST_MSVC) && defined(_HAS_EXCEPTIONS) && !_HAS_EXCEPTIONS 
         public std::exception 
@@ -1958,31 +1958,38 @@ namespace boost
             }
         };
 
-        class precision_loss_error : public boost::numeric::bad_numeric_cast
+        template<class Source, class Target >
+        struct detect_precision_loss
         {
-         public:
-            virtual const char * what() const throw()
-             {  return "bad numeric conversion: precision loss error"; }
-        };
+         typedef boost::numeric::Trunc<Source> Rounder;
+         typedef Source source_type ;
 
-        template<class S >
-        struct throw_on_precision_loss
-        {
-         typedef boost::numeric::Trunc<S> Rounder;
-         typedef S source_type ;
-
-         typedef typename mpl::if_< is_arithmetic<S>,S,S const&>::type argument_type ;
+         typedef BOOST_DEDUCED_TYPENAME mpl::if_<
+            is_arithmetic<Source>, Source, Source const&
+          >::type argument_type ;
 
          static source_type nearbyint ( argument_type s )
          {
-            source_type orig_div_round = s / Rounder::nearbyint(s);
+            const source_type orig_div_round = s / Rounder::nearbyint(s);
+            const source_type eps = std::numeric_limits<source_type>::epsilon();
 
-            if ( (orig_div_round > 1 ? orig_div_round - 1 : 1 - orig_div_round) > std::numeric_limits<source_type>::epsilon() )
-               BOOST_THROW_EXCEPTION( precision_loss_error() );
+            if ((orig_div_round > 1 ? orig_div_round - 1 : 1 - orig_div_round) > eps)
+                BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+
             return s ;
          }
 
          typedef typename Rounder::round_style round_style;
+        } ;
+
+        template<class Source, class Target >
+        struct nothrow_overflow_handler
+        {
+          void operator() ( boost::numeric::range_check_result r )
+          {
+            if (r != boost::numeric::cInRange)
+                BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+          }
         } ;
 
         template<typename Target, typename Source>
@@ -1990,20 +1997,13 @@ namespace boost
         {
             static inline Target lexical_cast_impl(const Source &arg)
             {
-                try{
-                    typedef boost::numeric::converter<
-                            Target,
-                            Source,
-                            boost::numeric::conversion_traits<Target,Source>,
-                            boost::numeric::def_overflow_handler,
-                            throw_on_precision_loss<Source>
-                    > Converter ;
-
-                    return Converter::convert(arg);
-                } catch( ::boost::numeric::bad_numeric_cast const& ) {
-                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
-                }
-                BOOST_UNREACHABLE_RETURN(static_cast<Target>(0));
+                return boost::numeric::converter<
+                        Target,
+                        Source,
+                        boost::numeric::conversion_traits<Target,Source>,
+                        nothrow_overflow_handler<Source, Target>,
+                        detect_precision_loss<Source, Target>
+                >::convert(arg);
             }
         };
 
@@ -2012,25 +2012,17 @@ namespace boost
         {
             static inline Target lexical_cast_impl(const Source &arg)
             {
-                try{
-                    typedef boost::numeric::converter<
-                            Target,
-                            Source,
-                            boost::numeric::conversion_traits<Target,Source>,
-                            boost::numeric::def_overflow_handler,
-                            throw_on_precision_loss<Source>
-                    > Converter ;
+                typedef boost::numeric::converter<
+                        Target,
+                        Source,
+                        boost::numeric::conversion_traits<Target,Source>,
+                        nothrow_overflow_handler<Source, Target>,
+                        detect_precision_loss<Source, Target>
+                > converter_t;
 
-                    bool has_minus = ( arg < 0);
-                    if ( has_minus ) {
-                        return static_cast<Target>(-Converter::convert(-arg));
-                    } else {
-                        return Converter::convert(arg);
-                    }
-                } catch( ::boost::numeric::bad_numeric_cast const& ) {
-                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
-                }
-                BOOST_UNREACHABLE_RETURN(static_cast<Target>(0));
+                return (
+                    arg < 0 ? -converter_t::convert(-arg) : converter_t::convert(arg)
+                );
             }
         };
 
