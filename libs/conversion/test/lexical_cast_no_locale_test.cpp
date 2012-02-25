@@ -113,7 +113,7 @@ void test_empty_3()
     
     v = lexical_cast<Escape>(100);
     BOOST_CHECK_EQUAL(lexical_cast<int>(v), 100);
-    BOOST_CHECK_EQUAL(lexical_cast<unsigned int>(v), 100);
+    BOOST_CHECK_EQUAL(lexical_cast<unsigned int>(v), 100u);
     
     v = lexical_cast<Escape>(0.0);
     BOOST_CHECK_EQUAL(lexical_cast<double>(v), 0.0);
