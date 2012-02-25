@@ -1039,8 +1039,8 @@ rules for __element_conversion__.
 
 [heading Header]
 
-    #include <boost/fusion/container/generation/make_list.hpp>
-    #include <boost/fusion/include/make_list.hpp>
+    #include <boost/fusion/container/generation/make_vector.hpp>
+    #include <boost/fusion/include/make_vector.hpp>
 
 [heading Example]
 
