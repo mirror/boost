@@ -167,6 +167,14 @@ if a negative number is read, no errors will arise and the result will be the tw
 `boost::lexical_cast` sees single `wchar_t` character as `unsigned short`. It is not a `boost::lexical_cast` mistake, but a 
 limitation of compiler options that you use.
 
+[pre
+]
+
+* [*Question:]    Why `boost::lexical_cast<double>("-1.#IND");` throws `boost::bad_lexical_cast`?
+  * [*Answer:]      `"-1.#IND"` is a compiler extension, that violates standard. You shall input `"-nan"`, `"nan"`, `"inf"`
+, `"-inf"` (case insensitive) strings to get NaN and Inf values. `boost::lexical_cast<string>` outputs `"-nan"`, `"nan"`, 
+`"inf"`, `"-inf"` strings, when has NaN or Inf input values.
+
 [endsect]
 
 [section Changes]
