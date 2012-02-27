@@ -234,7 +234,7 @@ namespace boost {
             \param Input An input string
             \param N Length of the head
                 For N>=0, at most N characters are extracted.
-                For N<0, size(Input)-|N| characters are extracted.
+                For N<0, at most size(Input)-|N| characters are extracted.
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c Range1T::iterator or 
@@ -264,7 +264,7 @@ namespace boost {
             \param Input An input string
             \param N Length of the tail. 
                 For N>=0, at most N characters are extracted.
-                For N<0, size(Input)-|N| characters are extracted.
+                For N<0, at most size(Input)-|N| characters are extracted.
             \return 
                 An \c iterator_range delimiting the match. 
                 Returned iterator is either \c RangeT::iterator or 
