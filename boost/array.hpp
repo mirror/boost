@@ -118,13 +118,13 @@ namespace boost {
         // operator[]
         reference operator[](size_type i) 
         { 
-            BOOST_ASSERT( i < N && "out of range" ); 
+            BOOST_ASSERT_MSG( i < N, "out of range" );
             return elems[i];
         }
         
         const_reference operator[](size_type i) const 
         {     
-            BOOST_ASSERT( i < N && "out of range" ); 
+            BOOST_ASSERT_MSG( i < N, "out of range" );
             return elems[i]; 
         }
 
