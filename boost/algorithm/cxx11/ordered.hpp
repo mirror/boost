@@ -22,6 +22,7 @@
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/mpl/identity.hpp>
 
 namespace boost { namespace algorithm {
 
@@ -124,6 +125,9 @@ using std::is_sorted;       // Section 25.4.1.5
         return boost::algorithm::is_sorted_until ( boost::begin ( range ), boost::end ( range ));
     }
 
+namespace detail {
+	typedef struct { typedef bool type; } bool_;
+};
 
 /// \fn is_sorted ( const R &range, Pred p )
 /// \return whether or not the entire range R is sorted
@@ -133,7 +137,8 @@ using std::is_sorted;       // Section 25.4.1.5
 /// \param p     A binary predicate that returns true if two elements are ordered.
 ///
     template <typename R, typename Pred>
-    bool is_sorted ( const R &range, Pred p )
+    typename boost::lazy_disable_if_c< boost::is_same<R, Pred>::value, boost::mpl::identity<bool> >::type
+    is_sorted ( const R &range, Pred p )
     {
         return boost::algorithm::is_sorted ( boost::begin ( range ), boost::end ( range ), p );
     }
@@ -144,7 +149,7 @@ using std::is_sorted;       // Section 25.4.1.5
 /// 
 /// \param range The range to be tested.
 ///
-    template <typename R, typename Pred>
+    template <typename R>
     bool is_sorted ( const R &range )
     {
         return boost::algorithm::is_sorted ( boost::begin ( range ), boost::end ( range ));

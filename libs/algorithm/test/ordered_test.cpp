@@ -31,13 +31,59 @@ static void
 test_ordered(void)
 {
     const int strictlyIncreasingValues[] = { 1, 2, 3, 4, 5 };
+    const int randomValues[] = { 3, 6, 1, 2, 7 };
+    const int constantValues[] = { 1, 2, 2, 2, 5 };
+          int nonConstantArray[] = { 1, 2, 2, 2, 5 };
+    const int inOrderUntilTheEnd [] = { 0, 1, 2, 3, 4, 5, 6, 7, 6 };
+
+//	Begin/end checks
+	BOOST_CHECK (  ba::is_sorted (b_e(strictlyIncreasingValues)));
+	BOOST_CHECK ( !ba::is_sorted (b_e(randomValues)));
+	BOOST_CHECK (  ba::is_sorted (b_e(strictlyIncreasingValues), std::less<int>()));
+	BOOST_CHECK ( !ba::is_sorted (b_e(strictlyIncreasingValues), std::greater<int>()));
+
+//	Range checks
+	BOOST_CHECK (  ba::is_sorted (a_range(strictlyIncreasingValues)));
+	BOOST_CHECK ( !ba::is_sorted (a_range(randomValues)));
+	BOOST_CHECK (  ba::is_sorted (a_range(strictlyIncreasingValues), std::less<int>()));
+	BOOST_CHECK ( !ba::is_sorted (a_range(strictlyIncreasingValues), std::greater<int>()));
+
+    BOOST_CHECK (  ba::is_sorted_until ( b_e(strictlyIncreasingValues))                       ==      a_end(strictlyIncreasingValues));
+    BOOST_CHECK (  ba::is_sorted_until ( b_e(strictlyIncreasingValues),     std::less<int>()) ==      a_end(strictlyIncreasingValues));
+    BOOST_CHECK (  ba::is_sorted_until ( a_range(strictlyIncreasingValues))                   == boost::end(strictlyIncreasingValues));
+    BOOST_CHECK (  ba::is_sorted_until ( a_range(strictlyIncreasingValues), std::less<int>()) == boost::end(strictlyIncreasingValues));
+
+//	Check for const and non-const arrays
+    BOOST_CHECK ( ba::is_sorted_until ( b_e(constantValues),       std::less<int>()) !=      a_end(constantValues));
+    BOOST_CHECK ( ba::is_sorted_until ( a_range(constantValues),   std::less<int>()) != boost::end(constantValues));
+    BOOST_CHECK ( ba::is_sorted_until ( b_e(nonConstantArray),     std::less<int>()) !=      a_end(nonConstantArray));
+    BOOST_CHECK ( ba::is_sorted_until ( a_range(nonConstantArray), std::less<int>()) != boost::end(nonConstantArray));
+
+    BOOST_CHECK ( ba::is_sorted_until ( b_e(randomValues),     std::less<int>()) == &randomValues[2] );
+    BOOST_CHECK ( ba::is_sorted_until ( b_e(randomValues))                       == &randomValues[2] );
+    BOOST_CHECK ( ba::is_sorted_until ( a_range(randomValues), std::less<int>()) == &randomValues[2] );
+    BOOST_CHECK ( ba::is_sorted_until ( a_range(randomValues))                   == &randomValues[2] );
+
+    BOOST_CHECK ( ba::is_sorted_until ( a_range(inOrderUntilTheEnd), std::less<int>()) == &inOrderUntilTheEnd[8] );
+    BOOST_CHECK ( ba::is_sorted_until ( a_range(inOrderUntilTheEnd))                   == &inOrderUntilTheEnd[8] );
+
+//  For zero and one element collections, the comparison predicate should never be called
+    BOOST_CHECK ( ba::is_sorted_until ( a_begin(randomValues), a_begin(randomValues),     std::equal_to<int>()) == a_begin(randomValues));
+    BOOST_CHECK ( ba::is_sorted_until ( a_begin(randomValues), a_begin(randomValues))                           == a_begin(randomValues));
+    BOOST_CHECK ( ba::is_sorted_until ( a_begin(randomValues), a_begin(randomValues) + 1, std::equal_to<int>()) == a_begin(randomValues) + 1);
+    BOOST_CHECK ( ba::is_sorted_until ( a_begin(randomValues), a_begin(randomValues) + 1 )                      == a_begin(randomValues) + 1);
+}
+
+
+static void
+test_increasing_decreasing(void)
+{
+    const int strictlyIncreasingValues[] = { 1, 2, 3, 4, 5 };
     const int strictlyDecreasingValues[] = { 9, 8, 7, 6, 5 };
     const int increasingValues[] = { 1, 2, 2, 2, 5 };
     const int decreasingValues[] = { 9, 7, 7, 7, 5 };
     const int randomValues[] = { 3, 6, 1, 2, 7 };
     const int constantValues[] = { 7, 7, 7, 7, 7 };
-          int nonConstantArray[] = { 7, 7, 7, 7, 7 };
-    const int inOrderUntilTheEnd [] = { 0, 1, 2, 3, 4, 5, 6, 7, 6 };
 
     // Test a strictly increasing sequence
     BOOST_CHECK (  ba::is_strictly_increasing (b_e(strictlyIncreasingValues)));
@@ -98,30 +144,11 @@ test_ordered(void)
     BOOST_CHECK ( !ba::is_strictly_decreasing (strictlyIncreasingValues, strictlyIncreasingValues+2));
     BOOST_CHECK ( !ba::is_decreasing          (strictlyIncreasingValues, strictlyIncreasingValues+2));
     
-    // Test underlying routines
-    BOOST_CHECK (  ba::is_sorted_until ( b_e(strictlyIncreasingValues),     std::less<int>()) ==      a_end(strictlyIncreasingValues));
-    BOOST_CHECK (  ba::is_sorted_until ( a_range(strictlyIncreasingValues), std::less<int>()) == boost::end(strictlyIncreasingValues));
-
-    BOOST_CHECK ( ba::is_sorted_until ( b_e(nonConstantArray),     std::less<int>()) !=      a_end(nonConstantArray));
-    BOOST_CHECK ( ba::is_sorted_until ( a_range(nonConstantArray), std::less<int>()) != boost::end(nonConstantArray));
-
-    BOOST_CHECK ( ba::is_sorted_until ( b_e(randomValues),     std::less<int>()) == &randomValues[2] );
-    BOOST_CHECK ( ba::is_sorted_until ( a_range(randomValues), std::less<int>()) == &randomValues[2] );
-
-    BOOST_CHECK ( ba::is_sorted_until ( b_e(randomValues),     std::less<int>()) == &randomValues[2] );
-    BOOST_CHECK ( ba::is_sorted_until ( a_range(randomValues), std::less<int>()) == &randomValues[2] );
-
-    BOOST_CHECK ( ba::is_sorted_until ( a_range(inOrderUntilTheEnd), std::less<int>()) == &inOrderUntilTheEnd[8] );
-
-//  For zero and one element collections, the comparison predicate should never be called
-    BOOST_CHECK ( ba::is_sorted_until ( a_begin(randomValues), a_begin(randomValues),     std::equal_to<int>()) == a_begin(randomValues));
-    BOOST_CHECK ( ba::is_sorted_until ( a_begin(randomValues), a_begin(randomValues) + 1, std::equal_to<int>()) == a_begin(randomValues) + 1);
-
 }
 
 int test_main( int, char * [] )
 {
     test_ordered ();
-
+	test_increasing_decreasing ();
     return 0;
 }
