@@ -39,6 +39,11 @@ import testing ;
      [ run is_partitioned_test1.cpp        : : : : is_partitioned_test1 ]
      [ run partition_copy_test1.cpp        : : : : partition_copy_test1 ]
 
+# Hex tests
+     [ run hex_test1.cpp        : : : : hex_test1 ]
+     [ run hex_test2.cpp        : : : : hex_test2 ]
+     [ run hex_test3.cpp        : : : : hex_test3 ]
+	 [ compile-fail hex_fail1.cpp ]
    ;
 }
 
