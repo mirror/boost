@@ -24,6 +24,7 @@
 #define BOOST_HAS_NRVO
 
 // Clang supports "long long" in all compilation modes.
+#define BOOST_HAS_LONG_LONG
 
 #if !__has_feature(cxx_auto_type)
 #  define BOOST_NO_AUTO_DECLARATIONS
