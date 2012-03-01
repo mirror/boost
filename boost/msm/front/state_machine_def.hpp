@@ -197,7 +197,7 @@ struct state_machine_def :  public boost::msm::front::detail::state_base<BaseSta
 protected:
     // Default no-transition handler. Can be replaced in the Derived SM class.
     template <class FSM,class Event>
-    void no_transition(Event const& ,FSM&, int state)
+    void no_transition(Event const& ,FSM&, int )
     {
         BOOST_ASSERT(false);
     }
