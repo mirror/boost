@@ -442,8 +442,7 @@ UNORDERED_AUTO_TEST(test_default_initializer_list) {
 
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST) && \
-    !defined(BOOST_NO_INITIALIZER_LISTS)
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
 
 UNORDERED_AUTO_TEST(test_initializer_list) {
     std::cerr<<"Initializer List Tests\n";
