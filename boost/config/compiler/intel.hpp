@@ -240,7 +240,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 //
 // Although the Intel compiler is capable of supporting these, it appears not to in MSVC compatibility mode:
 //
-#  define  BOOST_NO_INITIALIZER_LISTS
+#  define  BOOST_NO_0X_HDR_INITIALIZER_LIST
 #  define  BOOST_NO_VARIADIC_TEMPLATES
 #  define  BOOST_NO_DELETED_FUNCTIONS
 #  define  BOOST_NO_DEFAULTED_FUNCTIONS

@@ -63,7 +63,7 @@
 #endif
 
 #if !__has_feature(cxx_generalized_initializers)
-#  define BOOST_NO_INITIALIZER_LISTS
+#  define BOOST_NO_0X_HDR_INITIALIZER_LIST
 #endif
 
 #if !__has_feature(cxx_lambdas)

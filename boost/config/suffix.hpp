@@ -335,17 +335,6 @@
 #endif
 
 //
-// Set BOOST_NO_INITIALIZER_LISTS if there is no library support.
-//
-
-#if defined(BOOST_NO_0X_HDR_INITIALIZER_LIST) && !defined(BOOST_NO_INITIALIZER_LISTS)
-#  define BOOST_NO_INITIALIZER_LISTS
-#endif
-#if defined(BOOST_NO_INITIALIZER_LISTS) && !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
-#  define BOOST_NO_0X_HDR_INITIALIZER_LIST
-#endif
-
-//
 // Set BOOST_HAS_RVALUE_REFS when BOOST_NO_RVALUE_REFERENCES is not defined
 //
 #if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_HAS_RVALUE_REFS)
@@ -698,6 +687,15 @@ namespace std{ using ::type_info; }
 #  else
 #    define BOOST_FORCEINLINE inline
 #  endif
+#endif
+
+
+//	Deprecated macros for 1.50
+//	These will go away in a future release
+
+//	Use BOOST_NO_0X_HDR_INITIALIZER_LIST instead of BOOST_NO_INITIALIZER_LISTS
+#if defined(BOOST_NO_0X_HDR_INITIALIZER_LIST) && !defined(BOOST_NO_INITIALIZER_LISTS)
+#  define BOOST_NO_INITIALIZER_LISTS
 #endif
 
 #endif

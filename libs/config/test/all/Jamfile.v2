@@ -328,9 +328,6 @@ test-suite "BOOST_NO_FUNCTION_TEMPLATE_ORDERING" :
 test-suite "BOOST_NO_MS_INT64_NUMERIC_LIMITS" : 
 [ run ../no_i64_limits_pass.cpp ]
 [ compile-fail ../no_i64_limits_fail.cpp ] ;
-test-suite "BOOST_NO_INITIALIZER_LISTS" : 
-[ run ../no_initializer_lists_pass.cpp ]
-[ compile-fail ../no_initializer_lists_fail.cpp ] ;
 test-suite "BOOST_NO_INCLASS_MEMBER_INITIALIZATION" : 
 [ run ../no_inline_memb_init_pass.cpp ]
 [ compile-fail ../no_inline_memb_init_fail.cpp ] ;

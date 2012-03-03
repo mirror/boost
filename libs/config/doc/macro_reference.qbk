@@ -596,9 +596,6 @@ explicit instantiation forward declarations for templates (`extern template ...`
 [[`BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS`][The compiler does not support
 default template arguments for function templates.
 ]]
-[[`BOOST_NO_INITIALIZER_LISTS`][
-The C++ compiler does not support C++0x initializer lists.
-]]
 [[`BOOST_NO_LAMBDAS`][The compiler does not support Lambdas. 
 ]]                      
 [[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.
