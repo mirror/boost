@@ -176,59 +176,59 @@ test-suite "BOOST_HAS_WINTHREADS" :
 [ run ../has_winthreads_pass.cpp ]
 [ compile-fail ../has_winthreads_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_ARRAY" : 
-[ run ../no_0x_hdr_array_pass.cpp ]
-[ compile-fail ../no_0x_hdr_array_fail.cpp ] ;
+[ run ../no_cxx11_hdr_array_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_array_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_CHRONO" : 
-[ run ../no_0x_hdr_chrono_pass.cpp ]
-[ compile-fail ../no_0x_hdr_chrono_fail.cpp ] ;
+[ run ../no_cxx11_hdr_chrono_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_chrono_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_CODECVT" : 
-[ run ../no_0x_hdr_codecvt_pass.cpp ]
-[ compile-fail ../no_0x_hdr_codecvt_fail.cpp ] ;
+[ run ../no_cxx11_hdr_codecvt_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_codecvt_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_CONDITION_VARIABLE" : 
-[ run ../no_0x_hdr_condition_variable_pass.cpp ]
-[ compile-fail ../no_0x_hdr_condition_variable_fail.cpp ] ;
+[ run ../no_cxx11_hdr_condition_variable_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_condition_variable_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_FORWARD_LIST" : 
-[ run ../no_0x_hdr_forward_list_pass.cpp ]
-[ compile-fail ../no_0x_hdr_forward_list_fail.cpp ] ;
+[ run ../no_cxx11_hdr_forward_list_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_forward_list_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_FUTURE" : 
-[ run ../no_0x_hdr_future_pass.cpp ]
-[ compile-fail ../no_0x_hdr_future_fail.cpp ] ;
+[ run ../no_cxx11_hdr_future_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_future_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_INITIALIZER_LIST" : 
-[ run ../no_0x_hdr_initializer_list_pass.cpp ]
-[ compile-fail ../no_0x_hdr_initializer_list_fail.cpp ] ;
+[ run ../no_cxx11_hdr_initializer_list_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_initializer_list_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_MUTEX" : 
-[ run ../no_0x_hdr_mutex_pass.cpp ]
-[ compile-fail ../no_0x_hdr_mutex_fail.cpp ] ;
+[ run ../no_cxx11_hdr_mutex_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_mutex_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_RANDOM" : 
-[ run ../no_0x_hdr_random_pass.cpp ]
-[ compile-fail ../no_0x_hdr_random_fail.cpp ] ;
+[ run ../no_cxx11_hdr_random_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_random_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_RATIO" : 
-[ run ../no_0x_hdr_ratio_pass.cpp ]
-[ compile-fail ../no_0x_hdr_ratio_fail.cpp ] ;
+[ run ../no_cxx11_hdr_ratio_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_ratio_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_REGEX" : 
-[ run ../no_0x_hdr_regex_pass.cpp ]
-[ compile-fail ../no_0x_hdr_regex_fail.cpp ] ;
+[ run ../no_cxx11_hdr_regex_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_regex_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_SYSTEM_ERROR" : 
-[ run ../no_0x_hdr_system_error_pass.cpp ]
-[ compile-fail ../no_0x_hdr_system_error_fail.cpp ] ;
+[ run ../no_cxx11_hdr_system_error_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_system_error_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_THREAD" : 
-[ run ../no_0x_hdr_thread_pass.cpp ]
-[ compile-fail ../no_0x_hdr_thread_fail.cpp ] ;
+[ run ../no_cxx11_hdr_thread_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_thread_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_TUPLE" : 
-[ run ../no_0x_hdr_tuple_pass.cpp ]
-[ compile-fail ../no_0x_hdr_tuple_fail.cpp ] ;
+[ run ../no_cxx11_hdr_tuple_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_tuple_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_TYPEINDEX" : 
-[ run ../no_0x_hdr_typeindex_pass.cpp ]
-[ compile-fail ../no_0x_hdr_typeindex_fail.cpp ] ;
+[ run ../no_cxx11_hdr_typeindex_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_typeindex_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_TYPE_TRAITS" : 
-[ run ../no_0x_hdr_type_traits_pass.cpp ]
-[ compile-fail ../no_0x_hdr_type_traits_fail.cpp ] ;
+[ run ../no_cxx11_hdr_type_traits_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_type_traits_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_UNORDERED_MAP" : 
-[ run ../no_0x_hdr_unordered_map_pass.cpp ]
-[ compile-fail ../no_0x_hdr_unordered_map_fail.cpp ] ;
+[ run ../no_cxx11_hdr_unordered_map_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_unordered_map_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_HDR_UNORDERED_SET" : 
-[ run ../no_0x_hdr_unordered_set_pass.cpp ]
-[ compile-fail ../no_0x_hdr_unordered_set_fail.cpp ] ;
+[ run ../no_cxx11_hdr_unordered_set_pass.cpp ]
+[ compile-fail ../no_cxx11_hdr_unordered_set_fail.cpp ] ;
 test-suite "BOOST_NO_ADL_BARRIER" : 
 [ run ../no_adl_barrier_pass.cpp ]
 [ compile-fail ../no_adl_barrier_fail.cpp ] ;
