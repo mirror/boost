@@ -953,7 +953,7 @@ namespace boost
             CharT const capital_e = lcast_char_constants<CharT>::capital_e;
             CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
 
-            value = 0.0;
+            value = static_cast<T>(0);
 
             if (parse_inf_nan(begin, end, value)) return true;
 
