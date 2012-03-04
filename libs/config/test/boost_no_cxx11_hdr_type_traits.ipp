@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_TYPE_TRAITS
+//  MACRO:         BOOST_NO_CXX11_HDR_TYPE_TRAITS
 //  TITLE:         C++0x header <type_traits> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <type_traits>
 
 #include <type_traits>
 
-namespace boost_no_0x_hdr_type_traits {
+namespace boost_no_cxx11_hdr_type_traits {
 
 int test()
 {

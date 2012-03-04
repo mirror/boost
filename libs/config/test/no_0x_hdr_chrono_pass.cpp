@@ -10,10 +10,10 @@
 //
 
 
-// Test file for macro BOOST_NO_0X_HDR_CHRONO
+// Test file for macro BOOST_NO_CXX11_HDR_CHRONO
 // This file should compile, if it does not then
-// BOOST_NO_0X_HDR_CHRONO should be defined.
-// See file boost_no_0x_hdr_chrono.ipp for details
+// BOOST_NO_CXX11_HDR_CHRONO should be defined.
+// See file boost_no_cxx11_hdr_chrono.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_0X_HDR_CHRONO
-#include "boost_no_0x_hdr_chrono.ipp"
+#ifndef BOOST_NO_CXX11_HDR_CHRONO
+#include "boost_no_cxx11_hdr_chrono.ipp"
 #else
-namespace boost_no_0x_hdr_chrono = empty_boost;
+namespace boost_no_cxx11_hdr_chrono = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_0x_hdr_chrono::test();
+   return boost_no_cxx11_hdr_chrono::test();
 }
 

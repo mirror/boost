@@ -6,19 +6,18 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_REGEX
-//  TITLE:         C++0x header <regex> unavailable
-//  DESCRIPTION:   The standard library does not supply C++0x header <regex>
+//  MACRO:         BOOST_NO_CXX11_HDR_ARRAY
+//  TITLE:         C++0x header <array> unavailable
+//  DESCRIPTION:   The standard library does not supply C++0x header <array>
 
-#include <regex>
+#include <array>
 
-namespace boost_no_0x_hdr_regex {
+namespace boost_no_0cxx11_hdr_array {
 
 int test()
 {
-  using std::regex;
-  using std::wregex;
-  return 0;
+  std::array<int, 3> a = { 1, 2, 3 };
+  return a.size() == 3 ? 0 : 1;
 }
 
 }

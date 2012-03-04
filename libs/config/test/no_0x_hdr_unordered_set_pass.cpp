@@ -10,10 +10,10 @@
 //
 
 
-// Test file for macro BOOST_NO_0X_HDR_UNORDERED_SET
+// Test file for macro BOOST_NO_CXX11_HDR_UNORDERED_SET
 // This file should compile, if it does not then
-// BOOST_NO_0X_HDR_UNORDERED_SET should be defined.
-// See file boost_no_0x_hdr_unordered_set.ipp for details
+// BOOST_NO_CXX11_HDR_UNORDERED_SET should be defined.
+// See file boost_no_cxx11_hdr_unordered_set.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_0X_HDR_UNORDERED_SET
-#include "boost_no_0x_hdr_unordered_set.ipp"
+#ifndef BOOST_NO_CXX11_HDR_UNORDERED_SET
+#include "boost_no_cxx11_hdr_unordered_set.ipp"
 #else
-namespace boost_no_0x_hdr_unordered_set = empty_boost;
+namespace boost_no_cxx11_hdr_unordered_set = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_0x_hdr_unordered_set::test();
+   return boost_no_cxx11_hdr_unordered_set::test();
 }
 

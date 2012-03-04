@@ -10,10 +10,10 @@
 //
 
 
-// Test file for macro BOOST_NO_0X_HDR_SYSTEM_ERROR
+// Test file for macro BOOST_NO_CXX11_HDR_SYSTEM_ERROR
 // This file should compile, if it does not then
-// BOOST_NO_0X_HDR_SYSTEM_ERROR should be defined.
-// See file boost_no_0x_hdr_system_error.ipp for details
+// BOOST_NO_CXX11_HDR_SYSTEM_ERROR should be defined.
+// See file boost_no_cxx11_hdr_system_error.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_0X_HDR_SYSTEM_ERROR
-#include "boost_no_0x_hdr_system_error.ipp"
+#ifndef BOOST_NO_CXX11_HDR_SYSTEM_ERROR
+#include "boost_no_cxx11_hdr_system_error.ipp"
 #else
-namespace boost_no_0x_hdr_system_error = empty_boost;
+namespace boost_no_cxx11_hdr_system_error = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_0x_hdr_system_error::test();
+   return boost_no_cxx11_hdr_system_error::test();
 }
 

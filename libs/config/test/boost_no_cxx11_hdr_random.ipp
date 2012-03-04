@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_RANDOM
+//  MACRO:         BOOST_NO_CXX11_HDR_RANDOM
 //  TITLE:         C++0x header <random> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <random>
 
 #include <random>
 
-namespace boost_no_0x_hdr_random {
+namespace boost_no_cxx11_hdr_random {
 
 int test()
 {

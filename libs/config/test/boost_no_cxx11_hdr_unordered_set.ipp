@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_UNORDERED_SET
+//  MACRO:         BOOST_NO_CXX11_HDR_UNORDERED_SET
 //  TITLE:         C++0x header <unordered_set> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <unordered_set>
 
 #include <unordered_set>
 
-namespace boost_no_0x_hdr_unordered_set {
+namespace boost_no_cxx11_hdr_unordered_set {
 
 int test()
 {

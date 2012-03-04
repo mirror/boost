@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_TUPLE
+//  MACRO:         BOOST_NO_CXX11_HDR_TUPLE
 //  TITLE:         C++0x header <tuple> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <tuple>
 
 #include <tuple>
 
-namespace boost_no_0x_hdr_tuple {
+namespace boost_no_cxx11_hdr_tuple {
 
 int test()
 {

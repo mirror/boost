@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_RATIO
+//  MACRO:         BOOST_NO_CXX11_HDR_RATIO
 //  TITLE:         C++0x header <ratio> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <ratio>
 
 #include <ratio>
 
-namespace boost_no_0x_hdr_ratio {
+namespace boost_no_cxx11_hdr_ratio {
 
 int test()
 {

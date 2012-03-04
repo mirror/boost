@@ -10,10 +10,10 @@
 //
 
 
-// Test file for macro BOOST_NO_0X_HDR_CODECVT
+// Test file for macro BOOST_NO_CXX11_HDR_CODECVT
 // This file should not compile, if it does then
-// BOOST_NO_0X_HDR_CODECVT should not be defined.
-// See file boost_no_0x_hdr_codecvt.ipp for details
+// BOOST_NO_CXX11_HDR_CODECVT should not be defined.
+// See file boost_no_cxx11_hdr_codecvt.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifdef BOOST_NO_0X_HDR_CODECVT
-#include "boost_no_0x_hdr_codecvt.ipp"
+#ifdef BOOST_NO_CXX11_HDR_CODECVT
+#include "boost_no_cxx11_hdr_codecvt.ipp"
 #else
 #error "this file should not compile"
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_0x_hdr_codecvt::test();
+   return boost_no_cxx11_hdr_codecvt::test();
 }
 

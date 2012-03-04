@@ -64,7 +64,7 @@
 #endif
 #if (__EDG_VERSION__ <= 310)
 // No support for initializer lists
-#  define BOOST_NO_0X_HDR_INITIALIZER_LIST
+#  define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 #endif
 #if (__EDG_VERSION__ < 400)
 #  define BOOST_NO_VARIADIC_MACROS

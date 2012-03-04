@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_TYPEINDEX
+//  MACRO:         BOOST_NO_CXX11_HDR_TYPEINDEX
 //  TITLE:         C++0x header <typeindex> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <typeindex>
 
 #include <typeindex>
 
-namespace boost_no_0x_hdr_typeindex {
+namespace boost_no_cxx11_hdr_typeindex {
 
 int test()
 {

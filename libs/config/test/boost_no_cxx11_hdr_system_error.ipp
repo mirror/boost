@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_SYSTEM_ERROR
+//  MACRO:         BOOST_NO_CXX11_HDR_SYSTEM_ERROR
 //  TITLE:         C++0x header <system_error> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <system_error>
 
 #include <system_error>
 
-namespace boost_no_0x_hdr_system_error {
+namespace boost_no_cxx11_hdr_system_error {
 
 int test()
 {

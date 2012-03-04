@@ -10,10 +10,10 @@
 //
 
 
-// Test file for macro BOOST_NO_0X_HDR_THREAD
+// Test file for macro BOOST_NO_CXX11_HDR_THREAD
 // This file should not compile, if it does then
-// BOOST_NO_0X_HDR_THREAD should not be defined.
-// See file boost_no_0x_hdr_thread.ipp for details
+// BOOST_NO_CXX11_HDR_THREAD should not be defined.
+// See file boost_no_cxx11_hdr_thread.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifdef BOOST_NO_0X_HDR_THREAD
-#include "boost_no_0x_hdr_thread.ipp"
+#ifdef BOOST_NO_CXX11_HDR_THREAD
+#include "boost_no_cxx11_hdr_thread.ipp"
 #else
 #error "this file should not compile"
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_0x_hdr_thread::test();
+   return boost_no_cxx11_hdr_thread::test();
 }
 

@@ -95,7 +95,7 @@
 // not enabled separately at this time
 #  define BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS
 #endif
-#define BOOST_NO_0X_HDR_INITIALIZER_LIST
+#define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 #define BOOST_NO_LAMBDAS
 #define BOOST_NO_NOEXCEPT
 #define BOOST_NO_NULLPTR

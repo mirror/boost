@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_CONDITION_VARIABLE
+//  MACRO:         BOOST_NO_CXX11_HDR_CONDITION_VARIABLE
 //  TITLE:         C++0x header <condition_variable> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <condition_variable>
 
 #include <condition_variable>
 
-namespace boost_no_0x_hdr_condition_variable {
+namespace boost_no_cxx11_hdr_condition_variable {
 
 int test()
 {

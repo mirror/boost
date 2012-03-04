@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_THREAD
+//  MACRO:         BOOST_NO_CXX11_HDR_THREAD
 //  TITLE:         C++0x header <thread> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <thread>
 
 #include <thread>
 
-namespace boost_no_0x_hdr_thread {
+namespace boost_no_cxx11_hdr_thread {
 
 int test()
 {

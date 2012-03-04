@@ -119,7 +119,7 @@
 
 #define BOOST_HAS_MACRO_USE_FACET
 
-#define BOOST_NO_0X_HDR_INITIALIZER_LIST
+#define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 
 // On non-Win32 platforms let the platform config figure this out:
 #ifdef _WIN32

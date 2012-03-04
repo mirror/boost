@@ -10,10 +10,10 @@
 //
 
 
-// Test file for macro BOOST_NO_0X_HDR_REGEX
+// Test file for macro BOOST_NO_CXX11_HDR_REGEX
 // This file should not compile, if it does then
-// BOOST_NO_0X_HDR_REGEX should not be defined.
-// See file boost_no_0x_hdr_regex.ipp for details
+// BOOST_NO_CXX11_HDR_REGEX should not be defined.
+// See file boost_no_cxx11_hdr_regex.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifdef BOOST_NO_0X_HDR_REGEX
-#include "boost_no_0x_hdr_regex.ipp"
+#ifdef BOOST_NO_CXX11_HDR_REGEX
+#include "boost_no_cxx11_hdr_regex.ipp"
 #else
 #error "this file should not compile"
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_0x_hdr_regex::test();
+   return boost_no_cxx11_hdr_regex::test();
 }
 

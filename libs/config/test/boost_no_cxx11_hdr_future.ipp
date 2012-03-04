@@ -6,13 +6,13 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_0X_HDR_FUTURE
+//  MACRO:         BOOST_NO_CXX11_HDR_FUTURE
 //  TITLE:         C++0x header <future> unavailable
 //  DESCRIPTION:   The standard library does not supply C++0x header <future>
 
 #include <future>
 
-namespace boost_no_0x_hdr_future {
+namespace boost_no_cxx11_hdr_future {
 
 int test()
 {
