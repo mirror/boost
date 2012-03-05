@@ -39,8 +39,11 @@ test-suite conversion
     [ compile lexical_cast_typedefed_wchar_test.cpp : <toolset>msvc:<nowchar>on ]
     [ run lexical_cast_typedefed_wchar_test_runtime.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <toolset>msvc:<nowchar>on ]
     [ run lexical_cast_no_locale_test.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <define>BOOST_NO_STD_LOCALE <define>BOOST_LEXICAL_CAST_ASSUME_C_LOCALE ]
-    [ run lexical_cast_no_exceptions_test.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <define>BOOST_NO_EXCEPTIONS ]
-  ;
-#Add missing flags, when numeric_cast compilation with exceptions disabled will be fixed:
-#     [ run lexical_cast_no_exceptions_test.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <define>BOOST_NO_EXCEPTIONS <toolset>gcc:<cflags>-fno-exceptions ]    
+    [ run lexical_cast_no_exceptions_test.cpp ../../test/build//boost_unit_test_framework/<link>static : : : <define>BOOST_NO_EXCEPTIONS 
+      <toolset>gcc-4.3:<cflags>-fno-exceptions
+      <toolset>gcc-4.4:<cflags>-fno-exceptions
+      <toolset>gcc-4.5:<cflags>-fno-exceptions
+      <toolset>gcc-4.6:<cflags>-fno-exceptions
+    ]
+  ;   
 
