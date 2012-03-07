@@ -44,7 +44,9 @@
 #  define BOOST_NO_DECLTYPE
 #endif
 
-#define BOOST_NO_DECLTYPE_N3276
+#if !__has_feature(__cxx_decltype__)
+#  define BOOST_NO_DECLTYPE_N3276
+#endif
 
 #if !__has_feature(cxx_defaulted_functions)
 #  define BOOST_NO_DEFAULTED_FUNCTIONS
