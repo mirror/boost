@@ -12,7 +12,7 @@
 
 #include <array>
 
-namespace boost_no_0cxx11_hdr_array {
+namespace boost_no_cxx11_hdr_array {
 
 int test()
 {
