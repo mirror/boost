@@ -104,7 +104,7 @@ _CRTIMP int __cdecl vswprintf(wchar_t * __restrict__ , const wchar_t * __restric
 namespace boost
 {
     // exception used to indicate runtime lexical_cast failure
-    class bad_lexical_cast :
+    class BOOST_SYMBOL_VISIBLE bad_lexical_cast :
     // workaround MSVC bug with std::bad_cast when _HAS_EXCEPTIONS == 0 
 #if defined(BOOST_MSVC) && defined(_HAS_EXCEPTIONS) && !_HAS_EXCEPTIONS 
         public std::exception 
@@ -732,6 +732,15 @@ namespace boost
 
     namespace detail
     {
+        template <class CharT>
+        bool lc_iequal(const CharT* val, const CharT* lcase, const CharT* ucase, unsigned int len) {
+            for( unsigned int i=0; i < len; ++i ) {
+                if ( val[i] != lcase[i] && val[i] != ucase[i] ) return false;
+            }
+
+            return true;
+        }
+
         /* Returns true and sets the correct value if found NaN or Inf. */
         template <class CharT, class T>
         inline bool parse_inf_nan_impl(const CharT* begin, const CharT* end, T& value
@@ -755,7 +764,7 @@ namespace boost
             else if( *begin == plus ) ++begin;
 
             if( end-begin < 3 ) return false;
-            if( !memcmp(begin, lc_nan, 3*sizeof(CharT)) || !memcmp(begin, lc_NAN, 3*sizeof(CharT)) )
+            if( lc_iequal(begin, lc_nan, lc_NAN, 3) )
             {
                 begin += 3;
                 if (end != begin) /* It is 'nan(...)' or some bad input*/
@@ -772,13 +781,13 @@ namespace boost
             if (( /* 'INF' or 'inf' */
                   end-begin==3
                   &&
-                  (!memcmp(begin, lc_infinity, 3*sizeof(CharT)) || !memcmp(begin, lc_INFINITY, 3*sizeof(CharT)))
+                  lc_iequal(begin, lc_infinity, lc_INFINITY, 3)
                 )
                 ||
                 ( /* 'INFINITY' or 'infinity' */
                   end-begin==inifinity_size
                   &&
-                  (!memcmp(begin, lc_infinity, inifinity_size)|| !memcmp(begin, lc_INFINITY, inifinity_size))
+                  lc_iequal(begin, lc_infinity, lc_INFINITY, inifinity_size)
                 )
              )
             {
@@ -790,6 +799,41 @@ namespace boost
             return false;
         }
 
+        template <class CharT, class T>
+        bool put_inf_nan_impl(CharT* begin, CharT*& end, const T& value
+                         , const CharT* lc_nan
+                         , const CharT* lc_infinity)
+        {
+            using namespace std;
+            const CharT minus = lcast_char_constants<CharT>::minus;
+            if ( (boost::math::isnan)(value) )
+            {
+                if ( (boost::math::signbit)(value) )
+                {
+                    *begin = minus;
+                    ++ begin;
+                }
+
+                memcpy(begin, lc_nan, 3 * sizeof(CharT));
+                end = begin + 3;
+                return true;
+            } else if ( (boost::math::isinf)(value) )
+            {
+                if ( (boost::math::signbit)(value) )
+                {
+                    *begin = minus;
+                    ++ begin;
+                }
+
+                memcpy(begin, lc_infinity, 3 * sizeof(CharT));
+                end = begin + 3;
+                return true;
+            }
+
+            return false;
+        }
+
+
 #ifndef BOOST_LCAST_NO_WCHAR_T
         template <class T>
         bool parse_inf_nan(const wchar_t* begin, const wchar_t* end, T& value)
@@ -799,6 +843,13 @@ namespace boost
                                , L"INFINITY", L"infinity"
                                , L'(', L')');
         }
+
+        template <class T>
+        bool put_inf_nan(wchar_t* begin, wchar_t*& end, const T& value)
+        {
+            return put_inf_nan_impl(begin, end, value, L"nan", L"infinity");
+        }
+
 #endif
 #ifndef BOOST_NO_CHAR16_T
         template <class T>
@@ -808,6 +859,12 @@ namespace boost
                                , u"NAN", u"nan"
                                , u"INFINITY", u"infinity"
                                , u'(', u')');
+        }
+
+        template <class T>
+        bool put_inf_nan(char16_t* begin, char16_t*& end, const T& value)
+        {
+            return put_inf_nan_impl(begin, end, value, u"nan", u"infinity");
         }
 #endif
 #ifndef BOOST_NO_CHAR32_T
@@ -819,6 +876,12 @@ namespace boost
                                , U"INFINITY", U"infinity"
                                , U'(', U')');
         }
+
+        template <class T>
+        bool put_inf_nan(char32_t* begin, char32_t*& end, const T& value)
+        {
+            return put_inf_nan_impl(begin, end, value, U"nan", U"infinity");
+        }
 #endif
 
         template <class CharT, class T>
@@ -829,73 +892,12 @@ namespace boost
                                , "INFINITY", "infinity"
                                , '(', ')');
         }
-#ifndef BOOST_LCAST_NO_WCHAR_T
-        template <class T>
-        bool put_inf_nan(wchar_t* begin, wchar_t*& end, const T& value)
-        {
-            using namespace std;
-            if ( (boost::math::isnan)(value) )
-            {
-                if ( (boost::math::signbit)(value) )
-                {
-                    memcpy(begin,L"-nan", sizeof(L"-nan"));
-                    end = begin + 4;
-                } else
-                {
-                    memcpy(begin,L"nan", sizeof(L"nan"));
-                    end = begin + 3;
-                }
-                return true;
-            } else if ( (boost::math::isinf)(value) )
-            {
-                if ( (boost::math::signbit)(value) )
-                {
-                    memcpy(begin,L"-inf", sizeof(L"-inf"));
-                    end = begin + 4;
-                } else
-                {
-                    memcpy(begin,L"inf", sizeof(L"inf"));
-                    end = begin + 3;
-                }
-                return true;
-            }
 
-            return false;
-        }
-#endif
         template <class CharT, class T>
         bool put_inf_nan(CharT* begin, CharT*& end, const T& value)
         {
-            using namespace std;
-            if ( (boost::math::isnan)(value) )
-            {
-                if ( (boost::math::signbit)(value) )
-                {
-                    memcpy(begin,"-nan", sizeof("-nan"));
-                    end = begin + 4;
-                } else
-                {
-                    memcpy(begin,"nan", sizeof("nan"));
-                    end = begin + 3;
-                }
-                return true;
-            } else if ( (boost::math::isinf)(value) )
-            {
-                if ( (boost::math::signbit)(value) )
-                {
-                    memcpy(begin,"-inf", sizeof("-inf"));
-                    end = begin + 4;
-                } else
-                {
-                    memcpy(begin,"inf", sizeof("inf"));
-                    end = begin + 3;
-                }
-                return true;
-            }
-
-            return false;
+            return put_inf_nan_impl(begin, end, value, "nan", "infinity");
         }
-
     }
 
 
@@ -951,7 +953,7 @@ namespace boost
             CharT const capital_e = lcast_char_constants<CharT>::capital_e;
             CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
 
-            value = 0.0;
+            value = static_cast<T>(0);
 
             if (parse_inf_nan(begin, end, value)) return true;
 
@@ -1165,7 +1167,7 @@ namespace boost
 
     namespace detail
     {
-        struct do_not_construct_stringbuffer_t{};
+        struct do_not_construct_out_stream_t{};
     }
 
     namespace detail // optimized stream wrapper
@@ -1177,25 +1179,27 @@ namespace boost
                 >
         class lexical_stream_limited_src
         {
-            typedef stl_buf_unlocker<std::basic_streambuf<CharT, Traits>, CharT > local_streambuffer_t;
 
 #if defined(BOOST_NO_STRINGSTREAM)
-            typedef stl_buf_unlocker<std::strstream, CharT > local_stringbuffer_t;
+            typedef std::ostrstream                         out_stream_t;
+            typedef stl_buf_unlocker<std::strstreambuf, char>  unlocked_but_t;
 #elif defined(BOOST_NO_STD_LOCALE)
-            typedef stl_buf_unlocker<std::stringstream, CharT > local_stringbuffer_t;
+            typedef std::ostringstream                      out_stream_t;
+            typedef stl_buf_unlocker<std::stringbuf, char>  unlocked_but_t;
 #else
-            typedef stl_buf_unlocker<std::basic_stringbuf<CharT, Traits>, CharT > local_stringbuffer_t;
+            typedef std::basic_ostringstream<CharT, Traits>       out_stream_t;
+            typedef stl_buf_unlocker<std::basic_stringbuf<CharT, Traits>, CharT> unlocked_but_t;
 #endif
             typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
                 RequiresStringbuffer,
-                local_stringbuffer_t,
-                do_not_construct_stringbuffer_t
-            >::type deduced_stringbuffer_t;
+                out_stream_t,
+                do_not_construct_out_stream_t
+            >::type deduced_out_stream_t;
 
             // A string representation of Source is written to [start, finish).
             CharT* start;
             CharT* finish;
-            deduced_stringbuffer_t stringbuffer;
+            deduced_out_stream_t out_stream;
 
         public:
             lexical_stream_limited_src(CharT* sta, CharT* fin)
@@ -1256,10 +1260,16 @@ namespace boost
             template<typename InputStreamable>
             bool shl_input_streamable(InputStreamable& input)
             {
-                std::basic_ostream<CharT> stream(&stringbuffer);
-                bool const result = !(stream << input).fail();
-                start = stringbuffer.pbase();
-                finish = stringbuffer.pptr();
+#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_LOCALE)
+                // If you have compilation error at this point, than your STL library
+                // unsupports such conversions. Try updating it.
+                BOOST_STATIC_ASSERT((boost::is_same<char, CharT>::value));
+#endif
+                bool const result = !(out_stream << input).fail();
+                const unlocked_but_t* const p
+                        = static_cast<unlocked_but_t*>(out_stream.rdbuf()) ;
+                start = p->pbase();
+                finish = p->pptr();
                 return result;
             }
 
@@ -1524,9 +1534,22 @@ namespace boost
                 if(is_pointer<InputStreamable>::value)
                     return false;
 
-                local_streambuffer_t bb;
-                bb.setg(start, start, finish);
-                std::basic_istream<CharT> stream(&bb);
+#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_LOCALE)
+                // If you have compilation error at this point, than your STL library
+                // unsupports such conversions. Try updating it.
+                BOOST_STATIC_ASSERT((boost::is_same<char, CharT>::value));
+#endif
+
+#if defined(BOOST_NO_STRINGSTREAM)
+                std::istrstream stream(start, finish - start);
+#elif defined(BOOST_NO_STD_LOCALE)
+                std::istringstream stream;
+#else
+                std::basic_istringstream<CharT, Traits> stream;
+#endif
+                static_cast<unlocked_but_t*>(stream.rdbuf())
+                        ->setg(start, start, finish);
+
                 stream.unsetf(std::ios::skipws);
                 lcast_set_precision(stream, static_cast<InputStreamable*>(0));
 #if (defined _MSC_VER)
@@ -1935,31 +1958,38 @@ namespace boost
             }
         };
 
-        class precision_loss_error : public boost::numeric::bad_numeric_cast
+        template<class Source, class Target >
+        struct detect_precision_loss
         {
-         public:
-            virtual const char * what() const throw()
-             {  return "bad numeric conversion: precision loss error"; }
-        };
+         typedef boost::numeric::Trunc<Source> Rounder;
+         typedef Source source_type ;
 
-        template<class S >
-        struct throw_on_precision_loss
-        {
-         typedef boost::numeric::Trunc<S> Rounder;
-         typedef S source_type ;
-
-         typedef typename mpl::if_< is_arithmetic<S>,S,S const&>::type argument_type ;
+         typedef BOOST_DEDUCED_TYPENAME mpl::if_<
+            is_arithmetic<Source>, Source, Source const&
+          >::type argument_type ;
 
          static source_type nearbyint ( argument_type s )
          {
-            source_type orig_div_round = s / Rounder::nearbyint(s);
+            const source_type orig_div_round = s / Rounder::nearbyint(s);
+            const source_type eps = std::numeric_limits<source_type>::epsilon();
 
-            if ( (orig_div_round > 1 ? orig_div_round - 1 : 1 - orig_div_round) > std::numeric_limits<source_type>::epsilon() )
-               BOOST_THROW_EXCEPTION( precision_loss_error() );
+            if ((orig_div_round > 1 ? orig_div_round - 1 : 1 - orig_div_round) > eps)
+                BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+
             return s ;
          }
 
          typedef typename Rounder::round_style round_style;
+        } ;
+
+        template<class Source, class Target >
+        struct nothrow_overflow_handler
+        {
+          void operator() ( boost::numeric::range_check_result r )
+          {
+            if (r != boost::numeric::cInRange)
+                BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+          }
         } ;
 
         template<typename Target, typename Source>
@@ -1967,20 +1997,13 @@ namespace boost
         {
             static inline Target lexical_cast_impl(const Source &arg)
             {
-                try{
-                    typedef boost::numeric::converter<
-                            Target,
-                            Source,
-                            boost::numeric::conversion_traits<Target,Source>,
-                            boost::numeric::def_overflow_handler,
-                            throw_on_precision_loss<Source>
-                    > Converter ;
-
-                    return Converter::convert(arg);
-                } catch( ::boost::numeric::bad_numeric_cast const& ) {
-                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
-                }
-                BOOST_UNREACHABLE_RETURN(static_cast<Target>(0));
+                return boost::numeric::converter<
+                        Target,
+                        Source,
+                        boost::numeric::conversion_traits<Target,Source>,
+                        nothrow_overflow_handler<Source, Target>,
+                        detect_precision_loss<Source, Target>
+                >::convert(arg);
             }
         };
 
@@ -1989,25 +2012,17 @@ namespace boost
         {
             static inline Target lexical_cast_impl(const Source &arg)
             {
-                try{
-                    typedef boost::numeric::converter<
-                            Target,
-                            Source,
-                            boost::numeric::conversion_traits<Target,Source>,
-                            boost::numeric::def_overflow_handler,
-                            throw_on_precision_loss<Source>
-                    > Converter ;
+                typedef boost::numeric::converter<
+                        Target,
+                        Source,
+                        boost::numeric::conversion_traits<Target,Source>,
+                        nothrow_overflow_handler<Source, Target>,
+                        detect_precision_loss<Source, Target>
+                > converter_t;
 
-                    bool has_minus = ( arg < 0);
-                    if ( has_minus ) {
-                        return static_cast<Target>(-Converter::convert(-arg));
-                    } else {
-                        return Converter::convert(arg);
-                    }
-                } catch( ::boost::numeric::bad_numeric_cast const& ) {
-                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
-                }
-                BOOST_UNREACHABLE_RETURN(static_cast<Target>(0));
+                return (
+                    arg < 0 ? -converter_t::convert(-arg) : converter_t::convert(arg)
+                );
             }
         };
 

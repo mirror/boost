@@ -2,7 +2,7 @@
 //
 //  See http://www.boost.org for most recent version, including documentation.
 //
-//  Copyright Antony Polukhin, 2011.
+//  Copyright Antony Polukhin, 2012.
 //
 //  Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
@@ -22,9 +22,14 @@
 
 using namespace boost;
 
-#if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_WSTRING)
-#define BOOST_LCAST_NO_WCHAR_T
-#endif
+// Testing compilation and some basic usage with BOOST_NO_STD_LOCALE
+// Tests are mainly copyied from lexical_cast_empty_input_test.cpp (something 
+// new added to test_empty_3)
+
+#ifndef BOOST_NO_STD_LOCALE
+#error "This test must be compiled with -DBOOST_NO_STD_LOCALE"
+#endif 
+
 
 template <class T>
 void do_test_on_empty_input(T& v)
@@ -44,9 +49,8 @@ void do_test_on_empty_input(T& v)
 #endif
 }
 
-void test_empty_iterator_range()
+void test_empty_1()
 {
-
     boost::iterator_range<char*> v;
     do_test_on_empty_input(v);
     BOOST_CHECK_EQUAL(lexical_cast<std::string>(v), std::string());
@@ -69,35 +73,18 @@ void test_empty_iterator_range()
     BOOST_CHECK_THROW(lexical_cast<signed char>(ccv), bad_lexical_cast);
 }
 
-void test_empty_string()
+void test_empty_2()
 {
     std::string v;
     do_test_on_empty_input(v);
     BOOST_CHECK_THROW(lexical_cast<char>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<unsigned char>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<signed char>(v), bad_lexical_cast);
-
-#ifndef BOOST_LCAST_NO_WCHAR_T
-    std::wstring vw;
-    do_test_on_empty_input(vw);
-    BOOST_CHECK_THROW(lexical_cast<wchar_t>(vw), bad_lexical_cast);
-#endif
-
-// Currently, no compiler and STL library fully support char16_t and char32_t
-//#ifndef BOOST_NO_CHAR16_T
-//    std::basic_string<char16_t> v16w;
-//    do_test_on_empty_input(v16w);
-//    BOOST_CHECK_THROW(lexical_cast<char16_t>(v16w), bad_lexical_cast);
-//#endif
-//#ifndef BOOST_NO_CHAR32_T
-//    std::basic_string<char32_t> v32w;
-//    do_test_on_empty_input(v32w);
-//    BOOST_CHECK_THROW(lexical_cast<char32_t>(v32w), bad_lexical_cast);
-//#endif
 }
 
 struct Escape
 {
+    Escape(){}
     Escape(const std::string& s)
         : str_(s)
     {}
@@ -110,13 +97,26 @@ inline std::ostream& operator<< (std::ostream& o, const Escape& rhs)
     return o << rhs.str_;
 }
 
-void test_empty_user_class()
+inline std::istream& operator>> (std::istream& i, Escape& rhs)
+{
+    return i >> rhs.str_;
+}
+
+void test_empty_3()
 {
     Escape v("");
     do_test_on_empty_input(v);
+            
     BOOST_CHECK_THROW(lexical_cast<char>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<unsigned char>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<signed char>(v), bad_lexical_cast);
+    
+    v = lexical_cast<Escape>(100);
+    BOOST_CHECK_EQUAL(lexical_cast<int>(v), 100);
+    BOOST_CHECK_EQUAL(lexical_cast<unsigned int>(v), 100u);
+    
+    v = lexical_cast<Escape>(0.0);
+    BOOST_CHECK_EQUAL(lexical_cast<double>(v), 0.0);
 }
 
 namespace std {
@@ -129,7 +129,7 @@ inline std::ostream & operator<<(std::ostream & out, const std::vector<long> & v
 }
 }
 
-void test_empty_vector()
+void test_empty_4()
 {
     std::vector<long> v;
     do_test_on_empty_input(v);
@@ -145,7 +145,7 @@ struct my_string {
     }
 };
 
-void test_empty_zero_terminated_string()
+void test_empty_5()
 {
     my_string st;
     BOOST_CHECK_EQUAL(boost::lexical_cast<std::string>(st), std::string());;
@@ -154,12 +154,13 @@ void test_empty_zero_terminated_string()
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
     unit_test::test_suite *suite =
-        BOOST_TEST_SUITE("lexical_cast. Empty input unit test");
-    suite->add(BOOST_TEST_CASE(&test_empty_iterator_range));
-    suite->add(BOOST_TEST_CASE(&test_empty_string));
-    suite->add(BOOST_TEST_CASE(&test_empty_user_class));
-    suite->add(BOOST_TEST_CASE(&test_empty_vector));
-    suite->add(BOOST_TEST_CASE(&test_empty_zero_terminated_string));
+        BOOST_TEST_SUITE("lexical_cast. Testing with BOOST_NO_STD_LOCALE");
+    suite->add(BOOST_TEST_CASE(&test_empty_1));
+    suite->add(BOOST_TEST_CASE(&test_empty_2));
+    suite->add(BOOST_TEST_CASE(&test_empty_3));
+    suite->add(BOOST_TEST_CASE(&test_empty_4));
+    suite->add(BOOST_TEST_CASE(&test_empty_5));
 
     return suite;
 }
+
