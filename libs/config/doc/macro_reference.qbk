@@ -670,7 +670,7 @@ with:
 ``
 ]]
 [[`BOOST_STATIC_CONSTEXPR`][
-This is a shortcut for `static BOOST_CONSTEXPR_OR_CONST`For example, when defining const expr variables replace:
+This is a shortcut for `static BOOST_CONSTEXPR_OR_CONST`. For example, when defining const expr variables replace:
 ``
   static constexpr UIntType xor_mask = a;
 ``
@@ -850,7 +850,7 @@ must be used when the macro invocation appears after a normal parameter
 declaration or after the invocation of another macro of this same group.
 ]]
 [[`BOOST_USE_FACET(Type, loc)`][
-When the standard library does not have a comforming `std::use_facet` there
+When the standard library does not have a conforming `std::use_facet` there
 are various workarounds available, but they differ from library to library.
 This macro provides a consistent way to access a locale's facets. For example,
 replace:

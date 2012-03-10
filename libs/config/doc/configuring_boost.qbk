@@ -346,8 +346,8 @@ configuration macros setting. In a case like this, you can define
 `BOOST_NO_COMPILER_CONFIG` either on the command line, or in __BOOST_CONFIG_USER_HEADER__,
 and miss out the compiler configuration header altogether (actually you miss out
 two headers, one which works out what the compiler is, and one that configures
-boost for it). This has two consequences: the first is that less code has to be c
-ompiled, and the second that you have removed a dependency on two boost headers.
+boost for it). This has two consequences: the first is that less code has to be
+compiled, and the second that you have removed a dependency on two boost headers.
 
 [endsect]
 
