@@ -645,7 +645,7 @@ The following macros allow use of C++11 features even with compilers that do not
 provide compliant C++11 support.
 
 [table
-[[Macro        ][Section     ][ Description          ]]
+[[Macro        ][ Description          ]]
 
 [[`BOOST_CONSTEXPR`][
 Some compilers don't support the use of `constexpr`. This macro expands to nothing on those compilers, and `constexpr`
