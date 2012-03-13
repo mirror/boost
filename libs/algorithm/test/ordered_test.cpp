@@ -12,7 +12,7 @@
 #include <algorithm>
 #include <iostream>
 
-#include <boost/algorithm/cxx11/ordered.hpp>
+#include <boost/algorithm/cxx11/is_sorted.hpp>
 #include <boost/test/included/test_exec_monitor.hpp>
 
 using namespace boost;
