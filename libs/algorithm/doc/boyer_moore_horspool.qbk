@@ -1,0 +1,27 @@
+[/ QuickBook Document version 1.5 ]
+
+[section:BoyerMooreHorspool Boyer-Moore-Horspool Search]
+
+[/license
+
+Copyright (c) 2010-2012 Marshall Clow
+
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt)
+]
+
+
+[heading Overview]
+
+The header file 'boyer_moore_horspool.hpp' contains an an implementation of the Boyer-Moore-Horspool algorithm for searching sequences of values. 
+
+
+[endsect]
+
+[/ File boyer_moore_horspool.qbk
+Copyright 2011 Marshall Clow
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt).
+]
+

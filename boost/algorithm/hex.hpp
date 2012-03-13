@@ -158,6 +158,7 @@ namespace detail {
 /// \param first    The start of the input sequence
 /// \param last     One past the end of the input sequence
 /// \param out      An output iterator to the results into
+/// \return         The updated output iterator
 /// \note           Based on the MySQL function of the same name
 template <typename InputIterator, typename OutputIterator>
 typename boost::enable_if<boost::is_integral<typename detail::hex_iterator_traits<InputIterator>::value_type>, OutputIterator>::type
@@ -234,7 +235,7 @@ OutputIterator unhex ( const T *ptr, OutputIterator out ) {
     }
 
 
-/// \fn unhex ( const Range &r, OutputIterator out )
+/// \fn OutputIterator unhex ( const Range &r, OutputIterator out )
 /// \brief   Converts a sequence of hexadecimal characters into a sequence of integers.
 /// 
 /// \param r        The input range
@@ -247,7 +248,7 @@ OutputIterator unhex ( const Range &r, OutputIterator out ) {
     }
 
 
-/// \fn hex ( const String &input )
+/// \fn String hex ( const String &input )
 /// \brief   Converts a sequence of integral types into a hexadecimal sequence of characters.
 /// 
 /// \param input    A container to be converted
@@ -260,8 +261,8 @@ String hex ( const String &input ) {
     return output;
     }
 
-/// \fn unhex ( const String &input )
-/// \brief   Converts a sequence of hexadecimal characters into a sequence of integers.
+/// \fn String unhex ( const String &input )
+/// \brief   Converts a sequence of hexadecimal characters into a sequence of characters.
 /// 
 /// \param input    A container to be converted
 /// \return         A container with the decoded text
