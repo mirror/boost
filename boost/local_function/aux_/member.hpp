@@ -16,12 +16,24 @@ template<typename T> struct member_type {
     typedef T& reference;
     typedef T* pointer;
 };
+
 template<typename T> struct member_type<T*> {
     typedef T*& reference;
     typedef T* pointer;
 };
+
+template<typename T> struct member_type<T* const> {
+    typedef T* const& reference;
+    typedef T* pointer;
+};
+
 template<typename T> struct member_type<T const*> {
     typedef T const*& reference;
+    typedef T const* pointer;
+};
+
+template<typename T> struct member_type<T const* const> {
+    typedef T const* const& reference;
     typedef T const* pointer;
 };
 

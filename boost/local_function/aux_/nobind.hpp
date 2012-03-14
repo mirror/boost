@@ -18,7 +18,11 @@ namespace boost { namespace local_function { namespace aux {
 
 typedef int nobind_t; // Tag no-bind type.
 
-nobind_t nobind; // Global variable so all no-binds can reference it.
+static nobind_t nobind; // Global variable so all no-binds can reference it.
+
+// NOTE: Used only to get rid of unused static variable `nobind` (this function
+// is never actually called so it does not need to be defined).
+void no_unused_nobind_warning_(nobind_t* ptr = &nobind);
 
 } } } // namespace
 
