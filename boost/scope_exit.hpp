@@ -57,6 +57,15 @@
 #   define BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01 0
 #endif
 
+// MSVC 7.1=1300, 8.0=1400, 9.0=1500, 10.0=1600 (this workaround was tested at
+// MSVC 8.0 but it might work also for all MVSC >= 7.1).
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400)) && \
+        !defined(BOOST_TYPEOF_EMULATION) /* doesn't work in typeof-emu mode */
+#   define BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_WORKAROUND_01 1
+#else
+#   define BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_WORKAROUND_01 0
+#endif
+
 #if !defined(BOOST_NO_LAMBDAS) && !defined(BOOST_SCOPE_EXIT_CONFIG_NO_CPP11)
 #   define BOOST_SCOPE_EXIT_AUX_LAMBDAS_01 1
 #else
@@ -198,9 +207,7 @@ extern boost::scope_exit::detail::undeclared BOOST_SCOPE_EXIT_AUX_ARGS;
 // constant by assigning an enum and use that as type-index-- this only works
 // with the sizeof() approach and not with the typeid() approach. This does not
 // work in typeof emulation mode.
-#if BOOST_WORKAROUND(BOOST_MSVC, >= 1300) && /* MSVC 7.1 */ \
-        BOOST_WORKAROUND(BOOST_MSVC, <= 1400) && /* MSVC 8.0 */ \
-        !defined(BOOST_TYPEOF_EMULATION) /* doesn't work in typeof-emu mode */
+#if BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_WORKAROUND_01
 
 namespace boost { namespace scope_exit { namespace aux {
         namespace msvc_typeof_this {
@@ -265,12 +272,12 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
             BOOST_SCOPE_EXIT_AUX_TYPEDEF_TYPEOF_THIS_INDEX_(id) \
     >::type new_type;
 
-#else // typeof(this) on other compilers are OK.
+#else // TYPEOF_THIS_WORKAROUND
 
 #define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, new_type) \
     typedef BOOST_TYPEOF(this) new_type;
 
-#endif // typeof(this)
+#endif // TYPEOF_THIS_WORKAROUND
 
 #if BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
 
