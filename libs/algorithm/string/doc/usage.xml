@@ -163,7 +163,7 @@
         <title>Trimming</title>
         
         <para>
-            When parsing the input from a user, strings usually have unwanted leading or trailing 
+            When parsing the input from a user, strings often have unwanted leading or trailing 
             characters. To get rid of them, we need trim functions:
         </para>
         <programlisting>
