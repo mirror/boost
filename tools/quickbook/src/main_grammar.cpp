@@ -27,8 +27,6 @@
 #include <boost/range/algorithm/find_first_of.hpp>
 #include <boost/range/as_literal.hpp>
 
-#include <iostream>
-
 namespace quickbook
 {
     namespace cl = boost::spirit::classic;
@@ -103,9 +101,18 @@ namespace quickbook
 
                 info_ = l.info;
 
-                if (info_.type != element_info::phrase &&
+                if (!l.list_stack.empty() && !l.list_stack.top().root &&
+                        info_.type == element_info::block)
+                {
+                    // If in a list and the element is a block, end the list.
+                    l.actions_.list_item();
+                    l.clear_stack();
+                }
+                else if (info_.type != element_info::phrase &&
                         info_.type != element_info::maybe_block)
+                {
                     l.actions_.paragraph();
+                }
 
                 l.actions_.values.builder.reset();
                 
@@ -361,8 +368,12 @@ namespace quickbook
             >>  (cl::ch_p('*') | '#')
             >>  (*cl::blank_p)                  [local.list.still_in_block = true]
             >>  *(  cl::eps_p(local.list.still_in_block)
-                >>  local.list_item(element_info::only_block)
+                >>  (   qbk_since(106u) >> local.list_item(element_info::only_block)
+                    |   qbk_before(106u) >> local.list_item(element_info::only_list_block)
+                    )
                 )
+                // TODO: This is sometimes called in the wrong place. Currently
+                // harmless.
             >>  cl::eps_p                       [actions.list_item]
             ;
 

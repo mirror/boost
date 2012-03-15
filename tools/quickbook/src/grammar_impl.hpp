@@ -38,6 +38,7 @@ namespace quickbook
             in_block = phrase | maybe_block | nested_block | conditional_or_block | block,
             only_nested_block = nested_block,
             only_block = nested_block | conditional_or_block | block,
+            only_list_block = nested_block | conditional_or_block,
             only_contextual_block = maybe_block | nested_block | conditional_or_block | block
         };
 

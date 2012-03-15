@@ -103,6 +103,13 @@ Don't end list with comment 2:
 
 [endsect]
 
+[section List immediately following markup 2]
+* One
+[section Nested section]
+* Two
+[endsect]
+[endsect]
+
 [section Paragraphs in list items]
 
 * A1
