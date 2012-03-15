@@ -133,3 +133,15 @@ Don't end list with comment 2:
    D2
 
 [endsect]
+
+[section Indented code blocks in lists]
+
+* A
+
+    B
+  C
+* D
+
+    E
+* F
+[endsect]

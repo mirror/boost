@@ -242,7 +242,7 @@ namespace quickbook
             , no_eols(true)
             , actions_(actions)
             , check_indentation(*this, &main_grammar_local::check_indentation_impl)
-            , check_code_block(*this, &main_grammar_local::check_indentation_impl)
+            , check_code_block(*this, &main_grammar_local::check_code_block_impl)
             , start_blocks(*this, &main_grammar_local::start_blocks_impl)
             , end_blocks(*this, &main_grammar_local::end_blocks_impl)
             , in_list(*this)

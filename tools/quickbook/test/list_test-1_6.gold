@@ -495,4 +495,32 @@
       </listitem>
     </itemizedlist>
   </section>
+  <section id="list_test.indented_code_blocks_in_lists">
+    <title><link linkend="list_test.indented_code_blocks_in_lists">Indented code
+    blocks in lists</link></title>
+    <itemizedlist>
+      <listitem>
+        <simpara>
+          A
+<programlisting><phrase role="identifier">B</phrase>
+</programlisting>
+          <para>
+            C
+          </para>
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          D
+<programlisting><phrase role="identifier">E</phrase>
+</programlisting>
+        </simpara>
+      </listitem>
+      <listitem>
+        <simpara>
+          F
+        </simpara>
+      </listitem>
+    </itemizedlist>
+  </section>
 </article>
