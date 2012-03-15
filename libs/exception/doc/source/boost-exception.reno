@@ -52,201 +52,6 @@
 															<hook>
 																<hook>
 																	<stream_hook_path>
-																		<size>1</size>
-																		<strong>DB156E6A8ACB9FB90C8FB110FC25A5FEB14A619F82EEC47FF913373592E5CC3E</strong>
-																		<weak>240075319</weak>
-																		<size>6209</size>
-																		<position>412</position>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>0</empty>
-																		<string>../../example/example_io.cpp</string>
-																		<type>0</type>
-																		<base>0</base>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>diagnostic_information example</string>
-															</title>
-															<file_name>
-																<string></string>
-															</file_name>
-														</object>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>6</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
-																		<size>3</size>
-																		<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-																		<weak>3582349865</weak>
-																		<size>11956</size>
-																		<position>527</position>
-																		<strong>E0D734FE11CFB52F1BBF35C31E84A098AC93881DEE300CDBE3F9B772F75D9B2F</strong>
-																		<weak>4056200131</weak>
-																		<size>2307</size>
-																		<position>4436</position>
-																		<strong>A94129EFD6ABBDDCD4CFDB671821F7DA103B2EA4455CF39E783D333C236D1C41</strong>
-																		<weak>1035445969</weak>
-																		<size>595</size>
-																		<position>204</position>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>0</empty>
-																		<string>../../../../boost/exception/exception.hpp</string>
-																		<type>0</type>
-																		<base>0</base>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>exception::exception</string>
-															</title>
-															<file_name>
-																<string>exception_constructors</string>
-															</file_name>
-														</object>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:include include:)&#10;(:auto also:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>7</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
-																		<size>1</size>
-																		<strong>977045132A532A0071B0B53F737D85367CE9A331402F96790E45B3B6F2FC88A6</strong>
-																		<weak>1875939463</weak>
-																		<size>529</size>
-																		<position>382</position>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>0</empty>
-																		<string>../../example/error_info_1.cpp</string>
-																		<type>0</type>
-																		<base>0</base>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>adding of arbitrary data at the point of the throw</string>
-															</title>
-															<file_name>
-																<string>adding_data_at_throw</string>
-															</file_name>
-														</object>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>8</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
-																		<size>0</size>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>1</empty>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>page index</string>
-															</title>
-															<file_name>
-																<string>page_idx</string>
-															</file_name>
-														</object>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:include include:)&#10;(:auto also:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>9</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
-																		<size>0</size>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>1</empty>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>exception types as simple semantic tags</string>
-															</title>
-															<file_name>
-																<string></string>
-															</file_name>
-														</object>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:include include:)&#10;(:auto also:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>10</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
 																		<size>0</size>
 																	</stream_hook_path>
 																</hook>
@@ -272,7 +77,30 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-9</id>
+														<id>6</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<size>0</size>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>1</empty>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>exception types as simple semantic tags</string>
+															</title>
+															<file_name>
+																<string></string>
+															</file_name>
+														</object>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -281,7 +109,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>11</id>
+														<id>7</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -320,7 +148,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>12</id>
+														<id>8</id>
 														<type>
 															<string>reno_context</string>
 														</type>
@@ -348,6 +176,204 @@
 												</weak_ptr>
 												<variant>2</variant>
 												<string>&quot;:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-7</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:include include:)&#10;(:auto also:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-8</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:include include:)&#10;(:auto also:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>9</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<size>1</size>
+																		<strong>977045132A532A0071B0B53F737D85367CE9A331402F96790E45B3B6F2FC88A6</strong>
+																		<weak>1875939463</weak>
+																		<size>529</size>
+																		<position>382</position>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../example/error_info_1.cpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>adding of arbitrary data at the point of the throw</string>
+															</title>
+															<file_name>
+																<string>adding_data_at_throw</string>
+															</file_name>
+														</object>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>10</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<size>3</size>
+																		<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+																		<weak>2916767056</weak>
+																		<size>11964</size>
+																		<position>527</position>
+																		<strong>E0D734FE11CFB52F1BBF35C31E84A098AC93881DEE300CDBE3F9B772F75D9B2F</strong>
+																		<weak>4056200131</weak>
+																		<size>2307</size>
+																		<position>4436</position>
+																		<strong>A94129EFD6ABBDDCD4CFDB671821F7DA103B2EA4455CF39E783D333C236D1C41</strong>
+																		<weak>1035445969</weak>
+																		<size>595</size>
+																		<position>204</position>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../../../boost/exception/exception.hpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>exception::exception</string>
+															</title>
+															<file_name>
+																<string>exception_constructors</string>
+															</file_name>
+														</object>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:include include:)&#10;(:auto also:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>11</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<size>3</size>
+																		<strong>EFBD8063574E7D463C8E08D9AA1D68CFCE4630C445B20156AC7591F46AB48260</strong>
+																		<weak>2082877988</weak>
+																		<size>5081</size>
+																		<position>751</position>
+																		<strong>2C6C9E29E4E23E6C1F5876C33741FB18A63E703410F3CD61ACB348866B7B02B8</strong>
+																		<weak>3516588960</weak>
+																		<size>3918</size>
+																		<position>884</position>
+																		<strong>38AA79D330846BE1CF17285796F34A9DBB5A7E995963A55F9B46EB1DA6314610</strong>
+																		<weak>542483318</weak>
+																		<size>573</size>
+																		<position>3130</position>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../../../boost/exception/info.hpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>exception/operator&lt;&lt;</string>
+															</title>
+															<file_name>
+																<string></string>
+															</file_name>
+														</object>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:include include:)&#10;(:auto also:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>12</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<size>1</size>
+																		<strong>DB156E6A8ACB9FB90C8FB110FC25A5FEB14A619F82EEC47FF913373592E5CC3E</strong>
+																		<weak>240075319</weak>
+																		<size>6209</size>
+																		<position>412</position>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../example/example_io.cpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>diagnostic_information example</string>
+															</title>
+															<file_name>
+																<string></string>
+															</file_name>
+														</object>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -406,111 +432,6 @@
 															<hook>
 																<hook>
 																	<stream_hook_path>
-																		<size>3</size>
-																		<strong>EFBD8063574E7D463C8E08D9AA1D68CFCE4630C445B20156AC7591F46AB48260</strong>
-																		<weak>2082877988</weak>
-																		<size>5081</size>
-																		<position>751</position>
-																		<strong>2C6C9E29E4E23E6C1F5876C33741FB18A63E703410F3CD61ACB348866B7B02B8</strong>
-																		<weak>3516588960</weak>
-																		<size>3918</size>
-																		<position>884</position>
-																		<strong>38AA79D330846BE1CF17285796F34A9DBB5A7E995963A55F9B46EB1DA6314610</strong>
-																		<weak>542483318</weak>
-																		<size>573</size>
-																		<position>3130</position>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>0</empty>
-																		<string>../../../../boost/exception/info.hpp</string>
-																		<type>0</type>
-																		<base>0</base>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>exception/operator&lt;&lt;</string>
-															</title>
-															<file_name>
-																<string></string>
-															</file_name>
-														</object>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:include include:)&#10;(:auto also:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-11</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:include include:)&#10;(:auto also:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>15</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
-																		<size>2</size>
-																		<strong>9A4ECF9A49A73AED83C1565CB8C67AE1519E8AFE6818F968B4C4733CB9E86CEF</strong>
-																		<weak>1615599655</weak>
-																		<size>68</size>
-																		<position>227</position>
-																		<strong>34F0583BC8DE767CE2D79721E1F956895E43E5397473B1050F59BE7E26C773DB</strong>
-																		<weak>805836816</weak>
-																		<size>66</size>
-																		<position>1</position>
-																	</stream_hook_path>
-																</hook>
-																<file>
-																	<path>
-																		<empty>0</empty>
-																		<string>../../../../boost/exception/error_info.hpp</string>
-																		<type>0</type>
-																		<base>0</base>
-																	</path>
-																</file>
-															</hook>
-															<title>
-																<string>boost/exception/error_info.hpp</string>
-															</title>
-															<file_name>
-																<string></string>
-															</file_name>
-														</object>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:include include:)&#10;(:auto also:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>16</id>
-														<type>
-															<string>reno_context</string>
-														</type>
-														<object>
-															<hook>
-																<hook>
-																	<stream_hook_path>
 																		<size>2</size>
 																		<strong>6FB85B536F965F137409D5B5D34786DCBF0B9957A7C251D271B717A1156B823D</strong>
 																		<weak>1090406464</weak>
@@ -548,7 +469,82 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-12</id>
+														<id>15</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<size>1</size>
+																		<strong>790A065B0168021FAD180E996254E3CDBC0360D22D3FCB83C143416663D85402</strong>
+																		<weak>1376868984</weak>
+																		<size>262</size>
+																		<position>323</position>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../../../boost/exception/errinfo_nested_exception.hpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>boost/exception/errinfo_nested_exception.hpp</string>
+															</title>
+															<file_name>
+																<string></string>
+															</file_name>
+														</object>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:include include:)&#10;(:auto also:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>16</id>
+														<type>
+															<string>reno_context</string>
+														</type>
+														<object>
+															<hook>
+																<hook>
+																	<stream_hook_path>
+																		<size>2</size>
+																		<strong>9A4ECF9A49A73AED83C1565CB8C67AE1519E8AFE6818F968B4C4733CB9E86CEF</strong>
+																		<weak>1615599655</weak>
+																		<size>68</size>
+																		<position>321</position>
+																		<strong>34F0583BC8DE767CE2D79721E1F956895E43E5397473B1050F59BE7E26C773DB</strong>
+																		<weak>805836816</weak>
+																		<size>66</size>
+																		<position>1</position>
+																	</stream_hook_path>
+																</hook>
+																<file>
+																	<path>
+																		<empty>0</empty>
+																		<string>../../../../boost/exception/error_info.hpp</string>
+																		<type>0</type>
+																		<base>0</base>
+																	</path>
+																</file>
+															</hook>
+															<title>
+																<string>boost/exception/error_info.hpp</string>
+															</title>
+															<file_name>
+																<string></string>
+															</file_name>
+														</object>
 													</shared_ptr>
 												</weak_ptr>
 												<size>1</size>
@@ -604,6 +600,17 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
+														<id>-6</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:include include:)&#10;(:auto also:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
 														<id>18</id>
 														<type>
 															<string>reno_context</string>
@@ -612,27 +619,20 @@
 															<hook>
 																<hook>
 																	<stream_hook_path>
-																		<size>1</size>
-																		<strong>790A065B0168021FAD180E996254E3CDBC0360D22D3FCB83C143416663D85402</strong>
-																		<weak>1376868984</weak>
-																		<size>262</size>
-																		<position>323</position>
+																		<size>0</size>
 																	</stream_hook_path>
 																</hook>
 																<file>
 																	<path>
-																		<empty>0</empty>
-																		<string>../../../../boost/exception/errinfo_nested_exception.hpp</string>
-																		<type>0</type>
-																		<base>0</base>
+																		<empty>1</empty>
 																	</path>
 																</file>
 															</hook>
 															<title>
-																<string>boost/exception/errinfo_nested_exception.hpp</string>
+																<string>page index</string>
 															</title>
 															<file_name>
-																<string></string>
+																<string>page_idx</string>
 															</file_name>
 														</object>
 													</shared_ptr>
@@ -922,9 +922,9 @@
 																<hook>
 																	<stream_hook_path>
 																		<size>3</size>
-																		<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-																		<weak>3582349865</weak>
-																		<size>11956</size>
+																		<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+																		<weak>2916767056</weak>
+																		<size>11964</size>
 																		<position>527</position>
 																		<strong>E0D734FE11CFB52F1BBF35C31E84A098AC93881DEE300CDBE3F9B772F75D9B2F</strong>
 																		<weak>4056200131</weak>
@@ -1139,10 +1139,10 @@
 																<hook>
 																	<stream_hook_path>
 																		<size>1</size>
-																		<strong>9A6D5598D65F1C1B5F913007D1CD1A814F3CDAD07D4AF8C468A0716059B2F7CC</strong>
-																		<weak>3552995087</weak>
-																		<size>1405</size>
-																		<position>527</position>
+																		<strong>195FF369BA559E3C0080F75321794B4808B6A278D4DEF8AEDBD9FCEBCE69C548</strong>
+																		<weak>458631219</weak>
+																		<size>2145</size>
+																		<position>321</position>
 																	</stream_hook_path>
 																</hook>
 																<file>
@@ -1624,13 +1624,13 @@
 																<hook>
 																	<stream_hook_path>
 																		<size>2</size>
-																		<strong>F7633FDCF6615C0199645701EE6E7ACE5CBCD7A7CF6838573791E91ABB3C09F2</strong>
-																		<weak>1668435395</weak>
-																		<size>1332</size>
+																		<strong>1B4417301AE3C0338C22E6D497391F51ABD459E521E7DFCE59A6EEC1372D33C2</strong>
+																		<weak>202224383</weak>
+																		<size>1766</size>
 																		<position>600</position>
-																		<strong>A1F443AF571973A12005D2F7D4AE09A32AAF686FEEAE272EC21512A65EB943E8</strong>
-																		<weak>3879093659</weak>
-																		<size>1300</size>
+																		<strong>E0A17503B42EE12F31548A7D20F89916D734CE88B30A1BF6F9FC2D1F83A8B6F4</strong>
+																		<weak>3410340567</weak>
+																		<size>1734</size>
 																		<position>26</position>
 																	</stream_hook_path>
 																</hook>
@@ -2117,9 +2117,9 @@
 																<hook>
 																	<stream_hook_path>
 																		<size>2</size>
-																		<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-																		<weak>3582349865</weak>
-																		<size>11956</size>
+																		<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+																		<weak>2916767056</weak>
+																		<size>11964</size>
 																		<position>527</position>
 																		<strong>F3FB15CD82336271C6E875BC620385322777D16F0B7C233300783CE35710CCBF</strong>
 																		<weak>3292878997</weak>
@@ -2330,14 +2330,14 @@
 																<hook>
 																	<stream_hook_path>
 																		<size>2</size>
-																		<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-																		<weak>3582349865</weak>
-																		<size>11956</size>
+																		<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+																		<weak>2916767056</weak>
+																		<size>11964</size>
 																		<position>527</position>
 																		<strong>DF9EA87B0140AACF4422F1B76F6A6A409C15F32858BBBA85A35981A824C56BA9</strong>
 																		<weak>1137981799</weak>
 																		<size>192</size>
-																		<position>11758</position>
+																		<position>11766</position>
 																	</stream_hook_path>
 																</hook>
 																<file>
@@ -2665,9 +2665,9 @@
 																<hook>
 																	<stream_hook_path>
 																		<size>2</size>
-																		<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-																		<weak>3582349865</weak>
-																		<size>11956</size>
+																		<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+																		<weak>2916767056</weak>
+																		<size>11964</size>
 																		<position>527</position>
 																		<strong>17E691632123EB67BA67D590B49EB8094F462F5A10A66A1C5438E1867EF1478E</strong>
 																		<weak>765399792</weak>
@@ -2947,9 +2947,9 @@
 																<hook>
 																	<stream_hook_path>
 																		<size>1</size>
-																		<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-																		<weak>3582349865</weak>
-																		<size>11956</size>
+																		<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+																		<weak>2916767056</weak>
+																		<size>11964</size>
 																		<position>527</position>
 																	</stream_hook_path>
 																</hook>
@@ -3251,15 +3251,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-6</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-7</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -3288,6 +3279,24 @@
 													<expired>0</expired>
 													<shared_ptr>
 														<id>-10</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-11</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>0</size>
@@ -3334,15 +3343,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-11</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -3361,7 +3361,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-12</id>
+														<id>-17</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>0</size>
@@ -3370,7 +3370,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-17</id>
+														<id>-6</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>0</size>
@@ -3501,7 +3501,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-6</id>
+														<id>-10</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -4185,15 +4185,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-6</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-7</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -4230,6 +4221,24 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
+														<id>-11</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-12</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
 														<id>-13</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -4248,16 +4257,27 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-11</id>
+														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
-												<size>0</size>
+												<size>3</size>
+												<variant>2</variant>
+												<string>[@(:include </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-63</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string> def:)@]&#10;</string>
 											</pair>
 											<pair>
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>3</size>
@@ -4277,25 +4297,16 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-16</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-12</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-17</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-6</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>0</size>
@@ -4307,18 +4318,7 @@
 														<id>-18</id>
 													</shared_ptr>
 												</weak_ptr>
-												<size>3</size>
-												<variant>2</variant>
-												<string>[@(:include </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-63</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string> def:)@]&#10;</string>
+												<size>0</size>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -4851,7 +4851,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-16</id>
+														<id>-14</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -4889,7 +4889,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -5158,7 +5158,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -5275,7 +5275,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-18</id>
+														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -5355,44 +5355,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-6</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>7</size>
-												<variant>2</variant>
-												<string>[@(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-6</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string> mod=&quot;m&quot;:)();&#10;(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-6</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string> mod=&quot;m&quot;:)( (:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) const &amp; x );@]&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-7</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -5423,22 +5385,42 @@
 														<id>-10</id>
 													</shared_ptr>
 												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
+												<size>7</size>
+												<variant>2</variant>
+												<string>[@(:link </string>
+												<variant>1</variant>
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-13</id>
+														<id>-10</id>
 													</shared_ptr>
 												</weak_ptr>
-												<size>0</size>
+												<variant>2</variant>
+												<string> mod=&quot;m&quot;:)();&#10;(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-10</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string> mod=&quot;m&quot;:)( (:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) const &amp; x );@]&#10;</string>
 											</pair>
 											<pair>
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>5</size>
@@ -5448,7 +5430,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -5467,10 +5449,39 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-11</id>
+														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-13</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-14</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>3</size>
+												<variant>2</variant>
+												<string>[@template &lt;class E&gt;&#10;E * </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-14</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>();@]&#10;</string>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -5486,26 +5497,6 @@
 													<expired>0</expired>
 													<shared_ptr>
 														<id>-16</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>3</size>
-												<variant>2</variant>
-												<string>[@template &lt;class E&gt;&#10;E * </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-16</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>();@]&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>0</size>
@@ -5538,6 +5529,15 @@
 												</weak_ptr>
 												<variant>2</variant>
 												<string> mod=&quot;m&quot;:) const &amp; v );@]&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-6</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -6536,232 +6536,6 @@
 														<id>-5</id>
 													</shared_ptr>
 												</weak_ptr>
-												<size>11</size>
-												<variant>2</variant>
-												<string>!!!!Example:&#10;&#10;this is a possible output from the (:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-34</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) function, as used in &apos;&apos;libs/exception/example/example_io.cpp:&apos;&apos;&#10;&#10;[@example_io.cpp(70): Throw in function class boost::shared_ptr&lt;struct _iobuf&gt; __cdecl my_fopen(const char *,const char *)&#10;Dynamic exception type: class boost::exception_detail::clone_impl&lt;struct fopen_error&gt;&#10;std::exception::what: example_io error&#10;[struct boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-32</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)_ *] = fopen&#10;[struct boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-13</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)_ *] = 2, &quot;No such file or directory&quot;&#10;[struct boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-72</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)_ *] = tmp1.txt&#10;[struct boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-22</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)_ *] = rb@]&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-6</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>7</size>
-												<variant>2</variant>
-												<string>(:auto !!!:)&#10;&#10;(:include decl:)&#10;&#10;!!!!Effects:&#10;&#10;* Default constructor: initializes an empty boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) object.&#10;* Copy constructor: initializes a boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) object which shares ownership with x of all data added through (:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-14</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string> mod=&quot;/&quot;:), including data that is added at a future time.&#10;&#10;!!!!Throws:&#10;&#10;Nothing.&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-7</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>17</size>
-												<variant>2</variant>
-												<string>(:auto !!!:)&#10;&#10;The following example demonstrates how errno can be stored in exception objects using Boost Exception:&#10;&#10;[@#include &lt;(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-77</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)&gt;&#10;#include &lt;iostream&gt;&#10;&#10;typedef boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-26</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)&lt;struct tag_my_info,int&gt; my_info; //(1)&#10;&#10;struct my_error: virtual boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:), virtual std::exception { }; //(2)&#10;&#10;void&#10;f()&#10;    {&#10;    throw my_error() &lt;&lt; my_info(42); //(3)&#10;    }@]&#10;&#10;First, we instantiate the (:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-26</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) template using a unique identifier -- tag_my_info, and the type of the info it identifies -- int. This provides compile-time type safety for the various values stored in exception objects.&#10;&#10;Second, we define class my_error, which derives from boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:).&#10;&#10;Finally, (3) illustrates how the typedef from (1) can be used with (:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-14</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>|operator&lt;&lt;:) to store values in exception objects at the point of the throw.&#10;&#10;The stored my_info value can be recovered at a later time like this:&#10;&#10;[@// ...continued&#10;&#10;void&#10;g()&#10;    {&#10;    try&#10;        {&#10;        f();&#10;        }&#10;    catch(&#10;    my_error &amp; x )&#10;        {&#10;        if( int const * mi=boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-20</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)&lt;my_info&gt;(x) )&#10;            std::cerr &lt;&lt; &quot;My info: &quot; &lt;&lt; *mi;&#10;        }&#10;    }@]&#10;&#10;The (:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-20</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) function template is instantiated with the typedef from (1), and is passed an exception object of a polymorphic type. If the exception object contains the requested value, err will point to it; otherwise a null pointer is returned.&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-8</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:auto !:)&#10;&#10;This is an alphabetical list of all Boost Exception documentation pages.&#10;&#10;(:pagelist fmt=&quot;index&quot; except_tags=&quot;index noindex&quot; mod=&quot;w&quot;:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-9</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>7</size>
-												<variant>2</variant>
-												<string>(:auto !!!:)&#10;&#10;Deriving from boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) effectively decouples the semantics of a failure from the information that is relevant to each individual instance of reporting a failure with a given semantic.&#10;&#10;In other words: with boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:), what data a given exception object transports depends primarily on the context in which failures are reported (not on its type.) Since exception types need no members, it becomes very natural to throw exceptions that derive from more than one type to indicate multiple appropriate semantics:&#10;&#10;[@struct exception_base: virtual std::exception, virtual boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) { };&#10;struct io_error: virtual exception_base { };&#10;struct file_error: virtual io_error { };&#10;struct read_error: virtual io_error { };&#10;struct file_read_error: virtual file_error, virtual read_error { };@]&#10;&#10;Using this approach, exception types become a simple tagging system for categorizing errors and selecting failures in exception handlers.&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-10</id>
-													</shared_ptr>
-												</weak_ptr>
 												<size>33</size>
 												<variant>2</variant>
 												<string>(:auto !!!:)&#10;&#10;Traditionally, when using exceptions to report failures, the throw site:&#10;&#10;*creates an exception object of the appropriate type, and&#10;*stuffs it with data relevant to the detected error.&#10;&#10;A higher context in the program contains a catch statement which:&#10;&#10;*selects failures based on exception types, and&#10;*inspects exception objects for data required to deal with the problem.&#10;&#10;The main issue with this &quot;traditional&quot; approach is that often, the data available at the point of the throw is insufficient for the catch site to handle the failure.&#10;&#10;Here is an example of a catch statement:&#10;&#10;[@catch( file_read_error &amp; e )&#10;    {&#10;    std::cerr &lt;&lt; e.file_name();&#10;    }@]&#10;&#10;And here is a possible matching throw:&#10;&#10;[@void&#10;read_file( FILE * f )&#10;    {&#10;    ....&#10;    size_t nr=fread(buf,1,count,f);&#10;    if( ferror(f) )&#10;        throw file_read_error(???);&#10;    ....&#10;    }@]&#10;&#10;Clearly, the problem is that the handler requires a file name but the read_file function does not have a file name to put in the exception object; all it has is a FILE pointer!&#10;&#10;In an attempt to deal with this problem, we could modify read_file to accept a file name:&#10;&#10;[@void&#10;read_file( FILE * f, char const * name )&#10;    {&#10;    ....&#10;    size_t nr=fread(buf,1,count,f);&#10;    if( ferror(f) )&#10;        throw file_read_error(name);&#10;    ....&#10;    }@]&#10;&#10;This is not a real solution: it simply shifts the burden of supplying a file name to the immediate caller of the read_file function.&#10;&#10;-&gt;&apos;&apos;In general, the data required to handle a given library-emitted exception depends on the program that links to it. Many contexts between the throw and the catch may have relevant information which must be transported to the exception handler.&apos;&apos;&#10;&#10;!!!Exception wrapping&#10;&#10;The idea of exception wrapping is to catch an exception from a lower level function (such as the read_file function above), and throw a new exception object that contains the original exception (and also carries a file name.) This method seems to be particularly popular with C++ programmers with Java background.&#10;&#10;Exception wrapping leads to the following problems:&#10;&#10;*To wrap an exception object it must be copied, which may result in slicing.&#10;*Wrapping is practically impossible to use in generic contexts.&#10;&#10;The second point is actually special case of violating the exception neutrality principle. Most contexts in a program can not handle exceptions; such contexts should not interfere with the process of exception handling.&#10;&#10;!!!The boost::exception solution&#10;&#10;*Simply derive your exception types from boost::(:link </string>
@@ -6796,7 +6570,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -6832,7 +6606,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -6850,7 +6624,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -6914,83 +6688,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-13</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>7</size>
-												<variant>2</variant>
-												<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;This type is designed to be used as a standard (:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-26</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:) instance for transporting a relevant errno value in exceptions deriving from boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:).&#10;&#10;!!!Example:&#10;&#10;(:include </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-60</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-14</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>7</size>
-												<variant>2</variant>
-												<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;!!!!Requirements:&#10;&#10;E must be boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:), or a type that derives (indirectly) from boost::(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-25</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:).&#10;&#10;!!!!Postcondition:&#10;&#10;A copy of v is stored into x. If x already contains data of type (:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-26</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)&lt;Tag,T&gt;, that data is overwritten. Basic exception safety guarantee.&#10;&#10;!!!!Returns:&#10;&#10;x.&#10;&#10;(:include throws:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-11</id>
+														<id>-7</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>27</size>
@@ -7090,7 +6788,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7118,29 +6816,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-16</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;!!!!Requirements:&#10;&#10;This function must not be called outside of a catch block.&#10;&#10;!!!!Returns:&#10;&#10;A pointer of type E to the current exception object, or null if the current exception object can not be converted to E *.&#10;&#10;!!!!Throws:&#10;&#10;Nothing.&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-12</id>
+														<id>-8</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>81</size>
@@ -7204,7 +6880,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7231,7 +6907,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7456,7 +7132,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7465,7 +7141,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7474,7 +7150,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7483,7 +7159,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7492,7 +7168,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7506,6 +7182,292 @@
 												</weak_ptr>
 												<variant>2</variant>
 												<string>:) wrapper, a std::bad_alloc could propagate instead. This behavior seems undesirable to some programmers.&#10;&#10;Bjarne Stroustrup, The C++ Programming Language, 3rd Edition, page 371:&#10;&#10;-&gt;&apos;&apos;&quot;Throwing an exception requires an object to throw.  A C++ implementation is required to have enough spare memory to be able to throw bad_alloc in case of memory exhaustion.  However, it is possible that throwing some other exception will cause memory exhaustion.&quot;&apos;&apos;&#10;&#10;Therefore, the language itself does not guarantee that an attempt to throw an exception is guaranteed to throw an object of the specified type; propagating a std::bad_alloc seems to be a possibility even outside of the scope of Boost Exception.&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-9</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>17</size>
+												<variant>2</variant>
+												<string>(:auto !!!:)&#10;&#10;The following example demonstrates how errno can be stored in exception objects using Boost Exception:&#10;&#10;[@#include &lt;(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-77</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)&gt;&#10;#include &lt;iostream&gt;&#10;&#10;typedef boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-26</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)&lt;struct tag_my_info,int&gt; my_info; //(1)&#10;&#10;struct my_error: virtual boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:), virtual std::exception { }; //(2)&#10;&#10;void&#10;f()&#10;    {&#10;    throw my_error() &lt;&lt; my_info(42); //(3)&#10;    }@]&#10;&#10;First, we instantiate the (:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-26</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) template using a unique identifier -- tag_my_info, and the type of the info it identifies -- int. This provides compile-time type safety for the various values stored in exception objects.&#10;&#10;Second, we define class my_error, which derives from boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:).&#10;&#10;Finally, (3) illustrates how the typedef from (1) can be used with (:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-11</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>|operator&lt;&lt;:) to store values in exception objects at the point of the throw.&#10;&#10;The stored my_info value can be recovered at a later time like this:&#10;&#10;[@// ...continued&#10;&#10;void&#10;g()&#10;    {&#10;    try&#10;        {&#10;        f();&#10;        }&#10;    catch(&#10;    my_error &amp; x )&#10;        {&#10;        if( int const * mi=boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-20</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)&lt;my_info&gt;(x) )&#10;            std::cerr &lt;&lt; &quot;My info: &quot; &lt;&lt; *mi;&#10;        }&#10;    }@]&#10;&#10;The (:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-20</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) function template is instantiated with the typedef from (1), and is passed an exception object of a polymorphic type. If the exception object contains the requested value, err will point to it; otherwise a null pointer is returned.&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-10</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>7</size>
+												<variant>2</variant>
+												<string>(:auto !!!:)&#10;&#10;(:include decl:)&#10;&#10;!!!!Effects:&#10;&#10;* Default constructor: initializes an empty boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) object.&#10;* Copy constructor: initializes a boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) object which shares ownership with x of all data added through (:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-11</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string> mod=&quot;/&quot;:), including data that is added at a future time.&#10;&#10;!!!!Throws:&#10;&#10;Nothing.&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-11</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>7</size>
+												<variant>2</variant>
+												<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;!!!!Requirements:&#10;&#10;E must be boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:), or a type that derives (indirectly) from boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:).&#10;&#10;!!!!Postcondition:&#10;&#10;A copy of v is stored into x. If x already contains data of type (:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-26</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)&lt;Tag,T&gt;, that data is overwritten. Basic exception safety guarantee.&#10;&#10;!!!!Returns:&#10;&#10;x.&#10;&#10;(:include throws:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-12</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>11</size>
+												<variant>2</variant>
+												<string>!!!!Example:&#10;&#10;this is a possible output from the (:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-34</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) function, as used in &apos;&apos;libs/exception/example/example_io.cpp:&apos;&apos;&#10;&#10;[@example_io.cpp(70): Throw in function class boost::shared_ptr&lt;struct _iobuf&gt; __cdecl my_fopen(const char *,const char *)&#10;Dynamic exception type: class boost::exception_detail::clone_impl&lt;struct fopen_error&gt;&#10;std::exception::what: example_io error&#10;[struct boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-32</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)_ *] = fopen&#10;[struct boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-13</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)_ *] = 2, &quot;No such file or directory&quot;&#10;[struct boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-72</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)_ *] = tmp1.txt&#10;[struct boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-22</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)_ *] = rb@]&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-13</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>7</size>
+												<variant>2</variant>
+												<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;This type is designed to be used as a standard (:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-26</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) instance for transporting a relevant errno value in exceptions deriving from boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:).&#10;&#10;!!!Example:&#10;&#10;(:include </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-60</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-14</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:auto !!!:)&#10;&#10;(:include synopsis:)&#10;&#10;!!!!Requirements:&#10;&#10;This function must not be called outside of a catch block.&#10;&#10;!!!!Returns:&#10;&#10;A pointer of type E to the current exception object, or null if the current exception object can not be converted to E *.&#10;&#10;!!!!Throws:&#10;&#10;Nothing.&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-15</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-16</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -7531,12 +7493,50 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
+														<id>-6</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>7</size>
+												<variant>2</variant>
+												<string>(:auto !!!:)&#10;&#10;Deriving from boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) effectively decouples the semantics of a failure from the information that is relevant to each individual instance of reporting a failure with a given semantic.&#10;&#10;In other words: with boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:), what data a given exception object transports depends primarily on the context in which failures are reported (not on its type.) Since exception types need no members, it becomes very natural to throw exceptions that derive from more than one type to indicate multiple appropriate semantics:&#10;&#10;[@struct exception_base: virtual std::exception, virtual boost::(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-25</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:) { };&#10;struct io_error: virtual exception_base { };&#10;struct file_error: virtual io_error { };&#10;struct read_error: virtual io_error { };&#10;struct file_read_error: virtual file_error, virtual read_error { };@]&#10;&#10;Using this approach, exception types become a simple tagging system for categorizing errors and selecting failures in exception handlers.&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
 														<id>-18</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>1</size>
 												<variant>2</variant>
-												<string>(:auto !!:)&#10;&#10;!!!Synopsis&#10;&#10;(:include synopsis:)&#10;</string>
+												<string>(:auto !:)&#10;&#10;This is an alphabetical list of all Boost Exception documentation pages.&#10;&#10;(:pagelist fmt=&quot;index&quot; except_tags=&quot;index noindex&quot; mod=&quot;w&quot;:)&#10;</string>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -7608,7 +7608,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7951,7 +7951,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -7998,7 +7998,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8016,7 +8016,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8034,7 +8034,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8052,7 +8052,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8070,7 +8070,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8097,7 +8097,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8160,7 +8160,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8300,7 +8300,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-10</id>
+														<id>-5</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8318,7 +8318,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-11</id>
+														<id>-7</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8336,7 +8336,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-9</id>
+														<id>-6</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8399,7 +8399,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8507,7 +8507,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-16</id>
+														<id>-14</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8570,7 +8570,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-12</id>
+														<id>-8</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8579,7 +8579,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-8</id>
+														<id>-18</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8626,7 +8626,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8752,7 +8752,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-5</id>
+														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8790,7 +8790,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -8799,7 +8799,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -9060,7 +9060,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-18</id>
+														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -9069,7 +9069,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-18</id>
+														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -9237,7 +9237,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-9</id>
+														<id>-6</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -10002,7 +10002,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -10047,7 +10047,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-5</id>
+														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -10783,7 +10783,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-7</id>
+														<id>-9</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -11028,15 +11028,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-6</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-7</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -11073,16 +11064,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-13</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-14</id>
+														<id>-11</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>1</size>
@@ -11093,7 +11075,25 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-11</id>
+														<id>-12</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-13</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-14</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>0</size>
@@ -11120,21 +11120,21 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-12</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-17</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>1</size>
 												<variant>2</variant>
 												<string>!!!!Throws:&#10;&#10;Any exception emitted by v&apos;s copy constructor.</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-6</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -11732,15 +11732,6 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-6</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
 														<id>-7</id>
 													</shared_ptr>
 												</weak_ptr>
@@ -11769,6 +11760,35 @@
 													<expired>0</expired>
 													<shared_ptr>
 														<id>-10</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-11</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>3</size>
+												<variant>2</variant>
+												<string>`#include &lt;(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-57</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)&gt;\\&#10;&#10;[@namespace&#10;boost&#10;    {&#10;(:include decl pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-12</id>
 													</shared_ptr>
 												</weak_ptr>
 												<size>0</size>
@@ -11811,46 +11831,6 @@
 												</weak_ptr>
 												<size>3</size>
 												<variant>2</variant>
-												<string>`#include &lt;(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-57</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)&gt;\\&#10;&#10;[@namespace&#10;boost&#10;    {&#10;(:include decl pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-11</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>0</size>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-15</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>1</size>
-												<variant>2</variant>
-												<string>[@namespace&#10;boost&#10;    {&#10;(:include api pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
-											</pair>
-											<pair>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-16</id>
-													</shared_ptr>
-												</weak_ptr>
-												<size>3</size>
-												<variant>2</variant>
 												<string>`#include &lt;</string>
 												<variant>1</variant>
 												<weak_ptr>
@@ -11866,10 +11846,41 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-12</id>
+														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
-												<size>0</size>
+												<size>5</size>
+												<variant>2</variant>
+												<string>[@#include &lt;(:link </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-16</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string>:)&gt;&#10;&#10;namespace&#10;boost&#10;    {&#10;(:include </string>
+												<variant>1</variant>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-21</id>
+													</shared_ptr>
+												</weak_ptr>
+												<variant>2</variant>
+												<string> decl pre_indent=&quot;4&quot;:)&#10;(:include api pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
+														<id>-16</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>1</size>
+												<variant>2</variant>
+												<string>[@namespace&#10;boost&#10;    {&#10;(:include api pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -11895,30 +11906,19 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
+														<id>-6</id>
+													</shared_ptr>
+												</weak_ptr>
+												<size>0</size>
+											</pair>
+											<pair>
+												<weak_ptr>
+													<expired>0</expired>
+													<shared_ptr>
 														<id>-18</id>
 													</shared_ptr>
 												</weak_ptr>
-												<size>5</size>
-												<variant>2</variant>
-												<string>[@#include &lt;(:link </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-15</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string>:)&gt;&#10;&#10;namespace&#10;boost&#10;    {&#10;(:include </string>
-												<variant>1</variant>
-												<weak_ptr>
-													<expired>0</expired>
-													<shared_ptr>
-														<id>-21</id>
-													</shared_ptr>
-												</weak_ptr>
-												<variant>2</variant>
-												<string> decl pre_indent=&quot;4&quot;:)&#10;(:include api pre_indent=&quot;4&quot;:)&#10;    }@]&#10;</string>
+												<size>0</size>
 											</pair>
 											<pair>
 												<weak_ptr>
@@ -12112,7 +12112,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -12152,7 +12152,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -12315,7 +12315,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -12422,7 +12422,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -12482,7 +12482,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -12689,7 +12689,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-18</id>
+														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -12698,7 +12698,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-18</id>
+														<id>-15</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -12718,7 +12718,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -12974,7 +12974,7 @@
 												<weak_ptr>
 													<expired>0</expired>
 													<shared_ptr>
-														<id>-15</id>
+														<id>-16</id>
 													</shared_ptr>
 												</weak_ptr>
 												<variant>2</variant>
@@ -13011,9 +13011,6 @@
 									<id>-5</id>
 								</shared_ptr>
 								<shared_ptr>
-									<id>-6</id>
-								</shared_ptr>
-								<shared_ptr>
 									<id>-7</id>
 								</shared_ptr>
 								<shared_ptr>
@@ -13026,13 +13023,16 @@
 									<id>-10</id>
 								</shared_ptr>
 								<shared_ptr>
+									<id>-11</id>
+								</shared_ptr>
+								<shared_ptr>
+									<id>-12</id>
+								</shared_ptr>
+								<shared_ptr>
 									<id>-13</id>
 								</shared_ptr>
 								<shared_ptr>
 									<id>-14</id>
-								</shared_ptr>
-								<shared_ptr>
-									<id>-11</id>
 								</shared_ptr>
 								<shared_ptr>
 									<id>-15</id>
@@ -13041,10 +13041,10 @@
 									<id>-16</id>
 								</shared_ptr>
 								<shared_ptr>
-									<id>-12</id>
+									<id>-17</id>
 								</shared_ptr>
 								<shared_ptr>
-									<id>-17</id>
+									<id>-6</id>
 								</shared_ptr>
 								<shared_ptr>
 									<id>-18</id>
@@ -13297,7 +13297,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-8</id>
+										<id>-18</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -13342,7 +13342,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-10</id>
+										<id>-5</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -13372,7 +13372,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-9</id>
+										<id>-6</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -13387,7 +13387,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-12</id>
+										<id>-8</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -13484,7 +13484,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-18</id>
+										<id>-15</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -13657,6 +13657,166 @@
 									<hook>
 										<stream_hook_path>
 											<size>1</size>
+											<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+											<weak>2916767056</weak>
+											<size>11964</size>
+											<position>527</position>
+										</stream_hook_path>
+									</hook>
+									<file>
+										<path>
+											<empty>0</empty>
+											<string>../../../../boost/exception/exception.hpp</string>
+											<type>0</type>
+											<base>0</base>
+										</path>
+									</file>
+									<shared_ptr>
+										<id>-74</id>
+									</shared_ptr>
+								</pair>
+								<pair>
+									<hook>
+										<stream_hook_path>
+											<size>3</size>
+											<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+											<weak>2916767056</weak>
+											<size>11964</size>
+											<position>527</position>
+											<strong>E0D734FE11CFB52F1BBF35C31E84A098AC93881DEE300CDBE3F9B772F75D9B2F</strong>
+											<weak>4056200131</weak>
+											<size>2307</size>
+											<position>4436</position>
+											<strong>A94129EFD6ABBDDCD4CFDB671821F7DA103B2EA4455CF39E783D333C236D1C41</strong>
+											<weak>1035445969</weak>
+											<size>595</size>
+											<position>204</position>
+										</stream_hook_path>
+									</hook>
+									<file>
+										<path>
+											<empty>0</empty>
+											<string>../../../../boost/exception/exception.hpp</string>
+											<type>0</type>
+											<base>0</base>
+										</path>
+									</file>
+									<shared_ptr>
+										<id>-10</id>
+									</shared_ptr>
+								</pair>
+								<pair>
+									<hook>
+										<stream_hook_path>
+											<size>3</size>
+											<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+											<weak>2916767056</weak>
+											<size>11964</size>
+											<position>527</position>
+											<strong>E0D734FE11CFB52F1BBF35C31E84A098AC93881DEE300CDBE3F9B772F75D9B2F</strong>
+											<weak>4056200131</weak>
+											<size>2307</size>
+											<position>4436</position>
+											<strong>28ACC7E8903AFA473B656DAD74C22C3F675AFCCA871D81AB3AB7742FDF5F1E48</strong>
+											<weak>2824899226</weak>
+											<size>2163</size>
+											<position>145</position>
+										</stream_hook_path>
+									</hook>
+									<file>
+										<path>
+											<empty>0</empty>
+											<string>../../../../boost/exception/exception.hpp</string>
+											<type>0</type>
+											<base>0</base>
+										</path>
+									</file>
+									<shared_ptr>
+										<id>-25</id>
+									</shared_ptr>
+								</pair>
+								<pair>
+									<hook>
+										<stream_hook_path>
+											<size>2</size>
+											<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+											<weak>2916767056</weak>
+											<size>11964</size>
+											<position>527</position>
+											<strong>17E691632123EB67BA67D590B49EB8094F462F5A10A66A1C5438E1867EF1478E</strong>
+											<weak>765399792</weak>
+											<size>77</size>
+											<position>6878</position>
+										</stream_hook_path>
+									</hook>
+									<file>
+										<path>
+											<empty>0</empty>
+											<string>../../../../boost/exception/exception.hpp</string>
+											<type>0</type>
+											<base>0</base>
+										</path>
+									</file>
+									<shared_ptr>
+										<id>-67</id>
+									</shared_ptr>
+								</pair>
+								<pair>
+									<hook>
+										<stream_hook_path>
+											<size>2</size>
+											<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+											<weak>2916767056</weak>
+											<size>11964</size>
+											<position>527</position>
+											<strong>DF9EA87B0140AACF4422F1B76F6A6A409C15F32858BBBA85A35981A824C56BA9</strong>
+											<weak>1137981799</weak>
+											<size>192</size>
+											<position>11766</position>
+										</stream_hook_path>
+									</hook>
+									<file>
+										<path>
+											<empty>0</empty>
+											<string>../../../../boost/exception/exception.hpp</string>
+											<type>0</type>
+											<base>0</base>
+										</path>
+									</file>
+									<shared_ptr>
+										<id>-59</id>
+									</shared_ptr>
+								</pair>
+								<pair>
+									<hook>
+										<stream_hook_path>
+											<size>2</size>
+											<strong>EFEF19E7D10F02079DA9799E42DA1415CA0C815E964E88CF1A8896D49C81EC22</strong>
+											<weak>2916767056</weak>
+											<size>11964</size>
+											<position>527</position>
+											<strong>F3FB15CD82336271C6E875BC620385322777D16F0B7C233300783CE35710CCBF</strong>
+											<weak>3292878997</weak>
+											<size>282</size>
+											<position>9272</position>
+										</stream_hook_path>
+									</hook>
+									<file>
+										<path>
+											<empty>0</empty>
+											<string>../../../../boost/exception/exception.hpp</string>
+											<type>0</type>
+											<base>0</base>
+										</path>
+									</file>
+									<shared_ptr>
+										<id>-54</id>
+									</shared_ptr>
+								</pair>
+								<pair>
+									<hook>
+										<stream_hook_path>
+											<size>1</size>
 											<strong>27ED18F9B6131B084FEF0C9F932B7027AF449E378B5FD7973CD6642263FCAF27</strong>
 											<weak>2867102400</weak>
 											<size>404</size>
@@ -13764,7 +13924,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-16</id>
+										<id>-14</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -13786,7 +13946,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-5</id>
+										<id>-12</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -13835,6 +13995,28 @@
 									</file>
 									<shared_ptr>
 										<id>-39</id>
+									</shared_ptr>
+								</pair>
+								<pair>
+									<hook>
+										<stream_hook_path>
+											<size>1</size>
+											<strong>195FF369BA559E3C0080F75321794B4808B6A278D4DEF8AEDBD9FCEBCE69C548</strong>
+											<weak>458631219</weak>
+											<size>2145</size>
+											<position>321</position>
+										</stream_hook_path>
+									</hook>
+									<file>
+										<path>
+											<empty>0</empty>
+											<string>../../../../boost/exception/info_tuple.hpp</string>
+											<type>0</type>
+											<base>0</base>
+										</path>
+									</file>
+									<shared_ptr>
+										<id>-30</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14146,7 +14328,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-14</id>
+										<id>-11</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14460,7 +14642,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-7</id>
+										<id>-9</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14618,6 +14800,32 @@
 								<pair>
 									<hook>
 										<stream_hook_path>
+											<size>2</size>
+											<strong>1B4417301AE3C0338C22E6D497391F51ABD459E521E7DFCE59A6EEC1372D33C2</strong>
+											<weak>202224383</weak>
+											<size>1766</size>
+											<position>600</position>
+											<strong>E0A17503B42EE12F31548A7D20F89916D734CE88B30A1BF6F9FC2D1F83A8B6F4</strong>
+											<weak>3410340567</weak>
+											<size>1734</size>
+											<position>26</position>
+										</stream_hook_path>
+									</hook>
+									<file>
+										<path>
+											<empty>0</empty>
+											<string>../../../../boost/exception/info_tuple.hpp</string>
+											<type>0</type>
+											<base>0</base>
+										</path>
+									</file>
+									<shared_ptr>
+										<id>-42</id>
+									</shared_ptr>
+								</pair>
+								<pair>
+									<hook>
+										<stream_hook_path>
 											<size>1</size>
 											<strong>AA363B3E599C558409A17235E029C4F635E4FDE629F763F661BDA7FA5B2D99C2</strong>
 											<weak>1494903480</weak>
@@ -14635,28 +14843,6 @@
 									</file>
 									<shared_ptr>
 										<id>-66</id>
-									</shared_ptr>
-								</pair>
-								<pair>
-									<hook>
-										<stream_hook_path>
-											<size>1</size>
-											<strong>9A6D5598D65F1C1B5F913007D1CD1A814F3CDAD07D4AF8C468A0716059B2F7CC</strong>
-											<weak>3552995087</weak>
-											<size>1405</size>
-											<position>527</position>
-										</stream_hook_path>
-									</hook>
-									<file>
-										<path>
-											<empty>0</empty>
-											<string>../../../../boost/exception/info_tuple.hpp</string>
-											<type>0</type>
-											<base>0</base>
-										</path>
-									</file>
-									<shared_ptr>
-										<id>-30</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14689,166 +14875,6 @@
 									<hook>
 										<stream_hook_path>
 											<size>1</size>
-											<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-											<weak>3582349865</weak>
-											<size>11956</size>
-											<position>527</position>
-										</stream_hook_path>
-									</hook>
-									<file>
-										<path>
-											<empty>0</empty>
-											<string>../../../../boost/exception/exception.hpp</string>
-											<type>0</type>
-											<base>0</base>
-										</path>
-									</file>
-									<shared_ptr>
-										<id>-74</id>
-									</shared_ptr>
-								</pair>
-								<pair>
-									<hook>
-										<stream_hook_path>
-											<size>3</size>
-											<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-											<weak>3582349865</weak>
-											<size>11956</size>
-											<position>527</position>
-											<strong>E0D734FE11CFB52F1BBF35C31E84A098AC93881DEE300CDBE3F9B772F75D9B2F</strong>
-											<weak>4056200131</weak>
-											<size>2307</size>
-											<position>4436</position>
-											<strong>A94129EFD6ABBDDCD4CFDB671821F7DA103B2EA4455CF39E783D333C236D1C41</strong>
-											<weak>1035445969</weak>
-											<size>595</size>
-											<position>204</position>
-										</stream_hook_path>
-									</hook>
-									<file>
-										<path>
-											<empty>0</empty>
-											<string>../../../../boost/exception/exception.hpp</string>
-											<type>0</type>
-											<base>0</base>
-										</path>
-									</file>
-									<shared_ptr>
-										<id>-6</id>
-									</shared_ptr>
-								</pair>
-								<pair>
-									<hook>
-										<stream_hook_path>
-											<size>3</size>
-											<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-											<weak>3582349865</weak>
-											<size>11956</size>
-											<position>527</position>
-											<strong>E0D734FE11CFB52F1BBF35C31E84A098AC93881DEE300CDBE3F9B772F75D9B2F</strong>
-											<weak>4056200131</weak>
-											<size>2307</size>
-											<position>4436</position>
-											<strong>28ACC7E8903AFA473B656DAD74C22C3F675AFCCA871D81AB3AB7742FDF5F1E48</strong>
-											<weak>2824899226</weak>
-											<size>2163</size>
-											<position>145</position>
-										</stream_hook_path>
-									</hook>
-									<file>
-										<path>
-											<empty>0</empty>
-											<string>../../../../boost/exception/exception.hpp</string>
-											<type>0</type>
-											<base>0</base>
-										</path>
-									</file>
-									<shared_ptr>
-										<id>-25</id>
-									</shared_ptr>
-								</pair>
-								<pair>
-									<hook>
-										<stream_hook_path>
-											<size>2</size>
-											<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-											<weak>3582349865</weak>
-											<size>11956</size>
-											<position>527</position>
-											<strong>17E691632123EB67BA67D590B49EB8094F462F5A10A66A1C5438E1867EF1478E</strong>
-											<weak>765399792</weak>
-											<size>77</size>
-											<position>6878</position>
-										</stream_hook_path>
-									</hook>
-									<file>
-										<path>
-											<empty>0</empty>
-											<string>../../../../boost/exception/exception.hpp</string>
-											<type>0</type>
-											<base>0</base>
-										</path>
-									</file>
-									<shared_ptr>
-										<id>-67</id>
-									</shared_ptr>
-								</pair>
-								<pair>
-									<hook>
-										<stream_hook_path>
-											<size>2</size>
-											<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-											<weak>3582349865</weak>
-											<size>11956</size>
-											<position>527</position>
-											<strong>DF9EA87B0140AACF4422F1B76F6A6A409C15F32858BBBA85A35981A824C56BA9</strong>
-											<weak>1137981799</weak>
-											<size>192</size>
-											<position>11758</position>
-										</stream_hook_path>
-									</hook>
-									<file>
-										<path>
-											<empty>0</empty>
-											<string>../../../../boost/exception/exception.hpp</string>
-											<type>0</type>
-											<base>0</base>
-										</path>
-									</file>
-									<shared_ptr>
-										<id>-59</id>
-									</shared_ptr>
-								</pair>
-								<pair>
-									<hook>
-										<stream_hook_path>
-											<size>2</size>
-											<strong>088B53C0FBDB55F55DCF1296B3206D748A2B2453CCFC3DAA2AA0FADD930561E7</strong>
-											<weak>3582349865</weak>
-											<size>11956</size>
-											<position>527</position>
-											<strong>F3FB15CD82336271C6E875BC620385322777D16F0B7C233300783CE35710CCBF</strong>
-											<weak>3292878997</weak>
-											<size>282</size>
-											<position>9272</position>
-										</stream_hook_path>
-									</hook>
-									<file>
-										<path>
-											<empty>0</empty>
-											<string>../../../../boost/exception/exception.hpp</string>
-											<type>0</type>
-											<base>0</base>
-										</path>
-									</file>
-									<shared_ptr>
-										<id>-54</id>
-									</shared_ptr>
-								</pair>
-								<pair>
-									<hook>
-										<stream_hook_path>
-											<size>1</size>
 											<strong>C95CEF2E9D0BAA1E950509471062916DB849A46A19F7692BA478030E79B338EB</strong>
 											<weak>1917376632</weak>
 											<size>706</size>
@@ -14864,7 +14890,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-11</id>
+										<id>-7</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14874,7 +14900,7 @@
 											<strong>9A4ECF9A49A73AED83C1565CB8C67AE1519E8AFE6818F968B4C4733CB9E86CEF</strong>
 											<weak>1615599655</weak>
 											<size>68</size>
-											<position>227</position>
+											<position>321</position>
 											<strong>34F0583BC8DE767CE2D79721E1F956895E43E5397473B1050F59BE7E26C773DB</strong>
 											<weak>805836816</weak>
 											<size>66</size>
@@ -14890,33 +14916,7 @@
 										</path>
 									</file>
 									<shared_ptr>
-										<id>-15</id>
-									</shared_ptr>
-								</pair>
-								<pair>
-									<hook>
-										<stream_hook_path>
-											<size>2</size>
-											<strong>F7633FDCF6615C0199645701EE6E7ACE5CBCD7A7CF6838573791E91ABB3C09F2</strong>
-											<weak>1668435395</weak>
-											<size>1332</size>
-											<position>600</position>
-											<strong>A1F443AF571973A12005D2F7D4AE09A32AAF686FEEAE272EC21512A65EB943E8</strong>
-											<weak>3879093659</weak>
-											<size>1300</size>
-											<position>26</position>
-										</stream_hook_path>
-									</hook>
-									<file>
-										<path>
-											<empty>0</empty>
-											<string>../../../../boost/exception/info_tuple.hpp</string>
-											<type>0</type>
-											<base>0</base>
-										</path>
-									</file>
-									<shared_ptr>
-										<id>-42</id>
+										<id>-16</id>
 									</shared_ptr>
 								</pair>
 								<pair>
@@ -14992,16 +14992,16 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-6</id>
+											<id>-7</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>function</string>
+									<string>tutorial</string>
 								</pair>
 								<pair>
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-7</id>
+											<id>-9</id>
 										</shared_ptr>
 									</weak_ptr>
 									<string>noalso noindex tutorial</string>
@@ -15010,10 +15010,19 @@
 									<weak_ptr>
 										<expired>0</expired>
 										<shared_ptr>
-											<id>-8</id>
+											<id>-10</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string></string>
+									<string>function</string>
+								</pair>
+								<pair>
+									<weak_ptr>
+										<expired>0</expired>
+										<shared_ptr>
+											<id>-11</id>
+										</shared_ptr>
+									</weak_ptr>
+									<string>error_info free function</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15031,25 +15040,7 @@
 											<id>-14</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>error_info free function</string>
-								</pair>
-								<pair>
-									<weak_ptr>
-										<expired>0</expired>
-										<shared_ptr>
-											<id>-11</id>
-										</shared_ptr>
-									</weak_ptr>
-									<string>tutorial</string>
-								</pair>
-								<pair>
-									<weak_ptr>
-										<expired>0</expired>
-										<shared_ptr>
-											<id>-15</id>
-										</shared_ptr>
-									</weak_ptr>
-									<string></string>
+									<string>function</string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15058,7 +15049,7 @@
 											<id>-16</id>
 										</shared_ptr>
 									</weak_ptr>
-									<string>function</string>
+									<string></string>
 								</pair>
 								<pair>
 									<weak_ptr>
@@ -15068,6 +15059,15 @@
 										</shared_ptr>
 									</weak_ptr>
 									<string>function member</string>
+								</pair>
+								<pair>
+									<weak_ptr>
+										<expired>0</expired>
+										<shared_ptr>
+											<id>-18</id>
+										</shared_ptr>
+									</weak_ptr>
+									<string></string>
 								</pair>
 								<pair>
 									<weak_ptr>

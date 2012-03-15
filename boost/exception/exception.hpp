@@ -430,7 +430,7 @@ boost
         class
         clone_impl:
             public T,
-            public clone_base
+            public virtual clone_base
             {
             struct clone_tag { };
             clone_impl( clone_impl const & x, clone_tag ):
