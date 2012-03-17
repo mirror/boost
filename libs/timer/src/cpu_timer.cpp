@@ -136,7 +136,7 @@ namespace
 # else
     tms tm;
     clock_t c = ::times(&tm);
-    if (c == -1) // error
+    if (c == static_cast<clock_t>(-1)) // error
     {
       current.system = current.user = boost::timer::nanosecond_type(-1);
     }
