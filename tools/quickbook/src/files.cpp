@@ -285,8 +285,9 @@ namespace quickbook
     struct mapped_file : file
     {
         mapped_file(file_ptr original) :
-            file(original->path, std::string(), original->version()),
-            original(original), mapped_sections() {}
+            file(*original, std::string()),
+            original(original), mapped_sections()
+        {}
 
         file_ptr original;
         std::vector<mapped_file_section> mapped_sections;

@@ -62,7 +62,7 @@ namespace quickbook
         grammar block;
         grammar doc_info;
 
-        quickbook_grammar(quickbook::actions&);
+        quickbook_grammar(quickbook::state&);
         ~quickbook_grammar();
     };
 }

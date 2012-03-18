@@ -13,8 +13,8 @@
 
 namespace quickbook
 {
-   quickbook_grammar::quickbook_grammar(quickbook::actions& a)
-        : impl_(new impl(a))
+   quickbook_grammar::quickbook_grammar(quickbook::state& s)
+        : impl_(new impl(s))
         , command_line_macro(impl_->command_line, "command_line_macro")
         , inline_phrase(impl_->inline_phrase, "inline_phrase")
         , phrase(impl_->phrase_start, "phrase")
@@ -27,8 +27,8 @@ namespace quickbook
     {
     }
 
-    quickbook_grammar::impl::impl(quickbook::actions& a)
-        : actions(a)
+    quickbook_grammar::impl::impl(quickbook::state& s)
+        : state(s)
         , cleanup_()
     {
         init_main();

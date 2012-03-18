@@ -33,17 +33,6 @@ namespace quickbook { namespace detail {
     }
 
     std::string escape_uri(std::string uri);
-
-    // given a file extension, return the type of the source file
-    // we'll have an internal database for known file types.
-
-    enum file_type
-    {
-        cpp_file
-      , python_file
-    };
-
-    file_type get_file_type(std::string const& extension);
 }}
 
 #endif // BOOST_SPIRIT_QUICKBOOK_UTILS_HPP

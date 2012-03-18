@@ -21,6 +21,7 @@ namespace quickbook
         (copyright_year)(copyright_year_end)(copyright_name)
         (license)
         (biblioid_class)(biblioid_value)
+        (escaped_attribute)
     )
 
     QUICKBOOK_VALUE_NAMED_TAGS(doc_attributes, 0x440,

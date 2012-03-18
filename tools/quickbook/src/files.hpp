@@ -38,13 +38,20 @@ namespace quickbook {
     {
         fs::path const path;
         std::string source;
+        bool is_code_snippets;
     private:
         unsigned qbk_version;
     public:
 
         file(fs::path const& path, std::string const& source,
                 unsigned qbk_version) :
-            path(path), source(source), qbk_version(qbk_version)
+            path(path), source(source), is_code_snippets(false),
+            qbk_version(qbk_version)
+        {}
+
+        file(file const& f, std::string const& source) :
+            path(f.path), source(source), is_code_snippets(f.is_code_snippets),
+            qbk_version(f.qbk_version)
         {}
 
         virtual ~file() {}

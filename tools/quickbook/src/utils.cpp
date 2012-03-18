@@ -62,23 +62,4 @@ namespace quickbook { namespace detail
         }
         return uri;
     }
-    
-    file_type get_file_type(std::string const& extension)
-    {
-        static std::map<std::string, file_type> ftypes;
-        if (ftypes.empty())
-        {
-            // init the map of types
-            ftypes["cpp"] = cpp_file;
-            ftypes["hpp"] = cpp_file;
-            ftypes["h"] = cpp_file;
-            ftypes["c"] = cpp_file;
-            ftypes["cxx"] = cpp_file;
-            ftypes["hxx"] = cpp_file;
-            ftypes["ipp"] = cpp_file;
-            ftypes["py"] = python_file;
-        }
-        return ftypes[extension];
-    }
-
 }}

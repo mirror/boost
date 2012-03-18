@@ -765,6 +765,11 @@ namespace quickbook
             back_ = merge_sort(&head_);
             assert(*back_ == &value_list_end_impl::instance);
         }
+
+        bool value_list_builder::empty() const
+        {
+            return head_ == &value_list_end_impl::instance;
+        }
     }
 
     //////////////////////////////////////////////////////////////////////////
@@ -799,16 +804,6 @@ namespace quickbook
         return value(new detail::value_list_impl(current, list_tag));
     }
 
-    void value_builder::reset() {
-        detail::value_list_builder new_builder;
-        current.swap(new_builder);
-        list_tag = value::default_tag;
-    }
-
-    void value_builder::set_tag(value::tag_type tag) {
-        list_tag = tag;
-    }
-
     void value_builder::insert(value const& item) {
         current.append(item.value_);
     }
@@ -822,9 +817,8 @@ namespace quickbook
     }
 
     void value_builder::start_list(value::tag_type tag) {
-        value::tag_type saved_tag = tag;
         save();
-        list_tag = saved_tag;
+        list_tag = tag;
     }
 
     void value_builder::finish_list() {
@@ -840,6 +834,11 @@ namespace quickbook
     void value_builder::sort_list()
     {
         current.sort();
+    }
+
+    bool value_builder::empty() const
+    {
+        return current.empty();
     }
 
     ////////////////////////////////////////////////////////////////////////////

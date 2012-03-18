@@ -24,7 +24,7 @@ exe quickbook
     quickbook.cpp
     actions.cpp
     doc_info_actions.cpp
-    actions_class.cpp
+    state.cpp
     utils.cpp
     files.cpp
     string_ref.cpp

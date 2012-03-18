@@ -17,6 +17,7 @@
 #include <boost/spirit/include/phoenix1_primitives.hpp>
 #include <boost/spirit/include/phoenix1_tuples.hpp>
 #include <boost/spirit/include/phoenix1_binders.hpp>
+#include "fwd.hpp"
 
 namespace quickbook {
     namespace cl = boost::spirit::classic;
@@ -252,6 +253,48 @@ namespace quickbook {
     };
     
     lookback_gen const lookback = lookback_gen();
+ 
+    ///////////////////////////////////////////////////////////////////////////
+    //
+    // UTF-8 code point
+    //
+    // Very crude, it doesn't check that the code point is in any way valid.
+    // Just looks for the beginning of the next character. This is just for
+    // implementing some crude fixes, rather than full unicode support. I'm
+    // sure experts would be appalled.
+    //
+    ///////////////////////////////////////////////////////////////////////////
+
+    struct u8_codepoint_parser : public cl::parser<u8_codepoint_parser>
+    {
+        typedef u8_codepoint_parser self_t;
+
+        template <typename Scanner>
+        struct result
+        {
+            typedef cl::match<> type;
+        };
+
+        template <typename Scanner>
+        typename result<Scanner>::type parse(Scanner const& scan) const
+        {
+            typedef typename Scanner::iterator_t iterator_t;
+
+            if (scan.at_end()) return scan.no_match();
+
+            iterator_t save(scan.first);
+
+            do {
+                ++scan.first;
+            } while (!scan.at_end() &&
+                    ((unsigned char) *scan.first & 0xc0) == 0x80);
+
+            return scan.create_match(scan.first.base() - save.base(),
+                    cl::nil_t(), save, scan.first);
+        }
+    };
+  
+    u8_codepoint_parser const u8_codepoint_p = u8_codepoint_parser();
 }
 
 #endif // BOOST_QUICKBOOK_SCOPED_BLOCK_HPP
