@@ -13,14 +13,16 @@
 
 using namespace boost::unit_test;
 
+template<typename T>
 struct this_tester;
-BOOST_TYPEOF_REGISTER_TYPE(this_tester) // Register before `this_` capture.
+BOOST_TYPEOF_REGISTER_TEMPLATE(this_tester, 1) // Before`this_` capture.
 
+template<typename T>
 struct this_tester {
     void check(void) {
         value_ = -1;
 
-        BOOST_SCOPE_EXIT( (this_) ) {
+        BOOST_SCOPE_EXIT_TPL( (this_) ) {
             BOOST_CHECK(this_->value_ == 0);
         } BOOST_SCOPE_EXIT_END
 
@@ -34,14 +36,14 @@ struct this_tester {
     }
 
 private:
-    int value_;
+    T value_;
 };
 
-void test_this(void) { this_tester().check(); }
+void test_this_tpl(void) { this_tester<int>().check(); }
 
 test_suite* init_unit_test_suite(int, char* []) {
     framework::master_test_suite().p_name.value = "Unit test for ScopeExit";
-    framework::master_test_suite().add(BOOST_TEST_CASE(&test_this));
+    framework::master_test_suite().add(BOOST_TEST_CASE(&test_this_tpl));
     return 0;
 }
 

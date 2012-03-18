@@ -64,11 +64,7 @@
                 id \
             , \
                 /* ScopeExit expects typename or EMPTY() here */ \
-                BOOST_PP_IIF(typename01, \
-                    BOOST_PP_IDENTITY(typename) \
-                , \
-                    BOOST_PP_EMPTY \
-                )() \
+                BOOST_PP_EXPR_IIF(typename01, typename) \
             ), \
             i, BOOST_LOCAL_FUNCTION_AUX_PP_BIND_TRAITS_VAR_WITHOUT_TYPE( \
                     bind_traits))
@@ -90,11 +86,9 @@
                 BOOST_PP_TUPLE_ELEM(2, 0, id_typename) \
             , \
                 /* ScopeExit expects typename or EMPTY() here */ \
-                BOOST_PP_IIF(BOOST_PP_TUPLE_ELEM(2, 1, id_typename), \
-                    BOOST_PP_IDENTITY(typename) \
-                , \
-                    BOOST_PP_EMPTY \
-                )() \
+                BOOST_PP_EXPR_IIF(BOOST_PP_TUPLE_ELEM(2, 1, id_typename), \
+                    typename \
+                ) \
             ), \
             i, BOOST_LOCAL_FUNCTION_AUX_PP_BIND_TRAITS_VAR_WITHOUT_TYPE( \
                     bind_traits))
@@ -123,21 +117,28 @@
             BOOST_LOCAL_FUNCTION_AUX_PP_BIND_TRAITS_VAR_WITHOUT_TYPE( \
                     bind_traits))
 
+#define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_CAPTURE_TYPE_(id) \
+    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (this_capture_type)(id) )
+
+#define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE_(id) \
+    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (this_type)(id) )
+
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPEDEF_DEDUCED_( \
-        id, all_bind_this_types) \
+        id, typename01, all_bind_this_types) \
     BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, \
-            BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE(id))
+            BOOST_PP_EXPR_IIF(typename01, typename), \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_CAPTURE_TYPE_(id))
 
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPEDEF_TYPED_( \
-        id, all_bind_this_types) \
+        id, typename01, all_bind_this_types) \
     typedef \
         BOOST_LOCAL_FUNCTION_AUX_PP_BIND_TRAITS_THIS_TYPE(BOOST_PP_LIST_FIRST( \
                 all_bind_this_types)) \
-        BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE(id) \
+        BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_CAPTURE_TYPE_(id) \
     ;
     
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPEDEF_( \
-        id, all_bind_this_types) \
+        id, typename01, all_bind_this_types) \
     /* typedef type_ */ \
     BOOST_PP_IIF(BOOST_PP_IS_EMPTY( \
             /* all_bind_this_type is list with 1 elem (possibly PP_EMPTY), */ \
@@ -147,7 +148,7 @@
         BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPEDEF_DEDUCED_ \
     , \
         BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPEDEF_TYPED_ \
-    )(id, all_bind_this_types)
+    )(id, typename01, all_bind_this_types)
 
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_ALL_( \
         all_binds, all_bind_this_types, id, typename01) \
@@ -155,16 +156,21 @@
     BOOST_PP_IIF(BOOST_PP_LIST_IS_CONS(all_bind_this_types), \
         BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPEDEF_ \
     , \
-        BOOST_PP_TUPLE_EAT(2) \
-    )(id, all_bind_this_types) \
+        BOOST_PP_TUPLE_EAT(3) \
+    )(id, typename01, all_bind_this_types) \
     BOOST_PP_LIST_FOR_EACH_I(BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_TAG_DECL_, id, \
             all_binds) \
     BOOST_PP_LIST_FOR_EACH_I(BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_CAPTURE_DECL_, \
             (id, typename01), all_binds) \
     /* binding class */ \
     struct BOOST_SCOPE_EXIT_DETAIL_PARAMS_T(id) { \
+        /* interim capture types to workaround internal error on old GCC */ \
         BOOST_PP_EXPR_IIF(BOOST_PP_LIST_IS_CONS(all_bind_this_types), \
-            BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE(id) \
+            typedef BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_CAPTURE_TYPE_(id) \
+                    BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE_(id) ; \
+        ) \
+        BOOST_PP_EXPR_IIF(BOOST_PP_LIST_IS_CONS(all_bind_this_types), \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE_(id) \
             BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_VAR; \
         ) \
         BOOST_PP_LIST_FOR_EACH_I( \
@@ -207,8 +213,10 @@
 
 // PUBLIC //
 
-#define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE(id) \
-    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (this_type)(id) )
+#define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE(id, typename01) \
+    BOOST_PP_EXPR_IIF(typename01, typename) \
+    BOOST_SCOPE_EXIT_DETAIL_PARAMS_T(id):: \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPE_(id)
 
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_VAR \
     BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (this_var) )

@@ -61,7 +61,7 @@ void world::add_person(person const& a_person) {
     person::evolution_t checkpoint = p.evolution;
     BOOST_SCOPE_EXIT_ALL( (&) (checkpoint) (this_) ) {
         if(checkpoint == p.evolution) this_->persons_.pop_back();
-    } BOOST_SCOPE_EXIT_END
+    };
 
     // ...
 
@@ -75,7 +75,7 @@ void world::add_person(person const& a_person) {
             this->next_id_ = p.id;
             p.id = prev_id;
         }
-    }; // Use `;` instead of `SCOPE_EXIT_END` (C++11).
+    };
 
     // ...
 

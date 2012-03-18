@@ -34,19 +34,11 @@ void world::add_person(person const& a_person) {
     bool commit = false;
 
     persons_.push_back(a_person);
-#ifdef BOOST_NO_LAMBDAS
     //[world_this_
     BOOST_SCOPE_EXIT(&commit, this_) { // Capture object `this_`.
         if(!commit) this_->persons_.pop_back();
     } BOOST_SCOPE_EXIT_END
     //]
-#else
-    //[world_this
-    BOOST_SCOPE_EXIT(&commit, this) { // Use `this` (C++11).
-        if(!commit) this->persons_.pop_back();
-    }; // Use `;` instead of `BOOST_SCOPE_EXIT_END` (C++11).
-    //]
-#endif
 
     // ...
 
