@@ -10,9 +10,8 @@
 
 [/ TODO: The generated docs should contain boostinspect:nolicense ]
 
-[article Sample Proposal for the C++ Standard Library Technical Report 2
+[article 
     [quickbook 1.5]
-    [purpose Sample library proposal for the C++ committee]
 ]
 
 [def (tm) '''&#8482;''']
@@ -39,6 +38,19 @@ The proposal is based on the Boost library of the same name.
 
 [section Why is this important?]
 TBS
+'''
+<table><tr><td>Bingo!</td></tr></table>
+<table border="1" cellpadding="5" cellspacing="0" style="border-collapse: collapse" bordercolor="#111111">
+  <tr>
+    <td>Fee</td>
+    <td>Fi</td>
+  </tr>
+  <tr>
+    <td>Foo</td>
+    <td>Fum</td>
+  </tr>
+</table>
+'''
 [endsect]
 
 [section What kinds of problems does it address, and what kinds of
