@@ -282,26 +282,6 @@ html.
 
 [section:1_7 Quickbook 1.7]
 
-[section:glob Including multiple files with Globs]
-
-One can now include multiple files at once using a glob pattern for the
-file reference:
-
-    [include sub/*/*.qbk]
-    [include include/*.h]
-
-All the matching files, and intermediate irectories, will match and be
-included. The glob pattern can be "\*" for matching zero or more characters,
-"?" for matching a single character, "\[<c>-<c>\]" to match a character class,
-"\[\^<char>-<char>\]" to exclusive match a character class, "\\\\" to escape
-a glob special character which is then matched, and anything else is matched
-to the character.
-
-[note Because of the escaping in file references the "\\\\" glob escape is
-a double "\\"; i.e. and escaped back-slash.]
-
-[endsect]
-
 [section:source_mode Source mode for single entities]
 
 1.7 introduces a new `!` element type for setting the source mode of a single

@@ -33,7 +33,6 @@
 #include "block_tags.hpp"
 #include "phrase_tags.hpp"
 #include "id_manager.hpp"
-#include "glob.hpp"
 
 namespace quickbook
 {
@@ -1762,8 +1761,8 @@ namespace quickbook
     }
 
     struct path_details {
-        // Will possibly add 'url' to this list later:
-        enum path_type { path, glob };
+        // Will possibly add 'url' and 'glob' to this list later:
+        enum path_type { path };
 
         std::string value;
         path_type type;
@@ -1785,10 +1784,7 @@ namespace quickbook
         std::string path_text = qbk_version_n >= 106u || path.is_encoded() ?
                 path.get_encoded() : path.get_quickbook();
 
-        bool is_glob = qbk_version_n >= 107u &&
-            path_text.find_first_of("[]?*") != std::string::npos;
-
-        if(!is_glob && path_text.find('\\') != std::string::npos)
+        if(path_text.find('\\') != std::string::npos)
         {
             quickbook::detail::ostream* err;
 
@@ -1808,23 +1804,12 @@ namespace quickbook
             boost::replace(path_text, '\\', '/');
         }
 
-        return path_details(path_text,
-            is_glob ? path_details::glob : path_details::path);
+        return path_details(path_text, path_details::path);
     }
 
     xinclude_path calculate_xinclude_path(value const& p, quickbook::state& state)
     {
         path_details details = check_path(p, state);
-
-        if (details.type == path_details::glob) {
-            // TODO: Should know if this is an xinclude or an xmlbase.
-            // Would also help with implementation of 'check_path'.
-            detail::outerr(p.get_file(), p.get_position())
-                << "Glob used in xinclude/xmlbase."
-                << std::endl;
-            ++state.error_count;
-            return xinclude_path(state.current_file->path.parent_path(), "");
-        }
 
         fs::path path = detail::generic_to_path(details.value);
         fs::path full_path = path;
@@ -1873,121 +1858,41 @@ namespace quickbook
             }
         };
 
-        #if QUICKBOOK_WIDE_PATHS
-        typedef std::wstring path_string_t;
-        inline path_string_t path_to_string(fs::path const & p)
-        {
-            return p.generic_wstring();
-        }
-        static const path_string_t::value_type* glob_chars = L"[]?*";
-        #else
-        typedef std::string path_string_t;
-        inline path_string_t path_to_string(fs::path const & p)
-        {
-            return p.generic_string();
-        }
-        static const path_string_t::value_type* glob_chars = "[]?*";
-        #endif
-
-        void include_search_glob(std::set<include_search_return> & result,
-            fs::path dir, fs::path path, quickbook::state const & state)
-        {
-            // Split the glob into the current dir/glob/rest to search.
-            fs::path glob;
-            fs::path rest;
-            fs::path::iterator i = path.begin();
-            fs::path::iterator e = path.end();
-            for (; i != e; ++i)
-            {
-                if (path_to_string(*i).find_first_of(glob_chars) != path_string_t::npos)
-                {
-                    glob = *i;
-                    for (++i; i != e; ++i) rest /= *i;
-                    break;
-                }
-                else
-                {
-                    dir /= *i;
-                }
-            }
-            // Walk through the dir for matches.
-            fs::directory_iterator dir_i(dir.empty() ? fs::path(".") : dir);
-            fs::directory_iterator dir_e;
-            for (; dir_i != dir_e; ++dir_i)
-            {
-                fs::path f = dir_i->path().filename();
-                // Skip if the dir item doesn't match.
-                if (!quickbook::glob(path_to_string(glob).c_str(),path_to_string(f).c_str())) continue;
-                // If it's a file we add it to the results.
-                if (fs::is_regular_file(dir_i->status()))
-                {
-                    result.insert(include_search_return(
-                        dir/f,
-                        state.filename_relative.parent_path()/dir/f
-                        ));
-                }
-                // If it's a matching dir, we recurse looking for more files.
-                else
-                {
-                    include_search_glob(result,dir,f/rest,state);
-                }
-            }
-        }
-
         std::set<include_search_return> include_search(path_details const& details,
                 quickbook::state const& state)
         {
             std::set<include_search_return> result;
             fs::path current = state.current_file->path.parent_path();
 
-            // If the path has some glob match characters
-            // we do a discovery of all the matches..
-            if (details.type == path_details::glob)
-            {
-                fs::path path(details.value);
+            fs::path path(details.value);
 
-                // Search for the current dir accumulating to the result.
-                include_search_glob(result,current,path,state);
-                // Search the include path dirs accumulating to the result.
-                BOOST_FOREACH(fs::path dir, include_path)
+            // If the path is relative, try and resolve it.
+            if (!path.has_root_directory() && !path.has_root_name())
+            {
+                // See if it can be found locally first.
+                if (fs::exists(current / path))
                 {
-                    include_search_glob(result,dir,path,state);
+                    result.insert(include_search_return(
+                        current / path,
+                        state.filename_relative.parent_path() / path));
+                    return result;
                 }
-                // Done.
-                return result;
-            }
-            else
-            {
-                fs::path path(details.value);
 
-                // If the path is relative, try and resolve it.
-                if (!path.has_root_directory() && !path.has_root_name())
+                // Search in each of the include path locations.
+                BOOST_FOREACH(fs::path full, include_path)
                 {
-                    // See if it can be found locally first.
-                    if (fs::exists(current / path))
+                    full /= path;
+                    if (fs::exists(full))
                     {
-                        result.insert(include_search_return(
-                            current / path,
-                            state.filename_relative.parent_path() / path));
+                        result.insert(include_search_return(full, path));
                         return result;
                     }
-
-                    // Search in each of the include path locations.
-                    BOOST_FOREACH(fs::path full, include_path)
-                    {
-                        full /= path;
-                        if (fs::exists(full))
-                        {
-                            result.insert(include_search_return(full, path));
-                            return result;
-                        }
-                    }
                 }
-
-                result.insert(include_search_return(path,
-                    state.filename_relative.parent_path() / path));
-                return result;
             }
+
+            result.insert(include_search_return(path,
+                state.filename_relative.parent_path() / path));
+            return result;
         }
     }
     
