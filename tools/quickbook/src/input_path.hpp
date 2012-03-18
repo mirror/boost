@@ -10,7 +10,7 @@
 #define BOOST_QUICKBOOK_DETAIL_INPUT_PATH_HPP
 
 #include <boost/config.hpp>
-#include <boost/filesystem/v3/path.hpp>
+#include <boost/filesystem/path.hpp>
 #include <string>
 #include <stdexcept>
 #include <iostream>
