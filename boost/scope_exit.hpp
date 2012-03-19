@@ -283,8 +283,8 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
 #else // TYPEOF_THIS_WORKAROUND
 
 #define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, ty, new_type) \
-    typedef \
-        BOOST_PP_IIF(BOOST_PP_IS_EMPTY(ty), \
+    typedef /* trailing `EMPTY()` handles empty `ty` */ \
+        BOOST_PP_IIF(BOOST_PP_IS_EMPTY(ty BOOST_PP_EMPTY()), \
             BOOST_TYPEOF \
         , \
             BOOST_TYPEOF_TPL \
@@ -316,7 +316,7 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
         } /* trailing `;` will be added by the caller */ \
     )
 
-#else
+#else // TPL_WORKAROUND
 
 #define BOOST_SCOPE_EXIT_AUX_CTOR_ARG(r, id, i, var) \
     BOOST_PP_COMMA_IF(i) \
@@ -365,15 +365,16 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
     BOOST_PP_COMMA_IF(i) BOOST_SCOPE_EXIT_AUX_DEREF(id,i,var)
 
 #define BOOST_SCOPE_EXIT_AUX_PARAMS_INIT(id, captures, has_this) \
-    BOOST_PP_LPAREN_IF(BOOST_PP_LIST_IS_CONS(captures)) \
-        BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_DETAIL_PARAM_INIT, id, \
-                captures)\
-        BOOST_PP_COMMA_IF(BOOST_PP_BITAND(BOOST_PP_LIST_IS_CONS(captures), \
-                has_this)) \
-        BOOST_PP_EXPR_IIF(has_this, this) \
-    BOOST_PP_RPAREN_IF(BOOST_PP_LIST_IS_CONS(captures))
+    BOOST_PP_LPAREN_IF(BOOST_PP_BITOR(has_this, \
+            BOOST_PP_LIST_IS_CONS(captures))) \
+    BOOST_PP_LIST_FOR_EACH_I(BOOST_SCOPE_EXIT_DETAIL_PARAM_INIT, id, captures) \
+    BOOST_PP_COMMA_IF(BOOST_PP_BITAND(BOOST_PP_LIST_IS_CONS(captures), \
+            has_this)) \
+    BOOST_PP_EXPR_IIF(has_this, this) \
+    BOOST_PP_RPAREN_IF(BOOST_PP_BITOR(has_this, \
+            BOOST_PP_LIST_IS_CONS(captures)))
 
-#endif
+#endif // TPL_WORKAROUND
 
 #if defined(BOOST_TYPEOF_EMULATION)
 
