@@ -2096,7 +2096,7 @@ private:
         template <class StateType>
         void operator()( ::boost::msm::wrap<StateType> const& )
         {
-            typedef typename StateType::flag_list flags;
+            typedef typename get_flag_list<StateType>::type flags;
             typedef typename ::boost::mpl::contains<flags,Flag >::type found;
             typedef typename is_composite_state<StateType>::type composite;
 

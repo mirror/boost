@@ -59,6 +59,7 @@ struct func_state :  public ::boost::msm::front::detail::state_base<BASE,Attribu
     typedef StateNameTag state_name_tag;
     // flags
     typedef Flags       flag_list;
+    typedef ::boost::mpl::vector0<> internal_flag_list;
     // deferred events
     typedef Defer       deferred_events;
 
@@ -99,6 +100,7 @@ struct entry_func_state :  public ::boost::msm::front::detail::state_base<BASE,A
 
     // flags
     typedef Flags       flag_list;
+    typedef ::boost::mpl::vector0<> internal_flag_list;
     // deferred events
     typedef Defer       deferred_events;
 
@@ -135,6 +137,7 @@ struct explicit_entry_func_state :  public ::boost::msm::front::detail::state_ba
     typedef StateNameTag state_name_tag;
     // flags
     typedef Flags       flag_list;
+    typedef ::boost::mpl::vector0<> internal_flag_list;
     // deferred events
     typedef Defer       deferred_events;
 
@@ -175,6 +178,7 @@ struct exit_func_state :   public ::boost::msm::front::detail::state_base<BASE,A
 
     // flags
     typedef Flags       flag_list;
+    typedef ::boost::mpl::vector0<> internal_flag_list;
     // deferred events
     typedef Defer       deferred_events;
 
@@ -867,6 +871,7 @@ struct func_state_machine :  public ::boost::msm::front::detail::state_base<BASE
     // flags
     typedef StateNameTag state_name_tag;
     typedef Flags                        flag_list;
+    typedef ::boost::mpl::vector0<>      internal_flag_list;
     // deferred events
     typedef Defer                        deferred_events;
     // customization (message queue, exceptions)

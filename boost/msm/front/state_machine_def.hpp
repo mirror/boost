@@ -31,6 +31,7 @@ struct state_machine_def :  public boost::msm::front::detail::state_base<BaseSta
     // tags
     // default: no flag
     typedef ::boost::mpl::vector0<>               flag_list;
+    typedef ::boost::mpl::vector0<>               internal_flag_list;
     //default: no deferred events
     typedef ::boost::mpl::vector0<>               deferred_events;
     // customization (message queue, exceptions)
