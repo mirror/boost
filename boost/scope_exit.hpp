@@ -490,15 +490,44 @@ private:
 };
 
 } } } // namespace
+    
+#define BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id) \
+    BOOST_PP_CAT(boost_se_lambda_params_, id)
+
+#define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_CAPTURE_TYPE(id) \
+    BOOST_PP_CAT(boost_se_lambda_this_t_, id)
+
+#define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id) \
+    BOOST_PP_CAT(boost_se_lambda_this_capture_t_, id)
+
+#define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE(id) \
+    /* C++11 allows use of typename even in non-type dependent context */ \
+    typename BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id):: \
+            BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id)
+
+// Precondition: HAS_THIS(traits).
+#define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPEDEFS(id, traits) \
+    BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, 0 /* no TPL for C++11 */, \
+            BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_CAPTURE_TYPE(id)) \
+    /* capture type for workaround GCC internal error (even on later C++11) */ \
+    struct BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id) { \
+        typedef BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_CAPTURE_TYPE(id) \
+                BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id); \
+    };
 
 #define BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, traits) \
+    BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
+        /* no need for TYPEDEF THIS MSVC workaround on C++11 */ \
+        BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPEDEFS \
+    , \
+        BOOST_PP_TUPLE_EAT(2) \
+    )(id, traits) \
     ::boost::scope_exit::aux::guard< \
         BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
-            /* no need for TYPEDEF THIS MSVC workaround on C++11 */ \
-            BOOST_TYPEOF /* delay expansion for commas in TYPEOF */ \
+            BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE \
         , \
             BOOST_PP_TUPLE_EAT(1) \
-        )(this) \
+        )(id) \
     > BOOST_SCOPE_EXIT_AUX_GUARD(id) \
         BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
             (this) \
@@ -508,17 +537,16 @@ private:
         BOOST_PP_LIST_ENUM(BOOST_SCOPE_EXIT_AUX_TRAITS_CAPTURES(traits)) \
     ]( \
         BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
-            /* no need for TYPEDEF THIS MSVC workaround on C++11 */ \
-            BOOST_TYPEOF /* delay expansion for commas in TYPEOF */ \
+            BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE \
         , \
             BOOST_PP_TUPLE_EAT(1) \
-        )(this) \
+        )(id) \
         BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), this_) \
-    ) mutable -> void
+    ) mutable /* can change value captures (as with SCOPE_EXIT) */ -> void
 
 #endif // Lambdas.
 
-#if defined(BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPLEMENTATION) && \
+#if defined(BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL) && \
         !defined(BOOST_NO_LAMBDAS) // Use lambda for SCOPE_EXIT (not just _ALL).
 
 #define BOOST_SCOPE_EXIT_AUX_IMPL(id, ty, traits) \
@@ -655,7 +683,7 @@ private:
 #   endif
 #endif // Variadics.
 
-#if defined(BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPLEMENTATION) && \
+#if defined(BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL) && \
         !defined(BOOST_NO_LAMBDAS) // Use lambdas for SCOPE_EXIT (not just ALL).
 #   define BOOST_SCOPE_EXIT_END_ID(id) \
         ; /* lambdas ended with just `;` */
@@ -987,7 +1015,7 @@ This configuration macro does not control the definition of @RefMacro{BOOST_SCOP
 
 @See @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_ALL}, @RefMacro{BOOST_SCOPE_EXIT_END}.
 */
-#define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPLEMENTATION
+#define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL
 
 #endif // DOXYGEN
 
