@@ -794,7 +794,7 @@ This can be fixed by adding <c>typename</c> in front of <c>local::typeof_i</c> a
 #define BOOST_SCOPE_EXIT_TPL(capture_list)
 
 /**
-@brief This macro allows to expand multiple scope-exits on the same line.
+@brief This macro allows to expand multiple scope exit macros on the same line.
 
 This macro is equivalent to @RefMacro{BOOST_SCOPE_EXIT} but it can be expanded
 multiple times on the same line if different identifiers <c>id</c> are provided
@@ -806,16 +806,23 @@ for each expansion (see @RefMacro{BOOST_SCOPE_EXIT} for more detail).
     example <c>__LINE__</c> or <c>scope_exit_number_1_on_line_123</c>).
 }
 @Param{within_template,
-    If this macro is used in a type-dependant context on GCC then <c>1</c>
-    (equivalently to @RefMacro{BOOST_SCOPE_EXIT_TPL}), <c>0</c> otherwise.
+    Specify <c>1</c> when this macro is used in a type-dependant context
+    on GCC\, <c>1</c> otherwise (this is equivalent to using
+    @RefMacro{BOOST_SCOPE_EXIT_TPL} on separate lines).
 }
 @Param{capture_list,
     Same as the <c>capture_list</c> parameter of the
-    @RefMacro{BOOST_SCOPE_EXIT} macro: <c>void</c>\, or a comma separated
-    list\, or a preprocessor sequence (if no variadic macros) of variables in
-    scope to capture.
+    @RefMacro{BOOST_SCOPE_EXIT} macro.
 }
-@endParams
+@EndParams
+
+@Note This macro can be useful when the scope exit macros are expanded
+within user-defined macros (because macros all expand on the same line).
+On some compilers (e.g., MSVC which supports the non standard
+<c>__COUNTER__</c> macro) it might not be necessary to use this macro but
+the use of this macro is always necessary to ensure portability when expanding
+multiple scope exit macros on the same line (because this library can only
+portably use <c>__LINE__</c> to internally generate unique identifiers).
 
 @See @RefMacro{BOOST_SCOPE_EXIT_END_ID}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID},
     @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_TPL}.
@@ -877,7 +884,7 @@ Similarly, this macro can always use <c>this</c> instead of <c>this_</c> to capt
 #define BOOST_SCOPE_EXIT_ALL(capture_list)
 
 /**
-@brief This macro allows to expand multiple scope-exits on the same line.
+@brief This macro allows to expand multiple scope exit macros on the same line.
 
 This macro is equivalent to @RefMacro{BOOST_SCOPE_EXIT_ALL} but it can be
 expanded multiple times on the same line if different identifiers <c>id</c> are
@@ -891,11 +898,17 @@ detail).
 }
 @Param{capture_list,
     Same as the <c>capture_list</c> parameter of the
-    @RefMacro{BOOST_SCOPE_EXIT} macro: <c>void</c>\, or a comma separated
-    list\, or a preprocessor sequence (if no variadic macros) of variables in
-    scope to capture.
+    @RefMacro{BOOST_SCOPE_EXIT} macro.
 }
-@endParams
+@EndParams
+
+@Note This macro can be useful when the scope exit macros are expanded
+within user-defined macros (because macros all expand on the same line).
+On some compilers (e.g., MSVC which supports the non standard
+<c>__COUNTER__</c> macro) it might not be necessary to use this macro but
+the use of this macro is always necessary to ensure portability when expanding
+multiple scope exit macros on the same line (because this library can only
+portably use <c>__LINE__</c> to internally generate unique identifiers).
 
 @See @RefMacro{BOOST_SCOPE_EXIT_ID}, @RefMacro{BOOST_SCOPE_EXIT_ALL}.
 */
@@ -933,7 +946,7 @@ However, @RefMacro{BOOST_SCOPE_EXIT_END} is still provided on C++11 so to write 
 #define BOOST_SCOPE_EXIT_END
 
 /**
-@brief This macro allows to expand multiple scope-exits on the same line.
+@brief This macro allows to expand multiple scope exit macros on the same line.
 
 This macro is equivalent to @RefMacro{BOOST_SCOPE_EXIT_END} but it can be
 expanded multiple times on the same line if different identifiers <c>id</c> are
@@ -945,7 +958,15 @@ detail).
     A unique identifier token which can be catted by the preprocessor (for
     example <c>__LINE__</c> or <c>scope_exit_number_1_on_line_123</c>).
 }
-@endParams
+@EndParams
+
+@Note This macro can be useful when the scope exit macros are expanded
+within user-defined macros (because macros all expand on the same line).
+On some compilers (e.g., MSVC which supports the non standard
+<c>__COUNTER__</c> macro) it might not be necessary to use this macro but
+the use of this macro is always necessary to ensure portability when expanding
+multiple scope exit macros on the same line (because this library can only
+portably use <c>__LINE__</c> to internally generate unique identifiers).
 
 @See @RefMacro{BOOST_SCOPE_EXIT_ID}, @RefMacro{BOOST_SCOPE_EXIT_END}.
 */

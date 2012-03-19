@@ -21,35 +21,28 @@
 // PUBLIC //
 
 #ifdef BOOST_NO_VARIADIC_MACROS
+#   define BOOST_LOCAL_FUNCTION_ID(id, within_template, declarations) \
+        BOOST_LOCAL_FUNCTION_AUX_DECL(id, within_template, \
+                BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST( \
+                                declarations)))
 #   define BOOST_LOCAL_FUNCTION(declarations) \
-        BOOST_LOCAL_FUNCTION_AUX_DECL( \
-              BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
-            , 0 /* not within template */ \
-            , BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
-                    BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(declarations)) \
-        )
+        BOOST_LOCAL_FUNCTION_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
+                0, declarations)
 #   define BOOST_LOCAL_FUNCTION_TPL(declarations) \
-        BOOST_LOCAL_FUNCTION_AUX_DECL( \
-              BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
-            , 1 /* within template */ \
-            , BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
-                    BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(declarations)) \
-        )
+        BOOST_LOCAL_FUNCTION_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
+                1, declarations)
 #else // VARIADIC
+#   define BOOST_LOCAL_FUNCTION_ID(id, within_template, ...) \
+        BOOST_LOCAL_FUNCTION_AUX_DECL(id, within_template, \
+                BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)))
 #   define BOOST_LOCAL_FUNCTION(...) \
-        BOOST_LOCAL_FUNCTION_AUX_DECL( \
-              BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
-            , 0 /* not within template */ \
-            , BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
-                    BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)) \
-        )
+        BOOST_LOCAL_FUNCTION_ID( \
+                BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 0, __VA_ARGS__)
 #   define BOOST_LOCAL_FUNCTION_TPL(...) \
-        BOOST_LOCAL_FUNCTION_AUX_DECL( \
-              BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER \
-            , 1 /* within template */ \
-            , BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
-                    BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)) \
-        )
+        BOOST_LOCAL_FUNCTION_ID( \
+                BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1, __VA_ARGS__)
 #endif // VARIADIC
 
 #define BOOST_LOCAL_FUNCTION_NAME(qualified_function_name) \
@@ -194,6 +187,45 @@ the library when the enclosing scope is a template.
 @RefMacro{BOOST_LOCAL_FUNCTION_NAME}.
 */
 #define BOOST_LOCAL_FUNCTION_TPL(declarations)
+
+/**
+@brief This macro allows to expand multiple local function macros on the same
+line.
+
+This macro is equivalent to @RefMacro{BOOST_LOCAL_FUNCTION} but it can be
+expanded multiple times on the same line if different identifiers <c>id</c> are
+provided for each expansion (see @RefMacro{BOOST_LOCAL_FUNCTION} for more
+detail).
+
+@Params
+@Param{id,
+    A unique identifier token which can be catted by the preprocessor (for
+    example <c>__LINE__</c> or <c>local_function_number_1_on_line_123</c>).
+}
+@Param{within_template,
+    Specify <c>1</c> when this macro is used in a type-dependant context\,
+    <c>0</c> otherwise (this is equivalent to using
+    @RefMacro{BOOST_LOCAL_FUNCTION_TPL} on separate lines).
+}
+@Param{declarations,
+    Same as the <c>declarations</c> parameter of the
+    @RefMacro{BOOST_LOCAL_FUNCTION} macro.
+}
+@EndParams
+
+@Note This macro can be useful when the local function macros are expanded
+within user-defined macros (because macros all expand on the same line).
+On some compilers (e.g., MSVC which supports the non standard
+<c>__COUNTER__</c> macro) it might not be necessary to use this macro but
+the use of this macro when expanding multiple local function macros on the same
+line is always necessary to ensure portability (this is because this library
+can only portably use <c>__LINE__</c> to internally generate unique
+identifiers).
+
+@See @RefMacro{BOOST_SCOPE_EXIT_END_ID}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID},
+    @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_TPL}.
+*/
+#define BOOST_LOCAL_FUNCTION_ID(id, within_template, declarations)
 
 /**
 @brief This macro is used to end a local function declaration specifying its
