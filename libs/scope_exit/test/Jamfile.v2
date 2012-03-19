@@ -32,6 +32,7 @@ test-suite world_tests
         [ run-vaseq world_this ]
         [ run-vaseq world_tpl ]
         [ run world_void.cpp ]
+        [ run-vaseq same_line ]
     ;
 
 test-suite native_tests

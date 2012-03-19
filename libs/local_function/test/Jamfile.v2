@@ -52,6 +52,7 @@ run-vaseq return_derivative ;
 run-vaseq return_inc ;
 run-vaseq return_setget ;
 run-vaseq return_this ;
+run-vaseq same_line ;
 run ten_void.cpp ;
 run ten_void.cpp : : : <define>BOOST_NO_VARIADIC_MACROS : ten_void_nova : ;
 run-vaseq transform ;
