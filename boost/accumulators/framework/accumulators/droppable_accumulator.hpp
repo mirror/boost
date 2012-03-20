@@ -170,7 +170,7 @@ namespace boost { namespace accumulators
         }
 
         droppable_accumulator(droppable_accumulator const &that)
-          : droppable_accumulator::base(*static_cast<droppable_accumulator::base const *>(&that))
+          : droppable_accumulator::base(*static_cast<typename droppable_accumulator::base const *>(&that))
         {
         }
     };
