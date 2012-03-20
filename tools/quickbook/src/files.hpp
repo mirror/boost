@@ -16,6 +16,7 @@
 #include <boost/intrusive_ptr.hpp>
 #include <stdexcept>
 #include <cassert>
+#include <vector>
 #include "intrusive_base.hpp"
 
 namespace quickbook {
@@ -75,6 +76,7 @@ namespace quickbook {
     // If version isn't supplied then it must be set later.
     file_ptr load(fs::path const& filename,
         unsigned qbk_version = 0);
+    std::vector<fs::path> loaded_files();
 
     struct load_error : std::runtime_error
     {

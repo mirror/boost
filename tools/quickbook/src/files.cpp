@@ -12,6 +12,7 @@
 #include <boost/unordered_map.hpp>
 #include <boost/range/algorithm/upper_bound.hpp>
 #include <boost/range/algorithm/transform.hpp>
+#include <boost/foreach.hpp>
 #include <fstream>
 #include <iterator>
 
@@ -132,6 +133,19 @@ namespace quickbook
         }
 
         return pos->second;
+    }
+
+    std::vector<fs::path> loaded_files()
+    {
+        std::vector<fs::path> file_list;
+        typedef std::pair<fs::path const, file_ptr> pair;
+
+        BOOST_FOREACH(pair const& p, files)
+        {
+            file_list.push_back(p.first);
+        }
+
+        return file_list;
     }
 
     file_position relative_position(

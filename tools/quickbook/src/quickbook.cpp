@@ -23,6 +23,7 @@
 #include <boost/range/algorithm.hpp>
 #include <boost/ref.hpp>
 #include <boost/version.hpp>
+#include <boost/foreach.hpp>
 
 #include <stdexcept>
 #include <vector>
@@ -113,6 +114,7 @@ namespace quickbook
     parse_document(
         fs::path const& filein_
       , fs::path const& fileout_
+      , fs::path const& deps_out_
       , fs::path const& xinclude_base_
       , int indent
       , int linewidth
@@ -145,7 +147,14 @@ namespace quickbook
             result = 1;
         }
 
-        if (result == 0)
+        if (!deps_out_.empty())
+        {
+            fs::ofstream deps_out(deps_out_);
+            BOOST_FOREACH(fs::path const& f, loaded_files())
+                deps_out << detail::path_to_generic(fs::absolute(f)) << std::endl;
+        }
+
+        if (!fileout_.empty() && result == 0)
         {
             std::string stage2 = ids.replace_placeholders(buffer.str());
 
@@ -245,6 +254,7 @@ main(int argc, char* argv[])
             ("linewidth", PO_VALUE<int>(), "line width")
             ("input-file", PO_VALUE<input_string>(), "input file")
             ("output-file", PO_VALUE<input_string>(), "output file")
+            ("output-deps", PO_VALUE<input_string>(), "output dependency file")
             ("debug", "debug mode (for developers)")
             ("ms-errors", "use Microsoft Visual Studio style error & warn message format")
             ("include-path,I", PO_VALUE< std::vector<input_string> >(), "include path")
@@ -388,16 +398,23 @@ main(int argc, char* argv[])
             fs::path filein = quickbook::detail::input_to_path(
                 vm["input-file"].as<input_string>());
             fs::path fileout;
+            fs::path depsout;
 
             if (vm.count("output-file"))
             {
                 fileout = quickbook::detail::input_to_path(
                     vm["output-file"].as<input_string>());
             }
-            else
+            else if (!vm.count("output-deps"))
             {
                 fileout = filein;
                 fileout.replace_extension(".xml");
+            }
+
+            if (vm.count("output-deps"))
+            {
+                depsout = quickbook::detail::input_to_path(
+                    vm["output-deps"].as<input_string>());
             }
             
             fs::path xinclude_base;
@@ -432,12 +449,16 @@ main(int argc, char* argv[])
                 quickbook::image_location = filein.parent_path() / "html";
             }
 
-            quickbook::detail::out() << "Generating Output File: "
-                << fileout
-                << std::endl;
+            if (!fileout.empty()) {
+                quickbook::detail::out() << "Generating Output File: "
+                    << fileout
+                    << std::endl;
+            }
 
             if (!error_count)
-                error_count += quickbook::parse_document(filein, fileout, xinclude_base, indent, linewidth, pretty_print);
+                error_count += quickbook::parse_document(
+                        filein, fileout, depsout, xinclude_base,
+                        indent, linewidth, pretty_print);
 
             if (expect_errors)
             {
