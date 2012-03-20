@@ -45,6 +45,8 @@
       Specifications</a></span></dt>
 <dt><span class="section"><a href="Advanced_Topics.html#boost_localfunction.Advanced_Topics.storage_classifiers___auto__and__register__">Storage
       Classifiers (<code class="computeroutput"><span class="keyword">auto</span></code> and <code class="computeroutput"><span class="keyword">register</span></code>)</a></span></dt>
+<dt><span class="section"><a href="Advanced_Topics.html#boost_localfunction.Advanced_Topics.same_line_expansions">Same
+      Line Expansions</a></span></dt>
 <dt><span class="section"><a href="Advanced_Topics.html#boost_localfunction.Advanced_Topics.limitations__operators__etc_">Limitations
       (operators, etc)</a></span></dt>
 </dl></div>
@@ -79,7 +81,7 @@
     <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">+</span> <span class="identifier">y</span><span class="special">;</span>
 <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">add</span><span class="special">)</span>
 
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span> <span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span><span class="special">);</span>
 </pre>
 <p>
       </p>
@@ -101,7 +103,7 @@
     <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">+</span> <span class="identifier">y</span><span class="special">;</span>
 <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">add</span><span class="special">)</span>
 
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span> <span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span><span class="special">);</span>
 </pre>
 <p>
       </p>
@@ -302,8 +304,8 @@
       </p>
 <p>
 </p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">call1</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="keyword">int</span><span class="special">)</span> <span class="special">&gt;</span> <span class="identifier">f</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">f</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">5</span> <span class="special">);</span> <span class="special">}</span>
-<span class="keyword">void</span> <span class="identifier">call0</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="keyword">void</span><span class="special">)&gt;</span> <span class="identifier">f</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">f</span><span class="special">()</span> <span class="special">==</span> <span class="number">5</span> <span class="special">);</span> <span class="special">}</span>
+<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">call1</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="keyword">int</span><span class="special">)</span> <span class="special">&gt;</span> <span class="identifier">f</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="number">1</span><span class="special">)</span> <span class="special">==</span> <span class="number">5</span><span class="special">);</span> <span class="special">}</span>
+<span class="keyword">void</span> <span class="identifier">call0</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="keyword">void</span><span class="special">)&gt;</span> <span class="identifier">f</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">f</span><span class="special">()</span> <span class="special">==</span> <span class="number">5</span><span class="special">);</span> <span class="special">}</span>
 
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">)&gt;</span> <span class="identifier">linear</span><span class="special">(</span><span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">slope</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">slope</span><span class="special">,</span>
@@ -312,7 +314,7 @@
     <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">lin</span><span class="special">)</span>
 
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">)&gt;</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">lin</span><span class="special">;</span> <span class="comment">// Assign to local variable.</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">f</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">5</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">5</span><span class="special">);</span>
 
     <span class="identifier">call1</span><span class="special">(</span><span class="identifier">lin</span><span class="special">);</span> <span class="comment">// Pass to other functions.</span>
     <span class="identifier">call0</span><span class="special">(</span><span class="identifier">lin</span><span class="special">);</span>
@@ -322,7 +324,7 @@
 
 <span class="keyword">void</span> <span class="identifier">call</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">)&gt;</span> <span class="identifier">f</span> <span class="special">=</span> <span class="identifier">linear</span><span class="special">(</span><span class="number">2</span><span class="special">);</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">f</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">5</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">f</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">5</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -361,7 +363,7 @@
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">w</span><span class="special">;</span>
 
 <span class="keyword">for</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;=</span> <span class="number">2</span><span class="special">;</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">i</span> <span class="special">*</span> <span class="number">10</span><span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">v</span><span class="special">[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">10</span> <span class="special">);</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">v</span><span class="special">[</span><span class="number">1</span><span class="special">]</span> <span class="special">==</span> <span class="number">20</span> <span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">v</span><span class="special">[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">10</span><span class="special">);</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">v</span><span class="special">[</span><span class="number">1</span><span class="special">]</span> <span class="special">==</span> <span class="number">20</span><span class="special">);</span>
 <span class="identifier">w</span><span class="special">.</span><span class="identifier">resize</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">size</span><span class="special">());</span>
 
 <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">offset</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">i</span><span class="special">)</span> <span class="special">{</span>
@@ -369,7 +371,7 @@
 <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">inc</span><span class="special">)</span>
 
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">w</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">inc</span><span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">w</span><span class="special">[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">16</span> <span class="special">);</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">w</span><span class="special">[</span><span class="number">1</span><span class="special">]</span> <span class="special">==</span> <span class="number">26</span> <span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">w</span><span class="special">[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">16</span><span class="special">);</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">w</span><span class="special">[</span><span class="number">1</span><span class="special">]</span> <span class="special">==</span> <span class="number">26</span><span class="special">);</span>
 
 <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">inc</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">i</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">j</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">return</span> <span class="identifier">inc</span><span class="special">(</span><span class="identifier">i</span> <span class="special">+</span> <span class="identifier">j</span><span class="special">);</span> <span class="comment">// Call the other bound local function.</span>
@@ -377,7 +379,7 @@
 
 <span class="identifier">offset</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span>
 <span class="identifier">std</span><span class="special">::</span><span class="identifier">transform</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">w</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">inc_sum</span><span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">v</span><span class="special">[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">27</span> <span class="special">);</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">v</span><span class="special">[</span><span class="number">1</span><span class="special">]</span> <span class="special">==</span> <span class="number">47</span> <span class="special">);</span>
+<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">v</span><span class="special">[</span><span class="number">0</span><span class="special">]</span> <span class="special">==</span> <span class="number">27</span><span class="special">);</span> <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">v</span><span class="special">[</span><span class="number">1</span><span class="special">]</span> <span class="special">==</span> <span class="number">47</span><span class="special">);</span>
 </pre>
 <p>
       </p>
@@ -444,10 +446,10 @@
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
 <span class="keyword">void</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">factor</span><span class="special">,</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">sum</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">{</span>
-    <span class="comment">// Typeof for concept checking.</span>
+    <span class="comment">// Type-of for concept checking.</span>
     <span class="identifier">BOOST_CONCEPT_ASSERT</span><span class="special">((</span><span class="identifier">Addable</span><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">remove_reference</span><span class="special">&lt;</span>
             <span class="identifier">BOOST_LOCAL_FUNCTION_TYPEOF</span><span class="special">(</span><span class="identifier">sum</span><span class="special">)&gt;::</span><span class="identifier">type</span><span class="special">&gt;));</span>
-    <span class="comment">// Typeof for declarations.</span>
+    <span class="comment">// Type-of for declarations.</span>
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">remove_reference</span><span class="special">&lt;</span><span class="identifier">BOOST_LOCAL_FUNCTION_TYPEOF</span><span class="special">(</span>
             <span class="identifier">factor</span><span class="special">)&gt;::</span><span class="identifier">type</span> <span class="identifier">mult</span> <span class="special">=</span> <span class="identifier">factor</span> <span class="special">*</span> <span class="identifier">num</span><span class="special">;</span>
     <span class="identifier">sum</span> <span class="special">+=</span> <span class="identifier">mult</span><span class="special">;</span>
@@ -563,7 +565,7 @@
 <p>
 </p>
 <pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">adder</span> <span class="special">{</span>
-    <span class="identifier">adder</span><span class="special">():</span> <span class="identifier">sum_</span><span class="special">(</span><span class="number">0</span><span class="special">)</span> <span class="special">{}</span>
+    <span class="identifier">adder</span><span class="special">()</span> <span class="special">:</span> <span class="identifier">sum_</span><span class="special">(</span><span class="number">0</span><span class="special">)</span> <span class="special">{}</span>
 
     <span class="keyword">int</span> <span class="identifier">sum</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;&amp;</span> <span class="identifier">nums</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">)</span> <span class="special">{</span>
         <span class="comment">// Explicitly specify bound variable and result types.</span>
@@ -575,6 +577,7 @@
         <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">nums</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">add</span><span class="special">);</span>
         <span class="keyword">return</span> <span class="identifier">sum_</span><span class="special">;</span>
     <span class="special">}</span>
+
 <span class="keyword">private</span><span class="special">:</span>
     <span class="keyword">int</span> <span class="identifier">sum_</span><span class="special">;</span>
 <span class="special">};</span>
@@ -761,7 +764,7 @@
 </p>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">add_i</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">y</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">+</span> <span class="identifier">y</span><span class="special">;</span> <span class="special">}</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">test_overload</span> <span class="special">)</span> <span class="special">{</span>
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_overload</span><span class="special">)</span> <span class="special">{</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">s</span> <span class="special">=</span> <span class="string">"abc"</span><span class="special">;</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span>
             <span class="keyword">const</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">s</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span>
@@ -780,10 +783,10 @@
         <span class="special">,</span> <span class="keyword">int</span> <span class="special">(</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">int</span><span class="special">)</span>
     <span class="special">&gt;</span> <span class="identifier">add</span><span class="special">(</span><span class="identifier">add_s</span><span class="special">,</span> <span class="identifier">add_d</span><span class="special">,</span> <span class="identifier">add_d</span><span class="special">,</span> <span class="identifier">add_i</span><span class="special">);</span> <span class="comment">// Overloaded function object.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">add</span><span class="special">(</span><span class="string">"xyz"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abcxyz"</span> <span class="special">);</span> <span class="comment">// Call `add_s`.</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">fabs</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">3.21</span><span class="special">)</span> <span class="special">-</span> <span class="number">4.44</span><span class="special">)</span> <span class="special">&lt;</span> <span class="number">0.001</span> <span class="special">);</span> <span class="comment">// Call `add_d` (no default).</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">fabs</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">3.21</span><span class="special">,</span> <span class="number">40.0</span><span class="special">)</span> <span class="special">-</span> <span class="number">44.44</span><span class="special">)</span> <span class="special">&lt;</span> <span class="number">0.001</span><span class="special">);</span> <span class="comment">// Call `add_d`.</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span> <span class="special">);</span> <span class="comment">// Call `add_i`.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="string">"xyz"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abcxyz"</span><span class="special">);</span> <span class="comment">// Call `add_s`.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">fabs</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">3.21</span><span class="special">)</span> <span class="special">-</span> <span class="number">4.44</span><span class="special">)</span> <span class="special">&lt;</span> <span class="number">0.001</span><span class="special">);</span> <span class="comment">// Call `add_d` (no default).</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">fabs</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">3.21</span><span class="special">,</span> <span class="number">40.0</span><span class="special">)</span> <span class="special">-</span> <span class="number">44.44</span><span class="special">)</span> <span class="special">&lt;</span> <span class="number">0.001</span><span class="special">);</span> <span class="comment">// Call `add_d`.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span><span class="special">);</span> <span class="comment">// Call `add_i`.</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -860,6 +863,64 @@
 <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">add</span><span class="special">)</span>
 </pre>
 <p>
+      </p>
+</div>
+<div class="section boost_localfunction_Advanced_Topics_same_line_expansions">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="boost_localfunction.Advanced_Topics.same_line_expansions"></a><a class="link" href="Advanced_Topics.html#boost_localfunction.Advanced_Topics.same_line_expansions" title="Same Line Expansions">Same
+      Line Expansions</a>
+</h3></div></div></div>
+<p>
+        In general, it is not possible to expand the <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION.html" title="Macro BOOST_LOCAL_FUNCTION">BOOST_LOCAL_FUNCTION</a></code>,
+        <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION_TPL.html" title="Macro BOOST_LOCAL_FUNCTION_TPL">BOOST_LOCAL_FUNCTION_TPL</a></code>
+        macros multiple times on the same line. <sup>[<a name="boost_localfunction.Advanced_Topics.same_line_expansions.f0" href="#ftn.boost_localfunction.Advanced_Topics.same_line_expansions.f0" class="footnote">26</a>]</sup>
+      </p>
+<p>
+        Therefore, this library provides the additional macro <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION_ID.html" title="Macro BOOST_LOCAL_FUNCTION_ID">BOOST_LOCAL_FUNCTION_ID</a></code>
+        which can be expanded multiple times on the same line as long as programmers
+        specify a unique identifier as the macro's first parameter. The unique identifier
+        can be any token (not just numeric) that can be successfully concatenated
+        by the preprocessor (e.g., <code class="computeroutput"><span class="identifier">local_function_number_1_at_line_123</span></code>).
+        The second parameter of <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION_ID.html" title="Macro BOOST_LOCAL_FUNCTION_ID">BOOST_LOCAL_FUNCTION_ID</a></code>
+        is <code class="computeroutput"><span class="number">1</span></code> if the macro is used within
+        a template (equivalent to <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION_TPL.html" title="Macro BOOST_LOCAL_FUNCTION_TPL">BOOST_LOCAL_FUNCTION_TPL</a></code>),
+        or <code class="computeroutput"><span class="number">0</span></code> otherwise. Finally, <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION_ID.html" title="Macro BOOST_LOCAL_FUNCTION_ID">BOOST_LOCAL_FUNCTION_ID</a></code> accept
+        the local function parameter declaration list using the exact same syntax
+        as <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION.html" title="Macro BOOST_LOCAL_FUNCTION">BOOST_LOCAL_FUNCTION</a></code>.
+      </p>
+<p>
+        For example (see also <a href="../../../test/same_line.cpp" target="_top"><code class="literal">same_line.cpp</code></a>):
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">LOCAL_INC_DEC</span><span class="special">(</span><span class="identifier">offset</span><span class="special">)</span> <span class="special">\</span>
+    <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION_ID</span><span class="special">(</span> <span class="special">\</span>
+            <span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">inc</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">)</span> <span class="comment">/* unique ID */</span><span class="special">,</span> <span class="number">0</span> <span class="comment">/* no TPL */</span><span class="special">,</span> <span class="special">\</span>
+            <span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">offset</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
+        <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">+</span> <span class="identifier">offset</span><span class="special">;</span> <span class="special">\</span>
+    <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">inc</span><span class="special">)</span> <span class="special">\</span>
+    <span class="special">\</span>
+    <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION_ID</span><span class="special">(</span> <span class="special">\</span>
+            <span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">dec</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">)</span> <span class="comment">/* unique ID */</span><span class="special">,</span> <span class="number">0</span> <span class="comment">/* no TPL */</span><span class="special">,</span> <span class="special">\</span>
+            <span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">offset</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
+        <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">-</span> <span class="identifier">offset</span><span class="special">;</span> <span class="special">\</span>
+    <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">dec</span><span class="special">)</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_same_line</span><span class="special">)</span>
+<span class="special">{</span>
+    <span class="keyword">int</span> <span class="identifier">delta</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
+    <span class="identifier">LOCAL_INC_DEC</span><span class="special">(</span><span class="identifier">delta</span><span class="special">)</span> <span class="comment">// Declare local functions on same line using `_ID`.</span>
+
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">dec</span><span class="special">(</span><span class="identifier">inc</span><span class="special">(</span><span class="number">123</span><span class="special">))</span> <span class="special">==</span> <span class="number">123</span><span class="special">);</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        As indicated by the example above, the <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION_ID.html" title="Macro BOOST_LOCAL_FUNCTION_ID">BOOST_LOCAL_FUNCTION_ID</a></code>
+        macro is especially useful when it is necessary to invoke it multiple times
+        within a user-defined macro (because the preprocessor expands all nested
+        macros on the same line).
       </p>
 </div>
 <div class="section boost_localfunction_Advanced_Topics_limitations__operators__etc_">
@@ -1138,7 +1199,7 @@
       </h6>
 <p>
         Local functions cannot be operators. Naming a local function <code class="computeroutput"><span class="keyword">operator</span><span class="special">...</span></code>
-        will generate a compile-time error. <sup>[<a name="boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" href="#ftn.boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" class="footnote">26</a>]</sup>
+        will generate a compile-time error. <sup>[<a name="boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" href="#ftn.boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" class="footnote">27</a>]</sup>
       </p>
 <p>
         For example, the following code will not compile (see also <a href="../../../test/operator_error.cpp" target="_top"><code class="literal">operator_error.cpp</code></a>):
@@ -1150,14 +1211,14 @@
     <span class="keyword">int</span> <span class="identifier">y</span><span class="special">;</span>
 <span class="special">};</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">test_operator_err</span> <span class="special">)</span> <span class="special">{</span>
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_operator_error</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">bool</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">point</span><span class="special">&amp;</span> <span class="identifier">p</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">point</span><span class="special">&amp;</span> <span class="identifier">q</span><span class="special">)</span> <span class="special">{</span>
         <span class="keyword">return</span> <span class="identifier">p</span><span class="special">.</span><span class="identifier">x</span> <span class="special">==</span> <span class="identifier">q</span><span class="special">.</span><span class="identifier">x</span> <span class="special">&amp;&amp;</span> <span class="identifier">p</span><span class="special">.</span><span class="identifier">y</span> <span class="special">==</span> <span class="identifier">q</span><span class="special">.</span><span class="identifier">y</span><span class="special">;</span>
     <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="keyword">operator</span><span class="special">==)</span> <span class="comment">// Error: Cannot use `operator...`.</span>
 
     <span class="identifier">point</span> <span class="identifier">a</span><span class="special">;</span> <span class="identifier">a</span><span class="special">.</span><span class="identifier">x</span> <span class="special">=</span> <span class="number">1</span><span class="special">;</span> <span class="identifier">a</span><span class="special">.</span><span class="identifier">y</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
     <span class="identifier">point</span> <span class="identifier">b</span> <span class="special">=</span> <span class="identifier">a</span><span class="special">;</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">a</span> <span class="special">==</span> <span class="identifier">b</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">a</span> <span class="special">==</span> <span class="identifier">b</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -1179,7 +1240,6 @@
     <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span>
         <span class="keyword">if</span><span class="special">(</span><span class="identifier">x</span> <span class="special">&lt;=</span> <span class="number">0</span><span class="special">)</span> <span class="keyword">goto</span> <span class="identifier">failure</span><span class="special">;</span>    <span class="comment">// Error: Cannot jump to enclosing scope.</span>
         <span class="keyword">else</span> <span class="keyword">goto</span> <span class="identifier">success</span><span class="special">;</span>          <span class="comment">// OK: Can jump within local function.</span>
-
     <span class="identifier">success</span><span class="special">:</span>
         <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
     <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">validate</span><span class="special">)</span>
@@ -1279,7 +1339,16 @@
           classifier with the usual care in order to avoid writing <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/standards" target="_top">C++03</a>
           code that might not work on <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>.
         </p></div>
-<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" href="#boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" class="para">26</a>] </sup>
+<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Advanced_Topics.same_line_expansions.f0" href="#boost_localfunction.Advanced_Topics.same_line_expansions.f0" class="para">26</a>] </sup>
+          <span class="bold"><strong>Rationale.</strong></span> The <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION.html" title="Macro BOOST_LOCAL_FUNCTION">BOOST_LOCAL_FUNCTION</a></code>
+          and <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION_TPL.html" title="Macro BOOST_LOCAL_FUNCTION_TPL">BOOST_LOCAL_FUNCTION_TPL</a></code>
+          macros internally use <code class="computeroutput"><span class="identifier">__LINE__</span></code>
+          to generate unique identifiers. Therefore, if the same macro is expanded
+          more than on time on the same line, the generated identifiers will no longer
+          be unique and the code will not compile. (This restriction does not apply
+          to MSVC and other compilers that provide the non-standard <code class="computeroutput"><span class="identifier">__COUNTER__</span></code> macro.)
+        </p></div>
+<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" href="#boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" class="para">27</a>] </sup>
           <span class="bold"><strong>Rationale.</strong></span> This is the because a local
           function name must be a valid local variable name (the local variable used
           to hold the local functor) and operators cannot be used as local variable

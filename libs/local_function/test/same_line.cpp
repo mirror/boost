@@ -31,7 +31,7 @@
 BOOST_AUTO_TEST_CASE(test_same_line)
 {
     int delta = 10;
-    LOCAL_INC_DEC(delta) // Declare local functions on same line using `_ID`.
+    LOCAL_INC_DEC(delta) // Multiple local functions on same line.
     
     BOOST_CHECK(dec(inc(123)) == 123);
 }

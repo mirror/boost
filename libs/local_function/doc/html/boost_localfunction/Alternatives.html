@@ -541,7 +541,7 @@
     <span class="comment">// Unfortunately, cannot pass as template parameter to `std::for_each`.</span>
     <span class="keyword">for</span><span class="special">(</span><span class="identifier">size_t</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">0</span><span class="special">;</span> <span class="identifier">i</span> <span class="special">&lt;</span> <span class="number">2</span><span class="special">;</span> <span class="special">++</span><span class="identifier">i</span><span class="special">)</span> <span class="identifier">add</span><span class="special">(</span><span class="identifier">nums</span><span class="special">[</span><span class="identifier">i</span><span class="special">]);</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -561,7 +561,7 @@
     <span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">add</span><span class="special">);</span>     <span class="comment">// Pass it to an algorithm.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span> <span class="special">);</span>               <span class="comment">// Assert final summation value.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                 <span class="comment">// Assert final summation value.</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -610,7 +610,7 @@
     <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">factor</span><span class="special">;</span> <span class="comment">// Make `factor` constant.</span>
 <span class="special">};</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">test_add_global_functor</span> <span class="special">)</span> <span class="special">{</span>
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_add_global_functor</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
     <span class="identifier">global_add</span> <span class="identifier">add</span><span class="special">(</span><span class="identifier">sum</span><span class="special">,</span> <span class="identifier">factor</span><span class="special">);</span>
@@ -619,7 +619,7 @@
     <span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">add</span><span class="special">);</span> <span class="comment">// Passed as template parameter.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -639,7 +639,7 @@
     <span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">add</span><span class="special">);</span>     <span class="comment">// Pass it to an algorithm.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span> <span class="special">);</span>               <span class="comment">// Assert final summation value.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                 <span class="comment">// Assert final summation value.</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -696,7 +696,7 @@
         <span class="identifier">ref</span><span class="special">(</span><span class="identifier">sum</span><span class="special">)</span> <span class="special">+=</span> <span class="identifier">_f</span> <span class="special">*</span> <span class="identifier">_1</span><span class="special">,</span> <span class="identifier">_1</span> <span class="comment">// Access `sum` by reference.</span>
     <span class="special">]);</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -716,7 +716,7 @@
     <span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">add</span><span class="special">);</span>     <span class="comment">// Pass it to an algorithm.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span> <span class="special">);</span>               <span class="comment">// Assert final summation value.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                 <span class="comment">// Assert final summation value.</span>
 <span class="special">}</span>
 </pre>
 <p>

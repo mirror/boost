@@ -22,7 +22,7 @@ run expensive_copy_local_function.cpp ;
 
 run gcc_access.cpp ;
 run gcc_lambda.cpp ;
-run gcc_lambda_cpp11.cpp ;
+run gcc_lambda_cxx11.cpp ;
 run gcc_square.cpp ;
 run gcc_store.cpp ;
 

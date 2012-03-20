@@ -85,7 +85,7 @@
 [import ../test/add_classifiers.cpp]
 [import ../test/operator_error.cpp]
 [import ../test/goto_error.cpp]
-[import ../test/seq.cpp]
+[import ../test/same_line.cpp]
 
 [import ../example/gcc_lambda.cpp]
 [import ../example/gcc_lambda_cpp11.cpp]

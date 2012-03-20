@@ -42,13 +42,13 @@ BOOST_AUTO_TEST_CASE(test_same_line) {
     int x = 0, delta = 10;
 
     {
-        SCOPE_EXIT_INC_DEC(x, delta)
+        SCOPE_EXIT_INC_DEC(x, delta) // Multiple scope exits on same line.
     }
     BOOST_CHECK(x == 0);
 
 #ifndef BOOST_NO_LAMBDAS
     {
-        SCOPE_EXIT_ALL_INC_DEC(x, delta)
+        SCOPE_EXIT_ALL_INC_DEC(x, delta) // Multiple scope exits on same line.
     }
     BOOST_CHECK(x == 0);
 #endif

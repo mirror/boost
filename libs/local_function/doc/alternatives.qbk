@@ -226,11 +226,11 @@ Measurements available only for __CPP11__ compilers.
     [ [GCC 4.5.3 With C++11 Lambdas and "Local Types as Template Parameters" ([^bjam cxxflags=-std=c++0x ...])] ]
     [ [ 
         [*Compiled with =bjam release ...= for maximum optimization (=-O3 -finline-functions=)]
-        [$../../example/profile_gcc_cpp11_release.png [width 13in] [height 10in]]
+        [$../../example/profile_gcc_cxx11_release.png [width 13in] [height 10in]]
     ] ]
     [ [ 
         [*Compiled with =bjam debug ...= for no optimization (=-O0 -fno-inline=)]
-        [$../../example/profile_gcc_cpp11_debug.png [width 13in] [height 10in]]
+        [$../../example/profile_gcc_cxx11_debug.png [width 13in] [height 10in]]
     ] ]
 ]
 

@@ -246,7 +246,7 @@
         <code class="computeroutput"><span class="special">=</span><span class="identifier">variable</span></code>,
         and <code class="computeroutput"><span class="special">=</span></code>) are constant but they
         are required to be <code class="computeroutput"><span class="identifier">CopyConstructible</span></code>
-        and they introduce potentially expensive copy operations. <sup>[<a name="boost_localfunction.Examples.constant_blocks.f0" href="#ftn.boost_localfunction.Examples.constant_blocks.f0" class="footnote">27</a>]</sup>
+        and they introduce potentially expensive copy operations. <sup>[<a name="boost_localfunction.Examples.constant_blocks.f0" href="#ftn.boost_localfunction.Examples.constant_blocks.f0" class="footnote">28</a>]</sup>
       </p>
 </div>
 <div class="section boost_localfunction_Examples_scope_exits">
@@ -375,7 +375,7 @@
 <td>
                 <p>
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">test_phoenix_factorial_local</span> <span class="special">)</span> <span class="special">{</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_phoenix_factorial_local</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">phoenix</span><span class="special">::</span><span class="identifier">arg_names</span><span class="special">::</span><span class="identifier">arg1</span><span class="special">;</span>
 
     <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="special">{</span> <span class="comment">// Unfortunately, monomorphic.</span>
@@ -386,8 +386,8 @@
             <span class="identifier">factorial</span><span class="special">(</span><span class="identifier">factorial_impl</span><span class="special">);</span> <span class="comment">// Phoenix function from local function.</span>
 
     <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">factorial</span><span class="special">(</span><span class="identifier">i</span><span class="special">)()</span> <span class="special">==</span> <span class="number">24</span> <span class="special">);</span>        <span class="comment">// Call.</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">factorial</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">)(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <span class="number">24</span> <span class="special">);</span>    <span class="comment">// Lazy call.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">i</span><span class="special">)()</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>      <span class="comment">// Call.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">)(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>  <span class="comment">// Lazy call.</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -412,14 +412,14 @@
     <span class="special">}</span>
 <span class="special">};</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">test_phoenix_factorial</span> <span class="special">)</span> <span class="special">{</span>
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_phoenix_factorial</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">phoenix</span><span class="special">::</span><span class="identifier">arg_names</span><span class="special">::</span><span class="identifier">arg1</span><span class="special">;</span>
 
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">phoenix</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="identifier">factorial_impl</span><span class="special">&gt;</span> <span class="identifier">factorial</span><span class="special">;</span>
 
     <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">factorial</span><span class="special">(</span><span class="identifier">i</span><span class="special">)()</span> <span class="special">==</span> <span class="number">24</span> <span class="special">);</span>        <span class="comment">// Call.</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">factorial</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">)(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <span class="number">24</span> <span class="special">);</span>    <span class="comment">// Lazy call.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">i</span><span class="special">)()</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>      <span class="comment">// Call.</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">)(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>  <span class="comment">// Lazy call.</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -430,7 +430,7 @@
 <p>
         This is presented here mainly as a curiosity because <a href="http://www.boost.org/libs/phoenix" target="_top">Boost.Phoenix</a>
         functions created from local functions have the important limitation that
-        they cannot be polymorphic. <sup>[<a name="boost_localfunction.Examples.boost_phoenix_functions.f0" href="#ftn.boost_localfunction.Examples.boost_phoenix_functions.f0" class="footnote">28</a>]</sup> Therefore, in many cases creating the <a href="http://www.boost.org/libs/phoenix" target="_top">Boost.Phoenix</a>
+        they cannot be polymorphic. <sup>[<a name="boost_localfunction.Examples.boost_phoenix_functions.f0" href="#ftn.boost_localfunction.Examples.boost_phoenix_functions.f0" class="footnote">29</a>]</sup> Therefore, in many cases creating the <a href="http://www.boost.org/libs/phoenix" target="_top">Boost.Phoenix</a>
         function from global functors (possibly with the help of <a href="http://www.boost.org/libs/phoenix" target="_top">Boost.Phoenix</a>
         adaptor macros) might be a more valuable option.
       </p>
@@ -578,12 +578,12 @@
 </div>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Examples.constant_blocks.f0" href="#boost_localfunction.Examples.constant_blocks.f0" class="para">27</a>] </sup>
+<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Examples.constant_blocks.f0" href="#boost_localfunction.Examples.constant_blocks.f0" class="para">28</a>] </sup>
           Ideally, <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
           lambda</a> functions would allow to bind variables also using <code class="computeroutput"><span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">variable</span></code> (constant reference) and <code class="computeroutput"><span class="keyword">const</span><span class="special">&amp;</span></code>
           (all variables by constant reference).
         </p></div>
-<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Examples.boost_phoenix_functions.f0" href="#boost_localfunction.Examples.boost_phoenix_functions.f0" class="para">28</a>] </sup>
+<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Examples.boost_phoenix_functions.f0" href="#boost_localfunction.Examples.boost_phoenix_functions.f0" class="para">29</a>] </sup>
           <span class="bold"><strong>Rationale.</strong></span> Local functions can only be
           monomorphic because they are implemented using local classes and local
           classes cannot be templates in C++ (not even in <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>).

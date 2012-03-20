@@ -52,6 +52,7 @@
 [import ../test/world_checkpoint_all.cpp]
 [import ../test/world_tpl.cpp]
 [import ../test/world_lambda.cpp]
+[import ../test/same_line.cpp]
 [import ../example/try_catch.cpp]
 [import ../example/scope_guard.cpp]
 
@@ -224,7 +225,7 @@ The second __Boost_ScopeExit__ declaration instead captures all variables in sco
 
 [endsect]
 
-[section GCC Template Workaround]
+[section Template Workaround (GCC)]
 
 Various versions of the GCC compiler do not compile [macroref BOOST_SCOPE_EXIT] inside templates (see the __Reference__ section for more information).
 As a workaround, [macroref BOOST_SCOPE_EXIT_TPL] should be used instead of [macroref BOOST_SCOPE_EXIT] in these cases:
@@ -235,6 +236,29 @@ GCC versions compliant with C++11 do not present this issue and given that [macr
 [world_tpl]
 
 The [macroref BOOST_SCOPE_EXIT_TPL] macro has the exact same syntax of [macroref BOOST_SCOPE_EXIT].
+
+[endsect]
+
+[section Same Line Expansions]
+
+In general, it is not possible to expand the [macroref BOOST_SCOPE_EXIT], [macroref BOOST_SCOPE_EXIT_TPL], [macroref BOOST_SCOPE_EXIT_END], and [macroref BOOST_SCOPE_EXIT_ALL] macros multiple times on the same line.
+[footnote
+*Rationale.*
+This library's macros internally use `__LINE__` to generate unique identifiers.
+Therefore, if the same macro is expanded more than on time on the same line, the generated identifiers will no longer be unique and the code will not compile.
+(This restriction does not apply to MSVC and other compilers that provide the non-standard `__COUNTER__` macro.)
+]
+
+Therefore, this library provides additional macros [macroref BOOST_SCOPE_EXIT_ID], [macroref BOOST_SCOPE_EXIT_END_ID], and [macroref BOOST_SCOPE_EXIT_ALL_ID] which can be expanded multiple times on the same line as long as programmers specify a unique identifier as the macro's first parameter.
+The unique identifier can be any token (not just numeric) that can be successfully concatenated by the preprocessor (e.g., `scope_exit_number_1_at_line_123`).
+The second parameter of [macroref BOOST_SCOPE_EXIT_ID] shall be `1` if the macro is used within a template (equivalent to [macroref BOOST_SCOPE_EXIT_TPL]), or `0` otherwise.
+Finally, [macroref BOOST_SCOPE_EXIT_ID] and [macroref BOOST_SCOPE_EXIT_ALL_ID] accept a capture list using the exact same syntax as [macroref BOOST_SCOPE_EXIT] and [macroref BOOST_SCOPE_EXIT_ALL] respectively.
+
+For example (see also [@../../test/same_line.cpp =same_line.cpp=]):
+
+[same_line]
+
+As indicated by the example above, the [macroref BOOST_SCOPE_EXIT_ID], [macroref BOOST_SCOPE_EXIT_END_ID], and [macroref BOOST_SCOPE_EXIT_ALL_ID] macros are especially useful when it is necessary to invoke them multiple times within user-defined macros (because the preprocessor expands all nested macros on the same line).
 
 [endsect]
 

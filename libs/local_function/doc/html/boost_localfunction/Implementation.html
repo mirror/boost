@@ -106,7 +106,7 @@
     <span class="identifier">interface</span><span class="special">*</span> <span class="identifier">func_</span><span class="special">;</span>
 <span class="special">};</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">test_impl_tparam_tricks</span> <span class="special">)</span> <span class="special">{</span>
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_impl_tparam_tricks</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
     <span class="comment">// Local class for local function.</span>
@@ -134,11 +134,11 @@
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">vector</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&gt;</span> <span class="identifier">v</span><span class="special">(</span><span class="number">10</span><span class="special">);</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">fill</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="number">1</span><span class="special">);</span>
 
-<span class="comment">//  std::for_each(v.begin(), v.end(), add_local); // Error but OK on C++11.</span>
+    <span class="comment">// std::for_each(v.begin(), v.end(), add_local); // Error but OK on C++11.</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">add_casting</span><span class="special">);</span> <span class="comment">// OK.</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">add_virtual</span><span class="special">);</span> <span class="comment">// OK.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">sum</span> <span class="special">==</span> <span class="number">200</span> <span class="special">);</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">200</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -172,7 +172,7 @@
       special code to bind by constant), etc. The parameter tokens are inspected
       using preprocessor metaprogramming and specifically using the macros defined
       by the files in the <code class="literal">boost/local_function/detail/preprocessor/keyword/</code>
-      directory. <sup>[<a name="boost_localfunction.Implementation.f0" href="#ftn.boost_localfunction.Implementation.f0" class="footnote">29</a>]</sup>
+      directory. <sup>[<a name="boost_localfunction.Implementation.f0" href="#ftn.boost_localfunction.Implementation.f0" class="footnote">30</a>]</sup>
     </p>
 <p>
       For example, the following code defines a macro that allows the preprocessor
@@ -195,16 +195,16 @@
         <span class="identifier">tokens</span> <span class="special">\</span>
     <span class="special">)))</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span> <span class="identifier">test_impl_pp_keyword</span> <span class="special">)</span> <span class="special">{</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">this_</span><span class="special">)</span> <span class="special">==</span> <span class="number">1</span> <span class="special">);</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span> <span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span> <span class="special">);</span>
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_impl_pp_keyword</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">this_</span><span class="special">)</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 <p>
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Implementation.f0" href="#boost_localfunction.Implementation.f0" class="para">29</a>] </sup>
+<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Implementation.f0" href="#boost_localfunction.Implementation.f0" class="para">30</a>] </sup>
         This technique is at the core of even more complex preprocessor parsing macros
         like the ones that parse the <a href="http://sourceforge.net/projects/contractpp" target="_top">Contract++</a>
         syntax.

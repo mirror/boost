@@ -360,6 +360,29 @@ For example (see also [@../../test/add_classifiers.cpp =add_classifiers.cpp=]):
 
 [endsect]
 
+[section Same Line Expansions]
+
+In general, it is not possible to expand the [macroref BOOST_LOCAL_FUNCTION], [macroref BOOST_LOCAL_FUNCTION_TPL] macros multiple times on the same line.
+[footnote
+*Rationale.*
+The [macroref BOOST_LOCAL_FUNCTION] and [macroref BOOST_LOCAL_FUNCTION_TPL] macros internally use `__LINE__` to generate unique identifiers.
+Therefore, if the same macro is expanded more than on time on the same line, the generated identifiers will no longer be unique and the code will not compile.
+(This restriction does not apply to MSVC and other compilers that provide the non-standard `__COUNTER__` macro.)
+]
+
+Therefore, this library provides the additional macro [macroref BOOST_LOCAL_FUNCTION_ID] which can be expanded multiple times on the same line as long as programmers specify a unique identifier as the macro's first parameter.
+The unique identifier can be any token (not just numeric) that can be successfully concatenated by the preprocessor (e.g., `local_function_number_1_at_line_123`).
+The second parameter of [macroref BOOST_LOCAL_FUNCTION_ID] is `1` if the macro is used within a template (equivalent to [macroref BOOST_LOCAL_FUNCTION_TPL]), or `0` otherwise.
+Finally, [macroref BOOST_LOCAL_FUNCTION_ID] accept the local function parameter declaration list using the exact same syntax as [macroref BOOST_LOCAL_FUNCTION].
+
+For example (see also [@../../test/same_line.cpp =same_line.cpp=]):
+
+[same_line]
+
+As indicated by the example above, the [macroref BOOST_LOCAL_FUNCTION_ID] macro is especially useful when it is necessary to invoke it multiple times within a user-defined macro (because the preprocessor expands all nested macros on the same line).
+
+[endsect]
+
 [section Limitations (operators, etc)]
 
 The following table summarizes all C++ function features indicating those features that are not supported by this library for local functions.

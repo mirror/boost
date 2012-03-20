@@ -34,8 +34,9 @@
       No Variable</a></span></dt>
 <dt><span class="section"><a href="Tutorial.html#scope_exit.Tutorial.capturing_all_variables__c__11_only_">Capturing
       All Variables (C++11 Only)</a></span></dt>
-<dt><span class="section"><a href="Tutorial.html#scope_exit.Tutorial.gcc_template_workaround">GCC Template
-      Workaround</a></span></dt>
+<dt><span class="section"><a href="Tutorial.html#scope_exit.Tutorial.template_workaround__gcc_">Template
+      Workaround (GCC)</a></span></dt>
+<dt><span class="section"><a href="Tutorial.html#scope_exit.Tutorial.same_line_expansions">Same Line Expansions</a></span></dt>
 </dl></div>
 <p>
       This section illustrates how to use this library.
@@ -332,17 +333,17 @@
         are captured by value).
       </p>
 </div>
-<div class="section scope_exit_Tutorial_gcc_template_workaround">
+<div class="section scope_exit_Tutorial_template_workaround__gcc_">
 <div class="titlepage"><div><div><h3 class="title">
-<a name="scope_exit.Tutorial.gcc_template_workaround"></a><a class="link" href="Tutorial.html#scope_exit.Tutorial.gcc_template_workaround" title="GCC Template Workaround">GCC Template
-      Workaround</a>
+<a name="scope_exit.Tutorial.template_workaround__gcc_"></a><a class="link" href="Tutorial.html#scope_exit.Tutorial.template_workaround__gcc_" title="Template Workaround (GCC)">Template
+      Workaround (GCC)</a>
 </h3></div></div></div>
 <p>
         Various versions of the GCC compiler do not compile <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code>
         inside templates (see the <a href="../reference.html" target="_top">Reference</a> section
         for more information). As a workaround, <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_TPL.html" title="Macro BOOST_SCOPE_EXIT_TPL">BOOST_SCOPE_EXIT_TPL</a></code>
         should be used instead of <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code>
-        in these cases: <sup>[<a name="scope_exit.Tutorial.gcc_template_workaround.f0" href="#ftn.scope_exit.Tutorial.gcc_template_workaround.f0" class="footnote">6</a>]</sup>
+        in these cases: <sup>[<a name="scope_exit.Tutorial.template_workaround__gcc_.f0" href="#ftn.scope_exit.Tutorial.template_workaround__gcc_.f0" class="footnote">6</a>]</sup>
       </p>
 <p>
 </p>
@@ -365,6 +366,88 @@
 <p>
         The <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_TPL.html" title="Macro BOOST_SCOPE_EXIT_TPL">BOOST_SCOPE_EXIT_TPL</a></code>
         macro has the exact same syntax of <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code>.
+      </p>
+</div>
+<div class="section scope_exit_Tutorial_same_line_expansions">
+<div class="titlepage"><div><div><h3 class="title">
+<a name="scope_exit.Tutorial.same_line_expansions"></a><a class="link" href="Tutorial.html#scope_exit.Tutorial.same_line_expansions" title="Same Line Expansions">Same Line Expansions</a>
+</h3></div></div></div>
+<p>
+        In general, it is not possible to expand the <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code>,
+        <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_TPL.html" title="Macro BOOST_SCOPE_EXIT_TPL">BOOST_SCOPE_EXIT_TPL</a></code>,
+        <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_END.html" title="Macro BOOST_SCOPE_EXIT_END">BOOST_SCOPE_EXIT_END</a></code>, and
+        <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code> macros
+        multiple times on the same line. <sup>[<a name="scope_exit.Tutorial.same_line_expansions.f0" href="#ftn.scope_exit.Tutorial.same_line_expansions.f0" class="footnote">7</a>]</sup>
+      </p>
+<p>
+        Therefore, this library provides additional macros <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ID.html" title="Macro BOOST_SCOPE_EXIT_ID">BOOST_SCOPE_EXIT_ID</a></code>,
+        <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_END_ID.html" title="Macro BOOST_SCOPE_EXIT_END_ID">BOOST_SCOPE_EXIT_END_ID</a></code>,
+        and <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ALL_ID.html" title="Macro BOOST_SCOPE_EXIT_ALL_ID">BOOST_SCOPE_EXIT_ALL_ID</a></code>
+        which can be expanded multiple times on the same line as long as programmers
+        specify a unique identifier as the macro's first parameter. The unique identifier
+        can be any token (not just numeric) that can be successfully concatenated
+        by the preprocessor (e.g., <code class="computeroutput"><span class="identifier">scope_exit_number_1_at_line_123</span></code>).
+        The second parameter of <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ID.html" title="Macro BOOST_SCOPE_EXIT_ID">BOOST_SCOPE_EXIT_ID</a></code>
+        shall be <code class="computeroutput"><span class="number">1</span></code> if the macro is used
+        within a template (equivalent to <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_TPL.html" title="Macro BOOST_SCOPE_EXIT_TPL">BOOST_SCOPE_EXIT_TPL</a></code>),
+        or <code class="computeroutput"><span class="number">0</span></code> otherwise. Finally, <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ID.html" title="Macro BOOST_SCOPE_EXIT_ID">BOOST_SCOPE_EXIT_ID</a></code> and <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ALL_ID.html" title="Macro BOOST_SCOPE_EXIT_ALL_ID">BOOST_SCOPE_EXIT_ALL_ID</a></code> accept
+        a capture list using the exact same syntax as <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code>
+        and <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code>
+        respectively.
+      </p>
+<p>
+        For example (see also <a href="../../../test/same_line.cpp" target="_top"><code class="literal">same_line.cpp</code></a>):
+      </p>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">SCOPE_EXIT_INC_DEC</span><span class="special">(</span><span class="identifier">variable</span><span class="special">,</span> <span class="identifier">offset</span><span class="special">)</span> <span class="special">\</span>
+    <span class="identifier">BOOST_SCOPE_EXIT_ID</span><span class="special">(</span> <span class="special">\</span>
+            <span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">inc</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">)</span> <span class="comment">/* unique ID */</span><span class="special">,</span> <span class="number">0</span> <span class="comment">/* no TPL */</span><span class="special">,</span> <span class="special">\</span>
+            <span class="special">&amp;</span><span class="identifier">variable</span><span class="special">,</span> <span class="identifier">offset</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
+        <span class="identifier">variable</span> <span class="special">+=</span> <span class="identifier">offset</span><span class="special">;</span> <span class="special">\</span>
+    <span class="special">}</span> <span class="identifier">BOOST_SCOPE_EXIT_END_ID</span><span class="special">(</span><span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">inc</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">))</span> <span class="special">\</span>
+    <span class="special">\</span>
+    <span class="identifier">BOOST_SCOPE_EXIT_ID</span><span class="special">(</span> <span class="special">\</span>
+            <span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">dec</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">)</span> <span class="comment">/* unique ID */</span><span class="special">,</span> <span class="number">0</span> <span class="comment">/* no TPL */</span><span class="special">,</span> <span class="special">\</span>
+            <span class="special">&amp;</span><span class="identifier">variable</span><span class="special">,</span> <span class="identifier">offset</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
+        <span class="identifier">variable</span> <span class="special">-=</span> <span class="identifier">offset</span><span class="special">;</span> <span class="special">\</span>
+    <span class="special">}</span> <span class="identifier">BOOST_SCOPE_EXIT_END_ID</span><span class="special">(</span><span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">dec</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">))</span>
+
+<span class="preprocessor">#define</span> <span class="identifier">SCOPE_EXIT_ALL_INC_DEC</span><span class="special">(</span><span class="identifier">variable</span><span class="special">,</span> <span class="identifier">offset</span><span class="special">)</span> <span class="special">\</span>
+    <span class="identifier">BOOST_SCOPE_EXIT_ALL_ID</span><span class="special">(</span><span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">inc</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">)</span> <span class="comment">/* unique ID */</span><span class="special">,</span> <span class="special">\</span>
+            <span class="special">=,</span> <span class="special">&amp;</span><span class="identifier">variable</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
+        <span class="identifier">variable</span> <span class="special">+=</span> <span class="identifier">offset</span><span class="special">;</span> <span class="special">\</span>
+    <span class="special">};</span> <span class="special">\</span>
+    <span class="identifier">BOOST_SCOPE_EXIT_ALL_ID</span><span class="special">(</span><span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">dec</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">)</span> <span class="comment">/* unique ID */</span><span class="special">,</span> <span class="special">\</span>
+            <span class="special">=,</span> <span class="special">&amp;</span><span class="identifier">variable</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
+        <span class="identifier">variable</span> <span class="special">-=</span> <span class="identifier">offset</span><span class="special">;</span> <span class="special">\</span>
+    <span class="special">};</span>
+
+<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_same_line</span><span class="special">)</span> <span class="special">{</span>
+    <span class="keyword">int</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">delta</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
+
+    <span class="special">{</span>
+        <span class="identifier">SCOPE_EXIT_INC_DEC</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">delta</span><span class="special">)</span>
+    <span class="special">}</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">x</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
+
+<span class="preprocessor">#ifndef</span> <span class="identifier">BOOST_NO_LAMBDAS</span>
+    <span class="special">{</span>
+        <span class="identifier">SCOPE_EXIT_ALL_INC_DEC</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">delta</span><span class="special">)</span>
+    <span class="special">}</span>
+    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">x</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
+<span class="preprocessor">#endif</span>
+<span class="special">}</span>
+</pre>
+<p>
+      </p>
+<p>
+        As indicated by the example above, the <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ID.html" title="Macro BOOST_SCOPE_EXIT_ID">BOOST_SCOPE_EXIT_ID</a></code>,
+        <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_END_ID.html" title="Macro BOOST_SCOPE_EXIT_END_ID">BOOST_SCOPE_EXIT_END_ID</a></code>,
+        and <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ALL_ID.html" title="Macro BOOST_SCOPE_EXIT_ALL_ID">BOOST_SCOPE_EXIT_ALL_ID</a></code>
+        macros are especially useful when it is necessary to invoke them multiple
+        times within user-defined macros (because all nested macro will expand on
+        the same line).
       </p>
 </div>
 <div class="footnotes">
@@ -406,10 +489,19 @@
           token is never compared with neither <code class="computeroutput"><span class="keyword">void</span></code>
           or <code class="computeroutput"><span class="identifier">this_</span></code> for this macro).
         </p></div>
-<div class="footnote"><p><sup>[<a id="ftn.scope_exit.Tutorial.gcc_template_workaround.f0" href="#scope_exit.Tutorial.gcc_template_workaround.f0" class="para">6</a>] </sup>
+<div class="footnote"><p><sup>[<a id="ftn.scope_exit.Tutorial.template_workaround__gcc_.f0" href="#scope_exit.Tutorial.template_workaround__gcc_.f0" class="para">6</a>] </sup>
           GCC versions compliant with C++11 do not present this issue and given that
           <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code>
           is only available on C++11 compilers, there is no need for a <code class="computeroutput"><span class="identifier">BOOST_SCOPE_EXIT_ALL_TPL</span></code> macro.
+        </p></div>
+<div class="footnote"><p><sup>[<a id="ftn.scope_exit.Tutorial.same_line_expansions.f0" href="#scope_exit.Tutorial.same_line_expansions.f0" class="para">7</a>] </sup>
+          <span class="bold"><strong>Rationale.</strong></span> This library's macros internally
+          use <code class="computeroutput"><span class="identifier">__LINE__</span></code> to generate
+          unique identifiers. Therefore, if the same macro is expanded more than
+          on time on the same line, the generated identifiers will no longer be unique
+          and the code will not compile. (This restriction does not apply to MSVC
+          and other compilers that provide the non-standard <code class="computeroutput"><span class="identifier">__COUNTER__</span></code>
+          macro.)
         </p></div>
 </div>
 </div>
