@@ -215,7 +215,7 @@ template <typename pri_queue>
 void pri_queue_test_erase(void)
 {
 #ifdef USE_BOOST_RANDOM
-	boost::mt19937 rng;
+    boost::mt19937 rng;
 #endif
 
     for (int i = 0; i != test_size; ++i)
@@ -227,12 +227,12 @@ void pri_queue_test_erase(void)
         for (int j = 0; j != i; ++j)
         {
 #ifdef USE_BOOST_RANDOM
-			boost::uniform_int<> range(0, data.size() - 1);
-			boost::variate_generator<boost::mt19937&, boost::uniform_int<> > gen(rng, range);
+            boost::uniform_int<> range(0, data.size() - 1);
+            boost::variate_generator<boost::mt19937&, boost::uniform_int<> > gen(rng, range);
 
-			int index = gen();
+            int index = gen();
 #else
-            int index = rand() % (data.size() - 1);
+            int index = std::rand() % (data.size() - 1);
 #endif
             q.erase(handles[index]);
             handles.erase(handles.begin() + index);
