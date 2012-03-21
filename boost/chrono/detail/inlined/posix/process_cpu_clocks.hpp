@@ -213,6 +213,7 @@ process_system_cpu_clock::time_point process_system_cpu_clock::now() BOOST_NOEXC
         else
         {
           BOOST_ASSERT(0 && "Boost::Chrono - Internal Error");
+          return time_point();
         }
     }
 }
