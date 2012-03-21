@@ -205,6 +205,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 // http://software.intel.com/en-us/articles/c0x-features-supported-by-intel-c-compiler/
 //
 //#  undef  BOOST_NO_LAMBDAS
+//#  undef  BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
 //#  undef  BOOST_NO_DECLTYPE
 //#  undef  BOOST_NO_AUTO_DECLARATIONS
 //#  undef  BOOST_NO_AUTO_MULTIDECLARATIONS
@@ -216,6 +217,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  undef  BOOST_NO_DELETED_FUNCTIONS
 #  undef  BOOST_NO_DEFAULTED_FUNCTIONS
 #  undef  BOOST_NO_LAMBDAS
+#  undef  BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
 #  undef  BOOST_NO_DECLTYPE
 #  undef  BOOST_NO_AUTO_DECLARATIONS
 #  undef  BOOST_NO_AUTO_MULTIDECLARATIONS

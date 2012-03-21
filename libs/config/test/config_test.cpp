@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sun Nov 27 09:43:19 2011
+//  This file was automatically generated on Wed Mar 21 13:05:19 2012
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -22,6 +22,86 @@
 
 int error_count = 0;
 
+#ifndef BOOST_NO_ADL_BARRIER
+#include "boost_no_adl_barrier.ipp"
+#else
+namespace boost_no_adl_barrier = empty_boost;
+#endif
+#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
+#include "boost_no_arg_dep_lookup.ipp"
+#else
+namespace boost_no_argument_dependent_lookup = empty_boost;
+#endif
+#ifndef BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
+#include "boost_no_array_type_spec.ipp"
+#else
+namespace boost_no_array_type_specializations = empty_boost;
+#endif
+#ifndef BOOST_NO_AUTO_DECLARATIONS
+#include "boost_no_auto_declarations.ipp"
+#else
+namespace boost_no_auto_declarations = empty_boost;
+#endif
+#ifndef BOOST_NO_AUTO_MULTIDECLARATIONS
+#include "boost_no_auto_multidecl.ipp"
+#else
+namespace boost_no_auto_multideclarations = empty_boost;
+#endif
+#ifndef BOOST_NO_AUTO_PTR
+#include "boost_no_auto_ptr.ipp"
+#else
+namespace boost_no_auto_ptr = empty_boost;
+#endif
+#ifndef BOOST_BCB_PARTIAL_SPECIALIZATION_BUG
+#include "boost_no_bcb_partial_spec.ipp"
+#else
+namespace boost_bcb_partial_specialization_bug = empty_boost;
+#endif
+#ifndef BOOST_NO_CHAR16_T
+#include "boost_no_char16_t.ipp"
+#else
+namespace boost_no_char16_t = empty_boost;
+#endif
+#ifndef BOOST_NO_CHAR32_T
+#include "boost_no_char32_t.ipp"
+#else
+namespace boost_no_char32_t = empty_boost;
+#endif
+#ifndef BOOST_NO_COMPLETE_VALUE_INITIALIZATION
+#include "boost_no_com_value_init.ipp"
+#else
+namespace boost_no_complete_value_initialization = empty_boost;
+#endif
+#ifndef BOOST_NO_CONSTEXPR
+#include "boost_no_constexpr.ipp"
+#else
+namespace boost_no_constexpr = empty_boost;
+#endif
+#ifndef BOOST_NO_CTYPE_FUNCTIONS
+#include "boost_no_ctype_functions.ipp"
+#else
+namespace boost_no_ctype_functions = empty_boost;
+#endif
+#ifndef BOOST_NO_CV_SPECIALIZATIONS
+#include "boost_no_cv_spec.ipp"
+#else
+namespace boost_no_cv_specializations = empty_boost;
+#endif
+#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
+#include "boost_no_cv_void_spec.ipp"
+#else
+namespace boost_no_cv_void_specializations = empty_boost;
+#endif
+#ifndef BOOST_NO_CWCHAR
+#include "boost_no_cwchar.ipp"
+#else
+namespace boost_no_cwchar = empty_boost;
+#endif
+#ifndef BOOST_NO_CWCTYPE
+#include "boost_no_cwctype.ipp"
+#else
+namespace boost_no_cwctype = empty_boost;
+#endif
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
 #include "boost_no_cxx11_hdr_array.ipp"
 #else
@@ -111,86 +191,6 @@ namespace boost_no_cxx11_hdr_unordered_map = empty_boost;
 #include "boost_no_cxx11_hdr_unordered_set.ipp"
 #else
 namespace boost_no_cxx11_hdr_unordered_set = empty_boost;
-#endif
-#ifndef BOOST_NO_ADL_BARRIER
-#include "boost_no_adl_barrier.ipp"
-#else
-namespace boost_no_adl_barrier = empty_boost;
-#endif
-#ifndef BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-#include "boost_no_arg_dep_lookup.ipp"
-#else
-namespace boost_no_argument_dependent_lookup = empty_boost;
-#endif
-#ifndef BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS
-#include "boost_no_array_type_spec.ipp"
-#else
-namespace boost_no_array_type_specializations = empty_boost;
-#endif
-#ifndef BOOST_NO_AUTO_DECLARATIONS
-#include "boost_no_auto_declarations.ipp"
-#else
-namespace boost_no_auto_declarations = empty_boost;
-#endif
-#ifndef BOOST_NO_AUTO_MULTIDECLARATIONS
-#include "boost_no_auto_multidecl.ipp"
-#else
-namespace boost_no_auto_multideclarations = empty_boost;
-#endif
-#ifndef BOOST_NO_AUTO_PTR
-#include "boost_no_auto_ptr.ipp"
-#else
-namespace boost_no_auto_ptr = empty_boost;
-#endif
-#ifndef BOOST_BCB_PARTIAL_SPECIALIZATION_BUG
-#include "boost_no_bcb_partial_spec.ipp"
-#else
-namespace boost_bcb_partial_specialization_bug = empty_boost;
-#endif
-#ifndef BOOST_NO_CHAR16_T
-#include "boost_no_char16_t.ipp"
-#else
-namespace boost_no_char16_t = empty_boost;
-#endif
-#ifndef BOOST_NO_CHAR32_T
-#include "boost_no_char32_t.ipp"
-#else
-namespace boost_no_char32_t = empty_boost;
-#endif
-#ifndef BOOST_NO_COMPLETE_VALUE_INITIALIZATION
-#include "boost_no_com_value_init.ipp"
-#else
-namespace boost_no_complete_value_initialization = empty_boost;
-#endif
-#ifndef BOOST_NO_CONSTEXPR
-#include "boost_no_constexpr.ipp"
-#else
-namespace boost_no_constexpr = empty_boost;
-#endif
-#ifndef BOOST_NO_CTYPE_FUNCTIONS
-#include "boost_no_ctype_functions.ipp"
-#else
-namespace boost_no_ctype_functions = empty_boost;
-#endif
-#ifndef BOOST_NO_CV_SPECIALIZATIONS
-#include "boost_no_cv_spec.ipp"
-#else
-namespace boost_no_cv_specializations = empty_boost;
-#endif
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-#include "boost_no_cv_void_spec.ipp"
-#else
-namespace boost_no_cv_void_specializations = empty_boost;
-#endif
-#ifndef BOOST_NO_CWCHAR
-#include "boost_no_cwchar.ipp"
-#else
-namespace boost_no_cwchar = empty_boost;
-#endif
-#ifndef BOOST_NO_CWCTYPE
-#include "boost_no_cwctype.ipp"
-#else
-namespace boost_no_cwctype = empty_boost;
 #endif
 #ifndef BOOST_NO_DECLTYPE
 #include "boost_no_decltype.ipp"
@@ -536,6 +536,11 @@ namespace boost_no_templated_iostreams = empty_boost;
 #include "boost_no_template_template.ipp"
 #else
 namespace boost_no_template_templates = empty_boost;
+#endif
+#ifndef BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
+#include "boost_no_tem_local_classes.ipp"
+#else
+namespace boost_no_local_class_template_parameters = empty_boost;
 #endif
 #ifndef BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #include "boost_no_two_phase_lookup.ipp"
@@ -1111,6 +1116,86 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_HAS_WINTHREADS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_adl_barrier::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_ADL_BARRIER at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_argument_dependent_lookup::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_array_type_specializations::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_auto_declarations::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_AUTO_DECLARATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_auto_multideclarations::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_AUTO_MULTIDECLARATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_auto_ptr::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_AUTO_PTR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_bcb_partial_specialization_bug::test())
+   {
+      std::cerr << "Failed test for BOOST_BCB_PARTIAL_SPECIALIZATION_BUG at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_char16_t::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CHAR16_T at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_char32_t::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CHAR32_T at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_complete_value_initialization::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_COMPLETE_VALUE_INITIALIZATION at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_constexpr::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CONSTEXPR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_ctype_functions::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CTYPE_FUNCTIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cv_specializations::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CV_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cv_void_specializations::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CV_VOID_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cwchar::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CWCHAR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cwctype::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CWCTYPE at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_cxx11_hdr_array::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_HDR_ARRAY at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1199,86 +1284,6 @@ int main( int, char *[] )
    if(0 != boost_no_cxx11_hdr_unordered_set::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_HDR_UNORDERED_SET at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_adl_barrier::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_ADL_BARRIER at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_argument_dependent_lookup::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_array_type_specializations::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_auto_declarations::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_AUTO_DECLARATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_auto_multideclarations::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_AUTO_MULTIDECLARATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_auto_ptr::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_AUTO_PTR at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_bcb_partial_specialization_bug::test())
-   {
-      std::cerr << "Failed test for BOOST_BCB_PARTIAL_SPECIALIZATION_BUG at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_char16_t::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_CHAR16_T at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_char32_t::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_CHAR32_T at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_complete_value_initialization::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_COMPLETE_VALUE_INITIALIZATION at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_constexpr::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_CONSTEXPR at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_ctype_functions::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_CTYPE_FUNCTIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_cv_specializations::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_CV_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_cv_void_specializations::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_CV_VOID_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_cwchar::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_CWCHAR at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_cwctype::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_CWCTYPE at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_decltype::test())
@@ -1624,6 +1629,11 @@ int main( int, char *[] )
    if(0 != boost_no_template_templates::test())
    {
       std::cerr << "Failed test for BOOST_NO_TEMPLATE_TEMPLATES at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_local_class_template_parameters::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_two_phase_name_lookup::test())

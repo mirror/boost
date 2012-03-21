@@ -72,6 +72,10 @@
 #  define BOOST_NO_LAMBDAS
 #endif
 
+#if __clang_major__ < 2 || (__clang_major__ == 2 && __clang_minor__ < 9)
+#  define BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS // From version 2.9 on.
+#endif
+
 #if !__has_feature(cxx_noexcept)
 #  define BOOST_NO_NOEXCEPT
 #endif
