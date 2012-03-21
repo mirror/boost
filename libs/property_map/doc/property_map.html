@@ -245,6 +245,7 @@ functions are defined in <tt>&lt;boost/property_map/property_map.hpp&gt;</tt>.
   struct property_traits {
      typedef typename PropertyMap::key_type key_type;
      typedef typename PropertyMap::value_type value_type;
+     typedef typename PropertyMap::reference reference;
      typedef typename PropertyMap::category category;
   };
 
@@ -268,6 +269,7 @@ functions are defined in <tt>&lt;boost/property_map/property_map.hpp&gt;</tt>.
   template &lt;typename T&gt;
   struct property_traits&lt;T*&gt; {
     typedef T value_type;
+    typedef T&amp; reference;
     typedef std::ptrdiff_t key_type;
     typedef random_access_iterator_pa_tag category;
   };
