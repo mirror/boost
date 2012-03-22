@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011.
+// (C) Copyright Ion Gaztanaga 2005-2012.
 // (C) Copyright Gennaro Prota 2003 - 2004.
 //
 // Distributed under the Boost Software License, Version 1.0.
@@ -21,7 +21,7 @@
 #include "config_begin.hpp"
 #include <boost/container/detail/workaround.hpp>
 #include <boost/move/move.hpp>
-#include <boost/container/allocator/allocator_traits.hpp>
+#include <boost/container/allocator_traits.hpp>
 
 #ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 #include <boost/container/detail/variadic_templates_tools.hpp>
@@ -513,7 +513,7 @@ struct emplace_functor
    container_detail::tuple<Args&...> args_;
 };
 
-#else
+#else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
 #define BOOST_PP_LOCAL_MACRO(n)                                                        \
    BOOST_PP_EXPR_IF(n, template <)                                                     \
@@ -522,16 +522,16 @@ struct emplace_functor
    struct BOOST_PP_CAT(BOOST_PP_CAT(emplace_functor, n), arg)                          \
    {                                                                                   \
       BOOST_PP_CAT(BOOST_PP_CAT(emplace_functor, n), arg)                              \
-         ( BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _) )                       \
-      BOOST_PP_EXPR_IF(n, :) BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_INIT, _){}    \
+         ( BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _) )                        \
+      BOOST_PP_EXPR_IF(n, :) BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_INIT, _){}      \
                                                                                        \
       template<class A, class T>                                                       \
       void operator()(A &a, T *ptr)                                                    \
       {                                                                                \
          allocator_traits<A>::construct                                                \
-            (a, ptr BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_MEMBER_FORWARD, _) );\
+            (a, ptr BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_MEMBER_FORWARD, _) ); \
       }                                                                                \
-      BOOST_PP_REPEAT(n, BOOST_CONTAINER_PP_PARAM_DEFINE, _)                         \
+      BOOST_PP_REPEAT(n, BOOST_CONTAINER_PP_PARAM_DEFINE, _)                           \
    };                                                                                  \
    //!
 #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)

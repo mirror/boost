@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -27,7 +27,7 @@
 #include <boost/container/detail/destroyers.hpp>
 #include <boost/container/detail/pair.hpp>
 #include <boost/container/detail/type_traits.hpp>
-#include <boost/container/allocator/allocator_traits.hpp>
+#include <boost/container/allocator_traits.hpp>
 #ifndef BOOST_CONTAINER_PERFECT_FORWARDING
 #include <boost/container/detail/preprocessor.hpp>
 #endif
@@ -90,43 +90,49 @@ struct rbtree_hook
       >::type  type;
 };
 
+//This trait is used to type-pun std::pair because in C++03
+//compilers std::pair is useless for C++11 features
 template<class T>
-struct rbtree_type
+struct rbtree_internal_data_type
 {
    typedef T type;
 };
 
 template<class T1, class T2>
-struct rbtree_type< std::pair<T1, T2> >
+struct rbtree_internal_data_type< std::pair<T1, T2> >
 {
    typedef pair<T1, T2> type;
 };
 
+
+//The node to be store in the tree
 template <class T, class VoidPointer>
 struct rbtree_node
    :  public rbtree_hook<VoidPointer>::type
 {
-   private:
-   BOOST_COPYABLE_AND_MOVABLE(rbtree_node)
+   //private:
+   //BOOST_COPYABLE_AND_MOVABLE(rbtree_node)
 
    public:
    typedef typename rbtree_hook<VoidPointer>::type hook_type;
 
    typedef T value_type;
-   typedef typename rbtree_type<T>::type internal_type;
+   typedef typename rbtree_internal_data_type<T>::type internal_type;
 
    typedef rbtree_node<T, VoidPointer> node_type;
 
-   rbtree_node()
-      : m_data()
-   {}
+   private:
+   rbtree_node();
+   rbtree_node (const rbtree_node &);
+   rbtree_node & operator=(const rbtree_node &);
 
+/*
    rbtree_node(const rbtree_node &other)
       : m_data(other.m_data)
    {}
 
    rbtree_node(BOOST_RV_REF(rbtree_node) other)
-      : m_data(boost::move(other.m_data))
+      : m_data(::boost::move(other.m_data))
    {}
 
    #ifndef BOOST_CONTAINER_PERFECT_FORWARDING
@@ -152,8 +158,9 @@ struct rbtree_node
    {  do_assign(other.m_data);   return *this;  }
 
    rbtree_node &operator=(BOOST_RV_REF(rbtree_node) other)
-   {  do_move(other.m_data);   return *this;  }
-
+   {  do_move_assign(other.m_data);   return *this;  }
+*/
+   public:
    T &get_data()
    {
       T* ptr = reinterpret_cast<T*>(&this->m_data);
@@ -166,7 +173,7 @@ struct rbtree_node
       return *ptr;
    }
 
-   private:
+//   private:
    internal_type m_data;
 
    template<class A, class B>
@@ -188,22 +195,22 @@ struct rbtree_node
    {  m_data = v; }
 
    template<class A, class B>
-   void do_move(std::pair<const A, B> &p)
+   void do_move_assign(std::pair<const A, B> &p)
    {
-      const_cast<A&>(m_data.first) = boost::move(p.first);
-      m_data.second  = boost::move(p.second);
+      const_cast<A&>(m_data.first) = ::boost::move(p.first);
+      m_data.second = ::boost::move(p.second);
    }
 
    template<class A, class B>
-   void do_move(pair<const A, B> &p)
+   void do_move_assign(pair<const A, B> &p)
    {
-      const_cast<A&>(m_data.first) = boost::move(p.first);
-      m_data.second  = boost::move(p.second);
+      const_cast<A&>(m_data.first) = ::boost::move(p.first);
+      m_data.second  = ::boost::move(p.second);
    }
 
    template<class V>
-   void do_move(V &v)
-   {  m_data = boost::move(v); }
+   void do_move_assign(V &v)
+   {  m_data = ::boost::move(v); }
 };
 
 }//namespace container_detail {
@@ -282,7 +289,7 @@ class rbtree
             //First recycle a node (this can't throw)
             try{
                //This can throw
-               *p = other;
+               p->do_assign(other.m_data);
                return p;
             }
             catch(...){
@@ -295,7 +302,7 @@ class rbtree
             }
          }
          else{
-            return m_holder.create_node(other);
+            return m_holder.create_node(other.m_data);
          }
       }
 
@@ -319,7 +326,7 @@ class rbtree
             //First recycle a node (this can't throw)
             try{
                //This can throw
-               *p = boost::move(other);
+               p->do_move_assign(const_cast<Node &>(other).m_data);
                return p;
             }
             catch(...){
@@ -332,7 +339,7 @@ class rbtree
             }
          }
          else{
-            return m_holder.create_node(other);
+            return m_holder.create_node(other.m_data);
          }
       }
 
@@ -478,8 +485,10 @@ class rbtree
       iterator(){}
 
       //Pointer like operators
-      reference operator*()  const {  return  this->m_it->get_data();  }
-      pointer   operator->() const {  return  pointer(&this->m_it->get_data());  }
+      reference operator*()  const
+         {  return this->m_it->get_data();  }
+      pointer   operator->() const
+         {  return boost::intrusive::pointer_traits<pointer>::pointer_to(this->m_it->get_data());  }
 
       //Increment / Decrement
       iterator& operator++()  
@@ -532,8 +541,27 @@ class rbtree
    }
 
    rbtree(BOOST_RV_REF(rbtree) x) 
-      :  AllocHolder(boost::move(static_cast<AllocHolder&>(x)), x.key_comp())
+      :  AllocHolder(::boost::move(static_cast<AllocHolder&>(x)), x.key_comp())
    {}
+
+   rbtree(const rbtree& x, const allocator_type &a) 
+      :  AllocHolder(a, x.key_comp())
+   {
+      this->icont().clone_from
+         (x.icont(), typename AllocHolder::cloner(*this), Destroyer(this->node_alloc()));
+   }
+
+   rbtree(BOOST_RV_REF(rbtree) x, const allocator_type &a)
+      :  AllocHolder(a, x.key_comp())
+   {
+      if(this->node_alloc() == x.node_alloc()){
+         this->icont().swap(x.icont());
+      }
+      else{
+         this->icont().clone_from
+            (x.icont(), typename AllocHolder::cloner(*this), Destroyer(this->node_alloc()));
+      }
+   }
 
    ~rbtree()
    {} //AllocHolder clears the tree
@@ -552,7 +580,7 @@ class rbtree
          //Transfer all the nodes to a temporary tree
          //If anything goes wrong, all the nodes will be destroyed
          //automatically
-         Icont other_tree(boost::move(this->icont()));
+         Icont other_tree(::boost::move(this->icont()));
 
          //Now recreate the source tree reusing nodes stored by other_tree
          this->icont().clone_from
@@ -578,7 +606,7 @@ class rbtree
          if(this_alloc == x_alloc){
             //Destroy and swap pointers
             this->clear();
-            this->icont() = boost::move(x.icont());
+            this->icont() = ::boost::move(x.icont());
             //Move allocator if needed
             this->AllocHolder::move_assign_alloc(x);
          }
@@ -587,7 +615,7 @@ class rbtree
             //Transfer all the nodes to a temporary tree
             //If anything goes wrong, all the nodes will be destroyed
             //automatically
-            Icont other_tree(boost::move(this->icont()));
+            Icont other_tree(::boost::move(this->icont()));
 
             //Now recreate the source tree reusing nodes stored by other_tree
             this->icont().clone_from

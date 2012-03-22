@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -102,11 +102,19 @@ class flat_tree
       {}
 
       Data(const Data &d)
-         : value_compare(d), m_vect(d.m_vect)
+         : value_compare(static_cast<const value_compare&>(d)), m_vect(d.m_vect)
       {}
 
       Data(BOOST_RV_REF(Data) d)
-         : value_compare(boost::move(d)), m_vect(boost::move(d.m_vect))
+         : value_compare(boost::move(static_cast<value_compare&>(d))), m_vect(boost::move(d.m_vect))
+      {}
+
+      Data(const Data &d, const A &a)
+         : value_compare(static_cast<const value_compare&>(d)), m_vect(d.m_vect, a)
+      {}
+
+      Data(BOOST_RV_REF(Data) d, const A &a)
+         : value_compare(boost::move(static_cast<value_compare&>(d))), m_vect(boost::move(d.m_vect), a)
       {}
 
       Data(const Compare &comp) 
@@ -183,6 +191,14 @@ class flat_tree
 
    flat_tree(BOOST_RV_REF(flat_tree) x)
       :  m_data(boost::move(x.m_data))
+   { }
+
+   flat_tree(const flat_tree& x, const allocator_type &a) 
+      :  m_data(x.m_data, a)
+   { }
+
+   flat_tree(BOOST_RV_REF(flat_tree) x, const allocator_type &a)
+      :  m_data(boost::move(x.m_data), a)
    { }
 
    template <class InputIterator>

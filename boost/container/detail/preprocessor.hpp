@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2008-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2008-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -61,6 +61,10 @@
    const BOOST_PP_CAT(P, n) & BOOST_PP_CAT(p, n) \
    //!
 #endif   //#ifndef BOOST_NO_RVALUE_REFERENCES
+
+#define BOOST_CONTAINER_PP_CONST_REF_PARAM_LIST_Q(z, n, Data) \
+const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
+//!
 
 #ifndef BOOST_NO_RVALUE_REFERENCES
    #define BOOST_CONTAINER_PP_PARAM(U, u) \
@@ -152,7 +156,11 @@ BOOST_PP_CAT(*this->m_p, n) \
 //!
 
 #define BOOST_CONTAINER_PP_TEMPLATE_PARAM_VOID_DEFAULT(z, n, data)   \
-  BOOST_PP_CAT(class P, n) = void                                      \
+  BOOST_PP_CAT(class P, n) = void                                    \
+//!
+
+#define BOOST_CONTAINER_PP_TEMPLATE_PARAM_WITH_DEFAULT(z, n, default_type) \
+  BOOST_PP_CAT(class P, n) = default_type                                  \
 //!
 
 #define BOOST_CONTAINER_PP_STATIC_PARAM_REF_DECLARE(z, n, data) \

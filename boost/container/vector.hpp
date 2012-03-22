@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -38,7 +38,7 @@
 #include <boost/container/detail/iterators.hpp>
 #include <boost/container/detail/algorithms.hpp>
 #include <boost/container/detail/destroyers.hpp>
-#include <boost/container/allocator/allocator_traits.hpp>
+#include <boost/container/allocator_traits.hpp>
 #include <boost/container/container_fwd.hpp>
 #include <boost/move/move.hpp>
 #include <boost/move/move_helpers.hpp>
@@ -46,6 +46,7 @@
 #include <boost/container/detail/mpl.hpp>
 #include <boost/container/detail/type_traits.hpp>
 #include <boost/container/detail/advanced_insert_int.hpp>
+#include <boost/assert.hpp>
 
 namespace boost {
 namespace container {
@@ -539,6 +540,40 @@ class vector : private container_detail::vector_alloc_holder<A>
    vector(BOOST_RV_REF(vector) mx) BOOST_CONTAINER_NOEXCEPT
       :  base_t(boost::move(mx.alloc()))
    {  this->swap_members(mx);   }
+
+   //! <b>Effects</b>: Copy constructs a vector using the specified allocator.
+   //!
+   //! <b>Postcondition</b>: x == *this.
+   //! 
+   //! <b>Throws</b>: If allocation
+   //!   throws or T's copy constructor throws.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements x contains.
+   vector(const vector &x, const allocator_type &a) 
+      :  base_t(a)
+   {
+      this->assign( container_detail::to_raw_pointer(x.members_.m_start)
+                  , container_detail::to_raw_pointer(x.members_.m_start + x.members_.m_size));
+   }
+
+   //! <b>Effects</b>: Move constructor using the specified allocator.
+   //!                 Moves mx's resources to *this if a == allocator_type().
+   //!                 Otherwise copies values from x to *this.
+   //!
+   //! <b>Throws</b>: If allocation or T's copy constructor throws.
+   //! 
+   //! <b>Complexity</b>: Constant if a == mx.get_allocator(), linear otherwise.
+   vector(BOOST_RV_REF(vector) mx, const allocator_type &a)
+      :  base_t(a)
+   {
+      if(mx.alloc() == a){
+         this->swap_members(mx);
+      }
+      else{
+         this->assign( container_detail::to_raw_pointer(mx.members_.m_start)
+                     , container_detail::to_raw_pointer(mx.members_.m_start + mx.members_.m_size));
+      }
+   }
 
    //! <b>Effects</b>: Constructs a vector that will use a copy of allocator a
    //!   and inserts a copy of the range [first, last) in the vector.
@@ -1428,6 +1463,87 @@ class vector : private container_detail::vector_alloc_holder<A>
       }
    }
 
+   private:
+   template<class BiDirIt>
+   void insert_at_ordered_positions(const size_type *positions, size_type element_count, BiDirIt end)
+   {
+      const size_type old_size_pos = this->size();
+      this->reserve(old_size_pos + element_count);
+      T* const begin_ptr = container_detail::to_raw_pointer(this->members_.m_start);
+      size_type insertions_left = element_count;
+      size_type next_pos = old_size_pos;
+      size_type hole_size = element_count;
+
+      //Exception rollback. If any copy throws before the hole is filled, values
+      //already inserted/copied at the end of the buffer will be destroyed.
+      typename value_traits::ArrayDestructor past_hole_values_destroyer
+         (begin_ptr + old_size_pos + element_count, this->alloc(), size_type(0u));
+      //Loop for each insertion backwards, first moving the elements after the insertion point,
+      //then inserting the element.
+      while(insertions_left){
+         const size_type pos = positions[insertions_left - 1];
+         BOOST_ASSERT(pos <= old_size_pos);
+         //Shift the range after the insertion point, function will take care if the shift
+         //crosses the size() boundary, using copy/move or uninitialized copy/move if necessary.
+         size_type new_hole_size = shift_range(pos, next_pos, this->size(), insertions_left);
+         if(new_hole_size > 0){
+            //The hole was reduced by shift_range so expand exception rollback range backwards
+            past_hole_values_destroyer.increment_size_backwards(next_pos - pos);
+            //Insert the new value in the hole
+            allocator_traits_type::construct(this->alloc(), begin_ptr + pos + insertions_left - 1, *(--end));
+            --new_hole_size;
+            if(new_hole_size == 0){
+               //Hole was just filled, disable exception rollback and change vector size
+               past_hole_values_destroyer.release();
+               this->members_.m_size += element_count;
+            }
+            else{
+               //The hole was reduced by the new insertion by one
+               past_hole_values_destroyer.increment_size_backwards(size_type(1u));
+            }
+         }
+         else{
+            if(hole_size){
+               //Hole was just filled by shift_range, disable exception rollback and change vector size
+               past_hole_values_destroyer.release();
+               this->members_.m_size += element_count;
+            }
+            //Insert the new value in the already constructed range
+            begin_ptr[pos + insertions_left - 1] = *(--end);
+         }
+         --insertions_left;
+         hole_size = new_hole_size;
+         next_pos = pos;
+      }
+   }
+
+   size_type shift_range(size_type first_pos, size_type last_pos, size_type limit_pos, size_type shift_count)
+   {
+      BOOST_ASSERT(first_pos <= last_pos);
+      BOOST_ASSERT(last_pos <= limit_pos);
+      //
+      T* const begin_ptr = container_detail::to_raw_pointer(this->members_.m_start);
+
+      size_type hole_size = 0;
+      if((last_pos + shift_count) < limit_pos){
+         //All inside
+         boost::move_backward(begin_ptr + first_pos, begin_ptr + last_pos, begin_ptr + last_pos + shift_count);
+      }
+      else if((first_pos + shift_count) >= limit_pos){
+         //All outside
+         ::boost::container::uninitialized_move_alloc
+            (this->alloc(), begin_ptr + first_pos, begin_ptr + last_pos, begin_ptr + first_pos + shift_count);
+         hole_size = last_pos + shift_count - limit_pos;
+      }
+      else{
+         ::boost::container::uninitialized_move_alloc
+            (this->alloc(), begin_ptr + limit_pos - shift_count, begin_ptr + last_pos, begin_ptr + limit_pos);
+         boost::move_backward(begin_ptr + first_pos, begin_ptr + limit_pos - shift_count, begin_ptr + limit_pos + shift_count);
+      }
+      return hole_size;
+   }
+
+   private:
    void priv_range_insert_expand_forward(T* pos, size_type n, advanced_insert_aux_int_t &interf)
    {
       //n can't be 0, because there is nothing to do in that case

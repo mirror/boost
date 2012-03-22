@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -43,7 +43,7 @@
 #include <boost/container/detail/algorithms.hpp>
 #include <boost/container/detail/version_type.hpp>
 #include <boost/container/detail/allocation_type.hpp>
-#include <boost/container/allocator/allocator_traits.hpp>
+#include <boost/container/allocator_traits.hpp>
 #include <boost/container/detail/mpl.hpp>
 #include <boost/move/move.hpp>
 #include <boost/static_assert.hpp>
@@ -620,12 +620,12 @@ class basic_string
    //!
    //! <b>Postcondition</b>: x == *this.
    //! 
-   //! <b>Throws</b>: If allocator_type's default constructor or copy constructor throws.
+   //! <b>Throws</b>: If allocator_type's default constructor throws.
    basic_string(const basic_string& s) 
       :  base_t(allocator_traits_type::select_on_container_copy_construction(s.alloc()))
    { this->priv_range_initialize(s.begin(), s.end()); }
 
-   //! <b>Effects</b>: Move constructor. Moves mx's resources to *this.
+   //! <b>Effects</b>: Move constructor. Moves s's resources to *this.
    //!
    //! <b>Throws</b>: If allocator_type's copy constructor throws.
    //! 
@@ -633,6 +633,32 @@ class basic_string
    basic_string(BOOST_RV_REF(basic_string) s) 
       : base_t(boost::move((base_t&)s))
    {}
+
+   //! <b>Effects</b>: Copy constructs a basic_string using the specified allocator.
+   //!
+   //! <b>Postcondition</b>: x == *this.
+   //! 
+   //! <b>Throws</b>: If allocation throws.
+   basic_string(const basic_string& s, const allocator_type &a) 
+      :  base_t(a)
+   { this->priv_range_initialize(s.begin(), s.end()); }
+
+   //! <b>Effects</b>: Move constructor using the specified allocator.
+   //!                 Moves s's resources to *this.
+   //!
+   //! <b>Throws</b>: If allocation throws.
+   //! 
+   //! <b>Complexity</b>: Constant if a == s.get_allocator(), linear otherwise.
+   basic_string(BOOST_RV_REF(basic_string) s, const allocator_type &a) 
+      : base_t(a)
+   {
+      if(a == this->alloc()){
+         this->swap_data(s);
+      }
+      else{
+         this->priv_range_initialize(s.begin(), s.end());
+      }
+   }
 
    //! <b>Effects</b>: Constructs a basic_string taking the allocator as parameter,
    //!   and is initialized by a specific number of characters of the s string. 

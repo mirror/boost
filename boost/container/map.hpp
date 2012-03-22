@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -158,7 +158,7 @@ class map
       : m_tree(first, last, comp, a, true) 
    {
       //Allocator type must be std::pair<CONST Key, T>
-      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename     A::value_type>::value));
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
    }
 
    //! <b>Effects</b>: Constructs an empty map using the specified comparison object and 
@@ -175,29 +175,52 @@ class map
       : m_tree(ordered_range, first, last, comp, a) 
    {
       //Allocator type must be std::pair<CONST Key, T>
-      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename     A::value_type>::value));
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
    }
 
    //! <b>Effects</b>: Copy constructs a map.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   map(const map<Key,T,Pred,A>& x) 
+   map(const map& x) 
       : m_tree(x.m_tree)
    {
       //Allocator type must be std::pair<CONST Key, T>
-      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename     A::value_type>::value));
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
    }
 
    //! <b>Effects</b>: Move constructs a map. Constructs *this using x's resources.
    //! 
-   //! <b>Complexity</b>: Construct.
+   //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Postcondition</b>: x is emptied.
    map(BOOST_RV_REF(map) x) 
       : m_tree(boost::move(x.m_tree))
    {
       //Allocator type must be std::pair<CONST Key, T>
-      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename     A::value_type>::value));
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
+   }
+
+   //! <b>Effects</b>: Copy constructs a map using the specified allocator.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   map(const map& x, const allocator_type &a) 
+      : m_tree(x.m_tree, a)
+   {
+      //Allocator type must be std::pair<CONST Key, T>
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
+   }
+
+   //! <b>Effects</b>: Move constructs a map using the specified allocator.
+   //!                 Constructs *this using x's resources.
+   //!
+   //! <b>Complexity</b>: Constant if x == x.get_allocator(), linear otherwise.
+   //! 
+   //! <b>Postcondition</b>: x is emptied.
+   map(BOOST_RV_REF(map) x, const allocator_type &a) 
+      : m_tree(boost::move(x.m_tree), a)
+   {
+      //Allocator type must be std::pair<CONST Key, T>
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
    }
 
    //! <b>Effects</b>: Makes *this a copy of x.
@@ -833,7 +856,7 @@ class multimap
       : m_tree(comp, a)
    {
       //Allocator type must be std::pair<CONST Key, T>
-      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename     A::value_type>::value));
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
    }
 
    //! <b>Effects</b>: Constructs an empty multimap using the specified comparison object
@@ -848,7 +871,7 @@ class multimap
       : m_tree(first, last, comp, a, false) 
    {
       //Allocator type must be std::pair<CONST Key, T>
-      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename     A::value_type>::value));
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
    }
 
    //! <b>Effects</b>: Constructs an empty multimap using the specified comparison object and 
@@ -864,27 +887,48 @@ class multimap
       : m_tree(ordered_range, first, last, comp, a) 
    {}
 
-
    //! <b>Effects</b>: Copy constructs a multimap.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   multimap(const multimap<Key,T,Pred,A>& x) 
+   multimap(const multimap& x) 
       : m_tree(x.m_tree)
    {
       //Allocator type must be std::pair<CONST Key, T>
-      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename     A::value_type>::value));
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
    }
 
    //! <b>Effects</b>: Move constructs a multimap. Constructs *this using x's resources.
    //! 
-   //! <b>Complexity</b>: Construct.
+   //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Postcondition</b>: x is emptied.
    multimap(BOOST_RV_REF(multimap) x) 
       : m_tree(boost::move(x.m_tree))
    {
       //Allocator type must be std::pair<CONST Key, T>
-      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename     A::value_type>::value));
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
+   }
+
+   //! <b>Effects</b>: Copy constructs a multimap.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   multimap(const multimap& x, const allocator_type &a) 
+      : m_tree(x.m_tree, a)
+   {
+      //Allocator type must be std::pair<CONST Key, T>
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
+   }
+
+   //! <b>Effects</b>: Move constructs a multimap using the specified allocator.
+   //!                 Constructs *this using x's resources.
+   //! <b>Complexity</b>: Constant if a == x.get_allocator(), linear otherwise.
+   //! 
+   //! <b>Postcondition</b>: x is emptied.
+   multimap(BOOST_RV_REF(multimap) x, const allocator_type &a)
+      : m_tree(boost::move(x.m_tree), a)
+   {
+      //Allocator type must be std::pair<CONST Key, T>
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
    }
 
    //! <b>Effects</b>: Makes *this a copy of x.

@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011.
+// (C) Copyright Ion Gaztanaga 2005-2012.
 //
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
@@ -21,7 +21,7 @@
 #include <boost/container/detail/workaround.hpp>
 #include <boost/container/detail/version_type.hpp>
 #include <boost/container/detail/utilities.hpp>
-#include <boost/container/allocator/allocator_traits.hpp>
+#include <boost/container/allocator_traits.hpp>
 
 namespace boost {
 namespace container { 
@@ -85,6 +85,9 @@ struct scoped_destructor_n
 
    void increment_size(size_type inc)
    {  m_n += inc;   }
+
+   void increment_size_backwards(size_type inc)
+   {  m_n += inc;   m_p -= inc;  }
    
    ~scoped_destructor_n()
    {
@@ -115,8 +118,36 @@ struct null_scoped_destructor_n
    void increment_size(size_type)
    {}
 
+   void increment_size_backwards(size_type)
+   {}
+
    void release()
    {}
+};
+
+template<class A>
+class scoped_destructor
+{
+   typedef boost::container::allocator_traits<A> AllocTraits;
+   public:
+   typedef typename A::value_type value_type;
+   scoped_destructor(A &a, value_type *pv)
+      : pv_(pv), a_(a)
+   {}
+
+   ~scoped_destructor()
+   {
+      if(pv_){
+         AllocTraits::destroy(a_, pv_);
+      }
+   }
+
+   void release()
+   {  pv_ = 0; }
+
+   private:
+   value_type *pv_;
+   A &a_;
 };
 
 template <class Allocator>
