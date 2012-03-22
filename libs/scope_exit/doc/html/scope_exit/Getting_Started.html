@@ -40,14 +40,17 @@
       and Platforms</a>
 </h3></div></div></div>
 <p>
-        The library should be usable on any compiler that supports <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>
-        except:
+        The authors originally developed and tested the library on GNU Compiler Collection
+        (GCC) C++ 3.3, 3.4, 4.1, 4.2, 4.5.3 (with and without C++11 features <code class="literal">-std=c++0x</code>),
+        Microsoft Visual C++ (MSVC) 8.0, and Intel 10.1 under Linux, Cygwin, and
+        Windows 7. However, this library should be usable on any compiler that supports
+        <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a> except:
       </p>
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
             MSVC 7.1 and 8.0 fail to link if a function with <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">Boost.ScopeExit</a>
-            is included by multiple translation units. Furthermore, on MSVC 7.1 and
-            8.0 it is possible to capture the object <code class="computeroutput"><span class="identifier">this_</span></code>
+            is included by multiple translation units. Furthermore, on MSVC it is
+            possible to capture the object <code class="computeroutput"><span class="identifier">this_</span></code>
             only with native <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>
             (and not in <a href="http://www.boost.org/libs/typeof" target="_top">type-of emulation</a>
             mode).
@@ -59,9 +62,9 @@
           </li>
 </ul></div>
 <p>
-        The authors tested the library on GCC 3.3, 3.4, 4.1, 4.2, 4.5.3 (with and
-        without C++11 features <code class="literal">-std=c++0x</code>), MSVC 8.0, and Intel
-        10.1 under Linux, Cygwin, and Windows 7.
+        See the library <a href="http://www.boost.org/development/tests/release/developer/scope_exit.html" target="_top">regression
+        test results</a> for detailed information on supported compilers and
+        platforms.
       </p>
 </div>
 <div class="section scope_exit_Getting_Started_installation">

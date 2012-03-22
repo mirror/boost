@@ -24,7 +24,8 @@ This library allows to wrap type expressions within round parenthesis so they ca
 [import ../test/var_error.cpp]
 [import ../test/var.cpp]
 [import ../test/template.cpp]
-[import ../test/tmp_assert.cpp]
+[import ../test/abstract.cpp]
+[import ../test/paren.cpp]
 
 [section Motivation]
 
@@ -101,22 +102,33 @@ This can be worked around by manipulating the type adding and removing a referen
 
 Let's program a macro that performs a static assertion on a [@http://en.wikipedia.org/wiki/Template_metaprogramming Template Meta-Programming] (TMP) meta-function (similarly to Boost.MPL [@http://www.boost.org/doc/libs/1_36_0/libs/mpl/doc/refmanual/assert.html `BOOST_MPL_ASSERT`]).
 The [macroref BOOST_IDENTITY_TYPE] macro can be used to pass a meta-function with multiple template parameters to the assert macro (so to handle the commas separating the template parameters).
-In this case, if the meta-function is an abstract type, it needs to be manipulated adding and removing a reference to it (see also [@../../test/tmp_assert.cpp =tmp_assert.cpp=]):
+In this case, if the meta-function is an abstract type, it needs to be manipulated adding and removing a reference to it (see also [@../../test/abstract.cpp =abstract.cpp=]):
 
-[tmp_assert_abstract]
+[abstract]
+
+[endsect]
+
+[section Compilers and Platforms]
+
+The authors originally developed and tested the library on:
+
+# GNU Compiler Collection (GCC) C++ 4.5.3 (with and without C++11 features enabled `-std=c++0x`) on Cygwin.
+# Miscrosoft Visual C++ (MSVC) 8.0 on Windows 7.
+
+See the library [@http://www.boost.org/development/tests/release/developer/utility-identity_type.html regressions test results] for detailed information on supported compilers and platforms.
 
 [endsect]
 
 [section Annex: Usage]
 
 The [macroref BOOST_IDENTITY_TYPE] macro can be used either when calling a user-defined macro (as shown by the examples so far), or internally in the definition of a user-defined macro (as shown below).
-When [macroref BOOST_IDENTITY_TYPE] is used in the user macro definition, the call of the user macro will only have to specify the extra parenthesis (see also [@../../test/tmp_assert.cpp =tmp_assert.cpp=]):
+When [macroref BOOST_IDENTITY_TYPE] is used in the user macro definition, the call of the user macro will only have to specify the extra parenthesis (see also [@../../test/paren.cpp =paren.cpp=]):
 
-[tmp_assert_alternative]
+[paren]
 
 However, note that the user will /always/ have to specify the extra parenthesis even when the macro parameters contain no comma:
 
-[tmp_assert_alternative_always]
+[paren_always]
 
 In some cases, using [macroref BOOST_IDENTITY_TYPE] within the user macro definition might provide the best syntax for the user.
 For example, this is the case for `BOOST_MPL_ASSERT` because the majority of template meta-programming expressions contain unwrapped commas so it is less confusing for the user to always specify the extra parenthesis `((...))` instead of using [macroref BOOST_IDENTITY_TYPE]:

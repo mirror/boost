@@ -88,7 +88,7 @@
 [import ../test/same_line.cpp]
 
 [import ../example/gcc_lambda.cpp]
-[import ../example/gcc_lambda_cpp11.cpp]
+[import ../example/gcc_lambda_cxx11.cpp]
 [import ../example/const_block_error.cpp]
 [import ../example/scope_exit.cpp]
 [import ../example/scope_exit.hpp]

@@ -9,5 +9,7 @@ import testing ;
 
 project : requirements <library>/boost//unit_test_framework ;
 
-run identity.cpp ;
+run functor.cpp ;
+run make_decl.cpp ;
+run make_call.cpp ;
 

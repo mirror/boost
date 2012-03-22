@@ -42,23 +42,15 @@
         Consider the following functions with distinct signatures:
       </p>
 <p>
-</p>
-<pre class="programlisting"><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">identity_s</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span> <span class="comment">// As pointer.</span>
-
-<span class="keyword">int</span> <span class="identifier">identity_i_impl</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span>
-<span class="keyword">int</span> <span class="special">(&amp;</span><span class="identifier">identity_i</span><span class="special">)(</span><span class="keyword">int</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">identity_i_impl</span><span class="special">;</span> <span class="comment">// Function reference.</span>
-
-<span class="keyword">double</span> <span class="identifier">identity_d_impl</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">double</span> <span class="special">(</span><span class="keyword">double</span><span class="special">)&gt;</span> <span class="identifier">identity_d</span> <span class="special">=</span> <span class="identifier">identity_d_impl</span><span class="special">;</span> <span class="comment">// Functor.</span>
-</pre>
-<p>
+        [identity_decls]
       </p>
 <p>
         This library header <code class="computeroutput"><a class="link" href="../reference.html#header.boost.functional.overloaded_function_hpp" title="Header &lt;boost/functional/overloaded_function.hpp&gt;">boost/functional/overloaded_function.hpp</a></code>
         provides a <code class="computeroutput"><a class="link" href="../boost/overloaded_function.html" title="Class template overloaded_function">boost::overloaded_function</a></code>
         class template that creates a single overloaded function object that can
         be used to call the specified functions instead of using the separate function
-        names (see also <a href="../../../test/identity.cpp" target="_top"><code class="literal">identity.cpp</code></a>):
+        names (see also <a href="../../../test/functor.cpp" target="_top"><code class="literal">functor.cpp</code></a>
+        and <a href="../../../test/identity.hpp" target="_top"><code class="literal">identity.hpp</code></a>):
       </p>
 <p>
 </p>
@@ -114,7 +106,8 @@
 <p>
         The <code class="computeroutput"><a class="link" href="../boost/make_overloaded_function.html" title="Function template make_overloaded_function">boost::make_overloaded_function</a></code>
         function template can be useful when used together with <a href="http://www.boost.org/doc/libs/typeof" target="_top">Boost.Typeof</a>'s
-        <code class="computeroutput"><span class="identifier">BOOST_AUTO</span></code> (or C++11 <code class="computeroutput"><span class="keyword">auto</span></code>). For example (see also <a href="../../../test/identity.cpp" target="_top"><code class="literal">identity.cpp</code></a>):
+        <code class="computeroutput"><span class="identifier">BOOST_AUTO</span></code> (or C++11 <code class="computeroutput"><span class="keyword">auto</span></code>). For example (see also <a href="../../../test/make_decl.cpp" target="_top"><code class="literal">make_decl.cpp</code></a>
+        and <a href="../../../test/identity.hpp" target="_top"><code class="literal">identity.hpp</code></a>):
       </p>
 <p>
 </p>
@@ -143,7 +136,8 @@
         Another case where <code class="computeroutput"><a class="link" href="../boost/make_overloaded_function.html" title="Function template make_overloaded_function">boost::make_overloaded_function</a></code>
         can be useful is when the overloaded function object is passed to a function
         template which can hide the specific <code class="computeroutput"><a class="link" href="../boost/overloaded_function.html" title="Class template overloaded_function">boost::overloaded_function</a></code>
-        type using a template parameter. For example (see also <a href="../../../test/identity.cpp" target="_top"><code class="literal">identity.cpp</code></a>):
+        type using a template parameter. For example (see also <a href="../../../test/make_call.cpp" target="_top"><code class="literal">make_call.cpp</code></a>
+        and <a href="../../../test/identity.hpp" target="_top"><code class="literal">identity.hpp</code></a>):
       </p>
 <p>
 </p>

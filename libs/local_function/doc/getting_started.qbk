@@ -30,13 +30,13 @@ Using __Boost_Test__ allows to add the documentation examples to the library reg
 
 The implementation of this library uses preprocessor and template meta-programming (as supported by __Boost_Preprocessor__ and __Boost_MPL__), templates with partial specializations and function pointers (similarly to __Boost_Function__).
 As a consequence, this library is fairly demanding on compilers' compliance with the __CPP03__ standard.
-At present, this library has been successfully compiled and tested on the following compilers and platforms:
+The authors originally developed and tested the library on:
 
-# GNU Compiler Collection (GCC) 4.5.1 on Ubuntu Linux 10.
+# GNU Compiler Collection (GCC) C++ 4.5.1 on Ubuntu Linux 10.
 # GCC 4.3.4 and 4.5.3 (with and without __CPP11__ features enabled `-std=c++0x`) on Cygwin.
-# Miscrosoft Visual Studio Compiler (MSVC) 8.0 on Windows XP and Windows 7.
+# Miscrosoft Visual C++ (MSVC) 8.0 on Windows XP and Windows 7.
 
-This library has not yet been tested on any other compiler and platform.
+See the library [@http://www.boost.org/development/tests/release/developer/local_function.html regressions test results] for detailed information on supported compilers and platforms.
 
 [endsect]
 

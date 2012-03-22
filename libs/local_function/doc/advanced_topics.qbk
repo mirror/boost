@@ -368,6 +368,7 @@ In general, it is not possible to expand the [macroref BOOST_LOCAL_FUNCTION], [m
 The [macroref BOOST_LOCAL_FUNCTION] and [macroref BOOST_LOCAL_FUNCTION_TPL] macros internally use `__LINE__` to generate unique identifiers.
 Therefore, if the same macro is expanded more than on time on the same line, the generated identifiers will no longer be unique and the code will not compile.
 (This restriction does not apply to MSVC and other compilers that provide the non-standard `__COUNTER__` macro.)
+Note that the [macroref BOOST_LOCAL_FUNCTION_NAME] macro can always be expanded multiple times on the same line because a unique local function name must be provided for each different expansion (so the is no need for a `BOOST_LOCAL_FUNCTION_NAME_ID` macro).
 ]
 
 Therefore, this library provides the additional macro [macroref BOOST_LOCAL_FUNCTION_ID] which can be expanded multiple times on the same line as long as programmers specify a unique identifier as the macro's first parameter.

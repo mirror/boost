@@ -33,11 +33,36 @@ Finally, an parameter list is always specified using `void` on compilers with an
 
 [ten_void]
 
-[h5 An Example]
+[h5 Examples]
 
-The following example shows a bit of all the different macro parameter combinations using the sequence syntax (see also [@../../test/seq.cpp =seq.cpp=]):
+For reference, the following is a list of most of the examples presented in this documentation reprogrammed using the sequence syntax instead of the comma-separated syntax (in alphabetic order):
 
-[seq]
+[table
+    [ [Files] ]
+    [ [[@../../test/add_classifiers_seq.cpp =add_classifiers_seq.cpp=]] ]
+    [ [[@../../test/add_default_seq.cpp =add_default_seq.cpp=]] ]
+    [ [[@../../test/add_except_seq.cpp =add_except_seq.cpp=]] ]
+    [ [[@../../test/add_inline_seq.cpp =add_inline_seq.cpp=]] ]
+    [ [[@../../test/add_params_only_seq.cpp =add_params_only_seq.cpp=]] ]
+    [ [[@../../test/add_template_seq.cpp =add_template_seq.cpp=]] ]
+    [ [[@../../test/add_this_seq.cpp =add_this_seq.cpp=]] ]
+    [ [[@../../test/add_typed_seq.cpp =add_typed_seq.cpp=]] ]
+    [ [[@../../test/add_with_default_seq.cpp =add_with_default_seq.cpp=]] ]
+    [ [[@../../test/all_decl_seq.cpp =all_decl_seq.cpp=]] ]
+    [ [[@../../test/factorial_seq.cpp =factorial_seq.cpp=]] ]
+    [ [[@../../test/macro_commas_seq.cpp =macro_commas_seq.cpp=]] ]
+    [ [[@../../test/nesting_seq.cpp =nesting_seq.cpp=]] ]
+    [ [[@../../test/overload_seq.cpp =overload_seq.cpp=]] ]
+    [ [[@../../test/return_assign_seq.cpp =return_assign_seq.cpp=]] ]
+    [ [[@../../test/return_derivative_seq.cpp =return_derivative_seq.cpp=]] ]
+    [ [[@../../test/return_inc_seq.cpp =return_inc_seq.cpp=]] ]
+    [ [[@../../test/return_setget_seq.cpp =return_setget_seq.cpp=]] ]
+    [ [[@../../test/return_this_seq.cpp =return_this_seq.cpp=]] ]
+    [ [[@../../test/same_line_seq.cpp =same_line_seq.cpp=]] ]
+    [ [[@../../test/transform_seq.cpp =transform_seq.cpp=]] ]
+    [ [[@../../test/typeof_seq.cpp =typeof_seq.cpp=]] ]
+    [ [[@../../test/typeof_template_seq.cpp =typeof_template_seq.cpp=]] ]
+]
 
 [endsect]
 

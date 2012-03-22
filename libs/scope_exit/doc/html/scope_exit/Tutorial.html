@@ -427,13 +427,13 @@
     <span class="keyword">int</span> <span class="identifier">x</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">delta</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
     <span class="special">{</span>
-        <span class="identifier">SCOPE_EXIT_INC_DEC</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">delta</span><span class="special">)</span>
+        <span class="identifier">SCOPE_EXIT_INC_DEC</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">delta</span><span class="special">)</span> <span class="comment">// Multiple scope exits on same line.</span>
     <span class="special">}</span>
     <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">x</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
 
 <span class="preprocessor">#ifndef</span> <span class="identifier">BOOST_NO_LAMBDAS</span>
     <span class="special">{</span>
-        <span class="identifier">SCOPE_EXIT_ALL_INC_DEC</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">delta</span><span class="special">)</span>
+        <span class="identifier">SCOPE_EXIT_ALL_INC_DEC</span><span class="special">(</span><span class="identifier">x</span><span class="special">,</span> <span class="identifier">delta</span><span class="special">)</span> <span class="comment">// Multiple scope exits on same line.</span>
     <span class="special">}</span>
     <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">x</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
 <span class="preprocessor">#endif</span>
@@ -446,8 +446,8 @@
         <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_END_ID.html" title="Macro BOOST_SCOPE_EXIT_END_ID">BOOST_SCOPE_EXIT_END_ID</a></code>,
         and <code class="computeroutput"><a class="link" href="../BOOST_SCOPE_EXIT_ALL_ID.html" title="Macro BOOST_SCOPE_EXIT_ALL_ID">BOOST_SCOPE_EXIT_ALL_ID</a></code>
         macros are especially useful when it is necessary to invoke them multiple
-        times within user-defined macros (because all nested macro will expand on
-        the same line).
+        times within user-defined macros (because the preprocessor expands all nested
+        macros on the same line).
       </p>
 </div>
 <div class="footnotes">

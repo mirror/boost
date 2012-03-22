@@ -7,12 +7,10 @@
 
 #include <boost/utility/identity_type.hpp>
 #include <boost/static_assert.hpp>
-#include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-#include <map>
 
-//[tmp_assert_abstract
+//[abstract
 #define TMP_ASSERT(metafunction) \
     BOOST_STATIC_ASSERT(metafunction::value)
 
@@ -31,22 +29,6 @@ TMP_ASSERT(
         ))
     >::type
 );
-//]
-
-//[tmp_assert_alternative
-#define TMP_ASSERT_PAREN(parenthesized_metafunction) \
-    /* use `BOOST_IDENTITY_TYPE` in macro definition instead of invocation */ \
-    BOOST_STATIC_ASSERT(BOOST_IDENTITY_TYPE(parenthesized_metafunction)::value)
-
-// Specify only extra parenthesis `((...))`.
-TMP_ASSERT_PAREN((boost::is_const<std::map<int, char> const>));
-// Specify both the extra parenthesis `((...))` and `BOOST_IDENTITY_TYPE` macro.
-TMP_ASSERT(BOOST_IDENTITY_TYPE((boost::is_const<std::map<int, char> const>)));
-//]
-
-//[tmp_assert_alternative_always
-TMP_ASSERT_PAREN((boost::is_const<int const>)); // Always extra `((...))`.
-TMP_ASSERT(boost::is_const<int const>); // No extra `((...))` and no macro.
 //]
 
 int main() { return 0; }

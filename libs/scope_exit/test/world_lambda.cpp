@@ -34,8 +34,8 @@ void world::add_person(person const& a_person) {
     bool commit = false;
 
     persons_.push_back(a_person);
-    scope_exit on_exit1([&commit, &persons_](void) { // Use C++11 lambda.
-        if(!commit) persons_.pop_back();
+    scope_exit on_exit1([&commit, this](void) { // Use C++11 lambda.
+        if(!commit) persons_.pop_back(); // `persons_` via captured `this`.
     });
 
     // ...

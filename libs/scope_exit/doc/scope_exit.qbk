@@ -85,13 +85,14 @@ This section explains how to setup a system to use this library.
 
 [section Compilers and Platforms]
 
-The library should be usable on any compiler that supports __Boost_Typeof__ except:
+The authors originally developed and tested the library on GNU Compiler Collection (GCC) C++ 3.3, 3.4, 4.1, 4.2, 4.5.3 (with and without C++11 features [^-std=c++0x]), Microsoft Visual C++ (MSVC) 8.0, and Intel 10.1 under Linux, Cygwin, and Windows 7.
+However, this library should be usable on any compiler that supports __Boost_Typeof__ except:
 
 * MSVC 7.1 and 8.0 fail to link if a function with __Boost_ScopeExit__ is included by multiple translation units.
-Furthermore, on MSVC 7.1 and 8.0 it is possible to capture the object `this_` only with native __Boost_Typeof__ (and not in __typeof_emulation__ mode).
+Furthermore, on MSVC it is possible to capture the object `this_` only with native __Boost_Typeof__ (and not in __typeof_emulation__ mode).
 * GCC 3.3 cannot compile __Boost_ScopeExit__ inside a template (see [@http://lists.boost.org/Archives/boost/2007/02/116235.php] for more details).
 
-The authors tested the library on GCC 3.3, 3.4, 4.1, 4.2, 4.5.3 (with and without C++11 features [^-std=c++0x]), MSVC 8.0, and Intel 10.1 under Linux, Cygwin, and Windows 7.
+See the library [@http://www.boost.org/development/tests/release/developer/scope_exit.html regression test results] for detailed information on supported compilers and platforms.
 
 [endsect]
 
@@ -429,16 +430,17 @@ Finally, an empty capture list is always specified using `void` on compilers wit
 
 [h5 Examples]
 
-The following is a list of most of the examples presented in this documentation reprogrammed using the __Boost_Preprocessor__ sequence syntax instead of the comma-separated list:
+For reference, the following is a list of most of the examples presented in this documentation reprogrammed using the __Boost_Preprocessor__ sequence syntax instead of comma-separated lists (in alphabetic order):
 
 [table
     [ [Files] ]
+    [ [[@../../test/same_line_seq.cpp =same_line_seq.cpp=]] ]
+    [ [[@../../example/scope_guard_seq.cpp =scope_guard_seq.cpp=]] ]
+    [ [[@../../example/try_catch_seq.cpp =try_catch_seq.cpp=]] ]
+    [ [[@../../test/world_checkpoint_all_seq.cpp =world_checkpoint_all_seq.cpp=]] ]
     [ [[@../../test/world_checkpoint_seq.cpp =world_checkpoint_seq.cpp=]] ]
     [ [[@../../test/world_this_seq.cpp =world_this_seq.cpp=]] ]
-    [ [[@../../test/world_checkpoint_all_seq.cpp =world_checkpoint_all_seq.cpp=]] ]
     [ [[@../../test/world_tpl_seq.cpp =world_tpl_seq.cpp=]] ]
-    [ [[@../../example/try_catch_seq.cpp =try_catch_seq.cpp=]] ]
-    [ [[@../../example/scope_guard_seq.cpp =scope_guard_seq.cpp=]] ]
 ]
 
 [endsect]

@@ -222,8 +222,12 @@ line is always necessary to ensure portability (this is because this library
 can only portably use <c>__LINE__</c> to internally generate unique
 identifiers).
 
-@See @RefMacro{BOOST_SCOPE_EXIT_END_ID}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID},
-    @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_TPL}.
+@Note The @RefMacro{BOOST_LOCAL_FUNCTION_NAME} macro can always be expanded
+multiple times on the same line because a unique local function name must be
+provided for each different expansion (so the is no need for a
+<c>BOOST_LOCAL_FUNCTION_NAME_ID</c> macro).
+
+@See @RefMacro{BOOST_LOCAL_FUNCTION}, @RefMacro{BOOST_LOCAL_FUNCTION_TPL}.
 */
 #define BOOST_LOCAL_FUNCTION_ID(id, within_template, declarations)
 

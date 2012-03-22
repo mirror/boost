@@ -25,7 +25,7 @@ BOOST_AUTO_TEST_CASE( test_add_lambda )
     int nums[] = {2, 3};
     std::for_each(nums, nums + 2, add);     // Pass it to an algorithm.
     
-    BOOST_CHECK( sum == 60 );               // Assert final summation value.
+    BOOST_CHECK(sum == 60);                 // Assert final summation value.
 }
 //]
 

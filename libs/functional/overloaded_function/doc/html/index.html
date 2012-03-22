@@ -69,16 +69,7 @@
       Consider the following functions with distinct signatures:
     </p>
 <p>
-</p>
-<pre class="programlisting"><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">identity_s</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span> <span class="comment">// As pointer.</span>
-
-<span class="keyword">int</span> <span class="identifier">identity_i_impl</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span>
-<span class="keyword">int</span> <span class="special">(&amp;</span><span class="identifier">identity_i</span><span class="special">)(</span><span class="keyword">int</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">identity_i_impl</span><span class="special">;</span> <span class="comment">// Function reference.</span>
-
-<span class="keyword">double</span> <span class="identifier">identity_d_impl</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span>
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">double</span> <span class="special">(</span><span class="keyword">double</span><span class="special">)&gt;</span> <span class="identifier">identity_d</span> <span class="special">=</span> <span class="identifier">identity_d_impl</span><span class="special">;</span> <span class="comment">// Functor.</span>
-</pre>
-<p>
+      [identity_decls]
     </p>
 <p>
       Instead of calling them using their separate names (here <code class="computeroutput"><span class="identifier">BOOST_CHECK</span></code>
@@ -97,7 +88,8 @@
       It is possible to use this library to create a single <a href="http://en.wikipedia.org/wiki/Function_overloading" target="_top">overloaded</a>
       function object (or <a href="http://en.wikipedia.org/wiki/Functor" target="_top">functor</a>)
       named <code class="computeroutput"><span class="identifier">identity</span></code> that aggregates
-      together the calls to the specific functions (see also <a href="../../test/identity.cpp" target="_top"><code class="literal">identity.cpp</code></a>):
+      together the calls to the specific functions (see also <a href="../../test/functor.cpp" target="_top"><code class="literal">functor.cpp</code></a>
+      and <a href="../../test/identity.hpp" target="_top"><code class="literal">identity.hpp</code></a>):
     </p>
 <p>
 </p>
@@ -133,7 +125,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: February 20, 2012 at 20:10:59 GMT</small></p></td>
+<td align="left"><p><small>Last revised: March 22, 2012 at 20:51:03 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

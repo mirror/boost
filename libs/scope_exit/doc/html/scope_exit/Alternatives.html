@@ -286,8 +286,8 @@
     <span class="keyword">bool</span> <span class="identifier">commit</span> <span class="special">=</span> <span class="keyword">false</span><span class="special">;</span>
 
     <span class="identifier">persons_</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">a_person</span><span class="special">);</span>
-    <span class="identifier">scope_exit</span> <span class="identifier">on_exit1</span><span class="special">([&amp;</span><span class="identifier">commit</span><span class="special">,</span> <span class="special">&amp;</span><span class="identifier">persons_</span><span class="special">](</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span> <span class="comment">// Use C++11 lambda.</span>
-        <span class="keyword">if</span><span class="special">(!</span><span class="identifier">commit</span><span class="special">)</span> <span class="identifier">persons_</span><span class="special">.</span><span class="identifier">pop_back</span><span class="special">();</span>
+    <span class="identifier">scope_exit</span> <span class="identifier">on_exit1</span><span class="special">([&amp;</span><span class="identifier">commit</span><span class="special">,</span> <span class="keyword">this</span><span class="special">](</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span> <span class="comment">// Use C++11 lambda.</span>
+        <span class="keyword">if</span><span class="special">(!</span><span class="identifier">commit</span><span class="special">)</span> <span class="identifier">persons_</span><span class="special">.</span><span class="identifier">pop_back</span><span class="special">();</span> <span class="comment">// `persons_` via captured `this`.</span>
     <span class="special">});</span>
 
     <span class="comment">// ...</span>

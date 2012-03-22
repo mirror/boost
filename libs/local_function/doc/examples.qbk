@@ -17,11 +17,11 @@ Combing local functions with the [@http://gcc.gnu.org/onlinedocs/gcc/Statement-E
 This code only works on compilers that support the statement expression GCC extension or that support __CPP11_lambda__ functions.
 ]
 
-For example (see also [@../../example/gcc_lambda.cpp =gcc_lambda.cpp=] and [@../../example/gcc_lambda_cpp11.cpp =gcc_lambda_cpp11.cpp=]):
+For example (see also [@../../example/gcc_lambda.cpp =gcc_lambda.cpp=] and [@../../example/gcc_lambda_cxx11.cpp =gcc_lambda_cxx11.cpp=]):
 
 [table
     [ [With Local Functions (GCC only)] [C++11 Lambdas] ]
-    [ [[gcc_lambda]] [[gcc_lambda_cpp11]] ]
+    [ [[gcc_lambda]] [[gcc_lambda_cxx11]] ]
 ]
 
 Where the macros are defined in [@../../example/gcc_lambda.hpp =gcc_lambda.hpp=].

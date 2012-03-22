@@ -909,7 +909,7 @@
 <span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_same_line</span><span class="special">)</span>
 <span class="special">{</span>
     <span class="keyword">int</span> <span class="identifier">delta</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
-    <span class="identifier">LOCAL_INC_DEC</span><span class="special">(</span><span class="identifier">delta</span><span class="special">)</span> <span class="comment">// Declare local functions on same line using `_ID`.</span>
+    <span class="identifier">LOCAL_INC_DEC</span><span class="special">(</span><span class="identifier">delta</span><span class="special">)</span> <span class="comment">// Multiple local functions on same line.</span>
 
     <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">dec</span><span class="special">(</span><span class="identifier">inc</span><span class="special">(</span><span class="number">123</span><span class="special">))</span> <span class="special">==</span> <span class="number">123</span><span class="special">);</span>
 <span class="special">}</span>
@@ -1346,7 +1346,11 @@
           to generate unique identifiers. Therefore, if the same macro is expanded
           more than on time on the same line, the generated identifiers will no longer
           be unique and the code will not compile. (This restriction does not apply
-          to MSVC and other compilers that provide the non-standard <code class="computeroutput"><span class="identifier">__COUNTER__</span></code> macro.)
+          to MSVC and other compilers that provide the non-standard <code class="computeroutput"><span class="identifier">__COUNTER__</span></code> macro.) Note that the <code class="computeroutput"><a class="link" href="../BOOST_LOCAL_FUNCTION_NAME.html" title="Macro BOOST_LOCAL_FUNCTION_NAME">BOOST_LOCAL_FUNCTION_NAME</a></code> macro
+          can always be expanded multiple times on the same line because a unique
+          local function name must be provided for each different expansion (so the
+          is no need for a <code class="computeroutput"><span class="identifier">BOOST_LOCAL_FUNCTION_NAME_ID</span></code>
+          macro).
         </p></div>
 <div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" href="#boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" class="para">27</a>] </sup>
           <span class="bold"><strong>Rationale.</strong></span> This is the because a local

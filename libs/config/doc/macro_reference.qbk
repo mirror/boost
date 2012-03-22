@@ -598,9 +598,9 @@ default template arguments for function templates.
 ]]
 [[`BOOST_NO_LAMBDAS`][The compiler does not support Lambdas. 
 ]]                      
-[[`BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS`][The compiler does not support
-local classes as template parameters (this macro intentionally does not
-control support for unnamed types as template parameters, see also
+[[`BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS`][The compiler does not allow to
+pass local classes as template parameters (this macro intentionally does not
+control passing of unnamed types as template parameters, see also
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm N2657]).
 ]]
 [[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.

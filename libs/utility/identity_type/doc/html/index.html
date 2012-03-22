@@ -2,7 +2,8 @@
       Caminiti</p></div><div><div class="legalnotice" title="Legal Notice"><a name="boost_utility_identitytype.legal"></a><p>
         Distributed under the Boost Software License, Version 1.0 (see accompanying
         file LICENSE_1_0.txt or a copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
-      </p></div></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#boost_utility_identitytype.motivation">Motivation</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.solution">Solution</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.templates">Templates</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.abstract_types">Abstract Types</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.annex__usage">Annex: Usage</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.annex__implementation">Annex:
+      </p></div></div></div></div><div class="toc"><p><b>Table of Contents</b></p><dl><dt><span class="section"><a href="#boost_utility_identitytype.motivation">Motivation</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.solution">Solution</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.templates">Templates</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.abstract_types">Abstract Types</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.compilers_and_platforms">Compilers
+    and Platforms</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.annex__usage">Annex: Usage</a></span></dt><dt><span class="section"><a href="#boost_utility_identitytype.annex__implementation">Annex:
     Implementation</a></span></dt><dt><span class="section"><a href="#reference">Reference</a></span></dt></dl></div><p>
     This library allows to wrap type expressions within round parenthesis so they
     can be passed to macros even when they contain commas.
@@ -126,7 +127,7 @@
       to pass a meta-function with multiple template parameters to the assert macro
       (so to handle the commas separating the template parameters). In this case,
       if the meta-function is an abstract type, it needs to be manipulated adding
-      and removing a reference to it (see also <a href="../../test/tmp_assert.cpp" target="_top"><code class="literal">tmp_assert.cpp</code></a>):
+      and removing a reference to it (see also <a href="../../test/abstract.cpp" target="_top"><code class="literal">abstract.cpp</code></a>):
     </p><p>
 </p><pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">TMP_ASSERT</span><span class="special">(</span><span class="identifier">metafunction</span><span class="special">)</span> <span class="special">\</span>
     <span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">(</span><span class="identifier">metafunction</span><span class="special">::</span><span class="identifier">value</span><span class="special">)</span>
@@ -147,20 +148,36 @@
     <span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="special">);</span>
 </pre><p>
+    </p></div><div class="section boost_utility_identitytype_compilers_and_platforms" title="Compilers and Platforms"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="boost_utility_identitytype.compilers_and_platforms"></a><a class="link" href="#boost_utility_identitytype.compilers_and_platforms" title="Compilers and Platforms">Compilers
+    and Platforms</a></h2></div></div></div><p>
+      The authors originally developed and tested the library on:
+    </p><div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+          GNU Compiler Collection (GCC) C++ 4.5.3 (with and without C++11 features
+          enabled <code class="computeroutput"><span class="special">-</span><span class="identifier">std</span><span class="special">=</span><span class="identifier">c</span><span class="special">++</span><span class="number">0</span><span class="identifier">x</span></code>) on
+          Cygwin.
+        </li><li class="listitem">
+          Miscrosoft Visual C++ (MSVC) 8.0 on Windows 7.
+        </li></ol></div><p>
+      See the library <a href="http://www.boost.org/development/tests/release/developer/utility-identity_type.html" target="_top">regressions
+      test results</a> for detailed information on supported compilers and platforms.
     </p></div><div class="section boost_utility_identitytype_annex__usage" title="Annex: Usage"><div class="titlepage"><div><div><h2 class="title" style="clear: both"><a name="boost_utility_identitytype.annex__usage"></a><a class="link" href="#boost_utility_identitytype.annex__usage" title="Annex: Usage">Annex: Usage</a></h2></div></div></div><p>
       The <code class="computeroutput"><a class="link" href="#BOOST_IDENTITY_TYPE" title="Macro BOOST_IDENTITY_TYPE">BOOST_IDENTITY_TYPE</a></code> macro
       can be used either when calling a user-defined macro (as shown by the examples
       so far), or internally in the definition of a user-defined macro (as shown
       below). When <code class="computeroutput"><a class="link" href="#BOOST_IDENTITY_TYPE" title="Macro BOOST_IDENTITY_TYPE">BOOST_IDENTITY_TYPE</a></code>
       is used in the user macro definition, the call of the user macro will only
-      have to specify the extra parenthesis (see also <a href="../../test/tmp_assert.cpp" target="_top"><code class="literal">tmp_assert.cpp</code></a>):
+      have to specify the extra parenthesis (see also <a href="../../test/paren.cpp" target="_top"><code class="literal">paren.cpp</code></a>):
     </p><p>
 </p><pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">TMP_ASSERT_PAREN</span><span class="special">(</span><span class="identifier">parenthesized_metafunction</span><span class="special">)</span> <span class="special">\</span>
     <span class="comment">/* use `BOOST_IDENTITY_TYPE` in macro definition instead of invocation */</span> <span class="special">\</span>
     <span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">(</span><span class="identifier">BOOST_IDENTITY_TYPE</span><span class="special">(</span><span class="identifier">parenthesized_metafunction</span><span class="special">)::</span><span class="identifier">value</span><span class="special">)</span>
 
+<span class="preprocessor">#define</span> <span class="identifier">TMP_ASSERT</span><span class="special">(</span><span class="identifier">metafunction</span><span class="special">)</span> <span class="special">\</span>
+    <span class="identifier">BOOST_STATIC_ASSERT</span><span class="special">(</span><span class="identifier">metafunction</span><span class="special">::</span><span class="identifier">value</span><span class="special">)</span>
+
 <span class="comment">// Specify only extra parenthesis `((...))`.</span>
 <span class="identifier">TMP_ASSERT_PAREN</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_const</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&gt;));</span>
+
 <span class="comment">// Specify both the extra parenthesis `((...))` and `BOOST_IDENTITY_TYPE` macro.</span>
 <span class="identifier">TMP_ASSERT</span><span class="special">(</span><span class="identifier">BOOST_IDENTITY_TYPE</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_const</span><span class="special">&lt;</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">map</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">,</span> <span class="keyword">char</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&gt;)));</span>
 </pre><p>
@@ -169,6 +186,7 @@
       the extra parenthesis even when the macro parameters contain no comma:
     </p><p>
 </p><pre class="programlisting"><span class="identifier">TMP_ASSERT_PAREN</span><span class="special">((</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_const</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="keyword">const</span><span class="special">&gt;));</span> <span class="comment">// Always extra `((...))`.</span>
+
 <span class="identifier">TMP_ASSERT</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">is_const</span><span class="special">&lt;</span><span class="keyword">int</span> <span class="keyword">const</span><span class="special">&gt;);</span> <span class="comment">// No extra `((...))` and no macro.</span>
 </pre><p>
     </p><p>
@@ -221,7 +239,7 @@
 
 <a class="link" href="#BOOST_IDENTITY_TYPE" title="Macro BOOST_IDENTITY_TYPE">BOOST_IDENTITY_TYPE</a>(parenthesized_type)</pre><div class="refentry" title="Macro BOOST_IDENTITY_TYPE"><a name="BOOST_IDENTITY_TYPE"></a><div class="titlepage"></div><div class="refnamediv"><h2><span class="refentrytitle">Macro BOOST_IDENTITY_TYPE</span></h2><p>BOOST_IDENTITY_TYPE — This macro allows to wrap the specified type expression within extra round parenthesis so the type can be passed as a single macro parameter even if it contains commas (not already wrapped within round parenthesis). </p></div><h2 class="refsynopsisdiv-title">Synopsis</h2><div class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="#header.boost.utility.identity_type_hpp" title="Header &lt;boost/utility/identity_type.hpp&gt;">boost/utility/identity_type.hpp</a>&gt;
 
-</span>BOOST_IDENTITY_TYPE(parenthesized_type)</pre></div><div class="refsect1" title="Description"><a name="id512092"></a><h2>Description</h2><p><span class="bold"><strong>Parameters:</strong></span> </p><div class="informaltable"><table class="table"><colgroup><col><col></colgroup><tbody><tr><td><span class="bold"><strong><code class="computeroutput">parenthesized_type</code></strong></span></td><td>The type expression to be passed as macro parameter wrapped by a single set of round parenthesis <code class="computeroutput">(...)</code>. This type expression can contain an arbitrary number of commas.  </td></tr></tbody></table></div><p>
+</span>BOOST_IDENTITY_TYPE(parenthesized_type)</pre></div><div class="refsect1" title="Description"><a name="id558453"></a><h2>Description</h2><p><span class="bold"><strong>Parameters:</strong></span> </p><div class="informaltable"><table class="table"><colgroup><col><col></colgroup><tbody><tr><td><span class="bold"><strong><code class="computeroutput">parenthesized_type</code></strong></span></td><td>The type expression to be passed as macro parameter wrapped by a single set of round parenthesis <code class="computeroutput">(...)</code>. This type expression can contain an arbitrary number of commas.  </td></tr></tbody></table></div><p>
 </p><p>This macro works on any C++03 compiler (it does not require variadic macros).</p><p>This macro must be prefixed by <code class="computeroutput">typename</code> when used within templates. However, the compiler will not be able to automatically determine function template parameters when they are wrapped with this macro (these parameters need to be explicitly specified when calling the function template).</p><p>On some compilers (like GCC), using this macro on an abstract types requires to add and remove a reference to the type. </p></div></div></div></div><div class="footnotes"><br><hr width="100" align="left"><div class="footnote"><p><sup>[<a id="ftn.boost_utility_identitytype.solution.f0" href="#boost_utility_identitytype.solution.f0" class="para">1</a>] </sup>
         Using variadic macros, it would be possible to require a single set of extra
         parenthesis <code class="computeroutput"><span class="identifier">BOOST_IDENTITY_TYPE</span><span class="special">(</span></code><code class="literal"><span class="emphasis"><em>type</em></span></code><code class="computeroutput"><span class="special">)</span></code> instead of two <code class="computeroutput"><span class="identifier">BOOST_IDENTITY_TYPE</span><span class="special">((</span></code><code class="literal"><span class="emphasis"><em>type</em></span></code><code class="computeroutput"><span class="special">))</span></code> but variadic macros are not part of C++03
