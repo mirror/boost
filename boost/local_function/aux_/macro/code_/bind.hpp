@@ -126,7 +126,7 @@
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPEDEF_DEDUCED_( \
         id, typename01, all_bind_this_types) \
     BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, \
-            BOOST_PP_EXPR_IIF(typename01, typename), \
+            BOOST_PP_EXPR_IIF(typename01, typename), /* otherwise EMPTY() */ \
             BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_CAPTURE_TYPE_(id))
 
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_BIND_THIS_TYPEDEF_TYPED_( \

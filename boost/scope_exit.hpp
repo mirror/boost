@@ -501,13 +501,14 @@ private:
     BOOST_PP_CAT(boost_se_lambda_this_capture_t_, id)
 
 #define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE(id) \
-    /* C++11 allows use of typename even in non-type dependent context */ \
+    /* can always use `typename` on C++11 (so no _TPL) */ \
     typename BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id):: \
             BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id)
 
 // Precondition: HAS_THIS(traits).
 #define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPEDEFS(id, traits) \
-    BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, 0 /* no TPL for C++11 */, \
+    BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, \
+            typename, /* can always use `typename` on C++11 (so no _TPL) */ \
             BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_CAPTURE_TYPE(id)) \
     /* capture type for workaround GCC internal error (even on later C++11) */ \
     struct BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id) { \
