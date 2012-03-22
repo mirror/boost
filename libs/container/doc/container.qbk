@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2009-2011 Ion Gazta\u00F1aga
+ / Copyright (c) 2009-2012 Ion Gazta\u00F1aga
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,7 @@
 [library Boost.Container
     [quickbook 1.5]
     [authors [Gaztanaga, Ion]]
-    [copyright 2009-2011 Ion Gaztanaga]
+    [copyright 2009-2012 Ion Gaztanaga]
     [id container]
     [dirname container]
     [purpose Containers library]
@@ -37,9 +37,9 @@ In short, what does [*Boost.Container] offer?
   (they can be safely placed in shared memory).
 * The library offers new useful containers:
   * [classref boost::container::flat_map flat_map],
-    [classref boost::container::flat_map flat_set],
-    [classref boost::container::flat_map flat_multiset] and
-    [classref boost::container::flat_map flat_multiset]: drop-in
+    [classref boost::container::flat_set flat_set],
+    [classref boost::container::flat_multiset flat_multiset] and
+    [classref boost::container::flat_multiset flat_multiset]: drop-in
     replacements for standard associative containers but more memory friendly and with faster
     searches.
   * [classref boost::container::stable_vector stable_vector]: a std::list and std::vector hybrid
@@ -378,7 +378,7 @@ adequate for your needs, and that you often need to use insert and erase in the 
 should probably use list instead of slist.]]
 
 [*Boost.Container] updates the classic `slist` container with C++11 features like move semantics and placement
-insertion and implements it a bit differently for the standard C++11 `forward_list`. `forward_list` has no `size()`
+insertion and implements it a bit differently than the standard C++ `forward_list`. `forward_list` has no `size()`
 method, so it's been designed to allow (or in practice, encourage) implementations without tracking list size
 with every insertion/erasure, allowing constant-time 
 `splice_after(iterator, forward_list &, iterator, iterator)`-based list merging. On the other hand `slist` offers

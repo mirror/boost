@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2004-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2004-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -228,17 +228,17 @@ class recursive_flat_multiset
 {
    public:
    recursive_flat_multiset(const recursive_flat_multiset &c)
-      : id_(c.id_), flat_set_(c.flat_set_)
+      : id_(c.id_), flat_multiset_(c.flat_multiset_)
    {}
 
    recursive_flat_multiset & operator =(const recursive_flat_multiset &c)
    {
       id_ = c.id_;
-      flat_set_= c.flat_set_;
+      flat_multiset_= c.flat_multiset_;
       return *this;
    }
    int id_;
-   flat_multiset<recursive_flat_multiset> flat_set_;
+   flat_multiset<recursive_flat_multiset> flat_multiset_;
    friend bool operator< (const recursive_flat_multiset &a, const recursive_flat_multiset &b)
    {  return a.id_ < b.id_;   }
 };

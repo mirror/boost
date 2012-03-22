@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2004-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2004-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -95,6 +95,26 @@ enum Test
 
 int main()
 {
+   const std::size_t positions_length = 10;
+   std::size_t positions[positions_length];
+   vector<int> vector_int;
+   vector<int> vector_int2(positions_length);
+   for(std::size_t i = 0; i != positions_length; ++i){
+      positions[i] = 0u;
+   }
+   for(std::size_t i = 0, max = vector_int2.size(); i != max; ++i){
+      vector_int2[i] = i;
+   }
+
+   vector_int.insert(vector_int.begin(), 999);
+
+   vector_int.insert_at_ordered_positions(positions, positions_length, vector_int2.end());
+
+   for(std::size_t i = 0, max = vector_int.size(); i != max; ++i){
+      std::cout << vector_int[i] << std::endl;
+   }
+   return 0;
+/*
    recursive_vector_test();
    {
       //Now test move semantics
@@ -134,7 +154,8 @@ int main()
 
    if(!boost::container::test::test_propagate_allocator<vector>())
       return 1;
-  
+
    return 0;
+  */
 }
 #include <boost/container/detail/config_end.hpp>

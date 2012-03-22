@@ -1,6 +1,6 @@
 ///////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -86,10 +86,10 @@ class expand_bwd_test_allocator
       , m_offset(other.m_offset),  m_allocations(0){ }
 
    pointer address(reference value)
-   {  return pointer(addressof(value));  }
+   {  return pointer(container_detail::addressof(value));  }
 
    const_pointer address(const_reference value) const
-   {  return const_pointer(addressof(value));  }
+   {  return const_pointer(container_detail::addressof(value));  }
 
    pointer allocate(size_type , cvoid_ptr hint = 0)
    {  (void)hint; return 0; }
