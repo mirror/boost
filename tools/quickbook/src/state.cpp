@@ -13,6 +13,7 @@
 #include "quickbook.hpp"
 #include "grammar.hpp"
 #include "input_path.hpp"
+#include <boost/filesystem/operations.hpp>
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -68,6 +69,13 @@ namespace quickbook
 
     quickbook_grammar& state::grammar() const {
         return *grammar_;
+    }
+
+    void state::add_loaded_file(fs::path const& f) {
+        boost::system::error_code ec;
+        fs::path p = fs::canonical(f, ec);
+        if (ec) p = fs::absolute(f);
+        loaded_files.insert(p);
     }
 
     file_state::file_state(quickbook::state& state, scope_flags scope)

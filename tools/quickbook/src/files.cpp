@@ -135,19 +135,6 @@ namespace quickbook
         return pos->second;
     }
 
-    std::vector<fs::path> loaded_files()
-    {
-        std::vector<fs::path> file_list;
-        typedef std::pair<fs::path const, file_ptr> pair;
-
-        BOOST_FOREACH(pair const& p, files)
-        {
-            file_list.push_back(p.first);
-        }
-
-        return file_list;
-    }
-
     file_position relative_position(
         std::string::const_iterator begin,
         std::string::const_iterator iterator)

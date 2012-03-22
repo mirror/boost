@@ -130,6 +130,7 @@ namespace quickbook
             set_macros(state);
 
             if (state.error_count == 0) {
+                state.add_loaded_file(filein_);
                 state.current_file = load(filein_); // Throws load_error
 
                 parse_file(state);
@@ -141,17 +142,18 @@ namespace quickbook
             }
 
             result = state.error_count ? 1 : 0;
+
+            if (!deps_out_.empty())
+            {
+                fs::ofstream deps_out(deps_out_);
+                BOOST_FOREACH(fs::path const& f, state.loaded_files)
+                    deps_out << detail::path_to_generic(f) << std::endl;
+            }
+
         }
         catch (load_error& e) {
             detail::outerr(filein_) << e.what() << std::endl;
             result = 1;
-        }
-
-        if (!deps_out_.empty())
-        {
-            fs::ofstream deps_out(deps_out_);
-            BOOST_FOREACH(fs::path const& f, loaded_files())
-                deps_out << detail::path_to_generic(fs::absolute(f)) << std::endl;
         }
 
         if (!fileout_.empty() && result == 0)

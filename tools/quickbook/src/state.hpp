@@ -10,6 +10,7 @@
 #if !defined(BOOST_SPIRIT_ACTIONS_CLASS_HPP)
 #define BOOST_SPIRIT_ACTIONS_CLASS_HPP
 
+#include <set>
 #include <boost/scoped_ptr.hpp>
 #include "parsers.hpp"
 #include "values_parse.hpp"
@@ -49,6 +50,7 @@ namespace quickbook
         id_manager&             ids;
         value_builder           callouts;           // callouts are global as
         int                     callout_depth;      // they don't nest.
+        std::set<fs::path>      loaded_files;
 
     // state saved for files and templates.
         bool                    imported;
@@ -74,6 +76,10 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
     // actions
     ///////////////////////////////////////////////////////////////////////////
+
+        // Call this before loading any file so that it will be included in the
+        // list of dependencies.
+        void add_loaded_file(fs::path const&);
 
         void start_list(char mark);
         void end_list(char mark);

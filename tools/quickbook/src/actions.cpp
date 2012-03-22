@@ -936,6 +936,7 @@ namespace quickbook
            //
            // Now load the SVG file:
            //
+           state.add_loaded_file(img);
            std::string svg_text;
            fs::ifstream fs(img);
            char c;
@@ -1920,6 +1921,7 @@ namespace quickbook
                 qbk_version_n >= 106u ? file_state::scope_callables :
                 file_state::scope_macros);
 
+            state.add_loaded_file(paths.filename);
             state.current_file = load(paths.filename); // Throws load_error
             state.filename_relative = paths.filename_relative;
             state.imported = (load_type == block_tags::import);
@@ -1951,6 +1953,7 @@ namespace quickbook
 
         std::string ext = paths.filename.extension().generic_string();
         std::vector<template_symbol> storage;
+        state.add_loaded_file(paths.filename);
         // Throws load_error
         state.error_count +=
             load_snippets(paths.filename, storage, ext, load_type);
