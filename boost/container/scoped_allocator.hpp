@@ -71,17 +71,9 @@ class scoped_allocator_adaptor;
 //! by an argument of a type that satisfies the Allocator requirements
 struct allocator_arg_t{};
 
-static const allocator_arg_t allocator_arg = allocator_arg_t();
-
-//! <b>Remark</b>: Automatically detects if T has a nested allocator_type that is convertible from 
-//! Alloc. Meets the BinaryTypeTrait requirements ([meta.rqmts] 20.4.1). A program may 
-//! specialize this type to derive from true_type for a T of user-defined type if T does not
-//! have a nested allocator_type but is nonetheless constructible using the specified Alloc. 
+//! A instance of type allocator_arg_t
 //!
-//! <b>Result</b>: derived from true_type if Convertible<Alloc,T::allocator_type> and 
-//! derived from false_type otherwise. 
-template <class T, class Alloc>
-struct uses_allocator; 
+static const allocator_arg_t allocator_arg = allocator_arg_t();
 
 //! <b>Remark</b>: if a specialization is derived from true_type, indicates that T may be constructed 
 //! with an allocator as its last constructor argument.  Ideally, all constructors of T (including the 
@@ -207,10 +199,21 @@ struct uses_allocator_imp
 
 }  //namespace container_detail {
 
+///@endcond
+
+//! <b>Remark</b>: Automatically detects if T has a nested allocator_type that is convertible from 
+//! Alloc. Meets the BinaryTypeTrait requirements ([meta.rqmts] 20.4.1). A program may 
+//! specialize this type to derive from true_type for a T of user-defined type if T does not
+//! have a nested allocator_type but is nonetheless constructible using the specified Alloc. 
+//!
+//! <b>Result</b>: derived from true_type if Convertible<Alloc,T::allocator_type> and 
+//! derived from false_type otherwise.
 template <typename T, typename Alloc>
 struct uses_allocator
    : boost::integral_constant<bool, container_detail::uses_allocator_imp<T, Alloc>::value>
 {};
+
+///@cond
 
 namespace container_detail {
 
