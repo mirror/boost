@@ -108,13 +108,13 @@ int main()
 
    vector_int.insert(vector_int.begin(), 999);
 
-   vector_int.insert_at_ordered_positions(positions, positions_length, vector_int2.end());
+   //vector_int.insert_at_ordered_positions(positions, positions_length, vector_int2.end());
 
    for(std::size_t i = 0, max = vector_int.size(); i != max; ++i){
       std::cout << vector_int[i] << std::endl;
    }
    return 0;
-/*
+
    recursive_vector_test();
    {
       //Now test move semantics
@@ -156,6 +156,6 @@ int main()
       return 1;
 
    return 0;
-  */
+
 }
 #include <boost/container/detail/config_end.hpp>
