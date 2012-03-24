@@ -10,8 +10,8 @@
 //=======================================================================
 //
 
-#ifndef BOOST_PROPERTY_MAP_FUNCTION_PROPERTY_MAP_H
-#define BOOST_PROPERTY_MAP_FUNCTION_PROPERTY_MAP_H
+#ifndef BOOST_PROPERTY_MAP_FUNCTION_PROPERTY_MAP_HPP
+#define BOOST_PROPERTY_MAP_FUNCTION_PROPERTY_MAP_HPP
 
 #include <boost/config.hpp>
 #include <boost/property_map/property_map.hpp>
@@ -23,7 +23,7 @@
 
 namespace boost {
 
-template<typename Func, typename Key, typename Ret = typename boost::result_of<Func(Key)>::type>
+template<typename Func, typename Key, typename Ret = typename boost::result_of<const Func(const Key&)>::type>
 class function_property_map: public put_get_helper<Ret, function_property_map<Func, Key, Ret> > {
   public:
   typedef Key key_type;
@@ -45,10 +45,6 @@ class function_property_map: public put_get_helper<Ret, function_property_map<Fu
     return f(k);
   }
 
-  reference operator[](const Key& k) {
-    return f(k);
-  }
-
   private:
   Func f;
 };
@@ -67,4 +63,4 @@ make_function_property_map(const Func& f) {
 
 } // boost
 
-#endif /* BOOST_PROPERTY_MAP_FUNCTION_PROPERTY_MAP_H */
+#endif /* BOOST_PROPERTY_MAP_FUNCTION_PROPERTY_MAP_HPP */
