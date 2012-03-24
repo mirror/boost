@@ -45,5 +45,6 @@ test-suite conversion
       <toolset>gcc-4.5:<cflags>-fno-exceptions
       <toolset>gcc-4.6:<cflags>-fno-exceptions
     ]
+    [ run lexical_cast_iterator_range_test.cpp ../../test/build//boost_unit_test_framework/<link>static ]
   ;   
 
