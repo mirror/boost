@@ -132,22 +132,22 @@ Consider the following example:
             return non_zero_terminated_data;
         }
 
-        std::size_t length() const {
+        std::size_t size() const {
             return data_length;
         }
     };
     
     inline std::ostream& operator << (std::ostream& ostr, const example_class& rhs) {
-        return ostr << boost::make_iterator_range(rhs.data(), rhs.data() + rhs.length());
+        return ostr << boost::make_iterator_range(rhs.data(), rhs.data() + rhs.size());
     }
 ``
 
 This is a good generic solution for most use cases. 
 But we can make it even faster for some performance critical applications. During conversion, we loose speed at:
 
-* `std::basic_ostream<CharT>` construction     (it makes some heap allocations)
-* `operator <<`                                (it copyies one by one all the symbols to an instance of `std::basic_ostream<CharT>`)
-* `std::basic_ostream<CharT>` destruction      (it makes some heap deallocations)
+* `std::ostream` construction     (it makes some heap allocations)
+* `operator <<`                   (it copyies one by one all the symbols to an instance of `std::ostream`)
+* `std::ostream` destruction      (it makes some heap deallocations)
 
 We can avoid all of this, by specifieng an overload for `boost::lexical_cast`:
 ``
@@ -155,7 +155,7 @@ namespace boost {
     template <class OutT>
     OutT lexical_cast(const example_class& rhs) {
         return boost::lexical_cast<OutT>(
-            boost::make_iterator_range(rhs.data(), rhs.data() + rhs.length())
+            boost::make_iterator_range(rhs.data(), rhs.data() + rhs.size())
         );
     }
 }
