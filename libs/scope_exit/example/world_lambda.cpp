@@ -7,7 +7,9 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_LAMBDAS
+#ifdef BOOST_NO_LAMBDAS
+#   error "lambda functions required"
+#else
 
 #define BOOST_TEST_MODULE TestWorldLambda
 #include <boost/test/unit_test.hpp>
@@ -44,16 +46,12 @@ void world::add_person(person const& a_person) {
 }
 //]
 
-BOOST_AUTO_TEST_CASE( test_world_lambda ) {
+BOOST_AUTO_TEST_CASE(test_world_lambda) {
     world w;
     person p;
     w.add_person(p);
-    BOOST_CHECK( w.persons_.size() == 1 );
+    BOOST_CHECK(w.persons_.size() == 1);
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // lambdas
 

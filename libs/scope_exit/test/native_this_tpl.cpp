@@ -7,6 +7,7 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include <boost/scope_exit.hpp>
+#include <boost/config.hpp>
 #include <boost/typeof/typeof.hpp>
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/test/unit_test.hpp>
@@ -26,11 +27,11 @@ struct this_tester {
             BOOST_CHECK(this_->value_ == 0);
         } BOOST_SCOPE_EXIT_END
 
-#if !defined(BOOST_NO_LAMBDAS) && !defined(BOOST_SCOPE_EXIT_CONFIG_NO_CPP11)
+#ifndef BOOST_NO_LAMBDAS
         BOOST_SCOPE_EXIT_ALL(&, this) {
             BOOST_CHECK(this->value_ == 0);
         };
-#endif
+#endif // lambdas
 
         value_ = 0;
     }

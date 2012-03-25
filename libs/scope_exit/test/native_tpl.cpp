@@ -35,12 +35,12 @@ void tpl_long(
             ++tv;
         } BOOST_SCOPE_EXIT_END
 
-        BOOST_CHECK( t == remember );
-        BOOST_CHECK( tval == remember );
+        BOOST_CHECK(t == remember);
+        BOOST_CHECK(tval == remember);
     }
 
-    BOOST_CHECK( tval == 1 );
-    BOOST_CHECK( t == remember + 2 );
+    BOOST_CHECK(tval == 1);
+    BOOST_CHECK(t == remember + 2);
 }
 
 template<class Vector, int Value>
@@ -57,12 +57,12 @@ void tpl_vector(
             vval.push_back(Value);
         } BOOST_SCOPE_EXIT_END
 
-        BOOST_CHECK( v.size() == remember.size() );
-        BOOST_CHECK( vval.size() == remember.size() );
+        BOOST_CHECK(v.size() == remember.size());
+        BOOST_CHECK(vval.size() == remember.size());
     }
 
-    BOOST_CHECK( v.size() == 1 + remember.size() );
-    BOOST_CHECK( vval.size() == 1 + remember.size() );
+    BOOST_CHECK(v.size() == 1 + remember.size());
+    BOOST_CHECK(vval.size() == 1 + remember.size());
 }
 
 void test_tpl(void) {

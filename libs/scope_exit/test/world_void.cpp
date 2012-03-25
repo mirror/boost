@@ -41,6 +41,6 @@ void add_person(person const& a_person) {
 BOOST_AUTO_TEST_CASE( test_world_void ) {
     person p;
     add_person(p);
-    BOOST_CHECK( world.persons.size() == 1 );
+    BOOST_CHECK(world.persons.size() == 1);
 }
 

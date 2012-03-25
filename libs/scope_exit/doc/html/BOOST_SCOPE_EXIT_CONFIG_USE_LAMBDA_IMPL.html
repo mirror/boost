@@ -33,7 +33,7 @@
 
 </span>BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL</pre></div>
 <div class="refsect1">
-<a name="id888058"></a><h2>Description</h2>
+<a name="id854544"></a><h2>Description</h2>
 <p>If programmers define this configuration macro on a C++11 compiler, lambda functions will be used to implement the  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code> macro. By default this macro is not defined.</p>
 <p><span class="bold"><strong>Note:</strong></span> When  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code> is implemented using lambda, the semantics of its variable captures follow the semantics of C++11 lambda captures which are in general different from the legacy capture semantics of this library (e.g., C++11 lambdas require to capture data members via capturing the object <code class="computeroutput">this</code> while this library always allowed to capture data members directly). Therefore, when this configuration macro is defined,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code> is no longer backward compatible.</p>
 <p>A semicolon <code class="computeroutput">;</code> can simply be used instead of  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_END.html" title="Macro BOOST_SCOPE_EXIT_END">BOOST_SCOPE_EXIT_END</a></code> when this configuration macro is defined.</p>

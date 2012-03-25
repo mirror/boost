@@ -7,7 +7,9 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macro required"
+#else
 
 #include <boost/scope_exit.hpp>
 #include <boost/typeof/typeof.hpp>
@@ -53,9 +55,5 @@ BOOST_AUTO_TEST_CASE(test_world_tpl) {
     BOOST_CHECK(w.population() == 1);
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // variadic macros
 

@@ -41,11 +41,11 @@
 
 // PRIVATE/PROTECTED //
 
-// NOTE: AUX prefix and aux namespace mark private symbols that shall be used
+// NOTE: AUX prefix and aux namespace mark "private" symbols that shall be used
 // only within this library; DETAIL prefix and detail namespace mark "protected"
 // symbols that can be used by other Boost libraries but not outside Boost.
 
-// BOOST_SCOPE_EXIT_AUX_GCC also used in regression tests.
+// WARNING: BOOST_SCOPE_EXIT_AUX_GCC also used in regression tests.
 #if defined(__GNUC__) && !defined(BOOST_INTEL)
 #   define BOOST_SCOPE_EXIT_AUX_GCC (__GNUC__ * 100 + __GNUC_MINOR__)
 #else

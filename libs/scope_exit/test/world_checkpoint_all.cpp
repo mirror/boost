@@ -7,7 +7,11 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include <boost/config.hpp>
-#if !defined(BOOST_NO_LAMBDAS) && !defined(BOOST_NO_VARIADIC_MACROS)
+#if defined(BOOST_NO_LAMBDAS)
+#   error "lambda functions required"
+#elif defined(BOOST_NO_VARIADIC_MACROS)
+#   error "variadic macros required"
+#else
 
 #include <boost/scope_exit.hpp>
 #include <boost/foreach.hpp>
@@ -105,9 +109,5 @@ BOOST_AUTO_TEST_CASE(test_world_checkpoint_all) {
     BOOST_CHECK(oss.str() == "world(3, { person(1, 2),  person(2, 2), })");
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // lambda functions and variadic macros
 

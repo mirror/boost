@@ -8,15 +8,13 @@
 
 import testing ;
 
-# Run variadic and sequence syntax (also forcing no variadic macros).
-rule run-vaseq ( file_name )
-{
-    run $(file_name).cpp ;
-    run $(file_name)_seq.cpp ;
-    run $(file_name)_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS :
-            $(file_name)_seq_nova : ;
-}
+run try_catch.cpp ;
+run try_catch_seq.cpp ;
+run try_catch_seq_nova.cpp ;
 
-run-vaseq try_catch ;
-run-vaseq scope_guard ;
+run scope_guard.cpp ;
+run scope_guard_seq.cpp ;
+run scope_guard_seq_nova.cpp ;
+
+run world_lambda.cpp ;
 

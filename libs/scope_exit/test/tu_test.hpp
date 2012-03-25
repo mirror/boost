@@ -7,6 +7,7 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include <boost/scope_exit.hpp>
+#include <boost/config.hpp>
 
 int tu1(void);
 int tu2(void);
@@ -21,7 +22,8 @@ inline int inline_f(void) {
     return i;
 }
 
-#if !defined(BOOST_SCOPE_EXIT_AUX_GCC) || BOOST_SCOPE_EXIT_AUX_GCC >= 304
+#if !defined(BOOST_INTEL) && defined(__GNUC__) && \
+        (__GNUC__ * 100 + __GNUC_MINOR__) >= 304
 template<class Int>
 Int template_f(Int i) {
     {

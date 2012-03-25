@@ -48,6 +48,6 @@ BOOST_AUTO_TEST_CASE(test_same_line_seq) {
         SCOPE_EXIT_ALL_INC_DEC(x, delta)
     }
     BOOST_CHECK(x == 0);
-#endif
+#endif // lambdas
 }
 

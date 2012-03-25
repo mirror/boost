@@ -12,8 +12,8 @@
 using namespace boost::unit_test;
 
 void test(void) {
-    BOOST_CHECK( tu1() == 1 );
-    BOOST_CHECK( tu2() == 2 );
+    BOOST_CHECK(tu1() == 1);
+    BOOST_CHECK(tu2() == 2);
 }
 
 test_suite* init_unit_test_suite(int, char* []) {

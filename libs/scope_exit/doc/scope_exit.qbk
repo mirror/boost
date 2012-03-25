@@ -51,10 +51,10 @@
 [import ../test/world_void.cpp]
 [import ../test/world_checkpoint_all.cpp]
 [import ../test/world_tpl.cpp]
-[import ../test/world_lambda.cpp]
 [import ../test/same_line.cpp]
 [import ../example/try_catch.cpp]
 [import ../example/scope_guard.cpp]
+[import ../example/world_lambda.cpp]
 
 This library allows to execute arbitrary code when the enclosing scope exits.
 
@@ -391,7 +391,7 @@ However, this is not a big problem because these two __D__'s constructs can be e
 [h5 C++11 Lambdas]
 
 Using C++11 lambdas, it is relatively easy to implement the __Boost_ScopeExit__ construct.
-For example (see also [@../../test/world_lambda.cpp =world_lambda.cpp=]):
+For example (see also [@../../example/world_lambda.cpp =world_lambda.cpp=]):
 
 [world_lambda]
 

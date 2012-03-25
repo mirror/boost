@@ -7,7 +7,9 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/scope_exit.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -51,13 +53,9 @@ BOOST_AUTO_TEST_CASE(test_same_line) {
         SCOPE_EXIT_ALL_INC_DEC(x, delta) // Multiple scope exits on same line.
     }
     BOOST_CHECK(x == 0);
-#endif
+#endif // lambdas
 }
 //]
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // variadic macros
 
