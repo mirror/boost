@@ -6,5 +6,5 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include "nova.hpp"
-#include "world_seq.cpp"
+#include "world_checkpoint_all_seq.cpp"
 
