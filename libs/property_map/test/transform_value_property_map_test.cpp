@@ -47,9 +47,9 @@ int test_main(int, char**) {
   function_requires<ReadWritePropertyMapConcept<transform_value_property_map<return_fixed_ref<int>, PM>, int> >();
   function_requires<LvaluePropertyMapConcept<transform_value_property_map<return_fixed_ref<int>, PM>, int> >();
 
-  BOOST_STATIC_ASSERT((boost::is_same<typename boost::property_traits<transform_value_property_map<add1<int>, PM> >::category, boost::readable_property_map_tag>::value));
-  BOOST_STATIC_ASSERT((boost::is_same<typename boost::property_traits<transform_value_property_map<add1_val<int>, PM> >::category, boost::readable_property_map_tag>::value));
-  BOOST_STATIC_ASSERT((boost::is_same<typename boost::property_traits<transform_value_property_map<return_fixed_ref<int>, PM> >::category, boost::lvalue_property_map_tag>::value));
+  BOOST_STATIC_ASSERT((boost::is_same<boost::property_traits<transform_value_property_map<add1<int>, PM> >::category, boost::readable_property_map_tag>::value));
+  BOOST_STATIC_ASSERT((boost::is_same<boost::property_traits<transform_value_property_map<add1_val<int>, PM> >::category, boost::readable_property_map_tag>::value));
+  BOOST_STATIC_ASSERT((boost::is_same<boost::property_traits<transform_value_property_map<return_fixed_ref<int>, PM> >::category, boost::lvalue_property_map_tag>::value));
 
   BOOST_CHECK(get(transform_value_property_map<add1<int>, PM>(add1<int>(), orig_pm), 3) == 7);
   BOOST_CHECK(get(transform_value_property_map<add1<int>, PM>(add1<int>(), orig_pm), 4) == 9);
