@@ -39,7 +39,7 @@ namespace boost {
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
     template <typename T>
-    typename add_rvalue_reference<T>::type declval(); //noexcept; // as unevaluated operand
+    typename add_rvalue_reference<T>::type declval() BOOST_NOEXCEPT; // as unevaluated operand
 #else
     template <typename T>
     typename add_lvalue_reference<T>::type declval() BOOST_NOEXCEPT; // as unevaluated operand
