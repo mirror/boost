@@ -1,7 +1,6 @@
 [/
  / Copyright (c) 2008 Howard Hinnant
- / Copyright (c) 2008 Beman Dawes
- / Copyright (c) 2009-20010 Vicente J. Botet Escriba
+ / Copyright (c) 2009-20012 Vicente J. Botet Escriba
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,11 +9,9 @@
 [article Declval
     [quickbook 1.5]
     [authors [Hinnant, Howard]]
-    [authors [Dawes, Beman]]
     [authors [Botet Escriba, Vicente J.]]
     [copyright 2008 Howard Hinnant]
-    [copyright 2008 Beman Dawes]
-    [copyright 2009-2010 Vicente J. Botet Escriba]
+    [copyright 2009-2012 Vicente J. Botet Escriba]
     [license
         Distributed under the Boost Software License, Version 1.0.
         (See accompanying file LICENSE_1_0.txt or copy at
@@ -77,7 +74,7 @@ This extremely light-weight function is expected to be part of the daily tool-bo
     namespace boost {
 
         template <typename T>
-        typename add_rvalue_reference<T>::type declval(); //noexcept; // as unevaluated operand
+        typename add_rvalue_reference<T>::type declval() noexcept; // as unevaluated operand
 
     }  // namespace boost
 
@@ -99,6 +96,20 @@ The library provides the function template declval to simplify the definition of
 Declares a function template convert which only participates in overloading if the type From can be explicitly converted to type To. 
 
 [endsect]
+
+[/===============]
+[section History]
+[/===============]
+
+[heading boost 1.50]
+
+New Features:
+
+* [@http://svn.boost.org/trac/boost/ticket/6570 #6570] Adding noexcept to boost::declval.
+ 	
+
+[endsect]
+
 
 
 
