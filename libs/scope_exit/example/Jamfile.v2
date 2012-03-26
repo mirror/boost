@@ -8,6 +8,13 @@
 
 import testing ;
 
+project
+    :   requirements
+        <library>/boost/test//boost_test_exec_monitor
+        <library>/boost//unit_test_framework
+        <link>static
+    ;
+
 run try_catch.cpp ;
 run try_catch_seq.cpp ;
 run try_catch_seq_nova.cpp ;
