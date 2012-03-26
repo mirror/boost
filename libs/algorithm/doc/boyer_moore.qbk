@@ -24,6 +24,8 @@ However, the Boyer-Moore algorithm cannot be used with comparison predicates lik
 
 Nomenclature: I refer to the sequence being searched for as the "pattern", and the sequence being searched in as the "corpus".
 
+[heading Interface]
+
 For flexibility, the Boyer-Moore algorithm has has two interfaces; an object-based interface and a procedural one. The object-based interface builds the tables in the constructor, and uses operator () to perform the search. The procedural interface builds the table and does the search all in one step. If you are going to be searching for the same pattern in multiple corpora, then you should use the object interface, and only build the tables once.
 
 Here is the object interface:
@@ -78,7 +80,7 @@ Both the object-oriented and procedural versions of the Boyer-Moore algorithm ta
 
 The Boyer-Moore object takes a traits template parameter which enables the caller to customize how one of the precomputed tables is stored. This table, called the skip table, contains (logically) one entry for every possible value that the pattern can contain. When searching 8-bit character data, this table contains 256 elements. The traits class defines the table to be used. 
 
-The default traits class uses a `boost::array` for small 'alphabets' and a `tr1::unordered_map` for larger ones.  The array-based skip table gives excellent performance, but could be prohibitively large when the "alphabet" of elements to be searched grows. The unordered_map based version only grows as the number of unique elements in the pattern, but makes many more heap allocations, and gives slower lookup performance. 
+The default traits class uses a `boost::array` for small 'alphabets' and a `tr1::unordered_map` for larger ones.  The array-based skip table gives excellent performance, but could be prohibitively large when the 'alphabet' of elements to be searched grows. The unordered_map based version only grows as the number of unique elements in the pattern, but makes many more heap allocations, and gives slower lookup performance. 
 
 To use a different skip table, you should define your own skip table object and your own traits class, and use them to instantiate the Boyer-Moore object. The interface to these objects is described TBD.
 
