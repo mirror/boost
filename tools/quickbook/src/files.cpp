@@ -8,7 +8,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 #include "files.hpp"
-#include <boost/filesystem/v3/fstream.hpp>
+#include <boost/filesystem/fstream.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/range/algorithm/upper_bound.hpp>
 #include <boost/range/algorithm/transform.hpp>

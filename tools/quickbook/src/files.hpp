@@ -12,7 +12,7 @@
 #define BOOST_QUICKBOOK_FILES_HPP
 
 #include <string>
-#include <boost/filesystem/v3/path.hpp>
+#include <boost/filesystem/path.hpp>
 #include <boost/intrusive_ptr.hpp>
 #include <stdexcept>
 #include <cassert>

@@ -16,9 +16,9 @@
 #include "input_path.hpp"
 #include "id_manager.hpp"
 #include <boost/program_options.hpp>
-#include <boost/filesystem/v3/path.hpp>
-#include <boost/filesystem/v3/operations.hpp>
-#include <boost/filesystem/v3/fstream.hpp>
+#include <boost/filesystem/path.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <boost/filesystem/fstream.hpp>
 #include <boost/range/algorithm.hpp>
 #include <boost/ref.hpp>
 #include <boost/version.hpp>

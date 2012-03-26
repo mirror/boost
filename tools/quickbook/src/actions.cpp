@@ -12,8 +12,8 @@
 #include <functional>
 #include <vector>
 #include <map>
-#include <boost/filesystem/v3/convenience.hpp>
-#include <boost/filesystem/v3/fstream.hpp>
+#include <boost/filesystem/convenience.hpp>
+#include <boost/filesystem/fstream.hpp>
 #include <boost/range/distance.hpp>
 #include <boost/range/algorithm/replace.hpp>
 #include <boost/lexical_cast.hpp>
@@ -313,6 +313,14 @@ namespace quickbook
 
     void list_item_action::operator()() const
     {
+        // Be careful as this is sometimes called in the wrong place
+        // for markup such as:
+        //
+        // * A
+        // [endsect]
+        //
+        // This action is called before [endsect] (to end the list item)
+        // and then also after it due to the way the parser works.
         std::string str;
         actions.phrase.swap(str);
         actions.out << str;

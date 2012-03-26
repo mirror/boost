@@ -12,7 +12,7 @@
 #include <boost/bind.hpp>
 #include <boost/algorithm/string/join.hpp>
 #include <boost/foreach.hpp>
-#include <boost/filesystem/v3/operations.hpp>
+#include <boost/filesystem/operations.hpp>
 #include "quickbook.hpp"
 #include "utils.hpp"
 #include "files.hpp"
