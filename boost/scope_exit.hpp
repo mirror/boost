@@ -14,12 +14,13 @@
 #include <boost/local_function/detail/preprocessor/line_counter.hpp>
 #include <boost/local_function/detail/preprocessor/void_list.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/thisunderscore.hpp>
-#include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/function.hpp>
 #include <boost/typeof/typeof.hpp>
+#include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/control/expr_iif.hpp>
@@ -53,18 +54,17 @@
 #endif
 
 #if BOOST_WORKAROUND(BOOST_SCOPE_EXIT_AUX_GCC, BOOST_TESTED_AT(413))
-#   define BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01 1
+#   define BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01 1
 #else
-#   define BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01 0
+#   define BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01 0
 #endif
 
 // MSVC 7.1=1300, 8.0=1400, 9.0=1500, 10.0=1600 (this workaround was tested at
 // MSVC 8.0 but it might work also for all MVSC >= 7.1).
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400)) && \
-        !defined(BOOST_TYPEOF_EMULATION) /* doesn't work in typeof-emu mode */
-#   define BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_WORKAROUND_01 1
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
+#   define BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01 1
 #else
-#   define BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_WORKAROUND_01 0
+#   define BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01 0
 #endif
 
 // Steven Watanabe's trick with a modification suggested by Kim Barrett
@@ -111,7 +111,7 @@ template<class T>
 struct member<T,ref_tag>
 {
     T& value;
-#if !BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
+#if !BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01
     member(T& ref) : value(ref) {}
 #endif
 };
@@ -120,7 +120,7 @@ template<class T>
 struct member<T,val_tag>
 {
     T value;
-#if !BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
+#if !BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01
     member(T& val) : value(val) {}
 #endif
 };
@@ -212,7 +212,8 @@ extern boost::scope_exit::detail::undeclared BOOST_SCOPE_EXIT_AUX_ARGS;
 // constant by assigning an enum and use that as type-index-- this only works
 // with the sizeof() approach and not with the typeid() approach. This does not
 // work in typeof emulation mode.
-#if BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_WORKAROUND_01
+#if BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01 && \
+        !defined(BOOST_TYPEOF_EMULATION)
 
 namespace boost { namespace scope_exit { namespace aux {
         namespace msvc_typeof_this {
@@ -280,6 +281,17 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
         new_type \
     ;
 
+#elif BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01 && \
+        defined(BOOST_TYPEOF_EMULATION)
+
+#define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, ty, new_type) \
+    /* unfortunately, MSVC typeof(this) workaround does not work in type-of */ \
+    /* emulation mode so trying to give meaningful compiler errors */ \
+    BOOST_MPL_ASSERT_MSG(false, \
+            ERROR_msvc_compilers_require_native_typeof_to_capture_object_this, \
+            ()); \
+    typedef int new_type; /* some `int` type to limit cryptic errors */
+
 #else // TYPEOF_THIS_WORKAROUND
 
 #define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, ty, new_type) \
@@ -294,7 +306,7 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
 
 #endif // TYPEOF_THIS_WORKAROUND
 
-#if BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
+#if BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01
 
 #define BOOST_SCOPE_EXIT_AUX_PARAMS_T_CTOR(id, ty, captures, has_this) \
     /* expand to nothing */
@@ -638,14 +650,9 @@ private:
 #   define BOOST_SCOPE_EXIT(void_or_seq) \
         BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 0, \
                 void_or_seq)
-#   if BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
-#       define BOOST_SCOPE_EXIT_TPL(void_or_seq) \
-            BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1,\
-                    void_or_seq)
-#   else // No TPL workaround.
-#       define BOOST_SCOPE_EXIT_TPL(void_or_seq) \
-            BOOST_SCOPE_EXIT(void_or_seq)
-#   endif
+#   define BOOST_SCOPE_EXIT_TPL(void_or_seq) \
+        BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1, \
+                void_or_seq)
 #   if !defined(BOOST_NO_LAMBDAS)
 #       define BOOST_SCOPE_EXIT_ALL_ID(id, seq) \
             BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, \
@@ -664,14 +671,9 @@ private:
 #   define BOOST_SCOPE_EXIT(...) \
         BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 0, \
                 __VA_ARGS__)
-#   if BOOST_SCOPE_EXIT_AUX_TPL_WORKAROUND_01
-#       define BOOST_SCOPE_EXIT_TPL(...) \
-            BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1,\
-                    __VA_ARGS__)
-#   else // No TPL workaround.
-#       define BOOST_SCOPE_EXIT_TPL(...) \
-            BOOST_SCOPE_EXIT(__VA_ARGS__)
-#   endif
+#   define BOOST_SCOPE_EXIT_TPL(...) \
+        BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1, \
+                __VA_ARGS__)
 #   if !defined(BOOST_NO_LAMBDAS)
 #       define BOOST_SCOPE_EXIT_ALL_ID(id, ...) \
             BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, \
