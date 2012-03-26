@@ -17,9 +17,8 @@
 #include <fstream>
 #include <cstdlib> // for rand()
 #include <cmath> // for fabs()
-#include <limits> 
-
 #include <boost/config.hpp>
+#include <boost/limits.hpp> 
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
     using ::rand; 
