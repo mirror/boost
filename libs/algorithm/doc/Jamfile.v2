@@ -16,8 +16,6 @@ using quickbook ;
 using doxygen ;
 using boostbook ;
 
-local BOOST_ROOT = [ os.environ BOOST_ROOT ] ;
-
 doxygen autodoc 
     : 
         [ glob ../../../boost/algorithm/*.hpp ../../../boost/algorithm/searching/*.hpp ]
@@ -29,14 +27,12 @@ doxygen autodoc
 
 xml algorithm : algorithm.qbk ;
 
-# path-constant boost-images : $(BOOST_ROOT)/doc/src/images ;
-
 boostbook standalone
   :
     algorithm
   :
     <dependency>autodoc 
-    <xsl:param>boost.root=$(BOOST_ROOT)
+    <xsl:param>boost.root=../../../..
     <xsl:param>"boost.doxygen.reftitle=Boost.Algorithms C++ Reference"
     <xsl:param>chapter.autolabel=0
     <xsl:param>chunk.section.depth=8
