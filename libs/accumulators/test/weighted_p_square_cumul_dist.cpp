@@ -3,7 +3,7 @@
 //  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
-// Test case for weighted_p_square_cumulative_distribution.hpp
+// Test case for weighted_p_square_cumul_dist.hpp
 
 #include <cmath>
 #include <boost/random.hpp>
@@ -14,7 +14,7 @@
 #include <boost/accumulators/numeric/functional/valarray.hpp>
 #include <boost/accumulators/accumulators.hpp>
 #include <boost/accumulators/statistics/stats.hpp>
-#include <boost/accumulators/statistics/weighted_p_square_cumulative_distribution.hpp>
+#include <boost/accumulators/statistics/weighted_p_square_cumul_dist.hpp>
 
 using namespace boost;
 using namespace unit_test;
