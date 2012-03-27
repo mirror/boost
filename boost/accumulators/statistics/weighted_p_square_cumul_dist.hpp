@@ -20,7 +20,7 @@
 #include <boost/accumulators/statistics_fwd.hpp>
 #include <boost/accumulators/statistics/count.hpp>
 #include <boost/accumulators/statistics/sum.hpp>
-#include <boost/accumulators/statistics/p_square_cumulative_distribution.hpp> // for named parameter p_square_cumulative_distribution_num_cells
+#include <boost/accumulators/statistics/p_square_cumul_dist.hpp> // for named parameter p_square_cumulative_distribution_num_cells
 
 namespace boost { namespace accumulators
 {
