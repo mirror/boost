@@ -50,7 +50,7 @@ namespace quickbook
         id_manager&             ids;
         value_builder           callouts;           // callouts are global as
         int                     callout_depth;      // they don't nest.
-        std::set<fs::path>      loaded_files;
+        std::set<fs::path>      dependencies;
 
     // state saved for files and templates.
         bool                    imported;
@@ -79,7 +79,7 @@ namespace quickbook
 
         // Call this before loading any file so that it will be included in the
         // list of dependencies.
-        void add_loaded_file(fs::path const&);
+        void add_dependency(fs::path const&);
 
         void start_list(char mark);
         void end_list(char mark);

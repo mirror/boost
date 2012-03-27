@@ -71,11 +71,23 @@ namespace quickbook
         return *grammar_;
     }
 
-    void state::add_loaded_file(fs::path const& f) {
-        boost::system::error_code ec;
-        fs::path p = fs::canonical(f, ec);
-        if (ec) p = fs::absolute(f);
-        loaded_files.insert(p);
+    void state::add_dependency(fs::path const& f) {
+        fs::path p = fs::absolute(f);
+        fs::path extra;
+        while (!fs::exists(fs::status(p))) {
+            fs::path name = p.filename();
+            p = p.parent_path();
+            if (name == "..") {
+                p = p.parent_path();
+            }
+            else if (name == ".") {
+            }
+            else {
+                extra = name / extra;
+            }
+        }
+        p = fs::canonical(p) / extra;
+        dependencies.insert(p);
     }
 
     file_state::file_state(quickbook::state& state, scope_flags scope)

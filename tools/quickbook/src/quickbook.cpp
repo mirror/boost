@@ -130,7 +130,7 @@ namespace quickbook
             set_macros(state);
 
             if (state.error_count == 0) {
-                state.add_loaded_file(filein_);
+                state.add_dependency(filein_);
                 state.current_file = load(filein_); // Throws load_error
 
                 parse_file(state);
@@ -146,7 +146,7 @@ namespace quickbook
             if (!deps_out_.empty())
             {
                 fs::ofstream deps_out(deps_out_);
-                BOOST_FOREACH(fs::path const& f, state.loaded_files)
+                BOOST_FOREACH(fs::path const& f, state.dependencies)
                     deps_out << detail::path_to_generic(f) << std::endl;
             }
 

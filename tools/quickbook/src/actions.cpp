@@ -936,7 +936,7 @@ namespace quickbook
            //
            // Now load the SVG file:
            //
-           state.add_loaded_file(img);
+           state.add_dependency(img);
            std::string svg_text;
            fs::ifstream fs(img);
            char c;
@@ -1860,29 +1860,33 @@ namespace quickbook
         };
 
         std::set<include_search_return> include_search(path_details const& details,
-                quickbook::state const& state)
+                quickbook::state& state, string_iterator pos)
         {
             std::set<include_search_return> result;
-            fs::path current = state.current_file->path.parent_path();
 
-            fs::path path(details.value);
+            fs::path path = detail::generic_to_path(details.value);
 
             // If the path is relative, try and resolve it.
             if (!path.has_root_directory() && !path.has_root_name())
             {
+                fs::path local_path =
+                    state.current_file->path.parent_path() / path;
+                state.add_dependency(local_path);
+
                 // See if it can be found locally first.
-                if (fs::exists(current / path))
+                if (fs::exists(local_path))
                 {
                     result.insert(include_search_return(
-                        current / path,
+                        local_path,
                         state.filename_relative.parent_path() / path));
                     return result;
                 }
 
-                // Search in each of the include path locations.
                 BOOST_FOREACH(fs::path full, include_path)
                 {
                     full /= path;
+                    state.add_dependency(full);
+
                     if (fs::exists(full))
                     {
                         result.insert(include_search_return(full, path));
@@ -1890,9 +1894,22 @@ namespace quickbook
                     }
                 }
             }
+            else
+            {
+                state.add_dependency(path);
 
-            result.insert(include_search_return(path,
-                state.filename_relative.parent_path() / path));
+                if (fs::exists(path)) {
+                    result.insert(include_search_return(path, path));
+                    return result;
+                }
+            }
+
+            detail::outerr(state.current_file, pos)
+                << "Unable to find file: "
+                << details.value
+                << std::endl;
+            ++state.error_count;
+
             return result;
         }
     }
@@ -1921,7 +1938,6 @@ namespace quickbook
                 qbk_version_n >= 106u ? file_state::scope_callables :
                 file_state::scope_macros);
 
-            state.add_loaded_file(paths.filename);
             state.current_file = load(paths.filename); // Throws load_error
             state.filename_relative = paths.filename_relative;
             state.imported = (load_type == block_tags::import);
@@ -1953,7 +1969,6 @@ namespace quickbook
 
         std::string ext = paths.filename.extension().generic_string();
         std::vector<template_symbol> storage;
-        state.add_loaded_file(paths.filename);
         // Throws load_error
         state.error_count +=
             load_snippets(paths.filename, storage, ext, load_type);
@@ -2004,7 +2019,7 @@ namespace quickbook
         path_details details = check_path(values.consume(), state);
         values.finish();
 
-        std::set<include_search_return> search = include_search(details, state);
+        std::set<include_search_return> search = include_search(details, state, first);
         std::set<include_search_return>::iterator i = search.begin();
         std::set<include_search_return>::iterator e = search.end();
         for (; i != e; ++i)
