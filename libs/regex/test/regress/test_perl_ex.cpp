@@ -134,6 +134,11 @@ void test_conditionals()
    TEST_INVALID_REGEX("(?<=*|\\B)", perl);
    TEST_INVALID_REGEX("(?<!a|bc)de", perl);
    TEST_INVALID_REGEX("(?<=a|bc)de", perl);
+
+   // Bug reports:
+   TEST_REGEX_SEARCH("\\b(?:(?:(one)|(two)|(three))(?:,|\\b)){3,}(?(1)|(?!))(?(2)|(?!))(?(3)|(?!))", perl, "one,two,two, one", match_default, make_array(-2, -2));
+   TEST_REGEX_SEARCH("\\b(?:(?:(one)|(two)|(three))(?:,|\\b)){3,}(?(1)|(?!))(?(2)|(?!))(?(3)|(?!))", perl, "one,three,two", match_default, make_array(0, 13, 0, 3, 10, 13, 4, 9, -2, -2));
+   TEST_REGEX_SEARCH("\\b(?:(?:(one)|(two)|(three))(?:,|\\b)){3,}(?(1)|(?!))(?(2)|(?!))(?(3)|(?!))", perl, "one,two,two,one,three,four", match_default, make_array(0, 22, 12, 15, 8, 11, 16, 21, -2, -2));
 }
 
 void test_options()

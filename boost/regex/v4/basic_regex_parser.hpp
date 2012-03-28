@@ -2492,9 +2492,11 @@ option_group_jump:
       this->m_pdata->m_data.align();
       re_jump* jmp = static_cast<re_jump*>(this->getaddress(jump_offset));
       jmp->alt.i = this->m_pdata->m_data.size() - this->getoffset(jmp);
-      if(this->m_last_state == jmp)
+      if((this->m_last_state == jmp) && (markid != -2))
       {
-         // Oops... we didn't have anything inside the assertion:
+         // Oops... we didn't have anything inside the assertion.
+         // Note we don't get here for negated forward lookahead as (?!)
+         // does have some uses.
          // Rewind to start of (? sequence:
          --m_position;
          while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_mark) --m_position;
