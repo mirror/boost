@@ -392,6 +392,12 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
     </computeroutput>
   </xsl:template>
 
+  <xsl:template match="code[@lang='jam']">
+    <computeroutput>
+      <xsl:apply-templates mode="highlight-jam"/>
+    </computeroutput>
+  </xsl:template>
+
   <xsl:template match="bold">
     <emphasis role="bold">
       <xsl:apply-templates mode="annotation"/>
