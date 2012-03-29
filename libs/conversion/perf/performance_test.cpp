@@ -15,6 +15,7 @@
 #include <boost/lexical_cast.hpp>
 #include <boost/chrono.hpp>
 #include <fstream>
+#include <cstring>
 #include <boost/container/string.hpp>
 
 // File to output data
@@ -73,6 +74,12 @@ struct structure_sscanf {
     static inline void test(BufferT* /*buffer*/, const std::string& in_val, const char* const conv) {
         OutT out_val;
         sscanf(in_val.c_str(), conv, &out_val);
+    }
+
+    template <class OutT, class BufferT>
+    static inline void test(BufferT* /*buffer*/, const boost::iterator_range<const char*>& in_val, const char* const conv) {
+        OutT out_val;
+        sscanf(in_val.begin(), conv, &out_val);
     }
 };
 
@@ -255,6 +262,12 @@ struct to_schar_conv {
     }
 };
 
+struct to_iterator_range {
+    boost::iterator_range<const char*>  operator()(const char* const c) const {
+        return boost::make_iterator_range(c, c + std::strlen(c));
+    }
+};
+
 int main(int argc, char** argv) {
     BOOST_ASSERT(argc >= 2);
     std::string output_path(argv[1]);
@@ -296,10 +309,12 @@ int main(int argc, char** argv) {
     string_like_test_set<to_char_conv>("char*");
     string_like_test_set<to_uchar_conv>("unsigned char*");
     string_like_test_set<to_schar_conv>("signed char*");
+    string_like_test_set<to_iterator_range>("iterator_range<char*>");
 
     perf_test<int, structure_fake>("int->int", 100, "");
     perf_test<double, structure_fake>("float->double", 100.0f, "");
     perf_test<signed char, structure_fake>("char->signed char", 'c', "");
+
 
     fout << "]\n"
         << "[endsect]\n\n";

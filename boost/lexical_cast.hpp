@@ -72,6 +72,7 @@ _CRTIMP int __cdecl vswprintf(wchar_t * __restrict__ , const wchar_t * __restric
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/range/iterator_range_core.hpp>
 #if !defined(__SUNPRO_CC)
 #include <boost/container/container_fwd.hpp>
 #endif // !defined(__SUNPRO_CC)
@@ -166,6 +167,18 @@ namespace boost
     };
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+    template<typename CharT>
+    struct stream_char<iterator_range<CharT*> >
+    {
+        typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
+    };
+    
+    template<typename CharT>
+    struct stream_char<iterator_range<const CharT*> >
+    {
+        typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
+    };
+
     template<class CharT, class Traits, class Alloc>
     struct stream_char< std::basic_string<CharT,Traits,Alloc> >
     {
@@ -1225,7 +1238,7 @@ namespace boost
             bool shl_char(T ch)
             {
                 BOOST_STATIC_ASSERT_MSG(( sizeof(T) <= sizeof(CharT)) ,
-                    "boost::lexical_cast does not support conversions from whar_t to char types."
+                    "boost::lexical_cast does not support conversions from wchar_t to char types."
                     "Use boost::locale instead" );
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
                 std::locale loc;
@@ -1395,6 +1408,52 @@ namespace boost
                 Traits::assign(*start, Traits::to_char_type(czero + value));
                 finish = start + 1;
                 return true;
+            }
+
+            bool operator<<(const iterator_range<CharT*>& rng)
+            {
+                start = rng.begin();
+                finish = rng.end();
+                return true; 
+            }
+            
+            bool operator<<(const iterator_range<const CharT*>& rng)
+            {
+                start = const_cast<CharT*>(rng.begin());
+                finish = const_cast<CharT*>(rng.end());
+                return true; 
+            }
+
+            bool operator<<(const iterator_range<const signed char*>& rng)
+            {
+                return (*this) << iterator_range<char*>(
+                    const_cast<char*>(reinterpret_cast<const char*>(rng.begin())),
+                    const_cast<char*>(reinterpret_cast<const char*>(rng.end()))
+                );
+            }
+
+            bool operator<<(const iterator_range<const unsigned char*>& rng)
+            {
+                return (*this) << iterator_range<char*>(
+                    const_cast<char*>(reinterpret_cast<const char*>(rng.begin())),
+                    const_cast<char*>(reinterpret_cast<const char*>(rng.end()))
+                );
+            }
+
+            bool operator<<(const iterator_range<signed char*>& rng)
+            {
+                return (*this) << iterator_range<char*>(
+                    reinterpret_cast<char*>(rng.begin()),
+                    reinterpret_cast<char*>(rng.end())
+                );
+            }
+
+            bool operator<<(const iterator_range<unsigned char*>& rng)
+            {
+                return (*this) << iterator_range<char*>(
+                    reinterpret_cast<char*>(rng.begin()),
+                    reinterpret_cast<char*>(rng.end())
+                );
             }
 
             bool operator<<(char ch)                    { return shl_char(ch); }
@@ -1572,7 +1631,7 @@ namespace boost
             inline bool shr_xchar(T& output)
             {
                 BOOST_STATIC_ASSERT_MSG(( sizeof(CharT) == sizeof(T) ),
-                    "boost::lexical_cast does not support conversions from whar_t to char types."
+                    "boost::lexical_cast does not support conversions from wchar_t to char types."
                     "Use boost::locale instead" );
                 bool const ok = (finish - start == 1);
                 if(ok) {
@@ -1801,6 +1860,24 @@ namespace boost
             );
         };
 
+        template <typename T>
+        struct is_char_iterator_range
+        {
+            BOOST_STATIC_CONSTANT(bool, value = false );
+        };
+
+        template <typename CharT>
+        struct is_char_iterator_range<iterator_range<CharT*> >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = (is_char_or_wchar<CharT>::value) );
+        };
+
+        template <typename CharT>
+        struct is_char_iterator_range<iterator_range<const CharT*> >
+        {
+            BOOST_STATIC_CONSTANT(bool, value = (is_char_or_wchar<CharT>::value) );
+        };
+
         template<typename Target, typename Source>
         struct is_arithmetic_and_not_xchars
         {
@@ -1889,10 +1966,10 @@ namespace boost
             static inline Target lexical_cast_impl(const Source& arg)
             {
                 typedef BOOST_DEDUCED_TYPENAME detail::array_to_pointer_decay<Source>::type src;
-
+                typedef BOOST_DEDUCED_TYPENAME detail::stream_char<Target>::type target_char_t;
+                typedef BOOST_DEDUCED_TYPENAME detail::stream_char<src>::type src_char_type;
                 typedef BOOST_DEDUCED_TYPENAME detail::widest_char<
-                    BOOST_DEDUCED_TYPENAME detail::stream_char<Target>::type
-                    , BOOST_DEDUCED_TYPENAME detail::stream_char<src>::type
+                    target_char_t, src_char_type
                 >::type char_type;
 
                 typedef detail::lcast_src_length<src> lcast_src_length;
@@ -1903,7 +1980,8 @@ namespace boost
                 typedef BOOST_DEDUCED_TYPENAME
                     deduce_char_traits<char_type,Target,Source>::type traits;
 
-                typedef BOOST_DEDUCED_TYPENAME remove_pointer<src >::type removed_ptr_t;
+                typedef BOOST_DEDUCED_TYPENAME remove_pointer<src>::type removed_ptr_t_1;
+                typedef BOOST_DEDUCED_TYPENAME remove_cv<removed_ptr_t_1>::type removed_ptr_t;
 
                 // is_char_types_match variable value can be computed via
                 // sizeof(char_type) == sizeof(removed_ptr_t). But when
@@ -1914,12 +1992,12 @@ namespace boost
                     ::boost::type_traits::ice_and<
                         ::boost::type_traits::ice_eq<sizeof(char_type), sizeof(char) >::value,
                         ::boost::type_traits::ice_or<
-                            ::boost::is_same<char, removed_ptr_t>::value,
-                            ::boost::is_same<unsigned char, removed_ptr_t>::value,
-                            ::boost::is_same<signed char, removed_ptr_t>::value
+                            ::boost::is_same<char, src_char_type>::value,
+                            ::boost::is_same<unsigned char, src_char_type>::value,
+                            ::boost::is_same<signed char, src_char_type>::value
                         >::value
                     >::value,
-                    is_same<char_type, removed_ptr_t>::value
+                    is_same<char_type, src_char_type>::value
                 >::value);
 
                 const bool requires_stringbuf =
@@ -1928,14 +2006,18 @@ namespace boost
                                  is_stdstring<src >::value,
                                  is_arithmetic<src >::value,
                                  ::boost::type_traits::ice_and<
-                                     is_pointer<src >::value,
-                                     is_char_or_wchar<removed_ptr_t >::value,
+                                    is_char_iterator_range<src >::value,
+                                    is_char_types_match
+                                 >::value,
+                                 ::boost::type_traits::ice_and<
+                                     is_pointer<src>::value,
+                                     is_char_or_wchar<removed_ptr_t>::value,
                                      is_char_types_match
                                  >::value
                              >::value
                         );
 
-                detail::lexical_stream_limited_src<char_type,traits, requires_stringbuf >
+                detail::lexical_stream_limited_src<char_type, traits, requires_stringbuf >
                         interpreter(buf, buf + src_len);
 
                 Target result;
