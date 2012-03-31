@@ -388,7 +388,7 @@
     </computeroutput>
   </xsl:template>
 
-  <xsl:template match="code[@lang='jam']" mode="annotation">
+  <xsl:template match="code[@language='jam']" mode="annotation">
     <computeroutput>
       <xsl:apply-templates mode="annotation"/>
     </computeroutput>
