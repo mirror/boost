@@ -6,6 +6,8 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/scope_exit
 
+// No #include guard for this header.
+
 #include <boost/scope_exit.hpp>
 #include <boost/config.hpp>
 

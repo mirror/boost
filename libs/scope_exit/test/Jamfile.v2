@@ -8,13 +8,6 @@
 
 import testing ;
 
-project
-    :   requirements
-        <library>/boost/test//boost_test_exec_monitor
-        <library>/boost//unit_test_framework
-        <link>static
-    ;
-
 test-suite doc_tests
     :   [ run same_line.cpp ]
         [ run same_line_seq.cpp ]

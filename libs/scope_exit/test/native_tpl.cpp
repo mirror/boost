@@ -10,12 +10,8 @@
 #include <boost/rational.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/typeof/std/vector.hpp>
-#include <boost/test/unit_test.hpp>
-#include <iostream>
-#include <ostream>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
-
-using namespace boost::unit_test;
 
 template<class type>
 void tpl_long(
@@ -35,12 +31,12 @@ void tpl_long(
             ++tv;
         } BOOST_SCOPE_EXIT_END
 
-        BOOST_CHECK(t == remember);
-        BOOST_CHECK(tval == remember);
+        BOOST_TEST(t == remember);
+        BOOST_TEST(tval == remember);
     }
 
-    BOOST_CHECK(tval == 1);
-    BOOST_CHECK(t == remember + 2);
+    BOOST_TEST(tval == 1);
+    BOOST_TEST(t == remember + 2);
 }
 
 template<class Vector, int Value>
@@ -57,25 +53,21 @@ void tpl_vector(
             vval.push_back(Value);
         } BOOST_SCOPE_EXIT_END
 
-        BOOST_CHECK(v.size() == remember.size());
-        BOOST_CHECK(vval.size() == remember.size());
+        BOOST_TEST(v.size() == remember.size());
+        BOOST_TEST(vval.size() == remember.size());
     }
 
-    BOOST_CHECK(v.size() == 1 + remember.size());
-    BOOST_CHECK(vval.size() == 1 + remember.size());
+    BOOST_TEST(v.size() == 1 + remember.size());
+    BOOST_TEST(vval.size() == 1 + remember.size());
 }
 
-void test_tpl(void) {
+int main(void) {
     long l = 137;
     tpl_long(l, l, l, l, l);
 
     std::vector<int> v(10, 137);
     tpl_vector<std::vector<int>, 13>(v, v, v);
-}
 
-test_suite* init_unit_test_suite(int, char* []) {
-    framework::master_test_suite().p_name.value = "Unit test for ScopeExit TPL";
-    framework::master_test_suite().add(BOOST_TEST_CASE(&test_tpl));
-    return 0;
+    return boost::report_errors();
 }
 

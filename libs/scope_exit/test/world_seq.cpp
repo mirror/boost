@@ -10,8 +10,7 @@
 #include <boost/typeof/typeof.hpp>
 #include <boost/typeof/std/vector.hpp>
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-#define BOOST_TEST_MODULE TestWorldSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
 
 struct person {};
@@ -42,10 +41,11 @@ void world::add_person(person const& a_person) {
 }
 //]
 
-BOOST_AUTO_TEST_CASE(test_world_seq) {
+int main(void) {
     world w;
     person p;
     w.add_person(p);
-    BOOST_CHECK(w.population() == 1);
+    BOOST_TEST(w.population() == 1);
+    return boost::report_errors();
 }
 

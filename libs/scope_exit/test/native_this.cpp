@@ -10,9 +10,7 @@
 #include <boost/config.hpp>
 #include <boost/typeof/typeof.hpp>
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-#include <boost/test/unit_test.hpp>
-
-using namespace boost::unit_test;
+#include <boost/detail/lightweight_test.hpp>
 
 struct this_tester;
 BOOST_TYPEOF_REGISTER_TYPE(this_tester) // Register before `this_` capture.
@@ -22,12 +20,12 @@ struct this_tester {
         value_ = -1;
 
         BOOST_SCOPE_EXIT( (this_) ) {
-            BOOST_CHECK(this_->value_ == 0);
+            BOOST_TEST(this_->value_ == 0);
         } BOOST_SCOPE_EXIT_END
 
 #ifndef BOOST_NO_LAMBDAS
         BOOST_SCOPE_EXIT_ALL(&, this) {
-            BOOST_CHECK(this->value_ == 0);
+            BOOST_TEST(this->value_ == 0);
         };
 #endif // lambdas
 
@@ -38,11 +36,8 @@ private:
     int value_;
 };
 
-void test_this(void) { this_tester().check(); }
-
-test_suite* init_unit_test_suite(int, char* []) {
-    framework::master_test_suite().p_name.value = "Unit test for ScopeExit";
-    framework::master_test_suite().add(BOOST_TEST_CASE(&test_this));
-    return 0;
+int main(void) {
+    this_tester().check();
+    return boost::report_errors();
 }
 

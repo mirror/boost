@@ -13,8 +13,7 @@
 
 #include <boost/scope_exit.hpp>
 #include <boost/preprocessor/cat.hpp>
-#define BOOST_TEST_MODULE TestSameLine
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 //[same_line
 #define SCOPE_EXIT_INC_DEC(variable, offset) \
@@ -40,20 +39,22 @@
         variable -= offset; \
     };
 
-BOOST_AUTO_TEST_CASE(test_same_line) {
+int main(void) {
     int x = 0, delta = 10;
 
     {
         SCOPE_EXIT_INC_DEC(x, delta) // Multiple scope exits on same line.
     }
-    BOOST_CHECK(x == 0);
+    BOOST_TEST(x == 0);
 
 #ifndef BOOST_NO_LAMBDAS
     {
         SCOPE_EXIT_ALL_INC_DEC(x, delta) // Multiple scope exits on same line.
     }
-    BOOST_CHECK(x == 0);
+    BOOST_TEST(x == 0);
 #endif // lambdas
+    
+    return boost::report_errors();
 }
 //]
 

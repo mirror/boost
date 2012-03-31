@@ -10,9 +10,7 @@
 #include <boost/config.hpp>
 #include <boost/typeof/typeof.hpp>
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-#include <boost/test/unit_test.hpp>
-
-using namespace boost::unit_test;
+#include <boost/detail/lightweight_test.hpp>
 
 template<typename T>
 struct this_tester;
@@ -24,12 +22,12 @@ struct this_tester {
         value_ = -1;
 
         BOOST_SCOPE_EXIT_TPL( (this_) ) {
-            BOOST_CHECK(this_->value_ == 0);
+            BOOST_TEST(this_->value_ == 0);
         } BOOST_SCOPE_EXIT_END
 
 #ifndef BOOST_NO_LAMBDAS
         BOOST_SCOPE_EXIT_ALL(&, this) {
-            BOOST_CHECK(this->value_ == 0);
+            BOOST_TEST(this->value_ == 0);
         };
 #endif // lambdas
 
@@ -40,11 +38,8 @@ private:
     T value_;
 };
 
-void test_this_tpl(void) { this_tester<int>().check(); }
-
-test_suite* init_unit_test_suite(int, char* []) {
-    framework::master_test_suite().p_name.value = "Unit test for ScopeExit";
-    framework::master_test_suite().add(BOOST_TEST_CASE(&test_this_tpl));
-    return 0;
+int main(void) {
+    this_tester<int>().check();
+    return boost::report_errors();
 }
 

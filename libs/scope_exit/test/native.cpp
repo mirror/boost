@@ -10,12 +10,10 @@
 #include <boost/config.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/typeof/std/string.hpp>
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <iostream>
 #include <ostream>
 #include <string>
-
-using namespace boost::unit_test;
 
 std::string g_str;
 
@@ -31,19 +29,19 @@ void test_non_local(void) {
     int i = 0;
 
     BOOST_SCOPE_EXIT(void) {
-        BOOST_CHECK(Holder<>::g_long == 3);
+        BOOST_TEST(Holder<>::g_long == 3);
     } BOOST_SCOPE_EXIT_END
 
     BOOST_SCOPE_EXIT( (i) ) {
-        BOOST_CHECK(i == 0);
-        BOOST_CHECK(Holder<>::g_long == 3);
-        BOOST_CHECK(g_str == "try: g_str");
+        BOOST_TEST(i == 0);
+        BOOST_TEST(Holder<>::g_long == 3);
+        BOOST_TEST(g_str == "try: g_str");
     } BOOST_SCOPE_EXIT_END
 
     BOOST_SCOPE_EXIT( (&i) ) {
-        BOOST_CHECK(i == 3);
-        BOOST_CHECK(Holder<>::g_long == 3);
-        BOOST_CHECK(g_str == "try: g_str");
+        BOOST_TEST(i == 3);
+        BOOST_TEST(Holder<>::g_long == 3);
+        BOOST_TEST(g_str == "try: g_str");
     } BOOST_SCOPE_EXIT_END
 
     {
@@ -63,25 +61,25 @@ void test_non_local(void) {
             } catch(...) {}
         } BOOST_SCOPE_EXIT_END
 
-        BOOST_CHECK(i == 0);
-        BOOST_CHECK(g_str == "");
-        BOOST_CHECK(Holder<>::g_long == 1);
+        BOOST_TEST(i == 0);
+        BOOST_TEST(g_str == "");
+        BOOST_TEST(Holder<>::g_long == 1);
     }
 
-    BOOST_CHECK(Holder<>::g_long == 2);
-    BOOST_CHECK(g_str == "g_str");
-    BOOST_CHECK(i == 1); // Check that first declared is executed last.
+    BOOST_TEST(Holder<>::g_long == 2);
+    BOOST_TEST(g_str == "g_str");
+    BOOST_TEST(i == 1); // Check that first declared is executed last.
 
     BOOST_SCOPE_EXIT( (&i) ) {
-        BOOST_CHECK(i == 3);
-        BOOST_CHECK(Holder<>::g_long == 3);
-        BOOST_CHECK(g_str == "try: g_str");
+        BOOST_TEST(i == 3);
+        BOOST_TEST(Holder<>::g_long == 3);
+        BOOST_TEST(g_str == "try: g_str");
     } BOOST_SCOPE_EXIT_END
 
     BOOST_SCOPE_EXIT( (i) ) {
-        BOOST_CHECK(i == 1);
-        BOOST_CHECK(Holder<>::g_long == 3);
-        BOOST_CHECK(g_str == "try: g_str");
+        BOOST_TEST(i == 1);
+        BOOST_TEST(Holder<>::g_long == 3);
+        BOOST_TEST(g_str == "try: g_str");
     } BOOST_SCOPE_EXIT_END
 
     try {
@@ -95,15 +93,15 @@ void test_non_local(void) {
             Holder<>::g_long = 3;
         } BOOST_SCOPE_EXIT_END
 
-        BOOST_CHECK(i == 1);
-        BOOST_CHECK(g_str == "g_str");
-        BOOST_CHECK(Holder<>::g_long == 2);
+        BOOST_TEST(i == 1);
+        BOOST_TEST(g_str == "g_str");
+        BOOST_TEST(Holder<>::g_long == 2);
 
         throw 0;
     } catch(int) {
-        BOOST_CHECK(Holder<>::g_long == 3);
-        BOOST_CHECK(g_str == "try: g_str");
-        BOOST_CHECK(i == 3); // Check that first declared is executed last.
+        BOOST_TEST(Holder<>::g_long == 3);
+        BOOST_TEST(g_str == "try: g_str");
+        BOOST_TEST(i == 3); // Check that first declared is executed last.
     }
 }
 
@@ -125,12 +123,12 @@ void test_types(void) {
 
         pf = &foo;
 
-        BOOST_CHECK(results[0] == false);
-        BOOST_CHECK(results[1] == false);
+        BOOST_TEST(results[0] == false);
+        BOOST_TEST(results[1] == false);
     }
 
-    BOOST_CHECK(results[0] == true);
-    BOOST_CHECK(results[1] == true);
+    BOOST_TEST(results[0] == true);
+    BOOST_TEST(results[1] == true);
 
     {
         BOOST_SCOPE_EXIT( (&results) (pf) ) {
@@ -142,16 +140,16 @@ void test_types(void) {
 
         pf = 0;
 
-        BOOST_CHECK(results[0] == true);
-        BOOST_CHECK(results[1] == true);
+        BOOST_TEST(results[0] == true);
+        BOOST_TEST(results[1] == true);
     }
 
-    BOOST_CHECK(pf == 0);
-    BOOST_CHECK(results[0] == false);
-    BOOST_CHECK(results[1] == false);
+    BOOST_TEST(pf == 0);
+    BOOST_TEST(results[0] == false);
+    BOOST_TEST(results[1] == false);
 }
 
-void test_cpp11(void) {
+void test_capture_all(void) {
 #ifndef BOOST_NO_LAMBDAS
     int i = 0, j = 1;
 
@@ -160,38 +158,37 @@ void test_cpp11(void) {
             i = j = 1; // modify copies
         };
     }
-    BOOST_CHECK(i == 0);
-    BOOST_CHECK(j == 1);
+    BOOST_TEST(i == 0);
+    BOOST_TEST(j == 1);
 
     {
         BOOST_SCOPE_EXIT_ALL(&) {
             i = 1;
             j = 2;
         };
-        BOOST_CHECK(i == 0);
-        BOOST_CHECK(j == 1);
+        BOOST_TEST(i == 0);
+        BOOST_TEST(j == 1);
     }
-    BOOST_CHECK(i == 1);
-    BOOST_CHECK(j == 2);
+    BOOST_TEST(i == 1);
+    BOOST_TEST(j == 2);
 
     {
         BOOST_SCOPE_EXIT_ALL(=, &j) {
             i = 2; // modify a copy
             j = 3;
         };
-        BOOST_CHECK(i == 1);
-        BOOST_CHECK(j == 2);
+        BOOST_TEST(i == 1);
+        BOOST_TEST(j == 2);
     }
-    BOOST_CHECK(i == 1);
-    BOOST_CHECK(j == 3);
+    BOOST_TEST(i == 1);
+    BOOST_TEST(j == 3);
 #endif // lambdas
 }
 
-test_suite* init_unit_test_suite(int, char* []) {
-    framework::master_test_suite().p_name.value = "Unit test for ScopeExit";
-    framework::master_test_suite().add(BOOST_TEST_CASE(&test_non_local));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&test_types));
-    framework::master_test_suite().add(BOOST_TEST_CASE(&test_cpp11));
-    return 0;
+int main(void) {
+    test_non_local();
+    test_types();
+    test_capture_all();
+    return boost::report_errors();
 }
 

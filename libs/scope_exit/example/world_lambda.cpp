@@ -11,8 +11,7 @@
 #   error "lambda functions required"
 #else
 
-#define BOOST_TEST_MODULE TestWorldLambda
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
 
 struct person {};
@@ -46,11 +45,12 @@ void world::add_person(person const& a_person) {
 }
 //]
 
-BOOST_AUTO_TEST_CASE(test_world_lambda) {
+int main(void) {
     world w;
     person p;
     w.add_person(p);
-    BOOST_CHECK(w.persons_.size() == 1);
+    BOOST_TEST(w.persons_.size() == 1);
+    return boost::report_errors();
 }
 
 #endif // lambdas
