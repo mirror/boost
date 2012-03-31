@@ -453,6 +453,12 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
     <programlisting><xsl:apply-templates/></programlisting>
   </xsl:template>
 
+  <xsl:template match="programlisting[@lang='jam']">
+    <programlisting>
+      <xsl:apply-templates mode="highlight-jam"/>
+    </programlisting>
+  </xsl:template>
+
   <!-- These DocBook elements have special meaning. Use the annotation mode -->
   <xsl:template match="classname|methodname|functionname|enumname|
                        macroname|headername|globalname">
