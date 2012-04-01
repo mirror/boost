@@ -186,7 +186,8 @@ private:
     typedef ::boost::function<
         execute_return () >                         deferred_fct;
     typedef typename QueueContainerPolicy::
-        template In<deferred_fct>::type             deferred_events_queue_t;
+        template In< 
+        std::pair<deferred_fct,bool> >::type        deferred_events_queue_t;
     typedef typename QueueContainerPolicy::
         template In<transition_fct>::type           events_queue_t;
 
@@ -271,7 +272,7 @@ private:
     {
     public:
         deferred_msg_queue_helper():m_deferred_events_queue(){}
-        deferred_events_queue_t     m_deferred_events_queue;
+        deferred_events_queue_t         m_deferred_events_queue;
     };
 
  public: 
@@ -1805,24 +1806,40 @@ private:
             events_queue(a_queue),next_deferred_event(){}
         void do_pre_handle_deferred()
         {
-            if (!events_queue.m_deferred_events_queue.empty())
-            {
-                next_deferred_event = events_queue.m_deferred_events_queue.back();
-                events_queue.m_deferred_events_queue.pop_back();
-            }
         }
 
         void do_post_handle_deferred(HandledEnum handled)
         {
-            if (((handled & HANDLED_DEFERRED) == HANDLED_DEFERRED) && next_deferred_event )
+            if (handled == HANDLED_TRUE)
             {
-                // the event was already deferred, no reason to process another deferred event
-                events_queue.m_deferred_events_queue.push_back(next_deferred_event);
-                return;
+                // a transition has been taken, it makes sense again to try processing waiting deferred events
+                // reset all events to not tested 
+                for (std::size_t i = 0; i < events_queue.m_deferred_events_queue.size(); ++i)
+                {
+                    events_queue.m_deferred_events_queue[i].second=false;
+                }
+                // test first event
+                if (!events_queue.m_deferred_events_queue.empty())
+                {
+                    deferred_fct next = events_queue.m_deferred_events_queue.front().first;
+                    events_queue.m_deferred_events_queue.pop_front();
+                    next();
+                }
             }
-            else if (next_deferred_event)
+            else
             {
-                next_deferred_event();
+                // look for next deferred event, if any
+                typename deferred_events_queue_t::iterator it = 
+                    std::find_if(events_queue.m_deferred_events_queue.begin(),
+                                 events_queue.m_deferred_events_queue.end(),
+                                 boost::bind(&std::pair<deferred_fct,bool>::second, _1) == false);
+                if (it != events_queue.m_deferred_events_queue.end())
+                {
+                    (*it).second = true;
+                    deferred_fct next = (*it).first;
+                    events_queue.m_deferred_events_queue.erase(it);
+                    next();
+                }
             }
         }
 
@@ -2618,7 +2635,7 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
     // puts a deferred event in the queue
     void post_deferred_event(deferred_fct& deferred)
     {
-        m_deferred_events_queue.m_deferred_events_queue.push_front(deferred);
+        m_deferred_events_queue.m_deferred_events_queue.push_back(std::make_pair(deferred,true));
     }
     // removes one event from the message queue and processes it
     template <class StateType>
