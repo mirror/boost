@@ -480,7 +480,7 @@ namespace boost
         };
 #endif
 
-#ifndef BOOST_NO_CHAR16_T
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
         template<>
         struct lcast_char_constants<char16_t>
         {
@@ -493,7 +493,7 @@ namespace boost
         };
 #endif
 
-#ifndef BOOST_NO_CHAR32_T
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
         template<>
         struct lcast_char_constants<char32_t>
         {
@@ -1957,6 +1957,17 @@ namespace boost
                     target_char_t, src_char_type
                 >::type char_type;
 
+#if !defined(BOOST_NO_CHAR16_T) && defined(BOOST_NO_UNICODE_LITERALS)
+                BOOST_STATIC_ASSERT_MSG(( !::boost::is_same<char16_t, src_char_type>::value
+                                          && !::boost::is_same<char16_t, target_char_t>::value),
+                    "Your compiler does not have full support for char16_t" );
+#endif
+#if !defined(BOOST_NO_CHAR32_T) && defined(BOOST_NO_UNICODE_LITERALS)
+                BOOST_STATIC_ASSERT_MSG(( !::boost::is_same<char32_t, src_char_type>::value
+                                          && !::boost::is_same<char32_t, target_char_t>::value),
+                    "Your compiler does not have full support for char32_t" );
+#endif
+
                 typedef detail::lcast_src_length<src> lcast_src_length;
                 std::size_t const src_len = lcast_src_length::value;
                 char_type buf[src_len + 1];
@@ -1982,7 +1993,7 @@ namespace boost
                             ::boost::is_same<signed char, src_char_type>::value
                         >::value
                     >::value,
-                    is_same<char_type, src_char_type>::value
+                    ::boost::is_same<char_type, src_char_type>::value
                 >::value);
 
                 const bool requires_stringbuf =
