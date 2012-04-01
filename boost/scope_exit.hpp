@@ -512,15 +512,26 @@ private:
 #define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id) \
     BOOST_PP_CAT(boost_se_lambda_this_capture_t_, id)
 
+#ifndef BOOST_MSVC
+// C++11 allows to freely use `typename` (so no need for `..._ALL_TPL`).
+#   define BOOST_SCOPE_EXIT_AUX_LAMBDA_TYPENAME_() \
+        typename
+#else
+// C++11 on MSVC cannot freely use `typename` but MSVC does not require
+// typename to begin with (so still no need for `..._ALL_TPL` macro).
+#   define BOOST_SCOPE_EXIT_AUX_LAMBDA_TYPENAME_() \
+        /* must expand to empty */
+#endif
+
 #define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE(id) \
-    /* can always use `typename` on C++11 (so no _TPL) */ \
-    typename BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id):: \
+    BOOST_SCOPE_EXIT_AUX_LAMBDA_TYPENAME_() \
+    BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id):: \
             BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id)
 
 // Precondition: HAS_THIS(traits).
 #define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPEDEFS(id, traits) \
     BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, \
-            typename, /* can always use `typename` on C++11 (so no _TPL) */ \
+            BOOST_SCOPE_EXIT_AUX_LAMBDA_TYPENAME_(), \
             BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_CAPTURE_TYPE(id)) \
     /* capture type for workaround GCC internal error (even on later C++11) */ \
     struct BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id) { \
@@ -559,7 +570,7 @@ private:
 
 #endif // Lambdas.
 
-#if defined(BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL) && \
+#if defined(BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS) && \
         !defined(BOOST_NO_LAMBDAS) // Use lambda for SCOPE_EXIT (not just _ALL).
 
 #define BOOST_SCOPE_EXIT_AUX_IMPL(id, ty, traits) \
@@ -686,7 +697,7 @@ private:
 #   endif
 #endif // Variadics.
 
-#if defined(BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL) && \
+#if defined(BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS) && \
         !defined(BOOST_NO_LAMBDAS) // Use lambdas for SCOPE_EXIT (not just ALL).
 #   define BOOST_SCOPE_EXIT_END_ID(id) \
         ; /* lambdas ended with just `;` */
@@ -1018,7 +1029,7 @@ This configuration macro does not control the definition of @RefMacro{BOOST_SCOP
 
 @See @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_ALL}, @RefMacro{BOOST_SCOPE_EXIT_END}.
 */
-#define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL
+#define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS
 
 #endif // DOXYGEN
 
