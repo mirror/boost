@@ -19,7 +19,7 @@
 #include <vector>
 
 struct person {};
-BOOST_TYPEOF_REGISTER_TYPE(peron)
+BOOST_TYPEOF_REGISTER_TYPE(person)
 
 template<typename Person>
 struct world {
