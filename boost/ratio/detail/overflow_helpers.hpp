@@ -273,7 +273,7 @@ namespace ratio_detail
              >
          >::type type;
   };
-
+  
   template <class R, boost::intmax_t D>
   struct ratio_subtract<R, ratio<0,D> >
   {
@@ -322,7 +322,7 @@ namespace ratio_detail
              ((R2::num / gcd_n1_n2 ==1) && (R1::den / gcd_d1_d2)==1)
       > type;
   };
-
+  
   template <class T>
   struct is_ratio : public boost::false_type
   {};
