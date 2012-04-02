@@ -13,7 +13,6 @@
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/detail/lightweight_test.hpp>
 #include <vector>
-#include <iostream>
 #include <sstream>
 
 struct person {
@@ -82,12 +81,10 @@ int main(void) {
     person adam, eva;
     std::ostringstream oss;
     oss << adam;
-    std::cout << oss.str() << std::endl;
     BOOST_TEST(oss.str() == "person(0, 0)");
 
     oss.str("");
     oss << eva;
-    std::cout << oss.str() << std::endl;
     BOOST_TEST(oss.str() == "person(0, 0)");
 
     world w;
@@ -95,7 +92,6 @@ int main(void) {
     w.add_person(eva);
     oss.str("");
     oss << w;
-    std::cout << oss.str() << std::endl;
     BOOST_TEST(oss.str() == "world(3, { person(1, 2),  person(2, 2), })");
 
     return boost::report_errors();
