@@ -14,6 +14,7 @@
 #       include <boost/functional/overloaded_function/detail/base.hpp>
 #       include <boost/functional/overloaded_function/detail/function_type.hpp>
 #       include <boost/functional/overloaded_function/config.hpp>
+#       include <boost/typeof/typeof.hpp>
 #       include <boost/preprocessor/iteration/iterate.hpp>
 #       include <boost/preprocessor/repetition/enum.hpp>
 #       include <boost/preprocessor/repetition/repeat.hpp>
@@ -81,16 +82,12 @@
         BOOST_FUNCTIONAL_f_type(z, n, ~) \
     >::type
 
-namespace boost {
-
 // Iterate within namespace.
 #       define BOOST_PP_ITERATION_PARAMS_1 \
                 (3, (0, BOOST_PP_SUB( /*at least 2 func to overload 2, 3, ...*/\
                  BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX, 2), \
                 "boost/functional/overloaded_function.hpp"))
 #       include BOOST_PP_ITERATE() // Iterate over function arity.
-
-} // namespace
 
 #undef BOOST_FUNCTIONAL_f_type
 #undef BOOST_FUNCTIONAL_f_arg
@@ -118,6 +115,11 @@ namespace boost {
         /* if template specialization */ \
         BOOST_PP_LESS(BOOST_FUNCTIONAL_overloads, \
                 BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX)
+
+// For type-of emulation: This must be included at this pp iteration level.
+#   include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
+
+namespace boost {
 
 template<
     BOOST_PP_ENUM(BOOST_FUNCTIONAL_overloads, BOOST_FUNCTIONAL_f_tparam_dflt,
@@ -164,6 +166,12 @@ overloaded_function<
                 BOOST_FUNCTIONAL_function_type, ~)
     >(BOOST_PP_ENUM(BOOST_FUNCTIONAL_overloads, BOOST_FUNCTIONAL_f_arg, ~));
 }
+
+} // namespace
+
+// For type-of emulation: Register overloaded function type (for _AUTO, etc).
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::overloaded_function,
+    BOOST_FUNCTIONAL_overloads)
 
 #   undef BOOST_FUNCTIONAL_overloads
 #   undef BOOST_FUNCTIONAL_is_tspec

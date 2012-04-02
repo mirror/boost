@@ -7,14 +7,13 @@
 
 #include "identity.hpp"
 #include <boost/functional/overloaded_function.hpp>
-#define BOOST_TEST_MODULE TestFunctor
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_functor) {
+int main() {
     //[identity_calls
-    BOOST_CHECK(identity_s("abc") == "abc");
-    BOOST_CHECK(identity_i(123) == 123);
-    BOOST_CHECK(identity_d(1.23) == 1.23);
+    BOOST_TEST(identity_s("abc") == "abc");
+    BOOST_TEST(identity_i(123) == 123);
+    BOOST_TEST(identity_d(1.23) == 1.23);
     //]
 
     //[identity_functor
@@ -25,9 +24,11 @@ BOOST_AUTO_TEST_CASE(test_functor) {
     > identity(identity_s, identity_i, identity_d);
 
     // All calls via single `identity` function.
-    BOOST_CHECK(identity("abc") == "abc");
-    BOOST_CHECK(identity(123) == 123);
-    BOOST_CHECK(identity(1.23) == 1.23);
+    BOOST_TEST(identity("abc") == "abc");
+    BOOST_TEST(identity(123) == 123);
+    BOOST_TEST(identity(1.23) == 1.23);
     //]
+
+    return boost::report_errors();
 }
 

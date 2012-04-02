@@ -7,17 +7,17 @@
 
 #include "identity.hpp"
 #include <boost/functional/overloaded_function.hpp>
-#define BOOST_TEST_MODULE TestMakeDecl
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_make_decl) {
+int main() {
     //[identity_make
     BOOST_AUTO(identity, boost::make_overloaded_function(
             identity_s, identity_i, identity_d));
 
-    BOOST_CHECK(identity("abc") == "abc");
-    BOOST_CHECK(identity(123) == 123);
-    BOOST_CHECK(identity(1.23) == 1.23);
+    BOOST_TEST(identity("abc") == "abc");
+    BOOST_TEST(identity(123) == 123);
+    BOOST_TEST(identity(1.23) == 1.23);
     //]
+    return boost::report_errors();
 }
 

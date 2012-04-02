@@ -7,21 +7,21 @@
 
 #include "identity.hpp"
 #include <boost/functional/overloaded_function.hpp>
-#define BOOST_TEST_MODULE TestMakeCall
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 //[identity_make_checks
 template<typename F>
 void check(F identity) {
-    BOOST_CHECK(identity("abc") == "abc");
-    BOOST_CHECK(identity(123) == 123);
-    BOOST_CHECK(identity(1.23) == 1.23);
+    BOOST_TEST(identity("abc") == "abc");
+    BOOST_TEST(identity(123) == 123);
+    BOOST_TEST(identity(1.23) == 1.23);
 }
 //]
 
-BOOST_AUTO_TEST_CASE(test_identity) {
+int main() {
     //[identity_make_call
     check(boost::make_overloaded_function(identity_s, identity_i, identity_d));
     //]
+    return boost::report_errors();
 }
 
