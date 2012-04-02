@@ -843,7 +843,7 @@ namespace boost
         }
 
 #endif
-#ifndef BOOST_NO_CHAR16_T
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
         template <class T>
         bool parse_inf_nan(const char16_t* begin, const char16_t* end, T& value)
         {
@@ -859,7 +859,7 @@ namespace boost
             return put_inf_nan_impl(begin, end, value, u"nan", u"infinity");
         }
 #endif
-#ifndef BOOST_NO_CHAR32_T
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
         template <class T>
         bool parse_inf_nan(const char32_t* begin, const char32_t* end, T& value)
         {
@@ -1628,10 +1628,10 @@ namespace boost
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
             bool operator>>(wchar_t& output)                    { return shr_xchar(output); }
 #endif
-#ifndef BOOST_NO_CHAR16_T
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
             bool operator>>(char16_t& output)                   { return shr_xchar(output); }
 #endif
-#ifndef BOOST_NO_CHAR32_T
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
             bool operator>>(char32_t& output)                   { return shr_xchar(output); }
 #endif
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
