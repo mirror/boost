@@ -1254,7 +1254,7 @@ namespace boost
             {
 #if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_LOCALE)
                 // If you have compilation error at this point, than your STL library
-                // unsupports such conversions. Try updating it.
+                // does not support such conversions. Try updating it.
                 BOOST_STATIC_ASSERT((boost::is_same<char, CharT>::value));
 #endif
                 bool const result = !(out_stream << input).fail();
@@ -1279,8 +1279,10 @@ namespace boost
             }
 
             template <class T, class SomeCharT>
-            bool shl_real_type(const T& val, SomeCharT*, SomeCharT*) 
+            bool shl_real_type(const T& val, SomeCharT* begin, SomeCharT*& end)
             {
+                if (put_inf_nan(begin, end, val)) return true;
+                lcast_set_precision(out_stream, &val);
                 return shl_input_streamable(val);
             }
 
