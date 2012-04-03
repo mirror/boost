@@ -21,7 +21,7 @@ struct world {
     std::vector<person> persons_;
 };
 
-//[world_lambda
+//[world_cxx11_lambda
 #include <functional>
 
 struct scope_exit {
@@ -53,5 +53,5 @@ int main(void) {
     return boost::report_errors();
 }
 
-#endif // lambdas
+#endif // LAMBDAS
 

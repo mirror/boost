@@ -60,8 +60,8 @@ void world::add_person(person const& a_person) {
     // This block must be no-throw.
     person& p = persons_.back();
     person::evolution_t checkpoint = p.evolution;
-    BOOST_SCOPE_EXIT_ALL( (&) (checkpoint) (this_) ) {
-        if(checkpoint == p.evolution) this_->persons_.pop_back();
+    BOOST_SCOPE_EXIT_ALL( (&) (checkpoint) (this) ) {
+        if(checkpoint == p.evolution) this->persons_.pop_back();
     };
 
     // ...
@@ -71,7 +71,7 @@ void world::add_person(person const& a_person) {
     // Assign new identifier to the person.
     person::id_t const prev_id = p.id;
     p.id = next_id_++;
-    BOOST_SCOPE_EXIT_ALL( (=) (&p) (this) ) {
+    BOOST_SCOPE_EXIT_ALL( (=) (&p) ) {
         if(checkpoint == p.evolution) {
             this->next_id_ = p.id;
             p.id = prev_id;

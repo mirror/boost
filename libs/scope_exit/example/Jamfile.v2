@@ -16,5 +16,5 @@ run scope_guard.cpp ;
 run scope_guard_seq.cpp ;
 run scope_guard_seq_nova.cpp ;
 
-run world_lambda.cpp ;
+run world_cxx11_lambda.cpp ;
 

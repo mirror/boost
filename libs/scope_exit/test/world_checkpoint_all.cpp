@@ -63,9 +63,10 @@ void world::add_person(person const& a_person) {
     // This block must be no-throw.
     person& p = persons_.back();
     person::evolution_t checkpoint = p.evolution;
-    BOOST_SCOPE_EXIT_ALL(&, checkpoint, this_) { // Capture all by ref (C++11).
-        if(checkpoint == p.evolution) this_->persons_.pop_back();
-    }; // Use `;` instead of `SCOPE_EXIT_END` for `BOOST_SCOPE_EXIT_ALL`.
+    // Capture all by reference `&`, but `checkpoint` and `this` (C++11 only).
+    BOOST_SCOPE_EXIT_ALL(&, checkpoint, this) { // Use `this` (not `this_`).
+        if(checkpoint == p.evolution) this->persons_.pop_back();
+    }; // Use `;` (not `SCOPE_EXIT_END`).
 
     // ...
 
@@ -74,7 +75,8 @@ void world::add_person(person const& a_person) {
     // Assign new identifier to the person.
     person::id_t const prev_id = p.id;
     p.id = next_id_++;
-    BOOST_SCOPE_EXIT_ALL(=, &p, this) { // Capture all by value, `this` (C++11).
+    // Capture all by value `=`, but `p` (C++11 only).
+    BOOST_SCOPE_EXIT_ALL(=, &p) {
         if(checkpoint == p.evolution) {
             this->next_id_ = p.id;
             p.id = prev_id;

@@ -512,26 +512,13 @@ private:
 #define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id) \
     BOOST_PP_CAT(boost_se_lambda_this_capture_t_, id)
 
-#ifndef BOOST_MSVC
-// C++11 allows to freely use `typename` (so no need for `..._ALL_TPL`).
-#   define BOOST_SCOPE_EXIT_AUX_LAMBDA_TYPENAME_() \
-        typename
-#else
-// C++11 on MSVC cannot freely use `typename` but MSVC does not require
-// typename to begin with (so still no need for `..._ALL_TPL` macro).
-#   define BOOST_SCOPE_EXIT_AUX_LAMBDA_TYPENAME_() \
-        /* must expand to empty */
-#endif
-
-#define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE(id) \
-    BOOST_SCOPE_EXIT_AUX_LAMBDA_TYPENAME_() \
-    BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id):: \
+#define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE(id, ty) \
+    ty BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id):: \
             BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id)
 
 // Precondition: HAS_THIS(traits).
-#define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPEDEFS(id, traits) \
-    BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, \
-            BOOST_SCOPE_EXIT_AUX_LAMBDA_TYPENAME_(), \
+#define BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPEDEFS(id, ty, traits) \
+    BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, ty, \
             BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_CAPTURE_TYPE(id)) \
     /* capture type for workaround GCC internal error (even on later C++11) */ \
     struct BOOST_SCOPE_EXIT_AUX_LAMBDA_PARAMS(id) { \
@@ -539,19 +526,19 @@ private:
                 BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_PARAM_TYPE(id); \
     };
 
-#define BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, traits) \
+#define BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, ty, traits) \
     BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
         /* no need for TYPEDEF THIS MSVC workaround on C++11 */ \
         BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPEDEFS \
     , \
-        BOOST_PP_TUPLE_EAT(2) \
-    )(id, traits) \
+        BOOST_PP_TUPLE_EAT(3) \
+    )(id, ty, traits) \
     ::boost::scope_exit::aux::guard< \
         BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
             BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE \
         , \
-            BOOST_PP_TUPLE_EAT(1) \
-        )(id) \
+            BOOST_PP_TUPLE_EAT(2) \
+        )(id, ty) \
     > BOOST_SCOPE_EXIT_AUX_GUARD(id) \
         BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
             (this) \
@@ -563,8 +550,8 @@ private:
         BOOST_PP_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), \
             BOOST_SCOPE_EXIT_AUX_LAMBDA_THIS_TYPE \
         , \
-            BOOST_PP_TUPLE_EAT(1) \
-        )(id) \
+            BOOST_PP_TUPLE_EAT(2) \
+        )(id, ty) \
         BOOST_PP_EXPR_IIF(BOOST_SCOPE_EXIT_AUX_TRAITS_HAS_THIS(traits), this_) \
     ) mutable /* can change value captures (as with SCOPE_EXIT) */ -> void
 
@@ -574,7 +561,7 @@ private:
         !defined(BOOST_NO_LAMBDAS) // Use lambda for SCOPE_EXIT (not just _ALL).
 
 #define BOOST_SCOPE_EXIT_AUX_IMPL(id, ty, traits) \
-    BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, traits)
+    BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, ty, traits)
 
 #else // Not using lambdas.
 
@@ -667,6 +654,11 @@ private:
 #   if !defined(BOOST_NO_LAMBDAS)
 #       define BOOST_SCOPE_EXIT_ALL_ID(id, seq) \
             BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, \
+                    /* C++11 allows to use typename outside templates so */ \
+                    /* always typename here and no need for ..._ALL_TPL */ \
+                    /* (if a C++11 compiler does not implement this use of */ \
+                    /* typename, always use `this` instead of `this_`) */ \
+                    typename, \
                     BOOST_SCOPE_EXIT_AUX_TRAITS_ALL( \
                             BOOST_LOCAL_FUNCTION_DETAIL_PP_NON_VOID_LIST(seq)))
 #       define BOOST_SCOPE_EXIT_ALL(seq) \
@@ -688,6 +680,11 @@ private:
 #   if !defined(BOOST_NO_LAMBDAS)
 #       define BOOST_SCOPE_EXIT_ALL_ID(id, ...) \
             BOOST_SCOPE_EXIT_AUX_IMPL_LAMBDA(id, \
+                    /* C++11 allows to use typename outside templates so */ \
+                    /* always typename here and no need for ..._ALL_TPL */ \
+                    /* (if a C++11 compiler does not implement this use of */ \
+                    /* typename, always use `this` instead of `this_`) */ \
+                    typename, \
                     BOOST_SCOPE_EXIT_AUX_TRAITS_ALL( \
                             BOOST_LOCAL_FUNCTION_DETAIL_PP_NON_VOID_LIST( \
                                     __VA_ARGS__)))
