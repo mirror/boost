@@ -6,12 +6,13 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
-#define BOOST_TEST_MODULE TestReturnInc
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 boost::function<int (void)> inc(int& value) {
     int BOOST_LOCAL_FUNCTION(bind& value) {
@@ -20,21 +21,18 @@ boost::function<int (void)> inc(int& value) {
     return i;
 }
 
-BOOST_AUTO_TEST_CASE(test_return_inc) {
+int main(void) {
     int value1 = 0; // Reference valid in scope where closure is used.
     boost::function<int (void)> inc1 = inc(value1);
     int value2 = 0;
     boost::function<int (void)> inc2 = inc(value2);
 
-    BOOST_CHECK(inc1() == 1);
-    BOOST_CHECK(inc1() == 2);
-    BOOST_CHECK(inc2() == 1);
-    BOOST_CHECK(inc1() == 3);
+    BOOST_TEST(inc1() == 1);
+    BOOST_TEST(inc1() == 2);
+    BOOST_TEST(inc2() == 1);
+    BOOST_TEST(inc1() == 3);
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

@@ -7,20 +7,19 @@
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
-#define BOOST_TEST_MODULE TestReturnSetgetSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <string>
 
 boost::function<void (const std::string&)> set;
 boost::function<const std::string& (void)> get;
 
 void action(void) {
-    BOOST_CHECK(get() == "abc");
+    BOOST_TEST(get() == "abc");
     set("xyz");
-    BOOST_CHECK(get() == "xyz");
+    BOOST_TEST(get() == "xyz");
 }
 
-BOOST_AUTO_TEST_CASE(test_return_setget_seq) {
+int main(void) {
     std::string message = "abc";
     
     void BOOST_LOCAL_FUNCTION( (bind& message) (const std::string& text) ) {
@@ -34,5 +33,6 @@ BOOST_AUTO_TEST_CASE(test_return_setget_seq) {
     get = g;
     
     action();
+    return boost::report_errors();
 }
 

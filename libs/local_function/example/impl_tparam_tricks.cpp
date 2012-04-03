@@ -6,8 +6,7 @@
 // Home at http://www.boost.org/libs/local_function
 
 //[impl_tparam_tricks
-#define BOOST_TEST_MODULE TestImplTparamTricks
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -34,7 +33,7 @@ private:
     interface* func_;
 };
 
-BOOST_AUTO_TEST_CASE(test_impl_tparam_tricks) {
+int main(void) {
     int sum = 0, factor = 10;
 
     // Local class for local function.
@@ -66,7 +65,8 @@ BOOST_AUTO_TEST_CASE(test_impl_tparam_tricks) {
     std::for_each(v.begin(), v.end(), add_casting); // OK.
     std::for_each(v.begin(), v.end(), add_virtual); // OK.
 
-    BOOST_CHECK(sum == 200);
+    BOOST_TEST(sum == 200);
+    return boost::report_errors();
 }
 //]
 

@@ -6,12 +6,13 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
-#define BOOST_TEST_MODULE TestReturnSetGet
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <string>
 
 boost::function<void (const std::string&)> set;
@@ -19,12 +20,12 @@ boost::function<const std::string& (void)> get;
 
 void action(void) {
     // State `message` hidden behind access functions from here.
-    BOOST_CHECK(get() == "abc");
+    BOOST_TEST(get() == "abc");
     set("xyz");
-    BOOST_CHECK(get() == "xyz");
+    BOOST_TEST(get() == "xyz");
 }
 
-BOOST_AUTO_TEST_CASE(test_return_setget) {
+int main(void) {
     std::string message = "abc"; // Reference valid where closure used.
     
     void BOOST_LOCAL_FUNCTION(bind& message, const std::string& text) {
@@ -38,11 +39,8 @@ BOOST_AUTO_TEST_CASE(test_return_setget) {
     get = g;
     
     action();
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

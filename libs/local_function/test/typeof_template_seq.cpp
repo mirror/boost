@@ -9,8 +9,7 @@
 #include <boost/local_function.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/concept_check.hpp>
-#define BOOST_TEST_MODULE TestTypeofTemplateSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
 template<typename T>
@@ -27,7 +26,8 @@ T calculate(const T& factor) {
     return sum;
 }
 
-BOOST_AUTO_TEST_CASE(test_typeof_template_seq) {
-    BOOST_CHECK(calculate(10) == 60);
+int main(void) {
+    BOOST_TEST(calculate(10) == 60);
+    return boost::report_errors();
 }
 

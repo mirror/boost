@@ -9,11 +9,10 @@
 #include <boost/function.hpp>
 #include <boost/phoenix/core.hpp>
 #include <boost/phoenix/function.hpp>
-#define BOOST_TEST_MODULE TestPhoenixFactorialLocal
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 //[phoenix_factorial_local
-BOOST_AUTO_TEST_CASE(test_phoenix_factorial_local) {
+int main(void) {
     using boost::phoenix::arg_names::arg1;
     
     int BOOST_LOCAL_FUNCTION(int n) { // Unfortunately, monomorphic.
@@ -24,8 +23,9 @@ BOOST_AUTO_TEST_CASE(test_phoenix_factorial_local) {
             factorial(factorial_impl); // Phoenix function from local function.
     
     int i = 4;
-    BOOST_CHECK(factorial(i)() == 24);      // Call.
-    BOOST_CHECK(factorial(arg1)(i) == 24);  // Lazy call.
+    BOOST_TEST(factorial(i)() == 24);      // Call.
+    BOOST_TEST(factorial(arg1)(i) == 24);  // Lazy call.
+    return boost::report_errors();
 }
 //]
 

@@ -6,11 +6,12 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestAddTyped
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -34,16 +35,13 @@ private:
 };
 //]
 
-BOOST_AUTO_TEST_CASE(test_add_typed) {
+int main(void) {
     std::vector<int> v(3);
     v[0] = 1; v[1] = 2; v[2] = 3;
 
-    BOOST_CHECK(adder().sum(v) == 60);
+    BOOST_TEST(adder().sum(v) == 60);
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

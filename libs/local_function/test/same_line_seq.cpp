@@ -7,8 +7,7 @@
 
 #include <boost/local_function.hpp>
 #include <boost/preprocessor/cat.hpp>
-#define BOOST_TEST_MODULE TestSameLineSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <iostream>
     
 #define LOCAL_INC_DEC(offset) \
@@ -24,11 +23,11 @@
         return x - offset; \
     } BOOST_LOCAL_FUNCTION_NAME(dec)
 
-BOOST_AUTO_TEST_CASE(test_same_line_seq)
-{
+int main(void) {
     int delta = 10;
     LOCAL_INC_DEC(delta) // Declare local functions on same line using `_ID`.
     
-    BOOST_CHECK(dec(inc(123)) == 123);
+    BOOST_TEST(dec(inc(123)) == 123);
+    return boost::report_errors();
 }
 

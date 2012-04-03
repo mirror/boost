@@ -6,17 +6,18 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
-#define BOOST_TEST_MODULE TestReturnAssign
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <iostream>
 
 //[return_assign
-void call1(boost::function<int (int) > f) { BOOST_CHECK(f(1) == 5); }
-void call0(boost::function<int (void)> f) { BOOST_CHECK(f() == 5); }
+void call1(boost::function<int (int) > f) { BOOST_TEST(f(1) == 5); }
+void call0(boost::function<int (void)> f) { BOOST_TEST(f() == 5); }
 
 boost::function<int (int, int)> linear(const int& slope) {
     int BOOST_LOCAL_FUNCTION(const bind& slope,
@@ -25,7 +26,7 @@ boost::function<int (int, int)> linear(const int& slope) {
     } BOOST_LOCAL_FUNCTION_NAME(lin)
 
     boost::function<int (int, int)> f = lin; // Assign to local variable.
-    BOOST_CHECK(f(1, 2) == 5);
+    BOOST_TEST(f(1, 2) == 5);
 
     call1(lin); // Pass to other functions.
     call0(lin);
@@ -35,17 +36,14 @@ boost::function<int (int, int)> linear(const int& slope) {
 
 void call(void) {
     boost::function<int (int, int)> f = linear(2);
-    BOOST_CHECK(f(1, 2) == 5);
+    BOOST_TEST(f(1, 2) == 5);
 }
 //]
 
-BOOST_AUTO_TEST_CASE(test_return_assign) {
+int main(void) {
     call();
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

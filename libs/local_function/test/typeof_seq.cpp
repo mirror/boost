@@ -9,11 +9,10 @@
 #include <boost/local_function.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/concept_check.hpp>
-#define BOOST_TEST_MODULE TestTypeofSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE(test_typeof_seq) {
+int main(void) {
     int sum = 0, factor = 10;
 
     void BOOST_LOCAL_FUNCTION( (const bind factor) (bind& sum) (int num) ) {
@@ -25,6 +24,7 @@ BOOST_AUTO_TEST_CASE(test_typeof_seq) {
     } BOOST_LOCAL_FUNCTION_NAME(add)
 
     add(6);
-    BOOST_CHECK(sum == 60);
+    BOOST_TEST(sum == 60);
+    return boost::report_errors();
 }
 

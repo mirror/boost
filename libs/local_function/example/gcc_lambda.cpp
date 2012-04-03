@@ -6,14 +6,15 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#if defined(__GCC__) || !defined(BOOST_NO_LAMBDAS)
+#ifndef __GNUC__
+#   error "GCC compiler required (uses non-standard GCC statement expressions)"
+#else
 
 #include "gcc_lambda.hpp"
-#define BOOST_TEST_MODULE TestGccLambda
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE(test_gcc_lambda) {
+int main(void) {
     //[gcc_lambda
     int val = 2;
     int nums[] = {1, 2, 3};
@@ -26,13 +27,10 @@ BOOST_AUTO_TEST_CASE(test_gcc_lambda) {
     );
     //]
 
-    BOOST_CHECK(iter != end);
-    BOOST_CHECK(*iter == val);
+    BOOST_TEST(iter != end);
+    BOOST_TEST(*iter == val);
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // GCC
 

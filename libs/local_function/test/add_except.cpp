@@ -6,13 +6,14 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestAddExcept
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_except) {
+int main(void) {
     //[add_except
     double sum = 0.0;
     int factor = 10;
@@ -25,12 +26,9 @@ BOOST_AUTO_TEST_CASE(test_except) {
     add(100);
     //]
     
-    BOOST_CHECK(sum == 1000);
+    BOOST_TEST(sum == 1000);
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; }
-
-#endif
+#endif // VARIADIC_MACROS
 

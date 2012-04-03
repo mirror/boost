@@ -6,12 +6,13 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
 #include <boost/preprocessor/cat.hpp>
-#define BOOST_TEST_MODULE TestSameLine
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <iostream>
     
 //[same_line
@@ -28,18 +29,14 @@
         return x - offset; \
     } BOOST_LOCAL_FUNCTION_NAME(dec)
 
-BOOST_AUTO_TEST_CASE(test_same_line)
-{
+int main(void) {
     int delta = 10;
     LOCAL_INC_DEC(delta) // Multiple local functions on same line.
     
-    BOOST_CHECK(dec(inc(123)) == 123);
+    BOOST_TEST(dec(inc(123)) == 123);
+    return boost::report_errors();
 }
 //]
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

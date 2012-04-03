@@ -17,7 +17,6 @@
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <cassert>
 
 // PRIVATE //
 
@@ -34,8 +33,8 @@
     )
 
 #define CONST_BLOCK_END_(id) \
-    BOOST_LOCAL_FUNCTION_NAME(BOOST_PP_CAT(const_assert_, id)) \
-    BOOST_PP_CAT(const_assert_, id)(); /* call local function immediately */
+    BOOST_LOCAL_FUNCTION_NAME(BOOST_PP_CAT(const_block_, id)) \
+    BOOST_PP_CAT(const_block_, id)(); /* call local function immediately */
 
 // PUBLIC //
 

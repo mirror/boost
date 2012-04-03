@@ -10,13 +10,11 @@
 #include <boost/typeof/typeof.hpp>
 #include <boost/typeof/std/vector.hpp>
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-#define BOOST_TEST_MODULE TestScopeExit
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <iostream>
 #include <sstream>
 
-class person; BOOST_TYPEOF_REGISTER_TYPE(person)
 class person {
     friend class world;
 public:
@@ -32,8 +30,8 @@ private:
     id_t id_;
     evolution_t evolution_;
 };
+BOOST_TYPEOF_REGISTER_TYPE(person)
 
-class world; BOOST_TYPEOF_REGISTER_TYPE(world)
 class world {
 public:
     typedef unsigned int id_t;
@@ -53,6 +51,7 @@ private:
     id_t next_id_;
     std::vector<person> persons_;
 };
+BOOST_TYPEOF_REGISTER_TYPE(world)
 
 void world::add_person(person const& a_person) {
     persons_.push_back(a_person);
@@ -87,17 +86,17 @@ void world::add_person(person const& a_person) {
     checkpoint = ++p.evolution_;
 }
 
-BOOST_AUTO_TEST_CASE(test_scope_exit) {
+int main(void) {
     person adam, eva;
     std::ostringstream oss;
     oss << adam;
     std::cout << oss.str() << std::endl;
-    BOOST_CHECK(oss.str() == "person(0, 0)");
+    BOOST_TEST(oss.str() == "person(0, 0)");
 
     oss.str("");
     oss << eva;
     std::cout << oss.str() << std::endl;
-    BOOST_CHECK(oss.str() == "person(0, 0)");
+    BOOST_TEST(oss.str() == "person(0, 0)");
 
     world w;
     w.add_person(adam);
@@ -105,6 +104,7 @@ BOOST_AUTO_TEST_CASE(test_scope_exit) {
     oss.str("");
     oss << w;
     std::cout << oss.str() << std::endl;
-    BOOST_CHECK(oss.str() == "world(3, { person(1, 2),  person(2, 2), })");
+    BOOST_TEST(oss.str() == "world(3, { person(1, 2),  person(2, 2), })");
+    return boost::report_errors();
 }
 

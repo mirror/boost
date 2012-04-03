@@ -9,7 +9,10 @@ import sys
 import time
 import os
 
-# Usage: python crono.py COMMAND [COMMAND_OPTIONS]
+if len(sys.argv) < 2:
+    print "Usage: python " + sys.argv[0] + " COMMAND [COMMAND_OPTIONS]"
+    print "Measure run-time of executing the specified command."
+    exit(1)
 
 cmd = ""
 for arg in sys.argv[1:]: cmd += str(arg) + " "

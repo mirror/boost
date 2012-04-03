@@ -6,25 +6,23 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestAddDefault
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_add_default) {
+int main(void) {
     //[add_default
-    int BOOST_LOCAL_FUNCTION(int x, int y, default 2) { // Default.
+    int BOOST_LOCAL_FUNCTION(int x, int y, default 2) { // Default parameter.
         return x + y;
     } BOOST_LOCAL_FUNCTION_NAME(add)
 
-    BOOST_CHECK(add(1) == 3);
+    BOOST_TEST(add(1) == 3);
     //]
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

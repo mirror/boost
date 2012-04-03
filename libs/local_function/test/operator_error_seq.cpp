@@ -6,21 +6,21 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestOperatorErrorSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 struct point {
     int x;
     int y;
 };
 
-BOOST_AUTO_TEST_CASE(test_operator_error_seq) {
+int main(void) {
     bool BOOST_LOCAL_FUNCTION( (const point& p) (const point& q) ) {
         return p.x == q.x && p.y == q.y;
     } BOOST_LOCAL_FUNCTION_NAME(operator==)
 
     point a; a.x = 1; a.y = 2;
     point b = a;
-    BOOST_CHECK(a == b);
+    BOOST_TEST(a == b);
+    return boost::report_errors();
 }
 

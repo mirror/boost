@@ -5,8 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
-#define BOOST_TEST_MODULE TestAddGlobalFunctor
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
 //[add_global_functor
@@ -22,7 +21,7 @@ private: // Unfortunately, cannot bind so repeat variable types.
     const int factor; // Make `factor` constant.
 };
 
-BOOST_AUTO_TEST_CASE(test_add_global_functor) {
+int main(void) {
     int sum = 0, factor = 10;
 
     global_add add(sum, factor);
@@ -31,7 +30,8 @@ BOOST_AUTO_TEST_CASE(test_add_global_functor) {
     int nums[] = {2, 3};
     std::for_each(nums, nums + 2, add); // Passed as template parameter.
 
-    BOOST_CHECK(sum == 60);
+    BOOST_TEST(sum == 60);
+    return boost::report_errors();
 }
 //]
 

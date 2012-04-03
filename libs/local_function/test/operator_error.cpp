@@ -6,11 +6,12 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestOperatorError
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 //[operator_error
 struct point {
@@ -25,13 +26,10 @@ BOOST_AUTO_TEST_CASE(test_operator_error) {
 
     point a; a.x = 1; a.y = 2;
     point b = a;
-    BOOST_CHECK(a == b);
+    BOOST_TEST(a == b);
+    return boost::report_errors();
 }
 //]
 
-#else
-
-#error "Trivial error."
-
-#endif
+#endif // VARIADIC_MACROS
 

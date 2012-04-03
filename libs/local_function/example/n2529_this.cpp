@@ -6,8 +6,7 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestN2529This
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -25,7 +24,7 @@ struct v {
     }
 };
 
-BOOST_AUTO_TEST_CASE(test_n2529_this) {
+int main(void) {
     std::vector<int> n(3);
     n[0] = 1; n[1] = 2; n[2] = 3;
 
@@ -35,8 +34,9 @@ BOOST_AUTO_TEST_CASE(test_n2529_this) {
     v vn(n);
     vn.change_sign_all(i);
     
-    BOOST_CHECK(vn.nums.at(0) == -1);
-    BOOST_CHECK(vn.nums.at(1) == 2);
-    BOOST_CHECK(vn.nums.at(2) == -3);
+    BOOST_TEST(vn.nums.at(0) == -1);
+    BOOST_TEST(vn.nums.at(1) == 2);
+    BOOST_TEST(vn.nums.at(2) == -3);
+    return boost::report_errors();
 }
 

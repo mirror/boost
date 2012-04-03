@@ -6,10 +6,9 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestAddExceptSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_except_seq) {
+int main(void) {
     double sum = 0.0;
     int factor = 10;
 
@@ -20,6 +19,7 @@ BOOST_AUTO_TEST_CASE(test_except_seq) {
 
     add(100);
     
-    BOOST_CHECK(sum == 1000);
+    BOOST_TEST(sum == 1000);
+    return boost::report_errors();
 }
 

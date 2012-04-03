@@ -6,10 +6,9 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestNestingSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_nesting_seq) {
+int main(void) {
     int x = 0;
 
     void BOOST_LOCAL_FUNCTION( (bind& x) ) {
@@ -23,6 +22,7 @@ BOOST_AUTO_TEST_CASE(test_nesting_seq) {
     
     f();
 
-    BOOST_CHECK(x == 0);
+    BOOST_TEST(x == 0);
+    return boost::report_errors();
 }
 

@@ -13,7 +13,7 @@
 struct n {
     int i;
     n(int _i): i(_i) {}
-    n(n const& x): i(x.i) { // Some time consuming copy.
+    n(n const& x): i(x.i) { // Some time consuming copy operation.
         for (unsigned i = 0; i < 10000; ++i) std::cout << '.';
     }
 };
@@ -21,8 +21,8 @@ struct n {
 int main(void) {
     n x(-1);
 
-    void BOOST_LOCAL_FUNCTION(const bind& x) {  // OK: No copy
-        assert( x.i == -1 );                    // and constant.
+    void BOOST_LOCAL_FUNCTION(const bind& x) {  // OK: No copy expensive
+        assert(x.i == -1);                      // copy but constant.
     } BOOST_LOCAL_FUNCTION_NAME(f)
     f();
 

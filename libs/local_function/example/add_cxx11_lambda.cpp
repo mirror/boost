@@ -6,15 +6,15 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_LAMBDAS
+#ifdef BOOST_NO_LAMBDAS
+#   error "lambda functions required"
+#else
 
-#define BOOST_TEST_MODULE TestAddLambda
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE( test_add_lambda )
-//[add_lambda
-{                                           // Some local scope.
+//[add_cxx11_lambda
+int main(void) {                            // Some local scope.
     int sum = 0, factor = 10;               // Variables in scope to bind.
     
     auto add = [factor, &sum](int num) {    // C++11 only.
@@ -25,13 +25,10 @@ BOOST_AUTO_TEST_CASE( test_add_lambda )
     int nums[] = {2, 3};
     std::for_each(nums, nums + 2, add);     // Pass it to an algorithm.
     
-    BOOST_CHECK(sum == 60);                 // Assert final summation value.
+    BOOST_TEST(sum == 60);                  // Assert final summation value.
+    return boost::report_errors();
 }
 //]
-
-#else
-
-int main(void) { return 0; } // Trivial test.
 
 #endif
 

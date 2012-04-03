@@ -6,8 +6,6 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestGotoErrorSeq
-#include <boost/test/unit_test.hpp>
 
 int error(int x, int y) {
     int BOOST_LOCAL_FUNCTION( (int x) ) {
@@ -22,7 +20,8 @@ faliure:
     return -1;
 }
 
-BOOST_AUTO_TEST_CASE(test_goto_error_seq) {
+int main(void) {
     error(1, 2);
+    return 0;
 }
 

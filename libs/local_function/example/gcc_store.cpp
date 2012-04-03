@@ -7,8 +7,7 @@
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
-#define BOOST_TEST_MODULE TestGccStore
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 void intermediate(boost::function<void (int, int)> store_func, int size) {
     store_func(size - 1, -1);
@@ -22,12 +21,13 @@ void hack(int* array, int size) {
     intermediate(store, size);
 }
 
-BOOST_AUTO_TEST_CASE(test_gcc_store) {
+int main(void) {
     int nums[] = {1, 2, 3};
     hack(nums, 3);
 
-    BOOST_CHECK(nums[0] == 1);
-    BOOST_CHECK(nums[1] == 2);
-    BOOST_CHECK(nums[2] == -1);
+    BOOST_TEST(nums[0] == 1);
+    BOOST_TEST(nums[1] == 2);
+    BOOST_TEST(nums[2] == -1);
+    return boost::report_errors();
 }
 

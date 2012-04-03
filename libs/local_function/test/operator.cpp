@@ -6,11 +6,12 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestOperator
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 //[operator
 struct point {
@@ -18,20 +19,17 @@ struct point {
     int y;
 };
 
-BOOST_AUTO_TEST_CASE(test_operator) {
+int main(void) {
     bool BOOST_LOCAL_FUNCTION(const point& p, const point& q) {
         return p.x == q.x && p.y == q.y;
     } BOOST_LOCAL_FUNCTION_NAME(equal) // OK: not using `operator...`.
 
     point a; a.x = 1; a.y = 2;
     point b = a;
-    BOOST_CHECK(equal(a, b));
+    BOOST_TEST(equal(a, b));
+    return boost::report_errors();
 }
 //]
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

@@ -9,8 +9,7 @@
 #include <boost/local_function/detail/preprocessor/keyword/thisunderscore.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/const.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/bind.hpp>
-#define BOOST_TEST_MODULE TestImplPpKeyword
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 // Expand to 1 if space-separated tokens end with `this_`, 0 otherwise.
 #define IS_THIS_BACK(tokens) \
@@ -20,9 +19,10 @@
         tokens \
     )))
 
-BOOST_AUTO_TEST_CASE(test_impl_pp_keyword) {
-    BOOST_CHECK(IS_THIS_BACK(const bind this_) == 1);
-    BOOST_CHECK(IS_THIS_BACK(const bind& x) == 0);
+int main(void) {
+    BOOST_TEST(IS_THIS_BACK(const bind this_) == 1);
+    BOOST_TEST(IS_THIS_BACK(const bind& x) == 0);
+    return boost::report_errors();
 }
 //]
 

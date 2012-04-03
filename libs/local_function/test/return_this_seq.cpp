@@ -7,8 +7,7 @@
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
-#define BOOST_TEST_MODULE TestReturnThisSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 struct number {
     number(int value) : value_(value) {}
@@ -24,15 +23,16 @@ private:
     int value_;
 };
 
-BOOST_AUTO_TEST_CASE(test_return_this_seq) {
+int main(void) {
     number n1 = 0; // Object valid in scope where closure is used.
     boost::function<int (void)> inc1 = n1.inc();
     number n2 = 0;
     boost::function<int (void)> inc2 = n2.inc();
 
-    BOOST_CHECK(inc1() == 1);
-    BOOST_CHECK(inc1() == 2);
-    BOOST_CHECK(inc2() == 1);
-    BOOST_CHECK(inc1() == 3);
+    BOOST_TEST(inc1() == 1);
+    BOOST_TEST(inc1() == 2);
+    BOOST_TEST(inc2() == 1);
+    BOOST_TEST(inc1() == 3);
+    return boost::report_errors();
 }
 

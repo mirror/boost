@@ -6,17 +6,18 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include "addable.hpp"
 #include <boost/local_function.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/concept_check.hpp>
-#define BOOST_TEST_MODULE TestTypeof
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE(test_typeof) {
+int main(void) {
     //[typeof
     int sum = 0, factor = 10;
 
@@ -32,12 +33,9 @@ BOOST_AUTO_TEST_CASE(test_typeof) {
 
     add(6);
     //]
-    BOOST_CHECK(sum == 60);
+    BOOST_TEST(sum == 60);
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

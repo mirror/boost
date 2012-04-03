@@ -6,13 +6,11 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestAddSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE(test_add_seq)
 //[add_seq
-{
+int main(void) {
     int sum = 0, factor = 10;
     
     void BOOST_LOCAL_FUNCTION( (const bind factor) (bind& sum) (int num) ) {
@@ -23,7 +21,8 @@ BOOST_AUTO_TEST_CASE(test_add_seq)
     int nums[] = {2, 3};
     std::for_each(nums, nums + 2, add);
 
-    BOOST_CHECK(sum == 60);
+    BOOST_TEST(sum == 60);
+    return boost::report_errors();
 }
 //]
 

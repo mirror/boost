@@ -7,8 +7,7 @@
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
-#define BOOST_TEST_MODULE TestReturnDerivativeSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 boost::function<int (int)> derivative(boost::function<int (int)>& f, int dx) {
     int BOOST_LOCAL_FUNCTION( (bind& f) (const bind dx) (int x) ) {
@@ -18,7 +17,7 @@ boost::function<int (int)> derivative(boost::function<int (int)>& f, int dx) {
     return deriv;
 }
 
-BOOST_AUTO_TEST_CASE(test_return_derivative_seq) {
+int main(void) {
     int BOOST_LOCAL_FUNCTION( (int x) ) {
         return x + 4;
     } BOOST_LOCAL_FUNCTION_NAME(add2)
@@ -26,6 +25,7 @@ BOOST_AUTO_TEST_CASE(test_return_derivative_seq) {
     boost::function<int (int)> a2 = add2;
 
     boost::function<int (int)> d2 = derivative(a2, 2);
-    BOOST_CHECK(d2(6) == 1);
+    BOOST_TEST(d2(6) == 1);
+    return boost::report_errors();
 }
 

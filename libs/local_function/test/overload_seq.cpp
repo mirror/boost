@@ -7,14 +7,13 @@
 
 #include <boost/local_function.hpp>
 #include <boost/functional/overloaded_function.hpp>
-#define BOOST_TEST_MODULE TestOverloadSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <string>
 #include <cmath>
 
 int add_i(int x, int y) { return x + y; }
 
-BOOST_AUTO_TEST_CASE(test_overload_seq) {
+int main(void) {
     std::string s = "abc";
     std::string BOOST_LOCAL_FUNCTION(
             (const bind& s) (const std::string& x) ) {
@@ -34,9 +33,10 @@ BOOST_AUTO_TEST_CASE(test_overload_seq) {
         , int (int, int)
     > add(add_s, add_d, add_d, add_i);
 
-    BOOST_CHECK(add("xyz") == "abcxyz");
-    BOOST_CHECK(fabs(add(3.21) - 4.44) < 0.001);
-    BOOST_CHECK(fabs(add(3.21, 40.0) - 44.44) < 0.001);
-    BOOST_CHECK(add(1, 2) == 3);
+    BOOST_TEST(add("xyz") == "abcxyz");
+    BOOST_TEST(fabs(add(3.21) - 4.44) < 0.001);
+    BOOST_TEST(fabs(add(3.21, 40.0) - 44.44) < 0.001);
+    BOOST_TEST(add(1, 2) == 3);
+    return boost::report_errors();
 }
 

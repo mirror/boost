@@ -6,12 +6,11 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestAddInlineSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE(test_add_inline_seq) {
+int main(void) {
     int sum = 0, factor = 10;
 
     void BOOST_LOCAL_FUNCTION( (const bind factor) (bind& sum) (int num) ) {
@@ -23,6 +22,7 @@ BOOST_AUTO_TEST_CASE(test_add_inline_seq) {
 
     for(size_t i = 0; i < v.size(); ++i) add(v[i]);
 
-    BOOST_CHECK(sum == 1000);
+    BOOST_TEST(sum == 1000);
+    return boost::report_errors();
 }
 

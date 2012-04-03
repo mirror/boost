@@ -6,11 +6,12 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestFactorial
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 #include <vector>
 
@@ -35,20 +36,17 @@ struct calculator {
 };
 //]
 
-BOOST_AUTO_TEST_CASE(test_factorial) {
+int main(void) {
     std::vector<int> v(3);
     v[0] = 1; v[1] = 3; v[2] = 4;
 
     calculator calc;
     calc.factorials(v);
-    BOOST_CHECK(calc.results[0] == 1);
-    BOOST_CHECK(calc.results[1] == 6);
-    BOOST_CHECK(calc.results[2] == 24);
+    BOOST_TEST(calc.results[0] == 1);
+    BOOST_TEST(calc.results[1] == 6);
+    BOOST_TEST(calc.results[2] == 24);
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

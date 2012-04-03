@@ -6,14 +6,15 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_LAMBDAS
+#ifdef BOOST_NO_LAMBDAS
+#   error "lambda functions required"
+#else
 
-#define BOOST_TEST_MODULE TestGccLambdaCxx11
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
-BOOST_AUTO_TEST_CASE(test_gcc_lambda_cxx11) {
-    //[gcc_lambda_cxx11
+int main(void) {
+    //[gcc_cxx11_lambda
     int val = 2;
     int nums[] = {1, 2, 3};
     int* end = nums + 3;
@@ -25,13 +26,10 @@ BOOST_AUTO_TEST_CASE(test_gcc_lambda_cxx11) {
     );
     //]
 
-    BOOST_CHECK(iter != end);
-    BOOST_CHECK(*iter == val);
+    BOOST_TEST(iter != end);
+    BOOST_TEST(*iter == val);
+    return boost::report_errors();
 }
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // LAMBDAS
 

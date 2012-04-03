@@ -7,8 +7,7 @@
 
 #include <boost/phoenix/core.hpp>
 #include <boost/phoenix/function.hpp>
-#define BOOST_TEST_MODULE TestPhoenixFactorial
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 //[phoenix_factorial
 struct factorial_impl { // Phoenix function from global functor.
@@ -27,14 +26,15 @@ struct factorial_impl { // Phoenix function from global functor.
     }
 };
 
-BOOST_AUTO_TEST_CASE(test_phoenix_factorial) {
+int main(void) {
     using boost::phoenix::arg_names::arg1;
     
     boost::phoenix::function<factorial_impl> factorial;
     
     int i = 4;
-    BOOST_CHECK(factorial(i)() == 24);      // Call.
-    BOOST_CHECK(factorial(arg1)(i) == 24);  // Lazy call.
+    BOOST_TEST(factorial(i)() == 24);      // Call.
+    BOOST_TEST(factorial(arg1)(i) == 24);  // Lazy call.
+    return boost::report_errors();
 }
 //]
 

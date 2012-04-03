@@ -5,12 +5,10 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/local_function
 
-#define BOOST_TEST_MODULE TestAddLocalFunctor
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_add_local_functor) 
 //[add_local_functor
-{
+int main(void) {
     int sum = 0, factor = 10;
 
     struct local_add { // Unfortunately, boilerplate code to program the class.
@@ -29,7 +27,8 @@ BOOST_AUTO_TEST_CASE(test_add_local_functor)
     // Unfortunately, cannot pass as template parameter to `std::for_each`.
     for(size_t i = 0; i < 2; ++i) add(nums[i]);
 
-    BOOST_CHECK(sum == 60);
+    BOOST_TEST(sum == 60);
+    return boost::report_errors();
 }
 //]
 

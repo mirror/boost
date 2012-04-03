@@ -6,11 +6,11 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestGotoError
-#include <boost/test/unit_test.hpp>
 
 //[goto_error
 int error(int x, int y) {
@@ -27,13 +27,10 @@ faliure:
 }
 //]
 
-BOOST_AUTO_TEST_CASE(test_goto_error) {
+int main(void) {
     error(1, 2);
+    return 0;
 }
-
-#else
-
-#error "Trivial error."
 
 #endif
 

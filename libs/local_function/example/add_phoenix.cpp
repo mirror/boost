@@ -6,14 +6,12 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/spirit/include/phoenix.hpp>
-#define BOOST_TEST_MODULE TestAddPhoenix
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 #include <iostream>
     
-BOOST_AUTO_TEST_CASE(test_add_phoenix)
 //[add_phoenix
-{
+int main(void) {
     using boost::phoenix::let;
     using boost::phoenix::local_names::_f;
     using boost::phoenix::cref;
@@ -29,7 +27,8 @@ BOOST_AUTO_TEST_CASE(test_add_phoenix)
         ref(sum) += _f * _1, _1 // Access `sum` by reference.
     ]);
 
-    BOOST_CHECK(sum == 60);
+    BOOST_TEST(sum == 60);
+    return boost::report_errors();
 }
 //]
 

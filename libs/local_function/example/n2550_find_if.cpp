@@ -6,8 +6,7 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestN2550FindIf
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <algorithm>
 
@@ -16,7 +15,7 @@ struct employee {
     explicit employee(const int& a_salary): salary(a_salary) {}
 };
 
-BOOST_AUTO_TEST_CASE(test_n2550_find_if) {
+int main(void) {
     std::vector<employee> employees;
     employees.push_back(employee(85000));
     employees.push_back(employee(100000));
@@ -35,7 +34,8 @@ BOOST_AUTO_TEST_CASE(test_n2550_find_if) {
     std::vector<employee>::iterator i = std::find_if(
             employees.begin(), employees.end(), between);
 
-    BOOST_CHECK(i != employees.end());
-    BOOST_CHECK(i->salary >= min_salary && i->salary < u_limit);
+    BOOST_TEST(i != employees.end());
+    BOOST_TEST(i->salary >= min_salary && i->salary < u_limit);
+    return boost::report_errors();
 }
 

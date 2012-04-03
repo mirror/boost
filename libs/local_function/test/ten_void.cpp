@@ -6,17 +6,16 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestTenVoid
-#include <boost/test/unit_test.hpp>
-#include <iostream>
+#include <boost/detail/lightweight_test.hpp>
 
-BOOST_AUTO_TEST_CASE(test_ten_void) {
+int main(void) {
     //[ten_void
     int BOOST_LOCAL_FUNCTION(void) { // No parameter.
         return 10;
     } BOOST_LOCAL_FUNCTION_NAME(ten)
 
-    BOOST_CHECK(ten() == 10);
+    BOOST_TEST(ten() == 10);
     //]
+    return boost::report_errors();
 }
 

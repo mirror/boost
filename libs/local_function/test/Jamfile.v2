@@ -7,55 +7,42 @@
 
 import testing ;
 
-project : requirements <library>/boost//unit_test_framework ;
-
-# Run variadic and sequence syntax (also forcing no variadic macros).
-rule run-vaseq ( file_name )
+rule vaseq ( command target )
 {
-    run $(file_name).cpp ;
-    run $(file_name)_seq.cpp ;
-    run $(file_name)_seq.cpp : : : <define>BOOST_NO_VARIADIC_MACROS :
-            $(file_name)_seq_nova : ;
+    $(command) $(target).cpp ;
+    $(command) $(target)_seq.cpp ;
+    $(command) $(target)_seq_nova.cpp ;
 }
 
-# Compile-fail variadic and sequence syntax (also forcing no variadic macros).
-rule compile-fail-vaseq ( file_name )
-{
-    compile-fail $(file_name).cpp ;
-    compile-fail $(file_name)_seq.cpp ;
-    compile-fail $(file_name)_seq.cpp : <define>BOOST_NO_VARIADIC_MACROS :
-            $(file_name)_seq_nova ;
-}
+vaseq run add ;
+vaseq run add_classifiers ;
+vaseq run add_default ;
+vaseq run add_except ;
+vaseq run add_inline ;
+vaseq run add_params_only ;
+vaseq run add_template ;
+vaseq run add_this ;
+vaseq run add_typed ;
+vaseq run add_with_default ;
+vaseq run all_decl ;
+vaseq run factorial ;
+vaseq run goto ;
+vaseq compile-fail goto_error ;
+vaseq run macro_commas ;
+vaseq run nesting ;
+vaseq run operator ;
+vaseq compile-fail operator_error ;
+vaseq run overload ;
+vaseq run return_assign ;
+vaseq run return_derivative ;
+vaseq run return_inc ;
+vaseq run return_setget ;
+vaseq run return_this ;
+vaseq run same_line ;
+vaseq run transform ;
+vaseq run typeof ;
+vaseq run typeof_template ;
 
-run-vaseq add ;
-run-vaseq add_classifiers ;
-run-vaseq add_default ;
-run-vaseq add_except ;
-run-vaseq add_inline ;
-run add_lambda.cpp ;
-run-vaseq add_params_only ;
-run-vaseq add_template ;
-run-vaseq add_this ;
-run-vaseq add_typed ;
-run-vaseq add_with_default ;
-run-vaseq all_decl ;
-run-vaseq factorial ;
-run-vaseq goto ;
-compile-fail-vaseq goto_error ;
-run-vaseq macro_commas ;
-run-vaseq nesting ;
-run-vaseq operator ;
-compile-fail-vaseq operator_error ;
-run-vaseq overload ;
-run-vaseq return_assign ;
-run-vaseq return_derivative ;
-run-vaseq return_inc ;
-run-vaseq return_setget ;
-run-vaseq return_this ;
-run-vaseq same_line ;
 run ten_void.cpp ;
-run ten_void.cpp : : : <define>BOOST_NO_VARIADIC_MACROS : ten_void_nova : ;
-run-vaseq transform ;
-run-vaseq typeof ;
-run-vaseq typeof_template ;
+run ten_void_nova.cpp ;
 

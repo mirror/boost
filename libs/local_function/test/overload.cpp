@@ -6,19 +6,20 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_VARIADIC_MACROS
+#ifdef BOOST_NO_VARIADIC_MACROS
+#   error "variadic macros required"
+#else
 
 #include <boost/local_function.hpp>
 #include <boost/functional/overloaded_function.hpp> // For overloading.
-#define BOOST_TEST_MODULE TestOverload
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <string>
 #include <cmath>
 
 //[overload
 int add_i(int x, int y) { return x + y; }
 
-BOOST_AUTO_TEST_CASE(test_overload) {
+int main(void) {
     std::string s = "abc";
     std::string BOOST_LOCAL_FUNCTION(
             const bind& s, const std::string& x) {
@@ -37,16 +38,12 @@ BOOST_AUTO_TEST_CASE(test_overload) {
         , int (int, int)
     > add(add_s, add_d, add_d, add_i); // Overloaded function object.
 
-    BOOST_CHECK(add("xyz") == "abcxyz"); // Call `add_s`.
-    BOOST_CHECK(fabs(add(3.21) - 4.44) < 0.001); // Call `add_d` (no default).
-    BOOST_CHECK(fabs(add(3.21, 40.0) - 44.44) < 0.001); // Call `add_d`.
-    BOOST_CHECK(add(1, 2) == 3); // Call `add_i`.
+    BOOST_TEST(add("xyz") == "abcxyz"); // Call `add_s`.
+    BOOST_TEST(fabs(add(3.21) - 4.44) < 0.001); // Call `add_d` (no default).
+    BOOST_TEST(fabs(add(3.21, 40.0) - 44.44) < 0.001); // Call `add_d`.
+    BOOST_TEST(add(1, 2) == 3); // Call `add_i`.
+    return boost::report_errors();
 }
-//]
 
-#else
-
-int main(void) { return 0; } // Trivial test.
-
-#endif
+#endif // VARIADIC_MACROS
 

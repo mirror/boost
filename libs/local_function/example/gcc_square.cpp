@@ -6,8 +6,7 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestGccSquare
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 int add_square(int a, int b) {
     int BOOST_LOCAL_FUNCTION(int z) {
@@ -17,7 +16,8 @@ int add_square(int a, int b) {
     return square(a) + square(b);
 }
 
-BOOST_AUTO_TEST_CASE(test_gcc_square) {
-    BOOST_CHECK(add_square(2, 4) == 20);
+int main(void) {
+    BOOST_TEST(add_square(2, 4) == 20);
+    return boost::report_errors();
 }
 

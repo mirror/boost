@@ -6,8 +6,7 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
-#define BOOST_TEST_MODULE TestAddTemplateSeq
-#include <boost/test/unit_test.hpp>
+#include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 
 template<typename T>
@@ -25,7 +24,8 @@ T total(const T& x, const T& y, const T& z) {
     return sum;
 }
 
-BOOST_AUTO_TEST_CASE(test_add_template_seq) {
-    BOOST_CHECK(total(1, 2, 3) == 60);
+int main(void) {
+    BOOST_TEST(total(1, 2, 3) == 60);
+    return boost::report_errors();
 }
 

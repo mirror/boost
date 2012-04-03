@@ -6,7 +6,9 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/config.hpp>
-#ifndef BOOST_NO_LAMBDAS
+#ifdef BOOST_NO_LAMBDAS
+#   error "lambda functions required"
+#else
 
 #include <boost/chrono.hpp>
 #include <vector>
@@ -38,9 +40,5 @@ int main(int argc, char* argv[]) {
     return 0;
 }
 
-#else // NO_LAMBDAS
-
-int main(void) { return 0; } // Trivial program.
-
-#endif // NO_LAMBDAS
+#endif // LAMBDAS
 
