@@ -756,12 +756,12 @@ void test_conversion_from_to_integral()
     test_conversion_from_integral_to_char<T>(wzero);
     test_conversion_from_char_to_integral<T>(wzero);
 #endif
-#ifndef BOOST_NO_CHAR16_T
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
     char16_t const u16zero = u'0';
     test_conversion_from_integral_to_char<T>(u16zero);
     test_conversion_from_char_to_integral<T>(u16zero);
 #endif
-#ifndef BOOST_NO_CHAR32_T
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
     char32_t const u32zero = u'0';
     test_conversion_from_integral_to_char<T>(u32zero);
     test_conversion_from_char_to_integral<T>(u32zero);
