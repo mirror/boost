@@ -19,7 +19,7 @@ struct point {
     int y;
 };
 
-BOOST_AUTO_TEST_CASE(test_operator_error) {
+int main(void) {
     bool BOOST_LOCAL_FUNCTION(const point& p, const point& q) {
         return p.x == q.x && p.y == q.y;
     } BOOST_LOCAL_FUNCTION_NAME(operator==) // Error: Cannot use `operator...`.

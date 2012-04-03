@@ -16,7 +16,7 @@ int error(int x, int y) {
     } BOOST_LOCAL_FUNCTION_NAME(validate)
 
     return validate(x + y);
-faliure:
+failure:
     return -1;
 }
 

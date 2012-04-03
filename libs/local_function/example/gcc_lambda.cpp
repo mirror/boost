@@ -7,7 +7,7 @@
 
 #include <boost/config.hpp>
 #ifndef __GNUC__
-#   error "GCC compiler required (uses non-standard GCC statement expressions)"
+#   error "GCC required (using non-standard GCC statement expressions)"
 #else
 
 #include "gcc_lambda.hpp"
