@@ -8,6 +8,9 @@
 
 import testing ;
 
+# Workaround a Boost.Config bug that causes Boost.Typeof to fail on Sun.
+project : requirements <toolset>sun:<define>__typeof__=__typeof__ ;
+
 rule vaseq ( command target )
 {
     $(command) $(target).cpp ;
