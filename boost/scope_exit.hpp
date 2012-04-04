@@ -210,41 +210,167 @@ extern boost::scope_exit::detail::undeclared BOOST_SCOPE_EXIT_AUX_ARGS;
 // `this` type due to error C2355 being incorrectly reported. The typical
 // avoidance strategy implemented below is to make an indirect compile-time
 // constant by assigning an enum and use that as type-index-- this only works
-// with the sizeof() approach and not with the typeid() approach. This does not
-// work in typeof emulation mode.
-#if BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01 && \
-        !defined(BOOST_TYPEOF_EMULATION)
+// with the sizeof() approach and not with the typeid() approach. Lorenzo
+// Caminiti extended this approach to work in type-of emulation mode. This code
+// is very similar (and somewhat of a duplication) of the code in
+// boost/typeof/msvc/typeof_impl.hpp). However, this code cannot be integrated
+// into Boost.Typeof because its final API has to be a `typedef ...` and it
+// cannot be a `typeof(...)`.
+#if BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01
+
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
+#include <boost/mpl/int.hpp>
+#include <boost/type_traits/is_function.hpp>
+#include <boost/utility/enable_if.hpp>
+
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1310)
+#   include <typeinfo>
+#endif
 
 namespace boost { namespace scope_exit { namespace aux {
         namespace msvc_typeof_this {
+
+// compile-time constant code
+#if BOOST_WORKAROUND(BOOST_MSVC, >=1300) && defined(_MSC_EXTENSIONS)
+
+template<int N> struct the_counter;
+
+template<typename T,int N = 5 /* for similarity */>
+struct encode_counter {
+    __if_exists(the_counter<N + 256>) {
+        BOOST_STATIC_CONSTANT(unsigned,
+            count=(encode_counter<T,N + 257>::count));
+    }
+    __if_not_exists(the_counter<N + 256>) {
+        __if_exists(the_counter<N + 64>) {
+            BOOST_STATIC_CONSTANT(unsigned,
+                    count=(encode_counter<T,N + 65>::count));
+        }
+        __if_not_exists(the_counter<N + 64>) {
+            __if_exists(the_counter<N + 16>) {
+                BOOST_STATIC_CONSTANT(unsigned,
+                        count=(encode_counter<T,N + 17>::count));
+            }
+            __if_not_exists(the_counter<N + 16>) {
+                __if_exists(the_counter<N + 4>) {
+                    BOOST_STATIC_CONSTANT(unsigned,
+                            count=(encode_counter<T,N + 5>::count));
+                }
+                __if_not_exists(the_counter<N + 4>) {
+                    __if_exists(the_counter<N>) {
+                        BOOST_STATIC_CONSTANT(unsigned,
+                                count=(encode_counter<T,N + 1>::count));
+                    }
+                    __if_not_exists(the_counter<N>) {
+                        BOOST_STATIC_CONSTANT(unsigned,count=N);
+                        typedef the_counter<N> type;
+                    }
+                }
+            }
+        }
+    }
+};
+
+#else // compile-time constant code
     
-template<int Id>
-struct msvc_typeid_wrapper
+template<int N> struct encode_counter : encode_counter<N - 1> {};
+
+template<> struct encode_counter<0> {};
+
+#endif // compile-time constant code
+
+#if BOOST_WORKAROUND(BOOST_MSVC, == 1300) // type-of code
+
+template<typename ID>
+struct msvc_extract_type
 {
-    typedef typename boost::type_of::msvc_extract_type<boost::mpl::int_<Id>
+    template<bool>
+    struct id2type_impl;
+
+    typedef id2type_impl<true> id2type;
+};
+
+template<typename T, typename ID>
+struct msvc_register_type : msvc_extract_type<ID>
+{
+    template<>
+    struct id2type_impl<true> { // VC7.0 specific bug-feature.
+        typedef T type;
+    };
+};
+
+#elif BOOST_WORKAROUND(BOOST_MSVC, >= 1400) // type-of code
+
+struct msvc_extract_type_default_param {};
+
+template<typename ID, typename T = msvc_extract_type_default_param>
+struct msvc_extract_type;
+
+template<typename ID>
+struct msvc_extract_type<ID, msvc_extract_type_default_param> {
+    template<bool>
+    struct id2type_impl;
+
+    typedef id2type_impl<true> id2type;
+};
+
+template<typename ID, typename T>
+struct msvc_extract_type
+        : msvc_extract_type<ID, msvc_extract_type_default_param> {
+    template<>
+    struct id2type_impl<true> { // VC8.0 specific bug-feature.
+        typedef T type;
+    };
+
+    template<bool>
+    struct id2type_impl;
+
+    typedef id2type_impl<true> id2type;
+};
+
+template<typename T, typename ID>
+struct msvc_register_type : msvc_extract_type<ID, T> {};
+
+#else // type-of code
+
+template<typename ID>
+struct msvc_extract_type {
+    struct id2type;
+};
+
+template<typename T, typename ID>
+struct msvc_register_type : msvc_extract_type<ID> {
+    typedef msvc_extract_type<ID> base_type;
+    struct base_type::id2type { // This uses nice VC6.5 and VC7.1 bug-features.
+        typedef T type;
+    };
+};
+
+#endif // typeof code
+
+template<int Id>
+struct msvc_typeid_wrapper {
+    typedef typename msvc_extract_type<boost::mpl::int_<Id>
             >::id2type id2type;
     typedef typename id2type::type type;
 };
 
 template<>
-struct msvc_typeid_wrapper<4>
-{
+struct msvc_typeid_wrapper<4> {
     typedef msvc_typeid_wrapper<4> type;
 };
 
 template<typename T>
-struct encode_type
-{
-    BOOST_STATIC_CONSTANT(unsigned,
-            value = boost::type_of::encode_counter<T>::count);
-    typedef typename boost::type_of::msvc_register_type<T,
+struct encode_type {
+    BOOST_STATIC_CONSTANT(unsigned, value = encode_counter<T>::count);
+    typedef typename msvc_register_type<T,
             boost::mpl::int_<value> >::id2type type;
     BOOST_STATIC_CONSTANT(unsigned, next = value + 1);
 };
 
 template<class T>
-struct sizer
-{
+struct sizer {
     typedef char(*type)[encode_type<T>::value];
 };
 
@@ -261,7 +387,7 @@ typename boost::enable_if<
 >::type encode_start(T&);
 
 template<typename Organizer, typename T>
-boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
+msvc_register_type<T, Organizer> typeof_register_type(const T&,
         Organizer* = 0);
 
 } } } } // namespace
@@ -270,6 +396,9 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
     BOOST_PP_CAT(boost_se_thistype_index_, id)
 
 #define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, ty, new_type) \
+    /* unfortunately, we need to go via this enum which causes this to be */ \
+    /* a typedef construct and not a typeof (so this code cannot be */ \
+    /* integrated into Boost.Typeof) */ \
     enum { \
         BOOST_SCOPE_EXIT_AUX_TYPEDEF_TYPEOF_THIS_INDEX_(id) = sizeof( \
             *::boost::scope_exit::aux::msvc_typeof_this::encode_start(this)) \
@@ -292,7 +421,7 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
             ()); \
     typedef int new_type; /* some `int` type to limit cryptic errors */
 
-#else // TYPEOF_THIS_WORKAROUND
+#else // TYPEOF_THIS_MSVC_WORKAROUND
 
 #define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, ty, new_type) \
     typedef /* trailing `EMPTY()` handles empty `ty` */ \
@@ -304,7 +433,7 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
         new_type \
     ;
 
-#endif // TYPEOF_THIS_WORKAROUND
+#endif // TYPEOF_THIS_MSVC_WORKAROUND
 
 #if BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01
 
@@ -328,7 +457,7 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
         } /* trailing `;` will be added by the caller */ \
     )
 
-#else // TPL_WORKAROUND
+#else // TPL_GCC_WORKAROUND
 
 #define BOOST_SCOPE_EXIT_AUX_CTOR_ARG(r, id, i, var) \
     BOOST_PP_COMMA_IF(i) \
@@ -386,7 +515,7 @@ boost::type_of::msvc_register_type<T, Organizer> typeof_register_type(const T&,
     BOOST_PP_RPAREN_IF(BOOST_PP_BITOR(has_this, \
             BOOST_PP_LIST_IS_CONS(captures)))
 
-#endif // TPL_WORKAROUND
+#endif // TPL_GCC_WORKAROUND
 
 #if defined(BOOST_TYPEOF_EMULATION)
 
