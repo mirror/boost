@@ -488,6 +488,23 @@
           <xsl:with-param name="text" select="substring($text, 2)"/>
         </xsl:call-template>
       </xsl:when>
+      <xsl:when test="substring($text, 1, 1) = '#'">
+        <xsl:choose>
+          <xsl:when test="contains($text, '&#xA;')">
+            <xsl:call-template name="highlight-comment">
+              <xsl:with-param name="text" select="substring-before($text, '&#xA;')"/>
+            </xsl:call-template>
+            <xsl:call-template name="highlight-jam-text">
+              <xsl:with-param name="text" select="concat('&#xA;', substring-after($text, '&#xA;'))"/>
+            </xsl:call-template>
+          </xsl:when>
+          <xsl:otherwise>
+            <xsl:call-template name="highlight-comment">
+              <xsl:with-param name="text" select="$text"/>
+            </xsl:call-template>
+          </xsl:otherwise>
+        </xsl:choose>
+      </xsl:when>
       <xsl:otherwise>
         <xsl:variable name="length">
           <xsl:call-template name="jam-word-length">
