@@ -30,11 +30,6 @@
 #   undef BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
 #   define BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS 1
 #endif
-#if BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
-#   warning "locals as tparams"
-#else
-#   warning "no locals as tparams"
-#endif
 
 #else // DOXYGEN
 
