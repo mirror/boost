@@ -71,8 +71,7 @@
 #  define BOOST_NO_LAMBDAS
 #endif
 
-#if !(defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L) \
- || __clang_major__ < 2 || (__clang_major__ == 2 && __clang_minor__ < 8)
+#if !__has_feature(cxx_local_type_template_args)
 #  define BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
 #endif
 
