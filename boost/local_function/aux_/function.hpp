@@ -35,6 +35,9 @@
 #define BOOST_LOCAL_FUNCTION_AUX_FUNCTION_INIT_CALL_FUNC \
     BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (init_call) )
 
+#define BOOST_LOCAL_FUNCTION_AUX_typename_seq(z, n, unused) \
+    (typename)
+
 #define BOOST_LOCAL_FUNCTION_AUX_arg_type(z, arg_n, unused) \
     BOOST_PP_CAT(A, arg_n)
 
@@ -184,15 +187,18 @@ class function {}; // Empty template, only use its specializations.
 // Register type for type-of emu (NAME use TYPEOF to deduce this fctor type).
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::local_function::aux::function,
-    BOOST_PP_ADD(2, // F and defaults tparams.
-        BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01,
-            0 // No additional tparam.
-        ,
-            BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX // Bind tparams.
-        )
-    )
+    (typename) // For `F` tparam.
+    (size_t) // For `defaults` tparam.
+    // MSVC error if using #if instead of PP_IIF here.
+    BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01,
+        BOOST_PP_TUPLE_EAT(3) // Nothing.
+    ,
+        BOOST_PP_REPEAT // For bind tparams.
+    )(BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX,
+            BOOST_LOCAL_FUNCTION_AUX_typename_seq, ~)
 )
 
+#undef BOOST_LOCAL_FUNCTION_AUX_typename_seq
 #undef BOOST_LOCAL_FUNCTION_AUX_arg_type
 #undef BOOST_LOCAL_FUNCTION_AUX_arg_typedef
 #undef BOOST_LOCAL_FUNCTION_AUX_comma_arg_tparam

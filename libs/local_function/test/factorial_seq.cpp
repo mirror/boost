@@ -6,9 +6,14 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/detail/lightweight_test.hpp>
 #include <algorithm>
 #include <vector>
+
+struct calculator;
+BOOST_TYPEOF_REGISTER_TYPE(calculator) // Register before bind `this_` below.
 
 struct calculator {
     std::vector<int> results;

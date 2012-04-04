@@ -18,8 +18,18 @@
 // case are comparable to C++11 lambdas).
 #ifdef BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
 #   define BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01 0
+#   if __GNUC__
+#       warning "Boost.LocalFunction: Local class template parameters"
+#   elif BOOST_MSVC
+#       pragma message("Boost.LocalFunction: Local class template parameters")
+#   endif
 #else
 #   define BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01 1
+#   if __GNUC__
+#       warning "Boost.LocalFunction: No local class template parameters"
+#   elif BOOST_MSVC
+#       pragma message("Boost.LocalFunction: No local class template parameters")
+#   endif
 #endif
 
 #endif // #include guard

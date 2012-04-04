@@ -11,6 +11,11 @@
 #else
 
 #include <boost/local_function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
+
+struct s;
+BOOST_TYPEOF_REGISTER_TYPE(s) // Register before binding `this_` below.
 
 // Compile all local function declaration combinations.
 struct s {
