@@ -6,6 +6,8 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <algorithm>
@@ -14,6 +16,7 @@ struct employee {
     int salary;
     explicit employee(const int& a_salary): salary(a_salary) {}
 };
+BOOST_TYPEOF_REGISTER_TYPE(employee) // Register for `NAME` below. 
 
 int main(void) {
     std::vector<employee> employees;

@@ -15,7 +15,7 @@ T total(const T& x, const T& y, const T& z) {
 
     T BOOST_LOCAL_FUNCTION_TPL( (const bind factor) (bind& sum) (T num) ) {
         return sum += factor * num;
-    } BOOST_LOCAL_FUNCTION_NAME(add)
+    } BOOST_LOCAL_FUNCTION_NAME_TPL(add)
 
     add(x);
     T nums[2]; nums[0] = y; nums[1] = z;

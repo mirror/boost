@@ -20,7 +20,7 @@ T calculate(const T& factor) {
         BOOST_CONCEPT_ASSERT((Addable<typename boost::remove_reference<
                 BOOST_LOCAL_FUNCTION_TYPEOF(sum)>::type>));
         sum += factor * num;
-    } BOOST_LOCAL_FUNCTION_NAME(add)
+    } BOOST_LOCAL_FUNCTION_NAME_TPL(add)
 
     add(6);
     return sum;

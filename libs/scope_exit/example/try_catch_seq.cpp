@@ -7,6 +7,8 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include <boost/scope_exit.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <iostream>
 
 struct file {
@@ -20,6 +22,7 @@ struct file {
 private:
     bool open_;
 };
+BOOST_TYPEOF_REGISTER_TYPE(file)
 
 void bad(void) {
     //[try_catch_bad_seq

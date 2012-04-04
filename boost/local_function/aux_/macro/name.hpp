@@ -8,13 +8,13 @@
 #ifndef BOOST_LOCAL_FUNCTION_AUX_NAME_HPP_
 #define BOOST_LOCAL_FUNCTION_AUX_NAME_HPP_
 
+#include <boost/local_function/config.hpp>
 #include <boost/local_function/aux_/macro/decl.hpp>
 #include <boost/local_function/aux_/macro/code_/functor.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/recursive.hpp>
 #include <boost/local_function/detail/preprocessor/keyword/inline.hpp>
 #include <boost/local_function/aux_/function.hpp>
 #include <boost/local_function/aux_/symbol.hpp>
-#include <boost/local_function/aux_/config.hpp>
 #include <boost/typeof/typeof.hpp>
 #include <boost/preprocessor/control/iif.hpp>
 #include <boost/preprocessor/control/expr_iif.hpp>
@@ -34,7 +34,7 @@
         BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (nonrecursive_local_function_name) ) \
     )
 
-#define BOOST_LOCAL_FUNCTION_AUX_NAME_END_LOCAL_FUNCTOR_(id, \
+#define BOOST_LOCAL_FUNCTION_AUX_NAME_END_LOCAL_FUNCTOR_(typename01, \
         local_function_name, is_recursive, \
         local_functor_name, nonlocal_functor_name) \
     /* `PARAMS() { ... }` expandsion here -- still within functor class */ \
@@ -64,10 +64,14 @@
     /* local functor can be passed as tparam only on C++11 (faster) */ \
     } local_functor_name(BOOST_LOCAL_FUNCTION_AUX_DECL_ARGS_VAR.value); \
     /* non-local functor can always be passed as tparam (but slower) */ \
-    BOOST_TYPEOF(local_functor_name. \
-            BOOST_LOCAL_FUNCTION_AUX_NAME_RECURSIVE_FUNC_(is_recursive, \
-                    local_function_name)) \
-            nonlocal_functor_name; \
+    BOOST_PP_IIF(typename01, \
+        BOOST_TYPEOF_TPL \
+    , \
+        BOOST_TYPEOF \
+    )(local_functor_name.BOOST_LOCAL_FUNCTION_AUX_NAME_RECURSIVE_FUNC_( \
+            is_recursive, local_function_name)) \
+        nonlocal_functor_name /* functor variable */ \
+    ; \
     /* the order of the following 2 function calls cannot be changed */ \
     /* because init_recursion uses the local_functor so the local_functor */ \
     /* must be init first */ \
@@ -87,8 +91,8 @@
 // This can always be passed as a template parameters (on all compilers).
 // However, it is slower because it cannot be inlined.
 // Passed at tparam: Yes (on all C++). Inlineable: No. Recursive: No.
-#define BOOST_LOCAL_FUNCTION_AUX_NAME_(local_function_name) \
-    BOOST_LOCAL_FUNCTION_AUX_NAME_END_LOCAL_FUNCTOR_(__LINE__, \
+#define BOOST_LOCAL_FUNCTION_AUX_NAME_(typename01, local_function_name) \
+    BOOST_LOCAL_FUNCTION_AUX_NAME_END_LOCAL_FUNCTOR_(typename01, \
             local_function_name, \
             /* local function is not recursive (because recursion and its */ \
             /* initialization cannot be inlined even on C++11, */ \
@@ -104,8 +108,8 @@
 // because its optimization inlines it but not on MSVC). However, it cannot be
 // passed as a template parameter on non C++11 compilers.
 // Passed at tparam: Only on C++11. Inlineable: Yes. Recursive: No.
-#define BOOST_LOCAL_FUNCTION_AUX_NAME_INLINE_(local_function_name) \
-    BOOST_LOCAL_FUNCTION_AUX_NAME_END_LOCAL_FUNCTOR_(__LINE__, \
+#define BOOST_LOCAL_FUNCTION_AUX_NAME_INLINE_(typename01, local_function_name) \
+    BOOST_LOCAL_FUNCTION_AUX_NAME_END_LOCAL_FUNCTOR_(typename01, \
             local_function_name, \
             /* inlined local function is never recursive (because recursion */ \
             /* and its initialization cannot be inlined)*/ \
@@ -120,8 +124,9 @@
 // This is slower on all compilers (C++11 and non) because recursion and its
 // initialization can never be inlined.
 // Passed at tparam: Yes. Inlineable: No. Recursive: Yes.
-#define BOOST_LOCAL_FUNCTION_AUX_NAME_RECURSIVE_(local_function_name) \
-    BOOST_LOCAL_FUNCTION_AUX_NAME_END_LOCAL_FUNCTOR_(__LINE__, \
+#define BOOST_LOCAL_FUNCTION_AUX_NAME_RECURSIVE_( \
+        typename01, local_function_name) \
+    BOOST_LOCAL_FUNCTION_AUX_NAME_END_LOCAL_FUNCTOR_(typename01, \
             local_function_name, \
             /* recursive local function -- but it cannot be inlined */ \
             1 /* recursive */ , \
@@ -135,9 +140,10 @@
 // They have more chances to be inlined for faster run-times by some compilers
 // (for example by GCC but not by MSVC). C++11 compilers can always inline
 // local functions even if they are not explicitly specified inline.
-#define BOOST_LOCAL_FUNCTION_AUX_NAME_PARSE_INLINE_(qualified_name) \
+#define BOOST_LOCAL_FUNCTION_AUX_NAME_PARSE_INLINE_( \
+        typename01, qualified_name) \
     BOOST_PP_IIF(BOOST_PP_BITOR( \
-            BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01, \
+            BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS, \
             BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_IS_INLINE_FRONT( \
                     qualified_name)), \
         /* on C++11 always use inlining because compilers might optimize */ \
@@ -148,7 +154,7 @@
         /* programmers `inline name` the inlined local function cannot be */ \
         /* passed as tparam */ \
         BOOST_LOCAL_FUNCTION_AUX_NAME_ \
-    )(BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_INLINE_REMOVE_FRONT( \
+    )(typename01, BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_INLINE_REMOVE_FRONT( \
             qualified_name))
 
 // Expand to 1 iff `recursive name` or `recursive inline name` or
@@ -178,18 +184,20 @@
 
 // Recursive local function are specified by `..._NAME(recursive name)`. 
 // They can never be inlined for faster run-time (not even by C++11 compilers).
-#define BOOST_LOCAL_FUNCTION_AUX_NAME_PARSE_RECURSIVE_(qualified_name) \
+#define BOOST_LOCAL_FUNCTION_AUX_NAME_PARSE_RECURSIVE_( \
+        typename01, qualified_name) \
     BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_AUX_NAME_IS_RECURSIVE_(qualified_name), \
         /* recursion can never be inlined (not even on C++11) */ \
         BOOST_LOCAL_FUNCTION_AUX_NAME_RECURSIVE_ \
     , \
         BOOST_LOCAL_FUNCTION_AUX_NAME_PARSE_INLINE_ \
-    )(BOOST_LOCAL_FUNCTION_AUX_NAME_RECURSIVE_REMOVE_(qualified_name))
+    )(typename01, \
+            BOOST_LOCAL_FUNCTION_AUX_NAME_RECURSIVE_REMOVE_(qualified_name))
 
 // PUBLIC //
 
-#define BOOST_LOCAL_FUNCTION_AUX_NAME(qualified_name) \
-    BOOST_LOCAL_FUNCTION_AUX_NAME_PARSE_RECURSIVE_(qualified_name)
+#define BOOST_LOCAL_FUNCTION_AUX_NAME(typename01, qualified_name) \
+    BOOST_LOCAL_FUNCTION_AUX_NAME_PARSE_RECURSIVE_(typename01, qualified_name)
 
 #endif // #include guard
 

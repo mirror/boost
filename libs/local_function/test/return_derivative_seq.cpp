@@ -7,7 +7,11 @@
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/detail/lightweight_test.hpp>
+
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function, 1)
 
 boost::function<int (int)> derivative(boost::function<int (int)>& f, int dx) {
     int BOOST_LOCAL_FUNCTION( (bind& f) (const bind dx) (int x) ) {

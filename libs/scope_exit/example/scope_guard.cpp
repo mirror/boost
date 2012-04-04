@@ -12,6 +12,8 @@
 #else
 
 #include <boost/scope_exit.hpp>
+#include <boost/typeof/std/string.hpp>
+#include <boost/typeof/std/map.hpp>
 #include <map>
 #include <string>
 #include <utility>

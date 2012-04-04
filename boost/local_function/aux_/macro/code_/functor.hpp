@@ -8,8 +8,8 @@
 #ifndef BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_HPP_
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_HPP_
 
+#include <boost/local_function/config.hpp>
 #include <boost/local_function/aux_/symbol.hpp>
-#include <boost/local_function/aux_/config.hpp>
 #include <boost/local_function/aux_/function.hpp>
 #include <boost/local_function/aux_/add_pointed_const.hpp>
 #include <boost/local_function/aux_/member.hpp>
@@ -464,7 +464,7 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
     inline static BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) \
     BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_FUNC_(z, defaults_n, ~)( \
         void* object \
-        BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01, \
+        BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS, \
             BOOST_PP_TUPLE_EAT(6) \
         , \
   BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_ \
@@ -486,7 +486,7 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
             static_cast< \
                 BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_CLASS_TYPE_(id)* \
             >(object)-> \
-            BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01,\
+            BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS,\
                 BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_OPERATOR_ \
             , \
                 BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_BODY_ \
@@ -703,8 +703,7 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
                 ::boost::local_function::aux::function< \
                       BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_F_TYPE_ \
                     , default_count \
-                    BOOST_PP_IIF( \
-  BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01, \
+                    BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS,\
                         BOOST_PP_TUPLE_EAT(6) \
                     , \
                         BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_COMMA_BIND_TYPES_\
@@ -767,8 +766,7 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
         ) { \
             functor.BOOST_LOCAL_FUNCTION_AUX_FUNCTION_INIT_CALL_FUNC( \
                     object \
-                    BOOST_PP_IIF( \
-  BOOST_LOCAL_FUNCTION_AUX_CONFIG_LOCALS_AS_TPARAMS_01, \
+                    BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS,\
                         BOOST_PP_TUPLE_EAT(6) \
                     , \
   BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_COMMA_STATIC_BINDS_ \

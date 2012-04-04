@@ -11,20 +11,25 @@
 #else
 
 #include <boost/local_function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <algorithm>
 
 //[add_typed
+struct adder;
+BOOST_TYPEOF_REGISTER_TYPE(adder) // Unfortunately needed for `..._NAME` below.
+
 struct adder {
     adder() : sum_(0) {}
 
     int sum(const std::vector<int>& nums, const int& factor = 10) {
-        // Explicitly specify bound variable and result types.
+        // Explicitly specify bound variable and result types...
         BOOST_LOCAL_FUNCTION(const bind(const int&) factor,
                 bind(adder*) this_, int num, return int) {
             return this_->sum_ += factor * num;
-        } BOOST_LOCAL_FUNCTION_NAME(add)
+        } BOOST_LOCAL_FUNCTION_NAME(add) // ... but this still uses type-of.
         
         std::for_each(nums.begin(), nums.end(), add);
         return sum_;

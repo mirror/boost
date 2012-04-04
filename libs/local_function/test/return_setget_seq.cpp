@@ -7,6 +7,7 @@
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
+#include <boost/typeof/std/string.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #include <string>
 

@@ -6,6 +6,8 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include <boost/local_function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <iostream>
 #include <cassert>
 
@@ -17,6 +19,7 @@ struct n {
         for (unsigned i = 0; i < 10000; ++i) std::cout << '.';
     }
 };
+BOOST_TYPEOF_REGISTER_TYPE(n) // Register for `bind& x` below.
 
 int main(void) {
     n x(-1);

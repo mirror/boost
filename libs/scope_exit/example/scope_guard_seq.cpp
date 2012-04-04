@@ -7,6 +7,8 @@
 // Home at http://www.boost.org/libs/scope_exit
 
 #include <boost/scope_exit.hpp>
+#include <boost/typeof/std/string.hpp>
+#include <boost/typeof/std/map.hpp>
 #include <map>
 #include <string>
 #include <utility>
@@ -21,8 +23,7 @@ int main(void) {
 
     BOOST_SCOPE_EXIT( (currency_rate_inserted) (&commit) (&rates)
             (&currency) ) {
-        if(currency_rate_inserted && !commit)
-            rates.erase(currency);
+        if(currency_rate_inserted && !commit) rates.erase(currency);
     } BOOST_SCOPE_EXIT_END
 
     // ...

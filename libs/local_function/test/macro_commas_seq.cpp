@@ -7,6 +7,8 @@
 
 #include <boost/local_function.hpp>
 #include <boost/utility/identity_type.hpp>
+#include <boost/typeof/std/string.hpp>  // Type-of registrations
+#include <boost/typeof/std/map.hpp>     // needed for `NAME` macro.
 #include <boost/config.hpp>
 #include <map>
 #include <string>

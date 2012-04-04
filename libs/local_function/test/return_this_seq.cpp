@@ -7,7 +7,12 @@
 
 #include <boost/local_function.hpp>
 #include <boost/function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/detail/lightweight_test.hpp>
+
+struct number;
+BOOST_TYPEOF_REGISTER_TYPE(number) // Register before `bind this_` below.
 
 struct number {
     number(int value) : value_(value) {}

@@ -12,6 +12,7 @@
 
 #include <boost/local_function.hpp>
 #include <boost/functional/overloaded_function.hpp> // For overloading.
+#include <boost/typeof/std/string.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #include <string>
 #include <cmath>

@@ -10,12 +10,30 @@
 
 #ifndef DOXYGEN
 
+#include <boost/config.hpp>
+
 #ifndef BOOST_LOCAL_FUNCTION_CONFIG_FUNCTION_ARITY_MAX
-#define BOOST_LOCAL_FUNCTION_CONFIG_FUNCTION_ARITY_MAX 5
+#   define BOOST_LOCAL_FUNCTION_CONFIG_FUNCTION_ARITY_MAX 5
 #endif
 
 #ifndef BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX
-#define BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX 10
+#   define BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX 10
+#endif
+
+#ifndef BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
+#   ifdef BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
+#       define BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS 0
+#   else
+#       define BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS 1
+#   endif
+#elif BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS // If true, force it to 1.
+#   undef BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
+#   define BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS 1
+#endif
+#if BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
+#   warning "locals as tparams"
+#else
+#   warning "no locals as tparams"
 #endif
 
 #else // DOXYGEN
@@ -56,6 +74,14 @@ local function parameters (which are instead specified by
 section, @RefMacro{BOOST_LOCAL_FUNCTION_CONFIG_ARITY_MAX}.
 */
 #define BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX
+
+/**
+Control performance optimizations.
+Automatically set using Boost.Config BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
+if not defined by user.
+0 - no optimization, 1 - optimization.
+*/
+#define BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
 
 #endif // DOXYGEN
 

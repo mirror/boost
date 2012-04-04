@@ -11,9 +11,14 @@
 #else
 
 #include <boost/local_function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/detail/lightweight_test.hpp>
 #include <vector>
 #include <algorithm>
+
+struct adder;
+BOOST_TYPEOF_REGISTER_TYPE(adder) // Register before `bind this_` below.
 
 //[add_this
 struct adder {

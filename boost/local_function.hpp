@@ -46,7 +46,12 @@
 #endif // VARIADIC
 
 #define BOOST_LOCAL_FUNCTION_NAME(qualified_function_name) \
-    BOOST_LOCAL_FUNCTION_AUX_NAME(qualified_function_name)
+    BOOST_LOCAL_FUNCTION_AUX_NAME(0, /* not within template */ \
+            qualified_function_name)
+
+#define BOOST_LOCAL_FUNCTION_NAME_TPL(qualified_function_name) \
+    BOOST_LOCAL_FUNCTION_AUX_NAME(1, /* within template */ \
+            qualified_function_name)
 
 #define BOOST_LOCAL_FUNCTION_TYPEOF(bound_variable_name) \
     BOOST_LOCAL_FUNCTION_AUX_TYPEOF_TYPE(bound_variable_name)
@@ -296,6 +301,11 @@ Boost.Functional/OverloadedFunction and the
 @RefMacro{BOOST_LOCAL_FUNCTION}.
 */
 #define BOOST_LOCAL_FUNCTION_NAME(qualified_function_name)
+
+/**
+In type-dependant context.
+*/
+#define BOOST_LOCAL_FUNCTION_NAME_TPL(qualified_function_name)
 
 /**
 @brief This macro expands to the type of the specified bound variable.

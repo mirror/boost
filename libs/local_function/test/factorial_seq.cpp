@@ -13,7 +13,7 @@
 #include <vector>
 
 struct calculator;
-BOOST_TYPEOF_REGISTER_TYPE(calculator) // Register before bind `this_` below.
+BOOST_TYPEOF_REGISTER_TYPE(calculator) // Register before `bind this_` below.
 
 struct calculator {
     std::vector<int> results;

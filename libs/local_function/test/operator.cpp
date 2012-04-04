@@ -11,6 +11,8 @@
 #else
 
 #include <boost/local_function.hpp>
+#include <boost/typeof/typeof.hpp>
+#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
 #include <boost/detail/lightweight_test.hpp>
 
 //[operator
@@ -18,11 +20,12 @@ struct point {
     int x;
     int y;
 };
+BOOST_TYPEOF_REGISTER_TYPE(point) // Register for `NAME` below.
 
 int main(void) {
     bool BOOST_LOCAL_FUNCTION(const point& p, const point& q) {
         return p.x == q.x && p.y == q.y;
-    } BOOST_LOCAL_FUNCTION_NAME(equal) // OK: not using `operator...`.
+    } BOOST_LOCAL_FUNCTION_NAME(equal) // OK: not using `operator==`.
 
     point a; a.x = 1; a.y = 2;
     point b = a;
