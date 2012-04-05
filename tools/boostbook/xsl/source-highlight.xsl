@@ -568,7 +568,7 @@
   </xsl:template>
 
   <xsl:template match="*" mode="highlight-jam">
-    <xsl:apply-templates mode="annotation"/>
+    <xsl:apply-templates select="." mode="annotation"/>
   </xsl:template>
 
   <xsl:template match="text()" mode="highlight-jam">
