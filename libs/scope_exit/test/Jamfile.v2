@@ -9,7 +9,8 @@
 import testing ;
 
 # Workaround a Boost.Config bug that causes Boost.Typeof to fail on Sun.
-project : requirements <toolset>sun:<define>BOOST_TYPEOF_EMULATION ;
+project : requirements <toolset>sun:<cxxflags>"-Qoption ccfe -features=gcc" ;
+#project : requirements <toolset>gcc:<cxxflags>"-Wall -std=c++0x -Wall" ;
 
 rule vaseq ( command target )
 {
