@@ -2021,16 +2021,18 @@ private:
     }
 
 #define MSM_COMPOSITE_ACCEPT_SUB(z, n, unused) ARG ## n vis ## n
+#define MSM_COMPOSITE_ACCEPT_SUB2(z, n, unused) boost::ref( vis ## n )
 #define MSM_COMPOSITE_ACCEPT_EXECUTE(z, n, unused)                                      \
         template <BOOST_PP_ENUM_PARAMS(n, class ARG)>                                   \
         void composite_accept(BOOST_PP_ENUM(n, MSM_COMPOSITE_ACCEPT_SUB, ~ ) )               \
         {                                                                               \
             this->accept(BOOST_PP_ENUM_PARAMS(n,vis));                                        \
-            this->visit_current_states(BOOST_PP_ENUM_PARAMS(n,vis));                          \
+            this->visit_current_states(BOOST_PP_ENUM(n,MSM_COMPOSITE_ACCEPT_SUB2, ~));        \
         }
         BOOST_PP_REPEAT_FROM_TO(1,BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_COMPOSITE_ACCEPT_EXECUTE, ~)
 #undef MSM_COMPOSITE_ACCEPT_EXECUTE
 #undef MSM_COMPOSITE_ACCEPT_SUB
+#undef MSM_COMPOSITE_ACCEPT_SUB2
 
     // helper used to call the init states at the start of the state machine
     template <class Event>
