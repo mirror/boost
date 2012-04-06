@@ -42,6 +42,8 @@ time2_demo contained this comment:
 #include <boost/utility/enable_if.hpp>
 #include <boost/integer_traits.hpp>
 
+#define BOOST_RATIO_INTMAX_T_MAX (0x7FFFFFFFFFFFFFFELL)
+
 #if !defined(BOOST_NO_STATIC_ASSERT) || !defined(BOOST_RATIO_USES_MPL_ASSERT)
 #define BOOST_RATIO_OVERFLOW_IN_ADD "overflow in ratio add"
 #define BOOST_RATIO_OVERFLOW_IN_SUB "overflow in ratio sub"
@@ -216,7 +218,7 @@ namespace ratio_detail
   template <class R1, class R2> struct ratio_subtract;
   template <class R1, class R2> struct ratio_multiply;
   template <class R1, class R2> struct ratio_divide;
-  
+
   template <class R1, class R2>
   struct ratio_add
   {
@@ -247,7 +249,7 @@ namespace ratio_detail
   {
     typedef R type;
   };
-   
+
   template <class R1, class R2>
   struct ratio_subtract
   {
@@ -273,13 +275,13 @@ namespace ratio_detail
              >
          >::type type;
   };
-  
+
   template <class R, boost::intmax_t D>
   struct ratio_subtract<R, ratio<0,D> >
   {
     typedef R type;
   };
-  
+
   template <class R1, class R2>
   struct ratio_multiply
   {
@@ -322,12 +324,12 @@ namespace ratio_detail
              ((R2::num / gcd_n1_n2 ==1) && (R1::den / gcd_d1_d2)==1)
       > type;
   };
-  
+
   template <class T>
-  struct is_ratio : public boost::false_type 
+  struct is_ratio : public boost::false_type
   {};
   template <boost::intmax_t N, boost::intmax_t D>
-  struct is_ratio<ratio<N, D> > : public boost::true_type  
+  struct is_ratio<ratio<N, D> > : public boost::true_type
   {};
 
   template <class R1, class R2,
@@ -361,11 +363,11 @@ namespace ratio_detail
   {
     static const bool value = ratio_less1<ratio<R2::den, M2>, ratio<R1::den, M1>
                                             >::value;
-  };  
-  
+  };
+
   template <
-      class R1, 
-      class R2, 
+      class R1,
+      class R2,
       boost::intmax_t S1 = mpl::sign_c<boost::intmax_t, R1::num>::value,
     boost::intmax_t S2 = mpl::sign_c<boost::intmax_t, R2::num>::value
 >
