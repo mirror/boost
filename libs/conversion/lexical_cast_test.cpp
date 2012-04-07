@@ -427,7 +427,6 @@ void test_conversion_to_wstring()
     BOOST_CHECK(str == lexical_cast<std::wstring>(str));
     BOOST_CHECK(L"123" == lexical_cast<std::wstring>(123));
     BOOST_CHECK(L"1.23" == lexical_cast<std::wstring>(1.23));
-    BOOST_CHECK(L"1.111111111" == lexical_cast<std::wstring>(1.111111111));
     BOOST_CHECK(L"1" == lexical_cast<std::wstring>(true));
     BOOST_CHECK(L"0" == lexical_cast<std::wstring>(false));
 #if !defined(BOOST_NO_INTRINSIC_WCHAR_T)
