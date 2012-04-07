@@ -83,10 +83,14 @@
     >::type
 
 // Iterate within namespace.
+#       define BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_OVERLOAD_COUNT \
+            /*at least 2 func to overload 2, 3, ...*/ \
+            BOOST_PP_SUB( \
+                    BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX, \
+                    2)
 #       define BOOST_PP_ITERATION_PARAMS_1 \
-                (3, (0, BOOST_PP_SUB( /*at least 2 func to overload 2, 3, ...*/\
-                 BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX, 2), \
-                "boost/functional/overloaded_function.hpp"))
+            (3, (0, BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_OVERLOAD_COUNT, \
+            "boost/functional/overloaded_function.hpp"))
 #       include BOOST_PP_ITERATE() // Iterate over function arity.
 
 #undef BOOST_FUNCTIONAL_f_type
