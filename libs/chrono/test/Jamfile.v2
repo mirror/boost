@@ -15,12 +15,15 @@ project
     : requirements
         <target-os>freebsd:<linkflags>"-lrt" 
         <target-os>linux:<linkflags>"-lrt" 
+        <toolset>clang/<target-os>linux:<linkflags>"-lpthread" 
         <toolset>pgi:<linkflags>"-lrt" 
         #<threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <toolset>msvc:<asynch-exceptions>on
         <define>BOOST_CHRONO_USES_MPL_ASSERT
         <define>BOOST_SYSTEM_NO_DEPRECATED
-        <toolset>sun:<define>BOOST_TYPEOF_EMULATION
+        #<toolset>sun:<define>BOOST_COMMON_TYPE_DONT_USE_TYPEOF
+        #<toolset>sun:<define>BOOST_TYPEOF_EMULATION
+        <toolset>sun:<define>__typeof__=__typeof__ 
         <warnings>all
         <toolset>gcc:<cxxflags>-Wextra
         <toolset>gcc:<cxxflags>-pedantic

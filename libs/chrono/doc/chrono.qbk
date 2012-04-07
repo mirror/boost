@@ -7605,6 +7605,16 @@ When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not availabl
 
 [endsect] [/section [*Version 2.0.0] ]
 
+[section [*Version 1.2.2, April 1, 2012 - 1.50] ]
+
+[*Fixes:]
+
+* [@http://svn.boost.org/trac/boost/ticket/6361 #6361] integer overflow in boost::chrono::process_real_cpu_clock::now() under Windows 32bits.
+* [@http://svn.boost.org/trac/boost/ticket/6628 #6628] compiler warning in process_cpu_clocks.hpp.
+* [@http://svn.boost.org/trac/boost/ticket/6666 #6666] thread_clock.hpp needs pthread.h.
+
+[endsect] [/section [*Version 1.2.2] ]
+
 [section [*Version 1.2.1, February 1, 2012 - 1.49] ]
 
 [*Fixes:]
