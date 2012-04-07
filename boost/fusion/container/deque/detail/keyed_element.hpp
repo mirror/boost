@@ -14,12 +14,13 @@
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
 
-namespace boost { namespace fusion {
-
+namespace boost { namespace fusion
+{
     struct fusion_sequence_tag;
+}}
 
-namespace detail {
-
+namespace boost { namespace fusion { namespace detail
+{
     struct nil_keyed_element
     {
         typedef fusion_sequence_tag tag;
@@ -33,15 +34,18 @@ namespace detail {
         }
     };
 
-    template<typename Key, typename Value, typename Rest>
-    struct keyed_element
-        : Rest
+    template <typename Key, typename Value, typename Rest>
+    struct keyed_element : Rest
     {
         typedef Rest base;
         typedef fusion_sequence_tag tag;
+        typedef typename
+            add_reference<typename add_const<Value>::type>::type
+        const_value_type;
+        typedef typename add_reference<Value>::type value_type;
         using Rest::get;
 
-        template<typename It>
+        template <typename It>
         static keyed_element
         from_iterator(It const& it)
         {
@@ -51,7 +55,7 @@ namespace detail {
 
         template <typename U, typename Rst>
         keyed_element(keyed_element<Key, U, Rst> const& rhs)
-            : Rest(rhs.get_base()), value_(rhs.value_)
+          : Rest(rhs.get_base()), value_(rhs.value_)
         {}
 
         Rest const get_base() const
@@ -59,17 +63,17 @@ namespace detail {
             return *this;
         }
 
-        typename add_reference<typename add_const<Value>::type>::type get(Key) const
+        const_value_type get(Key) const
         {
             return value_;
         }
 
-        typename add_reference<Value>::type get(Key)
+        value_type get(Key)
         {
             return value_;
         }
 
-        keyed_element(typename add_reference<typename add_const<Value>::type>::type value, Rest const& rest)
+        keyed_element(const_value_type value, Rest const& rest)
             : Rest(rest), value_(value)
         {}
 
@@ -97,7 +101,7 @@ namespace detail {
 
     template<typename Elem, typename Key>
     struct keyed_element_value_at
-        : keyed_element_value_at<typename Elem::base, Key>
+      : keyed_element_value_at<typename Elem::base, Key>
     {};
 
     template<typename Key, typename Value, typename Rest>
@@ -105,7 +109,6 @@ namespace detail {
     {
         typedef Value type;
     };
-
 }}}
 
 #endif

@@ -8,6 +8,10 @@
 #if !defined(BOOST_CPP03_FUSION_DEQUE_26112006_1649)
 #define BOOST_CPP03_FUSION_DEQUE_26112006_1649
 
+#if defined(BOOST_FUSION_HAS_CPP11_DEQUE)
+#error "C++03 only! This file should not have been included"
+#endif
+
 #include <boost/fusion/container/deque/limits.hpp>
 #include <boost/fusion/container/deque/front_extended_deque.hpp>
 #include <boost/fusion/container/deque/back_extended_deque.hpp>

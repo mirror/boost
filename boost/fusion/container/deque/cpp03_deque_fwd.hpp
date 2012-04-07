@@ -8,6 +8,10 @@
 #if !defined(FUSION_CPP03_DEQUE_FORWARD_02092007_0749)
 #define FUSION_CPP03_DEQUE_FORWARD_02092007_0749
 
+#if defined(BOOST_FUSION_HAS_CPP11_DEQUE)
+#error "C++03 only! This file should not have been included"
+#endif
+
 #include <boost/fusion/container/deque/limits.hpp>
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 

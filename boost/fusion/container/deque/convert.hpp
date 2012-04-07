@@ -21,7 +21,9 @@ namespace boost { namespace fusion
         template <typename Sequence>
         struct as_deque
         {
-            typedef typename detail::as_deque<result_of::size<Sequence>::value> gen;
+            typedef typename
+                detail::as_deque<result_of::size<Sequence>::value>
+            gen;
             typedef typename gen::
                 template apply<typename result_of::begin<Sequence>::type>::type
             type;

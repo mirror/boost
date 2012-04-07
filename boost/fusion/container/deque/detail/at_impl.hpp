@@ -19,8 +19,8 @@
 #include <boost/type_traits/add_const.hpp>
 #include <boost/type_traits/add_reference.hpp>
 
-namespace boost { namespace fusion {
-
+namespace boost { namespace fusion
+{
     struct deque_tag;
 
     namespace extension
@@ -44,11 +44,14 @@ namespace boost { namespace fusion {
                     detail::keyed_element_value_at<Sequence, adjusted_index>::type
                 element_type;
 
-                typedef typename add_reference<
-                    typename mpl::eval_if<
-                    is_const<Sequence>,
-                    add_const<element_type>,
-                    mpl::identity<element_type> >::type>::type type;
+                typedef typename
+                    add_reference<
+                      typename mpl::eval_if<
+                      is_const<Sequence>,
+                      add_const<element_type>,
+                      mpl::identity<element_type> >::type
+                    >::type
+                type;
 
                 static type call(Sequence& seq)
                 {

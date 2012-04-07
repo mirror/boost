@@ -15,6 +15,9 @@
   || defined(BOOST_NO_RVALUE_REFERENCES))
 # include <boost/fusion/container/deque/cpp03_deque.hpp>
 #else
+# if !defined(BOOST_FUSION_HAS_CPP11_DEQUE)
+#   define BOOST_FUSION_HAS_CPP11_DEQUE
+# endif
 # include <boost/fusion/container/deque/cpp11_deque.hpp>
 #endif
 

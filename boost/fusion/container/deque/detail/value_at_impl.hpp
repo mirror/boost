@@ -13,8 +13,8 @@
 #include <boost/mpl/equal_to.hpp>
 #include <boost/mpl/assert.hpp>
 
-namespace boost { namespace fusion {
-
+namespace boost { namespace fusion
+{
     struct deque_tag;
 
     namespace extension

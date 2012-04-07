@@ -9,6 +9,10 @@
 #if !defined(BOOST_FUSION_SEQUENCE_DEQUE_DETAIL_DEQUE_KEYED_VALUES_CALL_04122006_2211)
 #define BOOST_FUSION_SEQUENCE_DEQUE_DETAIL_DEQUE_KEYED_VALUES_CALL_04122006_2211
 
+#if defined(BOOST_FUSION_HAS_CPP11_DEQUE)
+#error "C++03 only! This file should not have been included"
+#endif
+
 #include <boost/preprocessor/iterate.hpp>
 #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
