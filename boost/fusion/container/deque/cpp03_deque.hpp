@@ -15,7 +15,7 @@
 #include <boost/fusion/container/deque/limits.hpp>
 #include <boost/fusion/container/deque/front_extended_deque.hpp>
 #include <boost/fusion/container/deque/back_extended_deque.hpp>
-#include <boost/fusion/container/deque/detail/deque_keyed_values.hpp>
+#include <boost/fusion/container/deque/detail/cpp03_deque_keyed_values.hpp>
 #include <boost/fusion/container/deque/detail/deque_initial_size.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>

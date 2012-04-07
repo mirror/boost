@@ -14,6 +14,7 @@
 
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>
+#include <boost/fusion/container/deque/detail/cpp11_deque_keyed_values.hpp>
 #include <boost/fusion/container/deque/deque_fwd.hpp>
 #include <boost/fusion/container/deque/detail/value_at_impl.hpp>
 #include <boost/fusion/container/deque/detail/at_impl.hpp>
@@ -27,46 +28,6 @@
 
 namespace boost { namespace fusion
 {
-    namespace detail
-    {
-        template<typename Key, typename Value, typename Rest>
-        struct keyed_element;
-
-        template <typename N, typename ...Elements>
-        struct deque_keyed_values_impl;
-
-        template <typename N, typename Head, typename ...Tail>
-        struct deque_keyed_values_impl<N, Head, Tail...>
-        {
-            typedef mpl::int_<(N::value + 1)> next_index;
-            typedef typename deque_keyed_values_impl<next_index, Tail...>::type tail;
-            typedef keyed_element<N, Head, tail> type;
-
-            static type call(
-              typename add_reference<typename add_const<Head>::type>::type head
-            , typename add_reference<typename add_const<Tail>::type>::type... tail)
-            {
-                return type(
-                    head
-                  , deque_keyed_values_impl<next_index, Tail...>::call(tail...)
-                );
-            }
-        };
-
-        struct nil_keyed_element;
-
-        template <typename N>
-        struct deque_keyed_values_impl<N>
-        {
-            typedef nil_keyed_element type;
-            static type call() { return type(); }
-        };
-
-        template <typename ...Elements>
-        struct deque_keyed_values
-          : deque_keyed_values_impl<mpl::int_<0>, Elements...> {};
-    }
-
     struct deque_tag;
 
     template <typename ...Elements>
