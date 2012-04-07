@@ -43,7 +43,7 @@ inline std::basic_istream<CharT>& operator >> (std::basic_istream<CharT>& istr, 
 
 
 template <class RngT>
-void do_test_iterator_range(const RngT& rng)
+void do_test_iterator_range_impl(const RngT& rng)
 {
     BOOST_CHECK_EQUAL(lexical_cast<int>(rng), 1);
     BOOST_CHECK_EQUAL(lexical_cast<unsigned int>(rng), 1u);
@@ -69,109 +69,128 @@ void do_test_iterator_range(const RngT& rng)
 #endif
 }
 
+template <class CharT>
+void test_it_range_using_any_chars(CharT* one, CharT* eleven)
+{
+    typedef CharT test_char_type;
+
+    // Zero terminated
+    iterator_range<test_char_type*> rng1(one, one + 1);
+    do_test_iterator_range_impl(rng1);
+
+    iterator_range<const test_char_type*> crng1(one, one + 1);
+    do_test_iterator_range_impl(crng1);
+
+    // Non zero terminated
+    iterator_range<test_char_type*> rng2(eleven, eleven + 1);
+    do_test_iterator_range_impl(rng2);
+
+    iterator_range<const test_char_type*> crng2(eleven, eleven + 1);
+    do_test_iterator_range_impl(crng2);
+}
+
+template <class CharT>
+void test_it_range_using_char(CharT* one, CharT* eleven)
+{
+    typedef CharT test_char_type;
+
+    iterator_range<test_char_type*> rng1(one, one + 1);
+    BOOST_CHECK_EQUAL(lexical_cast<std::string>(rng1), "1");
+
+    iterator_range<const test_char_type*> crng1(one, one + 1);
+    BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng1), "1");
+
+    iterator_range<test_char_type*> rng2(eleven, eleven + 1);
+    BOOST_CHECK_EQUAL(lexical_cast<std::string>(rng2), "1");
+
+    iterator_range<const test_char_type*> crng2(eleven, eleven + 1);
+    BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng2), "1");
+
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+    BOOST_CHECK(lexical_cast<std::wstring>(rng1) == L"1");
+    BOOST_CHECK(lexical_cast<std::wstring>(crng1) == L"1");
+    BOOST_CHECK(lexical_cast<std::wstring>(rng2) == L"1");
+    BOOST_CHECK(lexical_cast<std::wstring>(crng2) == L"1");
+#endif
+
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+    typedef std::basic_string<char16_t> my_char16_string;
+    BOOST_CHECK(lexical_cast<my_char16_string>(rng1) == u"1");
+    BOOST_CHECK(lexical_cast<my_char16_string>(crng1) == u"1");
+    BOOST_CHECK(lexical_cast<my_char16_string>(rng2) == u"1");
+    BOOST_CHECK(lexical_cast<my_char16_string>(crng2) == u"1");
+#endif
+
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+    typedef std::basic_string<char32_t> my_char32_string;
+    BOOST_CHECK(lexical_cast<my_char32_string>(rng1) == U"1");
+    BOOST_CHECK(lexical_cast<my_char32_string>(crng1) == U"1");
+    BOOST_CHECK(lexical_cast<my_char32_string>(rng2) == U"1");
+    BOOST_CHECK(lexical_cast<my_char32_string>(crng2) == U"1");
+#endif
+}
+
 void test_char_iterator_ranges() 
 {
     typedef char test_char_type;
-
-    // Zero terminated
     test_char_type data1[] = "1";
-    iterator_range<test_char_type*> rng1(data1, data1 + 1);
-    do_test_iterator_range(rng1);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(rng1), "1");
-
-    const test_char_type cdata1[] = "1";
-    iterator_range<const test_char_type*> crng1(cdata1, cdata1 + 1);
-    do_test_iterator_range(crng1);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng1), "1");
-
-    // Non zero terminated
     test_char_type data2[] = "11";
-    iterator_range<test_char_type*> rng2(data2, data2 + 1);
-    do_test_iterator_range(rng2);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(rng2), "1");
-
-    const test_char_type cdata2[] = "11";
-    iterator_range<const test_char_type*> crng2(cdata2, cdata2 + 1);
-    do_test_iterator_range(crng2);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng2), "1");
+    test_it_range_using_any_chars(data1, data2);
+    test_it_range_using_char(data1, data2);
 }
+
+
 
 void test_unsigned_char_iterator_ranges() 
 {
     typedef unsigned char test_char_type;
-
-    // Zero terminated
     test_char_type data1[] = "1";
-    iterator_range<test_char_type*> rng1(data1, data1 + 1);
-    do_test_iterator_range(rng1);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(rng1), "1");
-
-    const test_char_type cdata1[] = "1";
-    iterator_range<const test_char_type*> crng1(cdata1, cdata1 + 1);
-    do_test_iterator_range(crng1);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng1), "1");
-
-    // Non zero terminated
     test_char_type data2[] = "11";
-    iterator_range<test_char_type*> rng2(data2, data2 + 1);
-    do_test_iterator_range(rng2);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(rng2), "1");
-
-    const test_char_type cdata2[] = "11";
-    iterator_range<const test_char_type*> crng2(cdata2, cdata2 + 1);
-    do_test_iterator_range(crng2);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng2), "1");
+    test_it_range_using_any_chars(data1, data2);
+    test_it_range_using_char(data1, data2);
 }
 
 void test_signed_char_iterator_ranges() 
 {
     typedef signed char test_char_type;
-
-    // Zero terminated
     test_char_type data1[] = "1";
-    iterator_range<test_char_type*> rng1(data1, data1 + 1);
-    do_test_iterator_range(rng1);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(rng1), "1");
-
-    const test_char_type cdata1[] = "1";
-    iterator_range<const test_char_type*> crng1(cdata1, cdata1 + 1);
-    do_test_iterator_range(crng1);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng1), "1");
-
-    // Non zero terminated
     test_char_type data2[] = "11";
-    iterator_range<test_char_type*> rng2(data2, data2 + 1);
-    do_test_iterator_range(rng2);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(rng2), "1");
-
-    const test_char_type cdata2[] = "11";
-    iterator_range<const test_char_type*> crng2(cdata2, cdata2 + 1);
-    do_test_iterator_range(crng2);
-    BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng2), "1");
+    test_it_range_using_any_chars(data1, data2);
+    test_it_range_using_char(data1, data2);
 }
 
-void test_wide_char_iterator_ranges() 
+void test_wchar_iterator_ranges() 
 {
 #ifndef BOOST_LCAST_NO_WCHAR_T
     typedef wchar_t test_char_type;
-
-    // Zero terminated
     test_char_type data1[] = L"1";
-    iterator_range<test_char_type*> rng1(data1, data1 + 1);
-    do_test_iterator_range(rng1);
-
-    const test_char_type cdata1[] = L"1";
-    iterator_range<const test_char_type*> crng1(cdata1, cdata1 + 1);
-    do_test_iterator_range(crng1);
-
-    // Non zero terminated
     test_char_type data2[] = L"11";
-    iterator_range<test_char_type*> rng2(data2, data2 + 1);
-    do_test_iterator_range(rng2);
+    test_it_range_using_any_chars(data1, data2);
+#endif
 
-    const test_char_type cdata2[] = L"11";
-    iterator_range<const test_char_type*> crng2(cdata2, cdata2 + 1);
-    do_test_iterator_range(crng2);
+    BOOST_CHECK(true);
+}
+
+void test_char16_iterator_ranges() 
+{
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+    typedef char16_t test_char_type;
+    test_char_type data1[] = u"1";
+    test_char_type data2[] = u"11";
+    test_it_range_using_any_chars(data1, data2);
+#endif
+
+    BOOST_CHECK(true);
+}
+
+void test_char32_iterator_ranges() 
+{
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+    typedef char32_t test_char_type;
+    test_char_type data1[] = U"1";
+    test_char_type data2[] = U"11";
+    test_it_range_using_any_chars(data1, data2);
 #endif
 
     BOOST_CHECK(true);
@@ -183,7 +202,9 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_char_iterator_ranges));
     suite->add(BOOST_TEST_CASE(&test_unsigned_char_iterator_ranges));
     suite->add(BOOST_TEST_CASE(&test_signed_char_iterator_ranges));
-    suite->add(BOOST_TEST_CASE(&test_wide_char_iterator_ranges));
+    suite->add(BOOST_TEST_CASE(&test_wchar_iterator_ranges));
+    suite->add(BOOST_TEST_CASE(&test_char16_iterator_ranges));
+    suite->add(BOOST_TEST_CASE(&test_char32_iterator_ranges));
 
     return suite;
 }
