@@ -29,7 +29,7 @@ bool g_was_exception = false;
 namespace boost {
 
 void throw_exception(std::exception const & ) {
-	g_was_exception = true;
+    g_was_exception = true;
 }
 
 }

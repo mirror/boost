@@ -26,27 +26,6 @@
 #define BOOST_LCAST_NO_WCHAR_T
 #endif
 
-#if (defined(__MINGW32__) || defined(__MINGW64__)) && (__GNUC__ == 4) \
- && ((__GNUC_MINOR__ == 4) || (__GNUC_MINOR__ == 5)) && defined(__STRICT_ANSI__) \
- && !defined(BOOST_LCAST_NO_WCHAR_T)
-
-// workaround for a mingw bug
-// http://sourceforge.net/tracker/index.php?func=detail&aid=2373234&group_id=2435&atid=102435
-#include <_mingw.h>
-#if (__GNUC_MINOR__ == 4)
-extern "C" {
-_CRTIMP int __cdecl swprintf(wchar_t * __restrict__ , const wchar_t * __restrict__ , ...);
-_CRTIMP int __cdecl vswprintf(wchar_t * __restrict__ , const wchar_t * __restrict__ , ...);
-}
-#endif
-#if (__GNUC_MINOR__ == 5)
-extern "C" {
-_CRTIMP int __cdecl swprintf(wchar_t * __restrict__ , const wchar_t * __restrict__ , ...);
-_CRTIMP int __cdecl vswprintf(wchar_t * __restrict__ , const wchar_t * __restrict__ , va_list);
-}
-#endif
-#endif
-
 #include <climits>
 #include <cstddef>
 #include <istream>
@@ -501,7 +480,7 @@ namespace boost
         };
 #endif
 
-#ifndef BOOST_NO_CHAR16_T
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
         template<>
         struct lcast_char_constants<char16_t>
         {
@@ -514,7 +493,7 @@ namespace boost
         };
 #endif
 
-#ifndef BOOST_NO_CHAR32_T
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
         template<>
         struct lcast_char_constants<char32_t>
         {
@@ -864,7 +843,7 @@ namespace boost
         }
 
 #endif
-#ifndef BOOST_NO_CHAR16_T
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
         template <class T>
         bool parse_inf_nan(const char16_t* begin, const char16_t* end, T& value)
         {
@@ -880,7 +859,7 @@ namespace boost
             return put_inf_nan_impl(begin, end, value, u"nan", u"infinity");
         }
 #endif
-#ifndef BOOST_NO_CHAR32_T
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
         template <class T>
         bool parse_inf_nan(const char32_t* begin, const char32_t* end, T& value)
         {
@@ -1275,7 +1254,7 @@ namespace boost
             {
 #if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_LOCALE)
                 // If you have compilation error at this point, than your STL library
-                // unsupports such conversions. Try updating it.
+                // does not support such conversions. Try updating it.
                 BOOST_STATIC_ASSERT((boost::is_same<char, CharT>::value));
 #endif
                 bool const result = !(out_stream << input).fail();
@@ -1299,34 +1278,42 @@ namespace boost
                 return true;
             }
 
+            template <class T, class SomeCharT>
+            bool shl_real_type(const T& val, SomeCharT* begin, SomeCharT*& end)
+            {
+                if (put_inf_nan(begin, end, val)) return true;
+                lcast_set_precision(out_stream, &val);
+                return shl_input_streamable(val);
+            }
+
 #if (defined _MSC_VER)
 # pragma warning( push )
 // C4996: This function or variable may be unsafe. Consider using sprintf_s instead
 # pragma warning( disable : 4996 )
 #endif
-
-            template <class T>
-            bool shl_float(float val,T* out)
+            static bool shl_real_type(float val, char* begin, char*& end)
             {   using namespace std;
-                if (put_inf_nan(start,finish,val)) return true;
-                finish = start + sprintf(out,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
-                return finish > start;
+                if (put_inf_nan(begin, end, val)) return true;
+                end = begin;
+                end += sprintf(begin,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float>()), val);
+                return end > begin;
             }
 
-            template <class T>
-            bool shl_double(double val,T* out)
+            static bool shl_real_type(double val, char* begin, char*& end)
             {   using namespace std;
-                if (put_inf_nan(start,finish,val)) return true;
-                finish = start + sprintf(out,"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
-                return finish > start;
+                if (put_inf_nan(begin, end, val)) return true;
+                end = begin;
+                end += sprintf(begin,"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double>()), val);
+                return end > begin;
             }
+
 #ifndef __MINGW32__
-            template <class T>
-            bool shl_long_double(long double val,T* out)
+            static bool shl_real_type(long double val, char* begin, char*& end)
             {   using namespace std;
-                if (put_inf_nan(start,finish,val)) return true;
-                finish = start + sprintf(out,"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
-                return finish > start;
+                if (put_inf_nan(begin, end, val)) return true;
+                end = begin;
+                end += sprintf(begin,"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double>()), val );
+                return end > begin;
             }
 #endif
 
@@ -1335,52 +1322,30 @@ namespace boost
 #endif
 
 
-#ifndef BOOST_LCAST_NO_WCHAR_T
-            bool shl_float(float val,wchar_t* out)
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_SWPRINTF) && !defined(__MINGW32__)
+            static bool shl_real_type(float val, wchar_t* begin, wchar_t*& end)
             {   using namespace std;
-                if (put_inf_nan(start,finish,val)) return true;
-                finish = start + swprintf(out,
-#if !defined(__MINGW32__) && !defined(UNDER_CE)
-                                          finish-start,
-#endif
+                if (put_inf_nan(begin, end, val)) return true;
+                end = begin + swprintf(begin, end-begin,
                                           L"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float >()), val );
-
-                return finish > start;
+                return end > begin;
             }
 
-
-            bool shl_double(double val,wchar_t* out)
+            static bool shl_real_type(double val, wchar_t* begin, wchar_t*& end)
             {   using namespace std;
-                if (put_inf_nan(start,finish,val)) return true;
-                /* __MINGW32__ is defined for both mingw.org and for mingw-w64.
-                 * For mingw-w64, __MINGW64__ is defined, too, when targetting
-                 * 64 bits.
-                 *
-                 * swprintf realization in MinGW and under WinCE does not conform
-                 * to the ISO C
-                 * Standard.
-                 */
-                finish = start + swprintf(out,
-#if !defined(__MINGW32__) && !defined(UNDER_CE)
-                                          finish-start,
-#endif
+                if (put_inf_nan(begin, end, val)) return true;
+                end = begin + swprintf(begin, end-begin,
                                           L"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
-                return finish > start;
+                return end > begin;
             }
 
-#ifndef __MINGW32__
-            bool shl_long_double(long double val,wchar_t* out)
+            static bool shl_real_type(long double val, wchar_t* begin, wchar_t*& end)
             {   using namespace std;
-                if (put_inf_nan(start,finish,val)) return true;
-                finish = start + swprintf(out,
-#if !defined(UNDER_CE)
-                                          finish-start,
-#endif
+                if (put_inf_nan(begin, end, val)) return true;
+                end = begin + swprintf(begin, end-begin,
                                           L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
-                return finish > start;
+                return end > begin;
             }
-#endif
-
 #endif
 
 /************************************ OPERATORS << ( ... ) ********************************/
@@ -1486,13 +1451,13 @@ namespace boost
             bool operator<<(unsigned __int64 n)         { start = lcast_put_unsigned<Traits>(n, finish); return true; }
             bool operator<<(         __int64 n)         { return shl_signed(n); }
 #endif
-            bool operator<<(float val)                  { return shl_float(val,start); }
-            bool operator<<(double val)                 { return shl_double(val,start); }
+            bool operator<<(float val)                  { return shl_real_type(val, start, finish); }
+            bool operator<<(double val)                 { return shl_real_type(val, start, finish); }
             bool operator<<(long double val)            {
 #ifndef __MINGW32__
-                return shl_long_double(val,start);
+                return shl_real_type(val, start, finish);
 #else
-                return shl_double(val,start);
+                return shl_real_type(static_cast<double>(val), start, finish);
 #endif
             }
 
@@ -1663,10 +1628,10 @@ namespace boost
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
             bool operator>>(wchar_t& output)                    { return shr_xchar(output); }
 #endif
-#ifndef BOOST_NO_CHAR16_T
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
             bool operator>>(char16_t& output)                   { return shr_xchar(output); }
 #endif
-#ifndef BOOST_NO_CHAR32_T
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
             bool operator>>(char32_t& output)                   { return shr_xchar(output); }
 #endif
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
@@ -1884,8 +1849,8 @@ namespace boost
             BOOST_STATIC_CONSTANT(bool, value =
                (
                    ::boost::type_traits::ice_and<
-                           is_arithmetic<Source>::value,
-                           is_arithmetic<Target>::value,
+                           ::boost::is_arithmetic<Source>::value,
+                           ::boost::is_arithmetic<Target>::value,
                            ::boost::type_traits::ice_not<
                                 detail::is_char_or_wchar<Target>::value
                            >::value,
@@ -1921,6 +1886,28 @@ namespace boost
                     >::value
                 )
             );
+        };
+
+
+        // this metafunction evaluates to true, if we have optimized comnversion 
+        // from Float type to Char array. 
+        // Must be in sync with lexical_stream_limited_src<Char, ...>::shl_real_type(...)
+        template <typename Float, typename Char>
+        struct is_this_float_conversion_optimized 
+        {
+            typedef ::boost::type_traits::ice_and<
+                ::boost::is_float<Float>::value,
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_SWPRINTF) && !defined(__MINGW32__)
+                ::boost::type_traits::ice_or<
+                    ::boost::type_traits::ice_eq<sizeof(Char), sizeof(char) >::value,
+                    ::boost::is_same<Char, wchar_t>::value
+                >::value
+#else
+                ::boost::type_traits::ice_eq<sizeof(Char), sizeof(char) >::value
+#endif
+            > result_type;
+
+            BOOST_STATIC_CONSTANT(bool, value = (result_type::value) );
         };
 
         template<typename Target, typename Source>
@@ -1972,6 +1959,17 @@ namespace boost
                     target_char_t, src_char_type
                 >::type char_type;
 
+#if !defined(BOOST_NO_CHAR16_T) && defined(BOOST_NO_UNICODE_LITERALS)
+                BOOST_STATIC_ASSERT_MSG(( !::boost::is_same<char16_t, src_char_type>::value
+                                          && !::boost::is_same<char16_t, target_char_t>::value),
+                    "Your compiler does not have full support for char16_t" );
+#endif
+#if !defined(BOOST_NO_CHAR32_T) && defined(BOOST_NO_UNICODE_LITERALS)
+                BOOST_STATIC_ASSERT_MSG(( !::boost::is_same<char32_t, src_char_type>::value
+                                          && !::boost::is_same<char32_t, target_char_t>::value),
+                    "Your compiler does not have full support for char32_t" );
+#endif
+
                 typedef detail::lcast_src_length<src> lcast_src_length;
                 std::size_t const src_len = lcast_src_length::value;
                 char_type buf[src_len + 1];
@@ -1997,21 +1995,22 @@ namespace boost
                             ::boost::is_same<signed char, src_char_type>::value
                         >::value
                     >::value,
-                    is_same<char_type, src_char_type>::value
+                    ::boost::is_same<char_type, src_char_type>::value
                 >::value);
 
                 const bool requires_stringbuf =
                         !(
                              ::boost::type_traits::ice_or<
-                                 is_stdstring<src >::value,
-                                 is_arithmetic<src >::value,
+                                 ::boost::detail::is_stdstring<src>::value,
+                                 ::boost::is_integral<src>::value,
+                                 ::boost::detail::is_this_float_conversion_optimized<src, char_type >::value,
                                  ::boost::type_traits::ice_and<
-                                    is_char_iterator_range<src >::value,
+                                    ::boost::detail::is_char_iterator_range<src >::value,
                                     is_char_types_match
                                  >::value,
                                  ::boost::type_traits::ice_and<
-                                     is_pointer<src>::value,
-                                     is_char_or_wchar<removed_ptr_t>::value,
+                                     ::boost::is_pointer<src>::value,
+                                     ::boost::detail::is_char_or_wchar<removed_ptr_t>::value,
                                      is_char_types_match
                                  >::value
                              >::value
@@ -2047,7 +2046,7 @@ namespace boost
          typedef Source source_type ;
 
          typedef BOOST_DEDUCED_TYPENAME mpl::if_<
-            is_arithmetic<Source>, Source, Source const&
+            ::boost::is_arithmetic<Source>, Source, Source const&
           >::type argument_type ;
 
          static source_type nearbyint ( argument_type s )
@@ -2138,10 +2137,10 @@ namespace boost
                             ::boost::is_float<Source>::value
                         >::value,
                         ::boost::type_traits::ice_not<
-                            is_same<Source, bool>::value
+                            ::boost::is_same<Source, bool>::value
                         >::value,
                         ::boost::type_traits::ice_not<
-                            is_same<Target, bool>::value
+                            ::boost::is_same<Target, bool>::value
                         >::value,
                         ::boost::is_unsigned<Target>::value
                     >::value,
@@ -2157,27 +2156,27 @@ namespace boost
     template<typename Target, typename Source>
     inline Target lexical_cast(const Source &arg)
     {
-        typedef BOOST_DEDUCED_TYPENAME detail::array_to_pointer_decay<Source>::type src;
+        typedef BOOST_DEDUCED_TYPENAME ::boost::detail::array_to_pointer_decay<Source>::type src;
 
         typedef BOOST_DEDUCED_TYPENAME ::boost::type_traits::ice_or<
-                detail::is_xchar_to_xchar<Target, src>::value,
-                detail::is_char_array_to_stdstring<Target,src>::value,
+                ::boost::detail::is_xchar_to_xchar<Target, src>::value,
+                ::boost::detail::is_char_array_to_stdstring<Target,src>::value,
                 ::boost::type_traits::ice_and<
-                     is_same<Target, src>::value,
-                     detail::is_stdstring<Target>::value
+                     ::boost::is_same<Target, src>::value,
+                     ::boost::detail::is_stdstring<Target>::value
                 >::value
         > do_copy_type;
 
         typedef BOOST_DEDUCED_TYPENAME
-                detail::is_arithmetic_and_not_xchars<Target, src> do_copy_with_dynamic_check_type;
+                ::boost::detail::is_arithmetic_and_not_xchars<Target, src> do_copy_with_dynamic_check_type;
 
         typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
             do_copy_type::value,
             detail::lexical_cast_copy<src>,
             BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
                  do_copy_with_dynamic_check_type::value,
-                 detail::lexical_cast_dynamic_num<Target, src>,
-                 detail::lexical_cast_do_cast<Target, src>
+                 ::boost::detail::lexical_cast_dynamic_num<Target, src>,
+                 ::boost::detail::lexical_cast_do_cast<Target, src>
             >::type
         >::type caster_type;
 
