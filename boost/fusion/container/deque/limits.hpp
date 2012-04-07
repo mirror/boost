@@ -8,6 +8,10 @@
 #if !defined(BOOST_FUSION_DEQUE_LIMITS_26112006_1737)
 #define BOOST_FUSION_DEQUE_LIMITS_26112006_1737
 
+#if defined(BOOST_FUSION_HAS_CPP11_DEQUE)
+#error "C++03 only! This file should not have been included"
+#endif
+
 #include <boost/fusion/container/vector/limits.hpp>
 
 #if !defined(FUSION_MAX_DEQUE_SIZE)
