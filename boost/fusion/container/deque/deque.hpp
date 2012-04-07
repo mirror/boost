@@ -8,6 +8,8 @@
 #if !defined(BOOST_FUSION_DEQUE_26112006_1649)
 #define BOOST_FUSION_DEQUE_26112006_1649
 
+#include <boost/config.hpp>
+
 #if (defined(BOOST_NO_DECLTYPE)             \
   || defined(BOOST_NO_VARIADIC_TEMPLATES)   \
   || defined(BOOST_NO_RVALUE_REFERENCES))
