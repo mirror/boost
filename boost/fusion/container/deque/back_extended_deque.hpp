@@ -29,6 +29,18 @@ namespace boost { namespace fusion {
         back_extended_deque(Deque const& deque, Arg const& val)
           : base(val, deque)
         {}
+
+#if defined(BOOST_NO_RVALUE_REFERENCES)
+        template <typename Arg>
+        back_extended_deque(Deque const& deque, Arg& val)
+          : base(val, deque)
+        {}
+#else
+        template <typename Arg>
+        back_extended_deque(Deque const& deque, Arg&& val)
+          : base(std::forward<Arg>(val), deque)
+        {}
+#endif
     };
 }}
 
