@@ -37,15 +37,13 @@ template<typename T> struct member_type<T const* const> {
     typedef T const* pointer;
 };
 
+// NOTE: Do not add specializations for T const[&/*] (ambiguous on VACPP).
 template<typename T> T* member_addr(T& data) { return &data; }
-template<typename T> T const* member_addr(T const& data) { return &data; }
 template<typename T> T* member_addr(T* data) { return data; }
-template<typename T> T const* member_addr(T const* data) { return data; }
 
+// NOTE: Do not add specializations for T const[&/*] (ambiguous on VACPP).
 template<typename T> T& member_deref(T& data) { return data; }
-template<typename T> T const& member_deref(T const& data) { return data; }
 template<typename T> T& member_deref(T* data) { return *data; }
-template<typename T> T const& member_deref(T const* data) { return *data; }
 
 } } } // namespace
 
