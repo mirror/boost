@@ -2,7 +2,7 @@
     Copyright (c) 2005-2012 Joel de Guzman
     Copyright (c) 2005-2006 Dan Marsden
 
-    Distributed under the Boost Software License, Version 1.0. (See accompanying 
+    Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #if !defined(BOOST_FUSION_DEQUE_DETAIL_KEYED_ELEMENT_26112006_1330)
@@ -26,7 +26,7 @@ namespace detail {
         void get();
 
         template<typename It>
-        static nil_keyed_element 
+        static nil_keyed_element
         from_iterator(It const&)
         {
             return nil_keyed_element();
@@ -49,7 +49,7 @@ namespace detail {
                 *it, base::from_iterator(fusion::next(it)));
         }
 
-        template<typename U, typename Rst>
+        template <typename U, typename Rst>
         keyed_element(keyed_element<Key, U, Rst> const& rhs)
             : Rest(rhs.get_base()), value_(rhs.value_)
         {}

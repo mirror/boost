@@ -9,7 +9,7 @@
 #define BOOST_FUSION_SEQUENCE_CONTAINER_DEQUE_24112006_2036
 
 #include <boost/fusion/container/deque/deque.hpp>
-#include <boost/fusion/container/deque/convert.hpp>
+//#include <boost/fusion/container/deque/convert.hpp>
 
 #endif
 

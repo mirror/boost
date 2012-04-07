@@ -14,11 +14,12 @@
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>
 
-namespace boost { namespace fusion {
+namespace boost { namespace fusion
+{
     template<typename Deque, typename T>
     struct back_extended_deque
-        : detail::keyed_element<typename Deque::next_up, T, Deque>,
-          sequence_base<back_extended_deque<Deque, T> >
+      : detail::keyed_element<typename Deque::next_up, T, Deque>
+      , sequence_base<back_extended_deque<Deque, T> >
     {
         typedef detail::keyed_element<typename Deque::next_up, T, Deque> base;
         typedef typename Deque::next_down next_down;

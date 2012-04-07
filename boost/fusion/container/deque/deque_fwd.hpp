@@ -15,7 +15,7 @@
   || defined(BOOST_NO_RVALUE_REFERENCES))
 # include <boost/fusion/container/deque/cpp03_deque_fwd.hpp>
 #else
-# include <boost/fusion/container/deque/cpp03_deque_fwd.hpp>
+# include <boost/fusion/container/deque/cpp11_deque_fwd.hpp>
 #endif
 
 #endif

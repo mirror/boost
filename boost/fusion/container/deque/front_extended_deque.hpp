@@ -17,8 +17,8 @@ namespace boost { namespace fusion
 {
     template<typename Deque, typename T>
     struct front_extended_deque
-        : detail::keyed_element<typename Deque::next_down, T, Deque>,
-          sequence_base<front_extended_deque<Deque, T> >
+      : detail::keyed_element<typename Deque::next_down, T, Deque>
+      , sequence_base<front_extended_deque<Deque, T> >
     {
         typedef detail::keyed_element<typename Deque::next_down, T, Deque> base;
         typedef mpl::int_<(Deque::next_down::value - 1)> next_down;
