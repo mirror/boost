@@ -39,8 +39,8 @@
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_PARAMS_(id) \
     BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (deduce_result_params)(id) )
 
-#define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_TYPE_(id) \
-    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (deduce_result_function_type)(id) )
+#define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE_(id) \
+    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (result_type)(id) )
 
 // User did not explicitly specified result type, deduce it (using Typeof).
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_DEDUCE_( \
@@ -70,37 +70,38 @@
         BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_CAPTURE_(id) \
     ; \
     struct BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_PARAMS_(id) { \
-        /* this typedef is internal to struct so its name will not clash */ \
-        typedef BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_CAPTURE_(id) \
-                function_ptr; \
-    }; \
-    typedef BOOST_PP_EXPR_IIF(typename01, typename) \
-        ::boost::remove_pointer< BOOST_PP_EXPR_IIF(typename01, typename) \
-            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_PARAMS_(id)::function_ptr \
-        >::type \
-        BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_TYPE_(id) \
-    ; \
-    typedef BOOST_PP_EXPR_IIF(typename01, typename) \
-        ::boost::function_traits< \
-            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_TYPE_(id) \
-        >::result_type \
-        BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) \
-    ;
+        /* internal to struct to workaround GCC and other compiler's issues */ \
+        typedef \
+            BOOST_PP_EXPR_IIF(typename01, typename) \
+            ::boost::function_traits< \
+                BOOST_PP_EXPR_IIF(typename01, typename) \
+                ::boost::remove_pointer< \
+                    BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_CAPTURE_(id) \
+                >::type \
+            >::result_type \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE_(id) \
+        ; \
+    };
 
 // Use result type as explicitly specified by user (no type deduction needed).
 // Precondition: RETURNS(decl_traits) != NIL
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPED_( \
         id, typename01, decl_traits) \
-    typedef \
-        BOOST_PP_LIST_FIRST(BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS_RETURNS( \
-                decl_traits)) \
-        BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) \
-    ;
+    struct BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_PARAMS_(id) { \
+        typedef \
+            BOOST_PP_LIST_FIRST( \
+                    BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS_RETURNS( \
+                            decl_traits)) \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE_(id) \
+        ; \
+    };
 
 // PUBLIC //
 
-#define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) \
-    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (result_type)(id) )
+#define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id, typename01) \
+    BOOST_PP_EXPR_IIF(typename01, typename) \
+    BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_PARAMS_(id) :: \
+    BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE_(id)
 
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_DECL(id) \
     /* result type here */ (*BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_(id))();

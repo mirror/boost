@@ -325,8 +325,8 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_MAYBECONST_BIND_MEMBER_INIT_ENUM_( \
 
 // Expand to the function type `R (A1, ...)`.
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_F_( \
-        id, decl_traits, has_type, function_type) \
-    BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) \
+        id, typename01, decl_traits, has_type, function_type) \
+    BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id, typename01) \
     BOOST_PP_EXPR_IIF(has_type, (function_type) ) \
     ( \
         BOOST_PP_LIST_FOR_EACH_I( \
@@ -385,7 +385,8 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_MAYBECONST_BIND_MEMBER_INIT_ENUM_( \
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_CALL_(z, defaults_n, \
         id, typename01, decl_traits, params, \
         const_binds, has_const_bind_this, binds, has_bind_this) \
-    inline BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) operator()( \
+    inline BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id, typename01) \
+    operator()( \
         BOOST_PP_LIST_FOR_EACH_I( \
                 BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_PARAM_ARG_DECL_ENUM_, \
                 typename01, params) \
@@ -461,7 +462,7 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_(z, defaults_n, \
         id, typename01, decl_traits, params, \
         const_binds, has_const_bind_this, binds, has_bind_this) \
-    inline static BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) \
+    inline static BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id, typename01) \
     BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_FUNC_(z, defaults_n, ~)( \
         void* object \
         BOOST_PP_IIF(BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS, \
@@ -691,8 +692,8 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
     { \
         /* function type */ \
         typedef \
-            BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_F_(id, decl_traits, \
-                    1 /* has type */, \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_F_(id, typename01, \
+                    decl_traits, 1 /* has type */, \
                     BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_F_TYPE_) \
         ; \
         /* functor type -- this type cannot have ID postfix because it is */ \
@@ -721,7 +722,8 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
         /* (traits must be defined in both this and the global functor) */ \
         enum { arity = ::boost::function_traits< /* can't use static data */ \
                 BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_F_TYPE_ >::arity }; \
-        typedef BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) result_type; \
+        typedef BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id, typename01) \
+                result_type; \
         BOOST_PP_LIST_FOR_EACH_I( \
                 BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_ARG_TYPEDEF_, \
                 typename01, params) \
@@ -791,7 +793,7 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
         /* body function (unfortunately, cannot be static to allow access */ \
         /* to member var with local function name for recursion but doing */ \
         /* so also allows the body to misuse `this` instead of `this_`) */ \
-        inline BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id) \
+        inline BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE(id, typename01) \
         BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_BODY_FUNC_( \
                 /* const binds */ \
                 BOOST_PP_LIST_FOR_EACH_I( \

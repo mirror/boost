@@ -24,7 +24,8 @@ boost::function<double (double)> identity_d = identity_d_impl; // Functor.
 #include <boost/typeof/typeof.hpp>
 #include <boost/typeof/std/string.hpp>
 #include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function1, 2) // Use `functionN`.
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function, 1)
+BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function1, 2) // Also `functionN`.
 //]
 
 #endif // #include guard
