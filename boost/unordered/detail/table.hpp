@@ -11,254 +11,7 @@
 #include <boost/unordered/detail/util.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
-#include <boost/iterator.hpp>
 #include <cmath>
-
-namespace boost { namespace unordered { namespace iterator_detail {
-
-    ////////////////////////////////////////////////////////////////////////////
-    // Iterators
-    //
-    // all no throw
-
-    template <typename NodePointer, typename Value> struct iterator;
-    template <typename ConstNodePointer, typename NodePointer,
-        typename Value> struct c_iterator;
-    template <typename NodePointer, typename Value, typename Policy>
-        struct l_iterator;
-    template <typename ConstNodePointer, typename NodePointer,
-        typename Value, typename Policy> struct cl_iterator;
-
-    // Local Iterators
-    //
-    // all no throw
-
-    template <typename NodePointer, typename Value, typename Policy>
-    struct l_iterator
-        : public boost::iterator<
-            std::forward_iterator_tag, Value, std::ptrdiff_t,
-            NodePointer, Value&>
-    {
-#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-        template <typename ConstNodePointer, typename NodePointer2,
-                typename Value2, typename Policy2>
-        friend struct boost::unordered::iterator_detail::cl_iterator;
-    private:
-#endif
-        typedef NodePointer node_pointer;
-        node_pointer ptr_;
-        std::size_t bucket_;
-        std::size_t bucket_count_;
-
-    public:
-
-        l_iterator() : ptr_() {}
-
-        l_iterator(node_pointer x, std::size_t b, std::size_t c)
-            : ptr_(x), bucket_(b), bucket_count_(c) {}
-
-        Value& operator*() const {
-            return ptr_->value();
-        }
-
-        Value* operator->() const {
-            return ptr_->value_ptr();
-        }
-
-        l_iterator& operator++() {
-            ptr_ = static_cast<node_pointer>(ptr_->next_);
-            if (ptr_ && Policy::to_bucket(bucket_count_, ptr_->hash_)
-                    != bucket_)
-                ptr_ = node_pointer();
-            return *this;
-        }
-
-        l_iterator operator++(int) {
-            l_iterator tmp(*this);
-            ++(*this);
-            return tmp;
-        }
-
-        bool operator==(l_iterator x) const {
-            return ptr_ == x.ptr_;
-        }
-
-        bool operator!=(l_iterator x) const {
-            return ptr_ != x.ptr_;
-        }
-    };
-
-    template <typename ConstNodePointer, typename NodePointer, typename Value,
-             typename Policy>
-    struct cl_iterator
-        : public boost::iterator<
-            std::forward_iterator_tag, Value, std::ptrdiff_t,
-            ConstNodePointer, Value const&>
-    {
-        friend struct boost::unordered::iterator_detail::l_iterator
-            <NodePointer, Value, Policy>;
-    private:
-
-        typedef NodePointer node_pointer;
-        node_pointer ptr_;
-        std::size_t bucket_;
-        std::size_t bucket_count_;
-
-    public:
-
-        cl_iterator() : ptr_() {}
-
-        cl_iterator(node_pointer x, std::size_t b, std::size_t c) :
-            ptr_(x), bucket_(b), bucket_count_(c) {}
-
-        cl_iterator(boost::unordered::iterator_detail::l_iterator<
-                NodePointer, Value, Policy> const& x) :
-            ptr_(x.ptr_), bucket_(x.bucket_), bucket_count_(x.bucket_count_)
-        {}
-
-        Value const&
-            operator*() const {
-            return ptr_->value();
-        }
-
-        Value const* operator->() const {
-            return ptr_->value_ptr();
-        }
-
-        cl_iterator& operator++() {
-            ptr_ = static_cast<node_pointer>(ptr_->next_);
-            if (ptr_ && Policy::to_bucket(bucket_count_, ptr_->hash_)
-                    != bucket_)
-                ptr_ = node_pointer();
-            return *this;
-        }
-
-        cl_iterator operator++(int) {
-            cl_iterator tmp(*this);
-            ++(*this);
-            return tmp;
-        }
-
-        friend bool operator==(cl_iterator const& x, cl_iterator const& y) {
-            return x.ptr_ == y.ptr_;
-        }
-
-        friend bool operator!=(cl_iterator const& x, cl_iterator const& y) {
-            return x.ptr_ != y.ptr_;
-        }
-    };
-
-    template <typename NodePointer, typename Value>
-    struct iterator
-        : public boost::iterator<
-            std::forward_iterator_tag, Value, std::ptrdiff_t,
-            NodePointer, Value&>
-    {
-#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-        template <typename ConstNodePointer, typename NodePointer2,
-                typename Value2>
-        friend struct boost::unordered::iterator_detail::c_iterator;
-    private:
-#endif
-        typedef NodePointer node_pointer;
-        node_pointer node_;
-
-    public:
-
-        iterator() : node_() {}
-
-        explicit iterator(node_pointer const& x) : node_(x) {}
-
-        Value& operator*() const {
-            return node_->value();
-        }
-
-        Value* operator->() const {
-            return &node_->value();
-        }
-
-        iterator& operator++() {
-            node_ = static_cast<node_pointer>(node_->next_);
-            return *this;
-        }
-
-        iterator operator++(int) {
-            iterator tmp(node_);
-            node_ = static_cast<node_pointer>(node_->next_);
-            return tmp;
-        }
-
-        bool operator==(iterator const& x) const {
-            return node_ == x.node_;
-        }
-
-        bool operator!=(iterator const& x) const {
-            return node_ != x.node_;
-        }
-    };
-
-    template <typename ConstNodePointer, typename NodePointer, typename Value>
-    struct c_iterator
-        : public boost::iterator<
-            std::forward_iterator_tag, Value, std::ptrdiff_t,
-            ConstNodePointer, Value const&>
-    {
-        friend struct boost::unordered::iterator_detail::iterator<
-                NodePointer, Value>;
-
-#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-        template <typename K, typename T, typename H, typename P, typename A>
-        friend class boost::unordered::unordered_map;
-        template <typename K, typename T, typename H, typename P, typename A>
-        friend class boost::unordered::unordered_multimap;
-        template <typename T, typename H, typename P, typename A>
-        friend class boost::unordered::unordered_set;
-        template <typename T, typename H, typename P, typename A>
-        friend class boost::unordered::unordered_multiset;
-
-    private:
-#endif
-
-        typedef NodePointer node_pointer;
-        node_pointer node_;
-
-    public:
-
-        c_iterator() : node_() {}
-
-        explicit c_iterator(node_pointer const& x) : node_(x) {}
-
-        c_iterator(boost::unordered::iterator_detail::iterator<
-                NodePointer, Value> const& x) : node_(x.node_) {}
-
-        Value const& operator*() const {
-            return node_->value();
-        }
-
-        Value const* operator->() const {
-            return &node_->value();
-        }
-
-        c_iterator& operator++() {
-            node_ = static_cast<node_pointer>(node_->next_);
-            return *this;
-        }
-
-        c_iterator operator++(int) {
-            c_iterator tmp(node_);
-            node_ = static_cast<node_pointer>(node_->next_);
-            return tmp;
-        }
-
-        friend bool operator==(c_iterator const& x, c_iterator const& y) {
-            return x.node_ == y.node_;
-        }
-
-        friend bool operator!=(c_iterator const& x, c_iterator const& y) {
-            return x.node_ != y.node_;
-        }
-    };
-}}}
 
 namespace boost { namespace unordered { namespace detail {
 
@@ -340,15 +93,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename buckets::node_pointer node_pointer;
         typedef typename buckets::const_node_pointer const_node_pointer;
 
-        typedef boost::unordered::iterator_detail::
-            iterator<node_pointer, value_type> iterator;
-        typedef boost::unordered::iterator_detail::
-            c_iterator<const_node_pointer, node_pointer, value_type> c_iterator;
-        typedef boost::unordered::iterator_detail::
-            l_iterator<node_pointer, value_type, policy> l_iterator;
-        typedef boost::unordered::iterator_detail::
-            cl_iterator<const_node_pointer, node_pointer, value_type, policy>
-            cl_iterator;
+        typedef typename table::iterator iterator;
 
         // Members
 
@@ -465,9 +210,9 @@ namespace boost { namespace unordered { namespace detail {
 
         // Iterators
 
-        node_pointer begin() const {
+        iterator begin() const {
             return !this->buckets_ ?
-                node_pointer() : this->get_start();
+                iterator() : this->get_start();
         }
 
         // Assignment
@@ -601,33 +346,33 @@ namespace boost { namespace unordered { namespace detail {
         // Find Node
 
         template <typename Key, typename Hash, typename Pred>
-        node_pointer generic_find_node(
+        iterator generic_find_node(
                 Key const& k,
                 Hash const& hash_function,
                 Pred const& eq) const
         {
-            if (!this->size_) return node_pointer();
+            if (!this->size_) return iterator();
             return static_cast<table_impl const*>(this)->
                 find_node_impl(policy::apply_hash(hash_function, k), k, eq);
         }
 
-        node_pointer find_node(
+        iterator find_node(
                 std::size_t hash,
                 key_type const& k) const
         {
-            if (!this->size_) return node_pointer();
+            if (!this->size_) return iterator();
             return static_cast<table_impl const*>(this)->
                 find_node_impl(hash, k, this->key_eq());
         }
 
-        node_pointer find_node(key_type const& k) const
+        iterator find_node(key_type const& k) const
         {
-            if (!this->size_) return node_pointer();
+            if (!this->size_) return iterator();
             return static_cast<table_impl const*>(this)->
                 find_node_impl(this->hash(k), k, this->key_eq());
         }
 
-        node_pointer find_matching_node(node_pointer n) const
+        iterator find_matching_node(iterator n) const
         {
             // TODO: Does this apply to C++11?
             //
@@ -635,7 +380,7 @@ namespace boost { namespace unordered { namespace detail {
             // when different hash functions are used. So I can't use the hash
             // value from the node here.
     
-            return find_node(get_key(n->value()));
+            return find_node(get_key(*n));
         }
 
         // Reserve and rehash

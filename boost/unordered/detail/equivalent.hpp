@@ -186,6 +186,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename table::node_constructor node_constructor;
         typedef typename table::extractor extractor;
         typedef typename table::iterator iterator;
+        typedef typename table::c_iterator c_iterator;
 
         // Constructors
 
@@ -219,48 +220,48 @@ namespace boost { namespace unordered { namespace detail {
         // Accessors
 
         template <class Key, class Pred>
-        node_pointer find_node_impl(
+        iterator find_node_impl(
                 std::size_t hash,
                 Key const& k,
                 Pred const& eq) const
         {
             std::size_t bucket_index =
                 policy::to_bucket(this->bucket_count_, hash);
-            node_pointer n = this->get_start(bucket_index);
+            iterator n = this->get_start(bucket_index);
 
             for (;;)
             {
-                if (!n) return n;
+                if (!n.node_) return n;
 
-                std::size_t node_hash = n->hash_;
+                std::size_t node_hash = n.node_->hash_;
                 if (hash == node_hash)
                 {
-                    if (eq(k, this->get_key(n->value())))
+                    if (eq(k, this->get_key(*n)))
                         return n;
                 }
                 else
                 {
                     if (policy::to_bucket(this->bucket_count_, node_hash)
                             != bucket_index)
-                        return node_pointer();
+                        return iterator();
                 }
 
-                n = static_cast<node_pointer>(
-                    static_cast<node_pointer>(n->group_prev_)->next_);
+                n = iterator(static_cast<node_pointer>(
+                    static_cast<node_pointer>(n.node_->group_prev_)->next_));
             }
         }
 
         std::size_t count(key_type const& k) const
         {
-            node_pointer n = this->find_node(k);
-            if (!n) return 0;
+            iterator n = this->find_node(k);
+            if (!n.node_) return 0;
 
             std::size_t count = 0;
-            node_pointer it = n;
+            node_pointer it = n.node_;
             do {
                 it = static_cast<node_pointer>(it->group_prev_);
                 ++count;
-            } while(it != n);
+            } while(it != n.node_);
 
             return count;
         }
@@ -268,12 +269,12 @@ namespace boost { namespace unordered { namespace detail {
         std::pair<iterator, iterator>
             equal_range(key_type const& k) const
         {
-            node_pointer n = this->find_node(k);
+            iterator n = this->find_node(k);
             return std::make_pair(
-                iterator(n), iterator(n ?
+                n, n.node_ ? iterator(
                     static_cast<node_pointer>(
-                        static_cast<node_pointer>(n->group_prev_)->next_) :
-                    n));
+                        static_cast<node_pointer>(n.node_->group_prev_)->next_
+                    )) : n);
         }
 
         // Equality
@@ -283,14 +284,14 @@ namespace boost { namespace unordered { namespace detail {
             if(this->size_ != other.size_) return false;
             if(!this->size_) return true;
     
-            for(node_pointer n1 = this->get_start(); n1;)
+            for(iterator n1 = this->get_start(); n1.node_;)
             {
-                node_pointer n2 = other.find_matching_node(n1);
-                if (!n2) return false;
-                node_pointer end1 = static_cast<node_pointer>(
-                    static_cast<node_pointer>(n1->group_prev_)->next_);
-                node_pointer end2 = static_cast<node_pointer>(
-                    static_cast<node_pointer>(n2->group_prev_)->next_);
+                iterator n2 = other.find_matching_node(n1);
+                if (!n2.node_) return false;
+                iterator end1(static_cast<node_pointer>(
+                    static_cast<node_pointer>(n1.node_->group_prev_)->next_));
+                iterator end2(static_cast<node_pointer>(
+                    static_cast<node_pointer>(n2.node_->group_prev_)->next_));
                 if (!group_equals(n1, end1, n2, end2)) return false;
                 n1 = end1;    
             }
@@ -300,25 +301,24 @@ namespace boost { namespace unordered { namespace detail {
 
 #if !defined(BOOST_UNORDERED_DEPRECATED_EQUALITY)
 
-        static bool group_equals(node_pointer n1, node_pointer end1,
-                node_pointer n2, node_pointer end2)
+        static bool group_equals(iterator n1, iterator end1,
+                iterator n2, iterator end2)
         {
             for(;;)
             {
-                if (n1->value() != n2->value())
-                    break;
+                if (*n1 != *n2) break;
 
-                n1 = static_cast<node_pointer>(n1->next_);
-                n2 = static_cast<node_pointer>(n2->next_);
+                ++n1;
+                ++n2;
             
                 if (n1 == end1) return n2 == end2;
                 if (n2 == end2) return false;
             }
             
-            for(node_pointer n1a = n1, n2a = n2;;)
+            for(iterator n1a = n1, n2a = n2;;)
             {
-                n1a = static_cast<node_pointer>(n1a->next_);
-                n2a = static_cast<node_pointer>(n2a->next_);
+                ++n1a;
+                ++n2a;
 
                 if (n1a == end1)
                 {
@@ -329,50 +329,50 @@ namespace boost { namespace unordered { namespace detail {
                 if (n2a == end2) return false;
             }
 
-            node_pointer start = n1;
-            for(;n1 != end1; n1 = static_cast<node_pointer>(n1->next_))
+            iterator start = n1;
+            for(;n1 != end1; ++n1)
             {
-                value_type const& v = n1->value();
+                value_type const& v = *n1;
                 if (find(start, n1, v)) continue;
                 std::size_t matches = count_equal(n2, end2, v);
-                if (!matches || matches != 1 + count_equal(
-                        static_cast<node_pointer>(n1->next_), end1, v))
-                    return false;
+                if (!matches) return false;
+                iterator next = n1;
+                ++next;
+                if (matches != 1 + count_equal(next, end1, v)) return false;
             }
             
             return true;
         }
 
-        static bool find(node_pointer n, node_pointer end, value_type const& v)
+        static bool find(iterator n, iterator end, value_type const& v)
         {
-            for(;n != end; n = static_cast<node_pointer>(n->next_))
-                if (n->value() == v)
+            for(;n != end; ++n)
+                if (*n == v)
                     return true;
             return false;
         }
 
-        static std::size_t count_equal(node_pointer n, node_pointer end,
+        static std::size_t count_equal(iterator n, iterator end,
             value_type const& v)
         {
             std::size_t count = 0;
-            for(;n != end; n = static_cast<node_pointer>(n->next_))
-                if (n->value() == v) ++count;
+            for(;n != end; ++n)
+                if (*n == v) ++count;
             return count;
         }
 
 #else
 
-        static bool group_equals(node_pointer n1, node_pointer end1,
-                node_pointer n2, node_pointer end2)
+        static bool group_equals(iterator n1, iterator end1,
+                iterator n2, iterator end2)
         {
             for(;;)
             {
-                if(!extractor::compare_mapped(
-                    n1->value(), n2->value()))
+                if(!extractor::compare_mapped(*n1, *n2))
                     return false;
 
-                n1 = static_cast<node_pointer>(n1->next_);
-                n2 = static_cast<node_pointer>(n2->next_);
+                ++n1;
+                ++n2;
 
                 if (n1 == end1) return n2 == end2;
                 if (n2 == end2) return false;
@@ -394,15 +394,15 @@ namespace boost { namespace unordered { namespace detail {
             pos->group_prev_ = static_cast<link_pointer>(n);
         }
 
-        inline node_pointer add_node(
+        inline iterator add_node(
                 node_constructor& a,
                 std::size_t hash,
-                node_pointer pos)
+                iterator pos)
         {
             node_pointer n = a.release();
             n->hash_ = hash;
-            if(pos) {
-                this->add_after_node(n, pos);
+            if (pos.node_) {
+                this->add_after_node(n, pos.node_);
                 if (n->next_) {
                     std::size_t next_bucket = policy::to_bucket(
                         this->bucket_count_,
@@ -438,14 +438,14 @@ namespace boost { namespace unordered { namespace detail {
                 }
             }
             ++this->size_;
-            return n;
+            return iterator(n);
         }
 
-        node_pointer emplace_impl(node_constructor& a)
+        iterator emplace_impl(node_constructor& a)
         {
             key_type const& k = this->get_key(a.value());
             std::size_t hash = this->hash(k);
-            node_pointer position = this->find_node(hash, k);
+            iterator position = this->find_node(hash, k);
 
             // reserve has basic exception safety if the hash function
             // throws, strong otherwise.
@@ -457,8 +457,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             key_type const& k = this->get_key(a.value());
             std::size_t hash = this->hash(k);
-            this->add_node(a, hash,
-                this->find_node(hash, k));
+            this->add_node(a, hash, this->find_node(hash, k));
         }
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
@@ -562,37 +561,38 @@ namespace boost { namespace unordered { namespace detail {
             node_pointer end = static_cast<node_pointer>(end1);
             prev->next_ = end1;
             this->fix_buckets(bucket, prev, end);
-            return this->delete_nodes(pos, end);
+            return this->delete_nodes(c_iterator(pos), c_iterator(end));
         }
 
-        node_pointer erase(node_pointer r)
+        iterator erase(c_iterator r)
         {
-            BOOST_ASSERT(r);
-            node_pointer next = static_cast<node_pointer>(r->next_);
+            BOOST_ASSERT(r.node_);
+            iterator next(r.node_);
+            ++next;
 
             bucket_pointer bucket = this->get_bucket(
-                policy::to_bucket(this->bucket_count_, r->hash_));
-            previous_pointer prev = unlink_node(*bucket, r);
+                policy::to_bucket(this->bucket_count_, r.node_->hash_));
+            previous_pointer prev = unlink_node(*bucket, r.node_);
 
-            this->fix_buckets(bucket, prev, next);
+            this->fix_buckets(bucket, prev, next.node_);
 
             this->delete_node(r);
 
             return next;
         }
 
-        node_pointer erase_range(node_pointer r1, node_pointer r2)
+        iterator erase_range(c_iterator r1, c_iterator r2)
         {
-            if (r1 == r2) return r2;
+            if (r1 == r2) return iterator(r2.node_);
 
             std::size_t bucket_index =
-                policy::to_bucket(this->bucket_count_, r1->hash_);
+                policy::to_bucket(this->bucket_count_, r1.node_->hash_);
             previous_pointer prev = unlink_nodes(
-                *this->get_bucket(bucket_index), r1, r2);
-            this->fix_buckets_range(bucket_index, prev, r1, r2);
+                *this->get_bucket(bucket_index), r1.node_, r2.node_);
+            this->fix_buckets_range(bucket_index, prev, r1.node_, r2.node_);
             this->delete_nodes(r1, r2);
 
-            return r2;
+            return iterator(r2.node_);
         }
 
         static previous_pointer unlink_node(bucket& b, node_pointer n)
@@ -709,17 +709,18 @@ namespace boost { namespace unordered { namespace detail {
 
             node_constructor a(dst.node_alloc());
 
-            node_pointer n = src.get_start();
+            iterator n = src.get_start();
             previous_pointer prev = dst.get_previous_start();
 
-            while(n) {
-                std::size_t hash = n->hash_;
-                node_pointer group_end =
+            while (n.node_) {
+                std::size_t hash = n.node_->hash_;
+                iterator group_end(
                     static_cast<node_pointer>(
-                        static_cast<node_pointer>(n->group_prev_)->next_);
+                        static_cast<node_pointer>(n.node_->group_prev_)->next_
+                    ));
 
                 a.construct_node();
-                a.construct_value2(n->value());
+                a.construct_value2(*n);
 
                 node_pointer first_node = a.release();
                 node_pointer end = first_node;
@@ -727,11 +728,10 @@ namespace boost { namespace unordered { namespace detail {
                 prev->next_ = static_cast<link_pointer>(first_node);
                 ++dst.size_;
 
-                for(n = static_cast<node_pointer>(n->next_); n != group_end;
-                        n = static_cast<node_pointer>(n->next_))
+                for (++n; n != group_end; ++n)
                 {
                     a.construct_node();
-                    a.construct_value2(n->value());
+                    a.construct_value2(*n);
                     end = a.release();
                     end->hash_ = hash;
                     add_after_node(end, first_node);
@@ -756,17 +756,18 @@ namespace boost { namespace unordered { namespace detail {
 
             node_constructor a(dst.node_alloc());
 
-            node_pointer n = src.get_start();
+            iterator n = src.get_start();
             previous_pointer prev = dst.get_previous_start();
 
-            while(n) {
-                std::size_t hash = n->hash_;
-                node_pointer group_end =
+            while (n.node_) {
+                std::size_t hash = n.node_->hash_;
+                iterator group_end(
                     static_cast<node_pointer>(
-                        static_cast<node_pointer>(n->group_prev_)->next_);
+                        static_cast<node_pointer>(n.node_->group_prev_)->next_
+                    ));
 
                 a.construct_node();
-                a.construct_value2(boost::move(n->value()));
+                a.construct_value2(boost::move(*n));
 
                 node_pointer first_node = a.release();
                 node_pointer end = first_node;
@@ -774,11 +775,10 @@ namespace boost { namespace unordered { namespace detail {
                 prev->next_ = static_cast<link_pointer>(first_node);
                 ++dst.size_;
 
-                for(n = static_cast<node_pointer>(n->next_); n != group_end;
-                        n = static_cast<node_pointer>(n->next_))
+                for(++n; n != group_end; ++n)
                 {
                     a.construct_node();
-                    a.construct_value2(boost::move(n->value()));
+                    a.construct_value2(boost::move(*n));
                     end = a.release();
                     end->hash_ = hash;
                     add_after_node(end, first_node);

@@ -203,12 +203,12 @@ namespace unordered
 
         iterator begin()
         {
-            return iterator(table_.begin());
+            return table_.begin();
         }
 
         const_iterator begin() const
         {
-            return const_iterator(table_.begin());
+            return table_.begin();
         }
 
         iterator end()
@@ -223,7 +223,7 @@ namespace unordered
 
         const_iterator cbegin() const
         {
-            return const_iterator(table_.begin());
+            return table_.begin();
         }
 
         const_iterator cend() const
@@ -689,12 +689,12 @@ namespace unordered
 
         iterator begin()
         {
-            return iterator(table_.begin());
+            return table_.begin();
         }
 
         const_iterator begin() const
         {
-            return const_iterator(table_.begin());
+            return table_.begin();
         }
 
         iterator end()
@@ -709,7 +709,7 @@ namespace unordered
 
         const_iterator cbegin() const
         {
-            return const_iterator(table_.begin());
+            return table_.begin();
         }
 
         const_iterator cend() const
@@ -1141,7 +1141,7 @@ namespace unordered
     typename unordered_map<K,T,H,P,A>::iterator
         unordered_map<K,T,H,P,A>::erase(const_iterator position)
     {
-        return iterator(table_.erase(position.node_));
+        return table_.erase(position);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1156,7 +1156,7 @@ namespace unordered
         unordered_map<K,T,H,P,A>::erase(
             const_iterator first, const_iterator last)
     {
-        return iterator(table_.erase_range(first.node_, last.node_));
+        return table_.erase_range(first, last);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1214,14 +1214,14 @@ namespace unordered
     typename unordered_map<K,T,H,P,A>::iterator
         unordered_map<K,T,H,P,A>::find(const key_type& k)
     {
-        return iterator(table_.find_node(k));
+        return table_.find_node(k);
     }
 
     template <class K, class T, class H, class P, class A>
     typename unordered_map<K,T,H,P,A>::const_iterator
         unordered_map<K,T,H,P,A>::find(const key_type& k) const
     {
-        return const_iterator(table_.find_node(k));
+        return table_.find_node(k);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1233,7 +1233,7 @@ namespace unordered
             CompatibleHash const& hash,
             CompatiblePredicate const& eq)
     {
-        return iterator(table_.generic_find_node(k, hash, eq));
+        return table_.generic_find_node(k, hash, eq);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1245,7 +1245,7 @@ namespace unordered
             CompatibleHash const& hash,
             CompatiblePredicate const& eq) const
     {
-        return const_iterator(table_.generic_find_node(k, hash, eq));
+        return table_.generic_find_node(k, hash, eq);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1468,7 +1468,7 @@ namespace unordered
     typename unordered_multimap<K,T,H,P,A>::iterator
         unordered_multimap<K,T,H,P,A>::erase(const_iterator position)
     {
-        return iterator(table_.erase(position.node_));
+        return table_.erase(position);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1483,7 +1483,7 @@ namespace unordered
         unordered_multimap<K,T,H,P,A>::erase(
             const_iterator first, const_iterator last)
     {
-        return iterator(table_.erase_range(first.node_, last.node_));
+        return table_.erase_range(first, last);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1520,14 +1520,14 @@ namespace unordered
     typename unordered_multimap<K,T,H,P,A>::iterator
         unordered_multimap<K,T,H,P,A>::find(const key_type& k)
     {
-        return iterator(table_.find_node(k));
+        return table_.find_node(k);
     }
 
     template <class K, class T, class H, class P, class A>
     typename unordered_multimap<K,T,H,P,A>::const_iterator
         unordered_multimap<K,T,H,P,A>::find(const key_type& k) const
     {
-        return const_iterator(table_.find_node(k));
+        return table_.find_node(k);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1539,7 +1539,7 @@ namespace unordered
             CompatibleHash const& hash,
             CompatiblePredicate const& eq)
     {
-        return iterator(table_.generic_find_node(k, hash, eq));
+        return table_.generic_find_node(k, hash, eq);
     }
 
     template <class K, class T, class H, class P, class A>
@@ -1551,7 +1551,7 @@ namespace unordered
             CompatibleHash const& hash,
             CompatiblePredicate const& eq) const
     {
-        return const_iterator(table_.generic_find_node(k, hash, eq));
+        return table_.generic_find_node(k, hash, eq);
     }
 
     template <class K, class T, class H, class P, class A>
