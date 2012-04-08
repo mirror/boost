@@ -280,6 +280,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef boost::unordered::detail::allocator_traits<A> traits;
         typedef typename traits::value_type value_type;
 
+        typedef Policy policy;
         typedef Node node;
         typedef Bucket bucket;
         typedef typename boost::unordered::detail::rebind_wrap<A, node>::type
@@ -334,7 +335,7 @@ namespace boost { namespace unordered { namespace detail {
         std::size_t max_bucket_count() const
         {
             // -1 to account for the start bucket.
-            return this->prev_bucket_count(
+            return policy::prev_bucket_count(
                 bucket_allocator_traits::max_size(bucket_alloc()) - 1);
         }
 
@@ -379,7 +380,8 @@ namespace boost { namespace unordered { namespace detail {
             if (!ptr) return 0;
 
             std::size_t count = 0;
-            while(ptr && this->to_bucket(this->bucket_count_, ptr->hash_) == index)
+            while(ptr &&
+                    policy::to_bucket(this->bucket_count_, ptr->hash_) == index)
             {
                 ++count;
                 ptr = static_cast<node_pointer>(ptr->next_);
@@ -574,7 +576,7 @@ namespace boost { namespace unordered { namespace detail {
             else
             {
                 bucket_pointer next_bucket = this->get_bucket(
-                    this->to_bucket(this->bucket_count_, next->hash_));
+                    policy::to_bucket(this->bucket_count_, next->hash_));
 
                 if (next_bucket != bucket)
                 {
@@ -600,7 +602,7 @@ namespace boost { namespace unordered { namespace detail {
                     if (n == end) return;
     
                     std::size_t new_bucket_index =
-                        this->to_bucket(this->bucket_count_, n->hash_);
+                        policy::to_bucket(this->bucket_count_, n->hash_);
                     if (bucket_index != new_bucket_index) {
                         bucket_index = new_bucket_index;
                         break;
@@ -616,7 +618,7 @@ namespace boost { namespace unordered { namespace detail {
                 if (n == end) break;
     
                 std::size_t new_bucket_index =
-                    this->to_bucket(this->bucket_count_, n->hash_);
+                    policy::to_bucket(this->bucket_count_, n->hash_);
                 if (bucket_index != new_bucket_index) {
                     bucket_index = new_bucket_index;
                     this->get_bucket(bucket_index)->next_ = previous_pointer();
@@ -625,7 +627,8 @@ namespace boost { namespace unordered { namespace detail {
     
             // Finally fix the bucket containing the trailing node.
             if (n) {
-                this->get_bucket(this->to_bucket(this->bucket_count_, n->hash_))->next_
+                this->get_bucket(
+                    policy::to_bucket(this->bucket_count_, n->hash_))->next_
                     = prev;
             }
         }

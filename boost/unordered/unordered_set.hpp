@@ -450,7 +450,7 @@ namespace unordered
 
         size_type bucket(const key_type& k) const
         {
-            return table_.to_bucket(table_.bucket_count_,
+            return table::to_bucket(table_.bucket_count_,
                 table_.hash(k));
         }
 
@@ -922,7 +922,7 @@ namespace unordered
 
         size_type bucket(const key_type& k) const
         {
-            return table_.to_bucket(table_.bucket_count_,
+            return table::to_bucket(table_.bucket_count_,
                 table_.hash(k));
         }
 

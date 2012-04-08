@@ -402,7 +402,7 @@ namespace boost { namespace unordered { namespace detail {
             // Or from rehash post-condition:
             // count > size / mlf_
 
-            return this->new_bucket_count(
+            return policy::new_bucket_count(
                 boost::unordered::detail::double_to_size(floor(
                     static_cast<double>(size) /
                     static_cast<double>(mlf_))) + 1);
@@ -415,7 +415,7 @@ namespace boost { namespace unordered { namespace detail {
                 hasher const& hf,
                 key_equal const& eq,
                 node_allocator const& a) :
-            buckets(a, this->new_bucket_count(num_buckets)),
+            buckets(a, policy::new_bucket_count(num_buckets)),
             functions(hf, eq),
             mlf_(1.0f),
             max_load_(0)
@@ -595,7 +595,7 @@ namespace boost { namespace unordered { namespace detail {
 
         std::size_t hash(key_type const& k) const
         {
-            return this->apply_hash(this->hash_function(), k);
+            return policy::apply_hash(this->hash_function(), k);
         }
 
         // Find Node
@@ -608,7 +608,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             if (!this->size_) return node_pointer();
             return static_cast<table_impl const*>(this)->
-                find_node_impl(this->apply_hash(hash_function, k), k, eq);
+                find_node_impl(policy::apply_hash(hash_function, k), k, eq);
         }
 
         node_pointer find_node(
@@ -678,10 +678,10 @@ namespace boost { namespace unordered { namespace detail {
 
         if(!this->size_) {
             if(this->buckets_) this->delete_buckets();
-            this->bucket_count_ = this->new_bucket_count(min_buckets);
+            this->bucket_count_ = policy::new_bucket_count(min_buckets);
         }
         else {
-            min_buckets = this->new_bucket_count((std::max)(min_buckets,
+            min_buckets = policy::new_bucket_count((std::max)(min_buckets,
                 boost::unordered::detail::double_to_size(floor(
                     static_cast<double>(this->size_) /
                     static_cast<double>(mlf_))) + 1));
