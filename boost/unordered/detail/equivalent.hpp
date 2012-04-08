@@ -330,7 +330,7 @@ namespace boost { namespace unordered { namespace detail {
             }
 
             node_pointer start = n1;
-            for(;n1 != end2; n1 = static_cast<node_pointer>(n1->next_))
+            for(;n1 != end1; n1 = static_cast<node_pointer>(n1->next_))
             {
                 value_type const& v = n1->value();
                 if (find(start, n1, v)) continue;
