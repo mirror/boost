@@ -391,7 +391,7 @@ namespace boost { namespace unordered { namespace detail {
 
         std::size_t min_buckets_for_size(std::size_t size) const
         {
-            BOOST_ASSERT(this->mlf_ != 0);
+            BOOST_ASSERT(this->mlf_ >= minimum_max_load_factor);
     
             using namespace std;
     
