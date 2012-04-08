@@ -174,8 +174,10 @@ namespace boost { namespace program_options {
                           bool utf8);
         
         /** Names of required options, filled by parser which has
-            access to options_description. */
-        std::set<std::string> m_required;
+            access to options_description.
+            The map values are the "canonical" names for each corresponding option.
+            This is useful in creating diagnostic messages when the option is absent. */
+        std::map<std::string, std::string> m_required;
     };
 
 

@@ -20,7 +20,7 @@ int main(int ac, char* av[])
         po::options_description desc("Allowed options");
         desc.add_options()
             ("help", "produce help message")
-            ("compression", po::value<int>(), "set compression level")
+            ("compression", po::value<double>(), "set compression level")
         ;
 
         po::variables_map vm;        
@@ -34,7 +34,7 @@ int main(int ac, char* av[])
 
         if (vm.count("compression")) {
             cout << "Compression level was set to " 
-                 << vm["compression"].as<int>() << ".\n";
+                 << vm["compression"].as<double>() << ".\n";
         } else {
             cout << "Compression level was not set.\n";
         }
