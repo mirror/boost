@@ -121,7 +121,7 @@ project
 
         ;
 
-    test-suite "tickets"
-        :
-        [ run test_6498_pass.cpp  ]
-        ;
+    #test-suite "tickets"
+    #    :
+    #    [ run test_6498_pass.cpp  ]
+    #    ;
