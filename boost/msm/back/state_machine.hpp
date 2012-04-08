@@ -1013,10 +1013,11 @@ private:
         // Take the transition action and return the next state.
         static HandledEnum execute(library_sm& fsm, int region_index, int , transition_event const& evt)
         {
-             execute_return res = 
-                (::boost::fusion::at_key<current_state_type>(fsm.m_substate_list)).process_event(evt); 
-             fsm.m_states[region_index]=get_state_id<stt,T1>::type::value;
-             return res;
+            // false as second parameter because this event is forwarded from outer fsm
+            execute_return res = 
+                (::boost::fusion::at_key<current_state_type>(fsm.m_substate_list)).process_event_internal(evt,false); 
+            fsm.m_states[region_index]=get_state_id<stt,T1>::type::value;
+            return res;
         }
         // helper metafunctions used by dispatch table and give the frow a new event
         // (used to avoid double entries in a table because of base events)
@@ -1249,50 +1250,11 @@ private:
         do_exit(finalEvent,*this);
     }
 
-    // Main function used by clients of the derived FSM to make
-    // transitions. Can also be called for internally (for example in an action method) generated events.
+    // Main function used by clients of the derived FSM to make transitions.
     template<class Event>
     execute_return process_event(Event const& evt)
     {
-        HandledEnum ret_handled=HANDLED_FALSE;
-        // if the state machine has terminate or interrupt flags, check them, otherwise skip
-        if (is_event_handling_blocked_helper<Event>
-                ( ::boost::mpl::bool_<has_fsm_blocking_states<library_sm>::type::value>() ) )
-            return HANDLED_TRUE;
-        // if a message queue is needed and processing is on the way
-        if (!do_pre_msg_queue_helper<Event>
-                (evt,::boost::mpl::bool_<is_no_message_queue<library_sm>::type::value>()) )
-        {
-            // wait for the end of current processing
-            return HANDLED_TRUE;
-        }
-        else
-        {
-            // prepare the next deferred event for handling
-            // if one defer is found in the SM, otherwise skip
-            handle_defer_helper<library_sm> defer_helper(m_deferred_events_queue);
-            defer_helper.do_pre_handle_deferred();
-            // process event
-            HandledEnum handled = this->do_process_helper<Event>
-                (evt,::boost::mpl::bool_<is_no_exception_thrown<library_sm>::type::value>());
-            if (handled)
-            {
-                ret_handled = handled;
-            }
-
-            // process completion transitions BEFORE any other event in the pool (UML Standard 2.3 §15.3.14)
-            handle_eventless_transitions_helper<library_sm> eventless_helper(this,(handled == HANDLED_TRUE));
-            eventless_helper.process_completion_event();
-
-            // after handling, take care of the deferred events
-            defer_helper.do_post_handle_deferred(handled);
-
-            // now check if some events were generated in a transition and was not handled
-            // because of another processing, and if yes, start handling them
-            do_post_msg_queue_helper(::boost::mpl::bool_<is_no_message_queue<library_sm>::type::value>());
-
-            return ret_handled;
-        }       
+        return process_event_internal(evt,true);
     }
 
     template <class EventType>
@@ -1765,16 +1727,16 @@ private:
     }
     // the following 2 functions handle the processing either with a try/catch protection or without
     template <class StateType,class EventType>
-    HandledEnum do_process_helper(EventType const& evt, ::boost::mpl::true_ const &)
+    HandledEnum do_process_helper(EventType const& evt, ::boost::mpl::true_ const &, bool is_direct_call)
     {
-        return this->do_process_event(evt);
+        return this->do_process_event(evt,is_direct_call);
     }
     template <class StateType,class EventType>
-    HandledEnum do_process_helper(EventType const& evt, ::boost::mpl::false_ const &)
+    HandledEnum do_process_helper(EventType const& evt, ::boost::mpl::false_ const &, bool is_direct_call)
     {
         try
         {
-            return this->do_process_event(evt);
+            return this->do_process_event(evt,is_direct_call);
         }
         catch (std::exception& e)
         {
@@ -1978,9 +1940,55 @@ private:
         HandledEnum&    result;
     };
 
+    // Main function used internally to make transitions
+    // Can only be called for internally (for example in an action method) generated events.
+    template<class Event>
+    execute_return process_event_internal(Event const& evt, bool is_direct_call)
+    {
+        HandledEnum ret_handled=HANDLED_FALSE;
+        // if the state machine has terminate or interrupt flags, check them, otherwise skip
+        if (is_event_handling_blocked_helper<Event>
+                ( ::boost::mpl::bool_<has_fsm_blocking_states<library_sm>::type::value>() ) )
+            return HANDLED_TRUE;
+        // if a message queue is needed and processing is on the way
+        if (!do_pre_msg_queue_helper<Event>
+                (evt,::boost::mpl::bool_<is_no_message_queue<library_sm>::type::value>()) )
+        {
+            // wait for the end of current processing
+            return HANDLED_TRUE;
+        }
+        else
+        {
+            // prepare the next deferred event for handling
+            // if one defer is found in the SM, otherwise skip
+            handle_defer_helper<library_sm> defer_helper(m_deferred_events_queue);
+            defer_helper.do_pre_handle_deferred();
+            // process event
+            HandledEnum handled = this->do_process_helper<Event>
+                (evt,::boost::mpl::bool_<is_no_exception_thrown<library_sm>::type::value>(),is_direct_call);
+            if (handled)
+            {
+                ret_handled = handled;
+            }
+
+            // process completion transitions BEFORE any other event in the pool (UML Standard 2.3 §15.3.14)
+            handle_eventless_transitions_helper<library_sm> eventless_helper(this,(handled == HANDLED_TRUE));
+            eventless_helper.process_completion_event();
+
+            // after handling, take care of the deferred events
+            defer_helper.do_post_handle_deferred(handled);
+
+            // now check if some events were generated in a transition and was not handled
+            // because of another processing, and if yes, start handling them
+            do_post_msg_queue_helper(::boost::mpl::bool_<is_no_message_queue<library_sm>::type::value>());
+
+            return ret_handled;
+        }       
+    }
+
     // minimum event processing without exceptions, queues, etc.
     template<class Event>
-    HandledEnum do_process_event(Event const& evt)
+    HandledEnum do_process_event(Event const& evt, bool is_direct_call)
     {
         HandledEnum handled = HANDLED_FALSE;
         // dispatch the event to every region
@@ -1990,9 +1998,10 @@ private:
         // if the event has not been handled and we have orthogonal zones, then
         // generate an error on every active state 
         // for state machine states contained in other state machines, do not handle
-        // but let the containing sm handle the error
+        // but let the containing sm handle the error, unless the event was generated in this fsm 
+        // (by calling process_event on this fsm object, is_direct_call == true)
         // completion events do not produce an error
-        if (!handled && !is_contained() && !is_completion_event<Event>::type::value)
+        if ( (!is_contained() || is_direct_call) && !handled && !is_completion_event<Event>::type::value)
         {
             for (int i=0; i<nr_regions::value;++i)
             {
