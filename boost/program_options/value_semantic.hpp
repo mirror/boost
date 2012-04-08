@@ -261,13 +261,21 @@ namespace boost { namespace program_options {
             return this;
         }
 
-        /** Specifies that the value can span multiple tokens. */
+        /** Specifies that the value can span multiple tokens. 
+        */
         typed_value* multitoken()
         {
             m_multitoken = true;
             return this;
         }
 
+        /** Specifies that no tokens may be provided as the value of
+            this option, which means that only presense of the option
+            is significant. For such option to be useful, either the
+            'validate' function should be specialized, or the 
+            'implicit_value' method should be also used. In most
+            cases, you can use the 'bool_switch' function instead of
+            using this method. */
         typed_value* zero_tokens() 
         {
             m_zero_tokens = true;
