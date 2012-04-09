@@ -63,10 +63,6 @@ void do_test_iterator_range_impl(const RngT& rng)
     BOOST_CHECK_EQUAL(lexical_cast<unsigned __int64>(rng), 1u);
     BOOST_CHECK_EQUAL(lexical_cast<__int64>(rng), 1);
 #endif
-
-#ifndef BOOST_LCAST_NO_WCHAR_T
-    BOOST_CHECK(lexical_cast<std::wstring>(rng) == L"1");
-#endif
 }
 
 template <class CharT>
