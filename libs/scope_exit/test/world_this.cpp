@@ -35,7 +35,7 @@ void world::add_person(person const& a_person) {
     bool commit = false;
 
     persons_.push_back(a_person);
-    //[world_this_
+    //[world_this
     BOOST_SCOPE_EXIT(&commit, this_) { // Capture object `this_`.
         if(!commit) this_->persons_.pop_back();
     } BOOST_SCOPE_EXIT_END

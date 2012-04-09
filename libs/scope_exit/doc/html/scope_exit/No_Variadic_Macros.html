@@ -7,7 +7,7 @@
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">
 <link rel="prev" href="Alternatives.html" title="Annex: Alternatives">
-<link rel="next" href="Acknowledgements.html" title="Acknowledgements">
+<link rel="next" href="../reference.html" title="Reference">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="Alternatives.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="Acknowledgements.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="Alternatives.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section scope_exit_No_Variadic_Macros">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -37,9 +37,9 @@
     </h6>
 <p>
       Most modern compilers support variadic macros (notably, these include GCC,
-      MSVC, and all C++11 compilers). However, in the rare case that programmers
-      need to use this library on a complier without variaidc macros, this library
-      also allows to specify the capture list using a <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a>
+      MSVC, and all C++11 compilers). <sup>[<a name="scope_exit.No_Variadic_Macros.f0" href="#ftn.scope_exit.No_Variadic_Macros.f0" class="footnote">9</a>]</sup> However, in the rare case that programmers need to use this library
+      on a complier without variaidc macros, this library also allows to specify
+      the capture list using a <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a>
       sequence where tokens are separated by round parenthesis <code class="computeroutput"><span class="special">()</span></code>:
     </p>
 <pre class="programlisting"><span class="special">(</span><span class="identifier">capture1</span><span class="special">)</span> <span class="special">(</span><span class="identifier">capture2</span><span class="special">)</span> <span class="special">...</span> <span class="comment">// All compilers.</span>
@@ -52,11 +52,31 @@
 </pre>
 <p>
       For example, the following syntax is accepted on all compilers with and without
-      variadic macros (see also <a href="../../../test/world_seq.cpp" target="_top"><code class="literal">world_seq.cpp</code></a>):
+      variadic macros (see also <a href="../../../test/world_seq.cpp" target="_top"><code class="literal">world_seq.cpp</code></a>
+      and <a href="../../../test/world.cpp" target="_top"><code class="literal">world.cpp</code></a>):
     </p>
-<p>
+<div class="informaltable"><table class="table">
+<colgroup>
+<col>
+<col>
+</colgroup>
+<thead><tr>
+<th>
+              <p>
+                Boost.Preprocessor Sequence (All Compilers)
+              </p>
+            </th>
+<th>
+              <p>
+                Comma-Separated List (Variadic Macros Only)
+              </p>
+            </th>
+</tr></thead>
+<tbody><tr>
+<td>
+              <p>
 </p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">world</span><span class="special">::</span><span class="identifier">add_person</span><span class="special">(</span><span class="identifier">person</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">a_person</span><span class="special">)</span> <span class="special">{</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">void</span> <span class="identifier">world</span><span class="special">::</span><span class="identifier">add_person</span><span class="special">(</span><span class="identifier">person</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">a_person</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">bool</span> <span class="identifier">commit</span> <span class="special">=</span> <span class="keyword">false</span><span class="special">;</span>
 
     <span class="identifier">persons_</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">a_person</span><span class="special">);</span>           <span class="comment">// (1) direct action</span>
@@ -71,17 +91,12 @@
 <span class="special">}</span>
 </pre>
 <p>
-    </p>
-<p>
-      Furthermore, older versions of this library used to only support the <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a> sequence
-      syntax so the above syntax is also supported for backward compatibility. However,
-      in the current version of this library and on compilers with variadic macros,
-      the comma-separated syntax we have seen so far is preferred because more readable
-      (see also <a href="../../../test/world.cpp" target="_top"><code class="literal">world.cpp</code></a>):
-    </p>
-<p>
+              </p>
+            </td>
+<td>
+              <p>
 </p>
-<pre class="programlisting"><span class="keyword">void</span> <span class="identifier">world</span><span class="special">::</span><span class="identifier">add_person</span><span class="special">(</span><span class="identifier">person</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">a_person</span><span class="special">)</span> <span class="special">{</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">void</span> <span class="identifier">world</span><span class="special">::</span><span class="identifier">add_person</span><span class="special">(</span><span class="identifier">person</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">a_person</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">bool</span> <span class="identifier">commit</span> <span class="special">=</span> <span class="keyword">false</span><span class="special">;</span>
 
     <span class="identifier">persons_</span><span class="special">.</span><span class="identifier">push_back</span><span class="special">(</span><span class="identifier">a_person</span><span class="special">);</span>           <span class="comment">// (1) direct action</span>
@@ -96,12 +111,21 @@
 <span class="special">}</span>
 </pre>
 <p>
-    </p>
+              </p>
+            </td>
+</tr></tbody>
+</table></div>
 <p>
       Note how the same macros accept both syntaxes on compilers with variadic macros
       and only the <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a>
-      sequence syntax on compilers without variadic macros. Finally, an empty capture
-      list is always specified using <code class="computeroutput"><span class="keyword">void</span></code>
+      sequence syntax on compilers without variadic macros. Older versions of this
+      library used to only support the <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a>
+      sequence syntax so this syntax is supported also for backward compatibility.
+      However, in the current version of this library and on compilers with variadic
+      macros, the comma-separated syntax is preferred because it is more readable.
+    </p>
+<p>
+      Finally, an empty capture list is always specified using <code class="computeroutput"><span class="keyword">void</span></code>
       on compilers with and without variaidc macros (see also <a href="../../../test/world_void.cpp" target="_top"><code class="literal">world_void.cpp</code></a>):
     </p>
 <p>
@@ -180,6 +204,14 @@
             </td></tr>
 </tbody>
 </table></div>
+<div class="footnotes">
+<br><hr width="100" align="left">
+<div class="footnote"><p><sup>[<a id="ftn.scope_exit.No_Variadic_Macros.f0" href="#scope_exit.No_Variadic_Macros.f0" class="para">9</a>] </sup>
+        A C++ compiler does not support variadic macros if the <a href="http://www.boost.org/libs/config" target="_top">Boost.Config</a>
+        macro <code class="computeroutput"><span class="identifier">BOOST_NO_VARIADIC_MACROS</span></code>
+        is defined for that compiler.
+      </p></div>
+</div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
@@ -191,7 +223,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="Alternatives.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="Acknowledgements.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="Alternatives.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

@@ -33,8 +33,8 @@
 
 </span>BOOST_SCOPE_EXIT_END</pre></div>
 <div class="refsect1">
-<a name="id854194"></a><h2>Description</h2>
-<p>This macro must follow the closing curly bracket <code class="computeroutput">}</code> that ends the scope exit body:</p>
+<a name="id857888"></a><h2>Description</h2>
+<p>This macro must follow the closing curly bracket <code class="computeroutput">}</code> that ends the body of either  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code> or  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_TPL.html" title="Macro BOOST_SCOPE_EXIT_TPL">BOOST_SCOPE_EXIT_TPL</a></code>:</p>
 <pre class="programlisting">    <span class="special">{</span> <span class="comment">// Some local scope.</span>
         <span class="special">...</span>
         <span class="identifier">BOOST_SCOPE_EXIT</span><span class="special">(</span><span class="identifier">capture_list</span><span class="special">)</span> <span class="special">{</span>
@@ -43,17 +43,9 @@
         <span class="special">...</span>
     <span class="special">}</span>
 </pre>
-<p>On C++11, this macro is not necessary and it can be replaced by a semi-column <code class="computeroutput">;</code> : </p>
-<pre class="programlisting">    <span class="special">{</span> <span class="comment">// Some local scope.</span>
-        <span class="special">...</span>
-        <span class="identifier">BOOST_SCOPE_EXIT</span><span class="special">(</span><span class="identifier">capture_list</span><span class="special">)</span> <span class="special">{</span>
-            <span class="special">...</span> <span class="comment">// Body code.</span>
-        <span class="special">}</span><span class="special">;</span> <span class="comment">// C++11 only.</span>
-        <span class="special">...</span>
-    <span class="special">}</span>
-</pre>
-<p> However,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_END.html" title="Macro BOOST_SCOPE_EXIT_END">BOOST_SCOPE_EXIT_END</a></code> is still provided on C++11 so to write code that is portable between C++03 and C++11 compilers.</p>
-<p><span class="bold"><strong>See:</strong></span>  <a class="link" href="scope_exit/Tutorial.html" title="Tutorial">Tutorial</a> section,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code>,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_TPL.html" title="Macro BOOST_SCOPE_EXIT_TPL">BOOST_SCOPE_EXIT_TPL</a></code>,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code>. </p>
+<p>In general, the special macro  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_END_ID.html" title="Macro BOOST_SCOPE_EXIT_END_ID">BOOST_SCOPE_EXIT_END_ID</a></code> must be used instead of  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_END.html" title="Macro BOOST_SCOPE_EXIT_END">BOOST_SCOPE_EXIT_END</a></code> when it is necessary to expand multiple scope exit bodies on the same line.</p>
+<p><span class="bold"><strong>Note:</strong></span> If programmers define the  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS.html" title="Macro BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS">BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS</a></code> macro on C++11 compilers, a semicolon <code class="computeroutput">;</code> can be used instead of this macro. However, to maximize portability, it is recommended to always use  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_END.html" title="Macro BOOST_SCOPE_EXIT_END">BOOST_SCOPE_EXIT_END</a></code>.</p>
+<p><span class="bold"><strong>See:</strong></span>  <a class="link" href="scope_exit/Tutorial.html" title="Tutorial">Tutorial</a> section,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code>,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_TPL.html" title="Macro BOOST_SCOPE_EXIT_TPL">BOOST_SCOPE_EXIT_TPL</a></code>,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_END_ID.html" title="Macro BOOST_SCOPE_EXIT_END_ID">BOOST_SCOPE_EXIT_END_ID</a></code>. </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

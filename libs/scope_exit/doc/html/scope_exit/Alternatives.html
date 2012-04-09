@@ -6,7 +6,7 @@
 <meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">
-<link rel="prev" href="../BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL.html" title="Macro BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL">
+<link rel="prev" href="Tutorial.html" title="Tutorial">
 <link rel="next" href="No_Variadic_Macros.html" title="Annex: No Variadic Macros">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
@@ -20,14 +20,14 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="No_Variadic_Macros.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="Tutorial.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="No_Variadic_Macros.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section scope_exit_Alternatives">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="scope_exit.Alternatives"></a><a class="link" href="Alternatives.html" title="Annex: Alternatives">Annex: Alternatives</a>
 </h2></div></div></div>
 <p>
-      This section presents some alternatives and work related to <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">Boost.ScopeExit</a>.
+      This section presents some alternative and related work to <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">Boost.ScopeExit</a>.
     </p>
 <h6>
 <a name="scope_exit.Alternatives.h0"></a>
@@ -58,7 +58,7 @@
 <p>
       Note the following issues with this approach:
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
           The <code class="computeroutput"><span class="identifier">passwd</span></code> object is defined
           outside of the <code class="computeroutput"><span class="keyword">try</span></code> block because
@@ -74,7 +74,7 @@
           If opening throws, the <code class="computeroutput"><span class="identifier">passwd</span><span class="special">.</span><span class="identifier">close</span><span class="special">()</span></code> should not be called, hence the call
           to <code class="computeroutput"><span class="identifier">passwd</span><span class="special">.</span><span class="identifier">is_open</span><span class="special">()</span></code>.
         </li>
-</ul></div>
+</ol></div>
 <p>
       The <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">Boost.ScopeExit</a> approach does not have
       any of these issues. For example (see also <a href="../../../example/try_catch.cpp" target="_top"><code class="literal">try_catch.cpp</code></a>):
@@ -151,7 +151,8 @@
       Guards</a>
     </h6>
 <p>
-      Imagine that a new currency rate is introduced before performing a transaction:
+      Imagine that a new currency rate is introduced before performing a transaction
+      (see also []):
     </p>
 <p>
 </p>
@@ -193,7 +194,7 @@
 <p>
       Note the following issues with this approach:
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
           <a href="http://www.boost.org/libs/lambda" target="_top">Boost.Lambda</a> expressions
           are hard to write correctly (e.g., overloaded functions must be explicitly
@@ -209,7 +210,7 @@
           Setting a breakpoint inside <code class="computeroutput"><span class="identifier">if_</span><span class="special">[...]</span></code> requires in-depth knowledge of <a href="http://www.boost.org/libs/lambda" target="_top">Boost.Lambda</a> and debugging
           techniques.
         </li>
-</ul></div>
+</ol></div>
 <p>
       This code will look much better with C++11 lambdas:
     </p>
@@ -259,8 +260,8 @@
       these two <a href="http://www.digitalmars.com/d/index.html" target="_top">D</a>'s
       constructs can be expressed in terms of <a href="http://www.digitalmars.com/d/2.0/statement.html#ScopeGuardStatement" target="_top">scope(exit)</a>
       and a <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">commit</span></code>
-      variable as explained in the <a class="link" href="Tutorial.html" title="Tutorial">Tutorial</a>
-      section.
+      variable (similarly to some examples presented in the <a class="link" href="Tutorial.html" title="Tutorial">Tutorial</a>
+      section).
     </p>
 <h6>
 <a name="scope_exit.Alternatives.h4"></a>
@@ -269,7 +270,7 @@
     </h6>
 <p>
       Using C++11 lambdas, it is relatively easy to implement the <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">Boost.ScopeExit</a>
-      construct. For example (see also <a href="../../../example/world_lambda.cpp" target="_top"><code class="literal">world_lambda.cpp</code></a>):
+      construct. For example (see also <a href="../../../example/world_cxx11_lambda.cpp" target="_top"><code class="literal">world_cxx11_lambda.cpp</code></a>):
     </p>
 <p>
 </p>
@@ -312,7 +313,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="../BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDA_IMPL.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="No_Variadic_Macros.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="Tutorial.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="No_Variadic_Macros.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

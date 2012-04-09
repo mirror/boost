@@ -49,11 +49,7 @@
 <div class="itemizedlist"><ul class="itemizedlist" type="disc">
 <li class="listitem">
             MSVC 7.1 and 8.0 fail to link if a function with <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">Boost.ScopeExit</a>
-            is included by multiple translation units. Furthermore, on MSVC it is
-            possible to capture the object <code class="computeroutput"><span class="identifier">this_</span></code>
-            only with native <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>
-            (and not in <a href="http://www.boost.org/libs/typeof" target="_top">type-of emulation</a>
-            mode).
+            is included by multiple translation units.
           </li>
 <li class="listitem">
             GCC 3.3 cannot compile <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">Boost.ScopeExit</a>
@@ -82,9 +78,9 @@
         to automatically deduce the types of the <a class="link" href="../index.html" title="Chapter&#160;1.&#160;Boost.ScopeExit 1.1.0">Boost.ScopeExit</a>
         captured variables (see the <a class="link" href="Tutorial.html" title="Tutorial">Tutorial</a>
         section). In order to compile code in <a href="http://www.boost.org/libs/typeof" target="_top">type-of
-        emulation</a> mode, all types should be properly registered with <a href="http://www.boost.org/libs/typeof/refe.html#typeof.regtype" target="_top">BOOST_TYPEOF_REGISTER_TYPE</a>
-        or <a href="http://www.boost.org/libs/typeof/refe.html#typeof.regtemp" target="_top">BOOST_TYPEOF_REGISTER_TEMPLATE</a>
-        macros, or appropriate <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>
+        emulation</a> mode, all types should be properly registered using <a href="http://www.boost.org/libs/typeof" target="_top">BOOST_TYPEOF_REGISTER_TYPE</a>
+        and <a href="http://www.boost.org/libs/typeof" target="_top">BOOST_TYPEOF_REGISTER_TEMPLATE</a>,
+        or appropriate <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>
         headers should be included.
       </p>
 </div>

@@ -16,7 +16,9 @@
 struct person {};
 BOOST_TYPEOF_REGISTER_TYPE(person)
 
-struct world_t; BOOST_TYPEOF_REGISTER_TYPE(world_t)
+struct world_t;
+BOOST_TYPEOF_REGISTER_TYPE(world_t)
+
 //[world_void
 struct world_t {
     std::vector<person> persons;

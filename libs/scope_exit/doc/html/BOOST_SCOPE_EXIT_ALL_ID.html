@@ -26,15 +26,15 @@
 <a name="BOOST_SCOPE_EXIT_ALL_ID"></a><div class="titlepage"></div>
 <div class="refnamediv">
 <h2><span class="refentrytitle">Macro BOOST_SCOPE_EXIT_ALL_ID</span></h2>
-<p>BOOST_SCOPE_EXIT_ALL_ID &#8212; This macro allows to expand multiple scope exit macros on the same line. </p>
+<p>BOOST_SCOPE_EXIT_ALL_ID &#8212; This macro allows to expand on the same line multiple scope exits that capture all variables in scope (C++11 only). </p>
 </div>
 <h2 xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv-title">Synopsis</h2>
 <div xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="refsynopsisdiv"><pre class="synopsis"><span class="comment">// In header: &lt;<a class="link" href="reference.html#header.boost.scope_exit_hpp" title="Header &lt;boost/scope_exit.hpp&gt;">boost/scope_exit.hpp</a>&gt;
 
 </span>BOOST_SCOPE_EXIT_ALL_ID(id, capture_list)</pre></div>
 <div class="refsect1">
-<a name="id854045"></a><h2>Description</h2>
-<p>This macro is equivalent to  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code> but it can be expanded multiple times on the same line if different identifiers <code class="computeroutput">id</code> are provided for each expansion (see  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code> for more detail).</p>
+<a name="id857728"></a><h2>Description</h2>
+<p>This macro is equivalent to  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code> but it can be expanded multiple times on the same line if different identifiers <code class="computeroutput">id</code> are provided for each expansion (see  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code> for more information). As with  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code>, this macro is only available on C++11 compilers (specifically, on C++11 compilers that do not define the Boost.Config <code class="computeroutput">BOOST_NO_LAMBDAS</code> macro).</p>
 <p><span class="bold"><strong>Parameters:</strong></span> </p>
 <div class="informaltable"><table class="table">
 <colgroup>
@@ -44,18 +44,18 @@
 <tbody>
 <tr>
 <td><span class="bold"><strong><code class="computeroutput">id</code></strong></span></td>
-<td>A unique identifier token which can be catted by the preprocessor (for example <code class="computeroutput">__LINE__</code> or <code class="computeroutput">scope_exit_number_1_on_line_123</code>).  </td>
+<td>A unique identifier token which can be concatenated by the preprocessor (<code class="computeroutput">__LINE__</code>, <code class="computeroutput">scope_exit_number_1_on_line_123</code>, a combination of alphanumeric tokens, etc).  </td>
 </tr>
 <tr>
 <td><span class="bold"><strong><code class="computeroutput">capture_list</code></strong></span></td>
-<td>Same as the <code class="computeroutput">capture_list</code> parameter of the  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT.html" title="Macro BOOST_SCOPE_EXIT">BOOST_SCOPE_EXIT</a></code> macro.  </td>
+<td>Same as the <code class="computeroutput">capture_list</code> parameter of the  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code> macro.  </td>
 </tr>
 </tbody>
 </table></div>
 <p>
 </p>
-<p><span class="bold"><strong>Note:</strong></span> This macro can be useful when the scope exit macros are expanded within user-defined macros (because macros all expand on the same line). On some compilers (e.g., MSVC which supports the non standard <code class="computeroutput">__COUNTER__</code> macro) it might not be necessary to use this macro but the use of this macro is always necessary to ensure portability when expanding multiple scope exit macros on the same line (because this library can only portably use <code class="computeroutput">__LINE__</code> to internally generate unique identifiers).</p>
-<p><span class="bold"><strong>See:</strong></span>  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ID.html" title="Macro BOOST_SCOPE_EXIT_ID">BOOST_SCOPE_EXIT_ID</a></code>,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code>. </p>
+<p><span class="bold"><strong>Note:</strong></span> This macro can be useful when the scope exit macros are expanded within user-defined macros (because nested macros expand on the same line). On some compilers (e.g., MSVC which supports the non standard <code class="computeroutput">__COUNTER__</code> macro) it might not be necessary to use this macro but the use of this macro is always necessary to ensure portability when expanding multiple scope exit declarations on the same line.</p>
+<p><span class="bold"><strong>See:</strong></span>  <a class="link" href="scope_exit/Tutorial.html" title="Tutorial">Tutorial</a> section,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ALL.html" title="Macro BOOST_SCOPE_EXIT_ALL">BOOST_SCOPE_EXIT_ALL</a></code>,  <code class="computeroutput"><a class="link" href="BOOST_SCOPE_EXIT_ID.html" title="Macro BOOST_SCOPE_EXIT_ID">BOOST_SCOPE_EXIT_ID</a></code>. </p>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>

@@ -769,16 +769,19 @@ private:
 // PUBLIC //
 
 #if defined(BOOST_NO_VARIADIC_MACROS) // No variadic macros (sequences only).
-#   define BOOST_SCOPE_EXIT_ID(id, within_template, void_or_seq) \
-        BOOST_SCOPE_EXIT_AUX_IMPL(id, \
-                BOOST_PP_EXPR_IIF(within_template, typename), \
+#   define BOOST_SCOPE_EXIT_ID(id, void_or_seq) \
+        BOOST_SCOPE_EXIT_AUX_IMPL(id, BOOST_PP_EMPTY(), \
+                BOOST_SCOPE_EXIT_AUX_TRAITS( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(void_or_seq)))
+#   define BOOST_SCOPE_EXIT_TPL_ID(id, void_or_seq) \
+        BOOST_SCOPE_EXIT_AUX_IMPL(id, typename, \
                 BOOST_SCOPE_EXIT_AUX_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(void_or_seq)))
 #   define BOOST_SCOPE_EXIT(void_or_seq) \
-        BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 0, \
+        BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
                 void_or_seq)
 #   define BOOST_SCOPE_EXIT_TPL(void_or_seq) \
-        BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1, \
+        BOOST_SCOPE_EXIT_TPL_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
                 void_or_seq)
 #   if !defined(BOOST_NO_LAMBDAS)
 #       define BOOST_SCOPE_EXIT_ALL_ID(id, seq) \
@@ -839,13 +842,15 @@ private:
 #else // DOXYGEN
 
 /** @file
-@brief Scope exits allow to execute arbitrary code when the enclosing scope exits.
+@brief Scope exits allow to execute arbitrary code when the enclosing scope
+exits.
 */
 
 /**
 @brief This macro declares a scope exit.
 
-The scope exit declaration schedules the execution of the scope exit body at the exit of the enclosing scope:
+The scope exit declaration schedules the execution of the scope exit body at
+the exit of the enclosing scope:
 
 @code
     { // Some local scope.
@@ -858,12 +863,16 @@ The scope exit declaration schedules the execution of the scope exit body at the
 @endcode
 
 The enclosing scope must be local.
-If multiple scope exits are declared within the same enclosing scope, the scope exit bodies are executed in the reversed order of their declarations.
-Note how the end of the scope exit body must be marked by @RefMacro{BOOST_SCOPE_EXIT_END} (or by a <c>;</c> but only on C++11).
+If multiple scope exits are declared within the same enclosing scope, the scope
+exit bodies are executed in the reversed order of their declarations.
+Note how the end of the scope exit body must be marked by
+@RefMacro{BOOST_SCOPE_EXIT_END}.
 
 @Params
 @Param{capture_list,
-On compilers that support variadic macros\, the capture list syntax is defined by the following grammar:
+On compilers that support variadic macros (see also Boost.Config
+<c>BOOST_NO_VARIADIC_MACROS</c>)\, the capture list syntax is defined by the
+following grammar:
 @code
     capture_list:
             void | capture_tuple | capture_sequence
@@ -874,54 +883,91 @@ On compilers that support variadic macros\, the capture list syntax is defined b
     capture:
             [&]variable | this_
 @endcode
-On compilers that do not support variadic macros\, <c>capture_tuple</c> cannot be used:
+On compilers that do not support variadic macros\, <c>capture_tuple</c> cannot
+be used:
 @code
     capture_list:
             void | capture_sequence
 @endcode
-Finally\, on C++11 compilers <c>this</c> can be used instead of <c>this_</c>:
+Furthermore\, if @RefMacro{BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS} is defined on
+C++11 compilers that support lambda functions (i.e.\, Boost.Config's <c>BOOST_NO_LAMBDAS</c> is not defined) then a semicolon <c>;</c> can be used instead of
+@RefMacro{BOOST_SCOPE_EXIT_END} and <c>this</c> can be used instead of
+<c>this_</c>:
 @code
     capture:
             [&]variable | this_ | this
 @endcode
 
-Lexical conventions: <c>token1 | token2</c> means either <c>token1</c> or
+(Lexical conventions: <c>token1 | token2</c> means either <c>token1</c> or
 <c>token2</c>; <c>[token]</c> means either <c>token</c> or nothing;
-<c>{expression}</c> means the token resulting from the expression.
+<c>{expression}</c> means the tokens resulting from the expression.)
 }
 @EndParams
 
-Note that on compilers with variadic macro support (most of moder compliers and all C++11 compilers), the capture list can be specified as a comma-separated list of tokens.
-On all compilers, the same macro @RefMacro{BOOST_SCOPE_EXIT} also allows to specify the capture list as a Boost.Preprocessor sequence of tokens (for supporting compilers without variadic macros and for backward compatibility with older versions of this library).
+Note that on compilers that support variadic macros (most of moder compliers
+and all C++11 compilers), the capture list can be specified as a
+comma-separated list of tokens (this is the preferred syntax).
+However, on all compilers the same macro @RefMacro{BOOST_SCOPE_EXIT} also
+allows to specify the capture list as a Boost.Preprocessor sequence of tokens
+(for supporting compilers without variadic macros and for backward compatibility with older versions of this library).
 
-The name <c>variable</c> of each captured variable must be a valid name in the enclosing scope and it must appear exactly once in the capture list.
-If a capture starts with the ampersand sign <c>&</c>, the corresponding variable will be available by reference within the scope exit body; otherwise, a copy of the variable will be made at the point of the scope exit declaration and that copy will be available inside the scope exit body (in this case, the variable's type must be <c>CopyConstructible</c>).
+The name <c>variable</c> of each captured variable must be a valid name in the
+enclosing scope and it must appear exactly once in the capture list.
+If a capture starts with the ampersand sign <c>&</c>, the corresponding
+variable will be available by reference within the scope exit body; otherwise,
+a copy of the variable will be made at the point of the scope exit declaration
+and that copy will be available inside the scope exit body (in this case, the
+variable's type must be <c>CopyConstructible</c>).
 
-From within a member function, the object <c>this</c> can be captured using the special symbol <c>this_</c> in both the capture list and the scope exit body (using <c>this</c> instead of <c>this_</c> in the scope exit body leads to undefined behaviour).
-On C++11 it is possible (but not required) to use <c>this</c> instead of <c>this_</c>.
+From within a member function, the object <c>this</c> can be captured using the
+special name <c>this_</c> in both the capture list and the scope exit body
+(using <c>this</c> instead of <c>this_</c> in the scope exit body leads to
+undefined behaviour).
 
-It is possible to capture no variable by specifying the capture list as <c>void</c> (regardless of variadic macro support).
+It is possible to capture no variable by specifying the capture list as
+<c>void</c> (regardless of variadic macro support).
 
-Only variables listed in the capture list, static variables, <c>extern</c> variables, global variables, functions, and enumerations from the enclosing scope can be used inside the scope exit body.
+Only variables listed in the capture list, static variables, <c>extern</c>
+variables, global variables, functions, and enumerations from the enclosing
+scope can be used inside the scope exit body.
 
-On various GCC versions the special macro @RefMacro{BOOST_SCOPE_EXIT_TPL} must be used instead of @RefMacro{BOOST_SCOPE_EXIT} within templates (this is not necessary on C++11).
+On various GCC versions the special macro @RefMacro{BOOST_SCOPE_EXIT_TPL} must
+be used instead of @RefMacro{BOOST_SCOPE_EXIT} within templates (to maximize
+portability, it is recommended to always use @RefMacro{BOOST_SCOPE_EXIT_TPL}
+within templates).
 
-On C++11, it is possible capture all variables in scope without listing their names using the macro @RefMacro{BOOST_SCOPE_EXIT_ALL}.
+On C++11, it is possible capture all variables in scope without listing their
+names one-by-one using the macro @RefMacro{BOOST_SCOPE_EXIT_ALL}.
 
-@Warning The implementation executes the scope exit body within a destructor thus the scope exit body must never throw in order to comply with STL exception safety requirements.
+In general, the special macro @RefMacro{BOOST_SCOPE_EXIT_ID} must be used
+instead of @RefMacro{BOOST_SCOPE_EXIT} when it is necessary to expand multiple
+scope exit declarations on the same line.
 
-@Note The implementation uses Boost.Typeof to automatically deduce the types of the captured variables.
-In order to compile code in type-of emulation mode, Boost.Typeof must be properly configured (see the @RefSectId{Getting_Started, Getting Started} section).
+@Warning The implementation executes the scope exit body within a destructor
+thus the scope exit body must never throw in order to comply with STL exception
+safety requirements.
 
-@See @RefSect{Tutorial} section, @RefSectId{Getting_Started, Getting Started} section, @RefSectId{No_Variadic_Macros, No Variadic Macros} section, @RefMacro{BOOST_SCOPE_EXIT_TPL}, @RefMacro{BOOST_SCOPE_EXIT_ALL}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+@Note The implementation uses Boost.Typeof to automatically deduce the types of
+the captured variables.
+In order to compile code in type-of emulation mode, all types must be properly
+registered with Boost.Typeof (see the
+@RefSectId{Getting_Started, Getting Started} section).
+
+@See @RefSect{Tutorial} section, @RefSectId{Getting_Started, Getting Started}
+section, @RefSectId{No_Variadic_Macros, No Variadic Macros} section,
+@RefMacro{BOOST_SCOPE_EXIT_TPL}, @RefMacro{BOOST_SCOPE_EXIT_ALL},
+@RefMacro{BOOST_SCOPE_EXIT_END}, @RefMacro{BOOST_SCOPE_EXIT_ID}.
 */
 #define BOOST_SCOPE_EXIT(capture_list)
 
 /**
-@brief This macro is a workaround to declare a scope exit for various versions of GCC.
+@brief This macro is a workaround for various versions of GCC to declare scope
+exits within templates.
 
-Various versions of the GCC compiler do not compile @RefMacro{BOOST_SCOPE_EXIT} inside function templates.
-As a workaround, @RefMacro{BOOST_SCOPE_EXIT_TPL} should be used instead of @RefMacro{BOOST_SCOPE_EXIT} in these cases:
+Various versions of the GCC compiler do not compile @RefMacro{BOOST_SCOPE_EXIT}
+inside function templates.
+As a workaround, @RefMacro{BOOST_SCOPE_EXIT_TPL} should be used instead of
+@RefMacro{BOOST_SCOPE_EXIT} in these cases:
 
 @code
     { // Some local scope.
@@ -933,12 +979,23 @@ As a workaround, @RefMacro{BOOST_SCOPE_EXIT_TPL} should be used instead of @RefM
     }
 @endcode
 
-The syntax of @RefMacro{BOOST_SCOPE_EXIT_TPL} is the exact same as the one of @RefMacro{BOOST_SCOPE_EXIT} (see @RefMacro{BOOST_SCOPE_EXIT} for more information).
+The syntax of @RefMacro{BOOST_SCOPE_EXIT_TPL} is the exact same as the one of
+@RefMacro{BOOST_SCOPE_EXIT} (see @RefMacro{BOOST_SCOPE_EXIT} for more
+information).
 
-On C++11, @RefMacro{BOOST_SCOPE_EXIT_TPL} is not needed because @RefMacro{BOOST_SCOPE_EXIT} always compiles on GCC versions that support C++11 (that is also why there is no need for a <c>BOOST_SCOPE_EXIT_ALL_TPL</c> macro given that @RefMacro{BOOST_SCOPE_EXIT_ALL} is only available for C++11 compilers on which it always compiles correctly).
+On C++11 compilers, @RefMacro{BOOST_SCOPE_EXIT_TPL} is not needed because
+@RefMacro{BOOST_SCOPE_EXIT} always compiles on GCC versions that support C++11.
 However, @RefMacro{BOOST_SCOPE_EXIT_TPL} is still provided on C++11 so to write code that is portable between C++03 and C++11 compilers.
+It is recommended to always use @RefMacro{BOOST_SCOPE_EXIT_TPL} within
+templates so to maximize portability.
 
-@Note The problem boils down to the following code (see also <a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=37920">GCC bug 37920</a>):
+In general, the special macro @RefMacro{BOOST_SCOPE_EXIT_TPL_ID} must be used
+instead of @RefMacro{BOOST_SCOPE_EXIT_TPL} when it is necessary to expand
+multiple scope exit declarations on the same line within templates.
+
+@Note The issue in compiling scope exit declarations that some GCC versions
+have is illustrated by the following code (see also
+<a href="http://gcc.gnu.org/bugzilla/show_bug.cgi?id=37920">GCC bug 37920</a>):
 @code
     template<class T>
     void f(T const& x) {
@@ -953,55 +1010,94 @@ However, @RefMacro{BOOST_SCOPE_EXIT_TPL} is still provided on C++11 so to write 
 
     int main(void) { f(0); }
 @endcode
-This can be fixed by adding <c>typename</c> in front of <c>local::typeof_i</c> and <c>local::typeof_x</c> (which is the approach followed by the implementation of @RefMacro{BOOST_SCOPE_EXIT_TPL}).
+This can be fixed by adding <c>typename</c> in front of <c>local::typeof_i</c>
+and <c>local::typeof_x</c> (which is the approach followed by the
+implementation of the @RefMacro{BOOST_SCOPE_EXIT_TPL} macro).
 
-@Note Although @RefMacro{BOOST_SCOPE_EXIT_TPL} has the same suffix as <c>BOOST_TYPEOF_TPL</c>, it does not follow the Boost.Typeof convention.
+@Note Although @RefMacro{BOOST_SCOPE_EXIT_TPL} has the same suffix as
+<c>BOOST_TYPEOF_TPL</c>, it does not follow the Boost.Typeof convention.
 
-@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
+@RefMacro{BOOST_SCOPE_EXIT_END}, @RefMacro{BOOST_SCOPE_EXIT_TPL_ID}.
 */
 #define BOOST_SCOPE_EXIT_TPL(capture_list)
 
 /**
-@brief This macro allows to expand multiple scope exit macros on the same line.
+@brief This macro allows to expand multiple scope exit declarations on the same
+line.
 
 This macro is equivalent to @RefMacro{BOOST_SCOPE_EXIT} but it can be expanded
 multiple times on the same line if different identifiers <c>id</c> are provided
-for each expansion (see @RefMacro{BOOST_SCOPE_EXIT} for more detail).
+for each expansion (see @RefMacro{BOOST_SCOPE_EXIT} for more information).
 
 @Params
 @Param{id,
-    A unique identifier token which can be catted by the preprocessor (for
-    example <c>__LINE__</c> or <c>scope_exit_number_1_on_line_123</c>).
-}
-@Param{within_template,
-    Specify <c>1</c> when this macro is used in a type-dependant context
-    on GCC\, <c>1</c> otherwise (this is equivalent to using
-    @RefMacro{BOOST_SCOPE_EXIT_TPL} on separate lines).
+A unique identifier token which can be concatenated by the preprocessor
+(<c>__LINE__</c>\, <c>scope_exit_number_1_on_line_123</c>\, a combination of
+alphanumeric tokens\, etc).
 }
 @Param{capture_list,
-    Same as the <c>capture_list</c> parameter of the
-    @RefMacro{BOOST_SCOPE_EXIT} macro.
+Same as the <c>capture_list</c> parameter of the @RefMacro{BOOST_SCOPE_EXIT}
+macro.
 }
 @EndParams
 
 @Note This macro can be useful when the scope exit macros are expanded
-within user-defined macros (because macros all expand on the same line).
+within user-defined macros (because nested macros expand on the same line).
 On some compilers (e.g., MSVC which supports the non standard
 <c>__COUNTER__</c> macro) it might not be necessary to use this macro but
 the use of this macro is always necessary to ensure portability when expanding
-multiple scope exit macros on the same line (because this library can only
-portably use <c>__LINE__</c> to internally generate unique identifiers).
+multiple scope exit declarations on the same line.
 
-@See @RefMacro{BOOST_SCOPE_EXIT_END_ID}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID},
-    @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_TPL}.
+@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
+@RefMacro{BOOST_SCOPE_EXIT_END_ID}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID},
+@RefMacro{BOOST_SCOPE_EXIT_TPL_ID}.
 */
-#define BOOST_SCOPE_EXIT_ID(id, within_template, capture_list)
+#define BOOST_SCOPE_EXIT_ID(id, capture_list)
 
 /**
-@brief This macro declares a scope exit that captures all variables in scope (C++11 only).
+@brief This macro is required to expand multiple scope exit declarations on the
+same line within templates on various versions of GCC.
+
+This macro is equivalent to @RefMacro{BOOST_SCOPE_EXIT_TPL} but it can be
+expanded multiple times on the same line if different identifiers <c>id</c> are
+provided for each expansion (see @RefMacro{BOOST_SCOPE_EXIT_TPL} for more
+information).
+As with @RefMacro{BOOST_SCOPE_EXIT_TPL}, it is recommended to always use this
+macro when expanding scope exits multiple times on the same line within
+templates.
+
+@Params
+@Param{id,
+A unique identifier token which can be concatenated by the preprocessor
+(<c>__LINE__</c>\, <c>scope_exit_number_1_on_line_123</c>\, a combination of
+alphanumeric tokens\, etc).
+}
+@Param{capture_list,
+Same as the <c>capture_list</c> parameter of the
+@RefMacro{BOOST_SCOPE_EXIT_TPL} macro.
+}
+@EndParams
+
+@Note This macro can be useful when the scope exit macros are expanded
+within user-defined macros (because nested macros expand on the same line).
+On some compilers (e.g., MSVC which supports the non standard
+<c>__COUNTER__</c> macro) it might not be necessary to use this macro but
+the use of this macro is always necessary to ensure portability when expanding
+multiple scope exit declarations on the same line.
+
+@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT_TPL},
+@RefMacro{BOOST_SCOPE_EXIT_END_ID}, @RefMacro{BOOST_SCOPE_EXIT_ID},
+@RefMacro{BOOST_SCOPE_EXIT_ALL_ID}.
+*/
+#define BOOST_SCOPE_EXIT_TPL_ID(id, capture_list)
+
+/**
+@brief This macro declares a scope exit that captures all variables in scope
+(C++11 only).
 
 This macro accepts a capture list starting with either <c>&</c> or <c>=</c> to capture all variables in scope by reference or value respectively (following the same syntax of C++11 lambdas).
-A part from that, this macro works like @RefMacro{BOOST_SCOPE_EXIT} (see @RefMacro{BOOST_SCOPE_EXIT} for more information).
+A part from that, this macro works like @RefMacro{BOOST_SCOPE_EXIT} (see @RefMacro{BOOST_SCOPE_EXIT} for more information):
 
 @code
     { // Some local scope.
@@ -1013,11 +1109,19 @@ A part from that, this macro works like @RefMacro{BOOST_SCOPE_EXIT} (see @RefMac
     }
 @endcode
 
-@Warning This macro is only available on C++11 compilers.
+Note how the end of the scope exit body declared by this macro must be marked
+by a semi-column <c>;</c> (and not by @RefMacro{BOOST_SCOPE_EXIT_END}).
+
+@Warning This macro is only available on C++11 compilers (specifically, on
+C++11 compilers that do not define the Boost.Config <c>BOOST_NO_LAMBDAS</c>
+macro).
 It is not defined on non-C++11 compilers so its use on non-C++11 compilers will generate a compiler error.
 
 @Params
 @Param{capture_list,
+On compilers that support variadic macros (see also Boost.Config
+<c>BOOST_NO_VARIADIC_MACROS</c>)\, the capture list syntax is defined by the
+following grammar:
 @code
 capture_list:
         capture_tuple | capture_sequence
@@ -1026,66 +1130,102 @@ capture_tuple:
 capture_sequence:
         {(&) | (=)} [(capture) (capture) ...]
 capture:
-        [&]variable | this_ | this
+        [&]variable | this_
+@endcode
+On compilers that do not support variadic macros\, <c>capture_tuple</c> cannot
+be used:
+@code
+    capture_list:
+            void | capture_sequence
+@endcode
+Furthermore\, on C++11 compilers that support the use of <c>typename</c>
+outside templates\, also <c>this</c> can be used to capture the object at member
+function scope:
+@code
+    capture:
+            [&]variable | this_ | this
 @endcode
 
-Lexical conventions: <c>token1 | token2</c> means either <c>token1</c> or
+(Lexical conventions: <c>token1 | token2</c> means either <c>token1</c> or
 <c>token2</c>; <c>[token]</c> means either <c>token</c> or nothing;
-<c>{expression}</c> means the token resulting from the expression.
+<c>{expression}</c> means the token resulting from the expression.)
 }
 @EndParams
 
-For this macro, the capture list must always contain at least the leading <c>&</c> or <c>=</c> so it can never be <c>void</c>.
+Note that on compilers with variadic macro support (which should be all C++11
+compilers), the capture list can be specified as a comma-separated list.
+On all compilers, the same macro @RefMacro{BOOST_SCOPE_EXIT_ALL} also allows to
+specify the capture list as a Boost.Preprocessor sequence.
 
-Note that on compilers with variadic macro support (which should be all C++11 compilers), the capture list can be specified as a comma-separated list.
-On all compilers, the same macro @RefMacro{BOOST_SCOPE_EXIT_ALL} also allows to specify the capture list as a Boost.Preprocessor sequence (to allow to use a syntax consistent with the one of <c>BOOST_SCOPE_EXIT</c> when used on compilers without variadic macro support).
-The scope exit body declared by this macro can be terminated equivalently by either a semi-column <c>;</c> or by the macro @RefMacro{BOOST_SCOPE_EXIT_END}.
-The @RefMacro{BOOST_SCOPE_EXIT_ALL} macro is only available on C++11 where the terminating semi-column <c>;</c> can always be used without worrying about portability with C++03 (see @RefMacro{BOOST_SCOPE_EXIT_END} for more information).
-Similarly, this macro can always use <c>this</c> instead of <c>this_</c> to capture the enclosing object without worrying about portability with C++03 because this macro is only available on C++11 compilers.
+The capture list must always contain at least the leading <c>&</c> or <c>=</c>
+so it can never be <c>void</c> (<c>BOOST_SCOPE_EXIT(void)</c> should be used
+to program scope exits with an empty capture list).
 
-@Note In summary, this macro can take advantage of all syntax improvements allowed by C++11 but it optionally supports the same syntax required by C++03 so programmers can always program both @RefMacro{BOOST_SCOPE_EXIT_ALL} and @RefMacro{BOOST_SCOPE_EXIT} using the same syntax and for all compilers if they wish to do so.
+In general, the special macro @RefMacro{BOOST_SCOPE_EXIT_ALL_ID} must be used
+instead of @RefMacro{BOOST_SCOPE_EXIT_ALL} when it is necessary to expand
+multiple scope exit declarations on the same line.
 
-@Warning The implementation executes the scope exit body within a destructor thus the scope exit body must never throw in order to comply with STL exception safety requirements.
+@Warning This macro capture list follows the exact same syntax of C++11 lambda
+captures which is unfortunately different from the syntax of
+@RefMacro{BOOST_SCOPE_EXIT} captures (unless programmers define the
+@RefMacro{BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS} macro).
+For example, like C++11 lambda functions, @RefMacro{BOOST_SCOPE_EXIT_ALL}
+requires to capture data members by capturing the object <c>this</c> while
+@RefMacro{BOOST_SCOPE_EXIT} allows to capture data members directly and without
+capturing the object.
 
-@See @RefSect{Tutorial} section, @RefSectId{No_Variadic_Macros, No Variadic Macros} section, @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+@Warning The implementation executes the scope exit body within a destructor
+thus the scope exit body must never throw in order to comply with STL exception
+safety requirements.
+
+@Note This macro can always be used also within templates (so there is no need
+for a <c>BOOST_SCOPE_EXIT_ALL_TPL</c> macro).
+
+@See @RefSect{Tutorial} section, @RefSectId{No_Variadic_Macros, No Variadic Macros} section, @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID}.
 */
 #define BOOST_SCOPE_EXIT_ALL(capture_list)
 
 /**
-@brief This macro allows to expand multiple scope exit macros on the same line.
+@brief This macro allows to expand on the same line multiple scope exits that
+capture all variables in scope (C++11 only).
 
 This macro is equivalent to @RefMacro{BOOST_SCOPE_EXIT_ALL} but it can be
 expanded multiple times on the same line if different identifiers <c>id</c> are
 provided for each expansion (see @RefMacro{BOOST_SCOPE_EXIT_ALL} for more
-detail).
+information).
+As with @RefMacro{BOOST_SCOPE_EXIT_ALL}, this macro is only available on C++11
+compilers (specifically, on C++11 compilers that do not define the
+Boost.Config <c>BOOST_NO_LAMBDAS</c> macro).
 
 @Params
 @Param{id,
-    A unique identifier token which can be catted by the preprocessor (for
-    example <c>__LINE__</c> or <c>scope_exit_number_1_on_line_123</c>).
+A unique identifier token which can be concatenated by the preprocessor
+(<c>__LINE__</c>\, <c>scope_exit_number_1_on_line_123</c>\, a combination of
+alphanumeric tokens\, etc).
 }
 @Param{capture_list,
-    Same as the <c>capture_list</c> parameter of the
-    @RefMacro{BOOST_SCOPE_EXIT} macro.
+Same as the <c>capture_list</c> parameter of the
+@RefMacro{BOOST_SCOPE_EXIT_ALL} macro.
 }
 @EndParams
 
 @Note This macro can be useful when the scope exit macros are expanded
-within user-defined macros (because macros all expand on the same line).
+within user-defined macros (because nested macros expand on the same line).
 On some compilers (e.g., MSVC which supports the non standard
 <c>__COUNTER__</c> macro) it might not be necessary to use this macro but
 the use of this macro is always necessary to ensure portability when expanding
-multiple scope exit macros on the same line (because this library can only
-portably use <c>__LINE__</c> to internally generate unique identifiers).
+multiple scope exit declarations on the same line.
 
-@See @RefMacro{BOOST_SCOPE_EXIT_ID}, @RefMacro{BOOST_SCOPE_EXIT_ALL}.
+@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT_ALL},
+@RefMacro{BOOST_SCOPE_EXIT_ID}.
 */
 #define BOOST_SCOPE_EXIT_ALL_ID(id, capture_list)
 
 /**
 @brief This macro marks the end of a scope exit body.
 
-This macro must follow the closing curly bracket <c>}</c> that ends the scope exit body:
+This macro must follow the closing curly bracket <c>}</c> that ends the body of
+either @RefMacro{BOOST_SCOPE_EXIT} or @RefMacro{BOOST_SCOPE_EXIT_TPL}:
 
 @code
     { // Some local scope.
@@ -1097,34 +1237,35 @@ This macro must follow the closing curly bracket <c>}</c> that ends the scope ex
     }
 @endcode
 
-On C++11, this macro is not necessary and it can be replaced by a semi-column <c>;</c> :
-@code
-    { // Some local scope.
-        ...
-        BOOST_SCOPE_EXIT(capture_list) {
-            ... // Body code.
-        }; // C++11 only.
-        ...
-    }
-@endcode
-However, @RefMacro{BOOST_SCOPE_EXIT_END} is still provided on C++11 so to write code that is portable between C++03 and C++11 compilers.
+In general, the special macro @RefMacro{BOOST_SCOPE_EXIT_END_ID} must be used
+instead of @RefMacro{BOOST_SCOPE_EXIT_END} when it is necessary to expand
+multiple scope exit bodies on the same line.
 
-@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_TPL}, @RefMacro{BOOST_SCOPE_EXIT_ALL}.
+@Note If programmers define the @RefMacro{BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS}
+macro on C++11 compilers, a semicolon <c>;</c> can be used instead of this
+macro.
+However, to maximize portability, it is recommended to always use
+@RefMacro{BOOST_SCOPE_EXIT_END}.
+
+@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
+@RefMacro{BOOST_SCOPE_EXIT_TPL}, @RefMacro{BOOST_SCOPE_EXIT_END_ID}.
 */
 #define BOOST_SCOPE_EXIT_END
 
 /**
-@brief This macro allows to expand multiple scope exit macros on the same line.
+@brief This macro allows to terminate multiple scope exit bodies on the same
+line.
 
 This macro is equivalent to @RefMacro{BOOST_SCOPE_EXIT_END} but it can be
 expanded multiple times on the same line if different identifiers <c>id</c> are
 provided for each expansion (see @RefMacro{BOOST_SCOPE_EXIT_END} for more
-detail).
+information).
 
 @Params
 @Param{id,
-    A unique identifier token which can be catted by the preprocessor (for
-    example <c>__LINE__</c> or <c>scope_exit_number_1_on_line_123</c>).
+A unique identifier token which can be concatenated by the preprocessor
+(<c>__LINE__</c>\, <c>scope_exit_number_1_on_line_123</c>\, a combination of
+alphanumeric tokens\, etc).
 }
 @EndParams
 
@@ -1136,24 +1277,40 @@ the use of this macro is always necessary to ensure portability when expanding
 multiple scope exit macros on the same line (because this library can only
 portably use <c>__LINE__</c> to internally generate unique identifiers).
 
-@See @RefMacro{BOOST_SCOPE_EXIT_ID}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+@See @RefMacro{BOOST_SCOPE_EXIT_ID}, @RefMacro{BOOST_SCOPE_EXIT_TPL_ID},
+@RefMacro{BOOST_SCOPE_EXIT_END}.
 */
 #define BOOST_SCOPE_EXIT_END_ID(id)
 
 /**
-@brief Force to use C++11 lambda implementation for scope-exit macro.
+@brief Force to use C++11 lambda functions to implement scope exits.
 
-If programmers define this configuration macro on a C++11 compiler, lambda functions will be used to implement the @RefMacro{BOOST_SCOPE_EXIT} macro.
+If programmers define this configuration macro on a C++11 compiler for which
+the Boost.Config macro <c>BOOST_NO_LAMBDAS</c> is not defined, the
+@RefMacro{BOOST_SCOPE_EXIT} and @RefMacro{BOOST_SCOPE_EXIT_TPL} macros will use
+C++11 lambda functions to declare scope exits.
 By default this macro is not defined.
 
-@Note When @RefMacro{BOOST_SCOPE_EXIT} is implemented using lambda, the semantics of its variable captures follow the semantics of C++11 lambda captures which are in general different from the legacy capture semantics of this library (e.g., C++11 lambdas require to capture data members via capturing the object <c>this</c> while this library always allowed to capture data members directly).
-Therefore, when this configuration macro is defined, @RefMacro{BOOST_SCOPE_EXIT} is no longer backward compatible.
+@Warning When scope exits are implemented using lambda functions, the syntax of
+the capture list follows the exact same syntax of C++11 lambda captures
+which is in general different from the legacy capture syntax of this library.
+For example, C++11 lambdas require to capture data members by capturing the
+object <c>this</c> while this library always allowed to capture data members
+directly.
+Therefore, when this configuration macro is defined,
+@RefMacro{BOOST_SCOPE_EXIT} and @RefMacro{BOOST_SCOPE_EXIT_TPL} are no longer
+backward compatible (and this is why this macro is not defined by default).
 
-A semicolon <c>;</c> can simply be used instead of @RefMacro{BOOST_SCOPE_EXIT_END} when this configuration macro is defined.
+A semicolon <c>;</c> can be used instead of @RefMacro{BOOST_SCOPE_EXIT_END}
+when this configuration macro is defined (but it is recommended to always use
+@RefMacro{BOOST_SCOPE_EXIT_END} so to maximize portability).
 
-This configuration macro does not control the definition of @RefMacro{BOOST_SCOPE_EXIT_ALL} which is always and automatically defined on compilers that support C++11 lambdas.
+@Note This configuration macro does not control the definition of
+@RefMacro{BOOST_SCOPE_EXIT_ALL} which is always and automatically defined on
+compilers that support C++11 lambda functions.
 
-@See @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_ALL}, @RefMacro{BOOST_SCOPE_EXIT_END}.
+@See @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_TPL},
+@RefMacro{BOOST_SCOPE_EXIT_END}.
 */
 #define BOOST_SCOPE_EXIT_CONFIG_USE_LAMBDAS
 
