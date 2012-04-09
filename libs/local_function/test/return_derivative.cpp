@@ -17,6 +17,7 @@
 #include <boost/detail/lightweight_test.hpp>
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function, 1)
+/** @todo is this really needed? does it fix the problem with gcc-mingw-4.5.2[_0x] or not? */
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function1, 2) // Also `functionN`.
 
 boost::function<int (int)> derivative(boost::function<int (int)>& f, int dx) {

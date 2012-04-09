@@ -27,7 +27,8 @@ int main(void) {
     int delta = 10;
     LOCAL_INC_DEC(delta) // Declare local functions on same line using `_ID`.
     
-    BOOST_TEST(dec(inc(123)) == 123);
+    BOOST_TEST(inc(123) == 123 + 10);
+    BOOST_TEST(dec(123) == 123 - 10);
     return boost::report_errors();
 }
 

@@ -33,7 +33,9 @@ int main(void) {
     int delta = 10;
     LOCAL_INC_DEC(delta) // Multiple local functions on same line.
     
-    BOOST_TEST(dec(inc(123)) == 123);
+    /** @todo back to BOOST_TEST(dec(inc(123)) == 123)) and doc that on vacpp compiler composition doesn't work */
+    BOOST_TEST(inc(123) == 123 + 10);
+    BOOST_TEST(dec(123) == 123 - 10);
     return boost::report_errors();
 }
 //]
