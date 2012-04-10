@@ -7,6 +7,8 @@
 
 #include "identity.hpp"
 #include <boost/functional/overloaded_function.hpp>
+#include <boost/typeof/typeof.hpp> // For `BOOST_AUTO`.
+#include <boost/typeof/std/string.hpp> // No need to register `boost::function`.
 #include <boost/detail/lightweight_test.hpp>
 
 int main() {

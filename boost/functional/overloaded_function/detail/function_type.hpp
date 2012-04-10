@@ -16,6 +16,7 @@
 #include <boost/function_types/result_type.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/function.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/pop_front.hpp>
@@ -46,6 +47,15 @@ public:
     type;
 };
 
+// NOTE: When using boost::function in Boost.Typeof emulation mode, the user
+// has to register boost::functionN instead of boost::function in oder to
+// do TYPEOF(F::operator()). That is confusing, so boost::function is handled
+// separately so it does not require any Boost.Typeof registration at all.
+template<typename F>
+struct functor_type< boost::function<F> > {
+    typedef F type;
+};
+
 // Requires: F is a function type, pointer, reference, or monomorphic functor.
 // Returns: F's function type `result_type (arg1_type, arg2_type, ...)`.
 template<typename F>
@@ -61,7 +71,7 @@ struct function_type {
                 typename boost::mpl::if_<boost::function_types::
                         is_function_reference<F>,
                     boost::remove_reference<F>
-                , // Requires, it's a functor.
+                , // Else, requires that F is a functor.
                     functor_type<F>
                 >::type
             >::type

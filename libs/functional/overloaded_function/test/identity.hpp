@@ -19,13 +19,6 @@ int (&identity_i)(int) = identity_i_impl; // Function reference.
 
 double identity_d_impl(double x) { return x; }
 boost::function<double (double)> identity_d = identity_d_impl; // Functor.
-
-// For type-of emulation on compilers without native type-of.
-#include <boost/typeof/typeof.hpp>
-#include <boost/typeof/std/string.hpp>
-#include BOOST_TYPEOF_INCREMENT_REGISTRATION_GROUP()
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function, 1)
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function1, 2) // Also `functionN`.
 //]
 
 #endif // #include guard
