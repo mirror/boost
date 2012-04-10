@@ -66,21 +66,31 @@
 <a name="boost_functional_overloadedfunction.Introduction"></a><a class="link" href="index.html#boost_functional_overloadedfunction.Introduction" title="Introduction">Introduction</a>
 </h2></div></div></div>
 <p>
-      Consider the following functions with distinct signatures:
+      Consider the following functions which have distinct signatures:
     </p>
 <p>
-      [identity_decls]
+</p>
+<pre class="programlisting"><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">identity_s</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="comment">// Function (as pointer).</span>
+    <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span>
+
+<span class="keyword">int</span> <span class="identifier">identity_i_impl</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span>
+<span class="keyword">int</span> <span class="special">(&amp;</span><span class="identifier">identity_i</span><span class="special">)(</span><span class="keyword">int</span><span class="special">)</span> <span class="special">=</span> <span class="identifier">identity_i_impl</span><span class="special">;</span> <span class="comment">// Function reference.</span>
+
+<span class="keyword">double</span> <span class="identifier">identity_d_impl</span><span class="special">(</span><span class="keyword">double</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span> <span class="special">}</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="keyword">double</span> <span class="special">(</span><span class="keyword">double</span><span class="special">)&gt;</span> <span class="identifier">identity_d</span> <span class="special">=</span> <span class="identifier">identity_d_impl</span><span class="special">;</span> <span class="comment">// Functor.</span>
+</pre>
+<p>
     </p>
 <p>
-      Instead of calling them using their separate names (here <code class="computeroutput"><span class="identifier">BOOST_CHECK</span></code>
+      Instead of calling them using their separate names (here <code class="computeroutput"><span class="identifier">BOOST_TEST</span></code>
       is equivalent to <code class="computeroutput"><span class="identifier">assert</span></code>):
       <sup>[<a name="boost_functional_overloadedfunction.Introduction.f0" href="#ftn.boost_functional_overloadedfunction.Introduction.f0" class="footnote">1</a>]</sup>
     </p>
 <p>
 </p>
-<pre class="programlisting"><span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity_s</span><span class="special">(</span><span class="string">"abc"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abc"</span><span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity_i</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span><span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity_d</span><span class="special">(</span><span class="number">1.23</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.23</span><span class="special">);</span>
+<pre class="programlisting"><span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">identity_s</span><span class="special">(</span><span class="string">"abc"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abc"</span><span class="special">);</span>
+<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">identity_i</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span><span class="special">);</span>
+<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">identity_d</span><span class="special">(</span><span class="number">1.23</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.23</span><span class="special">);</span>
 </pre>
 <p>
     </p>
@@ -100,9 +110,9 @@
 <span class="special">&gt;</span> <span class="identifier">identity</span><span class="special">(</span><span class="identifier">identity_s</span><span class="special">,</span> <span class="identifier">identity_i</span><span class="special">,</span> <span class="identifier">identity_d</span><span class="special">);</span>
 
 <span class="comment">// All calls via single `identity` function.</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="string">"abc"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abc"</span><span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span><span class="special">);</span>
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="number">1.23</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.23</span><span class="special">);</span>
+<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="string">"abc"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abc"</span><span class="special">);</span>
+<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span><span class="special">);</span>
+<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">identity</span><span class="special">(</span><span class="number">1.23</span><span class="special">)</span> <span class="special">==</span> <span class="number">1.23</span><span class="special">);</span>
 </pre>
 <p>
     </p>
@@ -116,16 +126,19 @@
 <div class="footnotes">
 <br><hr width="100" align="left">
 <div class="footnote"><p><sup>[<a id="ftn.boost_functional_overloadedfunction.Introduction.f0" href="#boost_functional_overloadedfunction.Introduction.f0" class="para">1</a>] </sup>
-        In the examples presented in this documentation, <code class="computeroutput"><span class="identifier">BOOST_CHECK</span></code>
-        is used instead of <code class="computeroutput"><span class="identifier">assert</span></code>
-        because it allows to write regression tests using <a href="http://www.boost.org/libs/test" target="_top">Boost.Test</a>.
-        The examples of this documentation are executed as part of the library test
-        suite to verify that they always compile and run correctly.
+        In most of the examples presented in this documentation, the Boost.Detail/LightweightTest
+        (<code class="literal">boost/detail/lightweight_test.hpp</code>) macro <code class="computeroutput"><span class="identifier">BOOST_TEST</span></code> is used to check correctness
+        conditions (conceptually similar to <code class="computeroutput"><span class="identifier">assert</span></code>).
+        A failure of the checked condition does not abort the execution of the program,
+        it will instead make <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span></code>
+        return a non-zero program exit code. Using Boost.Detail/LightweightTest allows
+        to add the examples to the library regression tests so to make sure that
+        they always compile and run correctly.
       </p></div>
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: March 22, 2012 at 20:51:03 GMT</small></p></td>
+<td align="left"><p><small>Last revised: April 10, 2012 at 20:37:20 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

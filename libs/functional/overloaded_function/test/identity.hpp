@@ -9,10 +9,14 @@
 #define IDENTITY_HPP_
 
 #include <boost/function.hpp>
+//[identity_typeof
+#include <boost/typeof/std/string.hpp> // No need to register `boost::function`.
+//]
 #include <string>
 
 //[identity_decls
-const std::string& identity_s(const std::string& x) { return x; } // As pointer.
+const std::string& identity_s(const std::string& x) // Function (as pointer).
+    { return x; }
 
 int identity_i_impl(int x) { return x; }
 int (&identity_i)(int) = identity_i_impl; // Function reference.
