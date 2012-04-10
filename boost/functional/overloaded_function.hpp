@@ -11,8 +11,9 @@
 #   ifndef BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_HPP_
 #       define BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_HPP_
 
-#       include <boost/functional/overloaded_function/detail/base.hpp>
-#       include <boost/functional/overloaded_function/detail/function_type.hpp>
+/** @todo[Lorenzo Caminiti] Uncomment this... trying to see what breaks on Sun */
+//#       include <boost/functional/overloaded_function/detail/base.hpp>
+//#       include <boost/functional/overloaded_function/detail/function_type.hpp>
 #       include <boost/functional/overloaded_function/config.hpp>
 #       include <boost/typeof/typeof.hpp>
 #       include <boost/preprocessor/iteration/iterate.hpp>
