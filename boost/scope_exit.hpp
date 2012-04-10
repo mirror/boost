@@ -798,16 +798,19 @@ private:
                     BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, seq)
 #   endif
 #else // Variadic macros (both sequences and variadic tuples).
-#   define BOOST_SCOPE_EXIT_ID(id, within_template, ...) \
-        BOOST_SCOPE_EXIT_AUX_IMPL(id, \
-                BOOST_PP_EXPR_IIF(within_template, typename), \
+#   define BOOST_SCOPE_EXIT_ID(id, ...) \
+        BOOST_SCOPE_EXIT_AUX_IMPL(id, BOOST_PP_EMPTY(), \
+                BOOST_SCOPE_EXIT_AUX_TRAITS( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)))
+#   define BOOST_SCOPE_EXIT_TPL_ID(id, ...) \
+        BOOST_SCOPE_EXIT_AUX_IMPL(id, typename, \
                 BOOST_SCOPE_EXIT_AUX_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)))
 #   define BOOST_SCOPE_EXIT(...) \
-        BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 0, \
+        BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
                 __VA_ARGS__)
 #   define BOOST_SCOPE_EXIT_TPL(...) \
-        BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1, \
+        BOOST_SCOPE_EXIT_TPL_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
                 __VA_ARGS__)
 #   if !defined(BOOST_NO_LAMBDAS)
 #       define BOOST_SCOPE_EXIT_ALL_ID(id, ...) \

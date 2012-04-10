@@ -25,6 +25,8 @@
     [dirname scope_exit]
 ]
 
+[def __Introduction__ [link scope_exit.Introduction Introduction]]
+[def __Getting_Started__ [link scope_exit.Getting_Started Getting Started]]
 [def __Tutorial__ [link scope_exit.Tutorial Tutorial]]
 [def __No_Variadic_Macros__ [link scope_exit.No_Variadic_Macros No Variadic Macros]]
 [def __Reference__ [@reference.html Reference]]
@@ -71,12 +73,10 @@ For example (see also [@../../test/world.cpp =world.cpp=]):
 [footnote
 Older versions of this library used a __Boost_Preprocessor__ sequence to specify the list of captured variables.
 While maintaining full backward compatibility, it is now possible to specify the captured variables also using a comma-separated list (which is the preferred syntax).
-See the __No_Variadic_Macros__ section for more details.
+See the __No_Variadic_Macros__ section for more information.
 ]
 
 [world]
-
-Read the __Tutorial__ section to find out how to write programs with __Boost_ScopeExit__ or jump to the __Reference__ section.
 
 [endsect]
 
@@ -84,15 +84,34 @@ Read the __Tutorial__ section to find out how to write programs with __Boost_Sco
 
 This section explains how to setup a system to use this library.
 
+[section Documentation]
+
+Programmers should have enough knowledge to use this library after reading the __Introduction__, __Getting_Started__, and __Tutorial__ sections.
+The __Reference__ section can be consulted at a later point for quick reference.
+All the other sections of this documentation can be considered optional. 
+
+Some footnotes are marked by the word "*Rationale*".
+They explain reasons behind decisions made during the design and implementation of this library.
+
+In most of the examples presented in this documentation, the Boost.Detail/LightweightTest (=boost/detail/lightweight_test.hpp=) macro `BOOST_TEST` is used to check correctness conditions (conceptually similar to `assert`).
+A failure of the checked condition does not abort the execution of the program, it will instead make `boost::report_errors` return a non-zero program exit code.
+[footnote
+*Rationale.*
+Using Boost.Detail/LightweightTest allows to add the examples to the library regression tests so to make sure that they always compile and run correctly.
+]
+
+[endsect]
+
 [section Compilers and Platforms]
 
 The authors originally developed and tested the library on GNU Compiler Collection (GCC) C++ 3.3, 3.4, 4.1, 4.2, 4.5.3 (with and without C++11 features [^-std=c++0x]), Microsoft Visual C++ (MSVC) 8.0, and Intel 10.1 under Linux, Cygwin, and Windows 7.
 However, this library should be usable on any compiler that supports __Boost_Typeof__ except:
 
 * MSVC 7.1 and 8.0 fail to link if a function with __Boost_ScopeExit__ is included by multiple translation units.
-* GCC 3.3 cannot compile __Boost_ScopeExit__ inside a template (see [@http://lists.boost.org/Archives/boost/2007/02/116235.php] for more details).
+* GCC 3.3 cannot compile __Boost_ScopeExit__ inside a template (see [@http://lists.boost.org/Archives/boost/2007/02/116235.php] for details).
 
 See the library [@http://www.boost.org/development/tests/release/developer/scope_exit.html regression test results] for detailed information on supported compilers and platforms.
+Check the library regression test [@../../test/Jamfile.v2 =Jamfile.v2=] for any special configuration that might be required for a specific compiler.
 
 [endsect]
 
@@ -103,7 +122,7 @@ Therefore there is no pre-compiled object file which needs to be installed.
 Programmers can simply instruct the compiler where to find the library header files (`-I` option on GCC, `/I` option on MSVC, etc) and compile code using the library.
 
 The library implementation uses __Boost_Typeof__ to automatically deduce the types of the __Boost_ScopeExit__ captured variables (see the __Tutorial__ section).
-In order to compile code in __typeof_emulation__ mode, all types should be properly registered using __BOOST_TYPEOF_REGISTER_TYPE__ and __BOOST_TYPEOF_REGISTER_TEMPLATE__, or appropriate __Boost_Typeof__ headers should be included.
+In order to compile code in __typeof_emulation__ mode, all types should be properly registered using __BOOST_TYPEOF_REGISTER_TYPE__ and __BOOST_TYPEOF_REGISTER_TEMPLATE__, or appropriate __Boost_Typeof__ headers should be included (see the source code of most examples presented in this documentation).
 
 [endsect]
 
@@ -391,7 +410,7 @@ With __Boost_ScopeExit__ we can simply do the following (see also [@../../exampl
 __Boost_ScopeExit__ is similar to __D_scope_exit__ feature built into the __D__ programming language.
 
 A curious reader may notice that the library does not implement `scope(success)` and `scope(failure)` of the __D__ language.
-Unfortunately, these are not possible in C++ because failure or success conditions cannot be determined by calling `std::uncaught_exception` (see [@http://www.gotw.ca/gotw/047.htm Guru of the Week #47] for more details about `std::uncaught_exception` and if it has any good use at all).
+Unfortunately, these are not possible in C++ because failure or success conditions cannot be determined by calling `std::uncaught_exception` (see [@http://www.gotw.ca/gotw/047.htm Guru of the Week #47] for details about `std::uncaught_exception` and if it has any good use at all).
 However, this is not a big problem because these two __D__'s constructs can be expressed in terms of __D_scope_exit__ and a `bool commit` variable (similarly to some examples presented in the __Tutorial__ section).
 
 [h5 C++11 Lambdas]

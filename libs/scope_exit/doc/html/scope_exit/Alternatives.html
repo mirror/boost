@@ -255,9 +255,8 @@
       language. Unfortunately, these are not possible in C++ because failure or success
       conditions cannot be determined by calling <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">uncaught_exception</span></code>
       (see <a href="http://www.gotw.ca/gotw/047.htm" target="_top">Guru of the Week #47</a>
-      for more details about <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">uncaught_exception</span></code>
-      and if it has any good use at all). However, this is not a big problem because
-      these two <a href="http://www.digitalmars.com/d/index.html" target="_top">D</a>'s
+      for details about <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">uncaught_exception</span></code> and if it has any good
+      use at all). However, this is not a big problem because these two <a href="http://www.digitalmars.com/d/index.html" target="_top">D</a>'s
       constructs can be expressed in terms of <a href="http://www.digitalmars.com/d/2.0/statement.html#ScopeGuardStatement" target="_top">scope(exit)</a>
       and a <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">commit</span></code>
       variable (similarly to some examples presented in the <a class="link" href="Tutorial.html" title="Tutorial">Tutorial</a>

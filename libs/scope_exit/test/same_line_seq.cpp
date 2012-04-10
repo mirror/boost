@@ -23,12 +23,12 @@
     } BOOST_SCOPE_EXIT_END_ID(BOOST_PP_CAT(dec, __LINE__))
 
 #define SCOPE_EXIT_INC_DEC_TPL(variable, offset) \
-    BOOST_SCOPE_EXIT_ID_TPL(BOOST_PP_CAT(inc, __LINE__), \
+    BOOST_SCOPE_EXIT_TPL_ID(BOOST_PP_CAT(inc, __LINE__), \
             (&variable) (offset) ) { \
         variable += offset; \
     } BOOST_SCOPE_EXIT_END_ID(BOOST_PP_CAT(inc, __LINE__)) \
     \
-    BOOST_SCOPE_EXIT_ID_TPL(BOOST_PP_CAT(dec, __LINE__), \
+    BOOST_SCOPE_EXIT_TPL_ID(BOOST_PP_CAT(dec, __LINE__), \
             (&variable) (offset) ) { \
         variable -= offset; \
     } BOOST_SCOPE_EXIT_END_ID(BOOST_PP_CAT(dec, __LINE__))
