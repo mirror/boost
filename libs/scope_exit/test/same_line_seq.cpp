@@ -12,27 +12,42 @@
 #include <boost/detail/lightweight_test.hpp>
 
 #define SCOPE_EXIT_INC_DEC(variable, offset) \
-    BOOST_SCOPE_EXIT_ID( \
-            BOOST_PP_CAT(inc, __LINE__) /* unique ID */, 0 /* no TPL */, \
+    BOOST_SCOPE_EXIT_ID(BOOST_PP_CAT(inc, __LINE__), /* unique ID */ \
             (&variable) (offset) ) { \
         variable += offset; \
     } BOOST_SCOPE_EXIT_END_ID(BOOST_PP_CAT(inc, __LINE__)) \
     \
-    BOOST_SCOPE_EXIT_ID( \
-            BOOST_PP_CAT(dec, __LINE__) /* unique ID */, 0 /* no TPL */, \
+    BOOST_SCOPE_EXIT_ID(BOOST_PP_CAT(dec, __LINE__), \
+            (&variable) (offset) ) { \
+        variable -= offset; \
+    } BOOST_SCOPE_EXIT_END_ID(BOOST_PP_CAT(dec, __LINE__))
+
+#define SCOPE_EXIT_INC_DEC_TPL(variable, offset) \
+    BOOST_SCOPE_EXIT_ID_TPL(BOOST_PP_CAT(inc, __LINE__), \
+            (&variable) (offset) ) { \
+        variable += offset; \
+    } BOOST_SCOPE_EXIT_END_ID(BOOST_PP_CAT(inc, __LINE__)) \
+    \
+    BOOST_SCOPE_EXIT_ID_TPL(BOOST_PP_CAT(dec, __LINE__), \
             (&variable) (offset) ) { \
         variable -= offset; \
     } BOOST_SCOPE_EXIT_END_ID(BOOST_PP_CAT(dec, __LINE__))
 
 #define SCOPE_EXIT_ALL_INC_DEC(variable, offset) \
-    BOOST_SCOPE_EXIT_ALL_ID(BOOST_PP_CAT(inc, __LINE__) /* unique ID */, \
+    BOOST_SCOPE_EXIT_ALL_ID(BOOST_PP_CAT(inc, __LINE__), \
             (=) (&variable) ) { \
         variable += offset; \
     }; \
-    BOOST_SCOPE_EXIT_ALL_ID(BOOST_PP_CAT(dec, __LINE__) /* unique ID */, \
+    BOOST_SCOPE_EXIT_ALL_ID(BOOST_PP_CAT(dec, __LINE__), \
             (=) (&variable) ) { \
         variable -= offset; \
     };
+
+template<typename T>
+void f(T& x, T& delta) {
+    SCOPE_EXIT_INC_DEC_TPL(x, delta)
+    BOOST_TEST(x == 0);
+}
 
 int main(void) {
     int x = 0, delta = 10;
@@ -42,12 +57,14 @@ int main(void) {
     }
     BOOST_TEST(x == 0);
 
+    f(x, delta);
+
 #ifndef BOOST_NO_LAMBDAS
     {
         SCOPE_EXIT_ALL_INC_DEC(x, delta)
     }
     BOOST_TEST(x == 0);
-#endif // lambdas
+#endif // LAMBDAS
 
     return boost::report_errors();
 }

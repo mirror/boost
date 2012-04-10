@@ -69,7 +69,7 @@ int main(void) {
         SCOPE_EXIT_ALL_INC_DEC(x, delta) // Multiple scope exits on same line.
     }
     BOOST_TEST(x == 0);
-#endif // lambdas
+#endif // LAMBDAS
     
     return boost::report_errors();
 }
