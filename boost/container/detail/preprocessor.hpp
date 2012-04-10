@@ -78,17 +78,16 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
 
 #ifndef BOOST_NO_RVALUE_REFERENCES
 
-   #ifdef BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES
+   #if defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
 
-      #define BOOST_CONTAINER_PP_PARAM_INIT(z, n, data) \
-      BOOST_PP_CAT(m_p, n) (boost::forward< BOOST_PP_CAT(P, n) >( BOOST_PP_CAT(p, n) ))           \
-      //!
+   #define BOOST_CONTAINER_PP_PARAM_INIT(z, n, data) \
+   BOOST_PP_CAT(m_p, n) (static_cast<BOOST_PP_CAT(P, n)>( BOOST_PP_CAT(p, n) ))           \
 
-   #else    //BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES
+   #else //#if defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
 
-      #define BOOST_CONTAINER_PP_PARAM_INIT(z, n, data) \
-      BOOST_PP_CAT(m_p, n) (static_cast<BOOST_PP_CAT(P, n)>( BOOST_PP_CAT(p, n) ))           \
-      //!
+   #define BOOST_CONTAINER_PP_PARAM_INIT(z, n, data) \
+   BOOST_PP_CAT(m_p, n) (::boost::forward< BOOST_PP_CAT(P, n) >( BOOST_PP_CAT(p, n) ))           \
+   //!
 
    #endif   //BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES
 
@@ -131,7 +130,7 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
 #else //!defined(BOOST_NO_RVALUE_REFERENCES) && defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
 
    #define BOOST_CONTAINER_PP_MEMBER_FORWARD(z, n, data) \
-   boost::forward< BOOST_PP_CAT(P, n) >( BOOST_PP_CAT(this->m_p, n) ) \
+   ::boost::forward< BOOST_PP_CAT(P, n) >( BOOST_PP_CAT(this->m_p, n) ) \
    //!
 
 #endif   //!defined(BOOST_NO_RVALUE_REFERENCES) && defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
@@ -144,11 +143,11 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
 
 
 #define BOOST_CONTAINER_PP_PARAM_FORWARD(z, n, data) \
-boost::forward< BOOST_PP_CAT(P, n) >( BOOST_PP_CAT(p, n) ) \
+::boost::forward< BOOST_PP_CAT(P, n) >( BOOST_PP_CAT(p, n) ) \
 //!
 
 #define BOOST_CONTAINER_PP_DECLVAL(z, n, data) \
-boost::move_detail::declval< BOOST_PP_CAT(P, n) >() \
+::boost::move_detail::declval< BOOST_PP_CAT(P, n) >() \
 //!
 
 #define BOOST_CONTAINER_PP_MEMBER_IT_FORWARD(z, n, data) \
