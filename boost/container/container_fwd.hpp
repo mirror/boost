@@ -132,26 +132,22 @@ class basic_string;
 
 //! Type used to tag that the input range is
 //! guaranteed to be ordered
-struct ordered_range_impl_t {};
+struct ordered_range_t
+{};
 
 //! Type used to tag that the input range is
 //! guaranteed to be ordered and unique
-struct ordered_unique_range_impl_t{};
-
-/// @cond
-
-typedef ordered_range_impl_t * ordered_range_t;
-typedef ordered_unique_range_impl_t *ordered_unique_range_t;
-
-/// @endcond
+struct ordered_unique_range_t
+   : public ordered_range_t
+{};
 
 //! Value used to tag that the input range is
 //! guaranteed to be ordered
-static const ordered_range_t ordered_range = 0;
+static const ordered_range_t ordered_range = ordered_range_t();
 
 //! Value used to tag that the input range is
 //! guaranteed to be ordered and unique
-static const ordered_unique_range_t ordered_unique_range = 0;
+static const ordered_unique_range_t ordered_unique_range = ordered_unique_range_t();
 
 /// @cond
 
