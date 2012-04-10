@@ -28,14 +28,15 @@ This type expression can contain an arbitrary number of commas.
 }
 @EndParams
 
-This macro works on any C++03 compiler (it does not require variadic macros).
+This macro works on any C++03 compiler (it does not use variadic macros).
 
 This macro must be prefixed by <c>typename</c> when used within templates.
-However, the compiler will not be able to automatically determine function template parameters when they are wrapped with this macro (these parameters need to
-be explicitly specified when calling the function template).
+Note that the compiler will not be able to automatically determine function
+template parameters when they are wrapped with this macro (these parameters
+need to be explicitly specified when calling the function template).
 
-On some compilers (like GCC), using this macro on an abstract types requires to
-add and remove a reference to the type.
+On some compilers (like GCC), using this macro on abstract types requires to
+add and remove a reference to the specified type.
 */
 #define BOOST_IDENTITY_TYPE(parenthesized_type) \
     /* must NOT prefix this with `::` to work with parenthesized syntax */ \
