@@ -22,6 +22,8 @@
 
 #include <boost/container/detail/mpl.hpp>
 #include <boost/container/detail/type_traits.hpp>
+#include <boost/container/detail/mpl.hpp>
+#include <boost/container/detail/type_traits.hpp>
 
 #include <utility>   //std::pair
 
@@ -211,7 +213,11 @@ struct pair
    }
 
    template <class D, class S>
-   pair& operator=(const pair<D, S>&p)
+   typename ::boost::container::container_detail::enable_if_c
+      < !(::boost::container::container_detail::is_same<T1, D>::value &&
+          ::boost::container::container_detail::is_same<T2, S>::value)
+      , pair &>::type
+      operator=(const pair<D, S>&p)
    {
       first  = p.first;
       second = p.second;
@@ -219,7 +225,11 @@ struct pair
    }
 
    template <class D, class S>
-   pair& operator=(BOOST_RV_REF_BEG pair<D, S> BOOST_RV_REF_END p)
+   typename ::boost::container::container_detail::enable_if_c
+      < !(::boost::container::container_detail::is_same<T1, D>::value &&
+          ::boost::container::container_detail::is_same<T2, S>::value)
+      , pair &>::type
+      operator=(BOOST_RV_REF_BEG pair<D, S> BOOST_RV_REF_END p)
    {
       first  = ::boost::move(p.first);
       second = ::boost::move(p.second);
