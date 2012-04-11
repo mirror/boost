@@ -30,6 +30,24 @@
 #  define BOOST_RESULT_OF_NUM_ARGS 16
 #endif
 
+// Use the decltype-based version of result_of by default if the compiler
+// supports N3276 <http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2011/n3276.pdf>.
+// The user can force the choice by defining either BOOST_RESULT_OF_USE_DECLTYPE or
+// BOOST_RESULT_OF_USE_TR1, but not both!
+#if defined(BOOST_RESULT_OF_USE_DECLTYPE) && defined(BOOST_RESULT_OF_USE_TR1)
+#  error Both BOOST_RESULT_OF_USE_DECLTYPE and BOOST_RESULT_OF_USE_TR1 cannot be defined at the same time.
+#endif
+
+#ifndef BOOST_RESULT_OF_USE_TR1
+#  ifndef BOOST_RESULT_OF_USE_DECLTYPE
+#    ifndef BOOST_NO_DECLTYPE_N3276 // this implies !defined(BOOST_NO_DECLTYPE)
+#      define BOOST_RESULT_OF_USE_DECLTYPE
+#    else
+#      define BOOST_RESULT_OF_USE_TR1
+#    endif
+#  endif
+#endif
+
 namespace boost {
 
 template<typename F> struct result_of;
