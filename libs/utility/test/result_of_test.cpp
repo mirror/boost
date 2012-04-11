@@ -5,7 +5,11 @@
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-#define BOOST_RESULT_OF_USE_DECLTYPE
+#include <boost/config.hpp>
+
+#ifndef BOOST_NO_DECLTYPE
+# define BOOST_RESULT_OF_USE_DECLTYPE
+#endif
 
 // For more information, see http://www.boost.org/libs/utility
 #include <boost/utility/result_of.hpp>
