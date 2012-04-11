@@ -65,12 +65,6 @@ template <class T, class VoidPointer>
 struct slist_node
    :  public slist_hook<VoidPointer>::type
 {
-   private:
-   slist_node();
-   slist_node(const slist_node &);
-   slist_node & operator=(const slist_node &);
-
-   public:
    typedef typename slist_hook<VoidPointer>::type hook_type;
    T m_data;
 };

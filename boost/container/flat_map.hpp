@@ -165,7 +165,12 @@ class flat_map
       get_flat_tree_iterators
          <pointer>::const_reverse_iterator                  const_reverse_iterator;
    typedef A                                                allocator_type;
+   
+   //!Standard extension
    typedef A                                                stored_allocator_type;
+
+   //!Standard extension for C++03 compilers with non-movable std::pair
+   typedef impl_value_type                                  movable_value_type;
 
    public:
    //! <b>Effects</b>: Default constructs an empty flat_map.
@@ -499,7 +504,7 @@ class flat_map
    //!   to the elements with bigger keys than x.
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
-   std::pair<iterator,bool> insert(BOOST_RV_REF(impl_value_type) x) 
+   std::pair<iterator,bool> insert(BOOST_RV_REF(movable_value_type) x) 
    {
       return container_detail::force<std::pair<iterator,bool> >
       (m_flat_tree.insert_unique(boost::move(x)));
@@ -530,8 +535,11 @@ class flat_map
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x)
-      { return container_detail::force_copy<iterator>
-         (m_flat_tree.insert_unique(container_detail::force<impl_const_iterator>(position), boost::move(container_detail::force<impl_value_type>(x)))); }
+   {
+      return container_detail::force_copy<iterator>
+         (m_flat_tree.insert_unique( container_detail::force<impl_const_iterator>(position)
+                                   , boost::move(container_detail::force<impl_value_type>(x))));
+   }
 
    //! <b>Effects</b>: Inserts an element move constructed from x in the container.
    //!   p is a hint pointing to where the insert should start to search.
@@ -542,7 +550,7 @@ class flat_map
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
-   iterator insert(const_iterator position, BOOST_RV_REF(impl_value_type) x)
+   iterator insert(const_iterator position, BOOST_RV_REF(movable_value_type) x)
    {
       return container_detail::force_copy<iterator>(
          m_flat_tree.insert_unique(container_detail::force<impl_const_iterator>(position), boost::move(x)));
@@ -719,13 +727,13 @@ class flat_map
    //!
    //! <b>Complexity</b>: Logarithmic
    std::pair<iterator,iterator> equal_range(const key_type& x) 
-      {  return container_detail::force<std::pair<iterator,iterator> >(m_flat_tree.equal_range(x)); }
+      {  return container_detail::force_copy<std::pair<iterator,iterator> >(m_flat_tree.equal_range(x)); }
 
    //! <b>Effects</b>: Equivalent to std::make_pair(this->lower_bound(k), this->upper_bound(k)).
    //!
    //! <b>Complexity</b>: Logarithmic
    std::pair<const_iterator,const_iterator> equal_range(const key_type& x) const 
-      {  return container_detail::force<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x)); }
+      {  return container_detail::force_copy<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x)); }
 
    //! <b>Effects</b>: Number of elements for which memory has been allocated.
    //!   capacity() is always greater than or equal to size().
@@ -931,6 +939,8 @@ class flat_multimap
    typedef A                                                allocator_type;
    //Non-standard extension
    typedef A                                                stored_allocator_type;
+   //!Standard extension for C++03 compilers with non-movable std::pair
+   typedef impl_value_type                                  movable_value_type;
 
    //! <b>Effects</b>: Default constructs an empty flat_map.
    //! 
@@ -1389,14 +1399,14 @@ class flat_multimap
    //!
    //! <b>Complexity</b>: Logarithmic
    std::pair<iterator,iterator> equal_range(const key_type& x) 
-      {  return container_detail::force_copy<std::pair<iterator,iterator> >(m_flat_tree.equal_range(x));   }
+      {  return container_detail::force<std::pair<iterator,iterator> >(m_flat_tree.equal_range(x));   }
 
    //! <b>Effects</b>: Equivalent to std::make_pair(this->lower_bound(k), this->upper_bound(k)).
    //!
    //! <b>Complexity</b>: Logarithmic
    std::pair<const_iterator,const_iterator> 
       equal_range(const key_type& x) const 
-      {  return container_detail::force_copy<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x));   }
+      {  return container_detail::force<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x));   }
 
    //! <b>Effects</b>: Number of elements for which memory has been allocated.
    //!   capacity() is always greater than or equal to size().

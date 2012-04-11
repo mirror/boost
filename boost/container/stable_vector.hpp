@@ -119,12 +119,6 @@ template<typename VoidPointer, typename T>
 struct node_type
    : public node_type_base<VoidPointer>
 {
-   private:
-   node_type();
-   node_type(const node_type &);
-   node_type & operator=(const node_type &);
-
-   public:
    T value;
 };
 

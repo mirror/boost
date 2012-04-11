@@ -110,8 +110,9 @@ template <class T, class VoidPointer>
 struct rbtree_node
    :  public rbtree_hook<VoidPointer>::type
 {
-   //private:
+   private:
    //BOOST_COPYABLE_AND_MOVABLE(rbtree_node)
+   rbtree_node();
 
    public:
    typedef typename rbtree_hook<VoidPointer>::type hook_type;
@@ -121,46 +122,6 @@ struct rbtree_node
 
    typedef rbtree_node<T, VoidPointer> node_type;
 
-   private:
-   rbtree_node();
-   rbtree_node (const rbtree_node &);
-   rbtree_node & operator=(const rbtree_node &);
-
-/*
-   rbtree_node(const rbtree_node &other)
-      : m_data(other.m_data)
-   {}
-
-   rbtree_node(BOOST_RV_REF(rbtree_node) other)
-      : m_data(::boost::move(other.m_data))
-   {}
-
-   #ifndef BOOST_CONTAINER_PERFECT_FORWARDING
-
-   #define BOOST_PP_LOCAL_MACRO(n)                                           \
-   template<BOOST_PP_ENUM_PARAMS(n, class P)>                                \
-   rbtree_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))           \
-      : m_data(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))        \
-   {}                                                                        \
-   //!
-   #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
-   #include BOOST_PP_LOCAL_ITERATE()
-
-   #else //#ifndef BOOST_CONTAINER_PERFECT_FORWARDING
-
-   template<class ...Args>
-   rbtree_node(Args &&...args)
-      : m_data(boost::forward<Args>(args)...)
-   {}
-   #endif//#ifndef BOOST_CONTAINER_PERFECT_FORWARDING
-
-   rbtree_node &operator=(const rbtree_node &other)
-   {  do_assign(other.m_data);   return *this;  }
-
-   rbtree_node &operator=(BOOST_RV_REF(rbtree_node) other)
-   {  do_move_assign(other.m_data);   return *this;  }
-*/
-   public:
    T &get_data()
    {
       T* ptr = reinterpret_cast<T*>(&this->m_data);
@@ -173,7 +134,6 @@ struct rbtree_node
       return *ptr;
    }
 
-//   private:
    internal_type m_data;
 
    template<class A, class B>
@@ -900,9 +860,9 @@ class rbtree
       if(this->empty()){
          //Insert with end hint, to achieve linear
          //complexity if [first, last) is ordered
-         const_iterator end(this->end());
+         const_iterator hint(this->cend());
          for( ; first != last; ++first)
-            this->insert_unique(end, *first);
+            hint = this->insert_unique(hint, *first);
       }
       else{
          for( ; first != last; ++first)
@@ -941,9 +901,9 @@ class rbtree
    {
       //Insert with end hint, to achieve linear
       //complexity if [first, last) is ordered
-      const_iterator end(this->cend());
+      const_iterator hint(this->cend());
       for( ; first != last; ++first)
-         this->insert_equal(end, *first);
+         hint = this->insert_equal(hint, *first);
    }
 
    iterator erase(const_iterator position)

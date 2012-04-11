@@ -65,12 +65,6 @@ template <class T, class VoidPointer>
 struct list_node
    :  public list_hook<VoidPointer>::type
 {
-   private:
-   list_node();
-   list_node(const list_node &);
-   list_node & operator=(const list_node &);
-
-   public:
    typedef typename list_hook<VoidPointer>::type hook_type;
    T m_data;
 };
