@@ -10,7 +10,7 @@
 #       define BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_DETAIL_BASE_HPP_
 
 #       include <boost/functional/overloaded_function/config.hpp>
-#       include <boost/function.hpp>
+/**@todo#       include <boost/function.hpp>*/
 #       include <boost/preprocessor/iteration/iterate.hpp>
 #       include <boost/preprocessor/repetition/enum.hpp>
 #       include <boost/preprocessor/cat.hpp>
@@ -39,10 +39,12 @@ namespace boost { namespace overloaded_function_detail {
 template<typename F>
 class base {}; // Empty template cannot be used directly (only its spec).
 
+/*@todo
 #       define BOOST_PP_ITERATION_PARAMS_1 \
                 (3, (0, BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_ARITY_MAX, \
                 "boost/functional/overloaded_function/detail/base.hpp"))
 #       include BOOST_PP_ITERATE() // Iterate over funciton arity.
+*/
 
 } } // namespace
 
