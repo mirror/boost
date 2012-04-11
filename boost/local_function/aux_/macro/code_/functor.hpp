@@ -687,10 +687,11 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_( \
         id, typename01, decl_traits, params, \
         default_count, const_binds, has_const_bind_this, binds, has_bind_this) \
-    class BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_CLASS_TYPE_(id) \
+    typedef class BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_CLASS_TYPE_(id) \
     /* run-time: do not use base class to allow for compiler optimizations */ \
     { \
         /* function type */ \
+    private: \
         typedef \
             BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_F_(id, typename01, \
                     decl_traits, 1 /* has type */, \
@@ -698,7 +699,9 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
         ; \
         /* functor type -- this type cannot have ID postfix because it is */ \
         /* used the `NAME` macro (this symbol is within functor class so */ \
-        /* it does not have to have ID postfix) */ \
+        /* it does not have to have ID postfix), must be public so it */ \
+        /* can be accessed by `NAME` macro from outside this class */ \
+    public: \
         typedef BOOST_PP_EXPR_IIF(typename01, typename) \
             BOOST_IDENTITY_TYPE(( /* IDENTITY for template param comma */ \
                 ::boost::local_function::aux::function< \
@@ -714,6 +717,7 @@ BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_STATIC_CALL_COMMA_BIND_PARAM_DECLS_( \
             )) \
             BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_TYPE \
         ; \
+    private: \
         BOOST_LOCAL_FUNCTION_AUX_CODE_FUNCTOR_BIND_TYPEOF_TYPEDEFS_( \
                 id, typename01, \
                 const_binds, has_const_bind_this, binds, has_bind_this) \

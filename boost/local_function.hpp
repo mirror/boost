@@ -14,7 +14,6 @@
 #include <boost/local_function/aux_/macro/name.hpp>
 #include <boost/local_function/aux_/macro/typeof.hpp>
 #include <boost/local_function/aux_/preprocessor/traits/decl.hpp>
-#include <boost/local_function/aux_/preprocessor/traits/name.hpp>
 #include <boost/local_function/detail/preprocessor/line_counter.hpp>
 #include <boost/local_function/detail/preprocessor/void_list.hpp>
 #include <boost/config.hpp>
@@ -46,12 +45,12 @@
                 BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1, __VA_ARGS__)
 #endif // VARIADIC
 
-#define BOOST_LOCAL_FUNCTION_NAME(name) \
+#define BOOST_LOCAL_FUNCTION_NAME(qualified_function_name) \
     BOOST_LOCAL_FUNCTION_AUX_NAME(0, /* not within template */ \
-            BOOST_LOCAL_FUNCTION_AUX_PP_NAME_TRAITS(name))
-#define BOOST_LOCAL_FUNCTION_NAME_TPL(name) \
+            qualified_function_name)
+#define BOOST_LOCAL_FUNCTION_NAME_TPL(qualified_function_name) \
     BOOST_LOCAL_FUNCTION_AUX_NAME(1, /* within template */ \
-            BOOST_LOCAL_FUNCTION_AUX_PP_NAME_TRAITS(name))
+            qualified_function_name)
 
 #define BOOST_LOCAL_FUNCTION_TYPEOF(bound_variable_name) \
     BOOST_LOCAL_FUNCTION_AUX_TYPEOF_TYPE(bound_variable_name)

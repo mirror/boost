@@ -17,7 +17,7 @@ struct adder {
         BOOST_LOCAL_FUNCTION( (const bind(const int&) factor)
                 (bind(adder*) this_) (int num) (return void) ) {
             this_->sum_ += factor * num;
-        } BOOST_LOCAL_FUNCTION_NAME((void (int)) add)
+        } BOOST_LOCAL_FUNCTION_NAME(add)
         
         std::for_each(nums.begin(), nums.end(), add);
         return sum_;
