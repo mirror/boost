@@ -94,7 +94,7 @@ enum Test
 };
 
 int main()
-{/*
+{
    {
       const std::size_t positions_length = 10;
       std::size_t positions[positions_length];
@@ -114,7 +114,7 @@ int main()
       for(std::size_t i = 0, max = vector_int.size(); i != max; ++i){
          std::cout << vector_int[i] << std::endl;
       }
-   }*/
+   }
    recursive_vector_test();
    {
       //Now test move semantics
