@@ -51,11 +51,13 @@ void do_test_iterator_range_impl(const RngT& rng)
     BOOST_CHECK_EQUAL(lexical_cast<unsigned short>(rng), 1u);
     BOOST_CHECK_EQUAL(lexical_cast<long int>(rng), 1);
     BOOST_CHECK_EQUAL(lexical_cast<unsigned long int>(rng), 1u);
+
+#ifdef BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES
     BOOST_CHECK_EQUAL(lexical_cast<float>(rng), 1.0f);
     BOOST_CHECK_EQUAL(lexical_cast<double>(rng), 1.0);
     BOOST_CHECK_EQUAL(lexical_cast<long double>(rng), 1.0L);
     BOOST_CHECK_EQUAL(lexical_cast<class_with_user_defined_sream_operators>(rng), 1);
-
+#endif
 #if defined(BOOST_HAS_LONG_LONG)
     BOOST_CHECK_EQUAL(lexical_cast<boost::ulong_long_type>(rng), 1u);
     BOOST_CHECK_EQUAL(lexical_cast<boost::long_long_type>(rng), 1);
@@ -102,6 +104,15 @@ void test_it_range_using_char(CharT* one, CharT* eleven)
     iterator_range<const test_char_type*> crng2(eleven, eleven + 1);
     BOOST_CHECK_EQUAL(lexical_cast<std::string>(crng2), "1");
 
+    BOOST_CHECK_EQUAL(lexical_cast<float>(rng1), 1.0f);
+    BOOST_CHECK_EQUAL(lexical_cast<double>(rng1), 1.0);
+    BOOST_CHECK_EQUAL(lexical_cast<long double>(rng1), 1.0L);
+    BOOST_CHECK_EQUAL(lexical_cast<class_with_user_defined_sream_operators>(rng1), 1);
+
+    BOOST_CHECK_EQUAL(lexical_cast<float>(crng2), 1.0f);
+    BOOST_CHECK_EQUAL(lexical_cast<double>(crng2), 1.0);
+    BOOST_CHECK_EQUAL(lexical_cast<long double>(crng2), 1.0L);
+    BOOST_CHECK_EQUAL(lexical_cast<class_with_user_defined_sream_operators>(crng2), 1);
 
 #ifndef BOOST_LCAST_NO_WCHAR_T
     BOOST_CHECK(lexical_cast<std::wstring>(rng1) == L"1");
