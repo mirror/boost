@@ -14,6 +14,7 @@
 #include <boost/local_function/aux_/macro/name.hpp>
 #include <boost/local_function/aux_/macro/typeof.hpp>
 #include <boost/local_function/aux_/preprocessor/traits/decl.hpp>
+#include <boost/local_function/aux_/preprocessor/traits/name.hpp>
 #include <boost/local_function/detail/preprocessor/line_counter.hpp>
 #include <boost/local_function/detail/preprocessor/void_list.hpp>
 #include <boost/config.hpp>
@@ -45,13 +46,12 @@
                 BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, 1, __VA_ARGS__)
 #endif // VARIADIC
 
-#define BOOST_LOCAL_FUNCTION_NAME(qualified_function_name) \
+#define BOOST_LOCAL_FUNCTION_NAME(name) \
     BOOST_LOCAL_FUNCTION_AUX_NAME(0, /* not within template */ \
-            qualified_function_name)
-
-#define BOOST_LOCAL_FUNCTION_NAME_TPL(qualified_function_name) \
+            BOOST_LOCAL_FUNCTION_AUX_PP_NAME_TRAITS(name))
+#define BOOST_LOCAL_FUNCTION_NAME_TPL(name) \
     BOOST_LOCAL_FUNCTION_AUX_NAME(1, /* within template */ \
-            qualified_function_name)
+            BOOST_LOCAL_FUNCTION_AUX_PP_NAME_TRAITS(name))
 
 #define BOOST_LOCAL_FUNCTION_TYPEOF(bound_variable_name) \
     BOOST_LOCAL_FUNCTION_AUX_TYPEOF_TYPE(bound_variable_name)
@@ -246,17 +246,17 @@ This macro must follow the local function body code block <c>{ ... }</c>:
     ...
     result_type BOOST_LOCAL_FUNCTION(declarations) {
         ... // Body code.
-    } BOOST_LOCAL_FUNCTION_NAME(qualified_function_name)
+    } BOOST_LOCAL_FUNCTION_NAME(name)
     ...
 }
 @endcode
 
 @Params
-@Param{qualified_function_name,
+@Param{name,
 The name of the local function optionally qualified as follow:
 @code
-qualified_function_name:
-        [inline] [recursive] name
+name:
+        [(function_type)[(defaults)]] [inline] [recursive] function_name
 @endcode
 Lexical conventions: <c>token1 | token2</c> means either <c>token1</c> or
 <c>token2</c>; <c>[token]</c> means either <c>token</c> or nothing;
@@ -300,12 +300,12 @@ Boost.Functional/OverloadedFunction and the
 @RefSectId{Advanced_Topics, Advanced Topics} section,
 @RefMacro{BOOST_LOCAL_FUNCTION}.
 */
-#define BOOST_LOCAL_FUNCTION_NAME(qualified_function_name)
+#define BOOST_LOCAL_FUNCTION_NAME(name)
 
 /**
 In type-dependant context.
 */
-#define BOOST_LOCAL_FUNCTION_NAME_TPL(qualified_function_name)
+#define BOOST_LOCAL_FUNCTION_NAME_TPL(name)
 
 /**
 @brief This macro expands to the type of the specified bound variable.

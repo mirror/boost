@@ -43,8 +43,8 @@
 <p>
         Local functions are defined using macros from the header file <code class="computeroutput"><a class="link" href="../reference.html#header.boost.local_function_hpp" title="Header &lt;boost/local_function.hpp&gt;">boost/local_function.hpp</a></code>. The
         macros must be used from within a declarative context (this is a limitation
-        with respect to <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> functions which can instead be declared also within expressions):
+        with respect to __CPP11_lambda__ functions which can instead be declared
+        also within expressions):
       </p>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">local_function</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span> <span class="comment">// This library header.</span>
 
@@ -92,7 +92,7 @@
     <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">+</span> <span class="identifier">y</span><span class="special">;</span>
 <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">add</span><span class="special">)</span>
 
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span><span class="special">);</span> <span class="comment">// Local function call.</span>
+<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span><span class="special">);</span> <span class="comment">// Local function call.</span>
 </pre>
 <p>
       </p>
@@ -113,7 +113,7 @@
     <span class="keyword">return</span> <span class="number">10</span><span class="special">;</span>
 <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">ten</span><span class="special">)</span>
 
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">ten</span><span class="special">()</span> <span class="special">==</span> <span class="number">10</span><span class="special">);</span>
+<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">ten</span><span class="special">()</span> <span class="special">==</span> <span class="number">10</span><span class="special">);</span>
 </pre>
 <p>
       </p>
@@ -202,8 +202,8 @@
             . However, if a bound variable was not declared constant in the enclosing
             scope then it will not be bound as constant unless constant binding is
             forced using <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">bind</span><span class="special">...</span></code>. (Note that binding by constant reference
-            is not supported by <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-            lambda</a> functions but it is supported by this library.) <sup>[<a name="boost_localfunction.Tutorial.Binding.f3" href="#ftn.boost_localfunction.Tutorial.Binding.f3" class="footnote">11</a>]</sup>
+            is not supported by __CPP11_lambda__ functions but it is supported by
+            this library.) <sup>[<a name="boost_localfunction.Tutorial.Binding.f3" href="#ftn.boost_localfunction.Tutorial.Binding.f3" class="footnote">11</a>]</sup>
           </li>
 <li class="listitem">
             If a bound variable was declared as a reference in the enclosing scope,
@@ -231,7 +231,7 @@
       </p>
 <p>
 </p>
-<pre class="programlisting"><span class="special">{</span>                                           <span class="comment">// Some local scope.</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span>                            <span class="comment">// Some local scope.</span>
     <span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>               <span class="comment">// Variables in scope to bind.</span>
 
     <span class="keyword">void</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">factor</span><span class="special">,</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">sum</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">{</span>
@@ -242,7 +242,8 @@
     <span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">add</span><span class="special">);</span>     <span class="comment">// Pass it to an algorithm.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                 <span class="comment">// Assert final summation value.</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                 <span class="comment">// Assert final summation value.</span>
+    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span><span class="special">();</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -377,10 +378,10 @@
 <span class="identifier">T</span> <span class="identifier">total</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">y</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">z</span><span class="special">)</span> <span class="special">{</span>
     <span class="identifier">T</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="identifier">T</span><span class="special">(),</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
-    <span class="comment">// Using the `..._TPL` macro.</span>
+    <span class="comment">// Must use the `..._TPL` macros within templates.</span>
     <span class="identifier">T</span> <span class="identifier">BOOST_LOCAL_FUNCTION_TPL</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">factor</span><span class="special">,</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">sum</span><span class="special">,</span> <span class="identifier">T</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">{</span>
         <span class="keyword">return</span> <span class="identifier">sum</span> <span class="special">+=</span> <span class="identifier">factor</span> <span class="special">*</span> <span class="identifier">num</span><span class="special">;</span>
-    <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">add</span><span class="special">)</span>
+    <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME_TPL</span><span class="special">(</span><span class="identifier">add</span><span class="special">)</span>
 
     <span class="identifier">add</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
     <span class="identifier">T</span> <span class="identifier">nums</span><span class="special">[</span><span class="number">2</span><span class="special">];</span> <span class="identifier">nums</span><span class="special">[</span><span class="number">0</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">y</span><span class="special">;</span> <span class="identifier">nums</span><span class="special">[</span><span class="number">1</span><span class="special">]</span> <span class="special">=</span> <span class="identifier">z</span><span class="special">;</span>
@@ -411,9 +412,9 @@
           would no longer be useful to pinpoint errors.
         </p></div>
 <div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Tutorial.local_functions.f2" href="#boost_localfunction.Tutorial.local_functions.f2" class="para">7</a>] </sup>
-          <span class="bold"><strong>Rationale.</strong></span> The <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/standards" target="_top">C++03</a>
-          standard does not allow to pass empty parameters to a macro so the macro
-          cannot be invoked as <code class="computeroutput"><span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">()</span></code>. On <a href="http://www.open-std.org/jtc1/sc22/wg14/www/projects#9899" target="_top">C99</a>
+          <span class="bold"><strong>Rationale.</strong></span> The __CPP03__ standard does
+          not allow to pass empty parameters to a macro so the macro cannot be invoked
+          as <code class="computeroutput"><span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">()</span></code>. On <a href="http://www.open-std.org/jtc1/sc22/wg14/www/projects#9899" target="_top">C99</a>
           compilers with properly implemented empty macro parameter support, it would
           be possible to allow <code class="computeroutput"><span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">()</span></code> but this is already not the case for
           MSVC so this syntax is never allowed to ensure better portability.
@@ -519,8 +520,8 @@
 <div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Tutorial.templates.f0" href="#boost_localfunction.Tutorial.templates.f0" class="para">16</a>] </sup>
           <span class="bold"><strong>Rationale.</strong></span> Within templates, this library
           needs to use <code class="computeroutput"><span class="keyword">typename</span></code> to explicitly
-          indicate that some expressions evaluate to a type. Because <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/standards" target="_top">C++03</a>
-          does not allow to use <code class="computeroutput"><span class="keyword">typename</span></code>
+          indicate that some expressions evaluate to a type. Because __CPP03__ does
+          not allow to use <code class="computeroutput"><span class="keyword">typename</span></code>
           outside templates, the special <code class="computeroutput"><span class="identifier">TPL</span></code>
           macro is used to indicate that the enclosing scope is a template so this
           library can safely use <code class="computeroutput"><span class="keyword">typename</span></code>

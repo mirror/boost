@@ -7,7 +7,7 @@
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.LocalFunction 1.0.0">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.LocalFunction 1.0.0">
 <link rel="prev" href="Advanced_Topics.html" title="Advanced Topics">
-<link rel="next" href="../reference.html" title="Reference">
+<link rel="next" href="Alternatives.html" title="Annex: Alternatives">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="Advanced_Topics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="Advanced_Topics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="Alternatives.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section boost_localfunction_Examples">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -50,8 +50,7 @@
 <p>
         Combing local functions with the <a href="http://gcc.gnu.org/onlinedocs/gcc/Statement-Exprs.html" target="_top">statement
         expression</a> extension of GCC compilers, it is possible to implement
-        lambda functions for GCC compilers even without <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>
-        support.
+        lambda functions for GCC compilers even without __CPP11__ support.
       </p>
 <div class="warning"><table border="0" summary="Warning">
 <tr>
@@ -60,8 +59,7 @@
 </tr>
 <tr><td align="left" valign="top"><p>
           This code only works on compilers that support the statement expression
-          GCC extension or that support <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-          lambda</a> functions.
+          GCC extension or that support __CPP11_lambda__ functions.
         </p></td></tr>
 </table></div>
 <p>
@@ -104,49 +102,35 @@
               </td>
 <td>
                 <p>
-</p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">int</span> <span class="identifier">val</span> <span class="special">=</span> <span class="number">2</span><span class="special">;</span>
-<span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
-<span class="keyword">int</span><span class="special">*</span> <span class="identifier">end</span> <span class="special">=</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">3</span><span class="special">;</span>
-
-<span class="keyword">int</span><span class="special">*</span> <span class="identifier">iter</span> <span class="special">=</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">find_if</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">end</span><span class="special">,</span>
-    <span class="special">[</span><span class="identifier">val</span><span class="special">](</span><span class="keyword">int</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">-&gt;</span> <span class="keyword">bool</span> <span class="special">{</span>
-        <span class="keyword">return</span> <span class="identifier">num</span> <span class="special">==</span> <span class="identifier">val</span><span class="special">;</span>
-    <span class="special">}</span>
-<span class="special">);</span>
-</pre>
-<p>
+                  [gcc_lambda_cxx11
                 </p>
               </td>
 </tr></tbody>
 </table></div>
+<p>
+        ]
+      </p>
 <p>
         Where the macros are defined in <a href="../../../example/gcc_lambda.hpp" target="_top"><code class="literal">gcc_lambda.hpp</code></a>.
       </p>
 <p>
         This is possible because GCC statement expressions allow to use declaration
         statements within expressions and therefore to declare a local function within
-        an expression. The macros automatically detect if the compiler supports
-        <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> functions in which case the implementation uses native lambdas
-        instead of local functions in statement expressions. However, <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> functions do not support constant binding so it is best to
-        only use <code class="computeroutput"><span class="keyword">const</span> <span class="identifier">bind</span>
-        <span class="identifier">variable</span></code> (same as <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> <code class="computeroutput"><span class="special">=</span><span class="identifier">variable</span></code>)
-        and <code class="computeroutput"><span class="identifier">bind</span><span class="special">&amp;</span>
-        <span class="identifier">variable</span></code> (same as <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> <code class="computeroutput"><span class="special">&amp;</span><span class="identifier">variable</span></code>)
-        because these have the exact same semantic between the local function and
-        native lambda implementation. Unfortunately, the <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> short-hand binds <code class="computeroutput"><span class="special">&amp;</span></code>
+        an expression. The macros automatically detect if the compiler supports __CPP11_lambda__
+        functions in which case the implementation uses native lambdas instead of
+        local functions in statement expressions. However, __CPP11_lambda__ functions
+        do not support constant binding so it is best to only use <code class="computeroutput"><span class="keyword">const</span>
+        <span class="identifier">bind</span> <span class="identifier">variable</span></code>
+        (same as __CPP11_lambda__ <code class="computeroutput"><span class="special">=</span><span class="identifier">variable</span></code>) and <code class="computeroutput"><span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">variable</span></code>
+        (same as __CPP11_lambda__ <code class="computeroutput"><span class="special">&amp;</span><span class="identifier">variable</span></code>) because these have the exact
+        same semantic between the local function and native lambda implementation.
+        Unfortunately, the __CPP11_lambda__ short-hand binds <code class="computeroutput"><span class="special">&amp;</span></code>
         and <code class="computeroutput"><span class="special">=</span></code> (which automatically bind
         all variables in scope either by reference or value) are not supported by
         the macros because they are not supported by the local function implementation.
         Finally, the result type <code class="computeroutput"><span class="keyword">return</span> </code><code class="literal"><span class="emphasis"><em>result-type</em></span></code>
         is optional and it is assumed <code class="computeroutput"><span class="keyword">void</span></code>
-        when it is not specified (same as with <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> functions).
+        when it is not specified (same as with __CPP11_lambda__ functions).
       </p>
 </div>
 <div class="section boost_localfunction_Examples_constant_blocks">
@@ -236,14 +220,14 @@
         were all specified variables are constant.
       </p>
 <p>
-        Unfortunately, constant blocks cannot be implemented with <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> functions because these do not support constant binding (of
-        course it is always possible to introduce extra constant variables <code class="computeroutput"><span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">const_x</span>
-        <span class="special">=</span> <span class="identifier">x</span></code>,
-        etc and use these variables in the assertion). Variables bound by value using
-        <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-        lambda</a> functions (<code class="computeroutput"><span class="identifier">variable</span></code>,
-        <code class="computeroutput"><span class="special">=</span><span class="identifier">variable</span></code>,
+        Unfortunately, constant blocks cannot be implemented with __CPP11_lambda__
+        functions because these do not support constant binding (of course it is
+        always possible to introduce extra constant variables <code class="computeroutput"><span class="keyword">const</span>
+        <span class="keyword">int</span><span class="special">&amp;</span>
+        <span class="identifier">const_x</span> <span class="special">=</span>
+        <span class="identifier">x</span></code>, etc and use these variables
+        in the assertion). Variables bound by value using __CPP11_lambda__ functions
+        (<code class="computeroutput"><span class="identifier">variable</span></code>, <code class="computeroutput"><span class="special">=</span><span class="identifier">variable</span></code>,
         and <code class="computeroutput"><span class="special">=</span></code>) are constant but they
         are required to be <code class="computeroutput"><span class="identifier">CopyConstructible</span></code>
         and they introduce potentially expensive copy operations. <sup>[<a name="boost_localfunction.Examples.constant_blocks.f0" href="#ftn.boost_localfunction.Examples.constant_blocks.f0" class="footnote">28</a>]</sup>
@@ -375,7 +359,7 @@
 <td>
                 <p>
 </p>
-<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_phoenix_factorial_local</span><span class="special">)</span> <span class="special">{</span>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">phoenix</span><span class="special">::</span><span class="identifier">arg_names</span><span class="special">::</span><span class="identifier">arg1</span><span class="special">;</span>
 
     <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">n</span><span class="special">)</span> <span class="special">{</span> <span class="comment">// Unfortunately, monomorphic.</span>
@@ -386,8 +370,9 @@
             <span class="identifier">factorial</span><span class="special">(</span><span class="identifier">factorial_impl</span><span class="special">);</span> <span class="comment">// Phoenix function from local function.</span>
 
     <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">i</span><span class="special">)()</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>      <span class="comment">// Call.</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">)(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>  <span class="comment">// Lazy call.</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">i</span><span class="special">)()</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>      <span class="comment">// Call.</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">)(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>  <span class="comment">// Lazy call.</span>
+    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span><span class="special">();</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -412,14 +397,15 @@
     <span class="special">}</span>
 <span class="special">};</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_phoenix_factorial</span><span class="special">)</span> <span class="special">{</span>
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">using</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">phoenix</span><span class="special">::</span><span class="identifier">arg_names</span><span class="special">::</span><span class="identifier">arg1</span><span class="special">;</span>
 
     <span class="identifier">boost</span><span class="special">::</span><span class="identifier">phoenix</span><span class="special">::</span><span class="identifier">function</span><span class="special">&lt;</span><span class="identifier">factorial_impl</span><span class="special">&gt;</span> <span class="identifier">factorial</span><span class="special">;</span>
 
     <span class="keyword">int</span> <span class="identifier">i</span> <span class="special">=</span> <span class="number">4</span><span class="special">;</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">i</span><span class="special">)()</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>      <span class="comment">// Call.</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">)(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>  <span class="comment">// Lazy call.</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">i</span><span class="special">)()</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>      <span class="comment">// Call.</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">factorial</span><span class="special">(</span><span class="identifier">arg1</span><span class="special">)(</span><span class="identifier">i</span><span class="special">)</span> <span class="special">==</span> <span class="number">24</span><span class="special">);</span>  <span class="comment">// Lazy call.</span>
+    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span><span class="special">();</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -553,9 +539,8 @@
 <td>
                 <p>
                   This example is adapted from <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2550.pdf" target="_top">[N2550]</a>
-                  (<a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-                  lambda</a> functions): It passes a local function to the STL
-                  algorithm <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">find_if</span></code>.
+                  (__CPP11_lambda__ functions): It passes a local function to the
+                  STL algorithm <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">find_if</span></code>.
                 </p>
               </td>
 </tr>
@@ -568,8 +553,7 @@
 <td>
                 <p>
                   This example is adapted from <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2529.pdf" target="_top">[N2529]</a>
-                  (<a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-                  lambda</a> functions): It binds the object in scope <code class="computeroutput"><span class="keyword">this</span></code> to a local function.
+                  (__CPP11_lambda__ functions): It binds the object in scope <code class="computeroutput"><span class="keyword">this</span></code> to a local function.
                 </p>
               </td>
 </tr>
@@ -579,14 +563,16 @@
 <div class="footnotes">
 <br><hr width="100" align="left">
 <div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Examples.constant_blocks.f0" href="#boost_localfunction.Examples.constant_blocks.f0" class="para">28</a>] </sup>
-          Ideally, <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
-          lambda</a> functions would allow to bind variables also using <code class="computeroutput"><span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">variable</span></code> (constant reference) and <code class="computeroutput"><span class="keyword">const</span><span class="special">&amp;</span></code>
+          Ideally, __CPP11_lambda__ functions would allow to bind variables also
+          using <code class="computeroutput"><span class="keyword">const</span><span class="special">&amp;</span>
+          <span class="identifier">variable</span></code> (constant reference)
+          and <code class="computeroutput"><span class="keyword">const</span><span class="special">&amp;</span></code>
           (all variables by constant reference).
         </p></div>
 <div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Examples.boost_phoenix_functions.f0" href="#boost_localfunction.Examples.boost_phoenix_functions.f0" class="para">29</a>] </sup>
           <span class="bold"><strong>Rationale.</strong></span> Local functions can only be
           monomorphic because they are implemented using local classes and local
-          classes cannot be templates in C++ (not even in <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>).
+          classes cannot be templates in C++ (not even in __CPP11__).
         </p></div>
 </div>
 </div>
@@ -601,7 +587,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="Advanced_Topics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="Advanced_Topics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="Alternatives.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

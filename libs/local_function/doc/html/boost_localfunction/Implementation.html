@@ -7,7 +7,7 @@
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.LocalFunction 1.0.0">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.LocalFunction 1.0.0">
 <link rel="prev" href="No_Variadic_Macros.html" title="Annex: No Variadic Macros">
-<link rel="next" href="Release_Notes.html" title="Release Notes">
+<link rel="next" href="../reference.html" title="Reference">
 </head>
 <body bgcolor="white" text="black" link="#0000FF" vlink="#840084" alink="#0000FF">
 <table cellpadding="2" width="100%"><tr>
@@ -20,7 +20,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="No_Variadic_Macros.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="Release_Notes.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="No_Variadic_Macros.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 <div class="section boost_localfunction_Implementation">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
@@ -49,11 +49,10 @@
     </h6>
 <p>
       This library uses a local class to implement the local function object. However,
-      in <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/standards" target="_top">C++03</a>
-      local classes (and therefore the local function objects they implement) cannot
-      be passed as template parameters (e.g., to the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span></code>
-      algorithm), this is instead possible in <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>,
-      MSVC, and some other compilers (see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm" target="_top">[N2657]</a>).
+      in __CPP03__ local classes (and therefore the local function objects they implement)
+      cannot be passed as template parameters (e.g., to the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span></code>
+      algorithm), this is instead possible in __CPP11__, MSVC, and some other compilers
+      (see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm" target="_top">[N2657]</a>).
       To work around this limitation, this library investigated the following two
       "tricks" (both tricks can be extended to support eventual function
       default parameters):
@@ -78,8 +77,7 @@
     </p>
 <p>
 </p>
-<pre class="programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_TEST_MODULE</span> <span class="identifier">TestImplTparamTricks</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">unit_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">lightweight_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">algorithm</span><span class="special">&gt;</span>
 
@@ -106,7 +104,7 @@
     <span class="identifier">interface</span><span class="special">*</span> <span class="identifier">func_</span><span class="special">;</span>
 <span class="special">};</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_impl_tparam_tricks</span><span class="special">)</span> <span class="special">{</span>
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
     <span class="comment">// Local class for local function.</span>
@@ -138,7 +136,8 @@
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">add_casting</span><span class="special">);</span> <span class="comment">// OK.</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">v</span><span class="special">.</span><span class="identifier">begin</span><span class="special">(),</span> <span class="identifier">v</span><span class="special">.</span><span class="identifier">end</span><span class="special">(),</span> <span class="identifier">add_virtual</span><span class="special">);</span> <span class="comment">// OK.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">200</span><span class="special">);</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">200</span><span class="special">);</span>
+    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span><span class="special">();</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -152,8 +151,7 @@
       allow for compiler optimizations that inline the local function calls (because
       they rely on one indirect function call via either a function pointer or a
       virtual function respectively). Therefore, on compilers that accept local types
-      as template parameters (MSVC, <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>,
-      etc, see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm" target="_top">[N2657]</a>),
+      as template parameters (MSVC, __CPP11__, etc, see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm" target="_top">[N2657]</a>),
       this library automatically generates code that passes the local class type
       directly as template parameter without using neither one of these two tricks
       in order to take full advantage of compiler optimizations that inline the local
@@ -184,8 +182,7 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">local_function</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">preprocessor</span><span class="special">/</span><span class="identifier">keyword</span><span class="special">/</span><span class="identifier">thisunderscore</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">local_function</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">preprocessor</span><span class="special">/</span><span class="identifier">keyword</span><span class="special">/</span><span class="keyword">const</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">local_function</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">preprocessor</span><span class="special">/</span><span class="identifier">keyword</span><span class="special">/</span><span class="identifier">bind</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-<span class="preprocessor">#define</span> <span class="identifier">BOOST_TEST_MODULE</span> <span class="identifier">TestImplPpKeyword</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">test</span><span class="special">/</span><span class="identifier">unit_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">detail</span><span class="special">/</span><span class="identifier">lightweight_test</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 
 <span class="comment">// Expand to 1 if space-separated tokens end with `this_`, 0 otherwise.</span>
 <span class="preprocessor">#define</span> <span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="identifier">tokens</span><span class="special">)</span> <span class="special">\</span>
@@ -195,9 +192,10 @@
         <span class="identifier">tokens</span> <span class="special">\</span>
     <span class="special">)))</span>
 
-<span class="identifier">BOOST_AUTO_TEST_CASE</span><span class="special">(</span><span class="identifier">test_impl_pp_keyword</span><span class="special">)</span> <span class="special">{</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">this_</span><span class="special">)</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">this_</span><span class="special">)</span> <span class="special">==</span> <span class="number">1</span><span class="special">);</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">IS_THIS_BACK</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">==</span> <span class="number">0</span><span class="special">);</span>
+    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span><span class="special">();</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -222,7 +220,7 @@
 </tr></table>
 <hr>
 <div class="spirit-nav">
-<a accesskey="p" href="No_Variadic_Macros.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="Release_Notes.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
+<a accesskey="p" href="No_Variadic_Macros.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../reference.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
 </body>
 </html>

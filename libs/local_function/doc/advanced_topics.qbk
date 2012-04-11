@@ -147,7 +147,7 @@ Consider the following complete example (see also [@../../test/macro_commas.cpp 
 
 [endsect]
 
-[section Assigning and Returning]
+[section Assignments and Returns]
 
 Local functions are function objects so it is possible to assign them to other functors like __Boost_Function__ `boost::function` in order to store the local function into a variable, pass it as a parameter to another function, or return it from the enclosing function.
 

@@ -18,10 +18,11 @@ All the other sections of this documentation can be considered optional.
 Some footnotes are marked by the word "*Rationale*".
 They explain reasons behind decisions made during the design and implementation of this library.
 
-In some of the examples presented in this documentation, the __Boost_Test__ macro `BOOST_CHECK` is used equivalently to `assert` and the __Boost_Test__ macro `BOOST_AUTO_TEST_CASE` is used equivalently to `main`.
+In most of the examples presented in this documentation, the Boost.Detail/LightweightTest (=boost/detail/lightweight_test.hpp=) macro `BOOST_TEST` is used to check correctness conditions (conceptually similar to `assert`).
+A failure of the checked condition does not abort the execution of the program, it will instead make `boost::report_errors` return a non-zero program exit code.
 [footnote
 *Rationale.*
-Using __Boost_Test__ allows to add the documentation examples to the library regression tests so to make sure that the listed examples always compile and run correctly.
+Using Boost.Detail/LightweightTest allows to add the examples to the library regression tests so to make sure that they always compile and run correctly.
 ]
 
 [endsect]
@@ -29,11 +30,11 @@ Using __Boost_Test__ allows to add the documentation examples to the library reg
 [section Compilers and Platforms]
 
 The implementation of this library uses preprocessor and template meta-programming (as supported by __Boost_Preprocessor__ and __Boost_MPL__), templates with partial specializations and function pointers (similarly to __Boost_Function__).
-As a consequence, this library is fairly demanding on compilers' compliance with the __CPP03__ standard.
+As a consequence, this library is fairly demanding on compilers' compliance with the __CXX03__ standard.
 The authors originally developed and tested the library on:
 
 # GNU Compiler Collection (GCC) C++ 4.5.1 on Ubuntu Linux 10.
-# GCC 4.3.4 and 4.5.3 (with and without __CPP11__ features enabled `-std=c++0x`) on Cygwin.
+# GCC 4.3.4 and 4.5.3 (with and without __CXX11__ features enabled `-std=c++0x`) on Cygwin.
 # Miscrosoft Visual C++ (MSVC) 8.0 on Windows XP and Windows 7.
 
 See the library [@http://www.boost.org/development/tests/release/developer/local_function.html regressions test results] for detailed information on supported compilers and platforms.
@@ -62,13 +63,8 @@ The "aux" symbols are private to this library while the "detail" symbols can be 
 * Any symbol prefixed by `boost_local_function_aux_...` or `boost_local_function_detail_...` (regardless of its namespace).
 * Any symbol prefixed by `BOOST_LOCAL_FUNCTION_AUX_...` or `BOOST_LOCAL_FUNCTION_DETAIL_...` (regardless of its namespace).
 
-[endsect]
-
-[section Configuration]
-
 Some of the library behaviour can be changed at compile-time by defining special /configuration macros/.
 If a configuration macro is left undefined, the library will use an appropriate default value for it.
-
 All configuration macros are defined in the header file [headerref boost/local_function/config.hpp].
 It is strongly recommended not to change the library configuration macro definitions unless strictly necessary.
 

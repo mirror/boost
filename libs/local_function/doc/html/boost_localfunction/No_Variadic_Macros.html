@@ -37,10 +37,10 @@
     </h6>
 <p>
       Most modern compilers support <a href="http://en.wikipedia.org/wiki/Variadic_macro" target="_top">variaid
-      macros</a> (notably, these include GCC, MSVC, and all <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>
-      compilers). However, in the rare case that programmers need to use this library
-      on a compiler without variadic macros, this library also allows to specify
-      its macro parameters using a <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a>
+      macros</a> (notably, these include GCC, MSVC, and all __CPP11__ compilers).
+      However, in the rare case that programmers need to use this library on a compiler
+      without variadic macros, this library also allows to specify its macro parameters
+      using a <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a>
       sequence where tokens are separated by round parenthesis <code class="computeroutput"><span class="special">()</span></code>:
     </p>
 <pre class="programlisting"><span class="special">(</span><span class="identifier">token1</span><span class="special">)</span> <span class="special">(</span><span class="identifier">token2</span><span class="special">)</span> <span class="special">...</span> <span class="comment">// All compilers.</span>
@@ -57,7 +57,7 @@
     </p>
 <p>
 </p>
-<pre class="programlisting"><span class="special">{</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span>
     <span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
     <span class="keyword">void</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span> <span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">factor</span><span class="special">)</span> <span class="special">(</span><span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">sum</span><span class="special">)</span> <span class="special">(</span><span class="keyword">int</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">)</span> <span class="special">{</span>
@@ -68,7 +68,8 @@
     <span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">add</span><span class="special">);</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>
+    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span><span class="special">();</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -79,7 +80,7 @@
     </p>
 <p>
 </p>
-<pre class="programlisting"><span class="special">{</span>                                           <span class="comment">// Some local scope.</span>
+<pre class="programlisting"><span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">void</span><span class="special">)</span> <span class="special">{</span>                            <span class="comment">// Some local scope.</span>
     <span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>               <span class="comment">// Variables in scope to bind.</span>
 
     <span class="keyword">void</span> <span class="identifier">BOOST_LOCAL_FUNCTION</span><span class="special">(</span><span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">factor</span><span class="special">,</span> <span class="identifier">bind</span><span class="special">&amp;</span> <span class="identifier">sum</span><span class="special">,</span> <span class="keyword">int</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">{</span>
@@ -90,7 +91,8 @@
     <span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">add</span><span class="special">);</span>     <span class="comment">// Pass it to an algorithm.</span>
 
-    <span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                 <span class="comment">// Assert final summation value.</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                 <span class="comment">// Assert final summation value.</span>
+    <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span><span class="special">();</span>
 <span class="special">}</span>
 </pre>
 <p>
@@ -107,7 +109,7 @@
     <span class="keyword">return</span> <span class="number">10</span><span class="special">;</span>
 <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">ten</span><span class="special">)</span>
 
-<span class="identifier">BOOST_CHECK</span><span class="special">(</span><span class="identifier">ten</span><span class="special">()</span> <span class="special">==</span> <span class="number">10</span><span class="special">);</span>
+<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">ten</span><span class="special">()</span> <span class="special">==</span> <span class="number">10</span><span class="special">);</span>
 </pre>
 <p>
     </p>
