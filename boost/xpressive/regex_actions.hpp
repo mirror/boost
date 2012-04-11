@@ -20,14 +20,17 @@
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
 #include <boost/mpl/int.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/noncopyable.hpp>
 #include <boost/lexical_cast.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/range/iterator_range.hpp>
 #include <boost/xpressive/detail/detail_fwd.hpp>
 #include <boost/xpressive/detail/core/state.hpp>
 #include <boost/xpressive/detail/core/matcher/attr_matcher.hpp>
@@ -61,21 +64,6 @@
 #pragma warning(disable : 4512) // assignment operator could not be generated
 #pragma warning(disable : 4610) // can never be instantiated - user defined constructor required
 #endif
-
-namespace boost
-{
-    namespace detail
-    {
-        // Bit of a hack to make lexical_cast work with wide sub_match
-        template<typename T>
-        struct stream_char;
-
-        template<typename BidiIter>
-        struct stream_char<xpressive::sub_match<BidiIter> >
-          : boost::iterator_value<BidiIter>
-        {};
-    }
-}
 
 namespace boost { namespace xpressive
 {
@@ -572,7 +560,50 @@ namespace boost { namespace xpressive
             template<typename Value>
             T operator()(Value const &val) const
             {
-                return lexical_cast<T>(val);
+                return boost::lexical_cast<T>(val);
+            }
+
+            // Hack around some limitations in boost::lexical_cast
+            T operator()(csub_match const &val) const
+            {
+                return val.matched
+                  ? boost::lexical_cast<T>(boost::make_iterator_range(val.first, val.second))
+                  : boost::lexical_cast<T>("");
+            }
+
+            T operator()(wcsub_match const &val) const
+            {
+                return val.matched
+                  ? boost::lexical_cast<T>(boost::make_iterator_range(val.first, val.second))
+                  : boost::lexical_cast<T>(L"");
+            }
+
+            T operator()(ssub_match const &val) const
+            {
+                return val.matched
+                  ? boost::lexical_cast<T>(boost::make_iterator_range(&*val.first, &*val.first + (val.second - val.first)))
+                  : boost::lexical_cast<T>("");
+            }
+
+            T operator()(wssub_match const &val) const
+            {
+                return val.matched
+                  ? boost::lexical_cast<T>(boost::make_iterator_range(&*val.first, &*val.first + (val.second - val.first)))
+                  : boost::lexical_cast<T>(L"");
+            }
+
+            template<typename BidiIter>
+            T operator()(sub_match<BidiIter> const &val) const
+            {
+                // If this assert fires, you're trying to coerce a sequences of non-characters
+                // to some other type. Xpressive doesn't know how to do that.
+                typedef typename iterator_value<BidiIter>::type char_type;
+                BOOST_MPL_ASSERT_MSG(
+                    (mpl::or_<is_same<char_type, char>, is_same<char_type, wchar_t> >::value)
+                  , CAN_ONLY_CONVERT_FROM_CHARACTER_SEQUENCES
+                  , (char_type)
+                );
+                return boost::lexical_cast<T>(val.str());
             }
         };
 
