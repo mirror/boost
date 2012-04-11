@@ -92,6 +92,22 @@
 # endif
 #endif
 
+#ifndef BOOST_NO_DECLTYPE_N3276
+# // Proto can only use the decltype-based result_of if N3276 has been
+# // implemented by the compiler.
+# // See http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2011/n3276.pdf
+# ifndef BOOST_PROTO_USE_NORMAL_RESULT_OF
+#  define BOOST_PROTO_USE_NORMAL_RESULT_OF
+# endif
+# // If we're using the decltype-based result_of, we need to be a bit
+# // stricter about the return types of some functions.
+# ifndef BOOST_PROTO_STRICT_RESULT_OF
+#  define BOOST_PROTO_STRICT_RESULT_OF
+# endif
+#endif
+
+// Unless compiler support is there, use tr1_result_of instead of
+// result_of to avoid the problems addressed by N3276.
 #ifdef BOOST_PROTO_USE_NORMAL_RESULT_OF
 # define BOOST_PROTO_RESULT_OF boost::result_of
 #else
