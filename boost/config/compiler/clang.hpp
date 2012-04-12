@@ -43,7 +43,7 @@
 #  define BOOST_NO_DECLTYPE
 #endif
 
-#if !__has_feature(__cxx_decltype__)
+#if !__has_feature(cxx_decltype_incomplete_return_types)
 #  define BOOST_NO_DECLTYPE_N3276
 #endif
 
