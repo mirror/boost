@@ -24,6 +24,7 @@
 #       include <boost/preprocessor/comparison/less.hpp>
 #       include <boost/preprocessor/cat.hpp>
 #       include <boost/preprocessor/arithmetic/add.hpp>
+#       include <boost/preprocessor/arithmetic/sub.hpp>
 #       include <boost/preprocessor/tuple/eat.hpp>
 #       include <boost/preprocessor/logical/and.hpp>
 #       include <boost/preprocessor/logical/not.hpp>
@@ -82,14 +83,10 @@
         BOOST_FUNCTIONAL_f_type(z, n, ~) \
     >::type
 
-// Iterate within namespace.
-#       define BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_OVERLOAD_COUNT \
-            /*at least 2 func to overload 2, 3, ...*/ \
-            BOOST_PP_SUB( \
-                    BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX, \
-                    2)
 #       define BOOST_PP_ITERATION_PARAMS_1 \
-            (3, (0, BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_OVERLOAD_COUNT, \
+            /* at least 2 func to overload so start from 2 to MAX */ \
+            /* (cannot iterate [0, MAX-2) because error on Sun) */ \
+            (3, (2, BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX, \
             "boost/functional/overloaded_function.hpp"))
 #       include BOOST_PP_ITERATE() // Iterate over function arity.
 
@@ -113,8 +110,10 @@
 #elif BOOST_PP_ITERATION_DEPTH() == 1
 #   define BOOST_FUNCTIONAL_overloads \
         /* iterate as OVERLOADS, OVERLOADS-1, OVERLOADS-2, ... */ \
-        BOOST_PP_SUB(BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX, \
-                BOOST_PP_FRAME_ITERATION(1))
+        /* (add 2 because iteration started from 2 to MAX) */ \
+        BOOST_PP_ADD(2, BOOST_PP_SUB( \
+                BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX, \
+                BOOST_PP_FRAME_ITERATION(1)))
 #   define BOOST_FUNCTIONAL_is_tspec \
         /* if template specialization */ \
         BOOST_PP_LESS(BOOST_FUNCTIONAL_overloads, \

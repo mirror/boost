@@ -16,7 +16,7 @@
 #include <boost/function_types/result_type.hpp>
 #include <boost/type_traits/remove_pointer.hpp>
 #include <boost/type_traits/remove_reference.hpp>
-/** @todo #include <boost/function.hpp>*/
+#include <boost/function.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/pop_front.hpp>

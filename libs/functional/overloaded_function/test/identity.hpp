@@ -8,10 +8,10 @@
 #ifndef IDENTITY_HPP_
 #define IDENTITY_HPP_
 
-/** @todo #include <boost/function.hpp> */
 //[identity_typeof
 #include <boost/typeof/std/string.hpp> // No need to register `boost::function`.
 //]
+#include <boost/function.hpp>
 #include <string>
 
 //[identity_decls

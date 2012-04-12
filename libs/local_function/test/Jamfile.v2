@@ -7,8 +7,8 @@
 
 import testing ;
 
-# Workaround a Boost.Config bug that causes Boost.Typeof to fail on Sun.
-project : requirements <toolset>sun:<define>__typeof__=__typeof__ ;
+# Sun does not automatically detect type-of emulation mode (force it).
+project : requirements <toolset>sun:<define>BOOST_TYPEOF_EMULATION ;
 
 rule vaseq ( command target )
 {
