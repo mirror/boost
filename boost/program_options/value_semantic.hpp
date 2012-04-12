@@ -227,6 +227,13 @@ namespace boost { namespace program_options {
             return this;
         }
 
+        /** Specifies the name used to to the value in help message.  */
+        typed_value* value_name(const std::string& name)
+        {
+            m_value_name = name;
+            return this;
+        }
+
         /** Specifies an implicit value, which will be used
             if the option is given, but without an adjacent value.
             Using this implies that an explicit value is optional, but if
@@ -354,6 +361,7 @@ namespace boost { namespace program_options {
         
         // Default value is stored as boost::any and not
         // as boost::optional to avoid unnecessary instantiations.
+        std::string m_value_name;
         boost::any m_default_value;
         std::string m_default_value_as_text;
         boost::any m_implicit_value;
