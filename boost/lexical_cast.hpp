@@ -1243,7 +1243,7 @@ namespace boost {
             bool shl_char(T ch)
             {
                 BOOST_STATIC_ASSERT_MSG(( sizeof(T) <= sizeof(CharT)) ,
-                    "boost::lexical_cast does not support conversions from wchar_t to char types."
+                    "boost::lexical_cast does not support conversions from wide character to char types."
                     "Use boost::locale instead" );
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
                 std::locale loc;
@@ -1269,7 +1269,7 @@ namespace boost {
             bool shl_char_array(T const* str)
             {
                 BOOST_STATIC_ASSERT_MSG(( sizeof(T) <= sizeof(CharT)),
-                    "boost::lexical_cast does not support conversions from wide character to char types."
+                    "boost::lexical_cast does not support conversions from wide characters to char types."
                     "Use boost::locale instead" );
                 return shl_input_streamable(str);
             }
@@ -1456,6 +1456,16 @@ namespace boost {
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
             bool operator<<(wchar_t ch)                 { return shl_char(ch); }
 #endif
+#endif
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+            bool operator<<(char16_t ch)                { return shl_char(ch); }
+            bool operator<<(char16_t * str)             { return shl_char_array(str); }
+            bool operator<<(char16_t const * str)       { return shl_char_array(str); }
+#endif
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+            bool operator<<(char32_t ch)                { return shl_char(ch); }
+            bool operator<<(char32_t * str)             { return shl_char_array(str); }
+            bool operator<<(char32_t const * str)       { return shl_char_array(str); }
 #endif
             bool operator<<(unsigned char const* ch)    { return ((*this) << reinterpret_cast<char const*>(ch)); }
             bool operator<<(unsigned char * ch)         { return ((*this) << reinterpret_cast<char *>(ch)); }
