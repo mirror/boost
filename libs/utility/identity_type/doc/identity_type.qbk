@@ -19,7 +19,7 @@
     [category Utilities]
 ]
 
-This library allows to wrap type expressions within round parenthesis so they can be passed to macros even when they contain commas.
+This library allows to wrap types within round parenthesis so they can always be passed as macro parameters.
 
 [import ../test/var_error.cpp]
 [import ../test/var.cpp]
