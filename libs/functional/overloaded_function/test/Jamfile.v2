@@ -13,5 +13,4 @@ project : requirements <toolset>sun:<define>BOOST_TYPEOF_EMULATION ;
 run functor.cpp ;
 run make_decl.cpp ;
 run make_call.cpp ;
-run sun_bug.cpp ;
 
