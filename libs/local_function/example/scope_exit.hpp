@@ -25,10 +25,12 @@ private:
 
 // PRIVATE //
 
+//[scope_exit_end_macro
 #define SCOPE_EXIT_END_(id) \
     BOOST_LOCAL_FUNCTION_NAME(BOOST_PP_CAT(scope_exit_func_, id)) \
     scope_exit BOOST_PP_CAT(scope_exit_, id)( \
             BOOST_PP_CAT(scope_exit_func_, id));
+//]
 
 // PUBLIC //
 
@@ -36,8 +38,10 @@ private:
 #   define SCOPE_EXIT(void_or_seq) \
         void BOOST_LOCAL_FUNCTION(void_or_seq)
 #else
+//[scope_exit_macro
 #   define SCOPE_EXIT(...) \
         void BOOST_LOCAL_FUNCTION(__VA_ARGS__)
+//]
 #endif
 
 #define SCOPE_EXIT_END \

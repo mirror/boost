@@ -93,8 +93,8 @@ All the other sections of this documentation can be considered optional.
 Some footnotes are marked by the word "*Rationale*".
 They explain reasons behind decisions made during the design and implementation of this library.
 
-In most of the examples presented in this documentation, the Boost.Detail/LightweightTest (=boost/detail/lightweight_test.hpp=) macro `BOOST_TEST` is used to check correctness conditions (conceptually similar to `assert`).
-A failure of the checked condition does not abort the execution of the program, it will instead make `boost::report_errors` return a non-zero program exit code.
+In most of the examples presented in this documentation, the Boost.Detail/LightweightTest (=boost/detail/lightweight_test.hpp=) macro `BOOST_TEST` is used to check correctness conditions.
+The `BOOST_TEST` macro is conceptually similar to `assert` but a failure of the checked condition does not abort the program, instead it makes `boost::report_errors` return a non-zero program exit code.
 [footnote
 *Rationale.*
 Using Boost.Detail/LightweightTest allows to add the examples to the library regression tests so to make sure that they always compile and run correctly.

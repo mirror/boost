@@ -7,7 +7,7 @@
 
 [section:Getting_Started Getting Started]
 
-This section explains how programmers can setup their system to use this library.
+This section explains how to setup a system to use this library.
 
 [section This Documentation]
 
@@ -18,8 +18,8 @@ All the other sections of this documentation can be considered optional.
 Some footnotes are marked by the word "*Rationale*".
 They explain reasons behind decisions made during the design and implementation of this library.
 
-In most of the examples presented in this documentation, the Boost.Detail/LightweightTest (=boost/detail/lightweight_test.hpp=) macro `BOOST_TEST` is used to check correctness conditions (conceptually similar to `assert`).
-A failure of the checked condition does not abort the execution of the program, it will instead make `boost::report_errors` return a non-zero program exit code.
+In most of the examples presented in this documentation, the Boost.Detail/LightweightTest (=boost/detail/lightweight_test.hpp=) macro `BOOST_TEST` is used to check correctness conditions.
+The `BOOST_TEST` macro is conceptually similar to `assert` but a failure of the checked condition does not abort the program, instead it makes `boost::report_errors` return a non-zero program exit code.
 [footnote
 *Rationale.*
 Using Boost.Detail/LightweightTest allows to add the examples to the library regression tests so to make sure that they always compile and run correctly.
@@ -29,8 +29,7 @@ Using Boost.Detail/LightweightTest allows to add the examples to the library reg
 
 [section Compilers and Platforms]
 
-The implementation of this library uses preprocessor and template meta-programming (as supported by __Boost_Preprocessor__ and __Boost_MPL__), templates with partial specializations and function pointers (similarly to __Boost_Function__).
-As a consequence, this library is fairly demanding on compilers' compliance with the __CXX03__ standard.
+The implementation of this library uses preprocessor and template meta-programming (as supported by __Boost_Preprocessor__ and __Boost_MPL__), templates with partial specializations and function pointers (similarly to __Boost_Function__), and automatic type deduction (as supported by __Boost_Typeof__).
 The authors originally developed and tested the library on:
 
 # GNU Compiler Collection (GCC) C++ 4.5.1 on Ubuntu Linux 10.
@@ -47,15 +46,15 @@ This library is composed of header files only.
 Therefore there is no pre-compiled object file which needs to be installed or linked.
 Programmers can simply instruct the C++ compiler where to find the library header files (`-I` option for GCC, `/I` option for MSVC, etc) and they can start compiling code using this library.
 
-This library implementation uses a number of __Boost__ libraries among which: __Boost_Preprocessor__, __Boost_ScopeExit__, __Boost_Typeof__, __Boost_TypeTraits__, and __Boost_MPL__.
-These __Boost__ libraries must be properly installed on your system in order for this library to work.
+The library implementation uses __Boost_Typeof__ to automatically deduce the types of bound variables (see the __Tutorial__ section).
+In order to compile code in type-of emulation mode, all types should be properly registered using `BOOST_TYPEOF_REGISTER_TYPE` and `BOOST_TYPEOF_REGISTER_TEMPLATE`, or appropriate __Boost_Typeof__ headers should be included (see the source code of most examples presented in this documentation).
 
 The followings are part of the library private API, they are not documented, and they should not be directly used by programmers:
 [footnote
 *Rationale.*
-This library concatenates symbols specified by the programmers (e.g., the local function name) with other symbols (e.g., special prefixes or preprocessor line numbers) to make internal symbols with unique names to avoid name clashes.
+This library concatenates symbols specified by the programmers (e.g., the local function name) with other symbols (e.g., special prefixes or file line numbers) to make internal symbols with unique names to avoid name clashes.
 These symbols are separated by the letter "`X`" when they are concatenated so they read more easily during debugging (the underscore character "`_`" could not be used instead of the letter "`X`" because if the original symbols already contained a leading or trailing underscore, the concatenation could result in a symbol with double underscores "`__`" which is reserved by the C++ standard).
-The "aux" symbols are private to this library while the "detail" symbols can be used within Boost by other libraries but they are still not part of this library public API.
+The "aux" symbols are private to this library while the "detail" symbols may be used within Boost by other libraries but they are still not part of this library public API.
 ]
 
 * Any symbol defined by files within the =boost/local_function/aux_/= or =boost/local_function/detail/= directory (these header files should not be directly included by programmers).

@@ -71,10 +71,38 @@ section, @RefMacro{BOOST_LOCAL_FUNCTION_CONFIG_ARITY_MAX}.
 #define BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX
 
 /**
-Control performance optimizations.
-Automatically set using Boost.Config BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
-if not defined by user.
-0 - no optimization, 1 - optimization.
+@brief Specify when local functions can be passed as template parameters
+without introducing any run-time overhead.
+
+If this macro is defined to <c>1</c>, this library will assume that the
+compiler allows to pass local classes as template parameters:
+@code
+    template<typename T> void f(void) {}
+
+    int main(void) {
+        struct local_class {};
+        f<local_class>();
+        return 0;
+    }
+@endcode
+This is the case for C++11 compilers and some C++03 compilers (e.g., MSVC), but
+it is not the case in general for most C++03 compilers (including GCC).
+This will allow the library to pass local functions as template parameters
+without introducing any run-time overhead (specifically without preventing the
+compiler from optimizing local function calls by inlining their assembly code).
+
+If this macro is defined to <c>0</c> instead, this library will introduce
+a run-time overhead associated to resolving a function pointer call in order to
+still allow to pass the local functions as template parameters.
+
+It is recommended to leave this macro undefined.
+In this case, the library will automatically define this macro to <c>0</c> if
+the Boost.Config macro <c>BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS</c> is
+defined for the specific compiler, and to <c>1</c> otherwise.
+
+@See @RefSectId{Getting_Started, Getting Started} section,
+@RefSectId{Advanced_Topics, Advanced Topics} section,
+@RefMacro{BOOST_LOCAL_FUNCTION_NAME}.
 */
 #define BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
 

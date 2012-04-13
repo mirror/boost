@@ -14,8 +14,8 @@
 
 //[goto
 int error(int x, int y) {
-    int BOOST_LOCAL_FUNCTION(int x) {
-        if(x > 0) goto success; // OK: Can jump within local function.
+    int BOOST_LOCAL_FUNCTION(int z) {
+        if(z > 0) goto success; // OK: Can jump within local function.
         return -1;
     success:
         return 0;

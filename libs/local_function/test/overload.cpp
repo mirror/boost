@@ -17,10 +17,12 @@
 #include <string>
 #include <cmath>
 
-//[overload
+//[overload_decl
 int add_i(int x, int y) { return x + y; }
+//]
 
 int main(void) {
+    //[overload
     std::string s = "abc";
     std::string BOOST_LOCAL_FUNCTION(
             const bind& s, const std::string& x) {
@@ -43,6 +45,7 @@ int main(void) {
     BOOST_TEST(fabs(add(3.21) - 4.44) < 0.001); // Call `add_d` (no default).
     BOOST_TEST(fabs(add(3.21, 40.0) - 44.44) < 0.001); // Call `add_d`.
     BOOST_TEST(add(1, 2) == 3); // Call `add_i`.
+    //]
     return boost::report_errors();
 }
 

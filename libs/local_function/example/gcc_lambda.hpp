@@ -65,6 +65,7 @@
             BOOST_PP_LIST_FIRST(results))
 
 #ifdef BOOST_NO_LAMBDAS
+//[gcc_lambda_macro
 #   define GCC_LAMBDA_(binds, params, results) \
         ({ /* open statement expression (GCC extension only) */ \
         BOOST_LOCAL_FUNCTION( \
@@ -78,6 +79,7 @@
                 ) \
             )) \
         )
+//]
 #else
 #   define GCC_LAMBDA_(binds, params, results) \
         /* ignore const binding because not supported by C++11 lambdas */ \
@@ -95,10 +97,12 @@
             BOOST_PP_TUPLE_ELEM(3, 1, binds_params_results), \
             BOOST_PP_TUPLE_ELEM(3, 2, binds_params_results))
 
+//[gcc_lambda_end_macro
 #define GCC_LAMBDA_END_(id) \
     BOOST_LOCAL_FUNCTION_NAME(BOOST_PP_CAT(gcc_lambda_, id)) \
     BOOST_PP_CAT(gcc_lambda_, id); \
     }) /* close statement expression (GCC extension only) */
+//]
 
 // PUBLIC //
 

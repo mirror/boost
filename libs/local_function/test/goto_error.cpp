@@ -14,8 +14,8 @@
 
 //[goto_error
 int error(int x, int y) {
-    int BOOST_LOCAL_FUNCTION(int x) {
-        if(x <= 0) goto failure;    // Error: Cannot jump to enclosing scope.
+    int BOOST_LOCAL_FUNCTION(int z) {
+        if(z <= 0) goto failure;    // Error: Cannot jump to enclosing scope.
         else goto success;          // OK: Can jump within local function.
     success:
         return 0;

@@ -65,15 +65,15 @@
 <dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.nesting">Nesting</a></span></dt>
 <dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.accessing_types__concepts__etc_">Accessing
       Types (concepts, etc)</a></span></dt>
-<dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.specifying_types">Specifying
-      Types</a></span></dt>
+<dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.specifying_types__no_boost_typeof_">Specifying
+      Types (no Boost.Typeof)</a></span></dt>
 <dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.inlining">Inlining</a></span></dt>
 <dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.recursion">Recursion</a></span></dt>
 <dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.overloading">Overloading</a></span></dt>
 <dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.exception_specifications">Exception
       Specifications</a></span></dt>
-<dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.storage_classifiers___auto__and__register__">Storage
-      Classifiers (<code class="computeroutput"><span class="keyword">auto</span></code> and <code class="computeroutput"><span class="keyword">register</span></code>)</a></span></dt>
+<dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.storage_classifiers">Storage
+      Classifiers</a></span></dt>
 <dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.same_line_expansions">Same
       Line Expansions</a></span></dt>
 <dt><span class="section"><a href="boost_localfunction/Advanced_Topics.html#boost_localfunction.Advanced_Topics.limitations__operators__etc_">Limitations
@@ -108,18 +108,19 @@
 </dl>
 </div>
 <p>
-    This library allows to program functions locally, directly within the scope where
-    they are needed.
+    This library allows to program functions locally, within other functions, and
+    directly within the scope where they are needed.
   </p>
 <div class="section boost_localfunction_Introduction">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_localfunction.Introduction"></a><a class="link" href="index.html#boost_localfunction.Introduction" title="Introduction">Introduction</a>
 </h2></div></div></div>
 <p>
-      <span class="emphasis"><em>Local functions</em></span> are a form of <span class="emphasis"><em>information hiding</em></span>
+      <span class="emphasis"><em>Local functions</em></span> (a.k.a., <a href="http://en.wikipedia.org/wiki/Nested_function" target="_top"><span class="emphasis"><em>nested
+      functions</em></span></a>) are a form of <span class="emphasis"><em>information hiding</em></span>
       and they are useful for dividing procedural tasks into subtasks which are only
       meaningful locally, avoiding cluttering other parts of the program with functions,
-      variables, etc unrelated to those parts. Local functions therefore complement
+      variables, etc unrelated to those parts. Therefore, local functions complement
       other structuring possibilities such as namespaces and classes. Local functions
       are a feature of many programming languages, notably <a href="http://en.wikipedia.org/wiki/Nested_function#An_example" target="_top">Pascal</a>
       and <a href="http://en.wikipedia.org/wiki/Nesting_(computing)#In_programming" target="_top">Ada</a>,
@@ -129,7 +130,7 @@
 <p>
       Using <a href="http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions" target="_top">C++11
       lambda functions</a>, it is possible to implement local functions by naming
-      the lambda functions assigning them to local variables. For example (see also
+      lambda functions assigning them to local variables. For example (see also
       <a href="../../example/add_cxx11_lambda.cpp" target="_top"><code class="literal">add_cxx11_lambda.cpp</code></a>):
     </p>
 <p>
@@ -170,7 +171,7 @@
     <span class="keyword">int</span> <span class="identifier">nums</span><span class="special">[]</span> <span class="special">=</span> <span class="special">{</span><span class="number">2</span><span class="special">,</span> <span class="number">3</span><span class="special">};</span>
     <span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span><span class="special">(</span><span class="identifier">nums</span><span class="special">,</span> <span class="identifier">nums</span> <span class="special">+</span> <span class="number">2</span><span class="special">,</span> <span class="identifier">add</span><span class="special">);</span>     <span class="comment">// Pass it to an algorithm.</span>
 
-    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                 <span class="comment">// Assert final summation value.</span>
+    <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">sum</span> <span class="special">==</span> <span class="number">60</span><span class="special">);</span>                  <span class="comment">// Assert final summation value.</span>
     <span class="keyword">return</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span><span class="special">();</span>
 <span class="special">}</span>
 </pre>
@@ -192,7 +193,7 @@
         </li>
 <li class="listitem">
           Local functions can be passed as template parameters so they can be conveniently
-          used with STL algorithms, etc. <sup>[<a name="boost_localfunction.Introduction.f0" href="#ftn.boost_localfunction.Introduction.f0" class="footnote">1</a>]</sup>
+          used with STL algorithms and other templates. <sup>[<a name="boost_localfunction.Introduction.f0" href="#ftn.boost_localfunction.Introduction.f0" class="footnote">1</a>]</sup>
         </li>
 <li class="listitem">
           However, local functions must be specified within a declarative context
@@ -225,7 +226,7 @@
 </div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
-<td align="left"><p><small>Last revised: April 10, 2012 at 22:33:23 GMT</small></p></td>
+<td align="left"><p><small>Last revised: April 13, 2012 at 00:19:19 GMT</small></p></td>
 <td align="right"><div class="copyright-footer"></div></td>
 </tr></table>
 <hr>

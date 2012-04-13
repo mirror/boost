@@ -16,6 +16,7 @@ struct global_add { // Unfortunately, boilerplate code to program the class.
     inline void operator()(int num) { // Body uses C++ statement syntax.
         sum += factor * num;
     }
+
 private: // Unfortunately, cannot bind so repeat variable types.
     int& sum; // Access `sum` by reference.
     const int factor; // Make `factor` constant.

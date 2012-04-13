@@ -21,7 +21,7 @@ int main(void) {
 
     void BOOST_LOCAL_FUNCTION(const bind factor, bind& sum, int num) {
         sum += factor * num;
-    } BOOST_LOCAL_FUNCTION_NAME(inline add) // Inlined.
+    } BOOST_LOCAL_FUNCTION_NAME(inline add) // Inlining.
 
     std::vector<int> v(100);
     std::fill(v.begin(), v.end(), 1);

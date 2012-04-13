@@ -18,7 +18,7 @@ struct n: boost::noncopyable {
 };
 BOOST_TYPEOF_REGISTER_TYPE(n) // Register for `bind& x` below.
 
-int main() {
+int main(void) {
     n x(-1);
 
     void BOOST_LOCAL_FUNCTION(const bind& x) {  // OK: No copy

@@ -34,7 +34,7 @@
 <dt><span class="section"><a href="Getting_Started.html#boost_localfunction.Getting_Started.installation">Installation</a></span></dt>
 </dl></div>
 <p>
-      This section explains how programmers can setup their system to use this library.
+      This section explains how to setup a system to use this library.
     </p>
 <div class="section boost_localfunction_Getting_Started_this_documentation">
 <div class="titlepage"><div><div><h3 class="title">
@@ -59,10 +59,11 @@
 <p>
         In most of the examples presented in this documentation, the Boost.Detail/LightweightTest
         (<code class="literal">boost/detail/lightweight_test.hpp</code>) macro <code class="computeroutput"><span class="identifier">BOOST_TEST</span></code> is used to check correctness
-        conditions (conceptually similar to <code class="computeroutput"><span class="identifier">assert</span></code>).
-        A failure of the checked condition does not abort the execution of the program,
-        it will instead make <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span></code>
-        return a non-zero program exit code. <sup>[<a name="boost_localfunction.Getting_Started.this_documentation.f0" href="#ftn.boost_localfunction.Getting_Started.this_documentation.f0" class="footnote">3</a>]</sup>
+        conditions. The <code class="computeroutput"><span class="identifier">BOOST_TEST</span></code>
+        macro is conceptually similar to <code class="computeroutput"><span class="identifier">assert</span></code>
+        but a failure of the checked condition does not abort the program, instead
+        it makes <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span></code> return a non-zero program
+        exit code. <sup>[<a name="boost_localfunction.Getting_Started.this_documentation.f0" href="#ftn.boost_localfunction.Getting_Started.this_documentation.f0" class="footnote">3</a>]</sup>
       </p>
 </div>
 <div class="section boost_localfunction_Getting_Started_compilers_and_platforms">
@@ -74,10 +75,9 @@
         The implementation of this library uses preprocessor and template meta-programming
         (as supported by <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a>
         and <a href="http://www.boost.org/libs/mpl" target="_top">Boost.MPL</a>), templates
-        with partial specializations and function pointers (similarly to <a href="http://www.boost.org/libs/function" target="_top">Boost.Function</a>).
-        As a consequence, this library is fairly demanding on compilers' compliance
-        with the <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/standards" target="_top">C++03</a>
-        standard. The authors originally developed and tested the library on:
+        with partial specializations and function pointers (similarly to <a href="http://www.boost.org/libs/function" target="_top">Boost.Function</a>),
+        and automatic type deduction (as supported by <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>).
+        The authors originally developed and tested the library on:
       </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
@@ -110,12 +110,14 @@
         option for MSVC, etc) and they can start compiling code using this library.
       </p>
 <p>
-        This library implementation uses a number of <a href="http://www.boost.org" target="_top">Boost</a>
-        libraries among which: <a href="http://www.boost.org/libs/preprocessor" target="_top">Boost.Preprocessor</a>,
-        <a href="http://www.boost.org/libs/scope_exit" target="_top">Boost.ScopeExit</a>,
-        <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>, <a href="http://www.boost.org/libs/type_traits" target="_top">Boost.TypeTraits</a>, and
-        <a href="http://www.boost.org/libs/mpl" target="_top">Boost.MPL</a>. These <a href="http://www.boost.org" target="_top">Boost</a> libraries must be properly installed
-        on your system in order for this library to work.
+        The library implementation uses <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>
+        to automatically deduce the types of bound variables (see the <a class="link" href="Tutorial.html" title="Tutorial">Tutorial</a>
+        section). In order to compile code in type-of emulation mode, all types should
+        be properly registered using <code class="computeroutput"><span class="identifier">BOOST_TYPEOF_REGISTER_TYPE</span></code>
+        and <code class="computeroutput"><span class="identifier">BOOST_TYPEOF_REGISTER_TEMPLATE</span></code>,
+        or appropriate <a href="http://www.boost.org/libs/typeof" target="_top">Boost.Typeof</a>
+        headers should be included (see the source code of most examples presented
+        in this documentation).
       </p>
 <p>
         The followings are part of the library private API, they are not documented,
@@ -157,7 +159,7 @@
 <div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Getting_Started.installation.f0" href="#boost_localfunction.Getting_Started.installation.f0" class="para">4</a>] </sup>
           <span class="bold"><strong>Rationale.</strong></span> This library concatenates symbols
           specified by the programmers (e.g., the local function name) with other
-          symbols (e.g., special prefixes or preprocessor line numbers) to make internal
+          symbols (e.g., special prefixes or file line numbers) to make internal
           symbols with unique names to avoid name clashes. These symbols are separated
           by the letter "<code class="computeroutput"><span class="identifier">X</span></code>"
           when they are concatenated so they read more easily during debugging (the
@@ -167,7 +169,7 @@
           underscore, the concatenation could result in a symbol with double underscores
           "<code class="computeroutput"><span class="identifier">__</span></code>" which is
           reserved by the C++ standard). The "aux" symbols are private
-          to this library while the "detail" symbols can be used within
+          to this library while the "detail" symbols may be used within
           Boost by other libraries but they are still not part of this library public
           API.
         </p></div>

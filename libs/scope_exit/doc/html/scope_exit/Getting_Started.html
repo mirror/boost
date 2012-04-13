@@ -55,10 +55,11 @@
 <p>
         In most of the examples presented in this documentation, the Boost.Detail/LightweightTest
         (<code class="literal">boost/detail/lightweight_test.hpp</code>) macro <code class="computeroutput"><span class="identifier">BOOST_TEST</span></code> is used to check correctness
-        conditions (conceptually similar to <code class="computeroutput"><span class="identifier">assert</span></code>).
-        A failure of the checked condition does not abort the execution of the program,
-        it will instead make <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span></code>
-        return a non-zero program exit code. <sup>[<a name="scope_exit.Getting_Started.this_documentation.f0" href="#ftn.scope_exit.Getting_Started.this_documentation.f0" class="footnote">2</a>]</sup>
+        conditions. The <code class="computeroutput"><span class="identifier">BOOST_TEST</span></code>
+        macro is conceptually similar to <code class="computeroutput"><span class="identifier">assert</span></code>
+        but a failure of the checked condition does not abort the program, instead
+        it makes <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">report_errors</span></code> return a non-zero program
+        exit code. <sup>[<a name="scope_exit.Getting_Started.this_documentation.f0" href="#ftn.scope_exit.Getting_Started.this_documentation.f0" class="footnote">2</a>]</sup>
       </p>
 </div>
 <div class="section scope_exit_Getting_Started_compilers_and_platforms">

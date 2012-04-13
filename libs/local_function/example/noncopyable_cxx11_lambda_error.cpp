@@ -13,11 +13,12 @@
 #include <boost/noncopyable.hpp>
 #include <cassert>
 
-//[noncopyable_lambda_error
+//[noncopyable_cxx11_lambda_error
 struct n: boost::noncopyable {
     int i;
     n(int _i): i(_i) {}
 };
+
 
 int main(void) {
     n x(-1);

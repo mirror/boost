@@ -11,7 +11,7 @@ This section illustrates an alternative syntax for compilers without variadic ma
 
 [h5 Sequence Syntax]
 
-Most modern compilers support [@http://en.wikipedia.org/wiki/Variadic_macro variaid macros] (notably, these include GCC, MSVC, and all __CPP11__ compilers).
+Most modern compilers support [@http://en.wikipedia.org/wiki/Variadic_macro variaid macros] (notably, these include GCC, MSVC, and all __CXX11__ compilers).
 However, in the rare case that programmers need to use this library on a compiler without variadic macros, this library also allows to specify its macro parameters using a __Boost_Preprocessor__ sequence where tokens are separated by round parenthesis `()`:
 
     (token1) (token2) ... // All compilers.
@@ -28,8 +28,8 @@ However, on compilers with variadic macros the comma-separated syntax we have se
 
 [add]
 
-Note how the same macros accept both syntaxes on compilers with variadic macros and only the sequence syntax on compilers without variadic macros.
-Finally, an parameter list is always specified using `void` on compilers with and without variadic macros:
+Note that the same macros accept both syntaxes on compilers with variadic macros and only the sequence syntax on compilers without variadic macros.
+Finally, an empty local function parameter list is always specified using `void` on compilers with and without variadic macros:
 
 [ten_void]
 

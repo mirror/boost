@@ -9,7 +9,7 @@
 
 This section lists the major changes between different library releases (in chronological order).
 
-[h5 Version 1.0.0 (2012-01-31)]
+[h5 Version 1.0.0 (2012-04-12)]
 
 # Incorporated all comments from the [@http://lists.boost.org/boost-announce/2011/12/0340.php Boost review of this library].
 # Removed local blocks and local exits.
@@ -19,6 +19,9 @@ This section lists the major changes between different library releases (in chro
 # Added GCC lambda and constant block examples.
 # Moved `overloaded_function` to Boost.Functional/OverloadedFunction.
 # Moved `BOOST_IDENTITY_TYPE` to Boost.Utility/IdentityType.
+# Completely removed use of Boost.Typeof when bound and result types are explicitly specified.
+# Added `..._ID` macros for multiple expansions on the same line.
+# Fixed compilation on Boost regression test platforms.
 
 [h5 Version 0.2.0 (2011-05-14)]
 

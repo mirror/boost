@@ -18,6 +18,7 @@ run add_phoenix.cpp ;
 run const_block.cpp ;
 compile-fail const_block_error.cpp : <variant>debug : ;
 run const_block_error.cpp : <variant>release : ;
+compile-fail const_block_error_cxx11_lambda.cpp ;
 
 run expensive_copy_cxx11_lambda.cpp ;
 run expensive_copy_local_function.cpp ;

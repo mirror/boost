@@ -26,7 +26,7 @@ int main(void) {                            // Some local scope.
     int nums[] = {2, 3};
     std::for_each(nums, nums + 2, add);     // Pass it to an algorithm.
 
-    BOOST_TEST(sum == 60);                 // Assert final summation value.
+    BOOST_TEST(sum == 60);                  // Assert final summation value.
     return boost::report_errors();
 }
 //]

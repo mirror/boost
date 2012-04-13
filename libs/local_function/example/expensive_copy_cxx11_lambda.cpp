@@ -22,6 +22,7 @@ struct n {
     }
 };
 
+
 int main(void) {
     n x(-1);
 

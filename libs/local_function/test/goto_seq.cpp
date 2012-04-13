@@ -8,8 +8,8 @@
 #include <boost/local_function.hpp>
 
 int error(int x, int y) {
-    int BOOST_LOCAL_FUNCTION( (int x) ) {
-        if(x > 0) goto success;
+    int BOOST_LOCAL_FUNCTION( (int z) ) {
+        if(z > 0) goto success;
         return -1;
     success:
         return 0;

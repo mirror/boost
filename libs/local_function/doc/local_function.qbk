@@ -38,6 +38,7 @@
 [def __Boost_TypeTraits__ [@http://www.boost.org/libs/type_traits Boost.TypeTraits]]
 [def __Boost_Utility_IdentityType__ [@http://www.boost.org/libs/utility/identity_type Boost.Utility/IdentityType]]
 [def __Boost_Chrono__ [@http://www.boost.org/libs/chrono Boost.Chrono]]
+[def __Boost_Config__ [@http://www.boost.org/libs/chrono Boost.Config]]
 [def __CXX11_lambda_functions__ [@http://en.wikipedia.org/wiki/C%2B%2B0x#Lambda_functions_and_expressions C++11 lambda functions]]
 [def __LISP__ [@http://en.wikipedia.org/wiki/Lisp_(programming_language) LISP]]
 [def __Contractpp__ [@http://sourceforge.net/projects/contractpp Contract++]]
@@ -83,15 +84,19 @@
 [import ../test/add_except.cpp]
 [import ../test/add_classifiers.cpp]
 [import ../test/operator_error.cpp]
+[import ../test/goto.cpp]
 [import ../test/goto_error.cpp]
 [import ../test/same_line.cpp]
 
 [import ../example/add_cxx11_lambda.cpp]
+[import ../example/gcc_lambda.hpp]
 [import ../example/gcc_lambda.cpp]
 [import ../example/gcc_cxx11_lambda.cpp]
+[import ../example/const_block.hpp]
 [import ../example/const_block_error.cpp]
-[import ../example/scope_exit.cpp]
+[import ../example/const_block_error_cxx11_lambda.cpp]
 [import ../example/scope_exit.hpp]
+[import ../example/scope_exit.cpp]
 [import ../example/phoenix_factorial_local.cpp]
 [import ../example/phoenix_factorial.cpp]
 [import ../example/noncopyable_cxx11_lambda_error.cpp]
@@ -104,7 +109,7 @@
 [import ../example/impl_tparam_tricks.cpp]
 [import ../example/impl_pp_keyword.cpp]
 
-This library allows to program functions locally, directly within the scope where they are needed.
+This library allows to program functions locally, within other functions, and directly within the scope where they are needed.
 
 [include introduction.qbk]
 [include getting_started.qbk]

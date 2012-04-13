@@ -49,13 +49,15 @@
     </h6>
 <p>
       This library uses a local class to implement the local function object. However,
-      in __CPP03__ local classes (and therefore the local function objects they implement)
-      cannot be passed as template parameters (e.g., to the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span></code>
-      algorithm), this is instead possible in __CPP11__, MSVC, and some other compilers
-      (see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm" target="_top">[N2657]</a>).
+      in <a href="http://www.open-std.org/JTC1/SC22/WG21/docs/standards" target="_top">C++03</a>
+      local classes (and therefore the local function objects they implement) cannot
+      be passed as template parameters (e.g., to the <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">for_each</span></code>
+      algorithm), this is instead possible in <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>,
+      MSVC, and some other compilers (see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm" target="_top">[N2657]</a>
+      and <a href="http://www.boost.org/libs/chrono" target="_top">Boost.Config</a>'s <code class="computeroutput"><span class="identifier">BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS</span></code>).
       To work around this limitation, this library investigated the following two
-      "tricks" (both tricks can be extended to support eventual function
-      default parameters):
+      "tricks" (both tricks can be extended to support function default
+      parameters):
     </p>
 <div class="orderedlist"><ol class="orderedlist" type="1">
 <li class="listitem">
@@ -63,13 +65,14 @@
           that calls a static member function of the local class via a function pointer.
           The static member function then calls the correct local function body after
           type casting the object from a <code class="computeroutput"><span class="keyword">void</span><span class="special">*</span></code> pointer (local classes can always be used
-          for type casting).
+          for type casting via <code class="computeroutput"><span class="keyword">static_cast</span></code>
+          or similar).
         </li>
 <li class="listitem">
           The <span class="emphasis"><em>virtual functor trick</em></span> derives the local functor
           class from a non-local base class. The correct overridden implementation
           of the virtual <code class="computeroutput"><span class="keyword">operator</span><span class="special">()</span></code>
-          is then called via polymorphism.
+          is then called via dynamic binding.
         </li>
 </ol></div>
 <p>
@@ -83,8 +86,8 @@
 
 <span class="comment">// Casting functor trick.</span>
 <span class="keyword">struct</span> <span class="identifier">casting_func</span> <span class="special">{</span>
-    <span class="keyword">explicit</span> <span class="identifier">casting_func</span><span class="special">(</span><span class="keyword">void</span><span class="special">*</span> <span class="identifier">obj</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">(*</span><span class="identifier">call</span><span class="special">)(</span><span class="keyword">void</span><span class="special">*,</span> <span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;)):</span>
-            <span class="identifier">obj_</span><span class="special">(</span><span class="identifier">obj</span><span class="special">),</span> <span class="identifier">call_</span><span class="special">(</span><span class="identifier">call</span><span class="special">)</span> <span class="special">{}</span>
+    <span class="keyword">explicit</span> <span class="identifier">casting_func</span><span class="special">(</span><span class="keyword">void</span><span class="special">*</span> <span class="identifier">obj</span><span class="special">,</span> <span class="keyword">void</span> <span class="special">(*</span><span class="identifier">call</span><span class="special">)(</span><span class="keyword">void</span><span class="special">*,</span> <span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;))</span>
+            <span class="special">:</span> <span class="identifier">obj_</span><span class="special">(</span><span class="identifier">obj</span><span class="special">),</span> <span class="identifier">call_</span><span class="special">(</span><span class="identifier">call</span><span class="special">)</span> <span class="special">{}</span>
     <span class="comment">// Unfortunately, function pointer call is not inlined.</span>
     <span class="keyword">inline</span> <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">{</span> <span class="identifier">call_</span><span class="special">(</span><span class="identifier">obj_</span><span class="special">,</span> <span class="identifier">num</span><span class="special">);</span> <span class="special">}</span>
 <span class="keyword">private</span><span class="special">:</span>
@@ -108,14 +111,13 @@
     <span class="keyword">int</span> <span class="identifier">sum</span> <span class="special">=</span> <span class="number">0</span><span class="special">,</span> <span class="identifier">factor</span> <span class="special">=</span> <span class="number">10</span><span class="special">;</span>
 
     <span class="comment">// Local class for local function.</span>
-    <span class="keyword">struct</span> <span class="identifier">local_add</span><span class="special">:</span> <span class="identifier">virtual_func</span><span class="special">::</span><span class="identifier">interface</span> <span class="special">{</span>
-        <span class="keyword">explicit</span> <span class="identifier">local_add</span><span class="special">(</span><span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">_sum</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">_factor</span><span class="special">):</span>
-                <span class="identifier">sum_</span><span class="special">(</span><span class="identifier">_sum</span><span class="special">),</span> <span class="identifier">factor_</span><span class="special">(</span><span class="identifier">_factor</span><span class="special">)</span> <span class="special">{}</span>
+    <span class="keyword">struct</span> <span class="identifier">local_add</span> <span class="special">:</span> <span class="identifier">virtual_func</span><span class="special">::</span><span class="identifier">interface</span> <span class="special">{</span>
+        <span class="keyword">explicit</span> <span class="identifier">local_add</span><span class="special">(</span><span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">_sum</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">_factor</span><span class="special">)</span>
+                <span class="special">:</span> <span class="identifier">sum_</span><span class="special">(</span><span class="identifier">_sum</span><span class="special">),</span> <span class="identifier">factor_</span><span class="special">(</span><span class="identifier">_factor</span><span class="special">)</span> <span class="special">{}</span>
         <span class="keyword">inline</span> <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">()(</span><span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">{</span>
             <span class="identifier">body</span><span class="special">(</span><span class="identifier">sum_</span><span class="special">,</span> <span class="identifier">factor_</span><span class="special">,</span> <span class="identifier">num</span><span class="special">);</span>
         <span class="special">}</span>
-        <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">call</span><span class="special">(</span>
-                <span class="keyword">void</span><span class="special">*</span> <span class="identifier">obj</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">{</span>
+        <span class="keyword">inline</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="identifier">call</span><span class="special">(</span><span class="keyword">void</span><span class="special">*</span> <span class="identifier">obj</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">num</span><span class="special">)</span> <span class="special">{</span>
             <span class="identifier">local_add</span><span class="special">*</span> <span class="identifier">self</span> <span class="special">=</span> <span class="keyword">static_cast</span><span class="special">&lt;</span><span class="identifier">local_add</span><span class="special">*&gt;(</span><span class="identifier">obj</span><span class="special">);</span>
             <span class="identifier">self</span><span class="special">-&gt;</span><span class="identifier">body</span><span class="special">(</span><span class="identifier">self</span><span class="special">-&gt;</span><span class="identifier">sum_</span><span class="special">,</span> <span class="identifier">self</span><span class="special">-&gt;</span><span class="identifier">factor_</span><span class="special">,</span> <span class="identifier">num</span><span class="special">);</span>
         <span class="special">}</span>
@@ -147,11 +149,13 @@
       the virtual functor trick so the current implementation of this library uses
       the casting functor trick (probably because in addition to the indirect function
       call, the virtual functor trick also requires accessing the <a href="http://en.wikipedia.org/wiki/Virtual_method_table" target="_top">virtual
-      function table</a>). However, neither one of tricks has been observed to
-      allow for compiler optimizations that inline the local function calls (because
+      function table</a>). However, neither one of the two tricks was observed
+      to allow for compiler optimizations that inline the local function calls (because
       they rely on one indirect function call via either a function pointer or a
-      virtual function respectively). Therefore, on compilers that accept local types
-      as template parameters (MSVC, __CPP11__, etc, see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm" target="_top">[N2657]</a>),
+      virtual function respectively). Therefore, on compilers that accept local classes
+      as template parameters (MSVC, <a href="http://www.open-std.org/JTC1/SC22/WG21/" target="_top">C++11</a>,
+      etc, see <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm" target="_top">[N2657]</a>
+      and <a href="http://www.boost.org/libs/chrono" target="_top">Boost.Config</a>'s <code class="computeroutput"><span class="identifier">BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS</span></code>),
       this library automatically generates code that passes the local class type
       directly as template parameter without using neither one of these two tricks
       in order to take full advantage of compiler optimizations that inline the local
@@ -168,9 +172,9 @@
       (to generate special code to bind the object in scope), or if the variable
       is bound by <code class="computeroutput"><span class="keyword">const</span></code> (to generate
       special code to bind by constant), etc. The parameter tokens are inspected
-      using preprocessor metaprogramming and specifically using the macros defined
+      using preprocessor meta-programming and specifically using the macros defined
       by the files in the <code class="literal">boost/local_function/detail/preprocessor/keyword/</code>
-      directory. <sup>[<a name="boost_localfunction.Implementation.f0" href="#ftn.boost_localfunction.Implementation.f0" class="footnote">30</a>]</sup>
+      directory. <sup>[<a name="boost_localfunction.Implementation.f0" href="#ftn.boost_localfunction.Implementation.f0" class="footnote">31</a>]</sup>
     </p>
 <p>
       For example, the following code defines a macro that allows the preprocessor
@@ -202,7 +206,7 @@
     </p>
 <div class="footnotes">
 <br><hr width="100" align="left">
-<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Implementation.f0" href="#boost_localfunction.Implementation.f0" class="para">30</a>] </sup>
+<div class="footnote"><p><sup>[<a id="ftn.boost_localfunction.Implementation.f0" href="#boost_localfunction.Implementation.f0" class="para">31</a>] </sup>
         This technique is at the core of even more complex preprocessor parsing macros
         like the ones that parse the <a href="http://sourceforge.net/projects/contractpp" target="_top">Contract++</a>
         syntax.

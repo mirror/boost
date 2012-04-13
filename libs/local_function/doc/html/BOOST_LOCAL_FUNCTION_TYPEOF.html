@@ -33,7 +33,7 @@
 
 </span>BOOST_LOCAL_FUNCTION_TYPEOF(bound_variable_name)</pre></div>
 <div class="refsect1">
-<a name="id904629"></a><h2>Description</h2>
+<a name="id861159"></a><h2>Description</h2>
 <p>This macro can be used within the local functions body to refer to the bound variable types so to declare local variables, check concepts (using Boost.ConceptCheck), etc (see the  <a class="link" href="boost_localfunction/Advanced_Topics.html" title="Advanced Topics"> Advanced Topics</a> section). This way the local function can be programmed entirely without explicitly specifying the bound variable types thus facilitating maintenance (e.g., if the type of a bound variable changes in the enclosing scope, the local function code does not have to change).</p>
 <p><span class="bold"><strong>Parameters:</strong></span> </p>
 <div class="informaltable"><table class="table">
@@ -56,8 +56,8 @@
 <li class="listitem"><p>Bound by constant reference using <code class="computeroutput">const bind&amp; t</code> then <code class="computeroutput">BOOST_LOCAL_FUNCTION_TYPEOF(t)</code> is <code class="computeroutput">const T&amp;</code>.</p></li>
 </ul></div>
 <p>
-This macro must be prefixed by <code class="computeroutput">typename</code> when used in a type dependant context.</p>
-<p>It is best to use this macro instead of Boost.Typeof so to reduce the number of times Boost.Typeof is used to deduce types (see the  <a class="link" href="boost_localfunction/Advanced_Topics.html" title="Advanced Topics"> Advanced Topics</a> section).</p>
+This macro must be prefixed by <code class="computeroutput">typename</code> when used within templates.</p>
+<p><span class="bold"><strong>Note:</strong></span> It is best to use this macro instead of Boost.Typeof so to reduce the number of times Boost.Typeof is used to deduce types (see the  <a class="link" href="boost_localfunction/Advanced_Topics.html" title="Advanced Topics"> Advanced Topics</a> section).</p>
 <p><span class="bold"><strong>See:</strong></span>  <a class="link" href="boost_localfunction/Advanced_Topics.html" title="Advanced Topics"> Advanced Topics</a> section,  <code class="computeroutput"><a class="link" href="BOOST_LOCAL_FUNCTION.html" title="Macro BOOST_LOCAL_FUNCTION">BOOST_LOCAL_FUNCTION</a></code>. </p>
 </div>
 </div>

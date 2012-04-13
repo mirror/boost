@@ -12,8 +12,8 @@
 
 // Casting functor trick.
 struct casting_func {
-    explicit casting_func(void* obj, void (*call)(void*, const int&)):
-            obj_(obj), call_(call) {}
+    explicit casting_func(void* obj, void (*call)(void*, const int&))
+            : obj_(obj), call_(call) {}
     // Unfortunately, function pointer call is not inlined.
     inline void operator()(const int& num) { call_(obj_, num); }
 private:
@@ -37,14 +37,13 @@ int main(void) {
     int sum = 0, factor = 10;
 
     // Local class for local function.
-    struct local_add: virtual_func::interface {
-        explicit local_add(int& _sum, const int& _factor):
-                sum_(_sum), factor_(_factor) {}
+    struct local_add : virtual_func::interface {
+        explicit local_add(int& _sum, const int& _factor)
+                : sum_(_sum), factor_(_factor) {}
         inline void operator()(const int& num) {
             body(sum_, factor_, num);
         }
-        inline static void call(
-                void* obj, const int& num) {
+        inline static void call(void* obj, const int& num) {
             local_add* self = static_cast<local_add*>(obj);
             self->body(self->sum_, self->factor_, num);
         }
