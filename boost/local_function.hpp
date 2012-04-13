@@ -21,33 +21,43 @@
 // PUBLIC //
 
 #ifdef BOOST_NO_VARIADIC_MACROS
-#   define BOOST_LOCAL_FUNCTION(declarations) \
+#   define BOOST_LOCAL_FUNCTION_ID(id, declarations) \
         BOOST_LOCAL_FUNCTION_AUX_DECL(id, 0 /* not within template */, \
+                BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
+                        BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST( \
+                                declarations)))
+#   define BOOST_LOCAL_FUNCTION(declarations) \
+        BOOST_LOCAL_FUNCTION_ID( \
+                BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, declarations)
+#   define BOOST_LOCAL_FUNCTION_TPL_ID(id, declarations) \
+        BOOST_LOCAL_FUNCTION_AUX_DECL(id, 1 /* within template */, \
                 BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST( \
                                 declarations)))
 #   define BOOST_LOCAL_FUNCTION_TPL(declarations) \
-        BOOST_LOCAL_FUNCTION_AUX_DECL(id, 1 /* within template */, \
-                BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
-                        BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST( \
-                                declarations)))
+        BOOST_LOCAL_FUNCTION_TPL_ID( \
+                BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, declarations)
 #else // VARIADIC
-#   define BOOST_LOCAL_FUNCTION(...) \
+#   define BOOST_LOCAL_FUNCTION_ID(id, ...) \
         BOOST_LOCAL_FUNCTION_AUX_DECL(id, 0 /* not within template */, \
                 BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)))
-#   define BOOST_LOCAL_FUNCTION_TPL(...) \
+#   define BOOST_LOCAL_FUNCTION(...) \
+        BOOST_LOCAL_FUNCTION_ID( \
+                BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, __VA_ARGS__)
+#   define BOOST_LOCAL_FUNCTION_TPL_ID(id, ...) \
         BOOST_LOCAL_FUNCTION_AUX_DECL(id, 1 /* within template */, \
                 BOOST_LOCAL_FUNCTION_AUX_PP_DECL_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)))
+#   define BOOST_LOCAL_FUNCTION_TPL(...) \
+        BOOST_LOCAL_FUNCTION_TPL_ID( \
+                BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, __VA_ARGS__)
 #endif // VARIADIC
 
-#define BOOST_LOCAL_FUNCTION_NAME(qualified_function_name) \
-    BOOST_LOCAL_FUNCTION_AUX_NAME(0, /* not within template */ \
-            qualified_function_name)
-#define BOOST_LOCAL_FUNCTION_NAME_TPL(qualified_function_name) \
-    BOOST_LOCAL_FUNCTION_AUX_NAME(1, /* within template */ \
-            qualified_function_name)
+#define BOOST_LOCAL_FUNCTION_NAME(qualified_name) \
+    BOOST_LOCAL_FUNCTION_AUX_NAME(0 /* not within template */, qualified_name)
+#define BOOST_LOCAL_FUNCTION_NAME_TPL(qualified_name) \
+    BOOST_LOCAL_FUNCTION_AUX_NAME(1 /* within template */, qualified_name)
 
 #define BOOST_LOCAL_FUNCTION_TYPEOF(bound_variable_name) \
     BOOST_LOCAL_FUNCTION_AUX_TYPEOF_TYPE(bound_variable_name)
