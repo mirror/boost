@@ -35,8 +35,6 @@
 [def __Boost_Phoenix__ [@http://www.boost.org/libs/phoenix Boost.Phoenix]]
 [def __Boost_Typeof__ [@http://www.boost.org/libs/typeof Boost.Typeof]]
 [def __typeof_emulation__ [@http://www.boost.org/libs/typeof type-of emulation]]
-[def __BOOST_TYPEOF_REGISTER_TYPE__ [@http://www.boost.org/libs/typeof BOOST_TYPEOF_REGISTER_TYPE]]
-[def __BOOST_TYPEOF_REGISTER_TEMPLATE__ [@http://www.boost.org/libs/typeof BOOST_TYPEOF_REGISTER_TEMPLATE]]
 [def __Boost_Preprocessor__ [@http://www.boost.org/libs/preprocessor Boost.Preprocessor]]
 [def __Boost_Config__ [@http://www.boost.org/libs/config Boost.Config]]
 [def __Boost_PointerContainer__ [@http://www.boost.org/libs/ptr_container Boost.PointerContainer]]
@@ -122,7 +120,7 @@ Therefore there is no pre-compiled object file which needs to be installed.
 Programmers can simply instruct the compiler where to find the library header files (`-I` option on GCC, `/I` option on MSVC, etc) and compile code using the library.
 
 The library implementation uses __Boost_Typeof__ to automatically deduce the types of the __Boost_ScopeExit__ captured variables (see the __Tutorial__ section).
-In order to compile code in __typeof_emulation__ mode, all types should be properly registered using __BOOST_TYPEOF_REGISTER_TYPE__ and __BOOST_TYPEOF_REGISTER_TEMPLATE__, or appropriate __Boost_Typeof__ headers should be included (see the source code of most examples presented in this documentation).
+In order to compile code in __typeof_emulation__ mode, all types should be properly registered using `BOOST_TYPEOF_REGISTER_TYPE` and `BOOST_TYPEOF_REGISTER_TEMPLATE`, or appropriate __Boost_Typeof__ headers should be included (see the source code of most examples presented in this documentation).
 
 [endsect]
 
