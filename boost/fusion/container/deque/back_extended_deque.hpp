@@ -16,7 +16,7 @@
 
 namespace boost { namespace fusion
 {
-    template<typename Deque, typename T>
+    template <typename Deque, typename T>
     struct back_extended_deque
       : detail::keyed_element<typename Deque::next_up, T, Deque>
       , sequence_base<back_extended_deque<Deque, T> >
