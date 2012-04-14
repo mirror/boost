@@ -46,7 +46,7 @@
 // only within this library; DETAIL prefix and detail namespace mark "protected"
 // symbols that can be used by other Boost libraries but not outside Boost.
 
-// WARNING: BOOST_SCOPE_EXIT_AUX_GCC also used in regression tests.
+// WARNING: BOOST_SCOPE_EXIT_AUX_GCC also used by some regression test.
 #if defined(__GNUC__) && !defined(BOOST_INTEL)
 #   define BOOST_SCOPE_EXIT_AUX_GCC (__GNUC__ * 100 + __GNUC_MINOR__)
 #else
@@ -59,9 +59,7 @@
 #   define BOOST_SCOPE_EXIT_AUX_TPL_GCC_WORKAROUND_01 0
 #endif
 
-// MSVC 7.1=1300, 8.0=1400, 9.0=1500, 10.0=1600 (this workaround was tested at
-// MSVC 8.0 but it might work also for all MVSC >= 7.1).
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))
+#if BOOST_MSVC
 #   define BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01 1
 #else
 #   define BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01 0
@@ -409,17 +407,6 @@ msvc_register_type<T, Organizer> typeof_register_type(const T&,
         >::type \
         new_type \
     ;
-
-#elif BOOST_SCOPE_EXIT_AUX_TYPEOF_THIS_MSVC_WORKAROUND_01 && \
-        defined(BOOST_TYPEOF_EMULATION)
-
-#define BOOST_SCOPE_EXIT_DETAIL_TYPEDEF_TYPEOF_THIS(id, ty, new_type) \
-    /* unfortunately, MSVC typeof(this) workaround does not work in type-of */ \
-    /* emulation mode so trying to give meaningful compiler errors */ \
-    BOOST_MPL_ASSERT_MSG(false, \
-            ERROR_msvc_compilers_require_native_typeof_to_capture_object_this, \
-            ()); \
-    typedef int new_type; /* some `int` type to limit cryptic errors */
 
 #else // TYPEOF_THIS_MSVC_WORKAROUND
 
