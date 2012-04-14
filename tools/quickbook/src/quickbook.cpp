@@ -115,6 +115,7 @@ namespace quickbook
         fs::path const& filein_
       , fs::path const& fileout_
       , fs::path const& deps_out_
+      , fs::path const& locations_out_
       , fs::path const& xinclude_base_
       , int indent
       , int linewidth
@@ -145,11 +146,26 @@ namespace quickbook
 
             if (!deps_out_.empty())
             {
-                fs::ofstream deps_out(deps_out_);
-                BOOST_FOREACH(fs::path const& f, state.dependencies)
-                    deps_out << detail::path_to_generic(f) << std::endl;
+                fs::ofstream out(deps_out_);
+                BOOST_FOREACH(quickbook::state::dependency_list::value_type
+                        const& d, state.dependencies)
+                {
+                    if (d.second) {
+                        out << detail::path_to_generic(d.first) << std::endl;
+                    }
+                }
             }
 
+            if (!locations_out_.empty())
+            {
+                fs::ofstream out(locations_out_);
+                BOOST_FOREACH(quickbook::state::dependency_list::value_type
+                        const& d, state.dependencies)
+                {
+                    out << (d.second ? "+ " : "- ")
+                        << detail::path_to_generic(d.first) << std::endl;
+                }
+            }
         }
         catch (load_error& e) {
             detail::outerr(filein_) << e.what() << std::endl;
@@ -271,6 +287,10 @@ main(int argc, char* argv[])
             ("xinclude-base", PO_VALUE<input_string>(),
                 "Generate xincludes as if generating for this target "
                 "directory.")
+            ("output-checked-locations", PO_VALUE<input_string>(),
+             "Writes a file listing all the file locations that were "
+             "checked, starting with '+' if they were found, or '-' "
+             "if they weren't.")
         ;
 
         all.add(desc).add(hidden);
@@ -400,25 +420,36 @@ main(int argc, char* argv[])
             fs::path filein = quickbook::detail::input_to_path(
                 vm["input-file"].as<input_string>());
             fs::path fileout;
-            fs::path depsout;
+            fs::path deps_out;
+            fs::path locations_out;
+
+            bool default_output = true;
+
+            if (vm.count("output-deps"))
+            {
+                deps_out = quickbook::detail::input_to_path(
+                    vm["output-deps"].as<input_string>());
+                default_output = false;
+            }
+
+            if (vm.count("output-checked-locations"))
+            {
+                locations_out = quickbook::detail::input_to_path(
+                    vm["output-checked-locations"].as<input_string>());
+                default_output = false;
+            }
 
             if (vm.count("output-file"))
             {
                 fileout = quickbook::detail::input_to_path(
                     vm["output-file"].as<input_string>());
             }
-            else if (!vm.count("output-deps"))
+            else if (default_output)
             {
                 fileout = filein;
                 fileout.replace_extension(".xml");
             }
 
-            if (vm.count("output-deps"))
-            {
-                depsout = quickbook::detail::input_to_path(
-                    vm["output-deps"].as<input_string>());
-            }
-            
             fs::path xinclude_base;
             if (vm.count("xinclude-base"))
             {
@@ -459,8 +490,8 @@ main(int argc, char* argv[])
 
             if (!error_count)
                 error_count += quickbook::parse_document(
-                        filein, fileout, depsout, xinclude_base,
-                        indent, linewidth, pretty_print);
+                        filein, fileout, deps_out, locations_out,
+                        xinclude_base, indent, linewidth, pretty_print);
 
             if (expect_errors)
             {

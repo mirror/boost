@@ -10,7 +10,7 @@
 #if !defined(BOOST_SPIRIT_ACTIONS_CLASS_HPP)
 #define BOOST_SPIRIT_ACTIONS_CLASS_HPP
 
-#include <set>
+#include <map>
 #include <boost/scoped_ptr.hpp>
 #include "parsers.hpp"
 #include "values_parse.hpp"
@@ -37,6 +37,7 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
 
         typedef std::vector<std::string> string_list;
+        typedef std::map<fs::path, bool> dependency_list;
 
         static int const max_template_depth = 100;
 
@@ -50,7 +51,7 @@ namespace quickbook
         id_manager&             ids;
         value_builder           callouts;           // callouts are global as
         int                     callout_depth;      // they don't nest.
-        std::set<fs::path>      dependencies;
+        dependency_list         dependencies;
 
     // state saved for files and templates.
         bool                    imported;
@@ -78,8 +79,8 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
 
         // Call this before loading any file so that it will be included in the
-        // list of dependencies.
-        void add_dependency(fs::path const&);
+        // list of dependencies. Returns true if file exists.
+        bool add_dependency(fs::path const&);
 
         void start_list(char mark);
         void end_list(char mark);
