@@ -96,7 +96,7 @@ including any Fusion header to change the default. Example:
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [['unspecified]]]
+    [[`T0`...`TN`]          [Element types]             [__unspecified__]]
 ]
 
 [heading Model of]
@@ -157,7 +157,7 @@ time). The runtime cost of access to each element is peculiarly constant
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`Car`]                [Head type]                 []]
+    [[`Car`]                [Head type]                 [ ]]
     [[`Cdr`]                [Tail type]                 [`nil`]]
 ]
 
@@ -247,7 +247,7 @@ including any Fusion header to change the default. Example:
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [[`unspecified-type`]]]
+    [[`T0`...`TN`]          [Element types]             [__unspecified__]]
 ]
 
 [heading Model of]
@@ -312,20 +312,16 @@ __front_extended_deque__ and __back_extended_deque__.
     #include <boost/fusion/container/list/deque_fwd.hpp>
     #include <boost/fusion/include/deque_fwd.hpp>
 
-[heading C++03 Synopsis]
+[heading Synopsis]
 
-    template <
-        typename T0 = __unspecified__
-      , typename T1 = __unspecified__
-      , typename T2 = __unspecified__
-        ...
-      , typename TN = __unspecified__
-    >
+    template <typename ...Elements>
     struct deque;
 
-The variadic class interface accepts `0` to `FUSION_MAX_DEQUE_SIZE`
-elements, where `FUSION_MAX_DEQUE_SIZE` is a user definable predefined
-maximum that defaults to `10`. Example:
+For C++11 compilers, the variadic class interface has no upper bound.
+
+For C++03 compilers, the variadic class interface accepts `0` to
+`FUSION_MAX_DEQUE_SIZE` elements, where `FUSION_MAX_DEQUE_SIZE` is a
+user definable predefined maximum that defaults to `10`. Example:
 
     deque<int, char, double>
 
@@ -334,25 +330,11 @@ including any Fusion header to change the default. Example:
 
     #define FUSION_MAX_DEQUE_SIZE 20
 
-[heading C++03 Template parameters]
+[heading Template parameters]
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [[`unspecified-type`]]]
-]
-
-[heading C++11 Synopsis]
-
-    template <typename ...Elements>
-    struct deque;
-
-For C++11 compilers, the variadic class interface has no upper bound.
-
-[heading C++11 Template parameters]
-
-[table
-    [[Parameter]            [Description]               [Default]]
-    [[`Elements`]           [Element types]             [[]]]
+    [[`Elements`]           [Element types]             [ ]]
 ]
 
 [heading Model of]
@@ -420,11 +402,11 @@ the same properties as the __deque__.
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`Deque`]              [Deque type]                []]
-    [[`T`]                  [Element type]              []]
+    [[`Deque`]              [Deque type]                [ ]]
+    [[`T`]                  [Element type]              [ ]]
 ]
 
-[`Deque` can be a __deque__, a __front_extended_deque__ or a
+[blurb __note__ `Deque` can be a __deque__, a __front_extended_deque__ or a
 __back_extended_deque__]
 
 [heading Model of]
@@ -481,11 +463,11 @@ the same properties as the __deque__.
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`Deque`]              [Deque type]                []]
-    [[`T`]                  [Element type]              []]
+    [[`Deque`]              [Deque type]                [ ]]
+    [[`T`]                  [Element type]              [ ]]
 ]
 
-[`Deque` can be a __deque__, a __back_extended_deque__ or a
+[blurb __note__ `Deque` can be a __deque__, a __back_extended_deque__ or a
 __back_extended_deque__]
 
 [heading Model of]
@@ -565,7 +547,7 @@ including any Fusion header to change the default. Example:
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [[`unspecified-type`]]]
+    [[`T0`...`TN`]          [Element types]             [__unspecified__]]
 ]
 
 [heading Model of]
@@ -647,7 +629,7 @@ including any Fusion header to change the default. Example:
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`T0`...`TN`]          [Element types]             [[`unspecified-type`]]]
+    [[`T0`...`TN`]          [Element types]             [__unspecified__]]
 ]
 
 [heading Model of]
@@ -856,35 +838,7 @@ __note_boost_ref__
 
 Create a __deque__ from one or more values.
 
-[heading C++03 Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    typename __result_of_make_deque__<T0, T1,... TN>::type
-    make_deque(T0 const& x0, T1 const& x1... TN const& xN);
-
-The variadic function accepts `0` to `FUSION_MAX_DEQUE_SIZE` elements, where
-`FUSION_MAX_DEQUE_SIZE` is a user definable predefined maximum that defaults
-to `10`. You may define the preprocessor constant `FUSION_MAX_DEQUE_SIZE`
-before including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_DEQUE_SIZE 20
-
-[heading C++03 Parameters]
-
-[table
-    [[Parameter]        [Requirement]                   [Description]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]  [The arguments to `make_deque`]]
-]
-
-[heading C++03 Expression Semantics]
-
-    make_deque(x0, x1,... xN);
-
-[*Return type]: __result_of_make_deque__`<T0, T1,... TN>::type`
-
-[*Semantics]: Create a __deque__ from `x0, x1,... xN`.
-
-[heading C++11 Synopsis]
+[heading Synopsis]
 
     template <typename ...Elements>
     typename __result_of_make_deque__<Elements...>::type
@@ -892,14 +846,22 @@ before including any Fusion header to change the default. Example:
 
 For C++11 compilers, the variadic function interface has no upper bound.
 
-[heading C++11 Parameters]
+For C++11 compilers, the variadic function accepts `0` to
+`FUSION_MAX_DEQUE_SIZE` elements, where `FUSION_MAX_DEQUE_SIZE` is a
+user definable predefined maximum that defaults to `10`. You may define
+the preprocessor constant `FUSION_MAX_DEQUE_SIZE` before including any
+Fusion header to change the default. Example:
+
+    #define FUSION_MAX_DEQUE_SIZE 20
+
+[heading Parameters]
 
 [table
     [[Parameter]            [Description]               [Description]]
     [[`elements`]           [Instances of `Elements`]   [The arguments to `make_deque`]]
 ]
 
-[heading C++11 Expression Semantics]
+[heading Expression Semantics]
 
     make_deque(elements...);
 
@@ -1226,35 +1188,7 @@ including any Fusion header to change the default. Example:
 
 Constructs a tie using a __deque__ sequence.
 
-[heading C++03 Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    __deque__<T0&, T1&,... TN&>
-    deque_tie(T0& x0, T1& x1... TN& xN);
-
-The variadic function accepts `0` to `FUSION_MAX_DEQUE_SIZE` elements, where
-`FUSION_MAX_DEQUE_SIZE` is a user definable predefined maximum that defaults
-to `10`. You may define the preprocessor constant `FUSION_MAX_DEQUE_SIZE`
-before including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_DEQUE_SIZE 20
-
-[heading C++03 Parameters]
-
-[table
-    [[Parameter]        [Requirement]                       [Description]]
-    [[`x0, x1,... xN`]  [Instances of `T0, T1,... TN`]      [The arguments to `deque_tie`]]
-]
-
-[heading C++03 Expression Semantics]
-
-    deque_tie(x0, x1,... xN);
-
-[*Return type]: __deque__<T0&, T1&,... TN&>
-
-[*Semantics]: Create a __deque__ of references from `x0, x1,... xN`.
-
-[heading C++11 Synopsis]
+[heading Synopsis]
 
     template <typename ...Elements>
     __deque__<Elements&...>
@@ -1262,14 +1196,22 @@ before including any Fusion header to change the default. Example:
 
 For C++11 compilers, the variadic function interface has no upper bound.
 
-[heading C++11 Parameters]
+For C++03 compilers, the variadic function accepts `0` to
+`FUSION_MAX_DEQUE_SIZE` elements, where `FUSION_MAX_DEQUE_SIZE` is a
+user definable predefined maximum that defaults to `10`. You may define
+the preprocessor constant `FUSION_MAX_DEQUE_SIZE` before including any
+Fusion header to change the default. Example:
+
+    #define FUSION_MAX_DEQUE_SIZE 20
+
+[heading Parameters]
 
 [table
     [[Parameter]            [Description]               [Description]]
     [[`elements`]           [Instances of `Elements`]   [The arguments to `deque_tie`]]
 ]
 
-[heading C++11 Expression Semantics]
+[heading Expression Semantics]
 
     deque_tie(elements...);
 
@@ -1690,48 +1632,29 @@ default. Example:
 
 Returns the result type of __deque_tie__.
 
-[heading C++03 Synopsis]
-
-    template <typename T0, typename T1,... typename TN>
-    struct deque_tie;
-
-The variadic function accepts `0` to `FUSION_MAX_DEQUE_SIZE` elements, where
-`FUSION_MAX_DEQUE_SIZE` is a user definable predefined maximum that defaults
-to `10`. You may define the preprocessor constant `FUSION_MAX_DEQUE_SIZE`
-before including any Fusion header to change the default. Example:
-
-    #define FUSION_MAX_DEQUE_SIZE 20
-
-[heading C++03 Parameters]
-
-[table
-    [[Parameter]        [Requirement]       [Description]]
-    [[`T0, T1,... TN`]  [Any type]          [The arguments to `deque_tie`]]
-]
-
-[heading C++03 Expression Semantics]
-
-    result_of::deque_tie<T0, T1,... TN>::type;
-
-[*Return type]: __deque__<T0&, T1&,... TN&>
-
-[*Semantics]: Create a __deque__ of references from `T0, T1,... TN`.
-
-[heading C++11 Synopsis]
+[heading Synopsis]
 
     template <typename ...Elements>
     struct deque_tie;
 
 For C++11 compilers, the variadic template interface has no upper bound.
 
-[heading C++11 Parameters]
+For C++03 compilers, the variadic function accepts `0` to
+`FUSION_MAX_DEQUE_SIZE` elements, where `FUSION_MAX_DEQUE_SIZE` is a
+user definable predefined maximum that defaults to `10`. You may define
+the preprocessor constant `FUSION_MAX_DEQUE_SIZE` before including any
+Fusion header to change the default. Example:
+
+    #define FUSION_MAX_DEQUE_SIZE 20
+
+[heading Parameters]
 
 [table
     [[Parameter]        [Requirement]               [Description]]
     [[`Elements`]       [Variadic template types]   [Template arguments to `deque_tie`]]
 ]
 
-[heading C++11 Expression Semantics]
+[heading Expression Semantics]
 
     result_of::deque_tie<Elements...>::type;
 
