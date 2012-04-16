@@ -142,24 +142,24 @@ class dynamic_property_map_adaptor : public dynamic_property_map
     key_type key = any_cast<key_type>(in_key);
     if (in_value.type() == typeid(value_type)) {
 #if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
-      boost::put(property_map, key, any_cast<value_type>(in_value));
+      boost::put(property_map_, key, any_cast<value_type>(in_value));
 #else
-      put(property_map, key, any_cast<value_type>(in_value));
+      put(property_map_, key, any_cast<value_type>(in_value));
 #endif
     } else {
       //  if in_value is an empty string, put a default constructed value_type.
       std::string v = any_cast<std::string>(in_value);
       if (v.empty()) {
 #if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
-        boost::put(property_map, key, value_type());
+        boost::put(property_map_, key, value_type());
 #else
-        put(property_map, key, value_type());
+        put(property_map_, key, value_type());
 #endif
       } else {
 #if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
-        boost::put(property_map, key, detail::read_value<value_type>(v));
+        boost::put(property_map_, key, detail::read_value<value_type>(v));
 #else
-        put(property_map, key, detail::read_value<value_type>(v));
+        put(property_map_, key, detail::read_value<value_type>(v));
 #endif
       }
     }
@@ -171,17 +171,17 @@ class dynamic_property_map_adaptor : public dynamic_property_map
   }
 
 public:
-  explicit dynamic_property_map_adaptor(const PropertyMap& property_map)
-    : property_map(property_map) { }
+  explicit dynamic_property_map_adaptor(const PropertyMap& property_map_)
+    : property_map_(property_map_) { }
 
   virtual boost::any get(const any& key)
   {
 #if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
-    return boost::get(property_map, any_cast<key_type>(key));
+    return boost::get(property_map_, any_cast<key_type>(key));
 #else
     using boost::get;
 
-    return get(property_map, any_cast<key_type>(key));
+    return get(property_map_, any_cast<key_type>(key));
 #endif
   }
 
@@ -189,13 +189,13 @@ public:
   {
 #if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
     std::ostringstream out;
-    out << boost::get(property_map, any_cast<key_type>(key));
+    out << boost::get(property_map_, any_cast<key_type>(key));
     return out.str();
 #else
     using boost::get;
 
     std::ostringstream out;
-    out << get(property_map, any_cast<key_type>(key));
+    out << get(property_map_, any_cast<key_type>(key));
     return out.str();
 #endif
   }
@@ -210,11 +210,11 @@ public:
   virtual const std::type_info& key()   const { return typeid(key_type); }
   virtual const std::type_info& value() const { return typeid(value_type); }
 
-  PropertyMap&       base()       { return property_map; }
-  const PropertyMap& base() const { return property_map; }
+  PropertyMap&       base()       { return property_map_; }
+  const PropertyMap& base() const { return property_map_; }
 
 private:
-  PropertyMap property_map;
+  PropertyMap property_map_;
 };
 
 } // namespace detail
