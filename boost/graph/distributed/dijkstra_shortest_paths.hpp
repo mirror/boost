@@ -190,8 +190,7 @@ namespace boost {
                                   IndexMap> DefColorMap;
     DefColorMap color_map(color.begin(), index_map);
 
-    typedef typename get_param_type< bgl_named_params<T, Tag, Base>,
-      vertex_color_t>::type color_map_type;
+    typedef typename get_param_type< vertex_color_t, bgl_named_params<T, Tag, Base> >::type color_map_type;
 
     graph::detail::parallel_dijkstra_impl<color_map_type>
       ::run(g, s, predecessor, distance, 
