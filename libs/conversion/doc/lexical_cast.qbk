@@ -115,6 +115,7 @@ Exception used to indicate runtime lexical_cast failure.
 
 [endsect]
 
+[/ Commenting out bad advise (this will break the ability to get correct function pointers via &lexical_cast<Target, Source>)
 [section Tuning classes for fast lexical conversions]
 Because of `boost::lexical_cast` optimizations for `boost::iterator_range<character_type*>`, it is possibile to make very fast lexical conversions for non zero terminated strings, substrings and user-defined classes.
 
@@ -162,7 +163,7 @@ namespace boost {
 ``
 Now `boost::lexical_cast<some_type>(example_class_instance)` conversions won't copy data and construct heavy STL stream objects. See [link boost_lexical_cast.performance Performance] section for info on `boost::iterator_range` conversion performance.
 [endsect]
-
+]
 
 [section Frequently Asked Questions]
 
