@@ -97,7 +97,21 @@ The requirements on the argument and result types are:
 * Target is CopyConstructible [20.1.3].
 * Target is DefaultConstructible, meaning that it is possible to default-initialize an object of that type [8.5, 20.1.4].
 
-The character type of the underlying stream is assumed to be char unless either the Source or the Target requires wide-character streaming, in which case the underlying stream uses `wchar_t`. Source types that require wide-character streaming are `wchar_t`, `wchar_t *`, and `std::wstring`. Target types that require wide-character streaming are `wchar_t` and `std::wstring`.
+The character type of the underlying stream is assumed to be `char` unless either the `Source` or the `Target` requires wide-character streaming, in which case the underlying stream uses `wchar_t`, `char16_t` or `char32_t`. Wide-character streaming is currently detected for:
+
+* Single character: `wchar_t`, `char16_t`, `char32_t`
+* Arrays of characters: `wchar_t *`, `char16_t *`, `char32_t *`, `const wchar_t *`, `const char16_t *`, `const char32_t *`
+* Strings: `std::basic_string`, `boost::containers::basic_string`
+* Character ranges: `boost::iterator_range`, `boost::iterator_range`
+
+[important Many compilers and runtime libraries fail to make conversions using new Unicode characters. Make shure that the following code compiles and outputs nonzero values, before using new types:
+`` 
+    std::cout 
+        << booat::lexical_cast<std::u32string>(1.0).size()
+        << "  "
+        << booat::lexical_cast<std::u16string>(1.0).size();
+``
+]
 
 Where a higher degree of control is required over conversions, `std::stringstream` and `std::wstringstream` offer a more appropriate path. Where non-stream-based conversions are required, `lexical_cast` is the wrong tool for the job and is not special-cased for such scenarios.
 [endsect]
@@ -146,9 +160,9 @@ Consider the following example:
 This is a good generic solution for most use cases. 
 But we can make it even faster for some performance critical applications. During conversion, we loose speed at:
 
-* `std::ostream` construction     (it makes some heap allocations)
-* `operator <<`                   (it copyies one by one all the symbols to an instance of `std::ostream`)
-* `std::ostream` destruction      (it makes some heap deallocations)
+ * `std::ostream` construction     (it makes some heap allocations)
+ * `operator <<`                   (it copyies one by one all the symbols to an instance of `std::ostream`)
+ * `std::ostream` destruction      (it makes some heap deallocations)
 
 We can avoid all of this, by specifieng an overload for `boost::lexical_cast`:
 ``
