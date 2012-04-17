@@ -102,7 +102,7 @@ The character type of the underlying stream is assumed to be `char` unless eithe
 * Single character: `wchar_t`, `char16_t`, `char32_t`
 * Arrays of characters: `wchar_t *`, `char16_t *`, `char32_t *`, `const wchar_t *`, `const char16_t *`, `const char32_t *`
 * Strings: `std::basic_string`, `boost::containers::basic_string`
-* Character ranges: `boost::iterator_range`, `boost::iterator_range`
+* `boost::iterator_range<WideCharPtr>`, where `WideCharPtr` is a pointer to wide-character or pointer to const wide-character
 
 [important Many compilers and runtime libraries fail to make conversions using new Unicode characters. Make shure that the following code compiles and outputs nonzero values, before using new types:
 `` 
