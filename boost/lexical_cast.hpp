@@ -28,36 +28,20 @@
 
 #include <climits>
 #include <cstddef>
-#include <istream>
 #include <string>
 #include <cstring>
 #include <cstdio>
 #include <typeinfo>
 #include <exception>
-#include <cmath>
 #include <boost/limits.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/throw_exception.hpp>
-#include <boost/type_traits/is_pointer.hpp>
-#include <boost/type_traits/is_integral.hpp>
-#include <boost/type_traits/is_arithmetic.hpp>
-#include <boost/type_traits/remove_pointer.hpp>
-#include <boost/numeric/conversion/cast.hpp>
 #include <boost/type_traits/ice.hpp>
-#include <boost/type_traits/make_unsigned.hpp>
-#include <boost/type_traits/is_signed.hpp>
-#include <boost/math/special_functions/sign.hpp>
-#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/type_traits/is_pointer.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/lcast_precision.hpp>
 #include <boost/detail/workaround.hpp>
-#include <boost/range/iterator_range_core.hpp>
-#if !defined(__SUNPRO_CC)
-#include <boost/container/container_fwd.hpp>
-#endif // !defined(__SUNPRO_CC)
-#ifndef BOOST_NO_CWCHAR
-#   include <cwchar>
-#endif
+
 
 #ifndef BOOST_NO_STD_LOCALE
 #   include <locale>
@@ -137,118 +121,9 @@ namespace boost
         const std::type_info *target;
     };
 
-    namespace detail // selectors for choosing stream character type
+    namespace detail // widest_char
     {
-    template<typename Type>
-    struct stream_char
-    {
-        typedef char type;
-    };
-
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    template<typename CharT>
-    struct stream_char<iterator_range<CharT*> >
-    {
-        typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
-    };
-    
-    template<typename CharT>
-    struct stream_char<iterator_range<const CharT*> >
-    {
-        typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
-    };
-
-    template<class CharT, class Traits, class Alloc>
-    struct stream_char< std::basic_string<CharT,Traits,Alloc> >
-    {
-        typedef CharT type;
-    };
-
-#if !defined(__SUNPRO_CC)
-    template<class CharT, class Traits, class Alloc>
-    struct stream_char< ::boost::container::basic_string<CharT,Traits,Alloc> >
-    {
-        typedef CharT type;
-    };
-#endif // !defined(__SUNPRO_CC)
-#endif
-
-#ifndef BOOST_LCAST_NO_WCHAR_T
-#ifndef BOOST_NO_INTRINSIC_WCHAR_T
-    template<>
-    struct stream_char<wchar_t>
-    {
-        typedef wchar_t type;
-    };
-#endif
-
-    template<>
-    struct stream_char<wchar_t *>
-    {
-        typedef wchar_t type;
-    };
-
-    template<>
-    struct stream_char<const wchar_t *>
-    {
-        typedef wchar_t type;
-    };
-
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    template<>
-    struct stream_char<std::wstring>
-    {
-        typedef wchar_t type;
-    };
-#endif
-#endif
-
-
-#ifndef BOOST_NO_CHAR16_T
-
-    template<>
-    struct stream_char<char16_t>
-    {
-        typedef char16_t type;
-    };
-
-    template<>
-    struct stream_char<char16_t *>
-    {
-        typedef char16_t type;
-    };
-
-    template<>
-    struct stream_char<const char16_t *>
-    {
-        typedef char16_t type;
-    };
-
-#endif
-
-#ifndef BOOST_NO_CHAR32_T
-
-    template<>
-    struct stream_char<char32_t>
-    {
-        typedef char32_t type;
-    };
-
-    template<>
-    struct stream_char<char32_t *>
-    {
-        typedef char32_t type;
-    };
-
-    template<>
-    struct stream_char<const char32_t *>
-    {
-        typedef char32_t type;
-    };
-
-#endif
-
-        template<typename TargetChar, typename SourceChar>
+        template <typename TargetChar, typename SourceChar>
         struct widest_char
         {
             typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
@@ -257,10 +132,162 @@ namespace boost
                 , SourceChar >::type type;
         };
     }
+} // namespace boost
+
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+#include <cmath>
+#include <istream>
+#include <boost/numeric/conversion/cast.hpp>
+#include <boost/type_traits/make_unsigned.hpp>
+#include <boost/type_traits/is_signed.hpp>
+#include <boost/type_traits/is_integral.hpp>
+#include <boost/type_traits/is_arithmetic.hpp>
+#include <boost/type_traits/remove_pointer.hpp>
+#include <boost/math/special_functions/sign.hpp>
+#include <boost/math/special_functions/fpclassify.hpp>
+#include <boost/range/iterator_range_core.hpp>
+#if !defined(__SUNPRO_CC)
+#include <boost/container/container_fwd.hpp>
+#endif // !defined(__SUNPRO_CC)
+#ifndef BOOST_NO_CWCHAR
+#   include <cwchar>
+#endif
+
+namespace boost {
+    namespace detail // widest_char<...> (continuation)
+    {
+        struct not_a_character_type{};
+
+        template <typename CharT>
+        struct widest_char<not_a_character_type, CharT >
+        {
+            typedef CharT type;
+        };
+
+        template <typename CharT>
+        struct widest_char< CharT, not_a_character_type >
+        {
+            typedef CharT type;
+        };
+                
+        template <>
+        struct widest_char< not_a_character_type, not_a_character_type >
+        {
+            typedef char type;
+        };
+    } 
+
+    namespace detail // is_char_or_wchar<...> and stream_char<...> templates
+    {
+        // returns true, if T is one of the character types
+        template <typename T>
+        struct is_char_or_wchar
+        {
+            typedef ::boost::type_traits::ice_or<
+                    ::boost::is_same< T, char >::value,
+                    #ifndef BOOST_LCAST_NO_WCHAR_T
+                        ::boost::is_same< T, wchar_t >::value,
+                    #endif
+                    #ifndef BOOST_NO_CHAR16_T
+                        ::boost::is_same< T, char16_t >::value,
+                    #endif
+                    #ifndef BOOST_NO_CHAR32_T
+                        ::boost::is_same< T, char32_t >::value,
+                    #endif
+                    ::boost::is_same< T, unsigned char >::value,
+                    ::boost::is_same< T, signed char >::value
+            > result_type;
+
+            BOOST_STATIC_CONSTANT(bool, value = (result_type::value) );
+        };
+
+        // selectors for choosing stream character type
+        // returns one of char, wchar_t, char16_t, char32_t or not_a_character_type types
+        template <typename Type>
+        struct stream_char
+        {
+            typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
+                is_char_or_wchar<Type >::value,
+                Type,
+                boost::detail::not_a_character_type
+            >::type type;
+        };
+
+        template <>
+        struct stream_char<unsigned char>
+        {
+            typedef char type;
+        };
+
+        template <>
+        struct stream_char<signed char>
+        {
+            typedef char type;
+        };
+
+        template<typename CharT>
+        struct stream_char<CharT*>
+        {
+            typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
+        };
+
+        template<typename CharT>
+        struct stream_char<const CharT*>
+        {
+            typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
+        };
+
+        template<typename CharT>
+        struct stream_char<iterator_range<CharT*> >
+        {
+            typedef BOOST_DEDUCED_TYPENAME stream_char<CharT*>::type type;
+        };
+    
+        template<typename CharT>
+        struct stream_char<iterator_range<const CharT*> >
+        {
+            typedef BOOST_DEDUCED_TYPENAME stream_char<const CharT*>::type type;
+        };
+
+        template<class CharT, class Traits, class Alloc>
+        struct stream_char< std::basic_string<CharT, Traits, Alloc> >
+        {
+            typedef CharT type;
+        };
+
+#if !defined(__SUNPRO_CC)
+        template<class CharT, class Traits, class Alloc>
+        struct stream_char< ::boost::container::basic_string<CharT, Traits, Alloc> >
+        {
+            typedef CharT type;
+        };
+#endif // !defined(__SUNPRO_CC)
+
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && defined(BOOST_NO_INTRINSIC_WCHAR_T)
+        template<>
+        struct stream_char<wchar_t>
+        {
+            typedef boost::detail::not_a_character_type type;
+        };
+
+        template<>
+        struct stream_char<wchar_t*>
+        {
+            typedef wchar_t type;
+        };
+
+        template<>
+        struct stream_char<const wchar_t*>
+        {
+            typedef wchar_t type;
+        };
+#endif
+    }
 
     namespace detail // deduce_char_traits template
     {
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
         template<class CharT, class Target, class Source>
         struct deduce_char_traits
         {
@@ -325,7 +352,7 @@ namespace boost
         template<class CharT, class Traits, class Alloc1, class Alloc2>
         struct deduce_char_traits< CharT
                                  , ::boost::container::basic_string<CharT,Traits,Alloc1>
-                                 , std::basic_string<CharT,Traits,Alloc2>
+                                 , ::std::basic_string<CharT,Traits,Alloc2>
                                  >
         {
             typedef Traits type;
@@ -333,14 +360,13 @@ namespace boost
 
         template<class CharT, class Traits, class Alloc1, class Alloc2>
         struct deduce_char_traits< CharT
-                                 , std::basic_string<CharT,Traits,Alloc1>
+                                 , ::std::basic_string<CharT,Traits,Alloc1>
                                  , ::boost::container::basic_string<CharT,Traits,Alloc2>
                                  >
         {
             typedef Traits type;
         };
 #endif // !defined(__SUNPRO_CC)
-#endif
     }
 
     namespace detail // lcast_src_length
@@ -383,7 +409,7 @@ namespace boost
             BOOST_STATIC_ASSERT(sizeof(Source) * CHAR_BIT <= 256);
 #endif
         };
-// TODO: FIX for char16_t, char32_t, we can ignore CharT
+
 #define BOOST_LCAST_DEF(T)               \
     template<> struct lcast_src_length<T> \
         : lcast_src_length_integral<T>           \
@@ -1217,7 +1243,7 @@ namespace boost
             bool shl_char(T ch)
             {
                 BOOST_STATIC_ASSERT_MSG(( sizeof(T) <= sizeof(CharT)) ,
-                    "boost::lexical_cast does not support conversions from wchar_t to char types."
+                    "boost::lexical_cast does not support conversions from wide character to char types."
                     "Use boost::locale instead" );
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
                 std::locale loc;
@@ -1243,7 +1269,7 @@ namespace boost
             bool shl_char_array(T const* str)
             {
                 BOOST_STATIC_ASSERT_MSG(( sizeof(T) <= sizeof(CharT)),
-                    "boost::lexical_cast does not support conversions from wchar_t to char types."
+                    "boost::lexical_cast does not support conversions from wide characters to char types."
                     "Use boost::locale instead" );
                 return shl_input_streamable(str);
             }
@@ -1430,6 +1456,16 @@ namespace boost
 #ifndef BOOST_NO_INTRINSIC_WCHAR_T
             bool operator<<(wchar_t ch)                 { return shl_char(ch); }
 #endif
+#endif
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+            bool operator<<(char16_t ch)                { return shl_char(ch); }
+            bool operator<<(char16_t * str)             { return shl_char_array(str); }
+            bool operator<<(char16_t const * str)       { return shl_char_array(str); }
+#endif
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+            bool operator<<(char32_t ch)                { return shl_char(ch); }
+            bool operator<<(char32_t * str)             { return shl_char_array(str); }
+            bool operator<<(char32_t const * str)       { return shl_char_array(str); }
 #endif
             bool operator<<(unsigned char const* ch)    { return ((*this) << reinterpret_cast<char const*>(ch)); }
             bool operator<<(unsigned char * ch)         { return ((*this) << reinterpret_cast<char *>(ch)); }
@@ -1634,19 +1670,13 @@ namespace boost
 #if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
             bool operator>>(char32_t& output)                   { return shr_xchar(output); }
 #endif
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-            bool operator>>(std::string& str)                   { str.assign(start, finish); return true; }
-#   ifndef BOOST_LCAST_NO_WCHAR_T
-            bool operator>>(std::wstring& str)                  { str.assign(start, finish); return true; }
-#   endif
-#else
             template<class Alloc>
             bool operator>>(std::basic_string<CharT,Traits,Alloc>& str) { str.assign(start, finish); return true; }
 #if !defined(__SUNPRO_CC)
             template<class Alloc>
             bool operator>>(::boost::container::basic_string<CharT,Traits,Alloc>& str) { str.assign(start, finish); return true; }
 #endif // !defined(__SUNPRO_CC)
-#endif
+
             /*
              * case "-0" || "0" || "+0" :   output = false; return true;
              * case "1" || "+1":            output = true;  return true;
@@ -1752,10 +1782,6 @@ namespace boost
         };
     }
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-    // call-by-const reference version
-
     namespace detail
     {
         template<class T>
@@ -1788,60 +1814,6 @@ namespace boost
             BOOST_STATIC_CONSTANT(bool, value = true );
         };
 #endif // !defined(__SUNPRO_CC)
-        template<typename T>
-        struct is_char_or_wchar
-        {
-        private:
-#ifndef BOOST_LCAST_NO_WCHAR_T
-            typedef wchar_t wchar_t_if_supported;
-#else
-            typedef char wchar_t_if_supported;
-#endif
-
-#ifndef BOOST_NO_CHAR16_T
-            typedef char16_t char16_t_if_supported;
-#else
-            typedef char char16_t_if_supported;
-#endif
-
-#ifndef BOOST_NO_CHAR32_T
-            typedef char32_t char32_t_if_supported;
-#else
-            typedef char char32_t_if_supported;
-#endif
-            public:
-
-            BOOST_STATIC_CONSTANT(bool, value =
-                    (
-                    ::boost::type_traits::ice_or<
-                         is_same< T, char >::value,
-                         is_same< T, wchar_t_if_supported >::value,
-                         is_same< T, char16_t_if_supported >::value,
-                         is_same< T, char32_t_if_supported >::value,
-                         is_same< T, unsigned char >::value,
-                         is_same< T, signed char >::value
-                    >::value
-                    )
-            );
-        };
-
-        template <typename T>
-        struct is_char_iterator_range
-        {
-            BOOST_STATIC_CONSTANT(bool, value = false );
-        };
-
-        template <typename CharT>
-        struct is_char_iterator_range<iterator_range<CharT*> >
-        {
-            BOOST_STATIC_CONSTANT(bool, value = (is_char_or_wchar<CharT>::value) );
-        };
-
-        template <typename CharT>
-        struct is_char_iterator_range<iterator_range<const CharT*> >
-        {
-            BOOST_STATIC_CONSTANT(bool, value = (is_char_or_wchar<CharT>::value) );
-        };
 
         template<typename Target, typename Source>
         struct is_arithmetic_and_not_xchars
@@ -1970,51 +1942,34 @@ namespace boost
                     "Your compiler does not have full support for char32_t" );
 #endif
 
-                typedef detail::lcast_src_length<src> lcast_src_length;
+                typedef detail::lcast_src_length<src > lcast_src_length;
                 std::size_t const src_len = lcast_src_length::value;
                 char_type buf[src_len + 1];
                 lcast_src_length::check_coverage();
 
-                typedef BOOST_DEDUCED_TYPENAME
-                    deduce_char_traits<char_type,Target,Source>::type traits;
+                typedef BOOST_DEDUCED_TYPENAME ::boost::detail::deduce_char_traits<
+                    char_type, Target, Source
+                >::type traits;
 
-                typedef BOOST_DEDUCED_TYPENAME remove_pointer<src>::type removed_ptr_t_1;
-                typedef BOOST_DEDUCED_TYPENAME remove_cv<removed_ptr_t_1>::type removed_ptr_t;
+                typedef ::boost::type_traits::ice_and<
+                    ::boost::detail::is_char_or_wchar<src_char_type>::value,                    // source is lexical type
+                    ::boost::detail::is_char_or_wchar<target_char_t>::value,                    // target is a lexical type
+                    ::boost::is_same<char, src_char_type>::value,                               // source is not a wide character based type
+                    ::boost::type_traits::ice_ne<sizeof(char), sizeof(target_char_t) >::value   // target type is based on wide character
+                >   is_string_widening_required_t;
 
-                // is_char_types_match variable value can be computed via
-                // sizeof(char_type) == sizeof(removed_ptr_t). But when
-                // removed_ptr_t is an incomplete type or void*, compilers
-                // produce warnings or errors.
-                const bool is_char_types_match =
-                (::boost::type_traits::ice_or<
-                    ::boost::type_traits::ice_and<
-                        ::boost::type_traits::ice_eq<sizeof(char_type), sizeof(char) >::value,
-                        ::boost::type_traits::ice_or<
-                            ::boost::is_same<char, src_char_type>::value,
-                            ::boost::is_same<unsigned char, src_char_type>::value,
-                            ::boost::is_same<signed char, src_char_type>::value
-                        >::value
-                    >::value,
-                    ::boost::is_same<char_type, src_char_type>::value
-                >::value);
+                typedef ::boost::type_traits::ice_or<
+                    ::boost::is_integral<src>::value,
+                    ::boost::detail::is_this_float_conversion_optimized<src, char_type >::value,
+                    ::boost::detail::is_char_or_wchar<src_char_type >::value
+                >   is_source_input_optimized_t;
 
-                const bool requires_stringbuf =
-                        !(
-                             ::boost::type_traits::ice_or<
-                                 ::boost::detail::is_stdstring<src>::value,
-                                 ::boost::is_integral<src>::value,
-                                 ::boost::detail::is_this_float_conversion_optimized<src, char_type >::value,
-                                 ::boost::type_traits::ice_and<
-                                    ::boost::detail::is_char_iterator_range<src >::value,
-                                    is_char_types_match
-                                 >::value,
-                                 ::boost::type_traits::ice_and<
-                                     ::boost::is_pointer<src>::value,
-                                     ::boost::detail::is_char_or_wchar<removed_ptr_t>::value,
-                                     is_char_types_match
-                                 >::value
-                             >::value
-                        );
+                // If we have an optimized conversion for
+                // Source, we do not need to construct stringbuf.
+                const bool requires_stringbuf = ::boost::type_traits::ice_or<
+                        is_string_widening_required_t::value,
+                        ::boost::type_traits::ice_not< is_source_input_optimized_t::value >::value
+                >::value;
 
                 detail::lexical_stream_limited_src<char_type, traits, requires_stringbuf >
                         interpreter(buf, buf + src_len);
@@ -2030,7 +1985,7 @@ namespace boost
 # pragma warning( pop )
 #endif
 
-        template<typename Source>
+        template <typename Source>
         struct lexical_cast_copy
         {
             static inline Source lexical_cast_impl(const Source &arg)
@@ -2039,7 +1994,7 @@ namespace boost
             }
         };
 
-        template<class Source, class Target >
+        template <class Source, class Target >
         struct detect_precision_loss
         {
          typedef boost::numeric::Trunc<Source> Rounder;
@@ -2063,7 +2018,7 @@ namespace boost
          typedef typename Rounder::round_style round_style;
         } ;
 
-        template<class Source, class Target >
+        template <class Source, class Target >
         struct nothrow_overflow_handler
         {
           void operator() ( boost::numeric::range_check_result r )
@@ -2073,7 +2028,7 @@ namespace boost
           }
         } ;
 
-        template<typename Target, typename Source>
+        template <typename Target, typename Source>
         struct lexical_cast_dynamic_num_not_ignoring_minus
         {
             static inline Target lexical_cast_impl(const Source &arg)
@@ -2088,7 +2043,7 @@ namespace boost
             }
         };
 
-        template<typename Target, typename Source>
+        template <typename Target, typename Source>
         struct lexical_cast_dynamic_num_ignoring_minus
         {
             static inline Target lexical_cast_impl(const Source &arg)
@@ -2125,7 +2080,7 @@ namespace boost
          * optional, so if a negative number is read, no errors will arise
          * and the result will be the two's complement.
          */
-        template<typename Target, typename Source>
+        template <typename Target, typename Source>
         struct lexical_cast_dynamic_num
         {
             static inline Target lexical_cast_impl(const Source &arg)
@@ -2153,40 +2108,80 @@ namespace boost
         };
     }
 
-    template<typename Target, typename Source>
+    template <typename Target, typename Source>
     inline Target lexical_cast(const Source &arg)
     {
         typedef BOOST_DEDUCED_TYPENAME ::boost::detail::array_to_pointer_decay<Source>::type src;
 
         typedef BOOST_DEDUCED_TYPENAME ::boost::type_traits::ice_or<
-                ::boost::detail::is_xchar_to_xchar<Target, src>::value,
-                ::boost::detail::is_char_array_to_stdstring<Target,src>::value,
+                ::boost::detail::is_xchar_to_xchar<Target, src >::value,
+                ::boost::detail::is_char_array_to_stdstring<Target, src >::value,
                 ::boost::type_traits::ice_and<
-                     ::boost::is_same<Target, src>::value,
-                     ::boost::detail::is_stdstring<Target>::value
+                     ::boost::is_same<Target, src >::value,
+                     ::boost::detail::is_stdstring<Target >::value
                 >::value
-        > do_copy_type;
+        > shall_we_copy_t;
 
         typedef BOOST_DEDUCED_TYPENAME
-                ::boost::detail::is_arithmetic_and_not_xchars<Target, src> do_copy_with_dynamic_check_type;
+                ::boost::detail::is_arithmetic_and_not_xchars<Target, src > shall_we_copy_with_dynamic_check_t;
 
         typedef BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
-            do_copy_type::value,
-            detail::lexical_cast_copy<src>,
+            shall_we_copy_t::value,
+            ::boost::detail::lexical_cast_copy<src >,
             BOOST_DEDUCED_TYPENAME ::boost::mpl::if_c<
-                 do_copy_with_dynamic_check_type::value,
-                 ::boost::detail::lexical_cast_dynamic_num<Target, src>,
-                 ::boost::detail::lexical_cast_do_cast<Target, src>
+                 shall_we_copy_with_dynamic_check_t::value,
+                 ::boost::detail::lexical_cast_dynamic_num<Target, src >,
+                 ::boost::detail::lexical_cast_do_cast<Target, src >
             >::type
         >::type caster_type;
 
         return caster_type::lexical_cast_impl(arg);
     }
 
-    #else
+} // namespace boost
 
-    namespace detail // stream wrapper for handling lexical conversions
+#else // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+
+namespace boost {
+    namespace detail
     {
+
+        // selectors for choosing stream character type
+        template<typename Type>
+        struct stream_char
+        {
+            typedef char type;
+        };
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+#ifndef BOOST_NO_INTRINSIC_WCHAR_T
+        template<>
+        struct stream_char<wchar_t>
+        {
+            typedef wchar_t type;
+        };
+#endif
+
+        template<>
+        struct stream_char<wchar_t *>
+        {
+            typedef wchar_t type;
+        };
+
+        template<>
+        struct stream_char<const wchar_t *>
+        {
+            typedef wchar_t type;
+        };
+
+        template<>
+        struct stream_char<std::wstring>
+        {
+            typedef wchar_t type;
+        };
+#endif
+
+        // stream wrapper for handling lexical conversions
         template<typename Target, typename Source, typename Traits>
         class lexical_stream
         {
@@ -2276,8 +2271,9 @@ namespace boost
         return result;
     }
 
-    #endif
-}
+} // namespace boost
+
+#endif
 
 // Copyright Kevlin Henney, 2000-2005.
 // Copyright Alexander Nasonov, 2006-2010.
@@ -2287,5 +2283,8 @@ namespace boost
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#undef BOOST_LCAST_THROW_BAD_CAST
 #undef BOOST_LCAST_NO_WCHAR_T
-#endif
+
+#endif // BOOST_LEXICAL_CAST_INCLUDED
+

@@ -12,6 +12,7 @@ project
     : requirements
         <library>/boost/test//boost_unit_test_framework
         <link>static 
+        <toolset>gcc-4.8:<define>BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES
     ;
 
 # Thanks to Steven Watanabe for helping with <nowchar> feature 

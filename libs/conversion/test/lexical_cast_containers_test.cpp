@@ -14,6 +14,8 @@
 
 void testing_boost_containers_basic_string();
 void testing_boost_containers_string_std_string();
+void testing_boost_containers_string_widening();
+
 
 using namespace boost;
 
@@ -23,6 +25,7 @@ boost::unit_test::test_suite *init_unit_test_suite(int, char *[])
         BOOST_TEST_SUITE("Testing boost::lexical_cast with boost::container::string");
     suite->add(BOOST_TEST_CASE(testing_boost_containers_basic_string));
     suite->add(BOOST_TEST_CASE(testing_boost_containers_string_std_string));
+    suite->add(BOOST_TEST_CASE(testing_boost_containers_string_widening));
 
     return suite;
 }
@@ -57,4 +60,24 @@ void testing_boost_containers_string_std_string()
 
 #endif
 
+}
+
+void testing_boost_containers_string_widening()
+{
+    const char char_array[] = "Test string";
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+    const wchar_t wchar_array[] = L"Test string";
+    BOOST_CHECK(boost::lexical_cast<boost::container::wstring>(char_array) == wchar_array);
+#endif
+
+#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+    const char16_t char16_array[] = u"Test string";
+    BOOST_CHECK(boost::lexical_cast<boost::container::basic_string<char16_t> >(char_array) == char16_array);
+#endif
+
+#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+    const char32_t char32_array[] = U"Test string";
+    BOOST_CHECK(boost::lexical_cast<boost::container::basic_string<char32_t> >(char_array) == char32_array);
+#endif
 }
