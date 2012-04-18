@@ -13,6 +13,7 @@
 #include <boost/type_traits/is_convertible.hpp>
 
 #include <boost/fusion/support/sequence_base.hpp>
+#include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>
 #include <boost/fusion/container/deque/detail/cpp11_deque_keyed_values.hpp>
 #include <boost/fusion/container/deque/deque_fwd.hpp>
@@ -56,8 +57,8 @@ namespace boost { namespace fusion
           : base(seq)
         {}
 
-        explicit deque(typename add_reference<typename add_const<Head>::type>::type head
-          , typename add_reference<typename add_const<Tail>::type>::type... tail)
+        explicit deque(typename detail::call_param<Head>::type head
+          , typename detail::call_param<Tail>::type... tail)
           : base(detail::deque_keyed_values<Head, Tail...>::call(head, tail...))
         {}
 

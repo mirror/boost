@@ -8,9 +8,7 @@
 #if !defined(BOOST_FUSION_DEQUE_DETAIL_KEYED_ELEMENT_26112006_1330)
 #define BOOST_FUSION_DEQUE_DETAIL_KEYED_ELEMENT_26112006_1330
 
-#include <boost/type_traits/add_reference.hpp>
-#include <boost/type_traits/add_const.hpp>
-
+#include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
 
@@ -39,10 +37,6 @@ namespace boost { namespace fusion { namespace detail
     {
         typedef Rest base;
         typedef fusion_sequence_tag tag;
-        typedef typename
-            add_reference<typename add_const<Value>::type>::type
-        const_value_type;
-        typedef typename add_reference<Value>::type value_type;
         using Rest::get;
 
         template <typename It>
@@ -63,17 +57,17 @@ namespace boost { namespace fusion { namespace detail
             return *this;
         }
 
-        const_value_type get(Key) const
+        typename cref_result<Value>::type get(Key) const
         {
             return value_;
         }
 
-        value_type get(Key)
+        typename ref_result<Value>::type get(Key)
         {
             return value_;
         }
 
-        keyed_element(const_value_type value, Rest const& rest)
+        keyed_element(typename call_param<Value>::type value, Rest const& rest)
             : Rest(rest), value_(value)
         {}
 
