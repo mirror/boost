@@ -31,7 +31,9 @@ namespace boost { namespace fusion
     struct deque_tag;
 
     template <typename ...Elements>
-    struct deque;
+    struct deque : detail::nil_keyed_element
+    {
+    };
 
     template <typename Head, typename ...Tail>
     struct deque<Head, Tail...>
@@ -49,22 +51,18 @@ namespace boost { namespace fusion
         deque()
         {}
 
-        explicit deque(typename add_reference<typename add_const<Head>::type>::type elem)
-          : base(elem, detail::nil_keyed_element())
-        {}
-
         template <typename ...Elements>
         deque(deque<Elements...> const& seq)
           : base(seq)
         {}
 
-        deque(typename add_reference<typename add_const<Head>::type>::type head
+        explicit deque(typename add_reference<typename add_const<Head>::type>::type head
           , typename add_reference<typename add_const<Tail>::type>::type... tail)
           : base(detail::deque_keyed_values<Head, Tail...>::call(head, tail...))
         {}
 
         template <typename Sequence>
-        deque(Sequence const& seq
+        explicit deque(Sequence const& seq
           , typename disable_if<is_convertible<Sequence, Head> >::type* /*dummy*/ = 0)
           : base(base::from_iterator(fusion::begin(seq)))
         {}
