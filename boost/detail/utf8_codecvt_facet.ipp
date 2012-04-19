@@ -1,5 +1,5 @@
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
-// utf8_codecvt_facet.cpp
+// utf8_codecvt_facet.ipp
 
 // Copyright (c) 2001 Ronald Garcia, Indiana University (garcia@osl.iu.edu)
 // Andrew Lumsdaine, Indiana University (lums@osl.iu.edu). 
