@@ -10,7 +10,6 @@
 #include <boost/typeof/std/string.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #include <string>
-#include <cmath>
 
 int add_i(int x, int y) { return x + y; }
 
@@ -35,8 +34,8 @@ int main(void) {
     > add(add_s, add_d, add_d, add_i);
 
     BOOST_TEST(add("xyz") == "abcxyz");
-    BOOST_TEST(fabs(add(3.21) - 4.44) < 0.001);
-    BOOST_TEST(fabs(add(3.21, 40.0) - 44.44) < 0.001);
+    BOOST_TEST((4.44 - add(3.21)) <= 0.001); // Equal within precision.
+    BOOST_TEST((44.44 - add(3.21, 40.0)) <= 0.001); // Equal within precision.
     BOOST_TEST(add(1, 2) == 3);
     return boost::report_errors();
 }

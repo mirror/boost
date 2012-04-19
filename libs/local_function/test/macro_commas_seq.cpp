@@ -17,8 +17,11 @@ std::string cat(const std::string& x, const std::string& y) { return x + y; }
 
 template<typename V, typename K>
 struct key_sizeof {
-    BOOST_STATIC_CONSTANT(int, value = sizeof(K));
+    static int const value;
 };
+
+template<typename V, typename K>
+int const key_sizeof<V, K>::value = sizeof(K);
 
 typedef int sign_t;
 

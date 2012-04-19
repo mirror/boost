@@ -28,13 +28,13 @@
     } BOOST_LOCAL_FUNCTION_NAME(dec)
 
 #define LOCAL_INC_DEC_TPL(offset) \
-    int BOOST_LOCAL_FUNCTION_TPL_ID(BOOST_PP_CAT(inc, __LINE__), \
-            const bind offset, const int x) { \
+    T BOOST_LOCAL_FUNCTION_TPL_ID(BOOST_PP_CAT(inc, __LINE__), \
+            const bind offset, const T x) { \
         return x + offset; \
     } BOOST_LOCAL_FUNCTION_NAME_TPL(inc) \
     \
-    int BOOST_LOCAL_FUNCTION_TPL_ID(BOOST_PP_CAT(dec, __LINE__), \
-            const bind offset, const int x) { \
+    T BOOST_LOCAL_FUNCTION_TPL_ID(BOOST_PP_CAT(dec, __LINE__), \
+            const bind offset, const T x) { \
         return x - offset; \
     } BOOST_LOCAL_FUNCTION_NAME_TPL(dec)
 

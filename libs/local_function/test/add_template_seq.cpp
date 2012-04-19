@@ -13,7 +13,8 @@ template<typename T>
 T total(const T& x, const T& y, const T& z) {
     T sum = T(), factor = 10;
 
-    T BOOST_LOCAL_FUNCTION_TPL( (const bind factor) (bind& sum) (T num) ) {
+    BOOST_LOCAL_FUNCTION_TPL( (const bind factor) (bind& sum) (T num)
+            (return T) ) {
         return sum += factor * num;
     } BOOST_LOCAL_FUNCTION_NAME_TPL(add)
 
