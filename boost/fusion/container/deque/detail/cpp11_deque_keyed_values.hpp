@@ -29,8 +29,8 @@ namespace boost { namespace fusion { namespace detail
         typedef keyed_element<N, Head, tail> type;
 
         static type call(
-          typename add_reference<typename add_const<Head>::type>::type head
-        , typename add_reference<typename add_const<Tail>::type>::type... tail)
+          typename detail::call_param<Head>::type head
+        , typename detail::call_param<Tail>::type... tail)
         {
             return type(
                 head
