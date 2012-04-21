@@ -350,6 +350,15 @@
       ::boost::rv< TYPE<ARG1, ARG2, ARG3> >& \
    //
 
+   #define BOOST_RV_REF_BEG\
+      ::boost::rv<   \
+   //
+
+   #define BOOST_RV_REF_END\
+      >& \
+   //
+
+
 
    #define BOOST_FWD_REF(TYPE)\
       const TYPE & \
@@ -361,6 +370,14 @@
 
    #define BOOST_COPY_ASSIGN_REF(TYPE)\
       const ::boost::rv< TYPE >& \
+   //
+
+   #define BOOST_COPY_ASSIGN_REF_BEG \
+      const ::boost::rv<  \
+   //
+
+   #define BOOST_COPY_ASSIGN_REF_END \
+      >& \
    //
 
    #define BOOST_MOVE_COPY_ASSIGN_REF_2_TEMPL_ARGS(TYPE, ARG1, ARG2)\
@@ -568,6 +585,25 @@
    #define BOOST_RV_REF(TYPE)\
       TYPE && \
    //
+
+   //!This macro is used to achieve portable syntax in move
+   //!constructors and assignments for template classes marked as
+   //!BOOST_COPYABLE_AND_MOVABLE or BOOST_MOVABLE_BUT_NOT_COPYABLE.
+   //!As macros have problem with comma-separatd template arguments,
+   //!the template argument must be preceded with BOOST_RV_REF_START
+   //!and ended with BOOST_RV_REF_END
+   #define BOOST_RV_REF_BEG\
+         \
+   //
+
+   //!This macro is used to achieve portable syntax in move
+   //!constructors and assignments for template classes marked as
+   //!BOOST_COPYABLE_AND_MOVABLE or BOOST_MOVABLE_BUT_NOT_COPYABLE.
+   //!As macros have problem with comma-separatd template arguments,
+   //!the template argument must be preceded with BOOST_RV_REF_START
+   //!and ended with BOOST_RV_REF_END
+   #define BOOST_RV_REF_END\
+      && \
 
    //!This macro is used to achieve portable syntax in copy
    //!assignment for classes marked as BOOST_COPYABLE_AND_MOVABLE.

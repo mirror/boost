@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -100,14 +100,14 @@ class flat_set
    typedef typename tree_t::allocator_type         allocator_type;
    typedef typename tree_t::stored_allocator_type  stored_allocator_type;
 
-   //! <b>Effects</b>: Defatuls constructs an empty flat_map.
+   //! <b>Effects</b>: Default constructs an empty flat_set.
    //! 
    //! <b>Complexity</b>: Constant.
    explicit flat_set()
       : m_flat_tree()
    {}
 
-   //! <b>Effects</b>: Constructs an empty flat_map using the specified
+   //! <b>Effects</b>: Constructs an empty flat_set using the specified
    //! comparison object and allocator.
    //! 
    //! <b>Complexity</b>: Constant.
@@ -116,7 +116,7 @@ class flat_set
       : m_flat_tree(comp, a)
    {}
 
-   //! <b>Effects</b>: Constructs an empty map using the specified comparison object and 
+   //! <b>Effects</b>: Constructs an empty set using the specified comparison object and 
    //! allocator, and inserts elements from the range [first ,last ).
    //! 
    //! <b>Complexity</b>: Linear in N if the range [first ,last ) is already sorted using 
@@ -143,31 +143,47 @@ class flat_set
       : m_flat_tree(ordered_range, first, last, comp, a) 
    {}
 
-   //! <b>Effects</b>: Copy constructs a map.
+   //! <b>Effects</b>: Copy constructs a set.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   flat_set(const flat_set<T,Pred,A>& x) 
-      : m_flat_tree(x.m_flat_tree) {}
+   flat_set(const flat_set& x) 
+      : m_flat_tree(x.m_flat_tree)
+   {}
 
-   //! <b>Effects</b>: Move constructs a map. Constructs *this using x's resources.
+   //! <b>Effects</b>: Move constructs a set. Constructs *this using x's resources.
    //! 
-   //! <b>Complexity</b>: Construct.
+   //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Postcondition</b>: x is emptied.
    flat_set(BOOST_RV_REF(flat_set) mx) 
       : m_flat_tree(boost::move(mx.m_flat_tree))
    {}
 
-   //! <b>Effects</b>: Makes *this a copy of x.
+   //! <b>Effects</b>: Copy constructs a set using the specified allocator.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   flat_set<T,Pred,A>& operator=(BOOST_COPY_ASSIGN_REF(flat_set) x)
-      {  m_flat_tree = x.m_flat_tree;   return *this;  }
+   flat_set(const flat_set& x, const allocator_type &a)
+      : m_flat_tree(x.m_flat_tree, a)
+   {}
+
+   //! <b>Effects</b>: Move constructs a set using the specified allocator.
+   //!                 Constructs *this using x's resources.
+   //! 
+   //! <b>Complexity</b>: Constant if a == mx.get_allocator(), linear otherwise
+   flat_set(BOOST_RV_REF(flat_set) mx, const allocator_type &a) 
+      : m_flat_tree(boost::move(mx.m_flat_tree), a)
+   {}
 
    //! <b>Effects</b>: Makes *this a copy of x.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   flat_set<T,Pred,A>& operator=(BOOST_RV_REF(flat_set) mx)
+   flat_set& operator=(BOOST_COPY_ASSIGN_REF(flat_set) x)
+      {  m_flat_tree = x.m_flat_tree;   return *this;  }
+
+   //! <b>Effects</b>: Makes *this a copy of the previous value of xx.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   flat_set& operator=(BOOST_RV_REF(flat_set) mx)
    {  m_flat_tree = boost::move(mx.m_flat_tree);   return *this;  }
 
    //! <b>Effects</b>: Returns the comparison object out
@@ -729,7 +745,7 @@ class flat_multiset
    typedef typename tree_t::allocator_type         allocator_type;
    typedef typename tree_t::stored_allocator_type  stored_allocator_type;
 
-   //! <b>Effects</b>: Defatuls constructs an empty flat_map.
+   //! <b>Effects</b>: Default constructs an empty flat_multiset.
    //! 
    //! <b>Complexity</b>: Constant.
    explicit flat_multiset()
@@ -761,17 +777,47 @@ class flat_multiset
       : m_flat_tree(ordered_range, first, last, comp, a) 
    {}
 
-   flat_multiset(const flat_multiset<T,Pred,A>& x) 
-      : m_flat_tree(x.m_flat_tree) {}
-
-   flat_multiset(BOOST_RV_REF(flat_multiset) x) 
-      : m_flat_tree(boost::move(x.m_flat_tree))
+   //! <b>Effects</b>: Copy constructs a flat_multiset.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   flat_multiset(const flat_multiset& x) 
+      : m_flat_tree(x.m_flat_tree)
    {}
 
-   flat_multiset<T,Pred,A>& operator=(BOOST_COPY_ASSIGN_REF(flat_multiset) x) 
+   //! <b>Effects</b>: Move constructs a flat_multiset. Constructs *this using x's resources.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   //! 
+   //! <b>Postcondition</b>: x is emptied.
+   flat_multiset(BOOST_RV_REF(flat_multiset) mx) 
+      : m_flat_tree(boost::move(mx.m_flat_tree))
+   {}
+
+   //! <b>Effects</b>: Copy constructs a flat_multiset using the specified allocator.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   flat_multiset(const flat_multiset& x, const allocator_type &a)
+      : m_flat_tree(x.m_flat_tree, a)
+   {}
+
+   //! <b>Effects</b>: Move constructs a flat_multiset using the specified allocator.
+   //!                 Constructs *this using x's resources.
+   //! 
+   //! <b>Complexity</b>: Constant if a == mx.get_allocator(), linear otherwise
+   flat_multiset(BOOST_RV_REF(flat_multiset) mx, const allocator_type &a) 
+      : m_flat_tree(boost::move(mx.m_flat_tree), a)
+   {}
+
+   //! <b>Effects</b>: Makes *this a copy of x.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   flat_multiset& operator=(BOOST_COPY_ASSIGN_REF(flat_multiset) x) 
       {  m_flat_tree = x.m_flat_tree;   return *this;  }
 
-   flat_multiset<T,Pred,A>& operator=(BOOST_RV_REF(flat_multiset) mx) 
+   //! <b>Effects</b>: Makes *this a copy of x.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   flat_multiset& operator=(BOOST_RV_REF(flat_multiset) mx) 
    {  m_flat_tree = boost::move(mx.m_flat_tree);   return *this;  }
 
    //! <b>Effects</b>: Returns the comparison object out

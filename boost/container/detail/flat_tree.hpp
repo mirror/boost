@@ -1,6 +1,6 @@
 ////////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -102,11 +102,19 @@ class flat_tree
       {}
 
       Data(const Data &d)
-         : value_compare(d), m_vect(d.m_vect)
+         : value_compare(static_cast<const value_compare&>(d)), m_vect(d.m_vect)
       {}
 
       Data(BOOST_RV_REF(Data) d)
-         : value_compare(boost::move(d)), m_vect(boost::move(d.m_vect))
+         : value_compare(boost::move(static_cast<value_compare&>(d))), m_vect(boost::move(d.m_vect))
+      {}
+
+      Data(const Data &d, const A &a)
+         : value_compare(static_cast<const value_compare&>(d)), m_vect(d.m_vect, a)
+      {}
+
+      Data(BOOST_RV_REF(Data) d, const A &a)
+         : value_compare(boost::move(static_cast<value_compare&>(d))), m_vect(boost::move(d.m_vect), a)
       {}
 
       Data(const Compare &comp) 
@@ -183,6 +191,14 @@ class flat_tree
 
    flat_tree(BOOST_RV_REF(flat_tree) x)
       :  m_data(boost::move(x.m_data))
+   { }
+
+   flat_tree(const flat_tree& x, const allocator_type &a) 
+      :  m_data(x.m_data, a)
+   { }
+
+   flat_tree(BOOST_RV_REF(flat_tree) x, const allocator_type &a)
+      :  m_data(boost::move(x.m_data), a)
    { }
 
    template <class InputIterator>
@@ -285,7 +301,6 @@ class flat_tree
       return ret;
    }
 
-
    iterator insert_equal(const value_type& val)
    {
       iterator i = this->upper_bound(KeyOfValue()(val));
@@ -323,14 +338,14 @@ class flat_tree
    iterator insert_equal(const_iterator pos, const value_type& val)
    {
       insert_commit_data data;
-      priv_insert_equal_prepare(pos, val, data);
+      this->priv_insert_equal_prepare(pos, val, data);
       return priv_insert_commit(data, val);
    }
 
    iterator insert_equal(const_iterator pos, BOOST_RV_REF(value_type) mval)
    {
       insert_commit_data data;
-      priv_insert_equal_prepare(pos, mval, data);
+      this->priv_insert_equal_prepare(pos, mval, data);
       return priv_insert_commit(data, boost::move(mval));
    }
 
@@ -346,7 +361,15 @@ class flat_tree
    {
       typedef typename 
          std::iterator_traits<InIt>::iterator_category ItCat;
-      priv_insert_equal(first, last, ItCat());
+      this->priv_insert_equal(first, last, ItCat());
+   }
+
+   template <class InIt>
+   void insert_equal(ordered_range_t, InIt first, InIt last)
+   {
+      typedef typename 
+         std::iterator_traits<InIt>::iterator_category ItCat;
+      this->priv_insert_equal(ordered_range_t(), first, last, ItCat());
    }
 
    #ifdef BOOST_CONTAINER_PERFECT_FORWARDING
@@ -390,7 +413,7 @@ class flat_tree
    {
       value_type &&val = value_type(boost::forward<Args>(args)...);
       insert_commit_data data;
-      priv_insert_equal_prepare(hint, val, data);
+      this->priv_insert_equal_prepare(hint, val, data);
       return priv_insert_commit(data, boost::move(val));
    }
 
@@ -450,7 +473,7 @@ class flat_tree
             BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
       value_type &val = vval;                                                             \
       insert_commit_data data;                                                            \
-      priv_insert_equal_prepare(hint, val, data);                                         \
+      this->priv_insert_equal_prepare(hint, val, data);                                   \
       return priv_insert_commit(data, boost::move(val));                                  \
    }                                                                                      \
    //!
@@ -730,10 +753,39 @@ class flat_tree
       return std::pair<RanIt, RanIt>(first, first);
    }
 
-   template <class FwdIt>
-   void priv_insert_equal(FwdIt first, FwdIt last, std::forward_iterator_tag)
+   template <class BidirIt>
+   void priv_insert_equal(ordered_range_t, BidirIt first, BidirIt last, std::bidirectional_iterator_tag)
    {
       size_type len = static_cast<size_type>(std::distance(first, last));
+      const size_type BurstSize = 16;
+      size_type positions[BurstSize];
+
+      while(len){
+         const size_type burst = len < BurstSize ? len : BurstSize;
+         len -= burst;
+         const iterator beg(this->cbegin());
+         iterator pos;
+         for(size_type i = 0; i != burst; ++i){
+            pos = this->upper_bound(KeyOfValue()(*first));
+            positions[i] = static_cast<size_type>(pos - beg);
+            ++first;
+         }
+         this->m_data.m_vect.insert_ordered_at(burst, positions + burst, first);
+      }
+   }
+
+   template <class FwdIt>
+   void priv_insert_equal_forward(ordered_range_t, FwdIt first, FwdIt last, std::forward_iterator_tag)
+   {  this->priv_insert_equal(first, last, std::forward_iterator_tag());   }
+
+   template <class InIt>
+   void priv_insert_equal(ordered_range_t, InIt first, InIt last, std::input_iterator_tag)
+   {  this->priv_insert_equal(first, last, std::input_iterator_tag());  }
+
+   template <class FwdIt>
+   void priv_insert_equal_forward(FwdIt first, FwdIt last, std::forward_iterator_tag)
+   {
+      const size_type len = static_cast<size_type>(std::distance(first, last));
       this->reserve(this->size()+len);
       this->priv_insert_equal(first, last, std::input_iterator_tag());
    }

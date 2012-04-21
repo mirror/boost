@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2008-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2008-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -34,7 +34,7 @@
 #include <boost/container/detail/utilities.hpp>
 #include <boost/container/detail/iterators.hpp>
 #include <boost/container/detail/algorithms.hpp>
-#include <boost/container/allocator/allocator_traits.hpp>
+#include <boost/container/allocator_traits.hpp>
 #include <boost/intrusive/pointer_traits.hpp>
 
 #include <algorithm>
@@ -78,10 +78,6 @@ struct smart_ptr_type<T*>
    {  return ptr;}
 };
 
-template<class Ptr>
-inline typename smart_ptr_type<Ptr>::pointer to_raw_pointer(const Ptr &ptr)
-{  return smart_ptr_type<Ptr>::get(ptr);   }
-
 template <class C>
 class clear_on_destroy
 {
@@ -110,13 +106,10 @@ class clear_on_destroy
 
 template<class VoidPtr>
 struct node_type_base
-{/*
-   node_type_base(VoidPtr p)
-      : up(p)
-   {}*/
+{
    node_type_base()
    {}
-   void set_pointer(VoidPtr p)
+   void set_pointer(const VoidPtr &p)
    {  up = p; }
 
    VoidPtr up;
@@ -126,33 +119,6 @@ template<typename VoidPointer, typename T>
 struct node_type
    : public node_type_base<VoidPointer>
 {
-   node_type()
-      : value()
-   {}
-
-   #if defined(BOOST_CONTAINER_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
-
-   template<class ...Args>
-   node_type(Args &&...args)
-      : value(boost::forward<Args>(args)...)
-   {}
-
-   #else //BOOST_CONTAINER_PERFECT_FORWARDING
-
-   #define BOOST_PP_LOCAL_MACRO(n)                                                           \
-   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)    \
-   node_type(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                             \
-      : value(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _))                         \
-   {}                                                                                        \
-   //!
-   #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
-   #include BOOST_PP_LOCAL_ITERATE()
-
-   #endif//BOOST_CONTAINER_PERFECT_FORWARDING
-   
-   void set_pointer(VoidPointer p)
-   {  node_type_base<VoidPointer>::set_pointer(p); }
-
    T value;
 };
 
@@ -206,17 +172,17 @@ class iterator
    private:
    static node_type_ptr_t node_ptr_cast(const void_ptr &p)
    {
-      return node_type_ptr_t(static_cast<node_type_t*>(stable_vector_detail::to_raw_pointer(p)));
+      return node_type_ptr_t(static_cast<node_type_t*>(container_detail::to_raw_pointer(p)));
    }
 
    static const_node_type_ptr_t node_ptr_cast(const const_void_ptr &p)
    {
-      return const_node_type_ptr_t(static_cast<const node_type_t*>(stable_vector_detail::to_raw_pointer(p)));
+      return const_node_type_ptr_t(static_cast<const node_type_t*>(container_detail::to_raw_pointer(p)));
    }
 
    static void_ptr_ptr void_ptr_ptr_cast(const void_ptr &p)
    {
-      return void_ptr_ptr(static_cast<void_ptr*>(stable_vector_detail::to_raw_pointer(p)));
+      return void_ptr_ptr(static_cast<void_ptr*>(container_detail::to_raw_pointer(p)));
    }
 
    reference dereference() const
@@ -353,35 +319,37 @@ BOOST_JOIN(check_invariant_,__LINE__).touch();
 
 /// @endcond
 
-//!Originally developed by Joaquin M. Lopez Munoz, stable_vector is std::vector
-//!drop-in replacement implemented as a node container, offering iterator and reference
-//!stability.
+//! Originally developed by Joaquin M. Lopez Munoz, stable_vector is std::vector
+//! drop-in replacement implemented as a node container, offering iterator and reference
+//! stability.
 //!
-//!More details taken the author's blog: (<a href="http://bannalia.blogspot.com/2008/09/introducing-stablevector.html" > Introducing stable_vector</a>)
+//! More details taken the author's blog:
+//! (<a href="http://bannalia.blogspot.com/2008/09/introducing-stablevector.html" > 
+//! Introducing stable_vector</a>)
 //!
-//!We present stable_vector, a fully STL-compliant stable container that provides
-//!most of the features of std::vector except element contiguity. 
+//! We present stable_vector, a fully STL-compliant stable container that provides
+//! most of the features of std::vector except element contiguity. 
 //!
-//!General properties: stable_vector satisfies all the requirements of a container,
-//!a reversible container and a sequence and provides all the optional operations
-//!present in std::vector. Like std::vector,  iterators are random access.
-//!stable_vector does not provide element contiguity; in exchange for this absence,
-//!the container is stable, i.e. references and iterators to an element of a stable_vector
-//!remain valid as long as the element is not erased, and an iterator that has been
-//!assigned the return value of end() always remain valid until the destruction of
-//!the associated  stable_vector.
+//! General properties: stable_vector satisfies all the requirements of a container,
+//! a reversible container and a sequence and provides all the optional operations
+//! present in std::vector. Like std::vector,  iterators are random access.
+//! stable_vector does not provide element contiguity; in exchange for this absence,
+//! the container is stable, i.e. references and iterators to an element of a stable_vector
+//! remain valid as long as the element is not erased, and an iterator that has been
+//! assigned the return value of end() always remain valid until the destruction of
+//! the associated  stable_vector.
 //!
-//!Operation complexity: The big-O complexities of stable_vector operations match
-//!exactly those of std::vector. In general, insertion/deletion is constant time at
-//!the end of the sequence and linear elsewhere. Unlike std::vector, stable_vector
-//!does not internally perform any value_type destruction, copy or assignment
-//!operations other than those exactly corresponding to the insertion of new
-//!elements or deletion of stored elements, which can sometimes compensate in terms
-//!of performance for the extra burden of doing more pointer manipulation and an
-//!additional allocation per element.
+//! Operation complexity: The big-O complexities of stable_vector operations match
+//! exactly those of std::vector. In general, insertion/deletion is constant time at
+//! the end of the sequence and linear elsewhere. Unlike std::vector, stable_vector
+//! does not internally perform any value_type destruction, copy or assignment
+//! operations other than those exactly corresponding to the insertion of new
+//! elements or deletion of stored elements, which can sometimes compensate in terms
+//! of performance for the extra burden of doing more pointer manipulation and an
+//! additional allocation per element.
 //!
-//!Exception safety: As stable_vector does not internally copy elements around, some
-//!operations provide stronger exception safety guarantees than in std::vector:
+//! Exception safety: As stable_vector does not internally copy elements around, some
+//! operations provide stronger exception safety guarantees than in std::vector:
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 template <class T, class A = std::allocator<T> >
 #else
@@ -524,7 +492,7 @@ class stable_vector
    //! <b>Throws</b>: If allocator_type's copy constructor throws.
    //! 
    //! <b>Complexity</b>: Constant.
-   explicit stable_vector(const A& al)
+   explicit stable_vector(const allocator_type& al)
       : internal_data(al),impl(al)
    {
       STABLE_VECTOR_CHECK_INVARIANT;
@@ -538,7 +506,7 @@ class stable_vector
    //! 
    //! <b>Complexity</b>: Linear to n.
    explicit stable_vector(size_type n)
-      : internal_data(A()),impl(A())
+      : internal_data(),impl()
    {
       stable_vector_detail::clear_on_destroy<stable_vector> cod(*this);
       this->resize(n);
@@ -553,7 +521,7 @@ class stable_vector
    //!   throws or T's default or copy constructor throws.
    //! 
    //! <b>Complexity</b>: Linear to n.
-   stable_vector(size_type n, const T& t, const A& al=A())
+   stable_vector(size_type n, const T& t, const allocator_type& al = allocator_type())
       : internal_data(al),impl(al)
    {
       stable_vector_detail::clear_on_destroy<stable_vector> cod(*this);
@@ -570,7 +538,7 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Linear to the range [first, last).
    template <class InputIterator>
-   stable_vector(InputIterator first,InputIterator last,const A& al=A())
+   stable_vector(InputIterator first,InputIterator last, const allocator_type& al = allocator_type())
       : internal_data(al),impl(al)
    {
       stable_vector_detail::clear_on_destroy<stable_vector> cod(*this);
@@ -605,6 +573,40 @@ class stable_vector
       : internal_data(boost::move(x.node_alloc())), impl(boost::move(x.impl))
    {
       this->priv_swap_members(x);
+   }
+
+   //! <b>Effects</b>: Copy constructs a stable_vector using the specified allocator.
+   //!
+   //! <b>Postcondition</b>: x == *this.
+   //! 
+   //! <b>Complexity</b>: Linear to the elements x contains.
+   stable_vector(const stable_vector& x, const allocator_type &a)
+      : internal_data(a), impl(a)
+   {
+      stable_vector_detail::clear_on_destroy<stable_vector> cod(*this);
+      this->insert(this->cbegin(), x.begin(), x.end());
+      STABLE_VECTOR_CHECK_INVARIANT;
+      cod.release();
+   }
+
+   //! <b>Effects</b>: Move constructor using the specified allocator.
+   //!                 Moves mx's resources to *this.
+   //!
+   //! <b>Throws</b>: If allocator_type's copy constructor throws.
+   //! 
+   //! <b>Complexity</b>: Constant if a == x.get_allocator(), linear otherwise
+   stable_vector(BOOST_RV_REF(stable_vector) x, const allocator_type &a)
+      : internal_data(a), impl(a)
+   {
+      if(this->node_alloc() == x.node_alloc()){
+         this->priv_swap_members(x);
+      }
+      else{
+         stable_vector_detail::clear_on_destroy<stable_vector> cod(*this);
+         this->insert(this->cbegin(), x.begin(), x.end());
+         STABLE_VECTOR_CHECK_INVARIANT;
+         cod.release();
+      }
    }
 
    //! <b>Effects</b>: Destroys the stable_vector. All stored values are destroyed
@@ -709,7 +711,7 @@ class stable_vector
    //! <b>Throws</b>: If allocator's copy constructor throws.
    //! 
    //! <b>Complexity</b>: Constant.
-   allocator_type get_allocator()const  {return node_alloc();}
+   allocator_type get_allocator()const  {return this->node_alloc();}
 
    //! <b>Effects</b>: Returns a reference to the internal allocator.
    //! 
@@ -1137,7 +1139,7 @@ class stable_vector
    void emplace_back(Args &&...args)
    {
       typedef emplace_functor<Args...>         EmplaceFunctor;
-      typedef emplace_iterator<node_type_t, EmplaceFunctor, difference_type> EmplaceIterator;
+      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type> EmplaceIterator;
       EmplaceFunctor &&ef = EmplaceFunctor(boost::forward<Args>(args)...);
       this->insert(this->cend(), EmplaceIterator(ef), EmplaceIterator());
    }
@@ -1157,7 +1159,7 @@ class stable_vector
       //Just call more general insert(pos, size, value) and return iterator
       size_type pos_n = position - cbegin();
       typedef emplace_functor<Args...>         EmplaceFunctor;
-      typedef emplace_iterator<node_type_t, EmplaceFunctor, difference_type> EmplaceIterator;
+      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type> EmplaceIterator;
       EmplaceFunctor &&ef = EmplaceFunctor(boost::forward<Args>(args)...);
       this->insert(position, EmplaceIterator(ef), EmplaceIterator());
       return iterator(this->begin() + pos_n);
@@ -1172,7 +1174,7 @@ class stable_vector
       typedef BOOST_PP_CAT(BOOST_PP_CAT(emplace_functor, n), arg)                               \
          BOOST_PP_EXPR_IF(n, <) BOOST_PP_ENUM_PARAMS(n, P) BOOST_PP_EXPR_IF(n, >)               \
             EmplaceFunctor;                                                                     \
-      typedef emplace_iterator<node_type_t, EmplaceFunctor, difference_type>  EmplaceIterator;  \
+      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type>  EmplaceIterator;   \
       EmplaceFunctor ef BOOST_PP_LPAREN_IF(n)                                                   \
                         BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)                   \
                         BOOST_PP_RPAREN_IF(n);                                                  \
@@ -1186,7 +1188,7 @@ class stable_vector
       typedef BOOST_PP_CAT(BOOST_PP_CAT(emplace_functor, n), arg)                               \
          BOOST_PP_EXPR_IF(n, <) BOOST_PP_ENUM_PARAMS(n, P) BOOST_PP_EXPR_IF(n, >)               \
             EmplaceFunctor;                                                                     \
-      typedef emplace_iterator<node_type_t, EmplaceFunctor, difference_type>  EmplaceIterator;  \
+      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type>  EmplaceIterator;   \
       EmplaceFunctor ef BOOST_PP_LPAREN_IF(n)                                                   \
                         BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)                   \
                         BOOST_PP_RPAREN_IF(n);                                                  \
@@ -1482,12 +1484,12 @@ class stable_vector
 
    static node_type_ptr_t node_ptr_cast(const void_ptr &p)
    {
-      return node_type_ptr_t(static_cast<node_type_t*>(stable_vector_detail::to_raw_pointer(p)));
+      return node_type_ptr_t(static_cast<node_type_t*>(container_detail::to_raw_pointer(p)));
    }
 
    static node_type_base_ptr_t node_base_ptr_cast(const void_ptr &p)
    {
-      return node_type_base_ptr_t(static_cast<node_type_base_t*>(stable_vector_detail::to_raw_pointer(p)));
+      return node_type_base_ptr_t(static_cast<node_type_base_t*>(container_detail::to_raw_pointer(p)));
    }
 
    static value_type& value(const void_ptr &p)
@@ -1529,7 +1531,9 @@ class stable_vector
    {
       node_type_ptr_t p = this->allocate_one();
       try{
-         boost::container::construct_in_place(this->node_alloc(), &*p, it);
+         boost::container::construct_in_place(this->node_alloc(), container_detail::addressof(p->value), it);
+         //This does not throw
+         ::new(static_cast<node_type_base_t*>(container_detail::to_raw_pointer(p))) node_type_base_t;
          p->set_pointer(up);
       }
       catch(...){
@@ -1621,7 +1625,9 @@ class stable_vector
             p = mem.front();
             mem.pop_front();
             //This can throw
-            boost::container::construct_in_place(this->node_alloc(), &*p, first);
+            boost::container::construct_in_place(this->node_alloc(), container_detail::addressof(p->value), first);
+            //This does not throw
+            ::new(static_cast<node_type_base_t*>(container_detail::to_raw_pointer(p))) node_type_base_t;
             p->set_pointer(void_ptr_ptr(&it[i]));
             ++first;
             it[i] = p;
@@ -1650,7 +1656,9 @@ class stable_vector
                break;
             }
             //This can throw
-            boost::container::construct_in_place(this->node_alloc(), &*p, first);
+            boost::container::construct_in_place(this->node_alloc(), container_detail::addressof(p->value), first);
+            //This does not throw
+            ::new(static_cast<node_type_base_t*>(container_detail::to_raw_pointer(p))) node_type_base_t;
             p->set_pointer(void_ptr_ptr(&it[i]));
             ++first;
             it[i]=p;

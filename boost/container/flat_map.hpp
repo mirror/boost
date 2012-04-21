@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -26,7 +26,7 @@
 #include <boost/container/detail/flat_tree.hpp>
 #include <boost/type_traits/has_trivial_destructor.hpp>
 #include <boost/container/detail/mpl.hpp>
-#include <boost/container/allocator/allocator_traits.hpp>
+#include <boost/container/allocator_traits.hpp>
 #include <boost/move/move.hpp>
 
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
@@ -165,7 +165,12 @@ class flat_map
       get_flat_tree_iterators
          <pointer>::const_reverse_iterator                  const_reverse_iterator;
    typedef A                                                allocator_type;
+   
+   //!Standard extension
    typedef A                                                stored_allocator_type;
+
+   //!Standard extension for C++03 compilers with non-movable std::pair
+   typedef impl_value_type                                  movable_value_type;
 
    public:
    //! <b>Effects</b>: Default constructs an empty flat_map.
@@ -209,23 +214,38 @@ class flat_map
    //! <b>Effects</b>: Copy constructs a flat_map.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   flat_map(const flat_map<Key,T,Pred,A>& x) 
+   flat_map(const flat_map& x) 
       : m_flat_tree(x.m_flat_tree) {}
 
    //! <b>Effects</b>: Move constructs a flat_map.
    //!   Constructs *this using x's resources.
    //! 
-   //! <b>Complexity</b>: Construct.
+   //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Postcondition</b>: x is emptied.
    flat_map(BOOST_RV_REF(flat_map) x) 
       : m_flat_tree(boost::move(x.m_flat_tree))
    {}
 
+   //! <b>Effects</b>: Copy constructs a flat_map using the specified allocator.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   flat_map(const flat_map& x, const allocator_type &a)
+      : m_flat_tree(x.m_flat_tree, a)
+   {}
+
+   //! <b>Effects</b>: Move constructs a flat_map using the specified allocator.
+   //!   Constructs *this using x's resources.
+   //! 
+   //! <b>Complexity</b>: Constant if x.get_allocator() == a, linear otherwise.
+   flat_map(BOOST_RV_REF(flat_map) x, const allocator_type &a) 
+      : m_flat_tree(boost::move(x.m_flat_tree), a)
+   {}
+
    //! <b>Effects</b>: Makes *this a copy of x.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   flat_map<Key,T,Pred,A>& operator=(BOOST_COPY_ASSIGN_REF(flat_map) x)
+   flat_map& operator=(BOOST_COPY_ASSIGN_REF(flat_map) x)
    {  m_flat_tree = x.m_flat_tree;   return *this;  }
 
    //! <b>Effects</b>: Move constructs a flat_map.
@@ -234,7 +254,7 @@ class flat_map
    //! <b>Complexity</b>: Construct.
    //! 
    //! <b>Postcondition</b>: x is emptied.
-   flat_map<Key,T,Pred,A>& operator=(BOOST_RV_REF(flat_map) mx)
+   flat_map& operator=(BOOST_RV_REF(flat_map) mx)
    {  m_flat_tree = boost::move(mx.m_flat_tree);   return *this;  }
 
    //! <b>Effects</b>: Returns the comparison object out
@@ -484,7 +504,7 @@ class flat_map
    //!   to the elements with bigger keys than x.
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
-   std::pair<iterator,bool> insert(BOOST_RV_REF(impl_value_type) x) 
+   std::pair<iterator,bool> insert(BOOST_RV_REF(movable_value_type) x) 
    {
       return container_detail::force<std::pair<iterator,bool> >
       (m_flat_tree.insert_unique(boost::move(x)));
@@ -515,8 +535,11 @@ class flat_map
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, BOOST_RV_REF(value_type) x)
-      { return container_detail::force_copy<iterator>
-         (m_flat_tree.insert_unique(container_detail::force<impl_const_iterator>(position), boost::move(container_detail::force<impl_value_type>(x)))); }
+   {
+      return container_detail::force_copy<iterator>
+         (m_flat_tree.insert_unique( container_detail::force<impl_const_iterator>(position)
+                                   , boost::move(container_detail::force<impl_value_type>(x))));
+   }
 
    //! <b>Effects</b>: Inserts an element move constructed from x in the container.
    //!   p is a hint pointing to where the insert should start to search.
@@ -527,7 +550,7 @@ class flat_map
    //!   right before p) plus insertion linear to the elements with bigger keys than x.
    //!
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
-   iterator insert(const_iterator position, BOOST_RV_REF(impl_value_type) x)
+   iterator insert(const_iterator position, BOOST_RV_REF(movable_value_type) x)
    {
       return container_detail::force_copy<iterator>(
          m_flat_tree.insert_unique(container_detail::force<impl_const_iterator>(position), boost::move(x)));
@@ -704,13 +727,13 @@ class flat_map
    //!
    //! <b>Complexity</b>: Logarithmic
    std::pair<iterator,iterator> equal_range(const key_type& x) 
-      {  return container_detail::force<std::pair<iterator,iterator> >(m_flat_tree.equal_range(x)); }
+      {  return container_detail::force_copy<std::pair<iterator,iterator> >(m_flat_tree.equal_range(x)); }
 
    //! <b>Effects</b>: Equivalent to std::make_pair(this->lower_bound(k), this->upper_bound(k)).
    //!
    //! <b>Complexity</b>: Logarithmic
    std::pair<const_iterator,const_iterator> equal_range(const key_type& x) const 
-      {  return container_detail::force<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x)); }
+      {  return container_detail::force_copy<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x)); }
 
    //! <b>Effects</b>: Number of elements for which memory has been allocated.
    //!   capacity() is always greater than or equal to size().
@@ -916,6 +939,8 @@ class flat_multimap
    typedef A                                                allocator_type;
    //Non-standard extension
    typedef A                                                stored_allocator_type;
+   //!Standard extension for C++03 compilers with non-movable std::pair
+   typedef impl_value_type                                  movable_value_type;
 
    //! <b>Effects</b>: Default constructs an empty flat_map.
    //! 
@@ -960,28 +985,43 @@ class flat_multimap
    //! <b>Effects</b>: Copy constructs a flat_multimap.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   flat_multimap(const flat_multimap<Key,T,Pred,A>& x) 
+   flat_multimap(const flat_multimap& x) 
       : m_flat_tree(x.m_flat_tree) { }
 
    //! <b>Effects</b>: Move constructs a flat_multimap. Constructs *this using x's resources.
    //! 
-   //! <b>Complexity</b>: Construct.
+   //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Postcondition</b>: x is emptied.
    flat_multimap(BOOST_RV_REF(flat_multimap) x) 
       : m_flat_tree(boost::move(x.m_flat_tree))
    { }
 
+   //! <b>Effects</b>: Copy constructs a flat_multimap using the specified allocator.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   flat_multimap(const flat_multimap& x, const allocator_type &a) 
+      : m_flat_tree(x.m_flat_tree, a)
+   {}
+
+   //! <b>Effects</b>: Move constructs a flat_multimap using the specified allocator.
+   //!                 Constructs *this using x's resources.
+   //!
+   //! <b>Complexity</b>: Constant if a == x.get_allocator(), linear otherwise.
+   flat_multimap(BOOST_RV_REF(flat_multimap) x, const allocator_type &a) 
+      : m_flat_tree(boost::move(x.m_flat_tree), a)
+   { }
+
    //! <b>Effects</b>: Makes *this a copy of x.
    //! 
    //! <b>Complexity</b>: Linear in x.size().
-   flat_multimap<Key,T,Pred,A>& operator=(BOOST_COPY_ASSIGN_REF(flat_multimap) x) 
+   flat_multimap& operator=(BOOST_COPY_ASSIGN_REF(flat_multimap) x) 
       {  m_flat_tree = x.m_flat_tree;   return *this;  }
 
    //! <b>Effects</b>: this->swap(x.get()).
    //! 
    //! <b>Complexity</b>: Constant.
-   flat_multimap<Key,T,Pred,A>& operator=(BOOST_RV_REF(flat_multimap) mx) 
+   flat_multimap& operator=(BOOST_RV_REF(flat_multimap) mx) 
       {  m_flat_tree = boost::move(mx.m_flat_tree);   return *this;  }
 
    //! <b>Effects</b>: Returns the comparison object out
@@ -1359,14 +1399,14 @@ class flat_multimap
    //!
    //! <b>Complexity</b>: Logarithmic
    std::pair<iterator,iterator> equal_range(const key_type& x) 
-      {  return container_detail::force_copy<std::pair<iterator,iterator> >(m_flat_tree.equal_range(x));   }
+      {  return container_detail::force<std::pair<iterator,iterator> >(m_flat_tree.equal_range(x));   }
 
    //! <b>Effects</b>: Equivalent to std::make_pair(this->lower_bound(k), this->upper_bound(k)).
    //!
    //! <b>Complexity</b>: Logarithmic
    std::pair<const_iterator,const_iterator> 
       equal_range(const key_type& x) const 
-      {  return container_detail::force_copy<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x));   }
+      {  return container_detail::force<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x));   }
 
    //! <b>Effects</b>: Number of elements for which memory has been allocated.
    //!   capacity() is always greater than or equal to size().

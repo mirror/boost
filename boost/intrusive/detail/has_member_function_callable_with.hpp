@@ -10,7 +10,7 @@
 
 // sample.h
 
-#if !BOOST_PP_IS_ITERATING
+#if !defined(BOOST_PP_IS_ITERATING)
 
    #ifndef BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_DETAILS_INCLUDED
    #define BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_DETAILS_INCLUDED
@@ -113,7 +113,7 @@
          };
          //!
 
-         #if !defined(_MSC_VER) || (_MSC_VER != 1600)
+         #if !defined(_MSC_VER) || (_MSC_VER < 1600)
 
             #if defined(BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED)
 
@@ -126,7 +126,7 @@
                static const bool value = true;
             };
 
-            #else
+            #else //defined(BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED)
 
             //Special case for 0 args
             template< class F
@@ -162,7 +162,7 @@
                static const bool value = sizeof(Test< Fun >(0))
                                     == sizeof(boost_intrusive_has_member_function_callable_with::yes_type);
             };
-            #endif
+            #endif   //defined(BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED)
 
          #else //#if !defined(_MSC_VER) || (_MSC_VER != 1600)
             template<typename Fun>

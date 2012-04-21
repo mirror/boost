@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2005-2011. Distributed under the Boost
+// (C) Copyright Ion Gaztanaga 2005-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
 // LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 //
@@ -144,15 +144,30 @@ class set
 
    //! <b>Effects</b>: Move constructs a set. Constructs *this using x's resources.
    //! 
-   //! <b>Complexity</b>: Construct.
+   //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Postcondition</b>: x is emptied.
    set(BOOST_RV_REF(set) x) 
       : m_tree(boost::move(x.m_tree))
    {}
 
-   //! <b>Effects</b>: Makes *this a copy of x.
+   //! <b>Effects</b>: Copy constructs a set using the specified allocator.
    //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   set(const set& x, const allocator_type &a) 
+      : m_tree(x.m_tree, a)
+   {}
+
+   //! <b>Effects</b>: Move constructs a set using the specified allocator.
+   //!                 Constructs *this using x's resources.
+   //!
+   //! <b>Complexity</b>: Constant if a == x.get_allocator(), linear otherwise.
+   set(BOOST_RV_REF(set) x, const allocator_type &a) 
+      : m_tree(boost::move(x.m_tree), a)
+   {}
+
+   //! <b>Effects</b>: Makes *this a copy of x.
+   //!
    //! <b>Complexity</b>: Linear in x.size().
    set& operator=(BOOST_COPY_ASSIGN_REF(set) x)
    {  m_tree = x.m_tree;   return *this;  }
@@ -716,11 +731,28 @@ class multiset
 
    //! <b>Effects</b>: Move constructs a multiset. Constructs *this using x's resources.
    //! 
-   //! <b>Complexity</b>: Construct.
+   //! <b>Complexity</b>: Constant.
    //! 
    //! <b>Postcondition</b>: x is emptied.
    multiset(BOOST_RV_REF(multiset) x) 
       : m_tree(boost::move(x.m_tree))
+   {}
+
+   //! <b>Effects</b>: Copy constructs a multiset using the specified allocator.
+   //! 
+   //! <b>Complexity</b>: Linear in x.size().
+   multiset(const multiset& x, const allocator_type &a) 
+      : m_tree(x.m_tree, a)
+   {}
+
+   //! <b>Effects</b>: Move constructs a multiset using the specified allocator.
+   //!                 Constructs *this using x's resources.
+   //! 
+   //! <b>Complexity</b>: Constant if a == x.get_allocator(), linear otherwise.
+   //! 
+   //! <b>Postcondition</b>: x is emptied.
+   multiset(BOOST_RV_REF(multiset) x, const allocator_type &a) 
+      : m_tree(boost::move(x.m_tree), a)
    {}
 
    //! <b>Effects</b>: Makes *this a copy of x.
