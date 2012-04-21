@@ -1062,9 +1062,10 @@ namespace boost {
                            ) return false;
 #endif
 
-                        if(*begin == decimal_point){
+                        if(*begin == decimal_point) {
                             ++ begin;
                             found_decimal = true;
+                            if (!found_number_before_exp && begin==end) return false;
                             continue;
                         }else {
                             if (!found_number_before_exp) return false;
