@@ -828,7 +828,7 @@ for(; first != last; ++first)
                     <code>std::set&lt;K,&#160;C,&#160;A&gt;</code>,
                     <code>std::multiset&lt;K,&#160;C,&#160;A&gt;</code>,
                     <code>std::map&lt;K,&#160;T,&#160;C,&#160;A&gt;</code>,
-                    <code>std::multimap&lt;K,&#160;T,&#160;C,&#160;A&gt;</code>
+                    <code>std::multimap&lt;K,&#160;T,&#160;C,&#160;A&gt;</code>,
                     <code>std::array&lt;T,&#160;N&gt;</code>
                   </entry>
                   <entry><code>hash_range(val.begin(), val.end())</code></entry>
