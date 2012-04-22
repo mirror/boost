@@ -704,7 +704,7 @@ namespace boost { namespace proto
 
             typedef
                 typename mpl::if_c<
-                    remove_reference<condition>::type::value
+                    static_cast<bool>(remove_reference<condition>::type::value)
                   , when<_, Then>
                   , when<_, Else>
                 >::type
