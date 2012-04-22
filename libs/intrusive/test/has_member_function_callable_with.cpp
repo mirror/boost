@@ -94,7 +94,7 @@ class has_member_function_named_func
    namespace intrusive{
    namespace intrusive_detail{
 
-      #if !defined(_MSC_VER) || (_MSC_VER != 1600)
+      #if !defined(_MSC_VER) || (_MSC_VER < 1600)
 
          #if !defined(BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED)
 

@@ -300,14 +300,6 @@ class flat_map
    const_iterator begin() const 
       { return container_detail::force<const_iterator>(m_flat_tree.begin()); }
 
-   //! <b>Effects</b>: Returns a const_iterator to the first element contained in the container.
-   //! 
-   //! <b>Throws</b>: Nothing.
-   //! 
-   //! <b>Complexity</b>: Constant.
-   const_iterator cbegin() const 
-      { return container_detail::force<const_iterator>(m_flat_tree.cbegin()); }
-
    //! <b>Effects</b>: Returns an iterator to the end of the container.
    //! 
    //! <b>Throws</b>: Nothing.
@@ -323,14 +315,6 @@ class flat_map
    //! <b>Complexity</b>: Constant.
    const_iterator end() const 
       { return container_detail::force<const_iterator>(m_flat_tree.end()); }
-
-   //! <b>Effects</b>: Returns a const_iterator to the end of the container.
-   //! 
-   //! <b>Throws</b>: Nothing.
-   //! 
-   //! <b>Complexity</b>: Constant.
-   const_iterator cend() const 
-      { return container_detail::force<const_iterator>(m_flat_tree.cend()); }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning 
    //! of the reversed container. 
@@ -350,15 +334,6 @@ class flat_map
    const_reverse_iterator rbegin() const 
       { return container_detail::force<const_reverse_iterator>(m_flat_tree.rbegin()); }
 
-   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
-   //! of the reversed container. 
-   //! 
-   //! <b>Throws</b>: Nothing.
-   //! 
-   //! <b>Complexity</b>: Constant.
-   const_reverse_iterator crbegin() const 
-      { return container_detail::force<const_reverse_iterator>(m_flat_tree.crbegin()); }
-
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the end
    //! of the reversed container. 
    //! 
@@ -376,6 +351,31 @@ class flat_map
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rend() const 
       { return container_detail::force<const_reverse_iterator>(m_flat_tree.rend()); }
+
+   //! <b>Effects</b>: Returns a const_iterator to the first element contained in the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_iterator cbegin() const 
+      { return container_detail::force<const_iterator>(m_flat_tree.cbegin()); }
+
+   //! <b>Effects</b>: Returns a const_iterator to the end of the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_iterator cend() const 
+      { return container_detail::force<const_iterator>(m_flat_tree.cend()); }
+
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
+   //! of the reversed container. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_reverse_iterator crbegin() const 
+      { return container_detail::force<const_reverse_iterator>(m_flat_tree.crbegin()); }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
    //! of the reversed container. 
@@ -1118,6 +1118,40 @@ class flat_multimap
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rend() const 
       { return container_detail::force<const_reverse_iterator>(m_flat_tree.rend()); }
+
+   //! <b>Effects</b>: Returns a const_iterator to the first element contained in the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_iterator cbegin() const 
+      { return container_detail::force<const_iterator>(m_flat_tree.cbegin()); }
+
+   //! <b>Effects</b>: Returns a const_iterator to the end of the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_iterator cend() const 
+      { return container_detail::force<const_iterator>(m_flat_tree.cend()); }
+
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
+   //! of the reversed container. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_reverse_iterator crbegin() const 
+      { return container_detail::force<const_reverse_iterator>(m_flat_tree.crbegin()); }
+
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
+   //! of the reversed container. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_reverse_iterator crend() const 
+      { return container_detail::force<const_reverse_iterator>(m_flat_tree.crend()); }
 
    //! <b>Effects</b>: Returns true if the container contains no elements.
    //! 

@@ -164,7 +164,7 @@
             };
             #endif   //defined(BOOST_INTRUSIVE_DETAIL_HAS_MEMBER_FUNCTION_CALLABLE_WITH_0_ARGS_UNSUPPORTED)
 
-         #else //#if !defined(_MSC_VER) || (_MSC_VER != 1600)
+         #else //#if !defined(_MSC_VER) || (_MSC_VER < 1600)
             template<typename Fun>
             struct BOOST_PP_CAT(BOOST_PP_CAT(has_member_function_callable_with_, BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME),_impl)
                <Fun, true BOOST_PP_ENUM_TRAILING(BOOST_PP_SUB(BOOST_PP_ITERATION_FINISH(), BOOST_PP_ITERATION()), BOOST_INTRUSIVE_PP_IDENTITY, void)>
@@ -180,7 +180,7 @@
                static const bool value = sizeof(Test<Fun>(0))
                                     == sizeof(boost_intrusive_has_member_function_callable_with::yes_type);
             };
-         #endif   //#if !defined(_MSC_VER) || (_MSC_VER != 1600)
+         #endif   //#if !defined(_MSC_VER) || (_MSC_VER < 1600)
 
       #else   //#if !defined(BOOST_INTRUSIVE_PERFECT_FORWARDING)
 

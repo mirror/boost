@@ -276,6 +276,14 @@ class map
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator begin() const 
+   { return this->cbegin(); }
+
+   //! <b>Effects</b>: Returns a const_iterator to the first element contained in the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_iterator cbegin() const 
    { return m_tree.begin(); }
 
    //! <b>Effects</b>: Returns an iterator to the end of the container.
@@ -292,6 +300,14 @@ class map
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator end() const 
+   { return this->cend(); }
+
+   //! <b>Effects</b>: Returns a const_iterator to the end of the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_iterator cend() const 
    { return m_tree.end(); }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning 
@@ -310,6 +326,15 @@ class map
    //! 
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rbegin() const 
+   { return this->crbegin(); }
+
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
+   //! of the reversed container. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_reverse_iterator crbegin() const 
    { return m_tree.rbegin(); }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the end
@@ -328,6 +353,15 @@ class map
    //! 
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rend() const 
+   { return this->crend(); }
+
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
+   //! of the reversed container. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_reverse_iterator crend() const 
    { return m_tree.rend(); }
 
    //! <b>Effects</b>: Returns true if the container contains no elements.
@@ -984,6 +1018,14 @@ class multimap
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator begin() const 
+   { return this->cbegin(); }
+
+   //! <b>Effects</b>: Returns a const_iterator to the first element contained in the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_iterator cbegin() const 
    { return m_tree.begin(); }
 
    //! <b>Effects</b>: Returns an iterator to the end of the container.
@@ -1000,6 +1042,14 @@ class multimap
    //! 
    //! <b>Complexity</b>: Constant.
    const_iterator end() const 
+   { return this->cend(); }
+
+   //! <b>Effects</b>: Returns a const_iterator to the end of the container.
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_iterator cend() const 
    { return m_tree.end(); }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning 
@@ -1018,6 +1068,15 @@ class multimap
    //! 
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rbegin() const 
+   { return this->crbegin(); }
+
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
+   //! of the reversed container. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_reverse_iterator crbegin() const 
    { return m_tree.rbegin(); }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the end
@@ -1036,6 +1095,15 @@ class multimap
    //! 
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rend() const 
+   { return this->crend(); }
+
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
+   //! of the reversed container. 
+   //! 
+   //! <b>Throws</b>: Nothing.
+   //! 
+   //! <b>Complexity</b>: Constant.
+   const_reverse_iterator crend() const 
    { return m_tree.rend(); }
 
    //! <b>Effects</b>: Returns true if the container contains no elements.

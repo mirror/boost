@@ -674,6 +674,20 @@ class scoped_allocator_adaptor_base
       , inner(other.inner_allocator())
       {}
 
+   protected:
+   struct internal_type_t{};
+
+   template <class OuterA2>
+   scoped_allocator_adaptor_base
+      ( internal_type_t
+      , BOOST_FWD_REF(OuterA2) outerAlloc
+      , const inner_allocator_type &inner)
+      : outer_allocator_type(::boost::forward<OuterA2>(outerAlloc))
+      , m_inner(inner)
+   {}
+
+   public:
+
    scoped_allocator_adaptor_base &operator=
       (BOOST_COPY_ASSIGN_REF(scoped_allocator_adaptor_base) other)
    {
@@ -772,17 +786,17 @@ class scoped_allocator_adaptor_base<OuterAlloc, true                            
    scoped_allocator_adaptor_base(BOOST_FWD_REF(OuterA2) outerAlloc                              \
       BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_CONST_REF_PARAM_LIST_Q, _))                  \
       : outer_allocator_type(::boost::forward<OuterA2>(outerAlloc))                             \
-      , inner(BOOST_PP_ENUM_PARAMS(n, q))                                                       \
+      , m_inner(BOOST_PP_ENUM_PARAMS(n, q))                                                     \
       {}                                                                                        \
                                                                                                 \
    scoped_allocator_adaptor_base(const scoped_allocator_adaptor_base& other)                    \
       : outer_allocator_type(other.outer_allocator())                                           \
-      , inner(other.inner_allocator())                                                          \
+      , m_inner(other.inner_allocator())                                                        \
       {}                                                                                        \
                                                                                                 \
    scoped_allocator_adaptor_base(BOOST_RV_REF(scoped_allocator_adaptor_base) other)             \
       : outer_allocator_type(::boost::move(other.outer_allocator()))                            \
-      , inner(::boost::move(other.inner_allocator()))                                           \
+      , m_inner(::boost::move(other.inner_allocator()))                                         \
       {}                                                                                        \
                                                                                                 \
    template <class OuterA2>                                                                     \
@@ -793,7 +807,7 @@ class scoped_allocator_adaptor_base<OuterAlloc, true                            
             , BOOST_CONTAINER_PP_IDENTITY, nat)                                                 \
          >& other)                                                                              \
       : outer_allocator_type(other.outer_allocator())                                           \
-      , inner(other.inner_allocator())                                                          \
+      , m_inner(other.inner_allocator())                                                        \
       {}                                                                                        \
                                                                                                 \
    template <class OuterA2>                                                                     \
@@ -805,29 +819,42 @@ class scoped_allocator_adaptor_base<OuterAlloc, true                            
             , BOOST_CONTAINER_PP_IDENTITY, nat)                                                 \
          > BOOST_RV_REF_END other)                                                              \
       : outer_allocator_type(other.outer_allocator())                                           \
-      , inner(other.inner_allocator())                                                          \
+      , m_inner(other.inner_allocator())                                                        \
       {}                                                                                        \
                                                                                                 \
+   protected:                                                                                   \
+   struct internal_type_t{};                                                                    \
+                                                                                                \
+   template <class OuterA2>                                                                     \
+   scoped_allocator_adaptor_base                                                                \
+      ( internal_type_t                                                                         \
+      , BOOST_FWD_REF(OuterA2) outerAlloc                                                       \
+      , const inner_allocator_type &inner)                                                      \
+      : outer_allocator_type(::boost::forward<OuterA2>(outerAlloc))                             \
+      , m_inner(inner)                                                                          \
+   {}                                                                                           \
+                                                                                                \
+   public:                                                                                      \
    scoped_allocator_adaptor_base &operator=                                                     \
       (BOOST_COPY_ASSIGN_REF(scoped_allocator_adaptor_base) other)                              \
    {                                                                                            \
       outer_allocator_type::operator=(other.outer_allocator());                                 \
-      inner = other.inner_allocator();                                                          \
+      m_inner = other.inner_allocator();                                                        \
       return *this;                                                                             \
    }                                                                                            \
                                                                                                 \
    scoped_allocator_adaptor_base &operator=(BOOST_RV_REF(scoped_allocator_adaptor_base) other)  \
    {                                                                                            \
       outer_allocator_type::operator=(boost::move(other.outer_allocator()));                    \
-      inner = ::boost::move(other.inner_allocator());                                           \
+      m_inner = ::boost::move(other.inner_allocator());                                         \
       return *this;                                                                             \
    }                                                                                            \
                                                                                                 \
    inner_allocator_type&       inner_allocator()                                                \
-      { return inner; }                                                                         \
+      { return m_inner; }                                                                       \
                                                                                                 \
    inner_allocator_type const& inner_allocator() const                                          \
-      { return inner; }                                                                         \
+      { return m_inner; }                                                                       \
                                                                                                 \
    outer_allocator_type      & outer_allocator()                                                \
       { return static_cast<outer_allocator_type&>(*this); }                                     \
@@ -836,7 +863,7 @@ class scoped_allocator_adaptor_base<OuterAlloc, true                            
       { return static_cast<const outer_allocator_type&>(*this); }                               \
                                                                                                 \
    private:                                                                                     \
-   inner_allocator_type inner;                                                                  \
+   inner_allocator_type m_inner;                                                                \
 };                                                                                              \
 //!
 #define BOOST_PP_LOCAL_LIMITS (1, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
@@ -920,6 +947,15 @@ class scoped_allocator_adaptor_base
       : outer_allocator_type(other.outer_allocator())
       {}
 
+   protected:
+   struct internal_type_t{};
+
+   template <class OuterA2>
+   scoped_allocator_adaptor_base(internal_type_t, BOOST_FWD_REF(OuterA2) outerAlloc, const inner_allocator_type &)
+      : outer_allocator_type(::boost::forward<OuterA2>(outerAlloc))
+      {}
+  
+   public:
    scoped_allocator_adaptor_base &operator=(BOOST_COPY_ASSIGN_REF(scoped_allocator_adaptor_base) other)
    {
       outer_allocator_type::operator=(other.outer_allocator());
@@ -1221,8 +1257,9 @@ class scoped_allocator_adaptor
    scoped_allocator_adaptor select_on_container_copy_construction() const
    {
       return scoped_allocator_adaptor
-         (outer_traits_type::select_on_container_copy_construction(this->outer_allocator()),
-          outer_traits_type::select_on_container_copy_construction(this->inner_allocator())
+         (internal_type_t()
+         ,outer_traits_type::select_on_container_copy_construction(this->outer_allocator())
+         ,outer_traits_type::select_on_container_copy_construction(this->inner_allocator())
          );
    }
    /// @cond
@@ -1309,11 +1346,11 @@ class scoped_allocator_adaptor
 
    template <class T1, class T2, class U, class V>
    void construct(std::pair<T1, T2>* p, BOOST_FWD_REF(U) x, BOOST_FWD_REF(V) y)
-   {  this->construct_pair(p, ::boost::forward<U>(x), ::boost::forward<U>(y));   }
+   {  this->construct_pair(p, ::boost::forward<U>(x), ::boost::forward<V>(y));   }
 
    template <class T1, class T2, class U, class V>
    void construct(container_detail::pair<T1, T2>* p, BOOST_FWD_REF(U) x, BOOST_FWD_REF(V) y)
-   {  this->construct_pair(p, ::boost::forward<U>(x), ::boost::forward<U>(y));   }
+   {  this->construct_pair(p, ::boost::forward<U>(x), ::boost::forward<V>(y));   }
    
    template <class T1, class T2, class U, class V>
    void construct(std::pair<T1, T2>* p, const std::pair<U, V>& x)
@@ -1390,6 +1427,12 @@ class scoped_allocator_adaptor
 
    //template <class T1, class T2, class... Args1, class... Args2>
    //void construct(pair<T1, T2>* p, piecewise_construct_t, tuple<Args1...> x, tuple<Args2...> y);
+
+   private:
+   template <class OuterA2>
+   scoped_allocator_adaptor(internal_type_t, BOOST_FWD_REF(OuterA2) outer, const inner_allocator_type& inner)
+      : base_type(internal_type_t(), ::boost::forward<OuterA2>(outer), inner)
+   {}
 
    /// @endcond
 };
