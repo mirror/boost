@@ -232,6 +232,10 @@ namespace boost { using std::min; using std::max; }
 #  define BOOST_NO_CXX11_HDR_UNORDERED_MAP
 #  define BOOST_NO_CXX11_HDR_UNORDERED_SET
 #  define BOOST_NO_NUMERIC_LIMITS_LOWEST
+#  define BOOST_NO_CXX11_ALLOCATOR
+#  define BOOST_NO_CXX11_ATOMIC_SMART_PTR
+#  define BOOST_NO_CXX11_SMART_PTR
+#  define BOOST_NO_CXX11_HDR_FUNCTIONAL
 
 #define BOOST_STDLIB "STLPort standard library version " BOOST_STRINGIZE(__SGI_STL_PORT)
 

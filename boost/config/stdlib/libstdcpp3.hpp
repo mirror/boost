@@ -111,6 +111,8 @@
 #  define BOOST_NO_STD_UNORDERED  // deprecated; see following
 #  define BOOST_NO_CXX11_HDR_UNORDERED_MAP
 #  define BOOST_NO_CXX11_HDR_UNORDERED_SET
+#  define BOOST_NO_CXX11_HDR_FUNCTIONAL
+#  define BOOST_NO_CXX11_SMART_PTR
 #endif
 
 //  C++0x headers in GCC 4.4.0 and later
@@ -141,7 +143,7 @@
 #  define BOOST_NO_CXX11_HDR_RANDOM
 #endif
 
-//  C++0x features in GCC 4.5.0 and later
+//  C++0x features in GCC 4.6.0 and later
 //
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 6) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  define BOOST_NO_CXX11_HDR_TYPEINDEX
@@ -151,5 +153,7 @@
 #  define BOOST_NO_CXX11_HDR_THREAD
 #  define BOOST_NO_CXX11_HDR_TYPE_TRAITS
 #  define BOOST_NO_CXX11_HDR_CODECVT
+#  define BOOST_NO_CXX11_ALLOCATOR
+#  define BOOST_NO_CXX11_ATOMIC_SMART_PTR
 
 //  --- end ---

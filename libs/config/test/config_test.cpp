@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Mar 21 13:05:19 2012
+//  This file was automatically generated on Sun Apr 22 11:55:04 2012
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -102,6 +102,16 @@ namespace boost_no_cwchar = empty_boost;
 #else
 namespace boost_no_cwctype = empty_boost;
 #endif
+#ifndef BOOST_NO_CXX11_ALLOCATOR
+#include "boost_no_cxx11_allocator.ipp"
+#else
+namespace boost_no_cxx11_allocator = empty_boost;
+#endif
+#ifndef BOOST_NO_CXX11_ATOMIC_SMART_PTR
+#include "boost_no_cxx11_atomic_sp.ipp"
+#else
+namespace boost_no_cxx11_atomic_smart_ptr = empty_boost;
+#endif
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
 #include "boost_no_cxx11_hdr_array.ipp"
 #else
@@ -191,6 +201,16 @@ namespace boost_no_cxx11_hdr_unordered_map = empty_boost;
 #include "boost_no_cxx11_hdr_unordered_set.ipp"
 #else
 namespace boost_no_cxx11_hdr_unordered_set = empty_boost;
+#endif
+#ifndef BOOST_NO_CXX11_SMART_PTR
+#include "boost_no_cxx11_smart_ptr.ipp"
+#else
+namespace boost_no_cxx11_smart_ptr = empty_boost;
+#endif
+#ifndef BOOST_NO_CXX11_HDR_FUNCTIONAL
+#include "boost_no_cxx_hdr_functional.ipp"
+#else
+namespace boost_no_cxx11_hdr_functional = empty_boost;
 #endif
 #ifndef BOOST_NO_DECLTYPE
 #include "boost_no_decltype.ipp"
@@ -1196,6 +1216,16 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_CWCTYPE at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_cxx11_allocator::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CXX11_ALLOCATOR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cxx11_atomic_smart_ptr::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CXX11_ATOMIC_SMART_PTR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_cxx11_hdr_array::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_HDR_ARRAY at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1284,6 +1314,16 @@ int main( int, char *[] )
    if(0 != boost_no_cxx11_hdr_unordered_set::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_HDR_UNORDERED_SET at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cxx11_smart_ptr::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CXX11_SMART_PTR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cxx11_hdr_functional::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CXX11_HDR_FUNCTIONAL at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_decltype::test())
