@@ -32,6 +32,8 @@
 #include <boost/container/vector.hpp>
 #include <boost/container/detail/value_init.hpp>
 #include <boost/container/detail/destroyers.hpp>
+#include <boost/container/allocator_traits.hpp>
+#include <boost/aligned_storage.hpp>
 
 namespace boost {
 
@@ -173,6 +175,10 @@ class flat_tree
    //!Standard extension
    typedef allocator_type                             stored_allocator_type;
 
+   private:
+   typedef allocator_traits<stored_allocator_type> stored_allocator_traits;
+
+   public:
    flat_tree()
       : m_data()
    { }
@@ -377,44 +383,65 @@ class flat_tree
    template <class... Args>
    std::pair<iterator, bool> emplace_unique(Args&&... args)
    {
-      value_type && val = value_type(boost::forward<Args>(args)...);
+      aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;
+      value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
+      stored_allocator_type &a = this->get_stored_allocator();
+      stored_allocator_traits::construct(a, &val, ::boost::forward(args)... );
+      scoped_destructor<stored_allocator_type> d(a, &val);
       insert_commit_data data;
       std::pair<iterator,bool> ret =
          priv_insert_unique_prepare(val, data);
       if(ret.second){
          ret.first = priv_insert_commit(data, boost::move(val));
       }
+      d.release();
       return ret;
    }
 
    template <class... Args>
    iterator emplace_hint_unique(const_iterator hint, Args&&... args)
    {
-      value_type && val = value_type(boost::forward<Args>(args)...);
+      aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;
+      value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
+      stored_allocator_type &a = this->get_stored_allocator();
+      stored_allocator_traits::construct(a, &val, ::boost::forward(args)... );
+      scoped_destructor<stored_allocator_type> d(a, &val);
       insert_commit_data data;
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(hint, val, data);
       if(ret.second){
          ret.first = priv_insert_commit(data, boost::move(val));
       }
+      d.release();
       return ret.first;
    }
 
    template <class... Args>
    iterator emplace_equal(Args&&... args)
    {
-      value_type &&val = value_type(boost::forward<Args>(args)...);
+      aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;
+      value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
+      stored_allocator_type &a = this->get_stored_allocator();
+      stored_allocator_traits::construct(a, &val, ::boost::forward(args)... );
+      scoped_destructor<stored_allocator_type> d(a, &val);
       iterator i = this->upper_bound(KeyOfValue()(val));
       i = this->m_data.m_vect.insert(i, boost::move(val));
+      d.release();
       return i;
    }
 
    template <class... Args>
    iterator emplace_hint_equal(const_iterator hint, Args&&... args)
    {
-      value_type &&val = value_type(boost::forward<Args>(args)...);
+      aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;
+      value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
+      stored_allocator_type &a = this->get_stored_allocator();
+      stored_allocator_traits::construct(a, &val, ::boost::forward(args)... );
+      scoped_destructor<stored_allocator_type> d(a, &val);
       insert_commit_data data;
       this->priv_insert_equal_prepare(hint, val, data);
-      return priv_insert_commit(data, boost::move(val));
+      iterator i = priv_insert_commit(data, boost::move(val));
+      d.release();
+      return i;
    }
 
    #else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
@@ -424,15 +451,18 @@ class flat_tree
    std::pair<iterator, bool>                                                              \
       emplace_unique(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                  \
    {                                                                                      \
-      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type         \
-         BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
-            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
-      value_type &val = vval;                                                             \
+      aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;             \
+      value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));              \
+      stored_allocator_type &a = this->get_stored_allocator();                            \
+      stored_allocator_traits::construct(a, &val                                          \
+         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
+      scoped_destructor<stored_allocator_type> d(a, &val);                                \
       insert_commit_data data;                                                            \
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(val, data);               \
       if(ret.second){                                                                     \
          ret.first = priv_insert_commit(data, boost::move(val));                          \
       }                                                                                   \
+      d.release();                                                                        \
       return ret;                                                                         \
    }                                                                                      \
                                                                                           \
@@ -440,27 +470,33 @@ class flat_tree
    iterator emplace_hint_unique(const_iterator hint                                       \
                         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))      \
    {                                                                                      \
-      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type         \
-         BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
-            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
-      value_type &val = vval;                                                             \
+      aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;             \
+      value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));              \
+      stored_allocator_type &a = this->get_stored_allocator();                            \
+      stored_allocator_traits::construct(a, &val                                          \
+         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
+      scoped_destructor<stored_allocator_type> d(a, &val);                                \
       insert_commit_data data;                                                            \
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(hint, val, data);         \
       if(ret.second){                                                                     \
          ret.first = priv_insert_commit(data, boost::move(val));                          \
       }                                                                                   \
+      d.release();                                                                        \
       return ret.first;                                                                   \
    }                                                                                      \
                                                                                           \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
    iterator emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))             \
    {                                                                                      \
-      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type         \
-         BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
-            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
-      value_type &val = vval;                                                             \
+      aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;             \
+      value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));              \
+      stored_allocator_type &a = this->get_stored_allocator();                            \
+      stored_allocator_traits::construct(a, &val                                          \
+         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
+      scoped_destructor<stored_allocator_type> d(a, &val);                                \
       iterator i = this->upper_bound(KeyOfValue()(val));                                  \
       i = this->m_data.m_vect.insert(i, boost::move(val));                                \
+      d.release();                                                                        \
       return i;                                                                           \
    }                                                                                      \
                                                                                           \
@@ -468,14 +504,19 @@ class flat_tree
    iterator emplace_hint_equal(const_iterator hint                                        \
                       BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))        \
    {                                                                                      \
-      BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), container_detail::value_init<) value_type         \
-         BOOST_PP_EXPR_IF(BOOST_PP_NOT(n), >) vval BOOST_PP_LPAREN_IF(n)                  \
-            BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) BOOST_PP_RPAREN_IF(n);  \
-      value_type &val = vval;                                                             \
+      aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;             \
+      value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));              \
+      stored_allocator_type &a = this->get_stored_allocator();                            \
+      stored_allocator_traits::construct(a, &val                                          \
+         BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
+      scoped_destructor<stored_allocator_type> d(a, &val);                                \
       insert_commit_data data;                                                            \
       this->priv_insert_equal_prepare(hint, val, data);                                   \
-      return priv_insert_commit(data, boost::move(val));                                  \
+      iterator i = priv_insert_commit(data, boost::move(val));                            \
+      d.release();                                                                        \
+      return i;                                                                           \
    }                                                                                      \
+
    //!
    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
    #include BOOST_PP_LOCAL_ITERATE()
