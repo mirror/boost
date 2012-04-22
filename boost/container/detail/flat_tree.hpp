@@ -386,7 +386,7 @@ class flat_tree
       aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;
       value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
       stored_allocator_type &a = this->get_stored_allocator();
-      stored_allocator_traits::construct(a, &val, ::boost::forward(args)... );
+      stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
       scoped_destructor<stored_allocator_type> d(a, &val);
       insert_commit_data data;
       std::pair<iterator,bool> ret =
@@ -404,7 +404,7 @@ class flat_tree
       aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;
       value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
       stored_allocator_type &a = this->get_stored_allocator();
-      stored_allocator_traits::construct(a, &val, ::boost::forward(args)... );
+      stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
       scoped_destructor<stored_allocator_type> d(a, &val);
       insert_commit_data data;
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(hint, val, data);
@@ -421,7 +421,7 @@ class flat_tree
       aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;
       value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
       stored_allocator_type &a = this->get_stored_allocator();
-      stored_allocator_traits::construct(a, &val, ::boost::forward(args)... );
+      stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
       scoped_destructor<stored_allocator_type> d(a, &val);
       iterator i = this->upper_bound(KeyOfValue()(val));
       i = this->m_data.m_vect.insert(i, boost::move(val));
@@ -435,7 +435,7 @@ class flat_tree
       aligned_storage<sizeof(value_type), alignment_of<value_type>::value> v;
       value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
       stored_allocator_type &a = this->get_stored_allocator();
-      stored_allocator_traits::construct(a, &val, ::boost::forward(args)... );
+      stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
       scoped_destructor<stored_allocator_type> d(a, &val);
       insert_commit_data data;
       this->priv_insert_equal_prepare(hint, val, data);

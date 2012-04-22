@@ -646,24 +646,24 @@ class scoped_allocator_adaptor_base
    template <class OuterA2>
    scoped_allocator_adaptor_base(BOOST_FWD_REF(OuterA2) outerAlloc, const InnerAllocs &...args)
       : outer_allocator_type(::boost::forward<OuterA2>(outerAlloc))
-      , inner(args...)
+      , m_inner(args...)
       {}
 
    scoped_allocator_adaptor_base(const scoped_allocator_adaptor_base& other)
       : outer_allocator_type(other.outer_allocator())
-      , inner(other.inner_allocator())
+      , m_inner(other.inner_allocator())
       {}
 
    scoped_allocator_adaptor_base(BOOST_RV_REF(scoped_allocator_adaptor_base) other)
       : outer_allocator_type(::boost::move(other.outer_allocator()))
-      , inner(::boost::move(other.inner_allocator()))
+      , m_inner(::boost::move(other.inner_allocator()))
       {}
 
    template <class OuterA2>
    scoped_allocator_adaptor_base
       (const scoped_allocator_adaptor_base<OuterA2, InnerAllocs...>& other)
       : outer_allocator_type(other.outer_allocator())
-      , inner(other.inner_allocator())
+      , m_inner(other.inner_allocator())
       {}
 
    template <class OuterA2>
@@ -671,7 +671,7 @@ class scoped_allocator_adaptor_base
       (BOOST_RV_REF_BEG scoped_allocator_adaptor_base
          <OuterA2, InnerAllocs...> BOOST_RV_REF_END other)
       : outer_allocator_type(other.outer_allocator())
-      , inner(other.inner_allocator())
+      , m_inner(other.inner_allocator())
       {}
 
    protected:
@@ -692,22 +692,22 @@ class scoped_allocator_adaptor_base
       (BOOST_COPY_ASSIGN_REF(scoped_allocator_adaptor_base) other)
    {
       outer_allocator_type::operator=(other.outer_allocator());
-      inner = other.inner_allocator();
+      m_inner = other.inner_allocator();
       return *this;
    }
 
    scoped_allocator_adaptor_base &operator=(BOOST_RV_REF(scoped_allocator_adaptor_base) other)
    {
       outer_allocator_type::operator=(boost::move(other.outer_allocator()));
-      inner = ::boost::move(other.inner_allocator());
+      m_inner = ::boost::move(other.inner_allocator());
       return *this;
    }
 
    inner_allocator_type&       inner_allocator()
-      { return inner; }
+      { return m_inner; }
 
    inner_allocator_type const& inner_allocator() const
-      { return inner; }
+      { return m_inner; }
 
    outer_allocator_type      & outer_allocator()
       { return static_cast<outer_allocator_type&>(*this); }
@@ -716,7 +716,7 @@ class scoped_allocator_adaptor_base
       { return static_cast<const outer_allocator_type&>(*this); }
 
    private:
-   inner_allocator_type inner;
+   inner_allocator_type m_inner;
 };
 
 #else //#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
@@ -1060,6 +1060,7 @@ class scoped_allocator_adaptor
       , true BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS, Q)
       #endif
       >                       base_type;
+   typedef typename base_type::internal_type_t internal_type_t;
    /// @endcond
    typedef OuterAlloc                                       outer_allocator_type;
    //! Type: For exposition only
