@@ -123,4 +123,8 @@
 
 * Avoid warning due with gcc's `-Wconversion` flag.
 
+[h2 Boost 1.50.0]
+
+* Avoid gcc's `-Wfloat-equal` warning.
+
 [endsect]
