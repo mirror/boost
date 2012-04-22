@@ -744,6 +744,25 @@ for(; first != last; ++first)
           <parameter name="val"><paramtype>std::type_index</paramtype></parameter>
         </signature>
 
+        <signature>
+          <template>
+            <template-type-parameter name="T"/>
+            <template-nontype-parameter name="N">
+              <type>std::size_t</type>
+            </template-nontype-parameter>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::array&lt;T, N&gt; const&amp;</paramtype></parameter>
+        </signature>
+
+        <signature>
+          <template>
+            <template-type-parameter name="T" pack="1"/>
+          </template>
+          <type>std::size_t</type>
+          <parameter name="val"><paramtype>std::tuple&lt;T...&gt;</paramtype></parameter>
+        </signature>
+
         <description><para>
           Generally shouldn't be called directly by users, instead they should use
           <classname>boost::hash</classname>, <functionname>boost::hash_range</functionname>
@@ -810,6 +829,7 @@ for(; first != last; ++first)
                     <code>std::multiset&lt;K,&#160;C,&#160;A&gt;</code>,
                     <code>std::map&lt;K,&#160;T,&#160;C,&#160;A&gt;</code>,
                     <code>std::multimap&lt;K,&#160;T,&#160;C,&#160;A&gt;</code>
+                    <code>std::array&lt;T,&#160;N&gt;</code>
                   </entry>
                   <entry><code>hash_range(val.begin(), val.end())</code></entry>
                 </row>
@@ -818,6 +838,14 @@ for(; first != last; ++first)
                   <entry><programlisting>size_t seed = 0;
 <functionname>hash_combine</functionname>(seed, val.first);
 <functionname>hash_combine</functionname>(seed, val.second);
+return seed;</programlisting></entry>
+                </row>
+                <row>
+                  <entry><code>std::tuple&lt;T...&gt;</code></entry>
+                  <entry><programlisting>size_t seed = 0;
+<functionname>hash_combine</functionname>(seed, get&lt;0&gt;(val));
+<functionname>hash_combine</functionname>(seed, get&lt;1&gt;(val));
+// ....
 return seed;</programlisting></entry>
                 </row>
                 <row>

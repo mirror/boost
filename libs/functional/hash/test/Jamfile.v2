@@ -40,6 +40,8 @@ test-suite functional/hash
         [ run hash_map_test.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
         [ run hash_complex_test.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
         [ run hash_type_index_test.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
+        [ run hash_std_array_test.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
+        [ run hash_std_tuple_test.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
         [ run link_test.cpp link_test_2.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
         [ run link_ext_test.cpp link_no_ext_test.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
         [ run extensions_hpp_test.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
