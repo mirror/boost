@@ -27,14 +27,24 @@
 #include <boost/utility/addressof.hpp>
 
 #if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
+// An allocator_traits test is currently failing for gcc 4.7 on mingw. I think
+// this is because it's an older development version. Temporarily disabling
+// std::allocator_traits in order ot get clean test results. Will reactivate
+// later.
+
+/*
 #   if defined(__GXX_EXPERIMENTAL_CXX0X__) && \
             (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7))
 #       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
 #   endif
-#
+*/
+
+// Use container's allocator_traits for older versions of Visual C++ as I don't
+// test with them.
 #   if defined(BOOST_MSVC) && BOOST_MSVC < 1400
 #       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 2
 #   endif
+
 #endif
 
 #if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
