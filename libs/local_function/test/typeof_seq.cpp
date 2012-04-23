@@ -13,10 +13,6 @@
 //#include <algorithm>
 
 int main(void) {
-        BOOST_CONCEPT_ASSERT((Addable<boost::remove_reference<
-                int&>::type>));
-    return 0;
-/**@todo
     int sum = 0, factor = 10;
 
     void BOOST_LOCAL_FUNCTION( (const bind factor) (bind& sum) (int num) ) {
@@ -30,6 +26,5 @@ int main(void) {
     add(6);
     BOOST_TEST(sum == 60);
     return boost::report_errors();
-    */
 }
 

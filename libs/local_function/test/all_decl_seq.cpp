@@ -13,6 +13,7 @@ struct s;
 BOOST_TYPEOF_REGISTER_TYPE(s); // Register before bind `this_` below.
 
 // Compile all local function declaration combinations.
+/** @todo uncomment this stuff */
 struct s {
     void f(double p = 1.23, double q = -1.23) {
         { // Only params.
@@ -28,7 +29,7 @@ struct s {
                 return b;
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l();
-
+/*
             const s& BOOST_LOCAL_FUNCTION( (const bind this_) ) {
                 return *this_;
             } BOOST_LOCAL_FUNCTION_NAME(t)
@@ -39,7 +40,7 @@ struct s {
                     (const bind this_) ) {
                 return a;
             } BOOST_LOCAL_FUNCTION_NAME(lt)
-            lt();
+            lt();*/
         }
         { // Only plain binds.
             int c, d;
@@ -49,7 +50,7 @@ struct s {
                 return d;
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l();
-
+/*
             s& BOOST_LOCAL_FUNCTION( (bind this_) ) {
                 return *this_;
             } BOOST_LOCAL_FUNCTION_NAME(t)
@@ -59,7 +60,7 @@ struct s {
                     (bind& p) (bind& q) (bind this_) ) {
                 return c;
             } BOOST_LOCAL_FUNCTION_NAME(lt)
-            lt();
+            lt();*/
         }
 
         { // Both params and const binds.
@@ -70,7 +71,7 @@ struct s {
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l(1);
-
+/*
             void BOOST_LOCAL_FUNCTION( (const bind this_) 
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(t)
@@ -80,7 +81,7 @@ struct s {
                     (const bind& b) (const bind& p) (const bind q) 
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lt)
-            lt(1);
+            lt(1);*/
         }
         { // Both params and plain binds.
             int c, d;
@@ -89,7 +90,7 @@ struct s {
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l(1);
-
+/*
             void BOOST_LOCAL_FUNCTION( (bind this_)
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(t)
@@ -99,7 +100,7 @@ struct s {
                     (bind& p) (bind this_) (bind q)
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lt)
-            lt(1);
+            lt(1);*/
         }
         { // Both const and plain binds.
             int a, b, c, d;
@@ -108,7 +109,7 @@ struct s {
                     (const bind p) (bind c) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l();
-
+/*
             void BOOST_LOCAL_FUNCTION( (const bind this_)
                     (bind c) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(ct)
@@ -126,7 +127,7 @@ struct s {
             void BOOST_LOCAL_FUNCTION( (const bind a) (const bind& b)
                     (const bind p) (bind c) (bind this_) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lpt)
-            lpt();
+            lpt();*/
         }
 
         { // All params, const binds, and plain binds.
@@ -137,7 +138,7 @@ struct s {
                     (bind c) (bind& d) (bind& q) (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l(1);
-
+/*
             void BOOST_LOCAL_FUNCTION( (const bind this_)
                     (bind c) (bind& d) (bind& q) 
                     (int x) (int y)(default 0) ) {
@@ -158,7 +159,7 @@ struct s {
                     (const bind& p) (bind c) (bind& d) (bind this_) (bind& q)
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lpt)
-            lpt(1);
+            lpt(1);*/
         }
     }
 };

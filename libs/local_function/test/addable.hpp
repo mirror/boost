@@ -17,10 +17,11 @@ struct Addable { // User-defined concept.
     }
 
 private:
-    T x;
-    T y;
+    T const& x;
+    T const& y;
 
-    void return_type(T const&); // Used to check addition returns type `T`.
+    void return_type(T const&) // Used to check addition returns type `T`.
+        {} // Do nothing implementation (required for some linkers).
 };
 
 #endif // #include guard
