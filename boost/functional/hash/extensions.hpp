@@ -162,15 +162,15 @@ namespace boost
         return boost::hash_detail::hash_tuple(v);
     }
 
-#   define BOOST_HASH_TUPLE_F(z, n, _) \
-    template< \
-        BOOST_PP_ENUM_PARAMS_Z(z, n, typename A) \
-    > \
-    inline std::size_t hash_value(std::tuple< \
-        BOOST_PP_ENUM_PARAMS_Z(z, n, A) \
-    > const& v) \
-    { \
-        return boost::hash_detail::hash_tuple(v); \
+#   define BOOST_HASH_TUPLE_F(z, n, _)                                      \
+    template<                                                               \
+        BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)                            \
+    >                                                                       \
+    inline std::size_t hash_value(std::tuple<                               \
+        BOOST_PP_ENUM_PARAMS_Z(z, n, A)                                     \
+    > const& v)                                                             \
+    {                                                                       \
+        return boost::hash_detail::hash_tuple(v);                           \
     }
 
     BOOST_PP_REPEAT_FROM_TO(1, 11, BOOST_HASH_TUPLE_F, _)
