@@ -53,13 +53,13 @@ void int_tuple_test() {
 
 void int_string_tuple_test() {
     std::vector<std::tuple<int, std::string> > int_string_tuples;
-    int_string_tuples.push_back(std::make_tuple(0, "zero"));
-    int_string_tuples.push_back(std::make_tuple(1, "one"));
-    int_string_tuples.push_back(std::make_tuple(2, "two"));
-    int_string_tuples.push_back(std::make_tuple(0, "one"));
-    int_string_tuples.push_back(std::make_tuple(1, "zero"));
-    int_string_tuples.push_back(std::make_tuple(0, ""));
-    int_string_tuples.push_back(std::make_tuple(1, ""));
+    int_string_tuples.push_back(std::make_tuple(0, std::string("zero")));
+    int_string_tuples.push_back(std::make_tuple(1, std::string("one")));
+    int_string_tuples.push_back(std::make_tuple(2, std::string("two")));
+    int_string_tuples.push_back(std::make_tuple(0, std::string("one")));
+    int_string_tuples.push_back(std::make_tuple(1, std::string("zero")));
+    int_string_tuples.push_back(std::make_tuple(0, std::string("")));
+    int_string_tuples.push_back(std::make_tuple(1, std::string("")));
     tuple_tests(int_string_tuples);
 }
 

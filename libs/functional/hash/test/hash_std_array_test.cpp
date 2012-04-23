@@ -50,11 +50,11 @@ void int_1_array_test()
     std::vector<std::array<int, 1> > arrays;
     std::array<int, 1> val;
     val[0] = 0;
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = 1;
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = 2;
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     array_tests(arrays);
 }
 
@@ -62,11 +62,11 @@ void string_1_array_test()
 {
     std::vector<std::array<std::string, 1> > arrays;
     std::array<std::string, 1> val;
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = "one";
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = "two";
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     array_tests(arrays);
 }
 
@@ -74,17 +74,17 @@ void string_3_array_test()
 {
     std::vector<std::array<std::string,3 > > arrays;
     std::array<std::string, 3> val;
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = "one";
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = ""; val[1] = "one"; val[2] = "";
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = ""; val[1] = ""; val[2] = "one";
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = "one"; val[1] = "one"; val[2] = "one";
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     val[0] = "one"; val[1] = "two"; val[2] = "three";
-    arrays.emplace_back(val);
+    arrays.push_back(val);
     array_tests(arrays);
 }
 
