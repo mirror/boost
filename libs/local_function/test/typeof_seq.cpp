@@ -6,11 +6,11 @@
 // Home at http://www.boost.org/libs/local_function
 
 #include "addable.hpp"
-//#include <boost/local_function.hpp>
+#include <boost/local_function.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/concept_check.hpp>
-//#include <boost/detail/lightweight_test.hpp>
-//#include <algorithm>
+#include <boost/detail/lightweight_test.hpp>
+#include <algorithm>
 
 int main(void) {
     int sum = 0, factor = 10;

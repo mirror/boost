@@ -29,12 +29,12 @@ struct s {
                 return b;
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l();
-/*
+
             const s& BOOST_LOCAL_FUNCTION( (const bind this_) ) {
                 return *this_;
             } BOOST_LOCAL_FUNCTION_NAME(t)
             t();
-
+/*
             const int BOOST_LOCAL_FUNCTION( (const bind a)
                     (const bind& b) (const bind& p) (const bind q)
                     (const bind this_) ) {
@@ -50,12 +50,12 @@ struct s {
                 return d;
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l();
-/*
+
             s& BOOST_LOCAL_FUNCTION( (bind this_) ) {
                 return *this_;
             } BOOST_LOCAL_FUNCTION_NAME(t)
             t();
-
+/*
             int BOOST_LOCAL_FUNCTION( (bind c) (bind& d)
                     (bind& p) (bind& q) (bind this_) ) {
                 return c;
@@ -71,12 +71,12 @@ struct s {
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l(1);
-/*
+
             void BOOST_LOCAL_FUNCTION( (const bind this_) 
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(t)
             t(1);
-
+/*
             void BOOST_LOCAL_FUNCTION( (const bind a) (const bind this_)
                     (const bind& b) (const bind& p) (const bind q) 
                     (int x) (int y)(default 0) ) {
@@ -90,12 +90,12 @@ struct s {
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l(1);
-/*
+
             void BOOST_LOCAL_FUNCTION( (bind this_)
                     (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(t)
             t(1);
-            
+/*            
             void BOOST_LOCAL_FUNCTION( (bind c) (bind& d)
                     (bind& p) (bind this_) (bind q)
                     (int x) (int y)(default 0) ) {
@@ -109,7 +109,7 @@ struct s {
                     (const bind p) (bind c) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l();
-/*
+
             void BOOST_LOCAL_FUNCTION( (const bind this_)
                     (bind c) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(ct)
@@ -119,7 +119,7 @@ struct s {
                     (bind c) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lct)
             lct();
-
+/*
             void BOOST_LOCAL_FUNCTION( (const bind a) (const bind& b)
                     (const bind p) (bind this_) ) {
             } BOOST_LOCAL_FUNCTION_NAME(pt)
@@ -138,7 +138,7 @@ struct s {
                     (bind c) (bind& d) (bind& q) (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l(1);
-/*
+
             void BOOST_LOCAL_FUNCTION( (const bind this_)
                     (bind c) (bind& d) (bind& q) 
                     (int x) (int y)(default 0) ) {
@@ -149,7 +149,7 @@ struct s {
                     (bind this_) (int x) (int y)(default 0) ) {
             } BOOST_LOCAL_FUNCTION_NAME(pt)
             pt(1);
-
+/*
             void BOOST_LOCAL_FUNCTION( (const bind a) (const bind this_)
                     (const bind& b) (const bind& p) (bind c) (bind& d)
                     (bind& q) (int x) (int y)(default 0) ) {
