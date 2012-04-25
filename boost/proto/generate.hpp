@@ -24,6 +24,11 @@
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/args.hpp>
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(push)
+# pragma warning(disable : 4714) // function 'xxx' marked as __forceinline not inlined
+#endif
+
 namespace boost { namespace proto
 {
 
@@ -439,5 +444,9 @@ namespace boost
     };
     #endif
 }
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
+#endif
 
 #endif // BOOST_PROTO_GENERATE_HPP_EAN_02_13_2007

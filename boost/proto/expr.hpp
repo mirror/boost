@@ -31,6 +31,7 @@
 # pragma warning(disable : 4510) // default constructor could not be generated
 # pragma warning(disable : 4512) // assignment operator could not be generated
 # pragma warning(disable : 4610) // user defined constructor required
+# pragma warning(disable : 4714) // function 'xxx' marked as __forceinline not inlined
 #endif
 
 namespace boost { namespace proto
