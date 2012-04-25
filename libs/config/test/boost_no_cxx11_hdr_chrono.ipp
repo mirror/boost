@@ -23,7 +23,7 @@ int test()
   using std::chrono::minutes;
   using std::chrono::hours;
   using std::chrono::system_clock;
-  using std::chrono::monotonic_clock;
+  using std::chrono::steady_clock;
   using std::chrono::high_resolution_clock;
   return 0;
 }

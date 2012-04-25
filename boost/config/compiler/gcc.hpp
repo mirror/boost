@@ -146,9 +146,6 @@
 #  endif
 #endif
 
-// C++0x features not implemented in any GCC version
-//
-#define BOOST_NO_TEMPLATE_ALIASES
 
 // C++0x features in 4.3.n and later
 //
@@ -218,6 +215,9 @@
 #define BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX
 #endif
 
+#if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+#  define BOOST_NO_TEMPLATE_ALIASES
+#endif
 // C++0x features not supported at all yet
 //
 #define BOOST_NO_DECLTYPE_N3276

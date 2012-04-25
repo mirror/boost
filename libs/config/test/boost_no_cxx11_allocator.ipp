@@ -17,13 +17,13 @@ namespace boost_no_cxx11_allocator {
 int test()
 {
    std::pointer_traits<char*>* p = 0;
-   std::pointer_safety s = std::relaxed;
+   //std::pointer_safety s = std::relaxed;
 
-   char* (*l_undeclare_reachable)(char *p) = std::undeclare_reachable;
-   void (*l_declare_no_pointers)(char *p, size_t n) = std::declare_no_pointers;
-   void (*l_undeclare_no_pointers)(char *p, size_t n) = std::undeclare_no_pointers;
-   std::pointer_safety (*l_get_pointer_safety)() = std::get_pointer_safety;
-   void* (*l_align)(std::size_t alignment, std::size_t size, void *&ptr, std::size_t& space) = std::align;
+   //char* (*l_undeclare_reachable)(char *p) = std::undeclare_reachable;
+   //void (*l_declare_no_pointers)(char *p, size_t n) = std::declare_no_pointers;
+   //void (*l_undeclare_no_pointers)(char *p, size_t n) = std::undeclare_no_pointers;
+   //std::pointer_safety (*l_get_pointer_safety)() = std::get_pointer_safety;
+   //void* (*l_align)(std::size_t alignment, std::size_t size, void *&ptr, std::size_t& space) = std::align;
    std::allocator_arg_t aat;
    std::uses_allocator<int, std::allocator<int> > ua;
    std::allocator_traits<std::allocator<int> > at;
