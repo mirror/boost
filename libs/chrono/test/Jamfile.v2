@@ -59,7 +59,7 @@ rule chrono-run ( sources )
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
     #    :
-    #        <library>/boost/system//boost_system
+    #        <library>/boost/system//boost_system/<link>static
     #    :   $(sources[1]:B)_s ]
     [ run $(sources)
         : :
@@ -82,7 +82,7 @@ rule chrono-v1-v2-run ( sources )
     [ run $(sources) ../build//boost_chrono/<link>static
         : :
         :
-            <library>/boost/system//boost_system
+            <library>/boost/system//boost_system/<link>static
         :   v1_$(sources[1]:B)_s ]
     [ run $(sources)
         : :
@@ -111,7 +111,7 @@ rule chrono-run2 ( sources : name )
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
     #    :
-    #        <library>/boost/system//boost_system
+    #        <library>/boost/system//boost_system/<link>static
     #    : $(name)_s ]
     [ run $(sources)
         : :
@@ -195,7 +195,7 @@ rule chrono-run-mt ( sources )
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
     #    :
-    #        <library>/boost/system//boost_system
+    #        <library>/boost/system//boost_system/<link>static
     #    :  $(sources[1]:B)_s ]
     [ run $(sources)
         : :
@@ -217,7 +217,7 @@ rule chrono-run2-mt ( sources : name )
     #[ run $(sources) ../build//boost_chrono/<link>static
     #    : :
     #    :
-    #        <library>/boost/system//boost_system
+    #        <library>/boost/system//boost_system/<link>static
     #    : $(name)_s ]
     [ run $(sources)
         : :
@@ -240,7 +240,7 @@ rule chrono-run-check ( sources )
     [ run $(sources) 
         : :
         :
-            <library>/boost/system//boost_system
+            <library>/boost/system//boost_system/<link>static
             <define>BOOST_CHRONO_VERSION=2
         :   $(sources[1]:B)_s ]
     [ run $(sources)
@@ -264,7 +264,7 @@ rule chrono-run-check2 ( sources : name )
     [ run $(sources) 
         : :
         :
-            <library>/boost/system//boost_system
+            <library>/boost/system//boost_system/<link>static
             <define>BOOST_CHRONO_VERSION=2
         : $(name)_s ]
     [ run $(sources)
