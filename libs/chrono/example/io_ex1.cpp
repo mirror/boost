@@ -62,10 +62,10 @@ int main()
     cout << "steady_clock::now() = " << steady_clock::now() << '\n';
 #endif
 #if BOOST_CHRONO_VERSION==2
-    cout << "\nSet cout to use long names:\n" <<     cout << duration_fmt(duration_style::prefix)
+    cout << "\nSet cout to use long names:\n" << duration_fmt(duration_style::prefix)
          << "high_resolution_clock::now() = " << high_resolution_clock::now() << '\n';
 #else
-    cout << "\nSet cout to use long names:\n" <<     cout << duration_long
+    cout << "\nSet cout to use long names:\n" <<  duration_long
          << "high_resolution_clock::now() = " << high_resolution_clock::now() << '\n';
 #endif
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
