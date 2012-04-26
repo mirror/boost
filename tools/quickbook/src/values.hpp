@@ -211,6 +211,8 @@ namespace quickbook
 
             void append(value_node*);
             void sort();
+
+            bool empty() const;
         private:
             value_node* head_;
             value_node** back_;
@@ -269,8 +271,6 @@ namespace quickbook
 
         value release();
 
-        void reset();
-        void set_tag(value::tag_type);
         void insert(value const&);
         void extend(value const&);
 
@@ -278,6 +278,8 @@ namespace quickbook
         void finish_list();
         void clear_list();
         void sort_list();
+
+        bool empty() const;
 
     private:
         detail::value_list_builder current;

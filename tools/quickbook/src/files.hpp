@@ -16,7 +16,6 @@
 #include <boost/intrusive_ptr.hpp>
 #include <stdexcept>
 #include <cassert>
-#include "intrusive_base.hpp"
 
 namespace quickbook {
 
@@ -34,20 +33,35 @@ namespace quickbook {
         int column;
     };
 
-    struct file : intrusive_base<file>
+    struct file
     {
+    private:
+        // Non copyable
+        file& operator=(file const&);
+        file(file const&);
+    public:
         fs::path const path;
         std::string source;
+        bool is_code_snippets;
     private:
         unsigned qbk_version;
+        unsigned ref_count;
     public:
 
         file(fs::path const& path, std::string const& source,
                 unsigned qbk_version) :
-            path(path), source(source), qbk_version(qbk_version)
+            path(path), source(source), is_code_snippets(false),
+            qbk_version(qbk_version), ref_count(0)
         {}
 
-        virtual ~file() {}
+        file(file const& f, std::string const& source) :
+            path(f.path), source(source), is_code_snippets(f.is_code_snippets),
+            qbk_version(f.qbk_version), ref_count(0)
+        {}
+
+        virtual ~file() {
+            assert(!ref_count);
+        }
 
         unsigned version() const {
             assert(qbk_version);
@@ -63,6 +77,11 @@ namespace quickbook {
         }
 
         virtual file_position position_of(std::string::const_iterator) const;
+
+        friend void intrusive_ptr_add_ref(file* ptr) { ++ptr->ref_count; }
+
+        friend void intrusive_ptr_release(file* ptr)
+            { if(--ptr->ref_count == 0) delete ptr; }
     };
 
     // If version isn't supplied then it must be set later.

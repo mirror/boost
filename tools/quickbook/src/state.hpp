@@ -10,20 +10,22 @@
 #if !defined(BOOST_SPIRIT_ACTIONS_CLASS_HPP)
 #define BOOST_SPIRIT_ACTIONS_CLASS_HPP
 
+#include <map>
 #include <boost/scoped_ptr.hpp>
-#include "actions.hpp"
 #include "parsers.hpp"
 #include "values_parse.hpp"
 #include "collector.hpp"
+#include "template_stack.hpp"
+#include "symbols.hpp"
 
 namespace quickbook
 {
     namespace cl = boost::spirit::classic;
     namespace fs = boost::filesystem;
 
-    struct actions
+    struct state
     {
-        actions(fs::path const& filein_, fs::path const& xinclude_base, string_stream& out_,
+        state(fs::path const& filein_, fs::path const& xinclude_base, string_stream& out_,
                 id_manager&);
 
     private:
@@ -35,9 +37,10 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
 
         typedef std::vector<std::string> string_list;
+        typedef std::map<fs::path, bool> dependency_list;
 
         static int const max_template_depth = 100;
-        
+
     // global state
         fs::path                xinclude_base;
         template_stack          templates;
@@ -46,12 +49,16 @@ namespace quickbook
         bool                    warned_about_breaks;
         bool                    conditional;
         id_manager&             ids;
+        value_builder           callouts;           // callouts are global as
+        int                     callout_depth;      // they don't nest.
+        dependency_list         dependencies;
 
     // state saved for files and templates.
         bool                    imported;
         string_symbols          macro;
         std::string             source_mode;
-        file_ptr          current_file;
+        value                   source_mode_next;
+        file_ptr                current_file;
         fs::path                filename_relative;  // for the __FILENAME__ macro.
                                                     // (relative to the original file
                                                     //  or include path).
@@ -71,37 +78,23 @@ namespace quickbook
     // actions
     ///////////////////////////////////////////////////////////////////////////
 
+        // Call this before loading any file so that it will be included in the
+        // list of dependencies. Returns true if file exists.
+        bool add_dependency(fs::path const&);
+
         void start_list(char mark);
         void end_list(char mark);
         void start_list_item();
         void end_list_item();
 
-        scoped_parser<to_value_scoped_action>
-                                to_value;
-        scoped_parser<cond_phrase_push>
-                                scoped_cond_phrase;
-
-        element_action          element;
-        error_action            error;
-
-        code_action             code;
-        code_action             code_block;
-        code_action             inline_code;
-        paragraph_action        paragraph;
-        list_item_action        list_item;
-        phrase_end_action       phrase_end;
-        raw_char_action         raw_char;
-        plain_char_action       plain_char;
-        escape_unicode_action   escape_unicode;
-
-        simple_phrase_action    simple_markup;
-
-        break_action            break_;
-        do_macro_action         do_macro;
-
-        element_id_warning_action element_id_warning;
+        void start_callouts();
+        std::string add_callout(value);
+        std::string end_callouts();
     };
+
+    extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
+    extern char const* quickbook_get_date;
+    extern char const* quickbook_get_time;
 }
 
 #endif // BOOST_SPIRIT_ACTIONS_CLASS_HPP
-

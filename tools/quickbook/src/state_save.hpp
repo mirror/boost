@@ -10,13 +10,13 @@
 #if !defined(BOOST_SPIRIT_ACTIONS_STATE_HPP)
 #define BOOST_SPIRIT_ACTIONS_STATE_HPP
 
-#include "actions_class.hpp"
+#include "state.hpp"
 
 namespace quickbook
 {
     // State savers
     //
-    // Defined in actions_class.cpp
+    // Defined in state.cpp
 
     struct file_state
     {
@@ -29,10 +29,10 @@ namespace quickbook
             scope_all = scope_callables + scope_output
         };
 
-        explicit file_state(actions&, scope_flags);
+        explicit file_state(quickbook::state&, scope_flags);
         ~file_state();
 
-        quickbook::actions& a;
+        quickbook::state& state;
         scope_flags scope;
         unsigned qbk_version;
         bool imported;
@@ -49,7 +49,7 @@ namespace quickbook
 
     struct template_state : file_state
     {
-        explicit template_state(actions&);
+        explicit template_state(quickbook::state&);
         ~template_state();
 
         int template_depth;

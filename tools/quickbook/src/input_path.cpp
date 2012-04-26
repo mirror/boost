@@ -122,7 +122,7 @@ namespace detail {
         return fs::path(static_cast<wchar_t*>(ptr));
     }
     
-    stream_string path_to_stream(fs::path const& path)
+    ostream::string path_to_stream(fs::path const& path)
     {
         cygwin_conv_path_t flags = CCP_WIN_W_TO_POSIX | CCP_RELATIVE;
 
@@ -145,12 +145,12 @@ namespace detail {
     }
 
 #if QUICKBOOK_WIDE_PATHS && !QUICKBOOK_WIDE_STREAMS
-    stream_string path_to_stream(fs::path const& path)
+    ostream::string path_to_stream(fs::path const& path)
     {
         return path.string();
     }
 #else
-    stream_string path_to_stream(fs::path const& path)
+    ostream::string path_to_stream(fs::path const& path)
     {
         return path.native();
     }
@@ -166,21 +166,23 @@ namespace detail {
         if (_isatty(_fileno(stderr))) _setmode(_fileno(stderr), _O_U16TEXT);
     }
 
-    void write_utf8(ostream& out, std::string const& x)
+    void write_utf8(ostream::base_ostream& out, std::string const& x)
     {
         out << from_utf8(x);
     }
 
     ostream& out()
     {
-        return std::wcout;
+        static ostream x(std::wcout);
+        return x;
     }
 
     namespace
     {
         inline ostream& error_stream()
         {
-            return std::wcerr;
+            static ostream x(std::wcerr);
+            return x;
         }
     }
 
@@ -190,21 +192,23 @@ namespace detail {
     {
     }
 
-    void write_utf8(ostream& out, std::string const& x)
+    void write_utf8(ostream::base_ostream& out, std::string const& x)
     {
         out << x;
     }
 
     ostream& out()
     {
-        return std::cout;
+        static ostream x(std::cout);
+        return x;
     }
 
     namespace
     {
         inline ostream& error_stream()
         {
-            return std::clog;
+            static ostream x(std::clog);
+            return x;
         }
     }
 
@@ -253,5 +257,62 @@ namespace detail {
     ostream& outwarn(file_ptr const& f, string_iterator pos)
     {
         return outwarn(f->path, f->position_of(pos).line);
+    }
+
+    ostream& ostream::operator<<(char c) {
+        assert(c > 0 && c <= 127);
+        base << c;
+        return *this;
+    }
+
+    inline bool check_ascii(char const* x) {
+        for(;*x;++x) if(*x <= 0 || *x > 127) return false;
+        return true;
+    }
+
+    ostream& ostream::operator<<(char const* x) {
+        assert(check_ascii(x));
+        base << x;
+        return *this;
+    }
+
+    ostream& ostream::operator<<(std::string const& x) {
+        write_utf8(base, x);
+        return *this;
+    }
+
+    ostream& ostream::operator<<(int x) {
+        base << x;
+        return *this;
+    }
+
+    ostream& ostream::operator<<(unsigned int x) {
+        base << x;
+        return *this;
+    }
+
+    ostream& ostream::operator<<(long x) {
+        base << x;
+        return *this;
+    }
+
+    ostream& ostream::operator<<(unsigned long x) {
+        base << x;
+        return *this;
+    }
+
+    ostream& ostream::operator<<(fs::path const& x) {
+        base << path_to_stream(x);
+        return *this;
+    }
+
+    ostream& ostream::operator<<(base_ostream& (*x)(base_ostream&)) {
+        base << x;
+        return *this;
+    }
+
+    ostream& ostream::operator<<(base_ios& (*x)(base_ios&)) {
+        base << x;
+        return *this;
     }
 }}

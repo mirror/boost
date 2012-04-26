@@ -37,6 +37,12 @@ namespace quickbook
         explicit string_ref(std::string const& x)
             : begin_(x.begin()), end_(x.end()) {}
 
+        void swap(string_ref&);
+
+        void clear() {
+            begin_ = end_ = iterator();
+        }
+
         operator std::string() const {
             return std::string(begin_, end_);
         }
@@ -72,6 +78,11 @@ namespace quickbook
     inline bool operator>(string_ref const& x, std::string const& y)
     {
         return x > string_ref(y);
+    }
+
+    inline void swap(string_ref& x, string_ref& y)
+    {
+        x.swap(y);
     }
 }
 

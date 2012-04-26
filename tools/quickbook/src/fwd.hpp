@@ -16,12 +16,13 @@
 
 namespace quickbook
 {
-    struct actions;
+    struct state;
     struct quickbook_grammar;
     struct collector;
     struct id_manager;
     struct section_info;
     struct file;
+    struct template_symbol;
     typedef boost::intrusive_ptr<file> file_ptr;
 
     typedef std::string::const_iterator string_iterator;

@@ -12,6 +12,7 @@
 #include <functional>
 #include <vector>
 #include <map>
+#include <set>
 #include <boost/filesystem/convenience.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/range/distance.hpp>
@@ -25,8 +26,8 @@
 #include "utils.hpp"
 #include "files.hpp"
 #include "markups.hpp"
-#include "actions_class.hpp"
-#include "actions_state.hpp"
+#include "state.hpp"
+#include "state_save.hpp"
 #include "grammar.hpp"
 #include "input_path.hpp"
 #include "block_tags.hpp"
@@ -35,17 +36,22 @@
 
 namespace quickbook
 {
-    char const* quickbook_get_date = "__quickbook_get_date__";
-    char const* quickbook_get_time = "__quickbook_get_time__";
-
-    unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
-
     namespace {
-        void write_anchors(quickbook::actions& actions, collector& tgt)
+        void write_anchors(quickbook::state& state, collector& tgt)
         {
-            for(quickbook::actions::string_list::iterator
-                it = actions.anchors.begin(),
-                end = actions.anchors.end();
+            // TODO: This works but is a bit of an odd place to put it.
+            // Might need to redefine the purpose of this function.
+            if (!state.source_mode_next.empty()) {
+                detail::outwarn(state.source_mode_next.get_file(),
+                    state.source_mode_next.get_position())
+                    << "Temporary source mode unsupported here."
+                    << std::endl;
+                state.source_mode_next = value();
+            }
+
+            for(quickbook::state::string_list::iterator
+                it = state.anchors.begin(),
+                end = state.anchors.end();
                 it != end; ++it)
             {
                 tgt << "<anchor id=\"";
@@ -53,46 +59,52 @@ namespace quickbook
                 tgt << "\"/>";
             }
             
-            actions.anchors.clear();
+            state.anchors.clear();
         }
         
-        std::string add_anchor(quickbook::actions& actions,
+        std::string add_anchor(quickbook::state& state,
                 std::string const& id,
                 id_category::categories category =
                     id_category::explicit_anchor_id)
         {
-            std::string placeholder = actions.ids.add_anchor(id, category);
-            actions.anchors.push_back(placeholder);
+            std::string placeholder = state.ids.add_anchor(id, category);
+            state.anchors.push_back(placeholder);
             return placeholder;
         }
     }
 
-    void explicit_list_action(quickbook::actions&, value);
-    void header_action(quickbook::actions&, value);
-    void begin_section_action(quickbook::actions&, value);
-    void end_section_action(quickbook::actions&, value, string_iterator);
-    void block_action(quickbook::actions&, value);
-    void block_empty_action(quickbook::actions&, value);
-    void macro_definition_action(quickbook::actions&, value);
-    void template_body_action(quickbook::actions&, value);
-    void variable_list_action(quickbook::actions&, value);
-    void table_action(quickbook::actions&, value);
-    void xinclude_action(quickbook::actions&, value);
-    void include_action(quickbook::actions&, value, string_iterator);
-    void image_action(quickbook::actions&, value);
-    void anchor_action(quickbook::actions&, value);
-    void link_action(quickbook::actions&, value);
-    void phrase_action(quickbook::actions&, value);
-    void role_action(quickbook::actions&, value);
-    void footnote_action(quickbook::actions&, value);
-    void raw_phrase_action(quickbook::actions&, value);
-    void source_mode_action(quickbook::actions&, value);
-    void do_template_action(quickbook::actions&, value, string_iterator);
+    bool quickbook_range::in_range() const {
+        return qbk_version_n >= lower && qbk_version_n < upper;
+    }
+
+    void explicit_list_action(quickbook::state&, value);
+    void header_action(quickbook::state&, value);
+    void begin_section_action(quickbook::state&, value);
+    void end_section_action(quickbook::state&, value, string_iterator);
+    void block_action(quickbook::state&, value);
+    void block_empty_action(quickbook::state&, value);
+    void macro_definition_action(quickbook::state&, value);
+    void template_body_action(quickbook::state&, value);
+    void variable_list_action(quickbook::state&, value);
+    void table_action(quickbook::state&, value);
+    void xinclude_action(quickbook::state&, value);
+    void include_action(quickbook::state&, value, string_iterator);
+    void image_action(quickbook::state&, value);
+    void anchor_action(quickbook::state&, value);
+    void link_action(quickbook::state&, value);
+    void phrase_action(quickbook::state&, value);
+    void role_action(quickbook::state&, value);
+    void footnote_action(quickbook::state&, value);
+    void raw_phrase_action(quickbook::state&, value);
+    void source_mode_action(quickbook::state&, value);
+    void next_source_mode_action(quickbook::state&, value);
+    void code_action(quickbook::state&, value);
+    void do_template_action(quickbook::state&, value, string_iterator);
     
     void element_action::operator()(parse_iterator first, parse_iterator) const
     {
-        value_consumer values = actions.values.release();
-        if(!values.check() || !actions.conditional) return;
+        value_consumer values = state.values.release();
+        if(!values.check() || !state.conditional) return;
         value v = values.consume();
         values.finish();
         
@@ -100,7 +112,7 @@ namespace quickbook
         {
         case block_tags::ordered_list:
         case block_tags::itemized_list:
-            return explicit_list_action(actions, v);
+            return explicit_list_action(state, v);
         case block_tags::generic_heading:
         case block_tags::heading1:
         case block_tags::heading2:
@@ -108,11 +120,11 @@ namespace quickbook
         case block_tags::heading4:
         case block_tags::heading5:
         case block_tags::heading6:
-            return header_action(actions, v);
+            return header_action(state, v);
         case block_tags::begin_section:
-            return begin_section_action(actions, v);
+            return begin_section_action(state, v);
         case block_tags::end_section:
-            return end_section_action(actions, v, first.base());
+            return end_section_action(state, v, first.base());
         case block_tags::blurb:
         case block_tags::preformatted:
         case block_tags::blockquote:
@@ -122,26 +134,26 @@ namespace quickbook
         case block_tags::note:
         case block_tags::tip:
         case block_tags::block:
-            return block_action(actions,v);
+            return block_action(state,v);
         case block_tags::hr:
-            return block_empty_action(actions,v);
+            return block_empty_action(state,v);
         case block_tags::macro_definition:
-            return macro_definition_action(actions,v);
+            return macro_definition_action(state,v);
         case block_tags::template_definition:
-            return template_body_action(actions,v);
+            return template_body_action(state,v);
         case block_tags::variable_list:
-            return variable_list_action(actions, v);
+            return variable_list_action(state, v);
         case block_tags::table:
-            return table_action(actions, v);
+            return table_action(state, v);
         case block_tags::xinclude:
-            return xinclude_action(actions, v);
+            return xinclude_action(state, v);
         case block_tags::import:
         case block_tags::include:
-            return include_action(actions, v, first.base());
+            return include_action(state, v, first.base());
         case phrase_tags::image:
-            return image_action(actions, v);
+            return image_action(state, v);
         case phrase_tags::anchor:
-            return anchor_action(actions, v);
+            return anchor_action(state, v);
         case phrase_tags::url:
         case phrase_tags::link:
         case phrase_tags::funcref:
@@ -152,7 +164,7 @@ namespace quickbook
         case phrase_tags::headerref:
         case phrase_tags::conceptref:
         case phrase_tags::globalref:
-            return link_action(actions, v);
+            return link_action(state, v);
         case phrase_tags::bold:
         case phrase_tags::italic:
         case phrase_tags::underline:
@@ -160,19 +172,25 @@ namespace quickbook
         case phrase_tags::strikethrough:
         case phrase_tags::quote:
         case phrase_tags::replaceable:
-            return phrase_action(actions, v);
+            return phrase_action(state, v);
         case phrase_tags::footnote:
-            return footnote_action(actions, v);
+            return footnote_action(state, v);
         case phrase_tags::escape:
-            return raw_phrase_action(actions, v);
+            return raw_phrase_action(state, v);
         case phrase_tags::role:
-            return role_action(actions, v);
+            return role_action(state, v);
         case source_mode_tags::cpp:
         case source_mode_tags::python:
         case source_mode_tags::teletype:
-            return source_mode_action(actions, v);
+            return source_mode_action(state, v);
+        case code_tags::next_source_mode:
+            return next_source_mode_action(state, v);
+        case code_tags::code_block:
+        case code_tags::inline_code_block:
+        case code_tags::inline_code:
+            return code_action(state, v);
         case template_tags::template_:
-            return do_template_action(actions, v, first.base());
+            return do_template_action(state, v, first.base());
         default:
             break;
         }
@@ -180,22 +198,22 @@ namespace quickbook
 
     void break_action::operator()(parse_iterator first, parse_iterator) const
     {
-        write_anchors(actions, phrase);
+        write_anchors(state, phrase);
 
         if(*first == '\\')
         {
-            detail::outwarn(actions.current_file, first.base())
+            detail::outwarn(state.current_file, first.base())
                 //<< "in column:" << pos.column << ", "
                 << "'\\n' is deprecated, pleases use '[br]' instead" << ".\n";
         }
 
-        if(!actions.warned_about_breaks)
+        if(!state.warned_about_breaks)
         {
-            detail::outwarn(actions.current_file, first.base())
+            detail::outwarn(state.current_file, first.base())
                 << "line breaks generate invalid boostbook "
                    "(will only note first occurrence).\n";
 
-            actions.warned_about_breaks = true;
+            state.warned_about_breaks = true;
         }
             
         phrase << detail::get_markup(phrase_tags::break_mark).pre;
@@ -203,7 +221,7 @@ namespace quickbook
 
     void error_message_action::operator()(parse_iterator first, parse_iterator last) const
     {
-        file_position const pos = actions.current_file->position_of(first.base());
+        file_position const pos = state.current_file->position_of(first.base());
 
         std::string value(first, last);
         std::string formatted_message = message;
@@ -211,91 +229,91 @@ namespace quickbook
         boost::replace_all(formatted_message, "%c",
             boost::lexical_cast<std::string>(pos.column));
 
-        detail::outerr(actions.current_file->path, pos.line)
-            << detail::utf8(formatted_message) << std::endl;
-        ++actions.error_count;
+        detail::outerr(state.current_file->path, pos.line)
+            << formatted_message << std::endl;
+        ++state.error_count;
     }
 
     void error_action::operator()(parse_iterator first, parse_iterator /*last*/) const
     {
-        file_position const pos = actions.current_file->position_of(first.base());
+        file_position const pos = state.current_file->position_of(first.base());
 
-        detail::outerr(actions.current_file->path, pos.line)
+        detail::outerr(state.current_file->path, pos.line)
             << "Syntax Error near column " << pos.column << ".\n";
-        ++actions.error_count;
+        ++state.error_count;
     }
 
-    void block_action(quickbook::actions& actions, value block)
+    void block_action(quickbook::state& state, value block)
     {
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
         detail::markup markup = detail::get_markup(block.get_tag());
 
         value_consumer values = block;
-        actions.out << markup.pre << values.consume().get_encoded() << markup.post;
+        state.out << markup.pre << values.consume().get_encoded() << markup.post;
         values.finish();
     }
 
-    void block_empty_action(quickbook::actions& actions, value block)
+    void block_empty_action(quickbook::state& state, value block)
     {
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
         detail::markup markup = detail::get_markup(block.get_tag());
-        actions.out << markup.pre;
+        state.out << markup.pre;
     }
 
-    void phrase_action(quickbook::actions& actions, value phrase)
+    void phrase_action(quickbook::state& state, value phrase)
     {
-        write_anchors(actions, actions.phrase);
+        write_anchors(state, state.phrase);
 
         detail::markup markup = detail::get_markup(phrase.get_tag());
 
         value_consumer values = phrase;
-        actions.phrase << markup.pre << values.consume().get_encoded() << markup.post;
+        state.phrase << markup.pre << values.consume().get_encoded() << markup.post;
         values.finish();
     }
 
-    void role_action(quickbook::actions& actions, value role)
+    void role_action(quickbook::state& state, value role)
     {
-        write_anchors(actions, actions.phrase);
+        write_anchors(state, state.phrase);
 
         value_consumer values = role;
-        actions.phrase
+        state.phrase
             << "<phrase role=\"";
-        detail::print_string(values.consume().get_quickbook(), actions.phrase.get());
-        actions.phrase
+        detail::print_string(values.consume().get_quickbook(), state.phrase.get());
+        state.phrase
             << "\">"
             << values.consume().get_encoded()
             << "</phrase>";
         values.finish();
     }
 
-    void footnote_action(quickbook::actions& actions, value phrase)
+    void footnote_action(quickbook::state& state, value phrase)
     {
-        write_anchors(actions, actions.phrase);
+        write_anchors(state, state.phrase);
 
         value_consumer values = phrase;
-        actions.phrase
+        state.phrase
             << "<footnote id=\""
-            << actions.ids.add_id("f", id_category::numbered)
+            << state.ids.add_id("f", id_category::numbered)
             << "\"><para>"
             << values.consume().get_encoded()
             << "</para></footnote>";
         values.finish();
     }
 
-    void raw_phrase_action(quickbook::actions& actions, value phrase)
+    void raw_phrase_action(quickbook::state& state, value phrase)
     {
-        write_anchors(actions, actions.phrase);
+        write_anchors(state, state.phrase);
 
         detail::markup markup = detail::get_markup(phrase.get_tag());
-        actions.phrase << markup.pre << phrase.get_quickbook() << markup.post;
+        state.phrase << markup.pre << phrase.get_quickbook() << markup.post;
     }
 
     void paragraph_action::operator()() const
     {
         std::string str;
-        actions.phrase.swap(str);
+        state.phrase.swap(str);
 
         std::string::const_iterator
             pos = str.begin(),
@@ -305,9 +323,9 @@ namespace quickbook
 
         if(pos != end) {
             detail::markup markup = detail::get_markup(block_tags::paragraph);
-            actions.out << markup.pre << str;
-            write_anchors(actions, actions.out);
-            actions.out << markup.post;
+            state.out << markup.pre << str;
+            write_anchors(state, state.out);
+            state.out << markup.post;
         }
     }
 
@@ -322,44 +340,44 @@ namespace quickbook
         // This action is called before [endsect] (to end the list item)
         // and then also after it due to the way the parser works.
         std::string str;
-        actions.phrase.swap(str);
-        actions.out << str;
-        write_anchors(actions, actions.out);
+        state.phrase.swap(str);
+        state.out << str;
+        write_anchors(state, state.out);
     }
 
     void phrase_end_action::operator()() const
     {
-        write_anchors(actions, actions.phrase);
+        write_anchors(state, state.phrase);
     }
     
     namespace {
-        void write_bridgehead(quickbook::actions& actions, int level,
+        void write_bridgehead(quickbook::state& state, int level,
             std::string const& str, std::string const& id, bool self_link)
         {
             if (self_link && !id.empty())
             {
-                actions.out << "<bridgehead renderas=\"sect" << level << "\"";
-                actions.out << " id=\"";
-                actions.out << actions.ids.add_id("h", id_category::numbered);
-                actions.out << "\">";
-                actions.out << "<phrase id=\"" << id << "\"/>";
-                actions.out << "<link linkend=\"" << id << "\">";
-                actions.out << str;
-                actions.out << "</link>";
-                actions.out << "</bridgehead>";
+                state.out << "<bridgehead renderas=\"sect" << level << "\"";
+                state.out << " id=\"";
+                state.out << state.ids.add_id("h", id_category::numbered);
+                state.out << "\">";
+                state.out << "<phrase id=\"" << id << "\"/>";
+                state.out << "<link linkend=\"" << id << "\">";
+                state.out << str;
+                state.out << "</link>";
+                state.out << "</bridgehead>";
             }
             else
             {
-                actions.out << "<bridgehead renderas=\"sect" << level << "\"";
-                if(!id.empty()) actions.out << " id=\"" << id << "\"";
-                actions.out << ">";
-                actions.out << str;
-                actions.out << "</bridgehead>";
+                state.out << "<bridgehead renderas=\"sect" << level << "\"";
+                if(!id.empty()) state.out << " id=\"" << id << "\"";
+                state.out << ">";
+                state.out << str;
+                state.out << "</bridgehead>";
             }
         }
     }
 
-    void header_action(quickbook::actions& actions, value heading_list)
+    void header_action(quickbook::state& state, value heading_list)
     {
         value_consumer values = heading_list;
 
@@ -372,7 +390,7 @@ namespace quickbook
 
         if (generic)
         {
-            level = actions.ids.section_level() + 1;
+            level = state.ids.section_level() + 1;
                                             // We need to use a heading which is one greater
                                             // than the current.
             if (level > 6 )                 // The max is h6, clip it if it goes
@@ -383,51 +401,51 @@ namespace quickbook
             level = heading_list.get_tag() - block_tags::heading1 + 1;
         }
 
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
         if (!element_id.empty())
         {
-            std::string anchor = actions.ids.add_id(
+            std::string anchor = state.ids.add_id(
                 element_id.get_quickbook(),
                 id_category::explicit_id);
 
-            write_bridgehead(actions, level,
+            write_bridgehead(state, level,
                 content.get_encoded(), anchor, self_linked_headers);
         }
-        else if (!generic && actions.ids.compatibility_version() < 103) // version 1.2 and below
+        else if (!generic && state.ids.compatibility_version() < 103) // version 1.2 and below
         {
             // This generates the old id style if both the interpreting
             // version and the generation version are less then 103u.
 
-            std::string anchor = actions.ids.old_style_id(
+            std::string anchor = state.ids.old_style_id(
                 detail::make_identifier(
-                    actions.ids.replace_placeholders_with_unresolved_ids(
+                    state.ids.replace_placeholders_with_unresolved_ids(
                         content.get_encoded())),
                 id_category::generated_heading);
 
-            write_bridgehead(actions, level,
+            write_bridgehead(state, level,
                 content.get_encoded(), anchor, false);
 
         }
         else
         {
-            std::string anchor = actions.ids.add_id(
+            std::string anchor = state.ids.add_id(
                 detail::make_identifier(
-                    actions.ids.compatibility_version() >= 106 ?
+                    state.ids.compatibility_version() >= 106 ?
                         content.get_quickbook() :
-                        actions.ids.replace_placeholders_with_unresolved_ids(
+                        state.ids.replace_placeholders_with_unresolved_ids(
                             content.get_encoded())
                 ),
                 id_category::generated_heading);
 
-            write_bridgehead(actions, level,
+            write_bridgehead(state, level,
                 content.get_encoded(), anchor, self_linked_headers);
         }
     }
 
     void simple_phrase_action::operator()(char mark) const
     {
-        write_anchors(actions, out);
+        write_anchors(state, out);
 
         int tag =
             mark == '*' ? phrase_tags::bold :
@@ -439,7 +457,7 @@ namespace quickbook
         assert(tag != 0);
         detail::markup markup = detail::get_markup(tag);
 
-        value_consumer values = actions.values.release();
+        value_consumer values = state.values.release();
         value content = values.consume();
         values.finish();
 
@@ -450,21 +468,21 @@ namespace quickbook
 
     bool cond_phrase_push::start()
     {
-        value_consumer values = actions.values.release();
+        value_consumer values = state.values.release();
 
-        saved_conditional = actions.conditional;
+        saved_conditional = state.conditional;
 
         if (saved_conditional)
         {
             string_ref macro1 = values.consume().get_quickbook();
             std::string macro(macro1.begin(), macro1.end());
 
-            actions.conditional = find(actions.macro, macro.c_str());
+            state.conditional = find(state.macro, macro.c_str());
 
-            if (!actions.conditional) {
-                actions.phrase.push();
-                actions.out.push();
-                actions.anchors.swap(anchors);
+            if (!state.conditional) {
+                state.phrase.push();
+                state.out.push();
+                state.anchors.swap(anchors);
             }
         }
 
@@ -473,14 +491,14 @@ namespace quickbook
     
     void cond_phrase_push::cleanup()
     {
-        if (saved_conditional && !actions.conditional)
+        if (saved_conditional && !state.conditional)
         {
-            actions.phrase.pop();
-            actions.out.pop();
-            actions.anchors.swap(anchors);
+            state.phrase.pop();
+            state.out.pop();
+            state.anchors.swap(anchors);
         }
 
-        actions.conditional = saved_conditional;
+        state.conditional = saved_conditional;
     }
 
     namespace {
@@ -502,64 +520,141 @@ namespace quickbook
         }
     }
 
-    void actions::start_list(char mark)
+    void state::start_list(char mark)
     {
         write_anchors(*this, out);
         assert(mark == '*' || mark == '#');
         out << ((mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
     }
 
-    void actions::end_list(char mark)
+    void state::end_list(char mark)
     {
         write_anchors(*this, out);
         assert(mark == '*' || mark == '#');
         out << ((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
     }
 
-    void actions::start_list_item()
+    void state::start_list_item()
     {
         out << "<listitem><simpara>";
         write_anchors(*this, out);
     }
 
-    void actions::end_list_item()
+    void state::end_list_item()
     {
         write_anchors(*this, out);
         out << "</simpara></listitem>";
     }
 
-    void explicit_list_action(quickbook::actions& actions, value list)
+    namespace
     {
-        write_anchors(actions, actions.out);
+        bool parse_template(value const&, quickbook::state& state);
+    }
+
+    void state::start_callouts()
+    {
+        ++callout_depth;
+    }
+
+    std::string state::add_callout(value v)
+    {
+        std::string callout_id1 = ids.add_id("c", id_category::numbered);
+        std::string callout_id2 = ids.add_id("c", id_category::numbered);
+
+        callouts.insert(encoded_value(callout_id1));
+        callouts.insert(encoded_value(callout_id2));
+        callouts.insert(v);
+
+        std::string code;
+        code += "<co id=\"" + callout_id1 + "\" ";
+        code += "linkends=\"" + callout_id2 + "\" />";
+
+        return code;
+    }
+
+    std::string state::end_callouts()
+    {
+        assert(callout_depth > 0);
+        std::string block;
+
+        --callout_depth;
+        if (callout_depth > 0) return block;
+
+        value_consumer c = callouts.release();
+        if (!c.check()) return block;
+
+        block += "<calloutlist>";
+        while (c.check())
+        {
+            std::string callout_id1 = c.consume().get_encoded();
+            std::string callout_id2 = c.consume().get_encoded();
+            value callout_body = c.consume();
+
+            std::string callout_value;
+
+            {
+                template_state state(*this);
+                ++template_depth;
+
+                bool r = parse_template(callout_body, *this);
+
+                if(!r)
+                {
+                    detail::outerr(callout_body.get_file(), callout_body.get_position())
+                        << "Expanding callout." << std::endl
+                        << "------------------begin------------------" << std::endl
+                        << callout_body.get_quickbook()
+                        << std::endl
+                        << "------------------end--------------------" << std::endl
+                        ;
+                    ++error_count;
+                }
+
+                out.swap(callout_value);
+            }
+            
+            block += "<callout arearefs=\"" + callout_id1 + "\" ";
+            block += "id=\"" + callout_id2 + "\">";
+            block += callout_value;
+            block += "</callout>";
+        }
+        block += "</calloutlist>";
+        
+        return block;
+    }
+
+    void explicit_list_action(quickbook::state& state, value list)
+    {
+        write_anchors(state, state.out);
 
         detail::markup markup = detail::get_markup(list.get_tag());
 
-        actions.out << markup.pre;
+        state.out << markup.pre;
 
         BOOST_FOREACH(value item, list)
         {
-            actions.out << "<listitem>";
-            actions.out << item.get_encoded();
-            actions.out << "</listitem>";
+            state.out << "<listitem>";
+            state.out << item.get_encoded();
+            state.out << "</listitem>";
         }
 
-        actions.out << markup.post;
+        state.out << markup.post;
     }
 
-    void anchor_action(quickbook::actions& actions, value anchor)
+    void anchor_action(quickbook::state& state, value anchor)
     {
         value_consumer values = anchor;
         value anchor_id = values.consume();
         // Note: anchor_id is never encoded as boostbook. If it
         // is encoded, it's just things like escapes.
-        add_anchor(actions, anchor_id.is_encoded() ?
+        add_anchor(state, anchor_id.is_encoded() ?
             anchor_id.get_encoded() : anchor_id.get_quickbook());
         values.finish();
     }
 
     void do_macro_action::operator()(std::string const& str) const
     {
-        write_anchors(actions, phrase);
+        write_anchors(state, phrase);
 
         if (str == quickbook_get_date)
         {
@@ -590,56 +685,69 @@ namespace quickbook
             out << *first++;
     }
 
-    void source_mode_action(quickbook::actions& actions, value source_mode)
+    void source_mode_action(quickbook::state& state, value source_mode)
     {
-        actions.source_mode = source_mode_tags::name(source_mode.get_tag());
+        state.source_mode = source_mode_tags::name(source_mode.get_tag());
     }
 
-    void code_action::operator()(parse_iterator first, parse_iterator last) const
+    void next_source_mode_action(quickbook::state& state, value source_mode)
     {
-        bool inline_code = type == inline_ ||
-            (type == inline_block && qbk_version_n < 106u);
-        bool block = type != inline_;
+        value_consumer values = source_mode;
+        state.source_mode_next = values.consume();
+        values.finish();
+    }
+
+    void code_action(quickbook::state& state, value code_block)
+    {
+        int code_tag = code_block.get_tag();
+
+        value_consumer values = code_block;
+        string_ref code_value = values.consume().get_quickbook();
+        values.finish();
+
+        bool inline_code = code_tag == code_tags::inline_code ||
+            (code_tag == code_tags::inline_code_block && qbk_version_n < 106u);
+        bool block = code_tag != code_tags::inline_code;
+
+        std::string source_mode = state.source_mode_next.empty() ?
+            state.source_mode : state.source_mode_next.get_quickbook();
+        state.source_mode_next = value();
 
         if (inline_code) {
-            write_anchors(actions, actions.phrase);
+            write_anchors(state, state.phrase);
         }
         else {
-            actions.paragraph();
-            write_anchors(actions, actions.out);
+            paragraph_action para(state);
+            para();
+            write_anchors(state, state.out);
         }
-
-        std::string str;
 
         if (block) {
             // preprocess the code section to remove the initial indentation
             mapped_file_builder mapped;
-            mapped.start(actions.current_file);
-            mapped.unindent_and_add(first.base(), last.base());
+            mapped.start(state.current_file);
+            mapped.unindent_and_add(code_value.begin(), code_value.end());
 
             file_ptr f = mapped.release();
 
             if (f->source.empty())
                 return; // Nothing left to do here. The program is empty.
 
+            if (qbk_version_n >= 107u) state.start_callouts();
+
             parse_iterator first_(f->source.begin());
             parse_iterator last_(f->source.end());
 
             file_ptr saved_file = f;
-            boost::swap(actions.current_file, saved_file);
+            boost::swap(state.current_file, saved_file);
 
             // print the code with syntax coloring
-            str = syntax_highlight(first_, last_, actions, actions.source_mode);
+            std::string str = syntax_highlight(first_, last_, state,
+                source_mode, block);
 
-            boost::swap(actions.current_file, saved_file);
-        }
-        else {
-            parse_iterator first_(first);
-            str = syntax_highlight(first_, last, actions, actions.source_mode);
-        }
+            boost::swap(state.current_file, saved_file);
 
-        if (block) {
-            collector& output = inline_code ? actions.phrase : actions.out;
+            collector& output = inline_code ? state.phrase : state.out;
 
             // We must not place a \n after the <programlisting> tag
             // otherwise PDF output starts code blocks with a blank line:
@@ -647,24 +755,31 @@ namespace quickbook
             output << "<programlisting>";
             output << str;
             output << "</programlisting>\n";
+
+            if (qbk_version_n >= 107u) output << state.end_callouts();
         }
         else {
-            actions.phrase << "<code>";
-            actions.phrase << str;
-            actions.phrase << "</code>";
+            parse_iterator first_(code_value.begin());
+            parse_iterator last_(code_value.end());
+            std::string str = syntax_highlight(first_, last_, state,
+                source_mode, block);
+
+            state.phrase << "<code>";
+            state.phrase << str;
+            state.phrase << "</code>";
         }
     }
 
     void plain_char_action::operator()(char ch) const
     {
-        write_anchors(actions, phrase);
+        write_anchors(state, phrase);
 
         detail::print_char(ch, phrase.get());
     }
 
     void plain_char_action::operator()(parse_iterator first, parse_iterator last) const
     {
-        write_anchors(actions, phrase);
+        write_anchors(state, phrase);
 
         while (first != last)
             detail::print_char(*first++, phrase.get());
@@ -672,7 +787,7 @@ namespace quickbook
 
     void escape_unicode_action::operator()(parse_iterator first, parse_iterator last) const
     {
-        write_anchors(actions, phrase);
+        write_anchors(state, phrase);
 
         while(first != last && *first == '0') ++first;
 
@@ -709,9 +824,9 @@ namespace quickbook
         }
     }
 
-    void image_action(quickbook::actions& actions, value image)
+    void image_action(quickbook::state& state, value image)
     {
-        write_anchors(actions, actions.phrase);
+        write_anchors(state, state.phrase);
 
         // Note: attributes are never encoded as boostbook, if they're
         // encoded, it's just things like escapes.
@@ -731,7 +846,7 @@ namespace quickbook
             {
                 detail::outwarn(name.get_file(), name.get_position())
                     << "Duplicate image attribute: "
-                    << detail::utf8(name.get_quickbook())
+                    << name.get_quickbook()
                     << std::endl;
             }
         }
@@ -756,10 +871,10 @@ namespace quickbook
                 detail::outerr(attributes["fileref"].get_file(), attributes["fileref"].get_position()) :
                 detail::outwarn(attributes["fileref"].get_file(), attributes["fileref"].get_position()))
                 << "Image path isn't portable: '"
-                << detail::utf8(fileref)
+                << fileref
                 << "'"
                 << std::endl;
-            if (qbk_version_n >= 106u) ++actions.error_count;
+            if (qbk_version_n >= 106u) ++state.error_count;
         }
 
         boost::replace(fileref, '\\', '/');
@@ -822,10 +937,13 @@ namespace quickbook
            // Now load the SVG file:
            //
            std::string svg_text;
-           fs::ifstream fs(img);
-           char c;
-           while(fs.get(c) && fs.good())
-              svg_text.push_back(c);
+           if (state.add_dependency(img)) {
+              fs::ifstream fs(img);
+              std::stringstream buffer;
+              buffer << fs.rdbuf();
+              svg_text = buffer.str();
+           }
+
            //
            // Extract the svg header from the file:
            //
@@ -861,31 +979,31 @@ namespace quickbook
            }
         }
 
-        actions.phrase << "<inlinemediaobject>";
+        state.phrase << "<inlinemediaobject>";
 
-        actions.phrase << "<imageobject><imagedata";
+        state.phrase << "<imageobject><imagedata";
         
         BOOST_FOREACH(attribute_map::value_type const& attr, attributes)
         {
-            actions.phrase << " " << attr.first << "=\"";
-            write_plain_text(actions.phrase.get(), attr.second);
-            actions.phrase << "\"";
+            state.phrase << " " << attr.first << "=\"";
+            write_plain_text(state.phrase.get(), attr.second);
+            state.phrase << "\"";
         }
 
-        actions.phrase << "></imagedata></imageobject>";
+        state.phrase << "></imagedata></imageobject>";
 
         // Add a textobject containing the alt tag from earlier.
         // This will be used for the alt tag in html.
         if (alt_text.check()) {
-            actions.phrase << "<textobject><phrase>";
-            write_plain_text(actions.phrase.get(), alt_text);
-            actions.phrase << "</phrase></textobject>";
+            state.phrase << "<textobject><phrase>";
+            write_plain_text(state.phrase.get(), alt_text);
+            state.phrase << "</phrase></textobject>";
         }
 
-        actions.phrase << "</inlinemediaobject>";
+        state.phrase << "</inlinemediaobject>";
     }
 
-    void macro_definition_action(quickbook::actions& actions, quickbook::value macro_definition)
+    void macro_definition_action(quickbook::state& state, quickbook::value macro_definition)
     {
         value_consumer values = macro_definition;
         std::string macro_id = values.consume().get_quickbook();
@@ -895,7 +1013,7 @@ namespace quickbook
         values.finish();
 
         std::string* existing_macro =
-            boost::spirit::classic::find(actions.macro, macro_id.c_str());
+            boost::spirit::classic::find(state.macro, macro_id.c_str());
         quickbook::ignore_variable(&existing_macro);
 
         if (existing_macro)
@@ -908,13 +1026,13 @@ namespace quickbook
             // return;
         }
 
-        actions.macro.add(
+        state.macro.add(
             macro_id.begin()
           , macro_id.end()
           , phrase);
     }
 
-    void template_body_action(quickbook::actions& actions, quickbook::value template_definition)
+    void template_body_action(quickbook::state& state, quickbook::value template_definition)
     {
         value_consumer values = template_definition;
         std::string identifier = values.consume().get_quickbook();
@@ -928,16 +1046,16 @@ namespace quickbook
         value body = values.consume();
         BOOST_ASSERT(!values.check());
     
-        if (!actions.templates.add(
+        if (!state.templates.add(
             template_symbol(
                 identifier,
                 template_values,
                 body,
-                &actions.templates.top_scope())))
+                &state.templates.top_scope())))
         {
             detail::outwarn(body.get_file(), body.get_position())
-                << "Template Redefinition: " << detail::utf8(identifier) << std::endl;
-            ++actions.error_count;
+                << "Template Redefinition: " << identifier << std::endl;
+            ++state.error_count;
         }
     }
 
@@ -1058,7 +1176,7 @@ namespace quickbook
           , std::vector<std::string> const& params
           , template_scope const& scope
           , string_iterator first
-          , quickbook::actions& actions
+          , quickbook::state& state
         )
         {
             std::vector<value>::const_iterator arg = args.begin();
@@ -1068,12 +1186,12 @@ namespace quickbook
             // Store each of the argument passed in as local templates:
             while (arg != args.end())
             {
-                if (!actions.templates.add(
+                if (!state.templates.add(
                         template_symbol(*tpl, empty_params, *arg, &scope)))
                 {
-                    detail::outerr(actions.current_file, first)
+                    detail::outerr(state.current_file, first)
                         << "Duplicate Symbol Found" << std::endl;
-                    ++actions.error_count;
+                    ++state.error_count;
                     return std::make_pair(false, tpl);
                 }
                 ++arg; ++tpl;
@@ -1083,47 +1201,50 @@ namespace quickbook
         
         bool parse_template(
             value const& content
-          , quickbook::actions& actions
+          , quickbook::state& state
         )
         {
-            file_ptr saved_current_file = actions.current_file;
+            file_ptr saved_current_file = state.current_file;
 
-            actions.current_file = content.get_file();
+            state.current_file = content.get_file();
             string_ref source = content.get_quickbook();
 
             parse_iterator first(source.begin());
             parse_iterator last(source.end());
 
             bool r = cl::parse(first, last,
-                    content.get_tag() == template_tags::block ?
-                        actions.grammar().block :
-                        actions.grammar().inline_phrase
+                    content.get_tag() == template_tags::phrase ?
+                        state.grammar().inline_phrase :
+                        state.grammar().block
                 ).full;
 
-            boost::swap(actions.current_file, saved_current_file);
+            boost::swap(state.current_file, saved_current_file);
 
             return r;
         }
     }
 
-    void call_template(quickbook::actions& actions,
+    void call_template(quickbook::state& state,
             template_symbol const* symbol,
             std::vector<value> const& args,
             string_iterator first)
     {
+        bool is_block = symbol->content.get_tag() != template_tags::phrase;
+
         // If this template contains already encoded text, then just
         // write it out, without going through any of the rigamarole.
 
         if (symbol->content.is_encoded())
         {
-            if (symbol->content.get_tag() == template_tags::block)
+            if (is_block)
             {
-                actions.paragraph();
-                actions.out << symbol->content.get_encoded();
+                paragraph_action para(state);
+                para();
+                state.out << symbol->content.get_encoded();
             }
             else
             {
-                actions.phrase << symbol->content.get_encoded();
+                state.phrase << symbol->content.get_encoded();
             }
 
             return;
@@ -1134,36 +1255,36 @@ namespace quickbook
         //
         // Note that for quickbook 1.4- this value is just ignored when the
         // arguments are expanded.
-        template_scope const& call_scope = actions.templates.top_scope();
+        template_scope const& call_scope = state.templates.top_scope();
 
         std::string block;
         std::string phrase;
 
         {
-            template_state state(actions);
-            actions.templates.start_template(symbol);
+            template_state save(state);
+            state.templates.start_template(symbol);
 
             qbk_version_n = symbol->content.get_file()->version();
 
-            ++actions.template_depth;
-            if (actions.template_depth > actions.max_template_depth)
+            ++state.template_depth;
+            if (state.template_depth > state.max_template_depth)
             {
-                detail::outerr(actions.current_file, first)
+                detail::outerr(state.current_file, first)
                     << "Infinite loop detected" << std::endl;
-                ++actions.error_count;
+                ++state.error_count;
                 return;
             }
 
             // Store the current section level so that we can ensure that
             // [section] and [endsect] tags in the template are balanced.
-            actions.min_section_level = actions.ids.section_level();
+            state.min_section_level = state.ids.section_level();
 
             ///////////////////////////////////
             // Prepare the arguments as local templates
             bool get_arg_result;
             std::vector<std::string>::const_iterator tpl;
             boost::tie(get_arg_result, tpl) =
-                get_arguments(args, symbol->params, call_scope, first, actions);
+                get_arguments(args, symbol->params, call_scope, first, state);
 
             if (!get_arg_result)
             {
@@ -1173,128 +1294,67 @@ namespace quickbook
             ///////////////////////////////////
             // parse the template body:
 
-            if (!parse_template(symbol->content, actions))
+            if (!parse_template(symbol->content, state))
             {
-                detail::outerr(actions.current_file, first)
+                detail::outerr(state.current_file, first)
                     << "Expanding "
-                    << (symbol->content.get_tag() == template_tags::block ? "block" : "phrase")
-                    << " template: " << detail::utf8(symbol->identifier) << std::endl
+                    << (is_block ? "block" : "phrase")
+                    << " template: " << symbol->identifier << std::endl
                     << std::endl
                     << "------------------begin------------------" << std::endl
-                    << detail::utf8(symbol->content.get_quickbook())
+                    << symbol->content.get_quickbook()
                     << "------------------end--------------------" << std::endl
                     << std::endl;
-                ++actions.error_count;
+                ++state.error_count;
                 return;
             }
 
-            if (actions.ids.section_level() != actions.min_section_level)
+            if (state.ids.section_level() != state.min_section_level)
             {
-                detail::outerr(actions.current_file, first)
+                detail::outerr(state.current_file, first)
                     << "Mismatched sections in template "
-                    << detail::utf8(symbol->identifier)
+                    << symbol->identifier
                     << std::endl;
-                ++actions.error_count;
+                ++state.error_count;
                 return;
             }
 
-            actions.out.swap(block);
-            actions.phrase.swap(phrase);
+            state.out.swap(block);
+            state.phrase.swap(phrase);
         }
 
-        if(symbol->content.get_tag() == template_tags::block || !block.empty()) {
-            actions.paragraph(); // For paragraphs before the template call.
-            actions.out << block;
-            actions.phrase << phrase;
-            actions.paragraph();
+        if(is_block || !block.empty()) {
+            paragraph_action para(state);
+            para(); // For paragraphs before the template call.
+            state.out << block;
+            state.phrase << phrase;
+            para();
         }
         else {
-            actions.phrase << phrase;
+            state.phrase << phrase;
         }
     }
 
-    void call_code_snippet(quickbook::actions& actions,
+    void call_code_snippet(quickbook::state& state,
             template_symbol const* symbol,
             string_iterator first)
     {
-        value_consumer values = symbol->content;
-        value content = values.consume(template_tags::block);
-        value callouts = values.consume();
-        values.finish();
-
-        std::vector<std::string> callout_ids;
+        assert(symbol->params.size() == 0);
         std::vector<value> args;
-        unsigned int size = symbol->params.size();
-        std::string callout_base("c");
-
-        for(unsigned int i = 0; i < size; ++i)
-        {
-            std::string callout_id1 = actions.ids.add_id(callout_base, id_category::numbered);
-            std::string callout_id2 = actions.ids.add_id(callout_base, id_category::numbered);
-
-            std::string code;
-            code += "<co id=\"" + callout_id1 + "\" ";
-            code += "linkends=\"" + callout_id2 + "\" />";
-
-            args.push_back(encoded_value(code, template_tags::phrase));
-            callout_ids.push_back(callout_id1);
-            callout_ids.push_back(callout_id2);
-        }
 
         // Create a fake symbol for call_template
         template_symbol t(
             symbol->identifier,
             symbol->params,
-            content,
+            symbol->content,
             symbol->lexical_parent);
-        call_template(actions, &t, args, first);
 
-        std::string block;
-
-        if(!callouts.empty())
-        {
-            block += "<calloutlist>";
-            int i = 0;
-            BOOST_FOREACH(value c, callouts)
-            {
-                std::string callout_id1 = callout_ids[i++];
-                std::string callout_id2 = callout_ids[i++];
-    
-                std::string callout_value;
-                {
-                    template_state state(actions);
-                    ++actions.template_depth;
-
-                    bool r = parse_template(c, actions);
-
-                    if(!r)
-                    {
-                        detail::outerr(c.get_file(), c.get_position())
-                            << "Expanding callout." << std::endl
-                            << "------------------begin------------------" << std::endl
-                            << detail::utf8(c.get_quickbook())
-                            << std::endl
-                            << "------------------end--------------------" << std::endl
-                            ;
-                        ++actions.error_count;
-                        return;
-                    }
-    
-                    actions.out.swap(callout_value);
-                }
-                
-                block += "<callout arearefs=\"" + callout_id1 + "\" ";
-                block += "id=\"" + callout_id2 + "\">";
-                block += callout_value;
-                block += "</callout>";
-            }
-            block += "</calloutlist>";
-        }
-
-        actions.out << block;
+        state.start_callouts();
+        call_template(state, &t, args, first);
+        state.out << state.end_callouts();
     }
 
-    void do_template_action(quickbook::actions& actions, value template_list,
+    void do_template_action(quickbook::state& state, value template_list,
             string_iterator first)
     {
         // Get the arguments
@@ -1314,7 +1374,7 @@ namespace quickbook
         
         values.finish();
 
-        template_symbol const* symbol = actions.templates.find(identifier);
+        template_symbol const* symbol = state.templates.find(identifier);
         BOOST_ASSERT(symbol);
 
         // Deal with escaped templates.
@@ -1323,19 +1383,19 @@ namespace quickbook
         {
             if (!args.empty())
             {
-                detail::outerr(actions.current_file, first)
+                detail::outerr(state.current_file, first)
                     << "Arguments for escaped template."
                     <<std::endl;
-                ++actions.error_count;
+                ++state.error_count;
             }
 
             if (symbol->content.is_encoded())
             {
-                actions.phrase << symbol->content.get_encoded();
+                state.phrase << symbol->content.get_encoded();
             }
             else
             {
-                actions.phrase << symbol->content.get_quickbook();
+                state.phrase << symbol->content.get_quickbook();
 
                 /*
 
@@ -1347,7 +1407,7 @@ namespace quickbook
                 quickbook::detail::markup escape_markup
                     = detail::get_markup(phrase_tags::escape);
 
-                actions.phrase
+                state.phrase
                     << escape_markup.pre
                     << symbol->content.get_quickbook()
                     << escape_markup.post
@@ -1367,11 +1427,11 @@ namespace quickbook
         case template_tags::phrase:
             // Break the arguments for a template
 
-            break_arguments(args, symbol->params, actions.current_file->path);
+            break_arguments(args, symbol->params, state.current_file->path);
 
             if (args.size() != symbol->params.size())
             {
-                detail::outerr(actions.current_file, first)
+                detail::outerr(state.current_file, first)
                     << "Invalid number of arguments passed. Expecting: "
                     << symbol->params.size()
                     << " argument(s), got: "
@@ -1379,26 +1439,26 @@ namespace quickbook
                     << " argument(s) instead."
                     << std::endl;
 
-                ++actions.error_count;
+                ++state.error_count;
                 return;
             }
 
-            call_template(actions, symbol, args, first);
+            call_template(state, symbol, args, first);
             break;
 
         case template_tags::snippet:
 
             if (!args.empty())
             {
-                detail::outerr(actions.current_file, first)
+                detail::outerr(state.current_file, first)
                     << "Arguments for code snippet."
                     <<std::endl;
-                ++actions.error_count;
+                ++state.error_count;
 
                 args.clear();
             }
 
-            call_code_snippet(actions, symbol, first);
+            call_code_snippet(state, symbol, first);
             break;
 
         default:
@@ -1406,9 +1466,9 @@ namespace quickbook
         }
     }
 
-    void link_action(quickbook::actions& actions, value link)
+    void link_action(quickbook::state& state, value link)
     {
-        write_anchors(actions, actions.phrase);
+        write_anchors(state, state.phrase);
 
         detail::markup markup = detail::get_markup(link.get_tag());
 
@@ -1422,57 +1482,57 @@ namespace quickbook
         std::string dst = dst_value.is_encoded() ?
             dst_value.get_encoded() : dst_value.get_quickbook();
         
-        actions.phrase << markup.pre;
-        detail::print_string(dst, actions.phrase.get());
-        actions.phrase << "\">";
+        state.phrase << markup.pre;
+        detail::print_string(dst, state.phrase.get());
+        state.phrase << "\">";
 
         if (content.empty())
-            detail::print_string(dst, actions.phrase.get());
+            detail::print_string(dst, state.phrase.get());
         else
-            actions.phrase << content.get_encoded();
+            state.phrase << content.get_encoded();
 
-        actions.phrase << markup.post;
+        state.phrase << markup.post;
     }
 
-    void variable_list_action(quickbook::actions& actions, value variable_list)
+    void variable_list_action(quickbook::state& state, value variable_list)
     {
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
         value_consumer values = variable_list;
         std::string title = values.consume(table_tags::title).get_quickbook();
 
-        actions.out << "<variablelist>\n";
+        state.out << "<variablelist>\n";
 
-        actions.out << "<title>";
-        detail::print_string(title, actions.out.get());
-        actions.out << "</title>\n";
+        state.out << "<title>";
+        detail::print_string(title, state.out.get());
+        state.out << "</title>\n";
 
         BOOST_FOREACH(value_consumer entry, values) {
-            actions.out << "<varlistentry>";
+            state.out << "<varlistentry>";
             
             if(entry.check()) {
-                actions.out << "<term>";
-                actions.out << entry.consume().get_encoded();
-                actions.out << "</term>";
+                state.out << "<term>";
+                state.out << entry.consume().get_encoded();
+                state.out << "</term>";
             }
             
             if(entry.check()) {
-                actions.out << "<listitem>";
-                BOOST_FOREACH(value phrase, entry) actions.out << phrase.get_encoded();
-                actions.out << "</listitem>";
+                state.out << "<listitem>";
+                BOOST_FOREACH(value phrase, entry) state.out << phrase.get_encoded();
+                state.out << "</listitem>";
             }
 
-            actions.out << "</varlistentry>\n";
+            state.out << "</varlistentry>\n";
         }
 
-        actions.out << "</variablelist>\n";
+        state.out << "</variablelist>\n";
         
         values.finish();
     }
 
-    void table_action(quickbook::actions& actions, value table)
+    void table_action(quickbook::state& state, value table)
     {
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
         value_consumer values = table;
 
@@ -1486,14 +1546,14 @@ namespace quickbook
         std::string table_id;
 
         if (!element_id.empty()) {
-            table_id = actions.ids.add_id(element_id, id_category::explicit_id);
+            table_id = state.ids.add_id(element_id, id_category::explicit_id);
         }
         else if (has_title) {
-            if (actions.ids.compatibility_version() >= 105) {
-                table_id = actions.ids.add_id(detail::make_identifier(title.get_quickbook()), id_category::generated);
+            if (state.ids.compatibility_version() >= 105) {
+                table_id = state.ids.add_id(detail::make_identifier(title.get_quickbook()), id_category::generated);
             }
             else {
-                table_id = actions.ids.add_id("t", id_category::numbered);
+                table_id = state.ids.add_id("t", id_category::numbered);
             }
         }
 
@@ -1511,64 +1571,64 @@ namespace quickbook
 
         if (has_title)
         {
-            actions.out << "<table frame=\"all\"";
+            state.out << "<table frame=\"all\"";
             if(!table_id.empty())
-                actions.out << " id=\"" << table_id << "\"";
-            actions.out << ">\n";
-            actions.out << "<title>";
+                state.out << " id=\"" << table_id << "\"";
+            state.out << ">\n";
+            state.out << "<title>";
             if (qbk_version_n < 106u) {
-                detail::print_string(title.get_quickbook(), actions.out.get());
+                detail::print_string(title.get_quickbook(), state.out.get());
             }
             else {
-                actions.out << title.get_encoded();
+                state.out << title.get_encoded();
             }
-            actions.out << "</title>";
+            state.out << "</title>";
         }
         else
         {
-            actions.out << "<informaltable frame=\"all\"";
+            state.out << "<informaltable frame=\"all\"";
             if(!table_id.empty())
-                actions.out << " id=\"" << table_id << "\"";
-            actions.out << ">\n";
+                state.out << " id=\"" << table_id << "\"";
+            state.out << ">\n";
         }
 
-        actions.out << "<tgroup cols=\"" << span_count << "\">\n";
+        state.out << "<tgroup cols=\"" << span_count << "\">\n";
 
         if (row_count > 1)
         {
-            actions.out << "<thead>" << "<row>";
+            state.out << "<thead>" << "<row>";
             BOOST_FOREACH(value cell, values.consume()) {
-                actions.out << "<entry>" << cell.get_encoded() << "</entry>";
+                state.out << "<entry>" << cell.get_encoded() << "</entry>";
             }
-            actions.out << "</row>\n" << "</thead>\n";
+            state.out << "</row>\n" << "</thead>\n";
         }
 
-        actions.out << "<tbody>\n";
+        state.out << "<tbody>\n";
 
         BOOST_FOREACH(value row, values) {
-            actions.out << "<row>";
+            state.out << "<row>";
             BOOST_FOREACH(value cell, row) {
-                actions.out << "<entry>" << cell.get_encoded() << "</entry>";
+                state.out << "<entry>" << cell.get_encoded() << "</entry>";
             }
-            actions.out << "</row>\n";
+            state.out << "</row>\n";
         }
         
         values.finish();
 
-        actions.out << "</tbody>\n"
-                     << "</tgroup>\n";
+        state.out << "</tbody>\n"
+            << "</tgroup>\n";
 
         if (has_title)
         {
-            actions.out << "</table>\n";
+            state.out << "</table>\n";
         }
         else
         {
-            actions.out << "</informaltable>\n";
+            state.out << "</informaltable>\n";
         }
     }
 
-    void begin_section_action(quickbook::actions& actions, value begin_section_list)
+    void begin_section_action(quickbook::state& state, value begin_section_list)
     {    
         value_consumer values = begin_section_list;
 
@@ -1576,7 +1636,7 @@ namespace quickbook
         value content = values.consume();
         values.finish();
 
-        std::string full_id = actions.ids.begin_section(
+        std::string full_id = state.ids.begin_section(
             !element_id.empty() ?
                 element_id.get_quickbook() :
                 detail::make_identifier(content.get_quickbook()),
@@ -1584,48 +1644,48 @@ namespace quickbook
                 id_category::explicit_section_id :
                 id_category::generated_section);
 
-        actions.out << "\n<section id=\"" << full_id << "\">\n";
-        actions.out << "<title>";
+        state.out << "\n<section id=\"" << full_id << "\">\n";
+        state.out << "<title>";
 
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
-        if (self_linked_headers && actions.ids.compatibility_version() >= 103)
+        if (self_linked_headers && state.ids.compatibility_version() >= 103)
         {
-            actions.out << "<link linkend=\"" << full_id << "\">"
+            state.out << "<link linkend=\"" << full_id << "\">"
                 << content.get_encoded()
                 << "</link>"
                 ;
         }
         else
         {
-            actions.out << content.get_encoded();
+            state.out << content.get_encoded();
         }
         
-        actions.out << "</title>\n";
+        state.out << "</title>\n";
     }
 
-    void end_section_action(quickbook::actions& actions, value end_section, string_iterator first)
+    void end_section_action(quickbook::state& state, value end_section, string_iterator first)
     {
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
-        if (actions.ids.section_level() <= actions.min_section_level)
+        if (state.ids.section_level() <= state.min_section_level)
         {
-            file_position const pos = actions.current_file->position_of(first);
+            file_position const pos = state.current_file->position_of(first);
 
-            detail::outerr(actions.current_file->path, pos.line)
+            detail::outerr(state.current_file->path, pos.line)
                 << "Mismatched [endsect] near column " << pos.column << ".\n";
-            ++actions.error_count;
+            ++state.error_count;
             
             return;
         }
 
-        actions.out << "</section>";
-        actions.ids.end_section();
+        state.out << "</section>";
+        state.ids.end_section();
     }
     
     void element_id_warning_action::operator()(parse_iterator first, parse_iterator) const
     {
-        detail::outwarn(actions.current_file, first.base()) << "Empty id.\n";
+        detail::outwarn(state.current_file, first.base()) << "Empty id.\n";
     }
 
     // Not a general purpose normalization function, just
@@ -1703,57 +1763,84 @@ namespace quickbook
         return result;
     }
 
-    fs::path check_path(value const& path, quickbook::actions& actions)
+    struct path_details {
+        // Will possibly add 'url' and 'glob' to this list later:
+        enum path_type { path };
+
+        std::string value;
+        path_type type;
+
+        path_details(std::string const& value, path_type type) :
+            value(value), type(type)
+        {
+        }
+    };
+
+    path_details check_path(value const& path, quickbook::state& state)
     {
-        std::string path_text = path.is_encoded() ? path.get_encoded() :
-            path.get_quickbook();
+        // Paths are encoded for quickbook 1.6+ and also xmlbase
+        // values (technically xmlbase is a 1.6 feature, but that
+        // isn't enforced as it's backwards compatible).
+        //
+        // Counter-intuitively: encoded == plain text here.
+
+        std::string path_text = qbk_version_n >= 106u || path.is_encoded() ?
+                path.get_encoded() : path.get_quickbook();
 
         if(path_text.find('\\') != std::string::npos)
         {
-            (qbk_version_n >= 106u ?
-                detail::outerr(path.get_file(), path.get_position()) :
-                detail::outwarn(path.get_file(), path.get_position()))
-                << "Path isn't portable: '"
-                << detail::utf8(path_text)
+            quickbook::detail::ostream* err;
+
+            if (qbk_version_n >= 106u) {
+                err = &detail::outerr(path.get_file(), path.get_position());
+                ++state.error_count;
+            }
+            else {
+                err = &detail::outwarn(path.get_file(), path.get_position());
+            }
+
+            *err << "Path isn't portable: '"
+                << path_text
                 << "'"
                 << std::endl;
-            if (qbk_version_n >= 106u) ++actions.error_count;
+
+            boost::replace(path_text, '\\', '/');
         }
-        
-        boost::replace(path_text, '\\', '/');
-        
-        return detail::generic_to_path(path_text);
+
+        return path_details(path_text, path_details::path);
     }
 
-    xinclude_path calculate_xinclude_path(value const& p, quickbook::actions& actions)
+    xinclude_path calculate_xinclude_path(value const& p, quickbook::state& state)
     {
-        fs::path path = check_path(p, actions);
+        path_details details = check_path(p, state);
+
+        fs::path path = detail::generic_to_path(details.value);
         fs::path full_path = path;
 
         // If the path is relative
         if (!path.has_root_directory())
         {
             // Resolve the path from the current file
-            full_path = actions.current_file->path.parent_path() / path;
+            full_path = state.current_file->path.parent_path() / path;
 
             // Then calculate relative to the current xinclude_base.
-            path = path_difference(actions.xinclude_base, full_path);
+            path = path_difference(state.xinclude_base, full_path);
         }
 
         return xinclude_path(full_path, detail::escape_uri(detail::path_to_generic(path)));
     }
 
-    void xinclude_action(quickbook::actions& actions, value xinclude)
+    void xinclude_action(quickbook::state& state, value xinclude)
     {
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
         value_consumer values = xinclude;
-        xinclude_path x = calculate_xinclude_path(values.consume(), actions);
+        xinclude_path x = calculate_xinclude_path(values.consume(), state);
         values.finish();
 
-        actions.out << "\n<xi:include href=\"";
-        detail::print_string(x.uri, actions.out.get());
-        actions.out << "\" />\n";
+        state.out << "\n<xi:include href=\"";
+        detail::print_string(x.uri, state.out.get());
+        state.out << "\" />\n";
     }
 
     namespace
@@ -1765,41 +1852,67 @@ namespace quickbook
 
             fs::path filename;
             fs::path filename_relative;
+
+            bool operator < (include_search_return const & other) const
+            {
+                if (filename_relative < other.filename_relative) return true;
+                else if (other.filename_relative < filename_relative) return false;
+                else return filename < other.filename;
+            }
         };
 
-        include_search_return include_search(fs::path const& path,
-                quickbook::actions const& actions)
+        std::set<include_search_return> include_search(path_details const& details,
+                quickbook::state& state, string_iterator pos)
         {
-            fs::path current = actions.current_file->path.parent_path();
+            std::set<include_search_return> result;
+
+            fs::path path = detail::generic_to_path(details.value);
 
             // If the path is relative, try and resolve it.
             if (!path.has_root_directory() && !path.has_root_name())
             {
+                fs::path local_path =
+                    state.current_file->path.parent_path() / path;
+
                 // See if it can be found locally first.
-                if (fs::exists(current / path))
+                if (state.add_dependency(local_path))
                 {
-                    return include_search_return(
-                        current / path,
-                        actions.filename_relative.parent_path() / path);
+                    result.insert(include_search_return(
+                        local_path,
+                        state.filename_relative.parent_path() / path));
+                    return result;
                 }
 
-                // Search in each of the include path locations.
                 BOOST_FOREACH(fs::path full, include_path)
                 {
                     full /= path;
-                    if (fs::exists(full))
+
+                    if (state.add_dependency(full))
                     {
-                        return include_search_return(full, path);
+                        result.insert(include_search_return(full, path));
+                        return result;
                     }
                 }
             }
+            else
+            {
+                if (state.add_dependency(path)) {
+                    result.insert(include_search_return(path, path));
+                    return result;
+                }
+            }
 
-            return include_search_return(path,
-                actions.filename_relative.parent_path() / path);
+            detail::outerr(state.current_file, pos)
+                << "Unable to find file: "
+                << details.value
+                << std::endl;
+            ++state.error_count;
+
+            return result;
         }
     }
     
-    void load_quickbook(quickbook::actions& actions,
+    void load_quickbook(quickbook::state& state,
             include_search_return const& paths,
             value::tag_type load_type,
             value const& include_doc_id = value())
@@ -1818,32 +1931,32 @@ namespace quickbook
             //
             // For old versions of quickbook, templates aren't scoped by the
             // file.
-            file_state state(actions,
+            file_state save(state,
                 load_type == block_tags::import ? file_state::scope_output :
                 qbk_version_n >= 106u ? file_state::scope_callables :
                 file_state::scope_macros);
 
-            actions.current_file = load(paths.filename); // Throws load_error
-            actions.filename_relative = paths.filename_relative;
-            actions.imported = (load_type == block_tags::import);
+            state.current_file = load(paths.filename); // Throws load_error
+            state.filename_relative = paths.filename_relative;
+            state.imported = (load_type == block_tags::import);
 
             // update the __FILENAME__ macro
-            *boost::spirit::classic::find(actions.macro, "__FILENAME__")
-                = detail::path_to_generic(actions.filename_relative);
+            *boost::spirit::classic::find(state.macro, "__FILENAME__")
+                = detail::path_to_generic(state.filename_relative);
         
             // parse the file
-            quickbook::parse_file(actions, include_doc_id, true);
+            quickbook::parse_file(state, include_doc_id, true);
 
             // Don't restore source_mode on older versions.
-            if (keep_inner_source_mode) state.source_mode = actions.source_mode;
+            if (keep_inner_source_mode) save.source_mode = state.source_mode;
         }
 
         // restore the __FILENAME__ macro
-        *boost::spirit::classic::find(actions.macro, "__FILENAME__")
-            = detail::path_to_generic(actions.filename_relative);
+        *boost::spirit::classic::find(state.macro, "__FILENAME__")
+            = detail::path_to_generic(state.filename_relative);
     }
 
-    void load_source_file(quickbook::actions& actions,
+    void load_source_file(quickbook::state& state,
             include_search_return const& paths,
             value::tag_type load_type,
             string_iterator first,
@@ -1855,12 +1968,12 @@ namespace quickbook
         std::string ext = paths.filename.extension().generic_string();
         std::vector<template_symbol> storage;
         // Throws load_error
-        actions.error_count +=
+        state.error_count +=
             load_snippets(paths.filename, storage, ext, load_type);
 
         if (load_type == block_tags::include)
         {
-            actions.templates.push();
+            state.templates.push();
         }
 
         BOOST_FOREACH(template_symbol& ts, storage)
@@ -1868,12 +1981,12 @@ namespace quickbook
             std::string tname = ts.identifier;
             if (tname != "!")
             {
-                ts.lexical_parent = &actions.templates.top_scope();
-                if (!actions.templates.add(ts))
+                ts.lexical_parent = &state.templates.top_scope();
+                if (!state.templates.add(ts))
                 {
                     detail::outerr(ts.content.get_file(), ts.content.get_position())
-                        << "Template Redefinition: " << detail::utf8(tname) << std::endl;
-                    ++actions.error_count;
+                        << "Template Redefinition: " << tname << std::endl;
+                    ++state.error_count;
                 }
             }
         }
@@ -1886,71 +1999,77 @@ namespace quickbook
 
                 if (tname == "!")
                 {
-                    ts.lexical_parent = &actions.templates.top_scope();
-                    call_code_snippet(actions, &ts, first);
+                    ts.lexical_parent = &state.templates.top_scope();
+                    call_code_snippet(state, &ts, first);
                 }
             }
 
-            actions.templates.pop();
+            state.templates.pop();
         }
     }
 
-    void include_action(quickbook::actions& actions, value include, string_iterator first)
+    void include_action(quickbook::state& state, value include, string_iterator first)
     {
-        write_anchors(actions, actions.out);
+        write_anchors(state, state.out);
 
         value_consumer values = include;
         value include_doc_id = values.optional_consume(general_tags::include_id);
-        include_search_return paths = include_search(
-            check_path(values.consume(), actions), actions);
+        path_details details = check_path(values.consume(), state);
         values.finish();
 
-        try {
-            if (qbk_version_n >= 106)
-            {
-                if (actions.imported && include.get_tag() == block_tags::include)
-                    return;
-
-                std::string ext = paths.filename.extension().generic_string();
-                
-                if (ext == ".qbk" || ext == ".quickbook")
+        std::set<include_search_return> search = include_search(details, state, first);
+        std::set<include_search_return>::iterator i = search.begin();
+        std::set<include_search_return>::iterator e = search.end();
+        for (; i != e; ++i)
+        {
+            include_search_return const & paths = *i;
+            try {
+                if (qbk_version_n >= 106)
                 {
-                    load_quickbook(actions, paths, include.get_tag(), include_doc_id);
+                    if (state.imported && include.get_tag() == block_tags::include)
+                        return;
+
+                    std::string ext = paths.filename.extension().generic_string();
+
+                    if (ext == ".qbk" || ext == ".quickbook")
+                    {
+                        load_quickbook(state, paths, include.get_tag(), include_doc_id);
+                    }
+                    else
+                    {
+                        load_source_file(state, paths, include.get_tag(), first, include_doc_id);
+                    }
                 }
                 else
                 {
-                    load_source_file(actions, paths, include.get_tag(), first, include_doc_id);
+                    if (include.get_tag() == block_tags::include)
+                    {
+                        load_quickbook(state, paths, include.get_tag(), include_doc_id);
+                    }
+                    else
+                    {
+                        load_source_file(state, paths, include.get_tag(), first, include_doc_id);
+                    }
                 }
             }
-            else
-            {
-                if (include.get_tag() == block_tags::include)
-                {
-                    load_quickbook(actions, paths, include.get_tag(), include_doc_id);
-                }
-                else
-                {
-                    load_source_file(actions, paths, include.get_tag(), first, include_doc_id);
-                }
-            }
-        }
-        catch (load_error& e) {
-            ++actions.error_count;
+            catch (load_error& e) {
+                ++state.error_count;
 
-            detail::outerr(actions.current_file, first)
-                << "Loading file "
-                << paths.filename
-                << ": "
-                << detail::utf8(e.what())
-                << std::endl;
+                detail::outerr(state.current_file, first)
+                    << "Loading file "
+                    << paths.filename
+                    << ": "
+                    << e.what()
+                    << std::endl;
+            }
         }
     }
 
     bool to_value_scoped_action::start(value::tag_type t)
     {
-        actions.out.push();
-        actions.phrase.push();
-        actions.anchors.swap(saved_anchors);
+        state.out.push();
+        state.phrase.push();
+        state.anchors.swap(saved_anchors);
         tag = t;
 
         return true;
@@ -1960,27 +2079,28 @@ namespace quickbook
     {
         std::string value;
 
-        if (!actions.out.str().empty())
+        if (!state.out.str().empty())
         {
-            actions.paragraph();
-            write_anchors(actions, actions.out);
-            actions.out.swap(value);
+            paragraph_action para(state);
+            para(); // For paragraphs before the template call.
+            write_anchors(state, state.out);
+            state.out.swap(value);
         }
         else
         {
-            write_anchors(actions, actions.phrase);
-            actions.phrase.swap(value);
+            write_anchors(state, state.phrase);
+            state.phrase.swap(value);
         }
 
-        actions.values.builder.insert(encoded_qbk_value(
-            actions.current_file, first.base(), last.base(), value, tag));
+        state.values.builder.insert(encoded_qbk_value(
+            state.current_file, first.base(), last.base(), value, tag));
     }
     
     
     void to_value_scoped_action::cleanup()
     {
-        actions.phrase.pop();
-        actions.out.pop();
-        actions.anchors.swap(saved_anchors);
+        state.phrase.pop();
+        state.out.pop();
+        state.anchors.swap(saved_anchors);
     }
 }

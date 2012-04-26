@@ -12,6 +12,7 @@
 #include <boost/unordered_map.hpp>
 #include <boost/range/algorithm/upper_bound.hpp>
 #include <boost/range/algorithm/transform.hpp>
+#include <boost/foreach.hpp>
 #include <fstream>
 #include <iterator>
 
@@ -285,8 +286,9 @@ namespace quickbook
     struct mapped_file : file
     {
         mapped_file(file_ptr original) :
-            file(original->path, std::string(), original->version()),
-            original(original), mapped_sections() {}
+            file(*original, std::string()),
+            original(original), mapped_sections()
+        {}
 
         file_ptr original;
         std::vector<mapped_file_section> mapped_sections;
