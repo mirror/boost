@@ -261,6 +261,7 @@ void test_converion_to_float_types()
     BOOST_CHECK_THROW(lexical_cast<test_t>(".e"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>(".11111111111111111111111111111111111111111111111111111111111111111111ee"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>(".11111111111111111111111111111111111111111111111111111111111111111111e-"), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<test_t>("."), bad_lexical_cast);
 
     BOOST_CHECK_THROW(lexical_cast<test_t>("-B"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>("0xB"), bad_lexical_cast);
@@ -276,6 +277,7 @@ void test_converion_to_float_types()
     BOOST_CHECK_THROW(lexical_cast<test_t>("-"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>('\0'), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>('-'), bad_lexical_cast);
+    BOOST_CHECK_THROW(lexical_cast<test_t>('.'), bad_lexical_cast);
 }
 
 template <class T>
