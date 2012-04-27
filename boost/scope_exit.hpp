@@ -508,11 +508,12 @@ msvc_register_type<T, Organizer> typeof_register_type(const T&,
 
 #define BOOST_SCOPE_EXIT_DETAIL_CAPTURE_DECL(r, id_ty, i, var) \
     struct BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), i) \
+        /* no need to use TYPEOF_TPL here because it's within inheritance */ \
         : BOOST_TYPEOF(::boost::scope_exit::detail::wrap( \
                 BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
                         i, var))) \
     {}; \
-    typedef BOOST_PP_TUPLE_ELEM(2, 1,id_ty) \
+    typedef BOOST_PP_TUPLE_ELEM(2, 1, id_ty) \
         BOOST_SCOPE_EXIT_AUX_WRAPPED(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), i)::type\
         BOOST_SCOPE_EXIT_DETAIL_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
                 i, var) \
@@ -522,6 +523,7 @@ msvc_register_type<T, Organizer> typeof_register_type(const T&,
 
 #define BOOST_SCOPE_EXIT_DETAIL_CAPTURE_DECL(r, id_ty, i, var) \
     typedef \
+        /* no TYPEOF_TPL here because uses TYPEOF_KEYWORD directly */ \
         BOOST_TYPEOF_KEYWORD(BOOST_SCOPE_EXIT_AUX_DEREF( \
                 BOOST_PP_TUPLE_ELEM(2, 0, id_ty), i, var)) \
         BOOST_SCOPE_EXIT_DETAIL_CAPTURE_T(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
@@ -532,6 +534,7 @@ msvc_register_type<T, Organizer> typeof_register_type(const T&,
 
 #define BOOST_SCOPE_EXIT_DETAIL_CAPTURE_DECL(r, id_ty, i, var) \
     typedef \
+        /* no need to use TYPEOF_TPL here because it's a typedef */ \
         BOOST_TYPEOF(::boost::scope_exit::detail::wrap( \
                 BOOST_SCOPE_EXIT_AUX_DEREF(BOOST_PP_TUPLE_ELEM(2, 0, id_ty), \
                         i, var))) \

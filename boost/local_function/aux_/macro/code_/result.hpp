@@ -21,20 +21,11 @@
 
 // PRIVATE //
 
-#define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TAG_(id) \
-    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (deduce_result_tag)(id) )
-
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_(id) \
     /* symbol (not internal) also gives error if missing result type */ \
     BOOST_PP_CAT( \
   ERROR_missing_result_type_before_the_local_function_parameter_macro_id, \
             id)
-
-#define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_WRAP_(id) \
-    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (deduce_result_wrap)(id) )
-
-#define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_CAPTURE_(id) \
-    BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (deduce_result_capture)(id) )
 
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_PARAMS_(id) \
     BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (deduce_result_params)(id) )
@@ -42,41 +33,38 @@
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE_(id) \
     BOOST_LOCAL_FUNCTION_AUX_SYMBOL( (result_type)(id) )
 
+#define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_INDEX_ \
+    /* this does not have to be an integral index because ScopeExit uses */ \
+    /* just as a symbol to concatenate go generate unique symbols (but */ \
+    /* if it'd ever needed to became integral, the number of function */ \
+    /* params + 1 as in the macro CONFIG_ARITY_MAX could be used) */ \
+    result
+
 // User did not explicitly specified result type, deduce it (using Typeof).
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_DEDUCE_( \
         id, typename01, decl_traits) \
+    /* user specified result type here */ \
     BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_DECL(id) \
-    /* the many tagging, wrapping, etc that follow are taken from ScopeExit */ \
-    /* type deduction mechanism and they are necessary within templates */ \
-    /* (at least on GCC) to work around an compiler internal error */ \
-    typedef \
-        void (*BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TAG_(id))( \
-            int BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_(id) \
-        ) \
-    ; \
-    typedef \
-        BOOST_PP_IIF(typename01, BOOST_TYPEOF_TPL, BOOST_TYPEOF)( \
-            ::boost::scope_exit::detail::wrap( \
-                ::boost::scope_exit::detail::deref( \
-                    BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_(id), \
-                    (BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TAG_(id))0 \
-                ) \
-            ) \
-        ) \
-        BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_WRAP_(id) \
-    ; \
-    typedef BOOST_PP_EXPR_IIF(typename01, typename) \
-        BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_WRAP_(id)::type \
-        BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_CAPTURE_(id) \
-    ; \
+    /* tagging, wrapping, etc as from ScopeExit type deduction are */ \
+    /* necessary within templates (at least on GCC) to work around an */ \
+    /* compiler internal errors) */ \
+    BOOST_SCOPE_EXIT_DETAIL_TAG_DECL(0, /* no recursive step r */ \
+            id, BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_INDEX_, \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_(id)) \
+    BOOST_SCOPE_EXIT_DETAIL_CAPTURE_DECL(0, /* no recursive step r */ \
+            ( id, BOOST_PP_EXPR_IIF(typename01, typename) ), \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_INDEX_, \
+            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_(id)) \
+    /* extra struct to workaround GCC and other compiler's issues */ \
     struct BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_PARAMS_(id) { \
-        /* internal to struct to workaround GCC and other compiler's issues */ \
         typedef \
             BOOST_PP_EXPR_IIF(typename01, typename) \
             ::boost::function_traits< \
                 BOOST_PP_EXPR_IIF(typename01, typename) \
                 ::boost::remove_pointer< \
-                    BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_CAPTURE_(id) \
+                    BOOST_SCOPE_EXIT_DETAIL_CAPTURE_T(id, \
+                            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_INDEX_, \
+                            BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_FUNC_(id)) \
                 >::type \
             >::result_type \
             BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPE_(id) \
@@ -87,6 +75,7 @@
 // Precondition: RETURNS(decl_traits) != NIL
 #define BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_TYPED_( \
         id, typename01, decl_traits) \
+    /* user specified result type here */ \
     struct BOOST_LOCAL_FUNCTION_AUX_CODE_RESULT_PARAMS_(id) { \
         typedef \
             BOOST_PP_LIST_FIRST( \
