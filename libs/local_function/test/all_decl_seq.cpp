@@ -34,13 +34,13 @@ struct s {
                 return *this_;
             } BOOST_LOCAL_FUNCTION_NAME(t)
             t();
-/*
+
             const int BOOST_LOCAL_FUNCTION( (const bind a)
                     (const bind& b) (const bind& p) (const bind q)
                     (const bind this_) ) {
                 return a;
             } BOOST_LOCAL_FUNCTION_NAME(lt)
-            lt();*/
+            lt();
         }
         { // Only plain binds.
             int c, d;
