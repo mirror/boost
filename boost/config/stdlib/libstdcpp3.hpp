@@ -118,7 +118,6 @@
 //  C++0x headers in GCC 4.4.0 and later
 //
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 4) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
-#  define BOOST_NO_CXX11_HDR_CHRONO
 #  define BOOST_NO_CXX11_HDR_CONDITION_VARIABLE
 #  define BOOST_NO_CXX11_HDR_FORWARD_LIST
 #  define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
@@ -152,6 +151,9 @@
 //  C++0x features in GCC 4.7.0 and later
 //
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 7) || !defined(__GXX_EXPERIMENTAL_CXX0X__)
+// Note that although <chrono> existed prior to 4.7, "stead_clock" is spelled "monotonic_clock"
+// so 4.7.0 is the first truely conforming one.
+#  define BOOST_NO_CXX11_HDR_CHRONO
 #  define BOOST_NO_CXX11_ALLOCATOR
 #endif
 //  C++0x headers not yet (fully!) implemented
