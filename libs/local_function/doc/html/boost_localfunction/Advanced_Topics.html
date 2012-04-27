@@ -781,8 +781,8 @@
 <span class="special">&gt;</span> <span class="identifier">add</span><span class="special">(</span><span class="identifier">add_s</span><span class="special">,</span> <span class="identifier">add_d</span><span class="special">,</span> <span class="identifier">add_d</span><span class="special">,</span> <span class="identifier">add_i</span><span class="special">);</span> <span class="comment">// Overloaded function object.</span>
 
 <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="string">"xyz"</span><span class="special">)</span> <span class="special">==</span> <span class="string">"abcxyz"</span><span class="special">);</span> <span class="comment">// Call `add_s`.</span>
-<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">fabs</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">3.21</span><span class="special">)</span> <span class="special">-</span> <span class="number">4.44</span><span class="special">)</span> <span class="special">&lt;</span> <span class="number">0.001</span><span class="special">);</span> <span class="comment">// Call `add_d` (no default).</span>
-<span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">fabs</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">3.21</span><span class="special">,</span> <span class="number">40.0</span><span class="special">)</span> <span class="special">-</span> <span class="number">44.44</span><span class="special">)</span> <span class="special">&lt;</span> <span class="number">0.001</span><span class="special">);</span> <span class="comment">// Call `add_d`.</span>
+<span class="identifier">BOOST_TEST</span><span class="special">((</span><span class="number">4.44</span> <span class="special">-</span> <span class="identifier">add</span><span class="special">(</span><span class="number">3.21</span><span class="special">))</span> <span class="special">&lt;=</span> <span class="number">0.001</span><span class="special">);</span> <span class="comment">// Call `add_d` (no default).</span>
+<span class="identifier">BOOST_TEST</span><span class="special">((</span><span class="number">44.44</span> <span class="special">-</span> <span class="identifier">add</span><span class="special">(</span><span class="number">3.21</span><span class="special">,</span> <span class="number">40.0</span><span class="special">))</span> <span class="special">&lt;=</span> <span class="number">0.001</span><span class="special">);</span> <span class="comment">// Call `add_d`.</span>
 <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">add</span><span class="special">(</span><span class="number">1</span><span class="special">,</span> <span class="number">2</span><span class="special">)</span> <span class="special">==</span> <span class="number">3</span><span class="special">);</span> <span class="comment">// Call `add_i`.</span>
 </pre>
 <p>
@@ -901,18 +901,18 @@
     <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">dec</span><span class="special">)</span>
 
 <span class="preprocessor">#define</span> <span class="identifier">LOCAL_INC_DEC_TPL</span><span class="special">(</span><span class="identifier">offset</span><span class="special">)</span> <span class="special">\</span>
-    <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION_TPL_ID</span><span class="special">(</span><span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">inc</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">),</span> <span class="special">\</span>
-            <span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">offset</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
+    <span class="identifier">T</span> <span class="identifier">BOOST_LOCAL_FUNCTION_TPL_ID</span><span class="special">(</span><span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">inc</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">),</span> <span class="special">\</span>
+            <span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">offset</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
         <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">+</span> <span class="identifier">offset</span><span class="special">;</span> <span class="special">\</span>
-    <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">inc</span><span class="special">)</span> <span class="special">\</span>
+    <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME_TPL</span><span class="special">(</span><span class="identifier">inc</span><span class="special">)</span> <span class="special">\</span>
     <span class="special">\</span>
-    <span class="keyword">int</span> <span class="identifier">BOOST_LOCAL_FUNCTION_TPL_ID</span><span class="special">(</span><span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">dec</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">),</span> <span class="special">\</span>
-            <span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">offset</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">int</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
+    <span class="identifier">T</span> <span class="identifier">BOOST_LOCAL_FUNCTION_TPL_ID</span><span class="special">(</span><span class="identifier">BOOST_PP_CAT</span><span class="special">(</span><span class="identifier">dec</span><span class="special">,</span> <span class="identifier">__LINE__</span><span class="special">),</span> <span class="special">\</span>
+            <span class="keyword">const</span> <span class="identifier">bind</span> <span class="identifier">offset</span><span class="special">,</span> <span class="keyword">const</span> <span class="identifier">T</span> <span class="identifier">x</span><span class="special">)</span> <span class="special">{</span> <span class="special">\</span>
         <span class="keyword">return</span> <span class="identifier">x</span> <span class="special">-</span> <span class="identifier">offset</span><span class="special">;</span> <span class="special">\</span>
-    <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME</span><span class="special">(</span><span class="identifier">dec</span><span class="special">)</span>
+    <span class="special">}</span> <span class="identifier">BOOST_LOCAL_FUNCTION_NAME_TPL</span><span class="special">(</span><span class="identifier">dec</span><span class="special">)</span>
 
 <span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
-<span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">delta</span><span class="special">)</span> <span class="special">{</span>
+<span class="keyword">void</span> <span class="identifier">f</span><span class="special">(</span><span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">delta</span><span class="special">)</span> <span class="special">{</span>
     <span class="identifier">LOCAL_INC_DEC_TPL</span><span class="special">(</span><span class="identifier">delta</span><span class="special">)</span> <span class="comment">// Multiple local functions on same line.</span>
     <span class="comment">/** @todo back to BOOST_TEST(dec(inc(123)) == 123)) and doc that on vacpp compiler composition doesn't work */</span>
     <span class="identifier">BOOST_TEST</span><span class="special">(</span><span class="identifier">inc</span><span class="special">(</span><span class="number">123</span><span class="special">)</span> <span class="special">==</span> <span class="number">123</span> <span class="special">+</span> <span class="identifier">delta</span><span class="special">);</span>
@@ -1210,10 +1210,10 @@
                     to dynamic binding or base function calls.
                   </p></div></td></tr></tbody>
 </table></div>
-<h6>
+<h5>
 <a name="boost_localfunction.Advanced_Topics.limitations__operators__etc_.h0"></a>
         <span><a name="boost_localfunction.Advanced_Topics.limitations__operators__etc_.operators"></a></span><a class="link" href="Advanced_Topics.html#boost_localfunction.Advanced_Topics.limitations__operators__etc_.operators">Operators</a>
-      </h6>
+      </h5>
 <p>
         Local functions cannot be operators. Naming a local function <code class="computeroutput"><span class="keyword">operator</span><span class="special">...</span></code>
         will generate a compile-time error. <sup>[<a name="boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" href="#ftn.boost_localfunction.Advanced_Topics.limitations__operators__etc_.f1" class="footnote">28</a>]</sup>
@@ -1229,10 +1229,10 @@
 </pre>
 <p>
       </p>
-<h6>
+<h5>
 <a name="boost_localfunction.Advanced_Topics.limitations__operators__etc_.h1"></a>
         <span><a name="boost_localfunction.Advanced_Topics.limitations__operators__etc_.goto"></a></span><a class="link" href="Advanced_Topics.html#boost_localfunction.Advanced_Topics.limitations__operators__etc_.goto">Goto</a>
-      </h6>
+      </h5>
 <p>
         It is possible to jump with a <code class="computeroutput"><span class="keyword">goto</span></code>
         within the local function body. For example, the following compiles (see

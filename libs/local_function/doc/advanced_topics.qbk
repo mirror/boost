@@ -464,7 +464,7 @@ However, this "inheritance" feature is not implemented because it seemed of [@ht
 ]
 ]
 
-[h5 Operators]
+[heading Operators]
 
 Local functions cannot be operators.
 Naming a local function `operator...` will generate a compile-time error.
@@ -477,7 +477,7 @@ For example, the following code does not compile (see also [@../../test/operator
 
 [operator_error]
 
-[h5 Goto]
+[heading Goto]
 
 It is possible to jump with a `goto` within the local function body.
 For example, the following compiles (see also [@../../test/goto.cpp =goto.cpp=]):

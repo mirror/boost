@@ -9,7 +9,7 @@
 
 This section compares the features offered by this library with similar features offered by C++ and by other libraries.
 
-[h5 Features]
+[heading Features]
 
 The following table compares local function features.
 
@@ -145,7 +145,7 @@ The following example compares local functions with __Boost_Phoenix__ (see also 
 The comparison in this section does not include the __Boost_Lambda__ library because that library is obsolete and it was replaced by __Boost_Phoenix__.
 The __Boost_Phoenix__ library version 3.0 is used for this comparison.
 
-[h5 Performances]
+[heading Performances]
 
 The following tables compare run-times, compile-times, and binary sizes for the different alternatives to local functions presented in this section.
 

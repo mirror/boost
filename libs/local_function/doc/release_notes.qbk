@@ -9,7 +9,7 @@
 
 This section lists the major changes between different library releases (in chronological order).
 
-[h5 Version 1.0.0 (2012-04-12)]
+[heading Version 1.0.0 (2012-04-12)]
 
 # Incorporated all comments from the [@http://lists.boost.org/boost-announce/2011/12/0340.php Boost review of this library].
 # Removed local blocks and local exits.
@@ -23,7 +23,7 @@ This section lists the major changes between different library releases (in chro
 # Added `..._ID` macros for multiple expansions on the same line.
 # Fixed compilation on Boost regression test platforms.
 
-[h5 Version 0.2.0 (2011-05-14)]
+[heading Version 0.2.0 (2011-05-14)]
 
 # Replaced parenthesized syntax with variadic and sequencing macro syntaxes.
 # Profiled library performances against other approaches.
@@ -36,17 +36,17 @@ This section lists the major changes between different library releases (in chro
 # Added functor to overload local functions (and functors in general).
 # Implemented support for nesting local functions, blocks, and exits into one another.
 
-[h5 Version 0.1.1 (2011-01-10)]
+[heading Version 0.1.1 (2011-01-10)]
 
 # Uploaded library source into Boost SVN sandbox.
 # Fixed prev/next arrows and other minor layouts in documentation.
 # Added Release section to documentation.
 
-[h5 Version 0.1.0 (2011-01-03)]
+[heading Version 0.1.0 (2011-01-03)]
 
 # Shared with Boost for first round of comments.
 
-[h5 Version 0.0.1 (2010-12-15)]
+[heading Version 0.0.1 (2010-12-15)]
 
 # Completed development, examples, and documentation.
 

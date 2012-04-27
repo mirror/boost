@@ -9,7 +9,7 @@
 
 This section illustrates an alternative syntax for compilers without variadic macro support.
 
-[h5 Sequence Syntax]
+[heading Sequence Syntax]
 
 Most modern compilers support [@http://en.wikipedia.org/wiki/Variadic_macro variaid macros] (notably, these include GCC, MSVC, and all __CXX11__ compilers).
 However, in the rare case that programmers need to use this library on a compiler without variadic macros, this library also allows to specify its macro parameters using a __Boost_Preprocessor__ sequence where tokens are separated by round parenthesis `()`:
@@ -33,7 +33,7 @@ Finally, an empty local function parameter list is always specified using `void`
 
 [ten_void]
 
-[h5 Examples]
+[heading Examples]
 
 For reference, the following is a list of most of the examples presented in this documentation reprogrammed using the sequence syntax instead of the comma-separated syntax (in alphabetic order):
 

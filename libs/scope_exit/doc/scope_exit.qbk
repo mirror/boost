@@ -294,7 +294,7 @@ As shown by the example above, the [macroref BOOST_SCOPE_EXIT_ID], [macroref BOO
 
 This section presents some alternative and related work to __Boost_ScopeExit__.
 
-[h5 Try-Catch]
+[heading Try-Catch]
 
 This is an example of using a badly designed `file` class. 
 An instance of `file` does not close the file in its destructor, a programmer is expected to call the `close` member function explicitly.
@@ -314,7 +314,7 @@ For example (see also [@../../example/try_catch.cpp =try_catch.cpp=]):
 
 [try_catch_good]
 
-[h5 RAII]
+[heading RAII]
 
 __RAII__ is absolutely perfect for the `file` class introduced above.
 Use of a properly designed `file` class would look like:
@@ -352,7 +352,7 @@ In some cases __strong_guarantee__ can be accomplished with standard utilities:
 
 Or with specialized containers such as __Boost_PointerContainer__ or __Boost_Multi_Index__.
 
-[h5 Scope Guards]
+[heading Scope Guards]
 
 Imagine that a new currency rate is introduced before performing a transaction (see also []):
 
@@ -403,7 +403,7 @@ With __Boost_ScopeExit__ we can simply do the following (see also [@../../exampl
 
 [scope_guard_exit]
 
-[h5 The D Programming Language]
+[heading The D Programming Language]
 
 __Boost_ScopeExit__ is similar to __D_scope_exit__ feature built into the __D__ programming language.
 
@@ -411,7 +411,7 @@ A curious reader may notice that the library does not implement `scope(success)`
 Unfortunately, these are not possible in C++ because failure or success conditions cannot be determined by calling `std::uncaught_exception` (see [@http://www.gotw.ca/gotw/047.htm Guru of the Week #47] for details about `std::uncaught_exception` and if it has any good use at all).
 However, this is not a big problem because these two __D__'s constructs can be expressed in terms of __D_scope_exit__ and a `bool commit` variable (similarly to some examples presented in the __Tutorial__ section).
 
-[h5 C++11 Lambdas]
+[heading C++11 Lambdas]
 
 Using C++11 lambdas, it is relatively easy to implement the __Boost_ScopeExit__ construct.
 For example (see also [@../../example/world_cxx11_lambda.cpp =world_cxx11_lambda.cpp=]):
@@ -426,7 +426,7 @@ However, this library allows to program the __Boost_ScopeExit__ construct in a w
 
 This section presents an alternative syntax for compilers without variadic macro support.
 
-[h5 Sequence Syntax]
+[heading Sequence Syntax]
 
 Most modern compilers support variadic macros (notably, these include GCC, MSVC, and all C++11 compilers).
 [footnote
@@ -455,7 +455,7 @@ Finally, an empty capture list is always specified using `void` on compilers wit
 
 [world_void]
 
-[h5 Examples]
+[heading Examples]
 
 For reference, the following is a list of most of the examples presented in this documentation reprogrammed using the __Boost_Preprocessor__ sequence syntax instead of comma-separated lists (in alphabetic order):
 

@@ -14,7 +14,7 @@ The code listed here can be used by curious readers and library maintainers as a
 There is absolutely no guarantee that the library implementation uses the exact code listed here.
 ]
 
-[h5 Local Classes as Template Parameters]
+[heading Local Classes as Template Parameters]
 
 This library uses a local class to implement the local function object.
 However, in __CXX03__ local classes (and therefore the local function objects they implement) cannot be passed as template parameters (e.g., to the `std::for_each` algorithm), this is instead possible in __CXX11__, MSVC, and some other compilers (see __N2657__ and __Boost_Config__'s `BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS`).
@@ -34,7 +34,7 @@ The casting functor trick measured slightly better run-time performances than th
 However, neither one of the two tricks was observed to allow for compiler optimizations that inline the local function calls (because they rely on one indirect function call via either a function pointer or a virtual function respectively).
 Therefore, on compilers that accept local classes as template parameters (MSVC, __CXX11__, etc, see __N2657__ and __Boost_Config__'s `BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS`), this library automatically generates code that passes the local class type directly as template parameter without using neither one of these two tricks in order to take full advantage of compiler optimizations that inline the local function calls.
 
-[h5 Parsing Macros]
+[heading Parsing Macros]
 
 This library macros can parse the list of specified parameters and detect if any of the bound variable names matches the token `this_` (to generate special code to bind the object in scope), or if the variable is bound by `const` (to generate special code to bind by constant), etc.
 The parameter tokens are inspected using preprocessor meta-programming and specifically using the macros defined by the files in the =boost/local_function/detail/preprocessor/keyword/= directory.
