@@ -119,7 +119,7 @@ struct s {
                     (bind c) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lct)
             lct();
-/*
+
             void BOOST_LOCAL_FUNCTION( (const bind a) (const bind& b)
                     (const bind p) (bind this_) ) {
             } BOOST_LOCAL_FUNCTION_NAME(pt)
@@ -127,7 +127,7 @@ struct s {
             void BOOST_LOCAL_FUNCTION( (const bind a) (const bind& b)
                     (const bind p) (bind c) (bind this_) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lpt)
-            lpt();*/
+            lpt();
         }
 
         { // All params, const binds, and plain binds.

@@ -33,7 +33,7 @@
     } BOOST_LOCAL_FUNCTION_NAME_TPL(dec)
 
 template<typename T>
-void f(T delta) {
+void f(T& delta) {
     LOCAL_INC_DEC_TPL(delta) // Multiple local functions on same line.
     /** @todo back to BOOST_TEST(dec(inc(123)) == 123)) and doc that on vacpp compiler composition doesn't work */
     BOOST_TEST(inc(123) == 123 + delta);
