@@ -25,10 +25,10 @@
     [dirname scope_exit]
 ]
 
-[def __Introduction__ [link scope_exit.Introduction Introduction]]
-[def __Getting_Started__ [link scope_exit.Getting_Started Getting Started]]
+[def __Introduction__ [link scope_exit.introduction Introduction]]
+[def __Getting_Started__ [link scope_exit.getting_started Getting Started]]
 [def __Tutorial__ [link scope_exit.Tutorial Tutorial]]
-[def __No_Variadic_Macros__ [link scope_exit.No_Variadic_Macros No Variadic Macros]]
+[def __No_Variadic_Macros__ [link scope_exit.no_variadic_macros No Variadic Macros]]
 [def __Reference__ [@reference.html Reference]]
 [def __Boost_ScopeExit__ [link scope_exit Boost.ScopeExit]]
 [def __Boost_Lambda__ [@http://www.boost.org/libs/lambda Boost.Lambda]]
@@ -78,7 +78,7 @@ See the __No_Variadic_Macros__ section for more information.
 
 [endsect]
 
-[section:Getting_Started Getting Started]
+[section Getting Started]
 
 This section explains how to setup a system to use this library.
 
@@ -126,7 +126,7 @@ In order to compile code in __typeof_emulation__ mode, all types should be prope
 
 [endsect]
 
-[section:Tutorial Tutorial]
+[section Tutorial]
 
 This section illustrates how to use this library.
 
@@ -290,7 +290,7 @@ As shown by the example above, the [macroref BOOST_SCOPE_EXIT_ID], [macroref BOO
 
 [endsect]
 
-[section:Alternatives Annex: Alternatives]
+[section:alternatives Annex: Alternatives]
 
 This section presents some alternative and related work to __Boost_ScopeExit__.
 
@@ -422,7 +422,7 @@ However, this library allows to program the __Boost_ScopeExit__ construct in a w
 
 [endsect]
 
-[section:No_Variadic_Macros Annex: No Variadic Macros]
+[section:no_variadic_macros Annex: No Variadic Macros]
 
 This section presents an alternative syntax for compilers without variadic macro support.
 
@@ -474,7 +474,7 @@ For reference, the following is a list of most of the examples presented in this
 
 [xinclude reference.xml]
 
-[section:Acknowledgements Acknowledgements]
+[section Acknowledgements]
 
 Alexander Nasonov is the original library author.
 
