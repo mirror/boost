@@ -5,7 +5,7 @@
 [/ http://www.boost.org/LICENSE_1_0.txt) ]
 [/ Home at http://www.boost.org/libs/local_function ]
 
-[section:Alternatives Annex: Alternatives]
+[section:alternatives Annex: Alternatives]
 
 This section compares the features offered by this library with similar features offered by C++ and by other libraries.
 

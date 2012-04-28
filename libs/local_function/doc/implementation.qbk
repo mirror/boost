@@ -5,7 +5,7 @@
 [/ http://www.boost.org/LICENSE_1_0.txt) ]
 [/ Home at http://www.boost.org/libs/local_function ]
 
-[section:Implementation Annex: Implementation]
+[section:implementation Annex: Implementation]
 
 This section gives an overview of the key programming techniques used to implement this library.
 

@@ -5,7 +5,7 @@
 [/ http://www.boost.org/LICENSE_1_0.txt) ]
 [/ Home at http://www.boost.org/libs/local_function ]
 
-[section:Advanced_Topics Advanced Topics]
+[section Advanced Topics]
 
 This section illustrates advanced usage of this library.
 At the bottom there is also a list of known limitations of this library.
@@ -371,18 +371,18 @@ Therefore, if these macros are expanded more than on time on the same line, the 
 Note that the [macroref BOOST_LOCAL_FUNCTION_NAME] macro can always be expanded multiple times on the same line because the unique local function name (and not `__LINE__`) is used by this macro to generate unique identifiers (so there is no need for a `BOOST_LOCAL_FUNCTION_NAME_ID` macro).
 ]
 
-Therefore, this library provides additional macros [macroref BOOST_LOCAL_FUNCTION_ID] and [macroref BOOST_LOCAL_FUNCTION_TPL_ID] which can be expanded multiple times on the same line as long as programmers specify unique identifiers as the macros' first parameters.
+Therefore, this library provides additional macros [macroref BOOST_LOCAL_FUNCTION_ID] and [macroref BOOST_LOCAL_FUNCTION_ID_TPL] which can be expanded multiple times on the same line as long as programmers specify unique identifiers as the macros' first parameters.
 The unique identifier can be any token (not just numeric) that can be successfully concatenated by the preprocessor (e.g., `local_function_number_1_at_line_123`).
 [footnote
 Because there are restrictions on the set of tokens that the preprocessor can concatenate and because not all compilers correctly implement these restrictions, it is in general recommended to specify unique identifiers as a combination of alphanumeric tokens. 
 ]
 
-The [macroref BOOST_LOCAL_FUNCTION_ID] and [macroref BOOST_LOCAL_FUNCTION_TPL_ID] macros accept local function parameter declaration lists using the exact same syntax as [macroref BOOST_LOCAL_FUNCTION].
+The [macroref BOOST_LOCAL_FUNCTION_ID] and [macroref BOOST_LOCAL_FUNCTION_ID_TPL] macros accept local function parameter declaration lists using the exact same syntax as [macroref BOOST_LOCAL_FUNCTION].
 For example (see also [@../../test/same_line.cpp =same_line.cpp=]):
 
 [same_line]
 
-As shown by the example above, the [macroref BOOST_LOCAL_FUNCTION_ID] and [macroref BOOST_LOCAL_FUNCTION_TPL_ID] macros are especially useful when it is necessary to invoke them multiple times within a user-defined macro (because the preprocessor expands all nested macros on the same line).
+As shown by the example above, the [macroref BOOST_LOCAL_FUNCTION_ID] and [macroref BOOST_LOCAL_FUNCTION_ID_TPL] macros are especially useful when it is necessary to invoke them multiple times within a user-defined macro (because the preprocessor expands all nested macros on the same line).
 
 [endsect]
 

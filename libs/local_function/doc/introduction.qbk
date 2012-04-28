@@ -5,7 +5,7 @@
 [/ http://www.boost.org/LICENSE_1_0.txt) ]
 [/ Home at http://www.boost.org/libs/local_function ]
 
-[section:Introduction Introduction]
+[section Introduction]
 
 /Local functions/ (a.k.a., [@http://en.wikipedia.org/wiki/Nested_function /nested functions/]) are a form of /information hiding/ and they are useful for dividing procedural tasks into subtasks which are only meaningful locally, avoiding cluttering other parts of the program with functions, variables, etc unrelated to those parts.
 Therefore, local functions complement other structuring possibilities such as namespaces and classes.
