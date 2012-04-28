@@ -763,7 +763,7 @@ private:
         BOOST_SCOPE_EXIT_AUX_IMPL(id, BOOST_PP_EMPTY(), \
                 BOOST_SCOPE_EXIT_AUX_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(void_or_seq)))
-#   define BOOST_SCOPE_EXIT_TPL_ID(id, void_or_seq) \
+#   define BOOST_SCOPE_EXIT_ID_TPL(id, void_or_seq) \
         BOOST_SCOPE_EXIT_AUX_IMPL(id, typename, \
                 BOOST_SCOPE_EXIT_AUX_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(void_or_seq)))
@@ -771,7 +771,7 @@ private:
         BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
                 void_or_seq)
 #   define BOOST_SCOPE_EXIT_TPL(void_or_seq) \
-        BOOST_SCOPE_EXIT_TPL_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
+        BOOST_SCOPE_EXIT_ID_TPL(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
                 void_or_seq)
 #   if !defined(BOOST_NO_LAMBDAS)
 #       define BOOST_SCOPE_EXIT_ALL_ID(id, seq) \
@@ -792,7 +792,7 @@ private:
         BOOST_SCOPE_EXIT_AUX_IMPL(id, BOOST_PP_EMPTY(), \
                 BOOST_SCOPE_EXIT_AUX_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)))
-#   define BOOST_SCOPE_EXIT_TPL_ID(id, ...) \
+#   define BOOST_SCOPE_EXIT_ID_TPL(id, ...) \
         BOOST_SCOPE_EXIT_AUX_IMPL(id, typename, \
                 BOOST_SCOPE_EXIT_AUX_TRAITS( \
                         BOOST_LOCAL_FUNCTION_DETAIL_PP_VOID_LIST(__VA_ARGS__)))
@@ -800,7 +800,7 @@ private:
         BOOST_SCOPE_EXIT_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
                 __VA_ARGS__)
 #   define BOOST_SCOPE_EXIT_TPL(...) \
-        BOOST_SCOPE_EXIT_TPL_ID(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
+        BOOST_SCOPE_EXIT_ID_TPL(BOOST_LOCAL_FUNCTION_DETAIL_PP_LINE_COUNTER, \
                 __VA_ARGS__)
 #   if !defined(BOOST_NO_LAMBDAS)
 #       define BOOST_SCOPE_EXIT_ALL_ID(id, ...) \
@@ -944,10 +944,11 @@ safety requirements.
 the captured variables.
 In order to compile code in type-of emulation mode, all types must be properly
 registered with Boost.Typeof (see the
-@RefSectId{Getting_Started, Getting Started} section).
+@RefSect{getting_started, Getting Started} section).
 
-@See @RefSect{Tutorial} section, @RefSectId{Getting_Started, Getting Started}
-section, @RefSectId{No_Variadic_Macros, No Variadic Macros} section,
+@See @RefSect{tutorial, Tutorial} section,
+@RefSect{getting_started, Getting Started} section,
+@RefSect{no_variadic_macros, No Variadic Macros} section,
 @RefMacro{BOOST_SCOPE_EXIT_TPL}, @RefMacro{BOOST_SCOPE_EXIT_ALL},
 @RefMacro{BOOST_SCOPE_EXIT_END}, @RefMacro{BOOST_SCOPE_EXIT_ID}.
 */
@@ -982,7 +983,7 @@ However, @RefMacro{BOOST_SCOPE_EXIT_TPL} is still provided on C++11 so to write 
 It is recommended to always use @RefMacro{BOOST_SCOPE_EXIT_TPL} within
 templates so to maximize portability.
 
-In general, the special macro @RefMacro{BOOST_SCOPE_EXIT_TPL_ID} must be used
+In general, the special macro @RefMacro{BOOST_SCOPE_EXIT_ID_TPL} must be used
 instead of @RefMacro{BOOST_SCOPE_EXIT_TPL} when it is necessary to expand
 multiple scope exit declarations on the same line within templates.
 
@@ -1010,8 +1011,8 @@ implementation of the @RefMacro{BOOST_SCOPE_EXIT_TPL} macro).
 @Note Although @RefMacro{BOOST_SCOPE_EXIT_TPL} has the same suffix as
 <c>BOOST_TYPEOF_TPL</c>, it does not follow the Boost.Typeof convention.
 
-@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
-@RefMacro{BOOST_SCOPE_EXIT_END}, @RefMacro{BOOST_SCOPE_EXIT_TPL_ID}.
+@See @RefSect{tutorial, Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
+@RefMacro{BOOST_SCOPE_EXIT_END}, @RefMacro{BOOST_SCOPE_EXIT_ID_TPL}.
 */
 #define BOOST_SCOPE_EXIT_TPL(capture_list)
 
@@ -1042,9 +1043,9 @@ On some compilers (e.g., MSVC which supports the non standard
 the use of this macro is always necessary to ensure portability when expanding
 multiple scope exit declarations on the same line.
 
-@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
+@See @RefSect{tutorial, Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
 @RefMacro{BOOST_SCOPE_EXIT_END_ID}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID},
-@RefMacro{BOOST_SCOPE_EXIT_TPL_ID}.
+@RefMacro{BOOST_SCOPE_EXIT_ID_TPL}.
 */
 #define BOOST_SCOPE_EXIT_ID(id, capture_list)
 
@@ -1079,11 +1080,11 @@ On some compilers (e.g., MSVC which supports the non standard
 the use of this macro is always necessary to ensure portability when expanding
 multiple scope exit declarations on the same line.
 
-@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT_TPL},
+@See @RefSect{tutorial, Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT_TPL},
 @RefMacro{BOOST_SCOPE_EXIT_END_ID}, @RefMacro{BOOST_SCOPE_EXIT_ID},
 @RefMacro{BOOST_SCOPE_EXIT_ALL_ID}.
 */
-#define BOOST_SCOPE_EXIT_TPL_ID(id, capture_list)
+#define BOOST_SCOPE_EXIT_ID_TPL(id, capture_list)
 
 /**
 @brief This macro declares a scope exit that captures all variables in scope
@@ -1174,7 +1175,9 @@ safety requirements.
 @Note This macro can always be used also within templates (so there is no need
 for a <c>BOOST_SCOPE_EXIT_ALL_TPL</c> macro).
 
-@See @RefSect{Tutorial} section, @RefSectId{No_Variadic_Macros, No Variadic Macros} section, @RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID}.
+@See @RefSect{tutorial, Tutorial} section,
+@RefSect{no_variadic_macros, No Variadic Macros} section,
+@RefMacro{BOOST_SCOPE_EXIT}, @RefMacro{BOOST_SCOPE_EXIT_ALL_ID}.
 */
 #define BOOST_SCOPE_EXIT_ALL(capture_list)
 
@@ -1209,7 +1212,7 @@ On some compilers (e.g., MSVC which supports the non standard
 the use of this macro is always necessary to ensure portability when expanding
 multiple scope exit declarations on the same line.
 
-@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT_ALL},
+@See @RefSect{tutorial, Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT_ALL},
 @RefMacro{BOOST_SCOPE_EXIT_ID}.
 */
 #define BOOST_SCOPE_EXIT_ALL_ID(id, capture_list)
@@ -1240,7 +1243,7 @@ macro.
 However, to maximize portability, it is recommended to always use
 @RefMacro{BOOST_SCOPE_EXIT_END}.
 
-@See @RefSect{Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
+@See @RefSect{tutorial, Tutorial} section, @RefMacro{BOOST_SCOPE_EXIT},
 @RefMacro{BOOST_SCOPE_EXIT_TPL}, @RefMacro{BOOST_SCOPE_EXIT_END_ID}.
 */
 #define BOOST_SCOPE_EXIT_END
@@ -1270,7 +1273,7 @@ the use of this macro is always necessary to ensure portability when expanding
 multiple scope exit macros on the same line (because this library can only
 portably use <c>__LINE__</c> to internally generate unique identifiers).
 
-@See @RefMacro{BOOST_SCOPE_EXIT_ID}, @RefMacro{BOOST_SCOPE_EXIT_TPL_ID},
+@See @RefMacro{BOOST_SCOPE_EXIT_ID}, @RefMacro{BOOST_SCOPE_EXIT_ID_TPL},
 @RefMacro{BOOST_SCOPE_EXIT_END}.
 */
 #define BOOST_SCOPE_EXIT_END_ID(id)

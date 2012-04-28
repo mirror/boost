@@ -27,7 +27,7 @@
 
 [def __Introduction__ [link scope_exit.introduction Introduction]]
 [def __Getting_Started__ [link scope_exit.getting_started Getting Started]]
-[def __Tutorial__ [link scope_exit.Tutorial Tutorial]]
+[def __Tutorial__ [link scope_exit.tutorial Tutorial]]
 [def __No_Variadic_Macros__ [link scope_exit.no_variadic_macros No Variadic Macros]]
 [def __Reference__ [@reference.html Reference]]
 [def __Boost_ScopeExit__ [link scope_exit Boost.ScopeExit]]
@@ -273,18 +273,18 @@ Therefore, if the same macro is expanded more than on time on the same line, the
 (This restriction does not apply to MSVC and other compilers that provide the non-standard `__COUNTER__` macro.)
 ]
 
-Therefore, this library provides additional macros [macroref BOOST_SCOPE_EXIT_ID], [macroref BOOST_SCOPE_EXIT_TPL_ID], [macroref BOOST_SCOPE_EXIT_END_ID], and [macroref BOOST_SCOPE_EXIT_ALL_ID] which can be expanded multiple times on the same line as long as programmers specify a unique identifiers as the macros' first parameters.
+Therefore, this library provides additional macros [macroref BOOST_SCOPE_EXIT_ID], [macroref BOOST_SCOPE_EXIT_ID_TPL], [macroref BOOST_SCOPE_EXIT_END_ID], and [macroref BOOST_SCOPE_EXIT_ALL_ID] which can be expanded multiple times on the same line as long as programmers specify a unique identifiers as the macros' first parameters.
 The unique identifier can be any token (not just numeric) that can be concatenated by the C++ preprocessor (e.g., `scope_exit_number_1_at_line_123`).
 [footnote
 Because there are restrictions on the set of tokens that the C++ preprocessor can concatenate and because not all compilers correctly implement these restrictions, it is in general recommended to specify unique identifiers as a combination of alphanumeric tokens.
 ]
 
-The [macroref BOOST_SCOPE_EXIT_ID], [macroref BOOST_SCOPE_EXIT_TPL_ID], and [macroref BOOST_SCOPE_EXIT_ALL_ID] macros accept a capture list using the exact same syntax as [macroref BOOST_SCOPE_EXIT] and [macroref BOOST_SCOPE_EXIT_ALL] respectively.
+The [macroref BOOST_SCOPE_EXIT_ID], [macroref BOOST_SCOPE_EXIT_ID_TPL], and [macroref BOOST_SCOPE_EXIT_ALL_ID] macros accept a capture list using the exact same syntax as [macroref BOOST_SCOPE_EXIT] and [macroref BOOST_SCOPE_EXIT_ALL] respectively.
 For example (see also [@../../test/same_line.cpp =same_line.cpp=]):
 
 [same_line]
 
-As shown by the example above, the [macroref BOOST_SCOPE_EXIT_ID], [macroref BOOST_SCOPE_EXIT_TPL_ID], [macroref BOOST_SCOPE_EXIT_END_ID], and [macroref BOOST_SCOPE_EXIT_ALL_ID] macros are especially useful when it is necessary to invoke them multiple times within user-defined macros (because the C++ preprocessor expands all nested macros on the same line).
+As shown by the example above, the [macroref BOOST_SCOPE_EXIT_ID], [macroref BOOST_SCOPE_EXIT_ID_TPL], [macroref BOOST_SCOPE_EXIT_END_ID], and [macroref BOOST_SCOPE_EXIT_ALL_ID] macros are especially useful when it is necessary to invoke them multiple times within user-defined macros (because the C++ preprocessor expands all nested macros on the same line).
 
 [endsect]
 
