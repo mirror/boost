@@ -117,6 +117,15 @@ struct dynamic_const_put_error  : public dynamic_property_exception {
 
 namespace detail {
 
+// Trying to work around VC++ problem that seems to relate to having too many
+// functions named "get"
+template <typename PMap, typename Key>
+typename boost::property_traits<PMap>::reference
+get_wrapper_xxx(const PMap& pmap, const Key& key) {
+  using boost::get;
+  return get(pmap, key);
+}
+
 //
 // dynamic_property_map_adaptor -
 //   property-map adaptor to support runtime polymorphism.
@@ -179,9 +188,9 @@ public:
 #if defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ == 95)
     return boost::get(property_map_, any_cast<key_type>(key));
 #else
-    using boost::get;
+    // using boost::get;
 
-    return get(property_map_, any_cast<key_type>(key));
+    return get_wrapper_xxx(property_map_, any_cast<key_type>(key));
 #endif
   }
 
