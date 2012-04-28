@@ -49,8 +49,9 @@ When defined by programmers, this macro must be a non-negative integer number.
 excluding bound variables (which are instead specified by
 @RefMacro{BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX}).
 
-@See @RefSect{Tutorial} section, @RefSectId{Getting_Started, Getting Started}
-section, @RefMacro{BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX}.
+@See @RefSect{tutorial, Tutorial} section,
+@RefSect{getting_started, Getting Started} section,
+@RefMacro{BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX}.
 */
 #define BOOST_LOCAL_FUNCTION_CONFIG_ARITY_MAX
 
@@ -65,8 +66,9 @@ When defined by programmers, this macro must be a non-negative integer number.
 local function parameters (which are instead specified by
 @RefMacro{BOOST_LOCAL_FUNCTION_CONFIG_ARITY_MAX}).
 
-@See @RefSect{Tutorial} section, @RefSectId{Getting_Started, Getting Started}
-section, @RefMacro{BOOST_LOCAL_FUNCTION_CONFIG_ARITY_MAX}.
+@See @RefSect{tutorial, Tutorial} section,
+@RefSect{getting_started, Getting Started} section,
+@RefMacro{BOOST_LOCAL_FUNCTION_CONFIG_ARITY_MAX}.
 */
 #define BOOST_LOCAL_FUNCTION_CONFIG_BIND_MAX
 
@@ -100,8 +102,8 @@ In this case, the library will automatically define this macro to <c>0</c> if
 the Boost.Config macro <c>BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS</c> is
 defined for the specific compiler, and to <c>1</c> otherwise.
 
-@See @RefSectId{Getting_Started, Getting Started} section,
-@RefSectId{Advanced_Topics, Advanced Topics} section,
+@See @RefSect{getting_started, Getting Started} section,
+@RefSect{advanced_topics, Advanced Topics} section,
 @RefMacro{BOOST_LOCAL_FUNCTION_NAME}.
 */
 #define BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
