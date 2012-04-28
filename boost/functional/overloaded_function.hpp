@@ -222,12 +222,10 @@ types is given by the
 @RefMacro{BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_ARITY_MAX}
 configuration macro.
 
-@See
-    @RefSect{Tutorial} section,
-    @RefFunc{make_overloaded_function},
-    @RefMacro{BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX},
-    @RefMacro{BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_ARITY_MAX},
-    Boost.Function.
+@See @RefSect{tutorial, Tutorial} section, @RefFunc{make_overloaded_function},
+@RefMacro{BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX},
+@RefMacro{BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_ARITY_MAX},
+Boost.Function.
 */
 template<typename F1, typename F2, ...>
 class overloaded_function {
@@ -290,7 +288,7 @@ This is especially useful when the explicit type of the returned
 @RefClass{overloaded_function} object does not need to be known (e.g., when
 used with Boost.Typeof's <c>BOOST_AUTO</c>, C++11 <c>auto</c>, or when the
 overloaded function object is handled using a function template parameter, see
-the @RefSect{Tutorial} section).
+the @RefSect{tutorial, Tutorial} section).
 
 The maximum number of functions to overload is given by the
 @RefMacro{BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX}
@@ -299,10 +297,8 @@ configuration macro.
 @Note In this documentation, <c>__function_type__</c> is a placeholder for a
 symbol that is specific to the implementation of this library.
 
-@See
-    @RefSect{Tutorial} section,
-    @RefClass{overloaded_function},
-    @RefMacro{BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX}.
+@See @RefSect{tutorial, Tutorial} section, @RefClass{overloaded_function},
+@RefMacro{BOOST_FUNCTIONAL_OVERLOADED_FUNCTION_CONFIG_OVERLOAD_MAX}.
 */
 template<typename F1, typename F2, ...>
 overloaded_function<

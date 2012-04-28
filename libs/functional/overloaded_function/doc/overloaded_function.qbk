@@ -19,9 +19,9 @@
     [category Function Objects and Higher-Order Programming]
 ]
 
-[def __Introduction__ [link functional_overloaded_function.Introduction Introduction]]
-[def __Getting_Started__ [link functional_overloaded_function.Getting_Started Getting Started]]
-[def __Tutorial__ [link functional_overloaded_function.Tutorial Tutorial]]
+[def __Introduction__ [link functional_overloaded_function.introduction Introduction]]
+[def __Getting_Started__ [link functional_overloaded_function.getting_started Getting Started]]
+[def __Tutorial__ [link functional_overloaded_function.tutorial Tutorial]]
 [def __Boost__ [@http://www.boost.org Boost]]
 [def __Boost_Test__ [@http://www.boost.org/libs/test Boost.Test]]
 [def __Boost_Function__ [@http://www.boost.org/libs/function Boost.Function]]
@@ -34,7 +34,7 @@
 
 This library allows to overload different functions into a single function object.
 
-[section:Introduction Introduction]
+[section Introduction]
 
 Consider the following functions which have distinct signatures:
 
@@ -57,7 +57,7 @@ Note how the functions are called via a single overloaded function object `ident
 
 [endsect]
 
-[section:Getting_Started Getting Started]
+[section Getting Started]
 
 This section explains how to setup a system to use this library.
 
@@ -87,7 +87,7 @@ All configuration macros have appropriate default values when they are left unde
 
 [endsect]
 
-[section:Tutorial Tutorial]
+[section Tutorial]
 
 This section explains how to use this library.
 
@@ -155,7 +155,7 @@ For the above examples, it is sufficient to include the __Boost_Typeof__ header 
 
 [xinclude reference.xml]
 
-[section:Acknowledgments Acknowledgments]
+[section Acknowledgments]
 
 Many thanks to Mathias Gaunard for suggesting to implement [classref boost::overloaded_function] and for some sample code.
 
