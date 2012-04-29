@@ -119,11 +119,11 @@ struct s {
                     (bind c) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lct)
             lct();
-
+/**
             void BOOST_LOCAL_FUNCTION( (const bind a) (const bind& b)
                     (const bind p) (bind this_) ) {
             } BOOST_LOCAL_FUNCTION_NAME(pt)
-            pt();
+            pt();*/
             void BOOST_LOCAL_FUNCTION( (const bind a) (const bind& b)
                     (const bind p) (bind c) (bind this_) (bind& d) (bind q) ) {
             } BOOST_LOCAL_FUNCTION_NAME(lpt)
