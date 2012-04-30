@@ -128,7 +128,8 @@ protected:
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES) && \
     !defined(BOOST_NO_VARIADIC_TEMPLATES) && \
-    !defined(BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS)
+    !defined(BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS) && \
+    !(defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 4))
     template <typename ...T, typename EnableIf = typename
      ::boost::detail::enable_if_unrelated<base_from_member, T...>::type>
     explicit BOOST_CONSTEXPR base_from_member( T&& ...x )
