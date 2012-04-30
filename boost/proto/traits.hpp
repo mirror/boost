@@ -32,9 +32,12 @@
 #include <boost/proto/domain.hpp>
 #include <boost/proto/transform/pass_through.hpp>
 
-#if BOOST_WORKAROUND( BOOST_MSVC, >= 1400 )
-    #pragma warning(push)
-    #pragma warning(disable: 4180) // warning C4180: qualifier applied to function type has no meaning; ignored
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(push)
+# if BOOST_WORKAROUND( BOOST_MSVC, >= 1400 )
+#  pragma warning(disable: 4180) // warning C4180: qualifier applied to function type has no meaning; ignored
+# endif
+# pragma warning(disable : 4714) // function 'xxx' marked as __forceinline not inlined
 #endif
 
 namespace boost { namespace proto
@@ -1256,8 +1259,8 @@ namespace boost { namespace proto
 
 }}
 
-#if BOOST_WORKAROUND( BOOST_MSVC, >= 1400 )
-    #pragma warning(pop)
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma warning(pop)
 #endif
 
 #endif
