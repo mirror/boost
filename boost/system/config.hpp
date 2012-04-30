@@ -32,7 +32,7 @@
 
 #if !defined(BOOST_SYSTEM_DYN_LINK) && !defined(BOOST_SYSTEM_STATIC_LINK) \
   && !defined(BOOST_ALL_DYN_LINK) && !defined(BOOST_ALL_STATIC_LINK)
-# define BOOST_SYSTEM_DYN_LINK
+# define BOOST_SYSTEM_STATIC_LINK
 #endif
 
 #if defined(BOOST_ALL_DYN_LINK) && !defined(BOOST_SYSTEM_DYN_LINK)
