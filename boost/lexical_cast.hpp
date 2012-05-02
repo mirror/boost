@@ -1322,7 +1322,8 @@ namespace boost {
             {   using namespace std;
                 if (put_inf_nan(begin, end, val)) return true;
                 end = begin;
-                end += sprintf(begin,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float>()), val);
+                const double val_as_double = val;
+                end += sprintf(begin,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float>()), val_as_double);
                 return end > begin;
             }
 
@@ -1330,7 +1331,7 @@ namespace boost {
             {   using namespace std;
                 if (put_inf_nan(begin, end, val)) return true;
                 end = begin;
-                end += sprintf(begin,"%.*lg", static_cast<int>(boost::detail::lcast_get_precision<double>()), val);
+                end += sprintf(begin,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<double>()), val);
                 return end > begin;
             }
 
