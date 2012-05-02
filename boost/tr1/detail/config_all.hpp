@@ -82,6 +82,9 @@
 #  elif defined(__clang__)
 #     define BOOST_TR1_STD_HEADER(name) <../include/name>
 
+#  elif defined(_CRAYC)
+#     define BOOST_TR1_STD_HEADER(name) <../include/name>
+
 #  elif defined(__GNUC__) && __GNUC__ >= 3
 #    if defined(BOOST_TR1_GCC_INCLUDE_PATH)
 #      define BOOST_TR1_STD_HEADER(name) <../BOOST_TR1_GCC_INCLUDE_PATH/name>
