@@ -4,10 +4,11 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "../helpers/prefix.hpp"
-
-#include <utility>
 #include <boost/unordered_map.hpp>
 #include <boost/unordered_set.hpp>
+#include "../helpers/postfix.hpp"
+
+#include <utility>
 
 namespace x
 {

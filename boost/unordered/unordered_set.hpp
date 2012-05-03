@@ -201,12 +201,12 @@ namespace unordered
 
         iterator begin()
         {
-            return iterator(table_.begin());
+            return table_.begin();
         }
 
         const_iterator begin() const
         {
-            return const_iterator(table_.begin());
+            return table_.begin();
         }
 
         iterator end()
@@ -221,7 +221,7 @@ namespace unordered
 
         const_iterator cbegin() const
         {
-            return const_iterator(table_.begin());
+            return table_.begin();
         }
 
         const_iterator cend() const
@@ -450,7 +450,8 @@ namespace unordered
 
         size_type bucket(const key_type& k) const
         {
-            return table_.hash_function()(k) % table_.bucket_count_;
+            return table::to_bucket(table_.bucket_count_,
+                table_.hash(k));
         }
 
         local_iterator begin(size_type n)
@@ -921,7 +922,8 @@ namespace unordered
 
         size_type bucket(const key_type& k) const
         {
-            return table_.hash_function()(k) % table_.bucket_count_;
+            return table::to_bucket(table_.bucket_count_,
+                table_.hash(k));
         }
 
         local_iterator begin(size_type n)
@@ -1114,7 +1116,7 @@ namespace unordered
     typename unordered_set<T,H,P,A>::iterator
         unordered_set<T,H,P,A>::erase(const_iterator position)
     {
-        return iterator(table_.erase(position.node_));
+        return table_.erase(position);
     }
 
     template <class T, class H, class P, class A>
@@ -1129,7 +1131,7 @@ namespace unordered
         unordered_set<T,H,P,A>::erase(
             const_iterator first, const_iterator last)
     {
-        return iterator(table_.erase_range(first.node_, last.node_));
+        return table_.erase_range(first, last);
     }
 
     template <class T, class H, class P, class A>
@@ -1166,7 +1168,7 @@ namespace unordered
     typename unordered_set<T,H,P,A>::const_iterator
         unordered_set<T,H,P,A>::find(const key_type& k) const
     {
-        return const_iterator(table_.find_node(k));
+        return table_.find_node(k);
     }
 
     template <class T, class H, class P, class A>
@@ -1178,7 +1180,7 @@ namespace unordered
             CompatibleHash const& hash,
             CompatiblePredicate const& eq) const
     {
-        return const_iterator(table_.generic_find_node(k, hash, eq));
+        return table_.generic_find_node(k, hash, eq);
     }
 
     template <class T, class H, class P, class A>
@@ -1392,7 +1394,7 @@ namespace unordered
     typename unordered_multiset<T,H,P,A>::iterator
         unordered_multiset<T,H,P,A>::erase(const_iterator position)
     {
-        return iterator(table_.erase(position.node_));
+        return table_.erase(position);
     }
 
     template <class T, class H, class P, class A>
@@ -1407,7 +1409,7 @@ namespace unordered
         unordered_multiset<T,H,P,A>::erase(
                 const_iterator first, const_iterator last)
     {
-        return iterator(table_.erase_range(first.node_, last.node_));
+        return table_.erase_range(first, last);
     }
 
     template <class T, class H, class P, class A>
@@ -1444,7 +1446,7 @@ namespace unordered
     typename unordered_multiset<T,H,P,A>::const_iterator
         unordered_multiset<T,H,P,A>::find(const key_type& k) const
     {
-        return const_iterator(table_.find_node(k));
+        return table_.find_node(k);
     }
 
     template <class T, class H, class P, class A>
@@ -1456,7 +1458,7 @@ namespace unordered
             CompatibleHash const& hash,
             CompatiblePredicate const& eq) const
     {
-        return const_iterator(table_.generic_find_node(k, hash, eq));
+        return table_.generic_find_node(k, hash, eq);
     }
 
     template <class T, class H, class P, class A>

@@ -7,8 +7,9 @@
 // hairy with several tricky edge cases - so explicitly test each one.
 
 #include "../helpers/prefix.hpp"
-
 #include <boost/unordered_map.hpp>
+#include "../helpers/postfix.hpp"
+
 #include "../helpers/test.hpp"
 #include "../helpers/list.hpp"
 #include <set>

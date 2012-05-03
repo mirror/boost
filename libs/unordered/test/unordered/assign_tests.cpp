@@ -4,9 +4,9 @@
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "../helpers/prefix.hpp"
-
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
+#include "../helpers/postfix.hpp"
 #include "../helpers/test.hpp"
 #include "../objects/test.hpp"
 #include "../objects/cxx11_allocator.hpp"
@@ -208,9 +208,7 @@ UNORDERED_AUTO_TEST(assign_default_initializer_list) {
 
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST) && \
-    !defined(BOOST_NO_INITIALIZER_LISTS)
-
+#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
 UNORDERED_AUTO_TEST(assign_initializer_list)
 {
     std::cerr<<"Initializer List Tests\n";

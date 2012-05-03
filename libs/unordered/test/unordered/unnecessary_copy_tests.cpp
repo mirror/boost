@@ -1,12 +1,14 @@
-#include <iostream>
+
 // Copyright 2006-2009 Daniel James.
 // Distributed under the Boost Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #include "../helpers/prefix.hpp"
-
 #include <boost/unordered_set.hpp>
 #include <boost/unordered_map.hpp>
+#include "../helpers/postfix.hpp"
+
+#include <iostream>
 #include "../helpers/test.hpp"
 
 #if defined(BOOST_UNORDERED_VARIADIC_MOVE)

@@ -90,7 +90,7 @@ void test_empty_allocator()
 {
     typedef empty_allocator<int> allocator;
     typedef boost::unordered::detail::allocator_traits<allocator> traits;
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
     BOOST_MPL_ASSERT((boost::is_same<traits::size_type,
         std::make_unsigned<std::ptrdiff_t>::type>));
 #else
@@ -128,8 +128,8 @@ void test_allocator1()
 {
     typedef allocator1<int> allocator;
     typedef boost::unordered::detail::allocator_traits<allocator> traits;
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS
-    BOOST_MPL_ASSERT((boost::is_same<typename traits::size_type,
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
+    BOOST_MPL_ASSERT((boost::is_same<traits::size_type,
         std::make_unsigned<std::ptrdiff_t>::type>));
 #else
     BOOST_MPL_ASSERT((boost::is_same<traits::size_type, std::size_t>));

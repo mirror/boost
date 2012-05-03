@@ -160,9 +160,9 @@ BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EARGS,
     //
     // Used for piecewise construction.
 
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 0x590)
+#if !defined(__SUNPRO_CC)
 
-#define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)                 \
+#   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)              \
     template<typename T>                                                    \
     void construct_from_tuple(T* ptr, namespace_::tuple<>)                  \
     {                                                                       \
@@ -172,7 +172,7 @@ BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EARGS,
     BOOST_PP_REPEAT_FROM_TO(1, n,                                           \
         BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL, namespace_)
 
-#define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL(z, n, namespace_)         \
+#   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL(z, n, namespace_)      \
     template<typename T, BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>          \
     void construct_from_tuple(T* ptr,                                       \
             namespace_::tuple<BOOST_PP_ENUM_PARAMS_Z(z, n, A)> const& x)    \
@@ -182,32 +182,26 @@ BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EARGS,
         );                                                                  \
     }
 
-#define BOOST_UNORDERED_GET_TUPLE_ARG(z, n, namespace_)                     \
+#   define BOOST_UNORDERED_GET_TUPLE_ARG(z, n, namespace_)                  \
     namespace_::get<n>(x)
-
-BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost)
-
-#if !defined(BOOST_NO_0X_HDR_TUPLE)
-BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
-#endif
-
-#undef BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE
-#undef BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL
-#undef BOOST_UNORDERED_GET_TUPLE_ARG
 
 #else
 
     template <int N> struct length {};
 
-    template<typename T>
-    void construct_from_tuple_impl(
-            boost::unordered::detail::length<0>, T* ptr,
-            boost::tuple<>)
-    {
-        new ((void*) ptr) T();
-    }
+#   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)              \
+    template<typename T>                                                    \
+    void construct_from_tuple_impl(                                         \
+            boost::unordered::detail::length<0>, T* ptr,                    \
+            namespace_::tuple<>)                                            \
+    {                                                                       \
+        new ((void*) ptr) T();                                              \
+    }                                                                       \
+                                                                            \
+    BOOST_PP_REPEAT_FROM_TO(1, n,                                           \
+        BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL, namespace_)
 
-#define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL(z, n, _)                  \
+#   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL(z, n, namespace_)      \
     template<typename T, BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>          \
     void construct_from_tuple_impl(                                         \
             boost::unordered::detail::length<n>, T* ptr,                    \
@@ -218,11 +212,22 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
         );                                                                  \
     }
 
-#define BOOST_UNORDERED_GET_TUPLE_ARG(z, n, _)                              \
-    boost::get<n>(x)
+#   define BOOST_UNORDERED_GET_TUPLE_ARG(z, n, namespace_)                  \
+    namespace_::get<n>(x)
 
-    BOOST_PP_REPEAT_FROM_TO(1, 10,                                          \
-        BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL, _)
+#endif
+
+BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost)
+
+#if !defined(__SUNPRO_CC) && !defined(BOOST_NO_0X_HDR_TUPLE)
+   BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
+#endif
+
+#undef BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE
+#undef BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL
+#undef BOOST_UNORDERED_GET_TUPLE_ARG
+
+#if defined(__SUNPRO_CC)
 
     template <typename T, typename Tuple>
     void construct_from_tuple(T* ptr, Tuple const& x)
@@ -232,9 +237,6 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std)
                 boost::tuples::length<Tuple>::value>(),
             ptr, x);
     }
-
-#undef BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL
-#undef BOOST_UNORDERED_GET_TUPLE_ARG
 
 #endif
 
