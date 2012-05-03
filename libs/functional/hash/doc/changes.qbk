@@ -125,7 +125,8 @@
 
 [h2 Boost 1.50.0]
 
-* Avoid gcc's `-Wfloat-equal` warning.
+* [@http://svn.boost.org/trac/boost/ticket/6771 Ticket 6771]:
+  Avoid gcc's `-Wfloat-equal` warning.
 * [@http://svn.boost.org/trac/boost/ticket/6806 Ticket 6806]:
   Support `std::array` and `std::tuple` when available.
 
