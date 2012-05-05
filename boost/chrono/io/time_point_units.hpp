@@ -80,7 +80,7 @@ namespace boost
       /**
        * Destroy the facet.
        */
-      virtual ~time_point_units() {};
+      virtual ~time_point_units() {}
 
 
       /**
