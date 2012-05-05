@@ -62,6 +62,10 @@ struct make_binomial_heap_base
         {}
 
 #ifdef BOOST_HAS_RVALUE_REFS
+        type(type const & rhs):
+            base_type(rhs), allocator_type(rhs)
+        {}
+
         type(type && rhs):
             base_type(std::move(static_cast<base_type&>(rhs))),
             allocator_type(std::move(static_cast<allocator_type&>(rhs)))
@@ -145,6 +149,7 @@ private:
 
         typedef typename base_maker::compare_argument value_compare;
         typedef typename base_maker::allocator_type allocator_type;
+        typedef typename base_maker::node_type node;
 
         typedef typename allocator_type::pointer node_pointer;
         typedef typename allocator_type::const_pointer const_node_pointer;
@@ -569,7 +574,8 @@ public:
     /// \copydoc boost::heap::d_ary_heap_mutable::s_handle_from_iterator
     static handle_type s_handle_from_iterator(iterator const & it)
     {
-        return handle_type(&*it);
+        node_type * ptr = const_cast<node_type *>(it.get_node());
+        return handle_type(ptr);
     }
 
     /// \copydoc boost::heap::priority_queue::value_comp

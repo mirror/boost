@@ -63,6 +63,10 @@ struct make_pairing_heap_base
         {}
 
 #ifdef BOOST_HAS_RVALUE_REFS
+        type(type const & rhs):
+            base_type(rhs), allocator_type(rhs)
+        {}
+
         type(type && rhs):
             base_type(std::move(static_cast<base_type&>(rhs))),
             allocator_type(std::move(static_cast<allocator_type&>(rhs)))
@@ -549,7 +553,8 @@ public:
     /// \copydoc boost::heap::d_ary_heap_mutable::s_handle_from_iterator
     static handle_type s_handle_from_iterator(iterator const & it)
     {
-        return super_t::s_handle_from_iterator(&*it);
+        node * ptr = const_cast<node *>(it.get_node());
+        return handle_type(ptr);
     }
 
     /**

@@ -205,6 +205,11 @@ struct make_skew_heap_base
             allocator_type(std::move(static_cast<allocator_type&>(rhs)))
         {}
 
+        type(type const & rhs):
+            base_type(rhs),
+            allocator_type(rhs)
+        {}
+
         type & operator=(type && rhs)
         {
             base_type::operator=(std::move(static_cast<base_type&>(rhs)));
@@ -616,7 +621,8 @@ public:
     /// \copydoc boost::heap::d_ary_heap::s_handle_from_iterator
     static handle_type s_handle_from_iterator(iterator const & it)
     {
-        return handle_type(&*it);
+        node * ptr = const_cast<node *>(it.get_node());
+        return handle_type(ptr);
     }
 
     /**
