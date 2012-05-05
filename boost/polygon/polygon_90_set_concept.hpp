@@ -460,24 +460,27 @@ namespace boost { namespace polygon{
     return polygon_set;
   }
 
+  struct y_p_s_move : gtl_yes {};
+
   //move
   template <typename polygon_set_type>
-  polygon_set_type&
+  typename enable_if< typename gtl_and<y_p_s_move, typename gtl_if<typename is_mutable_polygon_90_set_type<polygon_set_type>::type>::type>::type,
+                      polygon_set_type>::type &
   move(polygon_set_type& polygon_set,
-  orientation_2d orient, typename polygon_90_set_traits<polygon_set_type>::coordinate_type displacement,
-       typename enable_if< typename is_mutable_polygon_90_set_type<polygon_set_type>::type>::type * = 0) {
+  orientation_2d orient, typename polygon_90_set_traits<polygon_set_type>::coordinate_type displacement) {
     if(orient == HORIZONTAL)
       return move(polygon_set, displacement, 0);
     else 
       return move(polygon_set, 0, displacement);
   }
 
+  struct y_p_s_move2 : gtl_yes {};
+
   template <typename polygon_set_type>
-  polygon_set_type&
+  typename enable_if< typename gtl_and<y_p_s_move2, typename gtl_if<typename is_mutable_polygon_90_set_type<polygon_set_type>::type>::type>::type,
+                      polygon_set_type>::type &
   move(polygon_set_type& polygon_set, typename polygon_90_set_traits<polygon_set_type>::coordinate_type x_displacement, 
-  typename polygon_90_set_traits<polygon_set_type>::coordinate_type y_displacement,
-  typename enable_if< typename is_mutable_polygon_90_set_type<polygon_set_type>::type>::type * = 0
-  ) {
+  typename polygon_90_set_traits<polygon_set_type>::coordinate_type y_displacement) {
     typedef typename polygon_90_set_traits<polygon_set_type>::coordinate_type Unit;
     polygon_90_set_data<Unit> ps;
     assign(ps, polygon_set);

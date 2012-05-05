@@ -756,8 +756,6 @@ namespace boost { namespace polygon{
   void snap_point_vector_to_45(std::vector<point_data<Unit> >& pts) {
     typedef point_data<Unit> Point;
     if(pts.size() < 3) { pts.clear(); return; }
-    Point firstPt = pts.front();
-    Point prevPt = firstPt;
     typename std::vector<point_data<Unit> >::iterator endLocation = std::unique(pts.begin(), pts.end());
     if(endLocation != pts.end()){
       pts.resize(endLocation - pts.begin());

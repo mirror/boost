@@ -194,7 +194,7 @@ namespace boost { namespace polygon{
     return o << r.get(HORIZONTAL) << ' ' << r.get(VERTICAL);
   }
   template <class T>
-  std::ostream& operator << (std::ostream& o, const directed_line_segment_data<T>& r)
+  std::ostream& operator << (std::ostream& o, const segment_data<T>& r)
   {
     return o << r.get(LOW) << ' ' << r.get(HIGH);
   }
@@ -3649,15 +3649,15 @@ int main() {
   {
     using namespace gtl;
     typedef point_data<int> Point;
-    typedef directed_line_segment_data<int> Dls;
+    typedef segment_data<int> Segment;
     Point pt1(0, 0);
     Point pt2(10, 10);
     Point pt3(20, 20);
     Point pt4(20, 0);
-    Dls dls1(pt1, pt2);
-    Dls dls2(pt1, pt3);
-    Dls dls3(pt1, pt4);
-    Dls dls4(pt2, pt1);
+    Segment dls1(pt1, pt2);
+    Segment dls2(pt1, pt3);
+    Segment dls3(pt1, pt4);
+    Segment dls4(pt2, pt1);
     bool b1 = equivalence(dls1, dls1);
     bool b2 = equivalence(dls1, dls2);
     bool b3 = equivalence(dls1, dls3);
@@ -3704,10 +3704,9 @@ int main() {
     std::cout << euclidean_distance(dls1, Point(5, 6)) << std::endl;
     std::cout << euclidean_distance(dls1, Point(5, 3)) << std::endl;
     std::cout << euclidean_distance(dls1, dls3) << std::endl;
-    std::cout << euclidean_distance(dls1, directed_line_segment_data<int>(Point(2, 0), Point(3, 0))) << std::endl;
+    std::cout << euclidean_distance(dls1, segment_data<int>(Point(2, 0), Point(3, 0))) << std::endl;
     assert_s(intersects(dls1, dls3), "intersects1");
-    assert_s(!intersects(dls1, directed_line_segment_data<int>(Point(2, 0), Point(3, 0))), "intersects2");
-    assert_s(boundaries_intersect(dls1, dls2), "bi");
+    assert_s(!intersects(dls1, segment_data<int>(Point(2, 0), Point(3, 0))), "intersects2");
     assert_s(abuts(dls1, dls2), "abuts");
     Point p;
     bool ir = intersection(p, dls1, dls2);

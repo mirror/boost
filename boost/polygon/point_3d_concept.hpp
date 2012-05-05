@@ -39,7 +39,7 @@ namespace boost { namespace polygon{
   struct point_3d_difference_type_by_concept { typedef void type; };
   template <typename T>
   struct point_3d_difference_type_by_concept<T, gtl_yes> { 
-    typedef typename coordinate_traits<typename point_3d_traits<T>::coordinate_type>::coordinate_difference type; };
+    typedef typename coordinate_traits<typename point_3d_coordinate_type<T>::type>::coordinate_difference type; };
 
   template <typename T>
   struct point_3d_difference_type {
@@ -51,7 +51,7 @@ namespace boost { namespace polygon{
   struct point_3d_distance_type_by_concept { typedef void type; };
   template <typename T>
   struct point_3d_distance_type_by_concept<T, gtl_yes> { 
-    typedef typename coordinate_traits<typename point_3d_traits<T>::coordinate_type>::coordinate_distance type; };
+    typedef typename coordinate_traits<typename point_3d_coordinate_type<T>::type>::coordinate_distance type; };
 
   template <typename T>
   struct point_3d_distance_type {
@@ -62,7 +62,7 @@ namespace boost { namespace polygon{
   struct y_p3d_get : gtl_yes {};
 
   template <typename T>
-  typename enable_if< typename gtl_and<y_p3d_get, typename gtl_if<typename is_point_3d_concept<typename geometry_concept<T>::type>::type>::type>::type, 
+  typename enable_if< typename gtl_and<y_p3d_get, typename is_point_3d_concept<typename geometry_concept<T>::type>::type>::type,
                        typename point_3d_coordinate_type<T>::type >::type 
   get(const T& point, orientation_3d orient) { return point_3d_traits<T>::get(point, orient); }
   
@@ -103,7 +103,7 @@ namespace boost { namespace polygon{
 
   template <typename point_type>
   typename enable_if< typename gtl_and<y_p3d_z, typename is_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type, 
-                       typename point_3d_traits<point_type>::coordinate_type >::type 
+                       typename point_3d_coordinate_type<point_type>::type >::type 
   z(const point_type& point) { return get(point, PROXIMAL); }
 
   struct y_p3d_x : gtl_yes {};
@@ -142,7 +142,7 @@ namespace boost { namespace polygon{
                                           typename is_point_3d_concept<typename geometry_concept<point_type_2>::type>::type>::type, 
                        typename point_3d_difference_type<point_type_1>::type>::type
   euclidean_distance(const point_type_1& point1, const point_type_2& point2, orientation_3d orient) {
-    typedef typename coordinate_traits<typename point_3d_traits<point_type_1>::coordinate_type>::coordinate_difference return_type;
+    typedef typename coordinate_traits<typename point_3d_coordinate_type<point_type_1>::type>::coordinate_difference return_type;
     return_type return_value =
       (return_type)get(point1, orient) - (return_type)get(point2, orient);
     return return_value < 0 ? -return_value : return_value;
@@ -167,7 +167,7 @@ namespace boost { namespace polygon{
     typename gtl_same_type<point_3d_concept, typename geometry_concept<point_type_2>::type>::type>::type,
                        typename point_3d_distance_type<point_type_1>::type>::type
   euclidean_distance(const point_type_1& point1, const point_type_2& point2) {
-    typedef typename coordinate_traits<typename point_3d_traits<point_type_1>::coordinate_type>::coordinate_distance return_value;
+    typedef typename coordinate_traits<typename point_3d_coordinate_type<point_type_1>::type>::coordinate_distance return_value;
     return_value pdist = (return_value)euclidean_distance(point1, point2, PROXIMAL);
     pdist *= pdist;
     return sqrt((double)(distance_squared(point1, point2) + pdist));
@@ -207,10 +207,10 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_p3d_scale_up, typename is_mutable_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type, 
                        point_type>::type &
   scale_up(point_type& point, 
-           typename coordinate_traits<typename point_3d_traits<point_type>::coordinate_type>::unsigned_area_type factor) {
-    x(point, x(point) * (typename point_3d_traits<point_type>::coordinate_type)factor);
-    y(point, y(point) * (typename point_3d_traits<point_type>::coordinate_type)factor);
-    z(point, z(point) * (typename point_3d_traits<point_type>::coordinate_type)factor);
+           typename coordinate_traits<typename point_3d_coordinate_type<point_type>::type>::unsigned_area_type factor) {
+    x(point, x(point) * (typename point_3d_coordinate_type<point_type>::type)factor);
+    y(point, y(point) * (typename point_3d_coordinate_type<point_type>::type)factor);
+    z(point, z(point) * (typename point_3d_coordinate_type<point_type>::type)factor);
     return point;
   }
 
@@ -220,8 +220,8 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_p3d_scale_down, typename is_mutable_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type, 
                        point_type>::type &
   scale_down(point_type& point, 
-             typename coordinate_traits<typename point_3d_traits<point_type>::coordinate_type>::unsigned_area_type factor) {
-    typedef typename point_3d_traits<point_type>::coordinate_type Unit;
+             typename coordinate_traits<typename point_3d_coordinate_type<point_type>::type>::unsigned_area_type factor) {
+    typedef typename point_3d_coordinate_type<point_type>::type Unit;
     typedef typename coordinate_traits<Unit>::coordinate_distance dt;
     x(point, scaling_policy<Unit>::round((dt)(x(point)) / (dt)factor)); 
     y(point, scaling_policy<Unit>::round((dt)(y(point)) / (dt)factor)); 
@@ -236,7 +236,7 @@ namespace boost { namespace polygon{
                        point_type>::type &
   scale(point_type& point, 
         const scaling_type& scaling) {
-    typedef typename point_3d_traits<point_type>::coordinate_type Unit;
+    typedef typename point_3d_coordinate_type<point_type>::type Unit;
     Unit x_(x(point)), y_(y(point)), z_(z(point));
     scaling.scale(x_, y_, z_);
     x(point, x_);
@@ -251,7 +251,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_p3d_transform, typename is_mutable_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type, 
                        point_type>::type &
   transform(point_type& point, const transformation_type& transformation) {
-    typedef typename point_3d_traits<point_type>::coordinate_type Unit;
+    typedef typename point_3d_coordinate_type<point_type>::type Unit;
     Unit x_(x(point)), y_(y(point)), z_(z(point));
     transformation.transform(x_, y_, z_);
     x(point, x_);
