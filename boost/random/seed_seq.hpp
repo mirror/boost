@@ -23,7 +23,7 @@
 #include <algorithm>
 #include <iterator>
 
-#ifndef BOOST_NO_INITIALIZER_LISTS
+#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
 #include <initializer_list>
 #endif
 
@@ -42,7 +42,7 @@ public:
 
     /** Initializes a seed_seq to hold an empty sequence. */
     seed_seq() {}
-#ifndef BOOST_NO_INITIALIZER_LISTS
+#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
     /** Initializes the sequence from an initializer_list. */
     template<class T>
     seed_seq(const std::initializer_list<T>& il) : v(il.begin(), il.end()) {}
