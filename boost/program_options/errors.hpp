@@ -41,7 +41,7 @@ namespace boost { namespace program_options {
     class BOOST_PROGRAM_OPTIONS_DECL too_many_positional_options_error : public error {
     public:
         too_many_positional_options_error() 
-         : error("too many positional arguments have been specified on the command line") 
+         : error("too many positional options have been specified on the command line") 
         {}
     };
 
