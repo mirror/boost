@@ -54,7 +54,7 @@
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
 #  include <memory>
 #elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 2
-#  include <boost/container/allocator/allocator_traits.hpp>
+#  include <boost/container/allocator_traits.hpp>
 #endif
 
 #if !defined(BOOST_NO_0X_HDR_TYPE_TRAITS)
