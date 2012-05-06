@@ -174,12 +174,12 @@ namespace boost { namespace polygon{
   typename enable_if<
     typename gtl_and_3<
       y_s_assign,
-        typename is_mutable_segment_concept<
-          typename geometry_concept<Segment1>::type
-        >::type,
-        typename is_segment_concept<
-          typename geometry_concept<Segment2>::type
-        >::type
+      typename is_mutable_segment_concept<
+        typename geometry_concept<Segment1>::type
+      >::type,
+      typename is_segment_concept<
+        typename geometry_concept<Segment2>::type
+      >::type
     >::type,
     Segment1
   >::type &
@@ -338,20 +338,17 @@ namespace boost { namespace polygon{
     bool
   >::type
   contains(const Segment& segment, const Point& point, bool consider_touch = true ) {
-    if (!on_above_or_below(segment, point)) {
-      rectangle_data<typename segment_coordinate_type<Segment>::type> rect;
-      set_points(rect, low(segment), high(segment));
-      if (area(rect) == 0.0) {
-        if (!consider_touch) {
-          return !equivalence(point, low(segment)) &&
-                 !equivalence(point, high(segment));
-        }
-      }
-      return contains(rect, point, consider_touch);
-    }
-    return false;
+    if (on_above_or_below(segment, point))
+      return false;
+    rectangle_data<typename segment_coordinate_type<Segment>::type> rect;
+    set_points(rect, low(segment), high(segment));
+    if (!contains(rect, point, true))
+      return false;
+    if (!consider_touch && (equivalence(low(segment), point) || equivalence(high(segment), point)))
+      return false;
+    return true;
   }
-
+  
   struct y_s_contains2 : gtl_yes {};
 
   template <typename Segment1, typename Segment2>
@@ -590,21 +587,26 @@ namespace boost { namespace polygon{
   >::type
   intersects(const Segment1& segment1, const Segment2& segment2,
              bool consider_touch = true) {
-    if (consider_touch) {
-      if (low(segment1) == low(segment2) || low(segment1) == high(segment2) ||
-          high(segment1) == low(segment2) || high(segment1) == high(segment2))
-        return true;
-    }
-    typedef polygon_arbitrary_formation<
-      typename segment_coordinate_type<Segment1>::type
-    > paf;
-    typename paf::Point l1, h1, l2, h2;
-    assign(l1, low(segment1));
-    assign(h1, high(segment1));
-    assign(l2, low(segment2));
-    assign(h2, high(segment2));
-    return paf::intersects(typename paf::half_edge(l1, h1),
-                           typename paf::half_edge(l2, h2));
+    rectangle_data<typename segment_coordinate_type<Segment1>::type> rect1, rect2;
+    set_points(rect1, low(segment1), high(segment1));
+    set_points(rect2, low(segment2), high(segment2));
+    // Check if axis-parallel rectangles containing segments intersect.
+    if (!intersects(rect1, rect2, true))
+      return false;
+    int or1_1 = on_above_or_below(segment1, low(segment2));
+    int or1_2 = on_above_or_below(segment1, high(segment2));
+    if (or1_1 * or1_2 > 0)
+      return false;
+    int or2_1 = on_above_or_below(segment2, low(segment1));
+    int or2_2 = on_above_or_below(segment2, high(segment1));
+    if (or2_1 * or2_2 > 0)
+      return false;
+    if (consider_touch || or1_1 && or1_2 || or2_1 && or2_2)
+      return true;
+    if (or1_1 || or1_2 || or2_1 || or2_2)
+      return false;
+    return intersects(vertical(rect1), vertical(rect2), false) ||
+           intersects(horizontal(rect1), horizontal(rect2), false);
   }
 
   struct y_s_intersect : gtl_yes {};
@@ -713,10 +715,11 @@ namespace boost { namespace polygon{
         result2 = euclidean_distance(segment1, high(segment2)),
         result3 = euclidean_distance(segment2, low(segment1)),
         result4 = euclidean_distance(segment2, high(segment1));
-    typename segment_distance_type<Segment1>::type
-        subres1 = (result1 < result2) ? result1 : result2,
-        subres2 = (result3 < result4) ? result3 : result4;
-    return (subres1 < subres2) ? subres1 : subres2;
+    if (result2 < result1)
+      result1 = result2;
+    if (result4 < result3)
+      result3 = result4;
+    return (result1 < result3) ? result1 : result3;
   }
 
   template <class T>
