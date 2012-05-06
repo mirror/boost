@@ -13,7 +13,6 @@
 
 #include <boost/unordered/detail/util.hpp>
 #include <boost/unordered/detail/allocator_helpers.hpp>
-#include <boost/unordered/detail/emplace_args.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #include <boost/swap.hpp>
@@ -54,16 +53,14 @@ namespace boost { namespace unordered { namespace detail {
 
         node_allocator& alloc_;
         node_pointer node_;
-        bool node_constructed_;
-        bool value_constructed_;
+        bool constructed_;
 
     public:
 
         node_constructor(node_allocator& n) :
             alloc_(n),
             node_(),
-            node_constructed_(false),
-            value_constructed_(false)
+            constructed_(false)
         {
         }
 
@@ -74,24 +71,38 @@ namespace boost { namespace unordered { namespace detail {
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
         void construct_value(BOOST_UNORDERED_EMPLACE_ARGS)
         {
-            BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
-            boost::unordered::detail::construct_impl(
-                node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
-            value_constructed_ = true;
+            BOOST_ASSERT(node_ && !constructed_);
+            boost::unordered::detail::construct_node(alloc_,
+                boost::addressof(*node_), BOOST_UNORDERED_EMPLACE_FORWARD);
+            node_->init(static_cast<typename node::link_pointer>(node_));
+            constructed_ = true;
         }
 
         template <typename A0>
         void construct_value2(BOOST_FWD_REF(A0) a0)
         {
-            BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
-            boost::unordered::detail::construct_impl2(
-                node_->value_ptr(), boost::forward<A0>(a0));
-            value_constructed_ = true;
+            BOOST_ASSERT(node_ && !constructed_);
+#   if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+            boost::unordered::detail::construct_node(alloc_,
+                boost::addressof(*node_), boost::forward<A0>(a0));
+#   else
+            boost::unordered::detail::construct_node(alloc_,
+                boost::addressof(*node_),
+                boost::unordered::detail::create_emplace_args(
+                    boost::forward<A0>(a0)));
+#   endif
+            constructed_ = true;
+            node_->init(static_cast<typename node::link_pointer>(node_));
         }
 
         value_type const& value() const {
-            BOOST_ASSERT(node_ && node_constructed_ && value_constructed_);
+            BOOST_ASSERT(node_ && constructed_);
             return node_->value();
+        }
+
+        node_pointer get()
+        {
+            return node_;
         }
 
         // no throw
@@ -111,12 +122,8 @@ namespace boost { namespace unordered { namespace detail {
     node_constructor<Alloc>::~node_constructor()
     {
         if (node_) {
-            if (value_constructed_) {
-                boost::unordered::detail::destroy(node_->value_ptr());
-            }
-
-            if (node_constructed_) {
-                node_allocator_traits::destroy(alloc_,
+            if (constructed_) {
+                boost::unordered::detail::destroy_node(alloc_,
                     boost::addressof(*node_));
             }
 
@@ -128,24 +135,13 @@ namespace boost { namespace unordered { namespace detail {
     void node_constructor<Alloc>::construct_node()
     {
         if(!node_) {
-            node_constructed_ = false;
-            value_constructed_ = false;
-
+            constructed_ = false;
             node_ = node_allocator_traits::allocate(alloc_, 1);
-
-            node_allocator_traits::construct(alloc_,
-                boost::addressof(*node_), node());
-            node_->init(static_cast<typename node::link_pointer>(node_));
-            node_constructed_ = true;
         }
-        else {
-            BOOST_ASSERT(node_constructed_);
-
-            if (value_constructed_)
-            {
-                boost::unordered::detail::destroy(node_->value_ptr());
-                value_constructed_ = false;
-            }
+        else if (constructed_) {
+            boost::unordered::detail::destroy_node(alloc_,
+                boost::addressof(*node_));
+            constructed_ = false;
         }
     }
 
@@ -183,6 +179,16 @@ namespace boost { namespace unordered { namespace detail {
 
         enum { extra_node = false };
     };
+
+    template <typename LinkPointer>
+    struct node_base
+    {
+        typedef LinkPointer link_pointer;
+        link_pointer next_;
+
+        node_base() : next_() {}
+    };
+
 }}}
 
 namespace boost { namespace unordered { namespace iterator_detail {
@@ -718,6 +724,14 @@ namespace boost { namespace unordered { namespace detail {
                 node_constructor a(this->node_alloc());
                 a.construct_node();
 
+                // Since this node is just to mark the beginning it doesn't
+                // contain a value, so just construct node::node_base
+                // which containers the pointer to the next element.
+                node_allocator_traits::construct(node_alloc(),
+                    static_cast<typename node::node_base*>(
+                        boost::addressof(*a.get())),
+                    typename node::node_base());
+
                 (constructor.get() +
                     static_cast<std::ptrdiff_t>(this->bucket_count_))->next_ =
                         a.release();
@@ -762,9 +776,8 @@ namespace boost { namespace unordered { namespace detail {
 
         inline void delete_node(c_iterator n)
         {
-            boost::unordered::detail::destroy(n.node_->value_ptr());
-            node_allocator_traits::destroy(node_alloc(),
-                    boost::addressof(*n.node_));
+            boost::unordered::detail::destroy_node(
+                node_alloc(), boost::addressof(*n.node_));
             node_allocator_traits::deallocate(node_alloc(), n.node_, 1);
             --size_;
         }
@@ -786,7 +799,8 @@ namespace boost { namespace unordered { namespace detail {
         inline void delete_extra_node(bucket_pointer) {}
 
         inline void delete_extra_node(node_pointer n) {
-            node_allocator_traits::destroy(node_alloc(), boost::addressof(*n));
+            node_allocator_traits::destroy(node_alloc(),
+                static_cast<typename node::node_base*>(boost::addressof(*n)));
             node_allocator_traits::deallocate(node_alloc(), n, 1);
         }
 

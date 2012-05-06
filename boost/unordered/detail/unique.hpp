@@ -12,7 +12,6 @@
 #endif
 
 #include <boost/unordered/detail/table.hpp>
-#include <boost/unordered/detail/emplace_args.hpp>
 #include <boost/unordered/detail/extract_key.hpp>
 #include <boost/throw_exception.hpp>
 #include <stdexcept>
@@ -25,18 +24,37 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename A, typename T>
     struct node :
+        boost::unordered::detail::node_base<
+            typename ::boost::unordered::detail::rebind_wrap<
+                A, node<A, T> >::type::pointer
+        >,
         boost::unordered::detail::value_base<T>
     {
         typedef typename ::boost::unordered::detail::rebind_wrap<
             A, node<A, T> >::type::pointer link_pointer;
+        typedef boost::unordered::detail::node_base<link_pointer> node_base;
 
-        link_pointer next_;
         std::size_t hash_;
 
+#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
+        node(BOOST_UNORDERED_EMPLACE_ARGS) :
+            node_base(),
+            hash_(0)
+        {
+            boost::unordered::detail::construct_impl(
+                this->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+        }
+
+        ~node() {
+            boost::unordered::detail::destroy(this->value_ptr());
+        }
+#else
         node() :
-            next_(),
+            node_base(),
             hash_(0)
         {}
+#endif
 
         void init(link_pointer)
         {
@@ -49,14 +67,30 @@ namespace boost { namespace unordered { namespace detail {
         boost::unordered::detail::ptr_bucket
     {
         typedef boost::unordered::detail::ptr_bucket bucket_base;
+        typedef bucket_base node_base;
         typedef ptr_bucket* link_pointer;
 
         std::size_t hash_;
 
+#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
+        ptr_node(BOOST_UNORDERED_EMPLACE_ARGS) :
+            bucket_base(),
+            hash_(0)
+        {
+            boost::unordered::detail::construct_impl(
+                this->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+        }
+
+        ~ptr_node() {
+            boost::unordered::detail::destroy(this->value_ptr());
+        }
+#else
         ptr_node() :
             bucket_base(),
             hash_(0)
         {}
+#endif
 
         void init(link_pointer)
         {

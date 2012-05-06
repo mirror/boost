@@ -15,14 +15,7 @@
 # pragma once
 #endif
 
-#include <boost/config.hpp>
-#include <boost/detail/select_type.hpp>
-#include <boost/utility/enable_if.hpp>
-#include <boost/preprocessor/cat.hpp>
-#include <boost/preprocessor/enum.hpp>
-#include <boost/limits.hpp>
-#include <boost/type_traits/add_lvalue_reference.hpp>
-#include <boost/pointer_to_other.hpp>
+#include <boost/unordered/detail/emplace_args.hpp>
 #include <boost/assert.hpp>
 #include <boost/utility/addressof.hpp>
 
@@ -31,23 +24,29 @@
 #   if defined(__GXX_EXPERIMENTAL_CXX0X__) && \
             (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7))
 #       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
-#   elif BOOST_MSVC >= 1700 && defined(_CPPLIB_VER)
-#       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
+#   elif defined(BOOST_MSVC)
+#       if BOOST_MSVC < 1400
+            // Use container's allocator_traits for older versions of Visual
+            // C++ as I don't test with them.
+#           define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 2
+#       elif BOOST_MSVC >= 1700
+#           define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
+#       endif
 #   endif
-
-// Use container's allocator_traits for older versions of Visual C++ as I don't
-// test with them.
-#   if defined(BOOST_MSVC) && BOOST_MSVC < 1400
-#       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 2
-#   endif
-
 #endif
 
 #if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
 #   define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 0
 #endif
 
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 0
+#   include <boost/limits.hpp>
+#   include <boost/utility/enable_if.hpp>
+#   include <boost/pointer_to_other.hpp>
+#   if defined(BOOST_NO_SFINAE_EXPR)
+#       include <boost/type_traits/is_same.hpp>
+#   endif
+#elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
 #  include <memory>
 #elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 2
 #  include <boost/container/allocator_traits.hpp>
@@ -56,6 +55,7 @@
 #if !defined(BOOST_NO_0X_HDR_TYPE_TRAITS)
 #  include <type_traits>
 #endif
+
 
 namespace boost { namespace unordered { namespace detail {
 
@@ -98,42 +98,9 @@ namespace boost { namespace unordered { namespace detail {
 #endif
 
     ////////////////////////////////////////////////////////////////////////////
-    // Bits and pieces for implementing traits
-    //
-    // Some of these are also used elsewhere
-
-    template <typename T> typename boost::add_lvalue_reference<T>::type make();
-    struct choice9 { typedef char (&type)[9]; };
-    struct choice8 : choice9 { typedef char (&type)[8]; };
-    struct choice7 : choice8 { typedef char (&type)[7]; };
-    struct choice6 : choice7 { typedef char (&type)[6]; };
-    struct choice5 : choice6 { typedef char (&type)[5]; };
-    struct choice4 : choice5 { typedef char (&type)[4]; };
-    struct choice3 : choice4 { typedef char (&type)[3]; };
-    struct choice2 : choice3 { typedef char (&type)[2]; };
-    struct choice1 : choice2 { typedef char (&type)[1]; };
-    choice1 choose();
-
-    typedef choice1::type yes_type;
-    typedef choice2::type no_type;
-
-    struct private_type
-    {
-       private_type const &operator,(int) const;
-    };
-
-    template <typename T>
-    no_type is_private_type(T const&);
-    yes_type is_private_type(private_type const&);
-
-    struct convert_from_anything {
-        template <typename T>
-        convert_from_anything(T const&);
-    };
+    // Expression test mechanism
 
 #if !defined(BOOST_NO_SFINAE_EXPR)
-
-#   define BOOST_UNORDERED_HAVE_CALL_DETECTION 1
 
     template <typename T, unsigned int> struct expr_test;
     template <typename T> struct expr_test<T, sizeof(char)> : T {};
@@ -164,8 +131,6 @@ namespace boost { namespace unordered { namespace detail {
     }
 
 #else
-
-#   define BOOST_UNORDERED_HAVE_CALL_DETECTION 0
 
     template <typename T> struct identity { typedef T type; };
 
@@ -209,11 +174,10 @@ namespace boost { namespace unordered { namespace detail {
 
     ////////////////////////////////////////////////////////////////////////////
     // Allocator traits
-    //
-    // Uses the standard versions if available.
-    // (although untested as I don't have access to a standard version yet)
 
 #if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
+
+#define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
 
     template <typename Alloc>
     struct allocator_traits : std::allocator_traits<Alloc> {};
@@ -227,6 +191,8 @@ namespace boost { namespace unordered { namespace detail {
 
 #elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 2
 
+#define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 0
+
     template <typename Alloc>
     struct allocator_traits :
         boost::container::allocator_traits<Alloc> {};
@@ -238,6 +204,13 @@ namespace boost { namespace unordered { namespace detail {
     {};
 
 #else
+
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#   define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
+#else
+#   define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 0
+#endif
+
 
     // TODO: Does this match std::allocator_traits<Alloc>::rebind_alloc<T>?
     template <typename Alloc, typename T>
@@ -309,7 +282,7 @@ namespace boost { namespace unordered { namespace detail {
     BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_move_assignment);
     BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
 
-#if BOOST_UNORDERED_HAVE_CALL_DETECTION
+#if !defined(BOOST_NO_SFINAE_EXPR)
     template <typename T>
     BOOST_UNORDERED_HAS_FUNCTION(
         select_on_container_copy_construction, U const, (), 0
@@ -320,12 +293,21 @@ namespace boost { namespace unordered { namespace detail {
         max_size, U const, (), 0
     );
 
+#   if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+    template <typename T, typename ValueType, typename... Args>
+    BOOST_UNORDERED_HAS_FUNCTION(
+        construct, U, (
+            boost::unordered::detail::make<ValueType*>(),
+            boost::unordered::detail::make<Args const>()...), 2
+    );
+#   else
     template <typename T, typename ValueType>
     BOOST_UNORDERED_HAS_FUNCTION(
         construct, U, (
             boost::unordered::detail::make<ValueType*>(),
             boost::unordered::detail::make<ValueType const>()), 2
     );
+#   endif
 
     template <typename T, typename ValueType>
     BOOST_UNORDERED_HAS_FUNCTION(
@@ -425,7 +407,27 @@ namespace boost { namespace unordered { namespace detail {
 
     public:
 
-        // Only supporting the basic copy constructor for now.
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+
+        template <typename T, typename... Args>
+        static typename boost::enable_if_c<
+                boost::unordered::detail::has_construct<Alloc, T, Args...>
+                ::value>::type
+            construct(Alloc& a, T* p, Args&&... x)
+        {
+            a.construct(p, boost::forward<Args>(x)...);
+        }
+
+        template <typename T, typename... Args>
+        static typename boost::disable_if_c<
+                boost::unordered::detail::has_construct<Alloc, T, Args...>
+                ::value>::type
+            construct(Alloc&, T* p, Args&&... x)
+        {
+            new ((void*) p) T(boost::forward<Args>(x)...);
+        }
+
+#elif !defined(BOOST_NO_SFINAE_EXPR)
 
         template <typename T>
         static typename boost::enable_if_c<
@@ -443,6 +445,34 @@ namespace boost { namespace unordered { namespace detail {
             new ((void*) p) T(x);
         }
 
+#else
+
+        // If we don't have SFINAE expressions, only construct the type
+        // that matches the allocator.
+
+        template <typename T>
+        static typename boost::enable_if_c<
+                boost::unordered::detail::has_construct<Alloc, T>::value &&
+                boost::is_same<T, value_type>::value
+            >::type
+            construct(Alloc& a, T* p, T const& x)
+        {
+            a.construct(p, x);
+        }
+
+        template <typename T>
+        static typename boost::disable_if_c<
+                boost::unordered::detail::has_construct<Alloc, T>::value &&
+                boost::is_same<T, value_type>::value
+            >::type
+            construct(Alloc&, T* p, T const& x)
+        {
+            new ((void*) p) T(x);
+        }
+
+#endif
+
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
         template <typename T>
         static typename boost::enable_if_c<
                 boost::unordered::detail::has_destroy<Alloc, T>::value>::type
@@ -458,6 +488,48 @@ namespace boost { namespace unordered { namespace detail {
         {
             boost::unordered::detail::destroy(p);
         }
+
+#elif !defined(BOOST_NO_SFINAE_EXPR)
+
+        template <typename T>
+        static typename boost::enable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
+            destroy(Alloc& a, T* p)
+        {
+            a.destroy(p);
+        }
+
+        template <typename T>
+        static typename boost::disable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
+            destroy(Alloc&, T* p)
+        {
+            boost::unordered::detail::destroy(p);
+        }
+
+#else
+
+        template <typename T>
+        static typename boost::enable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value &&
+                boost::is_same<T, value_type>::value
+            >::type
+            destroy(Alloc& a, T* p)
+        {
+            a.destroy(p);
+        }
+
+        template <typename T>
+        static typename boost::disable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value &&
+                boost::is_same<T, value_type>::value
+            >::type
+            destroy(Alloc&, T* p)
+        {
+            boost::unordered::detail::destroy(p);
+        }
+
+#endif
 
         static size_type max_size(const Alloc& a)
         {
@@ -488,6 +560,41 @@ namespace boost { namespace unordered { namespace detail {
 #undef BOOST_UNORDERED_DEFAULT_TYPE_TMPLT
 #undef BOOST_UNORDERED_DEFAULT_TYPE
 
+#endif
+
+#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+    template <typename Alloc, typename T, BOOST_UNORDERED_EMPLACE_TEMPLATE>
+    inline void construct_node(Alloc& a, T* p, BOOST_UNORDERED_EMPLACE_ARGS)
+    {
+        boost::unordered::detail::allocator_traits<Alloc>::construct(
+            a, p, BOOST_UNORDERED_EMPLACE_FORWARD);
+    }
+
+    template <typename Alloc, typename T>
+    inline void destroy_node(Alloc& a, T* p)
+    {
+        boost::unordered::detail::allocator_traits<Alloc>::destroy(a, p);
+    }
+#else
+    template <typename Alloc, typename T, BOOST_UNORDERED_EMPLACE_TEMPLATE>
+    inline void construct_node(Alloc& a, T* p, BOOST_UNORDERED_EMPLACE_ARGS)
+    {
+        boost::unordered::detail::allocator_traits<Alloc>::construct(a, p, T());
+        try {
+            boost::unordered::detail::construct_impl(
+                p->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+        } catch(...) {
+            boost::unordered::detail::allocator_traits<Alloc>::destroy(a, p);
+            throw;
+        }
+    }
+
+    template <typename Alloc, typename T>
+    inline void destroy_node(Alloc& a, T* p)
+    {
+        boost::unordered::detail::destroy(p->value_ptr());
+        boost::unordered::detail::allocator_traits<Alloc>::destroy(a, p);
+    }
 #endif
 
     // array_constructor

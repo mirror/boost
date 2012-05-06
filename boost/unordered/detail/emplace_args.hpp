@@ -12,6 +12,7 @@
 # pragma once
 #endif
 
+#include <boost/unordered/detail/fwd.hpp>
 #include <boost/move/move.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/inc.hpp>
@@ -21,7 +22,10 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/type_traits/is_class.hpp>
+#include <boost/type_traits/add_lvalue_reference.hpp>
 #include <boost/tuple/tuple.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/detail/select_type.hpp>
 #include <utility>
 
 #if !defined(BOOST_NO_0X_HDR_TUPLE)
@@ -44,6 +48,38 @@
 #endif
 
 namespace boost { namespace unordered { namespace detail {
+
+    ////////////////////////////////////////////////////////////////////////////
+    // Bits and pieces for implementing traits
+
+    template <typename T> typename boost::add_lvalue_reference<T>::type make();
+    struct choice9 { typedef char (&type)[9]; };
+    struct choice8 : choice9 { typedef char (&type)[8]; };
+    struct choice7 : choice8 { typedef char (&type)[7]; };
+    struct choice6 : choice7 { typedef char (&type)[6]; };
+    struct choice5 : choice6 { typedef char (&type)[5]; };
+    struct choice4 : choice5 { typedef char (&type)[4]; };
+    struct choice3 : choice4 { typedef char (&type)[3]; };
+    struct choice2 : choice3 { typedef char (&type)[2]; };
+    struct choice1 : choice2 { typedef char (&type)[1]; };
+    choice1 choose();
+
+    typedef choice1::type yes_type;
+    typedef choice2::type no_type;
+
+    struct private_type
+    {
+       private_type const &operator,(int) const;
+    };
+
+    template <typename T>
+    no_type is_private_type(T const&);
+    yes_type is_private_type(private_type const&);
+
+    struct convert_from_anything {
+        template <typename T>
+        convert_from_anything(T const&);
+    };
 
     ////////////////////////////////////////////////////////////////////////////
     // emplace_args
