@@ -135,7 +135,7 @@
 #   if (!defined(__GLIBCXX__) || (__GLIBCXX__ >= 20080306 && __GLIBCXX__ != 20080519)) && __has_feature(is_pod)
 #     define BOOST_IS_POD(T) __is_pod(T)
 #   endif
-#   if (!defined(__GLIBCXX__) || (__GLIBCXX__ >= 20080306 && __GLIBCXX__ != 20080519)) && __has_feature(__is_empty__)
+#   if (!defined(__GLIBCXX__) || (__GLIBCXX__ >= 20080306 && __GLIBCXX__ != 20080519)) && __has_feature(is_empty)
 #     define BOOST_IS_EMPTY(T) __is_empty(T)
 #   endif
 #   if __has_feature(has_trivial_constructor)
