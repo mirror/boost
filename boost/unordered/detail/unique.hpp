@@ -535,7 +535,7 @@ namespace boost { namespace unordered { namespace detail {
                 a.construct_node();
                 a.construct_value2(*i);
     
-                if(this->size_ + 1 >= this->max_load_)
+                if(this->size_ + 1 > this->max_load_)
                     this->reserve_for_insert(this->size_ +
                         boost::unordered::detail::insert_size(i, j));
     

@@ -101,7 +101,44 @@ void rehash_test1(X* = 0,
 }
 
 template <class X>
-void reserve_test(X* = 0,
+void reserve_test1(X* = 0,
+    test::random_generator generator = test::default_generator)
+{
+    for (int random_mlf = 0; random_mlf < 2; ++random_mlf)
+    {
+        for (int i = 1; i < 2000; i += i < 50 ? 1 : 13)
+        {
+            test::random_values<X> v(i, generator);
+
+            test::ordered<X> tracker;
+            tracker.insert_range(v.begin(), v.end());
+
+            X x;
+            x.max_load_factor(random_mlf ?
+                static_cast<float>(std::rand() % 1000) / 500.0f + 0.5f : 1.0f);
+
+            // For the current standard this should reserve i+1, I've
+            // submitted a defect report and will assume it's a defect
+            // for now.
+            x.reserve(i);
+
+            // Insert an element before the range insert, otherwise there are
+            // no iterators to invalidate in the range insert, and it can
+            // rehash.
+            typename test::random_values<X>::iterator it = v.begin();
+            x.insert(*it);
+            ++it;
+
+            std::size_t bucket_count = x.bucket_count();
+            x.insert(it, v.end());
+            BOOST_TEST(bucket_count == x.bucket_count());
+            tracker.compare(x);
+        }
+    }
+}
+
+template <class X>
+void reserve_test2(X* = 0,
     test::random_generator generator = test::default_generator)
 {
     for (int random_mlf = 0; random_mlf < 2; ++random_mlf)
@@ -115,13 +152,17 @@ void reserve_test(X* = 0,
 
             X x;
             x.max_load_factor(random_mlf ?
-                static_cast<float>(std::rand() % 1000) / 500.0 + 0.5f : 1.0f);
-            // For the current standard this should reserve i+1, I've
-            // submitted a defect report and will assume it's a defect
-            // for now.
+                static_cast<float>(std::rand() % 1000) / 500.0f + 0.5f : 1.0f);
+
             x.reserve(i);
             std::size_t bucket_count = x.bucket_count();
-            x.insert(v.begin(), v.end());
+
+            for (typename test::random_values<X>::iterator it = v.begin();
+                    it != v.end(); ++it)
+            {
+                x.insert(*it);
+            }
+
             BOOST_TEST(bucket_count == x.bucket_count());
             tracker.compare(x);
         }
@@ -145,7 +186,10 @@ UNORDERED_TEST(rehash_empty_test3,
 UNORDERED_TEST(rehash_test1,
     ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
 )
-UNORDERED_TEST(reserve_test,
+UNORDERED_TEST(reserve_test1,
+    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+)
+UNORDERED_TEST(reserve_test2,
     ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
 )
 
