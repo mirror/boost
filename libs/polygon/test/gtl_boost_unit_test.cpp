@@ -3707,9 +3707,6 @@ int main() {
     assert_s(intersects(dls1, dls3), "intersects1");
     assert_s(!intersects(dls1, segment_data<int>(Point(2, 0), Point(3, 0))), "intersects2");
     assert_s(abuts(dls1, dls2), "abuts");
-    Point p;
-    bool ir = intersection(p, dls1, dls2);
-    std::cout << ir << " " << p << std::endl;
   }
 
   std::cout << "ALL TESTS COMPLETE\n";

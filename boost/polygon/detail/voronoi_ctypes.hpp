@@ -44,8 +44,8 @@ struct ulp_comparison<fpt64> {
     uint64 ll_a, ll_b;
 
     // Reinterpret double bits as 64-bit signed integer.
-    memcpy(&ll_a, &a, sizeof(fpt64));
-    memcpy(&ll_b, &b, sizeof(fpt64));
+    std::memcpy(&ll_a, &a, sizeof(fpt64));
+    std::memcpy(&ll_b, &b, sizeof(fpt64));
 
     // Positive 0.0 is integer zero. Negative 0.0 is 0x8000000000000000.
     // Map negative zero to an integer zero representation - making it
@@ -80,12 +80,12 @@ public:
 
   static int64 set_exponent(fpt64& value, int64 exponent) {
     int64 bits;
-    memcpy(&bits, &value, sizeof(fpt64));
+    std::memcpy(&bits, &value, sizeof(fpt64));
     int64 exp = ((bits & kExponentMask) >> 52) - 1023;
     if (exp == exponent)
       return exp;
     bits = (bits & kSignedMantissaMask) | ((exponent + 1023) << 52);
-    memcpy(&value, &bits, sizeof(fpt64));
+    std::memcpy(&value, &bits, sizeof(fpt64));
     return exp;
   }
 };
@@ -321,7 +321,7 @@ public:
   extended_int(const extended_int<M>& that) {
     if (that.size() > N) return;
     this->count_ = that.count();
-    memcpy(this->chunks_, that.chunks(), that.size() * sizeof(uint32));
+    std::memcpy(this->chunks_, that.chunks(), that.size() * sizeof(uint32));
   }
 
   extended_int& operator=(int32 that) {
@@ -357,7 +357,7 @@ public:
   extended_int& operator=(const extended_int<M>& that) {
     size_t mx = (std::max)(N, that.size());
     this->count_ = that.count();
-    memcpy(this->chunks_, that.chunks(), mx * sizeof(uint32));
+    std::memcpy(this->chunks_, that.chunks(), mx * sizeof(uint32));
     return *this;
   }
 

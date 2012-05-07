@@ -7,6 +7,7 @@
 */
 #ifndef BOOST_POLYGON_SEGMENT_CONCEPT_HPP
 #define BOOST_POLYGON_SEGMENT_CONCEPT_HPP
+
 #include "isotropy.hpp"
 #include "segment_data.hpp"
 #include "segment_traits.hpp"
@@ -603,52 +604,10 @@ namespace boost { namespace polygon{
       return false;
     if (consider_touch || or1_1 && or1_2 || or2_1 && or2_2)
       return true;
-    if (or1_1 || or1_2 || or2_1 || or2_2)
+    if (or1_1 || or1_2)
       return false;
     return intersects(vertical(rect1), vertical(rect2), false) ||
            intersects(horizontal(rect1), horizontal(rect2), false);
-  }
-
-  struct y_s_intersect : gtl_yes {};
-
-  // Set point to the intersection of segment and b
-  template <typename Point, typename Segment1, typename Segment2>
-  typename enable_if<
-    typename gtl_and_4<
-      y_s_intersect,
-      typename is_mutable_point_concept<
-        typename geometry_concept<Point>::type
-      >::type,
-      typename is_segment_concept<
-        typename geometry_concept<Segment1>::type
-      >::type,
-      typename is_segment_concept<
-        typename geometry_concept<Segment2>::type
-      >::type
-    >::type,
-    bool
-  >::type
-  intersection(Point& intersection,
-               const Segment1& segment1,
-               const Segment2& segment2,
-               bool projected = false,
-               bool round_closest = false) {
-    typedef polygon_arbitrary_formation<
-      typename segment_coordinate_type<Segment1>::type
-    > paf;
-    typename paf::Point pt;
-    typename paf::Point l1, h1, l2, h2;
-    assign(l1, low(segment1));
-    assign(h1, high(segment1));
-    assign(l2, low(segment2));
-    assign(h2, high(segment2));
-    typename paf::half_edge he1(l1, h1), he2(l2, h2);
-    typename paf::compute_intersection_pack pack;
-    if (pack.compute_intersection(pt, he1, he2, projected, round_closest)) {
-      assign(intersection, pt);
-      return true;
-    }
-    return false;
   }
 
   struct y_s_e_dist : gtl_yes {};
@@ -687,7 +646,7 @@ namespace boost { namespace polygon{
     }
     if (length_sq == 0.0)
       return 0.0;
-    Unit denom = sqrt(length_sq);
+    Unit denom = std::sqrt(length_sq);
     Unit result = (A * D - C * B) / denom;
     return (result < 0.0) ? -result : result;
   }

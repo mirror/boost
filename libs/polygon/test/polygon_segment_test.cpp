@@ -160,17 +160,25 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test2, T, test_types) {
   point_type point7(100, 201);
   point_type point8(100, 200);
   point_type point9(100, 199);
-  segment_type segment = construct<segment_type>(point1, point2);
+  segment_type segment1 = construct<segment_type>(point1, point2);
+  segment_type segment2 = construct<segment_type>(point2, point1);
+  segment_type segment3 = construct<segment_type>(point1, point5);
 
-  BOOST_CHECK(on_above_or_below(segment, point1) == 0);
-  BOOST_CHECK(on_above_or_below(segment, point2) == 0);
-  BOOST_CHECK(on_above_or_below(segment, point3) == 0);
-  BOOST_CHECK(on_above_or_below(segment, point4) == 0);
-  BOOST_CHECK(on_above_or_below(segment, point5) == 1);
-  BOOST_CHECK(on_above_or_below(segment, point6) == -1);
-  BOOST_CHECK(on_above_or_below(segment, point7) == 1);
-  BOOST_CHECK(on_above_or_below(segment, point8) == 0);
-  BOOST_CHECK(on_above_or_below(segment, point9) == -1);
+  BOOST_CHECK(on_above_or_below(segment1, point1) == 0);
+  BOOST_CHECK(on_above_or_below(segment1, point2) == 0);
+  BOOST_CHECK(on_above_or_below(segment1, point3) == 0);
+  BOOST_CHECK(on_above_or_below(segment1, point4) == 0);
+  BOOST_CHECK(on_above_or_below(segment1, point5) == 1);
+  BOOST_CHECK(on_above_or_below(segment2, point5) == 1);
+  BOOST_CHECK(on_above_or_below(segment1, point6) == -1);
+  BOOST_CHECK(on_above_or_below(segment2, point6) == -1);
+  BOOST_CHECK(on_above_or_below(segment1, point7) == 1);
+  BOOST_CHECK(on_above_or_below(segment2, point7) == 1);
+  BOOST_CHECK(on_above_or_below(segment1, point8) == 0);
+  BOOST_CHECK(on_above_or_below(segment1, point9) == -1);
+  BOOST_CHECK(on_above_or_below(segment2, point9) == -1);
+  BOOST_CHECK(on_above_or_below(segment3, point6) == -1);
+  BOOST_CHECK(on_above_or_below(segment3, point3) == 1);
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test3, T, test_types) {

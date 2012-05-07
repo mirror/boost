@@ -153,7 +153,7 @@ private:
 
   void init_sites_queue() {
     // Sort site events.
-    sort(site_events_.begin(), site_events_.end(),
+    std::sort(site_events_.begin(), site_events_.end(),
         event_comparison_predicate());
 
     // Remove duplicates.
