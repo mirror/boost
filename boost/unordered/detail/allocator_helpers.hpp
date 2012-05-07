@@ -19,8 +19,15 @@
 #include <boost/assert.hpp>
 #include <boost/utility/addressof.hpp>
 
-#if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
+////////////////////////////////////////////////////////////////////////////////
+//
+// Pick which version of allocator_traits to use
+//
+// 0 = Own partial implementation
+// 1 = std::allocator_traits
+// 2 = boost::container::allocator_traits
 
+#if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
 #   if defined(__GXX_EXPERIMENTAL_CXX0X__) && \
             (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7))
 #       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
@@ -39,23 +46,14 @@
 #   define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 0
 #endif
 
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 0
-#   include <boost/limits.hpp>
-#   include <boost/utility/enable_if.hpp>
-#   include <boost/pointer_to_other.hpp>
-#   if defined(BOOST_NO_SFINAE_EXPR)
-#       include <boost/type_traits/is_same.hpp>
-#   endif
-#elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
-#  include <memory>
-#elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 2
-#  include <boost/container/allocator_traits.hpp>
-#endif
+////////////////////////////////////////////////////////////////////////////////
+//
+// Some utilities for implementing allocator_traits, but useful elsewhere so
+// they're always defined.
 
 #if !defined(BOOST_NO_0X_HDR_TYPE_TRAITS)
 #  include <type_traits>
 #endif
-
 
 namespace boost { namespace unordered { namespace detail {
 
@@ -99,6 +97,13 @@ namespace boost { namespace unordered { namespace detail {
 
     ////////////////////////////////////////////////////////////////////////////
     // Expression test mechanism
+    //
+    // When SFINAE expressions are available, define
+    // BOOST_UNORDERED_HAS_FUNCTION which can check if a function call is
+    // supported by a class, otherwise define BOOST_UNORDERED_HAS_MEMBER which
+    // can detect if a class has the specified member, but not that it has the
+    // correct type, this is good enough for a passable impression of
+    // allocator_traits.
 
 #if !defined(BOOST_NO_SFINAE_EXPR)
 
@@ -106,7 +111,7 @@ namespace boost { namespace unordered { namespace detail {
     template <typename T> struct expr_test<T, sizeof(char)> : T {};
     template <typename U> static char for_expr_test(U const&);
 
-#define BOOST_UNORDERED_CHECK_EXPRESSION(count, result, expression)         \
+#   define BOOST_UNORDERED_CHECK_EXPRESSION(count, result, expression)      \
         template <typename U>                                               \
         static typename boost::unordered::detail::expr_test<                \
             BOOST_PP_CAT(choice, result),                                   \
@@ -115,12 +120,12 @@ namespace boost { namespace unordered { namespace detail {
             0)))>::type test(                                               \
             BOOST_PP_CAT(choice, count))
 
-#define BOOST_UNORDERED_DEFAULT_EXPRESSION(count, result)                   \
+#   define BOOST_UNORDERED_DEFAULT_EXPRESSION(count, result)                \
         template <typename U>                                               \
         static BOOST_PP_CAT(choice, result)::type test(                     \
             BOOST_PP_CAT(choice, count))
 
-#define BOOST_UNORDERED_HAS_FUNCTION(name, thing, args, _)                  \
+#   define BOOST_UNORDERED_HAS_FUNCTION(name, thing, args, _)               \
     struct BOOST_PP_CAT(has_, name)                                         \
     {                                                                       \
         BOOST_UNORDERED_CHECK_EXPRESSION(1, 1,                              \
@@ -134,7 +139,7 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename T> struct identity { typedef T type; };
 
-#define BOOST_UNORDERED_CHECK_MEMBER(count, result, name, member)           \
+#   define BOOST_UNORDERED_CHECK_MEMBER(count, result, name, member)        \
                                                                             \
     typedef typename boost::unordered::detail::identity<member>::type       \
         BOOST_PP_CAT(check, count);                                         \
@@ -148,11 +153,11 @@ namespace boost { namespace unordered { namespace detail {
         BOOST_PP_CAT(test, count)<&U::name>::type                           \
         test(BOOST_PP_CAT(choice, count))
 
-#define BOOST_UNORDERED_DEFAULT_MEMBER(count, result)                       \
+#   define BOOST_UNORDERED_DEFAULT_MEMBER(count, result)                    \
     template <class U> static BOOST_PP_CAT(choice, result)::type            \
         test(BOOST_PP_CAT(choice, count))
 
-#define BOOST_UNORDERED_HAS_MEMBER(name)                                    \
+#   define BOOST_UNORDERED_HAS_MEMBER(name)                                 \
     struct BOOST_PP_CAT(has_, name)                                         \
     {                                                                       \
         struct impl {                                                       \
@@ -172,105 +177,90 @@ namespace boost { namespace unordered { namespace detail {
 
 #endif
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Allocator traits
+}}}
 
-#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
+////////////////////////////////////////////////////////////////////////////////
+//
+// Allocator traits
+//
+// First our implementation, then later light wrappers around the alternatives
 
-#define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
+#if BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 0
 
-    template <typename Alloc>
-    struct allocator_traits : std::allocator_traits<Alloc> {};
+#   include <boost/limits.hpp>
+#   include <boost/utility/enable_if.hpp>
+#   include <boost/pointer_to_other.hpp>
+#   if defined(BOOST_NO_SFINAE_EXPR)
+#       include <boost/type_traits/is_same.hpp>
+#   endif
 
-    template <typename Alloc, typename T>
-    struct rebind_wrap
-    {
-        typedef typename std::allocator_traits<Alloc>::
-            template rebind_alloc<T> type;
-    };
-
-#elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 2
-
-#define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 0
-
-    template <typename Alloc>
-    struct allocator_traits :
-        boost::container::allocator_traits<Alloc> {};
-
-    template <typename Alloc, typename T>
-    struct rebind_wrap :
-        boost::container::allocator_traits<Alloc>::
-            template portable_rebind_alloc<T>
-    {};
-
-#else
-
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE) && \
+#   if defined(BOOST_UNORDERED_VARIADIC_MOVE) && \
         !defined(BOOST_NO_SFINAE_EXPR)
-#   define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
-#else
-#   define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 0
-#endif
+#       define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
+#   else
+#       define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 0
+#   endif
+
+namespace boost { namespace unordered { namespace detail {
 
     // TODO: Does this match std::allocator_traits<Alloc>::rebind_alloc<T>?
     template <typename Alloc, typename T>
     struct rebind_wrap
     {
-        typedef typename Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other
-            type;
+        typedef typename Alloc::BOOST_NESTED_TEMPLATE rebind<T>::other type;
     };
 
-#if defined(BOOST_MSVC) && BOOST_MSVC <= 1400
+#   if defined(BOOST_MSVC) && BOOST_MSVC <= 1400
 
-    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
-        template <typename Tp, typename Default>                            \
-        struct default_type_ ## tname {                                     \
+#       define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                    \
+    template <typename Tp, typename Default>                                \
+    struct default_type_ ## tname {                                         \
                                                                             \
-            template <typename X>                                           \
-            static choice1::type test(choice1, typename X::tname* = 0);     \
+        template <typename X>                                               \
+        static choice1::type test(choice1, typename X::tname* = 0);         \
                                                                             \
-            template <typename X>                                           \
-            static choice2::type test(choice2, void* = 0);                  \
+        template <typename X>                                               \
+        static choice2::type test(choice2, void* = 0);                      \
                                                                             \
-            struct DefaultWrap { typedef Default tname; };                  \
+        struct DefaultWrap { typedef Default tname; };                      \
                                                                             \
-            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
+        enum { value = (1 == sizeof(test<Tp>(choose()))) };                 \
                                                                             \
-            typedef typename boost::detail::if_true<value>::                \
-                BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
-                ::type::tname type;                                         \
-        }
+        typedef typename boost::detail::if_true<value>::                    \
+            BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                     \
+            ::type::tname type;                                             \
+    }
 
-#else
+#   else
 
     template <typename T, typename T2>
     struct sfinae : T2 {};
 
-    #define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                       \
-        template <typename Tp, typename Default>                            \
-        struct default_type_ ## tname {                                     \
+#       define BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(tname)                    \
+    template <typename Tp, typename Default>                                \
+    struct default_type_ ## tname {                                         \
                                                                             \
-            template <typename X>                                           \
-            static typename boost::unordered::detail::sfinae<               \
-                    typename X::tname, choice1>::type                       \
-                test(choice1);                                              \
+        template <typename X>                                               \
+        static typename boost::unordered::detail::sfinae<                   \
+                typename X::tname, choice1>::type                           \
+            test(choice1);                                                  \
                                                                             \
-            template <typename X>                                           \
-            static choice2::type test(choice2);                             \
+        template <typename X>                                               \
+        static choice2::type test(choice2);                                 \
                                                                             \
-            struct DefaultWrap { typedef Default tname; };                  \
+        struct DefaultWrap { typedef Default tname; };                      \
                                                                             \
-            enum { value = (1 == sizeof(test<Tp>(choose()))) };             \
+        enum { value = (1 == sizeof(test<Tp>(choose()))) };                 \
                                                                             \
-            typedef typename boost::detail::if_true<value>::                \
-                BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                 \
-                ::type::tname type;                                         \
-        }
+        typedef typename boost::detail::if_true<value>::                    \
+            BOOST_NESTED_TEMPLATE then<Tp, DefaultWrap>                     \
+            ::type::tname type;                                             \
+    }
 
-#endif
+#   endif
 
-    #define BOOST_UNORDERED_DEFAULT_TYPE(T,tname, arg)                      \
-        typename default_type_ ## tname<T, arg>::type
+#   define BOOST_UNORDERED_DEFAULT_TYPE(T,tname, arg)                   \
+    typename default_type_ ## tname<T, arg>::type
 
     BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(pointer);
     BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(const_pointer);
@@ -282,7 +272,8 @@ namespace boost { namespace unordered { namespace detail {
     BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_move_assignment);
     BOOST_UNORDERED_DEFAULT_TYPE_TMPLT(propagate_on_container_swap);
 
-#if !defined(BOOST_NO_SFINAE_EXPR)
+#   if !defined(BOOST_NO_SFINAE_EXPR)
+
     template <typename T>
     BOOST_UNORDERED_HAS_FUNCTION(
         select_on_container_copy_construction, U const, (), 0
@@ -293,27 +284,33 @@ namespace boost { namespace unordered { namespace detail {
         max_size, U const, (), 0
     );
 
-#   if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#       if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+
     template <typename T, typename ValueType, typename... Args>
     BOOST_UNORDERED_HAS_FUNCTION(
-        construct, U, (
-            boost::unordered::detail::make<ValueType*>(),
-            boost::unordered::detail::make<Args const>()...), 2
+    construct, U, (
+        boost::unordered::detail::make<ValueType*>(),
+        boost::unordered::detail::make<Args const>()...), 2
     );
-#   else
+
+#       else
+
     template <typename T, typename ValueType>
     BOOST_UNORDERED_HAS_FUNCTION(
-        construct, U, (
-            boost::unordered::detail::make<ValueType*>(),
-            boost::unordered::detail::make<ValueType const>()), 2
+    construct, U, (
+        boost::unordered::detail::make<ValueType*>(),
+        boost::unordered::detail::make<ValueType const>()), 2
     );
-#   endif
+
+#       endif
 
     template <typename T, typename ValueType>
     BOOST_UNORDERED_HAS_FUNCTION(
         destroy, U, (boost::unordered::detail::make<ValueType*>()), 1
     );
-#else
+
+#   else
+
     template <typename T>
     BOOST_UNORDERED_HAS_MEMBER(select_on_container_copy_construction);
 
@@ -325,7 +322,8 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename T, typename ValueType>
     BOOST_UNORDERED_HAS_MEMBER(destroy);
-#endif
+
+#   endif
 
     template <typename Alloc>
     inline typename boost::enable_if_c<
@@ -393,7 +391,7 @@ namespace boost { namespace unordered { namespace detail {
 
         // TODO: rebind_alloc and rebind_traits
 
-       static pointer allocate(Alloc& a, size_type n)
+        static pointer allocate(Alloc& a, size_type n)
             { return a.allocate(n); }
 
         // I never use this, so I'll just comment it out for now.
@@ -401,13 +399,13 @@ namespace boost { namespace unordered { namespace detail {
         //static pointer allocate(Alloc& a, size_type n,
         //        const_void_pointer hint)
         //    { return DEFAULT_FUNC(allocate, pointer)(a, n, hint); }
-    
+
         static void deallocate(Alloc& a, pointer p, size_type n)
             { a.deallocate(p, n); }
 
     public:
 
-#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+#   if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
 
         template <typename T, typename... Args>
         static typename boost::enable_if_c<
@@ -427,7 +425,23 @@ namespace boost { namespace unordered { namespace detail {
             new ((void*) p) T(boost::forward<Args>(x)...);
         }
 
-#elif !defined(BOOST_NO_SFINAE_EXPR)
+        template <typename T>
+        static typename boost::enable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
+            destroy(Alloc& a, T* p)
+        {
+            a.destroy(p);
+        }
+
+        template <typename T>
+        static typename boost::disable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
+            destroy(Alloc&, T* p)
+        {
+            boost::unordered::detail::destroy(p);
+        }
+
+#   elif !defined(BOOST_NO_SFINAE_EXPR)
 
         template <typename T>
         static typename boost::enable_if_c<
@@ -445,9 +459,29 @@ namespace boost { namespace unordered { namespace detail {
             new ((void*) p) T(x);
         }
 
-#else
+#   endif
 
-        // If we don't have SFINAE expressions, only construct the type
+#   if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+
+        template <typename T>
+        static typename boost::enable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
+            destroy(Alloc& a, T* p)
+        {
+            a.destroy(p);
+        }
+
+        template <typename T>
+        static typename boost::disable_if_c<
+                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
+            destroy(Alloc&, T* p)
+        {
+            boost::unordered::detail::destroy(p);
+        }
+
+#   else
+
+        // If we don't have SFINAE expressions, only call construct the type
         // that matches the allocator.
 
         template <typename T>
@@ -470,46 +504,6 @@ namespace boost { namespace unordered { namespace detail {
             new ((void*) p) T(x);
         }
 
-#endif
-
-#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
-
-        template <typename T>
-        static typename boost::enable_if_c<
-                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
-            destroy(Alloc& a, T* p)
-        {
-            a.destroy(p);
-        }
-
-        template <typename T>
-        static typename boost::disable_if_c<
-                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
-            destroy(Alloc&, T* p)
-        {
-            boost::unordered::detail::destroy(p);
-        }
-
-#elif !defined(BOOST_NO_SFINAE_EXPR)
-
-        template <typename T>
-        static typename boost::enable_if_c<
-                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
-            destroy(Alloc& a, T* p)
-        {
-            a.destroy(p);
-        }
-
-        template <typename T>
-        static typename boost::disable_if_c<
-                boost::unordered::detail::has_destroy<Alloc, T>::value>::type
-            destroy(Alloc&, T* p)
-        {
-            boost::unordered::detail::destroy(p);
-        }
-
-#else
-
         template <typename T>
         static typename boost::enable_if_c<
                 boost::unordered::detail::has_destroy<Alloc, T>::value &&
@@ -530,7 +524,7 @@ namespace boost { namespace unordered { namespace detail {
             boost::unordered::detail::destroy(p);
         }
 
-#endif
+#   endif
 
         static size_type max_size(const Alloc& a)
         {
@@ -538,13 +532,13 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         // Allocator propagation on construction
-        
+
         static Alloc select_on_container_copy_construction(Alloc const& rhs)
         {
             return boost::unordered::detail::
                 call_select_on_container_copy_construction(rhs);
         }
-    
+
         // Allocator propagation on assignment and swap.
         // Return true if lhs is modified.
         typedef BOOST_UNORDERED_DEFAULT_TYPE(
@@ -557,13 +551,78 @@ namespace boost { namespace unordered { namespace detail {
             Alloc,propagate_on_container_swap,false_type)
             propagate_on_container_swap;
     };
+}}}
 
-#undef BOOST_UNORDERED_DEFAULT_TYPE_TMPLT
-#undef BOOST_UNORDERED_DEFAULT_TYPE
+#   undef BOOST_UNORDERED_DEFAULT_TYPE_TMPLT
+#   undef BOOST_UNORDERED_DEFAULT_TYPE
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// std::allocator_traits
+
+#elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 1
+
+#   include <memory>
+
+#   define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
+
+namespace boost { namespace unordered { namespace detail {
+
+    template <typename Alloc>
+    struct allocator_traits : std::allocator_traits<Alloc> {};
+
+    template <typename Alloc, typename T>
+    struct rebind_wrap
+    {
+        typedef typename std::allocator_traits<Alloc>::
+            template rebind_alloc<T> type;
+    };
+}}}
+
+////////////////////////////////////////////////////////////////////////////////
+//
+// boost::container::allocator_traits
+ 
+#elif BOOST_UNORDERED_USE_ALLOCATOR_TRAITS == 2
+
+#   include <boost/container/allocator_traits.hpp>
+
+#   define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 0
+
+namespace boost { namespace unordered { namespace detail {
+
+    template <typename Alloc>
+    struct allocator_traits :
+        boost::container::allocator_traits<Alloc> {};
+
+    template <typename Alloc, typename T>
+    struct rebind_wrap :
+        boost::container::allocator_traits<Alloc>::
+            template portable_rebind_alloc<T>
+    {};
+
+}}}
+
+#else
+
+#error "Invalid BOOST_UNORDERED_USE_ALLOCATOR_TRAITS value."
 
 #endif
 
+////////////////////////////////////////////////////////////////////////////////
+//
+// Some helper functions for allocating & constructing
+
+namespace boost { namespace unordered { namespace detail {
+
+    ////////////////////////////////////////////////////////////////////////////
+    //
+    // construct_node/destroy_node
+    //
+    // Construct a node using the best available method.
+
 #if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+
     template <typename Alloc, typename T, BOOST_UNORDERED_EMPLACE_TEMPLATE>
     inline void construct_node(Alloc& a, T* p, BOOST_UNORDERED_EMPLACE_ARGS)
     {
@@ -576,7 +635,9 @@ namespace boost { namespace unordered { namespace detail {
     {
         boost::unordered::detail::allocator_traits<Alloc>::destroy(a, p);
     }
+
 #else
+
     template <typename Alloc, typename T, BOOST_UNORDERED_EMPLACE_TEMPLATE>
     inline void construct_node(Alloc& a, T* p, BOOST_UNORDERED_EMPLACE_ARGS)
     {
@@ -596,8 +657,11 @@ namespace boost { namespace unordered { namespace detail {
         boost::unordered::detail::destroy(p->value_ptr());
         boost::unordered::detail::allocator_traits<Alloc>::destroy(a, p);
     }
+
 #endif
 
+    ////////////////////////////////////////////////////////////////////////////
+    //
     // array_constructor
     //
     // Allocate and construct an array in an exception safe manner, and
@@ -653,7 +717,9 @@ namespace boost { namespace unordered { namespace detail {
             ptr_ = pointer();
             return p;
         }
+
     private:
+
         array_constructor(array_constructor const&);
         array_constructor& operator=(array_constructor const&);
     };
