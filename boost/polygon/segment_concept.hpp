@@ -12,7 +12,6 @@
 #include "segment_data.hpp"
 #include "segment_traits.hpp"
 #include "rectangle_concept.hpp"
-#include "detail/polygon_arbitrary_formation.hpp"
 
 namespace boost { namespace polygon{
   struct segment_concept {};
@@ -296,13 +295,57 @@ namespace boost { namespace polygon{
     set(segment, HIGH, point);
   }
 
-  struct y_s_on_above_or_below : gtl_yes {};
+  struct y_s_orientation1 : gtl_yes {};
 
-  // -1 for below, 0 for on and 1 for above
+  // -1 for CW, 0 for collinear and 1 for CCW.
+  template <typename Segment1, typename Segment2>
+  typename enable_if<
+    typename gtl_and_3<
+      y_s_orientation1,
+      typename is_segment_concept<
+        typename geometry_concept<Segment1>::type
+      >::type,
+      typename is_segment_concept<
+        typename geometry_concept<Segment2>::type
+      >::type
+    >::type,
+    int
+  >::type
+  orientation(const Segment1& segment1, const Segment2& segment2) {
+    typedef typename coordinate_traits<
+      typename segment_traits<Segment1>::coordinate_type
+    >::manhattan_area_type int_x2;
+    typedef typename coordinate_traits<
+      typename segment_traits<Segment1>::coordinate_type
+    >::unsigned_area_type uint_x2;
+    int_x2 a1 = (int_x2)x(high(segment1)) - (int_x2)x(low(segment1));
+    int_x2 b1 = (int_x2)y(high(segment1)) - (int_x2)y(low(segment1));
+    int_x2 a2 = (int_x2)x(high(segment2)) - (int_x2)x(low(segment2));
+    int_x2 b2 = (int_x2)y(high(segment2)) - (int_x2)y(low(segment2));
+
+    int sign1 = 0;
+    int sign2 = 0;
+    if (a1 && b2)
+      sign1 = ((a1 > 0) ^ (b2 > 0)) ? -1 : 1;
+    if (a2 && b1)
+      sign2 = ((a2 > 0) ^ (b1 > 0)) ? -1 : 1;
+
+    if (sign1 != sign2)
+      return (sign1 < sign2) ? -1 : 1;
+    uint_x2 a3 = (uint_x2)(a1 < 0 ? -a1 : a1) * (uint_x2)(b2 < 0 ? -b2 : b2);
+    uint_x2 b3 = (uint_x2)(b1 < 0 ? -b1 : b1) * (uint_x2)(a2 < 0 ? -a2 : a2);
+    if (a3 == b3)
+      return 0;
+    return ((a3 < b3) ^ (sign1 == 1)) ? 1 : -1; 
+  }
+
+  struct y_s_orientation2 : gtl_yes {};
+
+  // -1 for right, 0 for collinear and 1 for left.
   template <typename Segment, typename Point>
   typename enable_if<
     typename gtl_and_3<
-      y_s_on_above_or_below,
+      y_s_orientation2,
       typename is_segment_concept<
         typename geometry_concept<Segment>::type
       >::type,
@@ -312,15 +355,9 @@ namespace boost { namespace polygon{
     >::type,
     int
   >::type
-  on_above_or_below(const Segment& segment, const Point& point) {
-    typedef polygon_arbitrary_formation<
-      typename segment_coordinate_type<Segment>::type
-    > paf;
-    typename paf::Point pt, l, h;
-    assign(pt, point);
-    assign(l, low(segment));
-    assign(h, high(segment));
-    return paf::on_above_or_below(pt, typename paf::half_edge(l, h));
+  orientation(const Segment& segment, const Point& point) {
+    Segment segment2 = construct<Segment>(high(segment), point);
+    return orientation(segment, segment2);
   }
 
   struct y_s_contains : gtl_yes {};
@@ -339,7 +376,7 @@ namespace boost { namespace polygon{
     bool
   >::type
   contains(const Segment& segment, const Point& point, bool consider_touch = true ) {
-    if (on_above_or_below(segment, point))
+    if (orientation(segment, point))
       return false;
     rectangle_data<typename segment_coordinate_type<Segment>::type> rect;
     set_points(rect, low(segment), high(segment));
@@ -594,12 +631,12 @@ namespace boost { namespace polygon{
     // Check if axis-parallel rectangles containing segments intersect.
     if (!intersects(rect1, rect2, true))
       return false;
-    int or1_1 = on_above_or_below(segment1, low(segment2));
-    int or1_2 = on_above_or_below(segment1, high(segment2));
+    int or1_1 = orientation(segment1, low(segment2));
+    int or1_2 = orientation(segment1, high(segment2));
     if (or1_1 * or1_2 > 0)
       return false;
-    int or2_1 = on_above_or_below(segment2, low(segment1));
-    int or2_2 = on_above_or_below(segment2, high(segment1));
+    int or2_1 = orientation(segment2, low(segment1));
+    int or2_2 = orientation(segment2, high(segment1));
     if (or2_1 * or2_2 > 0)
       return false;
     if (consider_touch || or1_1 && or1_2 || or2_1 && or2_2)

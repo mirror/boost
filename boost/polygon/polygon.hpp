@@ -34,6 +34,11 @@
 #include "rectangle_traits.hpp"
 #include "rectangle_concept.hpp"
 
+//segment
+#include "segment_data.hpp"
+#include "segment_traits.hpp"
+#include "segment_concept.hpp"
+
 //algorithms needed by polygon types
 #include "detail/iterator_points_to_compact.hpp"
 #include "detail/iterator_compact_to_points.hpp"
@@ -87,10 +92,5 @@
 #include "detail/polygon_set_view.hpp"
 
 #include "polygon_set_concept.hpp"
-
-//segment
-#include "segment_data.hpp"
-#include "segment_traits.hpp"
-#include "segment_concept.hpp"
 
 #endif

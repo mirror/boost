@@ -20,24 +20,24 @@ namespace boost { namespace polygon{
       //that vertices be "linearly consistent"
       //therefore it doesn't work to fall back on 45-degree
       //booleans for arbitrary angle polygons
-      if(0) { //downcast(tmp) ) {
-        tmp.clean();
-        data_.clear();
-        is_45_ = true;
-        polygon_set_data<coordinate_type> tmp2;
-        tmp2.insert(tmp);
-        data_.swap(tmp2.data_);
-        dirty_ = false;
-        sort();
-      } else {
-        sort();
-        arbitrary_boolean_op<coordinate_type> abo;
-        polygon_set_data<coordinate_type> tmp2;
-        abo.execute(tmp2, begin(), end(), end(), end(), 0);
-        data_.swap(tmp2.data_);
-        is_45_ = tmp2.is_45_;
-        dirty_ = false;
-      }
+      //if(0) { //downcast(tmp) ) {
+      //  tmp.clean();
+      //  data_.clear();
+      //  is_45_ = true;
+      //  polygon_set_data<coordinate_type> tmp2;
+      //  tmp2.insert(tmp);
+      //  data_.swap(tmp2.data_);
+      //  dirty_ = false;
+      //  sort();
+      //} else {
+      sort();
+      arbitrary_boolean_op<coordinate_type> abo;
+      polygon_set_data<coordinate_type> tmp2;
+      abo.execute(tmp2, begin(), end(), end(), end(), 0);
+      data_.swap(tmp2.data_);
+      is_45_ = tmp2.is_45_;
+      dirty_ = false;
+      //}
     }
   }
 

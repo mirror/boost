@@ -164,24 +164,43 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test2, T, test_types) {
   segment_type segment2 = construct<segment_type>(point2, point1);
   segment_type segment3 = construct<segment_type>(point1, point5);
 
-  BOOST_CHECK(on_above_or_below(segment1, point1) == 0);
-  BOOST_CHECK(on_above_or_below(segment1, point2) == 0);
-  BOOST_CHECK(on_above_or_below(segment1, point3) == 0);
-  BOOST_CHECK(on_above_or_below(segment1, point4) == 0);
-  BOOST_CHECK(on_above_or_below(segment1, point5) == 1);
-  BOOST_CHECK(on_above_or_below(segment2, point5) == 1);
-  BOOST_CHECK(on_above_or_below(segment1, point6) == -1);
-  BOOST_CHECK(on_above_or_below(segment2, point6) == -1);
-  BOOST_CHECK(on_above_or_below(segment1, point7) == 1);
-  BOOST_CHECK(on_above_or_below(segment2, point7) == 1);
-  BOOST_CHECK(on_above_or_below(segment1, point8) == 0);
-  BOOST_CHECK(on_above_or_below(segment1, point9) == -1);
-  BOOST_CHECK(on_above_or_below(segment2, point9) == -1);
-  BOOST_CHECK(on_above_or_below(segment3, point6) == -1);
-  BOOST_CHECK(on_above_or_below(segment3, point3) == 1);
+  BOOST_CHECK(orientation(segment1, point1) == 0);
+  BOOST_CHECK(orientation(segment1, point2) == 0);
+  BOOST_CHECK(orientation(segment1, point3) == 0);
+  BOOST_CHECK(orientation(segment1, point4) == 0);
+  BOOST_CHECK(orientation(segment1, point5) == 1);
+  BOOST_CHECK(orientation(segment2, point5) == -1);
+  BOOST_CHECK(orientation(segment1, point6) == -1);
+  BOOST_CHECK(orientation(segment2, point6) == 1);
+  BOOST_CHECK(orientation(segment1, point7) == 1);
+  BOOST_CHECK(orientation(segment2, point7) == -1);
+  BOOST_CHECK(orientation(segment1, point8) == 0);
+  BOOST_CHECK(orientation(segment1, point9) == -1);
+  BOOST_CHECK(orientation(segment2, point9) == 1);
+  BOOST_CHECK(orientation(segment3, point6) == -1);
+  BOOST_CHECK(orientation(segment3, point3) == 1);
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test3, T, test_types) {
+  typedef point_data<T> point_type;
+  typedef Segment<T> segment_type;
+
+  segment_type segment1 = construct<segment_type>(point_type(0, 0), point_type(1, 2));
+  segment_type segment2 = construct<segment_type>(point_type(0, 0), point_type(2, 4));
+  segment_type segment3 = construct<segment_type>(point_type(0, 0), point_type(2, 3));
+  segment_type segment4 = construct<segment_type>(point_type(0, 0), point_type(2, 5));
+  segment_type segment5 = construct<segment_type>(point_type(0, 2), point_type(2, 0));
+
+  BOOST_CHECK(orientation(segment1, segment2) == 0);
+  BOOST_CHECK(orientation(segment1, segment3) == -1);
+  BOOST_CHECK(orientation(segment3, segment1) == 1);
+  BOOST_CHECK(orientation(segment1, segment4) == 1);
+  BOOST_CHECK(orientation(segment4, segment1) == -1);
+  BOOST_CHECK(orientation(segment1, segment5) == -1);
+  BOOST_CHECK(orientation(segment5, segment1) == 1);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test4, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 
@@ -201,7 +220,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test3, T, test_types) {
   BOOST_CHECK(!contains(segment, point5, true));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test4, T, test_types) {
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test5, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 
@@ -221,7 +240,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test4, T, test_types) {
   BOOST_CHECK(!contains(segment, point5, true));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test5, T, test_types) {
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test6, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 
@@ -258,7 +277,7 @@ struct Transformer {
   }
 };
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test6, T, test_types) {
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test7, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 
@@ -297,7 +316,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test6, T, test_types) {
   BOOST_CHECK(high(segment1) == point_type(12, 8));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test7, T, test_types) {
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test8, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 
@@ -325,7 +344,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test7, T, test_types) {
   BOOST_CHECK(!abuts(segment2, segment4));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test8, T, test_types) {
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test9, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 
@@ -349,7 +368,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test8, T, test_types) {
   BOOST_CHECK(intersects(segment3, segment5, true));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test9, T, test_types) {
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test10, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 
@@ -376,7 +395,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test9, T, test_types) {
   BOOST_CHECK(intersects(segment1, segment6, true));
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test10, T, test_types) {
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test11, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 
@@ -392,7 +411,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test10, T, test_types) {
   BOOST_CHECK(euclidean_distance(segment1, point_type(8, 3)) == 5.0);
 }
 
-BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test11, T, test_types) {
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_concept_test12, T, test_types) {
   typedef point_data<T> point_type;
   typedef Segment<T> segment_type;
 

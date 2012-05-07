@@ -1,6 +1,6 @@
 /*
   Copyright 2008 Intel Corporation
- 
+
   Use, modification and distribution are subject to the Boost Software License,
   Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -21,7 +21,7 @@ namespace boost { namespace polygon {
   template <typename T>
   static inline T round_down(double val) {
      T rounded_val = (T)(val);
-     if(val < (double)rounded_val) 
+     if(val < (double)rounded_val)
         --rounded_val;
      return rounded_val;
   }
@@ -56,11 +56,11 @@ namespace boost { namespace polygon {
     }
 
     // copy constructor
-    inline polygon_set_data(const polygon_set_data& that) : 
+    inline polygon_set_data(const polygon_set_data& that) :
       data_(that.data_), dirty_(that.dirty_), unsorted_(that.unsorted_), is_45_(that.is_45_) {}
 
     // copy constructor
-    template <typename ltype, typename rtype, int op_type> 
+    template <typename ltype, typename rtype, int op_type>
     inline polygon_set_data(const polygon_set_view<ltype, rtype, op_type>& that);
 
     // destructor
@@ -149,10 +149,10 @@ namespace boost { namespace polygon {
       insert(polygon_object, is_hole, polygon_concept()); }
 
     template <typename polygon_with_holes_type>
-    inline void insert(const polygon_with_holes_type& polygon_with_holes_object, bool is_hole, 
+    inline void insert(const polygon_with_holes_type& polygon_with_holes_object, bool is_hole,
                        polygon_with_holes_concept ) {
       insert(polygon_with_holes_object, is_hole, polygon_concept());
-      for(typename polygon_with_holes_traits<polygon_with_holes_type>::iterator_holes_type itr = 
+      for(typename polygon_with_holes_traits<polygon_with_holes_type>::iterator_holes_type itr =
             begin_holes(polygon_with_holes_object);
           itr != end_holes(polygon_with_holes_object); ++itr) {
         insert(*itr, !is_hole, polygon_concept());
@@ -160,12 +160,12 @@ namespace boost { namespace polygon {
     }
 
     template <typename polygon_with_holes_type>
-    inline void insert(const polygon_with_holes_type& polygon_with_holes_object, bool is_hole, 
+    inline void insert(const polygon_with_holes_type& polygon_with_holes_object, bool is_hole,
                        polygon_45_with_holes_concept ) {
       insert(polygon_with_holes_object, is_hole, polygon_with_holes_concept()); }
 
     template <typename polygon_with_holes_type>
-    inline void insert(const polygon_with_holes_type& polygon_with_holes_object, bool is_hole, 
+    inline void insert(const polygon_with_holes_type& polygon_with_holes_object, bool is_hole,
                        polygon_90_with_holes_concept ) {
       insert(polygon_with_holes_object, is_hole, polygon_with_holes_concept()); }
 
@@ -211,7 +211,7 @@ namespace boost { namespace polygon {
           first_point = previous_point = current_point;
         } else {
           if(previous_point != current_point) {
-            element_type elem(edge_type(previous_point, current_point), 
+            element_type elem(edge_type(previous_point, current_point),
                               ( previous_point.get(HORIZONTAL) == current_point.get(HORIZONTAL) ? -1 : 1) * multiplier);
             insert_clean(elem);
           }
@@ -221,7 +221,7 @@ namespace boost { namespace polygon {
       current_point = first_point;
       if(!first_iteration) {
         if(previous_point != current_point) {
-          element_type elem(edge_type(previous_point, current_point), 
+          element_type elem(edge_type(previous_point, current_point),
                             ( previous_point.get(HORIZONTAL) == current_point.get(HORIZONTAL) ? -1 : 1) * multiplier);
           insert_clean(elem);
         }
@@ -269,14 +269,14 @@ namespace boost { namespace polygon {
       }
     }
 
-    // equivalence operator 
+    // equivalence operator
     inline bool operator==(const polygon_set_data& p) const {
       clean();
       p.clean();
       return data_ == p.data_;
     }
 
-    // inequivalence operator 
+    // inequivalence operator
     inline bool operator!=(const polygon_set_data& p) const {
       return !((*this) == p);
     }
@@ -335,7 +335,7 @@ namespace boost { namespace polygon {
     }
 
     void set(const value_type& value) {
-      data_ = value; 
+      data_ = value;
       dirty_ = true;
       unsorted_ = true;
     }
@@ -362,7 +362,7 @@ namespace boost { namespace polygon {
     resize(coordinate_type resizing, bool corner_fill_arc = false, unsigned int num_circle_segments=0);
 
     template <typename transform_type>
-    inline polygon_set_data& 
+    inline polygon_set_data&
     transform(const transform_type& tr) {
       std::vector<polygon_with_holes_data<T> > polys;
       get(polys);
@@ -376,7 +376,7 @@ namespace boost { namespace polygon {
       return *this;
     }
 
-    inline polygon_set_data& 
+    inline polygon_set_data&
     scale_up(typename coordinate_traits<coordinate_type>::unsigned_area_type factor) {
       for(typename value_type::iterator itr = data_.begin(); itr != data_.end(); ++itr) {
         ::boost::polygon::scale_up((*itr).first.first, factor);
@@ -384,8 +384,8 @@ namespace boost { namespace polygon {
       }
       return *this;
     }
-    
-    inline polygon_set_data& 
+
+    inline polygon_set_data&
     scale_down(typename coordinate_traits<coordinate_type>::unsigned_area_type factor) {
       for(typename value_type::iterator itr = data_.begin(); itr != data_.end(); ++itr) {
         bool vb = (*itr).first.first.x() == (*itr).first.second.x();
@@ -400,9 +400,9 @@ namespace boost { namespace polygon {
       dirty_ = true;
       return *this;
     }
-    
+
     template <typename scaling_type>
-    inline polygon_set_data& scale(polygon_set_data& polygon_set, 
+    inline polygon_set_data& scale(polygon_set_data& polygon_set,
                                    const scaling_type& scaling) {
       for(typename value_type::iterator itr = begin(); itr != end(); ++itr) {
         bool vb = (*itr).first.first.x() == (*itr).first.second.x();
@@ -418,7 +418,7 @@ namespace boost { namespace polygon {
       return *this;
     }
 
-    static inline void compute_offset_edge(point_data<long double>& pt1, point_data<long double>& pt2, 
+    static inline void compute_offset_edge(point_data<long double>& pt1, point_data<long double>& pt2,
                                            const point_data<long double>&  prev_pt,
                                            const point_data<long double>&  current_pt,
                                            long double distance, int multiplier) {
@@ -449,17 +449,17 @@ namespace boost { namespace polygon {
       he2.second.y((long double)(next_pt.y()));
       compute_offset_edge(he1.first, he1.second, prev_pt, current_pt, distance, multiplier);
       compute_offset_edge(he2.first, he2.second, current_pt, next_pt, distance, multiplier);
-      typename scanline_base<long double>::compute_intersection_pack pack;
+      typedef scanline_base<long double>::compute_intersection_pack pack;
       point_data<long double> rpt;
       point_data<long double> bisectorpt((he1.second.x()+he2.first.x())/2,
                                          (he1.second.y()+he2.first.y())/2);
       point_data<long double> orig_pt((long double)pt.x(), (long double)pt.y());
       if(euclidean_distance(bisectorpt, orig_pt) < distance/2) {
-        if(!pack.compute_lazy_intersection(rpt, he1, he2, true, false)) {
+        if(!pack::compute_lazy_intersection(rpt, he1, he2, true, false)) {
           rpt = he1.second; //colinear offset edges use shared point
         }
       } else {
-        if(!pack.compute_lazy_intersection(rpt, he1, std::pair<point_data<long double>, point_data<long double> >(orig_pt, bisectorpt), true, false)) {
+        if(!pack::compute_lazy_intersection(rpt, he1, std::pair<point_data<long double>, point_data<long double> >(orig_pt, bisectorpt), true, false)) {
           rpt = he1.second; //colinear offset edges use shared point
         }
       }
@@ -575,8 +575,8 @@ namespace boost { namespace polygon {
     }
 
     template <typename geometry_type>
-    inline polygon_set_data& 
-    insert_with_resize_dispatch(const geometry_type& poly, coordinate_type resizing, bool corner_fill_arc, unsigned int num_circle_segments, bool hole, 
+    inline polygon_set_data&
+    insert_with_resize_dispatch(const geometry_type& poly, coordinate_type resizing, bool corner_fill_arc, unsigned int num_circle_segments, bool hole,
                                polygon_with_holes_concept tag) {
       insert_with_resize_dispatch(poly, resizing, corner_fill_arc, num_circle_segments, hole, polygon_concept());
       for(typename polygon_with_holes_traits<geometry_type>::iterator_holes_type itr =
@@ -588,14 +588,14 @@ namespace boost { namespace polygon {
     }
 
     template <typename geometry_type>
-    inline polygon_set_data& 
-    insert_with_resize_dispatch(const geometry_type& poly, coordinate_type resizing, bool corner_fill_arc, unsigned int num_circle_segments, bool hole, 
+    inline polygon_set_data&
+    insert_with_resize_dispatch(const geometry_type& poly, coordinate_type resizing, bool corner_fill_arc, unsigned int num_circle_segments, bool hole,
                           polygon_concept tag) {
 
       if (resizing==0)
          return *this;
 
-      
+
       // one dimensional used to store CCW/CW flag
       //direction_1d wdir = winding(poly);
       // LOW==CLOCKWISE just faster to type
@@ -640,7 +640,7 @@ namespace boost { namespace polygon {
         point_data<coordinate_type> normal2( third->y()-second->y(), second->x()-third->x());
         double direction = normal1.x()*normal2.y()- normal2.x()*normal1.y();
         bool convex = direction>0;
- 
+
         bool treat_as_concave = !convex;
         if(sizing_sign)
           treat_as_concave = convex;
@@ -653,12 +653,12 @@ namespace boost { namespace polygon {
         if (prev_concave)
           //TODO missing round_down()
           curr_prev = point_data<T>(first->x()+v.x(),first->y()+v.y());
-        else 
+        else
           curr_prev = prev_point;
 
            // around concave corners - insert rectangle
            // if previous corner is concave it's point info may be ignored
-        if ( treat_as_concave) { 
+        if ( treat_as_concave) {
            std::vector<point_data<T> > pts;
 
            pts.push_back(point_data<T>(second->x()+v.x(),second->y()+v.y()));
@@ -679,13 +679,13 @@ namespace boost { namespace polygon {
            direction_1d winding;
            winding = convex?COUNTERCLOCKWISE:CLOCKWISE;
            if (make_resizing_vertex_list(pts, curr_prev, prev_concave, *first, *second, *third, resizing
-                                         , num_circle_segments, corner_fill_arc)) 
+                                         , num_circle_segments, corner_fill_arc))
            {
                if (first_pts.size()) {
                   for (int i=0; i<pts.size(); i++) {
                     sizingSet.insert_vertex_sequence(pts[i].begin(),pts[i].end(),winding,false);
                   }
-  
+
                } else {
                   first_pts = pts[0];
                   first_wdir = resize_wdir;
@@ -694,7 +694,7 @@ namespace boost { namespace polygon {
                   }
                }
                prev_point = curr_prev;
-          
+
            } else {
               treat_as_concave = true;
            }
@@ -717,7 +717,7 @@ namespace boost { namespace polygon {
           first_pts[first_pts.size()-1]=prev_point;
       }
       sizingSet.insert_vertex_sequence(first_pts.begin(),first_pts.end(),first_wdir,false);
-         
+
       polygon_set_data<coordinate_type> tmp;
 
       //insert original shape
@@ -731,7 +731,7 @@ namespace boost { namespace polygon {
 
 
     inline polygon_set_data&
-    interact(const polygon_set_data& that); 
+    interact(const polygon_set_data& that);
 
     inline bool downcast(polygon_45_set_data<coordinate_type>& result) const {
       if(!is_45_) return false;
@@ -820,7 +820,7 @@ namespace boost { namespace polygon {
 //   }
 
   template <typename  T>
-  inline int make_resizing_vertex_list(std::vector<std::vector<point_data< T> > >& return_points, 
+  inline int make_resizing_vertex_list(std::vector<std::vector<point_data< T> > >& return_points,
                        point_data<T>& curr_prev, bool ignore_prev_point,
                        point_data< T> start, point_data<T> middle, point_data< T>  end,
                        double sizing_distance, unsigned int num_circle_segments, bool corner_fill_arc) {
@@ -853,7 +853,7 @@ namespace boost { namespace polygon {
          int num = make_arc(return_points[return_points.size()-1],mid1_offset,mid2_offset,dmid,sizing_distance,num_circle_segments);
          curr_prev = round_down<T>(mid2_offset);
          return num;
-         
+
       }
 
       std::pair<point_data<double>,point_data<double> > he1(start_offset,mid1_offset);
@@ -891,21 +891,21 @@ namespace boost { namespace polygon {
   // returnPoints will start with the first point after start
   // returnPoints vector  may be empty
   template <typename  T>
-  inline int  make_arc(std::vector<point_data< T> >& return_points,  
+  inline int  make_arc(std::vector<point_data< T> >& return_points,
                        point_data< double> start, point_data< double>  end,
                        point_data< double> center,  double r, unsigned int num_circle_segments) {
       const double our_pi=3.1415926535897932384626433832795028841971;
 
-      // derive start and end angles 
+      // derive start and end angles
       double ps = atan2(start.y()-center.y(), start.x()-center.x());
       double pe = atan2(end.y()-center.y(), end.x()-center.x());
-      if (ps <  0.0) 
+      if (ps <  0.0)
          ps += 2.0 * our_pi;
-      if (pe <= 0.0) 
+      if (pe <= 0.0)
          pe += 2.0 * our_pi;
-      if (ps >= 2.0 * our_pi) 
+      if (ps >= 2.0 * our_pi)
          ps -= 2.0 * our_pi;
-      while (pe <= ps)  
+      while (pe <= ps)
          pe += 2.0 * our_pi;
       double delta_angle = (2.0 * our_pi) / (double)num_circle_segments;
       if ( start==end) // full circle?
@@ -951,12 +951,12 @@ namespace boost { namespace polygon {
     inline connectivity_extraction() : ce_(), nodeCount_(0) {}
     inline connectivity_extraction(const connectivity_extraction& that) : ce_(that.ce_),
                                                                           nodeCount_(that.nodeCount_) {}
-    inline connectivity_extraction& operator=(const connectivity_extraction& that) { 
-      ce_ = that.ce_; 
+    inline connectivity_extraction& operator=(const connectivity_extraction& that) {
+      ce_ = that.ce_;
       nodeCount_ = that.nodeCount_; {}
       return *this;
     }
-    
+
     //insert a polygon set graph node, the value returned is the id of the graph node
     inline unsigned int insert(const polygon_set_data<coordinate_type>& ps) {
       ps.clean();
@@ -969,7 +969,7 @@ namespace boost { namespace polygon {
       ps.insert(geoObj);
       return insert(ps);
     }
-    
+
     //extract connectivity and store the edges in the graph
     //graph must be indexable by graph node id and the indexed value must be a std::set of
     //graph node id
@@ -1007,4 +1007,3 @@ namespace boost { namespace polygon {
 #include "polygon_set_concept.hpp"
 #include "detail/minkowski.hpp"
 #endif
-

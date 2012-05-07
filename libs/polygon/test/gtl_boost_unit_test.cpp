@@ -3645,69 +3645,6 @@ int main() {
       }
     }
   }
-  {
-    using namespace gtl;
-    typedef point_data<int> Point;
-    typedef segment_data<int> Segment;
-    Point pt1(0, 0);
-    Point pt2(10, 10);
-    Point pt3(20, 20);
-    Point pt4(20, 0);
-    Segment dls1(pt1, pt2);
-    Segment dls2(pt1, pt3);
-    Segment dls3(pt1, pt4);
-    Segment dls4(pt2, pt1);
-    bool b1 = equivalence(dls1, dls1);
-    bool b2 = equivalence(dls1, dls2);
-    bool b3 = equivalence(dls1, dls3);
-    bool b4 = equivalence(dls1, dls4);
-    if(!b1 || b2 || b3 || b4) {
-      std::cout << "fail1\n";
-      return 1;
-    }
-    low(dls1, pt1);
-    if(!equivalence(low(dls1), pt1)) {
-      std::cout << "fail2\n";
-      return 1;
-    }
-    high(dls1, pt2);
-    assert_s(equivalence(high(dls1), pt2), "fail3");
-    assign(dls1, dls4);
-    assert_s(equivalence(dls1, dls4), "fail4");
-    assert_s(!contains(dls1, dls2), "fail5");
-    assert_s(contains(dls2, dls1), "fail5");
-    assert_s(!contains(dls2, dls1, false), "fail6");
-    assert_s(center(dls1) == Point(5, 5), "center");
-    assert_s(length(dls3) == 20, "length");
-    scale_up(dls3, 10);
-    assert_s(length(dls3) == 200, "length2");
-    scale_down(dls3, 10);
-    assert_s(length(dls3) == 20, "length3");
-    scale(dls3, anisotropic_scale_factor<double>(1.5, 1.5, 1.5));
-    assert_s(length(dls3) == 30, "length4");
-    axis_transformation atr(axis_transformation::WS);
-    transform(dls3, atr);
-    assert_s(equivalence(high(dls3), Point(-30, 0)), "transform");
-    move(dls3, HORIZONTAL, 30);
-    assert_s(equivalence(high(dls3), pt1), "move");
-    convolve(dls3, pt2);
-    assert_s(equivalence(high(dls3), pt2), "convolve");
-    deconvolve(dls3, pt2);
-    assert_s(equivalence(high(dls3), pt1), "deconvolve");
-    assert_s(euclidean_distance(dls3, pt1) == 0.0, "distance1");
-    assert_s(euclidean_distance(dls3, pt2) == 10.0, "distance2");
-    std::cout << euclidean_distance(dls3, Point(5, 5)) << std::endl;
-    std::cout << dls1 << std::endl;
-    std::cout << euclidean_distance(dls1, Point(5, 5)) << std::endl;
-    std::cout << euclidean_distance(dls1, Point(15, 15)) << std::endl;
-    std::cout << euclidean_distance(dls1, Point(5, 6)) << std::endl;
-    std::cout << euclidean_distance(dls1, Point(5, 3)) << std::endl;
-    std::cout << euclidean_distance(dls1, dls3) << std::endl;
-    std::cout << euclidean_distance(dls1, segment_data<int>(Point(2, 0), Point(3, 0))) << std::endl;
-    assert_s(intersects(dls1, dls3), "intersects1");
-    assert_s(!intersects(dls1, segment_data<int>(Point(2, 0), Point(3, 0))), "intersects2");
-    assert_s(abuts(dls1, dls2), "abuts");
-  }
 
   std::cout << "ALL TESTS COMPLETE\n";
   return 0;
