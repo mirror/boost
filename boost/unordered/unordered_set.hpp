@@ -500,6 +500,7 @@ namespace unordered
         float load_factor() const;
         void max_load_factor(float);
         void rehash(size_type);
+        void reserve(size_type);
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<T,H,P,A>(
@@ -972,6 +973,7 @@ namespace unordered
         float load_factor() const;
         void max_load_factor(float);
         void rehash(size_type);
+        void reserve(size_type);
 
 #if !BOOST_WORKAROUND(__BORLANDC__, < 0x0582)
         friend bool operator==<T,H,P,A>(
@@ -1224,6 +1226,12 @@ namespace unordered
     void unordered_set<T,H,P,A>::rehash(size_type n)
     {
         table_.rehash(n);
+    }
+
+    template <class T, class H, class P, class A>
+    void unordered_set<T,H,P,A>::reserve(size_type n)
+    {
+        table_.reserve(n);
     }
 
     template <class T, class H, class P, class A>
@@ -1502,6 +1510,12 @@ namespace unordered
     void unordered_multiset<T,H,P,A>::rehash(size_type n)
     {
         table_.rehash(n);
+    }
+
+    template <class T, class H, class P, class A>
+    void unordered_multiset<T,H,P,A>::reserve(size_type n)
+    {
+        table_.reserve(n);
     }
 
     template <class T, class H, class P, class A>

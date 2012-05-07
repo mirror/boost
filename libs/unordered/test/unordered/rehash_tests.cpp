@@ -100,6 +100,34 @@ void rehash_test1(X* = 0,
     tracker.compare(x);
 }
 
+template <class X>
+void reserve_test(X* = 0,
+    test::random_generator generator = test::default_generator)
+{
+    for (int random_mlf = 0; random_mlf < 2; ++random_mlf)
+    {
+        for (int i = 0; i < 2000; i += i < 50 ? 1 : 13)
+        {
+            test::random_values<X> v(i, generator);
+
+            test::ordered<X> tracker;
+            tracker.insert_range(v.begin(), v.end());
+
+            X x;
+            x.max_load_factor(random_mlf ?
+                static_cast<float>(std::rand() % 1000) / 500.0 + 0.5f : 1.0f);
+            // For the current standard this should reserve i+1, I've
+            // submitted a defect report and will assume it's a defect
+            // for now.
+            x.reserve(i);
+            std::size_t bucket_count = x.bucket_count();
+            x.insert(v.begin(), v.end());
+            BOOST_TEST(bucket_count == x.bucket_count());
+            tracker.compare(x);
+        }
+    }
+}
+
 boost::unordered_set<int>* int_set_ptr;
 boost::unordered_multiset<int>* int_multiset_ptr;
 boost::unordered_map<int, int>* int_map_ptr;
@@ -115,6 +143,9 @@ UNORDERED_TEST(rehash_empty_test3,
     ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
 )
 UNORDERED_TEST(rehash_test1,
+    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+)
+UNORDERED_TEST(reserve_test,
     ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
 )
 
