@@ -472,7 +472,8 @@ namespace boost { namespace unordered { namespace detail {
 
 #endif
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+
         template <typename T>
         static typename boost::enable_if_c<
                 boost::unordered::detail::has_destroy<Alloc, T>::value>::type
