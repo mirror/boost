@@ -22,7 +22,7 @@
 
 namespace assign_tests {
 
-test::seed_t seed(96785);
+test::seed_t initialize_seed(96785);
 
 template <class T>
 void assign_tests1(T*,

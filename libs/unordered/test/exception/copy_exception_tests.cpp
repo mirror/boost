@@ -8,7 +8,7 @@
 
 template <typename T> inline void avoid_unused_warning(T const&) {}
 
-test::seed_t seed(73041);
+test::seed_t initialize_seed(73041);
 
 template <class T>
 struct copy_test1 : public test::exception_base

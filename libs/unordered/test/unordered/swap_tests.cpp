@@ -25,7 +25,7 @@
 namespace swap_tests
 {
 
-test::seed_t seed(783472);
+test::seed_t initialize_seed(783472);
 
 template <class X>
 void swap_test_impl(X& x1, X& x2)

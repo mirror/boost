@@ -861,22 +861,24 @@ namespace boost { namespace unordered { namespace detail {
 
         // This is called after erasing a node or group of nodes to fix up
         // the bucket pointers.
-        void fix_buckets(bucket_pointer bucket,
+        void fix_buckets(bucket_pointer this_bucket,
                 previous_pointer prev, node_pointer next)
         {
             if (!next)
             {
-                if (bucket->next_ == prev) bucket->next_ = node_pointer();
+                if (this_bucket->next_ == prev)
+                    this_bucket->next_ = node_pointer();
             }
             else
             {
                 bucket_pointer next_bucket = this->get_bucket(
                     policy::to_bucket(this->bucket_count_, next->hash_));
 
-                if (next_bucket != bucket)
+                if (next_bucket != this_bucket)
                 {
                     next_bucket->next_ = prev;
-                    if (bucket->next_ == prev) bucket->next_ = node_pointer();
+                    if (this_bucket->next_ == prev)
+                        this_bucket->next_ = node_pointer();
                 }
             }
         }

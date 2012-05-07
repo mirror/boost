@@ -111,7 +111,7 @@ namespace boost { namespace unordered { namespace detail {
     {                                                                       \
         BOOST_PP_REPEAT_##z(n, BOOST_UNORDERED_EARGS_MEMBER, _)             \
         BOOST_PP_CAT(emplace_args, n) (                                     \
-            BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, Arg, a)                     \
+            BOOST_PP_ENUM_BINARY_PARAMS_Z(z, n, Arg, b)                     \
         ) : BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_EARGS_INIT, _)             \
         {}                                                                  \
                                                                             \
@@ -121,12 +121,12 @@ namespace boost { namespace unordered { namespace detail {
     inline BOOST_PP_CAT(emplace_args, n) <                                  \
         BOOST_PP_ENUM_PARAMS_Z(z, n, A)                                     \
     > create_emplace_args(                                                  \
-        BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_FWD_PARAM, a)                  \
+        BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_FWD_PARAM, b)                  \
     )                                                                       \
     {                                                                       \
         BOOST_PP_CAT(emplace_args, n) <                                     \
             BOOST_PP_ENUM_PARAMS_Z(z, n, A)                                 \
-        > e(BOOST_PP_ENUM_PARAMS_Z(z, n, a));                               \
+        > e(BOOST_PP_ENUM_PARAMS_Z(z, n, b));                               \
         return e;                                                           \
     }
 
@@ -138,7 +138,7 @@ namespace boost { namespace unordered { namespace detail {
 
 #define BOOST_UNORDERED_EARGS_INIT(z, n, _)                                 \
     BOOST_PP_CAT(a, n)(                                                     \
-        boost::forward<BOOST_PP_CAT(A,n)>(BOOST_PP_CAT(a, n)))
+        boost::forward<BOOST_PP_CAT(A,n)>(BOOST_PP_CAT(b, n)))
 
 #else
 
@@ -148,7 +148,7 @@ namespace boost { namespace unordered { namespace detail {
     BOOST_PP_CAT(Arg, n) BOOST_PP_CAT(a, n);
 
 #define BOOST_UNORDERED_EARGS_INIT(z, n, _)                                 \
-    BOOST_PP_CAT(a, n)(BOOST_PP_CAT(a, n))
+    BOOST_PP_CAT(a, n)(BOOST_PP_CAT(b, n))
 
 #endif
 

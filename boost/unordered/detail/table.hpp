@@ -348,21 +348,21 @@ namespace boost { namespace unordered { namespace detail {
         template <typename Key, typename Hash, typename Pred>
         iterator generic_find_node(
                 Key const& k,
-                Hash const& hash_function,
+                Hash const& hf,
                 Pred const& eq) const
         {
             if (!this->size_) return iterator();
             return static_cast<table_impl const*>(this)->
-                find_node_impl(policy::apply_hash(hash_function, k), k, eq);
+                find_node_impl(policy::apply_hash(hf, k), k, eq);
         }
 
         iterator find_node(
-                std::size_t hash,
+                std::size_t key_hash,
                 key_type const& k) const
         {
             if (!this->size_) return iterator();
             return static_cast<table_impl const*>(this)->
-                find_node_impl(hash, k, this->key_eq());
+                find_node_impl(key_hash, k, this->key_eq());
         }
 
         iterator find_node(key_type const& k) const

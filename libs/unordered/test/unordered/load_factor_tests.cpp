@@ -20,7 +20,7 @@
 namespace load_factor_tests
 {
 
-test::seed_t seed(783656);
+test::seed_t initialize_seed(783656);
 
 template <class X>
 void set_load_factor_tests(X* = 0)

@@ -18,7 +18,7 @@
 
 namespace constructor_tests {
 
-test::seed_t seed(356730);
+test::seed_t initialize_seed(356730);
 
 template <class T>
 void constructor_tests1(T*,

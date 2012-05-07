@@ -124,8 +124,8 @@ namespace test
             : base()
         {}
 
-        explicit ordered(key_compare const& compare)
-            : base(compare)
+        explicit ordered(key_compare const& kc)
+            : base(kc)
         {}
 
         void compare(X const& x)
@@ -143,10 +143,10 @@ namespace test
         }
 
         template <class It>
-        void insert_range(It begin, It end) {
-            while(begin != end) {
-                this->insert(*begin);
-                ++begin;
+        void insert_range(It b, It e) {
+            while(b != e) {
+                this->insert(*b);
+                ++b;
             }
         }
     };

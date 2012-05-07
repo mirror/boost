@@ -15,7 +15,7 @@
 namespace rehash_tests
 {
 
-test::seed_t seed(2974);
+test::seed_t initialize_seed(2974);
 
 template <class X>
 bool postcondition(X const& x, BOOST_DEDUCED_TYPENAME X::size_type n)

@@ -17,7 +17,7 @@
 namespace find_tests
 {
 
-test::seed_t seed(78937);
+test::seed_t initialize_seed(78937);
 
 template <class X>
 void find_tests1(X*, test::random_generator generator = test::default_generator)
