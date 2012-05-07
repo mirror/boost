@@ -205,12 +205,12 @@ namespace boost { namespace unordered { namespace detail {
 
 #else
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if defined(BOOST_UNORDERED_VARIADIC_MOVE) && \
+        !defined(BOOST_NO_SFINAE_EXPR)
 #   define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
 #else
 #   define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 0
 #endif
-
 
     // TODO: Does this match std::allocator_traits<Alloc>::rebind_alloc<T>?
     template <typename Alloc, typename T>
@@ -407,7 +407,7 @@ namespace boost { namespace unordered { namespace detail {
 
     public:
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
 
         template <typename T, typename... Args>
         static typename boost::enable_if_c<
