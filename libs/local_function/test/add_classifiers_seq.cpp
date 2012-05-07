@@ -14,8 +14,7 @@
 #include <boost/detail/lightweight_test.hpp>
 
 int main(void) {
-    /** @todo re-add register and document that vacpp doesn't support it */
-    int BOOST_LOCAL_FUNCTION( (auto int x) (/*register*/ int y) ) {
+    int BOOST_LOCAL_FUNCTION( (auto int x) (register int y) ) {
         return x + y;
     } BOOST_LOCAL_FUNCTION_NAME(add)
 

@@ -41,19 +41,13 @@
 template<typename T>
 void f(T& delta) {
     LOCAL_INC_DEC_TPL(delta) // Multiple local functions on same line.
-    /** @todo back to BOOST_TEST(dec(inc(123)) == 123)) and doc that on vacpp compiler composition doesn't work */
-    BOOST_TEST(inc(123) == 123 + delta);
-    BOOST_TEST(dec(123) == 123 - delta);
+    BOOST_TEST(dec(inc(123)) == 123);
 }
 
 int main(void) {
     int delta = 10;
-
     LOCAL_INC_DEC(delta) // Multiple local functions on same line.
-    /** @todo back to BOOST_TEST(dec(inc(123)) == 123)) and doc that on vacpp compiler composition doesn't work */
-    BOOST_TEST(inc(123) == 123 + delta);
-    BOOST_TEST(dec(123) == 123 - delta);
-
+    BOOST_TEST(dec(inc(123)) == 123);
     f(delta);
     return boost::report_errors();
 }

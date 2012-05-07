@@ -12,7 +12,6 @@
 #include <boost/detail/lightweight_test.hpp>
 
 BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function, 1)
-BOOST_TYPEOF_REGISTER_TEMPLATE(boost::function1, 2) // Also `functionN`.
 
 boost::function<int (int)> derivative(boost::function<int (int)>& f, int dx) {
     int BOOST_LOCAL_FUNCTION( (bind& f) (const bind dx) (int x) ) {
