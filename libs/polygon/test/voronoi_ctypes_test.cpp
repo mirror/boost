@@ -46,25 +46,6 @@ BOOST_AUTO_TEST_CASE(ulp_comparison_test2) {
   BOOST_CHECK_EQUAL(ulp_cmp(da, db, 3), ulp_cmp.EQUAL);
 }
 
-BOOST_AUTO_TEST_CASE(fpt_exponent_accessor_test) {
-  typedef fpt_exponent_accessor<fpt64> fpt_ea;
-  fpt64 value = 15;
-  BOOST_CHECK_EQUAL(fpt_ea::set_exponent(value, 0), 3);
-  BOOST_CHECK_EQUAL(value, 1.875);
-  value = 0.0625;
-  BOOST_CHECK_EQUAL(fpt_ea::set_exponent(value, 0), -4);
-  BOOST_CHECK_EQUAL(value, 1.0);
-  value = -1.5;
-  BOOST_CHECK_EQUAL(fpt_ea::set_exponent(value, 4), 0);
-  BOOST_CHECK_EQUAL(value, -24.0);
-  value = 0.0;
-  BOOST_CHECK_EQUAL(fpt_ea::set_exponent(value, 4), fpt_ea::kMinExponent);
-  BOOST_CHECK_EQUAL(value, 16.0);
-  value = std::pow(2.0, 2000);
-  BOOST_CHECK_EQUAL(fpt_ea::set_exponent(value, 4), fpt_ea::kMaxExponent);
-  BOOST_CHECK_EQUAL(value, 16.0);
-}
-
 BOOST_AUTO_TEST_CASE(extended_exponent_fpt_test1) {
   boost::mt19937_64 gen(static_cast<uint32>(time(NULL)));
   fpt64 b = 0.0;

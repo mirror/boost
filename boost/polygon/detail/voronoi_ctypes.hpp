@@ -65,143 +65,102 @@ struct ulp_comparison<fpt64> {
   }
 };
 
-// Manages exponent of the floating-point value.
 template <typename _fpt>
-struct fpt_exponent_accessor;
+struct extened_exponent_fpt_traits;
 
 template <>
-class fpt_exponent_accessor<fpt64> {
+class extened_exponent_fpt_traits<fpt64> {
 public:
-  static const int64 kExponentMask;
-  static const int64 kSignedMantissaMask;
-  static const int64 kMinExponent;
-  static const int64 kMaxExponent;
-  static const int64 kMaxSignificantExpDif;
-
-  static int64 set_exponent(fpt64& value, int64 exponent) {
-    int64 bits;
-    std::memcpy(&bits, &value, sizeof(fpt64));
-    int64 exp = ((bits & kExponentMask) >> 52) - 1023;
-    if (exp == exponent)
-      return exp;
-    bits = (bits & kSignedMantissaMask) | ((exponent + 1023) << 52);
-    std::memcpy(&value, &bits, sizeof(fpt64));
-    return exp;
-  }
+  typedef int exp_type;
+  static const int kMaxSignificantExpDif;
 };
 
-const int64 fpt_exponent_accessor<fpt64>::kExponentMask =
-  0x7ff0000000000000LL;
-const int64 fpt_exponent_accessor<fpt64>::kSignedMantissaMask =
-  0x800fffffffffffffLL;
-const int64 fpt_exponent_accessor<fpt64>::kMinExponent = -1023LL;
-const int64 fpt_exponent_accessor<fpt64>::kMaxExponent = 1024LL;
-const int64 fpt_exponent_accessor<fpt64>::kMaxSignificantExpDif = 54;
+const int extened_exponent_fpt_traits<fpt64>::kMaxSignificantExpDif = 54;
 
 // Floating point type wrapper. Allows to extend exponent boundaries to the
-// 64 bit integer range. This class does not handle division by zero, subnormal
+// integer type range. This class does not handle division by zero, subnormal
 // numbers or NaNs.
-template <typename _fpt>
+template <typename _fpt, typename _traits = extened_exponent_fpt_traits<_fpt> >
 class extended_exponent_fpt {
 public:
   typedef _fpt fpt_type;
-  typedef int64 exp_type;
-  typedef fpt_exponent_accessor<fpt_type> fea;
+  typedef typename _traits::exp_type exp_type;
 
-  explicit extended_exponent_fpt(fpt_type value) {
-    if (value == 0.0) {
-      exponent_ = 0;
-      value_ = 0.0;
-    } else {
-      exponent_ = fea::set_exponent(value, 0);
-      value_ = value;
-    }
+  explicit extended_exponent_fpt(fpt_type val) {
+    val_ = std::frexp(val, &exp_);
   }
 
-  extended_exponent_fpt(fpt_type value, exp_type exponent) {
-    if (value == 0.0) {
-      exponent_ = 0;
-      value_ = 0.0;
-    } else {
-      exponent_ = fea::set_exponent(value, 0) + exponent;
-      value_ = value;
-    }
+  extended_exponent_fpt(fpt_type val, exp_type exp) {
+    val_ = std::frexp(val, &exp_);
+    exp_ += exp;
   }
 
   bool is_pos() const {
-    return value_ > 0;
+    return val_ > 0;
   }
 
   bool is_neg() const {
-    return value_ < 0;
+    return val_ < 0;
   }
 
   bool is_zero() const {
-    return value_ == 0;
+    return val_ == 0;
   }
 
   extended_exponent_fpt operator-() const {
-    return extended_exponent_fpt(-value_, exponent_);
+    return extended_exponent_fpt(-val_, exp_);
   }
 
   extended_exponent_fpt operator+(const extended_exponent_fpt& that) const {
-    if (this->value_ == 0.0 ||
-      that.exponent_ > this->exponent_ + fea::kMaxSignificantExpDif) {
+    if (this->val_ == 0.0 ||
+        that.exp_ > this->exp_ + _traits::kMaxSignificantExpDif) {
       return that;
     }
-    if (that.value_ == 0.0 ||
-      this->exponent_ > that.exponent_ + fea::kMaxSignificantExpDif) {
+    if (that.val_ == 0.0 ||
+        this->exp_ > that.exp_ + _traits::kMaxSignificantExpDif) {
       return *this;
     }
-    if (this->exponent_ >= that.exponent_) {
-      exp_type exp_dif = this->exponent_ - that.exponent_;
-      fpt_type value = this->value_;
-      fea::set_exponent(value, exp_dif);
-      value += that.value_;
-      return extended_exponent_fpt(value, that.exponent_);
+    if (this->exp_ >= that.exp_) {
+      exp_type exp_dif = this->exp_ - that.exp_;
+      fpt_type val = std::ldexp(this->val_, exp_dif) + that.val_;
+      return extended_exponent_fpt(val, that.exp_);
     } else {
-      exp_type exp_dif = that.exponent_ - this->exponent_;
-      fpt_type value = that.value_;
-      fea::set_exponent(value, exp_dif);
-      value += this->value_;
-      return extended_exponent_fpt(value, this->exponent_);
+      exp_type exp_dif = that.exp_ - this->exp_;
+      fpt_type val = std::ldexp(that.val_, exp_dif) + this->val_;
+      return extended_exponent_fpt(val, this->exp_);
     }
   }
 
   extended_exponent_fpt operator-(const extended_exponent_fpt& that) const {
-    if (this->value_ == 0.0 ||
-      that.exponent_ > this->exponent_ + fea::kMaxSignificantExpDif) {
-      return extended_exponent_fpt(-that.value_, that.exponent_);
+    if (this->val_ == 0.0 ||
+        that.exp_ > this->exp_ + _traits::kMaxSignificantExpDif) {
+      return extended_exponent_fpt(-that.val_, that.exp_);
     }
-    if (that.value_ == 0.0 ||
-      this->exponent_ > that.exponent_ + fea::kMaxSignificantExpDif) {
+    if (that.val_ == 0.0 ||
+        this->exp_ > that.exp_ + _traits::kMaxSignificantExpDif) {
       return *this;
     }
-    if (this->exponent_ >= that.exponent_) {
-      exp_type exp_dif = this->exponent_ - that.exponent_;
-      fpt_type value = this->value_;
-      fea::set_exponent(value, exp_dif);
-      value -= that.value_;
-      return extended_exponent_fpt(value, that.exponent_);
+    if (this->exp_ >= that.exp_) {
+      exp_type exp_dif = this->exp_ - that.exp_;
+      fpt_type val = std::ldexp(this->val_, exp_dif) - that.val_;
+      return extended_exponent_fpt(val, that.exp_);
     } else {
-      exp_type exp_dif = that.exponent_ - this->exponent_;
-      fpt_type value = -that.value_;
-      fea::set_exponent(value, exp_dif);
-      value += this->value_;
-      return extended_exponent_fpt(value, this->exponent_);
+      exp_type exp_dif = that.exp_ - this->exp_;
+      fpt_type val = std::ldexp(-that.val_, exp_dif) + this->val_;
+      return extended_exponent_fpt(val, this->exp_);
     }
   }
 
   extended_exponent_fpt operator*(const extended_exponent_fpt& that) const {
-    fpt_type value = this->value_ * that.value_;
-    exp_type exponent = this->exponent_ + that.exponent_;
-    return extended_exponent_fpt(value, exponent);
+    fpt_type val = this->val_ * that.val_;
+    exp_type exp = this->exp_ + that.exp_;
+    return extended_exponent_fpt(val, exp);
   }
 
   extended_exponent_fpt operator/(const extended_exponent_fpt& that) const {
-    fpt_type value = this->value_ / that.value_;
-    exp_type exponent = this->exponent_ - that.exponent_;
-    return extended_exponent_fpt(value, exponent);
+    fpt_type val = this->val_ / that.val_;
+    exp_type exp = this->exp_ - that.exp_;
+    return extended_exponent_fpt(val, exp);
   }
 
   extended_exponent_fpt& operator+=(const extended_exponent_fpt& that) {
@@ -221,8 +180,8 @@ public:
   }
 
   extended_exponent_fpt sqrt() const {
-    fpt_type val = value_;
-    exp_type exp = exponent_;
+    fpt_type val = val_;
+    exp_type exp = exp_;
     if (exp & 1) {
       val *= 2.0;
       --exp;
@@ -231,24 +190,12 @@ public:
   }
 
   fpt_type d() const {
-    fpt_type ret_val = value_;
-    exp_type exp = exponent_;
-    if (ret_val == 0.0)
-      return ret_val;
-    if (exp >= fea::kMaxExponent) {
-      ret_val = 1.0;
-      exp = fea::kMaxExponent;
-    } else if (exp <= fea::kMinExponent) {
-      ret_val = 1.0;
-      exp = fea::kMinExponent;
-    }
-    fea::set_exponent(ret_val, exp);
-    return ret_val;
+    return std::ldexp(val_, exp_);
   }
 
 private:
-  fpt_type value_;
-  exp_type exponent_;
+  fpt_type val_;
+  exp_type exp_;
 };
 typedef extended_exponent_fpt<double> efpt64;
 
@@ -521,8 +468,8 @@ public:
     return (std::abs)(count_);
   }
 
-  std::pair<fpt64, int64> p() const {
-    std::pair<fpt64, int64> ret_val(0, 0);
+  std::pair<fpt64, int> p() const {
+    std::pair<fpt64, int> ret_val(0, 0);
     size_t sz = this->size();
     if (!sz) {
       return ret_val;
@@ -547,9 +494,8 @@ public:
   }
 
   fpt64 d() const {
-    std::pair<fpt64, int64> p = this->p();
-    extended_exponent_fpt<fpt64> efpt(p.first, p.second);
-    return efpt.d();
+    std::pair<fpt64, int> p = this->p();
+    return std::ldexp(p.first, p.second);
   }
 
 private:
@@ -683,7 +629,7 @@ struct type_converter_fpt {
 struct type_converter_efpt {
   template <size_t N>
   extended_exponent_fpt<fpt64> operator()(const extended_int<N>& that) const {
-    std::pair<fpt64, int64> p = that.p();
+    std::pair<fpt64, int> p = that.p();
     return extended_exponent_fpt<fpt64>(p.first, p.second);
   }
 };
