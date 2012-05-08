@@ -252,11 +252,11 @@ public:
 
   template<typename PropertyMap>
   dynamic_properties&
-  property(const std::string& name, PropertyMap property_map)
+  property(const std::string& name, PropertyMap property_map_)
   {
     // Tbd: exception safety
     boost::shared_ptr<dynamic_property_map> pm(
-      new detail::dynamic_property_map_adaptor<PropertyMap>(property_map));
+      new detail::dynamic_property_map_adaptor<PropertyMap>(property_map_));
     property_maps.insert(property_maps_type::value_type(name, pm));
 
     return *this;
