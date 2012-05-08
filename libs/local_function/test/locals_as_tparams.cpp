@@ -17,9 +17,11 @@
 #if BOOST_LOCAL_FUNCTION_CONFIG_LOCALS_AS_TPARAMS
 #   define LOCALS_AS_TPARAMS_TFUNC call_expected_to_pass
 #   define LOCALS_AS_TPARAMS_TCLASS instantiation_expected_to_pass
+#   define LOCALS_AS_TPARAMS_EXIT_CODE 0 // Pass.
 #else
 #   define LOCALS_AS_TPARAMS_TFUNC call_exptected_to_fail
 #   define LOCALS_AS_TPARAMS_TCLASS instantiation_expected_to_fail
+#   define LOCALS_AS_TPARAMS_EXIT_CODE 1 // Fails.
 #endif
 
 template<typename T> struct LOCALS_AS_TPARAMS_TCLASS { void use(void) {} };
@@ -29,6 +31,6 @@ int main(void) {
     struct local_class {} local_obj;
     LOCALS_AS_TPARAMS_TCLASS<local_class>().use();
     LOCALS_AS_TPARAMS_TFUNC(local_obj);
-    return 0;
+    return LOCALS_AS_TPARAMS_EXIT_CODE;
 }
 
