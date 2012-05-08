@@ -459,10 +459,6 @@ namespace boost { namespace unordered { namespace detail {
             new ((void*) p) T(x);
         }
 
-#   endif
-
-#   if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
-
         template <typename T>
         static typename boost::enable_if_c<
                 boost::unordered::detail::has_destroy<Alloc, T>::value>::type
@@ -481,8 +477,9 @@ namespace boost { namespace unordered { namespace detail {
 
 #   else
 
-        // If we don't have SFINAE expressions, only call construct the type
-        // that matches the allocator.
+        // If we don't have SFINAE expressions, only call construct for the
+        // copy constructor for the allocator's value_type - as that's
+        // the only construct method that old fashioned allocators support.
 
         template <typename T>
         static typename boost::enable_if_c<
