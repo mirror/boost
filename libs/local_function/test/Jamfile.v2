@@ -31,6 +31,7 @@ vaseq run all_decl ;
 vaseq run factorial ;
 vaseq run goto ;
 vaseq compile-fail goto_error ;
+run locals_as_tparams.cpp ;
 vaseq run macro_commas ;
 vaseq run nesting ;
 vaseq run operator ;
