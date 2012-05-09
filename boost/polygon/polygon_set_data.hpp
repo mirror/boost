@@ -647,7 +647,7 @@ namespace boost { namespace polygon {
         point_data<double> v;
         assign(v, normal1);
         double s2 = (v.x()*v.x()+v.y()*v.y());
-        double s = sqrt(s2)/resizing;
+        double s = std::sqrt(s2)/resizing;
         v = point_data<double>(v.x()/s,v.y()/s);
         point_data<T> curr_prev;
         if (prev_concave)
@@ -827,10 +827,10 @@ namespace boost { namespace polygon {
 
       // handle the case of adding an intersection point
       point_data<double> dn1( middle.y()-start.y(), start.x()-middle.x());
-      double size = sizing_distance/sqrt( dn1.x()*dn1.x()+dn1.y()*dn1.y());
+      double size = sizing_distance/std::sqrt( dn1.x()*dn1.x()+dn1.y()*dn1.y());
       dn1 = point_data<double>( dn1.x()*size, dn1.y()* size);
       point_data<double> dn2( end.y()-middle.y(), middle.x()-end.x());
-      size = sizing_distance/sqrt( dn2.x()*dn2.x()+dn2.y()*dn2.y());
+      size = sizing_distance/std::sqrt( dn2.x()*dn2.x()+dn2.y()*dn2.y());
       dn2 = point_data<double>( dn2.x()*size, dn2.y()* size);
       point_data<double> start_offset((start.x()+dn1.x()),(start.y()+dn1.y()));
       point_data<double> mid1_offset((middle.x()+dn1.x()),(middle.y()+dn1.y()));

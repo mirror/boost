@@ -336,7 +336,7 @@ namespace boost { namespace polygon{
     uint_x2 b3 = (uint_x2)(b1 < 0 ? -b1 : b1) * (uint_x2)(a2 < 0 ? -a2 : a2);
     if (a3 == b3)
       return 0;
-    return ((a3 < b3) ^ (sign1 == 1)) ? 1 : -1; 
+    return ((a3 < b3) ^ (sign1 == 1)) ? 1 : -1;
   }
 
   struct y_s_orientation2 : gtl_yes {};
@@ -386,7 +386,7 @@ namespace boost { namespace polygon{
       return false;
     return true;
   }
-  
+
   struct y_s_contains2 : gtl_yes {};
 
   template <typename Segment1, typename Segment2>

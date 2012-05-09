@@ -157,7 +157,7 @@ private:
         event_comparison_predicate());
 
     // Remove duplicates.
-    site_events_.erase(unique(
+    site_events_.erase(std::unique(
         site_events_.begin(), site_events_.end()), site_events_.end());
 
     // Index sites.

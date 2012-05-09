@@ -10,7 +10,10 @@
 #ifndef BOOST_POLYGON_VORONOI
 #define BOOST_POLYGON_VORONOI
 
-#include "polygon.hpp"
+#include "isotropy.hpp"
+#include "point_concept.hpp"
+#include "segment_concept.hpp"
+
 #include "voronoi_builder.hpp"
 #include "voronoi_diagram.hpp"
 
@@ -29,13 +32,9 @@
 namespace boost {
 namespace polygon {
 
-struct voronoi_insert_point_yes : gtl_yes {};
-
 template <typename Point, typename VB>
-static inline
 typename enable_if<
-  typename gtl_and<
-    voronoi_insert_point_yes,
+  typename gtl_if<
     typename is_point_concept<
       typename geometry_concept<Point>::type
     >::type
@@ -46,13 +45,9 @@ insert(const Point &point, VB *vb) {
   vb->insert_point(x(point), y(point));
 }
 
-struct voronoi_insert_points_yes : gtl_yes {};
-
 template <typename PointIterator, typename VB>
-static inline
 typename enable_if<
-  typename gtl_and<
-    voronoi_insert_points_yes,
+  typename gtl_if<
     typename is_point_concept<
       typename geometry_concept<
         typename std::iterator_traits<PointIterator>::value_type
@@ -67,13 +62,9 @@ insert(PointIterator first, const PointIterator last, VB *vb) {
   }
 }
 
-struct voronoi_insert_segment_yes : gtl_yes {};
-
 template <typename Segment, typename VB>
-static inline
 typename enable_if<
-  typename gtl_and<
-    voronoi_insert_segment_yes,
+  typename gtl_if<
     typename is_segment_concept<
       typename geometry_concept<Segment>::type
     >::type
@@ -84,13 +75,9 @@ insert(const Segment &segment, VB *vb) {
   vb->insert_segment(x(low(segment)), y(low(segment)), x(high(segment)), y(high(segment)));
 }
 
-struct voronoi_insert_segments_yes : gtl_yes {};
-
 template <typename SegmentIterator, typename VB>
-static inline
 typename enable_if<
-  typename gtl_and<
-    voronoi_insert_segments_yes,
+  typename gtl_if<
     typename is_segment_concept<
       typename geometry_concept<
         typename std::iterator_traits<SegmentIterator>::value_type
@@ -105,13 +92,9 @@ insert(SegmentIterator first, SegmentIterator last, VB *vb) {
   }
 }
 
-struct voronoi_construct_points_yes : gtl_yes {};
-
 template <typename PointIterator, typename VD>
-static inline
 typename enable_if<
-  typename gtl_and<
-    voronoi_construct_points_yes,
+  typename gtl_if<
     typename is_point_concept<
       typename geometry_concept<
         typename std::iterator_traits<PointIterator>::value_type
@@ -126,13 +109,9 @@ construct_voronoi(PointIterator first, PointIterator last, VD *vd) {
   builder.construct(vd);
 }
 
-struct voronoi_construct_segments_yes : gtl_yes {};
-
 template <typename SegmentIterator, typename VD>
-static inline
 typename enable_if<
-  typename gtl_and<
-    voronoi_construct_segments_yes,
+  typename gtl_if<
     typename is_segment_concept<
       typename geometry_concept<
         typename std::iterator_traits<SegmentIterator>::value_type
@@ -147,13 +126,9 @@ construct_voronoi(SegmentIterator first, SegmentIterator last, VD *vd) {
   builder.construct(vd);
 }
 
-struct voronoi_construct_points_and_segments_yes : gtl_yes {};
-
 template <typename PointIterator, typename SegmentIterator, typename VD>
-static inline 
 typename enable_if<
-  typename gtl_and_3<
-    voronoi_construct_points_and_segments_yes,
+  typename gtl_and<
     typename gtl_if<
       typename is_point_concept<
         typename geometry_concept<

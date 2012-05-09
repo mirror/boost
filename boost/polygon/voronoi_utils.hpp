@@ -114,7 +114,7 @@ public:
 
   // Get scaled by a factor bounding rectangle.
   template <typename CT>
-  static brect_type scale(const bounding_rectangle<CT> &brect, 
+  static brect_type scale(const bounding_rectangle<CT> &brect,
       coordinate_type factor) {
     coordinate_type x_len = to_fpt(brect.x_max()) - to_fpt(brect.x_min());
     coordinate_type y_len = to_fpt(brect.y_max()) - to_fpt(brect.y_min());
@@ -131,7 +131,7 @@ public:
   // Discretizes finite Voronoi edge.
   // Discretization absolute error is defined by max_error value.
   template <typename CT>
-  static void discretize(const voronoi_edge<CT> &edge, 
+  static void discretize(const voronoi_edge<CT> &edge,
       coordinate_type max_error, point_set_type &discretization) {
     // Don't process infinite edges.
     if (!edge.is_finite())

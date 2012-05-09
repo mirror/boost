@@ -504,7 +504,7 @@ private:
           e1->twin(e2);
           e2->twin(e1);
           if (e1->prev()) {
-            e1->prev()->next(e1); 
+            e1->prev()->next(e1);
             e2->next()->prev(e2);
           }
           if (e2->prev()) {

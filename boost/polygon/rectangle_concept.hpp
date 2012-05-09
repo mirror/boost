@@ -1,6 +1,6 @@
 /*
   Copyright 2008 Intel Corporation
- 
+
   Use, modification and distribution are subject to the Boost Software License,
   Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -25,7 +25,7 @@
 
 namespace boost { namespace polygon{
   struct rectangle_concept {};
- 
+
   template <typename T>
   struct is_rectangle_concept { typedef gtl_no type; };
   template <>
@@ -62,7 +62,7 @@ namespace boost { namespace polygon{
   template <typename T, typename CT>
   struct rectangle_difference_type_by_concept { typedef void type; };
   template <typename T>
-  struct rectangle_difference_type_by_concept<T, gtl_yes> { 
+  struct rectangle_difference_type_by_concept<T, gtl_yes> {
      typedef typename coordinate_traits<typename rectangle_traits<T>::coordinate_type>::coordinate_difference type; };
 
   template <typename T>
@@ -74,7 +74,7 @@ namespace boost { namespace polygon{
   template <typename T, typename CT>
   struct rectangle_distance_type_by_concept { typedef void type; };
   template <typename T>
-  struct rectangle_distance_type_by_concept<T, gtl_yes> { 
+  struct rectangle_distance_type_by_concept<T, gtl_yes> {
     typedef typename coordinate_traits<typename rectangle_coordinate_type<T>::type>::coordinate_distance type; };
 
   template <typename T>
@@ -98,7 +98,7 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_h, typename is_rectangle_concept<typename geometry_concept<T>::type>::type>::type,
                        typename rectangle_interval_type<T>::type>::type
   horizontal(const T& rectangle) {
-    return rectangle_traits<T>::get(rectangle, HORIZONTAL); 
+    return rectangle_traits<T>::get(rectangle, HORIZONTAL);
   }
 
   struct y_r_v : gtl_yes {};
@@ -107,68 +107,68 @@ namespace boost { namespace polygon{
   typename enable_if< typename gtl_and<y_r_v, typename is_rectangle_concept<typename geometry_concept<T>::type>::type>::type,
                        typename rectangle_interval_type<T>::type>::type
   vertical(const T& rectangle) {
-    return rectangle_traits<T>::get(rectangle, VERTICAL); 
+    return rectangle_traits<T>::get(rectangle, VERTICAL);
   }
 
   struct y_r_set : gtl_yes {};
 
   template <orientation_2d_enum orient, typename T, typename T2>
-  typename enable_if< typename gtl_and_3<y_r_set, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type, 
+  typename enable_if< typename gtl_and_3<y_r_set, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type,
                                         typename is_interval_concept<typename geometry_concept<T2>::type>::type>::type,
-                       void>::type 
+                       void>::type
   set(T& rectangle, const T2& interval) {
-    rectangle_mutable_traits<T>::set(rectangle, orient, interval); 
+    rectangle_mutable_traits<T>::set(rectangle, orient, interval);
   }
 
   struct y_r_set2 : gtl_yes {};
 
   template <typename T, typename T2>
-  typename enable_if< typename gtl_and_3<y_r_set2, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type, 
+  typename enable_if< typename gtl_and_3<y_r_set2, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type,
                                         typename is_interval_concept<typename geometry_concept<T2>::type>::type>::type,
-                       void>::type 
+                       void>::type
   set(T& rectangle, orientation_2d orient, const T2& interval) {
-    rectangle_mutable_traits<T>::set(rectangle, orient, interval); 
+    rectangle_mutable_traits<T>::set(rectangle, orient, interval);
   }
 
   struct y_r_h2 : gtl_yes {};
 
   template <typename T, typename T2>
-  typename enable_if< typename gtl_and_3<y_r_h2, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type, 
+  typename enable_if< typename gtl_and_3<y_r_h2, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type,
                                         typename is_interval_concept<typename geometry_concept<T2>::type>::type>::type,
-                       void>::type 
+                       void>::type
   horizontal(T& rectangle, const T2& interval) {
-    rectangle_mutable_traits<T>::set(rectangle, HORIZONTAL, interval); 
+    rectangle_mutable_traits<T>::set(rectangle, HORIZONTAL, interval);
   }
 
   struct y_r_v2 : gtl_yes {};
 
   template <typename T, typename T2>
-  typename enable_if< 
-    typename gtl_and_3<y_r_v2, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type, 
-                     typename is_interval_concept<typename geometry_concept<T2>::type>::type>::type, void>::type 
+  typename enable_if<
+    typename gtl_and_3<y_r_v2, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type,
+                     typename is_interval_concept<typename geometry_concept<T2>::type>::type>::type, void>::type
   vertical(T& rectangle, const T2& interval) {
-    rectangle_mutable_traits<T>::set(rectangle, VERTICAL, interval); 
+    rectangle_mutable_traits<T>::set(rectangle, VERTICAL, interval);
   }
 
   struct y_r_construct : gtl_yes {};
 
   template <typename T, typename T2, typename T3>
   typename enable_if< typename gtl_and<y_r_construct, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type>::type,
-                       T>::type 
+                       T>::type
   construct(const T2& interval_horizontal,
             const T3& interval_vertical) {
     return rectangle_mutable_traits<T>::construct(interval_horizontal, interval_vertical); }
-  
+
   struct y_r_construct2 : gtl_yes {};
 
   template <typename T, typename coord_type>
   typename enable_if< typename gtl_and<y_r_construct2, typename is_mutable_rectangle_concept<typename geometry_concept<T>::type>::type>::type,
-                       T>::type 
+                       T>::type
   construct(coord_type xl, coord_type yl, coord_type xh, coord_type yh) {
-    return rectangle_mutable_traits<T>::construct(interval_data<coord_type>(xl, xh), 
-                                                  interval_data<coord_type>(yl, yh)); 
+    return rectangle_mutable_traits<T>::construct(interval_data<coord_type>(xl, xh),
+                                                  interval_data<coord_type>(yl, yh));
   }
-  
+
   struct y_r_cconstruct : gtl_yes {};
 
   template <typename T, typename T2>
@@ -180,11 +180,11 @@ namespace boost { namespace polygon{
   copy_construct(const T2& rectangle) {
     return construct<T> (get(rectangle, HORIZONTAL), get(rectangle, VERTICAL));
   }
-  
+
   struct y_r_assign : gtl_yes {};
 
   template <typename rectangle_type_1, typename rectangle_type_2>
-  typename enable_if< 
+  typename enable_if<
     typename gtl_and_3< y_r_assign,
       typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
       typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
@@ -194,34 +194,34 @@ namespace boost { namespace polygon{
     set(lvalue, VERTICAL, get(rvalue, VERTICAL));
     return lvalue;
   }
-  
+
   struct y_r_equiv : gtl_yes {};
 
   template <typename T, typename T2>
-  typename enable_if< 
+  typename enable_if<
     typename gtl_and_3< y_r_equiv,
       typename is_rectangle_concept<typename geometry_concept<T>::type>::type,
       typename is_rectangle_concept<typename geometry_concept<T2>::type>::type>::type,
-    bool>::type 
+    bool>::type
   equivalence(const T& rect1, const T2& rect2) {
     return equivalence(get(rect1, HORIZONTAL), get(rect2, HORIZONTAL)) &&
       equivalence(get(rect1, VERTICAL), get(rect2, VERTICAL));
   }
-  
+
   struct y_r_get : gtl_yes {};
 
   template <typename rectangle_type>
   typename enable_if< typename gtl_and<y_r_get, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                        typename rectangle_coordinate_type<rectangle_type>::type>::type
   get(const rectangle_type& rectangle, orientation_2d orient, direction_1d dir) {
-    return get(rectangle_traits<rectangle_type>::get(rectangle, orient), dir); 
+    return get(rectangle_traits<rectangle_type>::get(rectangle, orient), dir);
   }
-  
+
   struct y_r_set3 : gtl_yes {};
 
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_set3, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type 
-  set(rectangle_type& rectangle, orientation_2d orient, direction_1d dir, 
+  typename enable_if<typename gtl_and<y_r_set3, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
+  set(rectangle_type& rectangle, orientation_2d orient, direction_1d dir,
       typename rectangle_coordinate_type<rectangle_type>::type value) {
     typename rectangle_interval_type<rectangle_type>::type ivl = get(rectangle, orient);
     set(ivl, dir, value);
@@ -240,7 +240,7 @@ namespace boost { namespace polygon{
   struct y_r_xl2 : gtl_yes {};
 
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_xl2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type 
+  typename enable_if<typename gtl_and<y_r_xl2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
       xl(rectangle_type& rectangle, typename rectangle_coordinate_type<rectangle_type>::type value) {
     return set(rectangle, HORIZONTAL, LOW, value);
   }
@@ -257,7 +257,7 @@ namespace boost { namespace polygon{
   struct y_r_xh2 : gtl_yes {};
 
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_xh2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type 
+  typename enable_if<typename gtl_and<y_r_xh2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
   xh(rectangle_type& rectangle, typename rectangle_coordinate_type<rectangle_type>::type value) {
     return set(rectangle, HORIZONTAL, HIGH, value);
   }
@@ -270,11 +270,11 @@ namespace boost { namespace polygon{
   yl(const rectangle_type& rectangle) {
     return get(rectangle, VERTICAL, LOW);
   }
-  
+
   struct y_r_yl2 : gtl_yes {};
 
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_yl2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type 
+  typename enable_if<typename gtl_and<y_r_yl2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
       yl(rectangle_type& rectangle, typename rectangle_coordinate_type<rectangle_type>::type value) {
     return set(rectangle, VERTICAL, LOW, value);
   }
@@ -291,7 +291,7 @@ namespace boost { namespace polygon{
   struct y_r_yh2 : gtl_yes {};
 
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_yh2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type 
+  typename enable_if<typename gtl_and<y_r_yh2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, void>::type
       yh(rectangle_type& rectangle, typename rectangle_coordinate_type<rectangle_type>::type value) {
     return set(rectangle, VERTICAL, HIGH, value);
   }
@@ -337,8 +337,8 @@ namespace boost { namespace polygon{
   template <typename rectangle_type, typename rectangle_type_2>
   typename enable_if< typename gtl_and_3<y_r_contains, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
                                          typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-                       bool>::type 
-  contains(const rectangle_type& rectangle, const rectangle_type_2 rectangle_contained, 
+                       bool>::type
+  contains(const rectangle_type& rectangle, const rectangle_type_2 rectangle_contained,
            bool consider_touch = true) {
     return contains(horizontal(rectangle), horizontal(rectangle_contained), consider_touch) &&
       contains(vertical(rectangle), vertical(rectangle_contained), consider_touch);
@@ -348,8 +348,8 @@ namespace boost { namespace polygon{
 
   template <typename rectangle_type, typename point_type>
   typename enable_if< typename gtl_and_3<y_r_contains2, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
-                                         typename is_point_concept<typename geometry_concept<point_type>::type>::type>::type, bool>::type 
-  contains(const rectangle_type& rectangle, const point_type point_contained, 
+                                         typename is_point_concept<typename geometry_concept<point_type>::type>::type>::type, bool>::type
+  contains(const rectangle_type& rectangle, const point_type point_contained,
            bool consider_touch = true) {
     return contains(horizontal(rectangle), x(point_contained), consider_touch) &&
       contains(vertical(rectangle), y(point_contained), consider_touch);
@@ -360,9 +360,9 @@ namespace boost { namespace polygon{
   // set all four coordinates based upon two points
   template <typename rectangle_type, typename point_type_1, typename point_type_2>
   typename enable_if< typename gtl_and_4< y_r_set_points,
-    typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type, 
-    typename is_point_concept<typename geometry_concept<point_type_1>::type>::type, 
-    typename is_point_concept<typename geometry_concept<point_type_2>::type>::type>::type, 
+    typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
+    typename is_point_concept<typename geometry_concept<point_type_1>::type>::type,
+    typename is_point_concept<typename geometry_concept<point_type_2>::type>::type>::type,
                        rectangle_type>::type &
   set_points(rectangle_type& rectangle, const point_type_1& p1,
              const point_type_2& p2) {
@@ -382,7 +382,7 @@ namespace boost { namespace polygon{
   template <typename rectangle_type>
   typename enable_if< typename gtl_and<y_r_move, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                       rectangle_type>::type &
-  move(rectangle_type& rectangle, orientation_2d orient, 
+  move(rectangle_type& rectangle, orientation_2d orient,
        typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::coordinate_difference delta) {
     typename rectangle_interval_type<rectangle_type>::type ivl = get(rectangle, orient);
     move(ivl, delta);
@@ -396,8 +396,8 @@ namespace boost { namespace polygon{
   template <typename rectangle_type_1, typename rectangle_type_2>
   typename enable_if<
     typename gtl_and_3< y_r_convolve,
-      typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type, 
-      typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type, 
+      typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
+      typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
     rectangle_type_1>::type &
   convolve(rectangle_type_1& rectangle,
            const rectangle_type_2& convolution_rectangle) {
@@ -407,7 +407,7 @@ namespace boost { namespace polygon{
     vertical(rectangle, convolve(ivl, vertical(convolution_rectangle)));
     return rectangle;
   }
-  
+
   struct y_r_deconvolve : gtl_yes {};
 
   // deconvolve this with b
@@ -423,7 +423,7 @@ namespace boost { namespace polygon{
     vertical(rectangle, deconvolve(ivl, vertical(convolution_rectangle)));
     return rectangle;
   }
-  
+
   struct y_r_reconvolve : gtl_yes {};
 
   // reflectedConvolve this with b
@@ -439,7 +439,7 @@ namespace boost { namespace polygon{
     vertical(rectangle, reflected_convolve(ivl, vertical(convolution_rectangle)));
     return rectangle;
   }
-  
+
   struct y_r_redeconvolve : gtl_yes {};
 
   // reflectedDeconvolve this with b
@@ -456,7 +456,7 @@ namespace boost { namespace polygon{
     vertical(rectangle, reflected_deconvolve(ivl, vertical(convolution_rectangle)));
     return rectangle;
   }
-  
+
   struct y_r_convolve2 : gtl_yes {};
 
   // convolve with point
@@ -476,7 +476,7 @@ namespace boost { namespace polygon{
 
   // deconvolve with point
   template <typename rectangle_type, typename point_type>
-  typename enable_if< 
+  typename enable_if<
     typename gtl_and_3<y_r_deconvolve2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
                       typename is_point_concept<typename geometry_concept<point_type>::type>::type>::type, rectangle_type>::type &
   deconvolve(rectangle_type& rectangle, const point_type& convolution_point) {
@@ -512,8 +512,8 @@ namespace boost { namespace polygon{
 
   // returns the orientation of the longest side
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_go, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
-                      orientation_2d>::type 
+  typename enable_if<typename gtl_and<y_r_go, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
+                      orientation_2d>::type
   guess_orientation(const rectangle_type& rectangle) {
     return delta(rectangle, HORIZONTAL) >= delta(rectangle, VERTICAL) ?
       HORIZONTAL : VERTICAL;
@@ -546,10 +546,10 @@ namespace boost { namespace polygon{
   //  [in]     considerTouch If true, return true even if b touches the boundary
   //  [ret]    .         true if `t` intersects b
   template <typename rectangle_type_1, typename rectangle_type_2>
-  typename enable_if< 
+  typename enable_if<
     typename gtl_and_3<y_r_intersects, typename is_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                       typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-    bool>::type 
+    bool>::type
   intersects(const rectangle_type_1& rectangle, const rectangle_type_2& b, bool consider_touch = true) {
     return intersects(horizontal(rectangle), horizontal(b), consider_touch) &&
       intersects(vertical(rectangle), vertical(b), consider_touch);
@@ -562,44 +562,44 @@ namespace boost { namespace polygon{
   //  [in]     considerTouch If true, return true even if p is on the foundary
   //  [ret]    .         true if `t` contains p
   template <typename rectangle_type_1, typename rectangle_type_2>
-  typename enable_if< 
+  typename enable_if<
     typename gtl_and_3<y_r_b_intersect, typename is_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                       typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-    bool>::type 
+    bool>::type
   boundaries_intersect(const rectangle_type_1& rectangle, const rectangle_type_2& b,
                        bool consider_touch = true) {
     return (intersects(rectangle, b, consider_touch) &&
             !(contains(rectangle, b, !consider_touch)) &&
             !(contains(b, rectangle, !consider_touch)));
   }
-    
+
   struct y_r_b_abuts : gtl_yes {};
 
   // check if b is touching 'this' on the end specified by dir
   template <typename rectangle_type_1, typename rectangle_type_2>
   typename enable_if< typename gtl_and_3<y_r_b_abuts, typename is_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                                          typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-                       bool>::type 
+                       bool>::type
   abuts(const rectangle_type_1& rectangle, const rectangle_type_2& b,
         direction_2d dir) {
-    return 
+    return
       abuts(get(rectangle, orientation_2d(dir)),
             get(b, orientation_2d(dir)),
             direction_1d(dir)) &&
       intersects(get(rectangle, orientation_2d(dir).get_perpendicular()),
                  get(b, orientation_2d(dir).get_perpendicular()), true);
   }
-  
+
   struct y_r_b_abuts2 : gtl_yes {};
 
   // check if they are touching in the given orientation
   template <typename rectangle_type_1, typename rectangle_type_2>
   typename enable_if< typename gtl_and_3<y_r_b_abuts2, typename is_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                                          typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-                       bool>::type 
+                       bool>::type
   abuts(const rectangle_type_1& rectangle, const rectangle_type_2& b,
         orientation_2d orient) {
-    return 
+    return
       abuts(get(rectangle, orient), get(b, orient)) &&
       intersects(get(rectangle, orient.get_perpendicular()),
                  get(b, orient.get_perpendicular()), true);
@@ -611,7 +611,7 @@ namespace boost { namespace polygon{
   template <typename rectangle_type_1, typename rectangle_type_2>
   typename enable_if< typename gtl_and_3<y_r_b_abuts3, typename is_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                                          typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-                       bool>::type 
+                       bool>::type
   abuts(const rectangle_type_1& rectangle, const rectangle_type_2& b) {
     return abuts(rectangle, b, HORIZONTAL) || abuts(rectangle, b, VERTICAL);
   }
@@ -620,10 +620,10 @@ namespace boost { namespace polygon{
 
   // intersect rectangle with interval on orient
   template <typename rectangle_type, typename interval_type>
-  typename enable_if< 
+  typename enable_if<
     typename gtl_and_3<y_r_b_intersect2, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
                       typename is_interval_concept<typename geometry_concept<interval_type>::type>::type>::type,
-    bool>::type 
+    bool>::type
   intersect(rectangle_type& rectangle, const interval_type& b,
             orientation_2d orient, bool consider_touch = true) {
     typename rectangle_interval_type<rectangle_type>::type ivl = get(rectangle, orient);
@@ -640,7 +640,7 @@ namespace boost { namespace polygon{
   template <typename rectangle_type_1, typename rectangle_type_2>
   typename enable_if< typename gtl_and_3<y_r_b_intersect3, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                                          typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-                       bool>::type 
+                       bool>::type
   intersect(rectangle_type_1& rectangle, const rectangle_type_2& b, bool consider_touch = true) {
     if(intersects(rectangle, b)) {
       intersect(rectangle, horizontal(b), HORIZONTAL, consider_touch);
@@ -672,9 +672,9 @@ namespace boost { namespace polygon{
 
   // bloat the interval specified by orient by bloating
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_bloat, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_bloat, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                       rectangle_type>::type &
-  bloat(rectangle_type& rectangle, orientation_2d orient, 
+  bloat(rectangle_type& rectangle, orientation_2d orient,
         typename rectangle_coordinate_type<rectangle_type>::type bloating) {
     typename rectangle_interval_type<rectangle_type>::type ivl = get(rectangle, orient);
     bloat(ivl, bloating);
@@ -686,7 +686,7 @@ namespace boost { namespace polygon{
 
   // bloat the Rectangle by bloating
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_bloat2, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_bloat2, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                       rectangle_type>::type &
   bloat(rectangle_type& rectangle,
         typename rectangle_coordinate_type<rectangle_type>::type bloating) {
@@ -698,7 +698,7 @@ namespace boost { namespace polygon{
 
   // bloat the interval cooresponding to orient by bloating in dir direction
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_bloat3, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_bloat3, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                       rectangle_type>::type &
   bloat(rectangle_type& rectangle, direction_2d dir,
         typename rectangle_coordinate_type<rectangle_type>::type bloating) {
@@ -712,9 +712,9 @@ namespace boost { namespace polygon{
 
   // shrink the interval specified by orient by bloating
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_shrink, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_shrink, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                       rectangle_type>::type &
-  shrink(rectangle_type& rectangle, orientation_2d orient, 
+  shrink(rectangle_type& rectangle, orientation_2d orient,
          typename rectangle_coordinate_type<rectangle_type>::type shrinking) {
     return bloat(rectangle, orient, -shrinking);
   }
@@ -723,9 +723,9 @@ namespace boost { namespace polygon{
 
   // shrink the Rectangle by bloating
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_shrink2, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_shrink2, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                       rectangle_type>::type &
-  shrink(rectangle_type& rectangle, 
+  shrink(rectangle_type& rectangle,
          typename rectangle_coordinate_type<rectangle_type>::type shrinking) {
     return bloat(rectangle, -shrinking);
   }
@@ -734,7 +734,7 @@ namespace boost { namespace polygon{
 
   // shrink the interval cooresponding to orient by bloating in dir direction
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_shrink3, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_shrink3, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                       rectangle_type>::type &
   shrink(rectangle_type& rectangle, direction_2d dir,
          typename rectangle_coordinate_type<rectangle_type>::type shrinking) {
@@ -749,7 +749,7 @@ namespace boost { namespace polygon{
         y_r_encompass,
         typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
         typename is_interval_concept<typename geometry_concept<interval_type>::type>::type>::type,
-      bool>::type 
+      bool>::type
   encompass(rectangle_type& rectangle, const interval_type& b, orientation_2d orient) {
     typename rectangle_interval_type<rectangle_type>::type ivl = get(rectangle, orient);
     if(encompass(ivl, b)) {
@@ -782,7 +782,7 @@ namespace boost { namespace polygon{
         y_r_encompass3,
         typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
         typename is_point_concept<typename geometry_concept<point_type>::type>::type>::type,
-      bool>::type 
+      bool>::type
   encompass(rectangle_type_1& rectangle, const point_type& b) {
     typename rectangle_interval_type<rectangle_type_1>::type hivl, vivl;
     hivl = horizontal(rectangle);
@@ -803,7 +803,7 @@ namespace boost { namespace polygon{
   typename enable_if<
     typename gtl_and_3<y_r_center, typename is_mutable_point_concept<typename geometry_concept<point_type>::type>::type,
                       typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
-    bool>::type 
+    bool>::type
   center(point_type& center_point, const rectangle_type& rectangle) {
     center_point = construct<point_type>(center(horizontal(rectangle)),
                                          center(vertical(rectangle)));
@@ -816,7 +816,7 @@ namespace boost { namespace polygon{
   typename enable_if<
     typename gtl_and_3<y_r_get_corner, typename is_mutable_point_concept<typename geometry_concept<point_type>::type>::type,
                       typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
-    bool>::type 
+    bool>::type
   get_corner(point_type& corner_point, const rectangle_type& rectangle, direction_2d direction_facing, direction_1d direction_turning) {
     typedef typename rectangle_coordinate_type<rectangle_type>::type Unit;
     Unit u1 = get(rectangle, direction_facing);
@@ -829,8 +829,8 @@ namespace boost { namespace polygon{
   struct y_r_get_half : gtl_yes {};
 
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_get_half, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
-                     rectangle_type>::type 
+  typename enable_if<typename gtl_and<y_r_get_half, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
+                     rectangle_type>::type
   get_half(const rectangle_type& rectangle, direction_2d dir) {
     rectangle_type retval(rectangle);
     set(retval, orientation_2d(dir), get_half(get(rectangle, orientation_2d(dir)), direction_1d(dir)));
@@ -842,7 +842,7 @@ namespace boost { namespace polygon{
   template <typename rectangle_type_1, typename rectangle_type_2>
   typename enable_if< typename gtl_and_3<y_r_join_with, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                                          typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-                       bool>::type 
+                       bool>::type
   join_with(rectangle_type_1& rectangle, const rectangle_type_2& b) {
     typedef typename rectangle_interval_type<rectangle_type_1>::type Interval1;
     typedef typename rectangle_interval_type<rectangle_type_2>::type Interval2;
@@ -860,7 +860,7 @@ namespace boost { namespace polygon{
     }
     return false;
   }
-  
+
   struct y_r_eda2 : gtl_yes {};
 
   template <typename rectangle_type, typename point_type>
@@ -875,8 +875,8 @@ namespace boost { namespace polygon{
   struct y_r_eda : gtl_yes {};
 
   template <typename rectangle_type, typename rectangle_type_2>
-  typename enable_if< 
-    typename gtl_and_3<y_r_eda, 
+  typename enable_if<
+    typename gtl_and_3<y_r_eda,
       typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
                        typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
     typename rectangle_difference_type<rectangle_type>::type>::type
@@ -901,9 +901,9 @@ namespace boost { namespace polygon{
   struct y_r_sed2 : gtl_yes {};
 
   template <typename rectangle_type, typename rectangle_type_2>
-  typename enable_if< 
-    typename gtl_and_3<y_r_sed2, typename is_rectangle_concept< typename geometry_concept<rectangle_type>::type>::type, 
-                                       typename is_rectangle_concept< typename geometry_concept<rectangle_type_2>::type>::type>::type, 
+  typename enable_if<
+    typename gtl_and_3<y_r_sed2, typename is_rectangle_concept< typename geometry_concept<rectangle_type>::type>::type,
+                                       typename is_rectangle_concept< typename geometry_concept<rectangle_type_2>::type>::type>::type,
     typename rectangle_difference_type<rectangle_type>::type>::type
   square_euclidean_distance(const rectangle_type& lvalue, const rectangle_type_2& rvalue) {
     typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::coordinate_difference xdist, ydist;
@@ -917,10 +917,9 @@ namespace boost { namespace polygon{
   template <typename rectangle_type, typename point_type>
   typename enable_if< typename gtl_and_3<y_r_edist, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
                                                           typename is_point_concept<typename geometry_concept<point_type>::type>::type>::type,
-                       typename rectangle_distance_type<rectangle_type>::type>::type 
+                       typename rectangle_distance_type<rectangle_type>::type>::type
   euclidean_distance(rectangle_type& lvalue, const point_type& rvalue) {
-    return sqrt((double)
-                (square_euclidean_distance(lvalue, rvalue)));
+    return std::sqrt((double)(square_euclidean_distance(lvalue, rvalue)));
   }
 
   struct y_r_edist2 : gtl_yes {};
@@ -928,16 +927,16 @@ namespace boost { namespace polygon{
   template <typename rectangle_type, typename rectangle_type_2>
   typename enable_if< typename gtl_and_3<y_r_edist2, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
                                                           typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-                       typename rectangle_distance_type<rectangle_type>::type>::type 
+                       typename rectangle_distance_type<rectangle_type>::type>::type
   euclidean_distance(const rectangle_type& lvalue, const rectangle_type_2& rvalue) {
     double val = (int)square_euclidean_distance(lvalue, rvalue);
-    return sqrt(val);
+    return std::sqrt(val);
   }
 
   struct y_r_mdist : gtl_yes {};
 
   template <typename rectangle_type, typename point_type>
-  typename enable_if< 
+  typename enable_if<
     typename gtl_and_3<y_r_mdist, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
                                        typename is_point_concept<typename geometry_concept<point_type>::type>::type>::type,
     typename rectangle_difference_type<rectangle_type>::type>::type
@@ -951,7 +950,7 @@ namespace boost { namespace polygon{
   struct y_r_mdist2 : gtl_yes {};
 
   template <typename rectangle_type, typename rectangle_type_2>
-  typename enable_if< 
+  typename enable_if<
     typename gtl_and_3<y_r_mdist2, typename is_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type,
                                        typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
     typename rectangle_difference_type<rectangle_type>::type>::type
@@ -965,21 +964,21 @@ namespace boost { namespace polygon{
   struct y_r_scale_up : gtl_yes {};
 
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_scale_up, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_scale_up, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                      rectangle_type>::type &
-  scale_up(rectangle_type& rectangle, 
+  scale_up(rectangle_type& rectangle,
            typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::unsigned_area_type factor) {
     horizontal(rectangle, scale_up(horizontal(rectangle), factor));
     vertical(rectangle, scale_up(vertical(rectangle), factor));
     return rectangle;
   }
-  
+
   struct y_r_scale_down : gtl_yes {};
-  
+
   template <typename rectangle_type>
-  typename enable_if<typename gtl_and<y_r_scale_down, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_scale_down, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                      rectangle_type>::type &
-  scale_down(rectangle_type& rectangle, 
+  scale_down(rectangle_type& rectangle,
              typename coordinate_traits<typename rectangle_coordinate_type<rectangle_type>::type>::unsigned_area_type factor) {
     horizontal(rectangle, scale_down(horizontal(rectangle), factor));
     vertical(rectangle, scale_down(vertical(rectangle), factor));
@@ -989,7 +988,7 @@ namespace boost { namespace polygon{
   struct y_r_scale : gtl_yes {};
 
   template <typename rectangle_type, typename scaling_type>
-  typename enable_if<typename gtl_and<y_r_scale, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_scale, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                      rectangle_type>::type &
   scale(rectangle_type& rectangle, const scaling_type& scaling) {
     point_data<typename rectangle_coordinate_type<rectangle_type>::type> llp(xl(rectangle), yl(rectangle));
@@ -999,11 +998,11 @@ namespace boost { namespace polygon{
     set_points(rectangle, llp, urp);
     return rectangle;
   }
-  
+
   struct y_r_transform : gtl_yes {};
-  
+
   template <typename rectangle_type, typename transformation_type>
-  typename enable_if<typename gtl_and<y_r_transform, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type, 
+  typename enable_if<typename gtl_and<y_r_transform, typename is_mutable_rectangle_concept<typename geometry_concept<rectangle_type>::type>::type>::type,
                      rectangle_type>::type &
   transform(rectangle_type& rectangle, const transformation_type& transformation) {
     point_data<typename rectangle_coordinate_type<rectangle_type>::type> llp(xl(rectangle), yl(rectangle));
@@ -1013,7 +1012,7 @@ namespace boost { namespace polygon{
     set_points(rectangle, llp, urp);
     return rectangle;
   }
-  
+
   template <typename rectangle_type_1, typename rectangle_type_2>
   class less_rectangle_concept {
   private:
@@ -1023,12 +1022,12 @@ namespace boost { namespace polygon{
     typename enable_if<
       typename gtl_and< typename is_rectangle_concept<typename geometry_concept<rectangle_type_1>::type>::type,
                         typename is_rectangle_concept<typename geometry_concept<rectangle_type_2>::type>::type>::type,
-      bool>::type 
+      bool>::type
     operator () (const rectangle_type_1& a,
                  const rectangle_type_2& b) const {
       typedef typename rectangle_coordinate_type<rectangle_type_1>::type Unit;
-      Unit vl1 = get(get(a, orient_), LOW); 
-      Unit vl2 = get(get(b, orient_), LOW); 
+      Unit vl1 = get(get(a, orient_), LOW);
+      Unit vl2 = get(get(b, orient_), LOW);
       if(vl1 > vl2) return false;
       if(vl1 == vl2) {
         orientation_2d perp = orient_.get_perpendicular();
@@ -1036,8 +1035,8 @@ namespace boost { namespace polygon{
         Unit hl2 = get(get(b, perp), LOW);
         if(hl1 > hl2) return false;
         if(hl1 == hl2) {
-          Unit vh1 = get(get(a, orient_), HIGH); 
-          Unit vh2 = get(get(b, orient_), HIGH); 
+          Unit vh1 = get(get(a, orient_), HIGH);
+          Unit vh2 = get(get(b, orient_), HIGH);
           if(vh1 > vh2) return false;
           if(vh1 == vh2) {
             Unit hh1 = get(get(a, perp), HIGH);
@@ -1048,7 +1047,7 @@ namespace boost { namespace polygon{
       }
       return true;
     }
-    
+
   };
 
   template <typename T>
@@ -1063,7 +1062,7 @@ namespace boost { namespace polygon{
     assign(*this, rvalue);
     return *this;
   }
-  
+
   template <class T>
   template <class T2>
   bool rectangle_data<T>::operator==(const T2& rvalue) const {
@@ -1077,4 +1076,3 @@ namespace boost { namespace polygon{
 }
 }
 #endif
-

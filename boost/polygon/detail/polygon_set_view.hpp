@@ -1,6 +1,6 @@
 /*
   Copyright 2008 Intel Corporation
- 
+
   Use, modification and distribution are subject to the Boost Software License,
   Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -8,8 +8,8 @@
 #ifndef BOOST_POLYGON_POLYGON_SET_VIEW_HPP
 #define BOOST_POLYGON_POLYGON_SET_VIEW_HPP
 namespace boost { namespace polygon{
-  
-  
+
+
   template <typename coordinate_type>
   inline void polygon_set_data<coordinate_type>::clean() const {
     if(dirty_) {
@@ -66,7 +66,7 @@ namespace boost { namespace polygon{
     typedef typename polygon_set_view<ltype, rtype, op_type>::iterator_type iterator_type;
     typedef typename polygon_set_view<ltype, rtype, op_type>::operator_arg_type operator_arg_type;
 
-    static inline iterator_type begin(const polygon_set_view<ltype, rtype, op_type>& polygon_set); 
+    static inline iterator_type begin(const polygon_set_view<ltype, rtype, op_type>& polygon_set);
     static inline iterator_type end(const polygon_set_view<ltype, rtype, op_type>& polygon_set);
 
     static inline bool clean(const polygon_set_view<ltype, rtype, op_type>& polygon_set);
@@ -172,11 +172,11 @@ namespace boost { namespace polygon{
   }
   template <typename ltype, typename rtype, int op_type>
   bool polygon_set_traits<polygon_set_view<ltype, rtype, op_type> >::
-  clean(const polygon_set_view<ltype, rtype, op_type>& ) { 
+  clean(const polygon_set_view<ltype, rtype, op_type>& ) {
     return true; }
   template <typename ltype, typename rtype, int op_type>
   bool polygon_set_traits<polygon_set_view<ltype, rtype, op_type> >::
-  sort(const polygon_set_view<ltype, rtype, op_type>& ) { 
+  sort(const polygon_set_view<ltype, rtype, op_type>& ) {
     return true; }
 
   template <typename value_type, typename arg_type>
@@ -187,7 +187,7 @@ namespace boost { namespace polygon{
     itr2 = polygon_set_traits<arg_type>::end(arg);
     dest.insert(itr1, itr2);
   }
-  
+
   template <typename geometry_type_1, typename geometry_type_2, int op_type>
   geometry_type_1& self_assignment_boolean_op(geometry_type_1& lvalue_, const geometry_type_2& rvalue_) {
     typedef geometry_type_1 ltype;
@@ -201,7 +201,7 @@ namespace boost { namespace polygon{
 
   // copy constructor
   template <typename coordinate_type>
-  template <typename ltype, typename rtype, int op_type> 
+  template <typename ltype, typename rtype, int op_type>
   polygon_set_data<coordinate_type>::polygon_set_data(const polygon_set_view<ltype, rtype, op_type>& that) :
     data_(that.value().data_), dirty_(that.value().dirty_), unsorted_(that.value().unsorted_), is_45_(that.value().is_45_) {}
 
@@ -210,4 +210,3 @@ namespace boost { namespace polygon{
 }
 }
 #endif
-

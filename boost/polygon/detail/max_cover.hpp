@@ -1,6 +1,6 @@
 /*
   Copyright 2008 Intel Corporation
- 
+
   Use, modification and distribution are subject to the Boost Software License,
   Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -35,7 +35,7 @@ namespace boost { namespace polygon{
     };
 
     typedef std::pair<std::pair<Unit, Interval>, Node* > EdgeAssociation;
-  
+
     class lessEdgeAssociation : public std::binary_function<const EdgeAssociation&, const EdgeAssociation&, bool> {
     public:
       inline lessEdgeAssociation() {}
@@ -83,7 +83,7 @@ namespace boost { namespace polygon{
     };
 
     template <class cT>
-    static inline void getMaxCover(cT& outputContainer, Node* node, orientation_2d orient, 
+    static inline void getMaxCover(cT& outputContainer, Node* node, orientation_2d orient,
                                    Rectangle rect) {
       //std::cout << "New Root\n";
       std::vector<stack_element> stack;
@@ -170,7 +170,7 @@ namespace boost { namespace polygon{
         Because the code is so much simpler than the loop algorithm I retain it for clarity
 
     template <class cT>
-    static inline void getMaxCover(cT& outputContainer, Node* node, orientation_2d orient, 
+    static inline void getMaxCover(cT& outputContainer, Node* node, orientation_2d orient,
                                    const Rectangle& rect) {
       Interval rectIvl = rect.get(orient);
       Interval nodeIvl = node->rect.get(orient);
@@ -205,7 +205,7 @@ namespace boost { namespace polygon{
     template <class iT>
     static inline void computeDag(iT beginNode, iT endNode, orientation_2d orient,
                                   std::size_t size) {
-      std::vector<EdgeAssociation> leadingEdges; 
+      std::vector<EdgeAssociation> leadingEdges;
       leadingEdges.reserve(size);
       for(iT iter = beginNode; iter != endNode; ++iter) {
         Node* nodep = &(*iter);

@@ -310,12 +310,12 @@ public:
           A[j] = a[j];
           B[j] = b[j];
           expected_val += static_cast<fpt64>(a[j]) *
-                          sqrt(static_cast<fpt64>(b[j]));
+                          std::sqrt(static_cast<fpt64>(b[j]));
         } else {
           A[j] = -a[j];
           B[j] = b[j];
           expected_val -= static_cast<fpt64>(a[j]) *
-                          sqrt(static_cast<fpt64>(b[j]));
+                          std::sqrt(static_cast<fpt64>(b[j]));
         }
       }
       fpt64 received_val = to_fpt(sqrt_expr_.eval4(A, B));
