@@ -24,8 +24,8 @@ BOOST_AUTO_TEST_CASE(ulp_comparison_test1) {
   uint64 a = 22;
   uint64 b = 27;
   fpt64 da, db;
-  memcpy(&da, &a, sizeof(uint64));
-  memcpy(&db, &b, sizeof(uint64));
+  std::memcpy(&da, &a, sizeof(uint64));
+  std::memcpy(&db, &b, sizeof(uint64));
   BOOST_CHECK_EQUAL(ulp_cmp(da, db, 1), ulp_cmp.LESS);
   BOOST_CHECK_EQUAL(ulp_cmp(db, da, 1), ulp_cmp.MORE);
   BOOST_CHECK_EQUAL(ulp_cmp(da, db, 4), ulp_cmp.LESS);
@@ -38,8 +38,8 @@ BOOST_AUTO_TEST_CASE(ulp_comparison_test2) {
   uint64 a = 0ULL;
   uint64 b = 0x8000000000000002ULL;
   fpt64 da, db;
-  memcpy(&da, &a, sizeof(uint64));
-  memcpy(&db, &b, sizeof(uint64));
+  std::memcpy(&da, &a, sizeof(uint64));
+  std::memcpy(&db, &b, sizeof(uint64));
   BOOST_CHECK_EQUAL(ulp_cmp(da, db, 1), ulp_cmp.MORE);
   BOOST_CHECK_EQUAL(ulp_cmp(db, da, 1), ulp_cmp.LESS);
   BOOST_CHECK_EQUAL(ulp_cmp(da, db, 2), ulp_cmp.EQUAL);

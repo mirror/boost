@@ -1456,7 +1456,7 @@ namespace boost { namespace polygon{
 
   template <typename cT, typename iT>
   void get_error_rects_shell(cT& posE, cT& negE, iT beginr, iT endr) {
-    typedef typename iT::value_type Point;
+    typedef typename std::iterator_traits<iT>::value_type Point;
     typedef typename point_traits<Point>::coordinate_type Unit;
     typedef typename coordinate_traits<Unit>::area_type area_type;
     Point pt1, pt2, pt3;
