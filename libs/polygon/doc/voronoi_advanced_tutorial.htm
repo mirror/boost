@@ -177,7 +177,7 @@ In the following chapter we are going to extend input coordinate type
 to the 48-bit signed
 integer and output coordinate type to the 80-bit IEEE floating-point
 type
-(long double). The code for this chapter is available in <a href="../libs/polygon/example/voronoi_advanced_tutorial.cpp">voroni_advanced_tutorial.cpp</a>.
+(long double). The code for this chapter is available in <a href="../example/voronoi_advanced_tutorial.cpp">voroni_advanced_tutorial.cpp</a>.
 While it won't be possible to compile it using the MSVC compiler (it
 doesn't
 support 80-bit long double type; ieee754.h header is required), it
@@ -242,7 +242,7 @@ floating-point converter structures). The <span style="font-family: Courier New,
 structure checks weather two IEEE floating-point values are within the
 given signed integer ulp range (we won't analyze corresponding code
 here as it requires deep understanding of the <a href="http://docs.oracle.com/cd/E19957-01/806-3568/ncg_goldberg.html">floating-point
-architecture</a> and its <a href="../boost/polygon/detail/voronoi_ctypes.hpp">usage to compare
+architecture</a> and its <a href="../../../boost/polygon/detail/voronoi_ctypes.hpp">usage to compare
 floating-point values</a>), but just to mention the declaration is
 following:<br>
 
