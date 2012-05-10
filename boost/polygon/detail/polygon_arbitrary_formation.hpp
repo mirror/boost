@@ -554,7 +554,7 @@ namespace boost { namespace polygon{
         y_den = (dx1 * dy2 - dx2 * dy1);
         x = x_num / x_den;
         y = y_num / y_den;
-	//std::cout << x << " " << y << std::endl;
+        //std::cout << x << " " << y << std::endl;
         //std::cout << "cross1 " << dy1 << " " << dx2 << " " << dy1 * dx2 << std::endl;
         //std::cout << "cross2 " << dy2 << " " << dx1 << " " << dy2 * dx1 << std::endl;
         //Unit exp_x = compute_x_intercept<at>(x11, x21, y11, y21, dy1, dy2, dx1, dx2);

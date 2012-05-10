@@ -158,8 +158,8 @@ bool intersection_check(const std::map< Point2D, std::vector<Point2D>, cmp<Point
     const point_type &point1 = edge_map_it1->first;
     for (size_type i = 0; i < edge_map_it1->second.size(); i++) {
       const point_type &point2 = edge_map_it1->second[i];
-      coordinate_type min_y1 = std::min(point1.y(), point2.y());
-      coordinate_type max_y1 = std::max(point1.y(), point2.y());
+      coordinate_type min_y1 = (std::min)(point1.y(), point2.y());
+      coordinate_type max_y1 = (std::max)(point1.y(), point2.y());
 
       // Find the first edge with greater or equal first point.
       edge_map_it_bound = edge_map.lower_bound(point2);
@@ -170,8 +170,8 @@ bool intersection_check(const std::map< Point2D, std::vector<Point2D>, cmp<Point
         const point_type &point3 = edge_map_it2->first;
         for (size_type j = 0; j < edge_map_it2->second.size(); j++) {
           const point_type &point4 = edge_map_it2->second[j];
-          coordinate_type min_y2 = std::min(point3.y(), point4.y());
-          coordinate_type max_y2 = std::max(point3.y(), point4.y());
+          coordinate_type min_y2 = (std::min)(point3.y(), point4.y());
+          coordinate_type max_y2 = (std::max)(point3.y(), point4.y());
           
           // In most cases it is enought to make 
           // simple intersection check in the y dimension.
