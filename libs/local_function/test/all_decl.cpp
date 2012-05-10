@@ -47,7 +47,7 @@ struct s {
             } BOOST_LOCAL_FUNCTION_NAME(lt)
             lt();
         }*/
-        { // Only plain binds.
+/*        { // Only plain binds.
             int c, d;
 
             int& BOOST_LOCAL_FUNCTION(bind c, bind& d,
@@ -66,7 +66,7 @@ struct s {
                 return c;
             } BOOST_LOCAL_FUNCTION_NAME(lt)
             lt();
-        }
+        }*/
 
         { // Both params and const binds.
             int a, b;
