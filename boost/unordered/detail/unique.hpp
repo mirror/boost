@@ -18,27 +18,27 @@
 
 namespace boost { namespace unordered { namespace detail {
 
-    template <typename A, typename T> struct node;
+    template <typename A, typename T> struct unique_node;
     template <typename T> struct ptr_node;
     template <typename Types> struct table_impl;
 
     template <typename A, typename T>
-    struct node :
+    struct unique_node :
         boost::unordered::detail::node_base<
             typename ::boost::unordered::detail::rebind_wrap<
-                A, node<A, T> >::type::pointer
+                A, unique_node<A, T> >::type::pointer
         >,
         boost::unordered::detail::value_base<T>
     {
         typedef typename ::boost::unordered::detail::rebind_wrap<
-            A, node<A, T> >::type::pointer link_pointer;
+            A, unique_node<A, T> >::type::pointer link_pointer;
         typedef boost::unordered::detail::node_base<link_pointer> node_base;
 
         std::size_t hash_;
 
 #if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
-        node(BOOST_UNORDERED_EMPLACE_ARGS) :
+        unique_node(BOOST_UNORDERED_EMPLACE_ARGS) :
             node_base(),
             hash_(0)
         {
@@ -46,11 +46,11 @@ namespace boost { namespace unordered { namespace detail {
                 this->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
         }
 
-        ~node() {
+        ~unique_node() {
             boost::unordered::detail::destroy(this->value_ptr());
         }
 #else
-        node() :
+        unique_node() :
             node_base(),
             hash_(0)
         {}
@@ -103,7 +103,7 @@ namespace boost { namespace unordered { namespace detail {
     template <typename A, typename T, typename NodePtr, typename BucketPtr>
     struct pick_node2
     {
-        typedef boost::unordered::detail::node<A, T> node;
+        typedef boost::unordered::detail::unique_node<A, T> node;
 
         typedef typename boost::unordered::detail::allocator_traits<
             typename boost::unordered::detail::rebind_wrap<A, node>::type
