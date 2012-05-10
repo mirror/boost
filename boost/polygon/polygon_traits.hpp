@@ -1034,7 +1034,7 @@ namespace boost { namespace polygon{
 
   template <typename iT>
   bool point_sequence_is_45(iT itr, iT itr_end) {
-    typedef typename iT::value_type Point;
+    typedef typename std::iterator_traits<iT>::value_type Point;
     typedef typename point_traits<Point>::coordinate_type Unit;
     if(itr == itr_end) return true;
     Point firstPt = *itr;
