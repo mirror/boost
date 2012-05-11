@@ -18,10 +18,9 @@ struct s;
 BOOST_TYPEOF_REGISTER_TYPE(s) // Register before binding `this_` below.
 
 // Compile all local function declaration combinations.
-/** @todo uncomment this */
 struct s {
     void f(double p = 1.23, double q = -1.23) {
-/*        { // Only params.
+        { // Only params.
             void BOOST_LOCAL_FUNCTION(int x, int y, default 0) {
             } BOOST_LOCAL_FUNCTION_NAME(l)
             l(1);
@@ -46,8 +45,8 @@ struct s {
                 return a;
             } BOOST_LOCAL_FUNCTION_NAME(lt)
             lt();
-        }*/
-/*        { // Only plain binds.
+        }
+        { // Only plain binds.
             int c, d;
 
             int& BOOST_LOCAL_FUNCTION(bind c, bind& d,
@@ -66,7 +65,7 @@ struct s {
                 return c;
             } BOOST_LOCAL_FUNCTION_NAME(lt)
             lt();
-        }*/
+        }
 
         { // Both params and const binds.
             int a, b;
