@@ -58,6 +58,10 @@ time2_demo contained this comment:
 #define BOOST_CHRONO_SECOND_TEMPLATE_PARAMETER_OF_TIME_POINT_MUST_BE_A_BOOST_CHRONO_DURATION "Second template parameter of time_point must be a boost::chrono::duration"
 #endif
 
+#ifndef BOOST_CHRONO_HEADER_ONLY
+// this must occur after all of the includes and before any code appears:
+#include <boost/config/abi_prefix.hpp> // must be the last #include
+#endif
 
 //----------------------------------------------------------------------------//
 //                                                                            //
@@ -782,5 +786,10 @@ namespace detail
 
 } // namespace chrono
 } // namespace boost
+
+#ifndef BOOST_CHRONO_HEADER_ONLY
+// the suffix header occurs after all of our code:
+#include <boost/config/abi_suffix.hpp> // pops abi_prefix.hpp pragmas
+#endif
 
 #endif // BOOST_CHRONO_DURATION_HPP

@@ -77,6 +77,7 @@ TODO:
 # define BOOST_SYSTEM_CLOCK_DURATION boost::chrono::nanoseconds
 #endif
 
+// this must occur after all of the includes and before any code appears:
 #ifndef BOOST_CHRONO_HEADER_ONLY
 #include <boost/config/abi_prefix.hpp> // must be the last #include
 #endif
@@ -221,6 +222,7 @@ namespace chrono {
 } // namespace boost
 
 #ifndef BOOST_CHRONO_HEADER_ONLY
+// the suffix header occurs after all of our code:
 #include <boost/config/abi_suffix.hpp> // pops abi_prefix.hpp pragmas
 #else
 #include <boost/chrono/detail/inlined/chrono.hpp>
