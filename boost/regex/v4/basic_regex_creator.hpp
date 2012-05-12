@@ -517,23 +517,18 @@ re_syntax_base* basic_regex_creator<charT, traits>::append_set(
    return result;
 }
 
-namespace{
-
 template<class T>
 inline bool char_less(T t1, T t2)
 {
    return t1 < t2;
 }
-template<>
-inline bool char_less<char>(char t1, char t2)
+inline bool char_less(char t1, char t2)
 {
    return static_cast<unsigned char>(t1) < static_cast<unsigned char>(t2);
 }
-template<>
-inline bool char_less<signed char>(signed char t1, signed char t2)
+inline bool char_less(signed char t1, signed char t2)
 {
    return static_cast<unsigned char>(t1) < static_cast<unsigned char>(t2);
-}
 }
 
 template <class charT, class traits>
@@ -1035,7 +1030,7 @@ int basic_regex_creator<charT, traits>::calculate_backstep(re_syntax_base* state
                state = rep->alt.p;
                continue;
             }
-            else if((state->type == syntax_element_long_set_rep)) 
+            else if(state->type == syntax_element_long_set_rep)
             {
                BOOST_ASSERT(rep->next.p->type == syntax_element_long_set);
                if(static_cast<re_set_long<mask_type>*>(rep->next.p)->singleton == 0)
@@ -1113,9 +1108,9 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base* state, 
          if(l_map)
          {
             l_map[0] |= mask_init;
-            l_map['\n'] |= mask;
-            l_map['\r'] |= mask;
-            l_map['\f'] |= mask;
+            l_map[static_cast<unsigned>('\n')] |= mask;
+            l_map[static_cast<unsigned>('\r')] |= mask;
+            l_map[static_cast<unsigned>('\f')] |= mask;
             l_map[0x85] |= mask;
          }
          // now figure out if we can match a NULL string at this point:
@@ -1302,8 +1297,8 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base* state, 
          if(l_map)
          {
             l_map[0] |= mask_init;
-            l_map['\n'] |= mask;
-            l_map['\r'] |= mask;
+            l_map[static_cast<unsigned>('\n')] |= mask;
+            l_map[static_cast<unsigned>('\r')] |= mask;
          }
          if(pnull)
             *pnull |= mask;
@@ -1338,7 +1333,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base* state, 
             re_syntax_base* p = m_pdata->m_first_state;
             while(p)
             {
-               if((p->type == syntax_element_recurse))
+               if(p->type == syntax_element_recurse)
                {
                   re_brace* p2 = static_cast<re_brace*>(static_cast<re_jump*>(p)->alt.p);
                   if((p2->type == syntax_element_startmark) && (p2->index == static_cast<re_brace*>(state)->index))
