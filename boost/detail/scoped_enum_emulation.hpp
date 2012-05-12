@@ -28,7 +28,7 @@ Some of the enumerations defined in the standard library are scoped enums.
       no_state
   };
 
-On compilers that don't support them, the library two emulations:
+On compilers that don't support them, the library provides two emulations:
 
 [heading Strict]
 
@@ -164,7 +164,7 @@ namespace boost
   /**
    * Casts a scoped enum to its underlying type.
    *
-   * This function is useful to when working with scoped enum classes which doens't implicitly convert to the underlying type.
+   * This function is useful when working with scoped enum classes, which doens't implicitly convert to the underlying type.
    * @param v A scoped enum.
    * @returns The underlying type.
    * @throws No-throws.
@@ -172,7 +172,7 @@ namespace boost
   template <typename UnderlyingType, typename EnumType>
   UnderlyingType underlying_cast(EnumType v)
   {
-    return v.underlying();
+    return v.get_underlying_value_();
   }
 
   /**
@@ -180,17 +180,17 @@ namespace boost
    *
    * This function is useful to make programs portable when the scoped enum emulation can not be use where native enums can.
    *
-   * EC the scoped enum type
+   * EnumType the scoped enum type
    *
    * @param v A scoped enum.
    * @returns The native enum value.
    * @throws No-throws.
    */
-  template <typename EC>
+  template <typename EnumType>
   inline
-  typename EC::enum_type native_value(EC e)
+  typename EnumType::enum_type native_value(EnumType e)
   {
-    return e.native();
+    return e.native_value_();
   }
 
 #else  // BOOST_NO_SCOPED_ENUMS
@@ -213,9 +213,9 @@ namespace boost
     return static_cast<UnderlyingType>(v);
   }
 
-  template <typename EC>
+  template <typename EnumType>
   inline
-  EC native_value(EC e)
+  EnumType native_value(EnumType e)
   {
     return e;
  }
@@ -229,7 +229,7 @@ namespace boost
 #ifndef BOOST_NO_EXPLICIT_CONVERSION_OPERATORS
 
 #define BOOST_SCOPED_ENUM_UT_DECLARE_CONVERSION_OPERATOR \
-     explicit operator underlying_type() const { return underlying(); }
+     explicit operator underlying_type() const { return get_underlying_value_(); }
 
 #else
 
@@ -248,7 +248,7 @@ namespace boost
         typedef UnderlyingType underlying_type;                         \
         EnumType() BOOST_NOEXCEPT {}                                    \
         explicit EnumType(underlying_type v) : v_(v) {}                 \
-        underlying_type underlying() const { return v_; }               \
+        underlying_type get_underlying_value_() const { return v_; }               \
         BOOST_SCOPED_ENUM_UT_DECLARE_CONVERSION_OPERATOR                \
     private:                                                            \
         underlying_type v_;                                             \
@@ -257,8 +257,8 @@ namespace boost
         enum enum_type
 
 #define BOOST_SCOPED_ENUM_DECLARE_END2() \
-        enum_type native() const BOOST_NOEXCEPT { return enum_type(v_); } \
-        operator enum_type() const BOOST_NOEXCEPT { return native(); } \
+        enum_type get_native_value_() const BOOST_NOEXCEPT { return enum_type(v_); } \
+        operator enum_type() const BOOST_NOEXCEPT { return get_native_value_(); } \
         friend bool operator ==(self_type lhs, self_type rhs) BOOST_NOEXCEPT { return enum_type(lhs.v_)==enum_type(rhs.v_); } \
         friend bool operator ==(self_type lhs, enum_type rhs) BOOST_NOEXCEPT { return enum_type(lhs.v_)==rhs; } \
         friend bool operator ==(enum_type lhs, self_type rhs) BOOST_NOEXCEPT { return lhs==enum_type(rhs.v_); } \
@@ -317,21 +317,21 @@ namespace boost
 
 #endif  // BOOST_NO_SCOPED_ENUMS
 
-//#define BOOST_SCOPED_ENUM_START(name) BOOST_SCOPED_ENUM_DECLARE_BEGIN(name)
-//#define BOOST_SCOPED_ENUM_END BOOST_SCOPED_ENUM_DECLARE_END2()
-//#define BOOST_SCOPED_ENUM(name) BOOST_SCOPED_ENUM_NATIVE(name)
+#define BOOST_SCOPED_ENUM_START(name) BOOST_SCOPED_ENUM_DECLARE_BEGIN(name)
+#define BOOST_SCOPED_ENUM_END BOOST_SCOPED_ENUM_DECLARE_END2()
+#define BOOST_SCOPED_ENUM(name) BOOST_SCOPED_ENUM_NATIVE(name)
 
-#ifdef BOOST_NO_SCOPED_ENUMS
-
-# define BOOST_SCOPED_ENUM_START(name) struct name { enum enum_type
-# define BOOST_SCOPED_ENUM_END };
-# define BOOST_SCOPED_ENUM(name) name::enum_type
-
-#else
-
-# define BOOST_SCOPED_ENUM_START(name) enum class name
-# define BOOST_SCOPED_ENUM_END
-# define BOOST_SCOPED_ENUM(name) name
-
-#endif
+//#ifdef BOOST_NO_SCOPED_ENUMS
+//
+//# define BOOST_SCOPED_ENUM_START(name) struct name { enum enum_type
+//# define BOOST_SCOPED_ENUM_END };
+//# define BOOST_SCOPED_ENUM(name) name::enum_type
+//
+//#else
+//
+//# define BOOST_SCOPED_ENUM_START(name) enum class name
+//# define BOOST_SCOPED_ENUM_END
+//# define BOOST_SCOPED_ENUM(name) name
+//
+//#endif
 #endif  // BOOST_SCOPED_ENUM_EMULATION_HPP
