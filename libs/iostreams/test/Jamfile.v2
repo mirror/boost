@@ -87,12 +87,7 @@ rule compile-fail-iostreams ( sources * : requirements * : target-name ? ) {
           [ test-iostreams line_filter_test.cpp ]
           [ test-iostreams mapped_file_test.cpp 
                 ../build//boost_iostreams ]
-          [ test-iostreams path_test.cpp
-                : <define>BOOST_FILESYSTEM_VERSION=2
-                : path_test_filesystem2 ]
-          [ test-iostreams path_test.cpp
-                : <define>BOOST_FILESYSTEM_VERSION=3
-                : path_test_filesystem3 ]
+          [ test-iostreams path_test.cpp ]
           [ test-iostreams newline_test.cpp ]
           [ test-iostreams null_test.cpp ]
           [ test-iostreams operation_sequence_test.cpp ]

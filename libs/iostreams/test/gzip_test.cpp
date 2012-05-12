@@ -120,11 +120,11 @@ void header_test()
     // The extra field data used here is characteristic of the tabix file
     // format (http://samtools.sourceforge.net/tabix.shtml).
     const char header_bytes[] = {
-        gzip::magic::id1,
-        gzip::magic::id2,
+        static_cast<char>(gzip::magic::id1),
+        static_cast<char>(gzip::magic::id2),
         gzip::method::deflate, // Compression Method: deflate
         gzip::flags::extra | gzip::flags::name | gzip::flags::comment, // flags
-        0x22, 0x9c, 0xf3, 0x4e, // 4 byte modification time (little endian)
+        '\x22', '\x9c', '\xf3', '\x4e', // 4 byte modification time (little endian)
         gzip::extra_flags::best_compression, // XFL
         gzip::os_unix, // OS
         6, 0, // 2 byte length of extra field (little endian, 6 bytes)
