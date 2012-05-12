@@ -21,7 +21,7 @@
 
 namespace bucket_tests {
 
-test::seed_t seed(54635);
+test::seed_t initialize_seed(54635);
 
 template <class X>
 void tests(X* = 0, test::random_generator generator = test::default_generator)

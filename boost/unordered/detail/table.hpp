@@ -348,21 +348,21 @@ namespace boost { namespace unordered { namespace detail {
         template <typename Key, typename Hash, typename Pred>
         iterator generic_find_node(
                 Key const& k,
-                Hash const& hash_function,
+                Hash const& hf,
                 Pred const& eq) const
         {
             if (!this->size_) return iterator();
             return static_cast<table_impl const*>(this)->
-                find_node_impl(policy::apply_hash(hash_function, k), k, eq);
+                find_node_impl(policy::apply_hash(hf, k), k, eq);
         }
 
         iterator find_node(
-                std::size_t hash,
+                std::size_t key_hash,
                 key_type const& k) const
         {
             if (!this->size_) return iterator();
             return static_cast<table_impl const*>(this)->
-                find_node_impl(hash, k, this->key_eq());
+                find_node_impl(key_hash, k, this->key_eq());
         }
 
         iterator find_node(key_type const& k) const
@@ -387,6 +387,7 @@ namespace boost { namespace unordered { namespace detail {
 
         void reserve_for_insert(std::size_t);
         void rehash(std::size_t);
+        void reserve(std::size_t);
     };
 
     ////////////////////////////////////////////////////////////////////////////
@@ -402,7 +403,9 @@ namespace boost { namespace unordered { namespace detail {
             this->create_buckets();
             this->max_load_ = this->calculate_max_load();
         }
-        else if(size >= max_load_) {
+        // According to the standard this should be 'size >= max_load_',
+        // but I think this is better, defect report filed.
+        else if(size > max_load_) {
             std::size_t num_buckets
                 = this->min_buckets_for_size((std::max)(size,
                     this->size_ + (this->size_ >> 1)));
@@ -417,7 +420,7 @@ namespace boost { namespace unordered { namespace detail {
     // strong otherwise.
 
     template <typename Types>
-    void table<Types>::rehash(std::size_t min_buckets)
+    inline void table<Types>::rehash(std::size_t min_buckets)
     {
         using namespace std;
 
@@ -436,6 +439,13 @@ namespace boost { namespace unordered { namespace detail {
                 this->max_load_ = this->calculate_max_load();
             }
         }
+    }
+
+    template <typename Types>
+    inline void table<Types>::reserve(std::size_t num_elements)
+    {
+        rehash(static_cast<std::size_t>(
+            std::ceil(static_cast<double>(num_elements) / this->mlf_)));
     }
 }}}
 

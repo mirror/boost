@@ -22,7 +22,7 @@
 
 namespace move_tests
 {
-    test::seed_t seed(98624);
+    test::seed_t initialize_seed(98624);
 #if defined(BOOST_UNORDERED_USE_MOVE) || !defined(BOOST_NO_RVALUE_REFERENCES)
 #define BOOST_UNORDERED_TEST_MOVING 1
 #else

@@ -8,7 +8,7 @@
 #include "../helpers/invariants.hpp"
 #include "../helpers/helpers.hpp"
 
-test::seed_t seed(835193);
+test::seed_t initialize_seed(835193);
 
 template <class T>
 struct erase_test_base : public test::exception_base

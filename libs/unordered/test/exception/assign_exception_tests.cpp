@@ -11,7 +11,7 @@
 #pragma warning(disable:4512) // assignment operator could not be generated
 #endif
 
-test::seed_t seed(12847);
+test::seed_t initialize_seed(12847);
 
 template <class T>
 struct self_assign_base : public test::exception_base

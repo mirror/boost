@@ -21,7 +21,7 @@
 
 namespace insert_tests {
     
-test::seed_t seed(243432);
+test::seed_t initialize_seed(243432);
 
 template <class X>
 void unique_insert_tests1(X*,

@@ -16,7 +16,7 @@
 #include "../helpers/equivalent.hpp"
 #include "../helpers/invariants.hpp"
 
-test::seed_t seed(9063);
+test::seed_t initialize_seed(9063);
 
 namespace copy_tests
 {

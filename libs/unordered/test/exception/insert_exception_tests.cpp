@@ -11,7 +11,7 @@
 #include <boost/utility.hpp>
 #include <cmath>
 
-test::seed_t seed(747373);
+test::seed_t initialize_seed(747373);
 
 template <class T>
 struct insert_test_base : public test::exception_base

@@ -21,7 +21,7 @@
 namespace erase_tests
 {
 
-test::seed_t seed(85638);
+test::seed_t initialize_seed(85638);
 
 template <class Container>
 void erase_tests1(Container*,

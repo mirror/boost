@@ -12,7 +12,6 @@
 #endif
 
 #include <boost/unordered/detail/table.hpp>
-#include <boost/unordered/detail/emplace_args.hpp>
 #include <boost/unordered/detail/extract_key.hpp>
 
 namespace boost { namespace unordered { namespace detail {
@@ -23,20 +22,40 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename A, typename T>
     struct grouped_node :
+        boost::unordered::detail::node_base<
+            typename ::boost::unordered::detail::rebind_wrap<
+                A, grouped_node<A, T> >::type::pointer
+        >,
         boost::unordered::detail::value_base<T>
     {
         typedef typename ::boost::unordered::detail::rebind_wrap<
             A, grouped_node<A, T> >::type::pointer link_pointer;
+        typedef boost::unordered::detail::node_base<link_pointer> node_base;
 
-        link_pointer next_;
         link_pointer group_prev_;
         std::size_t hash_;
 
+#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
+        grouped_node(BOOST_UNORDERED_EMPLACE_ARGS) :
+            node_base(),
+            group_prev_(),
+            hash_(0)
+        {
+            boost::unordered::detail::construct_impl(
+                this->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+        }
+
+        ~grouped_node() {
+            boost::unordered::detail::destroy(this->value_ptr());
+        }
+#else
         grouped_node() :
-            next_(),
+            node_base(),
             group_prev_(),
             hash_(0)
         {}
+#endif
 
         void init(link_pointer self)
         {
@@ -50,16 +69,33 @@ namespace boost { namespace unordered { namespace detail {
         boost::unordered::detail::ptr_bucket
     {
         typedef boost::unordered::detail::ptr_bucket bucket_base;
+        typedef bucket_base node_base;
         typedef ptr_bucket* link_pointer;
 
         link_pointer group_prev_;
         std::size_t hash_;
 
+#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
+        grouped_ptr_node(BOOST_UNORDERED_EMPLACE_ARGS) :
+            bucket_base(),
+            group_prev_(0),
+            hash_(0)
+        {
+            boost::unordered::detail::construct_impl(
+                this->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+        }
+
+        ~grouped_ptr_node() {
+            boost::unordered::detail::destroy(this->value_ptr());
+        }
+#else
         grouped_ptr_node() :
             bucket_base(),
             group_prev_(0),
             hash_(0)
         {}
+#endif
 
         void init(link_pointer self)
         {
@@ -221,12 +257,12 @@ namespace boost { namespace unordered { namespace detail {
 
         template <class Key, class Pred>
         iterator find_node_impl(
-                std::size_t hash,
+                std::size_t key_hash,
                 Key const& k,
                 Pred const& eq) const
         {
             std::size_t bucket_index =
-                policy::to_bucket(this->bucket_count_, hash);
+                policy::to_bucket(this->bucket_count_, key_hash);
             iterator n = this->get_start(bucket_index);
 
             for (;;)
@@ -234,7 +270,7 @@ namespace boost { namespace unordered { namespace detail {
                 if (!n.node_) return n;
 
                 std::size_t node_hash = n.node_->hash_;
-                if (hash == node_hash)
+                if (key_hash == node_hash)
                 {
                     if (eq(k, this->get_key(*n)))
                         return n;
@@ -256,14 +292,14 @@ namespace boost { namespace unordered { namespace detail {
             iterator n = this->find_node(k);
             if (!n.node_) return 0;
 
-            std::size_t count = 0;
+            std::size_t x = 0;
             node_pointer it = n.node_;
             do {
                 it = static_cast<node_pointer>(it->group_prev_);
-                ++count;
+                ++x;
             } while(it != n.node_);
 
-            return count;
+            return x;
         }
 
         std::pair<iterator, iterator>
@@ -396,11 +432,11 @@ namespace boost { namespace unordered { namespace detail {
 
         inline iterator add_node(
                 node_constructor& a,
-                std::size_t hash,
+                std::size_t key_hash,
                 iterator pos)
         {
             node_pointer n = a.release();
-            n->hash_ = hash;
+            n->hash_ = key_hash;
             if (pos.node_) {
                 this->add_after_node(n, pos.node_);
                 if (n->next_) {
@@ -408,14 +444,14 @@ namespace boost { namespace unordered { namespace detail {
                         this->bucket_count_,
                         static_cast<node_pointer>(n->next_)->hash_);
                     if (next_bucket !=
-                            policy::to_bucket(this->bucket_count_, hash)) {
+                            policy::to_bucket(this->bucket_count_, key_hash)) {
                         this->get_bucket(next_bucket)->next_ = n;
                     }
                 }
             }
             else {
                 bucket_pointer b = this->get_bucket(
-                    policy::to_bucket(this->bucket_count_, hash));
+                    policy::to_bucket(this->bucket_count_, key_hash));
 
                 if (!b->next_)
                 {
@@ -444,20 +480,20 @@ namespace boost { namespace unordered { namespace detail {
         iterator emplace_impl(node_constructor& a)
         {
             key_type const& k = this->get_key(a.value());
-            std::size_t hash = this->hash(k);
-            iterator position = this->find_node(hash, k);
+            std::size_t key_hash = this->hash(k);
+            iterator position = this->find_node(key_hash, k);
 
             // reserve has basic exception safety if the hash function
             // throws, strong otherwise.
             this->reserve_for_insert(this->size_ + 1);
-            return this->add_node(a, hash, position);
+            return this->add_node(a, key_hash, position);
         }
 
         void emplace_impl_no_rehash(node_constructor& a)
         {
             key_type const& k = this->get_key(a.value());
-            std::size_t hash = this->hash(k);
-            this->add_node(a, hash, this->find_node(hash, k));
+            std::size_t key_hash = this->hash(k);
+            this->add_node(a, key_hash, this->find_node(key_hash, k));
         }
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
@@ -531,12 +567,12 @@ namespace boost { namespace unordered { namespace detail {
         {
             if(!this->size_) return 0;
 
-            std::size_t hash = this->hash(k);
+            std::size_t key_hash = this->hash(k);
             std::size_t bucket_index =
-                policy::to_bucket(this->bucket_count_, hash);
-            bucket_pointer bucket = this->get_bucket(bucket_index);
+                policy::to_bucket(this->bucket_count_, key_hash);
+            bucket_pointer this_bucket = this->get_bucket(bucket_index);
 
-            previous_pointer prev = bucket->next_;
+            previous_pointer prev = this_bucket->next_;
             if (!prev) return 0;
 
             for (;;)
@@ -547,7 +583,7 @@ namespace boost { namespace unordered { namespace detail {
                 if (policy::to_bucket(this->bucket_count_, node_hash)
                         != bucket_index)
                     return 0;
-                if (node_hash == hash &&
+                if (node_hash == key_hash &&
                     this->key_eq()(k, this->get_key(
                         static_cast<node_pointer>(prev->next_)->value())))
                     break;
@@ -560,7 +596,7 @@ namespace boost { namespace unordered { namespace detail {
                 static_cast<node_pointer>(pos->group_prev_)->next_;
             node_pointer end = static_cast<node_pointer>(end1);
             prev->next_ = end1;
-            this->fix_buckets(bucket, prev, end);
+            this->fix_buckets(this_bucket, prev, end);
             return this->delete_nodes(c_iterator(pos), c_iterator(end));
         }
 
@@ -570,11 +606,11 @@ namespace boost { namespace unordered { namespace detail {
             iterator next(r.node_);
             ++next;
 
-            bucket_pointer bucket = this->get_bucket(
+            bucket_pointer this_bucket = this->get_bucket(
                 policy::to_bucket(this->bucket_count_, r.node_->hash_));
-            previous_pointer prev = unlink_node(*bucket, r.node_);
+            previous_pointer prev = unlink_node(*this_bucket, r.node_);
 
-            this->fix_buckets(bucket, prev, next.node_);
+            this->fix_buckets(this_bucket, prev, next.node_);
 
             this->delete_node(r);
 
@@ -713,7 +749,7 @@ namespace boost { namespace unordered { namespace detail {
             previous_pointer prev = dst.get_previous_start();
 
             while (n.node_) {
-                std::size_t hash = n.node_->hash_;
+                std::size_t key_hash = n.node_->hash_;
                 iterator group_end(
                     static_cast<node_pointer>(
                         static_cast<node_pointer>(n.node_->group_prev_)->next_
@@ -724,7 +760,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 node_pointer first_node = a.release();
                 node_pointer end = first_node;
-                first_node->hash_ = hash;
+                first_node->hash_ = key_hash;
                 prev->next_ = static_cast<link_pointer>(first_node);
                 ++dst.size_;
 
@@ -733,7 +769,7 @@ namespace boost { namespace unordered { namespace detail {
                     a.construct_node();
                     a.construct_value2(*n);
                     end = a.release();
-                    end->hash_ = hash;
+                    end->hash_ = key_hash;
                     add_after_node(end, first_node);
                     ++dst.size_;
                 }
@@ -760,7 +796,7 @@ namespace boost { namespace unordered { namespace detail {
             previous_pointer prev = dst.get_previous_start();
 
             while (n.node_) {
-                std::size_t hash = n.node_->hash_;
+                std::size_t key_hash = n.node_->hash_;
                 iterator group_end(
                     static_cast<node_pointer>(
                         static_cast<node_pointer>(n.node_->group_prev_)->next_
@@ -771,7 +807,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 node_pointer first_node = a.release();
                 node_pointer end = first_node;
-                first_node->hash_ = hash;
+                first_node->hash_ = key_hash;
                 prev->next_ = static_cast<link_pointer>(first_node);
                 ++dst.size_;
 
@@ -780,7 +816,7 @@ namespace boost { namespace unordered { namespace detail {
                     a.construct_node();
                     a.construct_value2(boost::move(*n));
                     end = a.release();
-                    end->hash_ = hash;
+                    end->hash_ = key_hash;
                     add_after_node(end, first_node);
                     ++dst.size_;
                 }
