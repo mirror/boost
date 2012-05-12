@@ -34,10 +34,10 @@ namespace boost
       class time_manip: public manip<time_manip<CharT> >
       {
         std::basic_string<CharT> fmt_;
-        timezone_type tz_;
+        timezone tz_;
       public:
 
-        time_manip(timezone_type tz, std::basic_string<CharT> fmt)
+        time_manip(timezone tz, std::basic_string<CharT> fmt)
         // todo move semantics
         :
           fmt_(fmt), tz_(tz)
@@ -45,7 +45,7 @@ namespace boost
         }
 
         /**
-         * Change the timezone_type and time format ios state;
+         * Change the timezone and time format ios state;
          */
         void operator()(std::ios_base &ios) const
         {
@@ -56,10 +56,10 @@ namespace boost
 
       class time_man: public manip<time_man>
       {
-        timezone_type tz_;
+        timezone tz_;
       public:
 
-        time_man(timezone_type tz)
+        time_man(timezone tz)
         // todo move semantics
         :
           tz_(tz)
@@ -67,7 +67,7 @@ namespace boost
         }
 
         /**
-         * Change the timezone_type and time format ios state;
+         * Change the timezone and time format ios state;
          */
         void operator()(std::ios_base &ios) const
         {
@@ -79,19 +79,19 @@ namespace boost
     }
 
     template <class CharT>
-    inline detail::time_manip<CharT> time_fmt(timezone_type tz, const CharT* fmt)
+    inline detail::time_manip<CharT> time_fmt(timezone tz, const CharT* fmt)
     {
       return detail::time_manip<CharT>(tz, fmt);
     }
 
     template <class CharT>
-    inline detail::time_manip<CharT> time_fmt(timezone_type tz, std::basic_string<CharT> fmt)
+    inline detail::time_manip<CharT> time_fmt(timezone tz, std::basic_string<CharT> fmt)
     {
       // todo move semantics
       return detail::time_manip<CharT>(tz, fmt);
     }
 
-    inline detail::time_man time_fmt(timezone_type f)
+    inline detail::time_man time_fmt(timezone f)
     {
       return detail::time_man(f);
     }
@@ -163,7 +163,7 @@ namespace boost
       //! the type of the state to restore
       typedef std::ios_base state_type;
       //! the type of aspect to save
-      typedef timezone_type aspect_type;
+      typedef timezone aspect_type;
 
       /**
        * Explicit construction from an i/o stream.
@@ -404,7 +404,7 @@ namespace boost
           pb = fmt.data();
           pe = pb + fmt.size();
 
-          timezone_type tz = get_timezone(os);
+          timezone tz = get_timezone(os);
           std::locale loc = os.getloc();
           time_t t = system_clock::to_time_t(tp);
           std::tm tm;
@@ -589,7 +589,7 @@ namespace boost
           pb = fmt.data();
           pe = pb + fmt.size();
 
-          timezone_type tz = get_timezone(is);
+          timezone tz = get_timezone(is);
           std::locale loc = is.getloc();
           const std::time_get<CharT>& tg = std::use_facet<std::time_get<CharT> >(loc);
           const std::ctype<CharT>& ct = std::use_facet<std::ctype<CharT> >(loc);

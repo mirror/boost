@@ -9,7 +9,7 @@
 
 #ifndef BOOST_CHRONO_IO_TIMEZONE_HPP
 #define BOOST_CHRONO_IO_TIMEZONE_HPP
-#include <iostream>
+#include <boost/detail/scoped_enum_emulation.hpp>
 
 namespace boost
 {
@@ -18,15 +18,11 @@ namespace boost
     /**
      * Scoped enumeration emulation stating whether the time_point for system_clock I/O is UTC or local.
      */
-    struct timezone
-    {
-      enum type
-      {
-        utc, local
-      };
-    };
-
-    typedef timezone::type timezone_type;
+    BOOST_SCOPED_ENUM_DECLARE_BEGIN(timezone)
+          {
+            utc, local
+          }
+    BOOST_SCOPED_ENUM_DECLARE_END(timezone)
 
   } // chrono
 } // boost

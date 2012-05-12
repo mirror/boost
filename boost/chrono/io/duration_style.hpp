@@ -9,7 +9,8 @@
 
 #ifndef BOOST_CHRONO_IO_DURATION_STYLE_HPP
 #define BOOST_CHRONO_IO_DURATION_STYLE_HPP
-#include <iostream>
+
+#include <boost/detail/scoped_enum_emulation.hpp>
 
 namespace boost
 {
@@ -20,14 +21,11 @@ namespace boost
      * prefix means duration::rep with whatever stream/locale settings are set for it followed by a long name representing the unit
      * symbol means duration::rep with whatever stream/locale settings are set for it followed by a SI unit abbreviation
      */
-    struct duration_style
-    {
-      enum type
-      {
-        prefix, symbol
-      };
-    };
-    typedef duration_style::type duration_style_type;
+    BOOST_SCOPED_ENUM_DECLARE_BEGIN(duration_style)
+          {
+            prefix, symbol
+          }
+    BOOST_SCOPED_ENUM_DECLARE_END(duration_style)
 
 
   } // chrono

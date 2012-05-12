@@ -40,7 +40,7 @@
         return (value == -1 || value == 0 || value == 1) ? 0 : 1;
       }
 
-      std::basic_string<CharT> do_get_unit(duration_style_type style, ratio<1> , std::size_t pf) const
+      std::basic_string<CharT> do_get_unit(duration_style style, ratio<1> , std::size_t pf) const
       {
         static const CharT t[] =
         { 's' };
@@ -59,7 +59,7 @@
         throw "exception";
       }
 
-      std::basic_string<CharT> do_get_unit(duration_style_type style, ratio<60> , std::size_t pf) const
+      std::basic_string<CharT> do_get_unit(duration_style style, ratio<60> , std::size_t pf) const
       {
         static const CharT t[] =
         { 'm', 'i', 'n' };
@@ -79,7 +79,7 @@
         throw "exception";
       }
 
-      std::basic_string<CharT> do_get_unit(duration_style_type style, ratio<3600> , std::size_t pf) const
+      std::basic_string<CharT> do_get_unit(duration_style style, ratio<3600> , std::size_t pf) const
       {
         static const CharT t[] =
         { 'h' };

@@ -1,6 +1,7 @@
 # Boost Chrono Library Build Jamfile
 
 # Copyright Beman Dawes 2002, 2006, 2008
+# Copyright 2009-2012 Vicente J.Botet Escriba.
 
 # Distributed under the Boost Software License, Version 1.0.
 # (See accompanying file LICENSE_1_0.txt or www.boost.org/LICENSE_1_0.txt)
@@ -49,6 +50,9 @@ project boost/chrono
         <toolset>gcc-mingw-4.4.0:<cxxflags>-fdiagnostics-show-option
         <toolset>gcc-mingw-4.5.0:<cxxflags>-fdiagnostics-show-option
         <toolset>gcc-mingw-4.6.0:<cxxflags>-fdiagnostics-show-option
+        <toolset>gcc-mingw-4.6.3:<cxxflags>-fdiagnostics-show-option
+        <toolset>gcc-mingw-4.7.0:<cxxflags>-fdiagnostics-show-option
+        <toolset>gcc-mingw-4.8.0:<cxxflags>-fdiagnostics-show-option
 # Note: Some of the remarks from the Intel compiler are disabled
 # remark #304: access control not specified ("public" by default)
 # remark #383: value copied to temporary, reference to temporary used

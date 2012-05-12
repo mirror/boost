@@ -45,7 +45,7 @@ namespace boost
       {
         os_ = os;
       }
-      void set_duration_style(duration_style::type style)
+      void set_duration_style(duration_style style)
       {
         duration_style_ == style;
       }
@@ -53,7 +53,7 @@ namespace boost
     protected:
       std::size_t precision_;
       ostream_type & os_;
-      duration_style::type duration_style_;
+      duration_style duration_style_;
 
     };
 

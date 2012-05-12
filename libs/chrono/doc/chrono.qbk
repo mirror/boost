@@ -260,9 +260,8 @@
 [def __duration_long [link chrono.reference.io_v1.chrono_io_hpp.manipulators `duration_long`]]
 
 
-[def __duration_style_ns [link chrono.reference.io.duration_style_hpp.duration_style `duration_style`]]
-[def __duration_style [link chrono.reference.io.duration_style_hpp.duration_style `duration_style_type`]]
-[def __duration_style_type [link chrono.reference.io.duration_style_hpp.duration_style `duration_style_type`]]
+[def __duration_style [link chrono.reference.io.duration_style_hpp.duration_style `duration_style`]]
+[def __duration_style_type [link chrono.reference.io.duration_style_hpp.duration_style `duration_style`]]
 [def __prefix [link chrono.reference.io.duration_style_hpp.duration_style `prefix`]]
 [def __symbol [link chrono.reference.io.duration_style_hpp.duration_style `symbol`]]
 
@@ -270,7 +269,7 @@
 [def __name_format [link chrono.reference.io.duration_io_hpp.manipulators.name_format `name_format`]]
 [def __duration_fmt [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt `duration_fmt`]]
 [def __duration_fmt__c1 [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.c1 `duration_fmt`]]
-[def __duration_fmt__op_duration_style [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.op_duration_style `operator duration_style_type`]]
+[def __duration_fmt__op_duration_style [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.op_duration_style `operator duration_style`]]
 [def __duration_fmt__get_duration_style [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.op_duration_style `get_duration_style`]]
 [def __duration_fmt__op_in [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.op_in `operator >>`]]
 [def __duration_fmt__op_out [link chrono.reference.io.duration_io_hpp.manipulators.duration_fmt.op_out `operator <<`]]
@@ -328,8 +327,7 @@
 
 [/==================]
 
-[def __timezone_ns [link chrono.reference.io.timezone_hpp.timezone `timezone`]]
-[def __timezone [link chrono.reference.io.timezone_hpp.timezone `timezone_type`]]
+[def __timezone [link chrono.reference.io.timezone_hpp.timezone `timezone`]]
 [def __utc [link chrono.reference.io.timezone_hpp.timezone `utc`]]
 [def __local [link chrono.reference.io.timezone_hpp.timezone `local`]]
 
@@ -1358,7 +1356,7 @@ The [mu] for microsecond is specified to be U+00B5, encoded as UTF-8, UTF-16 or 
 
 When the format decision is taken at runtime, it could be better to use the parameterized manipulator __duration_fmt as in
 
-  duration_style::type style;
+  duration_style style;
   //...
   cout << duration_fmt(style);
 
@@ -4171,25 +4169,17 @@ This file includes the i/o of the two major components, duration and time_point.
       namespace chrono {
 
         // typedefs
-        struct __duration_style
-        {
-          enum type {
-            __prefix, __symbol
-          };
+        enum class __duration_style {
+          __prefix, __symbol
         };
-        typedef duration_style::type duration_style_type;
       }
     }
         
 [section:duration_style Scoped enum `duration_style`]
 
-        struct duration_style
-        {
-          enum type {
+          enum class duration_style {
             prefix, symbol
           };
-        };
-        typedef duration_style::type duration_style_type;
 
 __duration unit names come in two varieties: prefix and symbol.
 
@@ -4215,14 +4205,9 @@ __duration unit names come in two varieties: prefix and symbol.
         
 [section:timezone Scoped enum `timezone`]
 
-        struct timezone
-        {
-          enum type {
+          enum class timezone {
             utc, local
           };
-        };
-        typedef timezone::type timezone_type;
-
 
 [endsect] [/section:timezone Scoped enum `timezone`]
         
@@ -4238,11 +4223,11 @@ __duration unit names come in two varieties: prefix and symbol.
       namespace chrono {
 
         // setters and getters
-        duration_style::type __get_duration_style(std::ios_base & ios);
-        void __set_duration_style(std::ios_base& ios, duration_style::type style);
+        duration_style __get_duration_style(std::ios_base & ios);
+        void __set_duration_style(std::ios_base& ios, duration_style style);
 
-        timezone::type __get_timezone(std::ios_base & ios);
-        void __set_timezone(std::ios_base& ios, timezone::type tz);
+        timezone __get_timezone(std::ios_base & ios);
+        void __set_timezone(std::ios_base& ios, timezone tz);
         
         // i/o state savers
         struct __duration_style_io_saver;
@@ -4257,15 +4242,15 @@ __duration unit names come in two varieties: prefix and symbol.
 
 [section:get_duration_style Non Member Function `get_duration_style(std::ios_base &)`]
 
-        duration_style::type get_duration_style(std::ios_base & ios);
+        duration_style get_duration_style(std::ios_base & ios);
         
 __returns The stream's __duration_style attribute associated to `ios`.
         
 [endsect]
 
-[section:set_duration_style Non Member Function `set_duration_style(std::ios_base &,duration_style::type)`]
+[section:set_duration_style Non Member Function `set_duration_style(std::ios_base &,duration_style)`]
 
-        void set_duration_style(std::ios_base& ios, duration_style::type style);
+        void set_duration_style(std::ios_base& ios, duration_style style);
         
 __effects Set the stream's __duration_style attribute associated to `ios` so the `style` parameter.
         
@@ -4273,15 +4258,15 @@ __effects Set the stream's __duration_style attribute associated to `ios` so the
 
 [section:get_timezone Non Member Function `get_timezone(std::ios_base&)`]
 
-        timezone::type get_timezone(std::ios_base & ios);
+        timezone get_timezone(std::ios_base & ios);
         
 __returns The stream's __timezone attribute associated to `ios`.
         
 [endsect]
 
-[section:set_timezone Non Member Function `set_timezone(std::ios_base&,duration_style::type)`]
+[section:set_timezone Non Member Function `set_timezone(std::ios_base&,duration_style)`]
 
-        void set_timezone(std::ios_base& ios, timezone::type tz);
+        void set_timezone(std::ios_base& ios, timezone tz);
         
 __effects Set the stream's __timezone attribute associated to `ios` so the `style` parameter.
         
@@ -5033,16 +5018,16 @@ __returns s,  iterator pointing immediately after the last character produced.
       virtual bool __duration_units_match_valid_unit(const string_type* k, rt_ratio& rt) const = 0;
       virtual string_type __duration_units_get_pattern() const=0;
       template <typename Rep, typename Period>
-      string_type __duration_units_get_unit(duration_style::type style, duration<Rep, Period> const& d) const;
+      string_type __duration_units_get_unit(duration_style style, duration<Rep, Period> const& d) const;
       template <typename Rep, typename Period>
-      string_type __duration_units_get_n_d_unit(duration_style::type style, duration<Rep, Period> const& d) const;
+      string_type __duration_units_get_n_d_unit(duration_style style, duration<Rep, Period> const& d) const;
       template <typename Period>
       bool __duration_units_is_named_unit() const;
 
     protected:
       virtual __duration_units_d();
-      virtual string_type __duration_units_do_get_n_d_unit(duration_style::type style, rt_ratio rt, intmax_t v) const = 0;
-      virtual string_type __duration_units_do_get_unit(duration_style::type style,rt_ratio rt, intmax_t v) const = 0;
+      virtual string_type __duration_units_do_get_n_d_unit(duration_style style, rt_ratio rt, intmax_t v) const = 0;
+      virtual string_type __duration_units_do_get_unit(duration_style style,rt_ratio rt, intmax_t v) const = 0;
       virtual bool __duration_units_do_is_named_unit(rt_ratio rt) const =0;
     };
 
@@ -5135,20 +5120,20 @@ __returns `true` if `k` matches a valid unit.
 __returns the pattern to be used by default.
 
 [endsect]
-[section:get_unit Template Member Function `get_unit(duration_style::type,duration<Rep,Period> const&)`]
+[section:get_unit Template Member Function `get_unit(duration_style,duration<Rep,Period> const&)`]
 
       template <typename Rep, typename Period>
-      string_type get_unit(duration_style::type style, duration<Rep, Period> const& d) const;
+      string_type get_unit(duration_style style, duration<Rep, Period> const& d) const;
 
 
 __returns `get_unit(style, d.count(), rt_ratio(Period()))`, the unit associated to this duration.
 
 [endsect]
         
-[section:get_n_d_unit Template Member Function `get_n_d_unit(duration_style::type,duration<Rep,Period> const&)`]
+[section:get_n_d_unit Template Member Function `get_n_d_unit(duration_style,duration<Rep,Period> const&)`]
 
       template <typename Rep, typename Period>
-      string_type get_n_d_unit(duration_style::type style, duration<Rep, Period> const& d) const;
+      string_type get_n_d_unit(duration_style style, duration<Rep, Period> const& d) const;
 
 __returns get_n_d_unit(style, d.count(), rt_ratio(Period())), i.e. the [N/D] suffix unit associated to this duration.
 
@@ -5163,17 +5148,17 @@ __returns `do_is_named_unit(rt_ratio(Period()))`, true if the unit associated to
 
 [endsect]
         
-[section:do_get_n_d_unit Protected Member Function `do_get_n_d_unit(duration_style::type,rt_ratio,intmax_t)`]
+[section:do_get_n_d_unit Protected Member Function `do_get_n_d_unit(duration_style,rt_ratio,intmax_t)`]
 
-      virtual string_type do_get_n_d_unit(duration_style::type style, rt_ratio rt, intmax_t v) const = 0;
+      virtual string_type do_get_n_d_unit(duration_style style, rt_ratio rt, intmax_t v) const = 0;
 
 __returns the [N/D] suffix unit associated to this duration.
 
 [endsect]
         
-[section:do_get_unit Protected Member Function `do_get_unit(duration_style::type,rt_ratio,intmax_t)`]
+[section:do_get_unit Protected Member Function `do_get_unit(duration_style,rt_ratio,intmax_t)`]
 
-      virtual string_type do_get_unit(duration_style::type style,rt_ratio rt, intmax_t v) const = 0;
+      virtual string_type do_get_unit(duration_style style,rt_ratio rt, intmax_t v) const = 0;
 
 __returns the unit associated to this duration.
       
@@ -5213,48 +5198,48 @@ __returns true if the unit associated to the given Period is named, false otherw
       string_type get_pattern() const;
     protected:
       bool do_is_named_unit(rt_ratio rt) const;
-      string_type do_get_n_d_unit(duration_style::type style, rt_ratio, intmax_t v) const;
-      string_type do_get_unit(duration_style::type style, rt_ratio rt, intmax_t v) const;
+      string_type do_get_n_d_unit(duration_style style, rt_ratio, intmax_t v) const;
+      string_type do_get_unit(duration_style style, rt_ratio rt, intmax_t v) const;
       
       virtual std::size_t do_get_plural_forms() const;
       virtual std::size_t do_get_plural_form(int_least64_t value) const;
 
-      virtual string_type do_get_unit(duration_style_type style, ratio<1> u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, ratio<60> u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, ratio<3600> u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, atto u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, femto u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, pico u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, nano u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, micro u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, milli u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, centi u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, deci u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, deca u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, hecto u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, kilo u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, mega u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, giga u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, tera u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, peta u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, exa u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, ratio<1> u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, ratio<60> u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, ratio<3600> u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, atto u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, femto u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, pico u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, nano u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, micro u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, milli u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, centi u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, deci u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, deca u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, hecto u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, kilo u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, mega u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, giga u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, tera u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, peta u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, exa u, std::size_t pf) const;
 
-      virtual string_type do_get_ratio_prefix(duration_style_type style, atto u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, femto u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, pico u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, nano u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, micro u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, milli u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, centi u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, deci u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, deca u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, hecto u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, kilo u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, mega u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, giga u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, tera u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, peta u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, exa u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, atto u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, femto u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, pico u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, nano u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, micro u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, milli u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, centi u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, deci u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, deca u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, hecto u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, kilo u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, mega u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, giga u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, tera u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, peta u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, exa u) const;
     };
 
 This class is used to define the strings for the default English.
@@ -5367,17 +5352,17 @@ __returns the pattern to be used by default.
 
 [endsect]
         
-[section:do_get_n_d_unit Protected Member Function `do_get_n_d_unit(duration_style::type,rt_ratio,intmax_t)`]
+[section:do_get_n_d_unit Protected Member Function `do_get_n_d_unit(duration_style,rt_ratio,intmax_t)`]
 
-      virtual string_type do_get_n_d_unit(duration_style::type style, rt_ratio rt, intmax_t v) const;
+      virtual string_type do_get_n_d_unit(duration_style style, rt_ratio rt, intmax_t v) const;
 
 __returns the [N/D] suffix unit associated to this duration.
 
 [endsect]
         
-[section:do_get_unit Protected Member Function `do_get_unit(duration_style::type,rt_ratio,intmax_t)`]
+[section:do_get_unit Protected Member Function `do_get_unit(duration_style,rt_ratio,intmax_t)`]
 
-      virtual string_type do_get_unit(duration_style::type style,rt_ratio rt, intmax_t v) const;
+      virtual string_type do_get_unit(duration_style style,rt_ratio rt, intmax_t v) const;
 
 __returns the unit associated to this duration.
       
@@ -5416,9 +5401,9 @@ __returns the plural form associated to the `value` parameter. In English there 
 
 [endsect]
 
-[section:do_get_unit_seconds Protected Member Function `do_get_unit(duration_style_type,ratio<1>,std::size_t)`]
+[section:do_get_unit_seconds Protected Member Function `do_get_unit(duration_style,ratio<1>,std::size_t)`]
 
-      virtual string_type do_get_unit(duration_style_type style, ratio<1> u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, ratio<1> u, std::size_t pf) const;
 
 __params
 
@@ -5430,9 +5415,9 @@ __returns if style is symbol returns "s", otherwise if pf is 0 return "second", 
 
 [endsect]
 
-[section:do_get_unit_minutes Protected Member Function `do_get_unit(duration_style_type style,ratio<60>,std::size_t)`]
+[section:do_get_unit_minutes Protected Member Function `do_get_unit(duration_style style,ratio<60>,std::size_t)`]
 
-      virtual string_type do_get_unit(duration_style_type style, ratio<60> u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, ratio<60> u, std::size_t pf) const;
 
 __params
 
@@ -5444,9 +5429,9 @@ __returns if style is symbol returns "min", otherwise if pf is 0 return "minute"
 
 [endsect]
 
-[section:do_get_unit_hours Protected Member Function `do_get_unit(duration_style_type,ratio<3600>,std::size_t)`]
+[section:do_get_unit_hours Protected Member Function `do_get_unit(duration_style,ratio<3600>,std::size_t)`]
 
-      virtual string_type do_get_unit(duration_style_type style, ratio<3600> u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, ratio<3600> u, std::size_t pf) const;
 
 __params
 
@@ -5458,24 +5443,24 @@ __returns if style is symbol returns "h", otherwise if pf is 0 return "hour", if
 
 [endsect]
 
-[section:do_get_unit_xxx Protected Member Function `do_get_unit(duration_style_type,Period,std::size_t)`]
+[section:do_get_unit_xxx Protected Member Function `do_get_unit(duration_style,Period,std::size_t)`]
 
-      virtual string_type do_get_unit(duration_style_type style, atto u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, femto u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, pico u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, nano u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, micro u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, milli u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, centi u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, deci u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, deca u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, hecto u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, kilo u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, mega u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, giga u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, tera u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, peta u, std::size_t pf) const;
-      virtual string_type do_get_unit(duration_style_type style, exa u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, atto u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, femto u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, pico u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, nano u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, micro u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, milli u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, centi u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, deci u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, deca u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, hecto u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, kilo u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, mega u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, giga u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, tera u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, peta u, std::size_t pf) const;
+      virtual string_type do_get_unit(duration_style style, exa u, std::size_t pf) const;
       
 __params
 
@@ -5487,24 +5472,24 @@ __returns the concatenation of the prefix associated to period `u` + the one ass
 
 [endsect]
 
-[section:do_get_ratio_prefix_xxx Protected Member Function `do_get_ratio_prefix(duration_style_type, Period)`]
+[section:do_get_ratio_prefix_xxx Protected Member Function `do_get_ratio_prefix(duration_style, Period)`]
 
-      virtual string_type do_get_ratio_prefix(duration_style_type style, atto u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, femto u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, pico u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, nano u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, micro u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, milli u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, centi u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, deci u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, deca u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, hecto u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, kilo u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, mega u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, giga u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, tera u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, peta u) const;
-      virtual string_type do_get_ratio_prefix(duration_style_type style, exa u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, atto u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, femto u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, pico u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, nano u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, micro u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, milli u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, centi u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, deci u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, deca u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, hecto u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, kilo u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, mega u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, giga u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, tera u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, peta u) const;
+      virtual string_type do_get_ratio_prefix(duration_style style, exa u) const;
 
 __params
 
@@ -5584,9 +5569,9 @@ The symbol or name format can be easily chosen by streaming a `symbol_format` or
         __duration_fmt__op_in(std::basic_istream<CharT, Traits>& is, duration_fmt d);
 
 
-[section:c1 Constructor `duration_fmt(duration_style_type)`]
+[section:c1 Constructor `duration_fmt(duration_style)`]
 
-  explicit duration_fmt(duration_style_type f) noexcept;
+  explicit duration_fmt(duration_style f) noexcept;
 
 __effects Constructs a __duration_fmt by storing `f`.
 
@@ -5596,7 +5581,7 @@ __postcondition `static_cast<duration_style>(*this) == f`.
 [section:op_duration_style Member Function `operator duration_style()`]
 
   explicit operator duration_style() const noexcept;
-  duration_style_type get_duration_style() const noexcept;
+  duration_style get_duration_style() const noexcept;
 
 __returns: The stored __duration_fmt `f`.
 
@@ -6320,11 +6305,11 @@ __returns The epoch string associated to the __thread_clock.
 
         // manipulators
 
-        unspecified __time_fmt1(timezone::type tz);
+        unspecified __time_fmt1(timezone tz);
         template<class CharT>
-        unspecified __time_fmt2(timezone::type tz, basic_string<CharT> f);
+        unspecified __time_fmt2(timezone tz, basic_string<CharT> f);
         template<class CharT>
-        unspecified __time_fmt2(timezone::type tz, const CharT* f);
+        unspecified __time_fmt2(timezone tz, const CharT* f);
 
         // i/o state savers
 
@@ -6332,7 +6317,7 @@ __returns The epoch string associated to the __thread_clock.
         struct __timezone_io_saver
         {
           typedef std::basic_ios<CharT, Traits> state_type;
-          typedef timezone::type aspect_type;
+          typedef timezone aspect_type;
 
           explicit __timezone_io_saver__c1(state_type &s);
           __timezone_io_saver__c2(state_type &s, aspect_type new_value);
@@ -7581,7 +7566,7 @@ All the units are given using the suffix "s" following the System International 
 [/==================================]
 [section:history Appendix: History]
 [/==================================]
-[section [*Version 2.0.0, January 1, 2012] ]
+[section [*Version 2.0.0, July 1, 2012] ]
 
 [*New Features:]
 

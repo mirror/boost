@@ -31,13 +31,13 @@ namespace boost
 
     class duration_fmt: public manip<duration_fmt>
     {
-      duration_style::type style_;
+      duration_style style_;
     public:
 
       /**
        * explicit manipulator constructor from a @c duration_style
        */
-      explicit duration_fmt(duration_style::type style)BOOST_NOEXCEPT
+      explicit duration_fmt(duration_style style)BOOST_NOEXCEPT
       : style_(style)
       {}
 
@@ -62,7 +62,7 @@ namespace boost
       //! the type of the state to restore
       typedef std::ios_base state_type;
       //! the type of aspect to save
-      typedef duration_style::type aspect_type;
+      typedef duration_style aspect_type;
 
       /**
        * Explicit construction from an i/o stream.

@@ -31,7 +31,7 @@ void test_good_symbol(const char* str, D d)
 #if BOOST_CHRONO_VERSION==2
 
 template<typename D>
-void test_good(const char* str, D d, boost::chrono::duration_style::type style)
+void test_good(const char* str, D d, boost::chrono::duration_style style)
 {
   std::ostringstream out;
 
@@ -41,7 +41,7 @@ void test_good(const char* str, D d, boost::chrono::duration_style::type style)
 }
 
 template<typename D>
-void test_state_saver(const char* str, const char* str2, D d, boost::chrono::duration_style::type style)
+void test_state_saver(const char* str, const char* str2, D d, boost::chrono::duration_style style)
 {
   std::ostringstream out;
   {

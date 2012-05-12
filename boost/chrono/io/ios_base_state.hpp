@@ -32,11 +32,11 @@ namespace boost
         uses_local  = 1 << 1
       };
 
-      inline duration_style::type get_duration_style()
+      inline duration_style get_duration_style()
       {
         return (flags() & uses_symbol) ? duration_style::symbol : duration_style::prefix;
       }
-      inline void set_duration_style(duration_style::type style)
+      inline void set_duration_style(duration_style style)
       {
         if (style == duration_style::symbol)
           setf(uses_symbol);
@@ -44,11 +44,11 @@ namespace boost
           unsetf(uses_symbol);
       }
 
-      inline timezone_type get_timezone()
+      inline timezone get_timezone()
       {
         return (flags() & uses_local) ? timezone::local : timezone::utc;
       }
-      inline void set_timezone(timezone_type tz)
+      inline void set_timezone(timezone tz)
       {
         if (tz == timezone::local)
           setf(uses_local);
@@ -64,11 +64,11 @@ namespace boost
       } // namespace
     } // namespace detail
 
-    inline duration_style::type get_duration_style(std::ios_base & ios)
+    inline duration_style get_duration_style(std::ios_base & ios)
     {
       return fmt_masks(ios).get_duration_style();
     }
-    inline void set_duration_style(std::ios_base& ios, duration_style::type style)
+    inline void set_duration_style(std::ios_base& ios, duration_style style)
     {
       fmt_masks(ios).set_duration_style(style);
     }
@@ -83,11 +83,11 @@ namespace boost
       return ios;
     }
 
-    inline timezone_type get_timezone(std::ios_base & ios)
+    inline timezone get_timezone(std::ios_base & ios)
     {
       return fmt_masks(ios).get_timezone();
     }
-    inline void set_timezone(std::ios_base& ios, timezone_type tz)
+    inline void set_timezone(std::ios_base& ios, timezone tz)
     {
       fmt_masks(ios).set_timezone(tz);
     }

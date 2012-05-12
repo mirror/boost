@@ -35,7 +35,7 @@ void test_good_symbol(const char* str, D d)
 
 #if BOOST_CHRONO_VERSION==2
 template<typename Clock, typename D>
-void test_good(const char* str, D d, boost::chrono::duration_style::type style)
+void test_good(const char* str, D d, boost::chrono::duration_style style)
 {
   std::ostringstream out;
   boost::chrono::time_point<Clock,D> tp(d);
