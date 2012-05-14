@@ -14,6 +14,7 @@
 
 #include <algorithm>	// for std::partition_point, if available
 
+#include <algorithm>	// for std::partition_point, if available
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 
