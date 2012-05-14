@@ -658,7 +658,7 @@ __random_access_sequence__.
 
 [heading Synopsis]
 
-    BOOST_FUSION_ADAPT_ADT(
+    BOOST_FUSION_ADAPT_TPL_ADT(
         (template_param0)(template_param1)...,
         (type_name) (specialization_param0)(specialization_param1)...,
         (attribute_type0, attribute_const_type0, get_expr0, set_expr0)
