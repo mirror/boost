@@ -649,7 +649,7 @@ struct GetFsm_<void> : euml_action<GetFsm_<void> >
     }
     template <class EVT,class FSM,class SourceState,class TargetState>
     typename transition_action_result<EVT,FSM,SourceState,TargetState>::type 
-        operator()(EVT const& evt ,FSM& fsm,SourceState& ,TargetState&)const
+        operator()(EVT const& ,FSM& fsm,SourceState& ,TargetState&)const
     {
         return fsm;
     }
