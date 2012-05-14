@@ -14,14 +14,13 @@
 
 #include <algorithm>	// for std::partition_point, if available
 
-#include <algorithm>	// for std::partition_point, if available
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 
 namespace boost { namespace algorithm {
 
 #if __cplusplus >= 201103L
-//  Use the C++11 versions of iota if it is available
+//  Use the C++11 versions of partition_point if it is available
 using std::partition_point;      // Section 25.3.13
 #else
 /// \fn partition_point ( ForwardIterator first, ForwardIterator last, Predicate p )
