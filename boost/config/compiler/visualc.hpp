@@ -119,7 +119,6 @@
 #endif
 
 
-#if (_MSC_VER < 1700)
 // MSVC (including the latest checked version) has not yet completely 
 // implemented value-initialization, as is reported:
 // "VC++ does not value-initialize members of derived classes without 
@@ -134,7 +133,6 @@
 // See also: http://www.boost.org/libs/utility/value_init.htm#compiler_issues
 // (Niels Dekker, LKEB, May 2010)
 #  define BOOST_NO_COMPLETE_VALUE_INITIALIZATION
-#endif
 
 #if _MSC_VER < 1600  || !defined(BOOST_STRICT_CONFIG) // 150X == VC++ 9.0
 #  define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
