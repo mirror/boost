@@ -9,6 +9,8 @@
 //  TITLE:         C++0x unified initialization syntax unavailable
 //  DESCRIPTION:   The compiler does not support C++0x unified initialization syntax: see http://en.wikipedia.org/wiki/C%2B%2B0x#Uniform_initialization
 
+#include <string>
+
 namespace boost_no_unified_initialization_syntax {
 
 struct BasicStruct 

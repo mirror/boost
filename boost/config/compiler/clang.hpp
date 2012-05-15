@@ -8,8 +8,7 @@
 
 // Clang compiler setup.
 
-#if __has_feature(cxx_exceptions) && !defined(BOOST_NO_EXCEPTIONS)
-#else
+#if !__has_feature(cxx_exceptions) && !defined(BOOST_NO_EXCEPTIONS)
 #  define BOOST_NO_EXCEPTIONS
 #endif
 
@@ -24,6 +23,7 @@
 #define BOOST_HAS_NRVO
 
 // Clang supports "long long" in all compilation modes.
+#define BOOST_HAS_LONG_LONG
 
 #if !__has_feature(cxx_auto_type)
 #  define BOOST_NO_AUTO_DECLARATIONS
@@ -43,7 +43,9 @@
 #  define BOOST_NO_DECLTYPE
 #endif
 
-#define BOOST_NO_DECLTYPE_N3276
+#if !__has_feature(cxx_decltype_incomplete_return_types)
+#  define BOOST_NO_DECLTYPE_N3276
+#endif
 
 #if !__has_feature(cxx_defaulted_functions)
 #  define BOOST_NO_DEFAULTED_FUNCTIONS
@@ -62,11 +64,15 @@
 #endif
 
 #if !__has_feature(cxx_generalized_initializers)
-#  define BOOST_NO_INITIALIZER_LISTS
+#  define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 #endif
 
 #if !__has_feature(cxx_lambdas)
 #  define BOOST_NO_LAMBDAS
+#endif
+
+#if !__has_feature(cxx_local_type_template_args)
+#  define BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
 #endif
 
 #if !__has_feature(cxx_noexcept)
