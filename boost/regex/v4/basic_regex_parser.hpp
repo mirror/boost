@@ -669,8 +669,8 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
    case regex_constants::escape_type_class:
       {
 escape_type_class_jump:
-         typedef typename traits::char_class_type mask_type;
-         mask_type m = this->m_traits.lookup_classname(m_position, m_position+1);
+         typedef typename traits::char_class_type m_type;
+         m_type m = this->m_traits.lookup_classname(m_position, m_position+1);
          if(m != 0)
          {
             basic_char_set<charT, traits> char_set;
@@ -1383,8 +1383,8 @@ bool basic_regex_parser<charT, traits>::parse_inner_set(basic_char_set<charT, tr
          ++name_first;
          negated = true;
       }
-      typedef typename traits::char_class_type mask_type;
-      mask_type m = this->m_traits.lookup_classname(name_first, name_last);
+      typedef typename traits::char_class_type m_type;
+      m_type m = this->m_traits.lookup_classname(name_first, name_last);
       if(m == 0)
       {
          if(char_set.empty() && (name_last - name_first == 1))
