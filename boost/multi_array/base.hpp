@@ -252,7 +252,11 @@ struct associated_types
 // choose value accessor ends
 /////////////////////////////////////////////////////////////////////////
 
-
+// Due to some imprecision in the C++ Standard, 
+// MSVC 2010 is broken in debug mode: it requires
+// that an Output Iterator have output_iterator_tag in its iterator_category if 
+// that iterator is not bidirectional_iterator or random_access_iterator.
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600)
 struct mutable_iterator_tag
  : boost::random_access_traversal_tag, std::input_iterator_tag
 {
@@ -260,7 +264,7 @@ struct mutable_iterator_tag
     return std::output_iterator_tag();
   }
 };
-
+#endif
 
 ////////////////////////////////////////////////////////////////////////
 // multi_array_base
@@ -310,8 +314,14 @@ public:
   //
   // iterator support
   //
+#if BOOST_WORKAROUND(BOOST_MSVC, >= 1600)
+  // Deal with VC 2010 output_iterator_tag requirement
   typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
                          mutable_iterator_tag> iterator;
+#else
+  typedef array_iterator<T,T*,mpl::size_t<NumDims>,reference,
+                         boost::random_access_traversal_tag> iterator;
+#endif
   typedef array_iterator<T,T const*,mpl::size_t<NumDims>,const_reference,
                          boost::random_access_traversal_tag> const_iterator;
 
