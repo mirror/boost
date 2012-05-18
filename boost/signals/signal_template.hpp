@@ -16,7 +16,6 @@
 #define BOOST_SIGNALS_SIGNAL_TEMPLATE_HEADER_INCLUDED
 #  include <boost/config.hpp>
 #  include <boost/signals/connection.hpp>
-#  include <boost/utility.hpp>
 #  include <boost/ref.hpp>
 #  include <boost/signals/slot.hpp>
 #  include <boost/last_value.hpp>

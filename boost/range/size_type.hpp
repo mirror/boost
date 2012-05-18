@@ -21,7 +21,7 @@
 #include <boost/range/detail/size_type.hpp>
 #else
 
-#include <boost/utility.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/make_unsigned.hpp>
 #include <boost/type_traits/remove_const.hpp>
 #include <cstddef>
