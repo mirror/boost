@@ -15,6 +15,7 @@
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/random/lagged_fibonacci.hpp>
 #include <boost/cstdint.hpp>
+#include <boost/mpl/vector.hpp>
 
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
