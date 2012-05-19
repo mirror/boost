@@ -12,8 +12,12 @@
 #  define BOOST_NO_EXCEPTIONS
 #endif
 
-#if !__has_feature(cxx_rtti)
+#if !__has_feature(cxx_rtti) && !defined(BOOST_NO_RTTI)
 #  define BOOST_NO_RTTI
+#endif
+
+#if !__has_feature(cxx_rtti) && !defined(BOOST_NO_TYPEID)
+#  define BOOST_NO_TYPEID
 #endif
 
 #if defined(__int64)
