@@ -24,6 +24,7 @@
 #include <boost/random/detail/config.hpp>
 #include <boost/random/detail/seed.hpp>
 #include <boost/random/detail/seed_impl.hpp>
+#include <boost/random/detail/operators.hpp>
 
 namespace boost {
 namespace random {
