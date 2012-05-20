@@ -78,7 +78,7 @@ int main()
 
       //Test the objects inserted in the base hook list
       for(; vect_it != vect_itend; ++vect_it, ++list_it)
-         if(&*list_it  != &*vect_it)   
+         if(&*list_it  != &*vect_it)  
             return 1;
    }
 

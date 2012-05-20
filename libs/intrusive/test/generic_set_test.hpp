@@ -30,7 +30,7 @@ struct is_treap
 };
 
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
-struct test_generic_set 
+struct test_generic_set
 {
    typedef typename ValueTraits::value_type value_type;
    static void test_all();
@@ -52,7 +52,7 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_all()
    static const int random_init[6] = { 3, 2, 4, 1, 5, 2 };
    std::vector<value_type> values (6);
    for (int i = 0; i < 6; ++i)
-      values[i].value_ = random_init[i]; 
+      values[i].value_ = random_init[i];
 
    typedef typename ContainerDefiner
       < value_type
@@ -88,7 +88,7 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_impl()
    typedef typename ValueTraits::value_type value_type;
    std::vector<value_type> values (5);
    for (int i = 0; i < 5; ++i)
-      values[i].value_ = i; 
+      values[i].value_ = i;
 
    typedef typename ValueTraits::value_type value_type;
    typedef typename ContainerDefiner
@@ -103,7 +103,7 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_impl()
    testset.erase (testset.iterator_to (values[0]));
    testset.erase (testset.iterator_to (values[1]));
    testset.insert (values[1]);
-     
+    
    testset.erase (testset.iterator_to (values[2]));
    testset.erase (testset.iterator_to (values[3]));
 }
@@ -137,8 +137,8 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_sort(std::vector<type
       TEST_INTRUSIVE_SEQUENCE( init_values, testset2.rbegin() );  }
    BOOST_TEST (testset2.begin()->value_ == 2);
    BOOST_TEST (testset2.rbegin()->value_ == 5);
-}  
-  
+} 
+ 
 //test: insert, const_iterator, const_reverse_iterator, erase, s_iterator_to:
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
 void test_generic_set<ValueTraits, ContainerDefiner>::test_insert(std::vector<typename ValueTraits::value_type>& values)
@@ -263,7 +263,7 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_swap(std::vector<type
    BOOST_TEST (testset1.size() == 1);
    //  BOOST_TEST (&testset1.front() == &values[3]);
    BOOST_TEST (&*testset1.begin() == &values[3]);
-}  
+} 
 
 //test: find, equal_range (lower_bound, upper_bound):
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
@@ -284,14 +284,14 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_find(std::vector<type
    BOOST_TEST (i->value_ == 2);
    BOOST_TEST ((++i)->value_ != 2);
    std::pair<iterator,iterator> range = testset.equal_range (cmp_val);
-     
+    
    BOOST_TEST (range.first->value_ == 2);
    BOOST_TEST (range.second->value_ == 3);
    BOOST_TEST (std::distance (range.first, range.second) == 1);
 
    cmp_val.value_ = 7;
    BOOST_TEST (testset.find (cmp_val) == testset.end());
-} 
+}
 
 }}}   //namespace boost::intrusive::test
 

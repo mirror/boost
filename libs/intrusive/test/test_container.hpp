@@ -247,7 +247,7 @@ void test_common_unordered_and_associative_container(Container & c, Data & d)
       {
          BOOST_TEST( c.find(*di) != c.end() );
       }
-   
+  
       typename Data::const_iterator db = d.begin();
       typename Data::const_iterator da = db++;
 

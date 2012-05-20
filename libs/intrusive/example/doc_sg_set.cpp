@@ -56,7 +56,7 @@ int main()
 
    BaseSet baseset;
    MemberMultiset membermultiset;
-   
+  
    //Now insert them in the reverse order in the base hook sg_set
    for(VectIt it(values.begin()), itend(values.end()); it != itend; ++it){
       baseset.insert(*it);

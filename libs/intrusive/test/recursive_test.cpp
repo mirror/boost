@@ -49,7 +49,7 @@ void instantiate()
    list< Foo, base_hook<ListBaseHook> >   list_;   list_.clear();
    slist< Foo, base_hook<SListBaseHook> > slist_;  slist_.clear();
    set< Foo, base_hook<SetBaseHook> > set_;  set_.clear();
-   
+  
    USet::bucket_type buckets[1];
    USet unordered_set_(USet::bucket_traits(buckets, 1));  unordered_set_.clear();
 }

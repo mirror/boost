@@ -28,6 +28,6 @@ For more information on hashing alternatives see the original standard hashing c
 
 http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1456.html
 
-Now, intrusive containers don't allocate memory at all, so incremental rehashing must be trigered by the user using 
+Now, intrusive containers don't allocate memory at all, so incremental rehashing must be trigered by the user using
 "incremental_rehash(bool)" (use an additional bucket, that is, incremental rehash) and "incremental_rehash(bucket_traits)" (to update the new bucket array with an array that should be twice/half the size of the previous one). I admit that this is not explained at all with an example, so I will note this issue in my to do list.
 

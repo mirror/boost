@@ -25,8 +25,8 @@ struct my_slist_node_traits
    typedef my_node                                 node;
    typedef my_node *                               node_ptr;
    typedef const my_node *                         const_node_ptr;
-   static node_ptr get_next(const_node_ptr n)      {  return n->next_;  }  
-   static void set_next(node_ptr n, node_ptr next) {  n->next_ = next;  }  
+   static node_ptr get_next(const_node_ptr n)      {  return n->next_;  } 
+   static void set_next(node_ptr n, node_ptr next) {  n->next_ = next;  } 
 };
 
 int main()

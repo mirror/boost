@@ -141,7 +141,7 @@ struct even_odd
          return v1.value_ < v2.value_;
       else
          return v2.value_ & 1;
-   }  
+   } 
 };
 
 struct is_even
@@ -149,7 +149,7 @@ struct is_even
    template<class Hooks, bool constant_time_size>
    bool operator()
       (const testvalue<Hooks, constant_time_size>& v1) const
-   {  return (v1.value_ & 1) == 0;  }  
+   {  return (v1.value_ & 1) == 0;  } 
 };
 /*
 struct int_testvalue_comp
