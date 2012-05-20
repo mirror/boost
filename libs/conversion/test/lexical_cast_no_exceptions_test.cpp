@@ -22,7 +22,7 @@
 
 #ifndef BOOST_NO_EXCEPTIONS
 #error "This test must be compiled with -DBOOST_NO_EXCEPTIONS"
-#endif 
+#endif
 
 bool g_was_exception = false;
 
@@ -60,25 +60,25 @@ inline std::istream& operator>> (std::istream& i, Escape& rhs)
 void test_exceptions_off()
 {
     Escape v("");
-            
-    g_was_exception = false;        
+
+    g_was_exception = false;
     lexical_cast<char>(v);
     BOOST_CHECK(g_was_exception);
-    
+
     g_was_exception = false;
     lexical_cast<unsigned char>(v);
     BOOST_CHECK(g_was_exception);
-    
+
     v = lexical_cast<Escape>(100);
     BOOST_CHECK_EQUAL(lexical_cast<int>(v), 100);
     BOOST_CHECK_EQUAL(lexical_cast<unsigned int>(v), 100u);
-    
+
     v = lexical_cast<Escape>(0.0);
     BOOST_CHECK_EQUAL(lexical_cast<double>(v), 0.0);
 
     BOOST_CHECK_EQUAL(lexical_cast<short>(100), 100);
     BOOST_CHECK_EQUAL(lexical_cast<float>(0.0), 0.0);
-    
+
     g_was_exception = false;
     lexical_cast<short>(700000);
     BOOST_CHECK(g_was_exception);

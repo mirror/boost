@@ -23,12 +23,12 @@
 using namespace boost;
 
 // Testing compilation and some basic usage with BOOST_NO_STD_LOCALE
-// Tests are mainly copyied from lexical_cast_empty_input_test.cpp (something 
+// Tests are mainly copyied from lexical_cast_empty_input_test.cpp (something
 // new added to test_empty_3)
 
 #ifndef BOOST_NO_STD_LOCALE
 #error "This test must be compiled with -DBOOST_NO_STD_LOCALE"
-#endif 
+#endif
 
 
 template <class T>
@@ -106,15 +106,15 @@ void test_empty_3()
 {
     Escape v("");
     do_test_on_empty_input(v);
-            
+
     BOOST_CHECK_THROW(lexical_cast<char>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<unsigned char>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<signed char>(v), bad_lexical_cast);
-    
+
     v = lexical_cast<Escape>(100);
     BOOST_CHECK_EQUAL(lexical_cast<int>(v), 100);
     BOOST_CHECK_EQUAL(lexical_cast<unsigned int>(v), 100u);
-    
+
     v = lexical_cast<Escape>(0.0);
     BOOST_CHECK_EQUAL(lexical_cast<double>(v), 0.0);
 }

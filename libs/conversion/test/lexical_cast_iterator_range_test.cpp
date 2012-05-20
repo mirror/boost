@@ -138,7 +138,7 @@ void test_it_range_using_char(CharT* one, CharT* eleven)
 #endif
 }
 
-void test_char_iterator_ranges() 
+void test_char_iterator_ranges()
 {
     typedef char test_char_type;
     test_char_type data1[] = "1";
@@ -149,7 +149,7 @@ void test_char_iterator_ranges()
 
 
 
-void test_unsigned_char_iterator_ranges() 
+void test_unsigned_char_iterator_ranges()
 {
     typedef unsigned char test_char_type;
     test_char_type data1[] = "1";
@@ -158,7 +158,7 @@ void test_unsigned_char_iterator_ranges()
     test_it_range_using_char(data1, data2);
 }
 
-void test_signed_char_iterator_ranges() 
+void test_signed_char_iterator_ranges()
 {
     typedef signed char test_char_type;
     test_char_type data1[] = "1";
@@ -167,7 +167,7 @@ void test_signed_char_iterator_ranges()
     test_it_range_using_char(data1, data2);
 }
 
-void test_wchar_iterator_ranges() 
+void test_wchar_iterator_ranges()
 {
 #ifndef BOOST_LCAST_NO_WCHAR_T
     typedef wchar_t test_char_type;
@@ -179,7 +179,7 @@ void test_wchar_iterator_ranges()
     BOOST_CHECK(true);
 }
 
-void test_char16_iterator_ranges() 
+void test_char16_iterator_ranges()
 {
 #if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
     typedef char16_t test_char_type;
@@ -191,7 +191,7 @@ void test_char16_iterator_ranges()
     BOOST_CHECK(true);
 }
 
-void test_char32_iterator_ranges() 
+void test_char32_iterator_ranges()
 {
 #if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
     typedef char32_t test_char_type;
