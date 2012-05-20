@@ -55,7 +55,7 @@ namespace container {
 
 namespace container_detail {
 
-//! Const vector_iterator used to iterate through a vector. 
+//! Const vector_iterator used to iterate through a vector.
 template <class Pointer>
 class vector_const_iterator
 {
@@ -82,20 +82,20 @@ class vector_const_iterator
    vector_const_iterator() : m_ptr(0){}
 
    //Pointer like operators
-   reference operator*()   const  
+   reference operator*()   const 
    {  return *m_ptr;  }
 
-   const value_type * operator->()  const  
+   const value_type * operator->()  const 
    {  return  container_detail::to_raw_pointer(m_ptr);  }
 
    reference operator[](difference_type off) const
    {  return m_ptr[off];   }
 
    //Increment / Decrement
-   vector_const_iterator& operator++()       
+   vector_const_iterator& operator++()      
    { ++m_ptr;  return *this; }
 
-   vector_const_iterator operator++(int)      
+   vector_const_iterator operator++(int)     
    {  Pointer tmp = m_ptr; ++*this; return vector_const_iterator(tmp);  }
 
    vector_const_iterator& operator--()
@@ -165,22 +165,22 @@ class vector_iterator
    {}
 
    //Pointer like operators
-   reference operator*()  const  
+   reference operator*()  const 
    {  return *this->m_ptr;  }
 
-   value_type* operator->() const  
+   value_type* operator->() const 
    {  return  container_detail::to_raw_pointer(this->m_ptr);  }
 
-   reference operator[](difference_type off) const 
+   reference operator[](difference_type off) const
    {  return this->m_ptr[off];   }
 
    //Increment / Decrement
-   vector_iterator& operator++()  
+   vector_iterator& operator++() 
    {  ++this->m_ptr; return *this;  }
 
    vector_iterator operator++(int)
    {  pointer tmp = this->m_ptr; ++*this; return vector_iterator(tmp);  }
-   
+  
    vector_iterator& operator--()
    {  --this->m_ptr; return *this;  }
 
@@ -249,7 +249,7 @@ struct vector_value_traits
 
 //!This struct deallocates and allocated memory
 template <class A>
-struct vector_alloc_holder 
+struct vector_alloc_holder
 {
    typedef boost::container::allocator_traits<A>         allocator_traits_type;
    typedef typename allocator_traits_type::pointer       pointer;
@@ -282,7 +282,7 @@ struct vector_alloc_holder
       boost::container::container_detail::version<A>::value> alloc_version;
    std::pair<pointer, bool>
       allocation_command(allocation_type command,
-                         size_type limit_size, 
+                         size_type limit_size,
                          size_type preferred_size,
                          size_type &received_size, const pointer &reuse = 0)
    {
@@ -292,7 +292,7 @@ struct vector_alloc_holder
 
    std::pair<pointer, bool>
       allocation_command(allocation_type command,
-                         size_type limit_size, 
+                         size_type limit_size,
                          size_type preferred_size,
                          size_type &received_size,
                          const pointer &reuse,
@@ -308,7 +308,7 @@ struct vector_alloc_holder
 
    std::pair<pointer, bool>
       allocation_command(allocation_type command,
-                         size_type limit_size, 
+                         size_type limit_size,
                          size_type preferred_size,
                          size_type &received_size,
                          const pointer &reuse,
@@ -394,9 +394,9 @@ struct vector_alloc_holder
 /// @endcond
 
 //! \class vector
-//! A vector is a sequence that supports random access to elements, constant 
-//! time insertion and removal of elements at the end, and linear time insertion 
-//! and removal of elements at the beginning or in the middle. The number of 
+//! A vector is a sequence that supports random access to elements, constant
+//! time insertion and removal of elements at the end, and linear time insertion
+//! and removal of elements at the beginning or in the middle. The number of
 //! elements in a vector may vary dynamically; memory management is automatic.
 //! boost::container::vector is similar to std::vector but it's compatible
 //! with shared memory and memory mapped files.
@@ -434,11 +434,11 @@ class vector : private container_detail::vector_alloc_holder<A>
    //! The random access const_iterator
    typedef container_detail::vector_const_iterator<pointer>  const_iterator;
 
-   //! Iterator used to iterate backwards through a vector. 
-   typedef std::reverse_iterator<iterator>   
+   //! Iterator used to iterate backwards through a vector.
+   typedef std::reverse_iterator<iterator>  
       reverse_iterator;
-   //! Const iterator used to iterate backwards through a vector. 
-   typedef std::reverse_iterator<const_iterator>                 
+   //! Const iterator used to iterate backwards through a vector.
+   typedef std::reverse_iterator<const_iterator>                
       const_reverse_iterator;
    //! The stored allocator type
    typedef allocator_type                          stored_allocator_type;
@@ -461,9 +461,9 @@ class vector : private container_detail::vector_alloc_holder<A>
    public:
 
    //! <b>Effects</b>: Constructs a vector taking the allocator as parameter.
-   //! 
+   //!
    //! <b>Throws</b>: If allocator_type's default constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    vector()
       BOOST_CONTAINER_NOEXCEPT_IF(::boost::has_nothrow_default_constructor<A>::value)
@@ -471,9 +471,9 @@ class vector : private container_detail::vector_alloc_holder<A>
    {}
 
    //! <b>Effects</b>: Constructs a vector taking the allocator as parameter.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    explicit vector(const A& a) BOOST_CONTAINER_NOEXCEPT
       : base_t(a)
@@ -484,7 +484,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Throws</b>: If allocator_type's default constructor or allocation
    //!   throws or T's default constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Linear to n.
    explicit vector(size_type n)
       :  base_t()
@@ -511,21 +511,21 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Throws</b>: If allocator_type's default constructor or allocation
    //!   throws or T's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Linear to n.
-   vector(size_type n, const T& value, const allocator_type& a = allocator_type()) 
+   vector(size_type n, const T& value, const allocator_type& a = allocator_type())
       :  base_t(a)
    {  this->insert(this->cend(), n, value); }
 
    //! <b>Effects</b>: Copy constructs a vector.
    //!
    //! <b>Postcondition</b>: x == *this.
-   //! 
+   //!
    //! <b>Throws</b>: If allocator_type's default constructor or allocation
    //!   throws or T's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Linear to the elements x contains.
-   vector(const vector &x) 
+   vector(const vector &x)
       :  base_t(allocator_traits_type::select_on_container_copy_construction(x.alloc()))
    {
       this->assign( container_detail::to_raw_pointer(x.members_.m_start)
@@ -535,7 +535,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //! <b>Effects</b>: Move constructor. Moves mx's resources to *this.
    //!
    //! <b>Throws</b>: Nothing
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    vector(BOOST_RV_REF(vector) mx) BOOST_CONTAINER_NOEXCEPT
       :  base_t(boost::move(mx.alloc()))
@@ -544,12 +544,12 @@ class vector : private container_detail::vector_alloc_holder<A>
    //! <b>Effects</b>: Copy constructs a vector using the specified allocator.
    //!
    //! <b>Postcondition</b>: x == *this.
-   //! 
+   //!
    //! <b>Throws</b>: If allocation
    //!   throws or T's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Linear to the elements x contains.
-   vector(const vector &x, const allocator_type &a) 
+   vector(const vector &x, const allocator_type &a)
       :  base_t(a)
    {
       this->assign( container_detail::to_raw_pointer(x.members_.m_start)
@@ -561,7 +561,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!                 Otherwise copies values from x to *this.
    //!
    //! <b>Throws</b>: If allocation or T's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant if a == mx.get_allocator(), linear otherwise.
    vector(BOOST_RV_REF(vector) mx, const allocator_type &a)
       :  base_t(a)
@@ -597,103 +597,103 @@ class vector : private container_detail::vector_alloc_holder<A>
    {} //vector_alloc_holder clears the data
 
    //! <b>Effects</b>: Returns an iterator to the first element contained in the vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    iterator begin() BOOST_CONTAINER_NOEXCEPT
    { return iterator(this->members_.m_start); }
 
    //! <b>Effects</b>: Returns a const_iterator to the first element contained in the vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_iterator begin() const BOOST_CONTAINER_NOEXCEPT
    { return const_iterator(this->members_.m_start); }
 
    //! <b>Effects</b>: Returns an iterator to the end of the vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    iterator end() BOOST_CONTAINER_NOEXCEPT
    { return iterator(this->members_.m_start + this->members_.m_size); }
 
    //! <b>Effects</b>: Returns a const_iterator to the end of the vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_iterator end() const BOOST_CONTAINER_NOEXCEPT
    { return this->cend(); }
 
-   //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning 
-   //! of the reversed vector. 
-   //! 
+   //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning
+   //! of the reversed vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reverse_iterator rbegin() BOOST_CONTAINER_NOEXCEPT
    { return reverse_iterator(this->end());      }
 
-   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
-   //! of the reversed vector. 
-   //! 
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
+   //! of the reversed vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rbegin() const BOOST_CONTAINER_NOEXCEPT
    { return this->crbegin(); }
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the end
-   //! of the reversed vector. 
-   //! 
+   //! of the reversed vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reverse_iterator rend() BOOST_CONTAINER_NOEXCEPT
    { return reverse_iterator(this->begin());       }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //! of the reversed vector. 
-   //! 
+   //! of the reversed vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rend() const BOOST_CONTAINER_NOEXCEPT
    { return this->crend(); }
 
    //! <b>Effects</b>: Returns a const_iterator to the first element contained in the vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_iterator cbegin() const BOOST_CONTAINER_NOEXCEPT
    { return const_iterator(this->members_.m_start); }
 
    //! <b>Effects</b>: Returns a const_iterator to the end of the vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_iterator cend() const BOOST_CONTAINER_NOEXCEPT
    { return const_iterator(this->members_.m_start + this->members_.m_size); }
 
-   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
-   //! of the reversed vector. 
-   //! 
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
+   //! of the reversed vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator crbegin() const BOOST_CONTAINER_NOEXCEPT
    { return const_reverse_iterator(this->end());}
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //! of the reversed vector. 
-   //! 
+   //! of the reversed vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator crend() const BOOST_CONTAINER_NOEXCEPT
    { return const_reverse_iterator(this->begin()); }
@@ -702,9 +702,9 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Effects</b>: Returns a reference to the first
    //!   element of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reference         front() BOOST_CONTAINER_NOEXCEPT
    { return *this->members_.m_start; }
@@ -713,9 +713,9 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Effects</b>: Returns a const reference to the first
    //!   element of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reference   front() const BOOST_CONTAINER_NOEXCEPT
    { return *this->members_.m_start; }
@@ -724,9 +724,9 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Effects</b>: Returns a reference to the last
    //!   element of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reference         back() BOOST_CONTAINER_NOEXCEPT
    { return this->members_.m_start[this->members_.m_size - 1]; }
@@ -735,132 +735,132 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Effects</b>: Returns a const reference to the last
    //!   element of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reference   back()  const BOOST_CONTAINER_NOEXCEPT
    { return this->members_.m_start[this->members_.m_size - 1]; }
 
    //! <b>Returns</b>: A pointer such that [data(),data() + size()) is a valid range.
    //!   For a non-empty vector, data() == &front().
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    pointer data() BOOST_CONTAINER_NOEXCEPT
    { return this->members_.m_start; }
 
    //! <b>Returns</b>: A pointer such that [data(),data() + size()) is a valid range.
    //!   For a non-empty vector, data() == &front().
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_pointer data()  const BOOST_CONTAINER_NOEXCEPT
    { return this->members_.m_start; }
 
    //! <b>Effects</b>: Returns the number of the elements contained in the vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    size_type size() const BOOST_CONTAINER_NOEXCEPT
    { return this->members_.m_size; }
 
    //! <b>Effects</b>: Returns the largest possible size of the vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    size_type max_size() const BOOST_CONTAINER_NOEXCEPT
    { return allocator_traits_type::max_size(this->alloc()); }
 
    //! <b>Effects</b>: Number of elements for which memory has been allocated.
    //!   capacity() is always greater than or equal to size().
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    size_type capacity() const BOOST_CONTAINER_NOEXCEPT
    { return this->members_.m_capacity; }
 
    //! <b>Effects</b>: Returns true if the vector contains no elements.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    bool empty() const BOOST_CONTAINER_NOEXCEPT
    { return !this->members_.m_size; }
 
    //! <b>Requires</b>: size() > n.
    //!
-   //! <b>Effects</b>: Returns a reference to the nth element 
+   //! <b>Effects</b>: Returns a reference to the nth element
    //!   from the beginning of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   reference operator[](size_type n)         
+   reference operator[](size_type n)        
    { return this->members_.m_start[n]; }
 
    //! <b>Requires</b>: size() > n.
    //!
-   //! <b>Effects</b>: Returns a const reference to the nth element 
+   //! <b>Effects</b>: Returns a const reference to the nth element
    //!   from the beginning of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reference operator[](size_type n) const BOOST_CONTAINER_NOEXCEPT
    { return this->members_.m_start[n]; }
 
    //! <b>Requires</b>: size() > n.
    //!
-   //! <b>Effects</b>: Returns a reference to the nth element 
+   //! <b>Effects</b>: Returns a reference to the nth element
    //!   from the beginning of the container.
-   //! 
+   //!
    //! <b>Throws</b>: std::range_error if n >= size()
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   reference at(size_type n) 
+   reference at(size_type n)
    { this->priv_check_range(n); return this->members_.m_start[n]; }
 
    //! <b>Requires</b>: size() > n.
    //!
-   //! <b>Effects</b>: Returns a const reference to the nth element 
+   //! <b>Effects</b>: Returns a const reference to the nth element
    //!   from the beginning of the container.
-   //! 
+   //!
    //! <b>Throws</b>: std::range_error if n >= size()
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reference at(size_type n) const
    { this->priv_check_range(n); return this->members_.m_start[n]; }
 
    //! <b>Effects</b>: Returns a copy of the internal allocator.
-   //! 
+   //!
    //! <b>Throws</b>: If allocator's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    allocator_type get_allocator() const BOOST_CONTAINER_NOEXCEPT
    { return this->alloc();  }
 
    //! <b>Effects</b>: Returns a reference to the internal allocator.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   //! 
+   //!
    //! <b>Note</b>: Non-standard extension.
    const stored_allocator_type &get_stored_allocator() const BOOST_CONTAINER_NOEXCEPT
    {  return this->alloc(); }
 
    //! <b>Effects</b>: Returns a reference to the internal allocator.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   //! 
+   //!
    //! <b>Note</b>: Non-standard extension.
    stored_allocator_type &get_stored_allocator() BOOST_CONTAINER_NOEXCEPT
    {  return this->alloc(); }
@@ -869,7 +869,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!   effect. Otherwise, it is a request for allocation of additional memory.
    //!   If the request is successful, then capacity() is greater than or equal to
    //!   n; otherwise, capacity() is unchanged. In either case, size() is unchanged.
-   //! 
+   //!
    //! <b>Throws</b>: If memory allocation allocation throws or T's copy/move constructor throws.
    void reserve(size_type new_cap)
    {
@@ -928,8 +928,8 @@ class vector : private container_detail::vector_alloc_holder<A>
 
    //! <b>Effects</b>: Makes *this contain the same elements as x.
    //!
-   //! <b>Postcondition</b>: this->size() == x.size(). *this contains a copy 
-   //! of each of x's elements. 
+   //! <b>Postcondition</b>: this->size() == x.size(). *this contains a copy
+   //! of each of x's elements.
    //!
    //! <b>Throws</b>: If memory allocation throws or T's copy/move constructor/assignment throws.
    //!
@@ -1002,7 +1002,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Complexity</b>: Linear to n.
    template <class InIt>
-   void assign(InIt first, InIt last) 
+   void assign(InIt first, InIt last)
    {
       //Dispatch depending on integer/iterator
       const bool aux_boolean = container_detail::is_convertible<InIt, size_type>::value;
@@ -1113,7 +1113,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    #include BOOST_PP_LOCAL_ITERATE()
 
    #endif   //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
-  
+ 
    //! <b>Effects</b>: Swaps the contents of *this and x.
    //!
    //! <b>Throws</b>: Nothing.
@@ -1184,7 +1184,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //! <b>Throws</b>: Nothing.
    //!
    //! <b>Complexity</b>: Constant time.
-   void pop_back() 
+   void pop_back()
    {
       //Destroy last element
       --this->members_.m_size;
@@ -1195,9 +1195,9 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Throws</b>: Nothing.
    //!
-   //! <b>Complexity</b>: Linear to the elements between pos and the 
+   //! <b>Complexity</b>: Linear to the elements between pos and the
    //!   last element. Constant if pos is the last element.
-   iterator erase(const_iterator position) 
+   iterator erase(const_iterator position)
    {
       T *pos = container_detail::to_raw_pointer(position.get_ptr());
       T *beg = container_detail::to_raw_pointer(this->members_.m_start);
@@ -1214,7 +1214,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Complexity</b>: Linear to the distance between first and last
    //!   plus linear to the elements between pos and the last element.
-   iterator erase(const_iterator first, const_iterator last) 
+   iterator erase(const_iterator first, const_iterator last)
    {
       if (first != last){   // worth doing, copy down over hole
          T* end_pos = container_detail::to_raw_pointer(this->members_.m_start) + this->members_.m_size;
@@ -1236,7 +1236,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //! <b>Throws</b>: If memory allocation throws, or T's copy constructor throws.
    //!
    //! <b>Complexity</b>: Linear to the difference between size() and new_size.
-   void resize(size_type new_size, const T& x) 
+   void resize(size_type new_size, const T& x)
    {
       pointer finish = this->members_.m_start + this->members_.m_size;
       if (new_size < size()){
@@ -1255,7 +1255,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //! <b>Throws</b>: If memory allocation throws, or T's copy constructor throws.
    //!
    //! <b>Complexity</b>: Linear to the difference between size() and new_size.
-   void resize(size_type new_size) 
+   void resize(size_type new_size)
    {
       if (new_size < this->size()){
          //Destroy last elements
@@ -1288,8 +1288,23 @@ class vector : private container_detail::vector_alloc_holder<A>
 
    /// @cond
 
+   //Absolutely experimental. This function might change, disappear or simply crash!
+   template<class BiDirPosConstIt, class BiDirValueIt>
+   void insert_ordered_at(size_type element_count, BiDirPosConstIt last_position_it, BiDirValueIt last_value_it)
+   {
+      const size_type *dummy = 0;
+      this->priv_insert_ordered_at(element_count, last_position_it, false, &dummy[0], last_value_it);
+   }
+
+   //Absolutely experimental. This function might change, disappear or simply crash!
+   template<class BiDirPosConstIt, class BiDirSkipConstIt, class BiDirValueIt>
+   void insert_ordered_at(size_type element_count, BiDirPosConstIt last_position_it, BiDirSkipConstIt last_skip_it, BiDirValueIt last_value_it)
+   {
+      this->priv_insert_ordered_at(element_count, last_position_it, true, last_skip_it, last_value_it);
+   }
+
    private:
-   iterator priv_insert(const_iterator position, const T &x) 
+   iterator priv_insert(const_iterator position, const T &x)
    {
       //Just call more general insert(pos, size, value) and return iterator
       size_type pos_n = position - cbegin();
@@ -1297,7 +1312,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       return iterator(this->members_.m_start + pos_n);
    }
 
-   iterator priv_insert(const_iterator position, BOOST_RV_REF(T) x) 
+   iterator priv_insert(const_iterator position, BOOST_RV_REF(T) x)
    {
       //Just call more general insert(pos, size, value) and return iterator
       size_type pos_n = position - cbegin();
@@ -1387,7 +1402,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    template <class FwdIt>
    void priv_range_insert(const_iterator pos, FwdIt first, FwdIt last, std::forward_iterator_tag)
    {
-      if(first != last){        
+      if(first != last){       
          const size_type n = std::distance(first, last);
          container_detail::advanced_insert_aux_proxy<A, FwdIt, T*> proxy(this->alloc(), first, last);
          priv_range_insert(pos.get_ptr(), n, proxy);
@@ -1428,7 +1443,7 @@ class vector : private container_detail::vector_alloc_holder<A>
             this->members_.m_capacity  = real_cap;
          }
       }
-      
+     
       //If we had room or we have expanded forward
       if (same_buffer_start){
          #ifdef BOOST_CONTAINER_VECTOR_ALLOC_STATS
@@ -1463,10 +1478,10 @@ class vector : private container_detail::vector_alloc_holder<A>
       }
    }
 
-   public:
    //Absolutely experimental. This function might change, disappear or simply crash!
-   template<class BiDirPosIt, class BiDirValueIt>
-   void insert_ordered_at(size_type element_count, BiDirPosIt last_position_it, BiDirValueIt last_value_it)
+   template<class BiDirPosConstIt, class BiDirSkipConstIt, class BiDirValueIt>
+   void priv_insert_ordered_at( size_type element_count, BiDirPosConstIt last_position_it
+                              , bool do_skip, BiDirSkipConstIt last_skip_it, BiDirValueIt last_value_it)
    {
       const size_type old_size_pos = this->size();
       this->reserve(old_size_pos + element_count);
@@ -1484,11 +1499,15 @@ class vector : private container_detail::vector_alloc_holder<A>
       while(insertions_left){
          const size_type pos = static_cast<size_type>(*(--last_position_it));
          BOOST_ASSERT(pos <= old_size_pos);
-         //Shift the range after the insertion point, function will take care if the shift
-         //crosses the size() boundary, using copy/move or uninitialized copy/move if necessary.
-         size_type new_hole_size = insert_ordered_at_shift_range(pos, next_pos, this->size(), insertions_left);
+         //If needed shift the range after the insertion point and the previous insertion point.
+         //Function will take care if the shift crosses the size() boundary, using copy/move
+         //or uninitialized copy/move if necessary.
+         size_type new_hole_size = (pos != next_pos)
+            ? priv_insert_ordered_at_shift_range(pos, next_pos, this->size(), insertions_left)
+            : hole_size
+            ;
          if(new_hole_size > 0){
-            //The hole was reduced by insert_ordered_at_shift_range so expand exception rollback range backwards
+            //The hole was reduced by priv_insert_ordered_at_shift_range so expand exception rollback range backwards
             past_hole_values_destroyer.increment_size_backwards(next_pos - pos);
             //Insert the new value in the hole
             allocator_traits_type::construct(this->alloc(), begin_ptr + pos + insertions_left - 1, *(--last_value_it));
@@ -1505,12 +1524,18 @@ class vector : private container_detail::vector_alloc_holder<A>
          }
          else{
             if(hole_size){
-               //Hole was just filled by insert_ordered_at_shift_range, disable exception rollback and change vector size
+               //Hole was just filled by priv_insert_ordered_at_shift_range, disable exception rollback and change vector size
                past_hole_values_destroyer.release();
                this->members_.m_size += element_count;
             }
             //Insert the new value in the already constructed range
             begin_ptr[pos + insertions_left - 1] = *(--last_value_it);
+         }
+         if(do_skip){
+            size_type n = *(--last_skip_it);
+            while(n--){
+               --last_value_it;
+            }
          }
          --insertions_left;
          hole_size = new_hole_size;
@@ -1531,7 +1556,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //
    //Old situation:
    //       first_pos   last_pos         old_limit
-   //             |       |                  |  
+   //             |       |                  | 
    // ____________V_______V__________________V_____________
    //|   prefix   | range |     suffix       |raw_mem      ~
    //|____________|_______|__________________|_____________~
@@ -1540,20 +1565,20 @@ class vector : private container_detail::vector_alloc_holder<A>
    // range is moved through move assignments
    //
    //       first_pos   last_pos         old_limit
-   //             |       |                  |  
+   //             |       |                  | 
    // ____________V_______V__________________V_____________
    //|   prefix'  |       |  | range |suffix'|raw_mem      ~
    //|________________+______|___^___|_______|_____________~
    //                 |          |
-   //                 |_>_>_>_>_>^                     
+   //                 |_>_>_>_>_>^                    
    //
    //
    //New situation in Case B (hole_size >= 0):
    // range is moved through uninitialized moves
    //
    //       first_pos   last_pos         old_limit
-   //             |       |                  |  
-   // ____________V_______V__________________V________________ 
+   //             |       |                  | 
+   // ____________V_______V__________________V________________
    //|    prefix' |       |                  | [hole] | range |
    //|_______________________________________|________|___^___|
    //                 |                                   |
@@ -1563,13 +1588,13 @@ class vector : private container_detail::vector_alloc_holder<A>
    // range is moved through move assignments and uninitialized moves
    //
    //       first_pos   last_pos         old_limit
-   //             |       |                  |  
-   // ____________V_______V__________________V___ 
+   //             |       |                  | 
+   // ____________V_______V__________________V___
    //|   prefix'  |       |              | range |
    //|___________________________________|___^___|
    //                 |                      |
    //                 |_>_>_>_>_>_>_>_>_>_>_>^
-   size_type insert_ordered_at_shift_range(size_type first_pos, size_type last_pos, size_type limit_pos, size_type shift_count)
+   size_type priv_insert_ordered_at_shift_range(size_type first_pos, size_type last_pos, size_type limit_pos, size_type shift_count)
    {
       BOOST_ASSERT(first_pos <= last_pos);
       BOOST_ASSERT(last_pos <= limit_pos);
@@ -1597,7 +1622,7 @@ class vector : private container_detail::vector_alloc_holder<A>
          ::boost::container::uninitialized_move_alloc
             (this->alloc(), boundary_ptr, begin_ptr + last_pos, limit_ptr);
          //The rest is move assigned
-         boost::move_backward(begin_ptr + first_pos, boundary_ptr, limit_ptr + shift_count);
+         boost::move_backward(begin_ptr + first_pos, boundary_ptr, limit_ptr);
       }
       return hole_size;
    }
@@ -1646,7 +1671,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       typename value_traits::ArrayDeallocator scoped_alloc(new_start, this->alloc(), new_cap);
       typename value_traits::ArrayDestructor constructed_values_destroyer(new_start, this->alloc(), 0u);
 
-      //Initialize with [begin(), pos) old buffer 
+      //Initialize with [begin(), pos) old buffer
       //the start of the new buffer
       T *old_buffer = container_detail::to_raw_pointer(this->members_.m_start);
       if(old_buffer){
@@ -1658,7 +1683,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       interf.uninitialized_copy_remaining_to(old_finish = new_finish);
       new_finish += n;
       constructed_values_destroyer.increment_size(new_finish - old_finish);
-      //Initialize from the rest of the old buffer, 
+      //Initialize from the rest of the old buffer,
       //starting from previous point
       if(old_buffer){
          new_finish = ::boost::container::uninitialized_move_alloc
@@ -1666,7 +1691,7 @@ class vector : private container_detail::vector_alloc_holder<A>
          //Destroy and deallocate old elements
          //If there is allocated memory, destroy and deallocate
          if(!value_traits::trivial_dctr_after_move)
-            this->destroy_n(old_buffer, this->members_.m_size); 
+            this->destroy_n(old_buffer, this->members_.m_size);
          this->alloc().deallocate(this->members_.m_start, this->members_.m_capacity);
       }
       this->members_.m_start     = new_start;
@@ -1812,7 +1837,7 @@ class vector : private container_detail::vector_alloc_holder<A>
             //|___________|_____|_________|_____________________|
             //
             //Copy the first part of old_begin to raw_mem
-            T *start_n = old_start + difference_type(s_before); 
+            T *start_n = old_start + difference_type(s_before);
             ::boost::container::uninitialized_move_alloc
                (this->alloc(), old_start, start_n, new_start);
             //The buffer is all constructed until old_end,
@@ -2021,7 +2046,7 @@ class vector : private container_detail::vector_alloc_holder<A>
             this->members_.m_capacity  = real_cap;
          }
       }
-      
+     
       if(same_buffer_start){
          T *start = container_detail::to_raw_pointer(this->members_.m_start);
          if (this->size() >= n){
@@ -2050,7 +2075,7 @@ class vector : private container_detail::vector_alloc_holder<A>
          scoped_alloc.release();
          //Destroy and deallocate old buffer
          if(this->members_.m_start != 0){
-            this->destroy_n(container_detail::to_raw_pointer(this->members_.m_start), this->members_.m_size); 
+            this->destroy_n(container_detail::to_raw_pointer(this->members_.m_start), this->members_.m_size);
             this->alloc().deallocate(this->members_.m_start, this->members_.m_capacity);
          }
          this->members_.m_start     = ret.first;
@@ -2068,7 +2093,7 @@ class vector : private container_detail::vector_alloc_holder<A>
          this->members_.m_size  = 0;
          this->members_.m_start = ret.first;
          this->members_.m_capacity = real_cap;
-         
+        
          //Backup old buffer data
          size_type old_offset    = old_start - container_detail::to_raw_pointer(ret.first);
          size_type first_count   = container_detail::min_value(n, old_offset);
@@ -2079,7 +2104,7 @@ class vector : private container_detail::vector_alloc_holder<A>
             (this->alloc(), first, mid, container_detail::to_raw_pointer(ret.first));
 
          if(old_offset > n){
-            //All old elements will be destroyed by "old_values_destroyer" 
+            //All old elements will be destroyed by "old_values_destroyer"
             this->members_.m_size = n;
          }
          else{
@@ -2094,7 +2119,7 @@ class vector : private container_detail::vector_alloc_holder<A>
             std::advance(mid2, second_count);
             // iG std::copy(mid, mid2, old_start);
             std::copy(mid, mid2, old_start);
-            
+           
             //Check if we still have to append elements in the
             //uninitialized end
             if(second_count == old_size){
@@ -2107,7 +2132,7 @@ class vector : private container_detail::vector_alloc_holder<A>
                   (old_start + second_count, old_size - second_count);
                this->members_.m_size = n;
             }
-            this->members_.m_size = n;                        
+            this->members_.m_size = n;                       
          }
       }
    }
@@ -2118,18 +2143,18 @@ class vector : private container_detail::vector_alloc_holder<A>
 
    template <class InIt>
    void priv_assign_dispatch(InIt first, InIt last, container_detail::false_)
-   { 
+   {
       //Dispatch depending on integer/iterator
       typedef typename std::iterator_traits<InIt>::iterator_category ItCat;
-      this->priv_assign_aux(first, last, ItCat()); 
+      this->priv_assign_aux(first, last, ItCat());
    }
 
    template <class Integer>
-   void priv_insert_dispatch(const_iterator pos, Integer n, Integer val, container_detail::true_) 
+   void priv_insert_dispatch(const_iterator pos, Integer n, Integer val, container_detail::true_)
    {  this->insert(pos, (size_type)n, (T)val);  }
 
    template <class InIt>
-   void priv_insert_dispatch(const_iterator pos, InIt first, 
+   void priv_insert_dispatch(const_iterator pos, InIt first,
                              InIt last,      container_detail::false_)
    {
       //Dispatch depending on integer/iterator
@@ -2137,7 +2162,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       this->priv_range_insert(pos, first, last, ItCat());
    }
 
-   void priv_check_range(size_type n) const 
+   void priv_check_range(size_type n) const
    {
       //If n is out of range, throw an out_of_range exception
       if (n >= size())
@@ -2157,7 +2182,7 @@ class vector : private container_detail::vector_alloc_holder<A>
 };
 
 template <class T, class A>
-inline bool 
+inline bool
 operator==(const vector<T, A>& x, const vector<T, A>& y)
 {
    //Check first size and each element if needed
@@ -2165,7 +2190,7 @@ operator==(const vector<T, A>& x, const vector<T, A>& y)
 }
 
 template <class T, class A>
-inline bool 
+inline bool
 operator!=(const vector<T, A>& x, const vector<T, A>& y)
 {
    //Check first size and each element if needed
@@ -2173,7 +2198,7 @@ operator!=(const vector<T, A>& x, const vector<T, A>& y)
 }
 
 template <class T, class A>
-inline bool 
+inline bool
 operator<(const vector<T, A>& x, const vector<T, A>& y)
 {
    return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());

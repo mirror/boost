@@ -51,7 +51,7 @@ inline void construct_in_place(A &a, T *dest, emplace_iterator<U, EF, D> ei)
    ei.construct_in_place(a, dest);
 }
 
-}  //namespace container { 
+}  //namespace container {
 }  //namespace boost {
 
 #include <boost/container/detail/config_end.hpp>

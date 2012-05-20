@@ -189,11 +189,11 @@ struct node_alloc_holder
    public:
 
    //Constructors for sequence containers
-   node_alloc_holder() 
+   node_alloc_holder()
       : members_()
    {}
 
-   explicit node_alloc_holder(const ValAlloc &a) 
+   explicit node_alloc_holder(const ValAlloc &a)
       : members_(a)
    {}
 
@@ -206,7 +206,7 @@ struct node_alloc_holder
    {  this->icont().swap(x.icont());  }
 
    //Constructors for associative containers
-   explicit node_alloc_holder(const ValAlloc &a, const Pred &c) 
+   explicit node_alloc_holder(const ValAlloc &a, const Pred &c)
       : members_(a, c)
    {}
 
@@ -224,7 +224,7 @@ struct node_alloc_holder
    {  this->icont().swap(x.icont());  }
 
    void copy_assign_alloc(const node_alloc_holder &x)
-   {  
+   { 
       container_detail::bool_<allocator_traits_type::propagate_on_container_copy_assignment::value> flag;
       container_detail::assign_alloc( static_cast<NodeAlloc &>(this->members_)
                                     , static_cast<const NodeAlloc &>(x.members_), flag);

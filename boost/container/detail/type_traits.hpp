@@ -24,7 +24,7 @@
 #include <boost/move/move.hpp>
 
 namespace boost {
-namespace container { 
+namespace container {
 namespace container_detail {
 
 struct nat{};
@@ -202,7 +202,7 @@ struct remove_ref_const
 };
 
 } // namespace container_detail
-}  //namespace container { 
+}  //namespace container {
 }  //namespace boost {
 
 #include <boost/container/detail/config_end.hpp>

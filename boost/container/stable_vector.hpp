@@ -93,7 +93,7 @@ class clear_on_destroy
    {
       if(do_clear_){
          c_.clear();
-         c_.clear_pool();  
+         c_.clear_pool(); 
       }
    }
 
@@ -172,7 +172,7 @@ class iterator
    iterator(const iterator<T, T&, typename boost::intrusive::pointer_traits<Pointer>::template rebind_pointer<T>::type>& x)
       : pn(x.pn)
    {}
-   
+  
    private:
    static node_type_ptr_t node_ptr_cast(const void_ptr &p)
    {
@@ -208,7 +208,7 @@ class iterator
    pointer   operator->() const {  return  pointer(&this->dereference());  }
 
    //Increment / Decrement
-   iterator& operator++()  
+   iterator& operator++() 
    {  this->increment(); return *this;  }
 
    iterator operator++(int)
@@ -328,11 +328,11 @@ BOOST_JOIN(check_invariant_,__LINE__).touch();
 //! stability.
 //!
 //! More details taken the author's blog:
-//! (<a href="http://bannalia.blogspot.com/2008/09/introducing-stablevector.html" > 
+//! (<a href="http://bannalia.blogspot.com/2008/09/introducing-stablevector.html" >
 //! Introducing stable_vector</a>)
 //!
 //! We present stable_vector, a fully STL-compliant stable container that provides
-//! most of the features of std::vector except element contiguity. 
+//! most of the features of std::vector except element contiguity.
 //!
 //! General properties: stable_vector satisfies all the requirements of a container,
 //! a reversible container and a sequence and provides all the optional operations
@@ -398,7 +398,7 @@ class stable_vector
       integral_constant<unsigned, 1>                  allocator_v1;
    typedef ::boost::container::container_detail::
       integral_constant<unsigned, 2>                  allocator_v2;
-   typedef ::boost::container::container_detail::integral_constant 
+   typedef ::boost::container::container_detail::integral_constant
       <unsigned, boost::container::container_detail::
       version<A>::value>                              alloc_version;
    typedef typename allocator_traits_type::
@@ -481,9 +481,9 @@ class stable_vector
    public:
 
    //! <b>Effects</b>: Default constructs a stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: If allocator_type's default constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    stable_vector()
       : internal_data(), impl()
@@ -492,9 +492,9 @@ class stable_vector
    }
 
    //! <b>Effects</b>: Constructs a stable_vector taking the allocator as parameter.
-   //! 
+   //!
    //! <b>Throws</b>: If allocator_type's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    explicit stable_vector(const allocator_type& al)
       : internal_data(al),impl(al)
@@ -507,7 +507,7 @@ class stable_vector
    //!
    //! <b>Throws</b>: If allocator_type's default constructor or copy constructor
    //!   throws or T's default or copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Linear to n.
    explicit stable_vector(size_type n)
       : internal_data(),impl()
@@ -523,7 +523,7 @@ class stable_vector
    //!
    //! <b>Throws</b>: If allocator_type's default constructor or copy constructor
    //!   throws or T's default or copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Linear to n.
    stable_vector(size_type n, const T& t, const allocator_type& al = allocator_type())
       : internal_data(al),impl(al)
@@ -554,7 +554,7 @@ class stable_vector
    //! <b>Effects</b>: Copy constructs a stable_vector.
    //!
    //! <b>Postcondition</b>: x == *this.
-   //! 
+   //!
    //! <b>Complexity</b>: Linear to the elements x contains.
    stable_vector(const stable_vector& x)
       : internal_data(allocator_traits<node_allocator_type>::
@@ -571,7 +571,7 @@ class stable_vector
    //! <b>Effects</b>: Move constructor. Moves mx's resources to *this.
    //!
    //! <b>Throws</b>: If allocator_type's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    stable_vector(BOOST_RV_REF(stable_vector) x)
       : internal_data(boost::move(x.node_alloc())), impl(boost::move(x.impl))
@@ -582,7 +582,7 @@ class stable_vector
    //! <b>Effects</b>: Copy constructs a stable_vector using the specified allocator.
    //!
    //! <b>Postcondition</b>: x == *this.
-   //! 
+   //!
    //! <b>Complexity</b>: Linear to the elements x contains.
    stable_vector(const stable_vector& x, const allocator_type &a)
       : internal_data(a), impl(a)
@@ -597,7 +597,7 @@ class stable_vector
    //!                 Moves mx's resources to *this.
    //!
    //! <b>Throws</b>: If allocator_type's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant if a == x.get_allocator(), linear otherwise
    stable_vector(BOOST_RV_REF(stable_vector) x, const allocator_type &a)
       : internal_data(a), impl(a)
@@ -622,13 +622,13 @@ class stable_vector
    ~stable_vector()
    {
       this->clear();
-      clear_pool();  
+      clear_pool(); 
    }
 
    //! <b>Effects</b>: Makes *this contain the same elements as x.
    //!
-   //! <b>Postcondition</b>: this->size() == x.size(). *this contains a copy 
-   //! of each of x's elements. 
+   //! <b>Postcondition</b>: this->size() == x.size(). *this contains a copy
+   //! of each of x's elements.
    //!
    //! <b>Throws</b>: If memory allocation throws or T's copy constructor throws.
    //!
@@ -711,146 +711,146 @@ class stable_vector
    }
 
    //! <b>Effects</b>: Returns a copy of the internal allocator.
-   //! 
+   //!
    //! <b>Throws</b>: If allocator's copy constructor throws.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    allocator_type get_allocator()const  {return this->node_alloc();}
 
    //! <b>Effects</b>: Returns a reference to the internal allocator.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   //! 
+   //!
    //! <b>Note</b>: Non-standard extension.
    const stored_allocator_type &get_stored_allocator() const BOOST_CONTAINER_NOEXCEPT
    {  return node_alloc(); }
 
    //! <b>Effects</b>: Returns a reference to the internal allocator.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   //! 
+   //!
    //! <b>Note</b>: Non-standard extension.
    stored_allocator_type &get_stored_allocator() BOOST_CONTAINER_NOEXCEPT
    {  return node_alloc(); }
 
 
    //! <b>Effects</b>: Returns an iterator to the first element contained in the stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    iterator  begin()
    {   return (impl.empty()) ? end(): iterator(node_ptr_cast(impl.front())) ;   }
 
    //! <b>Effects</b>: Returns a const_iterator to the first element contained in the stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_iterator  begin()const
    {   return (impl.empty()) ? cend() : const_iterator(node_ptr_cast(impl.front())) ;   }
 
    //! <b>Effects</b>: Returns an iterator to the end of the stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    iterator        end()                {return iterator(get_end_node());}
 
    //! <b>Effects</b>: Returns a const_iterator to the end of the stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_iterator  end()const           {return const_iterator(get_end_node());}
 
-   //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning 
-   //! of the reversed stable_vector. 
-   //! 
+   //! <b>Effects</b>: Returns a reverse_iterator pointing to the beginning
+   //! of the reversed stable_vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reverse_iterator       rbegin()      {return reverse_iterator(this->end());}
 
-   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
-   //! of the reversed stable_vector. 
-   //! 
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
+   //! of the reversed stable_vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rbegin()const {return const_reverse_iterator(this->end());}
 
    //! <b>Effects</b>: Returns a reverse_iterator pointing to the end
-   //! of the reversed stable_vector. 
-   //! 
+   //! of the reversed stable_vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reverse_iterator       rend()        {return reverse_iterator(this->begin());}
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //! of the reversed stable_vector. 
-   //! 
+   //! of the reversed stable_vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator rend()const   {return const_reverse_iterator(this->begin());}
 
    //! <b>Effects</b>: Returns a const_iterator to the first element contained in the stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_iterator         cbegin()const {return this->begin();}
 
    //! <b>Effects</b>: Returns a const_iterator to the end of the stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_iterator         cend()const   {return this->end();}
 
-   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
-   //! of the reversed stable_vector. 
-   //! 
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
+   //! of the reversed stable_vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator crbegin()const{return this->rbegin();}
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //! of the reversed stable_vector. 
-   //! 
+   //! of the reversed stable_vector.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reverse_iterator crend()const  {return this->rend();}
 
    //! <b>Effects</b>: Returns the number of the elements contained in the stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    size_type size() const
    {  return impl.empty() ? 0 : (impl.size() - ExtraPointers);   }
 
    //! <b>Effects</b>: Returns the largest possible size of the stable_vector.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    size_type max_size() const
    {  return impl.max_size() - ExtraPointers;  }
 
    //! <b>Effects</b>: Number of elements for which memory has been allocated.
    //!   capacity() is always greater than or equal to size().
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    size_type capacity() const
    {
@@ -865,9 +865,9 @@ class stable_vector
    }
 
    //! <b>Effects</b>: Returns true if the stable_vector contains no elements.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    bool empty() const
    {  return impl.empty() || impl.size() == ExtraPointers;  }
@@ -907,7 +907,7 @@ class stable_vector
    //!   effect. Otherwise, it is a request for allocation of additional memory.
    //!   If the request is successful, then capacity() is greater than or equal to
    //!   n; otherwise, capacity() is unchanged. In either case, size() is unchanged.
-   //! 
+   //!
    //! <b>Throws</b>: If memory allocation allocation throws.
    void reserve(size_type n)
    {
@@ -915,7 +915,7 @@ class stable_vector
       if(n > this->max_size())
          throw std::bad_alloc();
 
-      size_type size = this->size();   
+      size_type size = this->size();  
       size_type old_capacity = this->capacity();
       if(n > old_capacity){
          this->initialize_end_node(n);
@@ -935,31 +935,31 @@ class stable_vector
 
    //! <b>Requires</b>: size() > n.
    //!
-   //! <b>Effects</b>: Returns a reference to the nth element 
+   //! <b>Effects</b>: Returns a reference to the nth element
    //!   from the beginning of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reference operator[](size_type n){return value(impl[n]);}
 
    //! <b>Requires</b>: size() > n.
    //!
-   //! <b>Effects</b>: Returns a const reference to the nth element 
+   //! <b>Effects</b>: Returns a const reference to the nth element
    //!   from the beginning of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reference operator[](size_type n)const{return value(impl[n]);}
 
    //! <b>Requires</b>: size() > n.
    //!
-   //! <b>Effects</b>: Returns a reference to the nth element 
+   //! <b>Effects</b>: Returns a reference to the nth element
    //!   from the beginning of the container.
-   //! 
+   //!
    //! <b>Throws</b>: std::range_error if n >= size()
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reference at(size_type n)
    {
@@ -970,11 +970,11 @@ class stable_vector
 
    //! <b>Requires</b>: size() > n.
    //!
-   //! <b>Effects</b>: Returns a const reference to the nth element 
+   //! <b>Effects</b>: Returns a const reference to the nth element
    //!   from the beginning of the container.
-   //! 
+   //!
    //! <b>Throws</b>: std::range_error if n >= size()
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reference at(size_type n)const
    {
@@ -987,9 +987,9 @@ class stable_vector
    //!
    //! <b>Effects</b>: Returns a reference to the first
    //!   element of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reference front()
    {  return value(impl.front());   }
@@ -998,9 +998,9 @@ class stable_vector
    //!
    //! <b>Effects</b>: Returns a const reference to the first
    //!   element of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reference front()const
    {  return value(impl.front());   }
@@ -1009,9 +1009,9 @@ class stable_vector
    //!
    //! <b>Effects</b>: Returns a reference to the last
    //!   element of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    reference back()
    {  return value(*(&impl.back() - ExtraPointers)); }
@@ -1020,9 +1020,9 @@ class stable_vector
    //!
    //! <b>Effects</b>: Returns a const reference to the last
    //!   element of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
    const_reference back()const
    {  return value(*(&impl.back() - ExtraPointers)); }
@@ -1033,7 +1033,7 @@ class stable_vector
    //!   T's copy constructor throws.
    //!
    //! <b>Complexity</b>: Amortized constant time.
-   void push_back(insert_const_ref_type x) 
+   void push_back(insert_const_ref_type x)
    {  return priv_push_back(x);  }
 
    #if defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
@@ -1051,7 +1051,7 @@ class stable_vector
    //! <b>Throws</b>: If memory allocation throws.
    //!
    //! <b>Complexity</b>: Amortized constant time.
-   void push_back(BOOST_RV_REF(T) t) 
+   void push_back(BOOST_RV_REF(T) t)
    {  this->insert(end(), boost::move(t));  }
 
    //! <b>Effects</b>: Removes the last element from the stable_vector.
@@ -1070,7 +1070,7 @@ class stable_vector
    //!
    //! <b>Complexity</b>: If position is end(), amortized constant time
    //!   Linear time otherwise.
-   iterator insert(const_iterator position, insert_const_ref_type x) 
+   iterator insert(const_iterator position, insert_const_ref_type x)
    {  return this->priv_insert(position, x); }
 
    #if defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
@@ -1090,7 +1090,7 @@ class stable_vector
    //!
    //! <b>Complexity</b>: If position is end(), amortized constant time
    //!   Linear time otherwise.
-   iterator insert(const_iterator position, BOOST_RV_REF(T) x) 
+   iterator insert(const_iterator position, BOOST_RV_REF(T) x)
    {
       typedef repeat_iterator<T, difference_type>           repeat_it;
       typedef boost::move_iterator<repeat_it> repeat_move_it;
@@ -1210,7 +1210,7 @@ class stable_vector
    //!
    //! <b>Throws</b>: Nothing.
    //!
-   //! <b>Complexity</b>: Linear to the elements between pos and the 
+   //! <b>Complexity</b>: Linear to the elements between pos and the
    //!   last element. Constant if pos is the last element.
    iterator erase(const_iterator position)
    {
@@ -1581,7 +1581,7 @@ class stable_vector
    {
       for(; first!=last; ++first){
          this->insert(position, *first);
-      }    
+      }   
    }
 
    template <class InputIterator>
@@ -1692,7 +1692,7 @@ class stable_vector
          return false;
       }
       for(const_impl_iterator it = impl.begin(), it_end = get_last_align(); it != it_end; ++it){
-         if(const_void_ptr(node_ptr_cast(*it)->up) != 
+         if(const_void_ptr(node_ptr_cast(*it)->up) !=
                const_void_ptr(const_void_ptr_ptr(&*it)))
             return false;
       }

@@ -21,8 +21,8 @@
 
 /// @cond
 
-namespace boost{ 
-namespace intrusive{ 
+namespace boost{
+namespace intrusive{
    //Create namespace to avoid compilation errors
 }}
 
@@ -32,9 +32,9 @@ namespace bi = boost::intrusive;
 
 }}}
 
-#include <utility> 
-#include <memory> 
-#include <functional> 
+#include <utility>
+#include <memory>
+#include <functional>
 #include <iosfwd>
 #include <string>
 
@@ -127,7 +127,7 @@ class flat_multimap;
 //basic_string class
 template <class CharT
          ,class Traits = std::char_traits<CharT>
-         ,class A  = std::allocator<CharT> > 
+         ,class A  = std::allocator<CharT> >
 class basic_string;
 
 //! Type used to tag that the input range is

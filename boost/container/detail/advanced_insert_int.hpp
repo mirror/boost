@@ -183,7 +183,7 @@ namespace container {
 namespace container_detail {
 
 
-//This class template will adapt emplace construction insertions of movable types 
+//This class template will adapt emplace construction insertions of movable types
 //to advanced_insert_aux_int
 template<class A, class Iterator, class ...Args>
 struct advanced_insert_aux_non_movable_emplace
@@ -254,7 +254,7 @@ struct advanced_insert_aux_non_movable_emplace
    bool used_;
 };
 
-//This class template will adapt emplace construction insertions of movable types 
+//This class template will adapt emplace construction insertions of movable types
 //to advanced_insert_aux_int
 template<class A, class Iterator, class ...Args>
 struct advanced_insert_aux_emplace
@@ -323,11 +323,11 @@ struct advanced_insert_aux_emplace
 
 #else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
-#include <boost/container/detail/preprocessor.hpp> 
+#include <boost/container/detail/preprocessor.hpp>
 #include <boost/container/detail/value_init.hpp>
 
 namespace boost {
-namespace container { 
+namespace container {
 namespace container_detail {
 
 #define BOOST_PP_LOCAL_MACRO(n)                                                     \

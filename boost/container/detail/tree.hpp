@@ -45,7 +45,7 @@ struct value_compare_impl
    :  public KeyCompare
 {
    typedef Value        value_type;
-   typedef KeyCompare   key_compare; 
+   typedef KeyCompare   key_compare;
    typedef KeyOfValue   key_of_value;
    typedef Key          key_type;
 
@@ -203,13 +203,13 @@ struct intrusive_rbtree_type
 
 namespace container_detail {
 
-template <class Key, class Value, class KeyOfValue, 
+template <class Key, class Value, class KeyOfValue,
           class KeyCompare, class A>
 class rbtree
    : protected container_detail::node_alloc_holder
       < A
       , typename container_detail::intrusive_rbtree_type
-         <A, value_compare_impl<Key, Value, KeyCompare, KeyOfValue>  
+         <A, value_compare_impl<Key, Value, KeyCompare, KeyOfValue> 
          >::type
       , KeyCompare
       >
@@ -218,7 +218,7 @@ class rbtree
          < A, value_compare_impl
             <Key, Value, KeyCompare, KeyOfValue>
          >::type                                            Icont;
-   typedef container_detail::node_alloc_holder  
+   typedef container_detail::node_alloc_holder 
       <A, Icont, KeyCompare>                                AllocHolder;
    typedef typename AllocHolder::NodePtr                    NodePtr;
    typedef rbtree < Key, Value, KeyOfValue
@@ -398,17 +398,17 @@ class rbtree
       {}
 
       //Pointer like operators
-      const_reference operator*()  const 
+      const_reference operator*()  const
       { return  m_it->get_data();  }
 
-      const_pointer   operator->() const 
+      const_pointer   operator->() const
       { return  const_pointer(&m_it->get_data()); }
 
       //Increment / Decrement
-      const_iterator& operator++()       
+      const_iterator& operator++()      
       { prot_incr();  return *this; }
 
-      const_iterator operator++(int)      
+      const_iterator operator++(int)     
       { iiterator tmp = m_it; ++*this; return const_iterator(tmp);  }
 
       const_iterator& operator--()
@@ -432,7 +432,7 @@ class rbtree
       explicit iterator(iiterator it)
          :  const_iterator(it)
       {}
-   
+  
       iiterator get()
       {  return this->m_it;   }
 
@@ -451,12 +451,12 @@ class rbtree
          {  return boost::intrusive::pointer_traits<pointer>::pointer_to(this->m_it->get_data());  }
 
       //Increment / Decrement
-      iterator& operator++()  
+      iterator& operator++() 
          { this->prot_incr(); return *this;  }
 
       iterator operator++(int)
          { iiterator tmp = this->m_it; ++*this; return iterator(tmp); }
-      
+     
       iterator& operator--()
          {  this->prot_decr(); return *this;  }
 
@@ -493,18 +493,18 @@ class rbtree
       priv_create_and_insert_ordered_nodes(first, last, alloc_version(), ItCat());
    }
 
-   rbtree(const rbtree& x) 
+   rbtree(const rbtree& x)
       :  AllocHolder(x, x.key_comp())
    {
       this->icont().clone_from
          (x.icont(), typename AllocHolder::cloner(*this), Destroyer(this->node_alloc()));
    }
 
-   rbtree(BOOST_RV_REF(rbtree) x) 
+   rbtree(BOOST_RV_REF(rbtree) x)
       :  AllocHolder(::boost::move(static_cast<AllocHolder&>(x)), x.key_comp())
    {}
 
-   rbtree(const rbtree& x, const allocator_type &a) 
+   rbtree(const rbtree& x, const allocator_type &a)
       :  AllocHolder(a, x.key_comp())
    {
       this->icont().clone_from
@@ -593,18 +593,18 @@ class rbtree
       return *this;
    }
 
-   public:    
+   public:   
    // accessors:
-   value_compare value_comp() const 
+   value_compare value_comp() const
    {  return this->icont().value_comp().value_comp(); }
 
-   key_compare key_comp() const 
+   key_compare key_comp() const
    {  return this->icont().value_comp().value_comp().key_comp(); }
 
-   allocator_type get_allocator() const 
+   allocator_type get_allocator() const
    {  return allocator_type(this->node_alloc()); }
 
-   const stored_allocator_type &get_stored_allocator() const 
+   const stored_allocator_type &get_stored_allocator() const
    {  return this->node_alloc(); }
 
    stored_allocator_type &get_stored_allocator()
@@ -635,46 +635,46 @@ class rbtree
    {  return this->crend();   }
 
    //! <b>Effects</b>: Returns a const_iterator to the first element contained in the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   const_iterator cbegin() const 
+   const_iterator cbegin() const
    { return const_iterator(this->non_const_icont().begin()); }
 
    //! <b>Effects</b>: Returns a const_iterator to the end of the container.
-   //! 
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   const_iterator cend() const 
+   const_iterator cend() const
    { return const_iterator(this->non_const_icont().end()); }
 
-   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning 
-   //! of the reversed container. 
-   //! 
+   //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the beginning
+   //! of the reversed container.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   const_reverse_iterator crbegin() const 
-   { return const_reverse_iterator(cend()); } 
+   const_reverse_iterator crbegin() const
+   { return const_reverse_iterator(cend()); }
 
    //! <b>Effects</b>: Returns a const_reverse_iterator pointing to the end
-   //! of the reversed container. 
-   //! 
+   //! of the reversed container.
+   //!
    //! <b>Throws</b>: Nothing.
-   //! 
+   //!
    //! <b>Complexity</b>: Constant.
-   const_reverse_iterator crend() const 
+   const_reverse_iterator crend() const
    { return const_reverse_iterator(cbegin()); }
 
-   bool empty() const 
+   bool empty() const
    {  return !this->size();  }
 
-   size_type size() const 
+   size_type size() const
    {  return this->icont().size();   }
 
-   size_type max_size() const 
+   size_type max_size() const
    {  return AllocHolder::max_size();  }
 
    void swap(ThisType& x)
@@ -688,7 +688,7 @@ class rbtree
    std::pair<iterator,bool> insert_unique_check
       (const key_type& key, insert_commit_data &data)
    {
-      std::pair<iiterator, bool> ret = 
+      std::pair<iiterator, bool> ret =
          this->icont().insert_unique_check(key, KeyNodeCompare(value_comp()), data);
       return std::pair<iterator, bool>(iterator(ret.first), ret.second);
    }
@@ -696,7 +696,7 @@ class rbtree
    std::pair<iterator,bool> insert_unique_check
       (const_iterator hint, const key_type& key, insert_commit_data &data)
    {
-      std::pair<iiterator, bool> ret = 
+      std::pair<iiterator, bool> ret =
          this->icont().insert_unique_check(hint.get(), key, KeyNodeCompare(value_comp()), data);
       return std::pair<iterator, bool>(iterator(ret.first), ret.second);
    }
@@ -915,7 +915,7 @@ class rbtree
    iterator erase(const_iterator first, const_iterator last)
    {  return iterator(AllocHolder::erase_range(first.get(), last.get(), alloc_version())); }
 
-   void clear() 
+   void clear()
    {  AllocHolder::clear(alloc_version());  }
 
    // set operations:
@@ -941,14 +941,14 @@ class rbtree
    {  return const_iterator(this->non_const_icont().upper_bound(k, KeyNodeCompare(value_comp())));  }
 
    std::pair<iterator,iterator> equal_range(const key_type& k)
-   {  
+   { 
       std::pair<iiterator, iiterator> ret =
          this->icont().equal_range(k, KeyNodeCompare(value_comp()));
       return std::pair<iterator,iterator>(iterator(ret.first), iterator(ret.second));
    }
 
    std::pair<const_iterator, const_iterator> equal_range(const key_type& k) const
-   {  
+   { 
       std::pair<iiterator, iiterator> ret =
          this->non_const_icont().equal_range(k, KeyNodeCompare(value_comp()));
       return std::pair<const_iterator,const_iterator>
@@ -1060,63 +1060,63 @@ class rbtree
    }
 };
 
-template <class Key, class Value, class KeyOfValue, 
+template <class Key, class Value, class KeyOfValue,
           class KeyCompare, class A>
-inline bool 
-operator==(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x, 
+inline bool
+operator==(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x,
            const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& y)
 {
   return x.size() == y.size() &&
          std::equal(x.begin(), x.end(), y.begin());
 }
 
-template <class Key, class Value, class KeyOfValue, 
+template <class Key, class Value, class KeyOfValue,
           class KeyCompare, class A>
-inline bool 
-operator<(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x, 
+inline bool
+operator<(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x,
           const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& y)
 {
-  return std::lexicographical_compare(x.begin(), x.end(), 
+  return std::lexicographical_compare(x.begin(), x.end(),
                                       y.begin(), y.end());
 }
 
-template <class Key, class Value, class KeyOfValue, 
+template <class Key, class Value, class KeyOfValue,
           class KeyCompare, class A>
-inline bool 
-operator!=(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x, 
+inline bool
+operator!=(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x,
            const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& y) {
   return !(x == y);
 }
 
-template <class Key, class Value, class KeyOfValue, 
+template <class Key, class Value, class KeyOfValue,
           class KeyCompare, class A>
-inline bool 
-operator>(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x, 
+inline bool
+operator>(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x,
           const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& y) {
   return y < x;
 }
 
-template <class Key, class Value, class KeyOfValue, 
+template <class Key, class Value, class KeyOfValue,
           class KeyCompare, class A>
-inline bool 
-operator<=(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x, 
+inline bool
+operator<=(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x,
            const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& y) {
   return !(y < x);
 }
 
-template <class Key, class Value, class KeyOfValue, 
+template <class Key, class Value, class KeyOfValue,
           class KeyCompare, class A>
-inline bool 
-operator>=(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x, 
+inline bool
+operator>=(const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x,
            const rbtree<Key,Value,KeyOfValue,KeyCompare,A>& y) {
   return !(x < y);
 }
 
 
-template <class Key, class Value, class KeyOfValue, 
+template <class Key, class Value, class KeyOfValue,
           class KeyCompare, class A>
-inline void 
-swap(rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x, 
+inline void
+swap(rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x,
      rbtree<Key,Value,KeyOfValue,KeyCompare,A>& y)
 {
   x.swap(y);
@@ -1127,7 +1127,7 @@ swap(rbtree<Key,Value,KeyOfValue,KeyCompare,A>& x,
 /*
 //!has_trivial_destructor_after_move<> == true_type
 //!specialization for optimizations
-template <class K, class V, class KOV, 
+template <class K, class V, class KOV,
 class C, class A>
 struct has_trivial_destructor_after_move
    <boost::container::container_detail::rbtree<K, V, KOV, C, A> >

@@ -35,7 +35,7 @@
 #endif
 
 namespace boost {
-namespace container { 
+namespace container {
 namespace container_detail {
 
 template <class T1, class T2>
@@ -313,8 +313,8 @@ inline void swap(pair<T1, T2>& x, pair<T1, T2>& y)
    swap(x.second, y.second);
 }
 
-}  //namespace container_detail { 
-}  //namespace container { 
+}  //namespace container_detail {
+}  //namespace container {
 
 
 //Without this specialization recursive flat_(multi)map instantiation fails
