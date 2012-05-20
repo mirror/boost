@@ -26,10 +26,10 @@
 
 using namespace boost::container;
 
-typedef test::dummy_test_allocator<char>           DummyCharAllocator; 
+typedef test::dummy_test_allocator<char>           DummyCharAllocator;
 typedef basic_string<char, std::char_traits<char>, DummyCharAllocator> DummyString;
 typedef test::dummy_test_allocator<DummyString>    DummyStringAllocator;
-typedef test::dummy_test_allocator<wchar_t>              DummyWCharAllocator; 
+typedef test::dummy_test_allocator<wchar_t>              DummyWCharAllocator;
 typedef basic_string<wchar_t, std::char_traits<wchar_t>, DummyWCharAllocator> DummyWString;
 typedef test::dummy_test_allocator<DummyWString>         DummyWStringAllocator;
 
@@ -67,7 +67,7 @@ template<class StrVector1, class StrVector2>
 bool CheckEqualStringVector(StrVector1 *strvect1, StrVector2 *strvect2)
 {
    StringEqual comp;
-   return std::equal(strvect1->begin(), strvect1->end(), 
+   return std::equal(strvect1->begin(), strvect1->end(),
                      strvect2->begin(), comp);
 }
 
@@ -159,7 +159,7 @@ int string_test()
          return 1;
       }
 
-      //Now push back moving 
+      //Now push back moving
       for(int i = 0; i < MaxSize; ++i){
          auxBoostString = string_literals<CharType>::String();
          auxStdString = string_literals<CharType>::String();
@@ -189,7 +189,7 @@ int string_test()
          return 1;
       }
 
-      //Now push front moving 
+      //Now push front moving
       for(int i = 0; i < MaxSize; ++i){
          auxBoostString = string_literals<CharType>::String();
          auxStdString = string_literals<CharType>::String();
@@ -214,15 +214,15 @@ int string_test()
       boost_swapper.swap(auxBoostString);
       std_swapper.swap(auxStdString);
       if(!StringEqual()(auxBoostString, auxStdString))
-         return 1;   
+         return 1;  
       if(!StringEqual()(boost_swapper, std_swapper))
-         return 1;   
+         return 1;  
       boost_swapper.swap(auxBoostString);
       std_swapper.swap(auxStdString);
       if(!StringEqual()(auxBoostString, auxStdString))
-         return 1;   
+         return 1;  
       if(!StringEqual()(boost_swapper, std_swapper))
-         return 1;   
+         return 1;  
 
       //Shrink_to_fit
       auxBoostString.shrink_to_fit();
@@ -249,7 +249,7 @@ int string_test()
       boost_swapper.swap(auxBoostString);
       std_swapper.swap(auxStdString);
       if(!StringEqual()(auxBoostString, auxStdString))
-         return 1;   
+         return 1;  
       if(!StringEqual()(boost_swapper, std_swapper))
          return 1;
       boost_swapper.swap(auxBoostString);
@@ -280,9 +280,9 @@ int string_test()
       for(int i = 0; i < MaxSize; ++i){
          (*boostStringVect)[i].append(sufix);
          (*stdStringVect)[i].append(sufix);
-         (*boostStringVect)[i].insert((*boostStringVect)[i].begin(), 
+         (*boostStringVect)[i].insert((*boostStringVect)[i].begin(),
                                     prefix, prefix + prefix_size);
-         (*stdStringVect)[i].insert((*stdStringVect)[i].begin(), 
+         (*stdStringVect)[i].insert((*stdStringVect)[i].begin(),
                                     prefix, prefix + prefix_size);
       }
 
@@ -310,10 +310,10 @@ int string_test()
       if(!CheckEqualStringVector(boostStringVect, stdStringVect)) return 1;
 
       for(int i = 0; i < MaxSize; ++i){
-         (*boostStringVect)[i].replace((*boostStringVect)[i].begin(), 
+         (*boostStringVect)[i].replace((*boostStringVect)[i].begin(),
                                     (*boostStringVect)[i].end(),
                                     string_literals<CharType>::String());
-         (*stdStringVect)[i].replace((*stdStringVect)[i].begin(), 
+         (*stdStringVect)[i].replace((*stdStringVect)[i].begin(),
                                     (*stdStringVect)[i].end(),
                                     string_literals<CharType>::String());
       }
@@ -330,7 +330,7 @@ int string_test()
       {
          typedef std::basic_string<CharType> StdString;
          typedef basic_string<CharType> BoostString;
-         
+        
          BoostString bs2 = string_literals<CharType>::String();
          StdString   ss2 = string_literals<CharType>::String();
          BoostString bs3 = string_literals<CharType>::Suffix();

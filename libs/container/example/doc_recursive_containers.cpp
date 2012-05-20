@@ -49,7 +49,7 @@ int main()
    stable_vector<data> sv;
    sv.resize(100);
 
-   //Let's build a tree based in 
+   //Let's build a tree based in
    //a recursive data type
    tree_node root;
    root.name  = "root";

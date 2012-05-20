@@ -19,12 +19,14 @@
 #include "map_test.hpp"
 #include "propagate_allocator_test.hpp"
 #include "emplace_test.hpp"
+#include <vector>
+#include <boost/container/detail/flat_tree.hpp>
 
 using namespace boost::container;
 
 namespace boost {
 namespace container {
-
+/*
 //Explicit instantiation to detect compilation errors
 
 //flat_map
@@ -113,25 +115,25 @@ template class flat_multiset
    , std::less<test::movable_and_copyable_int>
    , std::allocator<test::movable_and_copyable_int>
    >;
-
+*/
 }} //boost::container
 
 
 //Alias allocator type
 typedef std::allocator<int> allocator_t;
-typedef std::allocator<test::movable_int> 
+typedef std::allocator<test::movable_int>
    movable_allocator_t;
-typedef std::allocator<std::pair<int, int> > 
+typedef std::allocator<std::pair<int, int> >
    pair_allocator_t;
-typedef std::allocator<std::pair<test::movable_int, test::movable_int> > 
+typedef std::allocator<std::pair<test::movable_int, test::movable_int> >
    movable_pair_allocator_t;
-typedef std::allocator<test::movable_and_copyable_int > 
+typedef std::allocator<test::movable_and_copyable_int >
    move_copy_allocator_t;
-typedef std::allocator<std::pair<test::movable_and_copyable_int, test::movable_and_copyable_int> > 
+typedef std::allocator<std::pair<test::movable_and_copyable_int, test::movable_and_copyable_int> >
    move_copy_pair_allocator_t;
-typedef std::allocator<test::copyable_int > 
+typedef std::allocator<test::copyable_int >
    copy_allocator_t;
-typedef std::allocator<std::pair<test::copyable_int, test::copyable_int> > 
+typedef std::allocator<std::pair<test::copyable_int, test::copyable_int> >
    copy_pair_allocator_t;
 
 
@@ -302,6 +304,169 @@ class flat_tree_propagate_test_wrapper
    {  this->Base::swap(x);  }
 };
 
+namespace boost{
+namespace container {
+namespace test{
+
+bool flat_tree_ordered_insertion_test()
+{
+   using namespace boost::container;
+   const std::size_t NumElements = 100;
+
+   //Ordered insertion multiset
+   {
+      std::multiset<int> int_mset;
+      for(std::size_t i = 0; i != NumElements; ++i){
+         int_mset.insert(static_cast<int>(i));
+      }
+      //Construction insertion
+      flat_multiset<int> fmset(ordered_range, int_mset.begin(), int_mset.end());
+      if(!CheckEqualContainers(&int_mset, &fmset))
+         return false;
+      //Insertion when empty
+      fmset.clear();
+      fmset.insert(ordered_range, int_mset.begin(), int_mset.end());
+      if(!CheckEqualContainers(&int_mset, &fmset))
+         return false;
+      //Re-insertion
+      fmset.insert(ordered_range, int_mset.begin(), int_mset.end());
+      std::multiset<int> int_mset2(int_mset);
+      int_mset2.insert(int_mset.begin(), int_mset.end());
+      if(!CheckEqualContainers(&int_mset2, &fmset))
+         return false;
+      //Re-re-insertion
+      fmset.insert(ordered_range, int_mset2.begin(), int_mset2.end());
+      std::multiset<int> int_mset4(int_mset2);
+      int_mset4.insert(int_mset2.begin(), int_mset2.end());
+      if(!CheckEqualContainers(&int_mset4, &fmset))
+         return false;
+      //Re-re-insertion of even
+      std::multiset<int> int_even_mset;
+      for(std::size_t i = 0; i < NumElements; i+=2){
+         int_mset.insert(static_cast<int>(i));
+      }
+      fmset.insert(ordered_range, int_even_mset.begin(), int_even_mset.end());
+      int_mset4.insert(int_even_mset.begin(), int_even_mset.end());
+      if(!CheckEqualContainers(&int_mset4, &fmset))
+         return false;
+   }
+   //Ordered insertion multimap
+   {
+      std::multimap<int, int> int_mmap;
+      for(std::size_t i = 0; i != NumElements; ++i){
+         int_mmap.insert(std::multimap<int, int>::value_type(static_cast<int>(i), static_cast<int>(i)));
+      }
+      //Construction insertion
+      flat_multimap<int, int> fmmap(ordered_range, int_mmap.begin(), int_mmap.end());
+      if(!CheckEqualContainers(&int_mmap, &fmmap))
+         return false;
+      //Insertion when empty
+      fmmap.clear();
+      fmmap.insert(ordered_range, int_mmap.begin(), int_mmap.end());
+      if(!CheckEqualContainers(&int_mmap, &fmmap))
+         return false;
+      //Re-insertion
+      fmmap.insert(ordered_range, int_mmap.begin(), int_mmap.end());
+      std::multimap<int, int> int_mmap2(int_mmap);
+      int_mmap2.insert(int_mmap.begin(), int_mmap.end());
+      if(!CheckEqualContainers(&int_mmap2, &fmmap))
+         return false;
+      //Re-re-insertion
+      fmmap.insert(ordered_range, int_mmap2.begin(), int_mmap2.end());
+      std::multimap<int, int> int_mmap4(int_mmap2);
+      int_mmap4.insert(int_mmap2.begin(), int_mmap2.end());
+      if(!CheckEqualContainers(&int_mmap4, &fmmap))
+         return false;
+      //Re-re-insertion of even
+      std::multimap<int, int> int_even_mmap;
+      for(std::size_t i = 0; i < NumElements; i+=2){
+         int_mmap.insert(std::multimap<int, int>::value_type(static_cast<int>(i), static_cast<int>(i)));
+      }
+      fmmap.insert(ordered_range, int_even_mmap.begin(), int_even_mmap.end());
+      int_mmap4.insert(int_even_mmap.begin(), int_even_mmap.end());
+      if(!CheckEqualContainers(&int_mmap4, &fmmap))
+         return false;
+   }
+
+   //Ordered insertion set
+   {
+      std::set<int> int_set;
+      for(std::size_t i = 0; i != NumElements; ++i){
+         int_set.insert(static_cast<int>(i));
+      }
+      //Construction insertion
+      flat_set<int> fset(ordered_unique_range, int_set.begin(), int_set.end());
+      if(!CheckEqualContainers(&int_set, &fset))
+         return false;
+      //Insertion when empty
+      fset.clear();
+      fset.insert(ordered_unique_range, int_set.begin(), int_set.end());
+      if(!CheckEqualContainers(&int_set, &fset))
+         return false;
+      //Re-insertion
+      fset.insert(ordered_unique_range, int_set.begin(), int_set.end());
+      std::set<int> int_set2(int_set);
+      int_set2.insert(int_set.begin(), int_set.end());
+      if(!CheckEqualContainers(&int_set2, &fset))
+         return false;
+      //Re-re-insertion
+      fset.insert(ordered_unique_range, int_set2.begin(), int_set2.end());
+      std::set<int> int_set4(int_set2);
+      int_set4.insert(int_set2.begin(), int_set2.end());
+      if(!CheckEqualContainers(&int_set4, &fset))
+         return false;
+      //Re-re-insertion of even
+      std::set<int> int_even_set;
+      for(std::size_t i = 0; i < NumElements; i+=2){
+         int_set.insert(static_cast<int>(i));
+      }
+      fset.insert(ordered_unique_range, int_even_set.begin(), int_even_set.end());
+      int_set4.insert(int_even_set.begin(), int_even_set.end());
+      if(!CheckEqualContainers(&int_set4, &fset))
+         return false;
+   }
+   //Ordered insertion map
+   {
+      std::map<int, int> int_map;
+      for(std::size_t i = 0; i != NumElements; ++i){
+         int_map.insert(std::map<int, int>::value_type(static_cast<int>(i), static_cast<int>(i)));
+      }
+      //Construction insertion
+      flat_map<int, int> fmap(ordered_unique_range, int_map.begin(), int_map.end());
+      if(!CheckEqualContainers(&int_map, &fmap))
+         return false;
+      //Insertion when empty
+      fmap.clear();
+      fmap.insert(ordered_unique_range, int_map.begin(), int_map.end());
+      if(!CheckEqualContainers(&int_map, &fmap))
+         return false;
+      //Re-insertion
+      fmap.insert(ordered_unique_range, int_map.begin(), int_map.end());
+      std::map<int, int> int_map2(int_map);
+      int_map2.insert(int_map.begin(), int_map.end());
+      if(!CheckEqualContainers(&int_map2, &fmap))
+         return false;
+      //Re-re-insertion
+      fmap.insert(ordered_unique_range, int_map2.begin(), int_map2.end());
+      std::map<int, int> int_map4(int_map2);
+      int_map4.insert(int_map2.begin(), int_map2.end());
+      if(!CheckEqualContainers(&int_map4, &fmap))
+         return false;
+      //Re-re-insertion of even
+      std::map<int, int> int_even_map;
+      for(std::size_t i = 0; i < NumElements; i+=2){
+         int_map.insert(std::map<int, int>::value_type(static_cast<int>(i), static_cast<int>(i)));
+      }
+      fmap.insert(ordered_unique_range, int_even_map.begin(), int_even_map.end());
+      int_map4.insert(int_even_map.begin(), int_even_map.end());
+      if(!CheckEqualContainers(&int_map4, &fmap))
+         return false;
+   }
+
+   return true;
+}
+
+}}}
 
 int main()
 {
@@ -315,6 +480,9 @@ int main()
       test_move<flat_multimap<recursive_flat_multimap, recursive_flat_multimap> >();
    }
 
+   if(!flat_tree_ordered_insertion_test()){
+      return 1;
+   }
 
    if (0 != set_test<
                   MyBoostSet
@@ -459,3 +627,55 @@ int main()
 }
 
 #include <boost/container/detail/config_end.hpp>
+
+/*
+#include <boost/container/map.hpp>
+#include <boost/container/flat_map.hpp>
+#include <boost/container/vector.hpp>
+#include <boost/move/move.hpp>
+#include <iostream>
+
+struct Request
+{
+    Request() {};
+  
+    //Move semantics...
+    Request(BOOST_RV_REF(Request) r) : rvals()  //Move constructor
+    {
+        rvals.swap(r.rvals);
+    };
+
+    Request& operator=(BOOST_RV_REF(Request) r) //Move assignment
+    {
+        if (this != &r){
+            rvals.swap(r.rvals);
+        }
+        return *this;
+    };
+
+    // Values I want to be moved, not copied.
+    boost::container::vector<int> rvals;
+
+   private:
+    // Mark this class movable but not copyable
+    BOOST_MOVABLE_BUT_NOT_COPYABLE(Request)
+};
+
+typedef boost::container::flat_map<int, Request> Requests;
+//typedef boost::container::map<int, Request> Requests2;
+
+int
+main() {
+    Requests req;
+   
+    Requests::value_type v;
+    std::pair<Requests::iterator, bool> ret = req.insert( boost::move(v));
+    //std::cout << "Insert success for req: " << ret.second << std::endl;
+  
+    //Requests2 req2;
+    //std::pair<Requests::iterator, bool> ret2 = req2.insert( Requests2::value_type( 7, Request() ) );
+    //std::cout << "Insert success for req2: " << ret2.second << std::endl;
+
+    return 0;
+}
+*/

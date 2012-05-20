@@ -15,7 +15,7 @@
 //MyClassHolder.h
 
 //We don't need to include "MyClass.h"
-//to store vector<MyClass> 
+//to store vector<MyClass>
 class MyClass;
 
 class MyClassHolder
@@ -44,7 +44,7 @@ class MyClass
    MyClass(int val = 0) : value_(val){}
 
    friend bool operator==(const MyClass &l, const MyClass &r)
-   {  return l.value_ == r.value_;  } 
+   {  return l.value_ == r.value_;  }
    //...
 };
 

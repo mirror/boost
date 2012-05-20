@@ -644,7 +644,7 @@ int main()
    }
 
    {
-      vector<int, scoped_allocator_adaptor< test_allocator<int, 0> > > dummy;  
+      vector<int, scoped_allocator_adaptor< test_allocator<int, 0> > > dummy; 
       dummy.push_back(0);
    }
 
@@ -682,15 +682,15 @@ int main()
 
       BOOST_STATIC_ASSERT(( !boost::container::uses_allocator
                               < ::mark_on_scoped_allocation<NotUsesAllocator, 0>
-                              , test_allocator<float, 0> 
+                              , test_allocator<float, 0>
                               >::value ));
       BOOST_STATIC_ASSERT((  boost::container::uses_allocator
                               < ::mark_on_scoped_allocation<ConstructiblePrefix, 0>
-                              , test_allocator<float, 0> 
+                              , test_allocator<float, 0>
                               >::value ));
       BOOST_STATIC_ASSERT((  boost::container::uses_allocator
                               < ::mark_on_scoped_allocation<ConstructibleSuffix, 0>
-                              , test_allocator<float, 0> 
+                              , test_allocator<float, 0>
                               >::value ));
       BOOST_STATIC_ASSERT(( boost::container::constructible_with_allocator_prefix
                           < ::mark_on_scoped_allocation<ConstructiblePrefix, 0> >::value ));
