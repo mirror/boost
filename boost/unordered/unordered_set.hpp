@@ -14,7 +14,6 @@
 #endif
 
 #include <boost/unordered/unordered_set_fwd.hpp>
-#include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/unordered/detail/equivalent.hpp>
 #include <boost/unordered/detail/unique.hpp>
 #include <boost/unordered/detail/util.hpp>
