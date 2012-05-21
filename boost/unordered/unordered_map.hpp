@@ -232,15 +232,15 @@ namespace unordered
 
         // emplace
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
         template <class... Args>
-        std::pair<iterator, bool> emplace(Args&&... args)
+        std::pair<iterator, bool> emplace(BOOST_FWD_REF(Args)... args)
         {
             return table_.emplace(boost::forward<Args>(args)...);
         }
 
         template <class... Args>
-        iterator emplace_hint(const_iterator, Args&&... args)
+        iterator emplace_hint(const_iterator, BOOST_FWD_REF(Args)... args)
         {
             return table_.emplace(boost::forward<Args>(args)...).first;
         }
@@ -719,15 +719,15 @@ namespace unordered
 
         // emplace
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
         template <class... Args>
-        iterator emplace(Args&&... args)
+        iterator emplace(BOOST_FWD_REF(Args)... args)
         {
             return table_.emplace(boost::forward<Args>(args)...);
         }
 
         template <class... Args>
-        iterator emplace_hint(const_iterator, Args&&... args)
+        iterator emplace_hint(const_iterator, BOOST_FWD_REF(Args)... args)
         {
             return table_.emplace(boost::forward<Args>(args)...);
         }

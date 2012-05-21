@@ -45,11 +45,6 @@
 
 #define BOOST_UNORDERED_EMPLACE_LIMIT 10
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && \
-        !defined(BOOST_NO_VARIADIC_TEMPLATES)
-#define BOOST_UNORDERED_VARIADIC_MOVE
-#endif
-
 namespace boost { namespace unordered { namespace detail {
 
     ////////////////////////////////////////////////////////////////////////////
@@ -90,10 +85,10 @@ namespace boost { namespace unordered { namespace detail {
     // Either forwarding variadic arguments, or storing the arguments in
     // emplace_args##n
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
 #define BOOST_UNORDERED_EMPLACE_TEMPLATE typename... Args
-#define BOOST_UNORDERED_EMPLACE_ARGS Args&&... args
+#define BOOST_UNORDERED_EMPLACE_ARGS BOOST_FWD_REF(Args)... args
 #define BOOST_UNORDERED_EMPLACE_FORWARD boost::forward<Args>(args)...
 
 #else
@@ -330,13 +325,13 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
 #endif
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
     ////////////////////////////////////////////////////////////////////////////
     // Construct from variadic parameters
 
     template <typename T, typename... Args>
-    inline void construct_impl(T* address, Args&&... args)
+    inline void construct_impl(T* address, BOOST_FWD_REF(Args)... args)
     {
         new((void*) address) T(boost::forward<Args>(args)...);
     }
@@ -387,7 +382,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
     }
 
 #endif // BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT
-#else // BOOST_UNORDERED_VARIADIC_MOVE
+#else // BOOST_NO_VARIADIC_TEMPLATES
 
 ////////////////////////////////////////////////////////////////////////////////
 // Construct from emplace_args
@@ -499,7 +494,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 #undef BOOST_UNORDERED_CALL_FORWARD2
 
 #endif // BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT
-#endif // BOOST_UNORDERED_VARIADIC_MOVE
+#endif // BOOST_NO_VARIADIC_TEMPLATES
 
     ////////////////////////////////////////////////////////////////////////////
     // Construct without using the emplace args mechanism.
@@ -525,7 +520,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 #if !defined(BOOST_UNORDERED_USE_ALLOCATOR_TRAITS)
 #   if defined(__GXX_EXPERIMENTAL_CXX0X__) && \
             (__GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ >= 7))
-#       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
+#       define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 0
 #   elif defined(BOOST_MSVC)
 #       if BOOST_MSVC < 1400
             // Use container's allocator_traits for older versions of Visual
@@ -689,7 +684,7 @@ namespace boost { namespace unordered { namespace detail {
 #       include <boost/type_traits/is_same.hpp>
 #   endif
 
-#   if defined(BOOST_UNORDERED_VARIADIC_MOVE) && \
+#   if !defined(BOOST_NO_VARIADIC_TEMPLATES) && \
         !defined(BOOST_NO_SFINAE_EXPR)
 #       define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
 #   else
@@ -779,7 +774,7 @@ namespace boost { namespace unordered { namespace detail {
         max_size, U const, (), 0
     );
 
-#       if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#       if !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
     template <typename T, typename ValueType, typename... Args>
     BOOST_UNORDERED_HAS_FUNCTION(
@@ -906,7 +901,7 @@ namespace boost { namespace unordered { namespace detail {
         static typename boost::enable_if_c<
                 boost::unordered::detail::has_construct<Alloc, T, Args...>
                 ::value>::type
-            construct(Alloc& a, T* p, Args&&... x)
+            construct(Alloc& a, T* p, BOOST_FWD_REF(Args)... x)
         {
             a.construct(p, boost::forward<Args>(x)...);
         }
@@ -915,7 +910,7 @@ namespace boost { namespace unordered { namespace detail {
         static typename boost::disable_if_c<
                 boost::unordered::detail::has_construct<Alloc, T, Args...>
                 ::value>::type
-            construct(Alloc&, T* p, Args&&... x)
+            construct(Alloc&, T* p, BOOST_FWD_REF(Args)... x)
         {
             new ((void*) p) T(boost::forward<Args>(x)...);
         }

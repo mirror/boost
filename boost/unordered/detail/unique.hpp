@@ -379,7 +379,7 @@ namespace boost { namespace unordered { namespace detail {
             // exception (need strong safety in such a case).
             node_constructor a(this->node_alloc());
             a.construct_node();
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
             a.construct_value(boost::unordered::piecewise_construct,
                 boost::make_tuple(k), boost::make_tuple());
 #else
@@ -395,22 +395,30 @@ namespace boost { namespace unordered { namespace detail {
         }
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
+#   if defined(BOOST_NO_VARIADIC_TEMPLATES)
         emplace_return emplace(boost::unordered::detail::emplace_args1<
                 boost::unordered::detail::please_ignore_this_overload> const&)
         {
             BOOST_ASSERT(false);
             return emplace_return(this->begin(), false);
         }
+#   else
+        emplace_return emplace(
+                boost::unordered::detail::please_ignore_this_overload const&)
+        {
+            BOOST_ASSERT(false);
+            return emplace_return(this->begin(), false);
+        }
+#   endif
 #endif
 
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
         emplace_return emplace(BOOST_UNORDERED_EMPLACE_ARGS)
         {
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
             return emplace_impl(
                 extractor::extract(BOOST_UNORDERED_EMPLACE_FORWARD),
                 BOOST_UNORDERED_EMPLACE_FORWARD);
-
 #else
             return emplace_impl(
                 extractor::extract(args.a0, args.a1),
@@ -418,7 +426,7 @@ namespace boost { namespace unordered { namespace detail {
 #endif
         }
 
-#if !defined(BOOST_UNORDERED_VARIADIC_MOVE)
+#if defined(BOOST_NO_VARIADIC_TEMPLATES)
         template <typename A0>
         emplace_return emplace(
                 boost::unordered::detail::emplace_args1<A0> const& args)
