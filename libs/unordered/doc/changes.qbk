@@ -186,6 +186,9 @@ C++11 support has resulted in some breaking changes:
   Fix some Sun specific code.
 * [@https://svn.boost.org/trac/boost/ticket/6190 Ticket 6190]:
   Avoid gcc's `-Wshadow` warning.
+* [@https://svn.boost.org/trac/boost/ticket/6905 Ticket 6905]:
+  Make namespaces in macros compatible with `bcp` custom namespaces.
+  Fixed by Luke Elliott.
 * Remove some of the smaller prime number of buckets, as they may make
   collisions quite probable (e.g. multiples of 5 are very common because
   we used base 10).
