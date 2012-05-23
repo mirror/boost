@@ -753,7 +753,7 @@ public:
     static handle_type s_handle_from_iterator(iterator const & it)
     {
         BOOST_STATIC_ASSERT(is_mutable);
-        return super_t::handle_type(it);
+        return super_t::s_handle_from_iterator(it);
     }
 
     /// \copydoc boost::heap::priority_queue::pop
@@ -769,13 +769,25 @@ public:
     }
 
     /// \copydoc boost::heap::priority_queue::begin
-    iterator begin(void) const
+    const_iterator begin(void) const
+    {
+        return super_t::begin();
+    }
+
+    /// \copydoc boost::heap::priority_queue::begin
+    iterator begin(void)
     {
         return super_t::begin();
     }
 
     /// \copydoc boost::heap::priority_queue::end
-    iterator end(void) const
+    iterator end(void)
+    {
+        return super_t::end();
+    }
+
+    /// \copydoc boost::heap::priority_queue::end
+    const_iterator end(void) const
     {
         return super_t::end();
     }

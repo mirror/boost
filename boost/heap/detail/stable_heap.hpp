@@ -263,6 +263,11 @@ struct heap_base<T, Cmp, constant_time_size, StabilityCounterType, true>:
         rhs.counter_ = 0;
     }
 
+    heap_base(heap_base & rhs):
+        Cmp(static_cast<Cmp&>(rhs)),
+        size_holder_type(static_cast<size_holder_type&>(rhs)), counter_(rhs.counter_)
+    {}
+
     heap_base & operator=(heap_base && rhs)
     {
         Cmp::operator=(std::move(static_cast<Cmp&>(rhs)));

@@ -68,6 +68,11 @@ struct make_fibonacci_heap_base
             allocator_type(std::move(static_cast<allocator_type&>(rhs)))
         {}
 
+        type(type & rhs):
+            base_type(static_cast<base_type&>(rhs)),
+            allocator_type(static_cast<allocator_type&>(rhs))
+        {}
+
         type & operator=(type && rhs)
         {
             base_type::operator=(std::move(static_cast<base_type&>(rhs)));
@@ -227,6 +232,13 @@ public:
     /// \copydoc boost::heap::priority_queue::priority_queue(priority_queue &&)
     fibonacci_heap(fibonacci_heap && rhs):
         super_t(std::move(rhs)), top_element(rhs.top_element)
+    {
+        roots.splice(roots.begin(), rhs.roots);
+        rhs.top_element = NULL;
+    }
+
+    fibonacci_heap(fibonacci_heap & rhs):
+        super_t(rhs), top_element(rhs.top_element)
     {
         roots.splice(roots.begin(), rhs.roots);
         rhs.top_element = NULL;
@@ -605,7 +617,8 @@ public:
     /// \copydoc boost::heap::d_ary_heap_mutable::s_handle_from_iterator
     static handle_type s_handle_from_iterator(iterator const & it)
     {
-        return super_t::s_handle_from_iterator(&*it);
+        node * ptr = const_cast<node *>(it.get_node());
+        return handle_type(ptr);
     }
 
     /// \copydoc boost::heap::priority_queue::value_comp

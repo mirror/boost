@@ -94,6 +94,10 @@ public:
         handle_type (void)
         {}
 
+        handle_type(handle_type const & rhs):
+            iterator(rhs.iterator)
+        {}
+
     private:
         explicit handle_type(list_iterator const & it):
             iterator(it)
@@ -166,25 +170,27 @@ protected:
 
 
 public:
-    class iterator:
-        public boost::iterator_adaptor<iterator,
-                                       const_list_iterator,
+    template <typename iterator_type>
+    class iterator_base:
+        public boost::iterator_adaptor<iterator_base<iterator_type>,
+                                       iterator_type,
                                        value_type const,
                                        boost::bidirectional_traversal_tag>
     {
-        typedef boost::iterator_adaptor<iterator,
-                                       const_list_iterator,
+        typedef boost::iterator_adaptor<iterator_base<iterator_type>,
+                                       iterator_type,
                                        value_type const,
                                        boost::bidirectional_traversal_tag> super_t;
 
         friend class boost::iterator_core_access;
         friend class priority_queue_mutable_wrapper;
 
-        iterator(void):
+        iterator_base(void):
             super_t(0)
         {}
 
-        explicit iterator(const_list_iterator const & it):
+        template <typename T>
+        explicit iterator_base(T const & it):
             super_t(it)
         {}
 
@@ -192,9 +198,16 @@ public:
         {
             return super_t::base()->first;
         }
+
+        iterator_type get_list_iterator() const
+        {
+            return super_t::base_reference();
+        }
     };
 
-    typedef iterator const_iterator;
+    typedef iterator_base<list_iterator> iterator;
+    typedef iterator_base<const_list_iterator> const_iterator;
+
     typedef typename object_list::difference_type difference_type;
 
     class ordered_iterator:
@@ -464,12 +477,22 @@ public:
         objects.erase(it);
     }
 
-    iterator begin(void) const
+    const_iterator begin(void) const
+    {
+        return const_iterator(objects.begin());
+    }
+
+    const_iterator end(void) const
+    {
+        return const_iterator(objects.end());
+    }
+
+    iterator begin(void)
     {
         return iterator(objects.begin());
     }
 
-    iterator end(void) const
+    iterator end(void)
     {
         return iterator(objects.end());
     }
@@ -489,7 +512,7 @@ public:
 
     static handle_type s_handle_from_iterator(iterator const & it)
     {
-        return handle_type(it);
+        return handle_type(it.get_list_iterator());
     }
 
     value_compare const & value_comp(void) const
