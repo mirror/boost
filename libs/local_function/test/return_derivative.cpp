@@ -32,7 +32,6 @@ int main(void) {
     } BOOST_LOCAL_FUNCTION_NAME(add2)
     
     boost::function<int (int)> a2 = add2; // Reference valid where closure used.
-
     boost::function<int (int)> d2 = derivative(a2, 2);
     BOOST_TEST(d2(6) == 1);
     return boost::report_errors();

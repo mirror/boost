@@ -26,7 +26,7 @@
 //[const_block_macro
 #define CONST_BLOCK_(variables) \
     void BOOST_LOCAL_FUNCTION( \
-        BOOST_PP_IIF(BOOST_PP_LIST_IS_NIL(variables, \
+        BOOST_PP_IIF(BOOST_PP_LIST_IS_NIL(variables), \
             void BOOST_PP_TUPLE_EAT(3) \
         , \
             BOOST_PP_LIST_FOR_EACH_I \
