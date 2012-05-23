@@ -12,12 +12,12 @@
 #include <boost/preprocessor/logical/compl.hpp>
 
 // `is_front_macro(tokens)` is 1 if `tokens` start w/ `keyword` to add, else 0.
-#define BOOST_CLOURE_DETAIL_PP_KEYWORD_FACILITY_ADD_FRONT( \
+#define BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_ADD_FRONT( \
         tokens, is_front_macro, keyword) \
     BOOST_PP_EXPR_IIF(BOOST_PP_COMPL(is_front_macro(tokens)), keyword) tokens
 
 // `is_back_macro(tokens)` is 1 if `tokens` end with `keyword` to add, else 0.
-#define BOOST_CLOURE_DETAIL_PP_KEYWORD_FACILITY_ADD_BACK( \
+#define BOOST_LOCAL_FUNCTION_DETAIL_PP_KEYWORD_FACILITY_ADD_BACK( \
         tokens, is_back_macro, keyword) \
     tokens BOOST_PP_EXPR_IIF(BOOST_PP_COMPL(is_back_macro(tokens)), keyword)
 
