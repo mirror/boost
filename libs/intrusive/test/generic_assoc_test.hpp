@@ -42,7 +42,7 @@ struct has_insert_before
 };
 
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
-struct test_generic_assoc 
+struct test_generic_assoc
 {
    typedef typename ValueTraits::value_type value_type;
    static void test_all(std::vector<value_type>& values);
@@ -134,7 +134,7 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_erase_burst(
       typedef typename std::vector<value_type>::const_iterator cvec_iterator;
       //Random erasure
       std::vector<cvec_iterator> it_vector;
-      
+     
       for(cvec_iterator it(values.begin()), itend(values.end())
          ; it != itend
          ; ++it){
@@ -396,7 +396,7 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_before
    {
       assoc_type testset;
       typedef typename std::vector<value_type>::iterator vec_iterator;
-      
+     
       for(vec_iterator it(--values.end()); true; --it){
          testset.push_front(*it);
        if(it == values.begin()){

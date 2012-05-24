@@ -144,7 +144,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
 
    std::vector<value_type> values (5);
    for (int i = 0; i < 5; ++i)
-      values[i].value_ = i; 
+      values[i].value_ = i;
 
    typename unordered_multiset_type::bucket_type buckets [BucketSize];
    unordered_multiset_type testset(bucket_traits(
@@ -157,7 +157,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
    testset.erase (testset.iterator_to (values[0]));
    testset.erase (testset.iterator_to (values[1]));
    testset.insert (values[1]);
-     
+    
    testset.erase (testset.iterator_to (values[2]));
    testset.erase (testset.iterator_to (values[3]));
 }
@@ -194,7 +194,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
    }
    testset1.clear();
    BOOST_TEST (testset1.empty());
-}  
+} 
 
 //test: insert, const_iterator, const_reverse_iterator, erase, iterator_to:
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -231,7 +231,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
 
          i = testset.insert (values[0]);
          BOOST_TEST (&*i == &values[0]);
-            
+           
          i = testset.iterator_to (values[2]);
          BOOST_TEST (&*i == &values[2]);
          testset.erase(i);
@@ -275,7 +275,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
 
          i = testset.insert (values[0]);
          BOOST_TEST (&*i == &values[0]);
-            
+           
          i = testset.iterator_to (values[2]);
          BOOST_TEST (&*i == &values[2]);
          testset.erase(i);
@@ -317,7 +317,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
       for(unsigned int i = 0, max = random_size; i != max; ++i){
          std::vector<typename ValueTraits::value_type> data (random_size);
          for (unsigned int j = 0; j < random_size; ++j)
-            data[j].value_ = random_init[j]; 
+            data[j].value_ = random_init[j];
          unordered_multiset_type testset_new(bucket_traits(
             pointer_traits<typename unordered_multiset_type::bucket_ptr>::
                pointer_to(single_bucket[0]), 1));
@@ -442,7 +442,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>:
       //  BOOST_TEST (&testset1.front() == &values[3]);
       BOOST_TEST (&*testset1.begin() == &values[3]);
    }
-}  
+} 
 
 
 
@@ -651,7 +651,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
    BOOST_TEST (testset1.size() == values.size());
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
-}  
+} 
 
 //test: find, equal_range (lower_bound, upper_bound):
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -682,14 +682,14 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>:
    BOOST_TEST (i->value_ == 2);
    BOOST_TEST ((++i)->value_ == 2);
    std::pair<iterator,iterator> range = testset.equal_range (cmp_val);
-     
+    
    BOOST_TEST (range.first->value_ == 2);
    BOOST_TEST (range.second->value_ == 3);
    BOOST_TEST (std::distance (range.first, range.second) == 2);
 
    cmp_val.value_ = 7;
    BOOST_TEST (testset.find (cmp_val) == testset.end());
-} 
+}
 
 
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -781,7 +781,7 @@ class test_main_template
       static const int random_init[6] = { 3, 2, 4, 1, 5, 2 };
       std::vector<testvalue<hooks<VoidPointer> , constant_time_size> > data (6);
       for (int i = 0; i < 6; ++i)
-         data[i].value_ = random_init[i]; 
+         data[i].value_ = random_init[i];
 
       test_unordered_multiset < typename detail::get_base_value_traits
                   < value_type
@@ -817,7 +817,7 @@ class test_main_template<VoidPointer, false, Incremental>
       static const int random_init[6] = { 3, 2, 4, 1, 5, 2 };
       std::vector<testvalue<hooks<VoidPointer> , false> > data (6);
       for (int i = 0; i < 6; ++i)
-         data[i].value_ = random_init[i]; 
+         data[i].value_ = random_init[i];
 
       test_unordered_multiset < typename detail::get_base_value_traits
                   < value_type
@@ -864,7 +864,7 @@ class test_main_template<VoidPointer, false, Incremental>
    }
 };
 
-int main( int, char* [] ) 
+int main( int, char* [] )
 {
    test_main_template<void*, false, true>()();
    test_main_template<smart_ptr<void>, false, true>()();

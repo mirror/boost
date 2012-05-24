@@ -71,7 +71,7 @@ struct hooks
 static const std::size_t BucketSize = 8;
 
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
-struct test_unordered_set 
+struct test_unordered_set
 {
    typedef typename ValueTraits::value_type value_type;
    static void test_all(std::vector<value_type>& values);
@@ -142,7 +142,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::test
 
    std::vector<value_type> values (5);
    for (int i = 0; i < 5; ++i)
-      values[i].value_ = i; 
+      values[i].value_ = i;
 
    typename unordered_set_type::bucket_type buckets [BucketSize];
    unordered_set_type testset(bucket_traits(
@@ -188,11 +188,11 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
       {  int init_values [] = { 1, 2, 3, 4, 5 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
    }
-    
+   
    testset1.clear();
    BOOST_TEST (testset1.empty());
-}  
-  
+} 
+ 
 //test: insert, const_iterator, const_reverse_iterator, erase, iterator_to:
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
 void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
@@ -251,7 +251,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
       {  int init_values [] = { 1, 3, 5 };
          TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
    }
-}  
+} 
 
 //test: insert (seq-version), swap, erase (seq-version), size:
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -299,7 +299,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
       BOOST_TEST (testset1.size() == 1);
       BOOST_TEST (&*testset1.begin() == &values[3]);
    }
-}  
+} 
 
 //test: rehash:
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -507,7 +507,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    BOOST_TEST (testset1.size() == values.size()-1);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
-}  
+} 
 
 
 //test: find, equal_range (lower_bound, upper_bound):
@@ -538,7 +538,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    BOOST_TEST (i->value_ == 2);
    BOOST_TEST ((++i)->value_ != 2);
    std::pair<iterator,iterator> range = testset.equal_range (cmp_val);
-     
+    
    BOOST_TEST (range.first->value_ == 2);
    BOOST_TEST (range.second->value_ == 3);
    BOOST_TEST (std::distance (range.first, range.second) == 1);
@@ -636,7 +636,7 @@ class test_main_template
       static const int random_init[6] = { 3, 2, 4, 1, 5, 2 };
       std::vector<testvalue<hooks<VoidPointer> , constant_time_size> > data (6);
       for (int i = 0; i < 6; ++i)
-         data[i].value_ = random_init[i]; 
+         data[i].value_ = random_init[i];
 
       test_unordered_set < typename detail::get_base_value_traits
                   < value_type
@@ -672,7 +672,7 @@ class test_main_template<VoidPointer, false, incremental>
       static const int random_init[6] = { 3, 2, 4, 1, 5, 2 };
       std::vector<testvalue<hooks<VoidPointer> , false> > data (6);
       for (int i = 0; i < 6; ++i)
-         data[i].value_ = random_init[i]; 
+         data[i].value_ = random_init[i];
 
       test_unordered_set < typename detail::get_base_value_traits
                   < value_type
@@ -719,7 +719,7 @@ class test_main_template<VoidPointer, false, incremental>
    }
 };
 
-int main( int, char* [] ) 
+int main( int, char* [] )
 {
    test_main_template<void*, false, true>()();
    test_main_template<smart_ptr<void>, false, true>()();

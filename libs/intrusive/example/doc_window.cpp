@@ -27,7 +27,7 @@ class Window : public list_base_hook<>
    //Constructor. Includes this window in the list
    Window()             {  all_windows.push_back(*this);  }
    //Destructor. Removes this node from the list
-   virtual ~Window()    {  all_windows.erase(win_list::s_iterator_to(*this));  } 
+   virtual ~Window()    {  all_windows.erase(win_list::s_iterator_to(*this));  }
    //Pure virtual function to be implemented by derived classes
    virtual void Paint() = 0;
 };
@@ -75,7 +75,7 @@ int main()
    MainWindow window;
 
    //Paint all the windows, sub-windows and so on
-   paint_all_windows(); 
+   paint_all_windows();
 
    //All the windows are automatically unregistered in their destructors.
    return 0;

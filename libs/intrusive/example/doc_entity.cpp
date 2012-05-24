@@ -38,14 +38,14 @@ entity::~entity()
 
 //Function to insert a new "some_entity" in the global list
 void insert_some_entity()
-{  global_list.push_back (*new some_entity(/*...*/));  } 
+{  global_list.push_back (*new some_entity(/*...*/));  }
 
 //Function to clear an entity from the intrusive global list
 void clear_list ()
 {
    // entity's destructor removes itself from the global list implicitly
    while (!global_list.empty())
-      delete &global_list.front();   
+      delete &global_list.front();  
 }
 
 int main()

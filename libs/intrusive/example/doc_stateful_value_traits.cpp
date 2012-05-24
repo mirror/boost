@@ -27,8 +27,8 @@ struct stateful_value_traits
    typedef node *                            node_ptr;
    typedef const node *                      const_node_ptr;
    typedef identifier_t                      value_type;
-   typedef identifier_t *                    pointer; 
-   typedef const identifier_t *              const_pointer; 
+   typedef identifier_t *                    pointer;
+   typedef const identifier_t *              const_pointer;
    static const link_mode_type link_mode =   normal_link;
 
    stateful_value_traits(pointer ids, node_ptr node_array)

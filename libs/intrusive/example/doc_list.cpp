@@ -33,7 +33,7 @@ typedef list<MyClass>   BaseList;
 
 //Define a list that will store MyClass using the public member hook
 typedef list< MyClass
-            , member_hook< MyClass, list_member_hook<>, &MyClass::member_hook_> 
+            , member_hook< MyClass, list_member_hook<>, &MyClass::member_hook_>
             > MemberList;
 
 int main()

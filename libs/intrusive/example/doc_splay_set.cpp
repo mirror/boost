@@ -20,7 +20,7 @@ using namespace boost::intrusive;
 class MyClass
    : public splay_set_base_hook<>   //This is an splay tree base hook
    , public bs_set_base_hook<>      //This is a binary search tree base hook
-         
+        
 {
    int int_;
 

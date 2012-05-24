@@ -31,14 +31,14 @@ struct private_type
    private_type const &operator,(int) const;
 };
 
-typedef char yes_type;      
+typedef char yes_type;     
 struct no_type{ char dummy[2]; };
 
 template<typename T>
 no_type is_private_type(T const &);
 yes_type is_private_type(private_type const &);
 
-}}}}  
+}}}} 
 
 
 namespace boost{
@@ -121,9 +121,9 @@ class has_member_function_named_func
             template<class U>
             static zeroarg_checker_func<U> Test(zeroarg_checker_func<U>*);
 
-            template <class U> 
+            template <class U>
             static has_member_function_callable_with::no_type Test(...);
-            
+           
             static const bool value
                = sizeof(Test< Fun >(0)) == sizeof(has_member_function_callable_with::yes_type);
          };
@@ -186,7 +186,7 @@ class has_member_function_named_func
                                  );
    };
 
-   }}}  
+   }}} 
 
    namespace boost{
    namespace intrusive{
@@ -216,7 +216,7 @@ class has_member_function_named_func
                                        )
                                  );
    };
-   }}}  
+   }}} 
 
    namespace boost{
    namespace intrusive{
@@ -306,9 +306,9 @@ class has_member_function_named_func
       template<class U>
       static zeroarg_checker_func<U> Test(zeroarg_checker_func<U>*);
 
-      template <class U> 
+      template <class U>
       static has_member_function_callable_with::no_type Test(...);
-      
+     
       static const bool value = sizeof(Test< Fun >(0))
                            == sizeof(has_member_function_callable_with::yes_type);
    };
@@ -460,7 +460,7 @@ int main()
    (void)check5;
    (void)check6;
    (void)check7;
-   }   
+   }  
 
    return 0;
 

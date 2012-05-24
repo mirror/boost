@@ -55,10 +55,10 @@ int main()
 
    BaseSet baseset;
    MemberMultiset membermultiset;
-   
-   //Check that size optimization is activated in the base hook 
+  
+   //Check that size optimization is activated in the base hook
    assert(sizeof(set_base_hook<optimize_size<true> >) == 3*sizeof(void*));
-   //Check that size optimization is deactivated in the member hook 
+   //Check that size optimization is deactivated in the member hook
    assert(sizeof(set_member_hook<>) > 3*sizeof(void*));
 
    //Now insert them in the reverse order in the base hook set
