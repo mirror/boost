@@ -47,7 +47,7 @@ struct derivation_value_traits
    static const_node_ptr to_node_ptr(const_reference value)
    { return node_ptr(&value); }
 
-   static pointer to_value_ptr(const node_ptr &n) 
+   static pointer to_value_ptr(const node_ptr &n)
    {
 //      This still fails in gcc < 4.4 so forget about it
 //      using ::boost::static_pointer_cast;
@@ -64,7 +64,7 @@ struct derivation_value_traits
    }
 };
 
-} //namespace intrusive 
-} //namespace boost 
+} //namespace intrusive
+} //namespace boost
 
 #endif //BOOST_INTRUSIVE_DERIVATION_VALUE_TRAITS_HPP
