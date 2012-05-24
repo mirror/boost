@@ -22,13 +22,13 @@ namespace boost {
 namespace container {
 
 //Explicit instantiation to detect compilation errors
-template class boost::container::slist<test::movable_and_copyable_int, 
+template class boost::container::slist<test::movable_and_copyable_int,
    test::simple_allocator<test::movable_and_copyable_int> >;
 
-template class boost::container::slist<test::movable_and_copyable_int, 
+template class boost::container::slist<test::movable_and_copyable_int,
    test::dummy_test_allocator<test::movable_and_copyable_int> >;
 
-template class boost::container::slist<test::movable_and_copyable_int, 
+template class boost::container::slist<test::movable_and_copyable_int,
    std::allocator<test::movable_and_copyable_int> >;
 }}
 

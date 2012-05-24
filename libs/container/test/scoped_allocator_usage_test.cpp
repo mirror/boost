@@ -240,7 +240,7 @@ struct container_wrapper
    : public Container
 {
    typedef typename Container::allocator_type   allocator_type;
-   
+  
    container_wrapper(const allocator_type &a)
       : Container(a)
    {}

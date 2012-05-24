@@ -69,7 +69,7 @@ class simple_allocator
 
 //Version 2 allocator with rebind
 template<class T>
-class dummy_test_allocator 
+class dummy_test_allocator
 {
  private:
    typedef dummy_test_allocator<T>  self_t;
@@ -100,7 +100,7 @@ class dummy_test_allocator
 
    //!Default constructor. Never throws
    dummy_test_allocator()
-   {} 
+   {}
 
    //!Constructor from other dummy_test_allocator. Never throws
    dummy_test_allocator(const dummy_test_allocator &)
@@ -111,7 +111,7 @@ class dummy_test_allocator
    dummy_test_allocator(const dummy_test_allocator<T2> &)
    {}
 
-   pointer address(reference value) 
+   pointer address(reference value)
    {  return pointer(container_detail::addressof(value));  }
 
    const_pointer address(const_reference value) const
@@ -140,7 +140,7 @@ class dummy_test_allocator
 
    std::pair<pointer, bool>
       allocation_command(boost::container::allocation_type,
-                         size_type, 
+                         size_type,
                          size_type,
                          size_type &, const pointer & = 0)
    {  return std::pair<pointer, bool>(pointer(), true); }
@@ -192,19 +192,19 @@ class dummy_test_allocator
 
 //!Equality test for same type of dummy_test_allocator
 template<class T> inline
-bool operator==(const dummy_test_allocator<T>  &, 
+bool operator==(const dummy_test_allocator<T>  &,
                 const dummy_test_allocator<T>  &)
 {  return true; }
 
 //!Inequality test for same type of dummy_test_allocator
 template<class T> inline
-bool operator!=(const dummy_test_allocator<T>  &, 
+bool operator!=(const dummy_test_allocator<T>  &,
                 const dummy_test_allocator<T>  &)
 {  return false; }
 
 
 template< class T
-        , bool PropagateOnContCopyAssign 
+        , bool PropagateOnContCopyAssign
         , bool PropagateOnContMoveAssign
         , bool PropagateOnContSwap
         , bool CopyOnPropagateOnContSwap
@@ -335,7 +335,7 @@ class propagation_test_allocator
 };
 
 template< class T
-        , bool PropagateOnContCopyAssign 
+        , bool PropagateOnContCopyAssign
         , bool PropagateOnContMoveAssign
         , bool PropagateOnContSwap
         , bool CopyOnPropagateOnContSwap
