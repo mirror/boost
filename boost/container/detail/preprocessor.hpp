@@ -27,7 +27,7 @@
 //#error "This file is not needed when perfect forwarding is available"
 #endif   //BOOST_CONTAINER_PERFECT_FORWARDING
 
-#include <boost/preprocessor/iteration/local.hpp> 
+#include <boost/preprocessor/iteration/local.hpp>
 #include <boost/preprocessor/punctuation/paren_if.hpp>
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/control/expr_if.hpp>

@@ -150,7 +150,7 @@ enum {
    && !::boost::is_fundamental<_TypeT>::value
 };
 
-}; 
+};
 */
 
 template<class T>
@@ -233,7 +233,7 @@ F uninitialized_copy_alloc(A &a, I f, I l, F r)
 template
    <typename A,
     typename F, // F models ForwardIterator
-    typename T> 
+    typename T>
 void uninitialized_fill_alloc(A &a, F f, F l, const T &t)
 {
    while (f != l) {

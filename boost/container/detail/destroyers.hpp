@@ -24,7 +24,7 @@
 #include <boost/container/allocator_traits.hpp>
 
 namespace boost {
-namespace container { 
+namespace container {
 namespace container_detail {
 
 //!A deleter for scoped_ptr that deallocates the memory
@@ -88,7 +88,7 @@ struct scoped_destructor_n
 
    void increment_size_backwards(size_type inc)
    {  m_n += inc;   m_p -= inc;  }
-   
+  
    ~scoped_destructor_n()
    {
       if(!m_p) return;
@@ -185,8 +185,8 @@ class allocator_destroyer
 };
 
 
-}  //namespace container_detail { 
-}  //namespace container { 
+}  //namespace container_detail {
+}  //namespace container {
 }  //namespace boost {
 
 #include <boost/container/detail/config_end.hpp>

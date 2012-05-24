@@ -75,36 +75,36 @@ struct allocator_arg_t{};
 //!
 static const allocator_arg_t allocator_arg = allocator_arg_t();
 
-//! <b>Remark</b>: if a specialization is derived from true_type, indicates that T may be constructed 
-//! with an allocator as its last constructor argument.  Ideally, all constructors of T (including the 
-//! copy and move constructors) should have a variant that accepts a final argument of 
-//! allocator_type. 
+//! <b>Remark</b>: if a specialization is derived from true_type, indicates that T may be constructed
+//! with an allocator as its last constructor argument.  Ideally, all constructors of T (including the
+//! copy and move constructors) should have a variant that accepts a final argument of
+//! allocator_type.
 //!
-//! <b>Requires</b>: if a specialization is derived from true_type, T must have a nested type, 
-//! allocator_type and at least one constructor for which allocator_type is the last 
-//! parameter.  If not all constructors of T can be called with a final allocator_type argument, 
-//! and if T is used in a context where a container must call such a constructor, then the program is 
-//! ill-formed. 
+//! <b>Requires</b>: if a specialization is derived from true_type, T must have a nested type,
+//! allocator_type and at least one constructor for which allocator_type is the last
+//! parameter.  If not all constructors of T can be called with a final allocator_type argument,
+//! and if T is used in a context where a container must call such a constructor, then the program is
+//! ill-formed.
 //!
-//! [Example: 
-//!  template <class T, class A = allocator<T> >   
-//!  class Z { 
-//!    public: 
-//!      typedef A allocator_type; 
+//! [Example:
+//!  template <class T, class A = allocator<T> >  
+//!  class Z {
+//!    public:
+//!      typedef A allocator_type;
 //!
-//!    // Default constructor with optional allocator suffix 
-//!    Z(const allocator_type& a = allocator_type()); 
+//!    // Default constructor with optional allocator suffix
+//!    Z(const allocator_type& a = allocator_type());
 //!
-//!    // Copy constructor and allocator-extended copy constructor 
-//!    Z(const Z& zz); 
-//!    Z(const Z& zz, const allocator_type& a); 
-//! }; 
+//!    // Copy constructor and allocator-extended copy constructor
+//!    Z(const Z& zz);
+//!    Z(const Z& zz, const allocator_type& a);
+//! };
 //!
-//! // Specialize trait for class template Z 
-//! template <class T, class A = allocator<T> > 
-//! struct constructible_with_allocator_suffix<Z<T,A> >  
+//! // Specialize trait for class template Z
+//! template <class T, class A = allocator<T> >
+//! struct constructible_with_allocator_suffix<Z<T,A> > 
 //!      : ::boost::true_type { };
-//! -- end example] 
+//! -- end example]
 //!
 //! <b>Note</b>: This trait is a workaround inspired by "N2554: The Scoped Allocator Model (Rev 2)"
 //! (Pablo Halpern, 2008-02-29) to backport the scoped allocator model to C++03, as
@@ -117,44 +117,44 @@ static const allocator_arg_t allocator_arg = allocator_arg_t();
 template <class T>
 struct constructible_with_allocator_suffix
    : ::boost::false_type
-{}; 
+{};
 
-//! <b>Remark</b>: if a specialization is derived from true_type, indicates that T may be constructed 
-//! with allocator_arg and T::allocator_type as its first two constructor arguments.  
-//! Ideally, all constructors of T (including the copy and move constructors) should have a variant 
+//! <b>Remark</b>: if a specialization is derived from true_type, indicates that T may be constructed
+//! with allocator_arg and T::allocator_type as its first two constructor arguments. 
+//! Ideally, all constructors of T (including the copy and move constructors) should have a variant
 //! that accepts these two initial arguments.
 //!
-//! <b>Requires</b>: if a specialization is derived from true_type, T must have a nested type, 
-//! allocator_type and at least one constructor for which allocator_arg_t is the first 
-//! parameter and allocator_type is the second parameter.  If not all constructors of T can be 
-//! called with these initial arguments, and if T is used in a context where a container must call such 
+//! <b>Requires</b>: if a specialization is derived from true_type, T must have a nested type,
+//! allocator_type and at least one constructor for which allocator_arg_t is the first
+//! parameter and allocator_type is the second parameter.  If not all constructors of T can be
+//! called with these initial arguments, and if T is used in a context where a container must call such
 //! a constructor, then the program is ill-formed.
 //!
-//! [Example: 
-//! template <class T, class A = allocator<T> > 
-//! class Y { 
-//!    public: 
-//!       typedef A allocator_type; 
-//!  
-//!       // Default constructor with and allocator-extended default constructor 
-//!       Y(); 
-//!       Y(allocator_arg_t, const allocator_type& a); 
-//!  
-//!       // Copy constructor and allocator-extended copy constructor 
-//!       Y(const Y& yy); 
-//!       Y(allocator_arg_t, const allocator_type& a, const Y& yy); 
-//!  
-//!       // Variadic constructor and allocator-extended variadic constructor 
-//!       template<class ...Args> Y(Args&& args...); 
-//!       template<class ...Args>  
-//!       Y(allocator_arg_t, const allocator_type& a, Args&&... args); 
-//! }; 
-//!  
-//! // Specialize trait for class template Y 
-//! template <class T, class A = allocator<T> > 
-//! struct constructible_with_allocator_prefix<Y<T,A> >  
-//!       : ::boost::true_type { }; 
-//!  
+//! [Example:
+//! template <class T, class A = allocator<T> >
+//! class Y {
+//!    public:
+//!       typedef A allocator_type;
+//! 
+//!       // Default constructor with and allocator-extended default constructor
+//!       Y();
+//!       Y(allocator_arg_t, const allocator_type& a);
+//! 
+//!       // Copy constructor and allocator-extended copy constructor
+//!       Y(const Y& yy);
+//!       Y(allocator_arg_t, const allocator_type& a, const Y& yy);
+//! 
+//!       // Variadic constructor and allocator-extended variadic constructor
+//!       template<class ...Args> Y(Args&& args...);
+//!       template<class ...Args> 
+//!       Y(allocator_arg_t, const allocator_type& a, Args&&... args);
+//! };
+//! 
+//! // Specialize trait for class template Y
+//! template <class T, class A = allocator<T> >
+//! struct constructible_with_allocator_prefix<Y<T,A> > 
+//!       : ::boost::true_type { };
+//! 
 //! -- end example]
 //!
 //! <b>Note</b>: This trait is a workaround inspired by "N2554: The Scoped Allocator Model (Rev 2)"
@@ -166,7 +166,7 @@ struct constructible_with_allocator_suffix
 //! (when BOOST_NO_SFINAE_EXPR is NOT defined), this trait is ignored and C++11 rules will be used
 //! to detect if a type should be constructed with suffix or prefix allocator arguments.
 template <class T>
-struct constructible_with_allocator_prefix 
+struct constructible_with_allocator_prefix
     : ::boost::false_type
 {};
 
@@ -201,12 +201,12 @@ struct uses_allocator_imp
 
 ///@endcond
 
-//! <b>Remark</b>: Automatically detects if T has a nested allocator_type that is convertible from 
-//! Alloc. Meets the BinaryTypeTrait requirements ([meta.rqmts] 20.4.1). A program may 
+//! <b>Remark</b>: Automatically detects if T has a nested allocator_type that is convertible from
+//! Alloc. Meets the BinaryTypeTrait requirements ([meta.rqmts] 20.4.1). A program may
 //! specialize this type to derive from true_type for a T of user-defined type if T does not
-//! have a nested allocator_type but is nonetheless constructible using the specified Alloc. 
+//! have a nested allocator_type but is nonetheless constructible using the specified Alloc.
 //!
-//! <b>Result</b>: derived from true_type if Convertible<Alloc,T::allocator_type> and 
+//! <b>Result</b>: derived from true_type if Convertible<Alloc,T::allocator_type> and
 //! derived from false_type otherwise.
 template <typename T, typename Alloc>
 struct uses_allocator
@@ -340,7 +340,7 @@ namespace container_detail {
    //!
 
    //Generate N+1 template parameters so that we can specialize N
-   template<class T 
+   template<class T
             BOOST_PP_ENUM_TRAILING( BOOST_PP_ADD(BOOST_CONTAINER_MAX_IS_CONSTRUCTIBLE_PARAMETERS, 1)
                                  , BOOST_CONTAINER_PP_TEMPLATE_PARAM_WITH_DEFAULT
                                  , void)
@@ -379,7 +379,7 @@ namespace container_detail {
    #include BOOST_PP_LOCAL_ITERATE()
 
    //Finally just inherit from the implementation to define he trait
-   template< class T 
+   template< class T
            BOOST_PP_ENUM_TRAILING( BOOST_CONTAINER_MAX_IS_CONSTRUCTIBLE_PARAMETERS
                                  , BOOST_CONTAINER_PP_TEMPLATE_PARAM_WITH_DEFAULT
                                  , void)
@@ -388,14 +388,14 @@ namespace container_detail {
       : boost::integral_constant
          < bool
          , is_constructible_impl
-            < T 
+            < T
             BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_CONTAINER_MAX_IS_CONSTRUCTIBLE_PARAMETERS, P)
             , void>::value
          >
    {};
 
    //Finally just inherit from the implementation to define he trait
-   template <class T 
+   template <class T
             ,class InnerAlloc
             BOOST_PP_ENUM_TRAILING( BOOST_PP_SUB(BOOST_CONTAINER_MAX_IS_CONSTRUCTIBLE_PARAMETERS, 2)
                                  , BOOST_CONTAINER_PP_TEMPLATE_PARAM_WITH_DEFAULT
@@ -408,7 +408,7 @@ namespace container_detail {
          >
    {};
 /*
-   template <class T 
+   template <class T
             ,class InnerAlloc
             BOOST_PP_ENUM_TRAILING( BOOST_PP_SUB(BOOST_CONTAINER_MAX_IS_CONSTRUCTIBLE_PARAMETERS, 1)
                                  , BOOST_CONTAINER_PP_TEMPLATE_PARAM_WITH_DEFAULT
@@ -443,7 +443,7 @@ namespace container_detail {
 
    #else    // #if !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
-   template < class T 
+   template < class T
             , class InnerAlloc
             BOOST_PP_ENUM_TRAILING( BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS
                                   , BOOST_CONTAINER_PP_TEMPLATE_PARAM_WITH_DEFAULT
@@ -453,7 +453,7 @@ namespace container_detail {
       : constructible_with_allocator_prefix<T>
    {};
 /*
-   template < class T 
+   template < class T
             , class InnerAlloc
             BOOST_PP_ENUM_TRAILING( BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS
                                   , BOOST_CONTAINER_PP_TEMPLATE_PARAM_WITH_DEFAULT
@@ -954,7 +954,7 @@ class scoped_allocator_adaptor_base
    scoped_allocator_adaptor_base(internal_type_t, BOOST_FWD_REF(OuterA2) outerAlloc, const inner_allocator_type &)
       : outer_allocator_type(::boost::forward<OuterA2>(outerAlloc))
       {}
-  
+ 
    public:
    scoped_allocator_adaptor_base &operator=(BOOST_COPY_ASSIGN_REF(scoped_allocator_adaptor_base) other)
    {
@@ -991,36 +991,36 @@ class scoped_allocator_adaptor_base
    #if !defined(BOOST_CONTAINER_UNIMPLEMENTED_PACK_EXPANSION_TO_FIXED_LIST)
 
    //! This class is a C++03-compatible implementation of std::scoped_allocator_adaptor.
-   //! The class template scoped_allocator_adaptor is an allocator template that specifies 
-   //! the memory resource (the outer allocator) to be used by a container (as any other 
-   //! allocator does) and also specifies an inner allocator resource to be passed to 
+   //! The class template scoped_allocator_adaptor is an allocator template that specifies
+   //! the memory resource (the outer allocator) to be used by a container (as any other
+   //! allocator does) and also specifies an inner allocator resource to be passed to
    //! the constructor of every element within the container.
    //!
-   //! This adaptor is 
-   //! instantiated with one outer and zero or more inner allocator types. If 
-   //! instantiated with only one allocator type, the inner allocator becomes the 
-   //! scoped_allocator_adaptor itself, thus using the same allocator resource for the 
-   //! container and every element within the container and, if the elements themselves 
-   //! are containers, each of their elements recursively. If instantiated with more than 
+   //! This adaptor is
+   //! instantiated with one outer and zero or more inner allocator types. If
+   //! instantiated with only one allocator type, the inner allocator becomes the
+   //! scoped_allocator_adaptor itself, thus using the same allocator resource for the
+   //! container and every element within the container and, if the elements themselves
+   //! are containers, each of their elements recursively. If instantiated with more than
    //! one allocator, the first allocator is the outer allocator for use by the container,
-   //! the second allocator is passed to the constructors of the container's elements, 
-   //! and, if the elements themselves are containers, the third allocator is passed to 
-   //! the elements' elements, and so on. If containers are nested to a depth greater 
-   //! than the number of allocators, the last allocator is used repeatedly, as in the 
-   //! single-allocator case, for any remaining recursions. 
+   //! the second allocator is passed to the constructors of the container's elements,
+   //! and, if the elements themselves are containers, the third allocator is passed to
+   //! the elements' elements, and so on. If containers are nested to a depth greater
+   //! than the number of allocators, the last allocator is used repeatedly, as in the
+   //! single-allocator case, for any remaining recursions.
    //!
    //! [<b>Note</b>: The
-   //! scoped_allocator_adaptor is derived from the outer allocator type so it can be 
+   //! scoped_allocator_adaptor is derived from the outer allocator type so it can be
    //! substituted for the outer allocator type in most expressions. -end note]
    //!
-   //! In the construct member functions, `OUTERMOST(x)` is x if x does not have 
+   //! In the construct member functions, `OUTERMOST(x)` is x if x does not have
    //! an `outer_allocator()` member function and
    //! `OUTERMOST(x.outer_allocator())` otherwise; `OUTERMOST_ALLOC_TRAITS(x)` is
    //! `allocator_traits<decltype(OUTERMOST(x))>`.
    //!
    //! [<b>Note</b>: `OUTERMOST(x)` and
-   //! `OUTERMOST_ALLOC_TRAITS(x)` are recursive operations. It is incumbent upon 
-   //! the definition of `outer_allocator()` to ensure that the recursion terminates. 
+   //! `OUTERMOST_ALLOC_TRAITS(x)` are recursive operations. It is incumbent upon
+   //! the definition of `outer_allocator()` to ensure that the recursion terminates.
    //! It will terminate for all instantiations of scoped_allocator_adaptor. -end note]
    template <typename OuterAlloc, typename ...InnerAllocs>
    class scoped_allocator_adaptor
@@ -1120,7 +1120,7 @@ class scoped_allocator_adaptor
       : base_type(other.base())
       {}
 
-   //! <b>Effects</b>: move constructs each allocator within the adaptor with 
+   //! <b>Effects</b>: move constructs each allocator within the adaptor with
    //! the corresponding allocator from other.
    scoped_allocator_adaptor(BOOST_RV_REF(scoped_allocator_adaptor) other)
       : base_type(::boost::move(other.base()))
@@ -1131,7 +1131,7 @@ class scoped_allocator_adaptor
    //! <b>Requires</b>: OuterAlloc shall be constructible from OuterA2.
    //!
    //! <b>Effects</b>: initializes the OuterAlloc base class with boost::forward<OuterA2>(outerAlloc) and inner
-   //! with innerAllocs...(hence recursively initializing each allocator within the adaptor with the 
+   //! with innerAllocs...(hence recursively initializing each allocator within the adaptor with the
    //! corresponding allocator from the argument list).
    template <class OuterA2>
    scoped_allocator_adaptor(BOOST_FWD_REF(OuterA2) outerAlloc, const InnerAllocs & ...innerAllocs)
@@ -1169,7 +1169,7 @@ class scoped_allocator_adaptor
 
    //! <b>Requires</b>: OuterAlloc shall be constructible from OuterA2.
    //!
-   //! <b>Effects</b>: initializes each allocator within the adaptor with the corresponding allocator 
+   //! <b>Effects</b>: initializes each allocator within the adaptor with the corresponding allocator
    //! rvalue from other.
    template <class OuterA2>
    scoped_allocator_adaptor(BOOST_RV_REF_BEG scoped_allocator_adaptor<OuterA2
@@ -1221,7 +1221,7 @@ class scoped_allocator_adaptor
       return outer_traits_type::max_size(this->outer_allocator());
    }
 
-   //! <b>Effects</b>: 
+   //! <b>Effects</b>:
    //!   calls `OUTERMOST_ALLOC_TRAITS(*this)::destroy(OUTERMOST(*this), p)`.
    template <class T>
    void destroy(T* p)
@@ -1230,14 +1230,14 @@ class scoped_allocator_adaptor
          ::destroy(get_outermost_allocator(this->outer_allocator()), p);
    }
 
-   //! <b>Returns</b>: 
+   //! <b>Returns</b>:
    //! `allocator_traits<OuterAlloc>::allocate(outer_allocator(), n)`.
    pointer allocate(size_type n)
    {
       return outer_traits_type::allocate(this->outer_allocator(), n);
    }
 
-   //! <b>Returns</b>: 
+   //! <b>Returns</b>:
    //! `allocator_traits<OuterAlloc>::allocate(outer_allocator(), n, hint)`.
    pointer allocate(size_type n, const_void_pointer hint)
    {
@@ -1252,7 +1252,7 @@ class scoped_allocator_adaptor
    }
 
    //! <b>Returns</b>: A new scoped_allocator_adaptor object where each allocator
-   //! A in the adaptor is initialized from the result of calling 
+   //! A in the adaptor is initialized from the result of calling
    //! `allocator_traits<A>::select_on_container_copy_construction()` on
    //! the corresponding allocator in *this.
    scoped_allocator_adaptor select_on_container_copy_construction() const
@@ -1275,21 +1275,21 @@ class scoped_allocator_adaptor
    //! 1) If `uses_allocator<T, inner_allocator_type>::value` is false calls
    //!    `OUTERMOST_ALLOC_TRAITS(*this)::construct
    //!       (OUTERMOST(*this), p, std::forward<Args>(args)...)`.
-   //! 
-   //! 2) Otherwise, if `uses_allocator<T, inner_allocator_type>::value` is true and 
+   //!
+   //! 2) Otherwise, if `uses_allocator<T, inner_allocator_type>::value` is true and
    //!    `is_constructible<T, allocator_arg_t, inner_allocator_type, Args...>::value` is true, calls
    //!    `OUTERMOST_ALLOC_TRAITS(*this)::construct(OUTERMOST(*this), p, allocator_arg,
    //!    inner_allocator(), std::forward<Args>(args)...)`.
-   //! 
+   //!
    //! [<b>Note</b>: In compilers without advanced decltype SFINAE support, `is_constructible` can't
    //! be implemented so that condition will be replaced by
    //! constructible_with_allocator_prefix<T>::value. -end note]
    //!
-   //! 3) Otherwise, if uses_allocator<T, inner_allocator_type>::value is true and 
-   //!    `is_constructible<T, Args..., inner_allocator_type>::value` is true, calls 
-   //!    `OUTERMOST_ALLOC_TRAITS(*this)::construct(OUTERMOST(*this), p, 
+   //! 3) Otherwise, if uses_allocator<T, inner_allocator_type>::value is true and
+   //!    `is_constructible<T, Args..., inner_allocator_type>::value` is true, calls
+   //!    `OUTERMOST_ALLOC_TRAITS(*this)::construct(OUTERMOST(*this), p,
    //!    std::forward<Args>(args)..., inner_allocator())`.
-   //! 
+   //!
    //! [<b>Note</b>: In compilers without advanced decltype SFINAE support, `is_constructible` can't be
    //! implemented so that condition will be replaced by
    //! `constructible_with_allocator_suffix<T>::value`. -end note]
@@ -1352,7 +1352,7 @@ class scoped_allocator_adaptor
    template <class T1, class T2, class U, class V>
    void construct(container_detail::pair<T1, T2>* p, BOOST_FWD_REF(U) x, BOOST_FWD_REF(V) y)
    {  this->construct_pair(p, ::boost::forward<U>(x), ::boost::forward<V>(y));   }
-   
+  
    template <class T1, class T2, class U, class V>
    void construct(std::pair<T1, T2>* p, const std::pair<U, V>& x)
    {  this->construct_pair(p, x);   }
@@ -1361,7 +1361,7 @@ class scoped_allocator_adaptor
    void construct( container_detail::pair<T1, T2>* p
                  , const container_detail::pair<U, V>& x)
    {  this->construct_pair(p, x);   }
-   
+  
    template <class T1, class T2, class U, class V>
    void construct( std::pair<T1, T2>* p
                  , BOOST_RV_REF_BEG std::pair<U, V> BOOST_RV_REF_END x)
@@ -1461,7 +1461,7 @@ inline bool operator==(
       #endif
    >& b)
 {
-   #if !defined(BOOST_NO_VARIADIC_TEMPLATES) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)   
+   #if !defined(BOOST_NO_VARIADIC_TEMPLATES) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)  
    const bool has_zero_inner = sizeof...(InnerAllocs) == 0u;
    #else
    const bool has_zero_inner =

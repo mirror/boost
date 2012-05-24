@@ -86,12 +86,12 @@ class private_node_pool_impl
 
    void *allocate_node()
    {  return priv_alloc_node();  }
-   
+  
    //!Deallocates an array pointed by ptr. Never throws
    void deallocate_node(void *ptr)
    {  priv_dealloc_node(ptr); }
 
-   //!Allocates a singly linked list of n nodes ending in null pointer. 
+   //!Allocates a singly linked list of n nodes ending in null pointer.
    multiallocation_chain allocate_nodes(const size_type n)
    {
       //Preallocate all needed blocks to fulfill the request
@@ -238,7 +238,7 @@ class private_node_pool_impl
       push_in_list(free_nodes_t &l, typename free_nodes_t::iterator &it)
          :  slist_(l), last_it_(it)
       {}
-      
+     
       void operator()(typename free_nodes_t::pointer p) const
       {
          slist_.push_front(*p);
@@ -258,10 +258,10 @@ class private_node_pool_impl
       is_between(const void *addr, std::size_t size)
          :  beg_(static_cast<const char *>(addr)), end_(beg_+size)
       {}
-      
+     
       bool operator()(typename free_nodes_t::const_reference v) const
       {
-         return (beg_ <= reinterpret_cast<const char *>(&v) && 
+         return (beg_ <= reinterpret_cast<const char *>(&v) &&
                  end_ >  reinterpret_cast<const char *>(&v));
       }
       private:
@@ -299,7 +299,7 @@ class private_node_pool_impl
    {
       if(!num_blocks)
          return;
-      size_type blocksize = 
+      size_type blocksize =
          get_rounded_size(m_real_node_size*m_nodes_per_block, (size_type)alignment_of<node_t>::value);
 
       try{
@@ -311,7 +311,7 @@ class private_node_pool_impl
             char *pBlock = pNode;
             m_blocklist.push_front(get_block_hook(pBlock, blocksize));
 
-            //We initialize all Nodes in Node Block to insert 
+            //We initialize all Nodes in Node Block to insert
             //them in the free Node list
             for(size_type i = 0; i < m_nodes_per_block; ++i, pNode += m_real_node_size){
                m_freelist.push_front(*new (pNode) node_t);
@@ -335,13 +335,13 @@ class private_node_pool_impl
    private:
    //!Returns a reference to the block hook placed in the end of the block
    static node_t & get_block_hook (void *block, size_type blocksize)
-   {  
-      return *reinterpret_cast<node_t*>(reinterpret_cast<char*>(block) + blocksize);  
+   { 
+      return *reinterpret_cast<node_t*>(reinterpret_cast<char*>(block) + blocksize); 
    }
 
    //!Returns the starting address of the block reference to the block hook placed in the end of the block
    void *get_block_from_hook (node_t *hook, size_type blocksize)
-   {  
+   { 
       return (reinterpret_cast<char*>(hook) - blocksize);
    }
 

@@ -38,7 +38,7 @@ struct version_type
 
 namespace impl{
 
-template <class T, 
+template <class T,
           bool = container_detail::is_convertible<version_type<T, 0>, typename T::version>::value>
 struct extract_version
 {

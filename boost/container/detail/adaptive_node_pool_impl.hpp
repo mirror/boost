@@ -51,11 +51,11 @@ struct adaptive_pool_types
       , bi::optimize_size<true>
       , bi::constant_time_size<false>
       , bi::link_mode<bi::normal_link> >::type multiset_hook_t;
-   
+  
    typedef hdr_offset_holder_t<SizeType> hdr_offset_holder;
 
    struct block_info_t
-      :  
+      : 
          public hdr_offset_holder,
          public multiset_hook_t
    {
@@ -89,7 +89,7 @@ inline size_type calculate_alignment
    const size_type divisor  = overhead_percent*real_node_size;
    const size_type dividend = hdr_offset_size*100;
    size_type elements_per_subblock = (dividend - 1)/divisor + 1;
-   size_type candidate_power_of_2 = 
+   size_type candidate_power_of_2 =
       upper_power_of_2(elements_per_subblock*real_node_size + hdr_offset_size);
    bool overhead_satisfied = false;
    //Now calculate the wors-case overhead for a subblock
@@ -228,7 +228,7 @@ class private_adaptive_node_pool_impl
    {
       priv_invariants();
       //If there are no free nodes we allocate a new block
-      if (m_block_multiset.empty()){ 
+      if (m_block_multiset.empty()){
          priv_alloc_block(1);
       }
       //We take the first free node the multiset can't be empty
@@ -248,7 +248,7 @@ class private_adaptive_node_pool_impl
       priv_invariants();
    }
 
-   //!Allocates n nodes. 
+   //!Allocates n nodes.
    //!Can throw
    multiallocation_chain allocate_nodes(const size_type n)
    {
@@ -448,7 +448,7 @@ class private_adaptive_node_pool_impl
    #undef BOOST_CONTAINER_ADAPTIVE_NODE_POOL_CHECK_INVARIANTS
    {
       //We iterate through the block tree to free the memory
-      block_iterator it(m_block_multiset.begin()), 
+      block_iterator it(m_block_multiset.begin()),
                      itend(m_block_multiset.end()), to_deallocate;
       if(it != itend){
          for(++it; it != itend; ++it){
@@ -559,9 +559,9 @@ class private_adaptive_node_pool_impl
          ++m_totally_free_blocks;
          block_info_t *c_info = new(mem_address)block_info_t();
          m_block_multiset.insert(m_block_multiset.end(), *c_info);
-         
+        
          mem_address += HdrSize;
-         //We initialize all Nodes in Node Block to insert 
+         //We initialize all Nodes in Node Block to insert
          //them in the free Node list
          typename free_nodes_t::iterator prev_insert_pos = c_info->free_nodes.before_begin();
          for(size_type i = 0; i < m_real_num_node; ++i){
@@ -605,7 +605,7 @@ class private_adaptive_node_pool_impl
          }
          {
             char *pNode = hdr_addr + HdrSize;
-            //We initialize all Nodes in Node Block to insert 
+            //We initialize all Nodes in Node Block to insert
             //them in the free Node list
             for(size_type i = 0; i < hdr_subblock_elements; ++i){
                prev_insert_pos = c_info->free_nodes.insert_after(prev_insert_pos, *new (pNode) node_t);
