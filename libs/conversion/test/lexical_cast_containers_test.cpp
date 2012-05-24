@@ -31,7 +31,7 @@ boost::unit_test::test_suite *init_unit_test_suite(int, char *[])
 }
 
 void testing_boost_containers_basic_string()
-{       
+{
     BOOST_CHECK("100" == lexical_cast<boost::container::string>("100"));
     BOOST_CHECK(L"100" == lexical_cast<boost::container::wstring>(L"100"));
 

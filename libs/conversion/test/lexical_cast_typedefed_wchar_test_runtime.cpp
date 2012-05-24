@@ -30,7 +30,7 @@ void test_typedefed_wchar_t_runtime()
 
     BOOST_CHECK_EQUAL(boost::lexical_cast<int>(L'A'), 65);
     BOOST_CHECK_EQUAL(boost::lexical_cast<int>(L'B'), 66);
-    
+
     BOOST_CHECK_EQUAL(boost::lexical_cast<wchar_t>(L"65"), 65);
     BOOST_CHECK_EQUAL(boost::lexical_cast<wchar_t>(L"66"), 66);
 #endif

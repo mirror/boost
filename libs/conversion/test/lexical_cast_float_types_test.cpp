@@ -237,7 +237,7 @@ void test_converion_to_float_types()
     CHECK_CLOSE_ABS_DIFF(-10101.0E-011, test_t);
     CHECK_CLOSE_ABS_DIFF(-10101093, test_t);
     CHECK_CLOSE_ABS_DIFF(10101093, test_t);
-    
+
     CHECK_CLOSE_ABS_DIFF(-.34, test_t);
     CHECK_CLOSE_ABS_DIFF(.34, test_t);
     CHECK_CLOSE_ABS_DIFF(.34e10, test_t);

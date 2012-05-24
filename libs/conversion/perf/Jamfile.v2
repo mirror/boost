@@ -13,17 +13,17 @@ path-constant TEST_DIR : . ;
 
 project performance/test
     : source-location ./
-    : requirements 
-#      <library>/boost/chrono//boost_chrono 
+    : requirements
+#      <library>/boost/chrono//boost_chrono
 #      <library>/boost/system//boost_system
       <link>static
-      <target-os>freebsd:<linkflags>"-lrt" 
+      <target-os>freebsd:<linkflags>"-lrt"
       <target-os>linux:<linkflags>"-lrt"
       <toolset>gcc:<cxxflags>-fvisibility=hidden
       <toolset>intel-linux:<cxxflags>-fvisibility=hidden
       <toolset>sun:<cxxflags>-xldscope=hidden
     : default-build release
  ;
- 
+
 run performance_test.cpp : $(TEST_DIR) ;
-      
+
