@@ -855,11 +855,22 @@
           <xsl:otherwise>
             <!-- We are in a class -->
             <!-- The name of the class we are in -->
-            <xsl:variable name="in-class">
+            <xsl:variable name="in-class-full">
               <xsl:call-template name="strip-qualifiers">
                 <xsl:with-param name="name" 
                   select="string(ancestor::compounddef/compoundname/text())"/>
               </xsl:call-template>
+            </xsl:variable>
+
+            <xsl:variable name ="in-class">
+              <xsl:choose>
+                <xsl:when test="contains($in-class-full, '&lt;')">
+                  <xsl:value-of select="substring-before($in-class-full, '&lt;')"/>
+                </xsl:when>
+                <xsl:otherwise>
+                  <xsl:value-of select="$in-class-full"/>
+                </xsl:otherwise>
+              </xsl:choose>
             </xsl:variable>
             
             <xsl:choose>
