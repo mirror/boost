@@ -1890,7 +1890,7 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                         without any syntactic noise at all.</para>
                 </sect2>
                 <sect2>
-                    <title>A simple example: rewriting only our transition table</title>
+                    <title>A simple example: rewriting only our transition table </title>
                     <para>As an introduction to eUML, we will rewrite our tutorial's transition
                         table using eUML. This will require two or three changes, depending on the compiler:<itemizedlist>
                             <listitem>
@@ -1908,24 +1908,21 @@ Stopped  == Empty   + cd_detected [good_disk_format] / store_cd_info
                     <para>We now can write the transition table like just shown, using
                         BOOST_MSM_EUML_DECLARE_TRANSITION_TABLE instead of
                         BOOST_MSM_EUML_TRANSITION_TABLE. The <link
-                            xlink:href="examples/SimpleTutorialWithEumlTable.cpp">implementation</link> is pretty
-                        straightforward.</para>
-                    <para>The <link
-                        xlink:href="examples/CompositeTutorialWithEumlTable.cpp">composite</link> implementation is slightly trickier because the submachine
-                        has to be a msm::back::state_machine and a msm::front::euml::state. For
-                        example:</para>
+                            xlink:href="examples/SimpleTutorialWithEumlTable.cpp"
+                            >implementation</link> is pretty straightforward. The only required
+                        addition is the need to declare a variable for each state or add parenses (a
+                        default-constructor call) in the transition table.</para>
+                    <para>The <link xlink:href="examples/CompositeTutorialWithEumlTable.cpp">
+                      <command xml:id="eUML-composite-table">composite</command></link> implementation is also natural:</para>
                     <programlisting>// front-end like always
-struct front_end : public boost::msm::front::state_machine_def&lt;front_end>
+struct sub_front_end : public boost::msm::front::state_machine_def&lt;sub_front_end>
 {
 ...
 };
 // back-end like always
-typedef boost::msm::back::state_machine&lt;front_end> back_end;
-// this is new: make the submachine a eUML type
-struct submachine : public back_end,
-                    public boost::msm::front::euml::euml_state&lt;back_end>
-{
-};</programlisting>
+typedef boost::msm::back::state_machine&lt;sub_front_end> sub_back_end;
+
+sub_back_end const sub; // sub can be used in a transition table.</programlisting>
                     <para>Unfortunately, there is a bug with VC, which appears from time to time and
                         causes in a stack overflow. If you get a warning that the program is
                         recursive on all paths, revert to either standard eUML or another front-end
@@ -3925,6 +3922,40 @@ typename ::boost::enable_if&lt;
         </chapter>
         <chapter>
             <title>Version history</title>
+            <sect1>
+                <title>From V2.22 to V2.23 (Boost 1.50)</title>
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para> <command xlink:href="#eUML-composite-table">eUML</command> : better syntax
+                                for front-ends defined with eUML as transititon table only. Caution:
+                                Breaking Change!</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfix: graph building was only working if
+                                    <code>initial_state</code> defined as a sequence</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfix: flags defined for a Terminate or Interrupt state do not
+                                break the blocking function of these states any more.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfix: multiple deferred events from several regions were not
+                                working in every case.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfix: visitor was passed by value to submachines.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfix: <code>no_transition</code> was not called for submachines who send an
+                                event to themselves.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Fixed warnings with gcc</para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+            </sect1>
             <sect1>
                 <title>From V2.21 to V2.22 (Boost 1.48)</title>
                 <para>
