@@ -26,6 +26,15 @@
 #include "boost/filesystem/operations.hpp"
 #include "boost/filesystem/fstream.hpp"
 
+#include <stdio.h>  // for popen, pclose
+#if defined(_MSC_VER)
+# define POPEN _popen
+# define PCLOSE _pclose
+#else
+# define POPEN popen
+# define PCLOSE pclose
+#endif
+
 #include "time_string.hpp"
 
 #include "inspector.hpp"
@@ -111,29 +120,26 @@ namespace
 
 //  get info (as a string) if inspect_root is svn working copy  --------------//
 
-  void extract_info( fs::ifstream & entries_file, string & rev, string & repos )
-    {
-      std::getline( entries_file, rev );
-      std::getline( entries_file, rev );
-      std::getline( entries_file, rev );
-      std::getline( entries_file, rev );    // revision number as a string
-      std::getline( entries_file, repos );  // repository as a string
-    }
-
   string info( const fs::path & inspect_root )
   {
-    string rev( "?" );
-    string repos( "unknown" );
-    fs::path entries( inspect_root / ".svn" / "entries" );
-    fs::ifstream entries_file( entries );
-    if ( entries_file )
-      extract_info( entries_file, rev, repos );
-    else
+    string rev("unknown");
+    string repos("unknown");
+    string command("cd ");
+    command += inspect_root.string() + " & svn info";
+    FILE* fp = POPEN(command.c_str(), "r");
+    if (fp)
     {
-      entries = inspect_root / ".." / "svn_info" / ".svn" / "entries";
-      fs::ifstream entries_file( entries );
-      if ( entries_file )
-        extract_info( entries_file, rev, repos );
+      static const int line_max = 128;
+      char line[line_max];
+      while (fgets(line, line_max, fp) != NULL)
+      {
+        string ln(line);
+        string::size_type pos;
+        if ((pos = ln.find("Revision: ")) != string::npos)
+          rev = ln.substr(pos + 10);
+        else if ((pos = ln.find("URL: ")) != string::npos)
+          repos = ln.substr(pos + 5);
+      }
     }
     return repos + " at revision " + rev;
   }
