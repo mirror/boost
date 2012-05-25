@@ -38,7 +38,7 @@
     (typename)
 
 #define BOOST_LOCAL_FUNCTION_AUX_arg_type(z, arg_n, unused) \
-    BOOST_PP_CAT(A, arg_n)
+    BOOST_PP_CAT(Arg, arg_n)
 
 #define BOOST_LOCAL_FUNCTION_AUX_arg_typedef(z, arg_n, unused) \
     typedef \
@@ -58,14 +58,14 @@
 
 #define BOOST_LOCAL_FUNCTION_AUX_arg_name(z, arg_n, comma01) \
     BOOST_PP_COMMA_IF(comma01) \
-    BOOST_PP_CAT(a, arg_n)
+    BOOST_PP_CAT(arg, arg_n)
 
 #define BOOST_LOCAL_FUNCTION_AUX_arg_param_decl(z, arg_n, unused) \
     BOOST_LOCAL_FUNCTION_AUX_arg_param_type(z, arg_n, 0 /* no leading comma */)\
     BOOST_LOCAL_FUNCTION_AUX_arg_name(z, arg_n, 0 /* no leading comma */)
 
 #define BOOST_LOCAL_FUNCTION_AUX_bind_type(z, bind_n, unused) \
-    BOOST_PP_CAT(B, bind_n)
+    BOOST_PP_CAT(Bind, bind_n)
 
 #define BOOST_LOCAL_FUNCTION_AUX_comma_bind_type(z, bind_n, unused) \
     , BOOST_LOCAL_FUNCTION_AUX_bind_type(z, bind_n, ~)
@@ -77,7 +77,7 @@
     , typename BOOST_LOCAL_FUNCTION_AUX_bind_type(z, bind_n, ~)
 
 #define BOOST_LOCAL_FUNCTION_AUX_bind_name(z, bind_n, unused) \
-    BOOST_PP_CAT(b, bind_n)
+    BOOST_PP_CAT(bing, bind_n)
 
 #define BOOST_LOCAL_FUNCTION_AUX_comma_bind_param_decl(z, bind_n, unused) \
     , \
