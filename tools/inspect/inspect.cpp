@@ -1,4 +1,4 @@
-//  inspect program  ---------------------------------------------------------//
+//  inspect program  -------------------------------------------------------------------//
 
 //  Copyright Beman Dawes 2002.
 //  Copyright Rene Rivera 2004-2006.
@@ -14,6 +14,11 @@
 //  structure.
 
 //  See http://www.boost.org/tools/inspect/ for more information.
+
+const char* boost_no_inspect = "boost-" "no-inspect";
+
+//  Directories with a file name of the boost_no_inspect value are not inspected.
+//  Files that contain the boost_no_inspect value are not inspected.
 
 
 #include <vector>
@@ -171,7 +176,7 @@ namespace
       // ignore OS X directory info files:
       && leaf != ".DS_Store"
       // ignore if tag file present
-      && !boost::filesystem::exists(pth / "boost-no-inspect")
+      && !boost::filesystem::exists(pth / boost_no_inspect)
       ;
   }
 
@@ -274,9 +279,9 @@ namespace
         ++file_count;
         string content;
         load_content( *itr, content );
-        check( lib.empty()
-                ? library_from_content( content ) : lib
-               , *itr, content, insps );
+        if (content.find(boost_no_inspect) == string::npos)
+          check( lib.empty() ? library_from_content( content ) : lib,
+                 *itr, content, insps );
       }
     }
   }
@@ -382,8 +387,6 @@ namespace
 
   void display_details()
   {
-    // gps - review this
-
     if (display_text == display_format)
     {
       // display error messages with group indication
@@ -983,10 +986,14 @@ int cpp_main( int argc_param, char * argv_param[] )
     if (display_text == display_format)
     {
       std::cout << "Details:\n" << inspector_keys;
-    }
+      std::cout << "\nDirectories with a file named \"" << boost_no_inspect << "\" will not be inspected.\n"
+                   "Files containing \"" << boost_no_inspect << "\" will not be inspected.\n";
+   }
     else
     {
       std::cout << "<h2>Details</h2>\n" << inspector_keys;
+      std::cout << "\n<p>Directories with a file named \"" << boost_no_inspect << "\" will not be inspected.<br>\n"
+                   "Files containing \"" << boost_no_inspect << "\" will not be inspected.</p>\n";
     }
     display_details();
   }
