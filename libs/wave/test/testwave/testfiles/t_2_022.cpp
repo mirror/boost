@@ -7,17 +7,17 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-    /*
+// Verify fix of regression #6838: Adding include file with force_include makes
+// Wave fail to emit #line directive
 
-      Expose bug
+//O --forceinclude=t_2_022.hpp
 
-    */
+//R #line 12 "t_2_022.hpp"
+//R int func() { return 42; }
+//R #line 19 "t_2_022.cpp"
+//R int main() { return func(); }
+int main() { return func(); }
 
-#if 1
-//R #line 18 "t_9_001.cpp"
-    void exposed() {}   //R void exposed() {} 
-#endif
-
-//H 10: t_9_001.cpp(16): #if
-//H 11: t_9_001.cpp(16): #if 1: 1
-//H 10: t_9_001.cpp(19): #endif
+//H 04: t_2_022.hpp
+//H 05: $B(t_2_022.hpp) ($B(t_2_022.hpp))
+//H 06: 

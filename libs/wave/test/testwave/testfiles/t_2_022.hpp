@@ -7,17 +7,6 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-    /*
-
-      Expose bug
-
-    */
-
-#if 1
-//R #line 18 "t_9_001.cpp"
-    void exposed() {}   //R void exposed() {} 
-#endif
-
-//H 10: t_9_001.cpp(16): #if
-//H 11: t_9_001.cpp(16): #if 1: 1
-//H 10: t_9_001.cpp(19): #endif
+// Verify fix of regression #6838: Adding include file with force_include makes
+// Wave fail to emit #line directive
+int func() { return 42; }
