@@ -16,7 +16,7 @@
 
 #if defined(__EDG__)
 #elif defined(_MSC_VER) || defined(__BORLANDC__) || defined(__DMC__)
-#pragma message("Warning: boost/functional/detail/container_fwd.hpp is deprecated, use boost/detail/container_fwd.hpp instead.");
+#pragma message("Warning: boost/functional/detail/container_fwd.hpp is deprecated, use boost/detail/container_fwd.hpp instead.")
 #elif defined(__GNUC__) || defined(__HP_aCC) || \
     defined(__SUNPRO_CC) || defined(__IBMCPP__)
 #warning "boost/functional/detail/container_fwd.hpp is deprecated, use boost/detail/container_fwd.hpp instead."
