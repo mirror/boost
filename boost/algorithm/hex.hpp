@@ -45,7 +45,7 @@ namespace boost { namespace algorithm {
     
     \struct non_hex_input    
     \brief  Thrown when a non-hex value (0-9, A-F) encountered when decoding.
-    			Contains the offending character
+                Contains the offending character
     
     \struct not_enough_input 
     \brief  Thrown when the input sequence unexpectedly ends

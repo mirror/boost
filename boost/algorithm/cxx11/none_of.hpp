@@ -12,7 +12,7 @@
 #ifndef BOOST_ALGORITHM_NONE_OF_HPP
 #define BOOST_ALGORITHM_NONE_OF_HPP
 
-#include <algorithm>	// for std::none_of, if available
+#include <algorithm>    // for std::none_of, if available
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 

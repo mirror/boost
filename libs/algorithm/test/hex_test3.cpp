@@ -21,12 +21,12 @@ Try ostream_iterators
 
 template <typename char_type>
 void test_to_hex ( const char_type ** tests ) {
-	typedef std::basic_string<char_type> String;
-	typedef std::basic_ostringstream<char_type> Stream;
-	typedef std::ostream_iterator<char_type, char_type> Iter;
+    typedef std::basic_string<char_type> String;
+    typedef std::basic_ostringstream<char_type> Stream;
+    typedef std::ostream_iterator<char_type, char_type> Iter;
 
     for ( const char_type **p = tests; *p; p++ ) {
-    	String arg, argh;
+        String arg, argh;
         Stream one, two, three;
         arg.assign ( *p );
         boost::algorithm::hex ( *p, Iter ( one ));
@@ -49,12 +49,12 @@ void test_to_hex ( const char_type ** tests ) {
 
 template <typename char_type>
 void test_from_hex_success ( const char_type ** tests ) {
-	typedef std::basic_string<char_type> String;
-	typedef std::basic_ostringstream<char_type> Stream;
-	typedef std::ostream_iterator<char_type, char_type> Iter;
+    typedef std::basic_string<char_type> String;
+    typedef std::basic_ostringstream<char_type> Stream;
+    typedef std::ostream_iterator<char_type, char_type> Iter;
 
     for ( const char_type **p = tests; *p; p++ ) {
-    	String arg, argh;
+        String arg, argh;
         Stream one, two, three;
         arg.assign ( *p );
         boost::algorithm::unhex ( *p,                       Iter ( one ));

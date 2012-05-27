@@ -32,7 +32,7 @@ namespace boost { namespace algorithm {
         * Random-access iterators
         * The two iterator types (I1 and I2) must "point to" the same underlying type.
 
-    http://en.wikipedia.org/wiki/Knuth–Morris–Pratt_algorithm
+    http://en.wikipedia.org/wiki/Knuth-Morris-Pratt_algorithm
     http://www.inf.fh-flensburg.de/lang/algorithmen/pattern/kmpen.htm
 */
 

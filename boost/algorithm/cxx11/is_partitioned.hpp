@@ -12,7 +12,7 @@
 #ifndef BOOST_ALGORITHM_IS_PARTITIONED_HPP
 #define BOOST_ALGORITHM_IS_PARTITIONED_HPP
 
-#include <algorithm>	// for std::is_partitioned, if available
+#include <algorithm>    // for std::is_partitioned, if available
 
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
@@ -35,14 +35,14 @@ using std::is_partitioned;      // Section 25.3.13
 template <typename InputIterator, typename UnaryPredicate>
 bool is_partitioned ( InputIterator first, InputIterator last, UnaryPredicate p )
 {
-//	Run through the part that satisfy the predicate
+//  Run through the part that satisfy the predicate
     for ( ; first != last; ++first )
         if ( !p (*first))
-        	break;
-//	Now the part that does not satisfy the predicate
+            break;
+//  Now the part that does not satisfy the predicate
     for ( ; first != last; ++first )
         if ( p (*first))
-        	return false;
+            return false;
     return true;
 }
 #endif

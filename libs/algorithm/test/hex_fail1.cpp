@@ -15,7 +15,7 @@
 #include <iostream>
 #include <vector>
 
-//	should not compile: vector is not an integral type
+//  should not compile: vector is not an integral type
 int test_main( int , char* [] )
 {
   std::vector<float> v;

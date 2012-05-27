@@ -12,7 +12,7 @@
 #ifndef BOOST_ALGORITHM_PARTITION_POINT_HPP
 #define BOOST_ALGORITHM_PARTITION_POINT_HPP
 
-#include <algorithm>	// for std::partition_point, if available
+#include <algorithm>    // for std::partition_point, if available
 
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
@@ -25,7 +25,7 @@ using std::partition_point;      // Section 25.3.13
 #else
 /// \fn partition_point ( ForwardIterator first, ForwardIterator last, Predicate p )
 /// \brief Given a partitioned range, returns the partition point, i.e, the first element 
-///		that does not satisfy p
+///     that does not satisfy p
 /// 
 /// \param first    The start of the input sequence
 /// \param last     One past the end of the input sequence
