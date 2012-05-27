@@ -12,7 +12,7 @@
 #ifndef BOOST_ALGORITHM_COPY_IF_HPP
 #define BOOST_ALGORITHM_COPY_IF_HPP
 
-#include <algorithm>	// for std::copy_if, if available
+#include <algorithm>    // for std::copy_if, if available
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 

@@ -12,7 +12,7 @@
 #ifndef BOOST_ALGORITHM_PARTITION_COPY_HPP
 #define BOOST_ALGORITHM_PARTITION_COPY_HPP
 
-#include <algorithm>	// for std::partition_copy, if available
+#include <algorithm>    // for std::partition_copy, if available
 #include <utility>  // for make_pair
 
 #include <boost/range/begin.hpp>

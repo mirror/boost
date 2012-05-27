@@ -94,7 +94,7 @@ using std::is_sorted;       // Section 25.4.1.5
 #endif
 
 ///
-///	-- Range based versions of the C++11 functions
+/// -- Range based versions of the C++11 functions
 ///
 
 /// \fn is_sorted_until ( const R &range, Pred p )
@@ -126,7 +126,7 @@ using std::is_sorted;       // Section 25.4.1.5
     }
 
 namespace detail {
-	typedef struct { typedef bool type; } bool_;
+    typedef struct { typedef bool type; } bool_;
 };
 
 /// \fn is_sorted ( const R &range, Pred p )
@@ -157,7 +157,7 @@ namespace detail {
 
 
 ///
-///	-- Range based versions of the C++11 functions
+/// -- Range based versions of the C++11 functions
 ///
 
 /// \fn is_increasing ( ForwardIterator first, ForwardIterator last )

@@ -22,18 +22,18 @@ namespace ba = boost::algorithm;
 
 template <typename Container>
 typename Container::iterator offset_to_iter ( Container &v, int offset ) {
-	typename Container::iterator retval;
-	
-	if ( offset >= 0 ) {
-		retval = v.begin ();
-		std::advance ( retval, offset );
-		}
-	else {
-		retval = v.end ();
-		std::advance ( retval, offset + 1 );
-		}
-	return retval;
-	}
+    typename Container::iterator retval;
+    
+    if ( offset >= 0 ) {
+        retval = v.begin ();
+        std::advance ( retval, offset );
+        }
+    else {
+        retval = v.end ();
+        std::advance ( retval, offset + 1 );
+        }
+    return retval;
+    }
 
 template <typename Container, typename Predicate>
 void test_sequence ( Container &v, Predicate comp, int expected ) {
@@ -79,7 +79,7 @@ void test_sequence1 () {
     test_sequence ( v, less_than<int>(10), 5 );
     test_sequence ( v, less_than<int>(99), -1 );   // all elements satisfy 
 
-//	With bidirectional iterators.
+//  With bidirectional iterators.
     std::list<int> l;
     for ( int i = 5; i < 15; ++i )
         l.push_back ( i );

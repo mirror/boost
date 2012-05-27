@@ -40,19 +40,19 @@ void test_sequence1 () {
     v.clear ();
     for ( int i = 5; i < 15; ++i )
         v.push_back ( i );
-    BOOST_CHECK ( ba::is_partitioned ( v, less_than<int>(3)));		// no elements
-    BOOST_CHECK ( ba::is_partitioned ( v, less_than<int>(6)));		// only the first element
-    BOOST_CHECK ( ba::is_partitioned ( v, less_than<int>(10)));	// in the middle somewhere
-    BOOST_CHECK ( ba::is_partitioned ( v, less_than<int>(99)));	// all elements satisfy 
+    BOOST_CHECK ( ba::is_partitioned ( v, less_than<int>(3)));      // no elements
+    BOOST_CHECK ( ba::is_partitioned ( v, less_than<int>(6)));      // only the first element
+    BOOST_CHECK ( ba::is_partitioned ( v, less_than<int>(10))); // in the middle somewhere
+    BOOST_CHECK ( ba::is_partitioned ( v, less_than<int>(99))); // all elements satisfy 
 
-//	With bidirectional iterators.
+//  With bidirectional iterators.
     std::list<int> l;
     for ( int i = 5; i < 15; ++i )
         l.push_back ( i );
-    BOOST_CHECK ( ba::is_partitioned ( l.begin (), l.end (), less_than<int>(3)));		// no elements
-    BOOST_CHECK ( ba::is_partitioned ( l.begin (), l.end (), less_than<int>(6)));		// only the first element
-    BOOST_CHECK ( ba::is_partitioned ( l.begin (), l.end (), less_than<int>(10)));	// in the middle somewhere
-    BOOST_CHECK ( ba::is_partitioned ( l.begin (), l.end (), less_than<int>(99)));		// all elements satisfy 
+    BOOST_CHECK ( ba::is_partitioned ( l.begin (), l.end (), less_than<int>(3)));       // no elements
+    BOOST_CHECK ( ba::is_partitioned ( l.begin (), l.end (), less_than<int>(6)));       // only the first element
+    BOOST_CHECK ( ba::is_partitioned ( l.begin (), l.end (), less_than<int>(10)));  // in the middle somewhere
+    BOOST_CHECK ( ba::is_partitioned ( l.begin (), l.end (), less_than<int>(99)));      // all elements satisfy 
     }
 
 

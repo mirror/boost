@@ -36,24 +36,24 @@ test_ordered(void)
           int nonConstantArray[] = { 1, 2, 2, 2, 5 };
     const int inOrderUntilTheEnd [] = { 0, 1, 2, 3, 4, 5, 6, 7, 6 };
 
-//	Begin/end checks
-	BOOST_CHECK (  ba::is_sorted (b_e(strictlyIncreasingValues)));
-	BOOST_CHECK ( !ba::is_sorted (b_e(randomValues)));
-	BOOST_CHECK (  ba::is_sorted (b_e(strictlyIncreasingValues), std::less<int>()));
-	BOOST_CHECK ( !ba::is_sorted (b_e(strictlyIncreasingValues), std::greater<int>()));
+//  Begin/end checks
+    BOOST_CHECK (  ba::is_sorted (b_e(strictlyIncreasingValues)));
+    BOOST_CHECK ( !ba::is_sorted (b_e(randomValues)));
+    BOOST_CHECK (  ba::is_sorted (b_e(strictlyIncreasingValues), std::less<int>()));
+    BOOST_CHECK ( !ba::is_sorted (b_e(strictlyIncreasingValues), std::greater<int>()));
 
-//	Range checks
-	BOOST_CHECK (  ba::is_sorted (a_range(strictlyIncreasingValues)));
-	BOOST_CHECK ( !ba::is_sorted (a_range(randomValues)));
-	BOOST_CHECK (  ba::is_sorted (a_range(strictlyIncreasingValues), std::less<int>()));
-	BOOST_CHECK ( !ba::is_sorted (a_range(strictlyIncreasingValues), std::greater<int>()));
+//  Range checks
+    BOOST_CHECK (  ba::is_sorted (a_range(strictlyIncreasingValues)));
+    BOOST_CHECK ( !ba::is_sorted (a_range(randomValues)));
+    BOOST_CHECK (  ba::is_sorted (a_range(strictlyIncreasingValues), std::less<int>()));
+    BOOST_CHECK ( !ba::is_sorted (a_range(strictlyIncreasingValues), std::greater<int>()));
 
     BOOST_CHECK (  ba::is_sorted_until ( b_e(strictlyIncreasingValues))                       ==      a_end(strictlyIncreasingValues));
     BOOST_CHECK (  ba::is_sorted_until ( b_e(strictlyIncreasingValues),     std::less<int>()) ==      a_end(strictlyIncreasingValues));
     BOOST_CHECK (  ba::is_sorted_until ( a_range(strictlyIncreasingValues))                   == boost::end(strictlyIncreasingValues));
     BOOST_CHECK (  ba::is_sorted_until ( a_range(strictlyIncreasingValues), std::less<int>()) == boost::end(strictlyIncreasingValues));
 
-//	Check for const and non-const arrays
+//  Check for const and non-const arrays
     BOOST_CHECK ( ba::is_sorted_until ( b_e(constantValues),       std::less<int>()) !=      a_end(constantValues));
     BOOST_CHECK ( ba::is_sorted_until ( a_range(constantValues),   std::less<int>()) != boost::end(constantValues));
     BOOST_CHECK ( ba::is_sorted_until ( b_e(nonConstantArray),     std::less<int>()) !=      a_end(nonConstantArray));
@@ -149,6 +149,6 @@ test_increasing_decreasing(void)
 int test_main( int, char * [] )
 {
     test_ordered ();
-	test_increasing_decreasing ();
+    test_increasing_decreasing ();
     return 0;
 }
