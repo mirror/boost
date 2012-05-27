@@ -144,19 +144,22 @@ void test_mapped_container(Container &)
 	typedef BOOST_DEDUCED_TYPENAME Container::  data_type   data_type ;
 	typedef BOOST_DEDUCED_TYPENAME Container::mapped_type mapped_type ;
 
-    typedef boost::is_same< key_type
-	                      , BOOST_DEDUCED_TYPENAME value_type::first_type
-                          >::type test_key_type;
+    typedef BOOST_DEDUCED_TYPENAME 
+        boost::is_same< key_type
+	                  , BOOST_DEDUCED_TYPENAME value_type::first_type
+                      >::type test_key_type;
     BOOST_STATIC_ASSERT(test_key_type::value);
 
-	typedef boost::is_same< data_type
-	                      , BOOST_DEDUCED_TYPENAME value_type::second_type
-                          >::type test_data_type;
+	typedef BOOST_DEDUCED_TYPENAME
+        boost::is_same< data_type
+	                  , BOOST_DEDUCED_TYPENAME value_type::second_type
+                      >::type test_data_type;
     BOOST_STATIC_ASSERT(test_data_type::value);
 
-	typedef boost::is_same< mapped_type
-	                      , BOOST_DEDUCED_TYPENAME value_type::second_type
-                          >::type test_mapped_type;
+	typedef BOOST_DEDUCED_TYPENAME
+        boost::is_same< mapped_type
+	                  , BOOST_DEDUCED_TYPENAME value_type::second_type
+                      >::type test_mapped_type;
     BOOST_STATIC_ASSERT(test_mapped_type::value);
 }
 
