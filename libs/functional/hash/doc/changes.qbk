@@ -129,5 +129,7 @@
   Avoid gcc's `-Wfloat-equal` warning.
 * [@http://svn.boost.org/trac/boost/ticket/6806 Ticket 6806]:
   Support `std::array` and `std::tuple` when available.
+* Add deprecation warning to the long deprecated
+  `boost/functional/detail/container_fwd.hpp`.
 
 [endsect]
