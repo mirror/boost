@@ -14,8 +14,6 @@
 
 void f(int, float){}
 
-bool is_true ( int ) { return true; }
-
 namespace boost_no_cxx11_hdr_functional {
 
 int test()
@@ -38,23 +36,6 @@ int test()
    std::bind(f, std::placeholders::_1, 0.0f);
 
    std::function<void(int, float)> fun(f);
-   
-// make sure the C++11 functions are there too
-   int arr [5];
-   
-   std::all_of ( arr, arr+5, 1 );
-   std::any_of ( arr, arr+5, 1 );
-   std::copy_if ( arr, arr+5, arr, is_true );
-   std::copy_n ( arr, 3, arr );
-   std::find_if_not ( arr, arr+5, is_true );
-   std::iota ( arr, arr+5, 0 );
-   std::is_partitioned ( arr, arr + 5, is_true );
-   std::is_permutation ( arr, arr + 5, is_true );
-   std::is_sorted ( arr, arr+5 );
-   std::is_sorted_until ( arr, arr+5 );
-   std::none_of ( arr, arr+5, 1 );
-   std::partition_copy ( arr, arr+5, arr, arr, is_true );
-   std::partition_point ( arr, arr + 5, is_true );
 
    return 0;
 }
