@@ -21,7 +21,7 @@
 // options requested by configure --enable-test
 #define BOOST_HAS_PTHREADS
 #define BOOST_HAS_THREADS
-#undef BOOST_HAS_PTHREAD_YIELD
+#define BOOST_HAS_PTHREAD_YIELD
 #define BOOST_HAS_NRVO
 #define BOOST_HAS_LONG_LONG
 
