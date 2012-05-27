@@ -50,6 +50,7 @@ test-suite functional/hash
         [ compile-fail implicit_fail_test.cpp : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
         [ run hash_no_ext_macro_1.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
         [ run hash_no_ext_macro_2.cpp : : : <define>BOOST_HASH_NO_IMPLICIT_CASTS ]
+        [ compile deprecated_container_fwd.cpp ]
     ;
 
 test-suite functional/hash_implicit_casts
