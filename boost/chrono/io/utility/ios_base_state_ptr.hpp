@@ -13,7 +13,6 @@
 #include <ios>
 #include <boost/assert.hpp>
 
-
 /**
  *
 
@@ -26,38 +25,47 @@ namespace boost
     namespace detail
     {
 
-      template<typename T>
+      /**
+       * xalloc key holder.
+       */
+      template <typename T>
       struct xalloc_key_holder
       {
-          static int value;
-          static bool initialized;
+        static int value; //< the xalloc value associated to T.
+        static bool initialized; //< whether the value has been initialized or not.
       };
 
-      template<typename T>
+      template <typename T>
       int xalloc_key_holder<T>::value = 0;
 
-      template<typename T>
+      template <typename T>
       bool xalloc_key_holder<T>::initialized = false;
 
-      template<typename T>
-      struct xalloc_key_initializer_t
-      {
-          xalloc_key_initializer_t()
-          {
-              if (!xalloc_key_holder<T>::initialized)
-              {
-                  xalloc_key_holder<T>::value = std::ios_base::xalloc();
-                  xalloc_key_holder<T>::initialized = true;
-              }
-          }
-      };
     }
 
-
+    /**
+     * xalloc key initialiazer.
+     *
+     * Declare a static variable of this type to ensure that the xalloc_key_holder<T> is initialized correctly.
+     */
+    template <typename T>
+    struct xalloc_key_initializer
+    {
+      xalloc_key_initializer()
+      {
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
+        if (!detail::xalloc_key_holder<T>::initialized)
+        {
+          detail::xalloc_key_holder<T>::value = std::ios_base::xalloc();
+          detail::xalloc_key_holder<T>::initialized = true;
+          std::cout << __FILE__ << ":" << __LINE__ << " " << detail::xalloc_key_holder<T>::value <<std::endl;
+        }
+      }
+    };
     /**
      * @c ios_state_ptr is a smart pointer to a ios_base specific state.
      */
-    template<typename T>
+    template <typename Final, typename T>
     class ios_state_ptr
     {
     public:
@@ -73,16 +81,21 @@ namespace boost
       explicit ios_state_ptr(std::ios_base& ios) :
         ios_(ios)
       {
+        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
+
       }
+      /**
+       * Nothing to do as xalloc index can not be removed.
+       */
       ~ios_state_ptr()
       {
       }
 
       /**
-       * @Effects Allocates the index if not already done
+       * @Effects Allocates the index if not already done.
        * Registers the callback responsible of maintaining the state pointer coherency, if not already done.
        * Retrieves the associated ios pointer
-       * @return the retrieved pointer.
+       * @return the retrieved pointer statically casted to const.
        */
       T const* get() const BOOST_NOEXCEPT
       {
@@ -94,6 +107,12 @@ namespace boost
         }
         return static_cast<const T*> (pw);
       }
+      /**
+       * @Effects Allocates the index if not already done.
+       * Registers the callback responsible of maintaining the state pointer coherency, if not already done.
+       * Retrieves the associated ios pointer
+       * @return the retrieved pointer.
+       */
       T * get() BOOST_NOEXCEPT
       {
         register_once(index(), ios_);
@@ -108,10 +127,14 @@ namespace boost
        * @Effects as if @c return get();
        * @return the retrieved pointer.
        */
-      T * operator->() BOOST_NOEXCEPT
+      T * operator->()BOOST_NOEXCEPT
       {
         return get();
       }
+      /**
+       * @Effects as if @c return get();
+       * @return the retrieved pointer.
+       */
       T const * operator->() const BOOST_NOEXCEPT
       {
         return get();
@@ -126,6 +149,11 @@ namespace boost
       {
         return *get();
       }
+      /**
+       * @Effects as if @c return *get();
+       * @return a reference to the retrieved state.
+       * @Remark The behavior is undefined if @c get()==0.
+       */
       T const & operator *() const BOOST_NOEXCEPT
       {
         return *get();
@@ -135,7 +163,7 @@ namespace boost
        * @Effects reset the current pointer after storing in a temporary variable the pointer to the current state.
        * @return the stored state pointer.
        */
-      T * release()BOOST_NOEXCEPT
+      T * release() BOOST_NOEXCEPT
       {
         T const* f = get();
         reset();
@@ -147,7 +175,7 @@ namespace boost
        * @param new_ptr the new pointer.
        * @Effects deletes the current state and replace it with the new one.
        */
-      void reset(T* new_ptr=0) BOOST_NOEXCEPT
+      void reset(T* new_ptr = 0)BOOST_NOEXCEPT
       {
         register_once(index(), ios_);
         void*& pw = ios_.pword(index());
@@ -155,16 +183,27 @@ namespace boost
         pw = new_ptr;
       }
 
-      //explicit
-      /**
-       * Explicit conversion to bool.
-       */
-      operator bool() const BOOST_NOEXCEPT
-      {
-        return get()!=0;
-      }
+#if defined(BOOST_NO_EXPLICIT_CONVERSION_OPERATORS)
+        typedef T* (ios_state_ptr::*bool_type)();
+        operator bool_type() const BOOST_NOEXCEPT
+        {
+            return (get()!=0)?&ios_state_ptr::release:0;
+        }
+        bool operator!() const BOOST_NOEXCEPT
+        {
+          return (get()==0)?&ios_state_ptr::release:0;
+        }
+#else
+        /**
+         * Explicit conversion to bool.
+         */
+        explicit operator bool() const BOOST_NOEXCEPT
+        {
+          return get()!=0;
+        }
+#endif
 
-      std::ios_base& getios() BOOST_NOEXCEPT
+      std::ios_base& getios()BOOST_NOEXCEPT
       {
         return ios_;
       }
@@ -172,10 +211,16 @@ namespace boost
       {
         return ios_;
       }
+      /**
+       * Implicit conversion to the ios_base
+       */
       operator std::ios_base&() BOOST_NOEXCEPT
       {
         return ios_;
       }
+      /**
+       * Implicit conversion to the ios_base const
+       */
       operator std::ios_base&() const BOOST_NOEXCEPT
       {
         return ios_;
@@ -222,7 +267,7 @@ namespace boost
 
       static inline int index()
       {
-        return detail::xalloc_key_holder<ios_state_ptr<T> >::value;
+        return detail::xalloc_key_holder<Final>::value;
       }
 
       static inline void register_once(int indx, std::ios_base& ios)
@@ -235,25 +280,29 @@ namespace boost
         }
       }
 
-
     protected:
       std::ios_base& ios_;
+      //static detail::xalloc_key_initializer<Final> xalloc_key_initializer_;
+
     };
+    //template <typename Final, typename T>
+    //detail::xalloc_key_initializer<Final> ios_state_ptr<Final,T>::xalloc_key_initializer_;
+
 
     /**
      * @c ios_state_not_null_ptr is a non null variant of @c ios_state_ptr.
      * @tparm T
-     * @Requires Must be DefaultConstructible and HeapAllocatable
+     * @Requires @c T must be @c DefaultConstructible and @c HeapAllocatable
      */
-    template<typename T>
-    class ios_state_not_null_ptr : public ios_state_ptr<T>
+    template <typename Final, typename T>
+    class ios_state_not_null_ptr: public ios_state_ptr<Final, T>
     {
-      typedef ios_state_ptr<T> base_type;
+      typedef ios_state_ptr<Final, T> base_type;
     public:
       explicit ios_state_not_null_ptr(std::ios_base& ios) :
-      ios_state_ptr<T>(ios)
+      base_type(ios)
       {
-        if (this->get()==0)
+        if (this->get() == 0)
         {
           this->base_type::reset(new T());
         }
@@ -262,7 +311,7 @@ namespace boost
       {
       }
 
-      void reset(T* new_value)BOOST_NOEXCEPT
+      void reset(T* new_value) BOOST_NOEXCEPT
       {
         BOOST_ASSERT(new_value!=0);
         this->base_type::reset(new_value);
@@ -270,60 +319,92 @@ namespace boost
 
     };
 
-
-/**
- *
- *
- *
- */
-    template<typename Base>
+    /**
+     * This class is useful to associate some flags to an std::ios_base.
+     */
+    template <typename Final>
     class ios_flags
     {
     public:
+      /**
+       *
+       * @param ios the associated std::ios_base.
+       * @Postcondition <c>flags()==0</c>
+       */
       explicit ios_flags(std::ios_base& ios) :
         ios_(ios)
       {
       }
-      //ios_state_ptr(std::ios_base ios, void (*cleanup_function)(T*));
       ~ios_flags()
       {
       }
 
+      /**
+       * @Returns The format control information.
+       */
       long flags() const BOOST_NOEXCEPT
       {
         return value();
       }
-      long flags(long v) BOOST_NOEXCEPT
+
+      /**
+       * @param v the new bit mask.
+       * @Postcondition <c>v == flags()</c>.
+       * @Returns The previous value of @c flags().
+       */
+      long flags(long v)BOOST_NOEXCEPT
       {
         long tmp = flags();
         ref() = v;
         return tmp;
       }
 
+      /**
+       * @param v the new value
+       * @Effects: Sets @c v in @c flags().
+       * @Returns: The previous value of @c flags().
+       */
       long setf(long v)
       {
-          long tmp = value();
-          ref() |= v;
-          return tmp;
+        long tmp = value();
+        ref() |= v;
+        return tmp;
       }
 
+      /**
+       * @param mask the bit mask to clear.
+       * @Effects: Clears @c mask in @c flags().
+       */
       void unsetf(long mask)
       {
-          ref() &= ~mask;
+        ref() &= ~mask;
       }
 
+      /**
+       *
+       * @param v
+       * @param mask
+       * @Effects: Clears @c mask in @c flags(), sets <c>v & mask</c> in @c flags().
+       * @Returns: The previous value of flags().
+       */
       long setf(long v, long mask)
       {
-          long tmp = value();
-          unsetf(mask);
-          ref() |= v & mask;
-          return tmp;
+        long tmp = value();
+        unsetf(mask);
+        ref() |= v & mask;
+        return tmp;
       }
 
-      operator std::ios_base&() BOOST_NOEXCEPT
+      /**
+       * implicit conversion to the @c ios_base
+       */
+      operator std::ios_base&()BOOST_NOEXCEPT
       {
         return ios_;
       }
+      /**
+       * implicit conversion to the @c ios_base const
+       */
       operator std::ios_base const&() const BOOST_NOEXCEPT
       {
         return ios_;
@@ -333,17 +414,21 @@ namespace boost
       {
         return ios_.iword(index());
       }
-      long& ref() BOOST_NOEXCEPT
+      long& ref()BOOST_NOEXCEPT
       {
         return ios_.iword(index());
       }
       static inline int index()
       {
-        return detail::xalloc_key_holder<ios_flags<Base> >::value;
+        return detail::xalloc_key_holder<Final>::value;
       }
 
       std::ios_base& ios_;
+      //static detail::xalloc_key_initializer<Final> xalloc_key_initializer_;
+
     };
+    //template <typename Final>
+    //detail::xalloc_key_initializer<Final> ios_flags<Final>::xalloc_key_initializer_;
 
   } // namespace chrono
 } // namespace boost

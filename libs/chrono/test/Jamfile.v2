@@ -480,3 +480,8 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run win32_test.cpp  ]
         ;
 
+    test-suite "ts"
+        :
+        #[ chrono-run test_xx.cpp  ]
+        ;
+

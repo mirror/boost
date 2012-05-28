@@ -598,7 +598,8 @@ The simple way is to decompress (or checkout from SVN) the files in your BOOST_R
 [heading Building Boost.Chrono ]
 [/=================================]
 
-__Boost_Chrono__ can be configured as a header-only library. When __BOOST_CHRONO_HEADER_ONLY is defined the Boost.Chrono is a header-only library. Otherwise is not a header only library and you need to compile it and build the library before use, for example using:
+__Boost_Chrono__ can be configured as a header-only library. When __BOOST_CHRONO_HEADER_ONLY is defined the Boost.Chrono is a header-only library. 
+Otherwise is not a header only library and you need to compile it and build the library before use, for example using:
 
     bjam libs/chrono/build
 
@@ -1456,7 +1457,7 @@ that could result in
 
     2011-09-15 14:36:59.325132 -0400
 
-Note that `system_clock::time_point` itself is neither UTC, nor the local time. However in practice, `system_clock::time_point` is a count of ticks beyond some epoch which is synchronized with UTC. So as a mobile computer moves across time zones, the time zone traversal does not impact the value of a `system_clock::time_point` produced by `system_clock::now()v. And it is only in formatting it for human consumption that one can choose UTC or the local time zone. C and POSIX treat `time_t` just as __Boost_Chrono treats `system_clock::time_point`:
+Note that `system_clock::time_point` itself is neither UTC, nor the local time. However in practice, `system_clock::time_point` is a count of ticks beyond some epoch which is synchronized with UTC. So as a mobile computer moves across time zones, the time zone traversal does not impact the value of a `system_clock::time_point` produced by `system_clock::now()`. And it is only in formatting it for human consumption that one can choose UTC or the local time zone. C and POSIX treat `time_t` just as __Boost_Chrono treats `system_clock::time_point`:
 
     tm* gmtime(const time_t* timer) -> UTC
     tm* localtime(const time_t* timer) -> local time
