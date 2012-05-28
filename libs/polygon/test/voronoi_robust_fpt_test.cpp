@@ -282,7 +282,7 @@ BOOST_AUTO_TEST_CASE(robust_sqrt_expr_test8) {
   int32 A[4] = {1000, 3000, -2000, -500};
   int32 B[4] = {400, 100, 900, 1600};
   eint512 AA[4], BB[4];
-  for (size_t i = 0; i < 4; ++i) {
+  for (std::size_t i = 0; i < 4; ++i) {
     AA[i] = A[i];
     BB[i] = B[i];
   }
@@ -292,20 +292,20 @@ BOOST_AUTO_TEST_CASE(robust_sqrt_expr_test8) {
 template <typename _int, typename _fpt>
 class sqrt_expr_tester {
 public:
-  static const size_t MX_SQRTS = 4;
+  static const std::size_t MX_SQRTS = 4;
 
   bool run() {
     static boost::mt19937 gen(static_cast<uint32>(time(NULL)));
     bool ret_val = true;
-    for (size_t i = 0; i < MX_SQRTS; ++i) {
+    for (std::size_t i = 0; i < MX_SQRTS; ++i) {
       a[i] = gen() & 1048575;
       int64 temp = gen() & 1048575;
       b[i] = temp * temp;
     }
     uint32 mask = (1 << MX_SQRTS);
-    for (size_t i = 0; i < mask; i++) {
+    for (std::size_t i = 0; i < mask; i++) {
       fpt64 expected_val = 0.0;
-      for (size_t j = 0; j < MX_SQRTS; j++) {
+      for (std::size_t j = 0; j < MX_SQRTS; j++) {
         if (i & (1 << j)) {
           A[j] = a[j];
           B[j] = b[j];

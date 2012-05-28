@@ -68,10 +68,10 @@ struct my_fpt_converter {
     return static_cast<fpt80>(that);
   }
 
-  template <size_t N>
+  template <std::size_t N>
   fpt80 operator()(const typename detail::extended_int<N> &that) const {
     fpt80 result = 0.0;
-    for (size_t i = 1; i <= (std::min)((size_t)3, that.size()); ++i) {
+    for (std::size_t i = 1; i <= (std::min)((std::size_t)3, that.size()); ++i) {
       if (i != 1)
         result *= static_cast<fpt80>(0x100000000ULL);
       result += that.chunks()[that.size() - i];

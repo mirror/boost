@@ -24,30 +24,31 @@ class voronoi_edge;
 
 // Represents Voronoi cell.
 // Data members:
-//   1) pointer to the incident edge;
-//   2) site inside cell;
-//   3) data associated with a cell.
+//   1) pointer to the incident edge
+//   2) site inside cell
+//   3) mutable color member
 // Cell may contain point or segment site inside.
 template <typename T>
 class voronoi_cell {
 public:
   typedef T coordinate_type;
   typedef detail::point_2d<coordinate_type> point_type;
+  typedef std::size_t color_type;
   typedef voronoi_edge<coordinate_type> voronoi_edge_type;
 
   voronoi_cell(const point_type &p1, voronoi_edge_type *edge) :
       point0_(p1),
       point1_(p1),
-      incident_edge_(edge),
-      data_(NULL) {}
+      color_(0),
+      incident_edge_(edge) {}
 
   voronoi_cell(const point_type &p1,
                const point_type &p2,
                voronoi_edge_type *edge) :
       point0_(p1),
       point1_(p2),
-      incident_edge_(edge),
-      data_(NULL) {}
+      color_(0),
+      incident_edge_(edge) {}
 
   // Returns true if the cell contains point site, false else.
   bool contains_point() const { return point0_ == point1_; }
@@ -66,71 +67,64 @@ public:
   // the second endpoint of the segment site else.
   const point_type &point1() const { return point1_; }
 
+  color_type color() const { return color_; }
+  void color(const color_type& color) const { color_ = color; }
+
   voronoi_edge_type *incident_edge() { return incident_edge_; }
   const voronoi_edge_type *incident_edge() const { return incident_edge_; }
   void incident_edge(voronoi_edge_type *e) { incident_edge_ = e; }
 
-#ifndef NO_VORONOI_CELL_DATA
-  void *data() const { return data_; }
-  void data(void *d) const { data_ = d; }
-#endif
-
 private:
   point_type point0_;
   point_type point1_;
+  mutable color_type color_;
   voronoi_edge_type *incident_edge_;
-#ifndef NO_VORONOI_CELL_DATA
-  mutable void *data_;
-#endif
 };
 
 // Represents Voronoi vertex.
 // Data members:
-//   1) vertex point itself;
-//   2) pointer to the incident edge;
-//   3) data associated with vertex.
+//   1) vertex point itself
+//   2) pointer to the incident edge
+//   3) mutable color member
 template <typename T>
 class voronoi_vertex {
 public:
   typedef T coordinate_type;
   typedef detail::point_2d<T> point_type;
+  typedef std::size_t color_type;
   typedef voronoi_edge<coordinate_type> voronoi_edge_type;
 
   voronoi_vertex(const point_type &vertex, voronoi_edge_type *edge) :
       vertex_(vertex),
-      incident_edge_(edge),
-      data_(NULL) {}
+      color_(0),
+      incident_edge_(edge) {}
 
   const point_type &vertex() const { return vertex_; }
 
   bool is_degenerate() const { return incident_edge_ == NULL; }
 
+  color_type color() const { return color_; }
+  void color(const color_type& color) const { color_ = color; }
+
   voronoi_edge_type *incident_edge() { return incident_edge_; }
   const voronoi_edge_type *incident_edge() const { return incident_edge_; }
   void incident_edge(voronoi_edge_type *e) { incident_edge_ = e; }
 
-#ifndef NO_VORONOI_VERTEX_DATA
-  void *data() const { return data_; }
-  void data(void *d) const { data_ = d; }
-#endif
-
 private:
   point_type vertex_;
+  mutable color_type color_;
   voronoi_edge_type *incident_edge_;
-#ifndef NO_VORONOI_VERTEX_DATA
-  mutable void *data_;
-#endif
 };
 
 // Half-edge data structure. Represents Voronoi edge.
 // Data members:
-//   1) pointer to the corresponding cell;
+//   1) pointer to the corresponding cell
 //   2) pointer to the vertex that is the starting
-//      point of the half-edge;
-//   3) pointer to the twin edge;
-//   4) pointer to the CCW next edge;
-//   5) pointer to the CCW prev edge;
-//   6) pointer to data associated with edge.
+//      point of the half-edge
+//   3) pointer to the twin edge
+//   4) pointer to the CCW next edge
+//   5) pointer to the CCW prev edge
+//   6) mutable color member
 template <typename T>
 class voronoi_edge {
 public:
@@ -138,6 +132,7 @@ public:
   typedef voronoi_cell<coordinate_type> voronoi_cell_type;
   typedef voronoi_vertex<coordinate_type> voronoi_vertex_type;
   typedef voronoi_edge<coordinate_type> voronoi_edge_type;
+  typedef std::size_t color_type;
 
   voronoi_edge() :
       cell_(NULL),
@@ -145,7 +140,7 @@ public:
       twin_(NULL),
       next_(NULL),
       prev_(NULL),
-      data_(NULL) {}
+      color_(0) {}
 
   voronoi_cell_type *cell() { return cell_; }
   const voronoi_cell_type *cell() const { return cell_; }
@@ -170,11 +165,6 @@ public:
   voronoi_edge_type *prev() { return prev_; }
   const voronoi_edge_type *prev() const { return prev_; }
   void prev(voronoi_edge_type *e) { prev_ = e; }
-
-#ifndef NO_VORONOI_EDGE_DATA
-  void *data() const { return data_; }
-  void data(void *d) const { data_ = d; }
-#endif
 
   // Returns a pointer to the rotation next edge
   // over the starting point of the half-edge.
@@ -230,15 +220,16 @@ public:
     return true;
   }
 
+  color_type color() const { return color_; }
+  void color(const color_type& color) const { color_ = color; }
+
 private:
   voronoi_cell_type *cell_;
   voronoi_vertex_type *vertex_;
   voronoi_edge_type *twin_;
   voronoi_edge_type *next_;
   voronoi_edge_type *prev_;
-#ifndef NO_VORONOI_EDGE_DATA
-  mutable void *data_;
-#endif
+  mutable color_type color_;
 };
 
 template <typename T>

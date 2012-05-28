@@ -284,12 +284,11 @@ BOOST_AUTO_TEST_CASE(extended_int_test10) {
 BOOST_AUTO_TEST_CASE(extened_int_test11) {
   typedef extended_int<1> eint32;
   typedef extended_int<64> eint2048;
-  eint32 two(2), one(1);
-  eint2048 value(1);
+  eint2048 two(2), value(1);
   for (int i = 0; i < 1024; ++i)
     value = value * two;
   BOOST_CHECK_EQUAL(value.count(), 33);
-  for (size_t i = 1; i < value.size(); ++i)
+  for (std::size_t i = 1; i < value.size(); ++i)
     BOOST_CHECK_EQUAL(value.chunks()[i-1], 0U);
   BOOST_CHECK_EQUAL(value.chunks()[32], 1U);
 }

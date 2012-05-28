@@ -151,7 +151,7 @@ protected:
         if (primary_edges_only_ && !it->is_primary()) {
           continue;
         }
-        if (internal_edges_only_ && it->data()) {
+        if (internal_edges_only_ && it->color()) {
           continue;
         }
         std::vector<point_type> vec;
@@ -191,11 +191,13 @@ private:
   typedef VD::const_vertex_iterator const_vertex_iterator;
   typedef VD::const_edge_iterator const_edge_iterator;
 
+  static const std::size_t VISITED = 1;
+
   void remove_exterior(const VD::edge_type* edge) {
-    if (edge->data())
+    if (edge->color())
       return;
-    edge->data(&edge);
-    edge->twin()->data(&edge);
+    edge->color(VISITED);
+    edge->twin()->color(VISITED);
     const voronoi_diagram<double>::vertex_type* v = edge->vertex1();
     if (v == NULL || !edge->is_primary())
       return;

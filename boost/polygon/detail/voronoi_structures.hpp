@@ -185,7 +185,7 @@ public:
     return *this;
   }
 
-  size_t index() const {
+  std::size_t index() const {
     return site_index_ >> 2;
   }
 

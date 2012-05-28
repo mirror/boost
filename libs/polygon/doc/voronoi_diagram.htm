@@ -6,6 +6,8 @@
 
 
 
+
+
   
   <meta http-equiv="Content-Language" content="en-us">
 
@@ -23,7 +25,7 @@
 
   <tbody>
     <tr>
-      <td style="background-color: rgb(238, 238, 238);" valign="top" nowrap="1">
+      <td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top">
       <div style="padding: 5px;" align="center"> <img src="images/boost.png" border="0" height="86" width="277"><a title="www.boost.org home page" tabindex="2" style="border: medium none ;" href="http://www.boost.org/"> </a></div>
       <div style="margin: 5px;">
       <h3 class="navbar">Contents</h3>
@@ -473,20 +475,18 @@ pointer of the edge.<br>
             </td>
           </tr>
           <tr>
-            <td style="font-family: Courier New,Courier,monospace;">void
-*data() const<br>
+            <td style="font-family: Courier New,Courier,monospace;">size_t color() const<br>
             </td>
-            <td>Returns the pointer to the
-data associated with the edge.<br>
+            <td>Returns the color value.<br>
             </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">void
-data(void *d) const<br>
+data(size_t color) const<br>
             </td>
-            <td>Sets the data pointer of
+            <td>Sets the color of
 the edge.<br>
-This allows the user to associate any data type with the edge.<br>
+Allows to execut graph algorithms and associate data.<br>
             </td>
           </tr>
           <tr>
@@ -560,11 +560,7 @@ goes through the endpoint of the segment site, else true.<br>
       <span style="font-family: Courier New,Courier,monospace;"><br>
       </span>All
 the above methods have O(1) complexity. The size of
-the Voronoi edge structure is equal to: 6 * sizeof(void *). It is
-possible to disable the data member of the Voronoi edge data structure
-during the compile time using the following directive:<br>
-      <br>
-      <span style="font-family: Courier New,Courier,monospace;">#define NO_VORONOI_EDGE_DATA</span><br>
+the Voronoi edge structure is equal to: 5 * sizeof(void *) + sizeof(size_t).<span style="font-family: Courier New,Courier,monospace;"></span><br>
       <h2>Member Types</h2>
 
       <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
@@ -592,7 +588,13 @@ during the compile time using the following directive:<br>
             </td>
             <td>Voronoi edge type.<br>
             </td>
+          </tr><tr>
+            <td style="vertical-align: top;">color_type<br>
+            </td>
+            <td style="vertical-align: top;">Color type.<br>
+            </td>
           </tr>
+
         </tbody>
       </table>
       <h1>Voronoi Cell</h1>
@@ -682,19 +684,18 @@ edge pointer of the cell.<br>
             </td>
           </tr>
           <tr>
-            <td style="font-family: Courier New,Courier,monospace;">void
-*data() const<br>
+            <td style="font-family: Courier New,Courier,monospace;">size_t color() const<br>
             </td>
-            <td>Returns the pointer to the
-data associated with the cell.</td>
+            <td>Returns the color associated with the cell.</td>
           </tr>
           <tr>
-            <td style="font-family: Courier New,Courier,monospace;">void
-data(void *d) const<br>
+            <td style="font-family: Courier New,Courier,monospace;">void color(size_t color) const<br>
             </td>
-            <td>Sets the data pointer of
+            <td>Sets the color of
 the cell.<br>
-This allows the user to associate any data type with the cell.</td>
+
+Allows to execut graph algorithms and associate data.<br>
+</td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">bool
@@ -719,13 +720,7 @@ Could happen if a few input segments share a common endpoint.</td>
       </table>
       <span style="font-family: Courier New,Courier,monospace;"><br>
       </span>All the above methods have O(1) complexity. The size of
-the Voronoi cell structure is equal to: 2 * sizeof(void *) + 4 *
-sizeof(coordinate_type). It is possible to disable the data member of the Voronoi cell data
-structure during the compile time using the following directive:<br>
-
-      <br>
-
-      <span style="font-family: Courier New,Courier,monospace;">#define NO_VORONOI_CELL_DATA</span>
+the Voronoi cell structure is equal to: sizeof(void *) + sizeof(size_t) + 4 * sizeof(coordinate_type).<span style="font-family: Courier New,Courier,monospace;"></span>
       <h2>Member Types</h2>
 
 
@@ -744,6 +739,12 @@ structure during the compile time using the following directive:<br>
             </td>
           </tr>
           <tr>
+            <td style="vertical-align: top;">color_type<br>
+            </td>
+            <td style="vertical-align: top;">Color type.<br>
+            </td>
+          </tr>
+<tr>
             <td>voronoi_edge_type<br>
             </td>
             <td>Voronoi edge type.<br>
@@ -827,31 +828,23 @@ pointer.<br>
             </td>
           </tr>
           <tr>
-            <td style="font-family: Courier New,Courier,monospace;">void
-*data() const<br>
+            <td style="font-family: Courier New,Courier,monospace;">size_t color() const<br>
             </td>
-            <td>Returns the pointer to the
-data associated with the vertex.</td>
+            <td>Returns the color associated with the vertex.</td>
           </tr>
           <tr>
-            <td style="font-family: Courier New,Courier,monospace;">void
-data(void *d) const<br>
+            <td style="font-family: Courier New,Courier,monospace;">void color(size_t color) const<br>
             </td>
-            <td>Sets the data pointer of
+            <td>Sets the color of
 the cell.<br>
-This allows the user to associate any data type with the vertex.</td>
+Allows to execut graph algorithms and associate data.</td>
           </tr>
         </tbody>
       </table>
       <span style="font-family: Courier New,Courier,monospace;"><br>
       </span>All the above methods have O(1) complexity. The size of
-the Voronoi vertex structure is equal to: 2 * sizeof(void *) + 2 *
-sizeof(coordinate_type). It is possible to disable the data member of the Voronoi vertex data
-structure during the compile time using the following directive:<br>
-
-      <br>
-
-      <span style="font-family: Courier New,Courier,monospace;">#define NO_VORONOI_VERTEX_DATA</span>
+the Voronoi vertex structure is equal to: sizeof(void *) + sizeof(size_t) + 2 *
+sizeof(coordinate_type).<span style="font-family: Courier New,Courier,monospace;"></span>
       <h2>Member Types</h2>
       <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
         <tbody>
@@ -868,6 +861,12 @@ structure during the compile time using the following directive:<br>
             </td>
           </tr>
           <tr>
+            <td style="vertical-align: top;">color_type<br>
+            </td>
+            <td style="vertical-align: top;">Color type.<br>
+            </td>
+          </tr>
+<tr>
             <td>voronoi_edge_type<br>
             </td>
             <td>Voronoi edge type.<br>
@@ -963,7 +962,7 @@ This is used to unite nearby Voronoi vertices.<br>
       </td>
     </tr>
     <tr>
-      <td style="background-color: rgb(238, 238, 238);" valign="top" nowrap="1">&nbsp;</td>
+      <td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top">&nbsp;</td>
       <td style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" valign="top" width="100%">
       <table class="docinfo" id="table2" frame="void" rules="none">
         <colgroup> <col class="docinfo-name"><col class="docinfo-content"> </colgroup> <tbody valign="top">

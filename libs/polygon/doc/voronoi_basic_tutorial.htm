@@ -8,6 +8,7 @@
 
 
 
+
   
   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>Voronoi Basic Tutorial</title><meta http-equiv="content-type" content="text/html; charset=utf-8"></head><body>
 <h1>Voronoi Basic Tutorial<br>
@@ -213,37 +214,22 @@ edges/vertices/cells.</li>
 We will consider the first example and will associate the total number
 of incident edges with each cell.<br>
 
-Note: Each Voronoi primitive contains mutable pointer to the void* type,
-that allows to associate any type of data with it.<br>
+Note: Each Voronoi primitive contains mutable color member,
+that allows to use it for the graph algorithms or associate user data via array indices.<br>
 
-<br>
+<br style="font-family: Courier New,Courier,monospace;">
 
-<span style="font-family: Courier New,Courier,monospace;">std::vector&lt;int&gt;
-counts;</span><br>
-
-<span style="font-family: Courier New,Courier,monospace;">// This is
-required as reallocation of underlying vector will invalidate all the
-pointers.<br>
-counts.reserve(vd.num_cells());<br>
-for (voronoi_diagram&lt;double&gt;::const_cell_iterator it =
-vd.cells().begin();<br>
-&nbsp;&nbsp;&nbsp;&nbsp; it != vd.cells().end(); ++it) {<br>
-&nbsp; const voronoi_diagram&lt;double&gt;::cell_type &amp;cell = *it;<br>
-&nbsp; const voronoi_diagram&lt;double&gt;::edge_type *edge =
-cell.incident_edge();<br>
-&nbsp; int count = 0;<br>
-&nbsp; do {<br>
-&nbsp;&nbsp;&nbsp; ++count;<br>
-&nbsp;&nbsp;&nbsp; edge = edge-&gt;next();<br>
-&nbsp; } while (edge != cell.incident_edge());<br>
-&nbsp; counts.push_back(count);<br>
-&nbsp; cell.data(&amp;counts.back());<br>
-}</span><span style="font-family: Courier New,Courier,monospace;"><br>
-</span><br>
-
-Note: In the example above we could not use count variable
-without the vector, because the pointer to it will become invalid as soon as
-we leave the scope of the enclosing for-loop.<br>
+<span style="font-family: Courier New,Courier,monospace;">for (voronoi_diagram&lt;double&gt;::const_cell_iterator it = vd.cells().begin();</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp; it != vd.cells().end(); ++it) {</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp; const voronoi_diagram&lt;double&gt;::cell_type &amp;cell = *it;</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp; const voronoi_diagram&lt;double&gt;::edge_type *edge = cell.incident_edge();</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp; std::size_t count = 0;</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp; do {</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp; ++count;</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp; edge = edge-&gt;next();</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp; } while (edge != cell.incident_edge());</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">&nbsp; cell.color(count);</span><br style="font-family: Courier New,Courier,monospace;">
+<span style="font-family: Courier New,Courier,monospace;">}</span><br>
 
 <h2>Rendering Voronoi Diagram</h2>
 
@@ -291,31 +277,26 @@ following implementation:<br>
 
 <br>
 
-<span style="font-family: Courier New,Courier,monospace;">void
-render_diagram(const voronoi_diagram&lt;double&gt; &amp;vd,<br>
+<span style="font-family: Courier New,Courier,monospace;">void render_diagram(const voronoi_diagram&lt;double&gt; &amp;vd,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 const voronoi_utils&lt;double&gt;::brect_type &amp;bbox) {<br>
-&nbsp; int visited = 1;<br>
-&nbsp; for (voronoi_diagram&lt;double&gt;::const_edge_iterator it =
-vd.edges().begin();<br>
+&nbsp; const std::size_t VISITED = 1;<br>
+&nbsp; for (voronoi_diagram&lt;double&gt;::const_edge_iterator it = vd.edges().begin();<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; it != vd.edges().end(); ++it) {<br>
-&nbsp;&nbsp;&nbsp; // We use data pointer to mark visited edges.<br>
-&nbsp;&nbsp;&nbsp; it-&gt;data(&amp;visited);<br>
+&nbsp;&nbsp;&nbsp; // We use color to mark visited edges.<br>
+&nbsp;&nbsp;&nbsp; it-&gt;color(VISITED);<br>
 &nbsp;&nbsp;&nbsp; // Don't render the same edge twice.<br>
-&nbsp;&nbsp;&nbsp; if (it-&gt;twin()-&gt;data()) continue;<br>
+&nbsp;&nbsp;&nbsp; if (it-&gt;twin()-&gt;color()) continue;<br>
 &nbsp;&nbsp;&nbsp; voronoi_utils&lt;double&gt;::point_set_type polyline;<br>
 &nbsp;&nbsp;&nbsp; if (it-&gt;is_linear())<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; voronoi_utils&lt;double&gt;::clip(*it,
-bbox, polyline);<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; voronoi_utils&lt;double&gt;::clip(*it, bbox, polyline);<br>
 &nbsp;&nbsp;&nbsp; else<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; // Parabolic edges are always finite.<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-voronoi_utils&lt;double&gt;::discretize(*it, 1E-1, polyline);<br>
-&nbsp;&nbsp;&nbsp; // Note: discretized edge segments may also lie
-outside of the bbox.<br>
-&nbsp;&nbsp;&nbsp; for (int i = 1; i &lt; polyline.size(); ++i)<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; draw_segment(polyline[i-1].x(),
-polyline[i-1].y(),<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; voronoi_utils&lt;double&gt;::discretize(*it, 1E-1, polyline);<br>
+&nbsp;&nbsp;&nbsp; // Note: discretized edges may also lie outside of the bbox.<br>
+&nbsp;&nbsp;&nbsp; // So user might do additional clipping before rendering each such edge.&nbsp; <br>
+&nbsp;&nbsp;&nbsp; for (std::size_t i = 1; i &lt; polyline.size(); ++i)<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; draw_segment(polyline[i-1].x(), polyline[i-1].y(),<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 polyline[i].x(), polyline[i].y());<br>
 &nbsp; }<br>
@@ -356,5 +337,6 @@ http://www.boost.org/LICENSE_1_0.txt</a>)</td>
     </tr>
   </tbody>
 </table>
+
 
 </body></html>

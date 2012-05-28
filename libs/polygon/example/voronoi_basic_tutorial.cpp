@@ -112,13 +112,13 @@ void draw_segment(double x1, double y1, double x2, double y2) {
 
 void render_diagram(const voronoi_diagram<double> &vd,
                     const voronoi_utils<double>::brect_type &bbox) {
-  int visited = 1;
+  const std::size_t VISITED = 1;
   for (voronoi_diagram<double>::const_edge_iterator it = vd.edges().begin();
        it != vd.edges().end(); ++it) {
-    // We use data pointer to mark visited edges.
-    it->data(&visited);
+    // We use color to mark visited edges.
+    it->color(VISITED);
     // Don't render the same edge twice.
-    if (it->twin()->data()) continue;
+    if (it->twin()->color()) continue;
     voronoi_utils<double>::point_set_type polyline;
     if (it->is_linear())
       voronoi_utils<double>::clip(*it, bbox, polyline);
@@ -127,7 +127,7 @@ void render_diagram(const voronoi_diagram<double> &vd,
       voronoi_utils<double>::discretize(*it, 1E-1, polyline);
     // Note: discretized edges may also lie outside of the bbox.
     // So user might do additional clipping before rendering each such edge.  
-    for (size_t i = 1; i < polyline.size(); ++i)
+    for (std::size_t i = 1; i < polyline.size(); ++i)
       draw_segment(polyline[i-1].x(), polyline[i-1].y(),
                    polyline[i].x(), polyline[i].y());
   }
@@ -155,29 +155,25 @@ int main() {
     printf("\n");
   }
 
-  // Associating User Data with Voronoi Primitives.
-  std::vector<int> counts;
+  // Using color member of the Voronoi primitives..
   {
-    // This is required as reallocation of underlying vector will invalidate all the pointers.
-    counts.reserve(vd.num_cells());
     for (voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin();
          it != vd.cells().end(); ++it) {
       const voronoi_diagram<double>::cell_type &cell = *it;
       const voronoi_diagram<double>::edge_type *edge = cell.incident_edge();
-      int count = 0;
+      std::size_t count = 0;
       do {
         ++count;
         edge = edge->next();
       } while (edge != cell.incident_edge());
-      counts.push_back(count);
-      cell.data(&counts.back());
+      cell.color(count);
     }
 
     // Count the average number of edges.
     double total = 0;
     for (voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin();
          it != vd.cells().end(); ++it) {
-      total += *static_cast<int*>(it->data());
+      total += it->color();
     }
     total /= vd.cells().size();
     printf("The average number of edges per Voronoi cell is equal to: %3.1f\n", total);

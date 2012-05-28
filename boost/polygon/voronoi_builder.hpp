@@ -161,7 +161,7 @@ private:
         site_events_.begin(), site_events_.end()), site_events_.end());
 
     // Index sites.
-    for (size_t cur = 0; cur < site_events_.size(); ++cur)
+    for (std::size_t cur = 0; cur < site_events_.size(); ++cur)
       site_events_[cur].index(cur);
 
     // Init site iterator.

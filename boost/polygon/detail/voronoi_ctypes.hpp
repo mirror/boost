@@ -221,7 +221,7 @@ bool is_zero(const extended_exponent_fpt<_fpt>& that) {
 
 // Very efficient stack allocated big integer class.
 // Supports next set of arithmetic operations: +, -, *.
-template<size_t N>
+template<std::size_t N>
 class extended_int {
 public:
   static const uint64 kUInt64LowMask;
@@ -264,9 +264,7 @@ public:
       this->count_ = -this->count_;
   }
 
-  template <size_t M>
-  extended_int(const extended_int<M>& that) {
-    if (that.size() > N) return;
+  extended_int(const extended_int& that) {
     this->count_ = that.count();
     std::memcpy(this->chunks_, that.chunks(), that.size() * sizeof(uint32));
   }
@@ -300,11 +298,9 @@ public:
     return *this;
   }
 
-  template <size_t M>
-  extended_int& operator=(const extended_int<M>& that) {
-    size_t mx = (std::max)(N, that.size());
+  extended_int& operator=(const extended_int& that) {
     this->count_ = that.count();
-    std::memcpy(this->chunks_, that.chunks(), mx * sizeof(uint32));
+    std::memcpy(this->chunks_, that.chunks(), that.size() * sizeof(uint32));
     return *this;
   }
 
@@ -320,26 +316,23 @@ public:
     return this->count_ == 0;
   }
 
-  template <size_t M>
-  bool operator==(const extended_int<M>& that) const {
+  bool operator==(const extended_int& that) const {
     if (this->count_ != that.count())
       return false;
-    for (size_t i = 0; i < this->size(); ++i)
+    for (std::size_t i = 0; i < this->size(); ++i)
       if (this->chunks_[i] != that.chunks()[i])
         return false;
     return true;
   }
 
-  template <size_t M>
-  bool operator!=(const extended_int<M>& that) const {
+  bool operator!=(const extended_int& that) const {
     return !(*this == that);
   }
 
-  template <size_t M>
-  bool operator<(const extended_int<M>& that) const {
+  bool operator<(const extended_int& that) const {
     if (this->count_ != that.count())
       return this->count_ < that.count();
-    size_t i = this->size();
+    std::size_t i = this->size();
     if (!i)
       return false;
     do {
@@ -350,18 +343,15 @@ public:
     return false;
   }
 
-  template <size_t M>
-  bool operator>(const extended_int<M>& that) const {
+  bool operator>(const extended_int& that) const {
     return that < *this;
   }
 
-  template <size_t M>
-  bool operator<=(const extended_int<M>& that) const {
+  bool operator<=(const extended_int& that) const {
     return !(that < *this);
   }
 
-  template <size_t M>
-  bool operator>=(const extended_int<M>& that) const {
+  bool operator>=(const extended_int& that) const {
     return !(*this < that);
   }
 
@@ -375,15 +365,13 @@ public:
     this->count_ = -this->count_;
   }
 
-  template <size_t M>
-  extended_int<(N>M?N:M)> operator+(const extended_int<M>& that) const {
-    extended_int<(N>M?N:M)> ret_val;
+  extended_int operator+(const extended_int& that) const {
+    extended_int ret_val;
     ret_val.add(*this, that);
     return ret_val;
   }
 
-  template <size_t N1, size_t N2>
-  void add(const extended_int<N1>& e1, const extended_int<N2>& e2) {
+  void add(const extended_int& e1, const extended_int& e2) {
     if (!e1.count()) {
       *this = e2;
       return;
@@ -401,15 +389,13 @@ public:
       this->count_ = -this->count_;
   }
 
-  template <size_t M>
-  extended_int<(N>M?N:M)> operator-(const extended_int<M>& that) const {
-    extended_int<(N>M?N:M)> ret_val;
+  extended_int operator-(const extended_int& that) const {
+    extended_int ret_val;
     ret_val.dif(*this, that);
     return ret_val;
   }
 
-  template <size_t N1, size_t N2>
-  void dif(const extended_int<N1>& e1, const extended_int<N2> &e2) {
+  void dif(const extended_int& e1, const extended_int& e2) {
     if (!e1.count()) {
       *this = e2;
       this->count_ = -this->count_;
@@ -428,25 +414,23 @@ public:
       this->count_ = -this->count_;
   }
 
-  extended_int<N> operator*(int32 that) const {
-    extended_int<N> temp(that);
+  extended_int operator*(int32 that) const {
+    extended_int temp(that);
     return (*this) * temp;
   }
 
-  extended_int<N> operator*(int64 that) const {
-    extended_int<N> temp(that);
+  extended_int operator*(int64 that) const {
+    extended_int temp(that);
     return (*this) * temp;
   }
 
-  template <size_t M>
-  extended_int<(N>M?N:M)> operator*(const extended_int<M>& that) const {
-    extended_int<(N>M?N:M)> ret_val;
+  extended_int operator*(const extended_int& that) const {
+    extended_int ret_val;
     ret_val.mul(*this, that);
     return ret_val;
   }
 
-  template <size_t N1, size_t N2>
-  void mul(const extended_int<N1>& e1, const extended_int<N2>& e2) {
+  void mul(const extended_int& e1, const extended_int& e2) {
     if (!e1.count() || !e2.count()) {
       this->count_ = 0;
       return;
@@ -464,13 +448,13 @@ public:
     return count_;
   }
 
-  size_t size() const {
+  std::size_t size() const {
     return (std::abs)(count_);
   }
 
   std::pair<fpt64, int> p() const {
     std::pair<fpt64, int> ret_val(0, 0);
-    size_t sz = this->size();
+    std::size_t sz = this->size();
     if (!sz) {
       return ret_val;
     } else {
@@ -481,7 +465,7 @@ public:
                         static_cast<fpt64>(0x100000000LL) +
                         static_cast<fpt64>(this->chunks_[0]);
       } else {
-        for (size_t i = 1; i <= 3; ++i) {
+        for (std::size_t i = 1; i <= 3; ++i) {
           ret_val.first *= static_cast<fpt64>(0x100000000LL);
           ret_val.first += static_cast<fpt64>(this->chunks_[sz - i]);
         }
@@ -499,19 +483,20 @@ public:
   }
 
 private:
-  void add(const uint32* c1, size_t sz1, const uint32* c2, size_t sz2) {
+  void add(const uint32* c1, std::size_t sz1,
+           const uint32* c2, std::size_t sz2) {
     if (sz1 < sz2) {
       add(c2, sz2, c1, sz1);
       return;
     }
     this->count_ = sz1;
     uint64 temp = 0;
-    for (size_t i = 0; i < sz2; ++i) {
+    for (std::size_t i = 0; i < sz2; ++i) {
       temp += static_cast<uint64>(c1[i]) + static_cast<uint64>(c2[i]);
       this->chunks_[i] = static_cast<uint32>(temp & kUInt64LowMask);
       temp >>= 32;
     }
-    for (size_t i = sz2; i < sz1; ++i) {
+    for (std::size_t i = sz2; i < sz1; ++i) {
       temp += static_cast<uint64>(c1[i]);
       this->chunks_[i] = static_cast<uint32>(temp & kUInt64LowMask);
       temp >>= 32;
@@ -522,8 +507,9 @@ private:
     }
   }
 
-  void dif(const uint32* c1, size_t sz1,
-           const uint32* c2, size_t sz2, bool rec = false) {
+  void dif(const uint32* c1, std::size_t sz1,
+           const uint32* c2, std::size_t sz2,
+           bool rec = false) {
     if (sz1 < sz2) {
       dif(c2, sz2, c1, sz1, true);
       this->count_ = -this->count_;
@@ -549,11 +535,11 @@ private:
     }
     this->count_ = sz1-1;
     bool flag = false;
-    for (size_t i = 0; i < sz2; ++i) {
+    for (std::size_t i = 0; i < sz2; ++i) {
       this->chunks_[i] = c1[i] - c2[i] - (flag?1:0);
       flag = (c1[i] < c2[i]) || ((c1[i] == c2[i]) && flag);
     }
-    for (size_t i = sz2; i < sz1; ++i) {
+    for (std::size_t i = sz2; i < sz1; ++i) {
       this->chunks_[i] = c1[i] - (flag?1:0);
       flag = !c1[i] && flag;
     }
@@ -561,16 +547,17 @@ private:
       ++this->count_;
   }
 
-  void mul(const uint32* c1, size_t sz1, const uint32* c2, size_t sz2) {
+  void mul(const uint32* c1, std::size_t sz1,
+           const uint32* c2, std::size_t sz2) {
     uint64 cur = 0, nxt, tmp;
     this->count_ = static_cast<int32>((std::min)(N, sz1 + sz2 - 1));
-    for (size_t shift = 0; shift < static_cast<size_t>(this->count_);
+    for (std::size_t shift = 0; shift < static_cast<std::size_t>(this->count_);
          ++shift) {
       nxt = 0;
-      for (size_t first = 0; first <= shift; ++first) {
+      for (std::size_t first = 0; first <= shift; ++first) {
         if (first >= sz1)
           break;
-        size_t second = shift - first;
+        std::size_t second = shift - first;
         if (second >= sz2)
           continue;
         tmp = static_cast<uint64>(c1[first]) * static_cast<uint64>(c2[second]);
@@ -590,22 +577,22 @@ private:
   int32 count_;
 };
 
-template <size_t N>
+template <std::size_t N>
 const uint64 extended_int<N>::kUInt64LowMask = 0x00000000ffffffffULL;
-template <size_t N>
+template <std::size_t N>
 const uint64 extended_int<N>::kUInt64HighMask = 0xffffffff00000000ULL;
 
-template <size_t N>
+template <std::size_t N>
 bool is_pos(const extended_int<N>& that) {
   return that.count() > 0;
 }
 
-template <size_t N>
+template <std::size_t N>
 bool is_neg(const extended_int<N>& that) {
   return that.count() < 0;
 }
 
-template <size_t N>
+template <std::size_t N>
 bool is_zero(const extended_int<N>& that) {
   return !that.count();
 }
@@ -616,7 +603,7 @@ struct type_converter_fpt {
     return static_cast<fpt64>(that);
   }
 
-  template <size_t N>
+  template <std::size_t N>
   fpt64 operator()(const extended_int<N>& that) const {
     return that.d();
   }
@@ -627,7 +614,7 @@ struct type_converter_fpt {
 };
 
 struct type_converter_efpt {
-  template <size_t N>
+  template <std::size_t N>
   extended_exponent_fpt<fpt64> operator()(const extended_int<N>& that) const {
     std::pair<fpt64, int> p = that.p();
     return extended_exponent_fpt<fpt64>(p.first, p.second);
