@@ -144,7 +144,7 @@ class unordered_associative_container_adaptor :
 
     typedef LocalIterator      local_iterator;
     typedef ConstLocalIterator const_local_iterator;
-	
+
     protected:
 
     typedef BOOST_DEDUCED_TYPENAME mpl::if_<
