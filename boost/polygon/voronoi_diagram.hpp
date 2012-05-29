@@ -396,8 +396,8 @@ private:
   std::pair<void*, void*> insert_new_edge(
       const SEvent &site1, const SEvent &site2) {
     // Get sites' indexes.
-    int site_index1 = site1.index();
-    int site_index2 = site2.index();
+    int site_index1 = site1.sorted_index();
+    int site_index2 = site2.sorted_index();
 
     // Create a new half-edge that belongs to the first site.
     edges_.push_back(edge_type());
@@ -454,12 +454,12 @@ private:
     // Add a new half-edge.
     edges_.push_back(edge_type());
     edge_type &new_edge1 = edges_.back();
-    new_edge1.cell(&cells_[site1.index()]);
+    new_edge1.cell(&cells_[site1.sorted_index()]);
 
     // Add a new half-edge.
     edges_.push_back(edge_type());
     edge_type &new_edge2 = edges_.back();
-    new_edge2.cell(&cells_[site3.index()]);
+    new_edge2.cell(&cells_[site3.sorted_index()]);
 
     // Update twin pointers.
     new_edge1.twin(&new_edge2);

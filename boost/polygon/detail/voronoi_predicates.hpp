@@ -406,10 +406,10 @@ public:
         return !predicate_(node2.left_site(), node2.right_site(), site1);
       } else {
         // This checks were evaluated experimentally.
-        if (site1.index() == site2.index()) {
+        if (site1.sorted_index() == site2.sorted_index()) {
           // Both nodes are new (inserted during same site event processing).
           return get_comparison_y(node1) < get_comparison_y(node2);
-        } else if (site1.index() < site2.index()) {
+        } else if (site1.sorted_index() < site2.sorted_index()) {
           std::pair<coordinate_type, int> y1 = get_comparison_y(node1, false);
           std::pair<coordinate_type, int> y2 = get_comparison_y(node2, true);
           if (y1.first != y2.first) return y1.first < y2.first;
@@ -426,7 +426,7 @@ public:
   private:
     // Get the newer site.
     const site_type &get_comparison_site(const node_type &node) const {
-      if (node.left_site().index() > node.right_site().index()) {
+      if (node.left_site().sorted_index() > node.right_site().sorted_index()) {
         return node.left_site();
       }
       return node.right_site();
@@ -435,10 +435,11 @@ public:
     // Get comparison pair: y coordinate and direction of the newer site.
     std::pair<coordinate_type, int> get_comparison_y(
       const node_type &node, bool is_new_node = true) const {
-      if (node.left_site().index() == node.right_site().index()) {
+      if (node.left_site().sorted_index() ==
+          node.right_site().sorted_index()) {
         return std::make_pair(node.left_site().y(), 0);
       }
-      if (node.left_site().index() > node.right_site().index()) {
+      if (node.left_site().sorted_index() > node.right_site().sorted_index()) {
         if (!is_new_node &&
             node.left_site().is_segment() &&
             is_vertical(node.left_site())) {

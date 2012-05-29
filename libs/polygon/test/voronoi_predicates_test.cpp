@@ -257,11 +257,11 @@ BOOST_AUTO_TEST_CASE(distatnce_predicate_test8) {
 BOOST_AUTO_TEST_CASE(node_comparison_test1) {
   beach_line_type beach_line;
   site_type site1(0, 0);
-  site1.index(0);
+  site1.sorted_index(0);
   site_type site2(0, 2);
-  site2.index(1);
+  site2.sorted_index(1);
   site_type site3(1, 0);
-  site3.index(2);
+  site3.sorted_index(2);
   beach_line[key_type(site1, site2)] = 2;
   beach_line[key_type(site1, site3)] = 0;
   beach_line[key_type(site3, site1)] = 1;
@@ -275,11 +275,11 @@ BOOST_AUTO_TEST_CASE(node_comparison_test1) {
 BOOST_AUTO_TEST_CASE(node_comparison_test2) {
   beach_line_type beach_line;
   site_type site1(0, 1);
-  site1.index(0);
+  site1.sorted_index(0);
   site_type site2(2, 0);
-  site2.index(1);
+  site2.sorted_index(1);
   site_type site3(2, 4);
-  site3.index(2);
+  site3.sorted_index(2);
   beach_line[key_type(site1, site2)] = 0;
   beach_line[key_type(site2, site1)] = 1;
   beach_line[key_type(site1, site3)] = 2;
@@ -292,80 +292,80 @@ BOOST_AUTO_TEST_CASE(node_comparison_test2) {
 }
 
 BOOST_AUTO_TEST_CASE(node_comparison_test3) {
-  key_type node(site_type(1, 0).index(1), site_type(0, 2).index(0));
+  key_type node(site_type(1, 0).sorted_index(1), site_type(0, 2).sorted_index(0));
   key_type nodes[] = {
-    key_type(site_type(2, -10).index(2)),
-    key_type(site_type(2, -1).index(2)),
-    key_type(site_type(2, 0).index(2)),
-    key_type(site_type(2, 1).index(2)),
-    key_type(site_type(2, 2).index(2)),
-    key_type(site_type(2, 3).index(2)),
+    key_type(site_type(2, -10).sorted_index(2)),
+    key_type(site_type(2, -1).sorted_index(2)),
+    key_type(site_type(2, 0).sorted_index(2)),
+    key_type(site_type(2, 1).sorted_index(2)),
+    key_type(site_type(2, 2).sorted_index(2)),
+    key_type(site_type(2, 3).sorted_index(2)),
   };
   bool res[] = {false, false, false, false, true, true};
   CHECK_NODE_COMPARISON(node, nodes, res, 6);
 }
 
 BOOST_AUTO_TEST_CASE(node_comparison_test4) {
-  key_type node(site_type(0, 1).index(0), site_type(1, 0).index(1));
+  key_type node(site_type(0, 1).sorted_index(0), site_type(1, 0).sorted_index(1));
   key_type nodes[] = {
-    key_type(site_type(2, -3).index(2)),
-    key_type(site_type(2, -2).index(2)),
-    key_type(site_type(2, -1).index(2)),
-    key_type(site_type(2, 0).index(2)),
-    key_type(site_type(2, 1).index(2)),
-    key_type(site_type(2, 3).index(2)),
+    key_type(site_type(2, -3).sorted_index(2)),
+    key_type(site_type(2, -2).sorted_index(2)),
+    key_type(site_type(2, -1).sorted_index(2)),
+    key_type(site_type(2, 0).sorted_index(2)),
+    key_type(site_type(2, 1).sorted_index(2)),
+    key_type(site_type(2, 3).sorted_index(2)),
   };
   bool res[] = {false, true, true, true, true, true};
   CHECK_NODE_COMPARISON(node, nodes, res, 6);
 }
 
 BOOST_AUTO_TEST_CASE(node_comparison_test5) {
-  key_type node(site_type(0, 0).index(0), site_type(1, 2).index(1));
+  key_type node(site_type(0, 0).sorted_index(0), site_type(1, 2).sorted_index(1));
   key_type nodes[] = {
-    key_type(site_type(2, -10).index(2)),
-    key_type(site_type(2, 0).index(2)),
-    key_type(site_type(2, 1).index(2)),
-    key_type(site_type(2, 2).index(2)),
-    key_type(site_type(2, 5).index(2)),
-    key_type(site_type(2, 20).index(2)),
+    key_type(site_type(2, -10).sorted_index(2)),
+    key_type(site_type(2, 0).sorted_index(2)),
+    key_type(site_type(2, 1).sorted_index(2)),
+    key_type(site_type(2, 2).sorted_index(2)),
+    key_type(site_type(2, 5).sorted_index(2)),
+    key_type(site_type(2, 20).sorted_index(2)),
   };
   bool res[] = {false, false, true, true, true, true};
   CHECK_NODE_COMPARISON(node, nodes, res, 6);
 }
 
 BOOST_AUTO_TEST_CASE(node_comparison_test6) {
-  key_type node(site_type(1, 1).index(1), site_type(0, 0).index(0));
+  key_type node(site_type(1, 1).sorted_index(1), site_type(0, 0).sorted_index(0));
   key_type nodes [] = {
-    key_type(site_type(2, -3).index(2)),
-    key_type(site_type(2, -2).index(2)),
-    key_type(site_type(2, 0).index(2)),
-    key_type(site_type(2, 1).index(2)),
-    key_type(site_type(2, 2).index(2)),
-    key_type(site_type(2, 3).index(2)),
-    key_type(site_type(2, 5).index(2)),
+    key_type(site_type(2, -3).sorted_index(2)),
+    key_type(site_type(2, -2).sorted_index(2)),
+    key_type(site_type(2, 0).sorted_index(2)),
+    key_type(site_type(2, 1).sorted_index(2)),
+    key_type(site_type(2, 2).sorted_index(2)),
+    key_type(site_type(2, 3).sorted_index(2)),
+    key_type(site_type(2, 5).sorted_index(2)),
   };
   bool res[] = {false, false, false, false, false, false, true};
   CHECK_NODE_COMPARISON(node, nodes, res, 7);
 }
 
 BOOST_AUTO_TEST_CASE(node_comparison_test7) {
-  key_type node(site_type(0, 0).index(0), site_type(0, 2).index(1));
+  key_type node(site_type(0, 0).sorted_index(0), site_type(0, 2).sorted_index(1));
   key_type nodes[] = {
-    key_type(site_type(1, 0).index(2)),
-    key_type(site_type(1, 1).index(2)),
-    key_type(site_type(1, 2).index(2)),
+    key_type(site_type(1, 0).sorted_index(2)),
+    key_type(site_type(1, 1).sorted_index(2)),
+    key_type(site_type(1, 2).sorted_index(2)),
   };
   bool res[] = {false, false, true};
   CHECK_NODE_COMPARISON(node, nodes, res, 3);
 }
 
 BOOST_AUTO_TEST_CASE(node_comparison_test8) {
-  key_type node(site_type(0, 0).index(0), site_type(1, 1).index(2));
+  key_type node(site_type(0, 0).sorted_index(0), site_type(1, 1).sorted_index(2));
   key_type nodes[] = {
-    key_type(site_type(1, 0).index(1)),
-    key_type(site_type(1, 1).index(2)),
-    key_type(site_type(1, 2).index(3)),
-    key_type(site_type(1, 1).index(2), site_type(0, 0).index(0)),
+    key_type(site_type(1, 0).sorted_index(1)),
+    key_type(site_type(1, 1).sorted_index(2)),
+    key_type(site_type(1, 2).sorted_index(3)),
+    key_type(site_type(1, 1).sorted_index(2), site_type(0, 0).sorted_index(0)),
   };
   bool res[] = {false, true, true, true};
   CHECK_NODE_COMPARISON(node, nodes, res, 4);

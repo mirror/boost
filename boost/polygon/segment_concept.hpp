@@ -639,7 +639,7 @@ namespace boost { namespace polygon{
     int or2_2 = orientation(segment2, high(segment1));
     if (or2_1 * or2_2 > 0)
       return false;
-    if (consider_touch || or1_1 && or1_2 || or2_1 && or2_2)
+    if (consider_touch || (or1_1 && or1_2) || (or2_1 && or2_2))
       return true;
     if (or1_1 || or1_2)
       return false;

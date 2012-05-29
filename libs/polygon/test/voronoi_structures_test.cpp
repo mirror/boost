@@ -34,11 +34,11 @@ BOOST_AUTO_TEST_CASE(site_event_test2) {
   site_type s(1, 2);
   BOOST_CHECK(s.x0() == s.x1() && s.x1() == 1);
   BOOST_CHECK(s.y0() == s.y1() && s.y1() == 2);
-  BOOST_CHECK(s.index() == 0);
+  BOOST_CHECK(s.sorted_index() == 0);
   BOOST_CHECK(!s.is_segment());
   BOOST_CHECK(!s.is_inverse());
-  s.index(1);
-  BOOST_CHECK(s.index() == 1);
+  s.sorted_index(1);
+  BOOST_CHECK(s.sorted_index() == 1);
   BOOST_CHECK(!s.is_inverse());
 }
 
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(site_event_test3) {
   BOOST_CHECK(s.y0(true) == 2 && s.y0() == 2);
   BOOST_CHECK(s.x1(true) == 3 && s.x1() == 3);
   BOOST_CHECK(s.y1(true) == 4 && s.y1() == 4);
-  BOOST_CHECK(s.index() == 0);
+  BOOST_CHECK(s.sorted_index() == 0);
   BOOST_CHECK(s.is_segment());
   BOOST_CHECK(!s.is_inverse());
   s.inverse();
@@ -61,18 +61,18 @@ BOOST_AUTO_TEST_CASE(site_event_test3) {
 
 BOOST_AUTO_TEST_CASE(site_event_test4) {
   site_type s(1, 2, 3, 4);
-  s.index(27);
+  s.sorted_index(27);
   BOOST_CHECK(s.is_initial());
   BOOST_CHECK(s.has_initial_direction());
-  BOOST_CHECK(s.index() == 27);
+  BOOST_CHECK(s.sorted_index() == 27);
   s.inverse();
   BOOST_CHECK(!s.has_initial_direction());
   BOOST_CHECK(s.is_initial());
-  BOOST_CHECK(s.index() == 27);
+  BOOST_CHECK(s.sorted_index() == 27);
   s.change_initial_direction();
   BOOST_CHECK(s.has_initial_direction());
   BOOST_CHECK(!s.is_initial());
-  BOOST_CHECK(s.index() == 27);
+  BOOST_CHECK(s.sorted_index() == 27);
 }
 
 BOOST_AUTO_TEST_CASE(circle_event_test) {

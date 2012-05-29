@@ -91,39 +91,39 @@ public:
   site_event() :
       point0_(0, 0),
       point1_(0, 0),
-      site_index_(0) {}
+      sorted_index_(0) {}
 
   site_event(coordinate_type x, coordinate_type y) :
       point0_(x, y),
       point1_(x, y),
-      site_index_(0) {}
+      sorted_index_(0) {}
 
   site_event(const point_type &point) :
       point0_(point),
       point1_(point),
-      site_index_(0) {}
+      sorted_index_(0) {}
 
   site_event(coordinate_type x1, coordinate_type y1,
              coordinate_type x2, coordinate_type y2):
       point0_(x1, y1),
       point1_(x2, y2),
-      site_index_(0) {}
+      sorted_index_(0) {}
 
   site_event(const point_type &point1, const point_type &point2) :
       point0_(point1),
       point1_(point2),
-      site_index_(0) {}
+      sorted_index_(0) {}
 
   bool operator==(const site_event &that) const {
     return (this->point0_ == that.point0_) &&
            (this->point1_ == that.point1_) &&
-           (this->site_index_ == that.site_index_);
+           (this->sorted_index_ == that.sorted_index_);
   }
 
   bool operator!=(const site_event &that) const {
     return (this->point0_ != that.point0_) ||
            (this->point1_ != that.point1_) ||
-           (this->site_index_ != that.site_index_);
+           (this->sorted_index_ != that.sorted_index_);
   }
 
   coordinate_type x(bool oriented = false) const {
@@ -170,23 +170,23 @@ public:
     return is_inverse() ? point0_ : point1_;
   }
 
-  site_event& index(int index) {
-    site_index_ = (index << 2) + (site_index_ & 3);
+  site_event& sorted_index(std::size_t index) {
+    sorted_index_ = (index << 2) + (sorted_index_ & 3);
     return *this;
   }
 
   site_event& inverse() {
-    site_index_ ^= IS_INVERSE;
+    sorted_index_ ^= IS_INVERSE;
     return *this;
   }
 
   site_event& change_initial_direction() {
-    site_index_ ^= HAS_INITIAL_DIRECTION;
+    sorted_index_ ^= HAS_INITIAL_DIRECTION;
     return *this;
   }
 
-  std::size_t index() const {
-    return site_index_ >> 2;
+  std::size_t sorted_index() const {
+    return sorted_index_ >> 2;
   }
 
   bool is_point() const {
@@ -198,11 +198,11 @@ public:
   }
 
   bool is_inverse() const {
-    return (site_index_ & IS_INVERSE) ? true : false;
+    return (sorted_index_ & IS_INVERSE) ? true : false;
   }
 
   bool is_initial() const {
-    return (site_index_ & HAS_INITIAL_DIRECTION) ? false : true;
+    return (sorted_index_ & HAS_INITIAL_DIRECTION) ? false : true;
   }
 
   bool has_initial_direction() const {
@@ -217,7 +217,7 @@ private:
 
   point_type point0_;
   point_type point1_;
-  unsigned int site_index_;
+  std::size_t sorted_index_;
 };
 
 // Circle event type.
