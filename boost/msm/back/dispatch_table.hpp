@@ -21,7 +21,9 @@
 #include <boost/mpl/advance.hpp>
 
 #include <boost/type_traits/is_base_of.hpp>
+#include <boost/type_traits/is_same.hpp>
 
+#include <boost/msm/event_traits.hpp>
 #include <boost/msm/back/metafunctions.hpp>
 #include <boost/msm/back/common_types.hpp>
 
@@ -146,6 +148,16 @@ struct dispatch_table
     typedef typename generate_state_set<Stt>::type state_list;
     BOOST_STATIC_CONSTANT(int, max_state = ( ::boost::mpl::size<state_list>::value));
 
+    template <class Transition>
+    struct convert_event_and_forward
+    {
+        static HandledEnum execute(Fsm& fsm, int region_index, int state, Event const& evt)
+        {
+            typename Transition::transition_event forwarded(evt);
+            return Transition::execute(fsm,region_index,state,forwarded);
+        }
+    };
+
     // A function object for use with mpl::for_each that stuffs
     // transitions into cells.
     struct init_cell
@@ -159,7 +171,7 @@ struct dispatch_table
         typename ::boost::disable_if<
             typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
         ,void>::type
-        init_event_base_case(Transition const&, ::boost::mpl::true_ const &) const
+        init_event_base_case(Transition const&, ::boost::mpl::true_ const &, ::boost::mpl::false_ const &) const
         {
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = 
@@ -170,9 +182,31 @@ struct dispatch_table
         typename ::boost::enable_if<
             typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
         ,void>::type
-        init_event_base_case(Transition const&, ::boost::mpl::true_ const &) const
+        init_event_base_case(Transition const&, ::boost::mpl::true_ const &, ::boost::mpl::false_ const &) const
         {
             self->entries[0] = reinterpret_cast<cell>(&Transition::execute);
+        }
+
+        // version for transition event is boost::any
+        // first for all transitions, then for internal ones of a fsm
+        template <class Transition>
+        typename ::boost::disable_if<
+            typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
+        ,void>::type
+        init_event_base_case(Transition const&, ::boost::mpl::false_ const &, ::boost::mpl::true_ const &) const
+        {
+            typedef typename create_stt<Fsm>::type stt; 
+            BOOST_STATIC_CONSTANT(int, state_id = 
+                (get_state_id<stt,typename Transition::current_state_type>::value));
+            self->entries[state_id+1] = &convert_event_and_forward<Transition>::execute;
+        }
+        template <class Transition>
+        typename ::boost::enable_if<
+            typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
+        ,void>::type
+        init_event_base_case(Transition const&, ::boost::mpl::false_ const &, ::boost::mpl::true_ const &) const
+        {
+            self->entries[0] = &convert_event_and_forward<Transition>::execute;
         }
 
         // version for transition event base of our event
@@ -181,7 +215,7 @@ struct dispatch_table
         typename ::boost::disable_if<
             typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
         ,void>::type
-        init_event_base_case(Transition const&, ::boost::mpl::false_ const &) const
+        init_event_base_case(Transition const&, ::boost::mpl::false_ const &, ::boost::mpl::false_ const &) const
         {
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = 
@@ -192,7 +226,7 @@ struct dispatch_table
         typename ::boost::enable_if<
             typename ::boost::is_same<typename Transition::current_state_type,Fsm>::type
         ,void>::type
-        init_event_base_case(Transition const&, ::boost::mpl::false_ const &) const
+        init_event_base_case(Transition const&, ::boost::mpl::false_ const &, ::boost::mpl::false_ const &) const
         {
             self->entries[0] = &Transition::execute;
         }
@@ -210,7 +244,9 @@ struct dispatch_table
             //only if the transition event is a base of our event is the reinterpret_case safe
             init_event_base_case(tr,
                 ::boost::mpl::bool_< 
-                    ::boost::is_base_of<typename Transition::transition_event,Event>::type::value>() );
+                    ::boost::is_base_of<typename Transition::transition_event,Event>::type::value>(),
+                ::boost::mpl::bool_< 
+                    ::boost::msm::is_kleene_event<typename Transition::transition_event>::type::value>());
         }
     
         dispatch_table* self;
@@ -305,7 +341,11 @@ struct dispatch_table
         typedef typename ::boost::mpl::reverse_fold<
                         // filter on event
                         ::boost::mpl::filter_view
-                            <Stt, ::boost::is_base_of<transition_event< ::boost::mpl::placeholders::_>, Event> >,
+                            <Stt, boost::mpl::or_<
+                                    ::boost::is_base_of<transition_event< ::boost::mpl::placeholders::_>, Event>,
+                                    ::boost::msm::is_kleene_event<transition_event< ::boost::mpl::placeholders::_> >
+                                    >
+                            >,
                         // build a map
                         ::boost::mpl::map<>,
                         ::boost::mpl::if_<

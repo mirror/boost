@@ -59,6 +59,7 @@
 
 #include <boost/msm/msm_grammar.hpp>
 #include <boost/msm/active_state_switching_policies.hpp>
+#include <boost/msm/event_traits.hpp>
 #include <boost/msm/front/functor_row.hpp>
 
 namespace proto = boost::proto;
@@ -199,6 +200,7 @@ struct euml_event: proto::extends<typename proto::terminal<event_tag>::type, EVT
         typedef EVT type;
     };
 };
+
 template <class STATE>
 struct euml_state_intern: proto::extends<typename proto::terminal< boost::msm::state_tag>::type, STATE, boost::msm::state_domain>
 {
@@ -2475,6 +2477,15 @@ Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
     instance_name ## _helper const& operator()() const {return *this;} };                       \
     static instance_name ## _helper instance_name;
 
+// an event matching any event
+struct kleene_ : msm::front::euml::euml_event<kleene_>, public boost::any
+{
+    kleene_() : boost::any(){}
+    template<typename ValueType>
+    kleene_(const ValueType & v) : boost::any(v){}
+};
+static kleene_ kleene;
+
 #define BOOST_MSM_EUML_DECLARE_EVENT(instance_name)                                             \
     struct instance_name : msm::front::euml::euml_event<instance_name >{                        \
     instance_name(){}                                                                           \
@@ -2659,5 +2670,13 @@ Exit_Pt_Helper const exit_pt_ = Exit_Pt_Helper();
 #endif
 
 }}}} // boost::msm::front::euml
+
+namespace boost { namespace msm{
+    template<> 
+    struct is_kleene_event< boost::msm::front::euml::kleene_ >
+    { 
+      typedef ::boost::mpl::true_ type;
+    };
+}}
 
 #endif // BOOST_MSM_FRONT_EUML_COMMON_H
