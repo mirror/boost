@@ -12,7 +12,7 @@
 #endif
 
 #include <boost/unordered/detail/util.hpp>
-#include <boost/unordered/detail/allocate.hpp>
+#include <boost/unordered/detail/allocator_helpers.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #include <boost/swap.hpp>
@@ -82,7 +82,7 @@ namespace boost { namespace unordered { namespace detail {
         void construct_value2(BOOST_FWD_REF(A0) a0)
         {
             BOOST_ASSERT(node_ && !constructed_);
-#   if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#   if defined(BOOST_UNORDERED_VARIADIC_MOVE)
             boost::unordered::detail::construct_node(alloc_,
                 boost::addressof(*node_), boost::forward<A0>(a0));
 #   else
