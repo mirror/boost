@@ -36,8 +36,6 @@
             // Use container's allocator_traits for older versions of Visual
             // C++ as I don't test with them.
 #           define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 2
-#       elif BOOST_MSVC >= 1700
-#           define BOOST_UNORDERED_USE_ALLOCATOR_TRAITS 1
 #       endif
 #   endif
 #endif
