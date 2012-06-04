@@ -507,11 +507,70 @@ EOL;
               </notes>
             </method>
             <method name="insert">
+              <parameter name="obj">
+                <paramtype>value_type&amp;&amp;</paramtype>
+              </parameter>
+              <type><?php echo $equivalent_keys ? 'iterator' : 'std::pair&lt;iterator, bool&gt;' ?></type>
+              <description>
+                <para>Inserts <code>obj</code> in the container<?php
+                echo $equivalent_keys ? '.' :
+                    ' if and only if there is no element in the container with an equivalent '.$key_name. '.';
+                ?></para>
+              </description>
+              <returns>
+<?php if ($equivalent_keys): ?>
+                <para>An iterator pointing to the inserted element.</para>
+<?php else: ?>
+                <para>The bool component of the return type is true if an insert took place.</para>
+                <para>If an insert took place, then the iterator points to the newly inserted element. Otherwise, it points to the element with equivalent <?php echo $key_name; ?>.</para>
+<?php endif; ?>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
+            <method name="insert">
               <parameter name="hint">
                 <paramtype>const_iterator</paramtype>
               </parameter>
               <parameter name="obj">
                 <paramtype>value_type const&amp;</paramtype>
+              </parameter>
+              <type>iterator</type>
+              <description>
+<?php if ($equivalent_keys): ?>
+                <para>Inserts <code>obj</code> in the container.</para>
+<?php else: ?>
+                <para>Inserts <code>obj</code> in the container if and only if there is no element in the container with an equivalent <?php echo $key_name; ?>.</para>
+<?php endif; ?>
+                <para>hint is a suggestion to where the element should be inserted.</para>
+              </description>
+              <returns>
+<?php if ($equivalent_keys): ?>
+                <para>An iterator pointing to the inserted element.</para>
+<?php else: ?>
+                <para>If an insert took place, then the iterator points to the newly inserted element. Otherwise, it points to the element with equivalent <?php echo $key_name; ?>.</para>
+<?php endif; ?>
+              </returns>
+              <throws>
+                <para>If an exception is thrown by an operation other than a call to <code>hasher</code> the function has no effect.</para>
+              </throws>
+              <notes>
+                <para>The standard is fairly vague on the meaning of the hint. But the only practical way to use it, and the only way that Boost.Unordered supports is to point to an existing element with the same <?php echo $key_name; ?>. </para>
+                <para>Can invalidate iterators, but only if the insert causes the load factor to be greater to or equal to the maximum load factor.</para>
+                <para>Pointers and references to elements are never invalidated.</para>
+              </notes>
+            </method>
+            <method name="insert">
+              <parameter name="hint">
+                <paramtype>const_iterator</paramtype>
+              </parameter>
+              <parameter name="obj">
+                <paramtype>value_type&amp;&amp;</paramtype>
               </parameter>
               <type>iterator</type>
               <description>
