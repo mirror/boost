@@ -696,7 +696,7 @@ When the second template parameter to _when_ is a function type, _when_ interpre
 
 [note *Transforms are a Domain-Specific Language*
 
-`LeftmostLeaf( proto::_child0 )` /looks/ like an invocation of the `LeftmostLeaf` function object, but it's not, but then it actually is! Why this confusing subterfuge? Function types give us a natural and concise syntax for composing more complicated transforms from simpler ones. The fact that the syntax is suggestive of a function invocation is on purpose. It is a embedded domain-specific language for defining expression transformations. If the subterfuge worked, it may have fooled you into thinking the transform is doing exactly what it actually does! And that's the point.]
+`LeftmostLeaf( proto::_child0 )` /looks/ like an invocation of the `LeftmostLeaf` function object, but it's not, but then it actually is! Why this confusing subterfuge? Function types give us a natural and concise syntax for composing more complicated transforms from simpler ones. The fact that the syntax is suggestive of a function invocation is on purpose. It is an embedded domain-specific language for defining expression transformations. If the subterfuge worked, it may have fooled you into thinking the transform is doing exactly what it actually does! And that's the point.]
 
 The type `LeftmostLeaf( proto::_child0 )` is an example of a /callable transform/. It is a function type that represents a function object to call and its arguments. The types `proto::_child0` and `proto::_value` are /primitive transforms/. They are plain structs, not unlike function objects, from which callable transforms can be composed. There is one other type of transform, /object transforms/, that we'll encounter next.
 

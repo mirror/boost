@@ -10,13 +10,13 @@
     Defining Terminals and Non-Terminals of Your EDSL]
 [/================================================================================]
 
-Here is the fun part: designing your own mini-programming language. In this section we'll talk about the nuts and bolts of designing a EDSL interface using Proto. We'll cover the definition of terminals and lazy functions that the users of your EDSL will get to program with. We'll also talk about Proto's expression template-building operator overloads, and about ways to add additional members to expressions within your domain.
+Here is the fun part: designing your own mini-programming language. In this section we'll talk about the nuts and bolts of designing an EDSL interface using Proto. We'll cover the definition of terminals and lazy functions that the users of your EDSL will get to program with. We'll also talk about Proto's expression template-building operator overloads, and about ways to add additional members to expressions within your domain.
 
 [/=======================]
 [section Making Terminals]
 [/=======================]
 
-As we saw with the Calculator example from the Introduction, the simplest way to get a EDSL up and running is simply to define some terminals, as follows.
+As we saw with the Calculator example from the Introduction, the simplest way to get an EDSL up and running is simply to define some terminals, as follows.
 
     // Define a literal integer Proto expression.
     proto::terminal<int>::type i = {0};
@@ -501,7 +501,7 @@ Now we can use calculator expressions as function objects to STL algorithms, as 
 [/==========================================================]
 
 By default, Proto defines every possible operator overload for Protofied
-expressions. This makes it simple to bang together a EDSL. In some cases, however, the presence of Proto's promiscuous overloads can lead to confusion or worse. When that happens, you'll have to disable some of Proto's overloaded operators. That is done by defining the grammar for your domain and specifying it as the second parameter of the _domain_ template.
+expressions. This makes it simple to bang together an EDSL. In some cases, however, the presence of Proto's promiscuous overloads can lead to confusion or worse. When that happens, you'll have to disable some of Proto's overloaded operators. That is done by defining the grammar for your domain and specifying it as the second parameter of the _domain_ template.
 
 In the [link boost_proto.users_guide.getting_started.hello_calculator Hello Calculator] section, we saw an example of a Proto grammar, which is repeated here:
 
@@ -862,7 +862,7 @@ The invocation of the _DEFINE_OPERATORS_ macro defines a complete set of operato
 [section:code_repetition Generating Repetitive Code with the Preprocessor]
 [/=======================================================================]
 
-Sometimes as a EDSL designer, to make the lives of your users easy, you have to make your own life hard. Giving your users natural and flexible syntax often involves writing large numbers of repetitive function overloads. It can be enough to give you repetitive stress injury! Before you hurt yourself, check out the macros Proto provides for automating many repetitive code-generation chores.
+Sometimes as an EDSL designer, to make the lives of your users easy, you have to make your own life hard. Giving your users natural and flexible syntax often involves writing large numbers of repetitive function overloads. It can be enough to give you repetitive stress injury! Before you hurt yourself, check out the macros Proto provides for automating many repetitive code-generation chores.
 
 Imagine that we are writing a lambda EDSL, and we would like to enable syntax for constructing temporary objects of any type using the following syntax:
 
