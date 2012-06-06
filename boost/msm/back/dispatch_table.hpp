@@ -313,8 +313,12 @@ struct dispatch_table
 
         // this event is a compound one (not a real one, just one for use in event-less transitions)
         // Note this event cannot be used as deferred!
+        // case for internal transitions of this fsm 
         template <class State>
-        void operator()(boost::msm::wrap<State> const&)
+        typename ::boost::disable_if<
+            typename ::boost::is_same<State,Fsm>::type
+        ,void>::type
+        operator()(boost::msm::wrap<State> const&,boost::msm::back::dummy<0> = 0)
         {
             typedef typename create_stt<Fsm>::type stt; 
             BOOST_STATIC_CONSTANT(int, state_id = (get_state_id<stt,State>::value));
@@ -322,6 +326,15 @@ struct dispatch_table
             tofill_entries[state_id+1] = call_no_transition;
         }
 
+        template <class State>
+        typename ::boost::enable_if<
+            typename ::boost::is_same<State,Fsm>::type
+        ,void>::type
+        operator()(boost::msm::wrap<State> const&,boost::msm::back::dummy<1> = 0)
+        {
+            cell call_no_transition = &Fsm::default_eventless_transition;
+            tofill_entries[0] = call_no_transition;
+        }
         dispatch_table* self;
         cell* tofill_entries;
     };
