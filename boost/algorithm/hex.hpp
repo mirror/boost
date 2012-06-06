@@ -73,7 +73,7 @@ namespace detail {
         if ( c >= '0' && c <= '9' ) return c - '0';
         if ( c >= 'A' && c <= 'F' ) return c - 'A' + 10;
         if ( c >= 'a' && c <= 'f' ) return c - 'a' + 10;
-        BOOST_THROW_EXCEPTION (non_hex_input() << boost::algorithm::bad_char (c));
+        BOOST_THROW_EXCEPTION (non_hex_input() << bad_char (c));
         return 0;   // keep dumb compilers happy
         }
     
@@ -223,10 +223,8 @@ OutputIterator unhex ( const T *ptr, OutputIterator out ) {
 //  If we run into the terminator while decoding, we will throw a
 //      malformed input exception. It would be nicer to throw a 'Not enough input'
 //      exception - but how much extra work would that require?
-//  I just make up an "end iterator" which we will never get to - 
-//      two Ts per byte of the output type.
     while ( *ptr )
-        out = detail::decode_one ( ptr, ptr + 2 * sizeof(OutputType), out );
+        out = detail::decode_one ( ptr, (const T *) NULL, out );
     return out;
     }
 
