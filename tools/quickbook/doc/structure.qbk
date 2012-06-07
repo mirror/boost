@@ -7,7 +7,6 @@
     [@http://www.boost.org/LICENSE_1_0.txt])
 ]
 
-[#quickbook.ref.structure]
 [chapter Document Structure
     [quickbook 1.6]
     [id quickbook.syntax.structure]
