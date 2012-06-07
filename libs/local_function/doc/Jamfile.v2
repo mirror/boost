@@ -8,6 +8,9 @@
 import quickbook ;
 using boostbook ;
 
+path-constant images_location : html ;
+path-constant here : . ;
+
 doxygen reference
     :   ../../../boost/local_function.hpp
         ../../../boost/local_function/config.hpp
@@ -39,5 +42,13 @@ boostbook doc : qbk
     :   <xsl:param>boost.root=../../../..
         <xsl:param>boost.defaults=Boost
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/local_function/doc/html
+        <format>pdf:<xsl:param>admon.graphics.extension=".svg"
+        <format>pdf:<xsl:param>img.src.path=$(images_location)/
+        <format>pdf:<xsl:param>draft.mode="no"
     ;
+
+install pdf-install : doc : <location>. <install-type>PDF <name>local_function.pdf ;
+
+
+
 
