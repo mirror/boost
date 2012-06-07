@@ -29,3 +29,16 @@ boostbook doc : index
         <xsl:param>boost.root=../../../../..
     ;
 
+#
+# This is very imperfect - it results in both html and pdf docs being built,
+# for some reason I can't get the "onehtml" format specified above to play nice
+# with the usual incantations for mixed pdf/html builds. JM 06/2012.
+#
+boostbook pdf_doc : index
+    :
+       <format>pdf
+       <format>html:<build>no
+    ;
+
+install pdf_doc_install : pdf_doc : <location>. <name>identity_type.pdf <install-type>PDF ;
+

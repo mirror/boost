@@ -13,6 +13,7 @@ import quickbook ;
 using auto-index ;
 
 path-constant images_location : html ;
+path-constant here : . ;
 
 doxygen autodoc
    :
@@ -70,7 +71,7 @@ boostbook standalone
         <format>html:<auto-index-internal>on
        
         # Set the name of the script file to use (index.idx is popular):
-        <auto-index-script>index.idx
+        <auto-index-script>$(here)/index.idx
         # Commands in the script file should all use RELATIVE PATHS
         # otherwise the script will not be portable to other machines.
         # Relative paths are normally taken as relative to the location
@@ -79,6 +80,14 @@ boostbook standalone
         # The path specified by <auto-index-prefix> may be either relative or
         # absolute, for example the following will get us up to the boost root
         # directory for most Boost libraries:
-        <auto-index-prefix>"../../.."
+        <auto-index-prefix>"$(here)/../../.."
 
+        <format>pdf:<xsl:param>admon.graphics.extension=".svg"
    ;
+
+install pdf-install : standalone : <install-type>PDF <location>. <name>container.pdf ;
+
+
+
+
+

@@ -28,3 +28,7 @@ boostbook doc : qbk
         <format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/functional/overloaded_function/doc/html
     ;
 
+install pdf-install : doc : <location>. <install-type>PDF <name>overloaded_function.pdf ;
+
+
+
