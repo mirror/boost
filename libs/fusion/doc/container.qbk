@@ -21,10 +21,11 @@ __views__. These containers are more or less counterparts of those in __stl__.
 
 [heading Description]
 
-`vector` is a __random_access_sequence__ of heterogenous typed
-data structured as a simple `struct` where each element is held
-as a member variable. `vector` is the simplest of the Fusion
-sequence container, and in many cases the most efficient.
+`vector` is a __random_access_sequence__ of heterogenous typed data
+structured as a simple `struct` where each element is held as a member
+variable. `vector` is the simplest of the Fusion sequence container (a
+vector with N elements is just a struct with N members), and in many
+cases the most efficient.
 
 [heading Header]
 
@@ -156,7 +157,7 @@ time). The runtime cost of access to each element is peculiarly constant
 
 [table
     [[Parameter]            [Description]               [Default]]
-    [[`Car`]                [Head type]                 []]
+    [[`Car`]                [Head type]                 [ ]]
     [[`Cdr`]                [Tail type]                 [`nil`]]
 ]
 
@@ -1000,6 +1001,7 @@ succeeding sections document the various /tier/ flavors.
 * __list_tie__
 * __vector_tie__
 * __map_tie__
+* __deque_tie__
 
 Example:
 
@@ -1227,6 +1229,8 @@ Fusion header to change the default. Example:
     int i = 123;
     double d = 123.456;
     deque_tie(i, d)
+
+[endsect]
 
 [endsect]
 
