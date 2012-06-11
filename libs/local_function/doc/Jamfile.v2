@@ -48,7 +48,4 @@ boostbook doc : qbk
     ;
 
 install pdf-install : doc : <location>. <install-type>PDF <name>local_function.pdf ;
-
-
-
-
+explicit pdf-install ;
