@@ -41,4 +41,4 @@ boostbook pdf_doc : index
     ;
 
 install pdf_doc_install : pdf_doc : <location>. <name>identity_type.pdf <install-type>PDF ;
-
+explicit pdf_doc_install ;

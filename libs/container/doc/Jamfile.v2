@@ -86,8 +86,4 @@ boostbook standalone
    ;
 
 install pdf-install : standalone : <install-type>PDF <location>. <name>container.pdf ;
-
-
-
-
-
+explicit pdf-install ;
