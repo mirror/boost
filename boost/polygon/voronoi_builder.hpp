@@ -45,28 +45,35 @@ public:
   typedef typename CTT::int_type int_type;
   typedef typename CTT::fpt_type fpt_type;
 
-  voronoi_builder() {}
+  voronoi_builder() : index_(0) {}
 
   // Each point creates a single site event.
-  void insert_point(const int_type& x, const int_type& y) {
+  std::size_t insert_point(const int_type& x, const int_type& y) {
     site_events_.push_back(site_event_type(x, y));
+    site_events_.back().initial_index(index_);
+    return index_++;
   }
 
   // Each segment creates three site events that correspond to:
   //   1) the start point of the segment;
   //   2) the end point of the segment;
   //   3) the segment itself defined by its start point.
-  void insert_segment(const int_type& x1, const int_type& y1,
-                      const int_type& x2, const int_type& y2) {
+  std::size_t insert_segment(
+      const int_type& x1, const int_type& y1,
+      const int_type& x2, const int_type& y2) {
     point_type p1(x1, y1);
     point_type p2(x2, y2);
     site_events_.push_back(site_event_type(p1));
+    site_events_.back().initial_index(index_);
     site_events_.push_back(site_event_type(p2));
+    site_events_.back().initial_index(index_);
     if (point_comparison_(p1, p2)) {
       site_events_.push_back(site_event_type(p1, p2));
     } else {
       site_events_.push_back(site_event_type(p2, p1));
     }
+    site_events_.back().initial_index(index_);
+    return index_++;
   }
 
   // Run sweepline algorithm and fill output data structure.
@@ -75,10 +82,6 @@ public:
     // Init structures.
     output->builder()->reserve(site_events_.size());
     init_sites_queue();
-    if (!circle_events_.empty())
-      circle_events_.clear();
-    while (!end_points_.empty())
-      end_points_.pop();
     init_beach_line(output);
 
     // The algorithm stops when there are no events to process.
@@ -109,13 +112,9 @@ public:
   }
 
   void clear() {
+    index_ = 0;
     site_events_.clear();
-    if (!beach_line_.empty())
-      beach_line_.clear();
-    if (!circle_events_.empty())
-      circle_events_.clear();
-    while (!end_points_.empty())
-      end_points_.pop();
+    beach_line_.clear();
   }
 
 private:
@@ -493,6 +492,7 @@ private:
   circle_event_queue_type circle_events_;
   beach_line_type beach_line_;
   circle_formation_predicate_type circle_formation_predicate_;
+  std::size_t index_;
 
   //Disallow copy constructor and operator=
   voronoi_builder(const voronoi_builder&);

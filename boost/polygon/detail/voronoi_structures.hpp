@@ -63,25 +63,25 @@ private:
 
 // Site event type.
 // Occurs when the sweepline sweeps over one of the initial sites:
-//   1) point site;
-//   2) start-point of the segment site;
-//   3) endpoint of the segment site.
+//   1) point site
+//   2) start-point of the segment site
+//   3) endpoint of the segment site
 // Implicit segment direction is defined: the start-point of
 // the segment compares less than its endpoint.
 // Each input segment is divided onto two site events:
 //   1) One going from the start-point to the endpoint
-//      (is_inverse_ = false);
+//      (is_inverse() = false)
 //   2) Another going from the endpoint to the start-point
-//      (is_inverse_ = true).
+//      (is_inverse() = true)
 // In beach line data structure segment sites of the first
 // type precede sites of the second type for the same segment.
-// Variables:
-//   point0_ - point site or segment's start-point;
-//   point1_ - segment's endpoint if site is a segment;
-//   index_ - the last bit encodes if the site is inverse;
-//            the last-1 bit encodes initial site direction;
-//            other bits encode site event index among the other site events.
-// Note: for all the sites is_inverse_ flag is equal to false by default.
+// Members:
+//   point0_ - point site or segment's start-point
+//   point1_ - segment's endpoint if site is a segment
+//   sorted_index_ - the last bit encodes information if the site is inverse;
+//     the other bits encode site event index among the sorted site events
+//   initial_index_ - site index among the initial input set
+// Note: for all sites is_inverse_ flag is equal to false by default.
 template <typename T>
 class site_event {
 public:
@@ -171,22 +171,26 @@ public:
   }
 
   site_event& sorted_index(std::size_t index) {
-    sorted_index_ = (index << 2) + (sorted_index_ & 3);
+    sorted_index_ = (index << 1) + (sorted_index_ & 1);
+    return *this;
+  }
+
+  site_event& initial_index(std::size_t index) {
+    initial_index_ = index;
     return *this;
   }
 
   site_event& inverse() {
-    sorted_index_ ^= IS_INVERSE;
-    return *this;
-  }
-
-  site_event& change_initial_direction() {
-    sorted_index_ ^= HAS_INITIAL_DIRECTION;
+    sorted_index_ ^= 1;
     return *this;
   }
 
   std::size_t sorted_index() const {
-    return sorted_index_ >> 2;
+    return sorted_index_ >> 1;
+  }
+
+  std::size_t initial_index() const {
+    return initial_index_;
   }
 
   bool is_point() const {
@@ -198,26 +202,14 @@ public:
   }
 
   bool is_inverse() const {
-    return (sorted_index_ & IS_INVERSE) ? true : false;
-  }
-
-  bool is_initial() const {
-    return (sorted_index_ & HAS_INITIAL_DIRECTION) ? false : true;
-  }
-
-  bool has_initial_direction() const {
-    return is_inverse() ^ is_initial();
+    return static_cast<bool>(sorted_index_ & 1);
   }
 
 private:
-  enum kBits {
-    IS_INVERSE = 1,
-    HAS_INITIAL_DIRECTION = 2
-  };
-
   point_type point0_;
   point_type point1_;
   std::size_t sorted_index_;
+  std::size_t initial_index_;
 };
 
 // Circle event type.
