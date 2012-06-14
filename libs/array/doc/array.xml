@@ -70,6 +70,11 @@
     Technical Report, which will extend the C++ Standard (see
     <ulink url="http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1548.htm">http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1548.htm</ulink>).</para>
 
+    <para>Update: <code>std::array</code> is (as of C++11) part of the C++ standard.
+    The differences between <code>boost::array</code> and <code>std::array</code> are minimal.
+    If you are using C++11, you should consider using <code>std::array</code> instead of <code>boost::array</code>.
+    </para>
+
     <para>Class <code><classname>array</classname></code> fulfills most
     but not all of the requirements of "reversible containers" (see
     Section 23.1, [lib.container.requirements] of the C++
