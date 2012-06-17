@@ -605,7 +605,7 @@ insert(Type& object, const OperandT& operand)
 {
     typename Type::iterator prior_ = object.end();
     ICL_const_FORALL(typename OperandT, elem_, operand) 
-        insert(object, *elem_); 
+        insert(object, prior_, *elem_); 
 
     return object; 
 }
