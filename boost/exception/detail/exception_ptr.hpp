@@ -457,12 +457,12 @@ boost
         BOOST_ASSERT(p);
         p.ptr_->rethrow();
         BOOST_ASSERT(0);
-		#if defined(UNDER_CE)
-			// some CE platforms don't define ::abort(), let alone std::abort()
-			exit(-1);
-		#else
-			abort();
-		#endif
+        #if defined(UNDER_CE)
+            // some CE platforms don't define ::abort()
+            exit(-1);
+        #else
+            abort();
+        #endif
         }
 
     inline
