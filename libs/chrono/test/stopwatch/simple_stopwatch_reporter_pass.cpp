@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/chrono/stopwatches/simple_stopwatch.hpp>
+#include <boost/chrono/stopwatches/strict_stopwatch.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
 #include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
@@ -30,7 +30,7 @@ void check_invariants()
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::period, typename Stopwatch::clock::duration::period>::value), NOTHING, ());
     BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::duration, typename Stopwatch::clock::time_point::duration>::value), NOTHING, ());
     BOOST_CHRONO_STATIC_ASSERT(Stopwatch::is_steady == Stopwatch::clock::is_steady, NOTHING, ());
-    BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::stopwatch, simple_stopwatch<typename Stopwatch::clock> >::value), NOTHING, ());
+    BOOST_CHRONO_STATIC_ASSERT((boost::is_same<typename Stopwatch::stopwatch_type, strict_stopwatch<typename Stopwatch::clock> >::value), NOTHING, ());
 }
 
 template <typename Reporter>
@@ -110,8 +110,8 @@ void check_report()
 template <typename Clock>
 void check_all(bool check=true)
 {
-  typedef stopwatch_reporter<simple_stopwatch<Clock> > Reporter;
-  typedef stopwatch_reporter<simple_stopwatch<Clock>, elapsed_formatter > ReporterE;
+  typedef stopwatch_reporter<strict_stopwatch<Clock> > Reporter;
+  typedef stopwatch_reporter<strict_stopwatch<Clock>, elapsed_formatter > ReporterE;
 
   check_invariants<Reporter>();
   check_default_constructor<Reporter>();
@@ -126,7 +126,7 @@ void check_all(bool check=true)
 
 int main()
 {
-  typedef simple_stopwatch<high_resolution_clock > Stopwatch;
+  typedef strict_stopwatch<high_resolution_clock > Stopwatch;
   typedef basic_stopwatch_reporter_default_formatter<char, Stopwatch>::type Formatter;
   typedef stopwatch_reporter<Stopwatch> Reporter;
   static Formatter fmtr;

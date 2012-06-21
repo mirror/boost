@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/chrono/stopwatches/simple_stopwatch.hpp>
+#include <boost/chrono/stopwatches/strict_stopwatch.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -59,7 +59,7 @@ void check_elapsed(bool check=true)
 template <typename Clock>
 void check_all(bool check=true)
 {
-  typedef boost::chrono::simple_stopwatch<Clock> Stopwatch;
+  typedef boost::chrono::strict_stopwatch<Clock> Stopwatch;
   check_invariants<Stopwatch>();
   check_default_constructor<Stopwatch>();
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING

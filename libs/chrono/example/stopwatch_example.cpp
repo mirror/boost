@@ -6,7 +6,7 @@
 //  See http://www.boost.org/libs/chrono/stopwatches for documentation.
 
 //#include <iostream>
-#include <boost/chrono/stopwatches/simple_stopwatch.hpp>
+#include <boost/chrono/stopwatches/strict_stopwatch.hpp>
 #include <boost/chrono/chrono_io.hpp>
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <cmath>
@@ -35,7 +35,7 @@ namespace ex
 
 int f1(long j)
 {
-  simple_stopwatch<clock_type> sw;
+  strict_stopwatch<clock_type> sw;
 
   for ( long i = 0; i < j; ++i )
     std::sqrt( 123.456L );  // burn some time
@@ -46,7 +46,7 @@ int f1(long j)
 }
 int main()
 {
-  simple_stopwatch<clock_type> sw;
+  strict_stopwatch<clock_type> sw;
 
   f1(1000);
   f1(2000);

@@ -445,11 +445,15 @@ rule chrono-compile2 ( sources : name )
 
     test-suite "stopclock"
         :
-        [ stopwatch-run2 stopwatch/simple_stopwatch_reporter_pass.cpp  : simple_stopwatch_reporter_p ]
-        [ stopwatch-run2 stopwatch/basic_stopwatch_reporter_pass.cpp  : basic_stopwatch_reporter_p ]
         [ stopwatch-run2 stopwatch/basic_stopwatch_reporter_laps_accumulator_set_pass.cpp  : basic_stopwatch_reporter_laps_accumulator_set_p ]
+        #[ stopwatch-run2 stopwatch/basic_stopwatch_reporter_laps_container_pass.cpp  : basic_stopwatch_reporter_laps_container_p ]
+        #[ stopwatch-run2 stopwatch/basic_stopwatch_reporter_last_lap_pass.cpp  : basic_stopwatch_reporter_last_lap_p ]
+        #[ stopwatch-run2 stopwatch/basic_stopwatch_reporter_last_lap_pass.cpp  : basic_stopwatch_reporter_last_lap_p ]
+        [ stopwatch-run2 stopwatch/basic_stopwatch_reporter_pass.cpp  : basic_stopwatch_reporter_p ]
         [ stopwatch-run2 stopwatch/laps_stopclock_pass.cpp  : laps_stopclock_p ]
         [ stopwatch-run2 stopwatch/laps_stopclock_laps_accumulator_set_pass.cpp  : laps_stopclock_laps_accumulator_set_p ]
+        [ stopwatch-run2 stopwatch/simple_stopclock_pass.cpp  : simple_stopclock_p ]
+        [ stopwatch-run2 stopwatch/simple_stopwatch_reporter_pass.cpp  : simple_stopwatch_reporter_p ]
 
         ;
     test-suite "stopclock_ex"

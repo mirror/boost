@@ -6,11 +6,11 @@
 
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/chrono/stopwatches/laps_stopwatch.hpp>
+#include <boost/chrono/stopwatches/stopwatch.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
 #include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
-#include <boost/chrono/stopwatches/reporters/laps_stopwatch_default_formatter.hpp>
+#include <boost/chrono/stopwatches/reporters/laps_accumulator_set_stopwatch_default_formatter.hpp>
 #include <boost/chrono/stopwatches/collectors/laps_accumulator_set.hpp>
 
 #include <boost/chrono/chrono_io.hpp>
@@ -219,8 +219,8 @@ void check_report()
 template <typename Clock>
 void check_all()
 {
-  typedef stopwatch_reporter<laps_stopwatch<Clock, boost::chrono::laps_accumulator_set<typename Clock::duration> > > Reporter;
-  typedef stopwatch_reporter<laps_stopwatch<Clock>, elapsed_formatter > ReporterE;
+  typedef stopwatch_reporter<stopwatch<Clock, boost::chrono::laps_accumulator_set<typename Clock::duration> > > Reporter;
+  typedef stopwatch_reporter<stopwatch<Clock>, elapsed_formatter > ReporterE;
 
   check_invariants<Reporter>();
   check_default_constructor<Reporter>();
@@ -247,7 +247,7 @@ void check_all()
 
 int main()
 {
-  typedef laps_stopwatch<high_resolution_clock > Stopwatch;
+  typedef stopwatch<high_resolution_clock > Stopwatch;
   typedef basic_stopwatch_reporter_default_formatter<char, Stopwatch>::type Formatter;
   typedef stopwatch_reporter<Stopwatch> Reporter;
   static Formatter fmtr;

@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/chrono/stopwatches/reporters/laps_stopclock.hpp>
+#include <boost/chrono/stopwatches/reporters/stopclock.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
 #include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
 #include <boost/chrono/stopwatches/collectors/laps_accumulator_set.hpp>
@@ -218,8 +218,8 @@ template <typename Clock>
 void check_all()
 {
 
-  typedef laps_stopclock<Clock, boost::chrono::laps_accumulator_set<typename Clock::duration> > Reporter;
-  typedef laps_stopclock<Clock, boost::chrono::laps_accumulator_set<typename Clock::duration>, elapsed_formatter > ReporterE;
+  typedef stopclock<Clock, boost::chrono::laps_accumulator_set<typename Clock::duration> > Reporter;
+  typedef stopclock<Clock, boost::chrono::laps_accumulator_set<typename Clock::duration>, elapsed_formatter > ReporterE;
 
   check_invariants<Reporter>();
   check_default_constructor<Reporter>();
@@ -246,7 +246,7 @@ void check_all()
 
 int main()
 {
-  typedef laps_stopclock<high_resolution_clock > Reporter;
+  typedef stopclock<high_resolution_clock > Reporter;
 
   static Reporter::formatter_type fmtr;
 

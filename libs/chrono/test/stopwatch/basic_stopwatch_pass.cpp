@@ -6,7 +6,7 @@
 
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/chrono/stopwatches/laps_stopwatch.hpp>
+#include <boost/chrono/stopwatches/stopwatch.hpp>
 #include <libs/chrono/test/cycle_count.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
@@ -188,8 +188,7 @@ void check_all()
 int main()
 {
   std::cout << "cycle_count=";
-  check_all<boost::chrono::laps_stopwatch< ex::cycle_count<1500> > >();
-
+  check_all<boost::chrono::stopwatch< ex::cycle_count<1500> > >();
 
   return boost::report_errors();
 }
