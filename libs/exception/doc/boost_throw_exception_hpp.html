@@ -27,7 +27,7 @@
     #include &lt;boost/current_function.hpp&gt;
     #define <span class="RenoLink"><a href="BOOST_THROW_EXCEPTION.html">BOOST_THROW_EXCEPTION</a></span>(x)\
         ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( ::boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(x) &lt;&lt;\
-        ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_function</a></span>(BOOST_CURRENT_FUNCTION) &lt;&lt;\
+        ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_function</a></span>(<span class="RenoLink"><a href="configuration_macros.html">BOOST_THROW_EXCEPTION_CURRENT_FUNCTION</a></span>) &lt;&lt;\
         ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_file</a></span>(__FILE__) &lt;&lt;\
         ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_line</a></span>((int)__LINE__) )
 #else

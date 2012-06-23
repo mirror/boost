@@ -27,15 +27,15 @@
     #include &lt;boost/current_function.hpp&gt;
     #define <span class="RenoLink">BOOST_THROW_EXCEPTION</span>(x)\
         ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>( ::boost::<span class="RenoLink"><a href="enable_error_info.html">enable_error_info</a></span>(x) &lt;&lt;\
-        ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_function</a></span>(BOOST_CURRENT_FUNCTION) &lt;&lt;\
+        ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_function</a></span>(<span class="RenoLink"><a href="configuration_macros.html">BOOST_THROW_EXCEPTION_CURRENT_FUNCTION</a></span>) &lt;&lt;\
         ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_file</a></span>(__FILE__) &lt;&lt;\
         ::boost::<span class="RenoLink"><a href="boost_exception_exception_hpp.html">throw_line</a></span>((int)__LINE__) )
 #else
     #define <span class="RenoLink">BOOST_THROW_EXCEPTION</span>(x) ::boost::<span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>(x)
 #endif</pre>
-</div></div><p>This macro takes an exception object, records BOOST_CURRENT_FUNCTION, __FILE__ and __LINE__ in it, and forwards it to <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>. To recover this information at the catch site, use <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>; the information is also included in the message returned by <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>.</p>
+</div></div><p>This macro takes an exception object, records the current function name, __FILE__ and __LINE__ in it, and forwards it to <span class="RenoLink"><a href="throw_exception.html">throw_exception</a></span>. To recover this information at the catch site, use <span class="RenoLink"><a href="get_error_info.html">get_error_info</a></span>; the information is also included in the message returned by <span class="RenoLink"><a href="diagnostic_information.html">diagnostic_information</a></span>.</p>
 </div><div class="RenoAutoDIV"><div class="RenoHR"><hr/></div>
-See also: <span class="RenoPageList"><a href="boost-exception.html">Boost Exception</a>&nbsp;| <a href="boost_throw_exception_hpp.html">boost/throw_exception.hpp</a>&nbsp;| <a href="frequently_asked_questions.html">Frequently Asked Questions</a></span>
+See also: <span class="RenoPageList"><a href="boost-exception.html">Boost Exception</a>&nbsp;| <a href="boost_throw_exception_hpp.html">boost/throw_exception.hpp</a>&nbsp;| <a href="configuration_macros.html">Configuration Macros</a>&nbsp;| <a href="frequently_asked_questions.html">Frequently Asked Questions</a></span>
 </div>
 <!-- Copyright (c) 2006-2009 Emil Dotchevski and Reverge Studios, Inc. -->
 <!-- Distributed under the Boost Software License, Version 1.0. (See accompanying -->
