@@ -18,7 +18,8 @@ namespace boost
   {
 
     //--------------------------------------------------------------------------------------//
-    template<class Stopwatch> class stopwatch_runner
+    template<class Stopwatch>
+    class stopwatch_runner
     {
     public:
       typedef Stopwatch stopwatch;
@@ -47,7 +48,8 @@ namespace boost
     };
 
     //--------------------------------------------------------------------------------------//
-    template<class Stopwatch> class stopwatch_stopper
+    template<class Stopwatch>
+    class stopwatch_stopper
     {
     public:
       typedef Stopwatch stopwatch;
@@ -76,7 +78,8 @@ namespace boost
     };
 
     //--------------------------------------------------------------------------------------//
-    template<class Stopwatch> class stopwatch_suspender
+    template<class Stopwatch>
+    class stopwatch_suspender
     {
     public:
       typedef Stopwatch stopwatch;
@@ -105,7 +108,8 @@ namespace boost
     };
 
     //--------------------------------------------------------------------------------------//
-    template<class Stopwatch> class stopwatch_resumer
+    template<class Stopwatch>
+    class stopwatch_resumer
     {
     public:
       typedef Stopwatch stopwatch;

@@ -222,11 +222,15 @@ namespace boost
     {
 
       typedef std::basic_string<CharT, Traits> string_type;
+#ifndef BOOST_NO_EXCEPTIONS
       bool failed = false;
-      try
+      try // BOOST_NO_EXCEPTIONS protected
+#endif
       {
         std::ios_base::iostate err = std::ios_base::goodbit;
-        try
+#ifndef BOOST_NO_EXCEPTIONS
+        try // BOOST_NO_EXCEPTIONS protected
+#endif
         {
           typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
           if (opfx)
@@ -248,27 +252,31 @@ namespace boost
             os.width(0);
           }
         }
-        catch (...)
+#ifndef BOOST_NO_EXCEPTIONS
+        catch (...) // BOOST_NO_EXCEPTIONS protected
         {
           bool flag = false;
-          try
+          try // BOOST_NO_EXCEPTIONS protected
           {
             os.setstate(std::ios_base::failbit);
           }
-          catch (std::ios_base::failure )
+          catch (std::ios_base::failure ) // BOOST_NO_EXCEPTIONS protected
           {
             flag = true;
           }
           if (flag) throw;
         }
+#endif
         if (err) os.setstate(err);
         return os;
       }
-      catch (...)
+#ifndef BOOST_NO_EXCEPTIONS
+      catch (...) // BOOST_NO_EXCEPTIONS protected
       {
         failed = true;
       }
       if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
+#endif
       return os;
     }
 
@@ -279,7 +287,9 @@ namespace boost
       //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       std::ios_base::iostate err = std::ios_base::goodbit;
 
-      try
+#ifndef BOOST_NO_EXCEPTIONS
+      try // BOOST_NO_EXCEPTIONS protected
+#endif
       {
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
@@ -299,7 +309,8 @@ namespace boost
           }
         }
       }
-      catch (...)
+#ifndef BOOST_NO_EXCEPTIONS
+      catch (...) // BOOST_NO_EXCEPTIONS protected
       {
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         bool flag = false;
@@ -308,7 +319,7 @@ namespace boost
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           is.setstate(std::ios_base::failbit);
         }
-        catch (std::ios_base::failure )
+        catch (std::ios_base::failure ) // BOOST_NO_EXCEPTIONS protected
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           flag = true;
@@ -317,6 +328,7 @@ namespace boost
         if (flag) throw;
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       }
+#endif
       if (err) is.setstate(err);
       //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       return is;
@@ -395,7 +407,9 @@ namespace boost
       {
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         bool failed = false;
-        try
+#ifndef BOOST_NO_EXCEPTIONS
+        try // BOOST_NO_EXCEPTIONS protected
+#endif
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           const CharT* pb = 0; //nullptr;
@@ -500,11 +514,13 @@ namespace boost
             }
           }
         }
-        catch (...)
+#ifndef BOOST_NO_EXCEPTIONS
+        catch (...) // BOOST_NO_EXCEPTIONS protected
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           failed = true;
         }
+#endif
         if (failed)
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
@@ -581,7 +597,9 @@ namespace boost
       if (ok)
       {
         std::ios_base::iostate err = std::ios_base::goodbit;
+#ifndef BOOST_NO_EXCEPTIONS
         try
+#endif
         {
           const CharT* pb = 0; //nullptr;
           const CharT* pe = pb;
@@ -671,10 +689,12 @@ namespace boost
             tp = system_clock::from_time_t(t) - minu;
           }
         }
-        catch (...)
+#ifndef BOOST_NO_EXCEPTIONS
+        catch (...) // BOOST_NO_EXCEPTIONS protected
         {
           err |= std::ios_base::badbit | std::ios_base::failbit;
         }
+#endif
         exit: is.setstate(err);
       }
       return is;

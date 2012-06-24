@@ -39,7 +39,7 @@ namespace boost
     public:
       typedef Stopwatch base_type;
       typedef typename Stopwatch::clock clock;
-      typedef Stopwatch stopwatch;
+      typedef Stopwatch stopwatch_type;
       typedef Formatter formatter_type;
 
       basic_stopwatch_reporter() BOOST_NOEXCEPT :
@@ -114,13 +114,11 @@ namespace boost
 
 
     template<class Stopwatch,
-        class Formatter = typename basic_stopwatch_reporter_default_formatter<char,
-            Stopwatch>::type>
+        class Formatter = typename basic_stopwatch_reporter_default_formatter<char, Stopwatch>::type>
     class stopwatch_reporter;
 
     template<class Stopwatch, class Formatter>
-    struct basic_stopwatch_reporter_default_formatter<char, stopwatch_reporter<Stopwatch,
-        Formatter> >
+    struct basic_stopwatch_reporter_default_formatter<char, stopwatch_reporter<Stopwatch, Formatter> >
     {
       typedef Formatter type;
     };
@@ -132,7 +130,7 @@ namespace boost
       typedef basic_stopwatch_reporter<char, Stopwatch, Formatter> base_type;
     public:
       typedef typename Stopwatch::clock clock;
-      typedef Stopwatch stopwatch;
+      typedef Stopwatch stopwatch_type;
       typedef Formatter formatter_type;
 
       stopwatch_reporter()
@@ -186,20 +184,18 @@ namespace boost
     class wstopwatch_reporter;
 
     template<class Stopwatch, class Formatter>
-    struct basic_stopwatch_reporter_default_formatter<wchar_t, wstopwatch_reporter<
-        Stopwatch, Formatter> >
+    struct basic_stopwatch_reporter_default_formatter<wchar_t, wstopwatch_reporter<Stopwatch, Formatter> >
     {
       typedef Formatter type;
     };
 
     template<class Stopwatch, class Formatter>
-    class wstopwatch_reporter: public basic_stopwatch_reporter<wchar_t, Stopwatch,
-        Formatter>
+    class wstopwatch_reporter: public basic_stopwatch_reporter<wchar_t, Stopwatch, Formatter>
     {
       typedef basic_stopwatch_reporter<wchar_t, Stopwatch, Formatter> base_type;
     public:
       typedef typename Stopwatch::clock clock;
-      typedef Stopwatch stopwatch;
+      typedef Stopwatch stopwatch_type;
       typedef Formatter formatter_type;
 
       wstopwatch_reporter() :
@@ -223,7 +219,14 @@ namespace boost
         base_type(fmt)
       {
       }
-
+      explicit wstopwatch_reporter(const typename Formatter::char_type* fmt) :
+        base_type(fmt)
+      {
+      }
+      explicit wstopwatch_reporter(typename Formatter::string_type const& fmt) :
+        base_type(fmt)
+      {
+      }
       typedef stopwatch_runner<wstopwatch_reporter<Stopwatch, Formatter> >
           scoped_run;
       typedef stopwatch_stopper<wstopwatch_reporter<Stopwatch, Formatter> >
@@ -235,7 +238,6 @@ namespace boost
 
     protected:
 
-      //wstopwatch_reporter(); // = delete;
       wstopwatch_reporter(const wstopwatch_reporter&); // = delete;
       wstopwatch_reporter& operator=(const wstopwatch_reporter&); // = delete;
     };

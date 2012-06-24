@@ -4,7 +4,6 @@
 //  (See accompanying file LICENSE_1_0.txt or
 //   copy at http://www.boost.org/LICENSE_1_0.txt)
 //  See http://www.boost.org/libs/chrono/stopwatches for documentation.
-#error
 
 #ifndef BOOST_CHRONO_STOPWATCHES_REPORTERS_LAPS_STOPCLOCK_HPP
 #define BOOST_CHRONO_STOPWATCHES_REPORTERS_LAPS_STOPCLOCK_HPP
@@ -21,7 +20,7 @@
 #endif
 #endif
 
-#include <boost/chrono/stopwatches/reporters/laps_stopwatch_default_formatter.hpp>
+#include <boost/chrono/stopwatches/reporters/laps_accumulator_set_stopwatch_default_formatter.hpp>
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter_default_formatter.hpp>
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
 #include <boost/chrono/stopwatches/stopwatch_scoped.hpp>
@@ -43,7 +42,7 @@ namespace boost
     public:
       typedef basic_stopwatch_reporter<CharT, stopwatch<Clock, LapsCollector>, Formatter> base_type;
       typedef Clock clock;
-      typedef stopwatch<Clock, LapsCollector> stopwatch;
+      typedef stopwatch<Clock, LapsCollector> stopwatch_type;
       typedef Formatter formatter_type;
 
       basic_stopclock()
@@ -109,7 +108,7 @@ namespace boost
       typedef basic_stopclock<char, Clock, LapsCollector, Formatter> base_type;
     public:
       typedef Clock clock;
-      typedef typename base_type::stopwatch stopwatch;
+      typedef typename base_type::stopwatch_type stopwatch_type;
       typedef Formatter formatter_type;
 
       stopclock()
