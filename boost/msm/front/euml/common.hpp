@@ -1763,6 +1763,8 @@ Get_Flag_Helper const is_flag_ = Get_Flag_Helper();
 struct DeferEvent_ : euml_action< DeferEvent_ >
 {
     typedef ::boost::mpl::set<action_tag> tag_type;
+    // mark as deferring to avoid stack overflows in certain conditions
+    typedef int deferring_action;
     template <class EVT,class FSM,class SourceState,class TargetState>
     void operator()(EVT const& evt,FSM& fsm,SourceState& ,TargetState& ) const
     {
