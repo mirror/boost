@@ -134,10 +134,11 @@ import testing ;
     [ run sequence/define_struct.cpp : : : : ]
     [ run sequence/define_struct_inline.cpp : : : : ]
     [ run sequence/define_assoc_struct.cpp : : : : ]
-	[ run sequence/define_tpl_struct.cpp : : : : ]
+	  [ run sequence/define_tpl_struct.cpp : : : : ]
     [ run sequence/define_tpl_struct_inline.cpp : : : : ]
     [ run sequence/define_assoc_tpl_struct.cpp : : : : ]
     [ run sequence/std_tuple_iterator.cpp : : : : ]
+    [ run sequence/ref_vector.cpp : : : : ]
 
     [ run functional/fused.cpp : : : : ]
     [ run functional/fused_function_object.cpp : : : : ]
