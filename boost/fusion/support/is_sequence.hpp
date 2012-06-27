@@ -59,9 +59,11 @@ namespace boost { namespace fusion
     {
         template <typename T>
         struct is_sequence
-          : extension::is_sequence_impl<
-                typename fusion::detail::tag_of<T>::type
-            >::template apply<T>
+          : mpl::bool_<
+                (bool)extension::is_sequence_impl<
+                    typename fusion::detail::tag_of<T>::type
+                >::template apply<T>::type::value
+            >
         {};
 
         template <typename Sequence, typename Enable = void>
