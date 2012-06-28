@@ -168,8 +168,8 @@ namespace test
             new(p) T(t);
         }
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
-        template<typename... Args> void construct(T* p, Args&&... args) {
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+        template<typename... Args> void construct(T* p, BOOST_FWD_REF(Args)... args) {
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
             new(p) T(boost::forward<Args>(args)...);
         }

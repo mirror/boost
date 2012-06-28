@@ -497,12 +497,21 @@ namespace boost { namespace unordered { namespace detail {
         }
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
+#   if defined(BOOST_NO_VARIADIC_TEMPLATES)
         iterator emplace(boost::unordered::detail::emplace_args1<
                 boost::unordered::detail::please_ignore_this_overload> const&)
         {
             BOOST_ASSERT(false);
             return iterator();
         }
+#   else
+        iterator emplace(
+                boost::unordered::detail::please_ignore_this_overload const&)
+        {
+            BOOST_ASSERT(false);
+            return iterator();
+        }
+#   endif
 #endif
 
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
