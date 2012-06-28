@@ -19,6 +19,7 @@
 
 #define BOOST_REGEX_SOURCE
 
+#include <boost/config.hpp>
 #include <climits>
 #include <stdexcept>
 #include <string>

@@ -18,6 +18,7 @@
 
 
 #define BOOST_REGEX_SOURCE
+#include <boost/config.hpp>
 #include <memory>
 #include <cstring>
 #include <boost/assert.hpp>
