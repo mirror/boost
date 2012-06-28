@@ -474,7 +474,7 @@ namespace boost
              ;
            }
         }
-        throw "exception";
+        //throw "exception";
       }
 
     protected:
@@ -540,7 +540,7 @@ namespace boost
           return plural;
         }
         // assert
-        throw "exception";
+        //throw "exception";
       }
 
       /**
@@ -570,7 +570,7 @@ namespace boost
         if (pf == 0) return singular;
         if (pf == 1) return plural;
         // assert
-        throw "exception";
+        //throw "exception";
       }
 
       /**
@@ -599,7 +599,7 @@ namespace boost
         if (pf == 0) return singular;
         if (pf == 1) return plural;
         // assert
-        throw "exception";
+        //throw "exception";
       }
       /**
        * @param style the duration style.
