@@ -31,7 +31,6 @@ time2_demo contained this comment:
 TODO:
 
   * Fully implement error handling, with test cases.
-  * Use boost::throw_exception. (Currently not used because of an issue with Intel 11.0.)
   * Consider issues raised by Michael Marcin:
 
     > In the past I've seen QueryPerformanceCounter give incorrect results,
@@ -69,6 +68,12 @@ TODO:
 #include <boost/chrono/clock_string.hpp>
 
 #include <ctime>
+
+# if defined( BOOST_CHRONO_POSIX_API )
+#   if ! defined(CLOCK_REALTIME)
+#     error <time.h> does not supply CLOCK_REALTIME
+#   endif
+# endif
 
 #ifdef BOOST_CHRONO_WINDOWS_API
 // The system_clock tick is 100 nanoseconds
