@@ -61,10 +61,7 @@ TODO:
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
-#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
 #include <boost/chrono/detail/system.hpp>
-#include <boost/system/error_code.hpp>
-#endif
 #include <boost/chrono/clock_string.hpp>
 
 #include <ctime>

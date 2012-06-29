@@ -22,11 +22,9 @@
 
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter_default_formatter.hpp>
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
-//#include <boost/chrono/stopwatches/stopwatch_scoped.hpp>
 #include <boost/chrono/stopwatches/strict_stopwatch.hpp>
-//#include <boost/chrono/stopwatches/dont_start.hpp>
 #include <boost/chrono/chrono.hpp>
-#include <boost/system/error_code.hpp>
+#include <boost/chrono/detail/system.hpp>
 #include <boost/cstdint.hpp>
 #include <cassert>
 
@@ -54,12 +52,6 @@ namespace boost
       {
       }
 #endif
-//      explicit basic_strict_stopclock(
-//          const dont_start_t& tag
-//      ) BOOST_NOEXCEPT :
-//      base_type(tag)
-//      {
-//      }
 
       explicit basic_strict_stopclock(formatter_type const& fmt) :
         base_type(fmt)
@@ -74,14 +66,6 @@ namespace boost
         base_type(fmt)
       {
       }
-//      typedef stopwatch_runner<basic_strict_stopclock<CharT,Clock, Formatter> >
-//          scoped_run;
-//      typedef stopwatch_stopper<basic_strict_stopclock<CharT,Clock, Formatter> >
-//          scoped_stop;
-//      typedef stopwatch_suspender<basic_strict_stopclock<CharT,Clock, Formatter> >
-//          scoped_suspend;
-//      typedef stopwatch_resumer<basic_strict_stopclock<CharT,Clock, Formatter> >
-//          scoped_resume;
 
     protected:
 
@@ -119,12 +103,6 @@ namespace boost
       {
       }
 #endif
-//      explicit strict_stopclock(
-//          const dont_start_t& tag
-//      ) BOOST_NOEXCEPT :
-//      base_type(tag)
-//      {
-//      }
 
       explicit strict_stopclock(formatter_type const& fmt) :
         base_type(fmt)
@@ -139,14 +117,6 @@ namespace boost
         base_type(fmt)
       {
       }
-//      typedef stopwatch_runner<strict_stopclock<Clock, Formatter> >
-//          scoped_run;
-//      typedef stopwatch_stopper<strict_stopclock<Clock, Formatter> >
-//          scoped_stop;
-//      typedef stopwatch_suspender<strict_stopclock<Clock, Formatter> >
-//          scoped_suspend;
-//      typedef stopwatch_resumer<strict_stopclock<Clock, Formatter> >
-//          scoped_resume;
 
     protected:
 

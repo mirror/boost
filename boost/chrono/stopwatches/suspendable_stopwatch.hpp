@@ -12,7 +12,7 @@
 #include <boost/chrono/stopwatches/stopwatch_scoped.hpp>
 #include <boost/chrono/stopwatches/collectors/no_memory.hpp> // default laps_collector
 #include <boost/chrono/stopwatches/dont_start.hpp>
-#include <boost/system/error_code.hpp>
+#include <boost/chrono/detail/system.hpp>
 #include <boost/chrono/system_clocks.hpp>
 #include <utility>
 
@@ -20,7 +20,6 @@ namespace boost
 {
   namespace chrono
   {
-
 
     template<typename Clock=high_resolution_clock, typename LapsCollector=no_memory<typename Clock::duration> >
     class suspendable_stopwatch
@@ -37,8 +36,8 @@ namespace boost
       suspendable_stopwatch() :
         start_(duration::zero()),
         running_(false),
-        laps_collector_(),
         suspended_(false),
+        laps_collector_(),
         partial_(duration::zero())
       {
         start();
@@ -49,8 +48,8 @@ namespace boost
           ) :
         start_(duration::zero()),
         running_(false),
-        laps_collector_(),
         suspended_(false),
+        laps_collector_(),
         partial_(duration::zero())
       {
         start(ec);
@@ -62,8 +61,8 @@ namespace boost
           ) :
           start_(duration::zero()),
           running_(false),
-          laps_collector_(),
           suspended_(false),
+          laps_collector_(),
           partial_(duration::zero())
       {
       }
@@ -73,8 +72,8 @@ namespace boost
           ) :
           start_(duration::zero()),
           running_(false),
-          laps_collector_(acc),
           suspended_(false),
+          laps_collector_(acc),
           partial_(duration::zero())
       {
         start();
@@ -87,8 +86,8 @@ namespace boost
           ) :
           start_(duration::zero()),
           running_(false),
-          laps_collector_(acc),
           suspended_(false),
+          laps_collector_(acc),
           partial_(duration::zero())
       {
         start(ec);
@@ -101,8 +100,8 @@ namespace boost
           ) :
             start_(duration::zero()),
             running_(false),
-            laps_collector_(acc),
             suspended_(false),
+            laps_collector_(acc),
             partial_(duration::zero())
       {
       }

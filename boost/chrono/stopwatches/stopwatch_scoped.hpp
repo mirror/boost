@@ -10,7 +10,7 @@
 #include <boost/chrono/config.hpp>
 
 #include <boost/chrono/chrono.hpp>
-#include <boost/system/error_code.hpp>
+#include <boost/chrono/detail/system.hpp>
 
 namespace boost
 {

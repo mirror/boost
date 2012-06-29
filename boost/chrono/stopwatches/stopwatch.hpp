@@ -15,7 +15,7 @@
 #include <boost/chrono/stopwatches/collectors/no_memory.hpp> // default laps_collector
 #include <boost/chrono/stopwatches/dont_start.hpp>
 #include <boost/chrono/system_clocks.hpp> // default_clock
-#include <boost/system/error_code.hpp>
+#include <boost/chrono/detail/system.hpp>
 #include <utility>
 
 namespace boost

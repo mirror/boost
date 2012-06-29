@@ -13,6 +13,7 @@
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/io/duration_style.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
+#include <boost/assert.hpp>
 #include <string>
 #include <ios>
 #include <locale>
@@ -474,7 +475,9 @@ namespace boost
              ;
            }
         }
+        BOOST_ASSERT(false&&"ratio parameter can not be translated");
         //throw "exception";
+        return string_type();
       }
 
     protected:
@@ -539,8 +542,9 @@ namespace boost
         {
           return plural;
         }
-        // assert
+        BOOST_ASSERT(false&&"style/pf parameters not valid");
         //throw "exception";
+        return string_type();
       }
 
       /**
@@ -569,8 +573,10 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         if (pf == 0) return singular;
         if (pf == 1) return plural;
-        // assert
+        BOOST_ASSERT(false&&"style/pf parameters not valid");
         //throw "exception";
+        return string_type();
+
       }
 
       /**
@@ -598,8 +604,10 @@ namespace boost
         if (style == duration_style::symbol) return symbol;
         if (pf == 0) return singular;
         if (pf == 1) return plural;
-        // assert
+        BOOST_ASSERT(false&&"style/pf parameters not valid");
         //throw "exception";
+        return string_type();
+
       }
       /**
        * @param style the duration style.

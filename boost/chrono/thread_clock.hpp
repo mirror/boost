@@ -17,10 +17,7 @@
 #include <boost/chrono/config.hpp>
 #include <boost/chrono/duration.hpp>
 #include <boost/chrono/time_point.hpp>
-#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-#include <boost/system/error_code.hpp>
 #include <boost/chrono/detail/system.hpp>
-#endif
 #include <boost/chrono/clock_string.hpp>
 
 #ifndef BOOST_CHRONO_HEADER_ONLY

@@ -27,7 +27,7 @@
 #include <boost/chrono/stopwatches/stopwatch.hpp>
 #include <boost/chrono/stopwatches/dont_start.hpp>
 #include <boost/chrono/chrono.hpp>
-#include <boost/system/error_code.hpp>
+#include <boost/chrono/detail/system.hpp>
 #include <boost/cstdint.hpp>
 #include <cassert>
 
