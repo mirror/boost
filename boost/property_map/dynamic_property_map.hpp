@@ -227,7 +227,8 @@ public:
   property(const std::string& name, PropertyMap property_map_)
   {
     boost::shared_ptr<dynamic_property_map> pm(
-      boost::make_shared<detail::dynamic_property_map_adaptor<PropertyMap> >(property_map_));
+      boost::static_pointer_cast<dynamic_property_map>(
+        boost::make_shared<detail::dynamic_property_map_adaptor<PropertyMap> >(property_map_)));
     property_maps.insert(property_maps_type::value_type(name, pm));
 
     return *this;
