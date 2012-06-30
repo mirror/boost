@@ -484,10 +484,20 @@
           </xsl:if>
 
           <xsl:for-each select="param">
+            <xsl:variable name="name" select="defname/text()"/>
             <macro-parameter>
               <xsl:attribute name="name">
                 <xsl:value-of select="defname/text()"/>
               </xsl:attribute>
+              <xsl:variable name="params"
+                            select="../detaileddescription/para/parameterlist"/>
+              <xsl:variable name="description" select="$params/parameteritem/
+                            parameternamelist/parametername[text() = $name]/../../parameterdescription/para"/>
+              <xsl:if test="$description">
+                <description>
+                  <xsl:apply-templates select="$description" mode="passthrough"/>
+                </description>
+              </xsl:if>
             </macro-parameter>
           </xsl:for-each>
 
