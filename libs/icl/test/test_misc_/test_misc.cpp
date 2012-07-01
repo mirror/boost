@@ -197,7 +197,7 @@ BOOST_AUTO_TEST_CASE(test_infinities)
     BOOST_CHECK_EQUAL( numeric_infinity<std::string>::value(), std::string() );
 
     //--------------------------------------------------------------------------
-	BOOST_CHECK_EQUAL( icl::infinity<double>::value(),  (std::numeric_limits<double>::infinity)() );
+    BOOST_CHECK_EQUAL( icl::infinity<double>::value(),  (std::numeric_limits<double>::infinity)() );
     BOOST_CHECK_EQUAL( icl::infinity<int>::value(),     (std::numeric_limits<int>::max)() );
     BOOST_CHECK_EQUAL( icl::infinity<std::string>::value(), icl::identity_element<std::string>::value() );
 
