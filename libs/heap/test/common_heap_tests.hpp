@@ -18,7 +18,7 @@ typedef boost::default_constructible_archetype<
 
 
 typedef std::vector<int> test_data;
-const int test_size = 64;//128;
+const int test_size = 32;
 
 struct dummy_run
 {
