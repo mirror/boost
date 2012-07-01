@@ -10,6 +10,7 @@
 #define BOOST_HEAP_BINOMIAL_HEAP_HPP
 
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 #include <boost/assert.hpp>

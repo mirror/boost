@@ -10,6 +10,7 @@
 #define BOOST_HEAP_FIBONACCI_HEAP_HPP
 
 #include <algorithm>
+#include <utility>
 #include <vector>
 
 #include <boost/array.hpp>
