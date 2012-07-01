@@ -68,19 +68,13 @@ private:
         q_.set_stability_count(new_count);
     }
 
-    template <typename value_type>
     struct index_updater
     {
         template <typename It>
-        void operator()(It & it, size_type new_index)
+        static void run(It & it, size_type new_index)
         {
             q_type::get_value(it)->second = new_index;
         }
-
-        template <typename U>
-        struct rebind {
-            typedef index_updater<U> other;
-        };
     };
 
 public:
@@ -124,7 +118,7 @@ private:
 
     typedef typename PriorityQueueType::template rebind<list_iterator,
                                                         indirect_cmp,
-                                                        allocator_type, index_updater<list_iterator> >::other q_type;
+                                                        allocator_type, index_updater >::other q_type;
 
 protected:
     q_type q_;
