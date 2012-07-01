@@ -79,8 +79,8 @@ BOOST_AUTO_TEST_CASE(ticket_6095_Marvin_Sielenkemper_totalRangeTest)
     typedef std::numeric_limits<Value>                                       Limits;
     typedef boost::icl::interval_map<Value, int, boost::icl::total_enricher> Container;
 
-    Value const min(Limits::min());
-    Value const max(Limits::max());
+    Value const min((Limits::min)());
+    Value const max((Limits::max)());
 
     boost::icl::interval_map<Value, int, boost::icl::total_enricher> intervals;
 
