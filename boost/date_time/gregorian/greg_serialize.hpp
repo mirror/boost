@@ -22,6 +22,7 @@
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::date_duration)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::date_duration::duration_rep)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::date_period)
+BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::greg_year)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::greg_month)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::greg_day)
 BOOST_SERIALIZATION_SPLIT_FREE(::boost::gregorian::greg_weekday)
@@ -184,6 +185,32 @@ inline void load_construct_data(Archive & ar, gregorian::date_period* dp,
   gregorian::date d(gregorian::not_a_date_time);
   gregorian::date_duration dd(1);
   ::new(dp) gregorian::date_period(d,dd);
+}
+
+/**** greg_year ****/
+
+//! Function to save gregorian::greg_year objects using serialization lib
+template<class Archive>
+void save(Archive & ar, const gregorian::greg_year& gy, 
+          unsigned int /*version*/)
+{
+  unsigned short us = gy;
+  ar & make_nvp("greg_year", us);
+}
+//! Function to load gregorian::greg_year objects using serialization lib
+template<class Archive>
+void load(Archive & ar, gregorian::greg_year& gy, unsigned int /*version*/)
+{
+  unsigned short us;
+  ar & make_nvp("greg_year", us);
+  gy = gregorian::greg_year(us);
+}
+//!override needed b/c no default constructor
+template<class Archive>
+inline void load_construct_data(Archive & ar, gregorian::greg_year* gy, 
+                                const unsigned int /*file_version*/)
+{
+  ::new(gy) gregorian::greg_year(1900);
 }
 
 /**** greg_month ****/
