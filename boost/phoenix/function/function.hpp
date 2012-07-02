@@ -19,6 +19,14 @@ namespace boost { namespace phoenix
     /////////////////////////////////////////////////////////////////////////////
     // Functions
     /////////////////////////////////////////////////////////////////////////////
+    
+    namespace expression
+    {
+        template <typename F, BOOST_PHOENIX_typename_A_void(BOOST_PHOENIX_ACTOR_LIMIT)>
+        struct function
+            : detail::expression::function_eval<F, BOOST_PHOENIX_A(BOOST_PHOENIX_ACTOR_LIMIT)>
+        {};
+    }
 
     // functor which returns our lazy function call extension
     template<typename F>
