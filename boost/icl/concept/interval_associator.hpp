@@ -346,7 +346,7 @@ template<class Type, class OperandT>
 typename enable_if<is_binary_intra_combinable<Type, OperandT>, Type>::type
 operator + (const Type& object, const OperandT& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp += operand); 
 }
 
@@ -380,7 +380,7 @@ template<class Type, class OperandT>
 typename enable_if<is_binary_intra_combinable<Type, OperandT>, Type>::type
 operator + (const OperandT& operand, const Type& object)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp += operand);
 }
 
@@ -414,7 +414,7 @@ template<class Type>
 typename enable_if<is_interval_container<Type>, Type>::type
 operator + (const Type& object, const Type& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp += operand); 
 }
 
@@ -498,7 +498,7 @@ template<class Type, class OperandT>
 typename enable_if<is_binary_intra_combinable<Type, OperandT>, Type>::type
 operator | (const Type& object, const OperandT& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp += operand); 
 }
 
@@ -532,7 +532,7 @@ template<class Type, class OperandT>
 typename enable_if<is_binary_intra_combinable<Type, OperandT>, Type>::type
 operator | (const OperandT& operand, const Type& object)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp += operand);
 }
 
@@ -565,7 +565,7 @@ template<class Type>
 typename enable_if<is_interval_container<Type>, Type>::type
 operator | (const Type& object, const Type& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp += operand); 
 }
 
@@ -605,7 +605,7 @@ insert(Type& object, const OperandT& operand)
 {
     typename Type::iterator prior_ = object.end();
     ICL_const_FORALL(typename OperandT, elem_, operand) 
-        insert(object, *elem_); 
+        insert(object, prior_, *elem_); 
 
     return object; 
 }
@@ -724,7 +724,7 @@ template<class Type, class OperandT>
 typename enable_if<is_right_inter_combinable<Type, OperandT>, Type>::type
 operator - (const Type& object, const OperandT& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp -= operand); 
 }
 
@@ -793,7 +793,7 @@ template<class Type, class OperandT>
 typename enable_if<is_binary_inter_combinable<Type, OperandT>, Type>::type
 operator & (const Type& object, const OperandT& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp &= operand); 
 }
 
@@ -823,7 +823,7 @@ template<class Type, class OperandT>
 typename enable_if<is_binary_inter_combinable<Type, OperandT>, Type>::type
 operator & (const OperandT& operand, const Type& object)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp &= operand);
 }
 
@@ -853,7 +853,7 @@ template<class Type>
 typename enable_if<is_interval_container<Type>, Type>::type
 operator & (const Type& object, const Type& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp &= operand); 
 }
 
@@ -1028,7 +1028,7 @@ template<class Type, class OperandT>
 typename enable_if<is_binary_intra_combinable<Type, OperandT>, Type>::type
 operator ^ (const Type& object, const OperandT& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp ^= operand); 
 }
 
@@ -1058,7 +1058,7 @@ template<class Type, class OperandT>
 typename enable_if<is_binary_intra_combinable<Type, OperandT>, Type>::type
 operator ^ (const OperandT& operand, const Type& object)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp ^= operand);
 }
 
@@ -1088,7 +1088,7 @@ template<class Type>
 typename enable_if<is_interval_container<Type>, Type>::type
 operator ^ (const Type& object, const Type& operand)
 {
-	Type temp = object;
+    Type temp = object;
     return boost::move(temp ^= operand); 
 }
 
