@@ -272,9 +272,21 @@ namespace boost {
             typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
         };
 
+        template<typename CharT, std::size_t N>
+        struct stream_char<boost::array<const CharT, N> >
+        {
+            typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
+        };
+
 #if !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
         template <typename CharT, std::size_t N>
         struct stream_char<std::array<CharT, N> >
+        {
+            typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
+        };
+
+        template <typename CharT, std::size_t N>
+        struct stream_char<std::array<const CharT, N> >
         {
             typedef BOOST_DEDUCED_TYPENAME stream_char<CharT>::type type;
         };
