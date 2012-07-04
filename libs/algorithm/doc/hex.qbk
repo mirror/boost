@@ -66,12 +66,12 @@ If you want to catch all the decoding errors, you can catch exceptions of type `
 Assuming that `out` is an iterator that accepts `char` values, and `wout` accepts `wchar_t` values (and that sizeof ( wchar_t ) == 2)
 
 ``
-hex ( "abcde", out )  --> "616263646566"
+hex ( "abcdef", out )  --> "616263646566"
 hex ( "32", out )     --> "3332"
-hex ( "abcde", wout ) --> "006100620063006400650066"
+hex ( "abcdef", wout ) --> "006100620063006400650066"
 hex ( "32", wout )    --> "00330032"
 
-unhex ( "616263646566", out )  --> "abcde"
+unhex ( "616263646566", out )  --> "abcdef"
 unhex ( "3332", out )          --> "32"
 unhex ( "616263646566", wout ) --> "\6162\6364\6566"	( i.e, a 3 character string )
 unhex ( "3332", wout )         --> "\3233"				( U+3332, SQUARE HUARADDO )
