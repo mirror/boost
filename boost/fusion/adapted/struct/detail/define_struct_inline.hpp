@@ -29,6 +29,27 @@
 #define BOOST_FUSION_MAKE_DEFAULT_INIT_LIST_ENTRY(R, DATA, N, ATTRIBUTE)        \
     BOOST_PP_COMMA_IF(N) BOOST_PP_TUPLE_ELEM(2, 1, ATTRIBUTE)()
 
+#define BOOST_FUSION_MAKE_DEFAULT_INIT_LIST(ATTRIBUTES_SEQ)                     \
+            : BOOST_PP_SEQ_FOR_EACH_I(                                          \
+              BOOST_FUSION_MAKE_DEFAULT_INIT_LIST_ENTRY,                        \
+              ~,                                                                \
+              ATTRIBUTES_SEQ)                                                   \
+
+#define BOOST_FUSION_IGNORE_1(ARG1)
+#define BOOST_FUSION_IGNORE_2(ARG1, ARG2)
+
+#define BOOST_FUSION_MAKE_COPY_CONSTRUCTOR(NAME, ATTRIBUTES_SEQ)                \
+    NAME(BOOST_PP_SEQ_FOR_EACH_I(                                               \
+            BOOST_FUSION_MAKE_CONST_REF_PARAM,                                  \
+            ~,                                                                  \
+            ATTRIBUTES_SEQ))                                                    \
+        : BOOST_PP_SEQ_FOR_EACH_I(                                              \
+              BOOST_FUSION_MAKE_INIT_LIST_ENTRY,                                \
+              ~,                                                                \
+              ATTRIBUTES_SEQ)                                                   \
+    {                                                                           \
+    }                                                                           \
+
 #define BOOST_FUSION_MAKE_CONST_REF_PARAM(R, DATA, N, ATTRIBUTE)                \
     BOOST_PP_COMMA_IF(N)                                                        \
     BOOST_PP_TUPLE_ELEM(2, 0, ATTRIBUTE) const&                                 \
@@ -162,23 +183,19 @@
     NAME, ATTRIBUTES_SEQ, ATTRIBUTES_SEQ_SIZE)                                  \
                                                                                 \
     NAME()                                                                      \
-        : BOOST_PP_SEQ_FOR_EACH_I(                                              \
-              BOOST_FUSION_MAKE_DEFAULT_INIT_LIST_ENTRY,                        \
-              ~,                                                                \
-              ATTRIBUTES_SEQ)                                                   \
+        BOOST_PP_IF(                                                            \
+            BOOST_PP_SEQ_SIZE(ATTRIBUTES_SEQ),                                  \
+            BOOST_FUSION_MAKE_DEFAULT_INIT_LIST,                                \
+            BOOST_FUSION_IGNORE_1)                                              \
+                (ATTRIBUTES_SEQ)                                                \
     {                                                                           \
     }                                                                           \
                                                                                 \
-    NAME(BOOST_PP_SEQ_FOR_EACH_I(                                               \
-            BOOST_FUSION_MAKE_CONST_REF_PARAM,                                  \
-            ~,                                                                  \
-            ATTRIBUTES_SEQ))                                                    \
-        : BOOST_PP_SEQ_FOR_EACH_I(                                              \
-              BOOST_FUSION_MAKE_INIT_LIST_ENTRY,                                \
-              ~,                                                                \
-              ATTRIBUTES_SEQ)                                                   \
-    {                                                                           \
-    }                                                                           \
+    BOOST_PP_IF(                                                                \
+        BOOST_PP_SEQ_SIZE(ATTRIBUTES_SEQ),                                      \
+        BOOST_FUSION_MAKE_COPY_CONSTRUCTOR,                                     \
+        BOOST_FUSION_IGNORE_2)                                                  \
+            (NAME, ATTRIBUTES_SEQ)                                              \
                                                                                 \
     template <typename boost_fusion_uglified_Seq>                               \
     NAME(const boost_fusion_uglified_Seq& rhs)                                  \
