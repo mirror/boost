@@ -171,13 +171,13 @@ public:
 
   virtual boost::any get(const any& key)
   {
-    return get_wrapper_xxx(property_map_, any_cast<key_type>(key));
+    return get_wrapper_xxx(property_map_, any_cast<typename boost::property_traits<PropertyMap>::key_type>(key));
   }
 
   virtual std::string get_string(const any& key)
   {
     std::ostringstream out;
-    out << get_wrapper_xxx(property_map_, any_cast<key_type>(key));
+    out << get_wrapper_xxx(property_map_, any_cast<typename boost::property_traits<PropertyMap>::key_type>(key));
     return out.str();
   }
 
