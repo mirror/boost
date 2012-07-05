@@ -469,7 +469,7 @@ namespace boost { namespace program_options {
                     // Take care to never increment the iterator past
                     // the end, since MSVC 8.0 (brokenly), assumes that
                     // doing that, even if no access happens, is a bug.
-                    unsigned remaining = std::distance(line_begin, par_end);
+                    unsigned remaining = static_cast<unsigned>(std::distance(line_begin, par_end));
                     string::const_iterator line_end = line_begin + 
                         ((remaining < line_length) ? remaining : line_length);
             
@@ -502,8 +502,8 @@ namespace boost { namespace program_options {
               
                     if (first_line)
                     {
-                        indent += par_indent;
-                        line_length -= par_indent; // there's less to work with now
+                        indent += static_cast<unsigned>(par_indent);
+                        line_length -= static_cast<unsigned>(par_indent); // there's less to work with now
                         first_line = false;
                     }
 
@@ -592,7 +592,7 @@ namespace boost { namespace program_options {
                       os.put(' ');
                    }
                 } else {
-                   for(unsigned pad = first_column_width - ss.str().size(); pad > 0; --pad)
+                   for(unsigned pad = first_column_width - static_cast<unsigned>(ss.str().size()); pad > 0; --pad)
                    {
                       os.put(' ');
                    }
