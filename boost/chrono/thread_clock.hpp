@@ -46,7 +46,7 @@ struct clock_string<thread_clock, CharT>
   static std::basic_string<CharT> name()
   {
     static const CharT u[] =
-    { 't', 'h', 'r', 'e', 'd', '_',
+    { 't', 'h', 'r', 'e', 'a', 'd', '_',
       'c', 'l','o', 'c', 'k'};
     static const std::basic_string<CharT> str(u, u + sizeof(u)/sizeof(u[0]));
     return str;
@@ -54,7 +54,7 @@ struct clock_string<thread_clock, CharT>
   static std::basic_string<CharT> since()
   {
     const CharT u[] =
-    { ' ', 's', 'i', 'n', 'c', 'e', ' ', 't', 'r', 'e', 'a', 'd', ' ', 's', 't', 'a', 'r', 't', '-', 'u', 'p'};
+    { ' ', 's', 'i', 'n', 'c', 'e', ' ', 't', 'h', 'r', 'e', 'a', 'd', ' ', 's', 't', 'a', 'r', 't', '-', 'u', 'p'};
     const std::basic_string<CharT> str(u, u + sizeof(u)/sizeof(u[0]));
     return str;
   }
