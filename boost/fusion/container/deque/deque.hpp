@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2005-2011 Joel de Guzman
+    Copyright (c) 2005-2012 Joel de Guzman
     Copyright (c) 2005-2006 Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -8,19 +8,7 @@
 #if !defined(BOOST_FUSION_DEQUE_26112006_1649)
 #define BOOST_FUSION_DEQUE_26112006_1649
 
-#include <boost/fusion/container/deque/limits.hpp>
-#include <boost/fusion/container/deque/front_extended_deque.hpp>
-#include <boost/fusion/container/deque/back_extended_deque.hpp>
-#include <boost/fusion/container/deque/detail/deque_keyed_values.hpp>
-#include <boost/fusion/container/deque/detail/deque_initial_size.hpp>
-#include <boost/fusion/support/sequence_base.hpp>
-#include <boost/fusion/container/deque/detail/keyed_element.hpp>
-#include <boost/preprocessor/repetition/enum_params.hpp>
-#include <boost/preprocessor/repetition/enum_binary_params.hpp>
-#include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
-#include <boost/type_traits/add_reference.hpp>
-#include <boost/type_traits/add_const.hpp>
-#include <boost/type_traits/is_convertible.hpp>
+#include <boost/config.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // With no decltype and variadics, we will use the C++03 version
@@ -30,9 +18,9 @@
   || defined(BOOST_NO_RVALUE_REFERENCES))
 # include <boost/fusion/container/deque/detail/cpp03_deque.hpp>
 #else
-#if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
-#pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/deque" FUSION_MAX_DEQUE_SIZE_STR ".hpp")
-#endif
+# if !defined(BOOST_FUSION_HAS_CPP11_DEQUE)
+#   define BOOST_FUSION_HAS_CPP11_DEQUE
+# endif
 
 ///////////////////////////////////////////////////////////////////////////////
 // C++11 interface

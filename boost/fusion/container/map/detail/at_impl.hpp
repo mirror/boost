@@ -41,7 +41,7 @@ namespace boost { namespace fusion
             };
 
             template <typename Sequence, typename N>
-            struct apply <Sequence const, N>
+            struct apply<Sequence const, N>
             {
                 typedef typename 
                     mpl::at<typename Sequence::storage_type::types, N>::type 
