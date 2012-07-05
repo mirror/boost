@@ -30,6 +30,8 @@ struct cls
 namespace ns
 {
     BOOST_FUSION_DEFINE_TPL_STRUCT_INLINE((M), s, (M, m))
+            
+    BOOST_FUSION_DEFINE_TPL_STRUCT_INLINE((M), empty_struct, )
 }
 
 int
@@ -43,6 +45,11 @@ main()
     std::cout << tuple_close(']');
     std::cout << tuple_delimiter(", ");
 
+    {
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<ns::empty_struct<int> >::value == 0);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::empty<ns::empty_struct<int> >::value);
+    }
+    
     {
         BOOST_MPL_ASSERT_NOT((traits::is_view<point>));
         point p(123, 456);
