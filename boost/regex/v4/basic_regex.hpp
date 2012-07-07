@@ -243,11 +243,11 @@ public:
    // begin, end:
    const_iterator BOOST_REGEX_CALL begin()const
    { 
-      return (!this->m_status ? 0 : this->m_expression); 
+      return (this->m_status ? 0 : this->m_expression); 
    }
    const_iterator BOOST_REGEX_CALL end()const
    { 
-      return (!this->m_status ? 0 : this->m_expression + this->m_expression_len); 
+      return (this->m_status ? 0 : this->m_expression + this->m_expression_len); 
    }
    flag_type BOOST_REGEX_CALL flags()const
    {
