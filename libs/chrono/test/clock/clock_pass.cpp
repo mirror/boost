@@ -36,6 +36,7 @@ template <typename Clock>
 void check_clock_now()
 {
     typename Clock::time_point t1 = Clock::now();
+    (void)t1;
 }
 
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
@@ -45,6 +46,7 @@ void check_clock_now_ec()
 {
     boost::system::error_code ec;
     typename Clock::time_point t1 = Clock::now(ec);
+    (void)t1;
     BOOST_TEST(ec.value()==0);
 }
 
@@ -52,6 +54,7 @@ template <typename Clock>
 void check_clock_now_throws()
 {
     typename Clock::time_point t1 = Clock::now(boost::throws());
+    (void)t1;
 }
 
 #ifndef BOOST_NO_EXCEPTIONS
