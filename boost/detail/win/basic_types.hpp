@@ -14,7 +14,7 @@
 #if defined( BOOST_USE_WINDOWS_H )
 # include <windows.h>
 #elif defined( WIN32 ) || defined( _WIN32 ) || defined( __WIN32__ ) ||  defined(__CYGWIN__)
-# include <WinError.h>
+# include <winerror.h>
 // @FIXME Which condition must be tested
 # ifdef UNDER_CE
 #  ifndef WINAPI
