@@ -164,7 +164,7 @@ namespace boost
        *
        * Effects: Do nothing.
        */
-      ~stopwatch()
+      ~stopwatch() BOOST_NOEXCEPT
       {
       }
 
@@ -239,7 +239,7 @@ namespace boost
        * Effects: Assign the error code if any internal error occur while retrieving the current time.
        * Effects: Memorize the current time.
        *
-       * Post-conditions: is_running() if no error occur.
+       * Post-conditions: @c is_running() if no error occur.
        */
       void start(
           system::error_code & ec
@@ -256,9 +256,10 @@ namespace boost
       /**
        * Start the stopwatch.
        *
-       * Effects: Gives the elapsed time since start time to the LapCollector.
+       * Requires: is_running().
+       * Effects: Stores the elapsed time since start time into the LapCollector.
        *
-       * Throws: Any exception that the LapCollector can throw when .
+       * Throws: Any exception that the LapCollector can throw.
        *
        * Post-conditions: !is_running() if no error occur.
        */
@@ -276,8 +277,9 @@ namespace boost
       /**
        * Start the stopwatch.
        *
+       * Requires: is_running().
        * Effects: Assign the error code if any internal error occur while retrieving the current time.
-       * Effects: Gives the elapsed time since start time to the LapCollector if no internal error occurs.
+       * Effects: Stores the elapsed time since start time into the LapCollector if no internal error occurs.
        *
        * Throws: Any exception that the LapCollector can Throw.
        *

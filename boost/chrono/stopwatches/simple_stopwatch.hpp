@@ -35,7 +35,7 @@ namespace boost
       BOOST_STATIC_CONSTEXPR bool is_steady =             Clock::is_steady;
 
 
-      simple_stopwatch() BOOST_NOEXCEPT :
+      simple_stopwatch() :
         start_(clock::now())
       {
       }
@@ -59,13 +59,13 @@ namespace boost
       {
       }
 
-      duration elapsed() BOOST_NOEXCEPT
+      duration elapsed()
       {
         return clock::now() - start_;
       }
 
 #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-      duration elapsed(system::error_code & ec)
+      duration elapsed(system::error_code & ec) BOOST_NOEXCEPT
       {
         time_point tmp = clock::now(ec);
         if (!BOOST_CHRONO_IS_THROWS(ec))

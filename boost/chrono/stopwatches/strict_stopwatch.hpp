@@ -35,7 +35,7 @@ namespace boost
       BOOST_STATIC_CONSTEXPR bool is_steady =             Clock::is_steady;
 
 
-      strict_stopwatch() BOOST_NOEXCEPT :
+      strict_stopwatch() :
         start_(clock::now())
       {
       }
@@ -59,7 +59,7 @@ namespace boost
       {
       }
 
-      duration elapsed() BOOST_NOEXCEPT
+      duration elapsed()
       {
         return clock::now() - start_;
       }
