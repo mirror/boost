@@ -85,6 +85,10 @@
 #     undef BOOST_CHRONO_HAS_THREAD_CLOCK
 #     undef BOOST_CHRONO_THREAD_CLOCK_IS_STEADY
 #   endif
+#   if defined(__HP_aCC) && defined(__hpux)
+#     undef BOOST_CHRONO_HAS_THREAD_CLOCK
+#     undef BOOST_CHRONO_THREAD_CLOCK_IS_STEADY
+#   endif
 # endif
 
 #if defined(BOOST_CHRONO_THREAD_DISABLED) && defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
