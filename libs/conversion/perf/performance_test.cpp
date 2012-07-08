@@ -13,6 +13,7 @@
 #define BOOST_CHRONO_HEADER_ONLY
 
 #include <boost/lexical_cast.hpp>
+
 #include <boost/chrono.hpp>
 #include <fstream>
 #include <cstring>
@@ -20,6 +21,13 @@
 
 // File to output data
 std::fstream fout;
+
+namespace boost {
+inline std::istream& operator>> (std::istream& in, boost::array<char,50>& res) {
+    in >> res.begin();
+    return in;
+}
+}
 
 template <class OutT, class InT>
 static inline void test_lexical(const InT& in_val) {
@@ -35,6 +43,28 @@ static inline void test_ss_constr(const InT& in_val) {
     if (ss.fail()) throw std::logic_error("descr");
     ss >> out_val;
     if (ss.fail()) throw std::logic_error("descr");
+}
+
+template <class OutT, class CharT, std::size_t N>
+static inline void test_ss_constr(const boost::array<CharT, N>& in_val) {
+    OutT out_val;
+    std::stringstream ss;
+    ss << in_val.begin();
+    if (ss.fail()) throw std::logic_error("descr");
+    ss >> out_val;
+    if (ss.fail()) throw std::logic_error("descr");
+}
+
+template <class OutT, class StringStreamT, class CharT, std::size_t N>
+static inline void test_ss_noconstr(StringStreamT& ss, const boost::array<CharT, N>& in_val) {
+    OutT out_val;
+    ss << in_val.begin(); // ss is an instance of std::stringstream
+    if (ss.fail()) throw std::logic_error("descr");
+    ss >> out_val;
+    if (ss.fail()) throw std::logic_error("descr");
+    /* reseting std::stringstream to use it again */
+    ss.str(std::string());
+    ss.clear();
 }
 
 template <class OutT, class StringStreamT, class InT>
@@ -64,6 +94,12 @@ struct structure_sprintf {
 };
 
 struct structure_sscanf {
+    template <class OutT, class BufferT, class CharT, std::size_t N>
+    static inline void test(BufferT* /*buffer*/, const boost::array<CharT, N>& in_val, const char* const conv) {
+        OutT out_val;
+        sscanf(in_val.cbegin(), conv, &out_val);
+    }
+
     template <class OutT, class BufferT, class InT>
     static inline void test(BufferT* /*buffer*/, const InT& in_val, const char* const conv) {
         OutT out_val;
@@ -229,7 +265,7 @@ void string_like_test_set(const std::string& from) {
     perf_test<float, ssc_t>(from + "->float",             conv("1.123"), "%f");
     perf_test<double, ssc_t>(from + "->double",           conv("1.123"), "%lf");
     perf_test<long double, ssc_t>(from + "->long double", conv("1.123"), "%Lf");
-
+    perf_test<boost::array<char, 50>, ssc_t>(from + "->array<char, 50>", conv("1.123"), "%s");
 
     perf_test<std::string, structure_fake>(from + "->string", conv("string"), "%Lf");
     perf_test<boost::container::string, structure_fake>(from + "->container::string"
@@ -265,6 +301,14 @@ struct to_schar_conv {
 struct to_iterator_range {
     boost::iterator_range<const char*>  operator()(const char* const c) const {
         return boost::make_iterator_range(c, c + std::strlen(c));
+    }
+};
+
+struct to_array_50 {
+    boost::array<char, 50> operator()(const char* const c) const {
+        boost::array<char, 50> ret;
+        std::strcpy(ret.begin(), c);
+        return ret;
     }
 };
 
@@ -310,6 +354,7 @@ int main(int argc, char** argv) {
     string_like_test_set<to_uchar_conv>("unsigned char*");
     string_like_test_set<to_schar_conv>("signed char*");
     string_like_test_set<to_iterator_range>("iterator_range<char*>");
+    string_like_test_set<to_array_50>("array<char, 50>");
 
     perf_test<int, structure_fake>("int->int", 100, "");
     perf_test<double, structure_fake>("float->double", 100.0f, "");
