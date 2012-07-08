@@ -15,7 +15,7 @@ local disable-icu = [ MATCH (--disable-icu) : [ modules.peek : ARGV ] ] ;
 rule path_options ( properties * )
 {
     local result ;
-    if <address-model>64 in $(properties)
+    if <address-model>64 in $(properties) && <toolset>msvc in $(properties) 
     {
     	result = <search>$(ICU_PATH)/bin64 <search>$(ICU_PATH)/lib64 ;
     }
