@@ -379,16 +379,11 @@ namespace boost { namespace unordered { namespace detail {
             // exception (need strong safety in such a case).
             node_constructor a(this->node_alloc());
             a.construct_node();
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
-            a.construct_value(boost::unordered::piecewise_construct,
-                boost::make_tuple(k), boost::make_tuple());
-#else
-            a.construct_value(
-                boost::unordered::detail::create_emplace_args(
-                    boost::unordered::piecewise_construct,
-                    boost::make_tuple(k),
-                    boost::make_tuple()));
-#endif
+
+            a.construct_value(BOOST_UNORDERED_EMPLACE_ARGS3(
+                boost::unordered::piecewise_construct,
+                boost::make_tuple(k),
+                boost::make_tuple()));
     
             this->reserve_for_insert(this->size_ + 1);
             return *add_node(a, key_hash);

@@ -91,6 +91,10 @@ namespace boost { namespace unordered { namespace detail {
 #define BOOST_UNORDERED_EMPLACE_ARGS BOOST_FWD_REF(Args)... args
 #define BOOST_UNORDERED_EMPLACE_FORWARD boost::forward<Args>(args)...
 
+#define BOOST_UNORDERED_EMPLACE_ARGS1(a0) a0
+#define BOOST_UNORDERED_EMPLACE_ARGS2(a0, a1) a0, a1
+#define BOOST_UNORDERED_EMPLACE_ARGS3(a0, a1, a2) a0, a1, a2
+
 #else
 
 #define BOOST_UNORDERED_EMPLACE_TEMPLATE typename Args
@@ -127,6 +131,10 @@ namespace boost { namespace unordered { namespace detail {
         > e(BOOST_PP_ENUM_PARAMS_Z(z, n, b));                               \
         return e;                                                           \
     }
+
+#define BOOST_UNORDERED_EMPLACE_ARGS1 create_emplace_args
+#define BOOST_UNORDERED_EMPLACE_ARGS2 create_emplace_args
+#define BOOST_UNORDERED_EMPLACE_ARGS3 create_emplace_args
 
 #if defined(BOOST_NO_RVALUE_REFERENCES)
 

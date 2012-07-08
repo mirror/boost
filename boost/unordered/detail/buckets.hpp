@@ -82,15 +82,11 @@ namespace boost { namespace unordered { namespace detail {
         void construct_value2(BOOST_FWD_REF(A0) a0)
         {
             BOOST_ASSERT(node_ && !constructed_);
-#   if !defined(BOOST_NO_VARIADIC_TEMPLATES)
-            boost::unordered::detail::construct_node(alloc_,
-                boost::addressof(*node_), boost::forward<A0>(a0));
-#   else
+
             boost::unordered::detail::construct_node(alloc_,
                 boost::addressof(*node_),
-                boost::unordered::detail::create_emplace_args(
-                    boost::forward<A0>(a0)));
-#   endif
+                BOOST_UNORDERED_EMPLACE_ARGS1(boost::forward<A0>(a0)));
+
             constructed_ = true;
             node_->init(static_cast<typename node::link_pointer>(node_));
         }
