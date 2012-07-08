@@ -38,7 +38,7 @@ namespace boost { namespace unordered { namespace detail {
 
 #if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
-        unique_node(BOOST_UNORDERED_EMPLACE_ARGS) :
+        explicit unique_node(BOOST_UNORDERED_EMPLACE_ARGS) :
             node_base(),
             hash_(0)
         {
@@ -48,6 +48,10 @@ namespace boost { namespace unordered { namespace detail {
 
         ~unique_node() {
             boost::unordered::detail::destroy(this->value_ptr());
+        }
+
+        unique_node(unique_node const&) {
+            BOOST_ASSERT(false);
         }
 #else
         unique_node() :
@@ -59,6 +63,9 @@ namespace boost { namespace unordered { namespace detail {
         void init(link_pointer)
         {
         }
+
+    private:
+        unique_node& operator=(unique_node const&);
     };
 
     template <typename T>
@@ -74,7 +81,7 @@ namespace boost { namespace unordered { namespace detail {
 
 #if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
-        ptr_node(BOOST_UNORDERED_EMPLACE_ARGS) :
+        explicit ptr_node(BOOST_UNORDERED_EMPLACE_ARGS) :
             bucket_base(),
             hash_(0)
         {
@@ -84,6 +91,10 @@ namespace boost { namespace unordered { namespace detail {
 
         ~ptr_node() {
             boost::unordered::detail::destroy(this->value_ptr());
+        }
+
+        ptr_node(ptr_node const&) {
+            BOOST_ASSERT(false);
         }
 #else
         ptr_node() :
@@ -95,6 +106,9 @@ namespace boost { namespace unordered { namespace detail {
         void init(link_pointer)
         {
         }
+
+    private:
+        ptr_node& operator=(ptr_node const&);
     };
 
     // If the allocator uses raw pointers use ptr_node
