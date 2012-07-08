@@ -36,7 +36,10 @@
 namespace boost{
 #ifdef BOOST_MSVC
 #pragma warning(push)
-#pragma warning(disable : 4251 4231 4660 4800)
+#pragma warning(disable : 4251 4231 4800)
+#if BOOST_MSVC < 1600
+#pragma warning(disable : 4660)
+#endif
 #endif
 
 namespace re_detail{
