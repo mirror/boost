@@ -293,6 +293,20 @@ namespace test
         return x.tag_ == y.tag_;
     }
 
+    // Function to check how many times an allocator has been selected,
+    // return 0 for other allocators.
+
+    struct convert_from_anything
+    {
+        template <typename T>
+        convert_from_anything(T const&) {}
+    };
+
+    inline int selected_count(convert_from_anything)
+    {
+        return 0;
+    }
+
     template <typename T, typename Flags>
     int selected_count(cxx11_allocator<T, Flags> const& x)
     {

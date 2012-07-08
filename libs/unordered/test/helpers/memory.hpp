@@ -160,30 +160,6 @@ namespace test
             test::detail::memory_tracker tracker;
         }
     }
-    
-    template <int Value>
-    struct bool_type {
-        enum { value = (Value ? true : false) };
-    };
-
-    struct true_type {
-        enum { value = true };
-    };
-
-    struct false_type {
-        enum { value = false };
-    };
-
-    struct convert_from_anything
-    {
-        template <typename T>
-        convert_from_anything(T const&) {}
-    };
-
-    int selected_count(convert_from_anything)
-    {
-        return 0;
-    }
 }
 
 #endif
