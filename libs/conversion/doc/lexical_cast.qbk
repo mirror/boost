@@ -75,7 +75,7 @@ Following example converts some number and puts it to file:
     int i;
     FILE* file;
     ...
-    typedef boost::array<char, 50> buf_t;	// You can use std::array if your compiler supports it
+    typedef boost::array<char, 50> buf_t; // You can use std::array if your compiler supports it
     buf_t buffer = boost::lexical_cast<buf_t>(i); // No dynamic memory allocation
     puts(buffer.begin(), file);
 ``
