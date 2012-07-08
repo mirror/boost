@@ -191,6 +191,7 @@ void basic_regex_parser<charT, traits>::fail(regex_constants::error_type error_c
       this->m_pdata->m_status = error_code;
    m_position = m_end; // don't bother parsing anything else
 
+#ifndef BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
    //
    // Augment error message with the regular expression text:
    //
@@ -211,6 +212,7 @@ void basic_regex_parser<charT, traits>::fail(regex_constants::error_type error_c
       }
       message += "'.";
    }
+#endif
 
 #ifndef BOOST_NO_EXCEPTIONS
    if(0 == (this->flags() & regex_constants::no_except))
