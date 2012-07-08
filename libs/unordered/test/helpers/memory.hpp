@@ -8,10 +8,8 @@
 
 #include <memory>
 #include <map>
-#include <boost/mpl/apply.hpp>
 #include <boost/assert.hpp>
 #include <boost/unordered/detail/allocate.hpp>
-#include <boost/mpl/aux_/config/eti.hpp>
 #include "../helpers/test.hpp"
 
 namespace test

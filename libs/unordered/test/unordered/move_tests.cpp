@@ -162,12 +162,12 @@ namespace move_tests
 #elif defined(BOOST_HAS_NRVO)
             BOOST_TEST(
                 test::global_object_count.constructions - count.constructions <=
-                (test::is_map<T>::value ? 50 : 25));
+                (test::is_set<T>::value ? 25 : 50));
             BOOST_TEST(count.instances == test::global_object_count.instances);
 #else
             BOOST_TEST(
                 test::global_object_count.constructions - count.constructions <=
-                (test::is_map<T>::value ? 100 : 50));
+                (test::is_set<T>::value ? 50 : 100));
             BOOST_TEST(count.instances == test::global_object_count.instances);
 #endif
             test::check_container(y, v);
