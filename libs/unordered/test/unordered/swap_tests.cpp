@@ -148,18 +148,22 @@ void swap_tests2(X* ptr = 0,
     }
 }
 
-boost::unordered_set<test::object,
-        test::hash, test::equal_to,
-        test::allocator<test::object> >* test_set;
-boost::unordered_multiset<test::object,
-        test::hash, test::equal_to,
-        test::allocator<test::object> >* test_multiset;
 boost::unordered_map<test::object, test::object,
         test::hash, test::equal_to,
-        test::allocator<test::object> >* test_map;
+        std::allocator<test::object> >* test_map_std_alloc;
+
+boost::unordered_set<test::object,
+        test::hash, test::equal_to,
+        test::allocator1<test::object> >* test_set;
+boost::unordered_multiset<test::object,
+        test::hash, test::equal_to,
+        test::allocator2<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object,
+        test::hash, test::equal_to,
+        test::allocator1<test::object> >* test_map;
 boost::unordered_multimap<test::object, test::object,
         test::hash, test::equal_to,
-        test::allocator<test::object> >* test_multimap;
+        test::allocator2<test::object> >* test_multimap;
 
 boost::unordered_set<test::object,
         test::hash, test::equal_to,
@@ -209,6 +213,7 @@ UNORDERED_AUTO_TEST(check_traits)
 }
 
 UNORDERED_TEST(swap_tests1, (
+    (test_map_std_alloc)
     (test_set)(test_multiset)(test_map)(test_multimap)
     (test_set_prop_swap)(test_multiset_prop_swap)(test_map_prop_swap)(test_multimap_prop_swap)
     (test_set_no_prop_swap)(test_multiset_no_prop_swap)(test_map_no_prop_swap)(test_multimap_no_prop_swap)

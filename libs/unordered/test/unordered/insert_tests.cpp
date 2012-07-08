@@ -410,43 +410,50 @@ void map_insert_range_test2(X*,
 
 boost::unordered_set<test::object,
     test::hash, test::equal_to,
-    test::allocator<test::object> >* test_set;
-boost::unordered_multiset<test::object,
-    test::hash, test::equal_to,
-    test::allocator<test::object> >* test_multiset;
-boost::unordered_map<test::object, test::object,
-    test::hash, test::equal_to,
-    test::allocator<test::object> >* test_map;
+    std::allocator<test::object> >* test_set_std_alloc;
 boost::unordered_multimap<test::object, test::object,
     test::hash, test::equal_to,
-    test::allocator<test::object> >* test_multimap;
+    std::allocator<test::object> >* test_multimap_std_alloc;
+
+boost::unordered_set<test::object,
+    test::hash, test::equal_to,
+    test::allocator1<test::object> >* test_set;
+boost::unordered_multiset<test::object,
+    test::hash, test::equal_to,
+    test::allocator2<test::object> >* test_multiset;
+boost::unordered_map<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator2<test::object> >* test_map;
+boost::unordered_multimap<test::object, test::object,
+    test::hash, test::equal_to,
+    test::allocator1<test::object> >* test_multimap;
 
 using test::default_generator;
 using test::generate_collisions;
 
 UNORDERED_TEST(unique_insert_tests1,
-    ((test_set)(test_map))
+    ((test_set_std_alloc)(test_set)(test_map))
     ((default_generator)(generate_collisions))
 )
 
 UNORDERED_TEST(equivalent_insert_tests1,
-    ((test_multiset)(test_multimap))
+    ((test_multimap_std_alloc)(test_multiset)(test_multimap))
     ((default_generator)(generate_collisions))
 )
 
 UNORDERED_TEST(insert_tests2,
-    ((test_set)(test_multiset)(test_map)(test_multimap))
+    ((test_multimap_std_alloc)(test_set)(test_multiset)(test_map)(test_multimap))
     ((default_generator)(generate_collisions))
 )
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
 UNORDERED_TEST(unique_emplace_tests1,
-    ((test_set)(test_map))
+    ((test_set_std_alloc)(test_set)(test_map))
     ((default_generator)(generate_collisions))
 )
 
 UNORDERED_TEST(equivalent_emplace_tests1,
-    ((test_multiset)(test_multimap))
+    ((test_multimap_std_alloc)(test_multiset)(test_multimap))
     ((default_generator)(generate_collisions))
 )
 #endif
@@ -457,12 +464,12 @@ UNORDERED_TEST(map_tests,
 )
 
 UNORDERED_TEST(map_insert_range_test1,
-    ((test_map)(test_multimap))
+    ((test_multimap_std_alloc)(test_map)(test_multimap))
     ((default_generator)(generate_collisions))
 )
 
 UNORDERED_TEST(map_insert_range_test2,
-    ((test_map)(test_multimap))
+    ((test_multimap_std_alloc)(test_map)(test_multimap))
     ((default_generator)(generate_collisions))
 )
 

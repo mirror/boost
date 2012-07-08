@@ -155,16 +155,16 @@ void copy_construct_tests2(T* ptr,
 
 boost::unordered_set<test::object,
     test::hash, test::equal_to,
-    test::allocator<test::object> >* test_set;
+    test::allocator1<test::object> >* test_set;
 boost::unordered_multiset<test::object,
     test::hash, test::equal_to,
-    test::allocator<test::object> >* test_multiset;
+    test::allocator2<test::object> >* test_multiset;
 boost::unordered_map<test::object, test::object,
     test::hash, test::equal_to,
-    test::allocator<test::object> >* test_map;
+    test::allocator1<test::object> >* test_map;
 boost::unordered_multimap<test::object, test::object,
     test::hash, test::equal_to,
-    test::allocator<test::object> >* test_multimap;
+    test::allocator2<test::object> >* test_multimap;
 
 boost::unordered_set<test::object,
         test::hash, test::equal_to,
