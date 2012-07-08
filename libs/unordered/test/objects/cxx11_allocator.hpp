@@ -21,7 +21,8 @@ namespace test
             is_select_on_copy = 0,
             is_propagate_on_swap = 0,
             is_propagate_on_assign = 0,
-            is_propagate_on_move = 0
+            is_propagate_on_move = 0,
+            cxx11_construct = 0
         };
     };
 
@@ -31,7 +32,8 @@ namespace test
             is_select_on_copy = 1,
             is_propagate_on_swap = 1,
             is_propagate_on_assign = 1,
-            is_propagate_on_move = 1
+            is_propagate_on_move = 1,
+            cxx11_construct = 1
         };
     };
     

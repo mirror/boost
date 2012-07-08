@@ -53,30 +53,10 @@ namespace test
             }
         };
 
-        template <class Alloc>
-        struct allocator_memory_type_gen {
-            typedef std::map<memory_area, memory_track, memory_area_compare,
-                Alloc> type;
-        };
-
-#if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-        template <>
-        struct allocator_memory_type_gen<int> {
-            typedef std::map<memory_area, memory_track, memory_area_compare>
-                type;
-        };
-#endif
-
-        template <class Alloc = std::allocator<int> >
         struct memory_tracker {
-            typedef BOOST_DEDUCED_TYPENAME
-                ::boost::unordered::detail::rebind_wrap<Alloc,
-                    std::pair<memory_area const, memory_track> >::type
-                allocator_type;
-
-            typedef BOOST_DEDUCED_TYPENAME
-                allocator_memory_type_gen<allocator_type>::type
-                allocated_memory_type;
+            typedef std::map<memory_area, memory_track, memory_area_compare,
+                    std::allocator<std::pair<memory_area const, memory_track> >
+                > allocated_memory_type;
 
             allocated_memory_type allocated_memory;
             unsigned int count_allocators;
@@ -139,7 +119,7 @@ namespace test
             void track_deallocate(void* ptr, std::size_t n, std::size_t size,
                 int tag, bool check_tag_ = true)
             {
-                BOOST_DEDUCED_TYPENAME allocated_memory_type::iterator pos =
+                allocated_memory_type::iterator pos =
                     allocated_memory.find(
                         memory_area(ptr, (char*) ptr + n * size));
                 if(pos == allocated_memory.end()) {
@@ -177,7 +157,7 @@ namespace test
         // 
         // boostinspect:nounnamed
         namespace {
-            test::detail::memory_tracker<std::allocator<int> > tracker;
+            test::detail::memory_tracker tracker;
         }
     }
     
