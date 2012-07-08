@@ -496,17 +496,6 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 #endif // BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT
 #endif // BOOST_NO_VARIADIC_TEMPLATES
 
-    ////////////////////////////////////////////////////////////////////////////
-    // Construct without using the emplace args mechanism.
-
-    template <typename T, typename A0>
-    inline void construct_impl2(T* address, BOOST_FWD_REF(A0) a0)
-    {
-        new((void*) address) T(
-            boost::forward<A0>(a0)
-        );
-    }
-
 }}}
 
 ////////////////////////////////////////////////////////////////////////////////
