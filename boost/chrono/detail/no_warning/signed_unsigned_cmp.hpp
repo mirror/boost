@@ -41,4 +41,4 @@ namespace detail {
 } // namespace detail
 } // namespace chrono
 
-#endif // BOOST_CHRONO_DETAIL_IS_EVENLY_DIVISIBLE_BY_HPP
+#endif // BOOST_CHRONO_DETAIL_NO_WARNING_SIGNED_UNSIGNED_CMP_HPP
