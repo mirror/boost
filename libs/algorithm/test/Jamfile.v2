@@ -46,6 +46,9 @@ import testing ;
      [ run hex_test3.cpp        : : : : hex_test3 ]
      [ run hex_test4.cpp        : : : : hex_test4 ]
 	 [ compile-fail hex_fail1.cpp ]
+
+# Wrapper tests
+     [ run wrapper_test1.cpp        : : : : wrapper_test1 ]
    ;
 }
 
