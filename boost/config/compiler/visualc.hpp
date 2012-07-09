@@ -233,6 +233,7 @@
 #  define BOOST_ABI_SUFFIX "boost/config/abi/msvc_suffix.hpp"
 #endif
 
+#ifndef BOOST_COMPILER
 // TODO:
 // these things are mostly bogus. 1200 means version 12.0 of the compiler. The 
 // artificial versions assigned to them only refer to the versions of some IDE
@@ -289,7 +290,8 @@
 #   endif
 # endif
 
-#define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
+#  define BOOST_COMPILER "Microsoft Visual C++ version " BOOST_STRINGIZE(BOOST_COMPILER_VERSION)
+#endif
 
 //
 // last known and checked version is 1700 (VC11, aka 2011):
