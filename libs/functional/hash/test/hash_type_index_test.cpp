@@ -13,7 +13,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-#if !defined(BOOST_NO_0X_HDR_TYPEINDEX)
+#if !defined(BOOST_NO_CXX11_HDR_TYPEINDEX)
 
 #include <typeindex>
 
@@ -43,7 +43,7 @@ void test_type_index() {
 
 int main()
 {
-#if !defined(BOOST_NO_0X_HDR_TYPEINDEX)
+#if !defined(BOOST_NO_CXX11_HDR_TYPEINDEX)
     test_type_index();
 #else
     std::cout<<"<type_index> not available."<<std::endl;

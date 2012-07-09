@@ -16,7 +16,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-#if defined(TEST_EXTENSIONS) && !defined(BOOST_NO_0X_HDR_TUPLE)
+#if defined(TEST_EXTENSIONS) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
 #define TEST_TUPLE
 #include <tuple>
 #include <vector>
