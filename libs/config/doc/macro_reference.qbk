@@ -628,8 +628,6 @@ scoped enumerations (`enum class`).
 [[`BOOST_NO_STD_UNORDERD`][The standard library does not support
 <unordered_map> and <unordered_set>. 
 ]]                  
-[[`BOOST_NO_TEMPLATE_ALIASES`][The compiler does not support template aliases. 
-]]                      
 [[`BOOST_NO_UNICODE_LITERALS`][The compiler does not support
 Unicode (`u8`, `u`, `U`) literals. 
 ]] 
