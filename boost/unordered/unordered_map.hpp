@@ -20,7 +20,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/move/move.hpp>
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
 #endif
 
@@ -132,7 +132,7 @@ namespace unordered
         unordered_map(unordered_map&&, allocator_type const&);
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         unordered_map(
                 std::initializer_list<value_type>,
                 size_type = boost::unordered::detail::default_bucket_count,
@@ -175,7 +175,7 @@ namespace unordered
 #endif
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         unordered_map& operator=(std::initializer_list<value_type>);
 #endif
 
@@ -400,7 +400,7 @@ namespace unordered
 
         template <class InputIt> void insert(InputIt, InputIt);
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         void insert(std::initializer_list<value_type>);
 #endif
 
@@ -618,7 +618,7 @@ namespace unordered
         unordered_multimap(unordered_multimap&&, allocator_type const&);
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         unordered_multimap(
                 std::initializer_list<value_type>,
                 size_type = boost::unordered::detail::default_bucket_count,
@@ -662,7 +662,7 @@ namespace unordered
 #endif
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         unordered_multimap& operator=(std::initializer_list<value_type>);
 #endif
 
@@ -887,7 +887,7 @@ namespace unordered
 
         template <class InputIt> void insert(InputIt, InputIt);
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         void insert(std::initializer_list<value_type>);
 #endif
 
@@ -1087,7 +1087,7 @@ namespace unordered
 
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
     template <class K, class T, class H, class P, class A>
     unordered_map<K,T,H,P,A>::unordered_map(
@@ -1129,7 +1129,7 @@ namespace unordered
         table_.insert_range(first, last);
     }
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template <class K, class T, class H, class P, class A>
     void unordered_map<K,T,H,P,A>::insert(
             std::initializer_list<value_type> list)
@@ -1420,7 +1420,7 @@ namespace unordered
 
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
     template <class K, class T, class H, class P, class A>
     unordered_multimap<K,T,H,P,A>::unordered_multimap(
@@ -1462,7 +1462,7 @@ namespace unordered
         table_.insert_range(first, last);
     }
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template <class K, class T, class H, class P, class A>
     void unordered_multimap<K,T,H,P,A>::insert(
             std::initializer_list<value_type> list)

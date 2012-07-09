@@ -191,7 +191,7 @@ namespace detail {
 
 BOOST_UNORDERED_KEY_FROM_TUPLE(boost)
 
-#if !defined(BOOST_NO_0X_HDR_TUPLE)
+#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
 BOOST_UNORDERED_KEY_FROM_TUPLE(std)
 #endif
 
