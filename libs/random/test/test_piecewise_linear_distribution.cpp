@@ -51,7 +51,7 @@ BOOST_AUTO_TEST_CASE(test_constructors) {
     CHECK_SEQUENCE(dist.intervals(), list_of(0.0)(1.0));
     CHECK_SEQUENCE(dist.densities(), list_of(1.0)(1.0));
 
-#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
     boost::random::piecewise_linear_distribution<> dist_il = {
         { 99, 103, 107, 111, 115 },
         gen()
@@ -143,7 +143,7 @@ BOOST_AUTO_TEST_CASE(test_param) {
     BOOST_CHECK(param != param_default);
     BOOST_CHECK(!(param == param_default));
     
-#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
     boost::random::piecewise_linear_distribution<>::param_type parm_il = {
         { 99, 103, 107, 111, 115 },
         gen()
