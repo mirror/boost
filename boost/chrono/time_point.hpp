@@ -32,7 +32,6 @@ time2_demo contained this comment:
 
 #include <boost/chrono/duration.hpp>
 #include <iostream>
-#include <boost/chrono/detail/system.hpp>
 
 #ifndef BOOST_CHRONO_HEADER_ONLY
 // this must occur after all of the includes and before any code appears:
