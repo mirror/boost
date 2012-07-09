@@ -79,6 +79,11 @@ namespace boost { namespace algorithm {
             return do_search   ( corpus_first, corpus_last, k_corpus_length );
             }
     
+        template <typename Range>
+        typename boost::range_iterator<Range>::type operator () ( Range &r ) const {
+            return (*this) (boost::begin(r), boost::end(r));
+            }
+
     private:
 /// \cond DOXYGEN_HIDE
         patIter pat_first, pat_last;
@@ -179,6 +184,9 @@ namespace boost { namespace algorithm {
         };
 
 
+/*  Two ranges as inputs gives us four possibilities; with 2,3,3,4 parameters
+    Use a bit of TMP to disambiguate the 3-argument templates */
+
 /// \fn knuth_morris_pratt_search ( corpusIter corpus_first, corpusIter corpus_last, 
 ///       patIter pat_first, patIter pat_last )
 /// \brief Searches the corpus for the pattern.
@@ -190,10 +198,55 @@ namespace boost { namespace algorithm {
 ///
     template <typename patIter, typename corpusIter>
     corpusIter knuth_morris_pratt_search ( 
-            corpusIter corpus_first, corpusIter corpus_last, 
-            patIter pat_first, patIter pat_last ) {
+                  corpusIter corpus_first, corpusIter corpus_last, 
+                  patIter pat_first, patIter pat_last )
+    {
         knuth_morris_pratt<patIter> kmp ( pat_first, pat_last );
         return kmp ( corpus_first, corpus_last );
+    }
+
+    template <typename PatternRange, typename corpusIter>
+    corpusIter knuth_morris_pratt_search ( 
+        corpusIter corpus_first, corpusIter corpus_last, const PatternRange &pattern )
+    {
+        typedef typename boost::range_iterator<const PatternRange>::type pattern_iterator;
+        knuth_morris_pratt<pattern_iterator> kmp ( boost::begin(pattern), boost::end (pattern));
+        return kmp ( corpus_first, corpus_last );
+    }
+    
+    template <typename patIter, typename CorpusRange>
+    typename boost::lazy_disable_if_c<
+        boost::is_same<CorpusRange, patIter>::value, typename boost::range_iterator<CorpusRange> >
+    ::type
+    knuth_morris_pratt_search ( CorpusRange &corpus, patIter pat_first, patIter pat_last )
+    {
+        knuth_morris_pratt<patIter> kmp ( pat_first, pat_last );
+        return kmp (boost::begin (corpus), boost::end (corpus));
+    }
+    
+    template <typename PatternRange, typename CorpusRange>
+    typename boost::range_iterator<CorpusRange>::type
+    knuth_morris_pratt_search ( CorpusRange &corpus, const PatternRange &pattern )
+    {
+        typedef typename boost::range_iterator<const PatternRange>::type pattern_iterator;
+        knuth_morris_pratt<pattern_iterator> kmp ( boost::begin(pattern), boost::end (pattern));
+        return kmp (boost::begin (corpus), boost::end (corpus));
+    }
+
+
+    //  Creator functions -- take a pattern range, return an object
+    template <typename Range>
+    boost::algorithm::knuth_morris_pratt<typename boost::range_iterator<const Range>::type>
+    make_knuth_morris_pratt ( const Range &r ) {
+        return boost::algorithm::knuth_morris_pratt
+            <typename boost::range_iterator<const Range>::type> (boost::begin(r), boost::end(r));
+        }
+    
+    template <typename Range>
+    boost::algorithm::knuth_morris_pratt<typename boost::range_iterator<Range>::type>
+    make_knuth_morris_pratt ( Range &r ) {
+        return boost::algorithm::knuth_morris_pratt
+            <typename boost::range_iterator<Range>::type> (boost::begin(r), boost::end(r));
         }
 }}
 
