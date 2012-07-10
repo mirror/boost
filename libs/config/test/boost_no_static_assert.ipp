@@ -9,7 +9,7 @@
 //  TITLE:         C++0x static_assert unavailable
 //  DESCRIPTION:   The compiler does not support C++0x static assertions
 
-namespace boost_no_static_assert {
+namespace boost_no_cxx11_static_assert {
 
 int test()
 {

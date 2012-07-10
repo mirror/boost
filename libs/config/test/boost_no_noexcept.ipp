@@ -9,7 +9,7 @@
 //  TITLE:         C++0x noexcept unavailable
 //  DESCRIPTION:   The compiler does not support C++0x noexcept
 
-namespace boost_no_noexcept {
+namespace boost_no_cxx11_noexcept {
 
 void quiet_warning(bool){}
 

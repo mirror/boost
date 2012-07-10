@@ -204,6 +204,13 @@
 #  define BOOST_HAS_STDINT_H
 #endif
 
+// C++ features supported by VC++ 11 (aka 2012)
+//
+#if _MSC_VER < 1700
+#  define BOOST_NO_CXX11_RANGE_BASED_FOR
+#  define BOOST_NO_CXX11_SCOPED_ENUMS
+#endif // _MSC_VER < 1700
+
 // C++0x features not supported by any versions
 #define BOOST_NO_CXX11_CHAR16_T
 #define BOOST_NO_CXX11_CHAR32_T
@@ -216,7 +223,6 @@
 #define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 #define BOOST_NO_CXX11_NOEXCEPT
 #define BOOST_NO_CXX11_RAW_LITERALS
-#define BOOST_NO_CXX11_SCOPED_ENUMS
 #define BOOST_NO_CXX11_TEMPLATE_ALIASES
 #define BOOST_NO_CXX11_UNICODE_LITERALS
 #define BOOST_NO_CXX11_VARIADIC_TEMPLATES

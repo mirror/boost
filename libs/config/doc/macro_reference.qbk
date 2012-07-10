@@ -613,6 +613,9 @@ control passing of unnamed types as template parameters, see also
 ]]                      
 [[`BOOST_NO_CXX11_NULLPTR`][The compiler does not support `nullptr`. 
 ]]                      
+[[`BOOST_NO_CXX11_RANGE_BASED_FOR`][The compiler does not support
+range-based for statements. 
+]]                   
 [[`BOOST_NO_CXX11_RAW_LITERALS`][The compiler does not support
 raw string literals. 
 ]]                   

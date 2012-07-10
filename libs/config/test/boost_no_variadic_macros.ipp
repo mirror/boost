@@ -47,7 +47,7 @@
 #define TEST_VARIADIC_MACRO_MAYBE_STRIP_PARENS_2(x) TEST_VARIADIC_MACRO_APPLY(TEST_VARIADIC_MACRO_MAYBE_STRIP_PARENS_2_I, x)
 #define TEST_VARIADIC_MACRO_MAYBE_STRIP_PARENS_2_I(...) __VA_ARGS__
 
-namespace boost_no_variadic_macros {
+namespace boost_no_cxx11_variadic_macros {
 
 void quiet_warning(int){}
 

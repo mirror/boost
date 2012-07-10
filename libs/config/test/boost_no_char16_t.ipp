@@ -11,7 +11,7 @@
 //  TITLE:         C++0x char16_t unavailable
 //  DESCRIPTION:   The compiler does not support C++0x char16_t
 
-namespace boost_no_char16_t {
+namespace boost_no_cxx11_char16_t {
 
 //  Microsoft VC++ 2010, and possibly other compilers, provides
 //  a typedef for char16_t rather than a new type. We want that

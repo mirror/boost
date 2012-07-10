@@ -10,7 +10,7 @@
 //  TITLE:         C++0x constexpr unavailable
 //  DESCRIPTION:   The compiler does not support C++0x constexpr
 
-namespace boost_no_constexpr {
+namespace boost_no_cxx11_constexpr {
 
 void quiet_warning(int){}
 

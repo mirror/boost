@@ -10,7 +10,7 @@
 //  TITLE:         C++0x unicode literals unavailable
 //  DESCRIPTION:   The compiler does not support C++0x Unicode literals (N2442)
 
-namespace boost_no_unicode_literals {
+namespace boost_no_cxx11_unicode_literals {
 
 void quiet_warning(const char*){}
 

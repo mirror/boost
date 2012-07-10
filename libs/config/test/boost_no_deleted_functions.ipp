@@ -14,7 +14,7 @@
 #  error Deleted functions are not supported in non-C++0x mode
 #endif
 
-namespace boost_no_deleted_functions {
+namespace boost_no_cxx11_deleted_functions {
 
   struct foo {
     foo() = delete;

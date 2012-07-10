@@ -87,6 +87,10 @@
 #  define BOOST_NO_CXX11_NULLPTR
 #endif
 
+#if !__has_feature(cxx_range_for)
+#  define BOOST_NO_CXX11_RANGE_BASED_FOR
+#endif
+
 #if !__has_feature(cxx_raw_string_literals)
 #  define BOOST_NO_CXX11_RAW_LITERALS
 #endif

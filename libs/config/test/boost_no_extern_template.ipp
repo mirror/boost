@@ -10,7 +10,7 @@
 //  TITLE:         C++0x extern template unavailable
 //  DESCRIPTION:   The compiler does not support C++0x extern template
 
-namespace boost_no_extern_template {
+namespace boost_no_cxx11_extern_template {
 
 template<class T, class U> void f(T const* p, U const* q)
 {

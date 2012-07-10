@@ -14,7 +14,7 @@
 #  error Defaulted functions are not supported in non-C++0x mode
 #endif
 
-namespace boost_no_defaulted_functions {
+namespace boost_no_cxx11_defaulted_functions {
 
   struct foo {
     foo() = default;

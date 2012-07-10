@@ -1,4 +1,4 @@
-//  This file was automatically generated on Sun Apr 22 11:55:04 2012
+//  This file was automatically generated on Tue Jul 10 14:57:46 2012
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -40,12 +40,12 @@ namespace boost_no_array_type_specializations = empty_boost;
 #ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
 #include "boost_no_auto_declarations.ipp"
 #else
-namespace boost_no_auto_declarations = empty_boost;
+namespace boost_no_cxx11_auto_declarations = empty_boost;
 #endif
 #ifndef BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS
 #include "boost_no_auto_multidecl.ipp"
 #else
-namespace boost_no_auto_multideclarations = empty_boost;
+namespace boost_no_cxx11_auto_multideclarations = empty_boost;
 #endif
 #ifndef BOOST_NO_AUTO_PTR
 #include "boost_no_auto_ptr.ipp"
@@ -60,12 +60,12 @@ namespace boost_bcb_partial_specialization_bug = empty_boost;
 #ifndef BOOST_NO_CXX11_CHAR16_T
 #include "boost_no_char16_t.ipp"
 #else
-namespace boost_no_char16_t = empty_boost;
+namespace boost_no_cxx11_char16_t = empty_boost;
 #endif
 #ifndef BOOST_NO_CXX11_CHAR32_T
 #include "boost_no_char32_t.ipp"
 #else
-namespace boost_no_char32_t = empty_boost;
+namespace boost_no_cxx11_char32_t = empty_boost;
 #endif
 #ifndef BOOST_NO_COMPLETE_VALUE_INITIALIZATION
 #include "boost_no_com_value_init.ipp"
@@ -75,7 +75,7 @@ namespace boost_no_complete_value_initialization = empty_boost;
 #ifndef BOOST_NO_CXX11_CONSTEXPR
 #include "boost_no_constexpr.ipp"
 #else
-namespace boost_no_constexpr = empty_boost;
+namespace boost_no_cxx11_constexpr = empty_boost;
 #endif
 #ifndef BOOST_NO_CTYPE_FUNCTIONS
 #include "boost_no_ctype_functions.ipp"
@@ -215,12 +215,12 @@ namespace boost_no_cxx11_hdr_functional = empty_boost;
 #ifndef BOOST_NO_CXX11_DECLTYPE
 #include "boost_no_decltype.ipp"
 #else
-namespace boost_no_decltype = empty_boost;
+namespace boost_no_cxx11_decltype = empty_boost;
 #endif
 #ifndef BOOST_NO_CXX11_DECLTYPE_N3276
 #include "boost_no_decltype_n3276.ipp"
 #else
-namespace boost_no_decltype_n3276 = empty_boost;
+namespace boost_no_cxx11_decltype_n3276 = empty_boost;
 #endif
 #ifndef BOOST_DEDUCED_TYPENAME
 #include "boost_no_ded_typename.ipp"
@@ -230,12 +230,12 @@ namespace boost_deduced_typename = empty_boost;
 #ifndef BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
 #include "boost_no_defaulted_functions.ipp"
 #else
-namespace boost_no_defaulted_functions = empty_boost;
+namespace boost_no_cxx11_defaulted_functions = empty_boost;
 #endif
 #ifndef BOOST_NO_CXX11_DELETED_FUNCTIONS
 #include "boost_no_deleted_functions.ipp"
 #else
-namespace boost_no_deleted_functions = empty_boost;
+namespace boost_no_cxx11_deleted_functions = empty_boost;
 #endif
 #ifndef BOOST_NO_DEPENDENT_NESTED_DERIVATIONS
 #include "boost_no_dep_nested_class.ipp"
@@ -260,7 +260,7 @@ namespace boost_no_exception_std_namespace = empty_boost;
 #ifndef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
 #include "boost_no_explicit_cvt_ops.ipp"
 #else
-namespace boost_no_explicit_conversion_operators = empty_boost;
+namespace boost_no_cxx11_explicit_conversion_operators = empty_boost;
 #endif
 #ifndef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 #include "boost_no_exp_func_tem_arg.ipp"
@@ -270,7 +270,7 @@ namespace boost_no_explicit_function_template_arguments = empty_boost;
 #ifndef BOOST_NO_CXX11_EXTERN_TEMPLATE
 #include "boost_no_extern_template.ipp"
 #else
-namespace boost_no_extern_template = empty_boost;
+namespace boost_no_cxx11_extern_template = empty_boost;
 #endif
 #ifndef BOOST_NO_FENV_H
 #include "boost_no_fenv_h.ipp"
@@ -280,7 +280,7 @@ namespace boost_no_fenv_h = empty_boost;
 #ifndef BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
 #include "boost_no_function_template_default_args.ipp"
 #else
-namespace boost_no_function_template_default_args = empty_boost;
+namespace boost_no_cxx11_function_template_default_args = empty_boost;
 #endif
 #ifndef BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
 #include "boost_no_function_type_spec.ipp"
@@ -330,7 +330,7 @@ namespace boost_no_templated_iterator_constructors = empty_boost;
 #ifndef BOOST_NO_CXX11_LAMBDAS
 #include "boost_no_lambdas.ipp"
 #else
-namespace boost_no_lambdas = empty_boost;
+namespace boost_no_cxx11_lambdas = empty_boost;
 #endif
 #ifndef BOOST_NO_LIMITS
 #include "boost_no_limits.ipp"
@@ -390,12 +390,12 @@ namespace boost_no_nested_friendship = empty_boost;
 #ifndef BOOST_NO_CXX11_NOEXCEPT
 #include "boost_no_noexcept.ipp"
 #else
-namespace boost_no_noexcept = empty_boost;
+namespace boost_no_cxx11_noexcept = empty_boost;
 #endif
 #ifndef BOOST_NO_CXX11_NULLPTR
 #include "boost_no_nullptr.ipp"
 #else
-namespace boost_no_nullptr = empty_boost;
+namespace boost_no_cxx11_nullptr = empty_boost;
 #endif
 #ifndef BOOST_NO_OPERATORS_IN_NAMESPACE
 #include "boost_no_ops_in_namespace.ipp"
@@ -422,10 +422,15 @@ namespace boost_no_private_in_aggregate = empty_boost;
 #else
 namespace boost_no_pointer_to_member_const = empty_boost;
 #endif
+#ifndef BOOST_NO_CXX11_RANGE_BASED_FOR
+#include "boost_no_range_based_for.ipp"
+#else
+namespace boost_no_cxx11_range_based_for = empty_boost;
+#endif
 #ifndef BOOST_NO_CXX11_RAW_LITERALS
 #include "boost_no_raw_literals.ipp"
 #else
-namespace boost_no_raw_literals = empty_boost;
+namespace boost_no_cxx11_raw_literals = empty_boost;
 #endif
 #ifndef BOOST_NO_UNREACHABLE_RETURN_DETECTION
 #include "boost_no_ret_det.ipp"
@@ -440,12 +445,12 @@ namespace boost_no_rtti = empty_boost;
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 #include "boost_no_rvalue_references.ipp"
 #else
-namespace boost_no_rvalue_references = empty_boost;
+namespace boost_no_cxx11_rvalue_references = empty_boost;
 #endif
 #ifndef BOOST_NO_CXX11_SCOPED_ENUMS
 #include "boost_no_scoped_enums.ipp"
 #else
-namespace boost_no_scoped_enums = empty_boost;
+namespace boost_no_cxx11_scoped_enums = empty_boost;
 #endif
 #ifndef BOOST_NO_SFINAE
 #include "boost_no_sfinae.ipp"
@@ -465,7 +470,7 @@ namespace boost_no_stringstream = empty_boost;
 #ifndef BOOST_NO_CXX11_STATIC_ASSERT
 #include "boost_no_static_assert.ipp"
 #else
-namespace boost_no_static_assert = empty_boost;
+namespace boost_no_cxx11_static_assert = empty_boost;
 #endif
 #ifndef BOOST_NO_STDC_NAMESPACE
 #include "boost_no_stdc_namespace.ipp"
@@ -545,7 +550,7 @@ namespace boost_no_swprintf = empty_boost;
 #ifndef BOOST_NO_CXX11_TEMPLATE_ALIASES
 #include "boost_no_template_aliases.ipp"
 #else
-namespace boost_no_template_aliases = empty_boost;
+namespace boost_no_cxx11_template_aliases = empty_boost;
 #endif
 #ifndef BOOST_NO_TEMPLATED_IOSTREAMS
 #include "boost_no_template_streams.ipp"
@@ -560,7 +565,7 @@ namespace boost_no_template_templates = empty_boost;
 #ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
 #include "boost_no_tem_local_classes.ipp"
 #else
-namespace boost_no_local_class_template_parameters = empty_boost;
+namespace boost_no_cxx11_local_class_template_parameters = empty_boost;
 #endif
 #ifndef BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #include "boost_no_two_phase_lookup.ipp"
@@ -580,12 +585,12 @@ namespace boost_no_typename_with_ctor = empty_boost;
 #ifndef BOOST_NO_CXX11_UNICODE_LITERALS
 #include "boost_no_unicode_literals.ipp"
 #else
-namespace boost_no_unicode_literals = empty_boost;
+namespace boost_no_cxx11_unicode_literals = empty_boost;
 #endif
 #ifndef BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
 #include "boost_no_unified_init.ipp"
 #else
-namespace boost_no_unified_initialization_syntax = empty_boost;
+namespace boost_no_cxx11_unified_initialization_syntax = empty_boost;
 #endif
 #ifndef BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #include "boost_no_using_breaks_adl.ipp"
@@ -605,12 +610,12 @@ namespace boost_no_using_template = empty_boost;
 #ifndef BOOST_NO_CXX11_VARIADIC_MACROS
 #include "boost_no_variadic_macros.ipp"
 #else
-namespace boost_no_variadic_macros = empty_boost;
+namespace boost_no_cxx11_variadic_macros = empty_boost;
 #endif
 #ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
 #include "boost_no_variadic_templates.ipp"
 #else
-namespace boost_no_variadic_templates = empty_boost;
+namespace boost_no_cxx11_variadic_templates = empty_boost;
 #endif
 #ifndef BOOST_NO_VOID_RETURNS
 #include "boost_no_void_returns.ipp"
@@ -1151,12 +1156,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_auto_declarations::test())
+   if(0 != boost_no_cxx11_auto_declarations::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_AUTO_DECLARATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_auto_multideclarations::test())
+   if(0 != boost_no_cxx11_auto_multideclarations::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1171,12 +1176,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_BCB_PARTIAL_SPECIALIZATION_BUG at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_char16_t::test())
+   if(0 != boost_no_cxx11_char16_t::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_CHAR16_T at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_char32_t::test())
+   if(0 != boost_no_cxx11_char32_t::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_CHAR32_T at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1186,7 +1191,7 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_COMPLETE_VALUE_INITIALIZATION at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_constexpr::test())
+   if(0 != boost_no_cxx11_constexpr::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_CONSTEXPR at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1326,12 +1331,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_CXX11_HDR_FUNCTIONAL at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_decltype::test())
+   if(0 != boost_no_cxx11_decltype::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_DECLTYPE at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_decltype_n3276::test())
+   if(0 != boost_no_cxx11_decltype_n3276::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_DECLTYPE_N3276 at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1341,12 +1346,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_DEDUCED_TYPENAME at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_defaulted_functions::test())
+   if(0 != boost_no_cxx11_defaulted_functions::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_DEFAULTED_FUNCTIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_deleted_functions::test())
+   if(0 != boost_no_cxx11_deleted_functions::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_DELETED_FUNCTIONS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1371,7 +1376,7 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_EXCEPTION_STD_NAMESPACE at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_explicit_conversion_operators::test())
+   if(0 != boost_no_cxx11_explicit_conversion_operators::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1381,7 +1386,7 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_extern_template::test())
+   if(0 != boost_no_cxx11_extern_template::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_EXTERN_TEMPLATE at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1391,7 +1396,7 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_FENV_H at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_function_template_default_args::test())
+   if(0 != boost_no_cxx11_function_template_default_args::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1441,7 +1446,7 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_lambdas::test())
+   if(0 != boost_no_cxx11_lambdas::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_LAMBDAS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1501,12 +1506,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_NESTED_FRIENDSHIP at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_noexcept::test())
+   if(0 != boost_no_cxx11_noexcept::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_NOEXCEPT at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_nullptr::test())
+   if(0 != boost_no_cxx11_nullptr::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_NULLPTR at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1536,7 +1541,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_POINTER_TO_MEMBER_CONST at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_raw_literals::test())
+   if(0 != boost_no_cxx11_range_based_for::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CXX11_RANGE_BASED_FOR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cxx11_raw_literals::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_RAW_LITERALS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1551,12 +1561,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_RTTI at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_rvalue_references::test())
+   if(0 != boost_no_cxx11_rvalue_references::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_RVALUE_REFERENCES at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_scoped_enums::test())
+   if(0 != boost_no_cxx11_scoped_enums::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_SCOPED_ENUMS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1576,7 +1586,7 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_STRINGSTREAM at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_static_assert::test())
+   if(0 != boost_no_cxx11_static_assert::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_STATIC_ASSERT at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1656,7 +1666,7 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_SWPRINTF at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_template_aliases::test())
+   if(0 != boost_no_cxx11_template_aliases::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_TEMPLATE_ALIASES at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1671,7 +1681,7 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_TEMPLATE_TEMPLATES at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_local_class_template_parameters::test())
+   if(0 != boost_no_cxx11_local_class_template_parameters::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1691,12 +1701,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_TYPENAME_WITH_CTOR at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_unicode_literals::test())
+   if(0 != boost_no_cxx11_unicode_literals::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_UNICODE_LITERALS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_unified_initialization_syntax::test())
+   if(0 != boost_no_cxx11_unified_initialization_syntax::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
@@ -1716,12 +1726,12 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_USING_TEMPLATE at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_variadic_macros::test())
+   if(0 != boost_no_cxx11_variadic_macros::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_VARIADIC_MACROS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
-   if(0 != boost_no_variadic_templates::test())
+   if(0 != boost_no_cxx11_variadic_templates::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_VARIADIC_TEMPLATES at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;

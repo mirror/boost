@@ -10,7 +10,7 @@
 //  TITLE:         C++0x char32_t unavailable
 //  DESCRIPTION:   The compiler does not support C++0x char32_t
 
-namespace boost_no_char32_t {
+namespace boost_no_cxx11_char32_t {
 
 //  Microsoft VC++ 2010, and possibly other compilers, provides
 //  a typedef for char32_t rather than a new type. We want that

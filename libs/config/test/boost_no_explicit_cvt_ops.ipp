@@ -14,7 +14,7 @@
 #  error This feature is not available in non-C++0x mode
 #endif
 
-namespace boost_no_explicit_conversion_operators {
+namespace boost_no_cxx11_explicit_conversion_operators {
 
 void quiet_warning(int){}
 

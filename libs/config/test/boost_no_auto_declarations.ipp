@@ -9,7 +9,7 @@
 //  TITLE:         C++0x auto declarators unavailable
 //  DESCRIPTION:   The compiler does not support C++0x declarations of variables with automatically deduced type
 
-namespace boost_no_auto_declarations {
+namespace boost_no_cxx11_auto_declarations {
 
 void check_f(int& x)
 {

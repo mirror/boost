@@ -11,7 +11,7 @@
 //  TITLE:         C++0x decltype unavailable
 //  DESCRIPTION:   The compiler does not support C++0x decltype
 
-namespace boost_no_decltype {
+namespace boost_no_cxx11_decltype {
 
 void quiet_warning(int){}
 
