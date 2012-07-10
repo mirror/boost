@@ -634,6 +634,12 @@ namespace std{ using ::type_info; }
 #  endif
 #endif
 
+//
+// Set BOOST_NO_DECLTYPE_N3276 when BOOST_NO_DECLTYPE is defined
+//
+#if defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_NO_CXX11_DECLTYPE_N3276)
+#define	BOOST_NO_CXX11_DECLTYPE_N3276 BOOST_NO_CXX11_DECLTYPE
+#endif
 
 //  -------------------- Deprecated macros for 1.50 ---------------------------
 //  These will go away in a future release
@@ -892,14 +898,6 @@ namespace std{ using ::type_info; }
 #if !defined(BOOST_NO_VARIADIC_TEMPLATES) && !defined(BOOST_HAS_VARIADIC_TMPL)
 #define BOOST_HAS_VARIADIC_TMPL
 #endif
-
-//
-// Set BOOST_NO_DECLTYPE_N3276 when BOOST_NO_DECLTYPE is defined
-//
-#if !defined(BOOST_NO_DECLTYPE_N3276) && defined(BOOST_NO_DECLTYPE)
-#define BOOST_NO_DECLTYPE_N3276
-#endif
-
 
 
 #endif
