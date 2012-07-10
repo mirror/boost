@@ -6,7 +6,7 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_SCOPED_ENUMS
+//  MACRO:         BOOST_NO_CXX11_SCOPED_ENUMS
 //  TITLE:         C++0x scoped enum unavailable
 //  DESCRIPTION:   The compiler does not support C++0x scoped enum
 

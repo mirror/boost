@@ -71,10 +71,6 @@
 #  endif
 #endif
 
-#if defined(_STLPORT_VERSION) && ((_STLPORT_VERSION < 0x500) || (_STLPORT_VERSION >= 0x520))
-#  define BOOST_NO_STD_UNORDERED
-#endif
-
 #if defined(_STLPORT_VERSION) && (_STLPORT_VERSION >= 0x520)
 #  define BOOST_HAS_TR1_UNORDERED_SET
 #  define BOOST_HAS_TR1_UNORDERED_MAP
@@ -228,7 +224,6 @@ namespace boost { using std::min; using std::max; }
 #  define BOOST_NO_CXX11_HDR_TUPLE
 #  define BOOST_NO_CXX11_HDR_TYPE_TRAITS
 #  define BOOST_NO_CXX11_HDR_TYPEINDEX
-#  define BOOST_NO_STD_UNORDERED        // deprecated; see following
 #  define BOOST_NO_CXX11_HDR_UNORDERED_MAP
 #  define BOOST_NO_CXX11_HDR_UNORDERED_SET
 #  define BOOST_NO_NUMERIC_LIMITS_LOWEST

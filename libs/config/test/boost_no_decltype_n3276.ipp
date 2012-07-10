@@ -7,7 +7,7 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_DECLTYPE_N3276
+//  MACRO:         BOOST_NO_CXX11_DECLTYPE_N3276
 //  TITLE:         C++0x decltype v1.1 unavailable
 //  DESCRIPTION:   The compiler does not support extensions to C++0x
 //                 decltype as described in N3276 and accepted in Madrid,

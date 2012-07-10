@@ -5,7 +5,7 @@
 
 //  See http://www.boost.org/libs/config for most recent version.
 
-//  MACRO:         BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX
+//  MACRO:         BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
 //  TITLE:         C++0x unified initialization syntax unavailable
 //  DESCRIPTION:   The compiler does not support C++0x unified initialization syntax: see http://en.wikipedia.org/wiki/C%2B%2B0x#Uniform_initialization
 

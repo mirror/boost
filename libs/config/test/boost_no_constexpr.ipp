@@ -6,7 +6,7 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_CONSTEXPR 
+//  MACRO:         BOOST_NO_CXX11_CONSTEXPR 
 //  TITLE:         C++0x constexpr unavailable
 //  DESCRIPTION:   The compiler does not support C++0x constexpr
 

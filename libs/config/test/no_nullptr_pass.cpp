@@ -10,9 +10,9 @@
 //
 
 
-// Test file for macro BOOST_NO_NULLPTR
+// Test file for macro BOOST_NO_CXX11_NULLPTR
 // This file should compile, if it does not then
-// BOOST_NO_NULLPTR should be defined.
+// BOOST_NO_CXX11_NULLPTR should be defined.
 // See file boost_no_nullptr.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_NULLPTR
+#ifndef BOOST_NO_CXX11_NULLPTR
 #include "boost_no_nullptr.ipp"
 #else
 namespace boost_no_nullptr = empty_boost;

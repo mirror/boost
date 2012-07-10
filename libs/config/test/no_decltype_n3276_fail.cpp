@@ -10,9 +10,9 @@
 //
 
 
-// Test file for macro BOOST_NO_DECLTYPE_N3276
+// Test file for macro BOOST_NO_CXX11_DECLTYPE_N3276
 // This file should not compile, if it does then
-// BOOST_NO_DECLTYPE_N3276 should not be defined.
+// BOOST_NO_CXX11_DECLTYPE_N3276 should not be defined.
 // See file boost_no_decltype_n3276.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifdef BOOST_NO_DECLTYPE_N3276
+#ifdef BOOST_NO_CXX11_DECLTYPE_N3276
 #include "boost_no_decltype_n3276.ipp"
 #else
 #error "this file should not compile"

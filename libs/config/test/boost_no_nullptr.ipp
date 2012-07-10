@@ -6,7 +6,7 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_NULLPTR
+//  MACRO:         BOOST_NO_CXX11_NULLPTR
 //  TITLE:         C++0x nullptr feature unavailable
 //  DESCRIPTION:   The compiler does not support the C++0x nullptr feature
 

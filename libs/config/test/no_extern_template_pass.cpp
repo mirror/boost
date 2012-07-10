@@ -10,9 +10,9 @@
 //
 
 
-// Test file for macro BOOST_NO_EXTERN_TEMPLATE
+// Test file for macro BOOST_NO_CXX11_EXTERN_TEMPLATE
 // This file should compile, if it does not then
-// BOOST_NO_EXTERN_TEMPLATE should be defined.
+// BOOST_NO_CXX11_EXTERN_TEMPLATE should be defined.
 // See file boost_no_extern_template.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_EXTERN_TEMPLATE
+#ifndef BOOST_NO_CXX11_EXTERN_TEMPLATE
 #include "boost_no_extern_template.ipp"
 #else
 namespace boost_no_extern_template = empty_boost;

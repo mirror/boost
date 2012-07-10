@@ -5,7 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/config
 
-// MACRO:       BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
+// MACRO:       BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
 // TITLE:       local classes as template parameters
 // DESCRIPTION: Local classes cannot be passed as template parameters.
 

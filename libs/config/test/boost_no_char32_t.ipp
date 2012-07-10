@@ -6,7 +6,7 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_CHAR32_T
+//  MACRO:         BOOST_NO_CXX11_CHAR32_T
 //  TITLE:         C++0x char32_t unavailable
 //  DESCRIPTION:   The compiler does not support C++0x char32_t
 

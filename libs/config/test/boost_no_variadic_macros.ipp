@@ -5,7 +5,7 @@
 
 //  See http://www.boost.org/libs/config for most recent version.
 
-//  MACRO:         BOOST_NO_VARIADIC_MACROS
+//  MACRO:         BOOST_NO_CXX11_VARIADIC_MACROS
 //  TITLE:         C++0x variadic macros unavailable
 //  DESCRIPTION:   The compiler does not support C++0x variadic macros
 

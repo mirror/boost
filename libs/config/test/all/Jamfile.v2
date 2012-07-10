@@ -184,10 +184,10 @@ test-suite "BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP" :
 test-suite "BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS" : 
 [ run ../no_array_type_spec_pass.cpp ]
 [ compile-fail ../no_array_type_spec_fail.cpp ] ;
-test-suite "BOOST_NO_AUTO_DECLARATIONS" : 
+test-suite "BOOST_NO_CXX11_AUTO_DECLARATIONS" : 
 [ run ../no_auto_declarations_pass.cpp ]
 [ compile-fail ../no_auto_declarations_fail.cpp ] ;
-test-suite "BOOST_NO_AUTO_MULTIDECLARATIONS" : 
+test-suite "BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS" : 
 [ run ../no_auto_multidecl_pass.cpp ]
 [ compile-fail ../no_auto_multidecl_fail.cpp ] ;
 test-suite "BOOST_NO_AUTO_PTR" : 
@@ -196,16 +196,16 @@ test-suite "BOOST_NO_AUTO_PTR" :
 test-suite "BOOST_BCB_PARTIAL_SPECIALIZATION_BUG" : 
 [ run ../no_bcb_partial_spec_pass.cpp ]
 [ compile-fail ../no_bcb_partial_spec_fail.cpp ] ;
-test-suite "BOOST_NO_CHAR16_T" : 
+test-suite "BOOST_NO_CXX11_CHAR16_T" : 
 [ run ../no_char16_t_pass.cpp ]
 [ compile-fail ../no_char16_t_fail.cpp ] ;
-test-suite "BOOST_NO_CHAR32_T" : 
+test-suite "BOOST_NO_CXX11_CHAR16_T" : 
 [ run ../no_char32_t_pass.cpp ]
 [ compile-fail ../no_char32_t_fail.cpp ] ;
 test-suite "BOOST_NO_COMPLETE_VALUE_INITIALIZATION" : 
 [ run ../no_com_value_init_pass.cpp ]
 [ compile-fail ../no_com_value_init_fail.cpp ] ;
-test-suite "BOOST_NO_CONSTEXPR" : 
+test-suite "BOOST_NO_CXX11_CONSTEXPR" : 
 [ run ../no_constexpr_pass.cpp ]
 [ compile-fail ../no_constexpr_fail.cpp ] ;
 test-suite "BOOST_NO_CTYPE_FUNCTIONS" : 
@@ -289,19 +289,19 @@ test-suite "BOOST_NO_CXX11_SMART_PTR" :
 test-suite "BOOST_NO_CXX11_HDR_FUNCTIONAL" : 
 [ run ../no_cxx_hdr_functional_pass.cpp ]
 [ compile-fail ../no_cxx_hdr_functional_fail.cpp ] ;
-test-suite "BOOST_NO_DECLTYPE" : 
+test-suite "BOOST_NO_CXX11_DECLTYPE" : 
 [ run ../no_decltype_pass.cpp ]
 [ compile-fail ../no_decltype_fail.cpp ] ;
-test-suite "BOOST_NO_DECLTYPE_N3276" : 
+test-suite "BOOST_NO_CXX11_DECLTYPE_N3276" : 
 [ run ../no_decltype_n3276_pass.cpp ]
 [ compile-fail ../no_decltype_n3276_fail.cpp ] ;
 test-suite "BOOST_DEDUCED_TYPENAME" : 
 [ run ../no_ded_typename_pass.cpp ]
 [ compile-fail ../no_ded_typename_fail.cpp ] ;
-test-suite "BOOST_NO_DEFAULTED_FUNCTIONS" : 
+test-suite "BOOST_NO_CXX11_DEFAULTED_FUNCTIONS" : 
 [ run ../no_defaulted_functions_pass.cpp ]
 [ compile-fail ../no_defaulted_functions_fail.cpp ] ;
-test-suite "BOOST_NO_DELETED_FUNCTIONS" : 
+test-suite "BOOST_NO_CXX11_DELETED_FUNCTIONS" : 
 [ run ../no_deleted_functions_pass.cpp ]
 [ compile-fail ../no_deleted_functions_fail.cpp ] ;
 test-suite "BOOST_NO_DEPENDENT_NESTED_DERIVATIONS" : 
@@ -316,19 +316,19 @@ test-suite "BOOST_NO_EXCEPTIONS" :
 test-suite "BOOST_NO_EXCEPTION_STD_NAMESPACE" : 
 [ run ../no_excep_std_pass.cpp ]
 [ compile-fail ../no_excep_std_fail.cpp ] ;
-test-suite "BOOST_NO_EXPLICIT_CONVERSION_OPERATORS" : 
+test-suite "BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS" : 
 [ run ../no_explicit_cvt_ops_pass.cpp ]
 [ compile-fail ../no_explicit_cvt_ops_fail.cpp ] ;
 test-suite "BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS" : 
 [ run ../no_exp_func_tem_arg_pass.cpp ]
 [ compile-fail ../no_exp_func_tem_arg_fail.cpp ] ;
-test-suite "BOOST_NO_EXTERN_TEMPLATE" : 
+test-suite "BOOST_NO_CXX11_EXTERN_TEMPLATE" : 
 [ run ../no_extern_template_pass.cpp ]
 [ compile-fail ../no_extern_template_fail.cpp ] ;
 test-suite "BOOST_NO_FENV_H" : 
 [ run ../no_fenv_h_pass.cpp ]
 [ compile-fail ../no_fenv_h_fail.cpp ] ;
-test-suite "BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS" : 
+test-suite "BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS" : 
 [ run ../no_function_template_default_args_pass.cpp ]
 [ compile-fail ../no_function_template_default_args_fail.cpp ] ;
 test-suite "BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS" : 
@@ -358,7 +358,7 @@ test-suite "BOOST_NO_IS_ABSTRACT" :
 test-suite "BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS" : 
 [ run ../no_iter_construct_pass.cpp ]
 [ compile-fail ../no_iter_construct_fail.cpp ] ;
-test-suite "BOOST_NO_LAMBDAS" : 
+test-suite "BOOST_NO_CXX11_LAMBDAS" : 
 [ run ../no_lambdas_pass.cpp ]
 [ compile-fail ../no_lambdas_fail.cpp ] ;
 test-suite "BOOST_NO_LIMITS" : 
@@ -394,10 +394,10 @@ test-suite "BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS" :
 test-suite "BOOST_NO_NESTED_FRIENDSHIP" : 
 [ run ../no_nested_friendship_pass.cpp ]
 [ compile-fail ../no_nested_friendship_fail.cpp ] ;
-test-suite "BOOST_NO_NOEXCEPT" : 
+test-suite "BOOST_NO_CXX11_NOEXCEPT" : 
 [ run ../no_noexcept_pass.cpp ]
 [ compile-fail ../no_noexcept_fail.cpp ] ;
-test-suite "BOOST_NO_NULLPTR" : 
+test-suite "BOOST_NO_CXX11_NULLPTR" : 
 [ run ../no_nullptr_pass.cpp ]
 [ compile-fail ../no_nullptr_fail.cpp ] ;
 test-suite "BOOST_NO_OPERATORS_IN_NAMESPACE" : 
@@ -415,7 +415,7 @@ test-suite "BOOST_NO_PRIVATE_IN_AGGREGATE" :
 test-suite "BOOST_NO_POINTER_TO_MEMBER_CONST" : 
 [ run ../no_ptr_mem_const_pass.cpp ]
 [ compile-fail ../no_ptr_mem_const_fail.cpp ] ;
-test-suite "BOOST_NO_RAW_LITERALS" : 
+test-suite "BOOST_NO_CXX11_RAW_LITERALS" : 
 [ run ../no_raw_literals_pass.cpp ]
 [ compile-fail ../no_raw_literals_fail.cpp ] ;
 test-suite "BOOST_NO_UNREACHABLE_RETURN_DETECTION" : 
@@ -424,10 +424,10 @@ test-suite "BOOST_NO_UNREACHABLE_RETURN_DETECTION" :
 test-suite "BOOST_NO_RTTI" : 
 [ run ../no_rtti_pass.cpp ]
 [ compile-fail ../no_rtti_fail.cpp ] ;
-test-suite "BOOST_NO_RVALUE_REFERENCES" : 
+test-suite "BOOST_NO_CXX11_RVALUE_REFERENCES" : 
 [ run ../no_rvalue_references_pass.cpp ]
 [ compile-fail ../no_rvalue_references_fail.cpp ] ;
-test-suite "BOOST_NO_SCOPED_ENUMS" : 
+test-suite "BOOST_NO_CXX11_SCOPED_ENUMS" : 
 [ run ../no_scoped_enums_pass.cpp ]
 [ compile-fail ../no_scoped_enums_fail.cpp ] ;
 test-suite "BOOST_NO_SFINAE" : 
@@ -439,7 +439,7 @@ test-suite "BOOST_NO_SFINAE_EXPR" :
 test-suite "BOOST_NO_STRINGSTREAM" : 
 [ run ../no_sstream_pass.cpp ]
 [ compile-fail ../no_sstream_fail.cpp ] ;
-test-suite "BOOST_NO_STATIC_ASSERT" : 
+test-suite "BOOST_NO_CXX11_STATIC_ASSERT" : 
 [ run ../no_static_assert_pass.cpp ]
 [ compile-fail ../no_static_assert_fail.cpp ] ;
 test-suite "BOOST_NO_STDC_NAMESPACE" : 
@@ -487,7 +487,7 @@ test-suite "BOOST_NO_STD_WSTRING" :
 test-suite "BOOST_NO_SWPRINTF" : 
 [ run ../no_swprintf_pass.cpp ]
 [ compile-fail ../no_swprintf_fail.cpp ] ;
-test-suite "BOOST_NO_TEMPLATE_ALIASES" : 
+test-suite "BOOST_NO_CXX11_TEMPLATE_ALIASES" : 
 [ run ../no_template_aliases_pass.cpp ]
 [ compile-fail ../no_template_aliases_fail.cpp ] ;
 test-suite "BOOST_NO_TEMPLATED_IOSTREAMS" : 
@@ -496,7 +496,7 @@ test-suite "BOOST_NO_TEMPLATED_IOSTREAMS" :
 test-suite "BOOST_NO_TEMPLATE_TEMPLATES" : 
 [ run ../no_template_template_pass.cpp ]
 [ compile-fail ../no_template_template_fail.cpp ] ;
-test-suite "BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS" : 
+test-suite "BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS" : 
 [ run ../no_tem_local_classes_pass.cpp ]
 [ compile-fail ../no_tem_local_classes_fail.cpp ] ;
 test-suite "BOOST_NO_TWO_PHASE_NAME_LOOKUP" : 
@@ -508,10 +508,10 @@ test-suite "BOOST_NO_TYPEID" :
 test-suite "BOOST_NO_TYPENAME_WITH_CTOR" : 
 [ run ../no_typename_with_ctor_pass.cpp ]
 [ compile-fail ../no_typename_with_ctor_fail.cpp ] ;
-test-suite "BOOST_NO_UNICODE_LITERALS" : 
+test-suite "BOOST_NO_CXX11_UNICODE_LITERALS" : 
 [ run ../no_unicode_literals_pass.cpp ]
 [ compile-fail ../no_unicode_literals_fail.cpp ] ;
-test-suite "BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX" : 
+test-suite "BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX" : 
 [ run ../no_unified_init_pass.cpp ]
 [ compile-fail ../no_unified_init_fail.cpp ] ;
 test-suite "BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL" : 
@@ -523,10 +523,10 @@ test-suite "BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE" :
 test-suite "BOOST_NO_USING_TEMPLATE" : 
 [ run ../no_using_template_pass.cpp ]
 [ compile-fail ../no_using_template_fail.cpp ] ;
-test-suite "BOOST_NO_VARIADIC_MACROS" : 
+test-suite "BOOST_NO_CXX11_VARIADIC_MACROS" : 
 [ run ../no_variadic_macros_pass.cpp ]
 [ compile-fail ../no_variadic_macros_fail.cpp ] ;
-test-suite "BOOST_NO_VARIADIC_TEMPLATES" : 
+test-suite "BOOST_NO_CXX11_VARIADIC_TEMPLATES" : 
 [ run ../no_variadic_templates_pass.cpp ]
 [ compile-fail ../no_variadic_templates_fail.cpp ] ;
 test-suite "BOOST_NO_VOID_RETURNS" : 

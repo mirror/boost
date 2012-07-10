@@ -5,7 +5,7 @@
 
 //  See http://www.boost.org/libs/config for most recent version.
 
-//  MACRO:         BOOST_NO_AUTO_MULTIDECLARATIONS
+//  MACRO:         BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS
 //  TITLE:         C++0x auto multideclarators unavailable
 //  DESCRIPTION:   The compiler does not support C++0x declarations of series of variables with automatically deduced type
 

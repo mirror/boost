@@ -6,7 +6,7 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_UNICODE_LITERALS
+//  MACRO:         BOOST_NO_CXX11_UNICODE_LITERALS
 //  TITLE:         C++0x unicode literals unavailable
 //  DESCRIPTION:   The compiler does not support C++0x Unicode literals (N2442)
 

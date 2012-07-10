@@ -6,7 +6,7 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_DEFAULTED_FUNCTIONS 
+//  MACRO:         BOOST_NO_CXX11_DEFAULTED_FUNCTIONS 
 //  TITLE:         C++0x defaulted functions unavailable
 //  DESCRIPTION:   The compiler does not support C++0x defaulted functions
 

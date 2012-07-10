@@ -5,7 +5,7 @@
 
 //  See http://www.boost.org/libs/config for most recent version.
 
-//  MACRO:         BOOST_NO_STATIC_ASSERT
+//  MACRO:         BOOST_NO_CXX11_STATIC_ASSERT
 //  TITLE:         C++0x static_assert unavailable
 //  DESCRIPTION:   The compiler does not support C++0x static assertions
 

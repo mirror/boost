@@ -10,9 +10,9 @@
 //
 
 
-// Test file for macro BOOST_NO_STATIC_ASSERT
+// Test file for macro BOOST_NO_CXX11_STATIC_ASSERT
 // This file should not compile, if it does then
-// BOOST_NO_STATIC_ASSERT should not be defined.
+// BOOST_NO_CXX11_STATIC_ASSERT should not be defined.
 // See file boost_no_static_assert.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifdef BOOST_NO_STATIC_ASSERT
+#ifdef BOOST_NO_CXX11_STATIC_ASSERT
 #include "boost_no_static_assert.ipp"
 #else
 #error "this file should not compile"

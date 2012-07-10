@@ -6,7 +6,7 @@
 
 //  See http://www.boost.org/libs/config for more information.
 
-//  MACRO:         BOOST_NO_EXTERN_TEMPLATE
+//  MACRO:         BOOST_NO_CXX11_EXTERN_TEMPLATE
 //  TITLE:         C++0x extern template unavailable
 //  DESCRIPTION:   The compiler does not support C++0x extern template
 
