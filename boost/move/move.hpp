@@ -217,7 +217,7 @@
 #if defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
    //Move emulation rv breaks standard aliasing rules so add workarounds for some compilers
-   #ifdef __GNUC__
+   #if defined(__GNUC__) && (__GNUC__ >= 4)
       #define BOOST_MOVE_ATTRIBUTE_MAY_ALIAS __attribute__((__may_alias__))
    #else
       #define BOOST_MOVE_ATTRIBUTE_MAY_ALIAS
