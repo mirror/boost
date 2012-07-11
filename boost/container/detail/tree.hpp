@@ -745,12 +745,14 @@ class rbtree
    {
       value_type &v = p->get_data();
       insert_commit_data data;
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(p, this->node_alloc());
       std::pair<iterator,bool> ret =
          this->insert_unique_check(KeyOfValue()(v), data);
       if(!ret.second){
-         Destroyer(this->node_alloc())(p);
          return ret;
       }
+      //No throw insertion part, release rollback
+      destroy_deallocator.release();
       return std::pair<iterator,bool>
          ( iterator(iiterator(this->icont().insert_unique_commit(*p, data)))
          , true );
