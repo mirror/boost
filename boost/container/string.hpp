@@ -47,6 +47,7 @@
 #include <boost/container/detail/mpl.hpp>
 #include <boost/move/move.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/functional/hash.hpp>
 
 #include <functional>
 #include <string>
