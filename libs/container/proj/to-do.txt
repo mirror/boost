@@ -37,3 +37,7 @@ check move if noexcept conditions in vector, deque and stable_vector
 Detect always equal or unequal allocators at compiler time. operator== returns true_type or false_type
 
 change virtual functions with pointers to avoid template instantiation for every type
+
+Add hash for containers
+
+Add std:: hashing support

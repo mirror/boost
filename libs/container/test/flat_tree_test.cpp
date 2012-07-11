@@ -26,7 +26,7 @@ using namespace boost::container;
 
 namespace boost {
 namespace container {
-/*
+
 //Explicit instantiation to detect compilation errors
 
 //flat_map
@@ -115,7 +115,7 @@ template class flat_multiset
    , std::less<test::movable_and_copyable_int>
    , std::allocator<test::movable_and_copyable_int>
    >;
-*/
+
 }} //boost::container
 
 
@@ -627,55 +627,3 @@ int main()
 }
 
 #include <boost/container/detail/config_end.hpp>
-
-/*
-#include <boost/container/map.hpp>
-#include <boost/container/flat_map.hpp>
-#include <boost/container/vector.hpp>
-#include <boost/move/move.hpp>
-#include <iostream>
-
-struct Request
-{
-    Request() {};
-  
-    //Move semantics...
-    Request(BOOST_RV_REF(Request) r) : rvals()  //Move constructor
-    {
-        rvals.swap(r.rvals);
-    };
-
-    Request& operator=(BOOST_RV_REF(Request) r) //Move assignment
-    {
-        if (this != &r){
-            rvals.swap(r.rvals);
-        }
-        return *this;
-    };
-
-    // Values I want to be moved, not copied.
-    boost::container::vector<int> rvals;
-
-   private:
-    // Mark this class movable but not copyable
-    BOOST_MOVABLE_BUT_NOT_COPYABLE(Request)
-};
-
-typedef boost::container::flat_map<int, Request> Requests;
-//typedef boost::container::map<int, Request> Requests2;
-
-int
-main() {
-    Requests req;
-   
-    Requests::value_type v;
-    std::pair<Requests::iterator, bool> ret = req.insert( boost::move(v));
-    //std::cout << "Insert success for req: " << ret.second << std::endl;
-  
-    //Requests2 req2;
-    //std::pair<Requests::iterator, bool> ret2 = req2.insert( Requests2::value_type( 7, Request() ) );
-    //std::cout << "Insert success for req2: " << ret2.second << std::endl;
-
-    return 0;
-}
-*/
