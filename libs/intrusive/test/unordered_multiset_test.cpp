@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2009.
+// (C) Copyright Ion Gaztanaga  2006-2012.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -157,7 +157,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
    testset.erase (testset.iterator_to (values[0]));
    testset.erase (testset.iterator_to (values[1]));
    testset.insert (values[1]);
-    
+
    testset.erase (testset.iterator_to (values[2]));
    testset.erase (testset.iterator_to (values[3]));
 }
@@ -194,7 +194,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
    }
    testset1.clear();
    BOOST_TEST (testset1.empty());
-} 
+}
 
 //test: insert, const_iterator, const_reverse_iterator, erase, iterator_to:
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -231,7 +231,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
 
          i = testset.insert (values[0]);
          BOOST_TEST (&*i == &values[0]);
-           
+
          i = testset.iterator_to (values[2]);
          BOOST_TEST (&*i == &values[2]);
          testset.erase(i);
@@ -275,7 +275,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
 
          i = testset.insert (values[0]);
          BOOST_TEST (&*i == &values[0]);
-           
+
          i = testset.iterator_to (values[2]);
          BOOST_TEST (&*i == &values[2]);
          testset.erase(i);
@@ -442,7 +442,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>:
       //  BOOST_TEST (&testset1.front() == &values[3]);
       BOOST_TEST (&*testset1.begin() == &values[3]);
    }
-} 
+}
 
 
 
@@ -651,7 +651,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>
    BOOST_TEST (testset1.size() == values.size());
    {  int init_values [] = { 1, 2, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
-} 
+}
 
 //test: find, equal_range (lower_bound, upper_bound):
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -682,7 +682,7 @@ void test_unordered_multiset<ValueTraits, CacheBegin, CompareHash, Incremental>:
    BOOST_TEST (i->value_ == 2);
    BOOST_TEST ((++i)->value_ == 2);
    std::pair<iterator,iterator> range = testset.equal_range (cmp_val);
-    
+
    BOOST_TEST (range.first->value_ == 2);
    BOOST_TEST (range.second->value_ == 3);
    BOOST_TEST (std::distance (range.first, range.second) == 2);

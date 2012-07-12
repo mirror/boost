@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2009.
+// (C) Copyright Ion Gaztanaga  2006-2012.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -106,7 +106,7 @@ void test_slist<ValueTraits, Linear, CacheLast>
       > list_type;
    list_type testlist;
    BOOST_TEST (testlist.empty());
-    
+
    testlist.push_front (values[0]);
    BOOST_TEST (testlist.size() == 1);
    BOOST_TEST (&testlist.front() == &values[0]);
@@ -114,11 +114,11 @@ void test_slist<ValueTraits, Linear, CacheLast>
    testlist.push_front (values[1]);
    BOOST_TEST (testlist.size() == 2);
    BOOST_TEST (&testlist.front() == &values[1]);
-    
+
    testlist.pop_front();
    BOOST_TEST (testlist.size() == 1);
    BOOST_TEST (&testlist.front() == &values[0]);
-    
+
    testlist.pop_front();
    BOOST_TEST (testlist.empty());
 }
@@ -241,8 +241,8 @@ void test_slist<ValueTraits, Linear, CacheLast>
    testlist.reverse();
    {  int init_values [] = { 5, 3, 1, 4, 2 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testlist.begin() );  }
-} 
- 
+}
+
 //test: assign, insert_after, const_iterator, erase_after, s_iterator_to, previous:
 template<class ValueTraits, bool Linear, bool CacheLast>
 void test_slist<ValueTraits, Linear, CacheLast>
@@ -374,7 +374,7 @@ void test_slist<ValueTraits, Linear, CacheLast>
          testlist.clear();
       }
    }
-} 
+}
 
 //test: insert_after (seq-version), swap, splice_after:
 template<class ValueTraits, bool Linear, bool CacheLast>
@@ -476,7 +476,7 @@ void test_slist<ValueTraits, Linear, CacheLast>
       {  int init_values [] = { 1 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );  }
    }
-} 
+}
 
 template<class ValueTraits, bool Linear, bool CacheLast>
 void test_slist<ValueTraits, Linear, CacheLast>

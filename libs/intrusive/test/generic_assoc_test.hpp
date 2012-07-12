@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2009.
+// (C) Copyright Ion Gaztanaga  2006-2012.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -134,7 +134,7 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_erase_burst(
       typedef typename std::vector<value_type>::const_iterator cvec_iterator;
       //Random erasure
       std::vector<cvec_iterator> it_vector;
-     
+
       for(cvec_iterator it(values.begin()), itend(values.end())
          ; it != itend
          ; ++it){
@@ -396,7 +396,7 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_before
    {
       assoc_type testset;
       typedef typename std::vector<value_type>::iterator vec_iterator;
-     
+
       for(vec_iterator it(--values.end()); true; --it){
          testset.push_front(*it);
        if(it == values.begin()){

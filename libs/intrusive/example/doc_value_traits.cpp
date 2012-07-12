@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2006-2009
+// (C) Copyright Ion Gaztanaga  2006-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -39,10 +39,10 @@ struct legacy_node_traits
    typedef legacy_value *                          node_ptr;
    typedef const legacy_value *                    const_node_ptr;
 
-   static node *get_next(const node *n)            {  return n->next_;  } 
-   static void set_next(node *n, node *next)       {  n->next_ = next;  } 
-   static node *get_previous(const node *n)        {  return n->prev_;  } 
-   static void set_previous(node *n, node *prev)   {  n->prev_ = prev;  } 
+   static node *get_next(const node *n)            {  return n->next_;  }
+   static void set_next(node *n, node *next)       {  n->next_ = next;  }
+   static node *get_previous(const node *n)        {  return n->prev_;  }
+   static void set_previous(node *n, node *prev)   {  n->prev_ = prev;  }
 };
 
 //This ValueTraits will configure list and slist. In this case,

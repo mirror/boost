@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2006-2009
+// (C) Copyright Ion Gaztanaga  2006-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -45,7 +45,7 @@ void clear_list ()
 {
    // entity's destructor removes itself from the global list implicitly
    while (!global_list.empty())
-      delete &global_list.front();  
+      delete &global_list.front();
 }
 
 int main()
