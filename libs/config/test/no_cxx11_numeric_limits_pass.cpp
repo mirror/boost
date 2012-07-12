@@ -10,9 +10,9 @@
 //
 
 
-// Test file for macro BOOST_NO_NUMERIC_LIMITS_LOWEST
+// Test file for macro BOOST_NO_CXX11_NUMERIC_LIMITS
 // This file should compile, if it does not then
-// BOOST_NO_NUMERIC_LIMITS_LOWEST should be defined.
+// BOOST_NO_CXX11_NUMERIC_LIMITS should be defined.
 // See file boost_no_limits_lowest.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_NUMERIC_LIMITS_LOWEST
-#include "boost_no_limits_lowest.ipp"
+#ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
+#include "boost_no_cxx11_numeric_limits.ipp"
 #else
-namespace boost_no_numeric_limits_lowest = empty_boost;
+namespace boost_no_cxx11_numeric_limits = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_numeric_limits_lowest::test();
+   return boost_no_cxx11_numeric_limits::test();
 }
 

@@ -149,7 +149,7 @@ The C++ implementation does not provide the `<limits>` header. Never check for
 this symbol in library code; always include `<boost/limits.hpp>`, which
 guarantees to provide `std::numeric_limits`.
 ]]
-[[`BOOST_NO_NUMERIC_LIMITS_LOWEST`][Standard library][
+[[`BOOST_NO_CXX11_NUMERIC_LIMITS`][Standard library][
 Static function `numeric_limits<T>::lowest()` is not available for use.
 ]]
 [[`BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS`][Standard library][
@@ -1045,6 +1045,7 @@ They will be removed in a future version of boost.
 [[`BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX`][`BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX`][Boost 1.51][]]
 [[`BOOST_NO_VARIADIC_TEMPLATES`][`BOOST_NO_CXX11_VARIADIC_TEMPLATES`][Boost 1.51][]]
 [[`BOOST_NO_VARIADIC_MACROS`][`BOOST_NO_CXX11_VARIADIC_MACROS`][Boost 1.51][]]
+[[`BOOST_NO_NUMERIC_LIMITS_LOWEST`][`BOOST_NO_CXX11_NUMERIC_LIMITS`][Boost 1.51][]]
 ]
 
 [endsect]

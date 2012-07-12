@@ -367,9 +367,9 @@ test-suite "BOOST_NO_LIMITS" :
 test-suite "BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS" : 
 [ run ../no_limits_const_exp_pass.cpp ]
 [ compile-fail ../no_limits_const_exp_fail.cpp ] ;
-test-suite "BOOST_NO_NUMERIC_LIMITS_LOWEST" : 
-[ run ../no_limits_lowest_pass.cpp ]
-[ compile-fail ../no_limits_lowest_fail.cpp ] ;
+test-suite "BOOST_NO_CXX11_NUMERIC_LIMITS" : 
+[ run ../no_cxx11_numeric_limits_pass.cpp ]
+[ compile-fail ../no_cxx11_numeric_limits_fail.cpp ] ;
 test-suite "BOOST_NO_LONG_LONG_NUMERIC_LIMITS" : 
 [ run ../no_ll_limits_pass.cpp ]
 [ compile-fail ../no_ll_limits_fail.cpp ] ;

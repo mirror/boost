@@ -847,6 +847,10 @@ namespace std{ using ::type_info; }
 #if defined(BOOST_NO_CXX11_VARIADIC_MACROS) && !defined(BOOST_NO_VARIADIC_MACROS)
 #  define BOOST_NO_VARIADIC_MACROS
 #endif
+//  Use     BOOST_NO_CXX11_NUMERIC_LIMITS instead of   BOOST_NO_NUMERIC_LIMITS_LOWEST
+#if defined(BOOST_NO_CXX11_NUMERIC_LIMITS) && !defined(BOOST_NO_NUMERIC_LIMITS_LOWEST)
+#  define BOOST_NO_NUMERIC_LIMITS_LOWEST
+#endif
 //  ------------------ End of deprecated macros for 1.51 ---------------------------
 
 
