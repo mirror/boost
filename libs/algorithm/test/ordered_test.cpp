@@ -54,10 +54,10 @@ test_ordered(void)
     BOOST_CHECK (  ba::is_sorted_until ( a_range(strictlyIncreasingValues), std::less<int>()) == boost::end(strictlyIncreasingValues));
 
 //  Check for const and non-const arrays
-    BOOST_CHECK ( ba::is_sorted_until ( b_e(constantValues),       std::less<int>()) !=      a_end(constantValues));
-    BOOST_CHECK ( ba::is_sorted_until ( a_range(constantValues),   std::less<int>()) != boost::end(constantValues));
-    BOOST_CHECK ( ba::is_sorted_until ( b_e(nonConstantArray),     std::less<int>()) !=      a_end(nonConstantArray));
-    BOOST_CHECK ( ba::is_sorted_until ( a_range(nonConstantArray), std::less<int>()) != boost::end(nonConstantArray));
+    BOOST_CHECK ( ba::is_sorted_until ( b_e(constantValues),       std::less<int>()) ==      a_end(constantValues));
+    BOOST_CHECK ( ba::is_sorted_until ( a_range(constantValues),   std::less<int>()) == boost::end(constantValues));
+    BOOST_CHECK ( ba::is_sorted_until ( b_e(nonConstantArray),     std::less<int>()) ==      a_end(nonConstantArray));
+    BOOST_CHECK ( ba::is_sorted_until ( a_range(nonConstantArray), std::less<int>()) == boost::end(nonConstantArray));
 
     BOOST_CHECK ( ba::is_sorted_until ( b_e(randomValues),     std::less<int>()) == &randomValues[2] );
     BOOST_CHECK ( ba::is_sorted_until ( b_e(randomValues))                       == &randomValues[2] );
