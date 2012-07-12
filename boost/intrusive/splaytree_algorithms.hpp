@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2007.
+// (C) Copyright Ion Gaztanaga  2007-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -16,7 +16,7 @@
 // Here is the header of the file used as base code:
 //
 //  splay_tree.h -- implementation of a STL complatible splay tree.
-// 
+//
 //  Copyright (c) 2004 Ralf Mattethat
 //
 //  Permission to copy, use, modify, sell and distribute this software
@@ -24,7 +24,7 @@
 //  This software is provided "as is" without express or implied
 //  warranty, and with no claim as to its suitability for any purpose.
 //
-//  Please send questions, comments, complaints, performance data, etc to 
+//  Please send questions, comments, complaints, performance data, etc to
 //  ralf.mattethat@teknologisk.dk
 //
 //  Requirements for element type
@@ -95,7 +95,7 @@ struct splaydown_rollback
 
 //!   A splay tree is an implementation of a binary search tree. The tree is
 //!   self balancing using the splay algorithm as described in
-//!   
+//!
 //!      "Self-Adjusting Binary Search Trees
 //!      by Daniel Dominic Sleator and Robert Endre Tarjan
 //!      AT&T Bell Laboratories, Murray Hill, NJ
@@ -190,7 +190,7 @@ class splaytree_algorithms
    {
       if(node1 == node2)
          return;
-  
+
       node_ptr header1(tree_algorithms::get_header(node1)), header2(tree_algorithms::get_header(node2));
       swap_nodes(node1, header1, node2, header2);
    }
@@ -525,7 +525,7 @@ class splaytree_algorithms
    //!   ordering compatible with the strict weak ordering used to create the
    //!   the tree. NodePtrCompare compares two node_ptrs. "hint" is node from
    //!   the "header"'s tree.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree, using "hint" as a hint to
    //!   where it will be inserted. If "hint" is the upper_bound
    //!   the insertion takes constant time (two comparisons in the worst case).
@@ -548,7 +548,7 @@ class splaytree_algorithms
    //!   "pos" must be an iterator pointing to the successor to "new_node"
    //!   once inserted according to the order of already inserted nodes. This function does not
    //!   check "pos" and this precondition must be guaranteed by the caller.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree before "pos".
    //!
    //! <b>Complexity</b>: Constant-time.
@@ -568,7 +568,7 @@ class splaytree_algorithms
    //! <b>Requires</b>: "header" must be the header node of a tree.
    //!   "new_node" must be, according to the used ordering no less than the
    //!   greatest inserted key.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree before "pos".
    //!
    //! <b>Complexity</b>: Constant-time.
@@ -587,7 +587,7 @@ class splaytree_algorithms
    //! <b>Requires</b>: "header" must be the header node of a tree.
    //!   "new_node" must be, according to the used ordering, no greater than the
    //!   lowest inserted key.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree before "pos".
    //!
    //! <b>Complexity</b>: Constant-time.
@@ -650,7 +650,7 @@ class splaytree_algorithms
    //! <b>Effects</b>: First empties target tree calling
    //!   <tt>void disposer::operator()(const node_ptr &)</tt> for every node of the tree
    //!    except the header.
-   //!   
+   //!
    //!   Then, duplicates the entire tree pointed by "source_header" cloning each
    //!   source node with <tt>node_ptr Cloner::operator()(const node_ptr &)</tt> to obtain
    //!   the nodes of the target tree. If "cloner" throws, the cloned target nodes
@@ -723,13 +723,13 @@ class splaytree_algorithms
       node_ptr t(header);
 
       if( n == t ) return;
-     
+
       for( ;; ){
          node_ptr p(NodeTraits::get_parent(n));
          node_ptr g(NodeTraits::get_parent(p));
 
          if( p == t )   break;
-        
+
          if( g == t ){
             // zig
             rotate(n);
@@ -929,7 +929,7 @@ class splaytree_algorithms
       //Test if g is header before breaking tree
       //invariants that would make is_header invalid
       bool g_is_header = is_header(g);
-     
+
       if(NodeTraits::get_left(p) == n){
          NodeTraits::set_left(p, NodeTraits::get_right(n));
          if(NodeTraits::get_left(p) != node_ptr())

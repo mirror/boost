@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2007-2009
+// (C) Copyright Ion Gaztanaga 2007-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -160,7 +160,7 @@ class avltree_impl
       {}
       node_plus_pred_t node_plus_pred_;
    } data_;
- 
+
    const value_compare &priv_comp() const
    {  return data_.node_plus_pred_.get();  }
 
@@ -213,7 +213,7 @@ class avltree_impl
    typedef typename node_algorithms::insert_commit_data insert_commit_data;
 
    //! <b>Effects</b>: Constructs an empty tree.
-   //!  
+   //!
    //! <b>Complexity</b>: Constant.
    //!
    //! <b>Throws</b>: If value_traits::node_traits::node
@@ -222,8 +222,8 @@ class avltree_impl
    avltree_impl( const value_compare &cmp = value_compare()
                , const value_traits &v_traits = value_traits())
       :  data_(cmp, v_traits)
-   { 
-      node_algorithms::init_header(this->priv_header_ptr()); 
+   {
+      node_algorithms::init_header(this->priv_header_ptr());
       this->priv_size_traits().set_size(size_type(0));
    }
 
@@ -254,17 +254,17 @@ class avltree_impl
    }
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    avltree_impl(BOOST_RV_REF(avltree_impl) x)
       : data_(::boost::move(x.priv_comp()), ::boost::move(x.priv_value_traits()))
    {
-      node_algorithms::init_header(this->priv_header_ptr()); 
+      node_algorithms::init_header(this->priv_header_ptr());
       this->priv_size_traits().set_size(size_type(0));
       this->swap(x);
    }
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    avltree_impl& operator=(BOOST_RV_REF(avltree_impl) x)
    {  this->swap(x); return *this;  }
 
@@ -689,7 +689,7 @@ class avltree_impl
    //!   If the check is successful, the user can construct the value_type and use
    //!   "insert_commit" to insert the object in constant-time. This can give a total
    //!   constant-time complexity to the insertion: check(O(1)) + commit(O(1)).
-   //!  
+   //!
    //!   "commit_data" remains valid for a subsequent "insert_commit" only if no more
    //!   objects are inserted or erased from the container.
    template<class KeyType, class KeyValueCompare>
@@ -1238,7 +1238,7 @@ class avltree_impl
    //!
    //!   If cloner throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
-   //!  
+   //!
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //!
    //! <b>Throws</b>: If cloner throws or predicate copy assignment throws. Basic guarantee.

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2007.
+// (C) Copyright Ion Gaztanaga  2007-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -192,7 +192,7 @@ class tree_algorithms
    {
       if(node1 == node2)
          return;
-  
+
       node_ptr header1(get_header(node1)), header2(get_header(node2));
       swap_nodes(node1, header1, node2, header2);
    }
@@ -216,7 +216,7 @@ class tree_algorithms
    {
       if(node1 == node2)
          return;
-  
+
       //node1 and node2 must not be header nodes
       //BOOST_INTRUSIVE_INVARIANT_ASSERT((header1 != node1 && header2 != node2));
       if(header1 != header2){
@@ -388,7 +388,7 @@ class tree_algorithms
    {
       if(node_to_be_replaced == new_node)
          return;
-  
+
       //Update header if necessary
       if(node_to_be_replaced == NodeTraits::get_left(header)){
          NodeTraits::set_left(header, new_node);
@@ -688,7 +688,7 @@ class tree_algorithms
    {
       if(header1 == header2)
          return;
-  
+
       node_ptr tmp;
 
       //Parent swap
@@ -1174,7 +1174,7 @@ class tree_algorithms
    //! <b>Effects</b>: First empties target tree calling
    //!   <tt>void disposer::operator()(const node_ptr &)</tt> for every node of the tree
    //!    except the header.
-   //!   
+   //!
    //!   Then, duplicates the entire tree pointed by "source_header" cloning each
    //!   source node with <tt>node_ptr Cloner::operator()(const node_ptr &)</tt> to obtain
    //!   the nodes of the target tree. If "cloner" throws, the cloned target nodes
@@ -1536,7 +1536,7 @@ class tree_algorithms
       //Put old_root as right child
       NodeTraits::set_right(super_root, old_root);
 
-      //Start the compression algorithm           
+      //Start the compression algorithm
       node_ptr even_parent = super_root;
       node_ptr new_root = old_root;
 

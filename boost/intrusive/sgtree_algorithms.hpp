@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2007.
+// (C) Copyright Ion Gaztanaga 2007-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -119,7 +119,7 @@ class sgtree_algorithms
    {
       if(node1 == node2)
          return;
-  
+
       node_ptr header1(tree_algorithms::get_header(node1)), header2(tree_algorithms::get_header(node2));
       swap_nodes(node1, header1, node2, header2);
    }
@@ -322,7 +322,7 @@ class sgtree_algorithms
    //! <b>Effects</b>: First empties target tree calling
    //!   <tt>void disposer::operator()(const node_ptr &)</tt> for every node of the tree
    //!    except the header.
-   //!   
+   //!
    //!   Then, duplicates the entire tree pointed by "source_header" cloning each
    //!   source node with <tt>node_ptr Cloner::operator()(const node_ptr &)</tt> to obtain
    //!   the nodes of the target tree. If "cloner" throws, the cloned target nodes
@@ -472,7 +472,7 @@ class sgtree_algorithms
    //!   ordering compatible with the strict weak ordering used to create the
    //!   the tree. NodePtrCompare compares two node_ptrs. "hint" is node from
    //!   the "header"'s tree.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree, using "hint" as a hint to
    //!   where it will be inserted. If "hint" is the upper_bound
    //!   the insertion takes constant time (two comparisons in the worst case).
@@ -544,7 +544,7 @@ class sgtree_algorithms
    //!   "pos" must be an iterator pointing to the successor to "new_node"
    //!   once inserted according to the order of already inserted nodes. This function does not
    //!   check "pos" and this precondition must be guaranteed by the caller.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree before "pos".
    //!
    //! <b>Complexity</b>: Constant-time.
@@ -567,7 +567,7 @@ class sgtree_algorithms
    //! <b>Requires</b>: "header" must be the header node of a tree.
    //!   "new_node" must be, according to the used ordering no less than the
    //!   greatest inserted key.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree before "pos".
    //!
    //! <b>Complexity</b>: Constant-time.
@@ -589,7 +589,7 @@ class sgtree_algorithms
    //! <b>Requires</b>: "header" must be the header node of a tree.
    //!   "new_node" must be, according to the used ordering, no greater than the
    //!   lowest inserted key.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree before "pos".
    //!
    //! <b>Complexity</b>: Constant-time.

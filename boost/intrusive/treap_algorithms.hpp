@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2006-2009.
+// (C) Copyright Ion Gaztanaga  2006-2012.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -92,7 +92,7 @@ class treap_algorithms
             tree_algorithms::erase(header_, z_);
          }
       }
-     
+
       void release()
       {  remove_it_ = false;  }
 
@@ -117,7 +117,7 @@ class treap_algorithms
             rotate_up_n(header_, p_, n_);
          }
       }
-     
+
       void release()
       {  remove_it_ = false;  }
 
@@ -199,7 +199,7 @@ class treap_algorithms
    {
       if(node1 == node2)
          return;
-  
+
       node_ptr header1(tree_algorithms::get_header(node1)), header2(tree_algorithms::get_header(node2));
       swap_nodes(node1, header1, node2, header2);
    }
@@ -400,7 +400,7 @@ class treap_algorithms
    //! <b>Effects</b>: First empties target tree calling
    //!   <tt>void disposer::operator()(const node_ptr &)</tt> for every node of the tree
    //!    except the header.
-   //!   
+   //!
    //!   Then, duplicates the entire tree pointed by "source_header" cloning each
    //!   source node with <tt>node_ptr Cloner::operator()(const node_ptr &)</tt> to obtain
    //!   the nodes of the target tree. If "cloner" throws, the cloned target nodes
@@ -557,7 +557,7 @@ class treap_algorithms
    //!   NodePtrPriorityCompare is a priority function object that induces a strict weak
    //!   ordering compatible with the one used to create the
    //!   the tree. NodePtrPriorityCompare compares two node_ptrs.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree, using "hint" as a hint to
    //!   where it will be inserted. If "hint" is the upper_bound
    //!   the insertion takes constant time (two comparisons in the worst case).
@@ -585,7 +585,7 @@ class treap_algorithms
    //!   NodePtrPriorityCompare is a priority function object that induces a strict weak
    //!   ordering compatible with the one used to create the
    //!   the tree. NodePtrPriorityCompare compares two node_ptrs.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts new_node into the tree before "pos"
    //!   and rotates the tree according to "pcomp".
    //!
@@ -611,7 +611,7 @@ class treap_algorithms
    //!   NodePtrPriorityCompare is a priority function object that induces a strict weak
    //!   ordering compatible with the one used to create the
    //!   the tree. NodePtrPriorityCompare compares two node_ptrs.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts x into the tree in the last position
    //!   and rotates the tree according to "pcomp".
    //!
@@ -636,7 +636,7 @@ class treap_algorithms
    //!   NodePtrPriorityCompare is a priority function object that induces a strict weak
    //!   ordering compatible with the one used to create the
    //!   the tree. NodePtrPriorityCompare compares two node_ptrs.
-   //!  
+   //!
    //! <b>Effects</b>: Inserts x into the tree in the first position
    //!   and rotates the tree according to "pcomp".
    //!

@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2007-2009
+// (C) Copyright Ion Gaztanaga 2007-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -80,7 +80,7 @@ class avl_set_impl
 
    public:
    //! <b>Effects</b>: Constructs an empty avl_set.
-   //!  
+   //!
    //! <b>Complexity</b>: Constant.
    //!
    //! <b>Throws</b>: If value_traits::node_traits::node
@@ -111,13 +111,13 @@ class avl_set_impl
    {}
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    avl_set_impl(BOOST_RV_REF(avl_set_impl) x)
       :  tree_(::boost::move(x.tree_))
    {}
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    avl_set_impl& operator=(BOOST_RV_REF(avl_set_impl) x)
    {  tree_ = ::boost::move(x.tree_);  return *this;  }
 
@@ -343,7 +343,7 @@ class avl_set_impl
    //!
    //!   If cloner throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
-   //!  
+   //!
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //!
    //! <b>Throws</b>: If cloner throws or predicate copy assignment throws. Basic guarantee.
@@ -453,7 +453,7 @@ class avl_set_impl
    //!   If the check is successful, the user can construct the value_type and use
    //!   "insert_commit" to insert the object in constant-time. This can give a total
    //!   constant-time complexity to the insertion: check(O(1)) + commit(O(1)).
-   //!  
+   //!
    //!   "commit_data" remains valid for a subsequent "insert_commit" only if no more
    //!   objects are inserted or erased from the avl_set.
    template<class KeyType, class KeyValueCompare>
@@ -1290,7 +1290,7 @@ class avl_multiset_impl
 
    public:
    //! <b>Effects</b>: Constructs an empty avl_multiset.
-   //!  
+   //!
    //! <b>Complexity</b>: Constant.
    //!
    //! <b>Throws</b>: If value_traits::node_traits::node
@@ -1321,13 +1321,13 @@ class avl_multiset_impl
    {}
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    avl_multiset_impl(BOOST_RV_REF(avl_multiset_impl) x)
       :  tree_(::boost::move(x.tree_))
    {}
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    avl_multiset_impl& operator=(BOOST_RV_REF(avl_multiset_impl) x)
    {  tree_ = ::boost::move(x.tree_);  return *this;  }
 
@@ -1553,7 +1553,7 @@ class avl_multiset_impl
    //!
    //!   If cloner throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
-   //!  
+   //!
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //!
    //! <b>Throws</b>: If cloner throws or predicate copy assignment throws. Basic guarantee.

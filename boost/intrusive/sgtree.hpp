@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2007-2009
+// (C) Copyright Ion Gaztanaga 2007-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -103,7 +103,7 @@ struct alpha_by_max_size_t
    alpha_by_max_size_t(float alpha)
       :  alpha_(alpha)
    {}
-  
+
    float operator()(std::size_t max_tree_size) const
    {  return float(max_tree_size)*alpha_;   }
 
@@ -299,7 +299,7 @@ class sgtree_impl
 
    void priv_alpha(float alpha)
    {  return this->priv_alpha_traits().set_alpha(alpha);  }
- 
+
    const value_compare &priv_comp() const
    {  return data_.node_plus_pred_.get();  }
 
@@ -364,7 +364,7 @@ class sgtree_impl
    typedef typename node_algorithms::insert_commit_data insert_commit_data;
 
    //! <b>Effects</b>: Constructs an empty tree.
-   //!  
+   //!
    //! <b>Complexity</b>: Constant.
    //!
    //! <b>Throws</b>: If value_traits::node_traits::node
@@ -373,8 +373,8 @@ class sgtree_impl
    sgtree_impl( const value_compare &cmp     = value_compare()
               , const value_traits &v_traits = value_traits())
       :  data_(cmp, v_traits)
-   { 
-      node_algorithms::init_header(this->priv_header_ptr()); 
+   {
+      node_algorithms::init_header(this->priv_header_ptr());
       this->priv_size_traits().set_size(size_type(0));
    }
 
@@ -405,17 +405,17 @@ class sgtree_impl
    }
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    sgtree_impl(BOOST_RV_REF(sgtree_impl) x)
       : data_(::boost::move(x.priv_comp()), ::boost::move(x.priv_value_traits()))
    {
-      node_algorithms::init_header(this->priv_header_ptr()); 
+      node_algorithms::init_header(this->priv_header_ptr());
       this->priv_size_traits().set_size(size_type(0));
       this->swap(x);
    }
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    sgtree_impl& operator=(BOOST_RV_REF(sgtree_impl) x)
    {  this->swap(x); return *this;  }
 
@@ -848,7 +848,7 @@ class sgtree_impl
    //!   If the check is successful, the user can construct the value_type and use
    //!   "insert_commit" to insert the object in constant-time. This can give a total
    //!   constant-time complexity to the insertion: check(O(1)) + commit(O(1)).
-   //!  
+   //!
    //!   "commit_data" remains valid for a subsequent "insert_commit" only if no more
    //!   objects are inserted or erased from the container.
    template<class KeyType, class KeyValueCompare>
@@ -1040,7 +1040,7 @@ class sgtree_impl
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
    template<class KeyType, class KeyValueCompare>
-   size_type erase(const KeyType& key, KeyValueCompare comp                 
+   size_type erase(const KeyType& key, KeyValueCompare comp
                   /// @cond
                   , typename detail::enable_if_c<!detail::is_convertible<KeyValueCompare, const_iterator>::value >::type * = 0
                   /// @endcond
@@ -1414,7 +1414,7 @@ class sgtree_impl
    //!
    //!   If cloner throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
-   //!  
+   //!
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //!
    //! <b>Throws</b>: If cloner throws or predicate copy assignment throws. Basic guarantee.
