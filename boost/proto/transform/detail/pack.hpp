@@ -23,6 +23,7 @@
 #include <boost/preprocessor/iteration/iterate.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/assert.hpp>
+#include <boost/type_traits/is_same.hpp>
 #include <boost/proto/proto_fwd.hpp>
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
@@ -52,6 +53,12 @@ namespace boost { namespace proto
         template<typename Tfx, typename T>
         struct expand_pattern_helper<Tfx, pack(T)>
         {
+            // BUGBUG fix me. See comment in transform/detail/call.hpp
+            BOOST_MPL_ASSERT_MSG(
+                (is_same<T, _>::value)
+              , PACK_EXPANSIONS_OF_EXPRESSIONS_OTHER_THAN_THE_CURRENT_NOT_YET_SUPPORTED
+              , (T)
+            );
             typedef Tfx type(T);
             typedef mpl::true_ applied;
         };

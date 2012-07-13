@@ -93,7 +93,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value // BUGBUG this isn't right. Could be pack(_child), should use arity of child!
                   , BOOST_PP_CAT(A, BOOST_PP_DEC(N))
                   , detail::BOOST_PP_CAT(expand_pattern_rest_, BOOST_PP_DEC(N))<
                         Fun
