@@ -15,7 +15,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A0
                   , detail::expand_pattern_rest_0<
                         Fun
@@ -35,7 +35,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A1
                   , detail::expand_pattern_rest_1<
                         Fun
@@ -55,7 +55,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A2
                   , detail::expand_pattern_rest_2<
                         Fun
@@ -106,7 +106,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A3
                   , detail::expand_pattern_rest_3<
                         Fun
@@ -157,7 +157,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A4
                   , detail::expand_pattern_rest_4<
                         Fun
@@ -208,7 +208,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A5
                   , detail::expand_pattern_rest_5<
                         Fun
@@ -259,7 +259,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A6
                   , detail::expand_pattern_rest_6<
                         Fun
@@ -310,7 +310,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A7
                   , detail::expand_pattern_rest_7<
                         Fun
@@ -361,7 +361,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A8
                   , detail::expand_pattern_rest_8<
                         Fun
@@ -412,7 +412,7 @@
         struct impl
           : call<
                 typename detail::expand_pattern<
-                    proto::arity_of<Expr>::value
+                    proto::arity_of<Expr>::value 
                   , A9
                   , detail::expand_pattern_rest_9<
                         Fun

@@ -186,12 +186,10 @@
 
       <!-- proto::pack -->
       <struct name="pack">
-
         <purpose>To turn an expression into a pseudo-parameter pack containing the
         expression's children, for the purpose of expanding the pack expression within
         a <conceptname>CallableTransform</conceptname> or
         <conceptname>ObjectTransform</conceptname>.</purpose>
-
         <description>
           <para>
             <computeroutput>proto::pack</computeroutput> is useful within
@@ -249,6 +247,14 @@ int main()
           </para>
 
           <para>
+            In the above example, the type
+            <computeroutput>
+              <classname alt="boost::proto::_value">proto::_value</classname>(proto::pack(<classname alt="boost::proto::_">_</classname>))
+            </computeroutput>
+            is a so-called <emphasis>unpacking pattern</emphasis>, described below.
+          </para>
+
+          <para>
             <emphasis role="bold">Unpacking Patterns:</emphasis>
           </para>
 
@@ -259,15 +265,15 @@ int main()
             However, when the argument list in a composite transform is terminated with a C-style
             vararg ellipsis as in <computeroutput>X(A<subscript>0</subscript>,…A<subscript>n</subscript> ...)</computeroutput>,
             the final argument <computeroutput>A<subscript>n</subscript></computeroutput> is treated
-            as an <emphasis>unpacking expression</emphasis>.
+            as an <emphasis>unpacking pattern</emphasis>.
           </para>
           
           <para>
-            An unpacking expression must itself be a composite transform; that is, it must be a
+            An unpacking pattern must itself be a composite transform; that is, it must be a
             function type representing either a <conceptname>CallableTransform</conceptname> or
             an <conceptname>ObjectTransform</conceptname>. The type <computeroutput>proto::pack(_)</computeroutput>
-            must appear exactly once in the unpacking expression. This type will receive a substitution
-            when the unpacking expression is expanded.
+            must appear exactly once in the unpacking pattern. This type will receive a substitution
+            when the unpacking pattern is expanded.
           </para>
 
           <para>
@@ -293,8 +299,7 @@ int main()
             </itemizedlist>
           </para>
         </description>
-
-        </struct>
+      </struct>
       
     </namespace>
   </namespace>

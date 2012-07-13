@@ -40,7 +40,7 @@
         {
             BOOST_MPL_ASSERT_MSG(
                 (expand_pattern_helper<proto::_child_c<0>, Fun>::applied::value)
-              , NO_PACK_EXPRESSION_FOUND_IN_PACK_EXPANSION
+              , NO_PACK_EXPRESSION_FOUND_IN_UNPACKING_PATTERN
               , (Fun)
             );
         };

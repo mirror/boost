@@ -20,31 +20,44 @@ struct eval_ : proto::callable
     template<typename Sig>
     struct result;
 
-    template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::plus, Left, Right)>
-    {
-        typedef BOOST_TYPEOF_TPL(declval<Left>() + declval<Right>()) type;
-    };
+#define UNARY_OP(TAG, OP)                                                       \
+    template<typename This, typename Arg>                                       \
+    struct result<This(proto::tag::TAG, Arg)>                                   \
+    {                                                                           \
+        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (OP declval<Arg>()))            \
+        typedef typename nested::type type;                                     \
+    };                                                                          \
+                                                                                \
+    template<typename Arg>                                                      \
+    typename result<eval_(proto::tag::TAG, Arg)>::type                          \
+    operator()(proto::tag::TAG, Arg arg) const                                  \
+    {                                                                           \
+        return OP arg;                                                          \
+    }                                                                           \
+    /**/
 
-    template<typename This, typename Left, typename Right>
-    struct result<This(proto::tag::multiplies, Left, Right)>
-    {
-        typedef BOOST_TYPEOF_TPL(declval<Left>() * declval<Right>()) type;
-    };
+#define BINARY_OP(TAG, OP)                                                      \
+    template<typename This, typename Left, typename Right>                      \
+    struct result<This(proto::tag::TAG, Left, Right)>                           \
+    {                                                                           \
+        BOOST_TYPEOF_NESTED_TYPEDEF_TPL(nested, (declval<Left>() OP declval<Right>())) \
+        typedef typename nested::type type;                                     \
+    };                                                                          \
+                                                                                \
+    template<typename Left, typename Right>                                     \
+    typename result<eval_(proto::tag::TAG, Left, Right)>::type                  \
+    operator()(proto::tag::TAG, Left left, Right right) const                   \
+    {                                                                           \
+        return left OP right;                                                   \
+    }                                                                           \
+    /**/
 
-    template<typename Left, typename Right>
-    typename result<eval_(proto::tag::plus, Left, Right)>::type
-    operator()(proto::tag::plus, Left left, Right right) const
-    {
-        return left + right;
-    }
-
-    template<typename Left, typename Right>
-    typename result<eval_(proto::tag::multiplies, Left, Right)>::type
-    operator()(proto::tag::multiplies, Left left, Right right) const
-    {
-        return left * right;
-    }
+    UNARY_OP(negate, -)
+    BINARY_OP(plus, +)
+    BINARY_OP(minus, -)
+    BINARY_OP(multiplies, *)
+    BINARY_OP(divides, /)
+    /*... others ...*/
 };
 
 struct eval1

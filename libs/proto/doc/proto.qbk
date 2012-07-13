@@ -179,6 +179,8 @@
   [classref boost::proto::deduce_domain `proto::deduce_domain`]]
 [def _lazy_pt_ 
   [classref boost::proto::lazy `proto::lazy<>`]]
+[def _pack_ 
+  [classref boost::proto::pack `proto::pack`]]
 [def _SYB_ 
   [link boost_proto.users_guide.resources.SYB ["Scrap Your Boilerplate]]]
 [def _result_of_value_
