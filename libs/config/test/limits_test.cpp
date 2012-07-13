@@ -154,9 +154,12 @@ void test_float_limits(const T &, const char * msg)
     // If one of these fail, your compiler may be optimizing incorrectly,
     // or the standard library is incorrectly configured.
     BOOST_CHECK(! (qnan == 42));
-    BOOST_CHECK(! (qnan == qnan));
     BOOST_CHECK(qnan != 42);
-    BOOST_CHECK(qnan != qnan);
+    if(lim::is_iec559)
+    {
+      BOOST_CHECK(! (qnan == qnan));
+      BOOST_CHECK(qnan != qnan);
+    }
 
     // The following tests may cause arithmetic traps.
     // BOOST_CHECK(! (qnan < 42));
