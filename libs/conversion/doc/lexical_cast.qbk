@@ -114,12 +114,12 @@ The character type of the underlying stream is assumed to be `char` unless eithe
 * `boost::iterator_range<WideCharPtr>`, where `WideCharPtr` is a pointer to wide-character or pointer to const wide-character
 * `boost::array<CharT, N>` and `std::array<CharT, N>`, `boost::array<const CharT, N>` and `std::array<const CharT, N>` 
 
-[important Many compilers and runtime libraries fail to make conversions using new Unicode characters. Make shure that the following code compiles and outputs nonzero values, before using new types:
+[important Many compilers and runtime libraries fail to make conversions using new Unicode characters. Make sure that the following code compiles and outputs nonzero values, before using new types:
 ``
     std::cout
-        << booat::lexical_cast<std::u32string>(1.0).size()
+        << boost::lexical_cast<std::u32string>(1.0).size()
         << "  "
-        << booat::lexical_cast<std::u16string>(1.0).size();
+        << boost::lexical_cast<std::u16string>(1.0).size();
 ``
 ]
 
