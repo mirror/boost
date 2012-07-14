@@ -91,5 +91,5 @@ boostbook standalone
 
    ;
 
-install pdf-install : standalone : <name>intrusive.pdf <location>. <install-type>PDF <format>pdf ;
-explicit pdf-install ;
+install pdfinstall : standalone/<format>pdf : <name>intrusive.pdf <location>. <install-type>PDF <format>pdf ;
+explicit pdfinstall ;
