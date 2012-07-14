@@ -934,6 +934,92 @@ class splay_set_impl
       equal_range_dont_splay(const KeyType& key, KeyValueCompare comp) const
    {  return tree_.equal_range_dont_splay(key, comp);  }
 
+   //! <b>Requires</b>: 'lower_value' must not be greater than 'upper_value'. If
+   //!   'lower_value' == 'upper_value', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key) if left_closed, upper_bound(lower_key) otherwise
+   //!
+   //!   second = upper_bound(upper_key) if right_closed, lower_bound(upper_key) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If the predicate throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_value and upper_value.
+   std::pair<iterator,iterator> bounded_range
+      (const_reference lower_value, const_reference upper_value, bool left_closed, bool right_closed)
+   {  return tree_.bounded_range(lower_value, upper_value, left_closed, right_closed);  }
+
+   //! <b>Requires</b>: KeyValueCompare is a function object that induces a strict weak
+   //!   ordering compatible with the strict weak ordering used to create the
+   //!   the tree. 
+   //!   'lower_key' must not be greater than 'upper_key' according to 'comp'. If
+   //!   'lower_key' == 'upper_key', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key, comp) if left_closed, upper_bound(lower_key, comp) otherwise
+   //!
+   //!   second = upper_bound(upper_key, comp) if right_closed, lower_bound(upper_key, comp) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If "comp" throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_key and upper_key.
+   template<class KeyType, class KeyValueCompare>
+   std::pair<iterator,iterator> bounded_range
+      (const KeyType& lower_key, const KeyType& upper_key, KeyValueCompare comp, bool left_closed, bool right_closed)
+   {  return tree_.bounded_range(lower_key, upper_key, comp, left_closed, right_closed);  }
+
+   //! <b>Requires</b>: 'lower_value' must not be greater than 'upper_value'. If
+   //!   'lower_value' == 'upper_value', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key) if left_closed, upper_bound(lower_key) otherwise
+   //!
+   //!   second = upper_bound(upper_key) if right_closed, lower_bound(upper_key) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If the predicate throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_value and upper_value.
+   std::pair<const_iterator, const_iterator>
+      bounded_range_dont_splay_dont_splay
+         (const_reference lower_value, const_reference upper_value, bool left_closed, bool right_closed) const
+   {  return tree_.bounded_range_dont_splay(lower_value, upper_value, left_closed, right_closed);  }
+
+   //! <b>Requires</b>: KeyValueCompare is a function object that induces a strict weak
+   //!   ordering compatible with the strict weak ordering used to create the
+   //!   the tree. 
+   //!   'lower_key' must not be greater than 'upper_key' according to 'comp'. If
+   //!   'lower_key' == 'upper_key', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key, comp) if left_closed, upper_bound(lower_key, comp) otherwise
+   //!
+   //!   second = upper_bound(upper_key, comp) if right_closed, lower_bound(upper_key, comp) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If "comp" throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_key and upper_key.
+   template<class KeyType, class KeyValueCompare>
+   std::pair<const_iterator, const_iterator>
+      bounded_range_dont_splay
+         (const KeyType& lower_key, const KeyType& upper_key, KeyValueCompare comp, bool left_closed, bool right_closed) const
+   {  return tree_.bounded_range_dont_splay(lower_key, upper_key, comp, left_closed, right_closed);  }
+
    //! <b>Requires</b>: value must be an lvalue and shall be in a splay_set of
    //!   appropriate type. Otherwise the behavior is undefined.
    //!
@@ -2072,6 +2158,92 @@ class splay_multiset_impl
    std::pair<const_iterator, const_iterator>
       equal_range_dont_splay(const KeyType& key, KeyValueCompare comp) const
    {  return tree_.equal_range_dont_splay(key, comp);  }
+
+   //! <b>Requires</b>: 'lower_value' must not be greater than 'upper_value'. If
+   //!   'lower_value' == 'upper_value', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key) if left_closed, upper_bound(lower_key) otherwise
+   //!
+   //!   second = upper_bound(upper_key) if right_closed, lower_bound(upper_key) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If the predicate throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_value and upper_value.
+   std::pair<iterator,iterator> bounded_range
+      (const_reference lower_value, const_reference upper_value, bool left_closed, bool right_closed)
+   {  return tree_.bounded_range(lower_value, upper_value, left_closed, right_closed);  }
+
+   //! <b>Requires</b>: KeyValueCompare is a function object that induces a strict weak
+   //!   ordering compatible with the strict weak ordering used to create the
+   //!   the tree. 
+   //!   'lower_key' must not be greater than 'upper_key' according to 'comp'. If
+   //!   'lower_key' == 'upper_key', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key, comp) if left_closed, upper_bound(lower_key, comp) otherwise
+   //!
+   //!   second = upper_bound(upper_key, comp) if right_closed, lower_bound(upper_key, comp) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If "comp" throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_key and upper_key.
+   template<class KeyType, class KeyValueCompare>
+   std::pair<iterator,iterator> bounded_range
+      (const KeyType& lower_key, const KeyType& upper_key, KeyValueCompare comp, bool left_closed, bool right_closed)
+   {  return tree_.bounded_range(lower_key, upper_key, comp, left_closed, right_closed);  }
+
+   //! <b>Requires</b>: 'lower_value' must not be greater than 'upper_value'. If
+   //!   'lower_value' == 'upper_value', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key) if left_closed, upper_bound(lower_key) otherwise
+   //!
+   //!   second = upper_bound(upper_key) if right_closed, lower_bound(upper_key) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If the predicate throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_value and upper_value.
+   std::pair<const_iterator, const_iterator>
+      bounded_range_dont_splay
+         (const_reference lower_value, const_reference upper_value, bool left_closed, bool right_closed) const
+   {  return tree_.bounded_range_dont_splay(lower_value, upper_value, left_closed, right_closed);  }
+
+   //! <b>Requires</b>: KeyValueCompare is a function object that induces a strict weak
+   //!   ordering compatible with the strict weak ordering used to create the
+   //!   the tree. 
+   //!   'lower_key' must not be greater than 'upper_key' according to 'comp'. If
+   //!   'lower_key' == 'upper_key', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key, comp) if left_closed, upper_bound(lower_key, comp) otherwise
+   //!
+   //!   second = upper_bound(upper_key, comp) if right_closed, lower_bound(upper_key, comp) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If "comp" throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_key and upper_key.
+   template<class KeyType, class KeyValueCompare>
+   std::pair<const_iterator, const_iterator>
+      bounded_range_dont_splay
+         (const KeyType& lower_key, const KeyType& upper_key, KeyValueCompare comp, bool left_closed, bool right_closed) const
+   {  return tree_.bounded_range_dont_splay(lower_key, upper_key, comp, left_closed, right_closed);  }
 
    //! <b>Requires</b>: value must be an lvalue and shall be in a set of
    //!   appropriate type. Otherwise the behavior is undefined.

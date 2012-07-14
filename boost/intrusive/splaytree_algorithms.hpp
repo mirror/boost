@@ -15,7 +15,7 @@
 // The code has been modified and (supposely) improved by Ion Gaztanaga.
 // Here is the header of the file used as base code:
 //
-//  splay_tree.h -- implementation of a STL complatible splay tree.
+//  splay_tree.h -- implementation of a STL compatible splay tree.
 //
 //  Copyright (c) 2004 Ralf Mattethat
 //
@@ -477,6 +477,38 @@ class splaytree_algorithms
    //!   KeyNodePtrCompare is a function object that induces a strict weak
    //!   ordering compatible with the strict weak ordering used to create the
    //!   the tree. KeyNodePtrCompare can compare KeyType with tree's node_ptrs.
+   //!   'lower_key' must not be greater than 'upper_key' according to 'comp'. If
+   //!   'lower_key' == 'upper_key', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key) if left_closed, upper_bound(lower_key) otherwise
+   //!
+   //!   second = upper_bound(upper_key) if right_closed, lower_bound(upper_key) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If "comp" throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_key and upper_key.
+   template<class KeyType, class KeyNodePtrCompare>
+   static std::pair<node_ptr, node_ptr> bounded_range
+      (const const_node_ptr & header, const KeyType &lower_key, const KeyType &upper_key, KeyNodePtrCompare comp
+      , bool left_closed, bool right_closed, bool splay = true)
+   {
+      std::pair<node_ptr, node_ptr> ret =
+         tree_algorithms::bounded_range(header, lower_key, upper_key, comp, left_closed, right_closed);
+
+      if(splay)
+         splay_up(ret.first, uncast(header));
+      return ret;
+   }
+
+   //! <b>Requires</b>: "header" must be the header node of a tree.
+   //!   KeyNodePtrCompare is a function object that induces a strict weak
+   //!   ordering compatible with the strict weak ordering used to create the
+   //!   the tree. KeyNodePtrCompare can compare KeyType with tree's node_ptrs.
    //!
    //! <b>Effects</b>: Returns an node_ptr to the first element that is
    //!   not less than "key" according to "comp" or "header" if that element does
@@ -772,10 +804,11 @@ class splaytree_algorithms
       node_ptr leftmost (NodeTraits::get_left(header));
       node_ptr rightmost(NodeTraits::get_right(header));
       {
+         //Anti-exception rollback, recovers the original header node if an exception is thrown.
          detail::splaydown_rollback<NodeTraits> rollback(&t, header, leftmost, rightmost);
-         node_ptr null = header;
-         node_ptr l = null;
-         node_ptr r = null;
+         node_ptr null_node = header;
+         node_ptr l = null_node;
+         node_ptr r = null_node;
 
          for( ;; ){
             if(comp(key, t)){
@@ -827,10 +860,12 @@ class splaytree_algorithms
             }
          }
 
-         assemble(t, l, r, null);
+         assemble(t, l, r, null_node);
          rollback.release();
       }
 
+      //Now recover the original header except for the
+      //splayed root node.
       //t is the current root
       NodeTraits::set_parent(header, t);
       NodeTraits::set_parent(t, header);

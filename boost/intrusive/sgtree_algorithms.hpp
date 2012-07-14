@@ -421,6 +421,31 @@ class sgtree_algorithms
       (const const_node_ptr & header, const KeyType &key, KeyNodePtrCompare comp)
    {  return tree_algorithms::equal_range(header, key, comp);  }
 
+   //! <b>Requires</b>: "header" must be the header node of a tree.
+   //!   KeyNodePtrCompare is a function object that induces a strict weak
+   //!   ordering compatible with the strict weak ordering used to create the
+   //!   the tree. KeyNodePtrCompare can compare KeyType with tree's node_ptrs.
+   //!   'lower_key' must not be greater than 'upper_key' according to 'comp'. If
+   //!   'lower_key' == 'upper_key', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key) if left_closed, upper_bound(lower_key) otherwise
+   //!
+   //!   second = upper_bound(upper_key) if right_closed, lower_bound(upper_key) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If "comp" throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_key and upper_key.
+   template<class KeyType, class KeyNodePtrCompare>
+   static std::pair<node_ptr, node_ptr> bounded_range
+      (const const_node_ptr & header, const KeyType &lower_key, const KeyType &upper_key, KeyNodePtrCompare comp
+      , bool left_closed, bool right_closed)
+   {  return tree_algorithms::bounded_range(header, lower_key, upper_key, comp, left_closed, right_closed);  }
+
    //! <b>Requires</b>: "h" must be the header node of a tree.
    //!   NodePtrCompare is a function object that induces a strict weak
    //!   ordering compatible with the strict weak ordering used to create the

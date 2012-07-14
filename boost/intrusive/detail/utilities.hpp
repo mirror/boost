@@ -529,7 +529,7 @@ inline float fast_log2 (float val)
    x += 127 << 23;
    caster.x = x;
    val = caster.val;
-   val = ((-1.0f/3) * val + 2) * val - 2.0f/3;
+   val = ((-1.0f/3.f) * val + 2.f) * val - (2.0f/3.f);
 
    return (val + log_2);
 }
