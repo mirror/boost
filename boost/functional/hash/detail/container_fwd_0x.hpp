@@ -38,4 +38,18 @@ namespace std {
 #    endif
 #endif
 
+// std::shared_ptr/std::unique_ptr
+
+#if !defined(BOOST_NO_CXX11_HDR_MEMORY)
+#   if (defined(BOOST_DETAIL_NO_CONTAINER_FWD) && \
+        !defined(BOOST_DETAIL_TEST_FORCE_CONTAINER_FWD))
+#       include <memory>
+#    else
+namespace std {
+    template <class> class shared_ptr;
+    template <class, class> class unique_ptr;
+}
+#    endif
+#endif
+
 #endif

@@ -42,6 +42,7 @@ test-suite functional/hash
         [ run hash_type_index_test.cpp ]
         [ run hash_std_array_test.cpp ]
         [ run hash_std_tuple_test.cpp ]
+        [ run hash_std_smart_ptr_test.cpp ]
         [ run link_test.cpp link_test_2.cpp ]
         [ run link_ext_test.cpp link_no_ext_test.cpp ]
         [ run extensions_hpp_test.cpp ]
