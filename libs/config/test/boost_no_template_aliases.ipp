@@ -10,7 +10,7 @@
 //  TITLE:         C++0x template_aliases feature unavailable
 //  DESCRIPTION:   The compiler does not support the C++0x template_aliases feature
 
-namespace boost_no_template_aliases {
+namespace boost_no_cxx11_template_aliases {
 
 using PINT = void (*)(int);             // using plus C-style type
 
