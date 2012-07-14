@@ -85,5 +85,5 @@ boostbook standalone
         <format>pdf:<xsl:param>admon.graphics.extension=".svg"
    ;
 
-install pdf-install : standalone : <install-type>PDF <location>. <name>container.pdf ;
-explicit pdf-install ;
+install pdfinstall : standalone/<format>pdf : <install-type>PDF <location>. <name>container.pdf ;
+explicit pdfinstall ;

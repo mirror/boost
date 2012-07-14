@@ -47,5 +47,5 @@ boostbook doc : qbk
         <format>pdf:<xsl:param>draft.mode="no"
     ;
 
-install pdf-install : doc : <location>. <install-type>PDF <name>local_function.pdf ;
-explicit pdf-install ;
+install pdfinstall : doc/<format>pdf : <location>. <install-type>PDF <name>local_function.pdf ;
+explicit pdfinstall ;
