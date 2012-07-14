@@ -14,7 +14,7 @@
 //                 March 2011:
 //                 <http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3276.pdf>
 
-namespace boost_no_decltype_n3276 {
+namespace boost_no_cxx11_decltype_n3276 {
 
 // A simplified result_of implementation.
 // that uses decltype.
