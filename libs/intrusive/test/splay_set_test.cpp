@@ -65,6 +65,22 @@ struct has_rebalance<boost::intrusive::splay_set<T,
    static const bool value = true;
 };
 
+#if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+template<class T, class O1, class O2, class O3, class O4>
+#else
+template<class T, class ...Options>
+#endif
+struct has_const_searches<boost::intrusive::splay_set<T,
+   #if !defined (BOOST_INTRUSIVE_VARIADIC_TEMPLATES)
+   O1, O2, O3, O4
+   #else
+   Options...
+   #endif
+> >
+{
+   static const bool value = false;
+};
+
 }}}
 
 using namespace boost::intrusive;

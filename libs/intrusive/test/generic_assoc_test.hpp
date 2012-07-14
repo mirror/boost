@@ -41,6 +41,36 @@ struct has_insert_before
    static const bool value = false;
 };
 
+template<class T>
+struct has_const_searches
+{
+   static const bool value = true;
+};
+
+template<class T, bool = has_const_searches<T>::value>
+struct search_const_iterator
+{
+   typedef typename T::const_iterator type;
+};
+
+template<class T>
+struct search_const_iterator<T, false>
+{
+   typedef typename T::iterator type;
+};
+
+template<class T, bool = has_const_searches<T>::value>
+struct search_const_container
+{
+   typedef const T type;
+};
+
+template<class T>
+struct search_const_container<T, false>
+{
+   typedef T type;
+};
+
 template<class ValueTraits, template <class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none, class = ::boost::intrusive::none> class ContainerDefiner>
 struct test_generic_assoc
 {

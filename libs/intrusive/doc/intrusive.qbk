@@ -3829,6 +3829,18 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [section:release_notes Release Notes]
 
+[section:release_notes_boost_1_51_00 Boost 1.51 Release]
+
+*  Fixed bugs
+  [@https://svn.boost.org/trac/boost/ticket/6841 #6841],
+  [@https://svn.boost.org/trac/boost/ticket/6907 #6907],
+  [@https://svn.boost.org/trac/boost/ticket/6922 #6922],
+  [@https://svn.boost.org/trac/boost/ticket/7033 #7033],
+
+* Added `bounded_range` function to trees.
+
+[endsect]
+
 [section:release_notes_boost_1_49_00 Boost 1.49 Release]
 
 *  Fixed bugs

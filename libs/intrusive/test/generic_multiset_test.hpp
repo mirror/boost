@@ -205,7 +205,8 @@ void test_generic_multiset<ValueTraits, ContainerDefiner>::test_find(std::vector
       , constant_time_size<value_type::constant_time_size>
       >::type multiset_type;
    multiset_type testset (values.begin(), values.end());
-   typedef typename multiset_type::iterator iterator;
+   typedef typename multiset_type::iterator        iterator;
+   typedef typename multiset_type::const_iterator  const_iterator;
 
    {
       value_type cmp_val;
@@ -221,6 +222,61 @@ void test_generic_multiset<ValueTraits, ContainerDefiner>::test_find(std::vector
 
       cmp_val.value_ = 7;
       BOOST_TEST (testset.find (cmp_val) == testset.end());
+   }
+   {  //1, 2, 2, 3, 4, 5
+      typename search_const_container<multiset_type>::type &const_testset = testset;
+      std::pair<iterator,iterator> range;
+      std::pair<typename search_const_iterator<multiset_type>::type
+               ,typename search_const_iterator<multiset_type>::type> const_range;
+      value_type cmp_val_lower, cmp_val_upper;
+      {
+      cmp_val_lower.value_ = 1;
+      cmp_val_upper.value_ = 2;
+      //left-closed, right-closed
+      std::pair<iterator,iterator> range = testset.bounded_range (cmp_val_lower, cmp_val_upper, true, true);
+      BOOST_TEST (range.first->value_ == 1);
+      BOOST_TEST (range.second->value_ == 3);
+      BOOST_TEST (std::distance (range.first, range.second) == 3);
+      }
+      {
+      cmp_val_lower.value_ = 1;
+      cmp_val_upper.value_ = 2;
+      const_range = const_testset.bounded_range (cmp_val_lower, cmp_val_upper, true, false);
+      BOOST_TEST (const_range.first->value_ == 1);
+      BOOST_TEST (const_range.second->value_ == 2);
+      BOOST_TEST (std::distance (const_range.first, const_range.second) == 1);
+
+      cmp_val_lower.value_ = 1;
+      cmp_val_upper.value_ = 3;
+      range = testset.bounded_range (cmp_val_lower, cmp_val_upper, true, false);
+      BOOST_TEST (range.first->value_ == 1);
+      BOOST_TEST (range.second->value_ == 3);
+      BOOST_TEST (std::distance (range.first, range.second) == 3);
+      }
+      {
+      cmp_val_lower.value_ = 1;
+      cmp_val_upper.value_ = 2;
+      const_range = const_testset.bounded_range (cmp_val_lower, cmp_val_upper, false, true);
+      BOOST_TEST (const_range.first->value_ == 2);
+      BOOST_TEST (const_range.second->value_ == 3);
+      BOOST_TEST (std::distance (const_range.first, const_range.second) == 2);
+      }
+      {
+      cmp_val_lower.value_ = 1;
+      cmp_val_upper.value_ = 2;
+      range = testset.bounded_range (cmp_val_lower, cmp_val_upper, false, false);
+      BOOST_TEST (range.first->value_ == 2);
+      BOOST_TEST (range.second->value_ == 2);
+      BOOST_TEST (std::distance (range.first, range.second) == 0);
+      }
+      {
+      cmp_val_lower.value_ = 5;
+      cmp_val_upper.value_ = 6;
+      const_range = const_testset.bounded_range (cmp_val_lower, cmp_val_upper, true, false);
+      BOOST_TEST (const_range.first->value_ == 5);
+      BOOST_TEST (const_range.second == const_testset.end());
+      BOOST_TEST (std::distance (const_range.first, const_range.second) == 1);
+      }
    }
 }
 
