@@ -38,7 +38,9 @@ Iterator requirements: The `is_sorted` functions will work on all kinds of itera
 
 [heading is_sorted_until]
 
-The function `is_sorted_until(sequence, predicate)` compares each sequential pair of elements in the sequence, checking if they satisfy the predicate. it returns the first element of the sequence that does not satisfy the predicate with its' predecessor. In short, it returns the element in the sequence that is "out of order". If all adjacent pairs satisfy the predicate, then it will return one past the last element of the sequence. 
+If `distance(first, last) < 2`, then `is_sorted ( first, last )` returns `last`. Otherwise, it returns the last iterator i in [first,last] for which the range [first,i) is sorted.
+
+In short, it returns the element in the sequence that is "out of order". If the entire sequence is sorted (according to the predicate), then it will return `last`.
 
 ``
 namespace boost { namespace algorithm {

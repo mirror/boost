@@ -16,6 +16,7 @@ import testing ;
      [ run search_test1.cpp          : : : : search_test1 ]
      [ run search_test2.cpp          : : : : search_test2 ]
      [ run search_test3.cpp          : : : : search_test3 ]
+     [ run search_test4.cpp          : : : : search_test4 ]
      [ compile-fail search_fail1.cpp : : : : ]
      [ compile-fail search_fail2.cpp : : : : ]
      [ compile-fail search_fail3.cpp : : : : ]
@@ -43,6 +44,7 @@ import testing ;
      [ run hex_test1.cpp        : : : : hex_test1 ]
      [ run hex_test2.cpp        : : : : hex_test2 ]
      [ run hex_test3.cpp        : : : : hex_test3 ]
+     [ run hex_test4.cpp        : : : : hex_test4 ]
 	 [ compile-fail hex_fail1.cpp ]
    ;
 }

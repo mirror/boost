@@ -223,7 +223,7 @@ Requirements:
     corpusIter boyer_moore_search ( 
         corpusIter corpus_first, corpusIter corpus_last, const PatternRange &pattern )
     {
-        typedef typename boost::range_iterator<PatternRange> pattern_iterator;
+        typedef typename boost::range_iterator<const PatternRange>::type pattern_iterator;
         boyer_moore<pattern_iterator> bm ( boost::begin(pattern), boost::end (pattern));
         return bm ( corpus_first, corpus_last );
     }
@@ -242,7 +242,7 @@ Requirements:
     typename boost::range_iterator<CorpusRange>::type
     boyer_moore_search ( CorpusRange &corpus, const PatternRange &pattern )
     {
-        typedef typename boost::range_iterator<PatternRange> pattern_iterator;
+        typedef typename boost::range_iterator<const PatternRange>::type pattern_iterator;
         boyer_moore<pattern_iterator> bm ( boost::begin(pattern), boost::end (pattern));
         return bm (boost::begin (corpus), boost::end (corpus));
     }

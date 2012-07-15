@@ -51,14 +51,10 @@ namespace boost { namespace algorithm {
     \brief  Thrown when the input sequence unexpectedly ends
     
 */
-struct hex_decode_error: virtual boost::exception, virtual std::exception {};
-struct not_enough_input : public hex_decode_error {};
-struct non_hex_input : public hex_decode_error {
-    non_hex_input ( char ch ) : bad_char ( ch ) {}
-    char bad_char;
-private:
-    non_hex_input ();       // don't allow creation w/o a char
-    };
+struct hex_decode_error : virtual boost::exception, virtual std::exception {};
+struct not_enough_input : virtual hex_decode_error {};
+struct non_hex_input    : virtual hex_decode_error {};
+typedef boost::error_info<struct bad_char_,char> bad_char;
 
 namespace detail {
 /// \cond DOXYGEN_HIDE
@@ -77,7 +73,7 @@ namespace detail {
         if ( c >= '0' && c <= '9' ) return c - '0';
         if ( c >= 'A' && c <= 'F' ) return c - 'A' + 10;
         if ( c >= 'a' && c <= 'f' ) return c - 'a' + 10;
-        BOOST_THROW_EXCEPTION (non_hex_input (c));
+        BOOST_THROW_EXCEPTION (non_hex_input() << bad_char (c));
         return 0;   // keep dumb compilers happy
         }
     
@@ -227,10 +223,8 @@ OutputIterator unhex ( const T *ptr, OutputIterator out ) {
 //  If we run into the terminator while decoding, we will throw a
 //      malformed input exception. It would be nicer to throw a 'Not enough input'
 //      exception - but how much extra work would that require?
-//  I just make up an "end iterator" which we will never get to - 
-//      two Ts per byte of the output type.
     while ( *ptr )
-        out = detail::decode_one ( ptr, ptr + 2 * sizeof(OutputType), out );
+        out = detail::decode_one ( ptr, (const T *) NULL, out );
     return out;
     }
 
