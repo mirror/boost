@@ -94,7 +94,7 @@ BOOST_AUTO_TEST_CASE(test_seed_seq) {
     BOOST_CHECK_EQUAL_COLLECTIONS(
         &param[0], &param[0] + 4, &expected_param[0], &expected_param[0] + 4);
     
-#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
     std::fill_n(&store32[0], 10, 0);
     std::fill_n(&store64[0], 10, 0);
     std::fill_n(&param[0], 3, 0);

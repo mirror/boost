@@ -24,7 +24,7 @@
 #include <boost/random/detail/operators.hpp>
 #include <boost/random/detail/vector_io.hpp>
 
-#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
 #include <initializer_list>
 #endif
 
@@ -89,7 +89,7 @@ public:
                 }
             }
         }
-#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
         /**
          * Constructs a @c param_type object from an initializer_list
          * containing the interval boundaries and a unary function
@@ -278,7 +278,7 @@ public:
             init();
         }
     }
-#ifndef BOOST_NO_0X_HDR_INITIALIZER_LIST
+#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
     /**
      * Constructs a piecewise_linear_distribution from an
      * initializer_list containing the interval boundaries
