@@ -404,6 +404,8 @@ namespace boost { namespace proto
     template<typename Grammar>
     struct vararg;
 
+    struct pack;
+
     // Boost bug https://svn.boost.org/trac/boost/ticket/4602
     //int const N = INT_MAX;
     int const N = (INT_MAX >> 10);
