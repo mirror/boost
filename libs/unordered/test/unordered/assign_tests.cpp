@@ -193,7 +193,7 @@ UNORDERED_TEST(assign_tests2, (
     ((default_generator)(generate_collisions))
 )
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
 UNORDERED_AUTO_TEST(assign_default_initializer_list) {
     std::cerr<<"Initializer List Tests\n";
@@ -208,7 +208,7 @@ UNORDERED_AUTO_TEST(assign_default_initializer_list) {
 
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 UNORDERED_AUTO_TEST(assign_initializer_list)
 {
     std::cerr<<"Initializer List Tests\n";

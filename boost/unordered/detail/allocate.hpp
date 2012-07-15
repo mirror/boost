@@ -31,7 +31,7 @@
 #include <boost/assert.hpp>
 #include <utility>
 
-#if !defined(BOOST_NO_0X_HDR_TUPLE)
+#if !defined(BOOST_NO_CXX11_HDR_TUPLE)
 #include <tuple>
 #endif
 
@@ -261,7 +261,7 @@ BOOST_PP_REPEAT_FROM_TO(1, BOOST_UNORDERED_EMPLACE_LIMIT, BOOST_UNORDERED_EARGS,
 
 BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
-#if !defined(__SUNPRO_CC) && !defined(BOOST_NO_0X_HDR_TUPLE)
+#if !defined(__SUNPRO_CC) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
    BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, std::)
 #endif
 
@@ -536,7 +536,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 // Some utilities for implementing allocator_traits, but useful elsewhere so
 // they're always defined.
 
-#if !defined(BOOST_NO_0X_HDR_TYPE_TRAITS)
+#if !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
 #  include <type_traits>
 #endif
 
@@ -547,7 +547,7 @@ namespace boost { namespace unordered { namespace detail {
     //
     // Uses the standard versions if available.
 
-#if !defined(BOOST_NO_0X_HDR_TYPE_TRAITS)
+#if !defined(BOOST_NO_CXX11_HDR_TYPE_TRAITS)
 
     using std::integral_constant;
     using std::true_type;

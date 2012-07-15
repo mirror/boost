@@ -405,7 +405,7 @@ namespace unnecessary_copy_tests
                 boost::make_tuple(boost::ref(b.second)));
         COPY_COUNT(0); MOVE_COUNT(0);
         
-#if !defined(BOOST_NO_0X_HDR_TUPLE) || defined(BOOST_HAS_TR1_TUPLE)
+#if !defined(BOOST_NO_CXX11_HDR_TUPLE) || defined(BOOST_HAS_TR1_TUPLE)
 
         reset();
         x.emplace(boost::unordered::piecewise_construct,

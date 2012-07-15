@@ -20,7 +20,7 @@
 #include <boost/functional/hash.hpp>
 #include <boost/move/move.hpp>
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
 #endif
 
@@ -130,7 +130,7 @@ namespace unordered
         unordered_set(unordered_set&&, allocator_type const&);
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         unordered_set(
                 std::initializer_list<value_type>,
                 size_type = boost::unordered::detail::default_bucket_count,
@@ -173,7 +173,7 @@ namespace unordered
 #endif
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         unordered_set& operator=(std::initializer_list<value_type>);
 #endif
 
@@ -399,7 +399,7 @@ namespace unordered
 
         template <class InputIt> void insert(InputIt, InputIt);
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         void insert(std::initializer_list<value_type>);
 #endif
 
@@ -602,7 +602,7 @@ namespace unordered
         unordered_multiset(unordered_multiset&&, allocator_type const&);
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         unordered_multiset(
                 std::initializer_list<value_type>,
                 size_type = boost::unordered::detail::default_bucket_count,
@@ -646,7 +646,7 @@ namespace unordered
 #endif
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         unordered_multiset& operator=(std::initializer_list<value_type>);
 #endif
 
@@ -872,7 +872,7 @@ namespace unordered
 
         template <class InputIt> void insert(InputIt, InputIt);
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         void insert(std::initializer_list<value_type>);
 #endif
 
@@ -1062,7 +1062,7 @@ namespace unordered
 
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
     template <class T, class H, class P, class A>
     unordered_set<T,H,P,A>::unordered_set(
@@ -1104,7 +1104,7 @@ namespace unordered
         table_.insert_range(first, last);
     }
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template <class T, class H, class P, class A>
     void unordered_set<T,H,P,A>::insert(
             std::initializer_list<value_type> list)
@@ -1346,7 +1346,7 @@ namespace unordered
 
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
     template <class T, class H, class P, class A>
     unordered_multiset<T,H,P,A>::unordered_multiset(
@@ -1388,7 +1388,7 @@ namespace unordered
         table_.insert_range(first, last);
     }
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template <class T, class H, class P, class A>
     void unordered_multiset<T,H,P,A>::insert(
             std::initializer_list<value_type> list)

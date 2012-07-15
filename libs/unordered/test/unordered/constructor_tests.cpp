@@ -318,7 +318,7 @@ void constructor_tests2(T*,
         test::check_equivalent_keys(x);
     }
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     std::initializer_list<BOOST_DEDUCED_TYPENAME T::value_type> list;
     
     std::cerr<<"Initializer list construct 1\n";
@@ -432,7 +432,7 @@ UNORDERED_TEST(map_constructor_test,
     ((test_map)(test_multimap))
 )
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
 UNORDERED_AUTO_TEST(test_default_initializer_list) {
     std::cerr<<"Initializer List Tests\n";
@@ -443,7 +443,7 @@ UNORDERED_AUTO_TEST(test_default_initializer_list) {
 
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_INITIALIZER_LIST)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
 UNORDERED_AUTO_TEST(test_initializer_list) {
     std::cerr<<"Initializer List Tests\n";
