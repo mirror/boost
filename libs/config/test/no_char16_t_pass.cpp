@@ -10,9 +10,9 @@
 //
 
 
-// Test file for macro BOOST_NO_CHAR16_T
+// Test file for macro BOOST_NO_CXX11_CHAR16_T
 // This file should compile, if it does not then
-// BOOST_NO_CHAR16_T should be defined.
+// BOOST_NO_CXX11_CHAR16_T should be defined.
 // See file boost_no_char16_t.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_CHAR16_T
+#ifndef BOOST_NO_CXX11_CHAR16_T
 #include "boost_no_char16_t.ipp"
 #else
 namespace boost_no_char16_t = empty_boost;

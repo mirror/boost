@@ -10,9 +10,9 @@
 //
 
 
-// Test file for macro BOOST_NO_VARIADIC_TEMPLATES
+// Test file for macro BOOST_NO_CXX11_VARIADIC_TEMPLATES
 // This file should compile, if it does not then
-// BOOST_NO_VARIADIC_TEMPLATES should be defined.
+// BOOST_NO_CXX11_VARIADIC_TEMPLATES should be defined.
 // See file boost_no_variadic_templates.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
 #include "boost_no_variadic_templates.ipp"
 #else
 namespace boost_no_variadic_templates = empty_boost;

@@ -5,13 +5,13 @@
 
 //  See http://www.boost.org/libs/config for most recent version.
 
-//  MACRO:         BOOST_NO_NUMERIC_LIMITS_LOWEST
+//  MACRO:         BOOST_NO_CXX11_NUMERIC_LIMITS
 //  TITLE:         static function lowest() in numeric_limits class <limits>
 //  DESCRIPTION:   static function numeric_limits<T>::lowest() are not available for use.
 
 #include <limits>
 
-namespace boost_no_numeric_limits_lowest{
+namespace boost_no_cxx11_numeric_limits{
 
 int f()
 {

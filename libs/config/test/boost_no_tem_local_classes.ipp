@@ -5,7 +5,7 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 // Home at http://www.boost.org/libs/config
 
-// MACRO:       BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS
+// MACRO:       BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
 // TITLE:       local classes as template parameters
 // DESCRIPTION: Local classes cannot be passed as template parameters.
 
@@ -16,7 +16,7 @@
 // template parameters but it is intentionally limited to local named classes
 // because some non C++11 compilers might only support local named classes as
 // template parameters which is still very useful to program local functors).
-namespace boost_no_local_class_template_parameters {
+namespace boost_no_cxx11_local_class_template_parameters {
 
 template<typename T> struct a { void use() {} };
 template<typename T> void f(T x) {}

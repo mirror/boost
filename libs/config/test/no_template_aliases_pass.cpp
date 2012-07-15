@@ -10,9 +10,9 @@
 //
 
 
-// Test file for macro BOOST_NO_TEMPLATE_ALIASES
+// Test file for macro BOOST_NO_CXX11_TEMPLATE_ALIASES
 // This file should compile, if it does not then
-// BOOST_NO_TEMPLATE_ALIASES should be defined.
+// BOOST_NO_CXX11_TEMPLATE_ALIASES should be defined.
 // See file boost_no_template_aliases.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
@@ -24,7 +24,7 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_TEMPLATE_ALIASES
+#ifndef BOOST_NO_CXX11_TEMPLATE_ALIASES
 #include "boost_no_template_aliases.ipp"
 #else
 namespace boost_no_template_aliases = empty_boost;
