@@ -245,7 +245,8 @@ namespace unnecessary_copy_tests
         // the existing element.
         reset();
         x.emplace();
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES) || \
+    !defined(BOOST_NO_RVALUE_REFERENCES)
         // source_cost doesn't make much sense here, but it seems to fit.
         COPY_COUNT(1); MOVE_COUNT(source_cost);
 #else
