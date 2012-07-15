@@ -14,7 +14,7 @@
 #include <boost/detail/lightweight_test.hpp>
 #include "./compile_time.hpp"
 
-#if defined(TEST_EXTENSIONS) && !defined(BOOST_NO_CXX11_HDR_TUPLE)
+#if defined(TEST_EXTENSIONS) && !defined(BOOST_NO_CXX11_SMART_PTR)
 #define TEST_SMART_PTRS
 #include <memory>
 #endif
