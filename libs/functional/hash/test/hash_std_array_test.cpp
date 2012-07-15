@@ -16,7 +16,7 @@
 #include <boost/config.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-#if defined(TEST_EXTENSIONS) && !defined(BOOST_NO_0X_HDR_ARRAY)
+#if defined(TEST_EXTENSIONS) && !defined(BOOST_NO_CXX11_HDR_ARRAY)
 #define TEST_ARRAY
 #include <array>
 #include <vector>

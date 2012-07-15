@@ -20,7 +20,7 @@
 #include <boost/type_traits/is_pointer.hpp>
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_TYPEINDEX)
+#if !defined(BOOST_NO_CXX11_HDR_TYPEINDEX)
 #include <typeindex>
 #endif
 
@@ -111,7 +111,7 @@ namespace boost
     template <typename T>
     typename boost::hash_detail::float_numbers<T>::type hash_value(T);
 
-#if !defined(BOOST_NO_0X_HDR_TYPEINDEX)
+#if !defined(BOOST_NO_CXX11_HDR_TYPEINDEX)
     std::size_t hash_value(std::type_index);
 #endif
 
@@ -299,7 +299,7 @@ namespace boost
         return boost::hash_detail::float_hash_value(v);
     }
 
-#if !defined(BOOST_NO_0X_HDR_TYPEINDEX)
+#if !defined(BOOST_NO_CXX11_HDR_TYPEINDEX)
     inline std::size_t hash_value(std::type_index v)
     {
         return v.hash_code();
@@ -410,7 +410,7 @@ namespace boost
     BOOST_HASH_SPECIALIZE(boost::ulong_long_type)
 #endif
 
-#if !defined(BOOST_NO_0X_HDR_TYPEINDEX)
+#if !defined(BOOST_NO_CXX11_HDR_TYPEINDEX)
     BOOST_HASH_SPECIALIZE(std::type_index)
 #endif
 
