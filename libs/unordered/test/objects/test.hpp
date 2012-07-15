@@ -26,7 +26,7 @@ namespace test
     object generate(object const*);
     implicitly_convertible generate(implicitly_convertible const*);
     
-    class object : private globally_counted_object
+    class object : private counted_object
     {
         friend class hash;
         friend class equal_to;
@@ -64,7 +64,7 @@ namespace test
         }
     };
 
-    class implicitly_convertible : private globally_counted_object
+    class implicitly_convertible : private counted_object
     {
         int tag1_, tag2_;
     public:
@@ -259,8 +259,8 @@ namespace test
             new(p) T(t);
         }
 
-#if defined(BOOST_UNORDERED_VARIADIC_MOVE)
-        template<class... Args> void construct(T* p, Args&&... args) {
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+        template<class... Args> void construct(T* p, BOOST_FWD_REF(Args)... args) {
             detail::tracker.track_construct((void*) p, sizeof(T), tag_);
             new(p) T(boost::forward<Args>(args)...);
         }
