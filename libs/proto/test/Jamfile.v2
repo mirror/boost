@@ -38,6 +38,7 @@ test-suite "proto"
         [ run mem_ptr.cpp : : : <toolset>msvc:<cxxflags>/wd4355 ]
         [ run noinvoke.cpp ]
         [ run pack_expansion.cpp ]
+        [ run protect.cpp ]
         [ compile bug2407.cpp ]
     ;
 
