@@ -395,14 +395,13 @@ class flat_tree
       value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
       stored_allocator_type &a = this->get_stored_allocator();
       stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
-      scoped_destructor<stored_allocator_type> d(a, &val);
+      value_destructor<stored_allocator_type> d(a, val);
       insert_commit_data data;
       std::pair<iterator,bool> ret =
          priv_insert_unique_prepare(val, data);
       if(ret.second){
          ret.first = priv_insert_commit(data, boost::move(val));
       }
-      d.release();
       return ret;
    }
 
@@ -413,13 +412,12 @@ class flat_tree
       value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
       stored_allocator_type &a = this->get_stored_allocator();
       stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
-      scoped_destructor<stored_allocator_type> d(a, &val);
+      value_destructor<stored_allocator_type> d(a, val);
       insert_commit_data data;
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(hint, val, data);
       if(ret.second){
          ret.first = priv_insert_commit(data, boost::move(val));
       }
-      d.release();
       return ret.first;
    }
 
@@ -430,10 +428,9 @@ class flat_tree
       value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
       stored_allocator_type &a = this->get_stored_allocator();
       stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
-      scoped_destructor<stored_allocator_type> d(a, &val);
+      value_destructor<stored_allocator_type> d(a, val);
       iterator i = this->upper_bound(KeyOfValue()(val));
       i = this->m_data.m_vect.insert(i, boost::move(val));
-      d.release();
       return i;
    }
 
@@ -444,11 +441,10 @@ class flat_tree
       value_type &val = *static_cast<value_type *>(static_cast<void *>(&v));
       stored_allocator_type &a = this->get_stored_allocator();
       stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
-      scoped_destructor<stored_allocator_type> d(a, &val);
+      value_destructor<stored_allocator_type> d(a, val);
       insert_commit_data data;
       this->priv_insert_equal_prepare(hint, val, data);
       iterator i = priv_insert_commit(data, boost::move(val));
-      d.release();
       return i;
    }
 
@@ -464,13 +460,12 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();                            \
       stored_allocator_traits::construct(a, &val                                          \
          BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
-      scoped_destructor<stored_allocator_type> d(a, &val);                                \
+      value_destructor<stored_allocator_type> d(a, val);                                  \
       insert_commit_data data;                                                            \
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(val, data);               \
       if(ret.second){                                                                     \
          ret.first = priv_insert_commit(data, boost::move(val));                          \
       }                                                                                   \
-      d.release();                                                                        \
       return ret;                                                                         \
    }                                                                                      \
                                                                                           \
@@ -483,13 +478,12 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();                            \
       stored_allocator_traits::construct(a, &val                                          \
          BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
-      scoped_destructor<stored_allocator_type> d(a, &val);                                \
+      value_destructor<stored_allocator_type> d(a,  val);                                 \
       insert_commit_data data;                                                            \
       std::pair<iterator,bool> ret = priv_insert_unique_prepare(hint, val, data);         \
       if(ret.second){                                                                     \
          ret.first = priv_insert_commit(data, boost::move(val));                          \
       }                                                                                   \
-      d.release();                                                                        \
       return ret.first;                                                                   \
    }                                                                                      \
                                                                                           \
@@ -501,10 +495,9 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();                            \
       stored_allocator_traits::construct(a, &val                                          \
          BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
-      scoped_destructor<stored_allocator_type> d(a, &val);                                \
+      value_destructor<stored_allocator_type> d(a,  val);                                 \
       iterator i = this->upper_bound(KeyOfValue()(val));                                  \
       i = this->m_data.m_vect.insert(i, boost::move(val));                                \
-      d.release();                                                                        \
       return i;                                                                           \
    }                                                                                      \
                                                                                           \
@@ -517,11 +510,10 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();                            \
       stored_allocator_traits::construct(a, &val                                          \
          BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
-      scoped_destructor<stored_allocator_type> d(a, &val);                                \
+      value_destructor<stored_allocator_type> d(a,  val);                                 \
       insert_commit_data data;                                                            \
       this->priv_insert_equal_prepare(hint, val, data);                                   \
       iterator i = priv_insert_commit(data, boost::move(val));                            \
-      d.release();                                                                        \
       return i;                                                                           \
    }                                                                                      \
 
