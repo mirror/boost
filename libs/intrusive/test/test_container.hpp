@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2007-2011
+// (C) Copyright Ion Gaztanaga  2007-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -247,7 +247,7 @@ void test_common_unordered_and_associative_container(Container & c, Data & d)
       {
          BOOST_TEST( c.find(*di) != c.end() );
       }
-  
+
       typename Data::const_iterator db = d.begin();
       typename Data::const_iterator da = db++;
 

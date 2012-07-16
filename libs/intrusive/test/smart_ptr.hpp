@@ -113,18 +113,6 @@ class smart_ptr
       :  m_ptr(0)
    {}
 
-/*
-   //!Constructor from raw pointer (allows "0" pointer conversion). Never throws.
-   explicit smart_ptr(pointer ptr = 0)
-      :  m_ptr(ptr)
-   {}
-
-   //!Constructor from other pointer. Never throws.
-   template <class T>
-   smart_ptr(T *ptr)
-      :  m_ptr(ptr)
-   {}
-*/
    //!Constructor from other smart_ptr
    smart_ptr(const smart_ptr& ptr)
       :  m_ptr(ptr.m_ptr)
@@ -139,52 +127,20 @@ class smart_ptr
    smart_ptr(const smart_ptr<T2> &ptr)
       :  m_ptr(ptr.m_ptr)
    {}
-/*
-   //!Emulates static_cast operator. Never throws.
-   template<class Y>
-   smart_ptr(const smart_ptr<Y> & r, detail::static_cast_tag)
-      :  m_ptr(static_cast<PointedType*>(r.m_ptr))
-   {}
 
-   //!Emulates const_cast operator. Never throws.
-   template<class Y>
-   smart_ptr(const smart_ptr<Y> & r, detail::const_cast_tag)
-      :  m_ptr(const_cast<PointedType*>(r.m_ptr))
-   {}
-
-   //!Emulates dynamic_cast operator. Never throws.
-   template<class Y>
-   smart_ptr(const smart_ptr<Y> & r, detail::dynamic_cast_tag)
-      :  m_ptr(dynamic_cast<PointedType*>(r.m_ptr))
-   {}
-
-   //!Emulates reinterpret_cast operator. Never throws.
-   template<class Y>
-   smart_ptr(const smart_ptr<Y> & r, detail::reinterpret_cast_tag)
-      :  m_ptr(reinterpret_cast<PointedType*>(r.m_ptr))
-   {}
-
-   //!Obtains raw pointer from offset. Never throws.
-   pointer get() const
-   {  return m_ptr;   }
-*/
    //!Pointer-like -> operator. It can return 0 pointer. Never throws.
-   pointer operator->() const          
+   pointer operator->() const
    {  return m_ptr; }
 
    //!Dereferencing operator, if it is a null smart_ptr behavior
    //!   is undefined. Never throws.
-   reference operator* () const          
+   reference operator* () const
    {  return *m_ptr;   }
 
    //!Indexing operator. Never throws.
-   reference operator[](std::ptrdiff_t idx) const  
+   reference operator[](std::ptrdiff_t idx) const
    {  return m_ptr[idx];  }
-/*
-   //!Assignment from pointer (saves extra conversion). Never throws.
-   smart_ptr& operator= (pointer from)
-   {  m_ptr = from;  return *this;  }
-*/
+
    //!Assignment from other smart_ptr. Never throws.
    smart_ptr& operator= (const smart_ptr & pt)
    {  m_ptr = pt.m_ptr;  return *this;  }
@@ -196,7 +152,7 @@ class smart_ptr
    {  m_ptr = pt.m_ptr;  return *this;  }
 
    //!smart_ptr + std::ptrdiff_t. Never throws.
-   smart_ptr operator+ (std::ptrdiff_t offset) const  
+   smart_ptr operator+ (std::ptrdiff_t offset) const
    {  smart_ptr s; s.m_ptr = m_ptr + offset; return s;   }
 
    //!smart_ptr - std::ptrdiff_t. Never throws.
@@ -228,21 +184,13 @@ class smart_ptr
    {  smart_ptr temp(*this); --*this; return temp; }
 
    //!safe bool conversion operator. Never throws.
-   operator unspecified_bool_type() const 
+   operator unspecified_bool_type() const
    {  return m_ptr? &self_t::unspecified_bool_type_func : 0;   }
 
    //!Not operator. Not needed in theory, but improves portability.
    //!Never throws.
    bool operator! () const
    {  return m_ptr == 0;   }
-/*
-   friend void swap (smart_ptr &pt, smart_ptr &pt2)
-   { 
-      value_type *ptr = pt.get();
-      pt = pt2;
-      pt2 = ptr;
-   }
-*/
 };
 
 //!smart_ptr<T1> == smart_ptr<T2>. Never throws.
@@ -293,12 +241,12 @@ inline std::basic_istream<E, T> & operator>>
    (std::basic_istream<E, T> & os, smart_ptr<Y> & p)
 {  Y * tmp; return os >> tmp; p = tmp;   }
 
-//!std::ptrdiff_t + smart_ptr 
+//!std::ptrdiff_t + smart_ptr
 template<class T>
 inline smart_ptr<T> operator+(std::ptrdiff_t diff, const smart_ptr<T>& right)
 {  return right + diff;  }
 
-//!smart_ptr - smart_ptr 
+//!smart_ptr - smart_ptr
 template<class T, class T2>
 inline std::ptrdiff_t operator- (const smart_ptr<T> &pt, const smart_ptr<T2> &pt2)
 {  return pt.operator->()- pt2.operator->();   }
@@ -307,7 +255,7 @@ inline std::ptrdiff_t operator- (const smart_ptr<T> &pt, const smart_ptr<T2> &pt
 template<class T>
 inline void swap (smart_ptr<T> &pt,
                   smart_ptr<T> &pt2)
-{ 
+{
    typename smart_ptr<T>::value_type *ptr = pt.operator->();
    pt = pt2;
    pt2 = ptr;
@@ -317,32 +265,32 @@ inline void swap (smart_ptr<T> &pt,
 template<class T, class U>
 inline smart_ptr<T>
    static_pointer_cast(const smart_ptr<U> & r)
-{ 
-   return smart_ptr<T>(r, detail::static_cast_tag()); 
+{
+   return smart_ptr<T>(r, detail::static_cast_tag());
 }
 
 //!Simulation of const_cast between pointers. Never throws.
 template<class T, class U>
 inline smart_ptr<T>const_pointer_cast(smart_ptr<U> const & r)
-{ 
-   return smart_ptr<T>(r, detail::const_cast_tag()); 
+{
+   return smart_ptr<T>(r, detail::const_cast_tag());
 }
 
 //!Simulation of dynamic_cast between pointers. Never throws.
 template<class T, class U>
 inline smart_ptr<T>
    dynamic_pointer_cast(smart_ptr<U> const & r)
-{ 
+{
    return smart_ptr<T>
-            (r, detail::dynamic_cast_tag()); 
+            (r, detail::dynamic_cast_tag());
 }
 
 //!Simulation of reinterpret_cast between pointers. Never throws.
 template<class T, class U>
 inline smart_ptr<T>
    reinterpret_pointer_cast(smart_ptr<U> const & r)
-{ 
-   return smart_ptr<T>(r, detail::reinterpret_cast_tag()); 
+{
+   return smart_ptr<T>(r, detail::reinterpret_cast_tag());
 }
 
 }  //namespace intrusive {

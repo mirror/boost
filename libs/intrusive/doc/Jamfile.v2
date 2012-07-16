@@ -49,7 +49,7 @@ doxygen autodoc
 xml intrusive : intrusive.qbk
               :
                  <include>../../../tools/auto_index/include
-              ;  
+              ;
 
 boostbook standalone
    :
@@ -62,21 +62,21 @@ boostbook standalone
         <dependency>autodoc
 
         # Build requirements go here:
-       
+
         # <auto-index>on (or off) one turns on (or off) indexing:
         <auto-index>on
-       
+
         # Turns on (or off) auto-index-verbose for diagnostic info.
         # This is highly recommended until you have got all the many details correct!
         <auto-index-verbose>on
-       
+
         # Choose the indexing method (separately for html and PDF) - see manual.
         # Choose indexing method for PDFs:
         <format>pdf:<auto-index-internal>off
-       
+
         # Choose indexing method for html:
         <format>html:<auto-index-internal>on
-       
+
         # Set the name of the script file to use (index.idx is popular):
         <auto-index-script>$(here)/index.idx
         # Commands in the script file should all use RELATIVE PATHS

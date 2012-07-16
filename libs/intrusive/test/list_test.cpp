@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2009.
+// (C) Copyright Ion Gaztanaga  2006-2012.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -114,7 +114,7 @@ void test_list<ValueTraits>
 
    testlist.pop_front();
    BOOST_TEST (testlist.empty());
-} 
+}
 
 
 //test: constructor, iterator, reverse_iterator, sort, reverse:
@@ -196,7 +196,7 @@ void test_list<ValueTraits>
    int init_values [] = { 1, 3, 4, 5 };
    TEST_INTRUSIVE_SEQUENCE( init_values, testlist1.begin() );
 }
- 
+
 //test: assign, insert, const_iterator, const_reverse_iterator, erase, s_iterator_to:
 template<class ValueTraits>
 void test_list<ValueTraits>

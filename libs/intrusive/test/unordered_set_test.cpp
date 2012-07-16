@@ -1,7 +1,7 @@
 /////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Olaf Krzikalla 2004-2006.
-// (C) Copyright Ion Gaztanaga  2006-2009.
+// (C) Copyright Ion Gaztanaga  2006-2012.
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -188,11 +188,11 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
       {  int init_values [] = { 1, 2, 3, 4, 5 };
          TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
    }
-   
+
    testset1.clear();
    BOOST_TEST (testset1.empty());
-} 
- 
+}
+
 //test: insert, const_iterator, const_reverse_iterator, erase, iterator_to:
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
 void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
@@ -251,7 +251,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
       {  int init_values [] = { 1, 3, 5 };
          TEST_INTRUSIVE_SEQUENCE( init_values, const_testset.begin() );  }
    }
-} 
+}
 
 //test: insert (seq-version), swap, erase (seq-version), size:
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -299,7 +299,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
       BOOST_TEST (testset1.size() == 1);
       BOOST_TEST (&*testset1.begin() == &values[3]);
    }
-} 
+}
 
 //test: rehash:
 template<class ValueTraits, bool CacheBegin, bool CompareHash, bool Incremental>
@@ -507,7 +507,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    BOOST_TEST (testset1.size() == values.size()-1);
    {  int init_values [] = { 1, 2, 3, 4, 5 };
       TEST_INTRUSIVE_SEQUENCE( init_values, testset1.begin() );  }
-} 
+}
 
 
 //test: find, equal_range (lower_bound, upper_bound):
@@ -538,7 +538,7 @@ void test_unordered_set<ValueTraits, CacheBegin, CompareHash, Incremental>::
    BOOST_TEST (i->value_ == 2);
    BOOST_TEST ((++i)->value_ != 2);
    std::pair<iterator,iterator> range = testset.equal_range (cmp_val);
-    
+
    BOOST_TEST (range.first->value_ == 2);
    BOOST_TEST (range.second->value_ == 3);
    BOOST_TEST (std::distance (range.first, range.second) == 1);
