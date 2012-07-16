@@ -8,19 +8,14 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 #include <boost/container/detail/config_begin.hpp>
-#include <boost/container/scoped_allocator.hpp>
+#include <boost/container/scoped_allocator_fwd.hpp>
 #include <cstddef>
-#include <boost/static_assert.hpp>
-#include <boost/type_traits/is_same.hpp>
-#include <boost/container/detail/function_detector.hpp>
 #include <boost/container/detail/mpl.hpp>
 #include <boost/move/move.hpp>
+#include <boost/type_traits/integral_constant.hpp>
 #include <memory>
-#include <boost/container/vector.hpp>
-#include <boost/container/detail/pair.hpp>
 
 using namespace boost::container;
-
 
 template<class T, unsigned int Id, bool Propagate = false>
 class test_allocator
@@ -241,6 +236,12 @@ struct constructible_with_allocator_suffix
 }  //namespace container {
 }  //namespace boost {
 
+
+#include <boost/container/scoped_allocator.hpp>
+#include <boost/type_traits/is_same.hpp>
+#include <boost/static_assert.hpp>
+#include <boost/container/vector.hpp>
+#include <boost/container/detail/pair.hpp>
 
 int main()
 {
