@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2007-2009
+// (C) Copyright Ion Gaztanaga 2007-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -48,7 +48,7 @@ namespace intrusive {
 
 namespace detail{
 
-//! Returns floor(log(n)/log(sqrt(2))) -> floor(2*log2(n))
+//! Returns floor(log2(n)/log2(sqrt(2))) -> floor(2*log2(n))
 //! Undefined if N is 0.
 //!
 //! This function does not use float point operations.
@@ -83,9 +83,9 @@ struct h_alpha_t
 
    std::size_t operator()(std::size_t n) const
    {
-      //Returns floor(log1/alpha(n)) ->
-      // floor(log(n)/log(1/alpha)) ->
-      // floor(log(n)/(-log(alpha)))
+      //Returns floor(log2(1/alpha(n))) ->
+      // floor(log2(n)/log(1/alpha)) ->
+      // floor(log2(n)/(-log2(alpha)))
       //return static_cast<std::size_t>(std::log(float(n))*inv_minus_logalpha_);
       return static_cast<std::size_t>(detail::fast_log2(float(n))*inv_minus_logalpha_);
    }
@@ -103,7 +103,7 @@ struct alpha_by_max_size_t
    alpha_by_max_size_t(float alpha)
       :  alpha_(alpha)
    {}
-  
+
    float operator()(std::size_t max_tree_size) const
    {  return float(max_tree_size)*alpha_;   }
 
@@ -299,7 +299,7 @@ class sgtree_impl
 
    void priv_alpha(float alpha)
    {  return this->priv_alpha_traits().set_alpha(alpha);  }
- 
+
    const value_compare &priv_comp() const
    {  return data_.node_plus_pred_.get();  }
 
@@ -364,7 +364,7 @@ class sgtree_impl
    typedef typename node_algorithms::insert_commit_data insert_commit_data;
 
    //! <b>Effects</b>: Constructs an empty tree.
-   //!  
+   //!
    //! <b>Complexity</b>: Constant.
    //!
    //! <b>Throws</b>: If value_traits::node_traits::node
@@ -373,8 +373,8 @@ class sgtree_impl
    sgtree_impl( const value_compare &cmp     = value_compare()
               , const value_traits &v_traits = value_traits())
       :  data_(cmp, v_traits)
-   { 
-      node_algorithms::init_header(this->priv_header_ptr()); 
+   {
+      node_algorithms::init_header(this->priv_header_ptr());
       this->priv_size_traits().set_size(size_type(0));
    }
 
@@ -405,17 +405,17 @@ class sgtree_impl
    }
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    sgtree_impl(BOOST_RV_REF(sgtree_impl) x)
       : data_(::boost::move(x.priv_comp()), ::boost::move(x.priv_value_traits()))
    {
-      node_algorithms::init_header(this->priv_header_ptr()); 
+      node_algorithms::init_header(this->priv_header_ptr());
       this->priv_size_traits().set_size(size_type(0));
       this->swap(x);
    }
 
    //! <b>Effects</b>: to-do
-   //!  
+   //!
    sgtree_impl& operator=(BOOST_RV_REF(sgtree_impl) x)
    {  this->swap(x); return *this;  }
 
@@ -848,7 +848,7 @@ class sgtree_impl
    //!   If the check is successful, the user can construct the value_type and use
    //!   "insert_commit" to insert the object in constant-time. This can give a total
    //!   constant-time complexity to the insertion: check(O(1)) + commit(O(1)).
-   //!  
+   //!
    //!   "commit_data" remains valid for a subsequent "insert_commit" only if no more
    //!   objects are inserted or erased from the container.
    template<class KeyType, class KeyValueCompare>
@@ -1040,7 +1040,7 @@ class sgtree_impl
    //! <b>Note</b>: Invalidates the iterators (but not the references)
    //!    to the erased elements. No destructors are called.
    template<class KeyType, class KeyValueCompare>
-   size_type erase(const KeyType& key, KeyValueCompare comp                 
+   size_type erase(const KeyType& key, KeyValueCompare comp
                   /// @cond
                   , typename detail::enable_if_c<!detail::is_convertible<KeyValueCompare, const_iterator>::value >::type * = 0
                   /// @endcond
@@ -1404,6 +1404,104 @@ class sgtree_impl
       return std::pair<const_iterator, const_iterator>(const_iterator(ret.first, this), const_iterator(ret.second, this));
    }
 
+   //! <b>Requires</b>: 'lower_value' must not be greater than 'upper_value'. If
+   //!   'lower_value' == 'upper_value', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key) if left_closed, upper_bound(lower_key) otherwise
+   //!
+   //!   second = upper_bound(upper_key) if right_closed, lower_bound(upper_key) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If the predicate throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_value and upper_value.
+   std::pair<iterator,iterator> bounded_range
+      (const_reference lower_value, const_reference upper_value, bool left_closed, bool right_closed)
+   {  return this->bounded_range(lower_value, upper_value, priv_comp(), left_closed, right_closed);   }
+
+   //! <b>Requires</b>: KeyValueCompare is a function object that induces a strict weak
+   //!   ordering compatible with the strict weak ordering used to create the
+   //!   the tree. 
+   //!   'lower_key' must not be greater than 'upper_key' according to 'comp'. If
+   //!   'lower_key' == 'upper_key', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key, comp) if left_closed, upper_bound(lower_key, comp) otherwise
+   //!
+   //!   second = upper_bound(upper_key, comp) if right_closed, lower_bound(upper_key, comp) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If "comp" throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_key and upper_key.
+   template<class KeyType, class KeyValueCompare>
+   std::pair<iterator,iterator> bounded_range
+      (const KeyType &lower_key, const KeyType &upper_key, KeyValueCompare comp, bool left_closed, bool right_closed)
+   {
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
+         key_node_comp(comp, this);
+      std::pair<node_ptr, node_ptr> ret
+         (node_algorithms::bounded_range
+            (this->priv_header_ptr(), lower_key, upper_key, key_node_comp, left_closed, right_closed));
+      return std::pair<iterator, iterator>(iterator(ret.first, this), iterator(ret.second, this));
+   }
+
+   //! <b>Requires</b>: 'lower_value' must not be greater than 'upper_value'. If
+   //!   'lower_value' == 'upper_value', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key) if left_closed, upper_bound(lower_key) otherwise
+   //!
+   //!   second = upper_bound(upper_key) if right_closed, lower_bound(upper_key) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If the predicate throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_value and upper_value.
+   std::pair<const_iterator,const_iterator> bounded_range
+      (const_reference lower_value, const_reference upper_value, bool left_closed, bool right_closed) const
+   {  return this->bounded_range(lower_value, upper_value, priv_comp(), left_closed, right_closed);   }
+
+   //! <b>Requires</b>: KeyValueCompare is a function object that induces a strict weak
+   //!   ordering compatible with the strict weak ordering used to create the
+   //!   the tree. 
+   //!   'lower_key' must not be greater than 'upper_key' according to 'comp'. If
+   //!   'lower_key' == 'upper_key', ('left_closed' || 'right_closed') must be false.
+   //!
+   //! <b>Effects</b>: Returns an a pair with the following criteria:
+   //!
+   //!   first = lower_bound(lower_key, comp) if left_closed, upper_bound(lower_key, comp) otherwise
+   //!
+   //!   second = upper_bound(upper_key, comp) if right_closed, lower_bound(upper_key, comp) otherwise
+   //!
+   //! <b>Complexity</b>: Logarithmic.
+   //!
+   //! <b>Throws</b>: If "comp" throws.
+   //!
+   //! <b>Note</b>: This function can be more efficient than calling upper_bound
+   //!   and lower_bound for lower_key and upper_key.
+   template<class KeyType, class KeyValueCompare>
+   std::pair<const_iterator,const_iterator> bounded_range
+      (const KeyType &lower_key, const KeyType &upper_key, KeyValueCompare comp, bool left_closed, bool right_closed) const
+   {
+      detail::key_nodeptr_comp<KeyValueCompare, sgtree_impl>
+         key_node_comp(comp, this);
+      std::pair<node_ptr, node_ptr> ret
+         (node_algorithms::bounded_range
+            (this->priv_header_ptr(), lower_key, upper_key, key_node_comp, left_closed, right_closed));
+      return std::pair<const_iterator, const_iterator>(const_iterator(ret.first, this), const_iterator(ret.second, this));
+   }
+
    //! <b>Requires</b>: Disposer::operator()(pointer) shouldn't throw.
    //!   Cloner should yield to nodes equivalent to the original nodes.
    //!
@@ -1414,7 +1512,7 @@ class sgtree_impl
    //!
    //!   If cloner throws, all cloned elements are unlinked and disposed
    //!   calling Disposer::operator()(pointer).
-   //!  
+   //!
    //! <b>Complexity</b>: Linear to erased plus inserted elements.
    //!
    //! <b>Throws</b>: If cloner throws or predicate copy assignment throws. Basic guarantee.

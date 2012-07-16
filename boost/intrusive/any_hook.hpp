@@ -1,6 +1,6 @@
 /////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga  2006-2009
+// (C) Copyright Ion Gaztanaga  2006-2012
 //
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
@@ -50,7 +50,7 @@ struct make_any_base_hook
       Options...
       #endif
       >::type packed_options;
-  
+
    typedef detail::generic_hook
    < get_any_node_algo<typename packed_options::void_pointer>
    , typename packed_options::tag
