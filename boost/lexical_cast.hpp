@@ -1344,25 +1344,30 @@ namespace boost {
                 return shl_input_streamable(val);
             }
 
-#if (defined _MSC_VER)
-# pragma warning( push )
-// C4996: This function or variable may be unsafe. Consider using sprintf_s instead
-# pragma warning( disable : 4996 )
-#endif
             static bool shl_real_type(float val, char* begin, char*& end)
             {   using namespace std;
                 if (put_inf_nan(begin, end, val)) return true;
-                end = begin;
                 const double val_as_double = val;
-                end += sprintf(begin,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<float>()), val_as_double);
+                end = begin + 
+#if (defined _MSC_VER)
+                    sprintf_s(begin, end-begin,
+#else
+                    sprintf(begin, 
+#endif
+                    "%.*g", static_cast<int>(boost::detail::lcast_get_precision<float>()), val_as_double);
                 return end > begin;
             }
 
             static bool shl_real_type(double val, char* begin, char*& end)
             {   using namespace std;
                 if (put_inf_nan(begin, end, val)) return true;
-                end = begin;
-                end += sprintf(begin,"%.*g", static_cast<int>(boost::detail::lcast_get_precision<double>()), val);
+                end = begin + 
+#if (defined _MSC_VER)
+                    sprintf_s(begin, end-begin,
+#else
+                    sprintf(begin, 
+#endif
+                    "%.*g", static_cast<int>(boost::detail::lcast_get_precision<double>()), val);
                 return end > begin;
             }
 
@@ -1370,14 +1375,15 @@ namespace boost {
             static bool shl_real_type(long double val, char* begin, char*& end)
             {   using namespace std;
                 if (put_inf_nan(begin, end, val)) return true;
-                end = begin;
-                end += sprintf(begin,"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double>()), val );
+                end = begin + 
+#if (defined _MSC_VER)
+                    sprintf_s(begin, end-begin,
+#else
+                    sprintf(begin, 
+#endif
+                    "%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double>()), val );
                 return end > begin;
             }
-#endif
-
-#if (defined _MSC_VER)
-# pragma warning( pop )
 #endif
 
 
