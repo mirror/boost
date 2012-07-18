@@ -56,12 +56,25 @@ void test_short_input4 () {
 	BOOST_CHECK ( false );
 	}
 
+//	Make sure that the right thing is thrown
+void test_short_input5 () {
+	std::string s;
+	
+	try { ba::unhex ( "A", std::back_inserter(s)); }
+	catch ( const ba::non_hex_input &ex ) { BOOST_CHECK ( false ); }
+	catch ( const ba::not_enough_input &ex ) { return; }
+	catch ( ... ) { BOOST_CHECK ( false ); }
+	BOOST_CHECK ( false );
+	}
+
+
 void test_short_input () {
 //	BOOST_TEST_MESSAGE ( "Short input tests for boost::algorithm::unhex" );
 	test_short_input1 ();
 	test_short_input2 ();
 	test_short_input3 ();
 	test_short_input4 ();
+	test_short_input5 ();
 	}
 
 
@@ -73,6 +86,7 @@ void test_nonhex_input1 () {
 		BOOST_CHECK ( 'G' == *boost::get_error_info<ba::bad_char>(ex));
 		return;
 		}
+	catch ( ... ) {}
 	BOOST_TEST_MESSAGE ( "Failed to catch std::exception in test_nonhex_input1" );
 	BOOST_CHECK ( false );
 	}
@@ -85,6 +99,7 @@ void test_nonhex_input2 () {
 		BOOST_CHECK ( 'Z' == *boost::get_error_info<ba::bad_char>(ex));
 		return;
 		}
+	catch ( ... ) {}
 	BOOST_TEST_MESSAGE ( "Failed to catch ba::hex_decode_error in test_nonhex_input2" );
 	BOOST_CHECK ( false );
 	}
@@ -97,6 +112,7 @@ void test_nonhex_input3 () {
 		BOOST_CHECK ( 'Q' == *boost::get_error_info<ba::bad_char>(ex));
 		return;
 		}
+	catch ( ... ) {}
 	BOOST_TEST_MESSAGE ( "Failed to catch ba::non_hex_input in test_nonhex_input3" );
 	BOOST_CHECK ( false );
 	}
@@ -112,29 +128,13 @@ void test_nonhex_input4 () {
 	BOOST_CHECK ( false );
 	}
 
-//	Make sure that the right thing is thrown
-void test_nonhex_input5 () {
-	std::string s;
-	
-	try { ba::unhex ( "012", std::back_inserter(s)); }
-	catch ( const ba::non_hex_input &ex ) {
-		BOOST_CHECK ( '\000' == *boost::get_error_info<ba::bad_char>(ex));
-		return;
-		}
-	BOOST_TEST_MESSAGE ( "Failed to catch ba::non_hex_input in test_nonhex_input4" );
-	BOOST_CHECK ( false );
-	}
-
 void test_nonhex_input () {
 //	BOOST_TEST_MESSAGE ( "Non hex input tests for for boost::algorithm::unhex" );
 	test_nonhex_input1 ();
 	test_nonhex_input2 ();
 	test_nonhex_input3 ();
 	test_nonhex_input4 ();
-	test_nonhex_input5 ();
 	}
-
-
 
 int test_main( int , char* [] )
 {
