@@ -49,14 +49,14 @@ namespace detail
     BOOST_MPL_ASSERT_RELATION(sizeof(std::ctype_base::mask), ==, sizeof(umask_t));
 
     // Calculate what the size of the umaskex_t type should be to fix the 3 extra bitmasks
-    //   11 char categories in ctype_base
-    // +  3 extra categories for xpressive
-    // = 14 total bits needed
-    int const umaskex_bits = (14 > (sizeof(umask_t) * CHAR_BIT)) ? 14 : sizeof(umask_t) * CHAR_BIT;
+    int const umaskex_bits = (sizeof(umask_t) * CHAR_BIT) + 3;
 
     // define an unsigned integral type with at least umaskex_bits
     typedef boost::uint_t<umaskex_bits>::fast umaskex_t;
-    BOOST_MPL_ASSERT_RELATION(sizeof(umask_t), <=, sizeof(umaskex_t));
+    BOOST_MPL_ASSERT_RELATION(sizeof(umask_t), <, sizeof(umaskex_t));
+
+    // This is for slicing off the extra bits and just getting the standard ctype bits
+    umaskex_t const std_ctype_mask = static_cast<umask_t>(-1);
 
     // cast a ctype mask to a umaskex_t
     template<std::ctype_base::mask Mask>
@@ -117,17 +117,8 @@ namespace detail
     umaskex_t const std_ctype_upper = mask_cast<std::ctype_base::upper>::value;
     umaskex_t const std_ctype_xdigit = mask_cast<std::ctype_base::xdigit>::value;
 
-    // Reserve some bits for the implementation
-    #if defined(__GLIBCXX__)
-    umaskex_t const std_ctype_reserved = 0x8000;
-    #elif defined(_CPPLIB_VER) && defined(BOOST_WINDOWS)
-    umaskex_t const std_ctype_reserved = 0x8200;
-    #else
-    umaskex_t const std_ctype_reserved = 0;
-    #endif
-
     // Bitwise-or all the ctype masks together
-    umaskex_t const all_ctype_masks = std_ctype_reserved
+    umaskex_t const all_ctype_masks = 0
       | std_ctype_alnum | std_ctype_alpha | std_ctype_cntrl | std_ctype_digit
       | std_ctype_graph | std_ctype_lower | std_ctype_print | std_ctype_punct
       | std_ctype_space | std_ctype_upper | std_ctype_xdigit;
@@ -201,7 +192,7 @@ namespace detail
         {
             #ifndef BOOST_XPRESSIVE_BUGGY_CTYPE_FACET
 
-            if(ct.is((std::ctype_base::mask)(umask_t)mask, ch))
+            if(ct.is((std::ctype_base::mask)(umask_t)(mask & std_ctype_mask), ch))
             {
                 return true;
             }
