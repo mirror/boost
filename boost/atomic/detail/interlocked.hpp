@@ -122,9 +122,9 @@ public:
         do {
             if (expected == 1)
                 break;
-        } while (!atomics::detail::platform_cmpxchg32(expected, (uint32_t)1, &v_));
+        } while (!atomics::detail::platform_cmpxchg32_strong(expected, (uint32_t)1, &v_));
         atomics::detail::platform_fence_after(order);
-        return expected;
+        return expected != 0;
     }
 };
 
