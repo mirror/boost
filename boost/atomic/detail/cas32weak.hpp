@@ -490,24 +490,6 @@ public:
         }
     }
 
-    value_type
-    fetch_add(difference_type v, memory_order order = memory_order_seq_cst) volatile
-    {
-        value_type original = load(memory_order_relaxed);
-        do {
-        } while (!compare_exchange_weak(original, original + v, order, memory_order_relaxed));
-        return original;
-    }
-
-    value_type
-    fetch_sub(difference_type v, memory_order order = memory_order_seq_cst) volatile
-    {
-        value_type original = load(memory_order_relaxed);
-        do {
-        } while (!compare_exchange_weak(original, original - v, order, memory_order_relaxed));
-        return original;
-    }
-
     bool
     is_lock_free(void) const volatile
     {
