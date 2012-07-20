@@ -1510,7 +1510,7 @@ private:
 };
 #endif
 
-#if defined(__i686__)
+#if defined(__i686__) && !defined(__x86_64__)
 
 template<typename T>
 bool
@@ -1571,7 +1571,7 @@ platform_load64(volatile T * ptr)
 }
 
 /* pull in 64-bit atomic type using cmpxchg8b above */
-#if defined(__i686__)
+#if defined(__i686__) && !defined(__x86_64__)
 #include <boost/atomic/detail/cas64strong.hpp>
 #endif
 
