@@ -129,7 +129,7 @@ verify_lock_free(const char * type_name, int lock_free_macro_val, int lock_free_
 #define EXPECT_POINTER_LOCK_FREE 2
 #define EXPECT_BOOL_LOCK_FREE 2
 
-#elif defined(__GNUC__)
+#elif 0 && defined(__GNUC__)
 
 #define EXPECT_CHAR_LOCK_FREE 2
 #define EXPECT_SHORT_LOCK_FREE 2
