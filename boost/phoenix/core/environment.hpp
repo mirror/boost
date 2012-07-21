@@ -300,8 +300,8 @@ namespace boost { namespace phoenix
     };
 
     template <typename Expr, typename State>
-    struct _env::impl<Expr, State, int>
-        : proto::transform_impl<Expr, State, int>
+    struct _env::impl<Expr, State, proto::empty_env>
+        : proto::transform_impl<Expr, State, proto::empty_env>
     {
             typedef
                 typename fusion::result_of::at_c<
@@ -322,7 +322,7 @@ namespace boost { namespace phoenix
 
     template <typename Expr, typename State>
     struct _env::impl<Expr, State, unused>
-        : _env::impl<Expr, State, int>
+        : _env::impl<Expr, State, proto::empty_env>
     {};
 
     template <typename Context>
@@ -362,8 +362,8 @@ namespace boost { namespace phoenix
     };
 
     template <typename Expr, typename State>
-    struct _actions::impl<Expr, State, int>
-        : proto::transform_impl<Expr, State, int>
+    struct _actions::impl<Expr, State, proto::empty_env>
+        : proto::transform_impl<Expr, State, proto::empty_env>
     {
             typedef
                 typename fusion::result_of::at_c<
@@ -384,7 +384,7 @@ namespace boost { namespace phoenix
 
     template <typename Expr, typename State>
     struct _actions::impl<Expr, State, unused>
-        : _actions::impl<Expr, State, int>
+        : _actions::impl<Expr, State, proto::empty_env>
     {};
 
     template <typename Context>

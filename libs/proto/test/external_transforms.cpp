@@ -1,4 +1,3 @@
-//[ CheckedCalc
 //  Copyright 2011 Eric Niebler. Distributed under the Boost
 //  Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -10,16 +9,18 @@
 // or non-checked division.
 
 #include <iostream>
-#include <boost/assert.hpp>
 #include <boost/mpl/int.hpp>
 #include <boost/mpl/next.hpp>
 #include <boost/mpl/min_max.hpp>
 #include <boost/fusion/container/vector.hpp>
 #include <boost/fusion/container/generation/make_vector.hpp>
 #include <boost/proto/proto.hpp>
+#include <boost/test/unit_test.hpp>
+
 namespace mpl = boost::mpl;
 namespace proto = boost::proto;
 namespace fusion = boost::fusion;
+using proto::_;
 
 // The argument placeholder type
 template<typename I> struct placeholder : I {};
@@ -33,7 +34,7 @@ struct divides_rule : proto::divides<calc_grammar, calc_grammar> {};
 struct calc_grammar
   : proto::or_<
         proto::when<
-            proto::terminal<placeholder<proto::_> >
+            proto::terminal<placeholder<_> >
             , proto::functional::at(proto::_state, proto::_value)
         >
       , proto::when<
@@ -107,22 +108,78 @@ struct checked_division
     >
 {};
 
-int main()
+BOOST_PROTO_DEFINE_ENV_VAR(mydata_tag, mydata);
+
+void test_external_transforms()
 {
     non_checked_division non_checked;
-    int result2 = calc_grammar()(_1 / _2, fusion::make_vector(6, 2), non_checked);
-    BOOST_ASSERT(result2 == 3);
+    int result1 = calc_grammar()(_1 / _2, fusion::make_vector(6, 2), non_checked);
+    BOOST_CHECK_EQUAL(result1, 3);
 
+    // check that additional data slots are ignored
+    int result2 = calc_grammar()(_1 / _2, fusion::make_vector(8, 2), (non_checked, mydata = "foo"));
+    BOOST_CHECK_EQUAL(result2, 4);
+
+    // check that we can use the dedicated slot for this purpose
+    int result3 = calc_grammar()(_1 / _2, fusion::make_vector(8, 2), (42, proto::transforms = non_checked, mydata = "foo"));
+    BOOST_CHECK_EQUAL(result2, 4);
+
+    checked_division checked;
     try
     {
-        checked_division checked;
         // This should throw
         int result3 = calc_grammar()(_1 / _2, fusion::make_vector(6, 0), checked);
-        BOOST_ASSERT(false); // shouldn't get here!
+        BOOST_CHECK(!"Didn't throw an exception"); // shouldn't get here!
     }
     catch(division_by_zero)
     {
-        std::cout << "caught division by zero!\n";
+        ; // OK
+    }
+    catch(...)
+    {
+        BOOST_CHECK(!"Unexpected exception"); // shouldn't get here!
+    }
+
+    try
+    {
+        // This should throw
+        int result4 = calc_grammar()(_1 / _2, fusion::make_vector(6, 0), (checked, mydata = test_external_transforms));
+        BOOST_CHECK(!"Didn't throw an exception"); // shouldn't get here!
+    }
+    catch(division_by_zero)
+    {
+        ; // OK
+    }
+    catch(...)
+    {
+        BOOST_CHECK(!"Unexpected exception"); // shouldn't get here!
+    }
+
+    try
+    {
+        // This should throw
+        int result5 = calc_grammar()(_1 / _2, fusion::make_vector(6, 0), (42, proto::transforms = checked, mydata = test_external_transforms));
+        BOOST_CHECK(!"Didn't throw an exception"); // shouldn't get here!
+    }
+    catch(division_by_zero)
+    {
+        ; // OK
+    }
+    catch(...)
+    {
+        BOOST_CHECK(!"Unexpected exception"); // shouldn't get here!
     }
 }
-//]
+
+using namespace boost::unit_test;
+///////////////////////////////////////////////////////////////////////////////
+// init_unit_test_suite
+//
+test_suite* init_unit_test_suite( int argc, char* argv[] )
+{
+    test_suite *test = BOOST_TEST_SUITE("test for external transforms");
+
+    test->add(BOOST_TEST_CASE(&test_external_transforms));
+
+    return test;
+}

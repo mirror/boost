@@ -485,6 +485,14 @@ namespace boost { namespace proto
         template<typename Tag, typename DomainOrSequence, typename SequenceOrVoid = void, typename Void = void>
         struct unpack_expr;
 
+        template<typename T>
+        struct as_env;
+
+        template<typename Env, typename Tag>
+        struct has_env_var;
+
+        template<typename Env, typename Tag>
+        struct env_var;
     }
 
     template<typename T, typename Void = void>
@@ -495,6 +503,9 @@ namespace boost { namespace proto
 
     template<typename SubDomain, typename SuperDomain>
     struct is_sub_domain_of;
+
+    template<typename T, typename Void = void>
+    struct is_env;
 
     template<typename Expr>
     struct arity_of;
@@ -587,6 +598,14 @@ namespace boost { namespace proto
 
         template<long N>
         struct child_c;
+
+        struct as_env;
+
+        template<typename Tag>
+        struct has_env_var;
+
+        template<typename Tag>
+        struct env_var;
 
         template<typename Tag, typename Domain = deduce_domain>
         struct make_expr;
@@ -730,6 +749,17 @@ namespace boost { namespace proto
         BOOST_PROTO_CALLABLE()
     };
 
+    struct data_type;
+
+    struct transforms_type;
+
+    struct key_not_found;
+
+    struct empty_env;
+
+    template<typename Tag, typename Value, typename Base = empty_env>
+    struct env;
+
     struct external_transform;
 
     template<typename PrimitiveTransform = void, typename X = void>
@@ -821,11 +851,13 @@ namespace boost { namespace proto
     struct _byref;
     struct _byval;
 
+    template<typename Tag>
+    struct _env_var;
+
+    struct _env;
+
     template<typename T>
     struct is_extension;
-
-    //namespace exops
-    //{}
 
     namespace exops = exprns_;
 
