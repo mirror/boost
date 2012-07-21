@@ -5,6 +5,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/atomic.hpp>
+#include <boost/cstdint.hpp>
 #include <boost/test/minimal.hpp>
 
 #include "api_test_helpers.hpp"
@@ -16,20 +17,20 @@ int test_main(int, char *[])
     test_integral_api<char>();
     test_integral_api<signed char>();
     test_integral_api<unsigned char>();
-    test_integral_api<uint8_t>();
-    test_integral_api<int8_t>();
+    test_integral_api<boost::uint8_t>();
+    test_integral_api<boost::int8_t>();
     test_integral_api<short>();
     test_integral_api<unsigned short>();
-    test_integral_api<uint16_t>();
-    test_integral_api<int16_t>();
+    test_integral_api<boost::uint16_t>();
+    test_integral_api<boost::int16_t>();
     test_integral_api<int>();
     test_integral_api<unsigned int>();
-    test_integral_api<uint32_t>();
-    test_integral_api<int32_t>();
+    test_integral_api<boost::uint32_t>();
+    test_integral_api<boost::int32_t>();
     test_integral_api<long>();
     test_integral_api<unsigned long>();
-    test_integral_api<uint64_t>();
-    test_integral_api<int64_t>();
+    test_integral_api<boost::uint64_t>();
+    test_integral_api<boost::int64_t>();
     test_integral_api<long long>();
     test_integral_api<unsigned long long>();
 
