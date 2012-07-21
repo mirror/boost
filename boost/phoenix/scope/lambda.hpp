@@ -309,7 +309,7 @@ namespace boost { namespace phoenix
             return
                 expression::
                     lambda<env_type, locals_type, Map, Lambda>::
-                        make(env(ctx), locals, map, lambda);
+                        make(phoenix::env(ctx), locals, map, lambda);
         }
     };
 

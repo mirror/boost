@@ -71,7 +71,7 @@ namespace boost { namespace phoenix
               , typename impl::data_param
             ) const
             {
-                return what()(e, env(s), actions(s));
+                return what()(e, phoenix::env(s), actions(s));
             }
         };
         
@@ -95,7 +95,7 @@ namespace boost { namespace phoenix
               , typename impl::data_param
             ) const
             {
-                return what()(e, env(s), actions(s));
+                return what()(e, phoenix::env(s), actions(s));
             }
         };
     };
