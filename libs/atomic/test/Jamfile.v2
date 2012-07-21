@@ -12,6 +12,7 @@ project boost/atomic/test
     : requirements
       <library>../../thread/build//boost_thread
       <library>/boost/atomic//boost_atomic
+      <link>static
     ;
 
 test-suite atomic
