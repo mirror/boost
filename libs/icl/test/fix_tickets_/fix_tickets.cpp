@@ -63,7 +63,7 @@ BOOST_AUTO_TEST_CASE(ticket_6095_Marvin_Sielenkemper_isEmptyTest)
     typedef boost::icl::interval<Value> Interval;
     typedef std::numeric_limits<Value>  Limits;
 
-    Value const max(Limits::max());
+    Value const max((Limits::max)());
 
     Interval::interval_type piff = Interval::open(max,     max);
 
