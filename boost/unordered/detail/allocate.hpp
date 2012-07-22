@@ -1120,17 +1120,42 @@ namespace boost { namespace unordered { namespace detail {
 
 #else
 
+    template <typename AllocTraits, typename T>
+    struct value_construct
+    {
+        typedef BOOST_DEDUCED_TYPENAME AllocTraits::allocator_type allocator;
+
+        allocator& alloc;
+        T* ptr;
+
+        value_construct(allocator& a, T* p) : alloc(a), ptr(p)
+        {
+            AllocTraits::construct(alloc, ptr, T());
+        }
+
+        void release()
+        {
+            ptr = 0;
+        }
+
+        ~value_construct()
+        {
+            if (ptr) AllocTraits::destroy(alloc, ptr);
+        }
+
+    private:
+        value_construct(value_construct const&);
+        value_construct& operator=(value_construct const&);
+    };
+
     template <typename Alloc, typename T, BOOST_UNORDERED_EMPLACE_TEMPLATE>
     inline void construct_node(Alloc& a, T* p, BOOST_UNORDERED_EMPLACE_ARGS)
     {
-        boost::unordered::detail::allocator_traits<Alloc>::construct(a, p, T());
-        try {
-            boost::unordered::detail::construct_impl(
-                p->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
-        } catch(...) {
-            boost::unordered::detail::allocator_traits<Alloc>::destroy(a, p);
-            throw;
-        }
+        value_construct<boost::unordered::detail::allocator_traits<Alloc>, T>
+            construct_guard(a, p);
+        boost::unordered::detail::construct_impl(
+            p->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+        construct_guard.release();
     }
 
     template <typename Alloc, typename T>
