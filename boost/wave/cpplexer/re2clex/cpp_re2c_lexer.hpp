@@ -219,7 +219,7 @@ lexer<IteratorT, PositionT, TokenT>::get(TokenT& result)
       }
 #endif
 
-    case T_LONGINTLIT:  // supported in C++0x, C99 and long_long mode
+    case T_LONGINTLIT:  // supported in C++11, C99 and long_long mode
         value = string_type((char const *)scanner.tok, 
             scanner.cur-scanner.tok);
         if (!boost::wave::need_long_long(language)) {

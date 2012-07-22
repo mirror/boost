@@ -371,7 +371,7 @@ testwave_app::testwave_app(po::variables_map const& vm)
 #endif
         ("skipped_token_hooks", "record skipped_token hook calls")
 #if BOOST_WAVE_SUPPORT_CPP0X != 0
-        ("c++0x", "enable C99 mode (implies --variadics and --long_long)")
+        ("c++11", "enable C++11 mode (implies --variadics and --long_long)")
 #endif
     ;
 }
@@ -914,9 +914,9 @@ testwave_app::initialise_options(Context& ctx, po::variables_map const& vm,
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 
 #if BOOST_WAVE_SUPPORT_CPP0X
-    if (vm.count("c++0x")) {
+    if (vm.count("c++11")) {
         if (9 == debuglevel) {
-            std::cerr << "initialise_options: option: c++0x" << std::endl;
+            std::cerr << "initialise_options: option: c++11" << std::endl;
         }
         ctx.set_language(
             boost::wave::language_support(

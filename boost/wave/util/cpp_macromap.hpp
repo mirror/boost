@@ -1641,7 +1641,7 @@ macromap<ContextT>::is_valid_concat(string_type new_value,
     for (/**/; it != end && T_EOF != token_id(*it); ++it) 
     {
         // as of Wave V2.0.7 pasting of tokens is valid only if the resulting
-        // tokens are pp_tokens (as mandated by C++0x)
+        // tokens are pp_tokens (as mandated by C++11)
         if (!is_pp_token(*it))
             return false;
         rescanned.push_back(*it);
@@ -1847,7 +1847,7 @@ position_type pos("<built-in>");
     {
 #if BOOST_WAVE_SUPPORT_CPP0X != 0
         if (boost::wave::need_cpp0x(ctx.get_language())) {
-        // define C++0x specifics
+        // define C++11 specifics
             for (int i = 0; 0 != predef.static_data_cpp0x(i).name; ++i) {
                 predefined_macros::static_macros const& m = predef.static_data_cpp0x(i);
                 predefine_macro(current_scope, m.name, 

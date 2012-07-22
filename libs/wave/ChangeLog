@@ -23,6 +23,7 @@ CHANGELOG
 Boost V1.51.0
  - Fixed #7050: Invalid memory write bug in lexing_exception
  - Fixed #7159: Text-lines are processed as if they were preprocessing directives
+ - Changed --c++0x command line option to --c++11.
 
 Boost V1.50.0
  - V2.3.2

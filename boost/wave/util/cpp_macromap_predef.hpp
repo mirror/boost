@@ -224,7 +224,7 @@ namespace util {
         }
 
 #if BOOST_WAVE_SUPPORT_CPP0X != 0
-    // C++0x mode 
+    // C++11 mode 
         static_macros const& static_data_cpp0x(std::size_t i) const
         {
         static static_macros data[] = {

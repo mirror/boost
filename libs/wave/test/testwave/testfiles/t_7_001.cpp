@@ -7,7 +7,7 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-//O --c++0x
+//O --c++11
 
 //R #line 16 "t_7_001.cpp"
 //R R"de
@@ -18,8 +18,8 @@ fg
 h"
 
 //R #line 21 "t_7_001.cpp"
-"abc"   //R "abc" 
-R"abc"  //R R"abc" 
+"abc"   //R "abc"
+R"abc"  //R R"abc"
 
 //R #line 27 "t_7_001.cpp"
 //R uR"de fg
@@ -29,6 +29,6 @@ fg
 h"
 
 //R #line 32 "t_7_001.cpp"
-u"abc"      //R u"abc" 
-U"def"      //R U"def" 
-u8"ghi"     //R u8"ghi" 
+u"abc"      //R u"abc"
+U"def"      //R U"def"
+u8"ghi"     //R u8"ghi"

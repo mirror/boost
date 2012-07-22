@@ -283,7 +283,7 @@ public:
             "a macro or scope name",                    // alreadydefined_name
             "undefined macro or scope name may not be imported", // undefined_macroname
             "ill formed macro name",                    // invalid_macroname
-            "qualified names are supported in C++0x mode only",  // unexpected_qualified_name
+            "qualified names are supported in C++11 mode only",  // unexpected_qualified_name
             "division by zero in preprocessor expression",       // division_by_zero
             "integer overflow in preprocessor expression",       // integer_overflow
             "this cannot be used as a macro name as it is "

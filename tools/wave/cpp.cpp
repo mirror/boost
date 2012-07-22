@@ -808,9 +808,9 @@ int error_count = 0;
     // enable C99 mode, if appropriate (implies variadics)
         if (vm.count("c99")) {
 #if BOOST_WAVE_SUPPORT_CPP0X != 0
-            if (vm.count("c++0x")) {
+            if (vm.count("c++11")) {
                 cerr << "wave: multiple language options specified: --c99 "
-                        "and --c++0x" << endl;
+                        "and --c++11" << endl;
                 return -1;
             }
 #endif
@@ -834,10 +834,10 @@ int error_count = 0;
         }
 #endif // BOOST_WAVE_SUPPORT_VARIADICS_PLACEMARKERS != 0
 #if BOOST_WAVE_SUPPORT_CPP0X != 0
-        if (vm.count("c++0x")) {
+        if (vm.count("c++11")) {
             if (vm.count("c99")) {
                 cerr << "wave: multiple language options specified: --c99 "
-                        "and --c++0x" << endl;
+                        "and --c++11" << endl;
                 return -1;
             }
             ctx.set_language(
@@ -1271,7 +1271,7 @@ main (int argc, char *argv[])
             ("c99", "enable C99 mode (implies --variadics)")
 #endif
 #if BOOST_WAVE_SUPPORT_CPP0X != 0
-            ("c++0x", "enable C++0x mode (implies --variadics and --long_long)")
+            ("c++11", "enable C++11 mode (implies --variadics and --long_long)")
 #endif
             ("listincludes,l", po::value<std::string>(),
                 "list names of included files to a file [arg] or to stdout [-]")
