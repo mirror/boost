@@ -38,10 +38,10 @@ int test_main(int, char *[])
 
     test_enum_api();
 
-    test_struct_api<test_struct<uint8_t> >();
-    test_struct_api<test_struct<uint16_t> >();
-    test_struct_api<test_struct<uint32_t> >();
-    test_struct_api<test_struct<uint64_t> >();
+    test_struct_api<test_struct<boost::uint8_t> >();
+    test_struct_api<test_struct<boost::uint16_t> >();
+    test_struct_api<test_struct<boost::uint32_t> >();
+    test_struct_api<test_struct<boost::uint64_t> >();
 
     test_large_struct_api();
 
