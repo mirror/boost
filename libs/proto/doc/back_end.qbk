@@ -1162,9 +1162,6 @@ Proto's unpacking expressions take inspiration from the C++11 feature of the sam
 
 Proto has the built-in _default_pt_ transform for evaluating Proto expressions in a C++-ish way. But if it didn't, it wouldn't be too hard to implement one from scratch using Proto's unpacking patterns. The transform `eval` below does just that.
 
-
-    template<typename T> T declval();
-
     // A callable polymorphic function object that takes an unpacked expression
     // and a tag, and evaluates the expression. A plus tag and two operands adds
     // them with operator +, for instance.
@@ -1422,7 +1419,7 @@ To continue the above example, what if we also needed to pass a piece of data in
       , (proto::data = 42, proto::transforms = checked)
     );
 
-In the above invocation of the `calc_grammar_extern` algorithm, the map of external transforms is associated with the `proto::transforms` key and passed to the algorithm in a transform environment. Also in the transform environment is a key\/value pair that associated the value `42` with the `proto::data` key.
+In the above invocation of the `calc_grammar_extern` algorithm, the map of external transforms is associated with the `proto::transforms` key and passed to the algorithm in a transform environment. Also in the transform environment is a key\/value pair that associates the value `42` with the `proto::data` key.
 
 [endsect]
 
