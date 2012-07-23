@@ -493,7 +493,7 @@ pp_iterator_functor<ContextT>::operator()()
 
     // loop over skip able whitespace until something significant is found
     bool was_seen_newline = seen_newline;
-    bool was_skipped_newline = false;
+    bool was_skipped_newline = skipped_newline;
     token_id id = T_UNKNOWN;
 
     try {   // catch lexer exceptions
