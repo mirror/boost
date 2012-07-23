@@ -192,7 +192,7 @@ public:
         insert(key_value_pair); 
     }
 
-    map& operator = (map& src) 
+    map& operator = (const map& src) 
     { 
         base_type::operator=(src);
         return *this; 
