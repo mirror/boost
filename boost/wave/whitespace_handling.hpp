@@ -67,7 +67,7 @@ namespace util {
 
 #if BOOST_WAVE_SUPPORT_CPP0X != 0
     ///////////////////////////////////////////////////////////////////////////
-    //  This function returns the number of newlines in the given C++0x style 
+    //  This function returns the number of newlines in the given C++11 style 
     //  raw string
     template <typename TokenT>
     int rawstring_count_newlines(TokenT const& token)

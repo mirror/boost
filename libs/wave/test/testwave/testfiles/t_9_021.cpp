@@ -7,28 +7,18 @@
     LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-//O --c++11
+// Verifies that preprocessing directives are properly recognized only if
+// the '#' is really the first character on a line before macro expansion.
+// See http://www.open-std.org/jtc1/sc22/wg14/docs/rr/dr_144.html.
 
-//R #line 16 "t_7_001.cpp"
-//R R"de
-//R fg
-//R h"
-R"de
-fg
-h"
+#define EMPTY
+EMPTY # define M 1
 
-//R #line 21 "t_7_001.cpp"
-"abc"   //R "abc" 
-R"abc"  //R R"abc" 
+//R #line 15 "t_9_021.cpp"
+//R #define M 1
 
-//R #line 27 "t_7_001.cpp"
-//R uR"de fg
-//R h"
-uR"de \
-fg
-h"
-
-//R #line 32 "t_7_001.cpp"
-u"abc"      //R u"abc" 
-U"def"      //R U"def" 
-u8"ghi"     //R u8"ghi" 
+//H 10: t_9_021.cpp(14): #define
+//H 08: t_9_021.cpp(14): EMPTY=
+//H 01: t_9_021.cpp(14): EMPTY
+//H 02: 
+//H 03: _

@@ -466,7 +466,8 @@ namespace impl {
     template <typename ContextT>
     bool consider_emitting_line_directive(ContextT const& ctx, token_id id)
     {
-        if (need_preserve_comments(ctx.get_language())) {
+        if (need_preserve_comments(ctx.get_language()))
+        {
             if (!IS_CATEGORY(id, EOLTokenType) && !IS_CATEGORY(id, EOFTokenType))
             {
                 return true;
@@ -475,7 +476,7 @@ namespace impl {
         if (!IS_CATEGORY(id, WhiteSpaceTokenType) &&
             !IS_CATEGORY(id, EOLTokenType) && !IS_CATEGORY(id, EOFTokenType))
         {
-          return true;
+            return true;
         }
         return false;
     }
@@ -492,13 +493,17 @@ pp_iterator_functor<ContextT>::operator()()
 
     // loop over skip able whitespace until something significant is found
     bool was_seen_newline = seen_newline;
+    bool was_skipped_newline = skipped_newline;
     token_id id = T_UNKNOWN;
 
     try {   // catch lexer exceptions
         do {
+            if (skipped_newline) {
+                was_skipped_newline = true;
+                skipped_newline = false;
+            }
+
         // get_next_token assigns result to act_token member
-            if (skipped_newline)
-                seen_newline = true;
             get_next_token();
 
         // if comments shouldn't be preserved replace them with newlines
@@ -517,6 +522,10 @@ pp_iterator_functor<ContextT>::operator()()
         ctx.get_hooks().throw_exception(ctx.derived(), e);
         return act_token;
     }
+
+// restore the accumulated skipped_newline state for next invocation
+    if (was_skipped_newline)
+        skipped_newline = true;
 
 // if there were skipped any newlines, we must emit a #line directive
     if ((must_emit_line_directive || (was_seen_newline && skipped_newline)) &&
