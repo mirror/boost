@@ -337,17 +337,17 @@ namespace boost
         {
             template<typename T>
             struct as_env
-              : boost::result_of<functional::as_env(T)>
+              : BOOST_PROTO_RESULT_OF<functional::as_env(T)>
             {};
 
             template<typename Env, typename Key>
             struct has_env_var
-              : boost::result_of<functional::has_env_var<Key>(Env)>::type
+              : BOOST_PROTO_RESULT_OF<functional::has_env_var<Key>(Env)>::type
             {};
 
             template<typename Env, typename Key>
             struct env_var
-              : boost::result_of<functional::env_var<Key>(Env)>
+              : BOOST_PROTO_RESULT_OF<functional::env_var<Key>(Env)>
             {};
         }
 
