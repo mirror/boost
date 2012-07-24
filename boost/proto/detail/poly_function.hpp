@@ -108,7 +108,7 @@ namespace boost { namespace proto { namespace detail
 
         type operator()() const
         {
-            return *this;
+            return this->value;
         }
 
     private:
@@ -132,7 +132,7 @@ namespace boost { namespace proto { namespace detail
 
         type operator()() const
         {
-            return *this;
+            return this->value;
         }
 
     private:

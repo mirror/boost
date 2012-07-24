@@ -24,36 +24,39 @@
 
 namespace boost { namespace proto
 {
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    struct key_not_found
-    {};
-
-    ////////////////////////////////////////////////////////////////////////////////////////////
-    // empty_env
-    struct empty_env
+    namespace envns_
     {
-        typedef void proto_environment_;
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        struct key_not_found
+        {};
 
-        template<typename OtherTag, typename OtherValue = key_not_found>
-        struct lookup
+        ////////////////////////////////////////////////////////////////////////////////////////////
+        // empty_env
+        struct empty_env
         {
-            typedef OtherValue type;
-            typedef
-                typename add_reference<typename add_const<OtherValue>::type>::type
-            const_reference;
+            typedef void proto_environment_;
+
+            template<typename OtherTag, typename OtherValue = key_not_found>
+            struct lookup
+            {
+                typedef OtherValue type;
+                typedef
+                    typename add_reference<typename add_const<OtherValue>::type>::type
+                const_reference;
+            };
+
+            key_not_found operator[](detail::any) const
+            {
+                return key_not_found();
+            }
+
+            template<typename T>
+            T const &at(detail::any, T const &t) const
+            {
+                return t;
+            }
         };
-
-        key_not_found operator[](detail::any) const
-        {
-            return key_not_found();
-        }
-
-        template<typename T>
-        T const &at(detail::any, T const &t) const
-        {
-            return t;
-        }
-    };
+    }
 
     ////////////////////////////////////////////////////////////////////////////////////////////
     // is_env
@@ -92,9 +95,9 @@ namespace boost { namespace proto
     typename boost::proto::detail::apply_transform<transform_type(Expr &)>::result_type                         \
     operator ()(Expr &e) const                                                                                  \
     {                                                                                                           \
-        int i = 0;                                                                                              \
+        boost::proto::empty_state s = 0;                                                                        \
         boost::proto::empty_env d;                                                                              \
-        return boost::proto::detail::apply_transform<transform_type(Expr &)>()(e, i, d);                        \
+        return boost::proto::detail::apply_transform<transform_type(Expr &)>()(e, s, d);                        \
     }                                                                                                           \
                                                                                                                 \
     template<typename Expr, typename State>                                                                     \
@@ -152,9 +155,9 @@ namespace boost { namespace proto
     typename boost::proto::detail::apply_transform<transform_type(Expr const &)>::result_type                   \
     operator ()(Expr &&e) const                                                                                 \
     {                                                                                                           \
-        int i = 0;                                                                                              \
+        boost::proto::empty_state s = 0;                                                                        \
         boost::proto::empty_env d;                                                                              \
-        return boost::proto::detail::apply_transform<transform_type(Expr const &)>()(e, i, d);                  \
+        return boost::proto::detail::apply_transform<transform_type(Expr const &)>()(e, s, d);                  \
     }                                                                                                           \
                                                                                                                 \
     template<typename Expr, typename State>                                                                     \
@@ -188,7 +191,7 @@ namespace boost { namespace proto
 
         template<typename PrimitiveTransform, typename Expr>
         struct apply_transform<PrimitiveTransform(Expr)>
-          : PrimitiveTransform::template impl<Expr, int, empty_env>
+          : PrimitiveTransform::template impl<Expr, empty_state, empty_env>
         {};
 
         template<typename PrimitiveTransform, typename Expr, typename State>

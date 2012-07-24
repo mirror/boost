@@ -87,57 +87,62 @@ namespace boost
         TAG const NAME = {}                                                                         \
         /**/
 
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        // env
-        // A transform env is a slot-based storage mechanism, accessible by tag.
-        template<typename Tag, typename Value, typename Base /*= empty_env*/>
-        struct env
-          : private Base
+        namespace envns_
         {
-        private:
-            Value value_;
-
-        public:
-            typedef Value value_type;
-            typedef typename add_reference<Value>::type reference;
-            typedef typename add_reference<typename add_const<Value>::type>::type const_reference;
-            typedef void proto_environment_; ///< INTERNAL ONLY
-
-            env(const_reference value, Base const &base = Base())
-              : Base(base)
-              , value_(value)
-            {}
-
-            template<typename OtherTag, typename OtherValue = key_not_found>
-            struct lookup
-              : Base::template lookup<OtherTag, OtherValue>
-            {};
-
-            template<typename OtherValue>
-            struct lookup<Tag, OtherValue>
+            ////////////////////////////////////////////////////////////////////////////////////////////
+            // env
+            // A transform env is a slot-based storage mechanism, accessible by tag.
+            template<typename Key, typename Value, typename Base /*= empty_env*/>
+            struct env
+              : private Base
             {
-                typedef Value type;
+            private:
+                Value value_;
+
+            public:
+                typedef Value value_type;
+                typedef typename add_reference<Value>::type reference;
                 typedef typename add_reference<typename add_const<Value>::type>::type const_reference;
+                typedef void proto_environment_; ///< INTERNAL ONLY
+
+                explicit env(const_reference value, Base const &base = Base())
+                  : Base(base)
+                  , value_(value)
+                {}
+
+                /// INTERNAL ONLY
+                template<typename OtherTag, typename OtherValue = key_not_found>
+                struct lookup
+                  : Base::template lookup<OtherTag, OtherValue>
+                {};
+
+                /// INTERNAL ONLY
+                template<typename OtherValue>
+                struct lookup<Key, OtherValue>
+                {
+                    typedef Value type;
+                    typedef typename add_reference<typename add_const<Value>::type>::type const_reference;
+                };
+
+                // For key-based lookups not intended to fail
+                using Base::operator[];
+                const_reference operator[](Key) const
+                {
+                    return this->value_;
+                }
+
+                // For key-based lookups that can fail, use the default if key not found.
+                using Base::at;
+                template<typename T>
+                const_reference at(Key, T const &) const
+                {
+                    return this->value_;
+                }
             };
 
-            // For key-based lookups not intended to fail
-            using Base::operator[];
-            const_reference operator[](Tag) const
-            {
-                return this->value_;
-            }
-
-            // For key-based lookups that can fail, use the default if key not found.
-            using Base::at;
-            template<typename T>
-            const_reference at(Tag, T const &) const
-            {
-                return this->value_;
-            }
-        };
-
-        // define proto::data_type type and proto::data global
-        BOOST_PROTO_DEFINE_ENV_VAR(data_type, data);
+            // define proto::data_type type and proto::data global
+            BOOST_PROTO_DEFINE_ENV_VAR(data_type, data);
+        }
 
         namespace functional
         {
@@ -202,9 +207,9 @@ namespace boost
 
             ////////////////////////////////////////////////////////////////////////////////////////
             // has_env_var
-            template<typename Tag>
+            template<typename Key>
             struct has_env_var
-              : detail::poly_function<has_env_var<Tag> >
+              : detail::poly_function<has_env_var<Key> >
             {
                 BOOST_PROTO_CALLABLE()
 
@@ -214,7 +219,7 @@ namespace boost
                     typedef
                         mpl::not_<
                             is_same<
-                                typename remove_reference<Env>::type::template lookup<Tag>::type
+                                typename remove_reference<Env>::type::template lookup<Key>::type
                               , key_not_found
                             >
                         >
@@ -276,9 +281,9 @@ namespace boost
 
             ////////////////////////////////////////////////////////////////////////////////////////
             // env_var
-            template<typename Tag>
+            template<typename Key>
             struct env_var
-              : detail::poly_function<env_var<Tag> >
+              : detail::poly_function<env_var<Key> >
             {
                 BOOST_PROTO_CALLABLE()
 
@@ -286,12 +291,12 @@ namespace boost
                 struct impl
                 {
                     typedef
-                        typename remove_reference<Env>::type::template lookup<Tag>::type
+                        typename remove_reference<Env>::type::template lookup<Key>::type
                     result_type;
 
                     result_type operator()(detail::arg<Env> e) const
                     {
-                        return e()[Tag()];
+                        return e()[Key()];
                     }
                 };
             };
@@ -335,14 +340,14 @@ namespace boost
               : boost::result_of<functional::as_env(T)>
             {};
 
-            template<typename Env, typename Tag>
+            template<typename Env, typename Key>
             struct has_env_var
-              : boost::result_of<functional::has_env_var<Tag>(Env)>::type
+              : boost::result_of<functional::has_env_var<Key>(Env)>::type
             {};
 
-            template<typename Env, typename Tag>
+            template<typename Env, typename Key>
             struct env_var
-              : boost::result_of<functional::env_var<Tag>(Env)>
+              : boost::result_of<functional::env_var<Key>(Env)>
             {};
         }
 
@@ -362,73 +367,76 @@ namespace boost
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         // has_env_var
-        template<typename Tag, typename Env>
-        typename proto::result_of::has_env_var<Env &, Tag>::type has_env_var(Env &e BOOST_PROTO_DISABLE_IF_IS_CONST(Env))
+        template<typename Key, typename Env>
+        typename proto::result_of::has_env_var<Env &, Key>::type has_env_var(Env &e BOOST_PROTO_DISABLE_IF_IS_CONST(Env))
         {
-            return functional::has_env_var<Tag>()(e);
+            return functional::has_env_var<Key>()(e);
         }
 
-        template<typename Tag, typename Env>
-        typename proto::result_of::has_env_var<Env const &, Tag>::type has_env_var(Env const &e)
+        template<typename Key, typename Env>
+        typename proto::result_of::has_env_var<Env const &, Key>::type has_env_var(Env const &e)
         {
-            return functional::has_env_var<Tag>()(e);
+            return functional::has_env_var<Key>()(e);
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         // env_var
-        template<typename Tag, typename Env>
-        typename proto::result_of::env_var<Env &, Tag>::type env_var(Env &e BOOST_PROTO_DISABLE_IF_IS_CONST(Env))
+        template<typename Key, typename Env>
+        typename proto::result_of::env_var<Env &, Key>::type env_var(Env &e BOOST_PROTO_DISABLE_IF_IS_CONST(Env))
         {
-            return functional::env_var<Tag>()(e);
+            return functional::env_var<Key>()(e);
         }
 
-        template<typename Tag, typename Env>
-        typename proto::result_of::env_var<Env const &, Tag>::type env_var(Env const &e)
+        template<typename Key, typename Env>
+        typename proto::result_of::env_var<Env const &, Key>::type env_var(Env const &e)
         {
-            return functional::env_var<Tag>()(e);
+            return functional::env_var<Key>()(e);
         }
 
-        ////////////////////////////////////////////////////////////////////////////////////////////
-        // env operator,
-        template<typename T, typename T1, typename V1>
-        inline typename disable_if_c<
-            is_const<T>::value
-          , env<T1, V1, BOOST_PROTO_UNCVREF(typename result_of::as_env<T &>::type)>
-        >::type const operator,(T &t, env<T1, V1> const &head)
+        namespace envns_
         {
-            return env<T1, V1, BOOST_PROTO_UNCVREF(typename result_of::as_env<T &>::type)>(
-                head[T1()]
-              , proto::as_env(t)
-            );
-        }
+            ////////////////////////////////////////////////////////////////////////////////////////
+            // env operator,
+            template<typename T, typename T1, typename V1>
+            inline typename disable_if_c<
+                is_const<T>::value
+              , env<T1, V1, BOOST_PROTO_UNCVREF(typename result_of::as_env<T &>::type)>
+            >::type const operator,(T &t, env<T1, V1> const &head)
+            {
+                return env<T1, V1, BOOST_PROTO_UNCVREF(typename result_of::as_env<T &>::type)>(
+                    head[T1()]
+                  , proto::as_env(t)
+                );
+            }
 
-        template<typename T, typename T1, typename V1>
-        inline env<T1, V1, BOOST_PROTO_UNCVREF(typename result_of::as_env<T const &>::type)> const
-            operator,(T const &t, env<T1, V1> const &head)
-        {
-            return env<T1, V1, BOOST_PROTO_UNCVREF(typename result_of::as_env<T const &>::type)>(
-                head[T1()]
-              , proto::as_env(t)
-            );
+            template<typename T, typename T1, typename V1>
+            inline env<T1, V1, BOOST_PROTO_UNCVREF(typename result_of::as_env<T const &>::type)> const
+                operator,(T const &t, env<T1, V1> const &head)
+            {
+                return env<T1, V1, BOOST_PROTO_UNCVREF(typename result_of::as_env<T const &>::type)>(
+                    head[T1()]
+                  , proto::as_env(t)
+                );
+            }
         }
 
         ////////////////////////////////////////////////////////////////////////////////////////////
         // _env_var
-        template<typename Tag>
+        template<typename Key>
         struct _env_var
-          : proto::transform<_env_var<Tag> >
+          : proto::transform<_env_var<Key> >
         {
             template<typename Expr, typename State, typename Data>
             struct impl
               : transform_impl<Expr, State, Data>
             {
-                typedef typename impl::data::template lookup<Tag>::type result_type;
+                typedef typename impl::data::template lookup<Key>::type result_type;
                 BOOST_MPL_ASSERT_NOT((is_same<result_type, key_not_found>)); // lookup failed
 
                 #ifdef BOOST_PROTO_STRICT_RESULT_OF
                 result_type
                 #else
-                typename impl::data::template lookup<Tag>::const_reference
+                typename impl::data::template lookup<Key>::const_reference
                 #endif
                 operator ()(
                     typename impl::expr_param
@@ -436,7 +444,7 @@ namespace boost
                   , typename impl::data_param d
                 ) const
                 {
-                    return d[Tag()];
+                    return d[Key()];
                 }
             };
         };
@@ -467,20 +475,20 @@ namespace boost
         };
 
         /// INTERNAL ONLY
-        template<typename Tag>
-        struct is_callable<_env_var<Tag> >
+        template<typename Key>
+        struct is_callable<_env_var<Key> >
           : mpl::true_
         {};
 
         /// INTERNAL ONLY
-        template<typename Tag>
-        struct is_callable<functional::has_env_var<Tag> >
+        template<typename Key>
+        struct is_callable<functional::has_env_var<Key> >
           : mpl::true_
         {};
 
         /// INTERNAL ONLY
-        template<typename Tag>
-        struct is_callable<functional::env_var<Tag> >
+        template<typename Key>
+        struct is_callable<functional::env_var<Key> >
           : mpl::true_
         {};
     }

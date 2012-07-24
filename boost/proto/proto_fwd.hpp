@@ -749,16 +749,32 @@ namespace boost { namespace proto
         BOOST_PROTO_CALLABLE()
     };
 
-    struct data_type;
+    namespace envns_
+    {
+        struct key_not_found;
 
-    struct transforms_type;
+        struct empty_env;
 
-    struct key_not_found;
+        typedef int empty_state;
 
-    struct empty_env;
+        template<typename Tag, typename Value, typename Base = empty_env>
+        struct env;
 
-    template<typename Tag, typename Value, typename Base = empty_env>
-    struct env;
+        struct data_type;
+        extern data_type const data;
+
+        struct transforms_type;
+        extern transforms_type const transforms;
+    }
+
+    using envns_::key_not_found;
+    using envns_::empty_env;
+    using envns_::empty_state;
+    using envns_::env;
+    using envns_::data_type;
+    using envns_::data;
+    using envns_::transforms_type;
+    using envns_::transforms;
 
     struct external_transform;
 
