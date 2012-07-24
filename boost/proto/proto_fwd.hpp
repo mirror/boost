@@ -761,10 +761,8 @@ namespace boost { namespace proto
         struct env;
 
         struct data_type;
-        extern data_type const data;
 
         struct transforms_type;
-        extern transforms_type const transforms;
     }
 
     using envns_::key_not_found;
@@ -772,9 +770,7 @@ namespace boost { namespace proto
     using envns_::empty_state;
     using envns_::env;
     using envns_::data_type;
-    using envns_::data;
     using envns_::transforms_type;
-    using envns_::transforms;
 
     struct external_transform;
 
