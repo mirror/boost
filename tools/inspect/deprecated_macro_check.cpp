@@ -42,6 +42,33 @@ namespace
 	};
 	
   const char * boost151macros [] = {
+	"BOOST_NO_AUTO_DECLARATIONS",
+	"BOOST_NO_AUTO_MULTIDECLARATIONS",
+	"BOOST_NO_CHAR16_T",
+	"BOOST_NO_CHAR32_T",
+	"BOOST_NO_TEMPLATE_ALIASES",
+	"BOOST_NO_CONSTEXPR",
+	"BOOST_NO_DECLTYPE",
+	"BOOST_NO_DECLTYPE_N3276",
+	"BOOST_NO_DEFAULTED_FUNCTIONS",
+	"BOOST_NO_DELETED_FUNCTIONS",
+	"BOOST_NO_EXPLICIT_CONVERSION_OPERATORS",
+	"BOOST_NO_EXTERN_TEMPLATE",
+	"BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS",
+	"BOOST_NO_LAMBDAS",
+	"BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS",
+	"BOOST_NO_NOEXCEPT",
+	"BOOST_NO_NULLPTR",
+	"BOOST_NO_RAW_LITERALS",
+	"BOOST_NO_RVALUE_REFERENCES",
+	"BOOST_NO_SCOPED_ENUMS",
+	"BOOST_NO_STATIC_ASSERT",
+	"BOOST_NO_STD_UNORDERD",
+	"BOOST_NO_UNICODE_LITERALS",
+	"BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX",
+	"BOOST_NO_VARIADIC_TEMPLATES",
+	"BOOST_NO_VARIADIC_MACROS",
+	"BOOST_NO_NUMERIC_LIMITS_LOWEST",
     NULL
     };
 } // unnamed namespace
@@ -90,7 +117,7 @@ namespace boost
       {
 		if ( contents.find( *ptr ) != string::npos ) {
           ++errors;
-          error( library_name, full_path, string ( "Deprecated Boost macro " ) + *ptr );
+          error( library_name, full_path, string ( "Boost macro deprecated in 1.50: " ) + *ptr );
           }
       }
 
@@ -98,7 +125,7 @@ namespace boost
       {
 		if ( contents.find( *ptr ) != string::npos ) {
           ++errors;
-          error( library_name, full_path, string ( "Deprecated Boost macro " ) + *ptr );
+          error( library_name, full_path, string ( "Boost macro deprecated in 1.51: " ) + *ptr );
           }
       }
 
