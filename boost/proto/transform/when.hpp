@@ -163,6 +163,8 @@ namespace boost { namespace proto
         BOOST_PROTO_DEFINE_ENV_VAR(transforms_type, transforms);
     }
 
+    using envns_::transforms;
+
     /// \brief This specialization uses the Data parameter as a collection
     /// of transforms that can be indexed by the specified rule.
     ///

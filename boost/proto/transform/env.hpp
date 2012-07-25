@@ -144,6 +144,8 @@ namespace boost
             BOOST_PROTO_DEFINE_ENV_VAR(data_type, data);
         }
 
+        using envns_::data;
+
         namespace functional
         {
             ////////////////////////////////////////////////////////////////////////////////////////
