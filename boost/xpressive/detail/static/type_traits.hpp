@@ -55,6 +55,24 @@ struct is_random
 {
 };
 
+///////////////////////////////////////////////////////////////////////////////
+// is_char
+//
+template<typename T>
+struct is_char
+  : mpl::false_
+{};
+
+template<>
+struct is_char<char>
+  : mpl::true_
+{};
+
+template<>
+struct is_char<wchar_t>
+  : mpl::true_
+{};
+
 }}} // namespace boost::xpressive::detail
 
 #endif

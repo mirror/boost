@@ -38,6 +38,7 @@
 #include <boost/xpressive/detail/core/matcher/attr_begin_matcher.hpp>
 #include <boost/xpressive/detail/core/matcher/predicate_matcher.hpp>
 #include <boost/xpressive/detail/utility/ignore_unused.hpp>
+#include <boost/xpressive/detail/static/type_traits.hpp>
 
 // These are very often needed by client code.
 #include <boost/typeof/std/map.hpp>
@@ -575,21 +576,7 @@ namespace boost { namespace xpressive
             {
                 return val.matched
                   ? boost::lexical_cast<T>(boost::make_iterator_range(val.first, val.second))
-                  : boost::lexical_cast<T>(L"");
-            }
-
-            T operator()(ssub_match const &val) const
-            {
-                return val.matched
-                  ? boost::lexical_cast<T>(boost::make_iterator_range(&*val.first, &*val.first + (val.second - val.first)))
                   : boost::lexical_cast<T>("");
-            }
-
-            T operator()(wssub_match const &val) const
-            {
-                return val.matched
-                  ? boost::lexical_cast<T>(boost::make_iterator_range(&*val.first, &*val.first + (val.second - val.first)))
-                  : boost::lexical_cast<T>(L"");
             }
 
             template<typename BidiIter>
@@ -599,10 +586,25 @@ namespace boost { namespace xpressive
                 // to some other type. Xpressive doesn't know how to do that.
                 typedef typename iterator_value<BidiIter>::type char_type;
                 BOOST_MPL_ASSERT_MSG(
-                    (mpl::or_<is_same<char_type, char>, is_same<char_type, wchar_t> >::value)
+                    (xpressive::detail::is_char<char_type>::value)
                   , CAN_ONLY_CONVERT_FROM_CHARACTER_SEQUENCES
                   , (char_type)
                 );
+                return this->impl(val, xpressive::detail::is_random<BidiIter>());
+            }
+
+        private:
+            template<typename RandIter>
+            T impl(sub_match<RandIter> const &val, mpl::true_) const
+            {
+                return val.matched
+                  ? boost::lexical_cast<T>(boost::make_iterator_range(&*val.first, &*val.first + (val.second - val.first)))
+                  : boost::lexical_cast<T>("");
+            }
+
+            template<typename BidiIter>
+            T impl(sub_match<BidiIter> const &val, mpl::false_) const
+            {
                 return boost::lexical_cast<T>(val.str());
             }
         };
