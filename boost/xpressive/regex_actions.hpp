@@ -572,12 +572,14 @@ namespace boost { namespace xpressive
                   : boost::lexical_cast<T>("");
             }
 
+            #ifndef BOOST_XPRESSIVE_NO_WREGEX
             T operator()(wcsub_match const &val) const
             {
                 return val.matched
                   ? boost::lexical_cast<T>(boost::make_iterator_range(val.first, val.second))
                   : boost::lexical_cast<T>("");
             }
+            #endif
 
             template<typename BidiIter>
             T operator()(sub_match<BidiIter> const &val) const
@@ -590,7 +592,7 @@ namespace boost { namespace xpressive
                   , CAN_ONLY_CONVERT_FROM_CHARACTER_SEQUENCES
                   , (char_type)
                 );
-                return this->impl(val, xpressive::detail::is_random<BidiIter>());
+                return this->impl(val, xpressive::detail::is_string_iterator<BidiIter>());
             }
 
         private:
