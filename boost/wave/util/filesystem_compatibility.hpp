@@ -182,6 +182,14 @@ namespace boost { namespace wave { namespace util
 #endif
     }
 #endif
+
+    // starting withBoost V1.50 create_directories throws if given an empty path
+    inline bool create_directories(boost::filesystem::path const& p)
+    {
+        if (p.string().empty())
+            return true;
+        return boost::filesystem::create_directories(p);
+    }
 }}}
 
 #endif
