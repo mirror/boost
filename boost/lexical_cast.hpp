@@ -2077,8 +2077,9 @@ namespace boost {
             static inline Target lexical_cast_impl(const Source& arg)
             {
                 typedef BOOST_DEDUCED_TYPENAME detail::array_to_pointer_decay<Source>::type src;
+                typedef BOOST_DEDUCED_TYPENAME ::boost::remove_cv<src>::type no_cv_src;
                 typedef BOOST_DEDUCED_TYPENAME detail::stream_char<Target>::type target_char_t;
-                typedef BOOST_DEDUCED_TYPENAME detail::stream_char<src>::type src_char_type;
+                typedef BOOST_DEDUCED_TYPENAME detail::stream_char<no_cv_src>::type src_char_type;
                 typedef BOOST_DEDUCED_TYPENAME detail::widest_char<
                     target_char_t, src_char_type
                 >::type char_type;
@@ -2095,7 +2096,7 @@ namespace boost {
 #endif
 
                 typedef BOOST_DEDUCED_TYPENAME ::boost::detail::deduce_char_traits<
-                    char_type, Target, Source
+                    char_type, Target, no_cv_src
                 >::type traits;
 
                 typedef ::boost::type_traits::ice_and<
@@ -2106,8 +2107,8 @@ namespace boost {
                 >   is_string_widening_required_t;
 
                 typedef ::boost::type_traits::ice_or<
-                    ::boost::is_integral<src>::value,
-                    ::boost::detail::is_this_float_conversion_optimized<src, char_type >::value,
+                    ::boost::is_integral<no_cv_src>::value,
+                    ::boost::detail::is_this_float_conversion_optimized<no_cv_src, char_type >::value,
                     ::boost::detail::is_char_or_wchar<src_char_type >::value
                 >   is_source_input_optimized_t;
 
@@ -2123,7 +2124,7 @@ namespace boost {
                
                 typedef detail::lexical_stream_limited_src<char_type, traits, requires_stringbuf > interpreter_type;
 
-                typedef detail::lcast_src_length<src > lcast_src_length;
+                typedef detail::lcast_src_length<no_cv_src> lcast_src_length;
                 std::size_t const src_len = lcast_src_length::value;
                 char_type buf[src_len + 1];
                 lcast_src_length::check_coverage();

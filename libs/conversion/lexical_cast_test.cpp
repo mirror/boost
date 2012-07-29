@@ -73,6 +73,7 @@ void test_conversion_from_wstring();
 void test_conversion_to_wstring();
 void test_bad_lexical_cast();
 void test_no_whitespace_stripping();
+void test_volatile_types_conversions();
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 void test_traits();
 void test_wtraits();
@@ -108,6 +109,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
 #endif
     suite->add(BOOST_TEST_CASE(test_bad_lexical_cast));
     suite->add(BOOST_TEST_CASE(test_no_whitespace_stripping));
+    suite->add(BOOST_TEST_CASE(test_volatile_types_conversions));
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     suite->add(BOOST_TEST_CASE(&test_traits));
     suite->add(BOOST_TEST_CASE(&test_wtraits));
@@ -435,6 +437,17 @@ void test_no_whitespace_stripping()
     BOOST_CHECK_THROW(lexical_cast<int>("123 "), bad_lexical_cast);
 }
 
+void test_volatile_types_conversions()
+{
+    volatile int i1 = 100000;
+    BOOST_CHECK_EQUAL("100000", boost::lexical_cast<std::string>(i1));
+
+    volatile const int i2 = 100000;
+    BOOST_CHECK_EQUAL("100000", boost::lexical_cast<std::string>(i2));
+
+    volatile const long int i3 = 1000000;
+    BOOST_CHECK_EQUAL("1000000", boost::lexical_cast<std::string>(i3));
+}
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 void test_traits()
