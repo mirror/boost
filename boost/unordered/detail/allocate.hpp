@@ -346,19 +346,20 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
     template <typename A, typename B, typename A0, typename A1, typename A2>
     inline typename enable_if<piecewise3<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address, A0&&, A1&& a1, A2&& a2)
+        construct_impl(std::pair<A, B>* address,
+            BOOST_FWD_REF(A0), BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2)
     {
         boost::unordered::detail::construct_from_tuple(
-            boost::addressof(address->first), a1);
+            boost::addressof(address->first), boost::forward<A1>(a1));
         boost::unordered::detail::construct_from_tuple(
-            boost::addressof(address->second), a2);
+            boost::addressof(address->second), boost::forward<A2>(a2));
     }
 
 #if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
 
     template <typename A, typename B, typename A0>
     inline typename enable_if<emulation1<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address, A0&& a0)
+        construct_impl(std::pair<A, B>* address, BOOST_FWD_REF(A0) a0)
     {
         new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
         new((void*) boost::addressof(address->second)) B();
@@ -366,7 +367,8 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
     template <typename A, typename B, typename A0, typename A1, typename A2>
     inline typename enable_if<emulation3<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address, A0&& a0, A1&& a1, A2&& a2)
+        construct_impl(std::pair<A, B>* address,
+            BOOST_FWD_REF(A0) a0, BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2)
     {
         new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
         new((void*) boost::addressof(address->second)) B(
@@ -378,7 +380,8 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
             typename A0, typename A1, typename A2, typename A3,
             typename... Args>
     inline void construct_impl(std::pair<A, B>* address,
-            A0&& a0, A1&& a1, A2&& a2, A3&& a3, Args&&... args)
+            BOOST_FWD_REF(A0) a0, BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2,
+            BOOST_FWD_REF(A3) a3, BOOST_FWD_REF(Args)... args)
     {
         new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
 
