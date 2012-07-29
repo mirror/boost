@@ -29,6 +29,10 @@ CHANGELOG
   which allows to pre-pend the content of a (license) file to every newly
   created file. This option simplifies the implementation of partial
   preprocessing as done on Phoenix, Fusion, etc.
+- Changed the effect of the -N command line option to simply not expand
+  the macro by pretending it was not defined. Earlier the whole invocation
+  sequence was skipped, now we skip only the macro itself, which still expands
+  the arguments for the macro invocation.
 
 Boost V1.51.0
  - Fixed #7050: Invalid memory write bug in lexing_exception
