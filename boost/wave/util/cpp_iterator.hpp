@@ -515,6 +515,9 @@ pp_iterator_functor<ContextT>::operator()()
                 act_token.set_value("\n");
             }
 
+            if (IS_CATEGORY(id, EOLTokenType))
+                seen_newline = true;
+
         } while (ctx.get_hooks().may_skip_whitespace(ctx.derived(), act_token, skipped_newline));
     }
     catch (boost::wave::cpplexer::lexing_exception const& e) {

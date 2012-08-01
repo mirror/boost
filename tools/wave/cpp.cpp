@@ -81,7 +81,6 @@ using namespace boost::spirit::classic;
 using std::pair;
 using std::vector;
 using std::getline;
-using std::ifstream;
 using std::ofstream;
 using std::cout;
 using std::cerr;
@@ -226,7 +225,7 @@ namespace cmd_line_utils {
         po::options_description const &desc, po::variables_map &vm,
         bool may_fail = false)
     {
-    ifstream ifs(filename.c_str());
+    std::ifstream ifs(filename.c_str());
 
         if (!ifs.is_open()) {
             if (!may_fail) {
@@ -463,7 +462,7 @@ namespace {
 #if BOOST_WAVE_BINARY_SERIALIZATION != 0
                 mode = (std::ios::openmode)(mode | std::ios::binary);
 #endif
-                ifstream ifs (state_file.string().c_str(), mode);
+                std::ifstream ifs (state_file.string().c_str(), mode);
                 if (ifs.is_open()) {
                     using namespace boost::serialization;
                     iarchive ia(ifs);
@@ -540,7 +539,8 @@ namespace {
 
         if (macronames_file != "-") {
             macronames_file = boost::wave::util::complete_path(macronames_file);
-            fs::create_directories(boost::wave::util::branch_path(macronames_file));
+            boost::wave::util::create_directories(
+                boost::wave::util::branch_path(macronames_file));
             macronames_out.open(macronames_file.string().c_str());
             if (!macronames_out.is_open()) {
                 cerr << "wave: could not open file for macro name listing: "
@@ -609,7 +609,8 @@ namespace {
 
         if (macrocounts_file != "-") {
             macrocounts_file = boost::wave::util::complete_path(macrocounts_file);
-            fs::create_directories(boost::wave::util::branch_path(macrocounts_file));
+            boost::wave::util::create_directories(
+                boost::wave::util::branch_path(macrocounts_file));
             macrocounts_out.open(macrocounts_file.string().c_str());
             if (!macrocounts_out.is_open()) {
                 cerr << "wave: could not open file for macro invocation count listing: "
@@ -635,7 +636,25 @@ namespace {
         return true;
     }
 
-///////////////////////////////////////////////////////////////////////////////
+    ///////////////////////////////////////////////////////////////////////////
+    // read all of a file into a string
+    std::string read_entire_file(std::istream& instream)
+    {
+        std::string content;
+
+        instream.unsetf(std::ios::skipws);
+
+#if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
+        // this is known to be very slow for large files on some systems
+        copy (std::istream_iterator<char>(instream),
+              std::istream_iterator<char>(),
+              std::inserter(content, content.end()));
+#else
+        content = std::string(std::istreambuf_iterator<char>(instream.rdbuf()),
+                              std::istreambuf_iterator<char>());
+#endif
+        return content;
+    }
 }   // anonymous namespace
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -654,18 +673,8 @@ int error_count = 0;
     std::string instring;
 
         instream.unsetf(std::ios::skipws);
-
-        if (!input_is_stdin) {
-#if defined(BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS)
-            // this is known to be very slow for large files on some systems
-            copy (std::istream_iterator<char>(instream),
-                  std::istream_iterator<char>(),
-                  std::inserter(instring, instring.end()));
-#else
-            instring = std::string(std::istreambuf_iterator<char>(instream.rdbuf()),
-                                   std::istreambuf_iterator<char>());
-#endif
-        }
+        if (!input_is_stdin)
+            instring = read_entire_file(instream);
 
     // The preprocessing of the input stream is done on the fly behind the
     // scenes during iteration over the context_type::iterator_type stream.
@@ -682,7 +691,8 @@ int error_count = 0;
             vm["traceto"].as<std::string>()));
 
             if (trace_file != "-") {
-                fs::create_directories(boost::wave::util::branch_path(trace_file));
+                boost::wave::util::create_directories(
+                    boost::wave::util::branch_path(trace_file));
                 traceout.open(trace_file.string().c_str());
                 if (!traceout.is_open()) {
                     cerr << "wave: could not open trace file: " << trace_file
@@ -706,7 +716,8 @@ int error_count = 0;
             vm["listincludes"].as<std::string>()));
 
             if (includes_file != "-") {
-                fs::create_directories(boost::wave::util::branch_path(includes_file));
+                boost::wave::util::create_directories(
+                    boost::wave::util::branch_path(includes_file));
                 includelistout.open(includes_file.string().c_str());
                 if (!includelistout.is_open()) {
                     cerr << "wave: could not open include list file: "
@@ -731,7 +742,8 @@ int error_count = 0;
             vm["listguards"].as<std::string>()));
 
             if (listguards_file != "-") {
-                fs::create_directories(boost::wave::util::branch_path(listguards_file));
+                boost::wave::util::create_directories(
+                    boost::wave::util::branch_path(listguards_file));
                 listguardsout.open(listguards_file.string().c_str());
                 if (!listguardsout.is_open()) {
                     cerr << "wave: could not open include guard list file: "
@@ -801,6 +813,23 @@ int error_count = 0;
     // enable macro invocation count, if appropriate
         if (vm.count("macrocounts"))
             hooks.enable_macro_counting();
+
+    // check, if we have a license file to prepend
+    std::string license;
+
+        if (vm.count ("license")) {
+        // try to open the file, where to put the preprocessed output
+        std::string license_file(vm["license"].as<std::string>());
+        std::ifstream license_stream(license_file.c_str());
+
+            if (!license_stream.is_open()) {
+                cerr << "wave: could not open specified license file: "
+                      << license_file << endl;
+                return -1;
+            }
+            license = read_entire_file(license_stream);
+            hooks.set_license_info(license);
+        }
 
     context_type ctx (instring.begin(), instring.end(), file_name.c_str(), hooks);
 
@@ -1016,13 +1045,16 @@ int error_count = 0;
             }
             else {
                 out_file = boost::wave::util::complete_path(out_file);
-                fs::create_directories(boost::wave::util::branch_path(out_file));
+                boost::wave::util::create_directories(
+                    boost::wave::util::branch_path(out_file));
                 output.open(out_file.string().c_str());
                 if (!output.is_open()) {
                     cerr << "wave: could not open output file: "
                          << out_file.string() << endl;
                     return -1;
                 }
+                if (!license.empty())
+                    output << license;
                 default_outfile = out_file.string();
             }
         }
@@ -1036,13 +1068,16 @@ int error_count = 0;
                 basename = basename.substr(0, pos);
             out_file = boost::wave::util::branch_path(out_file) / (basename + ".i");
 
-            fs::create_directories(boost::wave::util::branch_path(out_file));
+            boost::wave::util::create_directories(
+                boost::wave::util::branch_path(out_file));
             output.open(out_file.string().c_str());
             if (!output.is_open()) {
                 cerr << "wave: could not open output file: "
                      << out_file.string() << endl;
                 return -1;
             }
+            if (!license.empty())
+                output << license;
             default_outfile = out_file.string();
         }
 
@@ -1238,6 +1273,8 @@ main (int argc, char *argv[])
                 "disable output [-]")
             ("autooutput,E",
                 "output goes into a file named <input_basename>.i")
+            ("license", po::value<std::string>(),
+                "prepend the content of the specified file to each created file")
             ("include,I", po::value<cmd_line_utils::include_paths>()->composing(),
                 "specify an additional include directory")
             ("sysinclude,S", po::value<vector<std::string> >()->composing(),
@@ -1414,7 +1451,7 @@ main (int argc, char *argv[])
             }
 
         std::string file_name(arguments[0].value[0]);
-        ifstream instream(file_name.c_str());
+        std::ifstream instream(file_name.c_str());
 
         // preprocess the given input file
             if (!instream.is_open()) {
