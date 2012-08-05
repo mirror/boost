@@ -346,19 +346,20 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
     template <typename A, typename B, typename A0, typename A1, typename A2>
     inline typename enable_if<piecewise3<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address, A0&&, A1&& a1, A2&& a2)
+        construct_impl(std::pair<A, B>* address,
+            BOOST_FWD_REF(A0), BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2)
     {
         boost::unordered::detail::construct_from_tuple(
-            boost::addressof(address->first), a1);
+            boost::addressof(address->first), boost::forward<A1>(a1));
         boost::unordered::detail::construct_from_tuple(
-            boost::addressof(address->second), a2);
+            boost::addressof(address->second), boost::forward<A2>(a2));
     }
 
 #if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
 
     template <typename A, typename B, typename A0>
     inline typename enable_if<emulation1<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address, A0&& a0)
+        construct_impl(std::pair<A, B>* address, BOOST_FWD_REF(A0) a0)
     {
         new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
         new((void*) boost::addressof(address->second)) B();
@@ -366,7 +367,8 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
     template <typename A, typename B, typename A0, typename A1, typename A2>
     inline typename enable_if<emulation3<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address, A0&& a0, A1&& a1, A2&& a2)
+        construct_impl(std::pair<A, B>* address,
+            BOOST_FWD_REF(A0) a0, BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2)
     {
         new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
         new((void*) boost::addressof(address->second)) B(
@@ -378,7 +380,8 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
             typename A0, typename A1, typename A2, typename A3,
             typename... Args>
     inline void construct_impl(std::pair<A, B>* address,
-            A0&& a0, A1&& a1, A2&& a2, A3&& a3, Args&&... args)
+            BOOST_FWD_REF(A0) a0, BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2,
+            BOOST_FWD_REF(A3) a3, BOOST_FWD_REF(Args)... args)
     {
         new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
 
@@ -390,6 +393,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
     }
 
 #endif // BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT
+
 #else // BOOST_NO_VARIADIC_TEMPLATES
 
 ////////////////////////////////////////////////////////////////////////////////
@@ -441,9 +445,9 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 #undef BOOST_UNORDERED_CONSTRUCT_IMPL
 
     template <typename A, typename B, typename A0, typename A1, typename A2>
-    inline typename enable_if<piecewise3<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address,
-            boost::unordered::detail::emplace_args3<A0, A1, A2> const& args)
+    inline void construct_impl(std::pair<A, B>* address,
+            boost::unordered::detail::emplace_args3<A0, A1, A2> const& args,
+            typename enable_if<piecewise3<A, B, A0>, void*>::type = 0)
     {
         boost::unordered::detail::construct_from_tuple(
             boost::addressof(address->first), args.a1);
@@ -454,9 +458,9 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 #if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
 
     template <typename A, typename B, typename A0>
-    inline typename enable_if<emulation1<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address,
-            boost::unordered::detail::emplace_args1<A0> const& args)
+    inline void construct_impl(std::pair<A, B>* address,
+            boost::unordered::detail::emplace_args1<A0> const& args,
+            typename enable_if<emulation1<A, B, A0>, void*>::type = 0)
     {
         new((void*) boost::addressof(address->first)) A(
             boost::forward<A0>(args.a0));
@@ -464,9 +468,9 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
     }
 
     template <typename A, typename B, typename A0, typename A1, typename A2>
-    inline typename enable_if<emulation3<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address,
-            boost::unordered::detail::emplace_args3<A0, A1, A2> const& args)
+    inline void construct_impl(std::pair<A, B>* address,
+            boost::unordered::detail::emplace_args3<A0, A1, A2> const& args,
+            typename enable_if<emulation3<A, B, A0>, void*>::type = 0)
     {
         new((void*) boost::addressof(address->first)) A(
             boost::forward<A0>(args.a0));
@@ -811,35 +815,38 @@ namespace boost { namespace unordered { namespace detail {
 #   endif
 
     template <typename Alloc>
-    inline typename boost::enable_if_c<
+    inline Alloc call_select_on_container_copy_construction(const Alloc& rhs,
+        typename boost::enable_if_c<
             boost::unordered::detail::
-            has_select_on_container_copy_construction<Alloc>::value, Alloc
-        >::type call_select_on_container_copy_construction(const Alloc& rhs)
+            has_select_on_container_copy_construction<Alloc>::value, void*
+        >::type = 0)
     {
         return rhs.select_on_container_copy_construction();
     }
 
     template <typename Alloc>
-    inline typename boost::disable_if_c<
+    inline Alloc call_select_on_container_copy_construction(const Alloc& rhs,
+        typename boost::disable_if_c<
             boost::unordered::detail::
-            has_select_on_container_copy_construction<Alloc>::value, Alloc
-        >::type call_select_on_container_copy_construction(const Alloc& rhs)
+            has_select_on_container_copy_construction<Alloc>::value, void*
+        >::type = 0)
     {
         return rhs;
     }
 
     template <typename SizeType, typename Alloc>
-    inline typename boost::enable_if_c<
-            boost::unordered::detail::has_max_size<Alloc>::value, SizeType
-        >::type call_max_size(const Alloc& a)
+    inline SizeType call_max_size(const Alloc& a,
+        typename boost::enable_if_c<
+            boost::unordered::detail::has_max_size<Alloc>::value, void*
+        >::type = 0)
     {
         return a.max_size();
     }
 
     template <typename SizeType, typename Alloc>
-    inline typename boost::disable_if_c<
-            boost::unordered::detail::has_max_size<Alloc>::value, SizeType
-        >::type call_max_size(const Alloc&)
+    inline SizeType call_max_size(const Alloc&, typename boost::disable_if_c<
+            boost::unordered::detail::has_max_size<Alloc>::value, void*
+        >::type = 0)
     {
         return (std::numeric_limits<SizeType>::max)();
     }
@@ -967,41 +974,41 @@ namespace boost { namespace unordered { namespace detail {
         // the only construct method that old fashioned allocators support.
 
         template <typename T>
-        static typename boost::enable_if_c<
-                boost::unordered::detail::has_construct<Alloc, T>::value &&
-                boost::is_same<T, value_type>::value
-            >::type
-            construct(Alloc& a, T* p, T const& x)
+        static void construct(Alloc& a, T* p, T const& x,
+            typename boost::enable_if_c<
+                    boost::unordered::detail::has_construct<Alloc, T>::value &&
+                    boost::is_same<T, value_type>::value,
+                    void*>::type = 0)
         {
             a.construct(p, x);
         }
 
         template <typename T>
-        static typename boost::disable_if_c<
+        static void construct(Alloc&, T* p, T const& x,
+            typename boost::disable_if_c<
                 boost::unordered::detail::has_construct<Alloc, T>::value &&
-                boost::is_same<T, value_type>::value
-            >::type
-            construct(Alloc&, T* p, T const& x)
+                boost::is_same<T, value_type>::value,
+                void*>::type = 0)
         {
             new ((void*) p) T(x);
         }
 
         template <typename T>
-        static typename boost::enable_if_c<
+        static void destroy(Alloc& a, T* p,
+            typename boost::enable_if_c<
                 boost::unordered::detail::has_destroy<Alloc, T>::value &&
-                boost::is_same<T, value_type>::value
-            >::type
-            destroy(Alloc& a, T* p)
+                boost::is_same<T, value_type>::value,
+                void*>::type = 0)
         {
             a.destroy(p);
         }
 
         template <typename T>
-        static typename boost::disable_if_c<
+        static void destroy(Alloc&, T* p,
+            typename boost::disable_if_c<
                 boost::unordered::detail::has_destroy<Alloc, T>::value &&
-                boost::is_same<T, value_type>::value
-            >::type
-            destroy(Alloc&, T* p)
+                boost::is_same<T, value_type>::value,
+                void*>::type = 0)
         {
             boost::unordered::detail::destroy(p);
         }
@@ -1120,17 +1127,42 @@ namespace boost { namespace unordered { namespace detail {
 
 #else
 
+    template <typename AllocTraits, typename T>
+    struct value_construct
+    {
+        typedef BOOST_DEDUCED_TYPENAME AllocTraits::allocator_type allocator;
+
+        allocator& alloc;
+        T* ptr;
+
+        value_construct(allocator& a, T* p) : alloc(a), ptr(p)
+        {
+            AllocTraits::construct(alloc, ptr, T());
+        }
+
+        void release()
+        {
+            ptr = 0;
+        }
+
+        ~value_construct()
+        {
+            if (ptr) AllocTraits::destroy(alloc, ptr);
+        }
+
+    private:
+        value_construct(value_construct const&);
+        value_construct& operator=(value_construct const&);
+    };
+
     template <typename Alloc, typename T, BOOST_UNORDERED_EMPLACE_TEMPLATE>
     inline void construct_node(Alloc& a, T* p, BOOST_UNORDERED_EMPLACE_ARGS)
     {
-        boost::unordered::detail::allocator_traits<Alloc>::construct(a, p, T());
-        try {
-            boost::unordered::detail::construct_impl(
-                p->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
-        } catch(...) {
-            boost::unordered::detail::allocator_traits<Alloc>::destroy(a, p);
-            throw;
-        }
+        value_construct<boost::unordered::detail::allocator_traits<Alloc>, T>
+            construct_guard(a, p);
+        boost::unordered::detail::construct_impl(
+            p->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+        construct_guard.release();
     }
 
     template <typename Alloc, typename T>

@@ -26,7 +26,9 @@ namespace test
     template <class T> class allocator2;
     object generate(object const*);
     implicitly_convertible generate(implicitly_convertible const*);
-    
+
+    inline void ignore_variable(void const*) {}
+
     class object : private counted_object
     {
         friend class hash;
@@ -248,6 +250,9 @@ namespace test
         void destroy(T* p) {
             //detail::tracker.track_destroy((void*) p, sizeof(T), tag_);
             p->~T();
+
+            // Work around MSVC buggy unused parameter warning.
+            ignore_variable(&p);
         }
 
         bool operator==(allocator1 const& x) const
