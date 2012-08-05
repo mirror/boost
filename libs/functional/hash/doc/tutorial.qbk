@@ -206,7 +206,7 @@ header which forward declares [classref boost::hash],
 include the main header before instantiating [classref boost::hash]. When using
 a container that uses [classref boost::hash] it should do that for you, so your
 type will work fine with the boost hash containers. There's an example of this
-in [@boost:/libs/unordered/examples/template.hpp template.hpp] and
-[@boost:/libs/unordered/examples/template.cpp template.cpp].
+in [@boost:/libs/functional/hash/examples/template.hpp template.hpp] and
+[@boost:/libs/functional/hash/examples/template.cpp template.cpp].
 
 [endsect]
