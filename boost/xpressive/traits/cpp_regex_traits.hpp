@@ -20,6 +20,7 @@
 #include <string>
 #include <locale>
 #include <sstream>
+#include <climits>
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/integer.hpp>
@@ -122,6 +123,8 @@ namespace detail
     umaskex_t const std_ctype_reserved = 0x8000;
     #elif defined(_CPPLIB_VER) && defined(BOOST_WINDOWS)
     umaskex_t const std_ctype_reserved = 0x8200;
+    #elif defined(_LIBCPP_VERSION)
+    umaskex_t const std_ctype_reserved = 0x8000;
     #else
     umaskex_t const std_ctype_reserved = 0;
     #endif
@@ -205,6 +208,16 @@ namespace detail
             {
                 return true;
             }
+
+            // HACKHACK Cygwin and mingw have buggy ctype facets for wchar_t
+            #if defined(__CYGWIN__) || defined(__MINGW32_VERSION)
+            if (std::ctype_base::xdigit == ((std::ctype_base::mask)(umask_t)mask & std::ctype_base::xdigit))
+            {
+                typename std::char_traits<Char>::int_type i = std::char_traits<Char>::to_int_type(ch);
+                if(UCHAR_MAX >= i && std::isxdigit(static_cast<int>(i)))
+                    return true;
+            }
+            #endif
 
             #else
 
