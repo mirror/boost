@@ -18,57 +18,57 @@
         template<typename Ret >
         struct expand_pattern_rest_0
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void , typename B3 = void , typename B4 = void , typename B5 = void , typename B6 = void , typename B7 = void , typename B8 = void , typename B9 = void , typename B10 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void , typename C3 = void , typename C4 = void , typename C5 = void , typename C6 = void , typename C7 = void , typename C8 = void , typename C9 = void , typename C10 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret( B0)> type;
+                typedef msvc_fun_workaround<Ret( C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1)> type;
             };
-            template<typename B0 , typename B1 , typename B2>
-            struct cat<B0 , B1 , B2>
+            template<typename C0 , typename C1 , typename C2>
+            struct cat<C0 , C1 , C2>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1 , B2)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1 , C2)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3>
-            struct cat<B0 , B1 , B2 , B3>
+            template<typename C0 , typename C1 , typename C2 , typename C3>
+            struct cat<C0 , C1 , C2 , C3>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1 , B2 , B3)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1 , C2 , C3)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4>
-            struct cat<B0 , B1 , B2 , B3 , B4>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4>
+            struct cat<C0 , C1 , C2 , C3 , C4>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1 , B2 , B3 , B4)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1 , C2 , C3 , C4)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1 , B2 , B3 , B4 , B5)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1 , C2 , C3 , C4 , C5)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1 , B2 , B3 , B4 , B5 , B6)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1 , C2 , C3 , C4 , C5 , C6)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6 , typename B7>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6 , typename C7>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6 , typename B7 , typename B8>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7 , B8>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6 , typename C7 , typename C8>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7 , C8>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7 , B8)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7 , C8)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6 , typename B7 , typename B8 , typename B9>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7 , B8 , B9>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6 , typename C7 , typename C8 , typename C9>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7 , C8 , C9>
             {
-                typedef msvc_fun_workaround<Ret( B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7 , B8 , B9)> type;
+                typedef msvc_fun_workaround<Ret( C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7 , C8 , C9)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -84,52 +84,52 @@
         template<typename Ret , typename A0>
         struct expand_pattern_rest_1
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void , typename B3 = void , typename B4 = void , typename B5 = void , typename B6 = void , typename B7 = void , typename B8 = void , typename B9 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void , typename C3 = void , typename C4 = void , typename C5 = void , typename C6 = void , typename C7 = void , typename C8 = void , typename C9 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0 , C1)> type;
             };
-            template<typename B0 , typename B1 , typename B2>
-            struct cat<B0 , B1 , B2>
+            template<typename C0 , typename C1 , typename C2>
+            struct cat<C0 , C1 , C2>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0 , B1 , B2)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0 , C1 , C2)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3>
-            struct cat<B0 , B1 , B2 , B3>
+            template<typename C0 , typename C1 , typename C2 , typename C3>
+            struct cat<C0 , C1 , C2 , C3>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0 , B1 , B2 , B3)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0 , C1 , C2 , C3)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4>
-            struct cat<B0 , B1 , B2 , B3 , B4>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4>
+            struct cat<C0 , C1 , C2 , C3 , C4>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0 , B1 , B2 , B3 , B4)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0 , C1 , C2 , C3 , C4)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0 , B1 , B2 , B3 , B4 , B5)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0 , C1 , C2 , C3 , C4 , C5)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0 , B1 , B2 , B3 , B4 , B5 , B6)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0 , C1 , C2 , C3 , C4 , C5 , C6)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6 , typename B7>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6 , typename C7>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6 , typename B7 , typename B8>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7 , B8>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6 , typename C7 , typename C8>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7 , C8>
             {
-                typedef msvc_fun_workaround<Ret(A0 , B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7 , B8)> type;
+                typedef msvc_fun_workaround<Ret(A0 , C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7 , C8)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -145,47 +145,47 @@
         template<typename Ret , typename A0 , typename A1>
         struct expand_pattern_rest_2
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void , typename B3 = void , typename B4 = void , typename B5 = void , typename B6 = void , typename B7 = void , typename B8 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void , typename C3 = void , typename C4 = void , typename C5 = void , typename C6 = void , typename C7 = void , typename C8 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , C0 , C1)> type;
             };
-            template<typename B0 , typename B1 , typename B2>
-            struct cat<B0 , B1 , B2>
+            template<typename C0 , typename C1 , typename C2>
+            struct cat<C0 , C1 , C2>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , B0 , B1 , B2)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , C0 , C1 , C2)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3>
-            struct cat<B0 , B1 , B2 , B3>
+            template<typename C0 , typename C1 , typename C2 , typename C3>
+            struct cat<C0 , C1 , C2 , C3>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , B0 , B1 , B2 , B3)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , C0 , C1 , C2 , C3)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4>
-            struct cat<B0 , B1 , B2 , B3 , B4>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4>
+            struct cat<C0 , C1 , C2 , C3 , C4>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , B0 , B1 , B2 , B3 , B4)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , C0 , C1 , C2 , C3 , C4)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , B0 , B1 , B2 , B3 , B4 , B5)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , C0 , C1 , C2 , C3 , C4 , C5)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , B0 , B1 , B2 , B3 , B4 , B5 , B6)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , C0 , C1 , C2 , C3 , C4 , C5 , C6)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6 , typename B7>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6 , typename C7>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , B0 , B1 , B2 , B3 , B4 , B5 , B6 , B7)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , C0 , C1 , C2 , C3 , C4 , C5 , C6 , C7)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -201,42 +201,42 @@
         template<typename Ret , typename A0 , typename A1 , typename A2>
         struct expand_pattern_rest_3
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void , typename B3 = void , typename B4 = void , typename B5 = void , typename B6 = void , typename B7 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void , typename C3 = void , typename C4 = void , typename C5 = void , typename C6 = void , typename C7 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , C0 , C1)> type;
             };
-            template<typename B0 , typename B1 , typename B2>
-            struct cat<B0 , B1 , B2>
+            template<typename C0 , typename C1 , typename C2>
+            struct cat<C0 , C1 , C2>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , B0 , B1 , B2)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , C0 , C1 , C2)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3>
-            struct cat<B0 , B1 , B2 , B3>
+            template<typename C0 , typename C1 , typename C2 , typename C3>
+            struct cat<C0 , C1 , C2 , C3>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , B0 , B1 , B2 , B3)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , C0 , C1 , C2 , C3)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4>
-            struct cat<B0 , B1 , B2 , B3 , B4>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4>
+            struct cat<C0 , C1 , C2 , C3 , C4>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , B0 , B1 , B2 , B3 , B4)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , C0 , C1 , C2 , C3 , C4)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , B0 , B1 , B2 , B3 , B4 , B5)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , C0 , C1 , C2 , C3 , C4 , C5)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5 , typename B6>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5 , B6>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5 , typename C6>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5 , C6>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , B0 , B1 , B2 , B3 , B4 , B5 , B6)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , C0 , C1 , C2 , C3 , C4 , C5 , C6)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -252,37 +252,37 @@
         template<typename Ret , typename A0 , typename A1 , typename A2 , typename A3>
         struct expand_pattern_rest_4
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void , typename B3 = void , typename B4 = void , typename B5 = void , typename B6 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void , typename C3 = void , typename C4 = void , typename C5 = void , typename C6 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , C0 , C1)> type;
             };
-            template<typename B0 , typename B1 , typename B2>
-            struct cat<B0 , B1 , B2>
+            template<typename C0 , typename C1 , typename C2>
+            struct cat<C0 , C1 , C2>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , B0 , B1 , B2)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , C0 , C1 , C2)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3>
-            struct cat<B0 , B1 , B2 , B3>
+            template<typename C0 , typename C1 , typename C2 , typename C3>
+            struct cat<C0 , C1 , C2 , C3>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , B0 , B1 , B2 , B3)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , C0 , C1 , C2 , C3)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4>
-            struct cat<B0 , B1 , B2 , B3 , B4>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4>
+            struct cat<C0 , C1 , C2 , C3 , C4>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , B0 , B1 , B2 , B3 , B4)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , C0 , C1 , C2 , C3 , C4)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4 , typename B5>
-            struct cat<B0 , B1 , B2 , B3 , B4 , B5>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4 , typename C5>
+            struct cat<C0 , C1 , C2 , C3 , C4 , C5>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , B0 , B1 , B2 , B3 , B4 , B5)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , C0 , C1 , C2 , C3 , C4 , C5)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -298,32 +298,32 @@
         template<typename Ret , typename A0 , typename A1 , typename A2 , typename A3 , typename A4>
         struct expand_pattern_rest_5
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void , typename B3 = void , typename B4 = void , typename B5 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void , typename C3 = void , typename C4 = void , typename C5 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , C0 , C1)> type;
             };
-            template<typename B0 , typename B1 , typename B2>
-            struct cat<B0 , B1 , B2>
+            template<typename C0 , typename C1 , typename C2>
+            struct cat<C0 , C1 , C2>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , B0 , B1 , B2)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , C0 , C1 , C2)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3>
-            struct cat<B0 , B1 , B2 , B3>
+            template<typename C0 , typename C1 , typename C2 , typename C3>
+            struct cat<C0 , C1 , C2 , C3>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , B0 , B1 , B2 , B3)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , C0 , C1 , C2 , C3)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3 , typename B4>
-            struct cat<B0 , B1 , B2 , B3 , B4>
+            template<typename C0 , typename C1 , typename C2 , typename C3 , typename C4>
+            struct cat<C0 , C1 , C2 , C3 , C4>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , B0 , B1 , B2 , B3 , B4)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , C0 , C1 , C2 , C3 , C4)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -339,27 +339,27 @@
         template<typename Ret , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5>
         struct expand_pattern_rest_6
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void , typename B3 = void , typename B4 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void , typename C3 = void , typename C4 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , C0 , C1)> type;
             };
-            template<typename B0 , typename B1 , typename B2>
-            struct cat<B0 , B1 , B2>
+            template<typename C0 , typename C1 , typename C2>
+            struct cat<C0 , C1 , C2>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , B0 , B1 , B2)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , C0 , C1 , C2)> type;
             };
-            template<typename B0 , typename B1 , typename B2 , typename B3>
-            struct cat<B0 , B1 , B2 , B3>
+            template<typename C0 , typename C1 , typename C2 , typename C3>
+            struct cat<C0 , C1 , C2 , C3>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , B0 , B1 , B2 , B3)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , C0 , C1 , C2 , C3)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -375,22 +375,22 @@
         template<typename Ret , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6>
         struct expand_pattern_rest_7
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void , typename B3 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void , typename C3 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , C0 , C1)> type;
             };
-            template<typename B0 , typename B1 , typename B2>
-            struct cat<B0 , B1 , B2>
+            template<typename C0 , typename C1 , typename C2>
+            struct cat<C0 , C1 , C2>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , B0 , B1 , B2)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , C0 , C1 , C2)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -406,17 +406,17 @@
         template<typename Ret , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7>
         struct expand_pattern_rest_8
         {
-            template<typename B0 = void , typename B1 = void , typename B2 = void>
+            template<typename C0 = void , typename C1 = void , typename C2 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , C0)> type;
             };
-            template<typename B0 , typename B1>
-            struct cat<B0 , B1>
+            template<typename C0 , typename C1>
+            struct cat<C0 , C1>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , B0 , B1)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , C0 , C1)> type;
             };
         };
         template<typename Fun, typename Cont>
@@ -432,11 +432,11 @@
         template<typename Ret , typename A0 , typename A1 , typename A2 , typename A3 , typename A4 , typename A5 , typename A6 , typename A7 , typename A8>
         struct expand_pattern_rest_9
         {
-            template<typename B0 = void , typename B1 = void>
+            template<typename C0 = void , typename C1 = void>
             struct cat;
-            template<typename B0>
-            struct cat<B0>
+            template<typename C0>
+            struct cat<C0>
             {
-                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , B0)> type;
+                typedef msvc_fun_workaround<Ret(A0 , A1 , A2 , A3 , A4 , A5 , A6 , A7 , A8 , C0)> type;
             };
         };
