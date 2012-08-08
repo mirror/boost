@@ -48,10 +48,10 @@
         template<typename Ret BOOST_PP_ENUM_TRAILING_PARAMS(N, typename A)>
         struct BOOST_PP_CAT(expand_pattern_rest_, N)
         {
-            template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_INC(M), typename B, void)>
+            template<BOOST_PP_ENUM_PARAMS_WITH_A_DEFAULT(BOOST_PP_INC(M), typename C, void)>
             struct cat;
 
-            #define BOOST_PP_ITERATION_PARAMS_2                                                             \
+            #define BOOST_PP_ITERATION_PARAMS_2                                                     \
                 (3, (1, M, <boost/proto/transform/detail/pack_impl.hpp>))
             #include BOOST_PP_ITERATE()
         };
@@ -61,10 +61,10 @@
     #else
         #define I BOOST_PP_ITERATION()
         #define J BOOST_PP_RELATIVE_ITERATION(1)
-            template<BOOST_PP_ENUM_PARAMS(I, typename B)>
-            struct cat<BOOST_PP_ENUM_PARAMS(I, B)>
+            template<BOOST_PP_ENUM_PARAMS(I, typename C)>
+            struct cat<BOOST_PP_ENUM_PARAMS(I, C)>
             {
-                typedef msvc_fun_workaround<Ret(BOOST_PP_ENUM_PARAMS(J, A) BOOST_PP_COMMA_IF(J) BOOST_PP_ENUM_PARAMS(I, B))> type;
+                typedef msvc_fun_workaround<Ret(BOOST_PP_ENUM_PARAMS(J, A) BOOST_PP_COMMA_IF(J) BOOST_PP_ENUM_PARAMS(I, C))> type;
             };
         #undef J
         #undef I
