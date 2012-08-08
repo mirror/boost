@@ -9,6 +9,8 @@
 #ifndef BOOST_PROTO_TRANSFORM_ENV_HPP_EAN_18_07_2012
 #define BOOST_PROTO_TRANSFORM_ENV_HPP_EAN_18_07_2012
 
+#include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/ref.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_const.hpp>
@@ -110,10 +112,27 @@ namespace boost
                   , value_(value)
                 {}
 
+                #if BOOST_WORKAROUND(__GNUC__, == 3) || (BOOST_WORKAROUND(__GNUC__, == 4) && __GNUC_MINOR__ <= 2)
                 /// INTERNAL ONLY
-                template<typename OtherTag, typename OtherValue = key_not_found>
+                struct found
+                {
+                    typedef Value type;
+                    typedef typename add_reference<typename add_const<Value>::type>::type const_reference;
+                };
+
+                template<typename OtherKey, typename OtherValue = key_not_found>
                 struct lookup
-                  : Base::template lookup<OtherTag, OtherValue>
+                  : mpl::if_c<
+                        is_same<OtherKey, Key>::value
+                      , found
+                      , typename Base::template lookup<OtherKey, OtherValue>
+                    >::type
+                {};
+                #else
+                /// INTERNAL ONLY
+                template<typename OtherKey, typename OtherValue = key_not_found>
+                struct lookup
+                  : Base::template lookup<OtherKey, OtherValue>
                 {};
 
                 /// INTERNAL ONLY
@@ -123,6 +142,7 @@ namespace boost
                     typedef Value type;
                     typedef typename add_reference<typename add_const<Value>::type>::type const_reference;
                 };
+                #endif
 
                 // For key-based lookups not intended to fail
                 using Base::operator[];

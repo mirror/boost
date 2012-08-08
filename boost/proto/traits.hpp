@@ -116,7 +116,7 @@ namespace boost { namespace proto
       : mpl::false_
     {};
 
-    #if BOOST_WORKAROUND(__GNUC__, == 3) || (__GNUC__ == 4 && __GNUC_MINOR__ == 0)
+    #if BOOST_WORKAROUND(__GNUC__, == 3) || (BOOST_WORKAROUND(__GNUC__, == 4) && __GNUC_MINOR__ == 0)
     // work around GCC bug
     template<typename Tag, typename Args, long N>
     struct is_callable<proto::expr<Tag, Args, N> >
