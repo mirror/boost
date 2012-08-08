@@ -20,7 +20,7 @@
 namespace boost { namespace algorithm {
 
 #if __cplusplus >= 201103L
-//  Use the C++11 versions of iota if it is available
+//  Use the C++11 versions of is_partitioned if it is available
 using std::is_partitioned;      // Section 25.3.13
 #else
 /// \fn is_partitioned ( InputIterator first, InputIterator last, UnaryPredicate p )
