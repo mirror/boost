@@ -27,7 +27,7 @@
 namespace boost { namespace algorithm {
 
 #if __cplusplus >= 201103L
-//  Use the C++11 versions of iota if it is available
+//  Use the C++11 versions of is_sorted/is_sorted_until if they are available
 using std::is_sorted_until; // Section 25.4.1.5
 using std::is_sorted;       // Section 25.4.1.5
 #else
