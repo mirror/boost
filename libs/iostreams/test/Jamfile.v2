@@ -107,6 +107,9 @@ rule compile-fail-iostreams ( sources * : requirements * : target-name ? ) {
           [ test-iostreams symmetric_filter_test.cpp ]
           [ test-iostreams tee_test.cpp ]
           [ test-iostreams wide_stream_test.cpp ]
+          [ test-iostreams windows_pipe_test.cpp
+               ../build//boost_iostreams
+               : <build>no <target-os>windows:<build>yes ]
           ;  
 
       if $(LARGE_FILE_KEEP) 
