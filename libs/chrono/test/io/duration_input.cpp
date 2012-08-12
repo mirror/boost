@@ -61,7 +61,7 @@ int main()
 
   test_good("1.0 second", duration<float,ratio<1> >(1));
   /* BUG with DURATION_GET
-../../../boost/math/common_factor_rt.hpp: In function ÔRingType boost::math::detail::gcd_euclidean(RingType, RingType) [with RingType = long double]Õ:
+../../../boost/math/common_factor_rt.hpp: In function 'RingType boost::math::detail::gcd_euclidean(RingType, RingType) [with RingType = long double]':
 ../../../boost/math/common_factor_rt.hpp:122:   instantiated from ÔIntegerType boost::math::detail::gcd_integer(const IntegerType&, const IntegerType&) [with IntegerType = long double]Õ
 ../../../boost/math/common_factor_rt.hpp:240:   instantiated from ÔT boost::math::detail::gcd_optimal_evaluator_helper_t<T, true, true>::operator()(const T&, const T&) [with T = long double]Õ
 ../../../boost/math/common_factor_rt.hpp:290:   instantiated from ÔT boost::math::detail::gcd_optimal_evaluator<T>::operator()(const T&, const T&) [with T = long double]Õ
