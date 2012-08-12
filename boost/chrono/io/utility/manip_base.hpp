@@ -41,7 +41,7 @@ namespace boost
         {
           out.put(out.widen('\n'));
         }
-        out.flush();
+        out.flush();
       }
     private:
       size_t count;

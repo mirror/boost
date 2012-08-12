@@ -183,7 +183,7 @@ namespace boost
         pw = new_ptr;
       }
 
-#if defined(BOOST_NO_EXPLICIT_CONVERSION_OPERATORS)
+#if defined(BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS)
         typedef T* (ios_state_ptr::*bool_type)();
         operator bool_type() const BOOST_NOEXCEPT
         {
