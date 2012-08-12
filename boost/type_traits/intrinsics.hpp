@@ -79,7 +79,8 @@
 #   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
 #endif
 
-#if defined(BOOST_MSVC) && defined(BOOST_MSVC_FULL_VER) && (BOOST_MSVC_FULL_VER >=140050215)
+#if (defined(BOOST_MSVC) && defined(BOOST_MSVC_FULL_VER) && (BOOST_MSVC_FULL_VER >=140050215))\
+         || (defined(BOOST_INTEL) && defined(_MSC_VER) && (_MSC_VER >= 1500))
 #   include <boost/type_traits/is_same.hpp>
 
 #   define BOOST_IS_UNION(T) __is_union(T)
@@ -220,6 +221,11 @@
       // old implementation instead in that case:
 #     define BOOST_ALIGNMENT_OF(T) __alignof__(T)
 #   endif
+
+#ifdef __GXX_EXPERIMENTAL_CXX0X__
+#  include <type_traits>
+#  define BOOST_IS_CONVERTIBLE(T,U) (std::is_convertible<T, U>::value)
+#endif
 
 #   define BOOST_HAS_TYPE_TRAITS_INTRINSICS
 #endif
