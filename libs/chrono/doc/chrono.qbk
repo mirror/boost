@@ -359,21 +359,20 @@
 
 [/==================]
 
-[def __StrictStopwatch [link chrono.reference.stopwatches.req.strict_stopwatch_req `StrictStopwatch`]]
-[def __strict_stopwatch_concept [link chrono.reference.stopwatches.req.strict_stopwatch_req `StrictStopwatch`]]
+[def __StrictStopwatch [link chrono.reference.stopwatches.strict_stopwatch_req `StrictStopwatch`]]
+[def __strict_stopwatch_concept [link chrono.reference.stopwatches.strict_stopwatch_req `StrictStopwatch`]]
 [def __strict_stopwatch [link chrono.reference.stopwatches.strict_stopwatch_hpp.strict_stopwatch `strict_stopwatch`]]
 
 
 [def __strict_stopclock [link chrono.reference.stopwatches.strict_stopclock_hpp.strict_stopclock `strict_stopclock`]]
-[def __basic_stopclock [link chrono.reference.stopwatches.strict_stopclock_hpp.basic_stopclock `basic_stopclock`]]
 
-[def __Stopwatch [link chrono.reference.stopwatches.req.stopwatch_req `Stopwatch`]]
-[def __stopwatch_concept [link chrono.reference.stopwatches.req.stopwatch_req `Stopwatch`]]
+[def __Stopwatch [link chrono.reference.stopwatches.stopwatch_req `Stopwatch`]]
+[def __stopwatch_concept [link chrono.reference.stopwatches.stopwatch_req `Stopwatch`]]
 [def __stopwatch [link chrono.reference.stopwatches.stopwatch_hpp.stopwatch `stopwatch`]]
 [def __laps_stopwatch [link chrono.reference.stopwatches.stopwatch_hpp.stopwatch `laps_stopwatch`]]
 [def __laps_stopclock [link chrono.reference.stopwatches.stopwatch_hpp.stopwatch `basic_stopclock`]]
 
-[def __SuspendableStopwatch [link chrono.reference.stopwatches.req.suspendable_stopwatch_req `SuspendableStopwatch`]]
+[def __SuspendableStopwatch [link chrono.reference.stopwatches.suspendable_stopwatch_req `SuspendableStopwatch`]]
 [def __suspendable_stopwatch_concept [link chrono.reference.stopwatches.suspendable_stopwatch_req `SuspendableStopwatch`]]
 [def __suspendable_stopwatch [link chrono.reference.stopwatches.suspendable_stopwatch_hpp.suspendable_stopwatch `suspendable_stopwatch`]]
 [def __suspendable_stopclock [link chrono.reference.stopwatches.suspendable_stopwatch_hpp.suspendable_stopwatch `suspendable_stopclock`]]
@@ -421,15 +420,15 @@ Finally, you can mentally add the following to any code fragments in this docume
 
 We all deal with time every day of our lives. We've intuitively known it since birth. Thus we are all very familiar with it and believe it to be a simple matter. The modeling of time in computer programs should be similarly simple. The unfortunate truth is that this perceived simplicity is only skin deep. Fortunately, we do not need a terribly complicated solution to meet the bulk of our needs. However, overly simplistic solutions can be dangerous and inefficient, and won't adapt as the computer industry evolves.
 
-__Boost_Chrono__ aims to implement the new time facilities in C++0x, as proposed in [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2661.htm [*N2661 - A Foundation to Sleep On]].  That document provides background and motivation for key design decisions and is the source of a good deal of information in this documentation.
+__Boost_Chrono__ implements the new time facilities in C++11, as proposed in [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2661.htm [*N2661 - A Foundation to Sleep On]].  That document provides background and motivation for key design decisions and is the source of a good deal of information in this documentation.
 
 [/
 __Boost_Chrono__ proposes a solution that is precision neutral, with a very simple end user interface which supports multiple clocks, multiple precisions (both coarser and finer than we will ever need), separate types for points in time and time durations, efficiency, and compile-time enforced safety.
 ]
 
-[/
-In addition to the clocks provided by the standard proposal, __Boost_Chrono__ provides specific process clocks and a thread clock.
-]
+
+In addition to the clocks provided by the standard proposal, __Boost_Chrono__ provides specific process and thread clocks.
+
 
 [/
 See [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2661.htm [*N2661 - A Foundation to Sleep On]] which is very informative and provides motivation for key design decisions for __common_type, __ratio and `chrono`. This documentation contains a lot of extracts from this document.
@@ -558,7 +557,7 @@ Stopclocks: a complete time reporting package that can be invoked in a single li
 * __stopwatch_reporter`<__Stopwatch,__Formatter>`, convenient reporting to an output stream (including wide char streams) of the elapsed time of models of __Stopwatch results.
 * Some basic __Formatters.
 * `__strict_stopclock<__Clock>` shortcut of `__stopwatch_reporter<__strict_stopwatch<__Clock>>`
-* `__basic_stopclock<__Clock>` shortcut of `__stopwatch_reporter<__laps_stopwatch<__Clock>>`
+* `__stopclock<__Clock>` shortcut of `__stopwatch_reporter<__stopwatch<__Clock>>`
 * `__suspendable_stopclock<__Clock>` shortcut of `__stopwatch_reporter<__suspendable_stopwatch<__Clock>>`
 
 [heading Caveat Emptor]
@@ -610,8 +609,6 @@ Otherwise is not a header only library and you need to compile it and build the 
 [/===================]
 [heading Requirements]
 [/===================]
-
-[caution __Boost_Chrono__ depends on some new traits in [*Boost.TypeTraits] which have been added on Boost 1.45.]
 
 In particular, __Boost_Chrono__ depends on:
 
@@ -2613,7 +2610,7 @@ The output could be:
 [/=======================================================]
 [section Simulated Thread Interface Demonstration Program]
 
-The C++0x standard library's multi-threading library requires the ability to deal with the representation of time in a manner consistent with modern C++ practices. Next is a simulation of this interface.
+The C++11 standard library's multi-threading library requires the ability to deal with the representation of time in a manner consistent with modern C++ practices. Next is a simulation of this interface.
 
 The non-member sleep functions can be emulated as follows:
 
@@ -2829,7 +2826,7 @@ Output is:
 [section:reference Reference ]
 [/=================]
 
-As `constexpr` will not be supported by some compilers, it is replaced in the code by `BOOST_CONSTEXPR` for `constexpr` functions and `BOOST_STATIC_CONSTEXPR` for struct/class static fields. The same applies to `noexecpt` which is replaced by `BOOST_NOEXCEPT` in the code.
+As `constexpr` will not be supported by some compilers, it is replaced in the code by `BOOST_CONSTEXPR` for `constexpr` functions and `BOOST_STATIC_CONSTEXPR` for struct/class static fields. The same applies to `noexecpt` which is replaced by `noexcept` in the code.
 
 The documentation doesn't use these macros.
 
@@ -2875,7 +2872,7 @@ Include only the standard files.
 
 [section:limitations Limitations and Extensions]
 
-Next follows some limitation respect to the C++0x recomendations:
+At present, tthere is no know limitation respect to the C++11 standard.
 
 The current implementation provides in addition:
 
@@ -2916,7 +2913,7 @@ Depending on the static assertion used system you will have an hint of the faili
 
 When `BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING` is defined the lib don't provides the hybrid error handling prototypes:
 
-  Clock::time_point Clock::now(system::error_code&ec=boost::thows());
+  Clock::time_point Clock::now(system::error_code&ec=boost::throws());
 
 This allow to be closer to the standard and to avoid the Boost.System dependency, making possible to have Boost.Chrono as a header-only library.
 
@@ -7355,8 +7352,6 @@ __thread_clock class provides access to the real thread wall-clock, i.e. the rea
 [section:stopwatches Stopwatches]
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:req Requirements]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:strict_stopwatch_req `StrictStopwatch` Requirements]
 
 A StrictStopwatch measure the amount of time elapsed from a start point in time.
@@ -7368,7 +7363,7 @@ A `S` meets the `StrictStopwatch` requirements if:
 * `S::clock` meets the __Clock requirements, and
 * meets the requirements specified in the following table.
 
-In this table `S` denote a StrictStopwatch type. `sc` is an instance of `S` const, `ec` is instance of `system::error_code`.
+In this table `S` denote a StrictStopwatch type. `sc` is an instance of `S` const.
 
 [table StrictStopwatch Requirements
     [[expression]        [return type]  [operational semantics]]
@@ -7376,10 +7371,19 @@ In this table `S` denote a StrictStopwatch type. `sc` is an instance of `S` cons
     [[`S::duration`]     [`S::clock::duration`]         [The __duration type of the `clock`.]]
     [[`S::time_point`]   [`S::clock::time_point`]       [The __time_point type of the `clock`.]]
     [[`S()`]             [`S&&`]                        [Constructd a stopwatch.]]
-    [[`S(ec)`]           [`S&&`]                        [Constructd a stopwatch.]]
     [[`sc.elapsed()`]    [`S::duration`]                [the elapsed time while the __StrictStopwatch was running.]]
-    [[`sc.elapsed(ec)`]  [`S::duration`]                [the elapsed time while the __StrictStopwatch was running.]]
+    
 ]
+
+
+[/ /////////////////////////////
+
+, `ec` is instance of `system::error_code`
+
+    [[`S(ec)`]           [`S&&`]                        [Constructd a stopwatch.]]
+    [[`sc.elapsed(ec)`]  [`S::duration`]                [the elapsed time while the __StrictStopwatch was running.]]
+
+////////////////////////////// ]
 
 Models of `StrictStopwatch `:
 
@@ -7392,37 +7396,36 @@ __return_type `S::duration`.
 
 __returns the elapsed time.
 
-__throws Any exception the S::clock::now` function can throw.
-
 [endsect]
 
+[/ /////////////////////////////
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:elapsed_ec `sc.elapsed(ec)`]
 
 __return_type `S::duration`.
 
-__returns the elapsed time.
+__returns the elapsed time or `S::duration::zero()` if an error occurred.
 
-__effects When there is an internal error stores the error code in the `ec` parameter if it is different from `boost::throws()`.
-
-__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`, otherwise none.
+__effects When there is an internal error stores the error code in the `ec` parameter`.
 
 [endsect]
-
+////////////////////////////// ]
 [endsect]
 
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:stopwatch_req `Stopwatch` Requirements]
 
-As a __StrictStopwatch, a Stopwatch measure the amount of time elapsed from a start point in time. The main difference is that a Stopwatch can be started and stopped (and restarted). The duration between these two time points is called a lap. It could have in addition the capability to collect these lap samples.
+As a __StrictStopwatch, a __Stopwatch measure the amount of time elapsed from a start point in time. 
+The main difference is that a __Stopwatch can be started and stopped (and restarted). 
+The duration between these two time points is called a lap. It could have in addition the capability to collect these lap samples.
 
 A `S` meets the `Stopwatch` requirements if:
 
 * `S` meets the __StrictStopwatch requirements, and
 * meets the requirements specified in the following table.
 
-In this table `S` denote `Stopwatch` type. `s` is an instance of `S`,  `sc` is an instance of `S` const, `ec` is instance of `system::error_code`.
+In this table `S` denote `Stopwatch` type. `s` is an instance of `S`,  `sc` is an instance of `S` const.
 
 [table Stopwatch Requirements
     [[expression]                [return type]                      [operational semantics]]
@@ -7432,23 +7435,32 @@ In this table `S` denote `Stopwatch` type. `s` is an instance of `S`,  `sc` is a
 
     [[`S(dont_start)`]           [`S&&`]                        [Constructd a stopwatch.]]
     [[`S(coll)`]                 [`S&&`]                        [Constructd a stopwatch.]]
-    [[`S(coll,ec)`]              [`S&&`]                        [Constructd a stopwatch.]]
     
     [[`s.start()`]               [-]                                [starts a Stopwatch.]]
-    [[`s.start(ec)`]             [-]                                [starts a Stopwatch.]]
     [[`s.stop()`]                [-]                                [stops a Stopwatch.]]
     [[`s.stop(ec)`]              [-]                                [stops a Stopwatch.]]
     [[`s.restart()`]             [-]                                [restarts a Stopwatch.]]
-    [[`s.restart(ec)`]           [-]                                [restarts a Stopwatch.]]
     [[`s.reset()`]               [-]                                [Resets as if it was constructed again.]]
-    [[`s.reset(ec)`]             [-]                                [Resets as if it was constructed again.]]
     
     [[`sc.is_running()`]         [`bool`]                           [whether the stopwatch is running or not.]]
     [[`sc.elapsed_current_lap()`]   [`S::duration`]                 [the elapsed time since the last start.]]
-    [[`sc.elapsed_current_lap(ec)`] [`S::duration`]                 [the elapsed time since the last start.]]
     [[`sc.is_running()`]         [bool]                             [true if the Stopwatch is running.]]
     [[`sc.lap_collector()`]      [`S::laps_collector const&`]       [the elapsed time while the Stopwatch was running.]]
+    
 ]
+
+
+[/ /////////////////////////////
+
+`ec` is instance of `system::error_code`
+
+    [[`S(coll,ec)`]              [`S&&`]                        [Constructd a stopwatch.]]
+    [[`s.start(ec)`]             [-]                                [starts a Stopwatch.]]
+    [[`s.restart(ec)`]           [-]                                [restarts a Stopwatch.]]
+    [[`s.reset(ec)`]             [-]                                [Resets as if it was constructed again.]]
+    [[`sc.elapsed_current_lap(ec)`] [`S::duration`]                 [the elapsed time since the last start.]]
+
+////////////////////////////// ]
 
 Models of `Stopwatch`:
 
@@ -7459,19 +7471,9 @@ Models of `Stopwatch`:
 
 __effects Starts running the stopwatch.
 
-__throws Any exception the `S::clock::now` function can throw.
+__throws Any exception the `S::clock::now()` function can throw.
 
 [endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:start_ec `start(ec)`]
-
-__effects Starts running the stopwatch.
-When there is an internal error stores the error code in the `ec` parameter if it is different from `throws()`.
-
-__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`.
-
-[endsect]
-
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:stop `stop()`]
 
@@ -7480,31 +7482,12 @@ __effects Stops running the stopwatch.
 __throws Any exception the __LapsCollector can throw.
 
 [endsect]
-
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:stop_ec `stop(ec)`]
-
-__effects Stops running the stopwatch.
-When there is an internal error stores the error code in the `ec` parameter if it is different from `throws()`.
-
-__throws Any exception the `__LapsCollector::store()` or `S::clock::now()` can throw when `ec` is `throws()`
-
-[endsect]
-
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:restart `restart()`]
 
 __effects `stop`/`start` the stopwatch.
 
 __throws Any exception the `S::clock::now` function can throw.
-
-[endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:restart_ec `restart(ec)`]
-
-__effects `stop`/`start` the stopwatch.
-
-__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`.
 
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -7527,6 +7510,35 @@ __returns the laps_collector instance.
 
 [endsect]
 
+[/ /////////////////////////////
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:start_ec `start(ec)`]
+
+__effects Starts running the stopwatch.
+When there is an internal error stores the error code in the `ec` parameter if it is different from `throws()`.
+
+__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`.
+
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:stop_ec `stop(ec)`]
+
+__effects Stops running the stopwatch.
+When there is an internal error stores the error code in the `ec` parameter if it is different from `throws()`.
+
+__throws Any exception the `__LapsCollector::store()` or `S::clock::now()` can throw when `ec` is `throws()`
+
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:restart_ec `restart(ec)`]
+
+__effects `stop`/`start` the stopwatch.
+
+__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`.
+
+[endsect]
+////////////////////////////// ]
+
 [endsect]
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -7538,7 +7550,7 @@ A `C` meets the `LapsCollector` requirements if:
 
 * it meets the requirements specified in the following table.
 
-In this table `C` denote `LapsCollector` type, `c` is an instance of `C`, `ec` is instance of `system::error_code`.
+In this table `C` denote `LapsCollector` type, `c` is an instance of `C`.
 
 [table LapsCollector Requirements
     [[expression]               [return type]                       [operational semantics]]
@@ -7546,7 +7558,6 @@ In this table `C` denote `LapsCollector` type, `c` is an instance of `C`, `ec` i
     [[`c.store(c)`]            [-]                                 [stores a duration.]]
     [[`c.reset()`]             [-]                                 [clears the collector.]]
 ]
-
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:suspend `c.store(d)`]
@@ -7577,7 +7588,7 @@ A `S` meets the `SuspendableStopwatch` requirements if:
 * `S` meets the __Stopwatch requirements, and
 * meets the requirements specified in the following table.
 
-In this table `S` denote `SuspendableStopwatch` type, `s` is an instance of `S`, `ec` is instance of `system::error_code`.
+In this table `S` denote `SuspendableStopwatch` type, `s` is an instance of `S`.
 
 [table Stopwatch Requirements
     [[expression]               [return type]                       [operational semantics]]
@@ -7598,27 +7609,11 @@ __throws Any exception the `S::clock::now` function can throw.
 
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:suspend_ec `s.suspend(ec)`]
-
-__effects Suspends the stopwatch.
-
-__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`
-
-[endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:resume `s.resume()`]
 
 __effects Resumes the stopwatch.
 
 __throws Any exception the `S::clock::now` function can throw.
-
-[endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:resume_ec `s.resume(ec)`]
-
-__effects Resumes the stopwatch.
-
-__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`
 
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -7632,33 +7627,27 @@ __throws Nothing.
 
 [endsect]
 
-[endsect]
-
+[/ /////////////////////////////
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:formatter_req `Formatter` Requirements]
+[section:suspend_ec `s.suspend(ec)`]
 
-A Formatter outputs on a given ostream a formatted string combining informations from a _StrictStopwatch, the format and the double precision.
+__effects Suspends the stopwatch.
 
-A Formatter must meet the requirements in the following Table.
-
-In this table `F`  denote a Formatter type, `S` is a StrictStopwatch and `s` is an instance of `S`, `f` is `const char *` , `p` is and `int`, and `os` is a `std::ostream`, ec is a `system::error_code`.
-
-[table Formatter Requirements
-    [[expression]        [return type]  [operational semantics]]
-    [[`F()`]        [F&&]  [Default constructible.]]
-    [[`F(os)`]        [F&&]  [Explicit Constructible from an std::basic_ostream.]]
-    [[`F(os)`]        [F&&]  [Explicit Constructible from an std::basic_ostream.]]
-    [[`F::set_precision(n)`]        [`-`]  [Sets the precision used when displaying a double.]]
-    [[`F::set_duration_style(ds)`]  [`-`]  [Sets the duration style used when displaying a duration.]]
-    [[`f(s)`]             [`S::time_point`]  [outputs on `os` a formatted string combining informations from the Stopwatch `s`, the format `f` and the double precision `p`.]]
-]
-
-
-Models of `Formatter`:
-
+__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`
 
 [endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:resume_ec `s.resume(ec)`]
+
+__effects Resumes the stopwatch.
+
+__throws Any exception the `S::clock::now` function can throw when `ec` is `throws()`
+
 [endsect]
+////////////////////////////// ]
+
+[endsect]
+
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [/==================================================]
@@ -7696,9 +7685,10 @@ Maintains the stopwatch running during the lifetime.
       stopwatch_runner& operator=(const stopwatch_runner&) = delete;
       
       stopwatch_runner(stopwatch & s);
-      stopwatch_runner(stopwatch & s, system::error_code & ec);
       ~stopwatch_runner();
     };
+
+
         
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c Constructor `stopwatch_runner(stopwatch &s)`]
@@ -7713,6 +7703,19 @@ __throws Any exception the `s.start()`can throw.
     
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:d Destructor `~stopwatch_runner()`]
+        
+__effects As if `s.stop()`.
+
+__post_condition `! s.is_running()`.
+
+__throws Nothing.
+    
+[endsect]
+
+[/ /////////////////////////////
+      stopwatch_runner(stopwatch & s, system::error_code & ec);
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c_ec Constructor `stopwatch_runner(stopwatch &s, system::error_code &ec)`]
         
 __requires `! s.is_running()`.
@@ -7724,16 +7727,8 @@ __post_condition `s.is_running()`.
 __throws Any exception the `s.start(ec)`can throw when `ec` is `throws()`
     
 [endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:d Destructor `~stopwatch_runner()`]
-        
-__effects As if `s.stop()`.
+////////////////////////////// ]
 
-__post_condition `! s.is_running()`.
-
-__throws Nothing.
-    
-[endsect]
     
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -7751,7 +7746,6 @@ Maintains the stopwatch stopped during the lifetime.
       stopwatch_stopper& operator=(const stopwatch_stopper&) = delete;
       
       stopwatch_stopper(stopwatch & s);
-      stopwatch_stopper(stopwatch & s, system::error_code & ec);
       ~stopwatch_stopper();
     };
         
@@ -7768,6 +7762,19 @@ __throws Any exception the `s.stop()` can throw.
     
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:d Destructor `~stopwatch_stopper()`]
+        
+__effects As if `s.start()`.
+
+__post_condition `s.is_running()`.
+
+__throws Nothing.
+    
+[endsect]
+
+[/ /////////////////////////////
+      stopwatch_stopper(stopwatch & s, system::error_code & ec);
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c_ec Constructor `stopwatch_stopper(stopwatch &s, system::error_code &ec)`]
         
 __requires `s.is_running()`.
@@ -7779,16 +7786,7 @@ __post_condition `! s.is_running()`.
 __throws Any exception the `s.stop(ec)` can throw when `ec` is `throws()`
     
 [endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:d Destructor `~stopwatch_stopper()`]
-        
-__effects As if `s.start()`.
-
-__post_condition `s.is_running()`.
-
-__throws Nothing.
-    
-[endsect]
+////////////////////////////// ]
     
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -7805,7 +7803,6 @@ Maintains the stopwatch supended during the lifetime.
       stopwatch_suspender(const stopwatch_suspender&) = delete;
       stopwatch_suspender& operator=(const stopwatch_suspender&) = delete;
       stopwatch_suspender(stopwatch & s);
-      stopwatch_suspender(stopwatch & s, system::error_code & ec);
       ~stopwatch_suspender();
     };
         
@@ -7822,6 +7819,19 @@ __throws Any exception the `s.suspend()` can throw.
     
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:d Destructor `~stopwatch_suspender()`]
+        
+__effects As if `s.resume()`.
+
+__post_condition `s.is_running() && ! s.is_suspended()`.
+
+__throws Nothing.
+    
+[endsect]
+
+[/ /////////////////////////////
+      stopwatch_suspender(stopwatch & s, system::error_code & ec);
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c_ec Constructor `stopwatch_suspender(stopwatch &s, system::error_code &ec)`]
         
 __requires `s.is_running() && ! s.is_suspended()`.
@@ -7833,16 +7843,7 @@ __post_condition `s.is_running() && s.is_suspended()`.
 __throws Any exception the `s.suspend(ec)` can throw.
     
 [endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:d Destructor `~stopwatch_suspender()`]
-        
-__effects As if `s.resume()`.
-
-__post_condition `s.is_running() && ! s.is_suspended()`.
-
-__throws Nothing.
-    
-[endsect]
+////////////////////////////// ]
     
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -7859,7 +7860,6 @@ Maintains the stopwatch resumed during the lifetime.
       stopwatch_resumer(const stopwatch_resumer&) = delete;
       stopwatch_resumer& operator=(const stopwatch_resumer&) = delete;
       stopwatch_resumer(stopwatch & s);
-      stopwatch_resumer(stopwatch & s, system::error_code & ec);
       ~stopwatch_resumer();
     };
 
@@ -7877,6 +7877,19 @@ __throws Any exception the `s.resume()` can throw.
     
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:d Destructor `~stopwatch_resumer()`]
+        
+__effects As if `s.suspend()`.
+
+__post_condition `s.is_running() && s.is_suspended()`.
+
+__throws Nothing.
+    
+[endsect]
+
+[/ /////////////////////////////
+      stopwatch_resumer(stopwatch & s, system::error_code & ec);
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c_ec Constructor `stopwatch_resumer(stopwatch &s, system::error_code &ec)`]
         
 __requires `s.is_running() && s.is_suspended()`.
@@ -7888,20 +7901,44 @@ __post_condition `s.is_running() && ! s.is_suspended()`.
 __throws Any exception the `s.resume(ec)` can throw.
     
 [endsect]
+////////////////////////////// ]
+    
+[endsect] [/ class ]
+
+[endsect] [/ header ]
+
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:d Destructor `~stopwatch_resumer()`]
+[/==================================================]
+[section:dont_start_hpp Header `<boost/chrono/stopwatches/dont_start.hpp>`]
+[/==================================================]
+
+  namespace boost
+  {
+    namespace chrono
+    {
+      struct dont_start_t;
+      static const dont_start_t dont_start;
+    } 
+  } 
+
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:dont_start_t Class `dont_start_t`]
+
+Type used to don't start a Stopwatch at construction time.
+
+    struct dont_start_t {  };
         
-__effects As if `s.suspend()`.
+[endsect] [/ class ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:dont_start Variable `dont_start`]
 
-__post_condition `s.is_running() && s.is_suspended()`.
+Instance used to don't start a Stopwatch at construction time.
 
-__throws Nothing.
-    
-[endsect]
-    
-[endsect]
-
-[endsect]
+    static const dont_start_t dont_start = { };
+            
+[endsect] [/ var ]
+[endsect] [/ header ]
 
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -7940,12 +7977,9 @@ accuracy of timing information provided the __Clock, and this could varies a gre
             typedef typename Clock::time_point  time_point;
 
             strict_stopwatch( );
-            explicit strict_stopwatch( system::error_code & ec );
-
             ~strict_stopwatch();
 
             duration elapsed( );
-            duration elapsed( system::error_code & ec );
 
         };
 
@@ -7962,6 +7996,9 @@ __throws Any exception the `Clock::now()`can throw.
 
 [endsect]
 
+[/
+            explicit strict_stopwatch( system::error_code & ec );
+            duration elapsed( system::error_code & ec );
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c2 Constructor `strict_stopwatch( system::error_code &)`]
 
@@ -7972,7 +8009,7 @@ __effects constructs and starts the strict_stopwatch.
 __throws Any exception the `Clock::now()`can throw when `ec` is `throws()`
 
 [endsect]
-
+]
 [endsect]
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -8039,23 +8076,14 @@ accuracy of timing information provided the __Clock, and this could varies a gre
       BOOST_STATIC_CONSTEXPR bool is_steady = Clock::is_steady;
 
       stopwatch();
-      explicit stopwatch(system::error_code & ec);
       explicit stopwatch(const dont_start_t&) noexcept;
       explicit stopwatch(laps_collector const& coll);
-      stopwatch(laps_collector const& acc, system::error_code & ec);
       stopwatch(laps_collector const& acc, const dont_start_t&);
-
       ~stopwatch();
 
       void restart();
-      void restart(system::error_code & ec);
-
       void start();
-      void start(system::error_code & ec);
-
       void stop();
-      void stop(system::error_code & ec);
-
       bool is_running() const;
 
       /**
@@ -8066,18 +8094,8 @@ accuracy of timing information provided the __Clock, and this could varies a gre
        */
       duration elapsed_current_lap() const;
 
-      /**
-       * Elapsed time getter for the current lap.
-       *
-       * Effects: Assign the error code if any internal error occur while retrieving the current time.
-       *
-       * Returns: the elapsed time since the start if no internal error occur.
-       *
-       */
-      duration elapsed_current_lap(system::error_code & ec) const;
 
       duration elapsed() const;
-      duration elapsed(system::error_code & ec) const;
       /**
        * Elapsed time for the last lap.
        *
@@ -8110,18 +8128,6 @@ __throws Any exception the `Clock::now()`can throw.
 
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:c_ec Constructor `stopwatch( system::error_code &ec)`]
-
-            explicit stopwatch( system::error_code & ec = throws() );
-
-__effects constructs and starts the stopwatch.
-
-__post_conditions: `ec || is_running()`.
-
-__throws Any exception the `Clock::now()`can throw when `ec` is `throws()`
-
-[endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c_ns Constructor `stopwatch( const dont_start_t& )`]
 
       explicit stopwatch(const dont_start_t&) noexcept;
@@ -8146,18 +8152,6 @@ __throws Any exception the `Clock::now()` or the __LapsCollector copy can throw.
 
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:c_coll_ec Constructor `stopwatch(laps_collector const&, system::error_code &)`]
-
-      explicit stopwatch(laps_collector const& acc, system::error_code & ec);
-
-__effects constructs copying the laps collector and starts the stopwatch. Assign the error code if any internal error occur while retrieving the current time.
-
-__post_conditions: `ec || is_running()`.
-
-__throws Any exception the `Clock::now()` or the __LapsCollector copy can throw when `ec` is `throws()`
-
-[endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c_coll_ns Constructor `stopwatch(laps_collector const&, const dont_start_t&)`]
 
       stopwatch(laps_collector const& acc, const dont_start_t&);
@@ -8170,6 +8164,55 @@ __throws Any exception the __LapsCollector copy can throw`
 
 [endsect]
 
+
+
+
+
+[/
+
+      explicit stopwatch(system::error_code & ec);
+      stopwatch(laps_collector const& acc, system::error_code & ec);
+      void restart(system::error_code & ec);
+      void start(system::error_code & ec);
+      void stop(system::error_code & ec);
+      /**
+       * Elapsed time getter for the current lap.
+       *
+       * Effects: Assign the error code if any internal error occur while retrieving the current time.
+       *
+       * Returns: the elapsed time since the start if no internal error occur.
+       *
+       */
+      duration elapsed_current_lap(system::error_code & ec) const;
+      duration elapsed(system::error_code & ec) const;
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:c_ec Constructor `stopwatch( system::error_code &ec)`]
+
+            explicit stopwatch( system::error_code & ec = throws() );
+
+__effects constructs and starts the stopwatch.
+
+__post_conditions: `ec || is_running()`.
+
+__throws Any exception the `Clock::now()`can throw when `ec` is `throws()`
+
+[endsect]
+]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:c_coll_ec Constructor `stopwatch(laps_collector const&, system::error_code &)`]
+
+      explicit stopwatch(laps_collector const& acc, system::error_code & ec);
+
+__effects constructs copying the laps collector and starts the stopwatch. Assign the error code if any internal error occur while retrieving the current time.
+
+__post_conditions: `ec || is_running()`.
+
+__throws Any exception the `Clock::now()` or the __LapsCollector copy can throw when `ec` is `throws()`
+
+[endsect]
+
+]
 
 
 [endsect]
@@ -8238,43 +8281,24 @@ accuracy of timing information provided the __Clock, and this could varies a gre
       BOOST_STATIC_CONSTEXPR bool is_steady = Clock::is_steady;
 
       suspendable_stopwatch();
-      explicit suspendable_stopwatch(system::error_code & ec);
       explicit suspendable_stopwatch(const dont_start_t&) noexcept;
       explicit suspendable_stopwatch(laps_collector const& coll);
-      suspendable_stopwatch(laps_collector const& acc, system::error_code & ec);
       suspendable_stopwatch(laps_collector const& acc, const dont_start_t&);
 
       ~suspendable_stopwatch();
 
       void restart();
-      void restart(system::error_code & ec);
-
       void start();
-      void start(system::error_code & ec);
-
       void stop();
-      void stop(system::error_code & ec);
-
       void suspend();
-      void suspend(system::error_code & ec);
-
       void resume();
-      void resume(system::error_code & ec);
-
       void reset();
-      void reset(system::error_code & ec);
 
       bool is_running() const;
       bool is_elapsed() const;
-
       duration elapsed_current_lap() const;
-      duration elapsed_current_lap(system::error_code & ec) const;
-
       duration elapsed() const;
-      duration elapsed(system::error_code & ec) const;
-      
       duration last() const;
-      
       laps_collector const& get_laps_collector() const noexcept;
 
       typedef stopwatch_runner<suspendable_stopwatch<Clock, LapsCollector> > scoped_run;
@@ -8297,18 +8321,6 @@ __effects constructs and starts the stopwatch.
 __post_conditions: `is_running() && ! is_suspended()`.
 
 __throws Any exception the `Clock::now()`can throw.
-
-[endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:c_ec Constructor `suspendable_stopwatch( system::error_code &ec)`]
-
-            explicit suspendable_stopwatch( system::error_code & ec = throws() );
-
-__effects constructs and starts the stopwatch.
-
-__post_conditions: `is_running() && ! is_suspended()`.
-
-__throws Any exception the `Clock::now()`can throw when `ec` is `throws()`
 
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -8336,18 +8348,6 @@ __throws Any exception the `Clock::now()` or the __LapsCollector copy can throw.
 
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section:c_coll_ec Constructor `suspendable_stopwatch(laps_collector const&, system::error_code &)`]
-
-      explicit suspendable_stopwatch(laps_collector const& acc, system::error_code & ec);
-
-__effects constructs copying the laps collector and starts the stopwatch. Assign the error code if any internal error occur while retrieving the current time.
-
-__post_conditions: `ec || (is_running() && ! is_suspended())`.
-
-__throws Any exception the `Clock::now()` or the __LapsCollector copy can throw when `ec` is `throws()`
-
-[endsect]
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section:c_coll_ns Constructor `suspendable_stopwatch(laps_collector const&, const dont_start_t&)`]
 
       suspendable_stopwatch(laps_collector const& acc, const dont_start_t&);
@@ -8361,6 +8361,45 @@ __throws Any exception the __LapsCollector copy can throw`
 [endsect]
 
 
+[/
+
+      explicit suspendable_stopwatch(system::error_code & ec);
+      suspendable_stopwatch(laps_collector const& acc, system::error_code & ec);
+      void restart(system::error_code & ec);
+      void start(system::error_code & ec);
+      void stop(system::error_code & ec);
+      void suspend(system::error_code & ec);
+      void resume(system::error_code & ec);
+      void reset(system::error_code & ec);
+      duration elapsed_current_lap(system::error_code & ec) const;
+      duration elapsed(system::error_code & ec) const;
+
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:c_ec Constructor `suspendable_stopwatch( system::error_code &ec)`]
+
+            explicit suspendable_stopwatch( system::error_code & ec = throws() );
+
+__effects constructs and starts the stopwatch.
+
+__post_conditions: `is_running() && ! is_suspended()`.
+
+__throws Any exception the `Clock::now()`can throw when `ec` is `throws()`
+
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:c_coll_ec Constructor `suspendable_stopwatch(laps_collector const&, system::error_code &)`]
+
+      explicit suspendable_stopwatch(laps_collector const& acc, system::error_code & ec);
+
+__effects constructs copying the laps collector and starts the stopwatch. Assign the error code if any internal error occur while retrieving the current time.
+
+__post_conditions: `ec || (is_running() && ! is_suspended())`.
+
+__throws Any exception the `Clock::now()` or the __LapsCollector copy can throw when `ec` is `throws()`
+
+[endsect]
+]
 
 [endsect]
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -8377,7 +8416,415 @@ The following typedef are provided as syntactic sugar.
 
 [endsect] [/ typedefs]
 [endsect] [/ header ]
-[endsect] [/ reference]
+
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:collectors Collectors]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:no_memory_hpp Header `<boost/chrono/stopwatches/collectors/no_memory.hpp>`]
+[/==================================================]
+
+  namespace boost
+  {
+    namespace chrono
+    {
+
+      template<typename Duration>
+      struct no_memory;
+
+    }
+  } 
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:no_memory Class `no_memory`]
+
+      template<typename Duration>
+      struct no_memory
+      {
+        typedef Duration duration;
+
+        duration elapsed() const;
+        duration last() const;
+        void store(duration const& );
+        void reset();
+
+      };
+
+[endsect]
+
+[endsect] [/ header ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:last_lap_hpp Header `<boost/chrono/stopwatches/collectors/last_lap.hpp>`]
+[/==================================================]
+
+  namespace boost
+  {
+    namespace chrono
+    {
+
+      template<typename Duration>
+      struct last_lap;
+
+    }
+  } 
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:last_lap Class `last_lap`]
+
+    template<typename Duration>
+    struct last_lap
+    {
+      typedef Duration duration;
+      duration elapsed() const;
+      duration last() const;
+      void store(duration const& d);
+      void reset();
+
+    };
+
+[endsect]
+
+[endsect] [/ header ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:laps_accumulator_set_hpp Header `<boost/chrono/stopwatches/collectors/laps_accumulator_set.hpp>`]
+[/==================================================]
+
+  namespace boost
+  {
+    namespace chrono
+    {
+
+      template<
+        typename Duration,
+        typename Features = accumulators::features<accumulators::tag::count,
+          accumulators::tag::sum, accumulators::tag::min,
+          accumulators::tag::max, accumulators::tag::mean>,
+        typename Weight = void>
+      struct laps_accumulator_set;
+
+    }
+  } 
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:laps_accumulator_set Class `laps_accumulator_set`]
+
+    template<
+      typename Duration,
+      typename Features = accumulators::features<accumulators::tag::count,
+        accumulators::tag::sum, accumulators::tag::min,
+        accumulators::tag::max, accumulators::tag::mean>,
+      typename Weight = void>
+    struct laps_accumulator_set : last_lap<Duration>
+    {
+      typedef Duration duration;
+      typedef accumulators::accumulator_set<typename duration::rep, Features,
+          Weight> storage_type;
+
+      duration elapsed() const;
+      void store(duration const& d);
+      void reset();
+      storage_type const& accumulator_set() const;
+
+
+    };
+
+[endsect]
+[endsect] [/ header ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:laps_sequence_container_hpp Header `<boost/chrono/stopwatches/collectors/laps_sequence_container.hpp>`]
+[/==================================================]
+
+  namespace boost
+  {
+    namespace chrono
+    {
+
+      template<
+        typename Duration,
+        typename SequenceContainer = std::list<Duration>
+      >
+      struct laps_sequence_container;
+
+    }
+  } 
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:laps_sequence_container Class `laps_sequence_container`]
+
+    template<
+      typename Duration,
+      typename SequenceContainer = std::list<Duration>
+    >
+    struct laps_sequence_container
+    {
+      typedef Duration duration;
+      typedef SequenceContainer storage_type;
+      typedef typename SequenceContainer::iterator iterator;
+      typedef typename SequenceContainer::const_iterator const_iterator;
+
+      duration elapsed() const;
+      duration last() const;
+      storage_type const& container() const;
+      void store(duration const& d);
+      void reset();
+    };
+
+[endsect]
+[endsect] [/ header ]
+[endsect] [/ collectors ]
+[endsect] [/ stopwatches]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:stopclocks Stopclocks]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:formatter_req `Formatter` Requirements]
+
+A Formatter outputs on a given ostream a formatted string combining informations from a __StrictStopwatch, the format and the double precision.
+
+A Formatter must meet the requirements in the following Table.
+
+In this table `F` denote a Formatter type, `f` is an instance of `F`, `p` is an `int`, `ds` is a `__duration_style`, and `os` is a `F::ostream_type`.
+
+[table Formatter Requirements
+    [[expression]        [return type]  [operational semantics]]
+    [[`F::char_type`]        [The associated char type.]  [-]]
+    [[`F::string_type`]        [The associated string type.]  [-]]
+    [[`F::format_type`]        [The associated format type ]  [-]]
+    [[`F::ostream_type`]        [The associated output stream type ]  [-]]
+    [[`F::`]        [A model of ]  [-]]
+    [[`F()`]        [F&&]  [Default constructible.]]
+    [[`F(os)`]        [F&&]  [Explicit Constructible from an std::basic_ostream.]]
+    [[`F(os)`]        [F&&]  [Explicit Constructible from an std::basic_ostream.]]
+    [[`f.set_precision(p)`]        [`-`]  [Sets the precision used when displaying a double.]]
+    [[`f.set_duration_style(ds)`]  [`-`]  [Sets the duration style used when displaying a duration.]]
+    [[`f(s)`]             [`S::time_point`]  [outputs on `os` a formatted string combining informations from the Stopwatch `s`, the format `f` and the double precision `p`.]]
+]
+     
+     
+Models of `Formatter`:
+
+
+[endsect]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:stopclock_req `StopClock` Requirements]
+
+A Stopclock is a Stopwatch that is able to make reports associated to the collected samples. 
+Stopclocks ensure that a report is done once and only once.
+
+A Stopclock must meet the requirements in the following Table. 
+In this table `S`  denote a Stopclock type and `s` is an instance of `S`, `fmt` `f` is `const S::char_type *` or `const S::string_type &` or `S::format_type`.
+
+[table Stopclock Requirements
+    [[expression]       [return type]   [operational semantics]]
+    [[`S::stopwatch_type`]              [A model of __Stopwatch]           [-]]
+    [[`S::formater_type`]               [A model of __Formater]           [-]]
+    
+    [[`S(fmt)`]         [S&&]           [Constructor with specific format.]]
+    [[`s::report()`]    [`-`]           [Makes a report of the stopclock samples.]]
+    [[`s::reported()`]  [`bool`]        [States if a report has already been done.]]
+]
+
+
+Models of `Stopclock`:
+
+
+[endsect]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:stopwatch_reporter_hpp Header `<boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>`]
+[/==================================================]
+
+  namespace boost
+  {
+   namespace chrono
+   {
+
+    template<
+      class CharT, 
+      class Stopwatch, 
+      class Formatter=basic_stopwatch_reporter_default_formatter<CharT, Stopwatch> >
+    class basic_stopwatch_reporter;
+
+    template<
+      class Stopwatch,
+      class Formatter = typename basic_stopwatch_reporter_default_formatter<char, Stopwatch>::type>
+    class stopwatch_reporter;
+
+    template<class Stopwatch, class Formatter>
+    struct basic_stopwatch_reporter_default_formatter<char, stopwatch_reporter<Stopwatch, Formatter> >;
+
+    template<
+      class Stopwatch,
+      class Formatter = typename basic_stopwatch_reporter_default_formatter<wchar_t, Stopwatch>::type>
+    class wstopwatch_reporter;
+
+    template<class Stopwatch, class Formatter>
+    struct basic_stopwatch_reporter_default_formatter<wchar_t, wstopwatch_reporter<Stopwatch, Formatter> >;
+
+   }
+  }
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:basic_stopwatch_reporter Template Class `basic_stopwatch_reporter`]
+
+    template<
+      class CharT, 
+      class Stopwatch, 
+      class Formatter=basic_stopwatch_reporter_default_formatter<CharT, Stopwatch> >
+    class basic_stopwatch_reporter: public Stopwatch
+    {
+    public:
+      typedef typename Stopwatch::clock clock;
+      typedef Stopwatch stopwatch_type;
+      typedef Formatter formatter_type;
+      
+      basic_stopwatch_reporter(const basic_stopwatch_reporter&) = delete;
+      basic_stopwatch_reporter& operator=(const basic_stopwatch_reporter&) = delete;
+
+      basic_stopwatch_reporter() noexcept;
+      explicit basic_stopwatch_reporter(system::error_code & ec);
+      explicit basic_stopwatch_reporter(const dont_start_t& tag) noexcept;
+      explicit basic_stopwatch_reporter(const typename Formatter::char_type* fmt);
+      explicit basic_stopwatch_reporter(typename Formatter::string_type const& fmt);
+      explicit basic_stopwatch_reporter(formatter_type fmt);
+
+      ~basic_stopwatch_reporter() noexcept;
+
+      bool reported() const;
+      formatter_type& format();
+
+      void report() noexcept;
+      
+    protected:
+      formatter_type formatter_;
+      bool reported_;
+
+    };
+    
+[endsect]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:stopwatch_reporter Template Class `stopwatch_reporter`]
+
+    template<class Stopwatch, class Formatter>
+    class stopwatch_reporter: public basic_stopwatch_reporter<char, Stopwatch, Formatter>
+    {
+    public:
+      typedef typename Stopwatch::clock clock;
+      typedef Stopwatch stopwatch_type;
+      typedef Formatter formatter_type;
+
+      stopwatch_reporter(const stopwatch_reporter&) = delete;
+      stopwatch_reporter& operator=(const stopwatch_reporter&) = delete;
+      stopwatch_reporter();
+      explicit stopwatch_reporter(system::error_code & ec);
+      explicit stopwatch_reporter(const dont_start_t& tag) noexcept;
+      explicit stopwatch_reporter(formatter_type const& fmt);
+      explicit stopwatch_reporter(const typename Formatter::char_type* fmt);
+      explicit stopwatch_reporter(typename Formatter::string_type const& fmt);
+      
+      typedef stopwatch_runner<stopwatch_reporter<Stopwatch, Formatter> > scoped_run;
+      typedef stopwatch_stopper<stopwatch_reporter<Stopwatch, Formatter> > scoped_stop;
+      typedef stopwatch_suspender<stopwatch_reporter<Stopwatch, Formatter> > scoped_suspend;
+      typedef stopwatch_resumer<stopwatch_reporter<Stopwatch, Formatter> > scoped_resume;
+
+    };
+    
+[endsect]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:stopwatch_reporter_ps Partial Specialization `basic_stopwatch_reporter_default_formatter<char_t, stopwatch_reporter<Stopwatch, Formatter> >`]
+
+    template<class Stopwatch, class Formatter>
+    struct basic_stopwatch_reporter_default_formatter<char_t, stopwatch_reporter<Stopwatch, Formatter> >
+    {
+      typedef Formatter type;
+    };
+    
+[endsect]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:wstopwatch_reporter Template Class `wstopwatch_reporter`]
+
+    template<class Stopwatch, class Formatter>
+    class wstopwatch_reporter: public basic_stopwatch_reporter<wchar_t, Stopwatch, Formatter>
+    {
+    public:
+      typedef typename Stopwatch::clock clock;
+      typedef Stopwatch stopwatch_type;
+      typedef Formatter formatter_type;
+
+      wstopwatch_reporter(const wstopwatch_reporter&) = delete;
+      wstopwatch_reporter& operator=(const wstopwatch_reporter&) = delete;
+      wstopwatch_reporter();
+      explicit wstopwatch_reporter(system::error_code & ec);
+      explicit wstopwatch_reporter(const dont_start_t& tag) noexcept;
+
+      explicit wstopwatch_reporter(formatter_type const& fmt);
+      explicit wstopwatch_reporter(const typename Formatter::char_type* fmt);
+      explicit wstopwatch_reporter(typename Formatter::string_type const& fmt);
+      typedef stopwatch_runner<wstopwatch_reporter<Stopwatch, Formatter> > scoped_run;
+      typedef stopwatch_stopper<wstopwatch_reporter<Stopwatch, Formatter> > scoped_stop;
+      typedef stopwatch_suspender<wstopwatch_reporter<Stopwatch, Formatter> > scoped_suspend;
+      typedef stopwatch_resumer<wstopwatch_reporter<Stopwatch, Formatter> > scoped_resume;
+
+    };
+
+
+[endsect]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:wstopwatch_reporter_ps Partial Specialization `basic_stopwatch_reporter_default_formatter<wchar_t, wstopwatch_reporter<Stopwatch, Formatter> >`]
+
+    template<class Stopwatch, class Formatter>
+    struct basic_stopwatch_reporter_default_formatter<wchar_t, wstopwatch_reporter<Stopwatch, Formatter> >
+    {
+      typedef Formatter type;
+    };
+    
+[endsect]
+
+
+[endsect] [/ header ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:strict_stopclock_hpp Header `<boost/chrono/stopwatches/reporters/strict_stopclock.hpp>`]
+[/==================================================]
+
+[endsect] [/ header ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:stopclock_hpp Header `<boost/chrono/stopwatches/reporters/stopclock.hpp>`]
+[/==================================================]
+
+[endsect] [/ header ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section:formatters Formatters]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:base_formatter_hpp Header `<boost/chrono/stopwatches/formatters/base_formatter.hpp>`]
+[/==================================================]
+
+[endsect] [/ header ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:elapsed_formatter_hpp Header `<boost/chrono/stopwatches/formatters/elapsed_formatter.hpp>`]
+[/==================================================]
+
+[endsect] [/ header ]
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[/==================================================]
+[section:accumulator_set_formatter_hpp Header `<boost/chrono/stopwatches/formatters/accumulator_set_formatter.hpp>`]
+[/==================================================]
+
+[endsect] [/ header ]
+[endsect] [/ formatters ]
+[endsect] [/ reporters ]
 
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
@@ -8606,14 +9053,21 @@ All the units are given using the suffix "s" following the System International 
 [/==================================]
 [section:history Appendix: History]
 [/==================================]
+
+
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section [*Version 2.0.0, July 1, 2012] ]
+
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section [*Version 2.0.0, December 1, 2012 - 1.52] ]
 
 [*New Features:]
 
 * Enhance chrono I/O
     * [@http://svn.boost.org/trac/boost/ticket/5980 #5980] Take care of the Howard Hinnant [@http://home.roadrunner.com/~hinnant/bloomington/chrono_io.html proposal] which has the advantage to provide I/O for system clocks using the Gregorian Calendar.
-    * [@http://svn.boost.org/trac/boost/ticket/5981 #5981] Added i/o state savers.
+    * [@http://svn.boost.org/trac/boost/ticket/5981 #5981] Add i/o state savers.
+    * [@http://svn.boost.org/trac/boost/ticket/7058 #7058] Make it work wehn BOOST_NO_EXCEPTIONS is defined.
+    * [@http://svn.boost.org/trac/boost/ticket/7059 #7059] Add low level i/o facilities.
 
 [*Deprecated:]
 
@@ -8625,11 +9079,26 @@ When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not availabl
 
 [*Fixes:]
 
-* [@http://svn.boost.org/trac/boost/ticket/6241 #6241] boost::chrono compilation problems without std::wstring support.
   
 [/* [@http://svn.boost.org/trac/boost/ticket/6094 #6094] 1 secondALPHA should be an invalid input for a duration.]
 
 [endsect] [/section [*Version 2.0.0] ]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section [*Version 1.2.3, August 1, 2012 - 1.51] ]
+
+[*Fixes:]
+
+* [@http://svn.boost.org/trac/boost/ticket/6918 #6918] Boost Chrono compilation failure on HP uX due to undefined pthread_getcpuclockid.  
+* [@http://svn.boost.org/trac/boost/ticket/6241 #6241] boost::chrono compilation problems without std::wstring support.
+* [@http://svn.boost.org/trac/boost/ticket/6987 #6987] Documentation & C++11.
+* [@http://svn.boost.org/trac/boost/ticket/7041 #7041] time_point.hpp depends on Boost.System.
+* [@http://svn.boost.org/trac/boost/ticket/7042 #7042] Avoiding time_point and duration dependency on time.h and CLOCK_REALTIME.
+* [@http://svn.boost.org/trac/boost/ticket/7058 #7058] Make it work when BOOST_NO_EXCEPTIONS is defined.
+* [@http://svn.boost.org/trac/boost/ticket/7069 #7069] Misspellings in clock_string<thread_clock>.
+* [@http://svn.boost.org/trac/boost/ticket/7081 #7081] WinError.h capitalization in boost/detail/win/basic_types.hpp.
+
+[endsect] [/section [*Version 1.2.3] ]
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section [*Version 1.2.2, April 1, 2012 - 1.50] ]
@@ -8999,9 +9468,9 @@ More updated documentation.
 
 [*Features:]
 
-*  The C++0x Standard Library's __common_type.
-*  The C++0x Standard Library's compile-time rational arithmetic.
-*  The C++0x Standard Library's time utilities, including:
+*  The C++11 Standard Library's __common_type.
+*  The C++11 Standard Library's compile-time rational arithmetic.
+*  The C++11 Standard Library's time utilities, including:
     * Class template __duration
     * Class template __time_point
     * Clocks:
