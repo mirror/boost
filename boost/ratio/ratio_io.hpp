@@ -6,7 +6,7 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 //
-// This code was adapted by Vicente from Howard Hinnant's experimental work 
+// This code was adapted by Vicente from Howard Hinnant's experimental work
 // on chrono i/o under lvm/libc++ to Boost
 
 #ifndef BOOST_RATIO_RATIO_IO_HPP
@@ -44,8 +44,8 @@ struct ratio_string
 #include <boost/static_string/static_string.hpp>
 #endif
 
-#if defined(BOOST_NO_UNICODE_LITERALS) || defined(BOOST_NO_CHAR16_T) || defined(BOOST_NO_CHAR32_T)
-//~ #define BOOST_RATIO_HAS_UNICODE_SUPPORT 
+#if defined(BOOST_NO_CXX11_UNICODE_LITERALS) || defined(BOOST_NO_CXX11_CHAR16_T) || defined(BOOST_NO_CXX11_CHAR32_T)
+//~ #define BOOST_RATIO_HAS_UNICODE_SUPPORT
 #else
 #define BOOST_RATIO_HAS_UNICODE_SUPPORT 1
 #endif
@@ -107,8 +107,8 @@ struct ratio_string_id<atto> : integral_constant<int,-18> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<atto, CharT> : 
-    ratio_detail::ratio_string_static<atto,CharT> 
+struct ratio_string<atto, CharT> :
+    ratio_detail::ratio_string_static<atto,CharT>
 {};
 
 #else
@@ -165,8 +165,8 @@ struct ratio_string_id<femto> : integral_constant<int,-15> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<femto, CharT> : 
-    ratio_detail::ratio_string_static<femto,CharT> 
+struct ratio_string<femto, CharT> :
+    ratio_detail::ratio_string_static<femto,CharT>
 {};
 
 #else
@@ -224,8 +224,8 @@ struct ratio_string_id<pico> : integral_constant<int,-12> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<pico, CharT> : 
-    ratio_detail::ratio_string_static<pico,CharT> 
+struct ratio_string<pico, CharT> :
+    ratio_detail::ratio_string_static<pico,CharT>
 {};
 
 #else
@@ -282,8 +282,8 @@ struct ratio_string_id<nano> : integral_constant<int,-9> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<nano, CharT> : 
-    ratio_detail::ratio_string_static<nano,CharT> 
+struct ratio_string<nano, CharT> :
+    ratio_detail::ratio_string_static<nano,CharT>
 {};
 
 #else
@@ -340,8 +340,8 @@ struct ratio_string_id<micro> : integral_constant<int,-6> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<micro, CharT> : 
-    ratio_detail::ratio_string_static<micro,CharT> 
+struct ratio_string<micro, CharT> :
+    ratio_detail::ratio_string_static<micro,CharT>
 {};
 
 #else
@@ -398,8 +398,8 @@ struct ratio_string_id<milli> : integral_constant<int,-3> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<milli, CharT> : 
-    ratio_detail::ratio_string_static<milli,CharT> 
+struct ratio_string<milli, CharT> :
+    ratio_detail::ratio_string_static<milli,CharT>
 {};
 
 #else
@@ -456,8 +456,8 @@ struct ratio_string_id<centi> : integral_constant<int,-2> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<centi, CharT> : 
-    ratio_detail::ratio_string_static<centi,CharT> 
+struct ratio_string<centi, CharT> :
+    ratio_detail::ratio_string_static<centi,CharT>
 {};
 
 #else
@@ -514,8 +514,8 @@ struct ratio_string_id<deci> : integral_constant<int,-1> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<deci, CharT> : 
-    ratio_detail::ratio_string_static<deci,CharT> 
+struct ratio_string<deci, CharT> :
+    ratio_detail::ratio_string_static<deci,CharT>
 {};
 
 #else
@@ -580,8 +580,8 @@ struct ratio_string_id<deca> : integral_constant<int,1> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<deca, CharT> : 
-    ratio_detail::ratio_string_static<deca,CharT> 
+struct ratio_string<deca, CharT> :
+    ratio_detail::ratio_string_static<deca,CharT>
 {};
 
 #else
@@ -639,8 +639,8 @@ struct ratio_string_id<hecto> : integral_constant<int,2> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<hecto, CharT> : 
-    ratio_detail::ratio_string_static<hecto,CharT> 
+struct ratio_string<hecto, CharT> :
+    ratio_detail::ratio_string_static<hecto,CharT>
 {};
 
 #else
@@ -697,8 +697,8 @@ struct ratio_string_id<kilo> : integral_constant<int,3> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<kilo, CharT> : 
-    ratio_detail::ratio_string_static<kilo,CharT> 
+struct ratio_string<kilo, CharT> :
+    ratio_detail::ratio_string_static<kilo,CharT>
 {};
 
 #else
@@ -755,8 +755,8 @@ struct ratio_string_id<mega> : integral_constant<int,6> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<mega, CharT> : 
-    ratio_detail::ratio_string_static<mega,CharT> 
+struct ratio_string<mega, CharT> :
+    ratio_detail::ratio_string_static<mega,CharT>
 {};
 
 #else
@@ -814,8 +814,8 @@ struct ratio_string_id<giga> : integral_constant<int,9> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<giga, CharT> : 
-    ratio_detail::ratio_string_static<giga,CharT> 
+struct ratio_string<giga, CharT> :
+    ratio_detail::ratio_string_static<giga,CharT>
 {};
 
 #else
@@ -873,8 +873,8 @@ struct ratio_string_id<tera> : integral_constant<int,12> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<tera, CharT> : 
-    ratio_detail::ratio_string_static<tera,CharT> 
+struct ratio_string<tera, CharT> :
+    ratio_detail::ratio_string_static<tera,CharT>
 {};
 
 #else
@@ -932,8 +932,8 @@ struct ratio_string_id<peta> : integral_constant<int,15> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<peta, CharT> : 
-    ratio_detail::ratio_string_static<peta,CharT> 
+struct ratio_string<peta, CharT> :
+    ratio_detail::ratio_string_static<peta,CharT>
 {};
 
 #else
@@ -990,8 +990,8 @@ struct ratio_string_id<exa> : integral_constant<int,18> {};
 
 #ifdef BOOST_RATIO_HAS_STATIC_STRING
 template <typename CharT>
-struct ratio_string<exa, CharT> : 
-    ratio_detail::ratio_string_static<exa,CharT> 
+struct ratio_string<exa, CharT> :
+    ratio_detail::ratio_string_static<exa,CharT>
 {};
 
 #else

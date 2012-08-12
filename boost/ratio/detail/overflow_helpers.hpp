@@ -44,7 +44,7 @@ time2_demo contained this comment:
 
 #define BOOST_RATIO_INTMAX_T_MAX (0x7FFFFFFFFFFFFFFELL)
 
-#if !defined(BOOST_NO_STATIC_ASSERT) || !defined(BOOST_RATIO_USES_MPL_ASSERT)
+#if !defined(BOOST_NO_CXX11_STATIC_ASSERT) || !defined(BOOST_RATIO_USES_MPL_ASSERT)
 #define BOOST_RATIO_OVERFLOW_IN_ADD "overflow in ratio add"
 #define BOOST_RATIO_OVERFLOW_IN_SUB "overflow in ratio sub"
 #define BOOST_RATIO_OVERFLOW_IN_MUL "overflow in ratio mul"
@@ -54,7 +54,7 @@ time2_demo contained this comment:
 #define BOOST_RATIO_DENOMINATOR_IS_OUT_OF_RANGE "ratio denominator is out of range"
 #endif
 
-#ifndef BOOST_NO_STATIC_ASSERT
+#ifndef BOOST_NO_CXX11_STATIC_ASSERT
 #define BOOST_RATIO_STATIC_ASSERT(CND, MSG, TYPES) static_assert(CND,MSG)
 #elif defined(BOOST_RATIO_USES_STATIC_ASSERT)
 #include <boost/static_assert.hpp>
