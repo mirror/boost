@@ -17,6 +17,7 @@
 #include <cstdio>  // remove
 #include <cmath>   // for fabs()
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/limits.hpp>
 
 #if defined(BOOST_NO_STDC_NAMESPACE)

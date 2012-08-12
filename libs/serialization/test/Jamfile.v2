@@ -31,7 +31,6 @@ lib dll_a_lib
         dll_a.cpp
         ../build//boost_serialization
     : 
-        # <link>shared 
     ;
 
 lib dll_base_lib 
@@ -39,7 +38,6 @@ lib dll_base_lib
         dll_base.cpp
         ../build//boost_serialization
     : 
-        # <link>shared 
     ;
     
 lib dll_derived2_lib
@@ -48,7 +46,6 @@ lib dll_derived2_lib
         dll_base_lib
         ../build//boost_serialization
     : 
-        # <link>shared
     ;
 
 lib dll_polymorphic_derived2_lib
@@ -56,7 +53,6 @@ lib dll_polymorphic_derived2_lib
         polymorphic_derived2.cpp 
         ../build//boost_serialization
     : 
-        # <link>shared
     ;
 
 test-suite "serialization" :

@@ -14,6 +14,7 @@
 #include <cstdlib> // rand
 #include <cstdio> // remove
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/limits.hpp>
 
 #if defined(BOOST_NO_STDC_NAMESPACE)
