@@ -715,6 +715,9 @@ private:
 
     void consolidate(void)
     {
+        if (roots.empty())
+            return;
+
         static const size_type max_log2 = sizeof(size_type) * 8;
         boost::array<node_pointer, max_log2> aux;
         aux.assign(NULL);
