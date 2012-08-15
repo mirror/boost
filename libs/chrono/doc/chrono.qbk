@@ -601,7 +601,7 @@ The simple way is to decompress (or checkout from SVN) the files in your BOOST_R
 [heading Building Boost.Chrono ]
 [/=================================]
 
-__Boost_Chrono__ can be configured as a header-only library. When __BOOST_CHRONO_HEADER_ONLY is defined the Boost.Chrono is a header-only library. 
+__Boost_Chrono__ can be configured as a header-only library. When __BOOST_CHRONO_HEADER_ONLY and BOOST_ERROR_CODE_HEADER_ONLY are defined the Boost.Chrono is a header-only library. 
 Otherwise is not a header only library and you need to compile it and build the library before use, for example using:
 
     bjam libs/chrono/build
@@ -648,7 +648,7 @@ In particular, __Boost_Chrono__ depends on:
 [/=========================================================]
 
 In addition to link with the __Boost_Chrono__ library you need also to link with the [*Boost.System] library.
-Once [*Boost.System] will be configurable to be a header only using __BOOST_SYSTEM_INLINED you will no need to link with it.
+If [*Boost.System] is configured defining BOOST_ERROR_CODE_HEADER_ONLY you will no need to link with it as the dependent part is header only then.
 
 
 [/=========================]
@@ -1268,8 +1268,11 @@ Any __duration can be streamed out to a `basic_ostream`. The run-time value of t
 
 the format is either
 
-<value> <unit>
-<unit> <value>
+  <value> <unit>
+
+or 
+
+  <unit> <value>
 
 
 
