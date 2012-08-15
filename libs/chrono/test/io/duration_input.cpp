@@ -62,21 +62,21 @@ int main()
   test_good("1.0 second", duration<float,ratio<1> >(1));
   /* BUG with DURATION_GET
 ../../../boost/math/common_factor_rt.hpp: In function 'RingType boost::math::detail::gcd_euclidean(RingType, RingType) [with RingType = long double]':
-../../../boost/math/common_factor_rt.hpp:122:   instantiated from ‘IntegerType boost::math::detail::gcd_integer(const IntegerType&, const IntegerType&) [with IntegerType = long double]’
-../../../boost/math/common_factor_rt.hpp:240:   instantiated from ‘T boost::math::detail::gcd_optimal_evaluator_helper_t<T, true, true>::operator()(const T&, const T&) [with T = long double]’
-../../../boost/math/common_factor_rt.hpp:290:   instantiated from ‘T boost::math::detail::gcd_optimal_evaluator<T>::operator()(const T&, const T&) [with T = long double]’
-../../../boost/math/common_factor_rt.hpp:442:   instantiated from ‘T boost::math::detail::gcd_optimal(const T&, const T&) [with T = long double]’
-../../../boost/math/common_factor_rt.hpp:473:   instantiated from ‘typename boost::math::gcd_evaluator<IntegerType>::result_type boost::math::gcd_evaluator<IntegerType>::operator()(const IntegerType&, const IntegerType&) const [with IntegerType = long double]’
-../../../boost/math/common_factor_rt.hpp:505:   instantiated from ‘IntegerType boost::math::gcd(const IntegerType&, const IntegerType&) [with IntegerType = long double]’
-../../../boost/chrono/io/duration_get.hpp:239:   instantiated from ‘InputIterator boost::chrono::duration_get<CharT, InputIterator>::get(InputIterator, InputIterator, std::ios_base&, std::_Ios_Iostate&, boost::chrono::duration<Rep2, Period2>&, const CharT*, const CharT*) const [with Rep = double, Period = boost::ratio<1l, 1l>, CharT = char, InputIterator = std::istreambuf_iterator<char, std::char_traits<char> >]’
-../../../boost/chrono/io/duration_get.hpp:294:   instantiated from ‘InputIterator boost::chrono::duration_get<CharT, InputIterator>::get(InputIterator, InputIterator, std::ios_base&, std::_Ios_Iostate&, boost::chrono::duration<Rep2, Period2>&) const [with Rep = double, Period = boost::ratio<1l, 1l>, CharT = char, InputIterator = std::istreambuf_iterator<char, std::char_traits<char> >]’
-../../../boost/chrono/io/duration_io.hpp:593:   instantiated from ‘std::basic_istream<_CharT, _Traits>& boost::chrono::operator>>(std::basic_istream<_CharT, _Traits>&, boost::chrono::duration<Rep2, Period2>&) [with CharT = char, Traits = std::char_traits<char>, Rep = double, Period = boost::ratio<1l, 1l>]’
-io/duration_input.cpp:15:   instantiated from ‘void test_good(const char*, D) [with D = boost::chrono::duration<double, boost::ratio<1l, 1l> >]’
+../../../boost/math/common_factor_rt.hpp:122:   instantiated from 'IntegerType boost::math::detail::gcd_integer(const IntegerType&, const IntegerType&) [with IntegerType = long double]'
+../../../boost/math/common_factor_rt.hpp:240:   instantiated from 'T boost::math::detail::gcd_optimal_evaluator_helper_t<T, true, true>::operator()(const T&, const T&) [with T = long double]'
+../../../boost/math/common_factor_rt.hpp:290:   instantiated from 'T boost::math::detail::gcd_optimal_evaluator<T>::operator()(const T&, const T&) [with T = long double]'
+../../../boost/math/common_factor_rt.hpp:442:   instantiated from 'T boost::math::detail::gcd_optimal(const T&, const T&) [with T = long double]'
+../../../boost/math/common_factor_rt.hpp:473:   instantiated from 'typename boost::math::gcd_evaluator<IntegerType>::result_type boost::math::gcd_evaluator<IntegerType>::operator()(const IntegerType&, const IntegerType&) const [with IntegerType = long double]'
+../../../boost/math/common_factor_rt.hpp:505:   instantiated from 'IntegerType boost::math::gcd(const IntegerType&, const IntegerType&) [with IntegerType = long double]'
+../../../boost/chrono/io/duration_get.hpp:239:   instantiated from 'InputIterator boost::chrono::duration_get<CharT, InputIterator>::get(InputIterator, InputIterator, std::ios_base&, std::_Ios_Iostate&, boost::chrono::duration<Rep2, Period2>&, const CharT*, const CharT*) const [with Rep = double, Period = boost::ratio<1l, 1l>, CharT = char, InputIterator = std::istreambuf_iterator<char, std::char_traits<char> >]'
+../../../boost/chrono/io/duration_get.hpp:294:   instantiated from 'InputIterator boost::chrono::duration_get<CharT, InputIterator>::get(InputIterator, InputIterator, std::ios_base&, std::_Ios_Iostate&, boost::chrono::duration<Rep2, Period2>&) const [with Rep = double, Period = boost::ratio<1l, 1l>, CharT = char, InputIterator = std::istreambuf_iterator<char, std::char_traits<char> >]'
+../../../boost/chrono/io/duration_io.hpp:593:   instantiated from 'std::basic_istream<_CharT, _Traits>& boost::chrono::operator>>(std::basic_istream<_CharT, _Traits>&, boost::chrono::duration<Rep2, Period2>&) [with CharT = char, Traits = std::char_traits<char>, Rep = double, Period = boost::ratio<1l, 1l>]'
+io/duration_input.cpp:15:   instantiated from 'void test_good(const char*, D) [with D = boost::chrono::duration<double, boost::ratio<1l, 1l> >]'
 io/duration_input.cpp:52:   instantiated from here
-../../../boost/math/common_factor_rt.hpp:102: error: invalid operands of types ‘long double’ and ‘long double’ to binary ‘operator%’
-../../../boost/math/common_factor_rt.hpp:102: error:   in evaluation of ‘operator%=(long double, long double)’
-../../../boost/math/common_factor_rt.hpp:106: error: invalid operands of types ‘long double’ and ‘long double’ to binary ‘operator%’
-../../../boost/math/common_factor_rt.hpp:106: error:   in evaluation of ‘operator%=(long double, long double)’
+../../../boost/math/common_factor_rt.hpp:102: error: invalid operands of types 'long double' and 'long double' to binary 'operator%'
+../../../boost/math/common_factor_rt.hpp:102: error:   in evaluation of 'operator%=(long double, long double)'
+../../../boost/math/common_factor_rt.hpp:106: error: invalid operands of types 'long double' and 'long double' to binary 'operator%'
+../../../boost/math/common_factor_rt.hpp:106: error:   in evaluation of 'operator%=(long double, long double)'
    *
    */
   test_good("1 second", seconds(1));

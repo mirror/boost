@@ -57,6 +57,7 @@
         if (pf == 1) return plural;
         // assert
         //throw "exception";
+        return "";
       }
 
       std::basic_string<CharT> do_get_unit(duration_style style, ratio<60> , std::size_t pf) const
@@ -77,6 +78,7 @@
         if (pf == 1) return plural;
         // assert
         //throw "exception";
+        return "";
       }
 
       std::basic_string<CharT> do_get_unit(duration_style style, ratio<3600> , std::size_t pf) const
@@ -96,6 +98,7 @@
         if (pf == 1) return plural;
         // assert
         //throw "exception";
+        return "";
       }
     };
 #endif
