@@ -1368,9 +1368,6 @@ class basic_string
    //! <b>Requires</b>: p is a valid iterator on *this.
    //!
    //! <b>Effects</b>: Inserts n copies of c before the character referred to by p.
-   //!
-   //! <b>Returns</b>: An iterator which refers to the copy of the first
-   //!   inserted character, or p if n == 0.
    void insert(const_iterator p, size_type n, CharT c)
    {
       this->insert(p, cvalue_iterator(c, n), cvalue_iterator());
@@ -1379,9 +1376,6 @@ class basic_string
    //! <b>Requires</b>: p is a valid iterator on *this. [first,last) is a valid range.
    //!
    //! <b>Effects</b>: Equivalent to insert(p - begin(), basic_string(first, last)).
-   //!
-   //! <b>Returns</b>: An iterator which refers to the copy of the first
-   //!   inserted character, or p if first == last.
    template <class InputIter>
    void insert(const_iterator p, InputIter first, InputIter last)
    {
