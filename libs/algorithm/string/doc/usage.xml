@@ -130,7 +130,7 @@
     string str1("command.com");
     cout 
         &lt;&lt; str1
-        &lt;&lt; (is_executable("command.com")? "is": "is not") 
+        &lt;&lt; (is_executable(str1)? "is": "is not") 
         &lt;&lt; "an executable" 
         &lt;&lt; endl; // prints "command.com is an executable"
     
