@@ -58,7 +58,7 @@
       <para>A function object <code>f</code> of
       type <code>F</code> is
       <emphasis>stateless</emphasis> if it is a function pointer or if
-      <code><classname>boost::is_stateless</classname>&lt;T&gt;</code>
+      <code><classname>boost::is_stateless</classname>&lt;F&gt;</code>
       is true. The construction of or copy to a Boost.Function object
       from a stateless function object will not cause exceptions to be
       thrown and will not allocate any storage.
