@@ -25,9 +25,9 @@
 #include <boost/type_traits/is_abstract.hpp>
 #endif
 #include <boost/type_traits/add_rvalue_reference.hpp>
+#include <boost/type_traits/is_function.hpp>
 
 #if defined(__MWERKS__)
-#include <boost/type_traits/is_function.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #endif
 
@@ -299,6 +299,9 @@ struct is_convertible_impl
             >::value,
             ::boost::type_traits::ice_not<
                ::boost::is_array<To>::value
+            >::value,
+            ::boost::type_traits::ice_not<
+               ::boost::is_function<To>::value
             >::value
         >::value) };
 };
@@ -315,6 +318,9 @@ struct is_convertible_impl
             >::value,
             ::boost::type_traits::ice_not<
                ::boost::is_array<To>::value
+            >::value,
+            ::boost::type_traits::ice_not<
+               ::boost::is_function<To>::value
             >::value
         >::value)
         );
