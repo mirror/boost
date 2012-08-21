@@ -13,7 +13,7 @@
 
 #include <boost/chrono/chrono.hpp>
 #include <boost/detail/lightweight_test.hpp>
-#include <libs/chrono/test/rep.h>
+#include "../rep.h"
 #ifdef BOOST_NO_CONSTEXPR
 #define BOOST_CONSTEXPR_ASSERT(C) BOOST_TEST(C)
 #else

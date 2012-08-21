@@ -7,7 +7,7 @@
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/chrono/stopwatches/strict_stopwatch.hpp>
-#include <libs/chrono/test/cycle_count.hpp>
+#include "../cycle_count.hpp"
 #include <boost/chrono/stopwatches/reporters/stopwatch_reporter.hpp>
 #include <boost/chrono/stopwatches/reporters/system_default_formatter.hpp>
 

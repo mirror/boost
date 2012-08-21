@@ -16,7 +16,7 @@
 #include <boost/detail/lightweight_test.hpp>
 
 
-#include <libs/chrono/test/rep.h>
+#include "../rep.h"
 #include <iostream>
 
 #ifdef BOOST_NO_CONSTEXPR

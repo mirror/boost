@@ -7,7 +7,7 @@
 #include <iostream>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/chrono/stopwatches/suspendable_stopwatch.hpp>
-#include <libs/chrono/test/cycle_count.hpp>
+#include "../cycle_count.hpp"
 #include <boost/detail/lightweight_test.hpp>
 
 #if !defined(BOOST_NO_STATIC_ASSERT)
