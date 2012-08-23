@@ -12,13 +12,11 @@
 #endif
 
 #include <boost/detail/lightweight_test.hpp>
-
-#include <boost/mpl/assert.hpp>
-#include <boost/type_traits/is_base_and_derived.hpp>
+#include "./compile_time.hpp"
 
 namespace test {
 	enum enum_override { enum_override1, enum_override2 };
-	std::size_t hash_value(enum_override x) { return -896532; }
+	std::size_t hash_value(enum_override) { return 896532; }
 
 	enum enum1 { enum1a };
 	enum enum2 { enum2a, enum2b };
@@ -27,10 +25,16 @@ namespace test {
 }
 
 int main() {
-	boost::hash<test::enum1> hash1;
-	boost::hash<test::enum2> hash2;
-	boost::hash<test::enum3> hash3;
-	boost::hash<test::enum4> hash4;
+	compile_time_tests((test::enum1*) 0);
+	compile_time_tests((test::enum2*) 0);
+	compile_time_tests((test::enum3*) 0);
+	compile_time_tests((test::enum4*) 0);
+	compile_time_tests((test::enum_override*) 0);
+
+	HASH_NAMESPACE::hash<test::enum1> hash1;
+	HASH_NAMESPACE::hash<test::enum2> hash2;
+	HASH_NAMESPACE::hash<test::enum3> hash3;
+	HASH_NAMESPACE::hash<test::enum4> hash4;
 	
 	BOOST_TEST(hash1(test::enum1a) == hash1(test::enum1a));
 
@@ -46,7 +50,7 @@ int main() {
 	BOOST_TEST(hash4(test::enum4a) != hash4(test::enum4b));
 	BOOST_TEST(hash4(test::enum4b) == hash4(test::enum4b));
 
-	boost::hash<test::enum_override> hash_override;
+	HASH_NAMESPACE::hash<test::enum_override> hash_override;
 
 	BOOST_TEST(hash_override(test::enum_override1) ==
 		hash_override(test::enum_override1));
