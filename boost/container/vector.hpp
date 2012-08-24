@@ -1413,7 +1413,8 @@ class vector : private container_detail::vector_alloc_holder<A>
    void priv_range_insert(const_iterator pos, InIt first, InIt last, std::input_iterator_tag)
    {
       for(;first != last; ++first){
-         this->emplace(pos, *first);
+         pos = this->emplace(pos, *first);
+         ++pos;
       }
    }
 
