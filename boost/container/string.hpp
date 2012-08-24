@@ -1177,10 +1177,11 @@ class basic_string
    //! <b>Effects</b>: Equivalent to append(static_cast<size_type>(1), c).
    void push_back(CharT c)
    {
-      if (this->priv_size() < this->capacity()){
-         this->priv_construct_null(this->priv_addr() + (this->priv_size() + 1));
-         Traits::assign(this->priv_addr()[this->priv_size()], c);
-         this->priv_size(this->priv_size()+1);
+      const size_type old_size = this->priv_size();
+      if (old_size < this->capacity()){
+         this->priv_construct_null(this->priv_addr() + old_size + 1);
+         Traits::assign(this->priv_addr()[old_size], c);
+         this->priv_size(old_size+1);
       }
       else{
          //No enough memory, insert a new object at the end
@@ -1359,7 +1360,7 @@ class basic_string
    //! <b>Returns</b>: An iterator which refers to the copy of the inserted character.
    iterator insert(const_iterator p, CharT c)
    {
-      size_type new_offset = p - this->priv_addr() + 1;
+      size_type new_offset = p - this->priv_addr();
       this->insert(p, cvalue_iterator(c, 1), cvalue_iterator());
       return this->priv_addr() + new_offset;
    }
@@ -1413,11 +1414,12 @@ class basic_string
    iterator erase(const_iterator p)
    {
       // The move includes the terminating null.
-      CharT *ptr = const_cast<CharT*>(container_detail::to_raw_pointer(p));
+      CharT * const ptr = const_cast<CharT*>(container_detail::to_raw_pointer(p));
+      const size_type old_size = this->priv_size();
       Traits::move(ptr,
                    container_detail::to_raw_pointer(p + 1),
-                   this->priv_size() - (p - this->priv_addr()));
-      this->priv_size(this->priv_size()-1);
+                   old_size - (p - this->priv_addr()));
+      this->priv_size(old_size-1);
       return iterator(ptr);
    }
 
@@ -1433,11 +1435,12 @@ class basic_string
    {
       CharT * f = const_cast<CharT*>(container_detail::to_raw_pointer(first));
       if (first != last) { // The move includes the terminating null.
-         size_type num_erased = last - first;
+         const size_type num_erased = last - first;
+         const size_type old_size = this->priv_size();
          Traits::move(f,
                       container_detail::to_raw_pointer(last),
-                      (this->priv_size() + 1)-(last - this->priv_addr()));
-         size_type new_length = this->priv_size() - num_erased;
+                      (old_size + 1)-(last - this->priv_addr()));
+         const size_type new_length = old_size - num_erased;
          this->priv_size(new_length);
       }
       return iterator(f);
@@ -1450,8 +1453,9 @@ class basic_string
    //! <b>Effects</b>: Equivalent to erase(size() - 1, 1).
    void pop_back()
    {
-      Traits::assign(this->priv_addr()[this->priv_size()-1], this->priv_null());
-      this->priv_size(this->priv_size()-1);;
+      const size_type old_size = this->priv_size();
+      Traits::assign(this->priv_addr()[old_size-1], this->priv_null());
+      this->priv_size(old_size-1);;
    }
 
    //! <b>Requires</b>: pos1 <= size().
@@ -1903,8 +1907,8 @@ class basic_string
       if (pos > size())
          return npos;
       else {
-         pointer finish = this->priv_addr() + this->priv_size();
-         const_iterator result = std::find_if(this->priv_addr() + pos, finish,
+         const pointer finish = this->priv_addr() + this->priv_size();
+         const const_iterator result = std::find_if(this->priv_addr() + pos, finish,
                                     Not_within_traits<Traits>(s, s + n));
          return result != finish ? result - this->priv_addr() : npos;
       }
@@ -1926,8 +1930,8 @@ class basic_string
       if (pos > size())
          return npos;
       else {
-         pointer finish = this->priv_addr() + this->priv_size();
-         const_iterator result
+         const pointer finish = this->priv_addr() + this->priv_size();
+         const const_iterator result
             = std::find_if(this->priv_addr() + pos, finish,
                      std::not1(std::bind2nd(Eq_traits<Traits>(), c)));
          return result != finish ? result - begin() : npos;
@@ -1983,7 +1987,7 @@ class basic_string
          return npos;
       else {
          const const_iterator last = begin() + container_detail::min_value(len - 1, pos) + 1;
-         const_reverse_iterator rresult =
+         const const_reverse_iterator rresult =
             std::find_if(const_reverse_iterator(last), rend(),
                   std::not1(std::bind2nd(Eq_traits<Traits>(), c)));
          return rresult != rend() ? (rresult.base() - 1) - begin() : npos;
@@ -2103,12 +2107,12 @@ class basic_string
    {
       //Allocate a new buffer.
       size_type real_cap = 0;
-      pointer   long_addr    = this->priv_long_addr();
-      size_type long_size    = this->priv_long_size();
-      size_type long_storage = this->priv_long_storage();
+      const pointer   long_addr    = this->priv_long_addr();
+      const size_type long_size    = this->priv_long_size();
+      const size_type long_storage = this->priv_long_storage();
       //We can make this nothrow as chars are always NoThrowCopyables
       try{
-         std::pair<pointer, bool> ret = this->allocation_command
+         const std::pair<pointer, bool> ret = this->allocation_command
                (allocate_new, long_size+1, long_size+1, real_cap, long_addr);
          //Copy and update
          Traits::copy( container_detail::to_raw_pointer(ret.first)
@@ -2245,14 +2249,15 @@ class basic_string
    {
       size_type cur = 0;
       CharT *ptr = container_detail::to_raw_pointer(this->priv_addr());
-      while (f != l && cur != this->priv_size()) {
+      const size_type old_size = this->priv_size();
+      while (f != l && cur != old_size) {
          Traits::assign(*ptr, *f);
          ++f;
          ++cur;
          ++ptr;
       }
       if (f == l)
-         this->erase(this->priv_addr() + cur, this->priv_addr() + this->priv_size());
+         this->erase(this->priv_addr() + cur, this->priv_addr() + old_size);
       else
          this->append(f, l);
       return *this;
@@ -2271,10 +2276,10 @@ class basic_string
                     ForwardIter last,  std::forward_iterator_tag)
    {
       if (first != last) {
-         size_type n = std::distance(first, last);
-         size_type remaining = this->capacity() - this->priv_size();
-         const size_type old_size = this->size();
-         pointer old_start = this->priv_addr();
+         const size_type n = std::distance(first, last);
+         const size_type old_size = this->priv_size();
+         const size_type remaining = this->capacity() - old_size;
+         const pointer old_start = this->priv_addr();
          bool enough_capacity = false;
          std::pair<pointer, bool> allocation_ret;
          size_type new_cap = 0;
@@ -2299,15 +2304,14 @@ class basic_string
 
          //Reuse same buffer
          if(enough_capacity){
-            const size_type elems_after =
-               this->priv_size() - (position - this->priv_addr());
-            size_type old_length = this->priv_size();
+            const size_type elems_after = old_size - (position - this->priv_addr());
+            const size_type old_length = old_size;
             if (elems_after >= n) {
-               pointer pointer_past_last = this->priv_addr() + this->priv_size() + 1;
-               priv_uninitialized_copy(this->priv_addr() + (this->priv_size() - n + 1),
+               const pointer pointer_past_last = this->priv_addr() + old_size + 1;
+               priv_uninitialized_copy(this->priv_addr() + (old_size - n + 1),
                                        pointer_past_last, pointer_past_last);
 
-               this->priv_size(this->priv_size()+n);
+               this->priv_size(old_size+n);
                Traits::move(const_cast<CharT*>(container_detail::to_raw_pointer(position + n)),
                            container_detail::to_raw_pointer(position),
                            (elems_after - n) + 1);
@@ -2317,8 +2321,8 @@ class basic_string
                ForwardIter mid = first;
                std::advance(mid, elems_after + 1);
 
-               priv_uninitialized_copy(mid, last, this->priv_addr() + this->priv_size() + 1);
-               this->priv_size(this->priv_size() + (n - elems_after));
+               priv_uninitialized_copy(mid, last, this->priv_addr() + old_size + 1);
+               this->priv_size(old_size + (n - elems_after));
                priv_uninitialized_copy
                   (position, const_iterator(this->priv_addr() + old_length + 1),
                   this->priv_addr() + this->priv_size());
@@ -2337,7 +2341,7 @@ class basic_string
                new_length += priv_uninitialized_copy
                               (first, last, new_start + new_length);
                new_length += priv_uninitialized_copy
-                              (position, const_iterator(this->priv_addr() + this->priv_size()),
+                              (position, const_iterator(this->priv_addr() + old_size),
                               new_start + new_length);
                this->priv_construct_null(new_start + new_length);
 
@@ -2350,10 +2354,10 @@ class basic_string
             else{
                //value_type is POD, so backwards expansion is much easier
                //than with vector<T>
-               value_type *oldbuf = container_detail::to_raw_pointer(old_start);
-               value_type *newbuf = container_detail::to_raw_pointer(new_start);
-               const value_type *pos    = container_detail::to_raw_pointer(position);
-               size_type  before  = pos - oldbuf;
+               value_type * const oldbuf     = container_detail::to_raw_pointer(old_start);
+               value_type * const newbuf     = container_detail::to_raw_pointer(new_start);
+               const value_type *const pos   = container_detail::to_raw_pointer(position);
+               const size_type before  = pos - oldbuf;
 
                //First move old data
                Traits::move(newbuf, oldbuf, before);
