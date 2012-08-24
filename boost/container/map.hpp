@@ -68,7 +68,7 @@ inline bool operator<(const map<Key,T,Pred,A>& x,
 //! A is the allocator to allocate the value_types
 //! (e.g. <i>allocator< std::pair<const Key, T> > </i>).
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class Key, class T, class Pred = std::less< std::pair< const Key, T> >, class A = std::allocator<T> >
+template <class Key, class T, class Pred = std::less<Key>, class A = std::allocator< std::pair< const Key, T> > >
 #else
 template <class Key, class T, class Pred, class A>
 #endif
@@ -814,7 +814,7 @@ namespace container {
 //! A is the allocator to allocate the value_types
 //!(e.g. <i>allocator< std::pair<<b>const</b> Key, T> ></i>).
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class Key, class T, class Pred = std::less< std::pair< const Key, T> >, class A = std::allocator<T> >
+template <class Key, class T, class Pred = std::less<Key>, class A = std::allocator< std::pair< const Key, T> > >
 #else
 template <class Key, class T, class Pred, class A>
 #endif

@@ -39,11 +39,7 @@ namespace container {
 
 /// @cond
 // Forward declarations of operators == and <, needed for friend declarations.
-#ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class Key, class T, class Pred = std::less< std::pair< Key, T> >, class A = std::allocator<T> >
-#else
 template <class Key, class T, class Pred, class A>
-#endif
 class flat_map;
 
 template <class Key, class T, class Pred, class A>
@@ -94,7 +90,7 @@ static D force_copy(S s)
 //! Erasing an element of a flat_map invalidates iterators and references
 //! pointing to elements that come after (their keys are bigger) the erased element.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class Key, class T, class Pred = std::less< std::pair< Key, T> >, class A = std::allocator<T> >
+template <class Key, class T, class Pred = std::less<Key>, class A = std::allocator< std::pair< Key, T> > >
 #else
 template <class Key, class T, class Pred, class A>
 #endif
@@ -870,11 +866,7 @@ struct has_trivial_destructor_after_move<boost::container::flat_map<K, T, C, A> 
 namespace container {
 
 // Forward declaration of operators < and ==, needed for friend declaration.
-#ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class Key, class T, class Pred = std::less< std::pair< Key, T> >, class A = std::allocator<T> >
-#else
 template <class Key, class T, class Pred, class A>
-#endif
 class flat_multimap;
 
 template <class Key, class T, class Pred, class A>
@@ -901,7 +893,7 @@ inline bool operator<(const flat_multimap<Key,T,Pred,A>& x,
 //! A is the allocator to allocate the value_types
 //! (e.g. <i>allocator< std::pair<Key, T> ></i>).
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class Key, class T, class Pred = std::less< std::pair< Key, T> >, class A = std::allocator<T> >
+template <class Key, class T, class Pred = std::less<Key>, class A = std::allocator< std::pair< Key, T> > >
 #else
 template <class Key, class T, class Pred, class A>
 #endif
