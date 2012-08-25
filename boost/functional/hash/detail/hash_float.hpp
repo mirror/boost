@@ -98,8 +98,7 @@ namespace boost
                 int>::type
             )
         {
-            boost::uint32_t* ptr = (boost::uint32_t*)&v;
-            return (std::size_t) *ptr;
+            return hash_binary((char*) &v, 4);
         }
 
 
