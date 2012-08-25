@@ -1031,6 +1031,36 @@ namespace boost { namespace unordered { namespace detail {
             tmp_functions_ = !tmp_functions_;
         }
     };
+
+    ////////////////////////////////////////////////////////////////////////////
+    // rvalue parameters when type can't be a BOOST_RV_REF(T) parameter
+    // e.g. for int
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#   define BOOST_UNORDERED_RV_REF(T) BOOST_RV_REF(T)
+#else
+    struct please_ignore_this_overload {
+        typedef please_ignore_this_overload type;
+    };
+
+    template <typename T>
+    struct rv_ref_impl {
+        typedef BOOST_RV_REF(T) type;
+    };
+
+    template <typename T>
+    struct rv_ref :
+        boost::detail::if_true<
+            boost::is_class<T>::value
+        >::BOOST_NESTED_TEMPLATE then <
+            boost::unordered::detail::rv_ref_impl<T>,
+            please_ignore_this_overload
+        >::type
+    {};
+
+#   define BOOST_UNORDERED_RV_REF(T) \
+        typename boost::unordered::detail::rv_ref<T>::type
+#endif
 }}}
 
 #if defined(BOOST_MSVC)
