@@ -22,44 +22,20 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename A, typename T>
     struct grouped_node :
-        boost::unordered::detail::node_base<
-            typename ::boost::unordered::detail::rebind_wrap<
-                A, grouped_node<A, T> >::type::pointer
-        >,
         boost::unordered::detail::value_base<T>
     {
         typedef typename ::boost::unordered::detail::rebind_wrap<
             A, grouped_node<A, T> >::type::pointer link_pointer;
-        typedef boost::unordered::detail::node_base<link_pointer> node_base;
 
+        link_pointer next_;
         link_pointer group_prev_;
         std::size_t hash_;
 
-#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
-        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
-        explicit grouped_node(BOOST_UNORDERED_EMPLACE_ARGS) :
-            node_base(),
-            group_prev_(),
-            hash_(0)
-        {
-            boost::unordered::detail::construct_impl(
-                this->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
-        }
-
-        ~grouped_node() {
-            boost::unordered::detail::destroy(this->value_ptr());
-        }
-
-        grouped_node(grouped_node const&) {
-            assert(false);
-        }
-#else
         grouped_node() :
-            node_base(),
+            next_(),
             group_prev_(),
             hash_(0)
         {}
-#endif
 
         void init(link_pointer self)
         {
@@ -76,37 +52,16 @@ namespace boost { namespace unordered { namespace detail {
         boost::unordered::detail::ptr_bucket
     {
         typedef boost::unordered::detail::ptr_bucket bucket_base;
-        typedef bucket_base node_base;
         typedef ptr_bucket* link_pointer;
 
         link_pointer group_prev_;
         std::size_t hash_;
 
-#if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
-        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
-        explicit grouped_ptr_node(BOOST_UNORDERED_EMPLACE_ARGS) :
-            bucket_base(),
-            group_prev_(0),
-            hash_(0)
-        {
-            boost::unordered::detail::construct_impl(
-                this->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
-        }
-
-        ~grouped_ptr_node() {
-            boost::unordered::detail::destroy(this->value_ptr());
-        }
-
-        grouped_ptr_node(grouped_ptr_node const&) {
-            assert(false);
-        }
-#else
         grouped_ptr_node() :
             bucket_base(),
             group_prev_(0),
             hash_(0)
         {}
-#endif
 
         void init(link_pointer self)
         {
