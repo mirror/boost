@@ -310,6 +310,11 @@ namespace boost { namespace unordered { namespace detail {
         template <typename Propagate>
         void swap(table& x, Propagate p)
         {
+            // According to 23.2.1.8, if propagate_on_container_swap is
+            // false the behaviour is undefined unless the allocators
+            // are equal.
+            BOOST_ASSERT(p.value || this->node_alloc() == x.node_alloc());
+
             boost::unordered::detail::set_hash_functions<hasher, key_equal>
                 op1(*this, x);
             boost::unordered::detail::set_hash_functions<hasher, key_equal>
