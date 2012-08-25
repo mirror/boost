@@ -170,7 +170,6 @@ namespace unnecessary_copy_tests
     UNORDERED_TEST(unnecessary_copy_emplace_rvalue_test,
             ((set)(multiset)(map)(multimap)))
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
     template <class T>
     void unnecessary_copy_emplace_move_test(T*)
     {
@@ -178,13 +177,17 @@ namespace unnecessary_copy_tests
         T x;
         BOOST_DEDUCED_TYPENAME T::value_type a;
         COPY_COUNT(1); MOVE_COUNT(0);
-        x.emplace(std::move(a));
+        x.emplace(boost::move(a));
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         COPY_COUNT(1); MOVE_COUNT(1);
+#else
+        // Since std::pair isn't movable, move only works for sets.
+        COPY_COUNT_RANGE(1, 2); MOVE_COUNT_RANGE(0, 1);
+#endif
     }
 
     UNORDERED_TEST(unnecessary_copy_emplace_move_test,
             ((set)(multiset)(map)(multimap)))
-#endif
 
     template <class T>
     void unnecessary_copy_emplace_boost_move_set_test(T*)
@@ -270,14 +273,16 @@ namespace unnecessary_copy_tests
         x.emplace(source<count_copies>());
         COPY_COUNT(1); MOVE_COUNT(source_cost);
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
         // No move should take place.
         reset();
-        x.emplace(std::move(a));
+        x.emplace(boost::move(a));
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
         COPY_COUNT(0); MOVE_COUNT(0);
+#else
+        COPY_COUNT(0); MOVE_COUNT(1);
 #endif
 
-        // Just in case a did get moved...
+        // Use a new value for cases where a did get moved...
         count_copies b;
 
         // The container will have to create a copy in order to compare with
@@ -367,15 +372,11 @@ namespace unnecessary_copy_tests
 
 #endif
 
-#if defined(BOOST_UNORDERED_STD_FORWARD_MOVE)
-
         // No move should take place.
         // (since a is already in the container)
         reset();
-        x.emplace(std::move(a));
+        x.emplace(boost::move(a));
         COPY_COUNT(0); MOVE_COUNT(0);
-
-#endif
 
         //
         // 2 arguments
