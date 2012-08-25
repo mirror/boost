@@ -74,7 +74,7 @@ namespace boost { namespace unordered { namespace detail {
         void construct_value(BOOST_UNORDERED_EMPLACE_ARGS)
         {
             BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
-            boost::unordered::detail::construct_impl(
+            boost::unordered::detail::construct_value_impl(
                 alloc_, node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
             value_constructed_ = true;
         }
@@ -83,7 +83,7 @@ namespace boost { namespace unordered { namespace detail {
         void construct_value2(BOOST_FWD_REF(A0) a0)
         {
             BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
-            boost::unordered::detail::construct_impl(
+            boost::unordered::detail::construct_value_impl(
                 alloc_, node_->value_ptr(),
                 BOOST_UNORDERED_EMPLACE_ARGS1(boost::forward<A0>(a0)));
             value_constructed_ = true;
@@ -112,7 +112,7 @@ namespace boost { namespace unordered { namespace detail {
     {
         if (node_) {
             if (value_constructed_) {
-                boost::unordered::detail::destroy_impl(alloc_,
+                boost::unordered::detail::destroy_value_impl(alloc_,
                     node_->value_ptr());
             }
 
@@ -144,7 +144,7 @@ namespace boost { namespace unordered { namespace detail {
 
             if (value_constructed_)
             {
-                boost::unordered::detail::destroy_impl(alloc_,
+                boost::unordered::detail::destroy_value_impl(alloc_,
                     node_->value_ptr());
                 value_constructed_ = false;
             }
@@ -764,7 +764,7 @@ namespace boost { namespace unordered { namespace detail {
 
         inline void delete_node(c_iterator n)
         {
-            boost::unordered::detail::destroy_impl(node_alloc(),
+            boost::unordered::detail::destroy_value_impl(node_alloc(),
                 n.node_->value_ptr());
             node_allocator_traits::destroy(node_alloc(),
                     boost::addressof(*n.node_));
