@@ -1361,7 +1361,7 @@ namespace boost {
                 if (put_inf_nan(begin, end, val)) return true;
                 const double val_as_double = val;
                 end = begin + 
-#if defined(_MSC_VER) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+#if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
                     sprintf_s(begin, end-begin,
 #else
                     sprintf(begin, 
@@ -1374,7 +1374,7 @@ namespace boost {
             {   using namespace std;
                 if (put_inf_nan(begin, end, val)) return true;
                 end = begin + 
-#if defined(_MSC_VER) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+#if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
                     sprintf_s(begin, end-begin,
 #else
                     sprintf(begin, 
@@ -1388,7 +1388,7 @@ namespace boost {
             {   using namespace std;
                 if (put_inf_nan(begin, end, val)) return true;
                 end = begin + 
-#if defined(_MSC_VER) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
+#if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
                     sprintf_s(begin, end-begin,
 #else
                     sprintf(begin, 
