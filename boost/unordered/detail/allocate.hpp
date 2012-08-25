@@ -775,6 +775,12 @@ namespace boost { namespace unordered { namespace detail {
             address, boost::forward<Args>(args)...);
     }
 
+    template <typename Alloc, typename T>
+    inline void destroy_impl(Alloc& alloc, T* x) {
+        boost::unordered::detail::allocator_traits<Alloc>::destroy(alloc, x);
+    }
+
+
 #   else
 
     template <typename Alloc, typename T, typename... Args>
@@ -784,7 +790,20 @@ namespace boost { namespace unordered { namespace detail {
         new((void*) address) T(boost::forward<Args>(args)...);
     }
 
+    template <typename Alloc, typename T>
+    inline void destroy_impl(Alloc&, T* x) {
+        boost::unordered::detail::destroy(x);
+    }
+
+
 #   endif
+
+#else
+
+    template <typename Alloc, typename T>
+    inline void destroy_impl(Alloc&, T* x) {
+        boost::unordered::detail::destroy(x);
+    }
 
 #endif
 

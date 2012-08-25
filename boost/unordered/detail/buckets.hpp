@@ -112,7 +112,8 @@ namespace boost { namespace unordered { namespace detail {
     {
         if (node_) {
             if (value_constructed_) {
-                boost::unordered::detail::destroy(node_->value_ptr());
+                boost::unordered::detail::destroy_impl(alloc_,
+                    node_->value_ptr());
             }
 
             if (node_constructed_) {
@@ -143,7 +144,8 @@ namespace boost { namespace unordered { namespace detail {
 
             if (value_constructed_)
             {
-                boost::unordered::detail::destroy(node_->value_ptr());
+                boost::unordered::detail::destroy_impl(alloc_,
+                    node_->value_ptr());
                 value_constructed_ = false;
             }
         }
@@ -762,7 +764,8 @@ namespace boost { namespace unordered { namespace detail {
 
         inline void delete_node(c_iterator n)
         {
-            boost::unordered::detail::destroy(n.node_->value_ptr());
+            boost::unordered::detail::destroy_impl(node_alloc(),
+                n.node_->value_ptr());
             node_allocator_traits::destroy(node_alloc(),
                     boost::addressof(*n.node_));
             node_allocator_traits::deallocate(node_alloc(), n.node_, 1);
