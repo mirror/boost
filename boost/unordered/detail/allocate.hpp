@@ -761,15 +761,69 @@ namespace boost { namespace unordered { namespace detail {
 namespace boost { namespace unordered { namespace detail {
 
     ////////////////////////////////////////////////////////////////////////////
+    // call_construct
+
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+
+#   if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
+
+    template <typename Alloc, typename T, typename... Args>
+    inline void call_construct(Alloc& alloc, T* address,
+        BOOST_FWD_REF(Args)... args)
+    {
+        boost::unordered::detail::allocator_traits<Alloc>::construct(alloc,
+            address, boost::forward<Args>(args)...);
+    }
+
+#   else
+
+    template <typename Alloc, typename T, typename... Args>
+    inline void call_construct(Alloc&, T* address,
+        BOOST_FWD_REF(Args)... args)
+    {
+        new((void*) address) T(boost::forward<Args>(args)...);
+    }
+
+#   endif
+
+#endif
+
+    ////////////////////////////////////////////////////////////////////////////
     // Construct from tuple
     //
     // Used for piecewise construction.
 
-#if !defined(__SUNPRO_CC)
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
 #   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)              \
-    template<typename T>                                                    \
-    void construct_from_tuple(T* ptr, namespace_ tuple<>)                   \
+    template<typename Alloc, typename T>                                    \
+    void construct_from_tuple(Alloc& alloc, T* ptr, namespace_ tuple<>)     \
+    {                                                                       \
+        boost::unordered::detail::call_construct(alloc, ptr);               \
+    }                                                                       \
+                                                                            \
+    BOOST_PP_REPEAT_FROM_TO(1, n,                                           \
+        BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL, namespace_)
+
+#   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL(z, n, namespace_)      \
+    template<typename Alloc, typename T,                                    \
+        BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                           \
+    void construct_from_tuple(Alloc& alloc, T* ptr,                         \
+            namespace_ tuple<BOOST_PP_ENUM_PARAMS_Z(z, n, A)> const& x)     \
+    {                                                                       \
+        boost::unordered::detail::call_construct(alloc, ptr,                \
+            BOOST_PP_ENUM_##z(n, BOOST_UNORDERED_GET_TUPLE_ARG, namespace_) \
+        );                                                                  \
+    }
+
+#   define BOOST_UNORDERED_GET_TUPLE_ARG(z, n, namespace_)                  \
+    namespace_ get<n>(x)
+
+#elif !defined(__SUNPRO_CC)
+
+#   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)              \
+    template<typename Alloc, typename T>                                    \
+    void construct_from_tuple(Alloc&, T* ptr, namespace_ tuple<>)           \
     {                                                                       \
         new ((void*) ptr) T();                                              \
     }                                                                       \
@@ -778,8 +832,9 @@ namespace boost { namespace unordered { namespace detail {
         BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL, namespace_)
 
 #   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL(z, n, namespace_)      \
-    template<typename T, BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>          \
-    void construct_from_tuple(T* ptr,                                       \
+    template<typename Alloc, typename T,                                    \
+        BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                           \
+    void construct_from_tuple(Alloc&, T* ptr,                               \
             namespace_ tuple<BOOST_PP_ENUM_PARAMS_Z(z, n, A)> const& x)     \
     {                                                                       \
         new ((void*) ptr) T(                                                \
@@ -795,9 +850,9 @@ namespace boost { namespace unordered { namespace detail {
     template <int N> struct length {};
 
 #   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)              \
-    template<typename T>                                                    \
+    template<typename Alloc, typename T>                                    \
     void construct_from_tuple_impl(                                         \
-            boost::unordered::detail::length<0>, T* ptr,                    \
+            boost::unordered::detail::length<0>, Alloc&, T* ptr,            \
             namespace_ tuple<>)                                             \
     {                                                                       \
         new ((void*) ptr) T();                                              \
@@ -807,9 +862,10 @@ namespace boost { namespace unordered { namespace detail {
         BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL, namespace_)
 
 #   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE_IMPL(z, n, namespace_)      \
-    template<typename T, BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>          \
+    template<typename Alloc, typename T,                                    \
+        BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                           \
     void construct_from_tuple_impl(                                         \
-            boost::unordered::detail::length<n>, T* ptr,                    \
+            boost::unordered::detail::length<n>, Alloc&, T* ptr,            \
             namespace_ tuple<BOOST_PP_ENUM_PARAMS_Z(z, n, A)> const& x)     \
     {                                                                       \
         new ((void*) ptr) T(                                                \
@@ -834,13 +890,13 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
 #if defined(__SUNPRO_CC)
 
-    template <typename T, typename Tuple>
-    void construct_from_tuple(T* ptr, Tuple const& x)
+    template <typename Alloc, typename T, typename Tuple>
+    void construct_from_tuple(Alloc& alloc, T* ptr, Tuple const& x)
     {
         construct_from_tuple_impl(
             boost::unordered::detail::length<
                 boost::tuples::length<Tuple>::value>(),
-            ptr, x);
+            alloc, ptr, x);
     }
 
 #endif
@@ -896,59 +952,70 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
 #endif
 
+// TODO: Full construct?
 #if !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
     ////////////////////////////////////////////////////////////////////////////
     // Construct from variadic parameters
 
-    template <typename T, typename... Args>
-    inline void construct_impl(T* address, BOOST_FWD_REF(Args)... args)
+    template <typename Alloc, typename T, typename... Args>
+    inline void construct_impl(Alloc& alloc, T* address,
+        BOOST_FWD_REF(Args)... args)
     {
-        new((void*) address) T(boost::forward<Args>(args)...);
+        boost::unordered::detail::call_construct(alloc,
+            address, boost::forward<Args>(args)...);
     }
 
-    template <typename A, typename B, typename A0, typename A1, typename A2>
+    template <typename Alloc, typename A, typename B,
+        typename A0, typename A1, typename A2>
     inline typename enable_if<piecewise3<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address,
+        construct_impl(Alloc& alloc, std::pair<A, B>* address,
             BOOST_FWD_REF(A0), BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2)
     {
-        boost::unordered::detail::construct_from_tuple(
+        boost::unordered::detail::construct_from_tuple(alloc,
             boost::addressof(address->first), boost::forward<A1>(a1));
-        boost::unordered::detail::construct_from_tuple(
+        boost::unordered::detail::construct_from_tuple(alloc,
             boost::addressof(address->second), boost::forward<A2>(a2));
     }
 
 #if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
 
-    template <typename A, typename B, typename A0>
+    template <typename Alloc, typename A, typename B, typename A0>
     inline typename enable_if<emulation1<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address, BOOST_FWD_REF(A0) a0)
+        construct_impl(Alloc& alloc, std::pair<A, B>* address,
+            BOOST_FWD_REF(A0) a0)
     {
-        new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
-        new((void*) boost::addressof(address->second)) B();
+        boost::unordered::detail::call_construct(alloc,
+            boost::addressof(address->first),boost::forward<A0>(a0));
+        boost::unordered::detail::call_construct(alloc,
+            boost::addressof(address->second));
    }
 
-    template <typename A, typename B, typename A0, typename A1, typename A2>
+    template <typename Alloc, typename A, typename B,
+        typename A0, typename A1, typename A2>
     inline typename enable_if<emulation3<A, B, A0>, void>::type
-        construct_impl(std::pair<A, B>* address,
+        construct_impl(Alloc& alloc, std::pair<A, B>* address,
             BOOST_FWD_REF(A0) a0, BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2)
     {
-        new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
-        new((void*) boost::addressof(address->second)) B(
+        boost::unordered::detail::call_construct(alloc,
+            boost::addressof(address->first),boost::forward<A0>(a0));
+        boost::unordered::detail::call_construct(alloc,
+            boost::addressof(address->second),
             boost::forward<A1>(a1),
             boost::forward<A2>(a2));
     }
 
-    template <typename A, typename B,
+    template <typename Alloc, typename A, typename B,
             typename A0, typename A1, typename A2, typename A3,
             typename... Args>
-    inline void construct_impl(std::pair<A, B>* address,
+    inline void construct_impl(Alloc& alloc, std::pair<A, B>* address,
             BOOST_FWD_REF(A0) a0, BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2,
             BOOST_FWD_REF(A3) a3, BOOST_FWD_REF(Args)... args)
     {
-        new((void*) boost::addressof(address->first)) A(boost::forward<A0>(a0));
-
-        new((void*) boost::addressof(address->second)) B(
+        boost::unordered::detail::call_construct(alloc,
+            boost::addressof(address->first),boost::forward<A0>(a0));
+        boost::unordered::detail::call_construct(alloc,
+            boost::addressof(address->second),
             boost::forward<A1>(a1),
             boost::forward<A2>(a2),
             boost::forward<A3>(a3),
@@ -963,10 +1030,10 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
 #define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                    \
     template <                                                              \
-        typename T,                                                         \
+        typename Alloc, typename T,                                         \
         BOOST_PP_ENUM_PARAMS_Z(z, num_params, typename A)                   \
     >                                                                       \
-    inline void construct_impl(T* address,                                  \
+    inline void construct_impl(Alloc&, T* address,                          \
         boost::unordered::detail::BOOST_PP_CAT(emplace_args,num_params) <   \
             BOOST_PP_ENUM_PARAMS_Z(z, num_params, A)                        \
         > const& args)                                                      \
@@ -976,14 +1043,16 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
                 args.a));                                                   \
     }
 
-    template <typename T, typename A0>
-    inline void construct_impl(T* address, emplace_args1<A0> const& args)
+    template <typename Alloc, typename T, typename A0>
+    inline void construct_impl(Alloc&, T* address,
+            emplace_args1<A0> const& args)
     {
         new((void*) address) T(boost::forward<A0>(args.a0));
     }
 
-    template <typename T, typename A0, typename A1>
-    inline void construct_impl(T* address, emplace_args2<A0, A1> const& args)
+    template <typename Alloc, typename T, typename A0, typename A1>
+    inline void construct_impl(Alloc&, T* address,
+            emplace_args2<A0, A1> const& args)
     {
         new((void*) address) T(
             boost::forward<A0>(args.a0),
@@ -991,8 +1060,9 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
         );
     }
 
-    template <typename T, typename A0, typename A1, typename A2>
-    inline void construct_impl(T* address, emplace_args3<A0, A1, A2> const& args)
+    template <typename Alloc, typename T, typename A0, typename A1, typename A2>
+    inline void construct_impl(Alloc&, T* address,
+            emplace_args3<A0, A1, A2> const& args)
     {
         new((void*) address) T(
             boost::forward<A0>(args.a0),
@@ -1006,21 +1076,22 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 
 #undef BOOST_UNORDERED_CONSTRUCT_IMPL
 
-    template <typename A, typename B, typename A0, typename A1, typename A2>
-    inline void construct_impl(std::pair<A, B>* address,
+    template <typename Alloc, typename A, typename B,
+        typename A0, typename A1, typename A2>
+    inline void construct_impl(Alloc& alloc, std::pair<A, B>* address,
             boost::unordered::detail::emplace_args3<A0, A1, A2> const& args,
             typename enable_if<piecewise3<A, B, A0>, void*>::type = 0)
     {
-        boost::unordered::detail::construct_from_tuple(
+        boost::unordered::detail::construct_from_tuple(alloc,
             boost::addressof(address->first), args.a1);
-        boost::unordered::detail::construct_from_tuple(
+        boost::unordered::detail::construct_from_tuple(alloc,
             boost::addressof(address->second), args.a2);
     }
 
 #if defined(BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
 
-    template <typename A, typename B, typename A0>
-    inline void construct_impl(std::pair<A, B>* address,
+    template <typename Alloc, typename A, typename B, typename A0>
+    inline void construct_impl(Alloc&, std::pair<A, B>* address,
             boost::unordered::detail::emplace_args1<A0> const& args,
             typename enable_if<emulation1<A, B, A0>, void*>::type = 0)
     {
@@ -1029,8 +1100,9 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
         new((void*) boost::addressof(address->second)) B();
     }
 
-    template <typename A, typename B, typename A0, typename A1, typename A2>
-    inline void construct_impl(std::pair<A, B>* address,
+    template <typename Alloc, typename A, typename B,
+        typename A0, typename A1, typename A2>
+    inline void construct_impl(Alloc&, std::pair<A, B>* address,
             boost::unordered::detail::emplace_args3<A0, A1, A2> const& args,
             typename enable_if<emulation3<A, B, A0>, void*>::type = 0)
     {
@@ -1042,10 +1114,10 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
     }
 
 #define BOOST_UNORDERED_CONSTRUCT_PAIR_IMPL(z, num_params, _)               \
-    template <typename A, typename B,                                       \
+    template <typename Alloc, typename A, typename B,                       \
         BOOST_PP_ENUM_PARAMS_Z(z, num_params, typename A)                   \
     >                                                                       \
-    inline void construct_impl(std::pair<A, B>* address,                    \
+    inline void construct_impl(Alloc&, std::pair<A, B>* address,            \
         boost::unordered::detail::BOOST_PP_CAT(emplace_args, num_params) <  \
                 BOOST_PP_ENUM_PARAMS_Z(z, num_params, A)                    \
             > const& args)                                                  \

@@ -75,7 +75,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
             boost::unordered::detail::construct_impl(
-                node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+                alloc_, node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
             value_constructed_ = true;
         }
 
@@ -84,7 +84,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
             boost::unordered::detail::construct_impl(
-                node_->value_ptr(),
+                alloc_, node_->value_ptr(),
                 BOOST_UNORDERED_EMPLACE_ARGS1(boost::forward<A0>(a0)));
             value_constructed_ = true;
         }
