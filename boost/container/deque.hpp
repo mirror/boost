@@ -1603,8 +1603,10 @@ class deque : protected deque_base<T, A>
    template <class InpIt>
    void priv_insert_aux(const_iterator pos, InpIt first, InpIt last, std::input_iterator_tag)
    {
+      iterator it(pos);
       for(;first != last; ++first){
-         this->insert(pos, boost::move(value_type(*first)));
+         it = this->emplace(it, *first);
+         ++it;
       }
    }
 

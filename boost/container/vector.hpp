@@ -1412,9 +1412,10 @@ class vector : private container_detail::vector_alloc_holder<A>
    template <class InIt>
    void priv_range_insert(const_iterator pos, InIt first, InIt last, std::input_iterator_tag)
    {
+      iterator it(pos.get_ptr());
       for(;first != last; ++first){
-         pos = this->emplace(pos, *first);
-         ++pos;
+         it = this->emplace(it, *first);
+         ++it;
       }
    }
 
