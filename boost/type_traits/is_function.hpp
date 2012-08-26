@@ -83,6 +83,11 @@ struct is_function_impl
 template <typename T>
 struct is_function_impl<T&> : public false_type
 {};
+#ifndef BOOST_NO_RVALUE_REFERENCES
+template <typename T>
+struct is_function_impl<T&&> : public false_type
+{};
+#endif
 #endif
 
 #endif
