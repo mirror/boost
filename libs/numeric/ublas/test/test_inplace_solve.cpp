@@ -3,7 +3,7 @@
 #include <boost/numeric/ublas/vector.hpp>
 #include <boost/numeric/ublas/matrix.hpp>
 #include <boost/numeric/ublas/matrix_sparse.hpp>
-#include <boost/numeric/ublas/triangular.hpp.new>
+#include <boost/numeric/ublas/triangular.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
 
