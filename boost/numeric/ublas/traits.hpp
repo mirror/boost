@@ -594,10 +594,10 @@ namespace boost { namespace numeric { namespace ublas {
         struct has_trivial_destructor : public boost::has_trivial_destructor<T> {};
 
         template<typename FLT>
-        struct has_trivial_constructor<std::complex<FLT> > : public boost::true_type {};
+        struct has_trivial_constructor<std::complex<FLT> > : public has_trivial_constructor<FLT> {};
         
         template<typename FLT>
-        struct has_trivial_destructor<std::complex<FLT> > : public boost::true_type {};
+        struct has_trivial_destructor<std::complex<FLT> > : public has_trivial_destructor<FLT> {};
 
     }
 
