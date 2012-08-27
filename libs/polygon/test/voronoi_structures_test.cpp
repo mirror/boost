@@ -30,35 +30,56 @@ BOOST_AUTO_TEST_CASE(point_2d_test1) {
   BOOST_CHECK_EQUAL(p.y(), 4);
 }
 
-BOOST_AUTO_TEST_CASE(site_event_test2) {
-  site_type s(1, 2);
-  BOOST_CHECK(s.x0() == s.x1() && s.x1() == 1);
-  BOOST_CHECK(s.y0() == s.y1() && s.y1() == 2);
-  BOOST_CHECK(s.sorted_index() == 0);
-  BOOST_CHECK(!s.is_segment());
-  BOOST_CHECK(!s.is_inverse());
-  s.sorted_index(1);
-  s.initial_index(2);
-  BOOST_CHECK(s.sorted_index() == 1);
-  BOOST_CHECK(s.initial_index() == 2);
-  BOOST_CHECK(!s.is_inverse());
+BOOST_AUTO_TEST_CASE(source_category_test1) {
+  BOOST_CHECK(belongs(SOURCE_CATEGORY_SINGLE_POINT, GEOMETRY_CATEGORY_POINT));
+  BOOST_CHECK(belongs(SOURCE_CATEGORY_SEGMENT_START_POINT, GEOMETRY_CATEGORY_POINT));
+  BOOST_CHECK(belongs(SOURCE_CATEGORY_SEGMENT_END_POINT, GEOMETRY_CATEGORY_POINT));
+  BOOST_CHECK(!belongs(SOURCE_CATEGORY_INITIAL_SEGMENT, GEOMETRY_CATEGORY_POINT));
+  BOOST_CHECK(!belongs(SOURCE_CATEGORY_REVERSE_SEGMENT, GEOMETRY_CATEGORY_POINT));
+
+  BOOST_CHECK(!belongs(SOURCE_CATEGORY_SINGLE_POINT, GEOMETRY_CATEGORY_SEGMENT));
+  BOOST_CHECK(!belongs(SOURCE_CATEGORY_SEGMENT_START_POINT, GEOMETRY_CATEGORY_SEGMENT));
+  BOOST_CHECK(!belongs(SOURCE_CATEGORY_SEGMENT_END_POINT, GEOMETRY_CATEGORY_SEGMENT));
+  BOOST_CHECK(belongs(SOURCE_CATEGORY_INITIAL_SEGMENT, GEOMETRY_CATEGORY_SEGMENT));
+  BOOST_CHECK(belongs(SOURCE_CATEGORY_REVERSE_SEGMENT, GEOMETRY_CATEGORY_SEGMENT));
 }
 
-BOOST_AUTO_TEST_CASE(site_event_test3) {
+BOOST_AUTO_TEST_CASE(site_event_test1) {
+  site_type s(1, 2);
+  s.sorted_index(1);
+  s.initial_index(2);
+  s.source_category(SOURCE_CATEGORY_SEGMENT_START_POINT);
+  BOOST_CHECK(s.x0() == 1 && s.x1() == 1);
+  BOOST_CHECK(s.y0() == 2 && s.y1() == 2);
+  BOOST_CHECK(s.is_point());
+  BOOST_CHECK(!s.is_segment());
+  BOOST_CHECK(!s.is_inverse());
+  BOOST_CHECK(s.sorted_index() == 1);
+  BOOST_CHECK(s.initial_index() == 2);
+  BOOST_CHECK(s.source_category() == SOURCE_CATEGORY_SEGMENT_START_POINT);
+}
+
+BOOST_AUTO_TEST_CASE(site_event_test2) {
   site_type s(1, 2, 3, 4);
+  s.sorted_index(1);
+  s.initial_index(2);
+  s.source_category(SOURCE_CATEGORY_INITIAL_SEGMENT);
   BOOST_CHECK(s.x0(true) == 1 && s.x0() == 1);
   BOOST_CHECK(s.y0(true) == 2 && s.y0() == 2);
   BOOST_CHECK(s.x1(true) == 3 && s.x1() == 3);
   BOOST_CHECK(s.y1(true) == 4 && s.y1() == 4);
-  BOOST_CHECK(s.sorted_index() == 0);
+  BOOST_CHECK(!s.is_point());
   BOOST_CHECK(s.is_segment());
   BOOST_CHECK(!s.is_inverse());
+  BOOST_CHECK(s.source_category() == SOURCE_CATEGORY_INITIAL_SEGMENT);
+  
   s.inverse();
   BOOST_CHECK(s.x1(true) == 1 && s.x0() == 1);
   BOOST_CHECK(s.y1(true) == 2 && s.y0() == 2);
   BOOST_CHECK(s.x0(true) == 3 && s.x1() == 3);
   BOOST_CHECK(s.y0(true) == 4 && s.y1() == 4);
   BOOST_CHECK(s.is_inverse());
+  BOOST_CHECK(s.source_category() == SOURCE_CATEGORY_INITIAL_SEGMENT);
 }
 
 BOOST_AUTO_TEST_CASE(circle_event_test) {
@@ -107,13 +128,13 @@ BOOST_AUTO_TEST_CASE(beach_line_node_key_test) {
 
 BOOST_AUTO_TEST_CASE(beach_line_node_data_test) {
   node_data_type node_data(NULL);
-  BOOST_CHECK_EQUAL(node_data.edge() == NULL, true);
-  BOOST_CHECK_EQUAL(node_data.circle_event() == NULL, true);
+  BOOST_CHECK(node_data.edge() == NULL);
+  BOOST_CHECK(node_data.circle_event() == NULL);
   int data = 4;
   node_data.circle_event(&data);
-  BOOST_CHECK_EQUAL(node_data.edge() == NULL, true);
-  BOOST_CHECK_EQUAL(node_data.circle_event() == &data, true);
+  BOOST_CHECK(node_data.edge() == NULL);
+  BOOST_CHECK(node_data.circle_event() == &data);
   node_data.edge(&data);
-  BOOST_CHECK_EQUAL(node_data.edge() == &data, true);
-  BOOST_CHECK_EQUAL(node_data.circle_event() == &data, true);
+  BOOST_CHECK(node_data.edge() == &data);
+  BOOST_CHECK(node_data.circle_event() == &data);
 }

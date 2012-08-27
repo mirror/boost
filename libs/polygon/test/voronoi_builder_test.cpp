@@ -26,18 +26,12 @@ typedef vd_type::edge_type voronoi_edge_type;
 typedef vd_type::const_cell_iterator const_cell_iterator;
 typedef vd_type::const_vertex_iterator const_vertex_iterator;
 
-#define CHECK_EQUAL_POINTS(p1, p2) \
-    BOOST_CHECK(p1.x() == static_cast<T>(p2.x())); \
-    BOOST_CHECK(p1.y() == static_cast<T>(p2.y()))
-
 #define CHECK_OUTPUT_SIZE(output, cells, vertices, edges) \
     BOOST_CHECK(output.num_cells() == cells); \
     BOOST_CHECK(output.num_vertices() == vertices); \
     BOOST_CHECK(output.num_edges() == edges)
 
 #define VERIFY_OUTPUT(output) \
-    BOOST_CHECK(voronoi_test_helper::verify_output(output, \
-        voronoi_test_helper::HALF_EDGE_ORIENTATION)); \
     BOOST_CHECK(voronoi_test_helper::verify_output(output, \
         voronoi_test_helper::CELL_CONVEXITY)); \
     BOOST_CHECK(voronoi_test_helper::verify_output(output, \
@@ -77,21 +71,21 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(collinear_sites_test1, T, test_types) {
   const_cell_iterator cell_it = test_output.cells().begin();
   cell_it++;
 
-  const voronoi_edge_type *edge1_1 = cell_it->incident_edge();
-  const voronoi_edge_type *edge1_2 = edge1_1->twin();
+  const voronoi_edge_type* edge1_1 = cell_it->incident_edge();
+  const voronoi_edge_type* edge1_2 = edge1_1->twin();
 
-  BOOST_CHECK_EQUAL(edge1_1->twin() == edge1_2, true);
-  BOOST_CHECK_EQUAL(edge1_2->twin() == edge1_1, true);
+  BOOST_CHECK(edge1_1->twin() == edge1_2);
+  BOOST_CHECK(edge1_2->twin() == edge1_1);
 
-  BOOST_CHECK_EQUAL(edge1_1->next() == edge1_1, true);
-  BOOST_CHECK_EQUAL(edge1_1->prev() == edge1_1, true);
-  BOOST_CHECK_EQUAL(edge1_1->rot_next() == NULL, true);
-  BOOST_CHECK_EQUAL(edge1_1->rot_prev() == NULL, true);
+  BOOST_CHECK(edge1_1->next() == edge1_1);
+  BOOST_CHECK(edge1_1->prev() == edge1_1);
+  BOOST_CHECK(edge1_1->rot_next() == NULL);
+  BOOST_CHECK(edge1_1->rot_prev() == NULL);
 
-  BOOST_CHECK_EQUAL(edge1_2->next() == edge1_2, true);
-  BOOST_CHECK_EQUAL(edge1_2->prev() == edge1_2, true);
-  BOOST_CHECK_EQUAL(edge1_2->rot_next() == NULL, true);
-  BOOST_CHECK_EQUAL(edge1_2->rot_prev() == NULL, true);
+  BOOST_CHECK(edge1_2->next() == edge1_2);
+  BOOST_CHECK(edge1_2->prev() == edge1_2);
+  BOOST_CHECK(edge1_2->rot_next() == NULL);
+  BOOST_CHECK(edge1_2->rot_prev() == NULL);
 }
 
 // Sites: (0, 0), (1, 1), (2, 2).
@@ -106,25 +100,25 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(collinear_sites_test2, T, test_types) {
   CHECK_OUTPUT_SIZE(test_output, 3, 0, 2);
 
   const_cell_iterator cell_it = test_output.cells().begin();
-  const voronoi_edge_type *edge1_1 = cell_it->incident_edge();
-  const voronoi_edge_type *edge1_2 = edge1_1->twin();
+  const voronoi_edge_type* edge1_1 = cell_it->incident_edge();
+  const voronoi_edge_type* edge1_2 = edge1_1->twin();
   cell_it++;
   cell_it++;
-  const voronoi_edge_type *edge2_2 = cell_it->incident_edge();
-  const voronoi_edge_type *edge2_1 = edge2_2->twin();
+  const voronoi_edge_type* edge2_2 = cell_it->incident_edge();
+  const voronoi_edge_type* edge2_1 = edge2_2->twin();
 
-  BOOST_CHECK_EQUAL(edge1_1->twin() == edge1_2 && edge1_2->twin() == edge1_1, true);
-  BOOST_CHECK_EQUAL(edge2_1->twin() == edge2_2 && edge2_2->twin() == edge2_1, true);
+  BOOST_CHECK(edge1_1->twin() == edge1_2 && edge1_2->twin() == edge1_1);
+  BOOST_CHECK(edge2_1->twin() == edge2_2 && edge2_2->twin() == edge2_1);
 
-  BOOST_CHECK_EQUAL(edge1_1->next() == edge1_1 && edge1_1->prev() == edge1_1, true);
-  BOOST_CHECK_EQUAL(edge1_1->rot_next() == NULL && edge1_1->rot_prev() == NULL, true);
-  BOOST_CHECK_EQUAL(edge1_2->rot_next() == NULL && edge1_2->rot_prev() == NULL, true);
-  BOOST_CHECK_EQUAL(edge2_1->rot_next() == NULL && edge2_1->rot_prev() == NULL, true);
-  BOOST_CHECK_EQUAL(edge2_2->next() == edge2_2 && edge2_2->prev() == edge2_2, true);
-  BOOST_CHECK_EQUAL(edge2_2->rot_next() == NULL && edge2_2->rot_prev() == NULL, true);
+  BOOST_CHECK(edge1_1->next() == edge1_1 && edge1_1->prev() == edge1_1);
+  BOOST_CHECK(edge1_1->rot_next() == NULL && edge1_1->rot_prev() == NULL);
+  BOOST_CHECK(edge1_2->rot_next() == NULL && edge1_2->rot_prev() == NULL);
+  BOOST_CHECK(edge2_1->rot_next() == NULL && edge2_1->rot_prev() == NULL);
+  BOOST_CHECK(edge2_2->next() == edge2_2 && edge2_2->prev() == edge2_2);
+  BOOST_CHECK(edge2_2->rot_next() == NULL && edge2_2->rot_prev() == NULL);
 
-  BOOST_CHECK_EQUAL(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge2_1->next() == edge1_2 && edge2_1->prev() == edge1_2, true);
+  BOOST_CHECK(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1);
+  BOOST_CHECK(edge2_1->next() == edge1_2 && edge2_1->prev() == edge1_2);
 }
 
 // Sites: (0, 0), (0, 4), (2, 1).
@@ -142,39 +136,39 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(triangle_test1, T, test_types) {
   CHECK_OUTPUT_SIZE(test_output, 3, 1, 3);
 
   const_vertex_iterator it = test_output.vertices().begin();
-  BOOST_CHECK_EQUAL(it->vertex().x() == static_cast<coordinate_type>(0.25) &&
-                    it->vertex().y() == static_cast<coordinate_type>(2.0), true);
+  BOOST_CHECK_EQUAL(it->x(), 0.25);
+  BOOST_CHECK_EQUAL(it->y(), 2.0);
 
-  const voronoi_edge_type *edge1_1 = it->incident_edge();
-  const voronoi_edge_type *edge1_2 = edge1_1->twin();
-  CHECK_EQUAL_POINTS(edge1_1->cell()->point0(), point2);
-  CHECK_EQUAL_POINTS(edge1_2->cell()->point0(), point3);
+  const voronoi_edge_type* edge1_1 = it->incident_edge();
+  const voronoi_edge_type* edge1_2 = edge1_1->twin();
+  BOOST_CHECK(edge1_1->cell()->source_index() == 1);
+  BOOST_CHECK(edge1_2->cell()->source_index() == 2);
 
-  const voronoi_edge_type *edge2_1 = edge1_1->rot_prev();
-  const voronoi_edge_type *edge2_2 = edge2_1->twin();
-  CHECK_EQUAL_POINTS(edge2_1->cell()->point0(), point3);
-  CHECK_EQUAL_POINTS(edge2_2->cell()->point0(), point1);
+  const voronoi_edge_type* edge2_1 = edge1_1->rot_prev();
+  const voronoi_edge_type* edge2_2 = edge2_1->twin();
+  BOOST_CHECK(edge2_1->cell()->source_index() == 2);
+  BOOST_CHECK(edge2_2->cell()->source_index() == 0);
 
-  const voronoi_edge_type *edge3_1 = edge2_1->rot_prev();
-  const voronoi_edge_type *edge3_2 = edge3_1->twin();
-  CHECK_EQUAL_POINTS(edge3_1->cell()->point0(), point1);
-  CHECK_EQUAL_POINTS(edge3_2->cell()->point0(), point2);
+  const voronoi_edge_type* edge3_1 = edge2_1->rot_prev();
+  const voronoi_edge_type* edge3_2 = edge3_1->twin();
+  BOOST_CHECK(edge3_1->cell()->source_index() == 0);
+  BOOST_CHECK(edge3_2->cell()->source_index() == 1);
 
-  BOOST_CHECK_EQUAL(edge1_2->twin() == edge1_1, true);
-  BOOST_CHECK_EQUAL(edge2_2->twin() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge3_2->twin() == edge3_1, true);
+  BOOST_CHECK(edge1_2->twin() == edge1_1);
+  BOOST_CHECK(edge2_2->twin() == edge2_1);
+  BOOST_CHECK(edge3_2->twin() == edge3_1);
 
-  BOOST_CHECK_EQUAL(edge1_1->prev() == edge3_2 && edge1_1->next() == edge3_2, true);
-  BOOST_CHECK_EQUAL(edge2_1->prev() == edge1_2 && edge2_1->next() == edge1_2, true);
-  BOOST_CHECK_EQUAL(edge3_1->prev() == edge2_2 && edge3_1->next() == edge2_2, true);
+  BOOST_CHECK(edge1_1->prev() == edge3_2 && edge1_1->next() == edge3_2);
+  BOOST_CHECK(edge2_1->prev() == edge1_2 && edge2_1->next() == edge1_2);
+  BOOST_CHECK(edge3_1->prev() == edge2_2 && edge3_1->next() == edge2_2);
 
-  BOOST_CHECK_EQUAL(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge2_2->next() == edge3_1 && edge2_2->prev() == edge3_1, true);
-  BOOST_CHECK_EQUAL(edge3_2->next() == edge1_1 && edge3_2->prev() == edge1_1, true);
+  BOOST_CHECK(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1);
+  BOOST_CHECK(edge2_2->next() == edge3_1 && edge2_2->prev() == edge3_1);
+  BOOST_CHECK(edge3_2->next() == edge1_1 && edge3_2->prev() == edge1_1);
 
-  BOOST_CHECK_EQUAL(edge1_1->rot_next() == edge3_1, true);
-  BOOST_CHECK_EQUAL(edge3_1->rot_next() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge2_1->rot_next() == edge1_1, true);
+  BOOST_CHECK(edge1_1->rot_next() == edge3_1);
+  BOOST_CHECK(edge3_1->rot_next() == edge2_1);
+  BOOST_CHECK(edge2_1->rot_next() == edge1_1);
 }
 
 // Sites: (0, 1), (2, 0), (2, 4).
@@ -192,39 +186,39 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(triangle_test2, T, test_types) {
   CHECK_OUTPUT_SIZE(test_output, 3, 1, 3);
 
   const_vertex_iterator it = test_output.vertices().begin();
-  BOOST_CHECK_EQUAL(it->vertex().x() == static_cast<coordinate_type>(1.75) &&
-                    it->vertex().y() == static_cast<coordinate_type>(2.0), true);
+  BOOST_CHECK_EQUAL(it->x(), 1.75);
+  BOOST_CHECK_EQUAL(it->y(), 2.0);
 
-  const voronoi_edge_type *edge1_1 = it->incident_edge();
-  const voronoi_edge_type *edge1_2 = edge1_1->twin();
-  CHECK_EQUAL_POINTS(edge1_1->cell()->point0(), point3);
-  CHECK_EQUAL_POINTS(edge1_2->cell()->point0(), point2);
+  const voronoi_edge_type* edge1_1 = it->incident_edge();
+  const voronoi_edge_type* edge1_2 = edge1_1->twin();
+  BOOST_CHECK(edge1_1->cell()->source_index() == 2);
+  BOOST_CHECK(edge1_2->cell()->source_index() == 1);
 
-  const voronoi_edge_type *edge2_1 = edge1_1->rot_prev();
-  const voronoi_edge_type *edge2_2 = edge2_1->twin();
-  CHECK_EQUAL_POINTS(edge2_1->cell()->point0(), point2);
-  CHECK_EQUAL_POINTS(edge2_2->cell()->point0(), point1);
+  const voronoi_edge_type* edge2_1 = edge1_1->rot_prev();
+  const voronoi_edge_type* edge2_2 = edge2_1->twin();
+  BOOST_CHECK(edge2_1->cell()->source_index() == 1);
+  BOOST_CHECK(edge2_2->cell()->source_index() == 0);
 
-  const voronoi_edge_type *edge3_1 = edge2_1->rot_prev();
-  const voronoi_edge_type *edge3_2 = edge3_1->twin();
-  CHECK_EQUAL_POINTS(edge3_1->cell()->point0(), point1);
-  CHECK_EQUAL_POINTS(edge3_2->cell()->point0(), point3);
+  const voronoi_edge_type* edge3_1 = edge2_1->rot_prev();
+  const voronoi_edge_type* edge3_2 = edge3_1->twin();
+  BOOST_CHECK(edge3_1->cell()->source_index() == 0);
+  BOOST_CHECK(edge3_2->cell()->source_index() == 2);
 
-  BOOST_CHECK_EQUAL(edge1_2->twin() == edge1_1, true);
-  BOOST_CHECK_EQUAL(edge2_2->twin() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge3_2->twin() == edge3_1, true);
+  BOOST_CHECK(edge1_2->twin() == edge1_1);
+  BOOST_CHECK(edge2_2->twin() == edge2_1);
+  BOOST_CHECK(edge3_2->twin() == edge3_1);
 
-  BOOST_CHECK_EQUAL(edge1_1->prev() == edge3_2 && edge1_1->next() == edge3_2, true);
-  BOOST_CHECK_EQUAL(edge2_1->prev() == edge1_2 && edge2_1->next() == edge1_2, true);
-  BOOST_CHECK_EQUAL(edge3_1->prev() == edge2_2 && edge3_1->next() == edge2_2, true);
+  BOOST_CHECK(edge1_1->prev() == edge3_2 && edge1_1->next() == edge3_2);
+  BOOST_CHECK(edge2_1->prev() == edge1_2 && edge2_1->next() == edge1_2);
+  BOOST_CHECK(edge3_1->prev() == edge2_2 && edge3_1->next() == edge2_2);
 
-  BOOST_CHECK_EQUAL(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge2_2->next() == edge3_1 && edge2_2->prev() == edge3_1, true);
-  BOOST_CHECK_EQUAL(edge3_2->next() == edge1_1 && edge3_2->prev() == edge1_1, true);
+  BOOST_CHECK(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1);
+  BOOST_CHECK(edge2_2->next() == edge3_1 && edge2_2->prev() == edge3_1);
+  BOOST_CHECK(edge3_2->next() == edge1_1 && edge3_2->prev() == edge1_1);
 
-  BOOST_CHECK_EQUAL(edge1_1->rot_next() == edge3_1, true);
-  BOOST_CHECK_EQUAL(edge3_1->rot_next() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge2_1->rot_next() == edge1_1, true);
+  BOOST_CHECK(edge1_1->rot_next() == edge3_1);
+  BOOST_CHECK(edge3_1->rot_next() == edge2_1);
+  BOOST_CHECK(edge2_1->rot_next() == edge1_1);
 }
 
 // Sites: (0, 0), (0, 1), (1, 0), (1, 1).
@@ -245,49 +239,49 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(square_test1, T, test_types) {
 
   // Check voronoi vertex.
   const_vertex_iterator it = test_output.vertices().begin();
-  BOOST_CHECK_EQUAL(it->vertex().x() == static_cast<coordinate_type>(0.5) &&
-                    it->vertex().y() == static_cast<coordinate_type>(0.5), true);
+  BOOST_CHECK_EQUAL(it->x(), 0.5);
+  BOOST_CHECK_EQUAL(it->y(), 0.5);
 
   // Check voronoi edges.
-  const voronoi_edge_type *edge1_1 = it->incident_edge();
-  const voronoi_edge_type *edge1_2 = edge1_1->twin();
-  CHECK_EQUAL_POINTS(edge1_1->cell()->point0(), points[3]);
-  CHECK_EQUAL_POINTS(edge1_2->cell()->point0(), points[2]);
+  const voronoi_edge_type* edge1_1 = it->incident_edge();
+  const voronoi_edge_type* edge1_2 = edge1_1->twin();
+  BOOST_CHECK(edge1_1->cell()->source_index() == 3);
+  BOOST_CHECK(edge1_2->cell()->source_index() == 2);
 
-  const voronoi_edge_type *edge2_1 = edge1_1->rot_prev();
-  const voronoi_edge_type *edge2_2 = edge2_1->twin();
-  CHECK_EQUAL_POINTS(edge2_1->cell()->point0(), points[2]);
-  CHECK_EQUAL_POINTS(edge2_2->cell()->point0(), points[0]);
+  const voronoi_edge_type* edge2_1 = edge1_1->rot_prev();
+  const voronoi_edge_type* edge2_2 = edge2_1->twin();
+  BOOST_CHECK(edge2_1->cell()->source_index() == 2);
+  BOOST_CHECK(edge2_2->cell()->source_index() == 0);
 
-  const voronoi_edge_type *edge3_1 = edge2_1->rot_prev();
-  const voronoi_edge_type *edge3_2 = edge3_1->twin();
-  CHECK_EQUAL_POINTS(edge3_1->cell()->point0(), points[0]);
-  CHECK_EQUAL_POINTS(edge3_2->cell()->point0(), points[1]);
+  const voronoi_edge_type* edge3_1 = edge2_1->rot_prev();
+  const voronoi_edge_type* edge3_2 = edge3_1->twin();
+  BOOST_CHECK(edge3_1->cell()->source_index() == 0);
+  BOOST_CHECK(edge3_2->cell()->source_index() == 1);
 
-  const voronoi_edge_type *edge4_1 = edge3_1->rot_prev();
-  const voronoi_edge_type *edge4_2 = edge4_1->twin();
-  CHECK_EQUAL_POINTS(edge4_1->cell()->point0(), points[1]);
-  CHECK_EQUAL_POINTS(edge4_2->cell()->point0(), points[3]);
+  const voronoi_edge_type* edge4_1 = edge3_1->rot_prev();
+  const voronoi_edge_type* edge4_2 = edge4_1->twin();
+  BOOST_CHECK(edge4_1->cell()->source_index() == 1);
+  BOOST_CHECK(edge4_2->cell()->source_index() == 3);
 
-  BOOST_CHECK_EQUAL(edge1_2->twin() == edge1_1, true);
-  BOOST_CHECK_EQUAL(edge2_2->twin() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge3_2->twin() == edge3_1, true);
-  BOOST_CHECK_EQUAL(edge4_2->twin() == edge4_1, true);
+  BOOST_CHECK(edge1_2->twin() == edge1_1);
+  BOOST_CHECK(edge2_2->twin() == edge2_1);
+  BOOST_CHECK(edge3_2->twin() == edge3_1);
+  BOOST_CHECK(edge4_2->twin() == edge4_1);
 
-  BOOST_CHECK_EQUAL(edge1_1->prev() == edge4_2 && edge1_1->next() == edge4_2, true);
-  BOOST_CHECK_EQUAL(edge2_1->prev() == edge1_2 && edge2_1->next() == edge1_2, true);
-  BOOST_CHECK_EQUAL(edge3_1->prev() == edge2_2 && edge3_1->next() == edge2_2, true);
-  BOOST_CHECK_EQUAL(edge4_1->prev() == edge3_2 && edge4_1->next() == edge3_2, true);
+  BOOST_CHECK(edge1_1->prev() == edge4_2 && edge1_1->next() == edge4_2);
+  BOOST_CHECK(edge2_1->prev() == edge1_2 && edge2_1->next() == edge1_2);
+  BOOST_CHECK(edge3_1->prev() == edge2_2 && edge3_1->next() == edge2_2);
+  BOOST_CHECK(edge4_1->prev() == edge3_2 && edge4_1->next() == edge3_2);
 
-  BOOST_CHECK_EQUAL(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge2_2->next() == edge3_1 && edge2_2->prev() == edge3_1, true);
-  BOOST_CHECK_EQUAL(edge3_2->next() == edge4_1 && edge3_2->prev() == edge4_1, true);
-  BOOST_CHECK_EQUAL(edge4_2->next() == edge1_1 && edge4_2->prev() == edge1_1, true);
+  BOOST_CHECK(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1);
+  BOOST_CHECK(edge2_2->next() == edge3_1 && edge2_2->prev() == edge3_1);
+  BOOST_CHECK(edge3_2->next() == edge4_1 && edge3_2->prev() == edge4_1);
+  BOOST_CHECK(edge4_2->next() == edge1_1 && edge4_2->prev() == edge1_1);
 
-  BOOST_CHECK_EQUAL(edge1_1->rot_next() == edge4_1, true);
-  BOOST_CHECK_EQUAL(edge4_1->rot_next() == edge3_1, true);
-  BOOST_CHECK_EQUAL(edge3_1->rot_next() == edge2_1, true);
-  BOOST_CHECK_EQUAL(edge2_1->rot_next() == edge1_1, true);
+  BOOST_CHECK(edge1_1->rot_next() == edge4_1);
+  BOOST_CHECK(edge4_1->rot_next() == edge3_1);
+  BOOST_CHECK(edge3_1->rot_next() == edge2_1);
+  BOOST_CHECK(edge2_1->rot_next() == edge1_1);
 }
 
 #ifdef NDEBUG
@@ -303,11 +297,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(grid_test, T, test_types) {
     point_vec_small.clear();
     point_vec_large.clear();
     int koef = std::numeric_limits<int>::max() / max_value[k];
-    for (int i = 0; i < grid_size[k]; i++)
+    for (int i = 0; i < grid_size[k]; i++) {
       for (int j = 0; j < grid_size[k]; j++) {
         point_vec_small.push_back(point_data<T>(i, j));
         point_vec_large.push_back(point_data<T>(koef * i, koef * j));
       }
+    }
     construct_voronoi(point_vec_small.begin(), point_vec_small.end(), &test_output_small);
     construct_voronoi(point_vec_large.begin(), point_vec_large.end(), &test_output_large);
     VERIFY_OUTPUT(test_output_small);
@@ -475,6 +470,19 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_site_test8, T, test_types) {
   segments.push_back(segment_data<T>(point4, point1));
   construct_voronoi(segments.begin(), segments.end(), &test_output);
   CHECK_OUTPUT_SIZE(test_output, 8, 5, 12);
+  VERIFY_NO_HALF_EDGE_INTERSECTIONS(test_output);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(segment_site_test9, T, test_types) {
+  vd_type test_output;
+  std::vector< segment_data<T> > segments;
+  point_data<T> point1(0, 0);
+  point_data<T> point2(2, 0);
+  point_data<T> point3(4, 0);
+  segments.push_back(segment_data<T>(point1, point2));
+  segments.push_back(segment_data<T>(point2, point3));
+  construct_voronoi(segments.begin(), segments.end(), &test_output);
+  CHECK_OUTPUT_SIZE(test_output, 5, 0, 4);
   VERIFY_NO_HALF_EDGE_INTERSECTIONS(test_output);
 }
 

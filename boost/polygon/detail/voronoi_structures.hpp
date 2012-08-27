@@ -61,6 +61,34 @@ private:
   coordinate_type y_;
 };
 
+// Represents topology type of the voronoi site.
+enum GeometryCategory {
+  GEOMETRY_CATEGORY_POINT = 0x0,
+  GEOMETRY_CATEGORY_SEGMENT = 0x1,
+};
+
+// Represents category of the input source that forms Voronoi cell.
+enum SourceCategory {
+  // Point subtypes.
+  SOURCE_CATEGORY_SINGLE_POINT = 0x0,
+  SOURCE_CATEGORY_SEGMENT_START_POINT = 0x1,
+  SOURCE_CATEGORY_SEGMENT_END_POINT = 0x2,
+
+  // Segment subtypes.
+  SOURCE_CATEGORY_INITIAL_SEGMENT = 0x8,
+  SOURCE_CATEGORY_REVERSE_SEGMENT = 0x9,
+
+  SOURCE_CATEGORY_GEOMETRY_SHIFT = 0x3,
+  SOURCE_CATEGORY_BITMASK = 0x1F,
+};
+
+bool belongs(
+    const SourceCategory& source_category,
+    const GeometryCategory& geometry_category) {
+  return (static_cast<std::size_t>(source_category) >> SOURCE_CATEGORY_GEOMETRY_SHIFT) ==
+      static_cast<std::size_t>(geometry_category);
+}
+
 // Site event type.
 // Occurs when the sweepline sweeps over one of the initial sites:
 //   1) point site
@@ -91,39 +119,42 @@ public:
   site_event() :
       point0_(0, 0),
       point1_(0, 0),
-      sorted_index_(0) {}
+      sorted_index_(0),
+      flags_(0) {}
 
   site_event(coordinate_type x, coordinate_type y) :
       point0_(x, y),
       point1_(x, y),
-      sorted_index_(0) {}
+      sorted_index_(0),
+      flags_(0) {}
 
   site_event(const point_type &point) :
       point0_(point),
       point1_(point),
-      sorted_index_(0) {}
+      sorted_index_(0),
+      flags_(0) {}
 
   site_event(coordinate_type x1, coordinate_type y1,
              coordinate_type x2, coordinate_type y2):
       point0_(x1, y1),
       point1_(x2, y2),
-      sorted_index_(0) {}
+      sorted_index_(0),
+      flags_(0) {}
 
   site_event(const point_type &point1, const point_type &point2) :
       point0_(point1),
       point1_(point2),
-      sorted_index_(0) {}
+      sorted_index_(0),
+      flags_(0) {}
 
   bool operator==(const site_event &that) const {
     return (this->point0_ == that.point0_) &&
-           (this->point1_ == that.point1_) &&
-           (this->sorted_index_ == that.sorted_index_);
+           (this->point1_ == that.point1_);
   }
 
   bool operator!=(const site_event &that) const {
     return (this->point0_ != that.point0_) ||
-           (this->point1_ != that.point1_) ||
-           (this->sorted_index_ != that.sorted_index_);
+           (this->point1_ != that.point1_);
   }
 
   coordinate_type x(bool oriented = false) const {
@@ -170,9 +201,17 @@ public:
     return is_inverse() ? point0_ : point1_;
   }
 
+  std::size_t sorted_index() const {
+    return sorted_index_;
+  }
+
   site_event& sorted_index(std::size_t index) {
-    sorted_index_ = (index << 1) + (sorted_index_ & 1);
+    sorted_index_ = index;
     return *this;
+  }
+
+  std::size_t initial_index() const {
+    return initial_index_;
   }
 
   site_event& initial_index(std::size_t index) {
@@ -180,36 +219,43 @@ public:
     return *this;
   }
 
+  bool is_inverse() const {
+    return (flags_ & IS_INVERSE) ? true : false;
+  }
+
   site_event& inverse() {
-    sorted_index_ ^= 1;
+    flags_ ^= IS_INVERSE;
     return *this;
   }
 
-  std::size_t sorted_index() const {
-    return sorted_index_ >> 1;
+  SourceCategory source_category() const {
+    return static_cast<SourceCategory>(flags_ & SOURCE_CATEGORY_BITMASK);
   }
 
-  std::size_t initial_index() const {
-    return initial_index_;
+  site_event& source_category(SourceCategory source_category) {
+    flags_ |= source_category;
+    return *this;
   }
 
   bool is_point() const {
-    return point0_.x() == point1_.x() && point0_.y() == point1_.y();
+    return (point0_.x() == point1_.x()) && (point0_.y() == point1_.y());
   }
 
   bool is_segment() const {
-    return point0_.x() != point1_.x() || point0_.y() != point1_.y();
-  }
-
-  bool is_inverse() const {
-    return static_cast<bool>(sorted_index_ & 1);
+    return (point0_.x() != point1_.x()) || (point0_.y() != point1_.y());
   }
 
 private:
+  enum Bits {
+    SOURCE_CATEGORY_BITMASK = SOURCE_CATEGORY_BITMASK,
+    IS_INVERSE = 0x20,  // 32
+  };
+
   point_type point0_;
   point_type point1_;
   std::size_t sorted_index_;
   std::size_t initial_index_;
+  std::size_t flags_;
 };
 
 // Circle event type.

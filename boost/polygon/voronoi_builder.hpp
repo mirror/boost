@@ -51,6 +51,7 @@ public:
   std::size_t insert_point(const int_type& x, const int_type& y) {
     site_events_.push_back(site_event_type(x, y));
     site_events_.back().initial_index(index_);
+    site_events_.back().source_category(detail::SOURCE_CATEGORY_SINGLE_POINT);
     return index_++;
   }
 
@@ -61,16 +62,29 @@ public:
   std::size_t insert_segment(
       const int_type& x1, const int_type& y1,
       const int_type& x2, const int_type& y2) {
+    // Set up start point site.
     point_type p1(x1, y1);
-    point_type p2(x2, y2);
     site_events_.push_back(site_event_type(p1));
     site_events_.back().initial_index(index_);
+    site_events_.back().source_category(
+        detail::SOURCE_CATEGORY_SEGMENT_START_POINT);
+
+    // Set up end point site.
+    point_type p2(x2, y2);
     site_events_.push_back(site_event_type(p2));
     site_events_.back().initial_index(index_);
+    site_events_.back().source_category(
+        detail::SOURCE_CATEGORY_SEGMENT_END_POINT);
+
+    // Set up segment site.
     if (point_comparison_(p1, p2)) {
       site_events_.push_back(site_event_type(p1, p2));
+      site_events_.back().source_category(
+          detail::SOURCE_CATEGORY_INITIAL_SEGMENT);
     } else {
       site_events_.push_back(site_event_type(p2, p1));
+      site_events_.back().source_category(
+          detail::SOURCE_CATEGORY_REVERSE_SEGMENT);
     }
     site_events_.back().initial_index(index_);
     return index_++;
@@ -93,8 +107,7 @@ public:
       } else if (site_event_iterator_ == site_events_.end()) {
         process_circle_event(output);
       } else {
-        if (event_comparison(*site_event_iterator_,
-                             circle_events_.top().first)) {
+        if (event_comparison(*site_event_iterator_, circle_events_.top().first)) {
           process_site_event(output);
         } else {
           process_circle_event(output);
@@ -114,7 +127,6 @@ public:
   void clear() {
     index_ = 0;
     site_events_.clear();
-    beach_line_.clear();
   }
 
 private:
@@ -169,8 +181,6 @@ private:
 
   template <typename OUTPUT>
   void init_beach_line(OUTPUT *output) {
-    if (!beach_line_.empty())
-      beach_line_.clear();
     if (site_events_.empty())
       return;
     if (site_events_.size() == 1) {

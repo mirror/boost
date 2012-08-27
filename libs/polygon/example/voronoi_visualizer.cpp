@@ -7,20 +7,24 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 
-#include <vector>
+#include <cassert>
+#include <iostream>
 
 #include <QtOpenGL/QGLWidget>
 #include <QtGui/QtGui>
 
-#include <boost/polygon/voronoi_builder.hpp>
-#include <boost/polygon/voronoi_diagram.hpp>
-#include <boost/polygon/voronoi_utils.hpp>
+#include <boost/polygon/point_data.hpp>
+#include <boost/polygon/rectangle_data.hpp>
+#include <boost/polygon/segment_data.hpp>
+#include <boost/polygon/voronoi.hpp>
 using namespace boost::polygon;
+
+#include "voronoi_visual_utils.hpp"
 
 class GLWidget : public QGLWidget {
   Q_OBJECT
 public:
-  GLWidget(QMainWindow *parent = NULL) :
+  GLWidget(QMainWindow* parent = NULL) :
       QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
       primary_edges_only_(false),
       internal_edges_only_(false) {
@@ -31,52 +35,36 @@ public:
     return QSize(600, 600);
   }
 
-  void build(QString file_path) {
-    brect_.clear();
-    vb_.clear();
-    vd_.clear();
+  void build(const QString& file_path) {
+    // Clear all containers.
+    clear();
 
-    // Open file.
-    QFile data(file_path);
-    if (!data.open(QFile::ReadOnly)) {
-      QMessageBox::warning(this, tr("Voronoi Visualizer"),
-                           tr("Disable to open file ") + file_path);
+    // Read data.
+    read_data(file_path);
+
+    // No data, don't proceed.
+    if (!brect_initialized_) {
+      return;
     }
 
-    // Read points from the file.
-    QTextStream in_stream(&data);
-    int num_point_sites = 0;
-    int num_edge_sites = 0;
-    int x1, y1, x2, y2;
-    in_stream >> num_point_sites;
-    for (int i = 0; i < num_point_sites; ++i) {
-      in_stream >> x1 >> y1;
-      vb_.insert_point(x1, y1);
-      brect_.update(x1, y1);
-    }
-    in_stream >> num_edge_sites;
-    for (int i = 0; i < num_edge_sites; ++i) {
-      in_stream >> x1 >> y1 >> x2 >> y2;
-      vb_.insert_segment(x1, y1, x2, y2);
-      brect_.update(x1, y1);
-      brect_.update(x2, y2);
-    }
-    in_stream.flush();
+    // Construct bounding rectangle.
+    construct_brect();
 
-    // Build voronoi diagram.
-    vb_.construct(&vd_);
-    brect_ = voronoi_utils<coordinate_type>::scale(brect_, 1.4);
-    shift_ = point_type((brect_.x_min() + brect_.x_max()) * 0.5,
-                        (brect_.y_min() + brect_.y_max()) * 0.5);
+    // Construct voronoi diagram.
+    construct_voronoi(
+        point_data_.begin(), point_data_.end(),
+        segment_data_.begin(), segment_data_.end(),
+        &vd_);
 
+    // Color exterior edges.
     for (const_edge_iterator it = vd_.edges().begin();
-        it != vd_.edges().end(); ++it) {
+         it != vd_.edges().end(); ++it) {
       if (!it->is_finite()) {
-        remove_exterior(&(*it));
+        color_exterior(&(*it));
       }
     }
 
-    // Update view.
+    // Update view port.
     update_view_port();
   }
 
@@ -100,74 +88,10 @@ protected:
     qglClearColor(QColor::fromRgb(255, 255, 255));
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-    // Draw voronoi sites.
-    {
-      glColor3f(0.0f, 0.5f, 1.0f);
-      glPointSize(9);
-      glBegin(GL_POINTS);
-      for (const_cell_iterator it = vd_.cells().begin();
-          it != vd_.cells().end(); ++it) {
-        if (!it->contains_segment()) {
-          glVertex2f(it->point0().x() - shift_.x(),
-                     it->point0().y() - shift_.y());
-        }
-      }
-      glEnd();
-      glPointSize(6);
-      glLineWidth(2.7f);
-      glBegin(GL_LINES);
-      for (const_cell_iterator it = vd_.cells().begin();
-          it != vd_.cells().end(); ++it) {
-        if (it->contains_segment()) {
-          glVertex2f(it->point0().x() - shift_.x(),
-                     it->point0().y() - shift_.y());
-          glVertex2f(it->point1().x() - shift_.x(),
-                     it->point1().y() - shift_.y());
-        }
-      }
-      glEnd();
-      glLineWidth(1.0);
-    }
-
-    // Draw voronoi vertices.
-    /*{
-      glColor3f(0.0f, 0.0f, 0.0f);
-      glBegin(GL_POINTS);
-      for (const_vertex_iterator it = vd_.vertices().begin();
-          it != vd_.vertices().end(); ++it) {
-        glVertex2f(it->vertex().x() - shift_.x(),
-                   it->vertex().y() - shift_.y());
-      }
-      glEnd();
-    }*/
-
-    // Draw voronoi edges.
-    {
-      glColor3f(0.0f, 0.0f, 0.0f);
-      glLineWidth(1.7f);
-      glBegin(GL_LINES);
-      for (const_edge_iterator it = vd_.edges().begin();
-          it != vd_.edges().end(); ++it) {
-        if (primary_edges_only_ && !it->is_primary()) {
-          continue;
-        }
-        if (internal_edges_only_ && it->color()) {
-          continue;
-        }
-        std::vector<point_type> vec;
-        if (!it->is_finite())
-          voronoi_utils<coordinate_type>::clip(*it, brect_, vec);
-        else {
-          coordinate_type max_error = 1E-3 * (brect_.x_max() - brect_.x_min());
-          voronoi_utils<coordinate_type>::discretize(*it, max_error, vec);
-        }
-        for (int i = 0; i < static_cast<int>(vec.size()) - 1; ++i) {
-          glVertex2f(vec[i].x() - shift_.x(), vec[i].y() - shift_.y());
-          glVertex2f(vec[i+1].x() - shift_.x(), vec[i+1].y() - shift_.y());
-        }
-      }
-      glEnd();
-    }
+    draw_points();
+    draw_segments();
+    draw_vertices();
+    draw_edges();
   }
 
   void resizeGL(int width, int height) {
@@ -175,14 +99,20 @@ protected:
     glViewport((width - side) / 2, (height - side) / 2, side, side);
   }
 
-  void timerEvent(QTimerEvent *) {
+  void timerEvent(QTimerEvent*) {
     update();
   }
 
 private:
   typedef double coordinate_type;
-  typedef detail::point_2d<double> point_type;
-  typedef voronoi_diagram<double> VD;
+  typedef point_data<double> point_type;
+  typedef segment_data<double> segment_type;
+  typedef rectangle_data<double> rect_type;
+  typedef voronoi_builder<int> VB;
+  typedef voronoi_diagram<coordinate_type> VD;
+  typedef VD::cell_type cell_type;
+  typedef VD::cell_type::source_index_type source_index_type;
+  typedef VD::cell_type::source_category_type source_category_type;
   typedef VD::edge_type edge_type;
   typedef VD::cell_container_type cell_container_type;
   typedef VD::cell_container_type vertex_container_type;
@@ -191,19 +121,74 @@ private:
   typedef VD::const_vertex_iterator const_vertex_iterator;
   typedef VD::const_edge_iterator const_edge_iterator;
 
-  static const std::size_t VISITED = 1;
+  static const std::size_t EXTERNAL_COLOR = 1;
 
-  void remove_exterior(const VD::edge_type* edge) {
-    if (edge->color())
+  void clear() {
+    brect_initialized_ = false;
+    point_data_.clear();
+    segment_data_.clear();
+    vd_.clear();
+  }
+
+  void read_data(const QString& file_path) {
+    QFile data(file_path);
+    if (!data.open(QFile::ReadOnly)) {
+      QMessageBox::warning(
+          this, tr("Voronoi Visualizer"),
+          tr("Disable to open file ") + file_path);
+    }
+    QTextStream in_stream(&data);
+    std::size_t num_points, num_segments;
+    int x1, y1, x2, y2;
+    in_stream >> num_points;
+    for (std::size_t i = 0; i < num_points; ++i) {
+      in_stream >> x1 >> y1;
+      point_type p(x1, y1);
+      update_brect(p);
+      point_data_.push_back(p);
+    }
+    in_stream >> num_segments;
+    for (std::size_t i = 0; i < num_segments; ++i) {
+      in_stream >> x1 >> y1 >> x2 >> y2;
+      point_type lp(x1, y1);
+      point_type hp(x2, y2);
+      update_brect(lp);
+      update_brect(hp);
+      segment_data_.push_back(segment_type(lp, hp));
+    }
+    in_stream.flush();
+  }
+
+  void update_brect(const point_type& point) {
+    if (brect_initialized_) {
+      encompass(brect_, point);
+    } else {
+      set_points(brect_, point, point);
+      brect_initialized_ = true;
+    }
+  }
+
+  void construct_brect() {
+    double side = (std::max)(xh(brect_) - xl(brect_), yh(brect_) - yl(brect_));
+    center(shift_, brect_);
+    set_points(brect_, shift_, shift_);
+    bloat(brect_, side * 1.2);
+  }
+
+  void color_exterior(const VD::edge_type* edge) {
+    if (edge->color() == EXTERNAL_COLOR) {
       return;
-    edge->color(VISITED);
-    edge->twin()->color(VISITED);
-    const voronoi_diagram<double>::vertex_type* v = edge->vertex1();
-    if (v == NULL || !edge->is_primary())
+    }
+    edge->color(EXTERNAL_COLOR);
+    edge->twin()->color(EXTERNAL_COLOR);
+    const VD::vertex_type* v = edge->vertex1();
+    if (v == NULL || !edge->is_primary()) {
       return;
-    const voronoi_diagram<double>::edge_type* e = v->incident_edge();
+    }
+    v->color(EXTERNAL_COLOR);
+    const VD::edge_type* e = v->incident_edge();
     do {
-      remove_exterior(e);
+      color_exterior(e);
       e = e->rot_next();
     } while (e != v->incident_edge());
   }
@@ -211,16 +196,182 @@ private:
   void update_view_port() {
     glMatrixMode(GL_PROJECTION);
     glLoadIdentity();
-    glOrtho(brect_.x_min() - shift_.x(), brect_.x_max() - shift_.x(),
-            brect_.y_min() - shift_.y(), brect_.y_max() - shift_.y(),
-            -1.0, 1.0);
+    rect_type view_rect = brect_;
+    deconvolve(view_rect, shift_);
+    glOrtho(xl(view_rect), xh(view_rect), yl(view_rect), yh(view_rect), -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
   }
 
-  bounding_rectangle<double> brect_;
+  void draw_points() {
+    // Draw input points and endpoints of the input segments.
+    glColor3f(0.0f, 0.5f, 1.0f);
+    glPointSize(9);
+    glBegin(GL_POINTS);
+    for (std::size_t i = 0; i < point_data_.size(); ++i) {
+      point_type point = point_data_[i];
+      deconvolve(point, shift_);
+      glVertex2f(point.x(), point.y());
+    }
+    for (std::size_t i = 0; i < segment_data_.size(); ++i) {
+      point_type lp = deconvolve(low(segment_data_[i]), shift_);
+      point_type hp = deconvolve(high(segment_data_[i]), shift_);
+      glVertex2f(lp.x(), lp.y());
+      glVertex2f(hp.x(), hp.y());
+    }
+    glEnd();
+  }
+
+  void draw_segments() {
+    // Draw input segments.
+    glColor3f(0.0f, 0.5f, 1.0f);
+    glLineWidth(2.7f);
+    glBegin(GL_LINES);
+    for (std::size_t i = 0; i < segment_data_.size(); ++i) {
+      point_type lp = deconvolve(low(segment_data_[i]), shift_);
+      point_type hp = deconvolve(high(segment_data_[i]), shift_);
+      glVertex2f(lp.x(), lp.y());
+      glVertex2f(hp.x(), hp.y());
+    }
+    glEnd();
+  }
+
+  void draw_vertices() {
+    // Draw voronoi vertices.
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glPointSize(6);
+    glBegin(GL_POINTS);
+    for (const_vertex_iterator it = vd_.vertices().begin();
+         it != vd_.vertices().end(); ++it) {
+      if (internal_edges_only_ && (it->color() == EXTERNAL_COLOR)) {
+        continue;
+      }
+      point_type vertex(it->x(), it->y());
+      vertex = deconvolve(vertex, shift_);
+      glVertex2f(vertex.x(), vertex.y());
+    }
+    glEnd();
+  }
+  void draw_edges() {
+    // Draw voronoi edges.
+    glColor3f(0.0f, 0.0f, 0.0f);
+    glLineWidth(1.7f);
+    for (const_edge_iterator it = vd_.edges().begin();
+         it != vd_.edges().end(); ++it) {
+      if (primary_edges_only_ && !it->is_primary()) {
+        continue;
+      }
+      if (internal_edges_only_ && (it->color() == EXTERNAL_COLOR)) {
+        continue;
+      }
+      std::vector<point_type> samples;
+      if (!it->is_finite()) {
+        clip_infinite_edge(*it, &samples);
+      } else {
+        point_type vertex0(it->vertex0()->x(), it->vertex0()->y());
+        samples.push_back(vertex0);
+        point_type vertex1(it->vertex1()->x(), it->vertex1()->y());
+        samples.push_back(vertex1);
+        if (it->is_curved()) {
+          sample_curved_edge(*it, &samples);
+        }
+      }
+      glBegin(GL_LINE_STRIP);
+      for (std::size_t i = 0; i < samples.size(); ++i) {
+        point_type vertex = deconvolve(samples[i], shift_);
+        glVertex2f(vertex.x(), vertex.y());
+      }
+      glEnd();
+    }
+  }
+
+  void clip_infinite_edge(const edge_type& edge, std::vector<point_type>* clipped_edge) {
+    const cell_type& cell1 = *edge.cell();
+    const cell_type& cell2 = *edge.twin()->cell();
+    point_type origin, direction;
+    // Infinite edges could not be created by two segment sites.
+    assert(cell1.contains_point() || cell2.contains_point());
+    if (cell1.contains_point() && cell2.contains_point()) {
+      point_type p1 = retrieve_point(cell1);
+      point_type p2 = retrieve_point(cell2);
+      origin.x((p1.x() + p2.x()) * 0.5);
+      origin.y((p1.y() + p2.y()) * 0.5);
+      direction.x(p1.y() - p2.y());
+      direction.y(p2.x() - p1.x());
+    } else {
+      origin = cell1.contains_segment() ?
+          retrieve_point(cell2) :
+          retrieve_point(cell1);
+      segment_type segment = cell1.contains_segment() ?
+          retrieve_segment(cell1) :
+          retrieve_segment(cell2);
+      coordinate_type dx = high(segment).x() - low(segment).x();
+      coordinate_type dy = high(segment).y() - low(segment).y();
+      if ((low(segment) == origin) ^ cell1.contains_point()) {
+        direction.x(dy);
+        direction.y(-dx);
+      } else {
+        direction.x(-dy);
+        direction.y(dx);
+      }
+    }
+    coordinate_type side = xh(brect_) - xl(brect_);
+    coordinate_type koef = side / (std::max)(fabs(direction.x()), fabs(direction.y()));
+    if (edge.vertex0() == NULL) {
+      clipped_edge->push_back(point_type(
+          origin.x() - direction.x() * koef,
+          origin.y() - direction.y() * koef));
+    } else {
+      clipped_edge->push_back(point_type(edge.vertex0()->x(), edge.vertex0()->y()));
+    }
+    if (edge.vertex1() == NULL) {
+      clipped_edge->push_back(point_type(
+          origin.x() + direction.x() * koef,
+          origin.y() + direction.y() * koef));
+    } else {
+      clipped_edge->push_back(point_type(edge.vertex1()->x(), edge.vertex1()->y()));
+    }
+  }
+
+  void sample_curved_edge(
+      const edge_type& edge,
+      std::vector<point_type>* sampled_edge) {
+    coordinate_type max_dist = 1E-3 * (xh(brect_) - xl(brect_));
+    point_type point = edge.cell()->contains_point() ?
+        retrieve_point(*edge.cell()) :
+        retrieve_point(*edge.twin()->cell());
+    segment_type segment = edge.cell()->contains_point() ?
+        retrieve_segment(*edge.twin()->cell()) :
+        retrieve_segment(*edge.cell());
+    voronoi_visual_utils<coordinate_type>::discretize(
+        point, segment, max_dist, sampled_edge);
+  }
+
+  point_type retrieve_point(const cell_type& cell) {
+    source_index_type index = cell.source_index();
+    source_category_type category = cell.source_category();
+    if (category == detail::SOURCE_CATEGORY_SINGLE_POINT) {
+      return point_data_[index];
+    }
+    index -= point_data_.size();
+    if (category == detail::SOURCE_CATEGORY_SEGMENT_START_POINT) {
+      return low(segment_data_[index]);
+    } else {
+      return high(segment_data_[index]);
+    }
+  }
+
+  segment_type retrieve_segment(const cell_type& cell) {
+    source_index_type index = cell.source_index() - point_data_.size();
+    return segment_data_[index];
+  }
+
   point_type shift_;
-  default_voronoi_builder vb_;
-  voronoi_diagram<coordinate_type> vd_;
+  std::vector<point_type> point_data_;
+  std::vector<segment_type> segment_data_;
+  rect_type brect_;
+  VB vb_;
+  VD vd_;
+  bool brect_initialized_;
   bool primary_edges_only_;
   bool internal_edges_only_;
 };
@@ -233,7 +384,7 @@ public:
     file_dir_ = QDir(QDir::currentPath(), tr("*.txt"));
     file_name_ = tr("");
 
-    QHBoxLayout *centralLayout = new QHBoxLayout;
+    QHBoxLayout* centralLayout = new QHBoxLayout;
     centralLayout->addWidget(glWidget_);
     centralLayout->addLayout(create_file_layout());
     setLayout(centralLayout);
@@ -281,8 +432,8 @@ private slots:
   }
 
 private:
-  QGridLayout *create_file_layout() {
-    QGridLayout *file_layout = new QGridLayout;
+  QGridLayout* create_file_layout() {
+    QGridLayout* file_layout = new QGridLayout;
 
     message_label_ = new QLabel("Double click item to build voronoi diagram:");
 
@@ -292,20 +443,20 @@ private:
                         this,
                         SLOT(build()));
 
-    QCheckBox *primary_checkbox = new QCheckBox("Show primary edges only.");
+    QCheckBox* primary_checkbox = new QCheckBox("Show primary edges only.");
     connect(primary_checkbox, SIGNAL(clicked()),
         this, SLOT(primary_edges_only()));
 
-    QCheckBox *internal_checkbox = new QCheckBox("Show internal edges only.");
+    QCheckBox* internal_checkbox = new QCheckBox("Show internal edges only.");
     connect(internal_checkbox, SIGNAL(clicked()),
         this, SLOT(internal_edges_only()));
 
-    QPushButton *browse_button =
+    QPushButton* browse_button =
         new QPushButton(tr("Browse Input Directory"));
     connect(browse_button, SIGNAL(clicked()), this, SLOT(browse()));
     browse_button->setMinimumHeight(50);
 
-    QPushButton *print_scr_button = new QPushButton(tr("Make Screenshot"));
+    QPushButton* print_scr_button = new QPushButton(tr("Make Screenshot"));
     connect(print_scr_button, SIGNAL(clicked()), this, SLOT(print_scr()));
     print_scr_button->setMinimumHeight(50);
 
@@ -334,12 +485,12 @@ private:
 
   QDir file_dir_;
   QString file_name_;
-  GLWidget *glWidget_;
-  QListWidget *file_list_;
-  QLabel *message_label_;
+  GLWidget* glWidget_;
+  QListWidget* file_list_;
+  QLabel* message_label_;
 };
 
-int main(int argc, char *argv[]) {
+int main(int argc, char* argv[]) {
   QApplication app(argc, argv);
   MainWindow window;
   window.show();

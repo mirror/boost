@@ -27,56 +27,39 @@ enum kOrientation {
   LEFT = 1
 };
 
-template <typename Point2D>
-kOrientation get_orientation(const Point2D &point1,
-                             const Point2D &point2,
-                             const Point2D &point3) {
-  typename Point2D::coordinate_type a = (point2.x() - point1.x()) * (point3.y() - point2.y());
-  typename Point2D::coordinate_type b = (point2.y() - point1.y()) * (point3.x() - point2.x());
-  if (a == b)
+template <typename VERTEX>
+kOrientation get_orientation(const VERTEX& v1, const VERTEX& v2, const VERTEX& v3) {
+  typename VERTEX::coordinate_type lhs = (v2.x() - v1.x()) * (v3.y() - v2.y());
+  typename VERTEX::coordinate_type rhs = (v2.y() - v1.y()) * (v3.x() - v2.x());
+  if (lhs == rhs) {
     return COLLINEAR;
-  return (a < b) ? RIGHT : LEFT;
-}
-
-template <typename Output>
-bool verify_half_edge_orientation(const Output &output) {
-  typedef typename Output::point_type point_type;
-  typename Output::const_edge_iterator edge_it;
-  for (edge_it = output.edges().begin(); 
-       edge_it != output.edges().end(); edge_it++) {
-    if (edge_it->is_finite()) {
-      const point_type &site_point = edge_it->cell()->point0();
-      const point_type &start_point = edge_it->vertex0()->vertex();
-      const point_type &end_point = edge_it->vertex1()->vertex();
-      if (get_orientation(start_point, end_point, site_point) != LEFT)
-        return false;
-    }
   }
-  return true;
+  return (lhs < rhs) ? RIGHT : LEFT;
 }
 
-template <typename Output>
-bool verify_cell_convexity(const Output &output) {
-  typedef typename Output::point_type point_type;
-  typename Output::const_cell_iterator cell_it;
+template <typename OUTPUT>
+bool verify_cell_convexity(const OUTPUT& output) {
+  typename OUTPUT::const_cell_iterator cell_it;
   for (cell_it = output.cells().begin();
        cell_it != output.cells().end(); cell_it++) {
-    const typename Output::edge_type *edge = cell_it->incident_edge();
+    const typename OUTPUT::edge_type* edge = cell_it->incident_edge();
     if (edge)
       do {
-        if (edge->next()->prev() != edge)
+        if (edge->next()->prev() != edge) {
           return false;
-        if (edge->cell() != &(*cell_it))
+        }
+        if (edge->cell() != &(*cell_it)) {
           return false;
+        }
+        if (edge->vertex1() != edge->next()->vertex0()) {
+          return false;
+        }
         if (edge->vertex0() != NULL &&
             edge->vertex1() != NULL &&
-            edge->vertex1() == edge->next()->vertex0() &&
             edge->next()->vertex1() != NULL) {
-          const point_type &vertex1 = edge->vertex0()->vertex();
-          const point_type &vertex2 = edge->vertex1()->vertex();
-          const point_type &vertex3 = edge->next()->vertex1()->vertex();
-          if (get_orientation(vertex1, vertex2, vertex3) != LEFT)
+          if (get_orientation(*edge->vertex0(), *edge->vertex1(), *edge->next()->vertex1()) != LEFT) {
             return false;
+          }
         }
         edge = edge->next();
       } while(edge != cell_it->incident_edge());
@@ -84,38 +67,36 @@ bool verify_cell_convexity(const Output &output) {
   return true;
 }
 
-template <typename Output>
-bool verify_incident_edges_ccw_order(const Output &output) {
-  typedef typename Output::point_type point_type;
-  typedef typename Output::edge_type voronoi_edge_type;
-  typename Output::const_vertex_iterator vertex_it;
+template <typename OUTPUT>
+bool verify_incident_edges_ccw_order(const OUTPUT& output) {
+  typedef typename OUTPUT::edge_type voronoi_edge_type;
+  typename OUTPUT::const_vertex_iterator vertex_it;
   for (vertex_it = output.vertices().begin();
-     vertex_it != output.vertices().end(); vertex_it++) {
+       vertex_it != output.vertices().end(); vertex_it++) {
     if (vertex_it->is_degenerate())
       continue;
-    const voronoi_edge_type *edge = vertex_it->incident_edge();
+    const voronoi_edge_type* edge = vertex_it->incident_edge();
     do {
-      const voronoi_edge_type *edge_next1 = edge->rot_next();
-      const voronoi_edge_type *edge_next2 = edge_next1->rot_next();
-      const point_type &site1 = edge->cell()->point0();
-      const point_type &site2 = edge_next1->cell()->point0();
-      const point_type &site3 = edge_next2->cell()->point0();
-
-      if (get_orientation(site1, site2, site3) != LEFT)
+      const voronoi_edge_type* next_edge = edge->rot_next();
+      if (edge->vertex0() != next_edge->vertex0()) {
         return false;
-
+      }
+      if (edge->vertex1() != NULL && next_edge->vertex1() != NULL &&
+          get_orientation(*edge->vertex1(), *edge->vertex0(), *next_edge->vertex1()) == LEFT) {
+        return false;
+      }
       edge = edge->rot_next();
     } while (edge != vertex_it->incident_edge());
   }
   return true;
 }
 
-template <typename P>
+template <typename VERTEX>
 struct cmp {
-  bool operator()(const P& p1, const P& p2) const {
-    if (p1.x() != p2.x()) 
-      return p1.x() < p2.x();
-    return p1.y() < p2.y();
+  bool operator()(const VERTEX& v1, const VERTEX& v2) const {
+    if (v1.x() != v2.x()) 
+      return v1.x() < v2.x();
+    return v1.y() < v2.y();
   }
 };
 
@@ -124,17 +105,16 @@ bool verfiy_no_line_edge_intersections(const Output &output) {
   // Create map from edges with first point less than the second one.
   // Key is the first point of the edge, value is a vector of second points
   // with the same first point.
-  typedef typename Output::point_type point_type;
-  cmp<point_type> comparator;
-  std::map< point_type, std::vector<point_type>, cmp<point_type> > edge_map;
+  typedef typename Output::vertex_type vertex_type;
+  cmp<vertex_type> comparator;
+  std::map< vertex_type, std::vector<vertex_type>, cmp<vertex_type> > edge_map;
   typename Output::const_edge_iterator edge_it;
   for (edge_it = output.edges().begin();
        edge_it != output.edges().end(); edge_it++) {
     if (edge_it->is_finite()) {
-        const point_type &vertex0 = edge_it->vertex0()->vertex();
-        const point_type &vertex1 = edge_it->vertex1()->vertex();
-      if (comparator(vertex0, vertex1))
-        edge_map[vertex0].push_back(vertex1);
+      if (comparator(*edge_it->vertex0(), *edge_it->vertex1())) {
+        edge_map[*edge_it->vertex0()].push_back(*edge_it->vertex1());
+      }
     }
   }
   return !intersection_check(edge_map);
@@ -192,19 +172,16 @@ bool intersection_check(const std::map< Point2D, std::vector<Point2D>, cmp<Point
 }
 
 enum kVerification {
-  HALF_EDGE_ORIENTATION = 1,
-  CELL_CONVEXITY = 2,
-  INCIDENT_EDGES_CCW_ORDER = 4,
-  NO_HALF_EDGE_INTERSECTIONS = 8,
-  FAST_VERIFICATION = 7,
-  COMPLETE_VERIFICATION = 15
+  CELL_CONVEXITY = 1,
+  INCIDENT_EDGES_CCW_ORDER = 2,
+  NO_HALF_EDGE_INTERSECTIONS = 4,
+  FAST_VERIFICATION = 3,
+  COMPLETE_VERIFICATION = 7
 };
 
 template <typename Output>
 bool verify_output(const Output &output, kVerification mask) {
   bool result = true;
-  if (mask & HALF_EDGE_ORIENTATION)
-    result &= verify_half_edge_orientation(output);
   if (mask & CELL_CONVEXITY)
     result &= verify_cell_convexity(output);
   if (mask & INCIDENT_EDGES_CCW_ORDER)
@@ -215,7 +192,7 @@ bool verify_output(const Output &output, kVerification mask) {
 }
 
 template <typename PointIterator>
-void save_points(PointIterator first, PointIterator last, const char *file_name) {
+void save_points(PointIterator first, PointIterator last, const char* file_name) {
   std::ofstream ofs(file_name);
   ofs << std::distance(first, last) << std::endl;
   for (PointIterator it = first; it != last; ++it) {
@@ -225,7 +202,7 @@ void save_points(PointIterator first, PointIterator last, const char *file_name)
 }
 
 template <typename SegmentIterator>
-void save_segments(SegmentIterator first, SegmentIterator last, const char *file_name) {
+void save_segments(SegmentIterator first, SegmentIterator last, const char* file_name) {
   std::ofstream ofs(file_name);
   ofs << std::distance(first, last) << std::endl;
   for (SegmentIterator it = first; it != last; ++it) {
@@ -236,7 +213,7 @@ void save_segments(SegmentIterator first, SegmentIterator last, const char *file
 }
 
 template <typename T>
-void clean_segment_set(std::vector< segment_data<T> > &data) {
+void clean_segment_set(std::vector< segment_data<T> >& data) {
   typedef T Unit;
   typedef typename scanline_base<Unit>::Point Point;
   typedef typename scanline_base<Unit>::half_edge half_edge;
