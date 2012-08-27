@@ -23,6 +23,7 @@ test-suite "proto"
     :
         [ run calculator.cpp ]
         [ run constrained_ops.cpp ]
+        [ run cpp-next_bug.cpp ]
         [ run deep_copy.cpp ]
         [ run display_expr.cpp ]
         [ run deduce_domain.cpp ]
