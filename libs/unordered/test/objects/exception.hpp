@@ -425,10 +425,10 @@ namespace exception
             test::detail::tracker.allocator_ref();
         }
 
-        template <class Y> allocator2(allocator<Y> const& x) : tag_(x.tag_)
+        allocator2(allocator<T> const& x) : tag_(x.tag_)
         {
             UNORDERED_SCOPE(allocator2::allocator2()) {
-                UNORDERED_EPOINT("Mock allocator2 copy constructor from allocator.");
+                UNORDERED_EPOINT("Mock allocator2 constructor from allocator.");
             }
             test::detail::tracker.allocator_ref();
         }
