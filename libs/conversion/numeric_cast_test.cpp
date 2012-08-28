@@ -96,5 +96,6 @@ int test_main( int , char * [] )
         { cout<<"caught bad_numeric_cast #5\n"; caught_exception = true; }
     BOOST_CHECK ( caught_exception );
 
+    (void)ul; // Supressing GCC warning about set but unused wariable
     return 0 ;
 }

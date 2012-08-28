@@ -2300,6 +2300,17 @@ namespace boost {
         return caster_type::lexical_cast_impl(arg);
     }
 
+    template <typename Target, typename CharType>
+    inline Target lexical_cast(const CharType* chars, std::size_t count)
+    {
+        BOOST_STATIC_ASSERT_MSG(::boost::detail::is_char_or_wchar<CharType>::value, 
+            "CharType must be a character or wide character type");
+
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const CharType*>(chars, chars + count)
+        );
+    }
+
 } // namespace boost
 
 #else // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
