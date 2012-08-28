@@ -291,9 +291,9 @@ namespace boost { namespace proto
             struct function;
 
             // Fusion tags
-            struct proto_expr;
-            struct proto_expr_iterator;
-            struct proto_flat_view;
+            template<typename Tag, typename Domain> struct proto_expr;
+            template<typename Tag, typename Domain> struct proto_expr_iterator;
+            template<typename Tag, typename Domain> struct proto_flat_view;
         }
     }
 
