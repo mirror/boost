@@ -25,7 +25,7 @@ namespace boost { namespace proto { namespace functional
 
         template<typename This, typename Rng>
         struct result<This(Rng)>
-          : boost::range_reverse_iterator<Rng>
+          : boost::range_reverse_iterator<Rng const>
         {};
 
         template<typename This, typename Rng>

@@ -25,22 +25,22 @@ namespace boost { namespace proto { namespace functional
 
         template<typename This, typename Rng>
         struct result<This(Rng)>
-          : boost::range_iterator<Rng>
+          : boost::range_reverse_iterator<Rng const>
         {};
 
         template<typename This, typename Rng>
         struct result<This(Rng &)>
-          : boost::range_iterator<Rng>
+          : boost::range_reverse_iterator<Rng>
         {};
 
         template<typename Rng>
-        typename boost::range_iterator<Rng>::type operator()(Rng &rng) const
+        typename boost::range_reverse_iterator<Rng>::type operator()(Rng &rng) const
         {
             return boost::rend(rng);
         }
 
         template<typename Rng>
-        typename boost::range_iterator<Rng const>::type operator()(Rng const &rng) const
+        typename boost::range_reverse_iterator<Rng const>::type operator()(Rng const &rng) const
         {
             return boost::rend(rng);
         }
