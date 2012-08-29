@@ -44,6 +44,16 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::_env">proto::_env</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::_env_var">proto::_env_var</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::_expr">proto::_expr</classname>
         </computeroutput>
       </listitem>
@@ -204,6 +214,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::data_type">proto::data_type</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::deduce_domain">proto::deduce_domain</classname>
         </computeroutput>
       </listitem>
@@ -250,6 +265,16 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::domain_of">proto::domain_of</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::empty_env">proto::empty_env</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::env">proto::env</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -304,6 +329,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::as_env">proto::functional::as_env</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::as_expr">proto::functional::as_expr</classname>
         </computeroutput>
       </listitem>
@@ -334,6 +364,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::env_var">proto::functional::env_var</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::eval">proto::functional::eval</classname>
         </computeroutput>
       </listitem>
@@ -345,6 +380,11 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::functional::flatten">proto::functional::flatten</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::has_env_var">proto::functional::has_env_var</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -459,6 +499,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::is_env">proto::is_env</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::is_expr">proto::is_expr</classname>
         </computeroutput>
       </listitem>
@@ -475,6 +520,11 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::is_transform">proto::is_transform</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::key_not_found">proto::key_not_found</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -664,6 +714,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::result_of::as_env">proto::result_of::as_env</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::result_of::as_expr">proto::result_of::as_expr</classname>
         </computeroutput>
       </listitem>
@@ -684,12 +739,22 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::result_of::env_var">proto::result_of::env_var</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::result_of::eval">proto::result_of::eval</classname>
         </computeroutput>
       </listitem>
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::result_of::flatten">proto::result_of::flatten</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::result_of::has_env_var">proto::result_of::has_env_var</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -1009,6 +1074,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::transforms_type">proto::transforms_type</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::transform_impl">proto::transform_impl</classname>
         </computeroutput>
       </listitem>
@@ -1060,6 +1130,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <functionname alt="boost::proto::as_env">proto::as_env()</functionname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <functionname alt="boost::proto::as_expr">proto::as_expr()</functionname>
         </computeroutput>
       </listitem>
@@ -1095,12 +1170,22 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <functionname alt="boost::proto::env_var">proto::env_var()</functionname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <functionname alt="boost::proto::eval">proto::eval()</functionname>
         </computeroutput>
       </listitem>
       <listitem>
         <computeroutput>
           <functionname alt="boost::proto::flatten">proto::flatten()</functionname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <functionname alt="boost::proto::has_env_var">proto::has_env_var()</functionname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -1176,6 +1261,7 @@
   <xi:include href="reference/transform/arg.xml"/>
   <xi:include href="reference/transform/call.xml"/>
   <xi:include href="reference/transform/default.xml"/>
+  <xi:include href="reference/transform/env.xml"/>
   <xi:include href="reference/transform/fold.xml"/>
   <xi:include href="reference/transform/fold_tree.xml"/>
   <xi:include href="reference/transform/impl.xml"/>

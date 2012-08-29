@@ -120,7 +120,7 @@ namespace boost { namespace phoenix
                         evaluator(
                             proto::_child_c<0>
                           , proto::_data
-                          , proto::make<int()>
+                          , proto::make<proto::empty_env()>
                         )
                     >
                 >
@@ -130,7 +130,7 @@ namespace boost { namespace phoenix
                         evaluator(
                             proto::_child_c<1>
                           , proto::_data
-                          , proto::make<int()>
+                          , proto::make<proto::empty_env()>
                         )
                     >
                 >
@@ -142,7 +142,7 @@ namespace boost { namespace phoenix
                                 evaluator(
                                     proto::_child_c<0>
                                   , proto::_data
-                                  , proto::make<int()>
+                                  , proto::make<proto::empty_env()>
                                 )
                             >
                           , proto::fold<
@@ -156,7 +156,7 @@ namespace boost { namespace phoenix
                                       , proto::call<
                                             try_catch_is_nullary(
                                                 proto::_
-                                              , proto::make<int()>
+                                              , proto::make<proto::empty_env()>
                                               , proto::_data
                                             )
                                         >
@@ -256,7 +256,7 @@ namespace boost { namespace phoenix
         : proto::call<
             detail::try_catch_is_nullary(
                 proto::_
-              , proto::make<int()>
+              , proto::make<proto::empty_env()>
               , _context
             )
         >

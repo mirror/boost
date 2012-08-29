@@ -136,8 +136,8 @@ namespace boost { namespace phoenix {
                     ctx
                   , cond
                   , cases
-                  , typename detail::switch_size::impl<Cases, int, int>::result_type()
-                  , typename detail::switch_grammar::impl<Cases, int, int>::result_type()
+                  , typename detail::switch_size::impl<Cases, int, proto::empty_env>::result_type()
+                  , typename detail::switch_grammar::impl<Cases, int, proto::empty_env>::result_type()
                 );
         }
 

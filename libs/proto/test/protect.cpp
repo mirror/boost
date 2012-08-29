@@ -19,40 +19,76 @@ struct identity
     typedef T type;
 };
 
-struct Test
+struct TestWithMake
   : proto::make< proto::protect<_> >
 {};
 
-struct Test1
+struct TestWithMake1
   : proto::make< identity<proto::protect<_> > >
 {};
 
-struct Test2
+struct TestWithMake2
   : proto::make< identity<proto::protect<int> > >
 {};
 
-struct Test3
+struct TestWithMake3
   : proto::make< identity<proto::protect<identity<_> > > >
 {};
 
-struct Test4
+struct TestWithMake4
   : proto::make< identity<proto::protect<identity<int> > > >
 {};
 
-struct Test5
+struct TestWithMake5
   : proto::make< identity<proto::protect<identity<identity<int> > > > >
 {};
 
-void test_protect()
+void test_protect_with_make()
 {
     proto::terminal<int>::type i = {42};
 
-    _ t = Test()(i);
-    _ t1 = Test1()(i);
-    int t2 = Test2()(i);
-    identity<_> t3 = Test3()(i);
-    identity<int> t4 = Test4()(i);
-    identity<identity<int> > t5 = Test5()(i);
+    _ t = TestWithMake()(i);
+    _ t1 = TestWithMake1()(i);
+    int t2 = TestWithMake2()(i);
+    identity<_> t3 = TestWithMake3()(i);
+    identity<int> t4 = TestWithMake4()(i);
+    identity<identity<int> > t5 = TestWithMake5()(i);
+}
+
+//struct TestWithWhen
+//  : proto::when<_, proto::protect<_>() >
+//{};
+
+struct TestWithWhen1
+  : proto::when<_, identity<proto::protect<_> >() >
+{};
+
+struct TestWithWhen2
+  : proto::when<_, identity<proto::protect<int> >() >
+{};
+
+struct TestWithWhen3
+  : proto::when<_, identity<proto::protect<identity<_> > >() >
+{};
+
+struct TestWithWhen4
+  : proto::when<_, identity<proto::protect<identity<int> > >() >
+{};
+
+struct TestWithWhen5
+  : proto::when<_, identity<proto::protect<identity<identity<int> > > >() >
+{};
+
+void test_protect_with_when()
+{
+    proto::terminal<int>::type i = {42};
+
+    //_ t = TestWithWhen()(i);
+    _ t1 = TestWithWhen1()(i);
+    int t2 = TestWithWhen2()(i);
+    identity<_> t3 = TestWithWhen3()(i);
+    identity<int> t4 = TestWithWhen4()(i);
+    identity<identity<int> > t5 = TestWithWhen5()(i);
 }
 
 using namespace boost::unit_test;
@@ -63,7 +99,8 @@ test_suite* init_unit_test_suite( int argc, char* argv[] )
 {
     test_suite *test = BOOST_TEST_SUITE("test proto::protect");
 
-    test->add(BOOST_TEST_CASE(&test_protect));
+    test->add(BOOST_TEST_CASE(&test_protect_with_make));
+    test->add(BOOST_TEST_CASE(&test_protect_with_when));
 
     return test;
 }

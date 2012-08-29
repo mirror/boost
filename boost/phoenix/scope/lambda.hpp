@@ -181,7 +181,7 @@ namespace boost { namespace phoenix
                     )
                 >
               , proto::make<
-                    int()
+                    proto::empty_env()
                 >
             )
         >
@@ -214,7 +214,7 @@ namespace boost { namespace phoenix
                                 evaluator(
                                     proto::_
                                   , _context
-                                  , proto::make<int()>
+                                  , proto::make<proto::empty_env()>
                                 )
                             >
                         >()
@@ -309,7 +309,7 @@ namespace boost { namespace phoenix
             return
                 expression::
                     lambda<env_type, locals_type, Map, Lambda>::
-                        make(env(ctx), locals, map, lambda);
+                        make(phoenix::env(ctx), locals, map, lambda);
         }
     };
 

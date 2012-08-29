@@ -33,6 +33,8 @@
 #include <boost/utility/addressof.hpp>
 #include <boost/utility/result_of.hpp>
 #include <boost/utility/enable_if.hpp>
+#include <boost/proto/proto_fwd.hpp>
+#include <boost/proto/detail/any.hpp>
 
 #if defined(_MSC_VER) && (_MSC_VER >= 1020)
 # pragma warning(push)
@@ -61,68 +63,6 @@ namespace boost { namespace proto
 {
     namespace detail
     {
-        namespace anyns
-        {
-            ////////////////////////////////////////////////////////////////////////////////////////////
-            struct any
-            {
-                any(...);
-                any operator=(any);
-                any operator[](any);
-                #define M0(Z, N, DATA) any operator()(BOOST_PP_ENUM_PARAMS_Z(Z, N, any BOOST_PP_INTERCEPT));
-                BOOST_PP_REPEAT(BOOST_PROTO_MAX_ARITY, M0, ~)
-                #undef M0
-
-                template<typename T>
-                operator T &() const volatile;
-
-                any operator+();
-                any operator-();
-                any operator*();
-                any operator&();
-                any operator~();
-                any operator!();
-                any operator++();
-                any operator--();
-                any operator++(int);
-                any operator--(int);
-
-                friend any operator<<(any, any);
-                friend any operator>>(any, any);
-                friend any operator*(any, any);
-                friend any operator/(any, any);
-                friend any operator%(any, any);
-                friend any operator+(any, any);
-                friend any operator-(any, any);
-                friend any operator<(any, any);
-                friend any operator>(any, any);
-                friend any operator<=(any, any);
-                friend any operator>=(any, any);
-                friend any operator==(any, any);
-                friend any operator!=(any, any);
-                friend any operator||(any, any);
-                friend any operator&&(any, any);
-                friend any operator&(any, any);
-                friend any operator|(any, any);
-                friend any operator^(any, any);
-                friend any operator,(any, any);
-                friend any operator->*(any, any);
-
-                friend any operator<<=(any, any);
-                friend any operator>>=(any, any);
-                friend any operator*=(any, any);
-                friend any operator/=(any, any);
-                friend any operator%=(any, any);
-                friend any operator+=(any, any);
-                friend any operator-=(any, any);
-                friend any operator&=(any, any);
-                friend any operator|=(any, any);
-                friend any operator^=(any, any);
-            };
-        }
-
-        using anyns::any;
-
         ////////////////////////////////////////////////////////////////////////////////////////////
         template<typename T>
         struct as_mutable
