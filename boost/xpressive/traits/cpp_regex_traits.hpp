@@ -607,7 +607,7 @@ private:
     /// INTERNAL ONLY
     static char_class_pair const &char_class(std::size_t j)
     {
-        static BOOST_CONSTEXPR char_class_pair const s_char_class_map[] =
+        static BOOST_CONSTEXPR_OR_CONST char_class_pair s_char_class_map[] =
         {
             { BOOST_XPR_CSTR_(char_type, "alnum"),  detail::std_ctype_alnum }
           , { BOOST_XPR_CSTR_(char_type, "alpha"),  detail::std_ctype_alpha }
