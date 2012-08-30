@@ -32,7 +32,7 @@ time2_demo contained this comment:
 #ifndef BOOST_RATIO_RATIO_HPP
 #define BOOST_RATIO_RATIO_HPP
 
-#include <boost/config.hpp>
+#include <boost/ratio/config.hpp>
 #include <boost/ratio/detail/mpl/abs.hpp>
 #include <boost/ratio/detail/mpl/sign.hpp>
 #include <boost/ratio/detail/mpl/gcd.hpp>
