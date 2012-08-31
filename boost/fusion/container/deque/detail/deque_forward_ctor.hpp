@@ -13,6 +13,8 @@
 #error "C++03 only! This file should not have been included"
 #endif
 
+#define FUSION_DEQUE_FORWARD_CTOR_FORWARD(z, n, _)    std::forward<T##n>(t##n)
+
 #include <boost/preprocessor/iterate.hpp>
 #include <boost/preprocessor/repetition/enum_shifted_params.hpp>
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
@@ -22,14 +24,22 @@
 #define BOOST_PP_ITERATION_LIMITS (2, FUSION_MAX_DEQUE_SIZE)
 #include BOOST_PP_ITERATE()
 
+#undef FUSION_DEQUE_FORWARD_CTOR_FORWARD
 #endif
 #else
 
 #define N BOOST_PP_ITERATION()
 
 deque(BOOST_PP_ENUM_BINARY_PARAMS(N, typename add_reference<typename add_const<T, >::type>::type t))
-    : base(detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(N, T)>::call(BOOST_PP_ENUM_PARAMS(N, t)))
+    : base(detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(N, T)>::construct(BOOST_PP_ENUM_PARAMS(N, t)))
 {}
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+deque(BOOST_PP_ENUM_BINARY_PARAMS(N, T, && t))
+    : base(detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(N, T)>::
+		forward_(BOOST_PP_ENUM(N, FUSION_DEQUE_FORWARD_CTOR_FORWARD, _)))
+{}
+#endif
 
 #undef N
 #endif

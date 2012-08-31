@@ -47,15 +47,38 @@ namespace boost { namespace fusion { namespace detail
                 *it, base::from_iterator(fusion::next(it)));
         }
 
+        keyed_element(keyed_element const& rhs)
+          : Rest(rhs.get_base()), value_(rhs.value_)
+        {}
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        keyed_element(keyed_element&& rhs)
+          : Rest(std::forward<Rest>(rhs.forward_base()))
+          , value_(std::forward<Value>(rhs.value_))
+        {}
+#endif
+
         template <typename U, typename Rst>
         keyed_element(keyed_element<Key, U, Rst> const& rhs)
           : Rest(rhs.get_base()), value_(rhs.value_)
         {}
 
-        Rest const get_base() const
+        Rest& get_base()
         {
             return *this;
         }
+
+        Rest const& get_base() const
+        {
+            return *this;
+        }
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        Rest&& forward_base()
+        {
+            return std::forward<Rest>(*static_cast<Rest*>(this));
+        }
+#endif
 
         typename cref_result<Value>::type get(Key) const
         {
@@ -67,9 +90,16 @@ namespace boost { namespace fusion { namespace detail
             return value_;
         }
 
-        keyed_element(typename call_param<Value>::type value, Rest const& rest)
+        keyed_element(Value const& value, Rest const& rest)
             : Rest(rest), value_(value)
         {}
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        keyed_element(Value&& value, Rest&& rest)
+            : Rest(std::forward<Rest>(rest))
+            , value_(std::forward<Value>(value))
+        {}
+#endif
 
         keyed_element()
             : Rest(), value_()

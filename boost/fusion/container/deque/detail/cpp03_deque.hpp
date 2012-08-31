@@ -87,13 +87,34 @@ namespace boost { namespace fusion {
             : base(t0, detail::nil_keyed_element())
             {}
 
+        explicit deque(deque const& rhs)
+            : base(rhs)
+            {}
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        explicit deque(T0&& t0)
+            : base(std::forward<T0>(t0), detail::nil_keyed_element())
+            {}
+
+        explicit deque(deque&& rhs)
+            : base(std::forward<deque>(rhs))
+            {}
+#endif
+
         template<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename U)>
-            deque(deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)> const& seq)
+        deque(deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)> const& seq)
             : base(seq)
             {}
 
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        template<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename U)>
+        deque(deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)>&& seq)
+            : base(std::forward<deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)>>(seq))
+            {}
+#endif
+
         template<typename Sequence>
-            deque(Sequence const& seq, typename disable_if<is_convertible<Sequence, T0> >::type* /*dummy*/ = 0)
+        deque(Sequence const& seq, typename disable_if<is_convertible<Sequence, T0> >::type* /*dummy*/ = 0)
             : base(base::from_iterator(fusion::begin(seq)))
             {}
 
@@ -112,7 +133,6 @@ namespace boost { namespace fusion {
             base::operator=(rhs);
             return *this;
         }
-
     };
 }}
 

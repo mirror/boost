@@ -72,6 +72,11 @@ namespace boost { namespace fusion { namespace detail
         {
             return type();
         }
+
+        static type forward_()
+        {
+            return type();
+        }
     };
 
     template<typename N, BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename T)>

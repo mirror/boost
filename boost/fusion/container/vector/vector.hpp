@@ -106,6 +106,11 @@ namespace boost { namespace fusion
         vector(vector const& rhs)
             : vec(rhs.vec) {}
 
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        vector(vector&& rhs)
+            : vec(std::move(rhs.vec)) {}
+#endif
+
         template <typename Sequence>
         vector(Sequence const& rhs)
             : vec(BOOST_FUSION_VECTOR_COPY_INIT()) {}

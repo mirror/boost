@@ -12,7 +12,10 @@
 #define FUSION_MEMBER_DEFAULT_INIT(z, n, _)     m##n()
 #define FUSION_MEMBER_INIT(z, n, _)             m##n(_##n)
 #define FUSION_COPY_INIT(z, n, _)               m##n(other.m##n)
+#define FUSION_MOVE_FROM_OTHER(z, n, _)         m##n(std::move(other.m##n))
+#define FUSION_MOVE(z, n, _)                    m##n(std::move(_##n))
 #define FUSION_MEMBER_DECL(z, n, _)             T##n m##n;
+#define FUSION_FORWARD(z, n, _)                 std::forward<T##n>(_##n)
 
 #define FUSION_MEMBER_ASSIGN(z, n, _)                                           \
     this->BOOST_PP_CAT(m, n) = vec.BOOST_PP_CAT(m, n);
@@ -42,6 +45,11 @@
         BOOST_PP_CAT(vector_data, N)()
             : BOOST_PP_ENUM(N, FUSION_MEMBER_DEFAULT_INIT, _) {}
 
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        BOOST_PP_CAT(vector_data, N)(BOOST_PP_ENUM_BINARY_PARAMS(N, T, && _))
+            : BOOST_PP_ENUM(N, FUSION_MOVE, _) {}
+#endif
+
         BOOST_PP_CAT(vector_data, N)(
             BOOST_PP_ENUM_BINARY_PARAMS(
                 N, typename detail::call_param<T, >::type _))
@@ -50,6 +58,12 @@
         BOOST_PP_CAT(vector_data, N)(
             BOOST_PP_CAT(vector_data, N) const& other)
             : BOOST_PP_ENUM(N, FUSION_COPY_INIT, _) {}
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        BOOST_PP_CAT(vector_data, N)(
+            BOOST_PP_CAT(vector_data, N)&& other)
+            : BOOST_PP_ENUM(N, FUSION_MOVE_FROM_OTHER, _) {}
+#endif
 
         BOOST_PP_CAT(vector_data, N)&
         operator=(BOOST_PP_CAT(vector_data, N) const& vec)
@@ -104,6 +118,19 @@
             BOOST_PP_ENUM_BINARY_PARAMS(
                 N, typename detail::call_param<T, >::type _))
             : base_type(BOOST_PP_ENUM_PARAMS(N, _)) {}
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if (N == 1)
+        explicit
+#endif
+        BOOST_PP_CAT(vector, N)(BOOST_PP_ENUM_BINARY_PARAMS(N, T, && _))
+            : base_type(BOOST_PP_ENUM(N, FUSION_FORWARD, _)) {}
+#endif
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        BOOST_PP_CAT(vector, N)(BOOST_PP_CAT(vector, N)&& rhs)
+            : base_type(std::move(rhs)) {}
+#endif
 
         template <BOOST_PP_ENUM_PARAMS(N, typename U)>
         BOOST_PP_CAT(vector, N)(
@@ -165,4 +192,5 @@
     };
 
 #undef N
+
 
