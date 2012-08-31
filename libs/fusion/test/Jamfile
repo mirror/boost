@@ -109,6 +109,7 @@ import testing ;
     [ run sequence/vector_iterator.cpp :  :  :  : ]
     [ run sequence/vector_make.cpp :  :  :  : ]
     [ run sequence/vector_misc.cpp :  :  :  : ]
+    [ run sequence/vector_move.cpp :  :  :  : ]
     [ run sequence/vector_mutate.cpp :  :  :  : ]
     [ run sequence/vector_n.cpp :  :  :  : ]
     [ run sequence/vector_tie.cpp :  :  :  : ]

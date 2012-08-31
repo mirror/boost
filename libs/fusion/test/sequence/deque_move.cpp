@@ -1,22 +1,32 @@
 /*=============================================================================
-    Copyright (c) 1999-2003 Jaakko Jarvi
-    Copyright (c) 2001-2011 Joel de Guzman
-    Copyright (c) 2006 Dan Marsden
+    Copyright (c) 2012 Joel de Guzman
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#include <boost/fusion/container/deque/deque.hpp>
-#include <boost/fusion/container/generation/make_deque.hpp>
-#include <boost/fusion/container/generation/deque_tie.hpp>
+#define BOOST_FUSION_DONT_USE_PREPROCESSED_FILES // $$$ JDG temp $$$
 
-#define FUSION_SEQUENCE deque
-#include "copy.hpp"
+
+#include <boost/config.hpp>
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+
+#include <boost/fusion/container/deque/deque.hpp>
+
+#define FUSION_SEQUENCE boost::fusion::deque
+#include "move.hpp"
+
+#else
+#include <boost/detail/lightweight_test.hpp>
+#endif
 
 int
 main()
 {
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
     test();
+#endif
+
     return boost::report_errors();
 }
 
