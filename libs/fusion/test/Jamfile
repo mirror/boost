@@ -76,6 +76,7 @@ import testing ;
     [ run sequence/deque_iterator.cpp :  :  :  : ]
     [ run sequence/deque_make.cpp :  :  :  : ]
     [ run sequence/deque_misc.cpp :  :  :  : ]
+    [ run sequence/deque_move.cpp :  :  :  : ]
     [ run sequence/deque_mutate.cpp :  :  :  : ]
     [ run sequence/deque_tie.cpp :  :  :  : ]
     [ run sequence/deque_value_at.cpp :  :  :  : ]
