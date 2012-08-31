@@ -6,7 +6,9 @@
   http://www.boost.org/LICENSE_1_0.txt).
 */
 #include <iostream>
+//#define BOOST_POLYGON_NO_DEPS
 #include <boost/polygon/polygon.hpp>
+
 namespace gtl = boost::polygon;
 using namespace boost::polygon::operators;
 #include <time.h>
@@ -3644,6 +3646,23 @@ int main() {
         }
       }
     }
+  }
+
+  {
+    polygon_set_data<int> t_eq;
+    t_eq.insert(rectangle_data<int>(0, 0, 5, 10));
+    t_eq.insert(rectangle_data<int>(0, 5, 5, 10));
+    std::cout << t_eq <<std::endl;
+    polygon_set_data<int> t_eq2;
+    t_eq2 += rectangle_data<int>(0, 0, 5, 10);
+    std::cout << area(t_eq) <<std::endl;
+    std::cout << area(t_eq2) <<std::endl;   
+    std::cout << t_eq <<std::endl;
+    std::cout << t_eq2 <<std::endl;   
+    if(t_eq != t_eq2) {
+      std::cout << "equivalence failed" << std::endl;
+      return 1;
+    }    
   }
 
   std::cout << "ALL TESTS COMPLETE\n";
