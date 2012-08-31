@@ -137,11 +137,12 @@ struct is_convertible_basic_impl
     typedef typename add_lvalue_reference<From>::type lvalue_type;
     typedef typename add_rvalue_reference<From>::type rvalue_type;
     static lvalue_type _m_from;
-    static bool const value = 
 #if !defined(BOOST_NO_RVALUE_REFERENCES) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 6)))
+    static bool const value =
         sizeof( boost::detail::checker<To>::_m_check(static_cast<rvalue_type>(_m_from), 0) )
         == sizeof(::boost::type_traits::yes_type);
 #else
+    static bool const value =
         sizeof( boost::detail::checker<To>::_m_check(_m_from, 0) )
         == sizeof(::boost::type_traits::yes_type);
 #endif
@@ -178,13 +179,15 @@ struct is_convertible_basic_impl
     typedef typename add_rvalue_reference<From>::type rvalue_type; 
     static lvalue_type _m_from;
 
-    BOOST_STATIC_CONSTANT(bool, value =
 #ifndef BOOST_NO_RVALUE_REFERENCES
+    BOOST_STATIC_CONSTANT(bool, value =
         sizeof( _m_check(static_cast<rvalue_type>(_m_from), 0) ) == sizeof(::boost::type_traits::yes_type)
-#else
-        sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
-#endif
         );
+#else
+    BOOST_STATIC_CONSTANT(bool, value =
+        sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
+        );
+#endif
 };
 
 #elif defined(__DMC__)
@@ -212,13 +215,15 @@ struct is_convertible_basic_impl
 
     // Static constants sometime cause the conversion of _m_from to To to be
     // called. This doesn't happen with an enum.
-    enum { value =
 #ifndef BOOST_NO_RVALUE_REFERENCES
+    enum { value =
         sizeof( _m_check(static_cast<rvalue_type>(_m_from), 0, 0) ) == sizeof(::boost::type_traits::yes_type)
-#else
-        sizeof( _m_check(_m_from, 0, 0) ) == sizeof(::boost::type_traits::yes_type)
-#endif
         };
+#else
+    enum { value =
+        sizeof( _m_check(_m_from, 0, 0) ) == sizeof(::boost::type_traits::yes_type)
+        };
+#endif
 };
 
 #elif defined(__MWERKS__)
@@ -249,13 +254,15 @@ struct is_convertible_basic_impl_aux<From,To,false /*FromIsFunctionRef*/>
     typedef typename add_rvalue_reference<From>::type rvalue_type; 
     static lvalue_type _m_from;
 
-    BOOST_STATIC_CONSTANT(bool, value =
 #ifndef BOOST_NO_RVALUE_REFERENCES
+    BOOST_STATIC_CONSTANT(bool, value =
         sizeof( _m_check(static_cast<rvalue_type>(_m_from), 0) ) == sizeof(::boost::type_traits::yes_type)
-#else
-        sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
-#endif
         );
+#else
+    BOOST_STATIC_CONSTANT(bool, value =
+        sizeof( _m_check(_m_from, 0) ) == sizeof(::boost::type_traits::yes_type)
+        );
+#endif
 };
 
 template <typename From, typename To>
@@ -266,13 +273,15 @@ struct is_convertible_basic_impl_aux<From,To,true /*FromIsFunctionRef*/>
     typedef typename add_lvalue_reference<From>::type lvalue_type;
     typedef typename add_rvalue_reference<From>::type rvalue_type;
     static lvalue_type _m_from;
-    BOOST_STATIC_CONSTANT(bool, value =
 #ifndef BOOST_NO_RVALUE_REFERENCES
+    BOOST_STATIC_CONSTANT(bool, value =
         sizeof( _m_check(static_cast<rvalue_type>(_m_from)) ) == sizeof(::boost::type_traits::yes_type)
-#else
-        sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
-#endif
         );
+#else
+    BOOST_STATIC_CONSTANT(bool, value =
+        sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
+        );
+#endif
 };
 
 template <typename From, typename To>
@@ -303,13 +312,15 @@ struct is_convertible_basic_impl
 #pragma warning(disable:6334)
 #endif
 #endif
-    BOOST_STATIC_CONSTANT(bool, value =
 #ifndef BOOST_NO_RVALUE_REFERENCES
+    BOOST_STATIC_CONSTANT(bool, value =
         sizeof( _m_check(static_cast<rvalue_type>(_m_from)) ) == sizeof(::boost::type_traits::yes_type)
-#else
-        sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
-#endif
         );
+#else
+    BOOST_STATIC_CONSTANT(bool, value =
+        sizeof( _m_check(_m_from) ) == sizeof(::boost::type_traits::yes_type)
+        );
+#endif
 #ifdef BOOST_MSVC
 #pragma warning(pop)
 #endif
