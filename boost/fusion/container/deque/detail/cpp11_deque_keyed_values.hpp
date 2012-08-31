@@ -28,13 +28,22 @@ namespace boost { namespace fusion { namespace detail
         typedef typename deque_keyed_values_impl<next_index, Tail...>::type tail;
         typedef keyed_element<N, Head, tail> type;
 
-        static type call(
+        static type construct(
           typename detail::call_param<Head>::type head
         , typename detail::call_param<Tail>::type... tail)
         {
             return type(
                 head
-              , deque_keyed_values_impl<next_index, Tail...>::call(tail...)
+              , deque_keyed_values_impl<next_index, Tail...>::construct(tail...)
+            );
+        }
+
+        static type forward_(Head&& head, Tail&&... tail)
+        {
+            return type(
+                std::forward<Head>(head)
+              , deque_keyed_values_impl<next_index, Tail...>::
+                  forward_(std::forward<Tail>(tail)...)
             );
         }
     };
@@ -45,7 +54,8 @@ namespace boost { namespace fusion { namespace detail
     struct deque_keyed_values_impl<N>
     {
         typedef nil_keyed_element type;
-        static type call() { return type(); }
+        static type construct() { return type(); }
+        static type forward_() { return type(); }
     };
 
     template <typename ...Elements>

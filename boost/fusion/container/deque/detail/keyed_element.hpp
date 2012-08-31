@@ -63,6 +63,9 @@ namespace boost { namespace fusion { namespace detail
           : Rest(rhs.get_base()), value_(rhs.value_)
         {}
 
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#endif
+
         Rest& get_base()
         {
             return *this;
