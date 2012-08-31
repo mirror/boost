@@ -99,26 +99,26 @@ namespace boost { namespace polygon{
     insert_into_view_arg(linput_, lvalue_);
     insert_into_view_arg(rinput_, rvalue_);
     polygon_45_set_data<coordinate_type> l45, r45, o45;
-    if(linput_.downcast(l45) && rinput_.downcast(r45)) {
-      //the op codes are screwed up between 45 and arbitrary
-#ifdef BOOST_POLYGON_MSVC
-#pragma warning (disable: 4127)
-#endif
-      if(op_type < 2)
-        l45.template applyAdaptiveBoolean_<op_type>(o45, r45);
-      else if(op_type == 2)
-        l45.template applyAdaptiveBoolean_<3>(o45, r45);
-      else
-        l45.template applyAdaptiveBoolean_<2>(o45, r45);
-#ifdef BOOST_POLYGON_MSVC
-#pragma warning (default: 4127)
-#endif
-      output_.insert(o45);
-    } else {
+//    if(linput_.downcast(l45) && rinput_.downcast(r45)) {
+//      //the op codes are screwed up between 45 and arbitrary
+//#ifdef BOOST_POLYGON_MSVC
+//#pragma warning (disable: 4127)
+//#endif
+//      if(op_type < 2)
+//        l45.template applyAdaptiveBoolean_<op_type>(o45, r45);
+//      else if(op_type == 2)
+//        l45.template applyAdaptiveBoolean_<3>(o45, r45);
+//      else
+//        l45.template applyAdaptiveBoolean_<2>(o45, r45);
+//#ifdef BOOST_POLYGON_MSVC
+//#pragma warning (default: 4127)
+//#endif
+//      output_.insert(o45);
+//    } else {
       arbitrary_boolean_op<coordinate_type> abo;
       abo.execute(output_, linput_.begin(), linput_.end(),
                   rinput_.begin(), rinput_.end(), op_type);
-    }
+//    }
   }
 
   template <typename ltype, typename rtype, int op_type>
@@ -204,6 +204,15 @@ namespace boost { namespace polygon{
   template <typename ltype, typename rtype, int op_type>
   polygon_set_data<coordinate_type>::polygon_set_data(const polygon_set_view<ltype, rtype, op_type>& that) :
     data_(that.value().data_), dirty_(that.value().dirty_), unsorted_(that.value().unsorted_), is_45_(that.value().is_45_) {}
+
+    // equivalence operator
+  template <typename coordinate_type>
+  inline bool polygon_set_data<coordinate_type>::operator==(const polygon_set_data<coordinate_type>& p) const {
+    typedef polygon_set_data<coordinate_type> value_type;
+    value_type output_;
+    execute_boolean_op<value_type, value_type, value_type, 2>(output_, (*this), p);  
+    return output_.data_.empty();
+  }
 
   template <typename ltype, typename rtype, int op_type>
   struct geometry_concept<polygon_set_view<ltype, rtype, op_type> > { typedef polygon_set_concept type; };

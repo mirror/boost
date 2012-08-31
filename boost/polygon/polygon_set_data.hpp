@@ -270,12 +270,8 @@ namespace boost { namespace polygon {
     }
 
     // equivalence operator
-    inline bool operator==(const polygon_set_data& p) const {
-      clean();
-      p.clean();
-      return data_ == p.data_;
-    }
-
+    inline bool operator==(const polygon_set_data& p) const;
+    
     // inequivalence operator
     inline bool operator!=(const polygon_set_data& p) const {
       return !((*this) == p);
