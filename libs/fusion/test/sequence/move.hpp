@@ -11,7 +11,6 @@
 #endif
 
 #include <boost/detail/lightweight_test.hpp>
-#include <boost/noncopyable.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/assert.hpp>
 #include <vector>
@@ -26,7 +25,7 @@ namespace test_detail
         copies++;
     }
 
-    struct x //: boost::noncopyable
+    struct x
     {
         int i;
         x() : i(123) {}
