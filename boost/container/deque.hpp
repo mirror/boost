@@ -943,14 +943,18 @@ class deque : protected deque_base<T, A>
    //!   throws or T's constructor taking an dereferenced InIt throws.
    //!
    //! <b>Complexity</b>: Linear to the range [first, last).
-   template <class InpIt>
-   deque(InpIt first, InpIt last, const allocator_type& a = allocator_type())
+   template <class InIt>
+   deque(InIt first, InIt last, const allocator_type& a = allocator_type()
+      #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<InIt, size_type>::value
+         >::type * = 0
+      #endif
+      )
       : Base(a)
    {
-      //Dispatch depending on integer/iterator
-      const bool aux_boolean = container_detail::is_convertible<InpIt, size_type>::value;
-      typedef container_detail::bool_<aux_boolean> Result;
-      this->priv_initialize_dispatch(first, last, Result());
+      typedef typename std::iterator_traits<InIt>::iterator_category ItCat;
+      this->priv_range_initialize(first, last, ItCat());
    }
 
    //! <b>Effects</b>: Destroys the deque. All stored values are destroyed
@@ -1043,22 +1047,60 @@ class deque : protected deque_base<T, A>
    //!
    //! <b>Complexity</b>: Linear to n.
    void assign(size_type n, const T& val)
-   {  this->priv_fill_assign(n, val);  }
+   {
+      typedef constant_iterator<value_type, difference_type> c_it;
+      this->assign(c_it(val, n), c_it());
+   }
 
    //! <b>Effects</b>: Assigns the the range [first, last) to *this.
    //!
    //! <b>Throws</b>: If memory allocation throws or
-   //!   T's constructor from dereferencing InpIt throws.
+   //!   T's constructor from dereferencing InIt throws.
    //!
    //! <b>Complexity</b>: Linear to n.
-   template <class InpIt>
-   void assign(InpIt first, InpIt last)
+   template <class InIt>
+   void assign(InIt first, InIt last
+      #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<InIt, size_type>::value
+            && container_detail::is_input_iterator<InIt>::value
+         >::type * = 0
+      #endif
+      )
    {
-      //Dispatch depending on integer/iterator
-      const bool aux_boolean = container_detail::is_convertible<InpIt, size_type>::value;
-      typedef container_detail::bool_<aux_boolean> Result;
-      this->priv_assign_dispatch(first, last, Result());
+      iterator cur = begin();
+      for ( ; first != last && cur != end(); ++cur, ++first){
+         *cur = *first;
+      }
+      if (first == last){
+         this->erase(cur, cend());
+      }
+      else{
+         this->insert(cend(), first, last);
+      }
    }
+
+   #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+   template <class FwdIt>
+   void assign(FwdIt first, FwdIt last
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<FwdIt, size_type>::value
+            && !container_detail::is_input_iterator<FwdIt>::value
+         >::type * = 0
+      )
+   {
+      const size_type len = std::distance(first, last);
+      if (len > size()) {
+         FwdIt mid = first;
+         std::advance(mid, size());
+         boost::copy_or_move(first, mid, begin());
+         this->insert(cend(), mid, last);
+      }
+      else{
+         this->erase(boost::copy_or_move(first, last, begin()), cend());
+      }
+   }
+   #endif
 
    #if defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
    //! <b>Effects</b>: Inserts a copy of x at the end of the deque.
@@ -1142,6 +1184,8 @@ class deque : protected deque_base<T, A>
    //!
    //! <b>Effects</b>: Insert a copy of x before position.
    //!
+   //! <b>Returns</b>: an iterator to the inserted element.
+   //!
    //! <b>Throws</b>: If memory allocation throws or x's copy constructor throws.
    //!
    //! <b>Complexity</b>: If position is end(), amortized constant time
@@ -1151,6 +1195,8 @@ class deque : protected deque_base<T, A>
    //! <b>Requires</b>: position must be a valid iterator of *this.
    //!
    //! <b>Effects</b>: Insert a new element before position with mx's resources.
+   //!
+   //! <b>Returns</b>: an iterator to the inserted element.
    //!
    //! <b>Throws</b>: If memory allocation throws.
    //!
@@ -1165,28 +1211,62 @@ class deque : protected deque_base<T, A>
    //!
    //! <b>Effects</b>: Insert n copies of x before pos.
    //!
+   //! <b>Returns</b>: an iterator to the first inserted element or pos if n is 0.
+   //!
    //! <b>Throws</b>: If memory allocation throws or T's copy constructor throws.
    //!
    //! <b>Complexity</b>: Linear to n.
-   void insert(const_iterator pos, size_type n, const value_type& x)
-   { this->priv_fill_insert(pos, n, x); }
+   iterator insert(const_iterator pos, size_type n, const value_type& x)
+   {
+      typedef constant_iterator<value_type, difference_type> c_it;
+      return this->insert(pos, c_it(x, n), c_it());
+   }
 
    //! <b>Requires</b>: pos must be a valid iterator of *this.
    //!
    //! <b>Effects</b>: Insert a copy of the [first, last) range before pos.
    //!
+   //! <b>Returns</b>: an iterator to the first inserted element or pos if first == last.
+   //!
    //! <b>Throws</b>: If memory allocation throws, T's constructor from a
-   //!   dereferenced InpIt throws or T's copy constructor throws.
+   //!   dereferenced InIt throws or T's copy constructor throws.
    //!
    //! <b>Complexity</b>: Linear to std::distance [first, last).
-   template <class InpIt>
-   void insert(const_iterator pos, InpIt first, InpIt last)
+   template <class InIt>
+   iterator insert(const_iterator pos, InIt first, InIt last
+      #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<InIt, size_type>::value
+            && container_detail::is_input_iterator<InIt>::value
+         >::type * = 0
+      #endif
+      )
    {
-      //Dispatch depending on integer/iterator
-      const bool aux_boolean = container_detail::is_convertible<InpIt, size_type>::value;
-      typedef container_detail::bool_<aux_boolean> Result;
-      this->priv_insert_dispatch(pos, first, last, Result());
+      size_type n = 0;
+      iterator it(pos);
+      for(;first != last; ++first, ++n){
+         it = this->emplace(it, *first);
+         ++it;
+      }
+      it -= n;
+      return it;
    }
+
+   #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+   template <class FwdIt>
+   iterator insert(const_iterator p, FwdIt first, FwdIt last
+      #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<FwdIt, size_type>::value
+            && !container_detail::is_input_iterator<FwdIt>::value
+         >::type * = 0
+      #endif
+      )
+   {
+      container_detail::advanced_insert_aux_proxy<A, FwdIt, iterator> proxy(this->alloc(), first, last);
+      return priv_insert_aux_impl(p, (size_type)std::distance(first, last), proxy);
+   }
+   #endif
 
    #if defined(BOOST_CONTAINER_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
 
@@ -1257,11 +1337,9 @@ class deque : protected deque_base<T, A>
          return (this->end()-1);
       }
       else{
-         size_type n = p - this->cbegin();
          typedef container_detail::advanced_insert_aux_emplace<A, iterator, Args...> type;
          type &&proxy = type(this->alloc(), boost::forward<Args>(args)...);
-         this->priv_insert_aux_impl(p, 1, proxy);
-         return iterator(this->begin() + n);
+         return this->priv_insert_aux_impl(p, 1, proxy);
       }
    }
 
@@ -1320,12 +1398,10 @@ class deque : protected deque_base<T, A>
          return (this->end()-1);                                                             \
       }                                                                                      \
       else{                                                                                  \
-         size_type pos_num = p - this->cbegin();                                             \
          container_detail::BOOST_PP_CAT(BOOST_PP_CAT(advanced_insert_aux_emplace, n), arg)   \
             <A, iterator BOOST_PP_ENUM_TRAILING_PARAMS(n, P)> proxy                          \
             (this->alloc() BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));  \
-         this->priv_insert_aux_impl(p, 1, proxy);                                            \
-         return iterator(this->begin() + pos_num);                                           \
+         return this->priv_insert_aux_impl(p, 1, proxy);                                     \
       }                                                                                      \
    }                                                                                         \
    //!
@@ -1361,7 +1437,7 @@ class deque : protected deque_base<T, A>
       if (new_size < len)
          this->priv_erase_last_n(len - new_size);
       else{
-         size_type n = new_size - this->size();
+         const size_type n = new_size - this->size();
          container_detail::default_construct_aux_proxy<A, iterator> proxy(this->alloc(), n);
          priv_insert_back_aux_impl(n, proxy);
       }
@@ -1500,9 +1576,7 @@ class deque : protected deque_base<T, A>
          return (end()-1);
       }
       else {
-         size_type n = position - cbegin();
-         this->priv_insert_aux(position, size_type(1), x);
-         return iterator(this->begin() + n);
+         return this->insert(position, size_type(1), x);
       }
    }
 
@@ -1517,10 +1591,7 @@ class deque : protected deque_base<T, A>
          return(end()-1);
       }
       else {
-         //Just call more general insert(pos, size, value) and return iterator
-         size_type n = position - begin();
-         this->priv_insert_aux(position, move_it(r_iterator(mx, 1)), move_it(r_iterator()));
-         return iterator(this->begin() + n);
+         return this->insert(position, move_it(r_iterator(mx, 1)), move_it(r_iterator()));
       }
    }
 
@@ -1532,7 +1603,7 @@ class deque : protected deque_base<T, A>
          this->priv_push_front_simple_commit();
       }
       else{
-         this->priv_insert_aux(cbegin(), size_type(1), t);
+         this->insert(cbegin(), size_type(1), t);
       }
    }
 
@@ -1544,7 +1615,7 @@ class deque : protected deque_base<T, A>
          this->priv_push_front_simple_commit();
       }
       else{
-         this->priv_insert_aux(cbegin(), move_it(r_iterator(t, 1)), move_it(r_iterator()));
+         this->insert(cbegin(), move_it(r_iterator(t, 1)), move_it(r_iterator()));
       }
    }
 
@@ -1556,7 +1627,7 @@ class deque : protected deque_base<T, A>
          this->priv_push_back_simple_commit();
       }
       else{
-         this->priv_insert_aux(cend(), size_type(1), t);
+         this->insert(cend(), size_type(1), t);
       }
    }
 
@@ -1568,7 +1639,7 @@ class deque : protected deque_base<T, A>
          this->priv_push_back_simple_commit();
       }
       else{
-         this->priv_insert_aux(cend(), move_it(r_iterator(t, 1)), move_it(r_iterator()));
+         this->insert(cend(), move_it(r_iterator(t, 1)), move_it(r_iterator()));
       }
    }
 
@@ -1600,50 +1671,6 @@ class deque : protected deque_base<T, A>
    void priv_push_front_simple_commit()
    {  --this->members_.m_start.m_cur;   }
 
-   template <class InpIt>
-   void priv_insert_aux(const_iterator pos, InpIt first, InpIt last, std::input_iterator_tag)
-   {
-      iterator it(pos);
-      for(;first != last; ++first){
-         it = this->emplace(it, *first);
-         ++it;
-      }
-   }
-
-   template <class FwdIt>
-   void priv_insert_aux(const_iterator pos, FwdIt first, FwdIt last, std::forward_iterator_tag)
-   {  this->priv_insert_aux(pos, first, last);  }
-
-  // assign(), a generalized assignment member function.  Two
-  // versions: one that takes a count, and one that takes a range.
-  // The range version is a member template, so we dispatch on whether
-  // or not the type is an integer.
-   void priv_fill_assign(size_type n, const T& val)
-   {
-      if (n > size()) {
-         std::fill(begin(), end(), val);
-         this->insert(cend(), n - size(), val);
-      }
-      else {
-         this->erase(cbegin() + n, cend());
-         std::fill(begin(), end(), val);
-      }
-   }
-
-   template <class Integer>
-   void priv_initialize_dispatch(Integer n, Integer x, container_detail::true_)
-   {
-      this->priv_initialize_map(n);
-      this->priv_fill_initialize(x);
-   }
-
-   template <class InpIt>
-   void priv_initialize_dispatch(InpIt first, InpIt last, container_detail::false_)
-   {
-      typedef typename std::iterator_traits<InpIt>::iterator_category ItCat;
-      this->priv_range_initialize(first, last, ItCat());
-   }
-
    void priv_destroy_range(iterator p, iterator p2)
    {
       for(;p != p2; ++p){
@@ -1664,71 +1691,10 @@ class deque : protected deque_base<T, A>
       }
    }
 
-   template <class Integer>
-   void priv_assign_dispatch(Integer n, Integer val, container_detail::true_)
-      { this->priv_fill_assign((size_type) n, (value_type)val); }
-
-   template <class InpIt>
-   void priv_assign_dispatch(InpIt first, InpIt last, container_detail::false_)
-   {
-      typedef typename std::iterator_traits<InpIt>::iterator_category ItCat;
-      this->priv_assign_aux(first, last, ItCat());
-   }
-
-   template <class InpIt>
-   void priv_assign_aux(InpIt first, InpIt last, std::input_iterator_tag)
-   {
-      iterator cur = begin();
-      for ( ; first != last && cur != end(); ++cur, ++first)
-         *cur = *first;
-      if (first == last)
-         this->erase(cur, cend());
-      else
-         this->insert(cend(), first, last);
-   }
-
-   template <class FwdIt>
-   void priv_assign_aux(FwdIt first, FwdIt last, std::forward_iterator_tag)
-   {
-      size_type len = std::distance(first, last);
-      if (len > size()) {
-         FwdIt mid = first;
-         std::advance(mid, size());
-         boost::copy_or_move(first, mid, begin());
-         this->insert(cend(), mid, last);
-      }
-      else
-         this->erase(boost::copy_or_move(first, last, begin()), cend());
-   }
-
-   template <class Integer>
-   void priv_insert_dispatch(const_iterator pos, Integer n, Integer x, container_detail::true_)
-   {  this->priv_fill_insert(pos, (size_type) n, (value_type)x); }
-
-   template <class InpIt>
-   void priv_insert_dispatch(const_iterator pos,InpIt first, InpIt last, container_detail::false_)
-   {
-      typedef typename std::iterator_traits<InpIt>::iterator_category ItCat;
-      this->priv_insert_aux(pos, first, last, ItCat());
-   }
-
-   void priv_insert_aux(const_iterator pos, size_type n, const value_type& x)
-   {
-      typedef constant_iterator<value_type, difference_type> c_it;
-      this->priv_insert_aux(pos, c_it(x, n), c_it());
-   }
-
-   //Just forward all operations to priv_insert_aux_impl
-   template <class FwdIt>
-   void priv_insert_aux(const_iterator p, FwdIt first, FwdIt last)
-   {
-      container_detail::advanced_insert_aux_proxy<A, FwdIt, iterator> proxy(this->alloc(), first, last);
-      priv_insert_aux_impl(p, (size_type)std::distance(first, last), proxy);
-   }
-
-   void priv_insert_aux_impl(const_iterator p, size_type n, advanced_insert_aux_int_t &interf)
+   iterator priv_insert_aux_impl(const_iterator p, size_type n, advanced_insert_aux_int_t &interf)
    {
       iterator pos(p);
+      const size_type pos_n = p - this->cbegin();
       if(!this->members_.m_map){
          this->priv_initialize_map(0);
          pos = this->begin();
@@ -1782,9 +1748,10 @@ class deque : protected deque_base<T, A>
             interf.copy_remaining_to(pos);
          }
       }
+      return this->begin() + pos_n;
    }
 
-   void priv_insert_back_aux_impl(size_type n, advanced_insert_aux_int_t &interf)
+   iterator priv_insert_back_aux_impl(size_type n, advanced_insert_aux_int_t &interf)
    {
       if(!this->members_.m_map){
          this->priv_initialize_map(0);
@@ -1794,9 +1761,10 @@ class deque : protected deque_base<T, A>
       iterator old_finish = this->members_.m_finish;
       interf.uninitialized_copy_some_and_update(old_finish, n, true);
       this->members_.m_finish = new_finish;
+      return iterator(this->members_.m_finish - n);
    }
 
-   void priv_insert_front_aux_impl(size_type n, advanced_insert_aux_int_t &interf)
+   iterator priv_insert_front_aux_impl(size_type n, advanced_insert_aux_int_t &interf)
    {
       if(!this->members_.m_map){
          this->priv_initialize_map(0);
@@ -1805,13 +1773,13 @@ class deque : protected deque_base<T, A>
       iterator new_start = this->priv_reserve_elements_at_front(n);
       interf.uninitialized_copy_some_and_update(new_start, difference_type(n), true);
       this->members_.m_start = new_start;
+      return new_start;
    }
 
-
-   void priv_fill_insert(const_iterator pos, size_type n, const value_type& x)
+   iterator priv_fill_insert(const_iterator pos, size_type n, const value_type& x)
    {
       typedef constant_iterator<value_type, difference_type> c_it;
-      this->insert(pos, c_it(x, n), c_it());
+      return this->insert(pos, c_it(x, n), c_it());
    }
 
    // Precondition: this->members_.m_start and this->members_.m_finish have already been initialized,
@@ -1834,13 +1802,13 @@ class deque : protected deque_base<T, A>
       BOOST_CATCH_END
    }
 
-   template <class InpIt>
-   void priv_range_initialize(InpIt first, InpIt last, std::input_iterator_tag)
+   template <class InIt>
+   void priv_range_initialize(InIt first, InIt last, std::input_iterator_tag)
    {
       this->priv_initialize_map(0);
       BOOST_TRY {
          for ( ; first != last; ++first)
-            this->push_back(*first);
+            this->emplace_back(*first);
       }
       BOOST_CATCH(...){
          this->clear();

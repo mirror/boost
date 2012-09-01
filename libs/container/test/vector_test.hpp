@@ -8,6 +8,9 @@
 //
 //////////////////////////////////////////////////////////////////////////////
 
+#ifndef BOOST_CONTAINER_TEST_VECTOR_TEST_HEADER
+#define BOOST_CONTAINER_TEST_VECTOR_TEST_HEADER
+
 #include <boost/container/detail/config_begin.hpp>
 #include <algorithm>
 #include <memory>
@@ -24,6 +27,7 @@
 #include <string>
 #include <vector>
 #include "emplace_test.hpp"
+#include "input_from_forward_iterator.hpp"
 
 namespace boost{
 namespace container {
@@ -133,10 +137,11 @@ int vector_test()
             for(int i = 0; i < 50; ++i){
                aux_vect2[i] = -1;
             }
-
-            boostvector->insert(boostvector->end()
+            typename MyBoostVector::iterator insert_it =
+               boostvector->insert(boostvector->end()
                               ,boost::make_move_iterator(&aux_vect[0])
                               ,boost::make_move_iterator(aux_vect + 50));
+            if(std::size_t(std::distance(insert_it, boostvector->end())) != 50) return 1;
             stdvector->insert(stdvector->end(), aux_vect2, aux_vect2 + 50);
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
 
@@ -156,9 +161,30 @@ int vector_test()
             for(int i = 0; i < 50; ++i){
                aux_vect2[i] = -1;
             }
-            boostvector->insert(boostvector->begin()
+            typename MyBoostVector::iterator insert_it =
+               boostvector->insert(boostvector->begin()
                               ,boost::make_move_iterator(&aux_vect[0])
                               ,boost::make_move_iterator(aux_vect + 50));
+            if(boostvector->begin() != insert_it) return 1;
+            stdvector->insert(stdvector->begin(), aux_vect2, aux_vect2 + 50);
+            if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
+
+            for(int i = 0; i < 50; ++i){
+               IntType new_int(-1);
+               aux_vect[i] = boost::move(new_int);
+            }
+
+            for(int i = 0; i < 50; ++i){
+               aux_vect2[i] = -1;
+            }
+            //Now try with input iterators instead
+            insert_it = boostvector->insert(boostvector->begin()
+//                              ,boost::make_move_iterator(make_input_from_forward_iterator(&aux_vect[0]))
+//                              ,boost::make_move_iterator(make_input_from_forward_iterator(aux_vect + 50))
+                              ,boost::make_move_iterator(&aux_vect[0])
+                              ,boost::make_move_iterator(aux_vect + 50)
+                           );
+            if(boostvector->begin() != insert_it) return 1;
             stdvector->insert(stdvector->begin(), aux_vect2, aux_vect2 + 50);
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
          }
@@ -204,10 +230,18 @@ int vector_test()
          //Test insertion from list
          {
             std::list<int> l(50, int(1));
-            boostvector->insert(boostvector->begin(), l.begin(), l.end());
+            typename MyBoostVector::iterator it_insert =
+               boostvector->insert(boostvector->begin(), l.begin(), l.end());
+            if(boostvector->begin() != it_insert) return 1;
             stdvector->insert(stdvector->begin(), l.begin(), l.end());
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
             boostvector->assign(l.begin(), l.end());
+            stdvector->assign(l.begin(), l.end());
+            if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
+
+            boostvector->clear();
+            stdvector->clear();
+            boostvector->assign(make_input_from_forward_iterator(l.begin()), make_input_from_forward_iterator(l.end()));
             stdvector->assign(l.begin(), l.end());
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
          }
@@ -252,3 +286,6 @@ int vector_test()
 }  //namespace boost{
 
 #include <boost/container/detail/config_end.hpp>
+
+#endif //BOOST_CONTAINER_TEST_VECTOR_TEST_HEADER
+

@@ -118,7 +118,7 @@ class set
    template <class InputIterator>
    set(InputIterator first, InputIterator last, const Pred& comp = Pred(),
          const allocator_type& a = allocator_type())
-      : m_tree(first, last, comp, a, true)
+      : m_tree(true, first, last, comp, a)
    {}
 
    //! <b>Effects</b>: Constructs an empty set using the specified comparison object and
@@ -705,7 +705,7 @@ class multiset
    multiset(InputIterator first, InputIterator last,
             const Pred& comp = Pred(),
             const allocator_type& a = allocator_type())
-      : m_tree(first, last, comp, a, false)
+      : m_tree(false, first, last, comp, a)
    {}
 
    //! <b>Effects</b>: Constructs an empty multiset using the specified comparison object and

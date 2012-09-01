@@ -155,7 +155,7 @@ class map
    template <class InputIterator>
    map(InputIterator first, InputIterator last, const Pred& comp = Pred(),
          const allocator_type& a = allocator_type())
-      : m_tree(first, last, comp, a, true)
+      : m_tree(true, first, last, comp, a)
    {
       //Allocator type must be std::pair<CONST Key, T>
       BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));
@@ -902,7 +902,7 @@ class multimap
    multimap(InputIterator first, InputIterator last,
             const Pred& comp = Pred(),
             const allocator_type& a = allocator_type())
-      : m_tree(first, last, comp, a, false)
+      : m_tree(false, first, last, comp, a)
    {
       //Allocator type must be std::pair<CONST Key, T>
       BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename A::value_type>::value));

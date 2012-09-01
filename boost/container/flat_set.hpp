@@ -125,8 +125,8 @@ class flat_set
    flat_set(InputIterator first, InputIterator last,
             const Pred& comp = Pred(),
             const allocator_type& a = allocator_type())
-      : m_flat_tree(comp, a)
-      { m_flat_tree.insert_unique(first, last); }
+      : m_flat_tree(true, first, last, comp, a)
+   {}
 
    //! <b>Effects</b>: Constructs an empty flat_set using the specified comparison object and
    //! allocator, and inserts elements from the ordered unique range [first ,last). This function
@@ -777,8 +777,8 @@ class flat_multiset
    flat_multiset(InputIterator first, InputIterator last,
                  const Pred& comp        = Pred(),
                  const allocator_type& a = allocator_type())
-      : m_flat_tree(comp, a)
-      { m_flat_tree.insert_equal(first, last); }
+      : m_flat_tree(false, first, last, comp, a)
+   {}
 
    //! <b>Effects</b>: Constructs an empty flat_multiset using the specified comparison object and
    //! allocator, and inserts elements from the ordered range [first ,last ). This function

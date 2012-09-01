@@ -489,8 +489,10 @@ class vector : private container_detail::vector_alloc_holder<A>
    explicit vector(size_type n)
       :  base_t()
    {
+      this->resize(n);
+/*
       //Allocate
-      size_type real_cap;
+      size_type real_cap = 0;
       std::pair<pointer, bool> ret =
          this->allocation_command(allocate_new, n, n, real_cap, this->members_.m_start);
       T *new_mem = container_detail::to_raw_pointer(ret.first);
@@ -503,7 +505,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       this->members_.m_start = ret.first;
       this->members_.m_size  = n;
       this->members_.m_capacity = real_cap;
-      scoped_alloc.release();
+      scoped_alloc.release();*/
    }
 
    //! <b>Effects</b>: Constructs a vector that will use a copy of allocator a
@@ -515,7 +517,10 @@ class vector : private container_detail::vector_alloc_holder<A>
    //! <b>Complexity</b>: Linear to n.
    vector(size_type n, const T& value, const allocator_type& a = allocator_type())
       :  base_t(a)
-   {  this->insert(this->cend(), n, value); }
+   {
+      this->resize(n, value);
+//      this->insert(this->cend(), n, value);
+   }
 
    //! <b>Effects</b>: Copy constructs a vector.
    //!
@@ -571,7 +576,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       }
       else{
          this->assign( container_detail::to_raw_pointer(mx.members_.m_start)
-                     , container_detail::to_raw_pointer(mx.members_.m_start + mx.members_.m_size));
+                     , container_detail::to_raw_pointer(mx.members_.m_start) + mx.members_.m_size);
       }
    }
 
@@ -1002,13 +1007,154 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Complexity</b>: Linear to n.
    template <class InIt>
-   void assign(InIt first, InIt last)
+   void assign(InIt first, InIt last
+      #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<InIt, size_type>::value
+            && container_detail::is_input_iterator<InIt>::value
+         >::type * = 0
+      #endif
+      )
    {
-      //Dispatch depending on integer/iterator
-      const bool aux_boolean = container_detail::is_convertible<InIt, size_type>::value;
-      typedef container_detail::bool_<aux_boolean> Result;
-      this->priv_assign_dispatch(first, last, Result());
+      //Overwrite all elements we can from [first, last)
+      iterator cur = begin();
+      for ( ; first != last && cur != end(); ++cur, ++first){
+         *cur = *first;
+      }
+
+      if (first == last){
+         //There are no more elements in the sequence, erase remaining
+         this->erase(cur, cend());
+      }
+      else{
+         //There are more elements in the range, insert the remaining ones
+         this->insert(this->cend(), first, last);
+      }
    }
+
+   #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+   template <class FwdIt>
+   void assign(FwdIt first, FwdIt last
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<FwdIt, size_type>::value
+            && !container_detail::is_input_iterator<FwdIt>::value
+         >::type * = 0
+      )
+   {
+      const size_type n = std::distance(first, last);
+      
+      if(!n){
+         this->prot_destroy_all();
+         return;
+      }
+      //Check if we have enough memory or try to expand current memory
+      size_type remaining = this->members_.m_capacity - this->members_.m_size;
+      bool same_buffer_start;
+      std::pair<pointer, bool> ret;
+      size_type real_cap = this->members_.m_capacity;
+
+      if (n <= remaining){
+         same_buffer_start = true;
+      }
+      else{
+         //There is not enough memory, allocate a new buffer
+         size_type new_cap = this->next_capacity(n);
+         ret = this->allocation_command
+               (allocate_new | expand_fwd | expand_bwd,
+                  this->size() + n, new_cap, real_cap, this->members_.m_start);
+         same_buffer_start = ret.second && this->members_.m_start == ret.first;
+         if(same_buffer_start){
+            this->members_.m_capacity  = real_cap;
+         }
+      }
+     
+      if(same_buffer_start){
+         T *start = container_detail::to_raw_pointer(this->members_.m_start);
+         if (this->size() >= n){
+            //There is memory, but there are more old elements than new ones
+            //Overwrite old elements with new ones
+            std::copy(first, last, start);
+            //Destroy remaining old elements
+            this->destroy_n(start + n, this->members_.m_size - n);
+            this->members_.m_size = n;
+         }
+         else{
+            //There is memory, but there are less old elements than new ones
+            //First overwrite some old elements with new ones
+            FwdIt mid = first;
+            std::advance(mid, this->size());
+            T *end = std::copy(first, mid, start);
+            //Initialize the remaining new elements in the uninitialized memory
+            ::boost::container::uninitialized_copy_or_move_alloc(this->alloc(), mid, last, end);
+            this->members_.m_size = n;
+         }
+      }
+      else if(!ret.second){
+         typename value_traits::ArrayDeallocator scoped_alloc(ret.first, this->alloc(), real_cap);
+         ::boost::container::uninitialized_copy_or_move_alloc(this->alloc(), first, last, container_detail::to_raw_pointer(ret.first));
+         scoped_alloc.release();
+         //Destroy and deallocate old buffer
+         if(this->members_.m_start != 0){
+            this->destroy_n(container_detail::to_raw_pointer(this->members_.m_start), this->members_.m_size);
+            this->alloc().deallocate(this->members_.m_start, this->members_.m_capacity);
+         }
+         this->members_.m_start     = ret.first;
+         this->members_.m_size      = n;
+         this->members_.m_capacity  = real_cap;
+      }
+      else{
+         //Backwards expansion
+         //If anything goes wrong, this object will destroy old objects
+         T *old_start         = container_detail::to_raw_pointer(this->members_.m_start);
+         size_type old_size   = this->members_.m_size;
+         typename value_traits::OldArrayDestructor old_values_destroyer(old_start, this->alloc(), old_size);
+         //If something goes wrong size will be 0
+         //but holding the whole buffer
+         this->members_.m_size  = 0;
+         this->members_.m_start = ret.first;
+         this->members_.m_capacity = real_cap;
+        
+         //Backup old buffer data
+         size_type old_offset    = old_start - container_detail::to_raw_pointer(ret.first);
+         size_type first_count   = container_detail::min_value(n, old_offset);
+
+         FwdIt mid = first;
+         std::advance(mid, first_count);
+         ::boost::container::uninitialized_copy_or_move_alloc
+            (this->alloc(), first, mid, container_detail::to_raw_pointer(ret.first));
+
+         if(old_offset > n){
+            //All old elements will be destroyed by "old_values_destroyer"
+            this->members_.m_size = n;
+         }
+         else{
+            //We have constructed objects from the new begin until
+            //the old end so release the rollback destruction
+            old_values_destroyer.release();
+            this->members_.m_start  = ret.first;
+            this->members_.m_size   = first_count + old_size;
+            //Now overwrite the old values
+            size_type second_count = container_detail::min_value(old_size, n - first_count);
+            FwdIt mid2 = mid;
+            std::advance(mid2, second_count);
+            std::copy(mid, mid2, old_start);
+           
+            //Check if we still have to append elements in the
+            //uninitialized end
+            if(second_count == old_size){
+               std::copy(mid2, last, old_start + old_size);
+            }
+            else{
+               //We have to destroy some old values
+               this->destroy_n
+                  (old_start + second_count, old_size - second_count);
+               this->members_.m_size = n;
+            }
+            this->members_.m_size = n;                       
+         }
+      }
+   }
+   #endif
 
    #if defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
    //! <b>Effects</b>: Inserts a copy of x at the end of the vector.
@@ -1051,7 +1197,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       else{
          typedef container_detail::advanced_insert_aux_emplace<A, T*, Args...> type;
          type &&proxy = type(this->alloc(), ::boost::forward<Args>(args)...);
-         priv_range_insert(back_pos, 1, proxy);
+         this->priv_forward_range_insert(back_pos, 1, proxy);
       }
    }
 
@@ -1072,7 +1218,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       size_type pos_n = position - cbegin();
       typedef container_detail::advanced_insert_aux_emplace<A, T*, Args...> type;
       type &&proxy = type(this->alloc(), ::boost::forward<Args>(args)...);
-      priv_range_insert(position.get_ptr(), 1, proxy);
+      this->priv_forward_range_insert(position.get_ptr(), 1, proxy);
       return iterator(this->members_.m_start + pos_n);
    }
 
@@ -1093,7 +1239,7 @@ class vector : private container_detail::vector_alloc_holder<A>
          container_detail::BOOST_PP_CAT(BOOST_PP_CAT(advanced_insert_aux_emplace, n), arg)      \
             <A, T* BOOST_PP_ENUM_TRAILING_PARAMS(n, P)> proxy                                   \
             (this->alloc() BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));     \
-         priv_range_insert(back_pos, 1, proxy);                                                 \
+         this->priv_forward_range_insert(back_pos, 1, proxy);                                   \
       }                                                                                         \
    }                                                                                            \
                                                                                                 \
@@ -1105,7 +1251,7 @@ class vector : private container_detail::vector_alloc_holder<A>
          container_detail::BOOST_PP_CAT(BOOST_PP_CAT(advanced_insert_aux_emplace, n), arg)      \
             <A, T* BOOST_PP_ENUM_TRAILING_PARAMS(n, P)> proxy                                   \
             (this->alloc() BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _));     \
-      priv_range_insert(container_detail::to_raw_pointer(pos.get_ptr()), 1, proxy);             \
+      this->priv_forward_range_insert(container_detail::to_raw_pointer(pos.get_ptr()), 1,proxy);\
       return iterator(this->members_.m_start + pos_n);                                          \
    }                                                                                            \
    //!
@@ -1152,32 +1298,63 @@ class vector : private container_detail::vector_alloc_holder<A>
    BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, T, iterator, priv_insert, const_iterator)
    #endif
 
-   //! <b>Requires</b>: pos must be a valid iterator of *this.
+   //! <b>Requires</b>: p must be a valid iterator of *this.
    //!
    //! <b>Effects</b>: Insert a copy of the [first, last) range before pos.
+   //!
+   //! <b>Returns</b>: an iterator to the first inserted element or pos if first == last.
    //!
    //! <b>Throws</b>: If memory allocation throws, T's constructor from a
    //!   dereferenced InpIt throws or T's copy/move constructor/assignment throws.
    //!
    //! <b>Complexity</b>: Linear to std::distance [first, last).
    template <class InIt>
-   void insert(const_iterator pos, InIt first, InIt last)
+   iterator insert(const_iterator pos, InIt first, InIt last
+      #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<InIt, size_type>::value
+            && container_detail::is_input_iterator<InIt>::value
+         >::type * = 0
+      #endif
+      )
    {
-      //Dispatch depending on integer/iterator
-      const bool aux_boolean = container_detail::is_convertible<InIt, size_type>::value;
-      typedef container_detail::bool_<aux_boolean> Result;
-      this->priv_insert_dispatch(pos, first, last, Result());
+      const size_type n_pos = pos - this->cbegin();
+      iterator it(pos.get_ptr());
+      for(;first != last; ++first){
+         it = this->emplace(it, *first);
+         ++it;
+      }
+      return this->begin() + n_pos;
    }
 
-   //! <b>Requires</b>: pos must be a valid iterator of *this.
+   #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+   template <class FwdIt>
+   iterator insert(const_iterator pos, FwdIt first, FwdIt last
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<FwdIt, size_type>::value
+            && !container_detail::is_input_iterator<FwdIt>::value
+         >::type * = 0
+      )
+   {
+      const size_type n_pos = pos - this->cbegin();
+      const size_type n = std::distance(first, last);
+      container_detail::advanced_insert_aux_proxy<A, FwdIt, T*> proxy(this->alloc(), first, last);
+      this->priv_forward_range_insert(pos.get_ptr(), n, proxy);
+      return this->begin() + n_pos;
+   }
+   #endif
+
+   //! <b>Requires</b>: p must be a valid iterator of *this.
    //!
    //! <b>Effects</b>: Insert n copies of x before pos.
+   //!
+   //! <b>Returns</b>: an iterator to the first inserted element or p if n is 0.
    //!
    //! <b>Throws</b>: If memory allocation throws or T's copy constructor throws.
    //!
    //! <b>Complexity</b>: Linear to n.
-   void insert(const_iterator p, size_type n, const T& x)
-   {  this->insert(p, cvalue_iterator(x, n), cvalue_iterator());  }
+   iterator insert(const_iterator p, size_type n, const T& x)
+   {  return this->insert(p, cvalue_iterator(x, n), cvalue_iterator());  }
 
    //! <b>Effects</b>: Removes the last element from the vector.
    //!
@@ -1262,10 +1439,10 @@ class vector : private container_detail::vector_alloc_holder<A>
          this->erase(const_iterator(this->members_.m_start + new_size), this->end());
       }
       else{
-         size_type n = new_size - this->size();
+         const size_type n = new_size - this->size();
          this->reserve(new_size);
          container_detail::default_construct_aux_proxy<A, T*> proxy(this->alloc(), n);
-         priv_range_insert(this->cend().get_ptr(), n, proxy);
+         this->priv_forward_range_insert(this->cend().get_ptr(), n, proxy);
       }
    }
 
@@ -1399,27 +1576,7 @@ class vector : private container_detail::vector_alloc_holder<A>
       }
    }
 
-   template <class FwdIt>
-   void priv_range_insert(const_iterator pos, FwdIt first, FwdIt last, std::forward_iterator_tag)
-   {
-      if(first != last){       
-         const size_type n = std::distance(first, last);
-         container_detail::advanced_insert_aux_proxy<A, FwdIt, T*> proxy(this->alloc(), first, last);
-         priv_range_insert(pos.get_ptr(), n, proxy);
-      }
-   }
-
-   template <class InIt>
-   void priv_range_insert(const_iterator pos, InIt first, InIt last, std::input_iterator_tag)
-   {
-      iterator it(pos.get_ptr());
-      for(;first != last; ++first){
-         it = this->emplace(it, *first);
-         ++it;
-      }
-   }
-
-   void priv_range_insert(pointer pos, const size_type n, advanced_insert_aux_int_t &interf)
+   void priv_forward_range_insert(pointer pos, const size_type n, advanced_insert_aux_int_t &interf)
    {
       //Check if we have enough memory or try to expand current memory
       size_type remaining = this->members_.m_capacity - this->members_.m_size;
@@ -1575,7 +1732,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //                 |_>_>_>_>_>^                    
    //
    //
-   //New situation in Case B (hole_size >= 0):
+   //New situation in Case B (hole_size > 0):
    // range is moved through uninitialized moves
    //
    //       first_pos   last_pos         old_limit
@@ -2001,173 +2158,10 @@ class vector : private container_detail::vector_alloc_holder<A>
       }
    }
 
-   template <class InIt>
-   void priv_assign_aux(InIt first, InIt last, std::input_iterator_tag)
-   {
-      //Overwrite all elements we can from [first, last)
-      iterator cur = begin();
-      for ( ; first != last && cur != end(); ++cur, ++first){
-         *cur = *first;
-      }
-
-      if (first == last){
-         //There are no more elements in the sequence, erase remaining
-         this->erase(cur, cend());
-      }
-      else{
-         //There are more elements in the range, insert the remaining ones
-         this->insert(this->cend(), first, last);
-      }
-   }
-
-   template <class FwdIt>
-   void priv_assign_aux(FwdIt first, FwdIt last, std::forward_iterator_tag)
-   {
-      size_type n = std::distance(first, last);
-      if(!n){
-         this->prot_destroy_all();
-         return;
-      }
-      //Check if we have enough memory or try to expand current memory
-      size_type remaining = this->members_.m_capacity - this->members_.m_size;
-      bool same_buffer_start;
-      std::pair<pointer, bool> ret;
-      size_type real_cap = this->members_.m_capacity;
-
-      if (n <= remaining){
-         same_buffer_start = true;
-      }
-      else{
-         //There is not enough memory, allocate a new buffer
-         size_type new_cap = this->next_capacity(n);
-         ret = this->allocation_command
-               (allocate_new | expand_fwd | expand_bwd,
-                  this->size() + n, new_cap, real_cap, this->members_.m_start);
-         same_buffer_start = ret.second && this->members_.m_start == ret.first;
-         if(same_buffer_start){
-            this->members_.m_capacity  = real_cap;
-         }
-      }
-     
-      if(same_buffer_start){
-         T *start = container_detail::to_raw_pointer(this->members_.m_start);
-         if (this->size() >= n){
-            //There is memory, but there are more old elements than new ones
-            //Overwrite old elements with new ones
-            std::copy(first, last, start);
-            //Destroy remaining old elements
-            this->destroy_n(start + n, this->members_.m_size - n);
-            this->members_.m_size = n;
-         }
-         else{
-            //There is memory, but there are less old elements than new ones
-            //First overwrite some old elements with new ones
-            FwdIt mid = first;
-            std::advance(mid, this->size());
-            // iG T *end = std::copy(first, mid, start);
-            T *end = std::copy(first, mid, start);
-            //Initialize the remaining new elements in the uninitialized memory
-            ::boost::container::uninitialized_copy_or_move_alloc(this->alloc(), mid, last, end);
-            this->members_.m_size = n;
-         }
-      }
-      else if(!ret.second){
-         typename value_traits::ArrayDeallocator scoped_alloc(ret.first, this->alloc(), real_cap);
-         ::boost::container::uninitialized_copy_or_move_alloc(this->alloc(), first, last, container_detail::to_raw_pointer(ret.first));
-         scoped_alloc.release();
-         //Destroy and deallocate old buffer
-         if(this->members_.m_start != 0){
-            this->destroy_n(container_detail::to_raw_pointer(this->members_.m_start), this->members_.m_size);
-            this->alloc().deallocate(this->members_.m_start, this->members_.m_capacity);
-         }
-         this->members_.m_start     = ret.first;
-         this->members_.m_size      = n;
-         this->members_.m_capacity  = real_cap;
-      }
-      else{
-         //Backwards expansion
-         //If anything goes wrong, this object will destroy old objects
-         T *old_start         = container_detail::to_raw_pointer(this->members_.m_start);
-         size_type old_size   = this->members_.m_size;
-         typename value_traits::OldArrayDestructor old_values_destroyer(old_start, this->alloc(), old_size);
-         //If something goes wrong size will be 0
-         //but holding the whole buffer
-         this->members_.m_size  = 0;
-         this->members_.m_start = ret.first;
-         this->members_.m_capacity = real_cap;
-        
-         //Backup old buffer data
-         size_type old_offset    = old_start - container_detail::to_raw_pointer(ret.first);
-         size_type first_count   = container_detail::min_value(n, old_offset);
-
-         FwdIt mid = first;
-         std::advance(mid, first_count);
-         ::boost::container::uninitialized_copy_or_move_alloc
-            (this->alloc(), first, mid, container_detail::to_raw_pointer(ret.first));
-
-         if(old_offset > n){
-            //All old elements will be destroyed by "old_values_destroyer"
-            this->members_.m_size = n;
-         }
-         else{
-            //We have constructed objects from the new begin until
-            //the old end so release the rollback destruction
-            old_values_destroyer.release();
-            this->members_.m_start  = ret.first;
-            this->members_.m_size   = first_count + old_size;
-            //Now overwrite the old values
-            size_type second_count = container_detail::min_value(old_size, n - first_count);
-            FwdIt mid2 = mid;
-            std::advance(mid2, second_count);
-            // iG std::copy(mid, mid2, old_start);
-            std::copy(mid, mid2, old_start);
-           
-            //Check if we still have to append elements in the
-            //uninitialized end
-            if(second_count == old_size){
-               // iG std::copy(mid2, last, old_start + old_size);
-               std::copy(mid2, last, old_start + old_size);
-            }
-            else{
-               //We have to destroy some old values
-               this->destroy_n
-                  (old_start + second_count, old_size - second_count);
-               this->members_.m_size = n;
-            }
-            this->members_.m_size = n;                       
-         }
-      }
-   }
-
-   template <class Integer>
-   void priv_assign_dispatch(Integer n, Integer val, container_detail::true_)
-   { this->assign((size_type) n, (value_type)val); }
-
-   template <class InIt>
-   void priv_assign_dispatch(InIt first, InIt last, container_detail::false_)
-   {
-      //Dispatch depending on integer/iterator
-      typedef typename std::iterator_traits<InIt>::iterator_category ItCat;
-      this->priv_assign_aux(first, last, ItCat());
-   }
-
-   template <class Integer>
-   void priv_insert_dispatch(const_iterator pos, Integer n, Integer val, container_detail::true_)
-   {  this->insert(pos, (size_type)n, (T)val);  }
-
-   template <class InIt>
-   void priv_insert_dispatch(const_iterator pos, InIt first,
-                             InIt last,      container_detail::false_)
-   {
-      //Dispatch depending on integer/iterator
-      typedef typename std::iterator_traits<InIt>::iterator_category ItCat;
-      this->priv_range_insert(pos, first, last, ItCat());
-   }
-
    void priv_check_range(size_type n) const
    {
       //If n is out of range, throw an out_of_range exception
-      if (n >= size())
+      if (n >= this->size())
          throw std::out_of_range("vector::at");
    }
 

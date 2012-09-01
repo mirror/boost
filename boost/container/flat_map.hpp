@@ -190,8 +190,8 @@ class flat_map
    template <class InputIterator>
    flat_map(InputIterator first, InputIterator last, const Pred& comp = Pred(),
          const allocator_type& a = allocator_type())
-      : m_flat_tree(comp, container_detail::force<impl_allocator_type>(a))
-      { m_flat_tree.insert_unique(first, last); }
+      : m_flat_tree(true, first, last, comp, container_detail::force<impl_allocator_type>(a))
+   {}
 
    //! <b>Effects</b>: Constructs an empty flat_map using the specified comparison object and
    //! allocator, and inserts elements from the ordered unique range [first ,last). This function
@@ -988,8 +988,8 @@ class flat_multimap
    flat_multimap(InputIterator first, InputIterator last,
             const Pred& comp        = Pred(),
             const allocator_type& a = allocator_type())
-      : m_flat_tree(comp, container_detail::force<impl_allocator_type>(a))
-      { m_flat_tree.insert_equal(first, last); }
+      : m_flat_tree(false, first, last, comp, container_detail::force<impl_allocator_type>(a))
+   {}
 
    //! <b>Effects</b>: Constructs an empty flat_multimap using the specified comparison object and
    //! allocator, and inserts elements from the ordered range [first ,last). This function

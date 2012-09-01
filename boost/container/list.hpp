@@ -660,18 +660,8 @@ class list
    //! <b>Complexity</b>: Linear to the difference between size() and new_size.
    void resize(size_type new_size, const T& x)
    {
-      const_iterator iend = this->cend();
-      size_type len = this->size();
-     
-      if(len > new_size){
-         size_type to_erase = len - new_size;
-         while(to_erase--){
-            --iend;
-         }
-         this->erase(iend, this->cend());
-      }
-      else{
-         this->priv_create_and_insert_nodes(iend, new_size - len, x);
+      if(!priv_try_shrink(new_size)){
+         this->insert(this->cend(), new_size - this->size(), x);
       }
    }
 
@@ -683,29 +673,9 @@ class list
    //! <b>Complexity</b>: Linear to the difference between size() and new_size.
    void resize(size_type new_size)
    {
-      const_iterator iend = this->end();
-      size_type len = this->size();
-     
-      if(len > new_size){
-         size_type to_erase = len - new_size;
-         const_iterator ifirst;
-         if(to_erase < len/2u){
-            ifirst = iend;
-            while(to_erase--){
-               --ifirst;
-            }
-         }
-         else{
-            ifirst = this->begin();
-            size_type to_skip = len - to_erase;
-            while(to_skip--){
-               ++ifirst;
-            }
-         }
-         this->erase(ifirst, iend);
-      }
-      else{
-         this->priv_create_and_insert_nodes(this->cend(), new_size - len);
+      if(!priv_try_shrink(new_size)){
+         typedef default_construct_iterator<value_type, difference_type> default_iterator;
+         this->insert(this->cend(), default_iterator(new_size - this->size()), default_iterator());
       }
    }
 
@@ -776,32 +746,75 @@ class list
    //!
    //! <b>Effects</b>: Inserts n copies of x before p.
    //!
+   //! <b>Returns</b>: an iterator to the first inserted element or p if n is 0.
+   //!
    //! <b>Throws</b>: If memory allocation throws or T's copy constructor throws.
    //!
    //! <b>Complexity</b>: Linear to n.
-   void insert(const_iterator p, size_type n, const T& x)
-   { this->priv_create_and_insert_nodes(p, n, x); }
+   iterator insert(const_iterator p, size_type n, const T& x)
+   {
+      typedef constant_iterator<value_type, difference_type> cvalue_iterator;
+      return this->insert(p, cvalue_iterator(x, n), cvalue_iterator());
+   }
 
    //! <b>Requires</b>: p must be a valid iterator of *this.
    //!
    //! <b>Effects</b>: Insert a copy of the [first, last) range before p.
+   //!
+   //! <b>Returns</b>: an iterator to the first inserted element or p if first == last.
    //!
    //! <b>Throws</b>: If memory allocation throws, T's constructor from a
    //!   dereferenced InpIt throws.
    //!
    //! <b>Complexity</b>: Linear to std::distance [first, last).
    template <class InpIt>
-   void insert(const_iterator p, InpIt first, InpIt last)
+   iterator insert(const_iterator p, InpIt first, InpIt last
+      #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<InpIt, size_type>::value
+            && (container_detail::is_input_iterator<InpIt>::value
+                || container_detail::is_same<alloc_version, allocator_v1>::value
+               )
+         >::type * = 0
+      #endif
+      )
    {
-      const bool aux_boolean = container_detail::is_convertible<InpIt, size_type>::value;
-      typedef container_detail::bool_<aux_boolean> Result;
-      this->priv_insert_dispatch(p, first, last, Result());
+      const typename Icont::iterator ipos(p.get());
+      iterator ret_it(ipos);
+      if(first != last){
+         ret_it = iterator(this->icont().insert(ipos, *this->create_node_from_it(first)));
+         ++first;
+      }
+      for (; first != last; ++first){
+         this->icont().insert(ipos, *this->create_node_from_it(first));
+      }
+      return ret_it;
    }
+
+   #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+   template <class FwdIt>
+   iterator insert(const_iterator p, FwdIt first, FwdIt last
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<FwdIt, size_type>::value
+            && !(container_detail::is_input_iterator<FwdIt>::value
+                || container_detail::is_same<alloc_version, allocator_v1>::value
+               )
+         >::type * = 0
+      )
+   {
+      //Optimized allocation and construction
+      insertion_functor func(this->icont(), p.get());
+      this->allocate_many_and_construct(first, std::distance(first, last), func);
+      return iterator(func.inserted_first());
+   }
+   #endif
 
    #if defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
    //! <b>Requires</b>: position must be a valid iterator of *this.
    //!
    //! <b>Effects</b>: Insert a copy of x before position.
+   //!
+   //! <b>Returns</b>: an iterator to the inserted element.
    //!
    //! <b>Throws</b>: If memory allocation throws or x's copy constructor throws.
    //!
@@ -811,6 +824,8 @@ class list
    //! <b>Requires</b>: position must be a valid iterator of *this.
    //!
    //! <b>Effects</b>: Insert a new element before position with mx's resources.
+   //!
+   //! <b>Returns</b>: an iterator to the inserted element.
    //!
    //! <b>Throws</b>: If memory allocation throws.
    //!
@@ -919,7 +934,10 @@ class list
    //!
    //! <b>Complexity</b>: Linear to n.
    void assign(size_type n, const T& val)
-   {  this->priv_fill_assign(n, val);  }
+   {
+      typedef constant_iterator<value_type, difference_type> cvalue_iterator;
+      return this->assign(cvalue_iterator(val, n), cvalue_iterator());
+   }
 
    //! <b>Effects</b>: Assigns the the range [first, last) to *this.
    //!
@@ -928,11 +946,23 @@ class list
    //!
    //! <b>Complexity</b>: Linear to n.
    template <class InpIt>
-   void assign(InpIt first, InpIt last)
+   void assign(InpIt first, InpIt last
+      #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+      , typename container_detail::enable_if_c
+         < !container_detail::is_convertible<InpIt, size_type>::value
+         >::type * = 0
+      #endif
+      )
    {
-      const bool aux_boolean = container_detail::is_convertible<InpIt, size_type>::value;
-      typedef container_detail::bool_<aux_boolean> Result;
-      this->priv_assign_dispatch(first, last, Result());
+      iterator first1      = this->begin();
+      const iterator last1 = this->end();
+      for ( ; first1 != last1 && first != last; ++first1, ++first)
+         *first1 = *first;
+      if (first == last)
+         this->erase(first1, last1);
+      else{
+         this->insert(last1, first, last);
+      }
    }
 
    //! <b>Requires</b>: p must point to an element contained
@@ -1151,6 +1181,34 @@ class list
    /// @cond
    private:
 
+   bool priv_try_shrink(size_type new_size)
+   {
+      const size_type len = this->size();
+      if(len > new_size){
+         const const_iterator iend = this->cend();
+         size_type to_erase = len - new_size;
+         const_iterator ifirst;
+         if(to_erase < len/2u){
+            ifirst = iend;
+            while(to_erase--){
+               --ifirst;
+            }
+         }
+         else{
+            ifirst = this->cbegin();
+            size_type to_skip = len - to_erase;
+            while(to_skip--){
+               ++ifirst;
+            }
+         }
+         this->erase(ifirst, iend);
+         return true;
+      }
+      else{
+         return false;
+      }
+   }
+
    iterator priv_insert(const_iterator p, const T &x)
    {
       NodePtr tmp = AllocHolder::create_node(x);
@@ -1175,116 +1233,38 @@ class list
    void priv_push_front (BOOST_RV_REF(T) x)
    {  this->insert(this->cbegin(), boost::move(x));  }
 
-   //Iterator range version
-   template<class InpIterator>
-   void priv_create_and_insert_nodes
-      (const_iterator pos, InpIterator beg, InpIterator end)
-   {
-      typedef typename std::iterator_traits<InpIterator>::iterator_category ItCat;
-      priv_create_and_insert_nodes(pos, beg, end, alloc_version(), ItCat());
-   }
-
-   template<class InpIterator>
-   void priv_create_and_insert_nodes
-      (const_iterator pos, InpIterator beg, InpIterator end, allocator_v1, std::input_iterator_tag)
-   {
-      for (; beg != end; ++beg){
-         this->icont().insert(pos.get(), *this->create_node_from_it(beg));
-      }
-   }
-
-   template<class InpIterator>
-   void priv_create_and_insert_nodes
-      (const_iterator pos, InpIterator beg, InpIterator end, allocator_v2, std::input_iterator_tag)
-   {  //Just forward to the default one
-      priv_create_and_insert_nodes(pos, beg, end, allocator_v1(), std::input_iterator_tag());
-   }
-
    class insertion_functor;
    friend class insertion_functor;
 
    class insertion_functor
    {
       Icont &icont_;
-      typename Icont::const_iterator pos_;
+      typedef typename Icont::iterator       iiterator;
+      typedef typename Icont::const_iterator iconst_iterator;
+
+      const iconst_iterator pos_;
+      iiterator ret_;
+      bool first_;
 
       public:
       insertion_functor(Icont &icont, typename Icont::const_iterator pos)
-         :  icont_(icont), pos_(pos)
+         :  icont_(icont), pos_(pos), ret_(pos.unconst()), first_(true)
       {}
 
       void operator()(Node &n)
-      {  this->icont_.insert(pos_, n); }
+      {
+         if(first_){
+            ret_ = this->icont_.insert(pos_, n);
+            first_ = false;
+         }
+         else{
+            this->icont_.insert(pos_, n);
+         }
+      }
+
+      iiterator inserted_first() const
+      {  return ret_;   }
    };
-
-
-   template<class FwdIterator>
-   void priv_create_and_insert_nodes
-      (const_iterator pos, FwdIterator beg, FwdIterator end, allocator_v2, std::forward_iterator_tag)
-   {
-      if(beg != end){
-         //Optimized allocation and construction
-         this->allocate_many_and_construct
-            (beg, std::distance(beg, end), insertion_functor(this->icont(), pos.get()));
-      }
-   }
-
-   //Default constructed version
-   void priv_create_and_insert_nodes(const_iterator pos, size_type n)
-   {
-      typedef default_construct_iterator<value_type, difference_type> default_iterator;
-      this->priv_create_and_insert_nodes(pos, default_iterator(n), default_iterator());
-   }
-
-   //Copy constructed version
-   void priv_create_and_insert_nodes(const_iterator pos, size_type n, const T& x)
-   {
-      typedef constant_iterator<value_type, difference_type> cvalue_iterator;
-      this->priv_create_and_insert_nodes(pos, cvalue_iterator(x, n), cvalue_iterator());
-   }
-
-   //Dispatch to detect iterator range or integer overloads
-   template <class InputIter>
-   void priv_insert_dispatch(const_iterator p,
-                             InputIter first, InputIter last,
-                             container_detail::false_)
-   {  this->priv_create_and_insert_nodes(p, first, last);   }
-
-   template<class Integer>
-   void priv_insert_dispatch(const_iterator p, Integer n, Integer x, container_detail::true_)
-   {  this->insert(p, (size_type)n, x);  }
-
-   void priv_fill_assign(size_type n, const T& val)
-   {
-      iterator i = this->begin(), iend = this->end();
-
-      for ( ; i != iend && n > 0; ++i, --n)
-         *i = val;
-      if (n > 0){
-         this->priv_create_and_insert_nodes(this->cend(), n, val);
-      }
-      else{
-         this->erase(i, cend());
-      }
-   }
-
-   template <class Integer>
-   void priv_assign_dispatch(Integer n, Integer val, container_detail::true_)
-   {  this->priv_fill_assign((size_type) n, (T) val); }
-
-   template <class InputIter>
-   void priv_assign_dispatch(InputIter first2, InputIter last2, container_detail::false_)
-   {
-      iterator first1   = this->begin();
-      iterator last1    = this->end();
-      for ( ; first1 != last1 && first2 != last2; ++first1, ++first2)
-         *first1 = *first2;
-      if (first2 == last2)
-         this->erase(first1, last1);
-      else{
-         this->priv_create_and_insert_nodes(last1, first2, last2);
-      }
-   }
 
    //Functors for member algorithm defaults
    struct value_less

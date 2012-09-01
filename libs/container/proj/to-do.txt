@@ -34,6 +34,17 @@ Write forward_list
 
 check move if noexcept conditions in vector, deque and stable_vector
 
+Add noexcept testing using static_assert (Howard Hinnants's suggestion):
+
+   #include <type_traits>
+
+   struct A
+   {
+      void foo() noexcept;
+   };
+
+   static_assert(noexcept(std::declval<A&>().foo()), "A::foo() should be noexcept");
+
 Detect always equal or unequal allocators at compiler time. operator== returns true_type or false_type
 
 change virtual functions with pointers to avoid template instantiation for every type
