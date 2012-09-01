@@ -135,15 +135,6 @@ namespace boost { namespace fusion {
         }
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
-        template <BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename U)>
-        deque&
-        operator=(deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)>&& rhs)
-        {
-            base::operator=(std::forward<
-               deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)>>(rhs));
-            return *this;
-        }
-
         template <typename T>
         deque&
         operator=(T&& rhs)

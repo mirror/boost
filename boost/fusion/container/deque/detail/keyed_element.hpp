@@ -124,14 +124,6 @@ namespace boost { namespace fusion { namespace detail
         }
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES)
-        template<typename U, typename Rst>
-        keyed_element& operator=(keyed_element<Key, U, Rst>&& rhs)
-        {
-            base::operator=(std::forward<keyed_element<Key, U, Rst>>(rhs));
-            value_ = std::forward<U>(rhs.value_);
-            return *this;
-        }
-
         keyed_element& operator=(keyed_element&& rhs)
         {
             base::operator=(std::forward<keyed_element>(rhs));
