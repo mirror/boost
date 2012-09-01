@@ -129,6 +129,23 @@ namespace boost { namespace fusion
             base::operator=(rhs);
             return *this;
         }
+
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        template <typename ...Elements>
+        deque& operator=(deque<Elements...>&& rhs)
+        {
+            base::operator=(std::forward<deque<Elements...>>(rhs));
+            return *this;
+        }
+
+        template <typename T>
+        deque& operator=(T&& rhs)
+        {
+            base::operator=(std::forward<T>(rhs));
+            return *this;
+        }
+#endif
+
     };
 }}
 
