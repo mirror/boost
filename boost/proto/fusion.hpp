@@ -27,6 +27,7 @@
 #include <boost/proto/proto_fwd.hpp>
 #include <boost/proto/traits.hpp>
 #include <boost/proto/eval.hpp>
+#include <boost/proto/make_expr.hpp>
 
 #ifdef BOOST_MSVC
 #pragma warning(push)
@@ -46,7 +47,12 @@ namespace boost { namespace proto
             typedef Expr expr_type;
             static const long index = Pos;
             typedef fusion::random_access_traversal_tag category;
-            typedef tag::proto_expr_iterator fusion_tag;
+            typedef
+                tag::proto_expr_iterator<
+                    typename Expr::proto_tag
+                  , typename Expr::proto_domain
+                >
+            fusion_tag;
 
             explicit expr_iterator(Expr &e)
               : expr(e)
@@ -60,7 +66,12 @@ namespace boost { namespace proto
         {
             typedef Expr expr_type;
             typedef fusion::forward_traversal_tag category;
-            typedef tag::proto_flat_view fusion_tag;
+            typedef
+                tag::proto_flat_view<
+                    typename Expr::proto_tag
+                  , typename Expr::proto_domain
+                >
+            fusion_tag;
 
             explicit flat_view(Expr &e)
               : expr_(e)
@@ -250,8 +261,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct is_sequence_impl;
 
-        template<>
-        struct is_sequence_impl<proto::tag::proto_flat_view>
+        template<typename Tag, typename Domain>
+        struct is_sequence_impl<proto::tag::proto_flat_view<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -259,8 +270,8 @@ namespace boost { namespace fusion
             {};
         };
 
-        template<>
-        struct is_sequence_impl<proto::tag::proto_expr>
+        template<typename Tag, typename Domain>
+        struct is_sequence_impl<proto::tag::proto_expr<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -271,8 +282,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct is_view_impl;
 
-        template<>
-        struct is_view_impl<proto::tag::proto_flat_view>
+        template<typename Tag, typename Domain>
+        struct is_view_impl<proto::tag::proto_flat_view<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -280,8 +291,8 @@ namespace boost { namespace fusion
             {};
         };
 
-        template<>
-        struct is_view_impl<proto::tag::proto_expr>
+        template<typename Tag, typename Domain>
+        struct is_view_impl<proto::tag::proto_expr<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -292,8 +303,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct value_of_impl;
 
-        template<>
-        struct value_of_impl<proto::tag::proto_expr_iterator>
+        template<typename Tag, typename Domain>
+        struct value_of_impl<proto::tag::proto_expr_iterator<Tag, Domain> >
         {
             template<
                 typename Iterator
@@ -323,8 +334,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct deref_impl;
 
-        template<>
-        struct deref_impl<proto::tag::proto_expr_iterator>
+        template<typename Tag, typename Domain>
+        struct deref_impl<proto::tag::proto_expr_iterator<Tag, Domain> >
         {
             template<
                 typename Iterator
@@ -364,8 +375,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct advance_impl;
 
-        template<>
-        struct advance_impl<proto::tag::proto_expr_iterator>
+        template<typename Tag, typename Domain>
+        struct advance_impl<proto::tag::proto_expr_iterator<Tag, Domain> >
         {
             template<typename Iterator, typename N>
             struct apply
@@ -387,8 +398,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct distance_impl;
 
-        template<>
-        struct distance_impl<proto::tag::proto_expr_iterator>
+        template<typename Tag, typename Domain>
+        struct distance_impl<proto::tag::proto_expr_iterator<Tag, Domain> >
         {
             template<typename IteratorFrom, typename IteratorTo>
             struct apply
@@ -399,32 +410,32 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct next_impl;
 
-        template<>
-        struct next_impl<proto::tag::proto_expr_iterator>
+        template<typename Tag, typename Domain>
+        struct next_impl<proto::tag::proto_expr_iterator<Tag, Domain> >
         {
             template<typename Iterator>
             struct apply
-              : advance_impl<proto::tag::proto_expr_iterator>::template apply<Iterator, mpl::long_<1> >
+              : advance_impl<proto::tag::proto_expr_iterator<Tag, Domain> >::template apply<Iterator, mpl::long_<1> >
             {};
         };
 
         template<typename Tag>
         struct prior_impl;
 
-        template<>
-        struct prior_impl<proto::tag::proto_expr_iterator>
+        template<typename Tag, typename Domain>
+        struct prior_impl<proto::tag::proto_expr_iterator<Tag, Domain> >
         {
             template<typename Iterator>
             struct apply
-              : advance_impl<proto::tag::proto_expr_iterator>::template apply<Iterator, mpl::long_<-1> >
+              : advance_impl<proto::tag::proto_expr_iterator<Tag, Domain> >::template apply<Iterator, mpl::long_<-1> >
             {};
         };
 
         template<typename Tag>
         struct category_of_impl;
 
-        template<>
-        struct category_of_impl<proto::tag::proto_expr>
+        template<typename Tag, typename Domain>
+        struct category_of_impl<proto::tag::proto_expr<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -436,8 +447,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct size_impl;
 
-        template<>
-        struct size_impl<proto::tag::proto_expr>
+        template<typename Tag, typename Domain>
+        struct size_impl<proto::tag::proto_expr<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -448,8 +459,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct begin_impl;
 
-        template<>
-        struct begin_impl<proto::tag::proto_expr>
+        template<typename Tag, typename Domain>
+        struct begin_impl<proto::tag::proto_expr<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -466,8 +477,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct end_impl;
 
-        template<>
-        struct end_impl<proto::tag::proto_expr>
+        template<typename Tag, typename Domain>
+        struct end_impl<proto::tag::proto_expr<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -489,8 +500,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct value_at_impl;
 
-        template<>
-        struct value_at_impl<proto::tag::proto_expr>
+        template<typename Tag, typename Domain>
+        struct value_at_impl<proto::tag::proto_expr<Tag, Domain> >
         {
             template<
                 typename Sequence
@@ -521,8 +532,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct at_impl;
 
-        template<>
-        struct at_impl<proto::tag::proto_expr>
+        template<typename Tag, typename Domain>
+        struct at_impl<proto::tag::proto_expr<Tag, Domain> >
         {
             template<
                 typename Sequence
@@ -561,10 +572,55 @@ namespace boost { namespace fusion
         };
 
         template<typename Tag>
+        struct convert_impl;
+
+        template<typename Tag, typename Domain>
+        struct convert_impl<proto::tag::proto_expr<Tag, Domain> >
+        {
+            template<typename Sequence>
+            struct apply
+            {
+                typedef
+                    typename proto::result_of::unpack_expr<
+                        Tag
+                      , Domain
+                      , Sequence
+                    >::type
+                type;
+
+                static type call(Sequence& seq)
+                {
+                    return proto::unpack_expr<Tag, Domain>(seq);
+                }
+            };
+        };
+
+        template<typename Tag, typename Domain>
+        struct convert_impl<proto::tag::proto_flat_view<Tag, Domain> >
+        {
+            template<typename Sequence>
+            struct apply
+            {
+                typedef
+                    typename proto::result_of::unpack_expr<
+                        Tag
+                      , Domain
+                      , Sequence
+                    >::type
+                type;
+
+                static type call(Sequence& seq)
+                {
+                    return proto::unpack_expr<Tag, Domain>(seq);
+                }
+            };
+        };
+
+        template<typename Tag>
         struct is_segmented_impl;
 
-        template<>
-        struct is_segmented_impl<proto::tag::proto_flat_view>
+        template<typename Tag, typename Domain>
+        struct is_segmented_impl<proto::tag::proto_flat_view<Tag, Domain> >
         {
             template<typename Iterator>
             struct apply
@@ -575,8 +631,8 @@ namespace boost { namespace fusion
         template<typename Tag>
         struct segments_impl;
 
-        template<>
-        struct segments_impl<proto::tag::proto_flat_view>
+        template<typename Tag, typename Domain>
+        struct segments_impl<proto::tag::proto_flat_view<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -597,8 +653,8 @@ namespace boost { namespace fusion
             };
         };
 
-        template<>
-        struct category_of_impl<proto::tag::proto_flat_view>
+        template<typename Tag, typename Domain>
+        struct category_of_impl<proto::tag::proto_flat_view<Tag, Domain> >
         {
             template<typename Sequence>
             struct apply
@@ -606,7 +662,6 @@ namespace boost { namespace fusion
                 typedef forward_traversal_tag type;
             };
         };
-
     }
 
     namespace traits

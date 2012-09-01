@@ -324,6 +324,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::advance">proto::functional::advance</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::as_child">proto::functional::as_child</classname>
         </computeroutput>
       </listitem>
@@ -344,6 +349,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::begin">proto::functional::begin</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::child">proto::functional::child</classname>
         </computeroutput>
       </listitem>
@@ -360,6 +370,21 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::functional::display_expr">proto::functional::display_expr</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::distance">proto::functional::distance</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::empty">proto::functional::empty</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::end">proto::functional::end</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -404,6 +429,11 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::next">proto::functional::next</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::pop_back">proto::functional::pop_back</classname>
         </computeroutput>
       </listitem>
@@ -414,12 +444,27 @@
       </listitem>
       <listitem>
         <computeroutput>
+          <classname alt="boost::proto::functional::prior">proto::functional::prior</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
           <classname alt="boost::proto::functional::push_back">proto::functional::push_back</classname>
         </computeroutput>
       </listitem>
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::functional::push_front">proto::functional::push_front</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::rbegin">proto::functional::rbegin</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::rend">proto::functional::rend</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -435,6 +480,11 @@
       <listitem>
         <computeroutput>
           <classname alt="boost::proto::functional::second">proto::functional::second</classname>
+        </computeroutput>
+      </listitem>
+      <listitem>
+        <computeroutput>
+          <classname alt="boost::proto::functional::size">proto::functional::size</classname>
         </computeroutput>
       </listitem>
       <listitem>
@@ -1243,7 +1293,14 @@
   <xi:include href="reference/functional/fusion/push_back.xml"/>
   <xi:include href="reference/functional/fusion/push_front.xml"/>
   <xi:include href="reference/functional/fusion/reverse.xml"/>
+  <xi:include href="reference/functional/range/begin.xml"/>
+  <xi:include href="reference/functional/range/empty.xml"/>
+  <xi:include href="reference/functional/range/end.xml"/>
+  <xi:include href="reference/functional/range/rbegin.xml"/>
+  <xi:include href="reference/functional/range/rend.xml"/>
+  <xi:include href="reference/functional/range/size.xml"/>
   <xi:include href="reference/functional/std.xml"/>
+  <xi:include href="reference/functional/std/iterator.xml"/>
   <xi:include href="reference/functional/std/utility.xml"/>
   <xi:include href="reference/fusion.xml"/>
   <xi:include href="reference/generate.xml"/>
