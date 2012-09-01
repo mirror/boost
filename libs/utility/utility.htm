@@ -161,14 +161,12 @@ void f() {
                 resides in the header <code>&lt;<a
                 href="../../boost/utility/result_of.hpp">boost/utility/result_of.hpp</a>&gt;</code>.</p>
 
-                <p>If your compiler supports <code>decltype</code>,
-                then you can enable automatic result type deduction by
-                defining the macro <code>BOOST_RESULT_OF_USE_DECLTYPE</code>,
-                as in the following example.</p>
+                <p>If your compiler's support for <code>decltype</code> is
+                adequate, <code>result_of</code> automatically uses it to
+                deduce the result type of your callable object.</p>
 
                 <blockquote>
-                <pre>#define BOOST_RESULT_OF_USE_DECLTYPE
-#include &lt;boost/utility/result_of.hpp&gt;
+                <pre>#include &lt;boost/utility/result_of.hpp&gt;
 
 struct functor {
     template&lt;class T&gt;
@@ -180,21 +178,29 @@ struct functor {
 
 typedef boost::result_of&lt;
     functor(int)
-&gt;::type type;</pre>
+&gt;::type type; // type is int</pre>
                 </blockquote>
 
-                <p>If <code>decltype</code> is not enabled,
+                <p>You can test whether <code>result_of</code> is using
+                <code>decltype</code> by checking if the macro
+                <code>BOOST_RESULT_OF_USE_DECLTYPE</code> is defined after
+                including <code>result_of.hpp</code>. You can also force
+                <code>result_of</code> to use <code>decltype</code> by
+                defining <code>BOOST_RESULT_OF_USE_DECLTYPE</code> prior
+                to including <code>result_of.hpp</code>.</p>
+
+                <p>If <code>decltype</code> is not used,
                 then automatic result type deduction of function
                 objects is not possible. Instead, <code>result_of</code>
                 uses the following protocol to allow the programmer to
                 specify a type. When <code>F</code> is a class type with a
                 member type <code>result_type</code>,
                 <code>result_of&lt;F(T1, T2, ...,
-                T<em>N</em>)&gt;</code> is
+                T<em>N</em>)&gt;::type</code> is
                 <code>F::result_type</code>. When <code>F</code> does
                 not contain <code>result_type</code>,
                 <code>result_of&lt;F(T1, T2, ...,
-                T<em>N</em>)&gt;</code> is <code>F::result&lt;F(T1,
+                T<em>N</em>)&gt;::type</code> is <code>F::result&lt;F(T1,
                 T2, ..., T<em>N</em>)&gt;::type</code> when
                 <code><em>N</em> &gt; 0</code> or <code>void</code>
                 when <code><em>N</em> = 0</code>. Note that it is the
@@ -221,22 +227,29 @@ typedef boost::result_of&lt;
 
 typedef boost::result_of&lt;
     functor(int)
-&gt;::type type;</pre>
+&gt;::type type; // type is int</pre>
                 </blockquote>
 
-                <p>In a future
-                release, <code>BOOST_RESULT_OF_USE_DECLTYPE</code>
-                may be enabled by default on compilers that
-                support <code>decltype</code>, so if you use the above
-                protocol please take care to ensure that
-                the <code>result_type</code>
-                and <code>result&lt;&gt;</code> members accurately
-                represent the result type. If you wish to continue to
+                <p>Since <code>decltype</code> is a new language
+                feature recently standardized in C++11,
+                if you are writing a function object
+                to be used with <code>result_of</code>, for
+                maximum portability, you might consider following
+                the above protocol even if your compiler has
+                proper <code>decltype</code> support. If you wish to continue to
                 use the protocol on compilers that
-                support <code>decltype</code>,
-                use <code>boost::tr1_result_of</code>, which is also
-                defined
-                in <code>&lt;<a href="../../boost/utility/result_of.hpp">boost/utility/result_of.hpp</a>&gt;</code>.</p>
+                support <code>decltype</code>, there are two options:
+                You can use <code>boost::tr1_result_of</code>, which is also
+                defined in <code>&lt;<a href="../../boost/utility/result_of.hpp">boost/utility/result_of.hpp</a>&gt;</code>.
+                Alternatively, you can define the macro
+                <code>BOOST_RESULT_OF_USE_TR1</code>, which causes
+                <code>result_of</code> to use the protocol described
+                above instead of <code>decltype</code>. If you choose to
+                follow the protocol, take care to ensure that the
+                <code>result_type</code> and
+                <code>result&lt;&gt;</code> members accurately
+                represent the return type of
+                <code>operator()</code>.</p>
 
                 <a name="BOOST_NO_RESULT_OF"></a>
                 <p>This implementation of <code>result_of</code>
@@ -253,7 +266,7 @@ typedef boost::result_of&lt;
                 <a href="http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1836.pdf">N1836</a>,
                 or, for motivation and design rationale,
                 the <code>result_of</code> <a href="http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1454.html">proposal</a>.</p>
-                Contributed by Doug Gregor.</p>
+                <p>Created by Doug Gregor. Contributions from Daniel Walker, Eric Niebler, Michel Morin and others</p>
 
 		<h2>Class templates for the Base-from-Member Idiom</h2>
 		<p>See <a href="base_from_member.html">separate documentation</a>.</p>

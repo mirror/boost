@@ -66,7 +66,7 @@ struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
 
 } // namespace detail 
 
-#else // defined(BOOST_NO_DECLTYPE)
+#else // !defined(BOOST_NO_DECLTYPE) && defined(BOOST_RESULT_OF_USE_DECLTYPE)
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
 template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
@@ -75,7 +75,7 @@ struct result_of<F(BOOST_RESULT_OF_ARGS)>
     : tr1_result_of<F(BOOST_RESULT_OF_ARGS)> { };
 #endif
 
-#endif // defined(BOOST_NO_DECLTYPE)
+#endif // !defined(BOOST_NO_DECLTYPE) && defined(BOOST_RESULT_OF_USE_DECLTYPE)
 
 #undef BOOST_RESULT_OF_ARGS
 
