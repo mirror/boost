@@ -116,11 +116,7 @@ namespace boost { namespace proto
         /// \return expr
         template<typename Expr>
         BOOST_FORCEINLINE
-        #ifdef BOOST_PROTO_STRICT_RESULT_OF
-        Expr
-        #else
-        Expr const &
-        #endif
+        BOOST_PROTO_RETURN_TYPE_STRICT_LOOSE(Expr, Expr const &)
         operator ()(Expr const &e) const
         {
             return e;

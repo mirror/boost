@@ -455,11 +455,7 @@ namespace boost
                 typedef typename impl::data::template lookup<Key>::type result_type;
                 BOOST_MPL_ASSERT_NOT((is_same<result_type, key_not_found>)); // lookup failed
 
-                #ifdef BOOST_PROTO_STRICT_RESULT_OF
-                result_type
-                #else
-                typename impl::data::template lookup<Key>::const_reference
-                #endif
+                BOOST_PROTO_RETURN_TYPE_STRICT_LOOSE(result_type, typename impl::data::template lookup<Key>::const_reference)
                 operator ()(
                     typename impl::expr_param
                   , typename impl::state_param
@@ -480,11 +476,7 @@ namespace boost
             {
                 typedef Data result_type;
 
-                #ifdef BOOST_PROTO_STRICT_RESULT_OF
-                result_type
-                #else
-                typename impl::data_param
-                #endif
+                BOOST_PROTO_RETURN_TYPE_STRICT_LOOSE(result_type, typename impl::data_param)
                 operator ()(
                     typename impl::expr_param
                   , typename impl::state_param

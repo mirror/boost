@@ -25,6 +25,7 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/mpl/aux_/config/ttp.hpp>
+#include <boost/utility/result_of.hpp>
 
 #ifndef BOOST_PROTO_MAX_ARITY
 # define BOOST_PROTO_MAX_ARITY 10
@@ -92,17 +93,12 @@
 # endif
 #endif
 
-#ifndef BOOST_NO_DECLTYPE_N3276
+#ifdef BOOST_NO_DECLTYPE_N3276
 # // Proto can only use the decltype-based result_of if N3276 has been
 # // implemented by the compiler.
 # // See http://www.open-std.org/JTC1/SC22/WG21/docs/papers/2011/n3276.pdf
 # ifndef BOOST_PROTO_USE_NORMAL_RESULT_OF
 #  define BOOST_PROTO_USE_NORMAL_RESULT_OF
-# endif
-# // If we're using the decltype-based result_of, we need to be a bit
-# // stricter about the return types of some functions.
-# ifndef BOOST_PROTO_STRICT_RESULT_OF
-#  define BOOST_PROTO_STRICT_RESULT_OF
 # endif
 #endif
 
@@ -112,6 +108,15 @@
 # define BOOST_PROTO_RESULT_OF boost::result_of
 #else
 # define BOOST_PROTO_RESULT_OF boost::tr1_result_of
+#endif
+
+// If we're using the decltype-based result_of, we need to be a bit
+// stricter about the return types of some functions.
+#if defined(BOOST_RESULT_OF_USE_DECLTYPE) && defined(BOOST_PROTO_USE_NORMAL_RESULT_OF)
+# define BOOST_PROTO_STRICT_RESULT_OF
+# define BOOST_PROTO_RETURN_TYPE_STRICT_LOOSE(X, Y) X
+#else
+# define BOOST_PROTO_RETURN_TYPE_STRICT_LOOSE(X, Y) Y
 #endif
 
 #ifdef BOOST_MPL_CFG_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
@@ -812,7 +817,7 @@ namespace boost { namespace proto
     template<typename Sequence, typename State, typename Fun>
     struct reverse_fold_tree;
 
-    template<typename Grammar>
+    template<typename Grammar, typename Domain = deduce_domain>
     struct pass_through;
 
     template<typename Grammar = detail::_default>
