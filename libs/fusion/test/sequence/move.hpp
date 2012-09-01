@@ -108,6 +108,9 @@ void test()
     return_type2 v2 = move_me(generate2());
     BOOST_TEST(copies == 0);
 
+    v2 = move_me(generate2());
+    BOOST_TEST(copies == 0);
+
     std::cout << "Copies: " << copies << std::endl;
 }
 
