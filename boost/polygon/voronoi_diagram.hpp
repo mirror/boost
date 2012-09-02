@@ -82,7 +82,7 @@ private:
   // 5 color bits are reserved.
   enum Bits {
     BITS_SHIFT = 0x5,
-    BITS_MASK = 0x1F,
+    BITS_MASK = 0x1F
   };
 
   source_index_type source_index_;
@@ -129,7 +129,7 @@ private:
   // 5 color bits are reserved.
   enum Bits {
     BITS_SHIFT = 0x5,
-    BITS_MASK = 0x1F,
+    BITS_MASK = 0x1F
   };
 
   coordinate_type x_;
@@ -256,7 +256,7 @@ private:
     BIT_IS_PRIMARY = 0x2,  // primary is opposite to secondary
 
     BITS_SHIFT = 0x5,
-    BITS_MASK = 0x1F,
+    BITS_MASK = 0x1F
   };
 
   voronoi_cell_type* cell_;

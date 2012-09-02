@@ -64,7 +64,7 @@ private:
 // Represents topology type of the voronoi site.
 enum GeometryCategory {
   GEOMETRY_CATEGORY_POINT = 0x0,
-  GEOMETRY_CATEGORY_SEGMENT = 0x1,
+  GEOMETRY_CATEGORY_SEGMENT = 0x1
 };
 
 // Represents category of the input source that forms Voronoi cell.
@@ -79,7 +79,7 @@ enum SourceCategory {
   SOURCE_CATEGORY_REVERSE_SEGMENT = 0x9,
 
   SOURCE_CATEGORY_GEOMETRY_SHIFT = 0x3,
-  SOURCE_CATEGORY_BITMASK = 0x1F,
+  SOURCE_CATEGORY_BITMASK = 0x1F
 };
 
 bool belongs(
@@ -247,8 +247,7 @@ public:
 
 private:
   enum Bits {
-    SOURCE_CATEGORY_BITMASK = SOURCE_CATEGORY_BITMASK,
-    IS_INVERSE = 0x20,  // 32
+    IS_INVERSE = 0x20  // 32
   };
 
   point_type point0_;
