@@ -94,7 +94,7 @@ public:
   template <typename OUTPUT>
   void construct(OUTPUT *output) {
     // Init structures.
-    output->builder()->reserve(site_events_.size());
+    output->_reserve(site_events_.size());
     init_sites_queue();
     init_beach_line(output);
 
@@ -107,7 +107,8 @@ public:
       } else if (site_event_iterator_ == site_events_.end()) {
         process_circle_event(output);
       } else {
-        if (event_comparison(*site_event_iterator_, circle_events_.top().first)) {
+        if (event_comparison(*site_event_iterator_,
+                             circle_events_.top().first)) {
           process_site_event(output);
         } else {
           process_circle_event(output);
@@ -121,7 +122,7 @@ public:
     beach_line_.clear();
 
     // Finish construction.
-    output->builder()->build();
+    output->_build();
   }
 
   void clear() {
@@ -172,8 +173,9 @@ private:
         site_events_.begin(), site_events_.end()), site_events_.end());
 
     // Index sites.
-    for (std::size_t cur = 0; cur < site_events_.size(); ++cur)
+    for (std::size_t cur = 0; cur < site_events_.size(); ++cur) {
       site_events_[cur].sorted_index(cur);
+    }
 
     // Init site iterator.
     site_event_iterator_ = site_events_.begin();
@@ -185,7 +187,7 @@ private:
       return;
     if (site_events_.size() == 1) {
       // Handle single site event case.
-      output->builder()->process_single_site(site_events_[0]);
+      output->_process_single_site(site_events_[0]);
       ++site_event_iterator_;
     } else {
       int skip = 0;
@@ -234,7 +236,7 @@ private:
 
       // Update the output.
       edge_type *edge =
-          output->builder()->insert_new_edge(*it_first, *it_second).first;
+          output->_insert_new_edge(*it_first, *it_second).first;
 
       // Insert a new bisector into the beach line.
       beach_line_.insert(beach_line_.end(),
@@ -395,7 +397,7 @@ private:
     const_cast<key_type &>(it_first->first).right_site(site3);
 
     // Insert the new bisector into the beach line.
-    it_first->second.edge(output->builder()->insert_new_edge(
+    it_first->second.edge(output->_insert_new_edge(
         site1, site3, circle_event, bisector1, bisector2).first);
 
     // Remove the (B, C) bisector node from the beach line.
@@ -441,7 +443,7 @@ private:
 
     // Update the output.
     std::pair<edge_type*, edge_type*> edges =
-        output->builder()->insert_new_edge(site_arc2, site_event);
+        output->_insert_new_edge(site_arc2, site_event);
     position = beach_line_.insert(position,
         typename beach_line_type::value_type(
             new_right_node, value_type(edges.second)));

@@ -37,12 +37,12 @@ public:
   };
 
   template <typename Point>
-  static bool is_vertical(const Point &point1, const Point &point2) {
+  static bool is_vertical(const Point& point1, const Point& point2) {
     return point1.x() == point2.x();
   }
 
   template <typename Site>
-  static bool is_vertical(const Site &site) {
+  static bool is_vertical(const Site& site) {
     return is_vertical(site.point0(), site.point1());
   }
 
@@ -100,9 +100,9 @@ public:
     }
 
     template <typename Point>
-    static Orientation eval(const Point &point1,
-                            const Point &point2,
-                            const Point &point3) {
+    static Orientation eval(const Point& point1,
+                            const Point& point2,
+                            const Point& point3) {
       int_x2_type dx1 = static_cast<int_x2_type>(point1.x()) -
                         static_cast<int_x2_type>(point2.x());
       int_x2_type dx2 = static_cast<int_x2_type>(point2.x()) -
@@ -120,7 +120,7 @@ public:
   public:
     typedef Point point_type;
 
-    bool operator()(const point_type &lhs, const point_type &rhs) const {
+    bool operator()(const point_type& lhs, const point_type& rhs) const {
       if (lhs.x() == rhs.x())
         return lhs.y() < rhs.y();
       return lhs.x() < rhs.x();
@@ -133,7 +133,7 @@ public:
     typedef Site site_type;
     typedef Circle circle_type;
 
-    bool operator()(const site_type &lhs, const site_type &rhs) const {
+    bool operator()(const site_type& lhs, const site_type& rhs) const {
       if (lhs.x0() != rhs.x0())
         return lhs.x0() < rhs.x0();
       if (!lhs.is_segment()) {
@@ -156,7 +156,7 @@ public:
       }
     }
 
-    bool operator()(const site_type &lhs, const circle_type &rhs) const {
+    bool operator()(const site_type& lhs, const circle_type& rhs) const {
       typename ulp_cmp_type::Result xCmp =
           ulp_cmp(to_fpt(lhs.x()), to_fpt(rhs.lower_x()), ULPS);
       if (xCmp != ulp_cmp_type::EQUAL)
@@ -166,7 +166,7 @@ public:
       return yCmp == ulp_cmp_type::LESS;
     }
 
-    bool operator()(const circle_type &lhs, const site_type &rhs) const {
+    bool operator()(const circle_type& lhs, const site_type& rhs) const {
       typename ulp_cmp_type::Result xCmp =
           ulp_cmp(to_fpt(lhs.lower_x()), to_fpt(rhs.x()), ULPS);
       if (xCmp != ulp_cmp_type::EQUAL)
@@ -176,7 +176,7 @@ public:
       return yCmp == ulp_cmp_type::LESS;
     }
 
-    bool operator()(const circle_type &lhs, const circle_type &rhs) const {
+    bool operator()(const circle_type& lhs, const circle_type& rhs) const {
       typename ulp_cmp_type::Result xCmp =
           ulp_cmp(to_fpt(lhs.lower_x()), to_fpt(rhs.lower_x()), ULPSx2);
       if (xCmp != ulp_cmp_type::EQUAL)
@@ -199,9 +199,9 @@ public:
     // Returns true if a horizontal line going through a new site intersects
     // right arc at first, else returns false. If horizontal line goes
     // through intersection point of the given two arcs returns false also.
-    bool operator()(const site_type &left_site,
-                    const site_type &right_site,
-                    const site_type &new_site) const {
+    bool operator()(const site_type& left_site,
+                    const site_type& right_site,
+                    const site_type& new_site) const {
       if (!left_site.is_segment()) {
         if (!right_site.is_segment()) {
           return pp(left_site, right_site, new_site);
@@ -232,12 +232,12 @@ public:
     // Returns true if a horizontal line going through the new point site
     // intersects right arc at first, else returns false. If horizontal line
     // goes through intersection point of the given two arcs returns false.
-    bool pp(const site_type &left_site,
-            const site_type &right_site,
-            const site_type &new_site) const {
-      const point_type &left_point = left_site.point0();
-      const point_type &right_point = right_site.point0();
-      const point_type &new_point = new_site.point0();
+    bool pp(const site_type& left_site,
+            const site_type& right_site,
+            const site_type& new_site) const {
+      const point_type& left_point = left_site.point0();
+      const point_type& right_point = right_site.point0();
+      const point_type& new_point = new_site.point0();
       if (left_point.x() > right_point.x()) {
         if (new_point.y() <= left_point.y())
           return false;
@@ -257,8 +257,8 @@ public:
       return dist1 < dist2;
     }
 
-    bool ps(const site_type &left_site, const site_type &right_site,
-            const site_type &new_site, bool reverse_order) const {
+    bool ps(const site_type& left_site, const site_type& right_site,
+            const site_type& new_site, bool reverse_order) const {
       kPredicateResult fast_res = fast_ps(
         left_site, right_site, new_site, reverse_order);
       if (fast_res != UNDEFINED)
@@ -273,9 +273,9 @@ public:
       return reverse_order ^ (dist1 < dist2);
     }
 
-    bool ss(const site_type &left_site,
-            const site_type &right_site,
-            const site_type &new_site) const {
+    bool ss(const site_type& left_site,
+            const site_type& right_site,
+            const site_type& new_site) const {
       // Handle temporary segment sites.
       if (left_site.point0() == right_site.point0() &&
           left_site.point1() == right_site.point1()) {
@@ -294,7 +294,7 @@ public:
     }
 
     fpt_type find_distance_to_point_arc(
-        const site_type &site, const point_type &point) const {
+        const site_type& site, const point_type& point) const {
       fpt_type dx = to_fpt(site.x()) - to_fpt(point.x());
       fpt_type dy = to_fpt(site.y()) - to_fpt(point.y());
       // The relative error is at most 3EPS.
@@ -302,12 +302,12 @@ public:
     }
 
     fpt_type find_distance_to_segment_arc(
-        const site_type &site, const point_type &point) const {
+        const site_type& site, const point_type& point) const {
       if (is_vertical(site)) {
         return (to_fpt(site.x()) - to_fpt(point.x())) * to_fpt(0.5);
       } else {
-        const point_type &segment0 = site.point0(true);
-        const point_type &segment1 = site.point1(true);
+        const point_type& segment0 = site.point0(true);
+        const point_type& segment1 = site.point1(true);
         fpt_type a1 = to_fpt(segment1.x()) - to_fpt(segment0.x());
         fpt_type b1 = to_fpt(segment1.y()) - to_fpt(segment0.y());
         fpt_type k = get_sqrt(a1 * a1 + b1 * b1);
@@ -327,12 +327,12 @@ public:
     }
 
     kPredicateResult fast_ps(
-        const site_type &left_site, const site_type &right_site,
-        const site_type &new_site, bool reverse_order) const {
-      const point_type &site_point = left_site.point0();
-      const point_type &segment_start = right_site.point0(true);
-      const point_type &segment_end = right_site.point1(true);
-      const point_type &new_point = new_site.point0();
+        const site_type& left_site, const site_type& right_site,
+        const site_type& new_site, bool reverse_order) const {
+      const point_type& site_point = left_site.point0();
+      const point_type& segment_start = right_site.point0(true);
+      const point_type& segment_end = right_site.point1(true);
+      const point_type& new_point = new_site.point0();
 
       if (ot::eval(segment_start, segment_end, new_point) != ot::RIGHT)
         return (!right_site.is_inverse()) ? LESS : MORE;
@@ -392,11 +392,11 @@ public:
     // Comparison is only called during the new site events processing.
     // That's why one of the nodes will always lie on the sweepline and may
     // be represented as a straight horizontal line.
-    bool operator() (const node_type &node1,
-                     const node_type &node2) const {
+    bool operator() (const node_type& node1,
+                     const node_type& node2) const {
       // Get x coordinate of the rightmost site from both nodes.
-      const site_type &site1 = get_comparison_site(node1);
-      const site_type &site2 = get_comparison_site(node2);
+      const site_type& site1 = get_comparison_site(node1);
+      const site_type& site2 = get_comparison_site(node2);
 
       if (site1.x() < site2.x()) {
         // The second node contains a new site.
@@ -425,7 +425,7 @@ public:
 
   private:
     // Get the newer site.
-    const site_type &get_comparison_site(const node_type &node) const {
+    const site_type& get_comparison_site(const node_type& node) const {
       if (node.left_site().sorted_index() > node.right_site().sorted_index()) {
         return node.left_site();
       }
@@ -434,7 +434,7 @@ public:
 
     // Get comparison pair: y coordinate and direction of the newer site.
     std::pair<coordinate_type, int> get_comparison_y(
-      const node_type &node, bool is_new_node = true) const {
+      const node_type& node, bool is_new_node = true) const {
       if (node.left_site().sorted_index() ==
           node.right_site().sorted_index()) {
         return std::make_pair(node.left_site().y(), 0);
@@ -459,16 +459,16 @@ public:
     typedef typename Site::point_type point_type;
     typedef Site site_type;
 
-    bool ppp(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3) const {
+    bool ppp(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3) const {
       return ot::eval(site1.point0(), site2.point0(), site3.point0()) ==
              ot::RIGHT;
     }
 
-    bool pps(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
+    bool pps(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
              int segment_index) const {
       if (segment_index != 2) {
         typename ot::Orientation orient1 = ot::eval(site1.point0(),
@@ -492,9 +492,9 @@ public:
       return true;
     }
 
-    bool pss(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
+    bool pss(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
              int point_index) const {
       if (site2.point0() == site3.point0() &&
           site2.point1() == site3.point1()) {
@@ -512,9 +512,9 @@ public:
       return true;
     }
 
-    bool sss(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3) const {
+    bool sss(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3) const {
       if (site1.point0() == site2.point0() && site1.point1() == site2.point1())
         return false;
       if (site2.point0() == site3.point0() && site2.point1() == site3.point1())
@@ -532,10 +532,10 @@ public:
     typedef robust_sqrt_expr<big_int_type, efpt_type, to_efpt_converter>
         robust_sqrt_expr_type;
 
-    void ppp(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
-             circle_type &circle,
+    void ppp(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
+             circle_type& circle,
              bool recompute_c_x = true,
              bool recompute_c_y = true,
              bool recompute_lower_x = true) {
@@ -600,11 +600,11 @@ public:
     }
 
     // Recompute parameters of the circle event using high-precision library.
-    void pps(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
+    void pps(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
              int segment_index,
-             circle_type &c_event,
+             circle_type& c_event,
              bool recompute_c_x = true,
              bool recompute_c_y = true,
              bool recompute_lower_x = true) {
@@ -696,19 +696,19 @@ public:
     }
 
     // Recompute parameters of the circle event using high-precision library.
-    void pss(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
+    void pss(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
              int point_index,
-             circle_type &c_event,
+             circle_type& c_event,
              bool recompute_c_x = true,
              bool recompute_c_y = true,
              bool recompute_lower_x = true) {
       big_int_type a[2], b[2], c[2], cA[4], cB[4];
-      const point_type &segm_start1 = site2.point1(true);
-      const point_type &segm_end1 = site2.point0(true);
-      const point_type &segm_start2 = site3.point0(true);
-      const point_type &segm_end2 = site3.point1(true);
+      const point_type& segm_start1 = site2.point1(true);
+      const point_type& segm_end1 = site2.point0(true);
+      const point_type& segm_start2 = site3.point0(true);
+      const point_type& segm_end2 = site3.point1(true);
       a[0] = static_cast<int_x2_type>(segm_end1.x()) -
              static_cast<int_x2_type>(segm_start1.x());
       b[0] = static_cast<int_x2_type>(segm_end1.y()) -
@@ -829,10 +829,10 @@ public:
     }
 
     // Recompute parameters of the circle event using high-precision library.
-    void sss(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
-             circle_type &c_event,
+    void sss(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
+             circle_type& c_event,
              bool recompute_c_x = true,
              bool recompute_c_y = true,
              bool recompute_lower_x = true) {
@@ -992,10 +992,10 @@ public:
     typedef mp_circle_formation_functor<site_type, circle_type>
         exact_circle_formation_functor_type;
 
-    void ppp(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
-             circle_type &c_event) {
+    void ppp(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
+             circle_type& c_event) {
       fpt_type dif_x1 = to_fpt(site1.x()) - to_fpt(site2.x());
       fpt_type dif_x2 = to_fpt(site2.x()) - to_fpt(site3.x());
       fpt_type dif_y1 = to_fpt(site1.y()) - to_fpt(site2.y());
@@ -1040,11 +1040,11 @@ public:
       }
     }
 
-    void pps(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
+    void pps(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
              int segment_index,
-             circle_type &c_event) {
+             circle_type& c_event) {
       fpt_type line_a = to_fpt(site3.point1(true).y()) -
                         to_fpt(site3.point0(true).y());
       fpt_type line_b = to_fpt(site3.point0(true).x()) -
@@ -1113,15 +1113,15 @@ public:
       }
     }
 
-    void pss(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
+    void pss(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
              int point_index,
-             circle_type &c_event) {
-      const point_type &segm_start1 = site2.point1(true);
-      const point_type &segm_end1 = site2.point0(true);
-      const point_type &segm_start2 = site3.point0(true);
-      const point_type &segm_end2 = site3.point1(true);
+             circle_type& c_event) {
+      const point_type& segm_start1 = site2.point1(true);
+      const point_type& segm_end1 = site2.point0(true);
+      const point_type& segm_start2 = site3.point0(true);
+      const point_type& segm_end2 = site3.point1(true);
       fpt_type a1 = to_fpt(segm_end1.x()) - to_fpt(segm_start1.x());
       fpt_type b1 = to_fpt(segm_end1.y()) - to_fpt(segm_start1.y());
       fpt_type a2 = to_fpt(segm_end2.x()) - to_fpt(segm_start2.x());
@@ -1271,10 +1271,10 @@ public:
       }
     }
 
-    void sss(const site_type &site1,
-             const site_type &site2,
-             const site_type &site3,
-             circle_type &c_event) {
+    void sss(const site_type& site1,
+             const site_type& site2,
+             const site_type& site3,
+             circle_type& c_event) {
       robust_fpt_type a1(to_fpt(site1.x1(true)) - to_fpt(site1.x0(true)));
       robust_fpt_type b1(to_fpt(site1.y1(true)) - to_fpt(site1.y0(true)));
       robust_fpt_type c1(robust_cross_product(
@@ -1371,8 +1371,8 @@ public:
     // Create a circle event from the given three sites.
     // Returns true if the circle event exists, else false.
     // If exists circle event is saved into the c_event variable.
-    bool operator()(const site_type &site1, const site_type &site2,
-                    const site_type &site3, circle_type &circle) {
+    bool operator()(const site_type& site1, const site_type& site2,
+                    const site_type& site3, circle_type& circle) {
       if (!site1.is_segment()) {
         if (!site2.is_segment()) {
           if (!site3.is_segment()) {

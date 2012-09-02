@@ -41,7 +41,7 @@ typename enable_if<
   >::type,
   void
 >::type
-insert(const Point &point, VB *vb) {
+insert(const Point& point, VB* vb) {
   vb->insert_point(x(point), y(point));
 }
 
@@ -56,7 +56,7 @@ typename enable_if<
   >::type,
   void
 >::type
-insert(PointIterator first, const PointIterator last, VB *vb) {
+insert(PointIterator first, const PointIterator last, VB* vb) {
   for (PointIterator it = first; it != last; ++it) {
     insert(*it, vb);
   }
@@ -71,7 +71,7 @@ typename enable_if<
   >::type,
   void
 >::type
-insert(const Segment &segment, VB *vb) {
+insert(const Segment& segment, VB* vb) {
   vb->insert_segment(x(low(segment)), y(low(segment)), x(high(segment)), y(high(segment)));
 }
 
@@ -86,7 +86,7 @@ typename enable_if<
   >::type,
   void
 >::type
-insert(SegmentIterator first, SegmentIterator last, VB *vb) {
+insert(SegmentIterator first, SegmentIterator last, VB* vb) {
   for (SegmentIterator it = first; it != last; ++it) {
     insert(*it, vb);
   }
@@ -103,7 +103,7 @@ typename enable_if<
   >::type,
   void
 >::type
-construct_voronoi(PointIterator first, PointIterator last, VD *vd) {
+construct_voronoi(PointIterator first, PointIterator last, VD* vd) {
   default_voronoi_builder builder;
   insert(first, last, &builder);
   builder.construct(vd);
@@ -120,7 +120,7 @@ typename enable_if<
   >::type,
   void
 >::type
-construct_voronoi(SegmentIterator first, SegmentIterator last, VD *vd) {
+construct_voronoi(SegmentIterator first, SegmentIterator last, VD* vd) {
   default_voronoi_builder builder;
   insert(first, last, &builder);
   builder.construct(vd);
@@ -147,7 +147,7 @@ typename enable_if<
   void
 >::type
 construct_voronoi(PointIterator p_first, PointIterator p_last,
-    SegmentIterator s_first, SegmentIterator s_last, VD *vd) {
+    SegmentIterator s_first, SegmentIterator s_last, VD* vd) {
   default_voronoi_builder builder;
   insert(p_first, p_last, &builder);
   insert(s_first, s_last, &builder);

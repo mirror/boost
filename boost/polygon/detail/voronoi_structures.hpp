@@ -30,11 +30,11 @@ public:
       x_(x),
       y_(y) {}
 
-  bool operator==(const point_2d &that) const {
+  bool operator==(const point_2d& that) const {
     return (this->x_ == that.x()) && (this->y_ == that.y());
   }
 
-  bool operator!=(const point_2d &that) const {
+  bool operator!=(const point_2d& that) const {
     return (this->x_ != that.x()) || (this->y_ != that.y());
   }
 
@@ -128,7 +128,7 @@ public:
       sorted_index_(0),
       flags_(0) {}
 
-  site_event(const point_type &point) :
+  site_event(const point_type& point) :
       point0_(point),
       point1_(point),
       sorted_index_(0),
@@ -141,18 +141,18 @@ public:
       sorted_index_(0),
       flags_(0) {}
 
-  site_event(const point_type &point1, const point_type &point2) :
+  site_event(const point_type& point1, const point_type& point2) :
       point0_(point1),
       point1_(point2),
       sorted_index_(0),
       flags_(0) {}
 
-  bool operator==(const site_event &that) const {
+  bool operator==(const site_event& that) const {
     return (this->point0_ == that.point0_) &&
            (this->point1_ == that.point1_);
   }
 
-  bool operator!=(const site_event &that) const {
+  bool operator!=(const site_event& that) const {
     return (this->point0_ != that.point0_) ||
            (this->point1_ != that.point1_);
   }
@@ -189,13 +189,13 @@ public:
     return is_inverse() ? point0_.y() : point1_.y();
   }
 
-  const point_type &point0(bool oriented = false) const {
+  const point_type& point0(bool oriented = false) const {
     if (!oriented)
       return point0_;
     return is_inverse() ? point1_ : point0_;
   }
 
-  const point_type &point1(bool oriented = false) const {
+  const point_type& point1(bool oriented = false) const {
     if (!oriented)
       return point1_;
     return is_inverse() ? point0_ : point1_;
@@ -220,7 +220,7 @@ public:
   }
 
   bool is_inverse() const {
-    return (flags_ & IS_INVERSE) ? true : false;
+    return flags_ & IS_INVERSE;
   }
 
   site_event& inverse() {
@@ -456,31 +456,31 @@ private:
 template <typename Edge, typename Circle>
 class beach_line_node_data {
 public:
-  explicit beach_line_node_data(Edge *new_edge) :
+  explicit beach_line_node_data(Edge* new_edge) :
       circle_event_(NULL),
       edge_(new_edge) {}
 
-  Circle *circle_event() const {
+  Circle* circle_event() const {
     return circle_event_;
   }
 
-  beach_line_node_data& circle_event(Circle *circle_event) {
+  beach_line_node_data& circle_event(Circle* circle_event) {
     circle_event_ = circle_event;
     return *this;
   }
 
-  Edge *edge() const {
+  Edge* edge() const {
     return edge_;
   }
 
-  beach_line_node_data& edge(Edge *new_edge) {
+  beach_line_node_data& edge(Edge* new_edge) {
     edge_ = new_edge;
     return *this;
   }
 
 private:
-  Circle *circle_event_;
-  Edge *edge_;
+  Circle* circle_event_;
+  Edge* edge_;
 };
 }  // detail
 }  // polygon

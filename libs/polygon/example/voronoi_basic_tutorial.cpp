@@ -11,8 +11,9 @@
 #include <vector>
 
 #include <boost/polygon/voronoi.hpp>
-#include <boost/polygon/voronoi_utils.hpp>
 using namespace boost::polygon;
+
+#include "voronoi_visual_utils.hpp"
 
 struct Point {
   int a;
@@ -57,7 +58,7 @@ struct segment_traits<Segment> {
 }  // boost
 
 // Traversing Voronoi edges using edge iterator.
-int iterate_primary_edges1(const voronoi_diagram<double> &vd) {
+int iterate_primary_edges1(const voronoi_diagram<double>& vd) {
   int result = 0;
   for (voronoi_diagram<double>::const_edge_iterator it = vd.edges().begin();
        it != vd.edges().end(); ++it) {
@@ -72,8 +73,8 @@ int iterate_primary_edges2(const voronoi_diagram<double> &vd) {
   int result = 0;
   for (voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin();
        it != vd.cells().end(); ++it) {
-    const voronoi_diagram<double>::cell_type &cell = *it;
-    const voronoi_diagram<double>::edge_type *edge = cell.incident_edge();
+    const voronoi_diagram<double>::cell_type& cell = *it;
+    const voronoi_diagram<double>::edge_type* edge = cell.incident_edge();
     // This is convenient way to iterate edges around Voronoi cell.
     do {
       if (edge->is_primary())
@@ -92,8 +93,8 @@ int iterate_primary_edges3(const voronoi_diagram<double> &vd) {
   int result = 0;
   for (voronoi_diagram<double>::const_vertex_iterator it = vd.vertices().begin();
        it != vd.vertices().end(); ++it) {
-    const voronoi_diagram<double>::vertex_type &vertex = *it;
-    const voronoi_diagram<double>::edge_type *edge = vertex.incident_edge();
+    const voronoi_diagram<double>::vertex_type& vertex = *it;
+    const voronoi_diagram<double>::edge_type* edge = vertex.incident_edge();
     // This is convenient way to iterate edges around Voronoi vertex.
     do {
       if (edge->is_primary())
@@ -102,35 +103,6 @@ int iterate_primary_edges3(const voronoi_diagram<double> &vd) {
     } while (edge != vertex.incident_edge());
   }
   return result;
-}
-
-// Prototype of a function that renders segments.
-void draw_segment(double x1, double y1, double x2, double y2) {
-  printf("Rendering segment: ");
-  printf("%7.3f %7.3f %7.3f %7.3f\n", x1, y1, x2, y2);
-}
-
-void render_diagram(const voronoi_diagram<double> &vd,
-                    const voronoi_utils<double>::brect_type &bbox) {
-  const std::size_t VISITED = 1;
-  for (voronoi_diagram<double>::const_edge_iterator it = vd.edges().begin();
-       it != vd.edges().end(); ++it) {
-    // We use color to mark visited edges.
-    it->color(VISITED);
-    // Don't render the same edge twice.
-    if (it->twin()->color()) continue;
-    voronoi_utils<double>::point_set_type polyline;
-    if (it->is_linear())
-      voronoi_utils<double>::clip(*it, bbox, polyline);
-    else
-      // Parabolic edges are always finite.
-      voronoi_utils<double>::discretize(*it, 1E-1, polyline);
-    // Note: discretized edges may also lie outside of the bbox.
-    // So user might do additional clipping before rendering each such edge.  
-    for (std::size_t i = 1; i < polyline.size(); ++i)
-      draw_segment(polyline[i-1].x(), polyline[i-1].y(),
-                   polyline[i].x(), polyline[i].y());
-  }
 }
 
 int main() {
@@ -155,46 +127,21 @@ int main() {
     printf("\n");
   }
 
-  // Using color member of the Voronoi primitives..
+  // Using color member of the Voronoi primitives to store the average number of edges
+  // around each cell (including secondary edges).
   {
+    printf("Number of edges (including secondary edges) around the Voronoi cells:\n");
+    for (voronoi_diagram<double>::const_edge_iterator it = vd.edges().begin();
+         it != vd.edges().end(); ++it) {
+      std::size_t cnt = it->cell()->color();
+      it->cell()->color(cnt + 1);
+    }
     for (voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin();
          it != vd.cells().end(); ++it) {
-      const voronoi_diagram<double>::cell_type &cell = *it;
-      const voronoi_diagram<double>::edge_type *edge = cell.incident_edge();
-      std::size_t count = 0;
-      do {
-        ++count;
-        edge = edge->next();
-      } while (edge != cell.incident_edge());
-      cell.color(count);
+      printf("%d ", it->color());
     }
-
-    // Count the average number of edges.
-    double total = 0;
-    for (voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin();
-         it != vd.cells().end(); ++it) {
-      total += it->color();
-    }
-    total /= vd.cells().size();
-    printf("The average number of edges per Voronoi cell is equal to: %3.1f\n", total);
+    printf("\n");
     printf("\n");
   } 
-
-  // Rendering Voronoi diagram.
-  {
-    // Construct clipping bounding rectangle.
-    bounding_rectangle<double> bbox;
-    for (std::vector<Point>::iterator it = points.begin(); it != points.end(); ++it)
-      bbox.update(it->a, it->b);
-    for (std::vector<Segment>::iterator it = segments.begin(); it != segments.end(); ++it) {
-      bbox.update(it->p0.a, it->p0.b);
-      bbox.update(it->p1.a, it->p1.b);
-    }
-    // Add 10% offset to the bounding rectangle.
-    bbox = voronoi_utils<double>::scale(bbox, 1.1);
-    // Render Voronoi diagram.
-    render_diagram(vd, bbox);
-  }
-
   return 0;
 }

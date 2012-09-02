@@ -94,7 +94,7 @@ public:
   relative_error_type re() const { return re_; }
   relative_error_type ulp() const { return re_; }
 
-  robust_fpt& operator=(const robust_fpt &that) {
+  robust_fpt& operator=(const robust_fpt& that) {
     this->fpv_ = that.fpv_;
     this->re_ = that.re_;
     return *this;
@@ -116,7 +116,7 @@ public:
     return robust_fpt(-fpv_, re_);
   }
 
-  robust_fpt& operator+=(const robust_fpt &that) {
+  robust_fpt& operator+=(const robust_fpt& that) {
     floating_point_type fpv = this->fpv_ + that.fpv_;
     if ((!is_neg(this->fpv_) && !is_neg(that.fpv_)) ||
         (!is_pos(this->fpv_) && !is_pos(that.fpv_)))
@@ -132,7 +132,7 @@ public:
     return *this;
   }
 
-  robust_fpt& operator-=(const robust_fpt &that) {
+  robust_fpt& operator-=(const robust_fpt& that) {
     floating_point_type fpv = this->fpv_ - that.fpv_;
     if ((!is_neg(this->fpv_) && !is_pos(that.fpv_)) ||
         (!is_pos(this->fpv_) && !is_neg(that.fpv_)))
@@ -148,19 +148,19 @@ public:
     return *this;
   }
 
-  robust_fpt& operator*=(const robust_fpt &that) {
+  robust_fpt& operator*=(const robust_fpt& that) {
     this->re_ += that.re_ + ROUNDING_ERROR;
     this->fpv_ *= that.fpv_;
     return *this;
   }
 
-  robust_fpt& operator/=(const robust_fpt &that) {
+  robust_fpt& operator/=(const robust_fpt& that) {
     this->re_ += that.re_ + ROUNDING_ERROR;
     this->fpv_ /= that.fpv_;
     return *this;
   }
 
-  robust_fpt operator+(const robust_fpt &that) const {
+  robust_fpt operator+(const robust_fpt& that) const {
     floating_point_type fpv = this->fpv_ + that.fpv_;
     relative_error_type re;
     if ((!is_neg(this->fpv_) && !is_neg(that.fpv_)) ||
@@ -176,7 +176,7 @@ public:
     return robust_fpt(fpv, re);
   }
 
-  robust_fpt operator-(const robust_fpt &that) const {
+  robust_fpt operator-(const robust_fpt& that) const {
     floating_point_type fpv = this->fpv_ - that.fpv_;
     relative_error_type re;
     if ((!is_neg(this->fpv_) && !is_pos(that.fpv_)) ||
@@ -192,13 +192,13 @@ public:
     return robust_fpt(fpv, re);
   }
 
-  robust_fpt operator*(const robust_fpt &that) const {
+  robust_fpt operator*(const robust_fpt& that) const {
     floating_point_type fpv = this->fpv_ * that.fpv_;
     relative_error_type re = this->re_ + that.re_ + ROUNDING_ERROR;
     return robust_fpt(fpv, re);
   }
 
-  robust_fpt operator/(const robust_fpt &that) const {
+  robust_fpt operator/(const robust_fpt& that) const {
     floating_point_type fpv = this->fpv_ / that.fpv_;
     relative_error_type re = this->re_ + that.re_ + ROUNDING_ERROR;
     return robust_fpt(fpv, re);
@@ -251,11 +251,11 @@ public:
       positive_sum_(0),
       negative_sum_(0) {}
 
-  robust_dif(const T &value) :
+  robust_dif(const T& value) :
       positive_sum_((value>0)?value:0),
       negative_sum_((value<0)?-value:0) {}
 
-  robust_dif(const T &pos, const T &neg) :
+  robust_dif(const T& pos, const T& neg) :
       positive_sum_(pos),
       negative_sum_(neg) {}
 
@@ -275,7 +275,7 @@ public:
     return robust_dif(negative_sum_, positive_sum_);
   }
 
-  robust_dif<T> &operator+=(const T &val) {
+  robust_dif<T>& operator+=(const T& val) {
     if (!is_neg(val))
       positive_sum_ += val;
     else
@@ -283,13 +283,13 @@ public:
     return *this;
   }
 
-  robust_dif<T> &operator+=(const robust_dif<T> &that) {
+  robust_dif<T>& operator+=(const robust_dif<T>& that) {
     positive_sum_ += that.positive_sum_;
     negative_sum_ += that.negative_sum_;
     return *this;
   }
 
-  robust_dif<T> &operator-=(const T &val) {
+  robust_dif<T>& operator-=(const T& val) {
     if (!is_neg(val))
       negative_sum_ += val;
     else
@@ -297,13 +297,13 @@ public:
     return *this;
   }
 
-  robust_dif<T> &operator-=(const robust_dif<T> &that) {
+  robust_dif<T>& operator-=(const robust_dif<T>& that) {
     positive_sum_ += that.negative_sum_;
     negative_sum_ += that.positive_sum_;
     return *this;
   }
 
-  robust_dif<T> &operator*=(const T &val) {
+  robust_dif<T>& operator*=(const T& val) {
     if (!is_neg(val)) {
       positive_sum_ *= val;
       negative_sum_ *= val;
@@ -315,7 +315,7 @@ public:
     return *this;
   }
 
-  robust_dif<T> &operator*=(const robust_dif<T> &that) {
+  robust_dif<T>& operator*=(const robust_dif<T>& that) {
     T positive_sum = this->positive_sum_ * that.positive_sum_ +
                      this->negative_sum_ * that.negative_sum_;
     T negative_sum = this->positive_sum_ * that.negative_sum_ +
@@ -325,7 +325,7 @@ public:
     return *this;
   }
 
-  robust_dif<T> &operator/=(const T &val) {
+  robust_dif<T>& operator/=(const T& val) {
     if (!is_neg(val)) {
       positive_sum_ /= val;
       negative_sum_ /= val;
@@ -442,7 +442,7 @@ public:
 
   // Evaluates expression (re = 4 EPS):
   // A[0] * sqrt(B[0]).
-  _fpt eval1(_int *A, _int *B) {
+  _fpt eval1(_int* A, _int* B) {
     _fpt a = convert(A[0]);
     _fpt b = convert(B[0]);
     return a * get_sqrt(b);
@@ -450,7 +450,7 @@ public:
 
   // Evaluates expression (re = 7 EPS):
   // A[0] * sqrt(B[0]) + A[1] * sqrt(B[1]).
-  _fpt eval2(_int *A, _int *B) {
+  _fpt eval2(_int* A, _int* B) {
     _fpt a = eval1(A, B);
     _fpt b = eval1(A + 1, B + 1);
     if ((!is_neg(a) && !is_neg(b)) ||
@@ -461,7 +461,7 @@ public:
 
   // Evaluates expression (re = 16 EPS):
   // A[0] * sqrt(B[0]) + A[1] * sqrt(B[1]) + A[2] * sqrt(B[2]).
-  _fpt eval3(_int *A, _int *B) {
+  _fpt eval3(_int* A, _int* B) {
     _fpt a = eval2(A, B);
     _fpt b = eval1(A + 2, B + 2);
     if ((!is_neg(a) && !is_neg(b)) ||
@@ -478,7 +478,7 @@ public:
   // Evaluates expression (re = 25 EPS):
   // A[0] * sqrt(B[0]) + A[1] * sqrt(B[1]) +
   // A[2] * sqrt(B[2]) + A[3] * sqrt(B[3]).
-  _fpt eval4(_int *A, _int *B) {
+  _fpt eval4(_int* A, _int* B) {
     _fpt a = eval2(A, B);
     _fpt b = eval2(A + 2, B + 2);
     if ((!is_neg(a) && !is_neg(b)) ||
