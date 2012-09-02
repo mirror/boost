@@ -27,7 +27,7 @@
 #include <boost/utility/declval.hpp>
 
 #ifndef BOOST_RESULT_OF_NUM_ARGS
-#  define BOOST_RESULT_OF_NUM_ARGS 10
+#  define BOOST_RESULT_OF_NUM_ARGS 16
 #endif
 
 // Use the decltype-based version of result_of by default if the compiler
