@@ -5,6 +5,11 @@
 //  1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
+//  Copyright Daniel Walker, Eric Niebler, Michel Morin 2008-2012.
+//  Use, modification and distribution is subject to the Boost Software
+//  License, Version 1.0. (See accompanying file LICENSE_1_0.txt or
+//  copy at http://www.boost.org/LICENSE_1_0.txt)
+
 // For more information, see http://www.boost.org/libs/utility
 #if !defined(BOOST_PP_IS_ITERATING)
 # error Boost result_of - do not include this file!
@@ -40,7 +45,7 @@ template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
          BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct result_of<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
     : mpl::if_<
-          mpl::or_< is_pointer<F>, is_member_function_pointer<F> >
+          is_member_function_pointer<F>
         , detail::tr1_result_of_impl<
             typename remove_cv<F>::type, 
             typename remove_cv<F>::type(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), false
