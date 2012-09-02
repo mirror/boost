@@ -173,14 +173,12 @@ namespace boost { namespace xpressive
 
             template<typename This, typename Cont, typename Idx>
             struct result<This(Cont &, Idx)>
+              : mpl::if_c<
+                    is_const<Cont>::value
+                  , typename Cont::const_reference
+                  , typename Cont::reference
+                >
             {
-                typedef typename Cont::reference type;
-            };
-
-            template<typename This, typename Cont, typename Idx>
-            struct result<This(Cont const &, Idx)>
-            {
-                typedef typename Cont::const_reference type;
             };
 
             template<typename Cont, typename Idx>
