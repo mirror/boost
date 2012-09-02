@@ -116,7 +116,7 @@ namespace boost { namespace phoenix
 
         template<typename Expr, typename State, typename Data>
         struct impl
-          : proto::detail::pass_through_impl<expr_ext, Expr, State, Data>
+          : proto::detail::pass_through_impl<expr_ext, proto::deduce_domain, Expr, State, Data>
         {};
         
         typedef Tag proto_tag;
