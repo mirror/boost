@@ -436,20 +436,41 @@ namespace boost { namespace unordered { namespace detail {
         ////////////////////////////////////////////////////////////////////////
         // Swap and Move
 
-        void swap_buckets(table& other, false_type = false_type())
+        void swap_allocators(table& other, false_type)
         {
+            // According to 23.2.1.8, if propagate_on_container_swap is
+            // false the behaviour is undefined unless the allocators
+            // are equal.
             BOOST_ASSERT(node_alloc() == other.node_alloc());
-            boost::swap(buckets_, other.buckets_);
-            boost::swap(bucket_count_, other.bucket_count_);
-            boost::swap(size_, other.size_);
         }
 
-        void swap_buckets(table& other, true_type)
+        void swap_allocators(table& other, true_type)
         {
             allocators_.swap(other.allocators_);
-            boost::swap(buckets_, other.buckets_);
-            boost::swap(bucket_count_, other.bucket_count_);
-            boost::swap(size_, other.size_);
+        }
+
+        // Only swaps the allocators if propagate_on_container_swap
+        void swap(table& x)
+        {
+            boost::unordered::detail::set_hash_functions<hasher, key_equal>
+                op1(*this, x);
+            boost::unordered::detail::set_hash_functions<hasher, key_equal>
+                op2(x, *this);
+
+            // I think swap can throw if Propagate::value,
+            // since the allocators' swap can throw. Not sure though.
+            swap_allocators(x,
+                boost::unordered::detail::integral_constant<bool,
+                    allocator_traits<node_allocator>::
+                    propagate_on_container_swap::value>());
+
+            boost::swap(buckets_, x.buckets_);
+            boost::swap(bucket_count_, x.bucket_count_);
+            boost::swap(size_, x.size_);
+            std::swap(mlf_, x.mlf_);
+            std::swap(max_load_, x.max_load_);
+            op1.commit();
+            op2.commit();
         }
 
         void move_buckets_from(table& other)
@@ -771,47 +792,6 @@ namespace boost { namespace unordered { namespace detail {
             mlf_ = x.mlf_;
             max_load_ = x.max_load_;
             new_func_this.commit();
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-        // Swap & Move
-
-        void swap(table& x)
-        {
-            swap(x,
-                boost::unordered::detail::integral_constant<bool,
-                    allocator_traits<node_allocator>::
-                    propagate_on_container_swap::value>());
-        }
-
-        // Only swaps the allocators if Propagate::value
-        template <typename Propagate>
-        void swap(table& x, Propagate p)
-        {
-            // According to 23.2.1.8, if propagate_on_container_swap is
-            // false the behaviour is undefined unless the allocators
-            // are equal.
-            BOOST_ASSERT(p.value || node_alloc() == x.node_alloc());
-
-            boost::unordered::detail::set_hash_functions<hasher, key_equal>
-                op1(*this, x);
-            boost::unordered::detail::set_hash_functions<hasher, key_equal>
-                op2(x, *this);
-            // I think swap can throw if Propagate::value,
-            // since the allocators' swap can throw. Not sure though.
-            swap_buckets(x, p);
-            std::swap(mlf_, x.mlf_);
-            std::swap(max_load_, x.max_load_);
-            op1.commit();
-            op2.commit();
-        }
-
-        // Swap everything but the allocators, and the functions objects.
-        void swap_contents(table& x)
-        {
-            swap_buckets(x, false_type());
-            std::swap(mlf_, x.mlf_);
-            std::swap(max_load_, x.max_load_);
         }
 
         // Accessors
