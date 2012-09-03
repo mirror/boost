@@ -83,7 +83,7 @@ Following example takes part of the string and converts it to `int`:
 ``
 int convert_strings_part(const std::string& s, std::size_t pos, std::size_t n) 
 {
-    return boost::lexical_cast<int>(s.c_str() + pos, n);
+    return boost::lexical_cast<int>(s.data() + pos, n);
 }
 ``
 [endsect]
@@ -267,7 +267,7 @@ limitation of compiler options that you use.
 ]
 
 * [*Question:]    What is the fastest way to convert a non zero terminated string or a substring using `boost::lexical_cast`?
-  * [*Answer:]      Use `boost::iterator_range` for conversion or `lexical_cast` overload with two parameters. For example, if you whant to convert to `int` two characters from a string `str`, you shall write `lexical_cast<int>(make_iterator_range(str.c_str(), str.c_str() + 2));` or `lexical_cast<int>(str.c_str(), 2);`.
+  * [*Answer:]      Use `boost::iterator_range` for conversion or `lexical_cast` overload with two parameters. For example, if you whant to convert to `int` two characters from a string `str`, you shall write `lexical_cast<int>(make_iterator_range(str.data(), str.data() + 2));` or `lexical_cast<int>(str.data(), 2);`.
 
 [endsect]
 
