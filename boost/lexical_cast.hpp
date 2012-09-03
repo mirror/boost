@@ -113,7 +113,7 @@ namespace boost
         }
 
 #ifndef BOOST_NO_NOEXCEPT
-        virtual const char *what() noexcept
+        virtual const char *what() const noexcept
 #else
         virtual const char *what() const throw()
 #endif
