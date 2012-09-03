@@ -516,25 +516,19 @@ namespace boost { namespace unordered { namespace detail {
             return count;
         }
 
-        void delete_extra_node(bucket_pointer) {}
-
-        void delete_extra_node(node_pointer n) {
-            node_allocator_traits::destroy(node_alloc(), boost::addressof(*n));
-            node_allocator_traits::deallocate(node_alloc(), n, 1);
-        }
-
         void delete_buckets()
         {
             if(buckets_) {
-                previous_pointer prev = get_previous_start();
+                delete_nodes(get_start(), iterator());
 
-                while(prev->next_) {
-                    node_pointer n = static_cast<node_pointer>(prev->next_);
-                    prev->next_ = n->next_;
-                    delete_node(iterator(n));
+                if (bucket::extra_node) {
+                    node_pointer n = static_cast<node_pointer>(
+                            get_bucket(bucket_count_)->next_);
+                    node_allocator_traits::destroy(node_alloc(),
+                            boost::addressof(*n));
+                    node_allocator_traits::deallocate(node_alloc(), n, 1);
                 }
 
-                delete_extra_node(prev);
                 destroy_buckets();
                 buckets_ = bucket_pointer();
             }
@@ -546,14 +540,8 @@ namespace boost { namespace unordered { namespace detail {
         {
             if(!size_) return;
 
-            previous_pointer prev = get_previous_start();
-
-            while(prev->next_) {
-                node_pointer n = static_cast<node_pointer>(prev->next_);
-                prev->next_ = n->next_;
-                delete_node(iterator(n));
-            }
-
+            delete_nodes(get_start(), iterator());
+            get_previous_start()->next_ = link_pointer();
             clear_buckets();
 
             BOOST_ASSERT(!size_);
@@ -580,6 +568,9 @@ namespace boost { namespace unordered { namespace detail {
             bucket_allocator_traits::deallocate(bucket_alloc(),
                 buckets_, bucket_count_ + 1);
         }
+
+        ////////////////////////////////////////////////////////////////////////
+        // Fix buckets after erase
 
         // This is called after erasing a node or group of nodes to fix up
         // the bucket pointers.
