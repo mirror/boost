@@ -234,6 +234,8 @@ namespace boost { namespace unordered { namespace detail {
                 Key const& k,
                 Pred const& eq) const
         {
+            if (!this->size_) return iterator();
+
             std::size_t bucket_index =
                 policy::to_bucket(this->bucket_count_, key_hash);
             iterator n = this->get_start(bucket_index);
