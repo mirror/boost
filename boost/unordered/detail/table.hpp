@@ -92,6 +92,33 @@ namespace boost { namespace unordered { namespace detail {
         }
     };
 
+    template <typename Buckets>
+    struct assign_nodes
+    {
+        node_holder<typename Buckets::node_allocator> holder;
+
+        explicit assign_nodes(Buckets& b) : holder(b) {}
+
+        typename Buckets::node_pointer create(
+                typename Buckets::value_type const& v)
+        {
+            return holder.copy_of(v);
+        }
+    };
+
+    template <typename Buckets>
+    struct move_assign_nodes
+    {
+        node_holder<typename Buckets::node_allocator> holder;
+
+        explicit move_assign_nodes(Buckets& b) : holder(b) {}
+
+        typename Buckets::node_pointer create(
+                typename Buckets::value_type& v)
+        {
+            return holder.move_copy_of(v);
+        }
+    };
 
     template <typename Types>
     struct table :
@@ -264,35 +291,84 @@ namespace boost { namespace unordered { namespace detail {
 
         void assign(table const& x)
         {
-            assign(x,
-                boost::unordered::detail::integral_constant<bool,
-                    allocator_traits<node_allocator>::
-                    propagate_on_container_copy_assignment::value>());
+            if (this != boost::addressof(x))
+            {
+                assign(x,
+                    boost::unordered::detail::integral_constant<bool,
+                        allocator_traits<node_allocator>::
+                        propagate_on_container_copy_assignment::value>());
+            }
         }
 
         void assign(table const& x, false_type)
         {
-            table tmp(x, this->node_alloc());
-            this->swap(tmp, false_type());
+            // Strong exception safety.
+            boost::unordered::detail::set_hash_functions<hasher, key_equal>
+                new_func_this(*this, x);
+            new_func_this.commit();
+            mlf_ = x.mlf_;
+            this->max_load_ = this->calculate_max_load();
+
+            if (!this->size_ && !x.size_) return;
+
+            if (!this->buckets_ || x.size_ >= this->max_load_) {
+                this->create_buckets(min_buckets_for_size(x.size_));
+                this->max_load_ = this->calculate_max_load();
+            }
+            else {
+                this->clear_buckets();
+            }
+
+            // assign_nodes takes ownership of the container's elements,
+            // assigning to them if possible, and deleting any that are
+            // left over.
+            assign_nodes<table> assign(*this);
+
+            if (x.size_) {
+                table_impl::fill_buckets(x.get_start(), *this, assign);
+            }
         }
 
         void assign(table const& x, true_type)
         {
-            table tmp(x, x.node_alloc());
-            // Need to delete before setting the allocator so that buckets
-            // aren't deleted with the wrong allocator.
-            if(this->buckets_) this->delete_buckets();
-            // TODO: Can allocator assignment throw?
-            this->allocators_.assign(x.allocators_);
-            this->swap(tmp, false_type());
+            if (this->node_alloc() == x.node_alloc()) {
+                this->allocators_.assign(x.allocators_);
+                this->assign(x, false_type());
+            }
+            else {
+                boost::unordered::detail::set_hash_functions<hasher, key_equal>
+                    new_func_this(*this, x);
+
+                // Delete everything with current allocators before assigning
+                // the new ones.
+                if (this->buckets_) this->delete_buckets();
+                this->allocators_.assign(x.allocators_);
+
+                // Copy over other data, all no throw.
+                new_func_this.commit();
+                this->mlf_ = x.mlf_;
+                this->bucket_count_ = this->min_buckets_for_size(x.size_);
+                this->max_load_ = 0;
+
+                // Finally copy the elements.
+                if (x.size_) {
+                    this->create_buckets(this->bucket_count_);
+                    copy_nodes<node_allocator> copy(this->node_alloc());
+                    table_impl::fill_buckets(x.get_start(), *this, copy);
+                    this->max_load_ = this->calculate_max_load();
+                }
+            }
         }
 
         void move_assign(table& x)
         {
-            move_assign(x,
-                boost::unordered::detail::integral_constant<bool,
-                    allocator_traits<node_allocator>::
-                    propagate_on_container_move_assignment::value>());
+            if (this != boost::addressof(x))
+            {
+                move_assign(x,
+                    boost::unordered::detail::integral_constant<bool,
+                        allocator_traits<node_allocator>::
+                        propagate_on_container_move_assignment::value>());
+            }
         }
 
         void move_assign(table& x, true_type)
@@ -304,32 +380,36 @@ namespace boost { namespace unordered { namespace detail {
 
         void move_assign(table& x, false_type)
         {
-            if(this->node_alloc() == x.node_alloc()) {
+            if (this->node_alloc() == x.node_alloc()) {
                 if(this->buckets_) this->delete_buckets();
                 move_assign_no_alloc(x);
             }
             else {
                 boost::unordered::detail::set_hash_functions<hasher, key_equal>
                     new_func_this(*this, x);
+                new_func_this.commit();
+                mlf_ = x.mlf_;
+                this->max_load_ = this->calculate_max_load();
 
-                if (x.size_) {
-                    buckets b(this->node_alloc(),
-                        x.min_buckets_for_size(x.size_));
-                    buckets tmp(x, move_tag());
+                if (!this->size_ && !x.size_) return;
 
-                    b.create_buckets(b.bucket_count_);
-                    move_nodes<node_allocator> move(b.node_alloc());
-                    table_impl::fill_buckets(tmp.get_start(), b, move);
-
-                    b.swap(*this);
+                if (!this->buckets_ || x.size_ >= max_load_) {
+                    this->create_buckets(min_buckets_for_size(x.size_));
+                    this->max_load_ = this->calculate_max_load();
                 }
                 else {
-                    this->clear();
+                    this->clear_buckets();
                 }
-                
-                this->mlf_ = x.mlf_;
-                if (this->buckets_) this->max_load_ = calculate_max_load();
-                new_func_this.commit();
+
+                // move_assign_nodes takes ownership of the container's
+                // elements, assigning to them if possible, and deleting
+                // any that are left over.
+                move_assign_nodes<table> assign(*this);
+
+                if (x.size_) {
+                    node_holder<node_allocator> nodes(x);
+                    table_impl::fill_buckets(nodes.get_start(), *this, assign);
+                }
             }
         }
         
