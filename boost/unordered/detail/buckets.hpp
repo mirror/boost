@@ -684,38 +684,59 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         buckets(buckets& b, boost::unordered::detail::move_tag m) :
-            buckets_(),
+            buckets_(b.buckets_),
             bucket_count_(b.bucket_count_),
-            size_(),
+            size_(b.size_),
             allocators_(b.allocators_, m)
         {
-            swap(b);
+            b.buckets_ = bucket_pointer();
+            b.size_ = 0;
         }
 
         template <typename Types>
         buckets(boost::unordered::detail::table<Types>& x,
                 boost::unordered::detail::move_tag m) :
-            buckets_(),
+            buckets_(x.buckets_),
             bucket_count_(x.bucket_count_),
-            size_(),
+            size_(x.size_),
             allocators_(x.allocators_, m)
         {
-            swap(x);
+            x.buckets_ = bucket_pointer();
+            x.size_ = 0;
         }
 
         ////////////////////////////////////////////////////////////////////////
         // Create buckets
         // (never called in constructor to avoid exception issues)
 
-        void create_buckets()
+        void create_buckets(std::size_t new_count)
         {
             boost::unordered::detail::array_constructor<bucket_allocator>
                 constructor(bucket_alloc());
     
             // Creates an extra bucket to act as the start node.
-            constructor.construct(bucket(), this->bucket_count_ + 1);
+            constructor.construct(bucket(), new_count + 1);
     
-            if (bucket::extra_node)
+            if (buckets_)
+            {
+                // Copy the nodes to the new buckets, including the dummy
+                // node if there is one.
+                (constructor.get() +
+                    static_cast<std::ptrdiff_t>(new_count))->next_ =
+                        (buckets_ + static_cast<std::ptrdiff_t>(
+                            bucket_count_))->next_;
+
+                bucket_pointer end = this->get_bucket(this->bucket_count_ + 1);
+                for(bucket_pointer it = this->buckets_; it != end; ++it)
+                {
+                    bucket_allocator_traits::destroy(bucket_alloc(),
+                        boost::addressof(*it));
+                }
+
+                bucket_allocator_traits::deallocate(bucket_alloc(),
+                    this->buckets_, this->bucket_count_ + 1);
+            }
+            else if (bucket::extra_node)
             {
                 node_constructor a(this->node_alloc());
                 a.construct_node();
@@ -725,6 +746,7 @@ namespace boost { namespace unordered { namespace detail {
                         a.release();
             }
 
+            this->bucket_count_ = new_count;
             this->buckets_ = constructor.release();
         }
 
@@ -755,7 +777,6 @@ namespace boost { namespace unordered { namespace detail {
             this->bucket_count_ = other.bucket_count_;
             this->size_ = other.size_;
             other.buckets_ = bucket_pointer();
-            other.bucket_count_ = 0;
             other.size_ = 0;
         }
 

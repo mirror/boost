@@ -196,7 +196,7 @@ namespace boost { namespace unordered { namespace detail {
             max_load_(x.max_load_)
         {
             if(a == x.node_alloc()) {
-                this->buckets::swap(x, false_type());
+                this->move_buckets_from(x);
             }
             else if(x.size_) {
                 // Use a temporary table because move_buckets_to leaves the
@@ -403,9 +403,8 @@ namespace boost { namespace unordered { namespace detail {
     inline void table<Types>::reserve_for_insert(std::size_t size)
     {
         if (!this->buckets_) {
-            this->bucket_count_ = (std::max)(this->bucket_count_,
-                this->min_buckets_for_size(size));
-            this->create_buckets();
+            this->create_buckets((std::max)(this->bucket_count_,
+                this->min_buckets_for_size(size)));
             this->max_load_ = this->calculate_max_load();
         }
         // According to the standard this should be 'size >= max_load_',

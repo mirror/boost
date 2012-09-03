@@ -719,7 +719,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             BOOST_ASSERT(!dst.buckets_);
 
-            dst.create_buckets();
+            dst.create_buckets(dst.bucket_count_);
 
             node_constructor a(dst.node_alloc());
 
@@ -766,7 +766,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             BOOST_ASSERT(!dst.buckets_);
 
-            dst.create_buckets();
+            dst.create_buckets(dst.bucket_count_);
 
             node_constructor a(dst.node_alloc());
 
@@ -808,26 +808,12 @@ namespace boost { namespace unordered { namespace detail {
         {
             BOOST_ASSERT(this->size_);
 
-            buckets dst(this->node_alloc(), num_buckets);
-            dst.create_buckets();
-
-            previous_pointer src_start = this->get_previous_start();
-            previous_pointer dst_start = dst.get_previous_start();
-
-            dst_start->next_ = src_start->next_;
-            src_start->next_ = link_pointer();
-            dst.size_ = this->size_;
-            this->size_ = 0;
-
-            previous_pointer prev = dst_start;
+            this->create_buckets(num_buckets);
+            previous_pointer prev = this->get_previous_start();
             while (prev->next_)
-                prev = place_in_bucket(dst, prev,
+                prev = place_in_bucket(*this, prev,
                     static_cast<node_pointer>(
                         static_cast<node_pointer>(prev->next_)->group_prev_));
-
-            // Swap the new nodes back into the container and setup the
-            // variables.
-            dst.swap(*this); // no throw
         }
 
         // Iterate through the nodes placing them in the correct buckets.
