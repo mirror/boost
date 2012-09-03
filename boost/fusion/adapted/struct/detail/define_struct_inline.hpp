@@ -20,6 +20,7 @@
 #include <boost/mpl/if.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/preprocessor/comma_if.hpp>
+#include <boost/preprocessor/facilities/is_empty.hpp>
 #include <boost/preprocessor/repeat.hpp>
 #include <boost/preprocessor/seq/for_each_i.hpp>
 #include <boost/preprocessor/seq/size.hpp>
@@ -184,11 +185,14 @@
         NAME,                                                                   \
         BOOST_PP_CAT(BOOST_FUSION_ADAPT_STRUCT_FILLER_0 ATTRIBUTES,_END))
 
+// Note: can't compute BOOST_PP_SEQ_SIZE(ATTRIBUTES_SEQ) directly because
+//       ATTRIBUTES_SEQ may be empty and calling BOOST_PP_SEQ_SIZE on an empty
+//       sequence produces warnings on MSVC.
 #define BOOST_FUSION_DEFINE_STRUCT_MEMBERS_IMPL(NAME, ATTRIBUTES_SEQ)           \
     BOOST_FUSION_DEFINE_STRUCT_INLINE_MEMBERS_IMPL_IMPL(                        \
         NAME,                                                                   \
         ATTRIBUTES_SEQ,                                                         \
-        BOOST_PP_SEQ_SIZE(ATTRIBUTES_SEQ))
+        BOOST_PP_DEC(BOOST_PP_SEQ_SIZE((0)ATTRIBUTES_SEQ)))
 
 #define BOOST_FUSION_DEFINE_STRUCT_INLINE_ITERATOR(NAME, ATTRIBUTES)            \
     BOOST_FUSION_DEFINE_STRUCT_ITERATOR_IMPL(                                   \
