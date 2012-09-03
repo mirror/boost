@@ -54,6 +54,45 @@ namespace boost { namespace unordered { namespace detail {
         value_base& operator=(value_base const&);
     };
 
+    template <typename NodeAlloc>
+    struct copy_nodes
+    {
+        typedef boost::unordered::detail::allocator_traits<NodeAlloc>
+            node_allocator_traits;
+
+        node_constructor<NodeAlloc> constructor;
+
+        explicit copy_nodes(NodeAlloc& a) : constructor(a) {}
+
+        typename node_allocator_traits::pointer create(
+                typename node_allocator_traits::value_type::value_type const& v)
+        {
+            constructor.construct_node();
+            constructor.construct_value2(v);
+            return constructor.release();
+        }
+    };
+
+    template <typename NodeAlloc>
+    struct move_nodes
+    {
+        typedef boost::unordered::detail::allocator_traits<NodeAlloc>
+            node_allocator_traits;
+
+        node_constructor<NodeAlloc> constructor;
+
+        explicit move_nodes(NodeAlloc& a) : constructor(a) {}
+
+        typename node_allocator_traits::pointer create(
+                typename node_allocator_traits::value_type::value_type& v)
+        {
+            constructor.construct_node();
+            constructor.construct_value2(boost::move(v));
+            return constructor.release();
+        }
+    };
+
+
     template <typename Types>
     struct table :
         boost::unordered::detail::buckets<
@@ -173,7 +212,9 @@ namespace boost { namespace unordered { namespace detail {
             max_load_(0)
         {
             if(x.size_) {
-                table_impl::copy_buckets_to(x, *this);
+                this->create_buckets(this->bucket_count_);
+                copy_nodes<node_allocator> copy(this->node_alloc());
+                table_impl::fill_buckets(x.get_start(), *this, copy);
                 this->max_load_ = calculate_max_load();
             }
         }
@@ -199,11 +240,15 @@ namespace boost { namespace unordered { namespace detail {
                 this->move_buckets_from(x);
             }
             else if(x.size_) {
-                // Use a temporary table because move_buckets_to leaves the
+                // Use a temporary table because moving the nodes leaves the
                 // source container in a complete mess.
 
                 buckets tmp(x, m);
-                table_impl::move_buckets_to(tmp, *this);
+
+                this->create_buckets(this->bucket_count_);
+                move_nodes<node_allocator> move(this->node_alloc());
+                table_impl::fill_buckets(tmp.get_start(), *this, move);
+
                 this->max_load_ = calculate_max_load();
             }
         }
@@ -271,7 +316,11 @@ namespace boost { namespace unordered { namespace detail {
                     buckets b(this->node_alloc(),
                         x.min_buckets_for_size(x.size_));
                     buckets tmp(x, move_tag());
-                    table_impl::move_buckets_to(tmp, b);
+
+                    b.create_buckets(b.bucket_count_);
+                    move_nodes<node_allocator> move(b.node_alloc());
+                    table_impl::fill_buckets(tmp.get_start(), b, move);
+
                     b.swap(*this);
                 }
                 else {

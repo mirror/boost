@@ -710,20 +710,12 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // copy_buckets_to
-        //
-        // Basic exception safety. If an exception is thrown this will
-        // leave dst partially filled and the buckets unset.
+        // fill_buckets
 
-        static void copy_buckets_to(buckets const& src, buckets& dst)
+        template <class NodeCreator>
+        static void fill_buckets(iterator n, buckets& dst,
+            NodeCreator& creator)
         {
-            BOOST_ASSERT(!dst.buckets_);
-
-            dst.create_buckets(dst.bucket_count_);
-
-            node_constructor a(dst.node_alloc());
-
-            iterator n = src.get_start();
             previous_pointer prev = dst.get_previous_start();
 
             while (n.node_) {
@@ -733,10 +725,7 @@ namespace boost { namespace unordered { namespace detail {
                         static_cast<node_pointer>(n.node_->group_prev_)->next_
                     ));
 
-                a.construct_node();
-                a.construct_value2(*n);
-
-                node_pointer first_node = a.release();
+                node_pointer first_node = creator.create(*n);
                 node_pointer end = first_node;
                 first_node->hash_ = key_hash;
                 prev->next_ = static_cast<link_pointer>(first_node);
@@ -744,56 +733,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 for (++n; n != group_end; ++n)
                 {
-                    a.construct_node();
-                    a.construct_value2(*n);
-                    end = a.release();
-                    end->hash_ = key_hash;
-                    add_after_node(end, first_node);
-                    ++dst.size_;
-                }
-
-                prev = place_in_bucket(dst, prev, end);
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-        // move_buckets_to
-        //
-        // Basic exception safety. The source nodes are left in an unusable
-        // state if an exception throws.
-
-        static void move_buckets_to(buckets& src, buckets& dst)
-        {
-            BOOST_ASSERT(!dst.buckets_);
-
-            dst.create_buckets(dst.bucket_count_);
-
-            node_constructor a(dst.node_alloc());
-
-            iterator n = src.get_start();
-            previous_pointer prev = dst.get_previous_start();
-
-            while (n.node_) {
-                std::size_t key_hash = n.node_->hash_;
-                iterator group_end(
-                    static_cast<node_pointer>(
-                        static_cast<node_pointer>(n.node_->group_prev_)->next_
-                    ));
-
-                a.construct_node();
-                a.construct_value2(boost::move(*n));
-
-                node_pointer first_node = a.release();
-                node_pointer end = first_node;
-                first_node->hash_ = key_hash;
-                prev->next_ = static_cast<link_pointer>(first_node);
-                ++dst.size_;
-
-                for(++n; n != group_end; ++n)
-                {
-                    a.construct_node();
-                    a.construct_value2(boost::move(*n));
-                    end = a.release();
+                    end = creator.create(*n);
                     end->hash_ = key_hash;
                     add_after_node(end, first_node);
                     ++dst.size_;

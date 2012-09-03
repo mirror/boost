@@ -617,58 +617,16 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // copy_buckets_to
-        //
-        // Basic exception safety. If an exception is thrown this will
-        // leave dst partially filled and the buckets unset.
+        // fill_buckets
 
-        static void copy_buckets_to(buckets const& src, buckets& dst)
+        template <class NodeCreator>
+        static void fill_buckets(iterator n, buckets& dst,
+            NodeCreator& creator)
         {
-            BOOST_ASSERT(!dst.buckets_);
-
-            dst.create_buckets(dst.bucket_count_);
-
-            node_constructor a(dst.node_alloc());
-
-            iterator n = src.get_start();
-            previous_pointer prev = dst.get_previous_start();
-
-            while(n.node_) {
-                a.construct_node();
-                a.construct_value2(*n);
-
-                node_pointer node = a.release();
-                node->hash_ = n.node_->hash_;
-                prev->next_ = static_cast<link_pointer>(node);
-                ++dst.size_;
-                ++n;
-
-                prev = place_in_bucket(dst, prev);
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-        // move_buckets_to
-        //
-        // Basic exception safety. The source nodes are left in an unusable
-        // state if an exception throws.
-
-        static void move_buckets_to(buckets& src, buckets& dst)
-        {
-            BOOST_ASSERT(!dst.buckets_);
-
-            dst.create_buckets(dst.bucket_count_);
-
-            node_constructor a(dst.node_alloc());
-
-            iterator n = src.get_start();
             previous_pointer prev = dst.get_previous_start();
 
             while (n.node_) {
-                a.construct_node();
-                a.construct_value2(boost::move(*n));
-
-                node_pointer node = a.release();
+                node_pointer node = creator.create(*n);
                 node->hash_ = n.node_->hash_;
                 prev->next_ = static_cast<link_pointer>(node);
                 ++dst.size_;
