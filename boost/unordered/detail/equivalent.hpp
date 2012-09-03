@@ -204,12 +204,17 @@ namespace boost { namespace unordered { namespace detail {
 
         grouped_table_impl(grouped_table_impl const& x)
           : table(x, node_allocator_traits::
-                select_on_container_copy_construction(x.node_alloc())) {}
+                select_on_container_copy_construction(x.node_alloc()))
+        {
+            this->init(x);
+        }
 
         grouped_table_impl(grouped_table_impl const& x,
                 node_allocator const& a)
           : table(x, a)
-        {}
+        {
+            this->init(x);
+        }
 
         grouped_table_impl(grouped_table_impl& x,
                 boost::unordered::detail::move_tag m)
@@ -220,7 +225,9 @@ namespace boost { namespace unordered { namespace detail {
                 node_allocator const& a,
                 boost::unordered::detail::move_tag m)
           : table(x, a, m)
-        {}
+        {
+            this->move_init(x);
+        }
 
         // Accessors
 

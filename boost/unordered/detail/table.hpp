@@ -235,14 +235,7 @@ namespace boost { namespace unordered { namespace detail {
             functions(x),
             mlf_(x.mlf_),
             max_load_(0)
-        {
-            if(x.size_) {
-                this->create_buckets(this->bucket_count_);
-                copy_nodes<node_allocator> copy(this->node_alloc());
-                table_impl::fill_buckets(x.get_start(), *this, copy);
-                this->max_load_ = calculate_max_load();
-            }
-        }
+        {}
 
         // TODO: Why calculate_max_load?
         table(table& x, boost::unordered::detail::move_tag m) :
@@ -260,8 +253,23 @@ namespace boost { namespace unordered { namespace detail {
             functions(x),
             mlf_(x.mlf_),
             max_load_(x.max_load_)
+        {}
+
+        // Initialisation.
+
+        void init(table const& x)
         {
-            if(a == x.node_alloc()) {
+            if (x.size_) {
+                this->create_buckets(this->bucket_count_);
+                copy_nodes<node_allocator> copy(this->node_alloc());
+                table_impl::fill_buckets(x.get_start(), *this, copy);
+                this->max_load_ = calculate_max_load();
+            }
+        }
+
+        void move_init(table& x)
+        {
+            if(this->node_alloc() == x.node_alloc()) {
                 this->move_buckets_from(x);
             }
             else if(x.size_) {
