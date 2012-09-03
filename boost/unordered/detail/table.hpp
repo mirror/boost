@@ -255,7 +255,7 @@ namespace boost { namespace unordered { namespace detail {
         // TODO: Why not calculate_max_load?
         // TODO: Why do I use x's bucket count?
         table(table& x, node_allocator const& a,
-                boost::unordered::detail::move_tag m) :
+                boost::unordered::detail::move_tag) :
             buckets(a, x.bucket_count_),
             functions(x),
             mlf_(x.mlf_),
@@ -265,14 +265,11 @@ namespace boost { namespace unordered { namespace detail {
                 this->move_buckets_from(x);
             }
             else if(x.size_) {
-                // Use a temporary table because moving the nodes leaves the
-                // source container in a complete mess.
-
-                buckets tmp(x, m);
-
                 this->create_buckets(this->bucket_count_);
+
                 move_nodes<node_allocator> move(this->node_alloc());
-                table_impl::fill_buckets(tmp.get_start(), *this, move);
+                node_holder<node_allocator> nodes(x);
+                table_impl::fill_buckets(nodes.get_start(), *this, move);
 
                 this->max_load_ = calculate_max_load();
             }

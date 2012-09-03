@@ -443,6 +443,8 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename node_allocator_traits::pointer node_pointer;
         typedef typename node::value_type value_type;
         typedef typename node::link_pointer link_pointer;
+        typedef boost::unordered::iterator_detail::
+            iterator<node_pointer, value_type> iterator;
 
         node_pointer nodes_;
 
@@ -513,6 +515,11 @@ namespace boost { namespace unordered { namespace detail {
                 this->construct_with_value2(boost::move(v));
                 return base::release();
             }
+        }
+
+        iterator get_start() const
+        {
+            return iterator(nodes_);
         }
     };
 
