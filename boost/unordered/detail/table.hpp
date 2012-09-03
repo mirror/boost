@@ -67,8 +67,7 @@ namespace boost { namespace unordered { namespace detail {
         typename node_allocator_traits::pointer create(
                 typename node_allocator_traits::value_type::value_type const& v)
         {
-            constructor.construct_node();
-            constructor.construct_value2(v);
+            constructor.construct_with_value2(v);
             return constructor.release();
         }
     };
@@ -86,8 +85,7 @@ namespace boost { namespace unordered { namespace detail {
         typename node_allocator_traits::pointer create(
                 typename node_allocator_traits::value_type::value_type& v)
         {
-            constructor.construct_node();
-            constructor.construct_value2(boost::move(v));
+            constructor.construct_with_value2(boost::move(v));
             return constructor.release();
         }
     };

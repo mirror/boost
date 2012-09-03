@@ -73,21 +73,21 @@ namespace boost { namespace unordered { namespace detail {
 
         ~node_constructor();
 
-        void construct_node();
+        void construct();
 
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
-        void construct_value(BOOST_UNORDERED_EMPLACE_ARGS)
+        void construct_with_value(BOOST_UNORDERED_EMPLACE_ARGS)
         {
-            BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
+            construct();
             boost::unordered::detail::construct_value_impl(
                 alloc_, node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
             value_constructed_ = true;
         }
 
         template <typename A0>
-        void construct_value2(BOOST_FWD_REF(A0) a0)
+        void construct_with_value2(BOOST_FWD_REF(A0) a0)
         {
-            BOOST_ASSERT(node_ && node_constructed_ && !value_constructed_);
+            construct();
             boost::unordered::detail::construct_value_impl(
                 alloc_, node_->value_ptr(),
                 BOOST_UNORDERED_EMPLACE_ARGS1(boost::forward<A0>(a0)));
@@ -132,7 +132,7 @@ namespace boost { namespace unordered { namespace detail {
     }
 
     template <typename Alloc>
-    void node_constructor<Alloc>::construct_node()
+    void node_constructor<Alloc>::construct()
     {
         if(!node_) {
             node_constructed_ = false;
@@ -228,8 +228,7 @@ namespace boost { namespace unordered { namespace detail {
                 return p;
             }
             else {
-                this->construct_node();
-                this->construct_value2(v);
+                this->construct_with_value2(v);
                 return base::release();
             }
         }
@@ -244,8 +243,7 @@ namespace boost { namespace unordered { namespace detail {
                 return p;
             }
             else {
-                this->construct_node();
-                this->construct_value2(boost::move(v));
+                this->construct_with_value2(boost::move(v));
                 return base::release();
             }
         }
@@ -853,7 +851,7 @@ namespace boost { namespace unordered { namespace detail {
             else if (bucket::extra_node)
             {
                 node_constructor a(this->node_alloc());
-                a.construct_node();
+                a.construct();
 
                 (constructor.get() +
                     static_cast<std::ptrdiff_t>(this->bucket_count_))->next_ =

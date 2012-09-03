@@ -487,8 +487,7 @@ namespace boost { namespace unordered { namespace detail {
         iterator emplace(BOOST_UNORDERED_EMPLACE_ARGS)
         {
             node_constructor a(this->node_alloc());
-            a.construct_node();
-            a.construct_value(BOOST_UNORDERED_EMPLACE_FORWARD);
+            a.construct_with_value(BOOST_UNORDERED_EMPLACE_FORWARD);
 
             return iterator(emplace_impl(a));
         }
@@ -507,8 +506,7 @@ namespace boost { namespace unordered { namespace detail {
             std::size_t distance = boost::unordered::detail::distance(i, j);
             if(distance == 1) {
                 node_constructor a(this->node_alloc());
-                a.construct_node();
-                a.construct_value2(*i);
+                a.construct_with_value2(*i);
                 emplace_impl(a);
             }
             else {
@@ -517,8 +515,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 node_constructor a(this->node_alloc());
                 for (; i != j; ++i) {
-                    a.construct_node();
-                    a.construct_value2(*i);
+                    a.construct_with_value2(*i);
                     emplace_impl_no_rehash(a);
                 }
             }
@@ -530,8 +527,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             node_constructor a(this->node_alloc());
             for (; i != j; ++i) {
-                a.construct_node();
-                a.construct_value2(*i);
+                a.construct_with_value2(*i);
                 emplace_impl(a);
             }
         }
