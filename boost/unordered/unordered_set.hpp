@@ -54,7 +54,6 @@ namespace unordered
     private:
 
         typedef boost::unordered::detail::set<A, T, H, P> types;
-        typedef typename types::allocator value_allocator;
         typedef typename types::traits allocator_traits;
         typedef typename types::table table;
 
@@ -526,7 +525,6 @@ namespace unordered
     private:
 
         typedef boost::unordered::detail::multiset<A, T, H, P> types;
-        typedef typename types::allocator value_allocator;
         typedef typename types::traits allocator_traits;
         typedef typename types::table table;
 

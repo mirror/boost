@@ -125,16 +125,15 @@ namespace boost { namespace unordered { namespace detail {
     {
         typedef boost::unordered::detail::multiset<A, T, H, P> types;
 
+        typedef A allocator;
         typedef T value_type;
         typedef H hasher;
         typedef P key_equal;
         typedef T key_type;
 
-        typedef typename boost::unordered::detail::rebind_wrap<
-                A, value_type>::type allocator;
-
         typedef boost::unordered::detail::allocator_traits<allocator> traits;
-        typedef boost::unordered::detail::pick_grouped_node<allocator, value_type> pick;
+        typedef boost::unordered::detail::pick_grouped_node<allocator,
+            value_type> pick;
         typedef typename pick::node node;
         typedef typename pick::bucket bucket;
         typedef typename pick::link_pointer link_pointer;
@@ -150,16 +149,15 @@ namespace boost { namespace unordered { namespace detail {
     {
         typedef boost::unordered::detail::multimap<A, K, M, H, P> types;
 
+        typedef A allocator;
         typedef std::pair<K const, M> value_type;
         typedef H hasher;
         typedef P key_equal;
         typedef K key_type;
 
-        typedef typename boost::unordered::detail::rebind_wrap<
-                A, value_type>::type allocator;
-
         typedef boost::unordered::detail::allocator_traits<allocator> traits;
-        typedef boost::unordered::detail::pick_grouped_node<allocator, value_type> pick;
+        typedef boost::unordered::detail::pick_grouped_node<allocator,
+                value_type> pick;
         typedef typename pick::node node;
         typedef typename pick::bucket bucket;
         typedef typename pick::link_pointer link_pointer;

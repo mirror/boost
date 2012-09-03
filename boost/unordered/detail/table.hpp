@@ -144,12 +144,11 @@ namespace boost { namespace unordered { namespace detail {
             typename Types::hasher,
             typename Types::key_equal> functions;
 
-        // TODO: Better to use the original allocator here.
-        typedef typename Types::allocator value_allocator;
+        typedef typename Types::allocator allocator;
         typedef typename boost::unordered::detail::
-            rebind_wrap<value_allocator, node>::type node_allocator;
+            rebind_wrap<allocator, node>::type node_allocator;
         typedef typename boost::unordered::detail::
-            rebind_wrap<value_allocator, bucket>::type bucket_allocator;
+            rebind_wrap<allocator, bucket>::type bucket_allocator;
         typedef boost::unordered::detail::allocator_traits<node_allocator>
             node_allocator_traits;
         typedef boost::unordered::detail::allocator_traits<bucket_allocator>
