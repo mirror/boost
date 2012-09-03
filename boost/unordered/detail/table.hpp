@@ -120,11 +120,7 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename Types>
     struct table :
-        boost::unordered::detail::buckets<
-            typename Types::allocator,
-            typename Types::bucket,
-            typename Types::node,
-            typename Types::policy>,
+        Types::policy,
         boost::unordered::detail::functions<
             typename Types::hasher,
             typename Types::key_equal>
@@ -133,6 +129,8 @@ namespace boost { namespace unordered { namespace detail {
         table(table const&);
         table& operator=(table const&);
     public:
+        typedef typename Types::node node;
+        typedef typename Types::bucket bucket;
         typedef typename Types::hasher hasher;
         typedef typename Types::key_equal key_equal;
         typedef typename Types::key_type key_type;
@@ -146,23 +144,129 @@ namespace boost { namespace unordered { namespace detail {
             typename Types::hasher,
             typename Types::key_equal> functions;
 
-        typedef boost::unordered::detail::buckets<
-            typename Types::allocator,
-            typename Types::bucket,
-            typename Types::node,
-            typename Types::policy> buckets;
+        // TODO: Better to use the original allocator here.
+        typedef typename Types::allocator value_allocator;
+        typedef typename boost::unordered::detail::
+            rebind_wrap<value_allocator, node>::type node_allocator;
+        typedef typename boost::unordered::detail::
+            rebind_wrap<value_allocator, bucket>::type bucket_allocator;
+        typedef boost::unordered::detail::allocator_traits<node_allocator>
+            node_allocator_traits;
+        typedef boost::unordered::detail::allocator_traits<bucket_allocator>
+            bucket_allocator_traits;
+        typedef typename node_allocator_traits::pointer
+            node_pointer;
+        typedef typename node_allocator_traits::const_pointer
+            const_node_pointer;
+        typedef typename bucket_allocator_traits::pointer
+            bucket_pointer;
+        typedef typename bucket::previous_pointer
+            previous_pointer;
+        typedef boost::unordered::detail::node_constructor<node_allocator>
+            node_constructor;
 
-        typedef typename buckets::node_allocator node_allocator;
-        typedef typename buckets::node_allocator_traits node_allocator_traits;
-        typedef typename buckets::node_pointer node_pointer;
-        typedef typename buckets::const_node_pointer const_node_pointer;
+        typedef boost::unordered::iterator_detail::
+            iterator<node_pointer, value_type> iterator;
+        typedef boost::unordered::iterator_detail::
+            c_iterator<const_node_pointer, node_pointer, value_type> c_iterator;
+        typedef boost::unordered::iterator_detail::
+            l_iterator<node_pointer, value_type, policy> l_iterator;
+        typedef boost::unordered::iterator_detail::
+            cl_iterator<const_node_pointer, node_pointer, value_type, policy>
+            cl_iterator;
 
-        typedef typename table::iterator iterator;
-
+        ////////////////////////////////////////////////////////////////////////
         // Members
 
+        boost::unordered::detail::compressed<bucket_allocator, node_allocator>
+            allocators_;
+        std::size_t bucket_count_;
+        std::size_t size_;
         float mlf_;
         std::size_t max_load_; // Only use if this->buckets_.
+        bucket_pointer buckets_;
+
+        ////////////////////////////////////////////////////////////////////////
+        // Data access
+
+        bucket_allocator const& bucket_alloc() const
+        {
+            return allocators_.first();
+        }
+
+        node_allocator const& node_alloc() const
+        {
+            return allocators_.second();
+        }
+
+        bucket_allocator& bucket_alloc()
+        {
+            return allocators_.first();
+        }
+
+        node_allocator& node_alloc()
+        {
+            return allocators_.second();
+        }
+
+        std::size_t max_bucket_count() const
+        {
+            // -1 to account for the start bucket.
+            return policy::prev_bucket_count(
+                bucket_allocator_traits::max_size(bucket_alloc()) - 1);
+        }
+
+        bucket_pointer get_bucket(std::size_t bucket_index) const
+        {
+            return buckets_ + static_cast<std::ptrdiff_t>(bucket_index);
+        }
+
+        previous_pointer get_previous_start() const
+        {
+            return this->get_bucket(this->bucket_count_)->first_from_start();
+        }
+
+        previous_pointer get_previous_start(std::size_t bucket_index) const
+        {
+            return this->get_bucket(bucket_index)->next_;
+        }
+
+        iterator get_start() const
+        {
+            return iterator(static_cast<node_pointer>(
+                        this->get_previous_start()->next_));
+        }
+
+        iterator get_start(std::size_t bucket_index) const
+        {
+            previous_pointer prev = this->get_previous_start(bucket_index);
+            return prev ? iterator(static_cast<node_pointer>(prev->next_)) :
+                iterator();
+        }
+
+        float load_factor() const
+        {
+            BOOST_ASSERT(this->bucket_count_ != 0);
+            return static_cast<float>(this->size_)
+                / static_cast<float>(this->bucket_count_);
+        }
+
+        std::size_t bucket_size(std::size_t index) const
+        {
+            if (!this->size_) return 0;
+            iterator it = this->get_start(index);
+            if (!it.node_) return 0;
+
+            std::size_t count = 0;
+            while(it.node_ && policy::to_bucket(
+                        this->bucket_count_, it.node_->hash_) == index)
+            {
+                ++count;
+                ++it;
+            }
+
+            return count;
+        }
 
         ////////////////////////////////////////////////////////////////////////
         // Load methods
@@ -224,37 +328,53 @@ namespace boost { namespace unordered { namespace detail {
                 hasher const& hf,
                 key_equal const& eq,
                 node_allocator const& a) :
-            buckets(a, policy::new_bucket_count(num_buckets)),
             functions(hf, eq),
+            allocators_(a,a),
+            bucket_count_(policy::new_bucket_count(num_buckets)),
+            size_(0),
             mlf_(1.0f),
-            max_load_(0)
+            max_load_(0),
+            buckets_()
         {}
 
         table(table const& x, node_allocator const& a) :
-            buckets(a, x.min_buckets_for_size(x.size_)),
             functions(x),
+            allocators_(a,a),
+            bucket_count_(x.min_buckets_for_size(x.size_)),
+            size_(0),
             mlf_(x.mlf_),
-            max_load_(0)
+            max_load_(0),
+            buckets_()
         {}
 
         // TODO: Why calculate_max_load?
         table(table& x, boost::unordered::detail::move_tag m) :
-            buckets(x, m),
             functions(x),
+            allocators_(x.allocators_, m),
+            bucket_count_(x.bucket_count_),
+            size_(x.size_),
             mlf_(x.mlf_),
-            max_load_(calculate_max_load())
-        {}
+            max_load_(calculate_max_load()),
+            buckets_(x.buckets_)
+        {
+            x.buckets_ = bucket_pointer();
+            x.size_ = 0;
+        }
 
         // TODO: Why not calculate_max_load?
         // TODO: Why do I use x's bucket count?
         table(table& x, node_allocator const& a,
                 boost::unordered::detail::move_tag) :
-            buckets(a, x.bucket_count_),
             functions(x),
+            allocators_(a, a),
+            bucket_count_(x.bucket_count_),
+            size_(0),
             mlf_(x.mlf_),
-            max_load_(x.max_load_)
+            max_load_(x.max_load_),
+            buckets_()
         {}
 
+        ////////////////////////////////////////////////////////////////////////
         // Initialisation.
 
         void init(table const& x)
@@ -283,6 +403,246 @@ namespace boost { namespace unordered { namespace detail {
             }
         }
 
+        ////////////////////////////////////////////////////////////////////////
+        // Create buckets
+
+        void create_buckets(std::size_t new_count)
+        {
+            boost::unordered::detail::array_constructor<bucket_allocator>
+                constructor(bucket_alloc());
+    
+            // Creates an extra bucket to act as the start node.
+            constructor.construct(bucket(), new_count + 1);
+    
+            if (buckets_)
+            {
+                // Copy the nodes to the new buckets, including the dummy
+                // node if there is one.
+                (constructor.get() +
+                    static_cast<std::ptrdiff_t>(new_count))->next_ =
+                        (buckets_ + static_cast<std::ptrdiff_t>(
+                            bucket_count_))->next_;
+
+                bucket_pointer end = this->get_bucket(this->bucket_count_ + 1);
+                for(bucket_pointer it = this->buckets_; it != end; ++it)
+                {
+                    bucket_allocator_traits::destroy(bucket_alloc(),
+                        boost::addressof(*it));
+                }
+
+                bucket_allocator_traits::deallocate(bucket_alloc(),
+                    this->buckets_, this->bucket_count_ + 1);
+            }
+            else if (bucket::extra_node)
+            {
+                node_constructor a(this->node_alloc());
+                a.construct();
+
+                (constructor.get() +
+                    static_cast<std::ptrdiff_t>(this->bucket_count_))->next_ =
+                        a.release();
+            }
+
+            this->bucket_count_ = new_count;
+            this->buckets_ = constructor.release();
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // Swap and Move
+
+        void swap_buckets(table& other, false_type = false_type())
+        {
+            BOOST_ASSERT(node_alloc() == other.node_alloc());
+            boost::swap(buckets_, other.buckets_);
+            boost::swap(bucket_count_, other.bucket_count_);
+            boost::swap(size_, other.size_);
+        }
+
+        void swap_buckets(table& other, true_type)
+        {
+            allocators_.swap(other.allocators_);
+            boost::swap(buckets_, other.buckets_);
+            boost::swap(bucket_count_, other.bucket_count_);
+            boost::swap(size_, other.size_);
+        }
+
+        void move_buckets_from(table& other)
+        {
+            BOOST_ASSERT(node_alloc() == other.node_alloc());
+            BOOST_ASSERT(!this->buckets_);
+            this->buckets_ = other.buckets_;
+            this->bucket_count_ = other.bucket_count_;
+            this->size_ = other.size_;
+            other.buckets_ = bucket_pointer();
+            other.size_ = 0;
+        }
+
+        ////////////////////////////////////////////////////////////////////////
+        // Delete/destruct
+
+        ~table()
+        {
+            this->delete_buckets();
+        }
+
+        void delete_node(c_iterator n)
+        {
+            boost::unordered::detail::destroy_value_impl(node_alloc(),
+                n.node_->value_ptr());
+            node_allocator_traits::destroy(node_alloc(),
+                    boost::addressof(*n.node_));
+            node_allocator_traits::deallocate(node_alloc(), n.node_, 1);
+            --size_;
+        }
+
+        std::size_t delete_nodes(c_iterator begin, c_iterator end)
+        {
+            std::size_t count = 0;
+
+            while(begin != end) {
+                c_iterator n = begin;
+                ++begin;
+                delete_node(n);
+                ++count;
+            }
+
+            return count;
+        }
+
+        void delete_extra_node(bucket_pointer) {}
+
+        void delete_extra_node(node_pointer n) {
+            node_allocator_traits::destroy(node_alloc(), boost::addressof(*n));
+            node_allocator_traits::deallocate(node_alloc(), n, 1);
+        }
+
+        void delete_buckets()
+        {
+            if(this->buckets_) {
+                previous_pointer prev = this->get_previous_start();
+
+                while(prev->next_) {
+                    node_pointer n = static_cast<node_pointer>(prev->next_);
+                    prev->next_ = n->next_;
+                    delete_node(iterator(n));
+                }
+
+                delete_extra_node(prev);
+
+                bucket_pointer end = this->get_bucket(this->bucket_count_ + 1);
+                for(bucket_pointer it = this->buckets_; it != end; ++it)
+                {
+                    bucket_allocator_traits::destroy(bucket_alloc(),
+                        boost::addressof(*it));
+                }
+
+                bucket_allocator_traits::deallocate(bucket_alloc(),
+                    this->buckets_, this->bucket_count_ + 1);
+
+                this->buckets_ = bucket_pointer();
+            }
+
+            BOOST_ASSERT(!this->size_);
+        }
+
+        void clear()
+        {
+            if(!this->size_) return;
+
+            previous_pointer prev = this->get_previous_start();
+
+            while(prev->next_) {
+                node_pointer n = static_cast<node_pointer>(prev->next_);
+                prev->next_ = n->next_;
+                delete_node(iterator(n));
+            }
+
+            clear_buckets();
+
+            BOOST_ASSERT(!this->size_);
+        }
+
+        void clear_buckets()
+        {
+            bucket_pointer end = this->get_bucket(this->bucket_count_);
+            for(bucket_pointer it = this->buckets_; it != end; ++it)
+            {
+                it->next_ = node_pointer();
+            }
+        }
+
+        // This is called after erasing a node or group of nodes to fix up
+        // the bucket pointers.
+        void fix_buckets(bucket_pointer this_bucket,
+                previous_pointer prev, node_pointer next)
+        {
+            if (!next)
+            {
+                if (this_bucket->next_ == prev)
+                    this_bucket->next_ = node_pointer();
+            }
+            else
+            {
+                bucket_pointer next_bucket = this->get_bucket(
+                    policy::to_bucket(this->bucket_count_, next->hash_));
+
+                if (next_bucket != this_bucket)
+                {
+                    next_bucket->next_ = prev;
+                    if (this_bucket->next_ == prev)
+                        this_bucket->next_ = node_pointer();
+                }
+            }
+        }
+
+        // This is called after erasing a range of nodes to fix any bucket
+        // pointers into that range.
+        void fix_buckets_range(std::size_t bucket_index,
+                previous_pointer prev, node_pointer begin, node_pointer end)
+        {
+            node_pointer n = begin;
+
+            // If we're not at the start of the current bucket, then
+            // go to the start of the next bucket.
+            if (this->get_bucket(bucket_index)->next_ != prev)
+            {
+                for(;;) {
+                    n = static_cast<node_pointer>(n->next_);
+                    if (n == end) return;
+
+                    std::size_t new_bucket_index =
+                        policy::to_bucket(this->bucket_count_, n->hash_);
+                    if (bucket_index != new_bucket_index) {
+                        bucket_index = new_bucket_index;
+                        break;
+                    }
+                }
+            }
+
+            // Iterate through the remaining nodes, clearing out the bucket
+            // pointers.
+            this->get_bucket(bucket_index)->next_ = previous_pointer();
+            for(;;) {
+                n = static_cast<node_pointer>(n->next_);
+                if (n == end) break;
+
+                std::size_t new_bucket_index =
+                    policy::to_bucket(this->bucket_count_, n->hash_);
+                if (bucket_index != new_bucket_index) {
+                    bucket_index = new_bucket_index;
+                    this->get_bucket(bucket_index)->next_ = previous_pointer();
+                }
+            };
+
+            // Finally fix the bucket containing the trailing node.
+            if (n) {
+                this->get_bucket(
+                    policy::to_bucket(this->bucket_count_, n->hash_))->next_
+                    = prev;
+            }
+        }
+
+        ////////////////////////////////////////////////////////////////////////
         // Iterators
 
         iterator begin() const {
@@ -290,6 +650,7 @@ namespace boost { namespace unordered { namespace detail {
                 iterator() : this->get_start();
         }
 
+        ////////////////////////////////////////////////////////////////////////
         // Assignment
 
         void assign(table const& x)
@@ -453,7 +814,7 @@ namespace boost { namespace unordered { namespace detail {
                 op2(x, *this);
             // I think swap can throw if Propagate::value,
             // since the allocators' swap can throw. Not sure though.
-            this->buckets::swap(x, p);
+            swap_buckets(x, p);
             std::swap(this->mlf_, x.mlf_);
             std::swap(this->max_load_, x.max_load_);
             op1.commit();
@@ -463,7 +824,7 @@ namespace boost { namespace unordered { namespace detail {
         // Swap everything but the allocators, and the functions objects.
         void swap_contents(table& x)
         {
-            this->buckets::swap(x, false_type());
+            swap_buckets(x, false_type());
             std::swap(this->mlf_, x.mlf_);
             std::swap(this->max_load_, x.max_load_);
         }

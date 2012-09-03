@@ -177,7 +177,6 @@ namespace boost { namespace unordered { namespace detail {
         typedef boost::unordered::detail::table<Types> table;
         typedef typename table::value_type value_type;
         typedef typename table::bucket bucket;
-        typedef typename table::buckets buckets;
         typedef typename table::policy policy;
         typedef typename table::node_pointer node_pointer;
         typedef typename table::node_allocator node_allocator;
@@ -716,7 +715,7 @@ namespace boost { namespace unordered { namespace detail {
         // fill_buckets
 
         template <class NodeCreator>
-        static void fill_buckets(iterator n, buckets& dst,
+        static void fill_buckets(iterator n, table& dst,
             NodeCreator& creator)
         {
             previous_pointer prev = dst.get_previous_start();
@@ -761,7 +760,7 @@ namespace boost { namespace unordered { namespace detail {
 
         // Iterate through the nodes placing them in the correct buckets.
         // pre: prev->next_ is not null.
-        static previous_pointer place_in_bucket(buckets& dst,
+        static previous_pointer place_in_bucket(table& dst,
                 previous_pointer prev, node_pointer end)
         {
             bucket_pointer b = dst.get_bucket(policy::to_bucket(
