@@ -35,268 +35,6 @@ namespace boost { namespace unordered { namespace detail {
     template <typename Types> struct table_impl;
     template <typename Types> struct grouped_table_impl;
 
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Node construction
-
-    template <typename NodeAlloc>
-    struct node_constructor
-    {
-    private:
-
-        typedef NodeAlloc node_allocator;
-        typedef boost::unordered::detail::allocator_traits<NodeAlloc>
-            node_allocator_traits;
-        typedef typename node_allocator_traits::value_type node;
-        typedef typename node_allocator_traits::pointer node_pointer;
-        typedef typename node::value_type value_type;
-
-    protected:
-
-        node_allocator& alloc_;
-
-    private:
-
-        node_pointer node_;
-        bool node_constructed_;
-        bool value_constructed_;
-
-    public:
-
-        node_constructor(node_allocator& n) :
-            alloc_(n),
-            node_(),
-            node_constructed_(false),
-            value_constructed_(false)
-        {
-        }
-
-        ~node_constructor();
-
-        void construct();
-
-        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
-        void construct_with_value(BOOST_UNORDERED_EMPLACE_ARGS)
-        {
-            construct();
-            boost::unordered::detail::construct_value_impl(
-                alloc_, node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
-            value_constructed_ = true;
-        }
-
-        template <typename A0>
-        void construct_with_value2(BOOST_FWD_REF(A0) a0)
-        {
-            construct();
-            boost::unordered::detail::construct_value_impl(
-                alloc_, node_->value_ptr(),
-                BOOST_UNORDERED_EMPLACE_ARGS1(boost::forward<A0>(a0)));
-            value_constructed_ = true;
-        }
-
-        value_type const& value() const {
-            BOOST_ASSERT(node_ && node_constructed_ && value_constructed_);
-            return node_->value();
-        }
-
-        // no throw
-        node_pointer release()
-        {
-            BOOST_ASSERT(node_ && node_constructed_);
-            node_pointer p = node_;
-            node_ = node_pointer();
-            return p;
-        }
-
-    private:
-        node_constructor(node_constructor const&);
-        node_constructor& operator=(node_constructor const&);
-    };
-    
-    template <typename Alloc>
-    node_constructor<Alloc>::~node_constructor()
-    {
-        if (node_) {
-            if (value_constructed_) {
-                boost::unordered::detail::destroy_value_impl(alloc_,
-                    node_->value_ptr());
-            }
-
-            if (node_constructed_) {
-                node_allocator_traits::destroy(alloc_,
-                    boost::addressof(*node_));
-            }
-
-            node_allocator_traits::deallocate(alloc_, node_, 1);
-        }
-    }
-
-    template <typename Alloc>
-    void node_constructor<Alloc>::construct()
-    {
-        if(!node_) {
-            node_constructed_ = false;
-            value_constructed_ = false;
-
-            node_ = node_allocator_traits::allocate(alloc_, 1);
-
-            node_allocator_traits::construct(alloc_,
-                boost::addressof(*node_), node());
-            node_->init(static_cast<typename node::link_pointer>(node_));
-            node_constructed_ = true;
-        }
-        else {
-            BOOST_ASSERT(node_constructed_);
-
-            if (value_constructed_)
-            {
-                boost::unordered::detail::destroy_value_impl(alloc_,
-                    node_->value_ptr());
-                value_constructed_ = false;
-            }
-        }
-    }
-
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Node Holder
-    //
-    // Temporary store for nodes. Deletes any that aren't used.
-
-    template <typename NodeAlloc>
-    struct node_holder : private node_constructor<NodeAlloc>
-    {
-    private:
-        typedef node_constructor<NodeAlloc> base;
-
-        typedef NodeAlloc node_allocator;
-        typedef boost::unordered::detail::allocator_traits<NodeAlloc>
-            node_allocator_traits;
-        typedef typename node_allocator_traits::value_type node;
-        typedef typename node_allocator_traits::pointer node_pointer;
-        typedef typename node::value_type value_type;
-        typedef typename node::link_pointer link_pointer;
-
-        node_pointer nodes_;
-
-    public:
-
-        template <typename Buckets>
-        explicit node_holder(Buckets& b) :
-            base(b.node_alloc()),
-            nodes_()
-        {
-            typename Buckets::previous_pointer prev = b.get_previous_start();
-            nodes_ = static_cast<node_pointer>(prev->next_);
-            prev->next_ = link_pointer();
-            b.size_ = 0;
-        }
-
-        ~node_holder();
-
-        template <typename T>
-        inline void assign_impl(T const& v) {
-            nodes_->value() = v;
-        }
-
-        template <typename T1, typename T2>
-        inline void assign_impl(std::pair<T1 const, T2> const& v) {
-            const_cast<T1&>(nodes_->value().first) = v.first;
-            nodes_->value().second = v.second;
-        }
-
-        template <typename T>
-        inline void move_assign_impl(T& v) {
-            nodes_->value() = boost::move(v);
-        }
-
-        template <typename T1, typename T2>
-        inline void move_assign_impl(std::pair<T1 const, T2>& v) {
-            // TODO: Move key as well?
-            const_cast<T1&>(nodes_->value().first) =
-                boost::move(const_cast<T1&>(v.first));
-            nodes_->value().second = boost::move(v.second);
-        }
-
-        node_pointer copy_of(value_type const& v)
-        {
-            if (nodes_) {
-                assign_impl(v);
-                node_pointer p = nodes_;
-                nodes_ = static_cast<node_pointer>(p->next_);
-                p->next_ = link_pointer();
-                return p;
-            }
-            else {
-                this->construct_with_value2(v);
-                return base::release();
-            }
-        }
-
-        node_pointer move_copy_of(value_type& v)
-        {
-            if (nodes_) {
-                move_assign_impl(v);
-                node_pointer p = nodes_;
-                nodes_ = static_cast<node_pointer>(p->next_);
-                p->next_ = link_pointer();
-                return p;
-            }
-            else {
-                this->construct_with_value2(boost::move(v));
-                return base::release();
-            }
-        }
-    };
-
-    template <typename Alloc>
-    node_holder<Alloc>::~node_holder()
-    {
-        while (nodes_) {
-            node_pointer p = nodes_;
-            nodes_ = static_cast<node_pointer>(p->next_);
-
-            boost::unordered::detail::destroy_value_impl(this->alloc_,
-                p->value_ptr());
-            node_allocator_traits::destroy(this->alloc_, boost::addressof(*p));
-            node_allocator_traits::deallocate(this->alloc_, p, 1);
-        }
-    }
-
-    ///////////////////////////////////////////////////////////////////
-    //
-    // Bucket
-
-    template <typename NodePointer>
-    struct bucket
-    {
-        typedef NodePointer previous_pointer;
-        previous_pointer next_;
-
-        bucket() : next_() {}
-
-        previous_pointer first_from_start()
-        {
-            return next_;
-        }
-
-        enum { extra_node = true };
-    };
-
-    struct ptr_bucket
-    {
-        typedef ptr_bucket* previous_pointer;
-        previous_pointer next_;
-
-        ptr_bucket() : next_(0) {}
-
-        previous_pointer first_from_start()
-        {
-            return this;
-        }
-
-        enum { extra_node = false };
-    };
 }}}
 
 namespace boost { namespace unordered { namespace iterator_detail {
@@ -563,6 +301,269 @@ namespace boost { namespace unordered { namespace iterator_detail {
 }}}
 
 namespace boost { namespace unordered { namespace detail {
+
+    ///////////////////////////////////////////////////////////////////
+    //
+    // Node construction
+
+    template <typename NodeAlloc>
+    struct node_constructor
+    {
+    private:
+
+        typedef NodeAlloc node_allocator;
+        typedef boost::unordered::detail::allocator_traits<NodeAlloc>
+            node_allocator_traits;
+        typedef typename node_allocator_traits::value_type node;
+        typedef typename node_allocator_traits::pointer node_pointer;
+        typedef typename node::value_type value_type;
+
+    protected:
+
+        node_allocator& alloc_;
+
+    private:
+
+        node_pointer node_;
+        bool node_constructed_;
+        bool value_constructed_;
+
+    public:
+
+        node_constructor(node_allocator& n) :
+            alloc_(n),
+            node_(),
+            node_constructed_(false),
+            value_constructed_(false)
+        {
+        }
+
+        ~node_constructor();
+
+        void construct();
+
+        template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
+        void construct_with_value(BOOST_UNORDERED_EMPLACE_ARGS)
+        {
+            construct();
+            boost::unordered::detail::construct_value_impl(
+                alloc_, node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
+            value_constructed_ = true;
+        }
+
+        template <typename A0>
+        void construct_with_value2(BOOST_FWD_REF(A0) a0)
+        {
+            construct();
+            boost::unordered::detail::construct_value_impl(
+                alloc_, node_->value_ptr(),
+                BOOST_UNORDERED_EMPLACE_ARGS1(boost::forward<A0>(a0)));
+            value_constructed_ = true;
+        }
+
+        value_type const& value() const {
+            BOOST_ASSERT(node_ && node_constructed_ && value_constructed_);
+            return node_->value();
+        }
+
+        // no throw
+        node_pointer release()
+        {
+            BOOST_ASSERT(node_ && node_constructed_);
+            node_pointer p = node_;
+            node_ = node_pointer();
+            return p;
+        }
+
+    private:
+        node_constructor(node_constructor const&);
+        node_constructor& operator=(node_constructor const&);
+    };
+
+    template <typename Alloc>
+    node_constructor<Alloc>::~node_constructor()
+    {
+        if (node_) {
+            if (value_constructed_) {
+                boost::unordered::detail::destroy_value_impl(alloc_,
+                    node_->value_ptr());
+            }
+
+            if (node_constructed_) {
+                node_allocator_traits::destroy(alloc_,
+                    boost::addressof(*node_));
+            }
+
+            node_allocator_traits::deallocate(alloc_, node_, 1);
+        }
+    }
+
+    template <typename Alloc>
+    void node_constructor<Alloc>::construct()
+    {
+        if(!node_) {
+            node_constructed_ = false;
+            value_constructed_ = false;
+
+            node_ = node_allocator_traits::allocate(alloc_, 1);
+
+            node_allocator_traits::construct(alloc_,
+                boost::addressof(*node_), node());
+            node_->init(static_cast<typename node::link_pointer>(node_));
+            node_constructed_ = true;
+        }
+        else {
+            BOOST_ASSERT(node_constructed_);
+
+            if (value_constructed_)
+            {
+                boost::unordered::detail::destroy_value_impl(alloc_,
+                    node_->value_ptr());
+                value_constructed_ = false;
+            }
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    //
+    // Node Holder
+    //
+    // Temporary store for nodes. Deletes any that aren't used.
+
+    template <typename NodeAlloc>
+    struct node_holder : private node_constructor<NodeAlloc>
+    {
+    private:
+        typedef node_constructor<NodeAlloc> base;
+
+        typedef NodeAlloc node_allocator;
+        typedef boost::unordered::detail::allocator_traits<NodeAlloc>
+            node_allocator_traits;
+        typedef typename node_allocator_traits::value_type node;
+        typedef typename node_allocator_traits::pointer node_pointer;
+        typedef typename node::value_type value_type;
+        typedef typename node::link_pointer link_pointer;
+
+        node_pointer nodes_;
+
+    public:
+
+        template <typename Buckets>
+        explicit node_holder(Buckets& b) :
+            base(b.node_alloc()),
+            nodes_()
+        {
+            typename Buckets::previous_pointer prev = b.get_previous_start();
+            nodes_ = static_cast<node_pointer>(prev->next_);
+            prev->next_ = link_pointer();
+            b.size_ = 0;
+        }
+
+        ~node_holder();
+
+        template <typename T>
+        inline void assign_impl(T const& v) {
+            nodes_->value() = v;
+        }
+
+        template <typename T1, typename T2>
+        inline void assign_impl(std::pair<T1 const, T2> const& v) {
+            const_cast<T1&>(nodes_->value().first) = v.first;
+            nodes_->value().second = v.second;
+        }
+
+        template <typename T>
+        inline void move_assign_impl(T& v) {
+            nodes_->value() = boost::move(v);
+        }
+
+        template <typename T1, typename T2>
+        inline void move_assign_impl(std::pair<T1 const, T2>& v) {
+            // TODO: Move key as well?
+            const_cast<T1&>(nodes_->value().first) =
+                boost::move(const_cast<T1&>(v.first));
+            nodes_->value().second = boost::move(v.second);
+        }
+
+        node_pointer copy_of(value_type const& v)
+        {
+            if (nodes_) {
+                assign_impl(v);
+                node_pointer p = nodes_;
+                nodes_ = static_cast<node_pointer>(p->next_);
+                p->next_ = link_pointer();
+                return p;
+            }
+            else {
+                this->construct_with_value2(v);
+                return base::release();
+            }
+        }
+
+        node_pointer move_copy_of(value_type& v)
+        {
+            if (nodes_) {
+                move_assign_impl(v);
+                node_pointer p = nodes_;
+                nodes_ = static_cast<node_pointer>(p->next_);
+                p->next_ = link_pointer();
+                return p;
+            }
+            else {
+                this->construct_with_value2(boost::move(v));
+                return base::release();
+            }
+        }
+    };
+
+    template <typename Alloc>
+    node_holder<Alloc>::~node_holder()
+    {
+        while (nodes_) {
+            node_pointer p = nodes_;
+            nodes_ = static_cast<node_pointer>(p->next_);
+
+            boost::unordered::detail::destroy_value_impl(this->alloc_,
+                p->value_ptr());
+            node_allocator_traits::destroy(this->alloc_, boost::addressof(*p));
+            node_allocator_traits::deallocate(this->alloc_, p, 1);
+        }
+    }
+
+    ///////////////////////////////////////////////////////////////////
+    //
+    // Bucket
+
+    template <typename NodePointer>
+    struct bucket
+    {
+        typedef NodePointer previous_pointer;
+        previous_pointer next_;
+
+        bucket() : next_() {}
+
+        previous_pointer first_from_start()
+        {
+            return next_;
+        }
+
+        enum { extra_node = true };
+    };
+
+    struct ptr_bucket
+    {
+        typedef ptr_bucket* previous_pointer;
+        previous_pointer next_;
+
+        ptr_bucket() : next_(0) {}
+
+        previous_pointer first_from_start()
+        {
+            return this;
+        }
+
+        enum { extra_node = false };
+    };
 
     ///////////////////////////////////////////////////////////////////
     //
