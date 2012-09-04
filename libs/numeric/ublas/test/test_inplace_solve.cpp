@@ -6,11 +6,6 @@
 #include <boost/numeric/ublas/triangular.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
-
-#include <sys/times.h>
-#include <sys/time.h>
-#include <sys/stat.h>
-
 #include "utils.hpp"
 
 namespace ublas  = boost::numeric::ublas;
