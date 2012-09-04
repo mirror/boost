@@ -5,17 +5,17 @@
     Distributed under the Boost Software License, Version 1.0. (See accompanying
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
-#if !defined(BOOST_CPP03_FUSION_DEQUE_26112006_1649)
-#define BOOST_CPP03_FUSION_DEQUE_26112006_1649
+#if !defined(BOOST_PP_FUSION_DEQUE_26112006_1649)
+#define BOOST_PP_FUSION_DEQUE_26112006_1649
 
-#if defined(BOOST_FUSION_HAS_CPP11_DEQUE)
+#if defined(BOOST_FUSION_HAS_VARIADIC_DEQUE)
 #error "C++03 only! This file should not have been included"
 #endif
 
 #include <boost/fusion/container/deque/limits.hpp>
 #include <boost/fusion/container/deque/front_extended_deque.hpp>
 #include <boost/fusion/container/deque/back_extended_deque.hpp>
-#include <boost/fusion/container/deque/detail/cpp03_deque_keyed_values.hpp>
+#include <boost/fusion/container/deque/detail/pp_deque_keyed_values.hpp>
 #include <boost/fusion/container/deque/detail/deque_initial_size.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>

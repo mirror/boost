@@ -11,24 +11,23 @@
 #include <boost/config.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-// With no decltype and variadics, we will use the C++03 version
+// With variadics, we will use the PP version version
 ///////////////////////////////////////////////////////////////////////////////
-#if (defined(BOOST_NO_DECLTYPE)             \
-  || defined(BOOST_NO_VARIADIC_TEMPLATES)   \
-  || defined(BOOST_NO_RVALUE_REFERENCES))
-# include <boost/fusion/container/deque/detail/cpp03_deque.hpp>
+#if defined(BOOST_NO_VARIADIC_TEMPLATES)
+# include <boost/fusion/container/deque/detail/pp_deque.hpp>
 #else
-# if !defined(BOOST_FUSION_HAS_CPP11_DEQUE)
-#   define BOOST_FUSION_HAS_CPP11_DEQUE
+# if !defined(BOOST_FUSION_HAS_VARIADIC_DEQUE)
+#   define BOOST_FUSION_HAS_VARIADIC_DEQUE
 # endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// C++11 interface
+// C++11 variadic interface
 ///////////////////////////////////////////////////////////////////////////////
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/detail/access.hpp>
+#include <boost/fusion/support/is_sequence.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>
-#include <boost/fusion/container/deque/detail/cpp11_deque_keyed_values.hpp>
+#include <boost/fusion/container/deque/detail/variadic_deque_keyed_values.hpp>
 #include <boost/fusion/container/deque/deque_fwd.hpp>
 #include <boost/fusion/container/deque/detail/value_at_impl.hpp>
 #include <boost/fusion/container/deque/detail/at_impl.hpp>
@@ -36,8 +35,10 @@
 #include <boost/fusion/container/deque/detail/end_impl.hpp>
 #include <boost/fusion/container/deque/detail/is_sequence_impl.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
+#include <boost/fusion/sequence/intrinsic/empty.hpp>
 
 #include <boost/mpl/int.hpp>
+#include <boost/mpl/and.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -48,6 +49,22 @@ namespace boost { namespace fusion
     template <typename ...Elements>
     struct deque : detail::nil_keyed_element
     {
+        typedef deque_tag fusion_tag;
+        typedef bidirectional_traversal_tag category;
+        typedef mpl::int_<0> size;
+        typedef mpl::int_<0> next_up;
+        typedef mpl::int_<0> next_down;
+        typedef mpl::false_ is_view;
+
+        template <typename Sequence>
+        deque(Sequence const&,
+            typename enable_if<
+                mpl::and_<
+                    traits::is_sequence<Sequence>
+                  , result_of::empty<Sequence>>>::type* /*dummy*/ = 0)
+        {}
+
+        deque() {}
     };
 
     template <typename Head, typename ...Tail>
@@ -60,7 +77,7 @@ namespace boost { namespace fusion
         typedef typename detail::deque_keyed_values<Head, Tail...>::type base;
         typedef mpl::int_<(sizeof ...(Tail) + 1)> size;
         typedef mpl::int_<size::value> next_up;
-        typedef mpl::int_<mpl::int_<((size::value == 0) ? 0 : -1)>::type::value> next_down;
+        typedef mpl::int_<((size::value == 0) ? 0 : -1)> next_down;
         typedef mpl::false_ is_view;
 
         deque()
