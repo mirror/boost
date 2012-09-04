@@ -349,11 +349,11 @@ private:
   point_type retrieve_point(const cell_type& cell) {
     source_index_type index = cell.source_index();
     source_category_type category = cell.source_category();
-    if (category == detail::SOURCE_CATEGORY_SINGLE_POINT) {
+    if (category == SOURCE_CATEGORY_SINGLE_POINT) {
       return point_data_[index];
     }
     index -= point_data_.size();
-    if (category == detail::SOURCE_CATEGORY_SEGMENT_START_POINT) {
+    if (category == SOURCE_CATEGORY_SEGMENT_START_POINT) {
       return low(segment_data_[index]);
     } else {
       return high(segment_data_[index]);

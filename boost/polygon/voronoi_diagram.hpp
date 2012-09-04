@@ -13,7 +13,7 @@
 #include <vector>
 
 #include "detail/voronoi_ctypes.hpp"
-#include "detail/voronoi_structures.hpp"
+#include "voronoi_events.hpp"
 
 namespace boost {
 namespace polygon {
@@ -35,7 +35,7 @@ public:
   typedef std::size_t color_type;
   typedef voronoi_edge<coordinate_type> voronoi_edge_type;
   typedef std::size_t source_index_type;
-  typedef detail::SourceCategory source_category_type;
+  typedef SourceCategory source_category_type;
 
   voronoi_cell(const source_index_type& source_index,
                const source_category_type& source_category,
@@ -47,13 +47,13 @@ public:
   // Returns true if the cell contains point site, false else.
   bool contains_point() const {
     source_category_type source_category = this->source_category();
-    return detail::belongs(source_category, detail::GEOMETRY_CATEGORY_POINT);
+    return belongs(source_category, GEOMETRY_CATEGORY_POINT);
   }
 
   // Returns true if the cell contains segment site, false else.
   bool contains_segment() const {
     source_category_type source_category = this->source_category();
-    return detail::belongs(source_category, detail::GEOMETRY_CATEGORY_SEGMENT);
+    return belongs(source_category, GEOMETRY_CATEGORY_SEGMENT);
   }
 
   source_index_type source_index() const {
@@ -61,8 +61,7 @@ public:
   }
 
   source_category_type source_category() const {
-    return static_cast<source_category_type>(
-        color_ & detail::SOURCE_CATEGORY_BITMASK);
+    return static_cast<source_category_type>(color_ & SOURCE_CATEGORY_BITMASK);
   }
 
   // Degenerate cells don't have any incident edges.
@@ -222,25 +221,25 @@ public:
   // Returns true if the edge is linear (segment, ray, line).
   // Returns false if the edge is curved (parabolic arc).
   bool is_linear() const {
-    return color_ & BIT_IS_LINEAR;
+    return (color_ & BIT_IS_LINEAR) ? true : false;
   }
 
   // Returns true if the edge is curved (parabolic arc).
   // Returns false if the edge is linear (segment, ray, line).
   bool is_curved() const {
-    return !(color_ & BIT_IS_LINEAR);
+    return (color_ & BIT_IS_LINEAR) ? false : true;
   }
 
   // Returns false if edge goes through the endpoint of the segment.
   // Returns true else.
   bool is_primary() const {
-    return color_ & BIT_IS_PRIMARY;
+    return (color_ & BIT_IS_PRIMARY) ? true : false;
   }
 
   // Returns true if edge goes through the endpoint of the segment.
   // Returns false else.
   bool is_secondary() const {
-    return !(color_ & BIT_IS_PRIMARY);
+    return (color_ & BIT_IS_PRIMARY) ? false : true;
   }
 
   color_type color() const { return color_ >> BITS_SHIFT; }
@@ -351,8 +350,8 @@ public:
     edges_.reserve((num_sites << 2) + (num_sites << 1));
   }
 
-template <typename SEvent>
-  void _process_single_site(const SEvent& site) {
+  template <typename CT>
+  void _process_single_site(const site_event<CT>& site) {
     cells_.push_back(cell_type(
          site.initial_index(), site.source_category(), NULL));
   }
@@ -360,9 +359,9 @@ template <typename SEvent>
   // Insert a new half-edge into the output data structure.
   // Takes as input left and right sites that form a new bisector.
   // Returns a pair of pointers to a new half-edges.
-  template <typename SEvent>
+  template <typename CT>
   std::pair<void*, void*> _insert_new_edge(
-      const SEvent& site1, const SEvent& site2) {
+      const site_event<CT>& site1, const site_event<CT>& site2) {
     // Get sites' indexes.
     int site_index1 = site1.sorted_index();
     int site_index2 = site2.sorted_index();
@@ -407,10 +406,10 @@ template <typename SEvent>
   // that corresponds to the intersection point of the two old half-edges,
   // pointers to those half-edges. Half-edges' direction goes out of the
   // new Voronoi vertex point. Returns a pair of pointers to a new half-edges.
-  template <typename SEvent, typename CEvent>
+  template <typename CT1, typename CT2>
   std::pair<void*, void*> _insert_new_edge(
-      const SEvent& site1, const SEvent& site3, const CEvent& circle,
-      void* data12, void* data23) {
+      const site_event<CT1>& site1, const site_event<CT1>& site3,
+      const circle_event<CT2>& circle, void* data12, void* data23) {
     edge_type* edge12 = static_cast<edge_type*>(data12);
     edge_type* edge23 = static_cast<edge_type*>(data23);
 

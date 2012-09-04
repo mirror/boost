@@ -18,6 +18,8 @@
 #include "detail/voronoi_predicates.hpp"
 #include "detail/voronoi_structures.hpp"
 
+#include "voronoi_events.hpp"
+
 namespace boost {
 namespace polygon {
 // GENERAL INFO:
@@ -51,7 +53,7 @@ public:
   std::size_t insert_point(const int_type& x, const int_type& y) {
     site_events_.push_back(site_event_type(x, y));
     site_events_.back().initial_index(index_);
-    site_events_.back().source_category(detail::SOURCE_CATEGORY_SINGLE_POINT);
+    site_events_.back().source_category(SOURCE_CATEGORY_SINGLE_POINT);
     return index_++;
   }
 
@@ -66,25 +68,21 @@ public:
     point_type p1(x1, y1);
     site_events_.push_back(site_event_type(p1));
     site_events_.back().initial_index(index_);
-    site_events_.back().source_category(
-        detail::SOURCE_CATEGORY_SEGMENT_START_POINT);
+    site_events_.back().source_category(SOURCE_CATEGORY_SEGMENT_START_POINT);
 
     // Set up end point site.
     point_type p2(x2, y2);
     site_events_.push_back(site_event_type(p2));
     site_events_.back().initial_index(index_);
-    site_events_.back().source_category(
-        detail::SOURCE_CATEGORY_SEGMENT_END_POINT);
+    site_events_.back().source_category(SOURCE_CATEGORY_SEGMENT_END_POINT);
 
     // Set up segment site.
     if (point_comparison_(p1, p2)) {
       site_events_.push_back(site_event_type(p1, p2));
-      site_events_.back().source_category(
-          detail::SOURCE_CATEGORY_INITIAL_SEGMENT);
+      site_events_.back().source_category(SOURCE_CATEGORY_INITIAL_SEGMENT);
     } else {
       site_events_.push_back(site_event_type(p2, p1));
-      site_events_.back().source_category(
-          detail::SOURCE_CATEGORY_REVERSE_SEGMENT);
+      site_events_.back().source_category(SOURCE_CATEGORY_REVERSE_SEGMENT);
     }
     site_events_.back().initial_index(index_);
     return index_++;
@@ -131,11 +129,11 @@ public:
   }
 
 private:
-  typedef detail::point_2d<int_type> point_type;
-  typedef detail::site_event<int_type> site_event_type;
+  typedef point_2d<int_type> point_type;
+  typedef site_event<int_type> site_event_type;
   typedef typename std::vector<site_event_type>::const_iterator
     site_event_iterator_type;
-  typedef detail::circle_event<fpt_type> circle_event_type;
+  typedef circle_event<fpt_type> circle_event_type;
   typedef typename VP::template point_comparison_predicate<point_type>
     point_comparison_predicate;
   typedef typename VP::
