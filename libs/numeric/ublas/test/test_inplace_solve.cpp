@@ -79,7 +79,6 @@ BOOST_UBLAS_TEST_DEF ( test_inplace_solve )
 }
 
 int main() {
-  const int n=10;
 
   // typedefs are needed as macros do not work with "," in template arguments
   typedef ublas::compressed_matrix<double, ublas::row_major>     commat_doub_rowmaj;
@@ -95,16 +94,30 @@ int main() {
 
   BOOST_UBLAS_TEST_BEGIN();
 
-  BOOST_UBLAS_TEST_DO( test_inplace_solve<commat_doub_rowmaj> );
-  BOOST_UBLAS_TEST_DO( test_inplace_solve<commat_doub_colmaj> );
+#ifdef USE_MATRIX
   BOOST_UBLAS_TEST_DO( test_inplace_solve<mat_doub_rowmaj> );
   BOOST_UBLAS_TEST_DO( test_inplace_solve<mat_doub_colmaj> );
+#endif
+
+#ifdef USE_COMPRESSED_MATRIX
+  BOOST_UBLAS_TEST_DO( test_inplace_solve<commat_doub_rowmaj> );
+  BOOST_UBLAS_TEST_DO( test_inplace_solve<commat_doub_colmaj> );
+#endif
+
+#ifdef USE_MAPPED_MATRIX
   BOOST_UBLAS_TEST_DO( test_inplace_solve<mapmat_doub_rowmaj> );
   BOOST_UBLAS_TEST_DO( test_inplace_solve<mapmat_doub_colmaj> );
+#endif
+
+#ifdef USE_COORDINATE_MATRIX
   BOOST_UBLAS_TEST_DO( test_inplace_solve<cormat_doub_rowmaj> );
   BOOST_UBLAS_TEST_DO( test_inplace_solve<cormat_doub_colmaj> );
+#endif
+
+#ifdef USE_MAPPED_VECTOR_OF_MAPPED_VECTOR
   BOOST_UBLAS_TEST_DO( test_inplace_solve<mvmv_doub_rowmaj> );
   BOOST_UBLAS_TEST_DO( test_inplace_solve<mvmv_doub_colmaj> );
+#endif
 
   BOOST_UBLAS_TEST_END();
 }
