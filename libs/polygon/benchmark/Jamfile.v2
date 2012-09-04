@@ -5,39 +5,22 @@
 
 import testing ;
 
-# Windows
-# It took five hours to configure CGAL on Windows. Good luck!
-#path-constant CGAL_ROOT : "d:/Programming/CGAL-4.0" ;
-#path-constant SHULL_ROOT : "d:/Programming/SHull" ;
-#project voronoi-benchmark
-#    :
-#    requirements
-#        <include>$(CGAL_ROOT)/include
-#        <library>$(CGAL_ROOT)/lib/libCGAL-vc90-mt-4.0.lib
-#        <library>$(CGAL_ROOT)/lib/libCGAL_Core-vc90-mt-4.0.lib
-#        <include>$(CGAL_ROOT)/auxiliary/gmp/include
-#        <library>$(CGAL_ROOT)/auxiliary/gmp/lib/libgmp-10.lib
-#        <library>$(CGAL_ROOT)/auxiliary/gmp/lib/libmpfr-4.lib
-#        <library>$(BOOST_ROOT)/libs/thread/build//boost_thread
-#        <library>$(BOOST_ROOT)/lib/libboost_thread-vc90-mt-1_48.lib
-#        <library>$(BOOST_ROOT)/libs/test/build//boost_unit_test_framework
-#        <include>$(SHULL_ROOT)
-#    ;
-
-# Linux
-# If follow official documentation of CGAL it takes 30 mins to
-# set up properly CGAL and required libraries (GMP, MPFR).
-path-constant CGAL_ROOT : "/home/slevin/Workspace/Libraries/CGAL" ;
-path-constant SHULL_ROOT : "/home/slevin/Workspace/Libraries/s_hull" ;
-project benchmark
+project voronoi-benchmark
     :
     requirements
         <include>$(CGAL_ROOT)/include
-        <library>$(CGAL_ROOT)/lib/libCGAL.so
-        <library>$(CGAL_ROOT)/lib/libCGAL_Core.so
         <include>$(SHULL_ROOT)
-        <library>$(SHULL_ROOT)/s_hull.so
-        <library>$(BOOST_ROOT)/libs/test/build//boost_unit_test_framework
+        <toolset>msvc:<include>$(CGAL_ROOT)/auxiliary/gmp/include
+        <toolset>msvc:<library>$(CGAL_ROOT)/lib/libCGAL-vc90-mt-4.0.lib
+        <toolset>msvc:<library>$(CGAL_ROOT)/lib/libCGAL_Core-vc90-mt-4.0.lib
+        <toolset>msvc:<library>$(CGAL_ROOT)/auxiliary/gmp/lib/libgmp-10.lib
+        <toolset>msvc:<library>$(CGAL_ROOT)/auxiliary/gmp/lib/libmpfr-4.lib
+        <toolset>msvc:<library>$(BOOST_ROOT)/libs/thread/build//boost_thread
+        <toolset>msvc:<library>$(BOOST_ROOT)/libs/test/build//boost_unit_test_framework
+        <toolset>gcc:<library>$(CGAL_ROOT)/lib/libCGAL.so
+        <toolset>gcc:<library>$(CGAL_ROOT)/lib/libCGAL_Core.so
+        <toolset>gcc:<library>$(SHULL_ROOT)/s_hull.so
+        <toolset>gcc:<library>$(BOOST_ROOT)/libs/test/build//boost_unit_test_framework
     ;
 
 alias "benchmark-general"
