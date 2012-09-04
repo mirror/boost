@@ -8,6 +8,12 @@
 # bring in rules for testing
 import testing ;
 
+project
+    : requirements
+        <toolset>gcc:<cxxflags>-std=c++0x
+        <toolset>darwin:<cxxflags>-std=c++0x
+    ;
+
 {
     test-suite fusion :
 

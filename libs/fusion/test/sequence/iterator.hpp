@@ -29,7 +29,11 @@ void test()
 
         char const* s = "Hello";
         typedef FUSION_SEQUENCE<int, char, double, char const*> seq_type;
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        seq_type v(1, 'x', 3.3, std::move(s));
+#else
         seq_type v(1, 'x', 3.3, s);
+#endif
         boost::fusion::result_of::begin<seq_type>::type i(v);
 
         BOOST_TEST(*i == 1);
@@ -61,7 +65,12 @@ void test()
 
         char const* s = "Hello";
         typedef FUSION_SEQUENCE<int, char, double, char const*> const seq_type;
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        seq_type t(1, 'x', 3.3, std::move(s));
+#else
         seq_type t(1, 'x', 3.3, s);
+#endif
+
         boost::fusion::result_of::begin<seq_type>::type i(t);
 
         BOOST_TEST(*i == 1);
@@ -104,7 +113,11 @@ void test()
 
         char const* s = "Hello";
         typedef FUSION_SEQUENCE<int, char, double, char const*> seq_type;
+#if !defined(BOOST_NO_RVALUE_REFERENCES)
+        seq_type t(1, 'x', 3.3, std::move(s));
+#else
         seq_type t(1, 'x', 3.3, s);
+#endif
         boost::fusion::result_of::begin<seq_type>::type i(t);
 
         BOOST_TEST(*i == 1);
