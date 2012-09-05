@@ -157,18 +157,20 @@ class transform_multiallocation_chain
    MultiallocationChain   holder_;
    typedef typename MultiallocationChain::void_pointer   void_pointer;
    typedef typename boost::intrusive::pointer_traits
-      <void_pointer>::template rebind_pointer<T>::type   pointer;
+      <void_pointer>                                     void_pointer_traits;
+   typedef typename void_pointer_traits::template
+      rebind_pointer<T>::type                            pointer;
+   typedef typename boost::intrusive::pointer_traits
+      <pointer>                                          pointer_traits;
 
-   static pointer cast(void_pointer p)
-   {
-      return pointer(static_cast<T*>(container_detail::to_raw_pointer(p)));
-   }
+   static pointer cast(const void_pointer &p)
+   {  return pointer_traits::static_cast_from(p);  }
 
    public:
    typedef transform_iterator
       < typename MultiallocationChain::iterator
-      , container_detail::cast_functor <T> >                 iterator;
-   typedef typename MultiallocationChain::size_type           size_type;
+      , container_detail::cast_functor <T> >             iterator;
+   typedef typename MultiallocationChain::size_type      size_type;
 
    transform_multiallocation_chain()
       : holder_()
@@ -234,8 +236,11 @@ class transform_multiallocation_chain
    static iterator iterator_to(pointer p)
    {  return iterator(MultiallocationChain::iterator_to(p));  }
 
-   std::pair<void_pointer, void_pointer> extract_data()
-   {  return holder_.extract_data();  }
+   std::pair<pointer, pointer> extract_data()
+   {
+      std::pair<void_pointer, void_pointer> data(holder_.extract_data());
+      return std::pair<pointer, pointer>(cast(data.first), cast(data.second));
+   }
 
    MultiallocationChain extract_multiallocation_chain()
    {

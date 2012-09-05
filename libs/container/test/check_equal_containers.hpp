@@ -58,13 +58,8 @@ bool CheckEqualContainers(const MyBoostCont *boostcont, const MyStdCont *stdcont
    }
    std::size_t i = 0;
    for(; itboost != itboostend; ++itboost, ++itstd, ++i){
-
       if(!CheckEqual(*itstd, *itboost))
          return false;
-/*    value_type val(*itstd);
-      const value_type &v = *itboost;
-      if(v != val)
-         return false;*/
    }
    return true;
 }
