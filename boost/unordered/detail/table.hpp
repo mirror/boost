@@ -13,6 +13,11 @@
 #include <boost/type_traits/alignment_of.hpp>
 #include <cmath>
 
+#if defined(BOOST_MSVC)
+#pragma warning(push)
+#pragma warning(disable:4127) // conditional expression is constant
+#endif
+
 namespace boost { namespace unordered { namespace detail {
 
     ////////////////////////////////////////////////////////////////////////////
@@ -894,5 +899,9 @@ namespace boost { namespace unordered { namespace detail {
             std::ceil(static_cast<double>(num_elements) / mlf_)));
     }
 }}}
+
+#if defined(BOOST_MSVC)
+#pragma warning(pop)
+#endif
 
 #endif

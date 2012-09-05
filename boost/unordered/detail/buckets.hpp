@@ -20,11 +20,6 @@
 #include <boost/limits.hpp>
 #include <boost/iterator.hpp>
 
-#if defined(BOOST_MSVC)
-#pragma warning(push)
-#pragma warning(disable:4127) // conditional expression is constant
-#endif
-
 namespace boost { namespace unordered { namespace detail {
 
     template <typename Types> struct table;
@@ -798,9 +793,5 @@ namespace boost { namespace unordered { namespace detail {
         typename boost::unordered::detail::rv_ref<T>::type
 #endif
 }}}
-
-#if defined(BOOST_MSVC)
-#pragma warning(pop)
-#endif
 
 #endif
