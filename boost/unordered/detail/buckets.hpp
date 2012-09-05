@@ -487,6 +487,7 @@ namespace boost { namespace unordered { namespace detail {
                 assign_impl(v);
                 node_pointer p = nodes_;
                 nodes_ = static_cast<node_pointer>(p->next_);
+                p->init(static_cast<typename node::link_pointer>(p));
                 p->next_ = link_pointer();
                 return p;
             }
@@ -502,6 +503,7 @@ namespace boost { namespace unordered { namespace detail {
                 move_assign_impl(v);
                 node_pointer p = nodes_;
                 nodes_ = static_cast<node_pointer>(p->next_);
+                p->init(static_cast<typename node::link_pointer>(p));
                 p->next_ = link_pointer();
                 return p;
             }
