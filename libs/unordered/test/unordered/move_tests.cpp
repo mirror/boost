@@ -57,8 +57,7 @@ namespace move_tests
     }
 
     template <class T>
-    void move_construct_tests1(T* ptr,
-        test::random_generator const& generator = test::default_generator)
+    void move_construct_tests1(T* ptr, test::random_generator const& generator)
     {
         BOOST_DEDUCED_TYPENAME T::hasher hf;
         BOOST_DEDUCED_TYPENAME T::key_equal eq;
@@ -91,8 +90,7 @@ namespace move_tests
     }
 
     template <class T>
-    void move_assign_tests1(T*,
-        test::random_generator const& generator = test::default_generator)
+    void move_assign_tests1(T*, test::random_generator const& generator)
     {
         {
             test::check_instances check_;
@@ -110,8 +108,7 @@ namespace move_tests
     }
 
     template <class T>
-    void move_construct_tests2(T*,
-            test::random_generator const& generator = test::default_generator)
+    void move_construct_tests2(T*, test::random_generator const& generator)
     {
         BOOST_DEDUCED_TYPENAME T::hasher hf(1);
         BOOST_DEDUCED_TYPENAME T::key_equal eq(1);
@@ -180,8 +177,7 @@ namespace move_tests
     }
 
     template <class T>
-    void move_assign_tests2(T*,
-        test::random_generator const& generator = test::default_generator)
+    void move_assign_tests2(T*, test::random_generator const& generator)
     {
         BOOST_DEDUCED_TYPENAME T::hasher hf(1);
         BOOST_DEDUCED_TYPENAME T::key_equal eq(1);
@@ -376,6 +372,7 @@ boost::unordered_multimap<test::object, test::object,
             (test_set_prop_move)(test_multiset_prop_move)(test_map_prop_move)(test_multimap_prop_move)
             (test_set_no_prop_move)(test_multiset_no_prop_move)(test_map_no_prop_move)(test_multimap_no_prop_move)
         )
+        ((default_generator)(generate_collisions))
     )
     UNORDERED_TEST(move_assign_tests1, (
             (test_map_std_alloc)
@@ -383,19 +380,21 @@ boost::unordered_multimap<test::object, test::object,
             (test_set_prop_move)(test_multiset_prop_move)(test_map_prop_move)(test_multimap_prop_move)
             (test_set_no_prop_move)(test_multiset_no_prop_move)(test_map_no_prop_move)(test_multimap_no_prop_move)
         )
+        ((default_generator)(generate_collisions))
     )
-    UNORDERED_TEST_REPEAT(move_construct_tests2, 50, (
+    UNORDERED_TEST(move_construct_tests2, (
             (test_set)(test_multiset)(test_map)(test_multimap)
             (test_set_prop_move)(test_multiset_prop_move)(test_map_prop_move)(test_multimap_prop_move)
             (test_set_no_prop_move)(test_multiset_no_prop_move)(test_map_no_prop_move)(test_multimap_no_prop_move)
         )
         ((default_generator)(generate_collisions))
     )
-    UNORDERED_TEST_REPEAT(move_assign_tests2, 50, (
+    UNORDERED_TEST(move_assign_tests2, (
             (test_set)(test_multiset)(test_map)(test_multimap)
             (test_set_prop_move)(test_multiset_prop_move)(test_map_prop_move)(test_multimap_prop_move)
             (test_set_no_prop_move)(test_multiset_no_prop_move)(test_map_no_prop_move)(test_multimap_no_prop_move)
         )
+        ((default_generator)(generate_collisions))
     )
 }
 

@@ -24,8 +24,7 @@ namespace erase_tests
 test::seed_t initialize_seed(85638);
 
 template <class Container>
-void erase_tests1(Container*,
-    test::random_generator generator = test::default_generator)
+void erase_tests1(Container*, test::random_generator generator)
 {
     std::cerr<<"Erase by key.\n";
     {

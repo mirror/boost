@@ -25,8 +25,7 @@ namespace assign_tests {
 test::seed_t initialize_seed(96785);
 
 template <class T>
-void assign_tests1(T*,
-    test::random_generator generator = test::default_generator)
+void assign_tests1(T*, test::random_generator generator)
 {
     BOOST_DEDUCED_TYPENAME T::hasher hf;
     BOOST_DEDUCED_TYPENAME T::key_equal eq;
@@ -68,8 +67,7 @@ void assign_tests1(T*,
 }
 
 template <class T>
-void assign_tests2(T*,
-    test::random_generator generator = test::default_generator)
+void assign_tests2(T*, test::random_generator generator)
 {
     BOOST_DEDUCED_TYPENAME T::hasher hf1(1);
     BOOST_DEDUCED_TYPENAME T::hasher hf2(2);
