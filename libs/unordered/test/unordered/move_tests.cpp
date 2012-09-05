@@ -384,14 +384,14 @@ boost::unordered_multimap<test::object, test::object,
             (test_set_no_prop_move)(test_multiset_no_prop_move)(test_map_no_prop_move)(test_multimap_no_prop_move)
         )
     )
-    UNORDERED_TEST(move_construct_tests2, (
+    UNORDERED_TEST_REPEAT(move_construct_tests2, 50, (
             (test_set)(test_multiset)(test_map)(test_multimap)
             (test_set_prop_move)(test_multiset_prop_move)(test_map_prop_move)(test_multimap_prop_move)
             (test_set_no_prop_move)(test_multiset_no_prop_move)(test_map_no_prop_move)(test_multimap_no_prop_move)
         )
         ((default_generator)(generate_collisions))
     )
-    UNORDERED_TEST(move_assign_tests2, (
+    UNORDERED_TEST_REPEAT(move_assign_tests2, 50, (
             (test_set)(test_multiset)(test_map)(test_multimap)
             (test_set_prop_move)(test_multiset_prop_move)(test_map_prop_move)(test_multimap_prop_move)
             (test_set_no_prop_move)(test_multiset_no_prop_move)(test_map_no_prop_move)(test_multimap_no_prop_move)
