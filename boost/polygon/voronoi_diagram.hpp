@@ -197,19 +197,19 @@ public:
   // Returns a pointer to the rotation next edge
   // over the starting point of the half-edge.
   voronoi_edge_type* rot_next() {
-    return (vertex_) ? prev_->twin() : NULL;
+    return prev_->twin();
   }
   const voronoi_edge_type* rot_next() const {
-    return (vertex_) ? prev_->twin() : NULL;
+    return prev_->twin();
   }
 
   // Returns a pointer to the rotation prev edge
   // over the starting point of the half-edge.
   voronoi_edge_type* rot_prev() {
-    return (vertex_) ? twin_->next() : NULL;
+    return twin_->next();
   }
   const voronoi_edge_type* rot_prev() const {
-    return (vertex_) ? twin_->next() : NULL;
+    return twin_->next();
   }
 
   // Returns true if the edge is finite (segment, parabolic arc).

@@ -27,9 +27,9 @@ typedef vd_type::const_cell_iterator const_cell_iterator;
 typedef vd_type::const_vertex_iterator const_vertex_iterator;
 
 #define CHECK_OUTPUT_SIZE(output, cells, vertices, edges) \
-    BOOST_CHECK(output.num_cells() == cells); \
-    BOOST_CHECK(output.num_vertices() == vertices); \
-    BOOST_CHECK(output.num_edges() == edges)
+    BOOST_CHECK_EQUAL(output.num_cells(), (std::size_t)cells); \
+    BOOST_CHECK_EQUAL(output.num_vertices(), (std::size_t)vertices); \
+    BOOST_CHECK_EQUAL(output.num_edges(), (std::size_t)edges)
 
 #define VERIFY_OUTPUT(output) \
     BOOST_CHECK(voronoi_test_helper::verify_output(output, \
@@ -79,13 +79,13 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(collinear_sites_test1, T, test_types) {
 
   BOOST_CHECK(edge1_1->next() == edge1_1);
   BOOST_CHECK(edge1_1->prev() == edge1_1);
-  BOOST_CHECK(edge1_1->rot_next() == NULL);
-  BOOST_CHECK(edge1_1->rot_prev() == NULL);
+  BOOST_CHECK(edge1_1->rot_next() == edge1_2);
+  BOOST_CHECK(edge1_1->rot_prev() == edge1_2);
 
   BOOST_CHECK(edge1_2->next() == edge1_2);
   BOOST_CHECK(edge1_2->prev() == edge1_2);
-  BOOST_CHECK(edge1_2->rot_next() == NULL);
-  BOOST_CHECK(edge1_2->rot_prev() == NULL);
+  BOOST_CHECK(edge1_2->rot_next() == edge1_1);
+  BOOST_CHECK(edge1_2->rot_prev() == edge1_1);
 }
 
 // Sites: (0, 0), (1, 1), (2, 2).
@@ -111,11 +111,14 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(collinear_sites_test2, T, test_types) {
   BOOST_CHECK(edge2_1->twin() == edge2_2 && edge2_2->twin() == edge2_1);
 
   BOOST_CHECK(edge1_1->next() == edge1_1 && edge1_1->prev() == edge1_1);
-  BOOST_CHECK(edge1_1->rot_next() == NULL && edge1_1->rot_prev() == NULL);
-  BOOST_CHECK(edge1_2->rot_next() == NULL && edge1_2->rot_prev() == NULL);
-  BOOST_CHECK(edge2_1->rot_next() == NULL && edge2_1->rot_prev() == NULL);
+  BOOST_CHECK(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1);
+  BOOST_CHECK(edge2_1->next() == edge1_2 && edge2_1->prev() == edge1_2);
   BOOST_CHECK(edge2_2->next() == edge2_2 && edge2_2->prev() == edge2_2);
-  BOOST_CHECK(edge2_2->rot_next() == NULL && edge2_2->rot_prev() == NULL);
+
+  BOOST_CHECK(edge1_1->rot_next() == edge1_2 && edge1_1->rot_prev() == edge2_1);
+  BOOST_CHECK(edge1_2->rot_next() == edge2_2 && edge1_2->rot_prev() == edge1_1);
+  BOOST_CHECK(edge2_1->rot_next() == edge1_1 && edge2_1->rot_prev() == edge2_2);
+  BOOST_CHECK(edge2_2->rot_next() == edge2_1 && edge2_2->rot_prev() == edge1_2);
 
   BOOST_CHECK(edge1_2->next() == edge2_1 && edge1_2->prev() == edge2_1);
   BOOST_CHECK(edge2_1->next() == edge1_2 && edge2_1->prev() == edge1_2);
@@ -169,6 +172,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(triangle_test1, T, test_types) {
   BOOST_CHECK(edge1_1->rot_next() == edge3_1);
   BOOST_CHECK(edge3_1->rot_next() == edge2_1);
   BOOST_CHECK(edge2_1->rot_next() == edge1_1);
+
+  BOOST_CHECK(edge1_2->rot_next() == edge2_2);
+  BOOST_CHECK(edge2_2->rot_next() == edge3_2);
+  BOOST_CHECK(edge3_2->rot_next() == edge1_2);
 }
 
 // Sites: (0, 1), (2, 0), (2, 4).
@@ -219,6 +226,10 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(triangle_test2, T, test_types) {
   BOOST_CHECK(edge1_1->rot_next() == edge3_1);
   BOOST_CHECK(edge3_1->rot_next() == edge2_1);
   BOOST_CHECK(edge2_1->rot_next() == edge1_1);
+
+  BOOST_CHECK(edge1_2->rot_next() == edge2_2);
+  BOOST_CHECK(edge2_2->rot_next() == edge3_2);
+  BOOST_CHECK(edge3_2->rot_next() == edge1_2);
 }
 
 // Sites: (0, 0), (0, 1), (1, 0), (1, 1).
@@ -282,6 +293,11 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(square_test1, T, test_types) {
   BOOST_CHECK(edge4_1->rot_next() == edge3_1);
   BOOST_CHECK(edge3_1->rot_next() == edge2_1);
   BOOST_CHECK(edge2_1->rot_next() == edge1_1);
+
+  BOOST_CHECK(edge1_2->rot_next() == edge2_2);
+  BOOST_CHECK(edge2_2->rot_next() == edge3_2);
+  BOOST_CHECK(edge3_2->rot_next() == edge4_2);
+  BOOST_CHECK(edge4_2->rot_next() == edge1_2);
 }
 
 #ifdef NDEBUG
