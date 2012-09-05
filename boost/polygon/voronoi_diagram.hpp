@@ -13,7 +13,9 @@
 #include <vector>
 
 #include "detail/voronoi_ctypes.hpp"
-#include "voronoi_events.hpp"
+#include "detail/voronoi_structures.hpp"
+
+#include "voronoi_geometry_type.hpp"
 
 namespace boost {
 namespace polygon {
@@ -351,7 +353,7 @@ public:
   }
 
   template <typename CT>
-  void _process_single_site(const site_event<CT>& site) {
+  void _process_single_site(const detail::site_event<CT>& site) {
     cells_.push_back(cell_type(
          site.initial_index(), site.source_category(), NULL));
   }
@@ -361,7 +363,8 @@ public:
   // Returns a pair of pointers to a new half-edges.
   template <typename CT>
   std::pair<void*, void*> _insert_new_edge(
-      const site_event<CT>& site1, const site_event<CT>& site2) {
+      const detail::site_event<CT>& site1,
+      const detail::site_event<CT>& site2) {
     // Get sites' indexes.
     int site_index1 = site1.sorted_index();
     int site_index2 = site2.sorted_index();
@@ -408,8 +411,8 @@ public:
   // new Voronoi vertex point. Returns a pair of pointers to a new half-edges.
   template <typename CT1, typename CT2>
   std::pair<void*, void*> _insert_new_edge(
-      const site_event<CT1>& site1, const site_event<CT1>& site3,
-      const circle_event<CT2>& circle, void* data12, void* data23) {
+      const detail::site_event<CT1>& site1, const detail::site_event<CT1>& site3,
+      const detail::circle_event<CT2>& circle, void* data12, void* data23) {
     edge_type* edge12 = static_cast<edge_type*>(data12);
     edge_type* edge23 = static_cast<edge_type*>(data23);
 

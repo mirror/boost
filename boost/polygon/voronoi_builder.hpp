@@ -18,7 +18,7 @@
 #include "detail/voronoi_predicates.hpp"
 #include "detail/voronoi_structures.hpp"
 
-#include "voronoi_events.hpp"
+#include "voronoi_geometry_type.hpp"
 
 namespace boost {
 namespace polygon {
@@ -129,11 +129,11 @@ public:
   }
 
 private:
-  typedef point_2d<int_type> point_type;
-  typedef site_event<int_type> site_event_type;
+  typedef detail::point_2d<int_type> point_type;
+  typedef detail::site_event<int_type> site_event_type;
   typedef typename std::vector<site_event_type>::const_iterator
     site_event_iterator_type;
-  typedef circle_event<fpt_type> circle_event_type;
+  typedef detail::circle_event<fpt_type> circle_event_type;
   typedef typename VP::template point_comparison_predicate<point_type>
     point_comparison_predicate;
   typedef typename VP::

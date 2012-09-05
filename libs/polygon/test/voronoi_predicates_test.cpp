@@ -17,7 +17,7 @@
 #include <boost/polygon/detail/voronoi_structures.hpp>
 using namespace boost::polygon::detail;
 
-#include <boost/polygon/voronoi_events.hpp>
+#include <boost/polygon/voronoi_geometry_type.hpp>
 using namespace boost::polygon;
 
 ulp_comparison<double> ulp_cmp;
