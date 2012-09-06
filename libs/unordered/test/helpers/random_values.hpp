@@ -35,11 +35,11 @@ namespace test
             int* int_ptr = 0;
             len += x.size();
 
-            while(x.size() < len) {
+            for (std::size_t i = 0; i < len; ++i) {
                 value_type value = generate(value_ptr);
 
                 int count = type_ == generate_collisions ?
-                    1 + (generate(int_ptr) % 10) : 1;
+                    1 + (generate(int_ptr) % 5) : 1;
 
                 for(int i = 0; i < count; ++i) {
                     x.push_back(value);
@@ -64,13 +64,12 @@ namespace test
             key_type* key_ptr = 0;
             mapped_type* mapped_ptr = 0;
             int* int_ptr = 0;
-            len += x.size();
 
-            while(x.size() < len) {
+            for (std::size_t i = 0; i < len; ++i) {
                 key_type key = generate(key_ptr);
 
                 int count = type_ == generate_collisions ?
-                    1 + (generate(int_ptr) % 10) : 1;
+                    1 + (generate(int_ptr) % 5) : 1;
 
                 for(int i = 0; i < count; ++i) {
                     x.push_back(std::pair<key_type const, mapped_type>(

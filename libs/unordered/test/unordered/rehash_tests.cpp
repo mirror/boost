@@ -11,6 +11,7 @@
 #include "../helpers/test.hpp"
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
+#include "../helpers/metafunctions.hpp"
 
 namespace rehash_tests
 {
@@ -115,7 +116,7 @@ void reserve_test1(X*, test::random_generator generator)
             // For the current standard this should reserve i+1, I've
             // submitted a defect report and will assume it's a defect
             // for now.
-            x.reserve(v.size());
+            x.reserve(test::has_unique_keys<X>::value ? i : v.size());
 
             // Insert an element before the range insert, otherwise there are
             // no iterators to invalidate in the range insert, and it can
@@ -148,9 +149,9 @@ void reserve_test2(X*, test::random_generator generator)
             x.max_load_factor(random_mlf ?
                 static_cast<float>(std::rand() % 1000) / 500.0f + 0.5f : 1.0f);
 
-            x.reserve(v.size());
-            std::size_t bucket_count = x.bucket_count();
+            x.reserve(test::has_unique_keys<X>::value ? i : v.size());
 
+            std::size_t bucket_count = x.bucket_count();
             for (typename test::random_values<X>::iterator it = v.begin();
                     it != v.end(); ++it)
             {

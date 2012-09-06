@@ -158,13 +158,17 @@ namespace move_tests
             BOOST_TEST(count == test::global_object_count);
 #elif defined(BOOST_HAS_NRVO)
             BOOST_TEST(
-                test::global_object_count.constructions - count.constructions <=
-                (test::is_set<T>::value ? 25 : 50));
+                static_cast<std::size_t>(test::global_object_count.constructions
+                    - count.constructions) <=
+                (test::is_set<T>::value ? 1 : 2) *
+                    (test::has_unique_keys<T>::value ? 25 : v.size()));
             BOOST_TEST(count.instances == test::global_object_count.instances);
 #else
             BOOST_TEST(
-                test::global_object_count.constructions - count.constructions <=
-                (test::is_set<T>::value ? 50 : 100));
+                static_cast<std::size_t>(test::global_object_count.constructions
+                    - count.constructions) <=
+                (test::is_set<T>::value ? 2 : 4) *
+                    (test::has_unique_keys<T>::value ? 25 : v.size()));
             BOOST_TEST(count.instances == test::global_object_count.instances);
 #endif
             test::check_container(y, v);
