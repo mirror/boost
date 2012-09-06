@@ -51,7 +51,7 @@ time2_demo contained this comment:
 #include <boost/detail/workaround.hpp>
 #include <boost/integer_traits.hpp>
 
-#if !defined(BOOST_NO_STATIC_ASSERT) || !defined(BOOST_CHRONO_USES_MPL_ASSERT)
+#if !defined(BOOST_NO_CXX11_STATIC_ASSERT) || !defined(BOOST_CHRONO_USES_MPL_ASSERT)
 #define BOOST_CHRONO_A_DURATION_REPRESENTATION_CAN_NOT_BE_A_DURATION        "A duration representation can not be a duration"
 #define BOOST_CHRONO_SECOND_TEMPLATE_PARAMETER_OF_DURATION_MUST_BE_A_STD_RATIO "Second template parameter of duration must be a boost::ratio"
 #define BOOST_CHRONO_DURATION_PERIOD_MUST_BE_POSITIVE "duration period must be positive"
@@ -340,17 +340,17 @@ namespace detail
 namespace detail {
     template <class T, bool = is_arithmetic<T>::value>
     struct chrono_numeric_limits {
-        static T lowest() throw() {return (std::numeric_limits<T>::min)  ();}
+        static BOOST_CONSTEXPR T lowest() throw() {return (std::numeric_limits<T>::min)  ();}
     };
 
     template <class T>
     struct chrono_numeric_limits<T,true> {
-        static T lowest() throw() {return (std::numeric_limits<T>::min)  ();}
+        static BOOST_CONSTEXPR T lowest() throw() {return (std::numeric_limits<T>::min)  ();}
     };
 
     template <>
     struct chrono_numeric_limits<float,true> {
-        static float lowest() throw()
+        static BOOST_CONSTEXPR float lowest() throw()
         {
             return -(std::numeric_limits<float>::max) ();
         }
@@ -358,7 +358,7 @@ namespace detail {
 
     template <>
     struct chrono_numeric_limits<double,true> {
-        static double lowest() throw()
+        static BOOST_CONSTEXPR double lowest() throw()
         {
             return -(std::numeric_limits<double>::max) ();
         }
@@ -366,7 +366,7 @@ namespace detail {
 
     template <>
     struct chrono_numeric_limits<long double,true> {
-        static long double lowest() throw()
+        static BOOST_CONSTEXPR long double lowest() throw()
         {
             return -(std::numeric_limits<long double>::max)();
         }
@@ -484,7 +484,7 @@ namespace chrono {
         // arithmetic
 
         BOOST_CONSTEXPR
-        duration  operator+() const {return *this;}
+        duration  operator+() const {return duration(rep_);;}
         BOOST_CONSTEXPR
         duration  operator-() const {return duration(-rep_);}
         duration& operator++()      {++rep_; return *this;}
@@ -761,7 +761,7 @@ namespace detail
     // Duration >=
 
     template <class Rep1, class Period1, class Rep2, class Period2>
-    inline
+    inline BOOST_CONSTEXPR
     bool
     operator>=(const duration<Rep1, Period1>& lhs,
           const duration<Rep2, Period2>& rhs)

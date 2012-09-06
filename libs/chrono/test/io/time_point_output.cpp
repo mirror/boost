@@ -24,7 +24,7 @@ void test_good_symbol(const char* str, D d)
 {
   std::ostringstream out;
   boost::chrono::time_point<Clock, D> tp(d);
-#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+#if BOOST_CHRONO_VERSION==2
   out << boost::chrono::duration_fmt(boost::chrono::duration_style::symbol) << tp;
 #else
   out << boost::chrono::duration_short << tp;
@@ -33,9 +33,9 @@ void test_good_symbol(const char* str, D d)
   BOOST_TEST( (out.str() == std::string(str) + boost::chrono::clock_string<Clock, char>::since()));
 }
 
-#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+#if BOOST_CHRONO_VERSION==2
 template<typename Clock, typename D>
-void test_good(const char* str, D d, boost::chrono::duration_style::type style)
+void test_good(const char* str, D d, boost::chrono::duration_style style)
 {
   std::ostringstream out;
   boost::chrono::time_point<Clock,D> tp(d);
@@ -51,7 +51,7 @@ void check_all()
   using namespace boost::chrono;
   using namespace boost;
 
-#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+#if BOOST_CHRONO_VERSION==2
   test_good<Clock>("2 hours", hours(2), duration_style::prefix);
   test_good<Clock>("2 h", hours(2), duration_style::symbol);
 #endif
@@ -69,7 +69,7 @@ void check_all()
   test_good_prefix<Clock> ("2 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (2));
 
   test_good_symbol<Clock> ("2 h", hours(2));
-#if defined BOOST_CHRONO_DONT_PROVIDE_DEPRECATED_IO_V1
+#if BOOST_CHRONO_VERSION==2
   test_good_symbol<Clock>("2 min", minutes(2));
 #else
   test_good_symbol<Clock> ("2 m", minutes(2));
