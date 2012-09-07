@@ -7,8 +7,10 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 
-#define BOOST_TEST_MODULE voronoi_structures_test
+#include <functional>
+#include <vector>
 
+#define BOOST_TEST_MODULE voronoi_structures_test
 #include <boost/test/test_case_template.hpp>
 #include <boost/polygon/detail/voronoi_structures.hpp>
 using namespace boost::polygon::detail;
@@ -61,7 +63,7 @@ BOOST_AUTO_TEST_CASE(site_event_test2) {
   BOOST_CHECK(s.is_segment());
   BOOST_CHECK(!s.is_inverse());
   BOOST_CHECK(s.source_category() == SOURCE_CATEGORY_INITIAL_SEGMENT);
-  
+
   s.inverse();
   BOOST_CHECK(s.x1(true) == 1 && s.x0() == 1);
   BOOST_CHECK(s.y1(true) == 2 && s.y0() == 2);

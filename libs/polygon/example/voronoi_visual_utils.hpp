@@ -18,13 +18,12 @@
 #include <boost/polygon/segment_concept.hpp>
 #include <boost/polygon/rectangle_concept.hpp>
 
-namespace boost{
-namespace polygon{
-
+namespace boost {
+namespace polygon {
 // Utilities class, that contains set of routines handful for visualization.
 template <typename CT>
 class voronoi_visual_utils {
-public:
+ public:
   // Discretize parabolic Voronoi edge.
   // Parabolic Voronoi edges are always formed by one point and one segment
   // from the initial input set.
@@ -39,7 +38,7 @@ public:
   //   InCT: coordinate type of the input geometries (usually integer).
   //   Point: point type, should model point concept.
   //   Segment: segment type, should model segment concept.
-  // 
+  //
   // Important:
   //   discretization should contain both edge endpoints initially.
   template <class InCT1, class InCT2,
@@ -133,7 +132,7 @@ public:
     discretization->back() = last_point;
   }
 
-private:
+ private:
   // Compute y(x) = ((x - a) * (x - a) + b * b) / (2 * b).
   static CT parabola_y(CT x, CT a, CT b) {
     return ((x - a) * (x - a) + b * b) / (b + b);

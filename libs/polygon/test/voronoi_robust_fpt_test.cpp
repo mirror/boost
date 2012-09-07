@@ -9,6 +9,7 @@
 
 #include <cmath>
 #include <ctime>
+#include <vector>
 
 #define BOOST_TEST_MODULE voronoi_robust_fpt_test
 #include <boost/mpl/list.hpp>
@@ -17,7 +18,19 @@
 
 #include <boost/polygon/detail/voronoi_ctypes.hpp>
 #include <boost/polygon/detail/voronoi_robust_fpt.hpp>
-using namespace boost::polygon::detail;
+using boost::polygon::detail::int32;
+using boost::polygon::detail::uint32;
+using boost::polygon::detail::int64;
+using boost::polygon::detail::fpt64;
+using boost::polygon::detail::efpt64;
+using boost::polygon::detail::extended_int;
+using boost::polygon::detail::extended_exponent_fpt;
+using boost::polygon::detail::robust_fpt;
+using boost::polygon::detail::robust_dif;
+using boost::polygon::detail::robust_sqrt_expr;
+using boost::polygon::detail::type_converter_fpt;
+using boost::polygon::detail::type_converter_efpt;
+using boost::polygon::detail::ulp_comparison;
 
 typedef robust_fpt<double> rfpt_type;
 typedef type_converter_fpt to_fpt_type;
@@ -291,7 +304,7 @@ BOOST_AUTO_TEST_CASE(robust_sqrt_expr_test8) {
 
 template <typename _int, typename _fpt>
 class sqrt_expr_tester {
-public:
+ public:
   static const std::size_t MX_SQRTS = 4;
 
   bool run() {
@@ -325,7 +338,7 @@ public:
     return ret_val;
   }
 
-private:
+ private:
   robust_sqrt_expr<_int, _fpt, to_efpt_type> sqrt_expr_;
   ulp_comparison<fpt64> ulp_cmp;
   _int A[MX_SQRTS];

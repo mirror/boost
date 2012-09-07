@@ -8,6 +8,7 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 
 #include <ctime>
+#include <vector>
 
 #define BOOST_TEST_MODULE voronoi_ctypes_test
 #include <boost/mpl/list.hpp>
@@ -67,7 +68,7 @@ BOOST_AUTO_TEST_CASE(extended_exponent_fpt_test1) {
 BOOST_AUTO_TEST_CASE(extended_exponent_fpt_test2) {
   boost::mt19937_64 gen(static_cast<uint32>(time(NULL)));
   fpt64 a = 0.0;
-  efpt64 eea(a);  
+  efpt64 eea(a);
   for (int i = 0; i < 1000; ++i) {
     fpt64 b = to_fpt(static_cast<int64>(gen()));
     if (b == 0.0)

@@ -7,11 +7,13 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <fstream>
 #include <numeric>
 #include <vector>
+#include <utility>
 
 #include <boost/random/mersenne_twister.hpp>
 #include <boost/timer.hpp>
@@ -44,7 +46,8 @@ const int RANDOM_SEED = 27;
 const int NUM_TESTS = 6;
 const int NUM_POINTS[] = {10, 100, 1000, 10000, 100000, 1000000};
 const int NUM_RUNS[] = {100000, 10000, 1000, 100, 10, 1};
-std::ofstream bf("benchmark_points.txt", std::ios_base::out | std::ios_base::app);
+std::ofstream bf("benchmark_points.txt",
+                 std::ios_base::out | std::ios_base::app);
 boost::timer timer;
 
 void format_line(int num_points, int num_tests, double time_per_test) {
@@ -113,7 +116,6 @@ void run_shull_test() {
       // Absolutely the same code is used by the Boost.Polygon Voronoi library.
       std::sort(upts.begin(), upts.end());
       upts.erase(std::unique(upts.begin(), upts.end()), upts.end());
-      
       for (int k = 0; k < upts.size(); ++k) {
         pt.r = koef * upts[k].first;
         pt.c = koef * upts[k].second;

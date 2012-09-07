@@ -8,6 +8,9 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 
 #include <ctime>
+#include <limits>
+#include <list>
+#include <vector>
 
 #define BOOST_TEST_MODULE voronoi_builder_test
 #include <boost/mpl/list.hpp>
@@ -16,8 +19,9 @@
 
 #include <boost/polygon/polygon.hpp>
 #include <boost/polygon/voronoi.hpp>
-using namespace boost::polygon;
 #include "voronoi_test_helper.hpp"
+using boost::polygon::voronoi_builder;
+using boost::polygon::voronoi_diagram;
 
 typedef boost::mpl::list<int> test_types;
 typedef voronoi_diagram<double> vd_type;

@@ -9,6 +9,7 @@
 
 #include <cassert>
 #include <iostream>
+#include <vector>
 
 #include <QtOpenGL/QGLWidget>
 #include <QtGui/QtGui>
@@ -23,8 +24,9 @@ using namespace boost::polygon;
 
 class GLWidget : public QGLWidget {
   Q_OBJECT
-public:
-  GLWidget(QMainWindow* parent = NULL) :
+
+ public:
+  explicit GLWidget(QMainWindow* parent = NULL) :
       QGLWidget(QGLFormat(QGL::SampleBuffers), parent),
       primary_edges_only_(false),
       internal_edges_only_(false) {
@@ -76,7 +78,7 @@ public:
     internal_edges_only_ ^= true;
   }
 
-protected:
+ protected:
   void initializeGL() {
     glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -99,11 +101,11 @@ protected:
     glViewport((width - side) / 2, (height - side) / 2, side, side);
   }
 
-  void timerEvent(QTimerEvent*) {
+  void timerEvent(QTimerEvent* e) {
     update();
   }
 
-private:
+ private:
   typedef double coordinate_type;
   typedef point_data<double> point_type;
   typedef segment_data<double> segment_type;
@@ -198,7 +200,9 @@ private:
     glLoadIdentity();
     rect_type view_rect = brect_;
     deconvolve(view_rect, shift_);
-    glOrtho(xl(view_rect), xh(view_rect), yl(view_rect), yh(view_rect), -1.0, 1.0);
+    glOrtho(xl(view_rect), xh(view_rect),
+            yl(view_rect), yh(view_rect),
+            -1.0, 1.0);
     glMatrixMode(GL_MODELVIEW);
   }
 
@@ -284,7 +288,8 @@ private:
     }
   }
 
-  void clip_infinite_edge(const edge_type& edge, std::vector<point_type>* clipped_edge) {
+  void clip_infinite_edge(
+      const edge_type& edge, std::vector<point_type>* clipped_edge) {
     const cell_type& cell1 = *edge.cell();
     const cell_type& cell2 = *edge.twin()->cell();
     point_type origin, direction;
@@ -315,20 +320,23 @@ private:
       }
     }
     coordinate_type side = xh(brect_) - xl(brect_);
-    coordinate_type koef = side / (std::max)(fabs(direction.x()), fabs(direction.y()));
+    coordinate_type koef =
+        side / (std::max)(fabs(direction.x()), fabs(direction.y()));
     if (edge.vertex0() == NULL) {
       clipped_edge->push_back(point_type(
           origin.x() - direction.x() * koef,
           origin.y() - direction.y() * koef));
     } else {
-      clipped_edge->push_back(point_type(edge.vertex0()->x(), edge.vertex0()->y()));
+      clipped_edge->push_back(
+          point_type(edge.vertex0()->x(), edge.vertex0()->y()));
     }
     if (edge.vertex1() == NULL) {
       clipped_edge->push_back(point_type(
           origin.x() + direction.x() * koef,
           origin.y() + direction.y() * koef));
     } else {
-      clipped_edge->push_back(point_type(edge.vertex1()->x(), edge.vertex1()->y()));
+      clipped_edge->push_back(
+          point_type(edge.vertex1()->x(), edge.vertex1()->y()));
     }
   }
 
@@ -378,7 +386,8 @@ private:
 
 class MainWindow : public QWidget {
   Q_OBJECT
-public:
+
+ public:
   MainWindow() {
     glWidget_ = new GLWidget();
     file_dir_ = QDir(QDir::currentPath(), tr("*.txt"));
@@ -394,7 +403,7 @@ public:
     layout()->setSizeConstraint(QLayout::SetFixedSize);
   }
 
-private slots:
+ private slots:
   void primary_edges_only() {
     glWidget_->show_primary_edges_only();
   }
@@ -431,7 +440,7 @@ private slots:
     }
   }
 
-private:
+ private:
   QGridLayout* create_file_layout() {
     QGridLayout* file_layout = new QGridLayout;
 

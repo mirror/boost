@@ -7,9 +7,11 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 
+#include <algorithm>
 #include <iomanip>
 #include <iostream>
 #include <fstream>
+#include <list>
 #include <numeric>
 #include <vector>
 
@@ -21,7 +23,9 @@
 
 #include <boost/polygon/polygon.hpp>
 #include <boost/polygon/voronoi.hpp>
-using namespace boost::polygon;
+using boost::polygon::point_data;
+using boost::polygon::segment_data;
+using boost::polygon::voronoi_diagram;
 
 typedef boost::mpl::list<int> test_types;
 const char *BENCHMARK_FILE = "voronoi_benchmark.txt";
@@ -98,10 +102,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(benchmark_test_points, T, test_types) {
     }
     std::sort(periods.begin(), periods.end());
     // Using olympic system to evaluate average time.
-    double elapsed_time = std::accumulate(periods.begin() + 2, periods.end() - 2, 0.0);
+    double elapsed_time =
+        std::accumulate(periods.begin() + 2, periods.end() - 2, 0.0);
     elapsed_time /= (periods.size() - 4);
 
-    std::ofstream bench_file(BENCHMARK_FILE, std::ios_base::out | std::ios_base::app);
+    std::ofstream bench_file(
+        BENCHMARK_FILE, std::ios_base::out | std::ios_base::app);
     bench_file << std::setiosflags(std::ios::right | std::ios::fixed) << std::setprecision(6);
     bench_file << "Static test of " << points.size() << " points: " << elapsed_time << std::endl;
     bench_file.close();
@@ -138,10 +144,12 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(benchmark_test_segments, T, test_types) {
     }
     std::sort(periods.begin(), periods.end());
     // Using olympic system to evaluate average time.
-    double elapsed_time = std::accumulate(periods.begin() + 2, periods.end() - 2, 0.0);
+    double elapsed_time =
+        std::accumulate(periods.begin() + 2, periods.end() - 2, 0.0);
     elapsed_time /= (periods.size() - 4);
 
-    std::ofstream bench_file(BENCHMARK_FILE, std::ios_base::out | std::ios_base::app);
+    std::ofstream bench_file(
+        BENCHMARK_FILE, std::ios_base::out | std::ios_base::app);
     bench_file << std::setiosflags(std::ios::right | std::ios::fixed) << std::setprecision(6);
     bench_file << "Static test of " << segments.size() << " segments: " << elapsed_time << std::endl;
     bench_file.close();

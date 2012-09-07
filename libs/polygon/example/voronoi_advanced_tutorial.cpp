@@ -22,14 +22,15 @@ typedef long double fpt80;
 #include <boost/timer/timer.hpp>
 
 #include <boost/polygon/voronoi.hpp>
-using namespace boost::polygon;
+using boost::polygon::voronoi_builder;
+using boost::polygon::voronoi_diagram;
 
 struct my_ulp_comparison {
   enum Result {
     LESS = -1,
     EQUAL = 0,
     MORE = 1
-  };  
+  };
 
   Result operator()(fpt80 a, fpt80 b, unsigned int maxUlps) const {
     if (a == b)
@@ -44,19 +45,23 @@ struct my_ulp_comparison {
     rhs.d = b;
     if (lhs.ieee.negative ^ rhs.ieee.negative)
       return lhs.ieee.negative ? LESS : MORE;
-    boost::uint64_t le = lhs.ieee.exponent; le = (le << 32) + lhs.ieee.mantissa0;
-    boost::uint64_t re = rhs.ieee.exponent; re = (re << 32) + rhs.ieee.mantissa0;
+    boost::uint64_t le = lhs.ieee.exponent; le =
+        (le << 32) + lhs.ieee.mantissa0;
+    boost::uint64_t re = rhs.ieee.exponent; re =
+        (re << 32) + rhs.ieee.mantissa0;
     if (lhs.ieee.negative) {
       if (le - 1 > re)
         return LESS;
-      le = (le == re) ? 0 : 1; le = (le << 32) + lhs.ieee.mantissa1;
+      le = (le == re) ? 0 : 1;
+      le = (le << 32) + lhs.ieee.mantissa1;
       re = rhs.ieee.mantissa1;
       return (re + maxUlps < le) ? LESS : EQUAL;
     } else {
       if (le + 1 < re)
         return LESS;
       le = lhs.ieee.mantissa0;
-      re = (le == re) ? 0 : 1; re = (re << 32) + rhs.ieee.mantissa1;
+      re = (le == re) ? 0 : 1;
+      re = (re << 32) + rhs.ieee.mantissa1;
       return (le + maxUlps < re) ? LESS : EQUAL;
     }
   }
@@ -121,8 +126,7 @@ struct my_voronoi_ctype_traits {
 const unsigned int GENERATED_POINTS = 100;
 const boost::int64_t MAX = 0x1000000000000LL;
 
-#include <iostream>
-int main () {
+int main() {
   boost::mt19937_64 gen(std::time(0));
   boost::random::uniform_int_distribution<boost::int64_t> distr(-MAX, MAX-1);
   voronoi_builder<boost::int64_t, my_voronoi_ctype_traits> vb;

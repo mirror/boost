@@ -7,6 +7,7 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 
+#include <limits>
 #include <map>
 
 #define BOOST_TEST_MODULE voronoi_predicates_test
@@ -338,7 +339,7 @@ BOOST_AUTO_TEST_CASE(node_comparison_test5) {
 
 BOOST_AUTO_TEST_CASE(node_comparison_test6) {
   key_type node(site_type(1, 1).sorted_index(1), site_type(0, 0).sorted_index(0));
-  key_type nodes [] = {
+  key_type nodes[] = {
     key_type(site_type(2, -3).sorted_index(2)),
     key_type(site_type(2, -2).sorted_index(2)),
     key_type(site_type(2, 0).sorted_index(2)),

@@ -7,6 +7,9 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 
+#include <algorithm>
+#include <list>
+
 #define BOOST_TEST_MODULE POLYGON_SEGMENT_TEST
 #include <boost/mpl/list.hpp>
 #include <boost/test/test_case_template.hpp>
@@ -48,7 +51,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_data_test, T, test_types) {
 }
 
 BOOST_AUTO_TEST_CASE_TEMPLATE(segment_traits_test, T, test_types) {
-  typedef point_data<T> point_type ;
+  typedef point_data<T> point_type;
   typedef segment_data<T> segment_type;
 
   point_type point1(1, 2);
@@ -74,7 +77,9 @@ struct Segment {
 namespace boost {
 namespace polygon {
   template <typename T>
-  struct geometry_concept< Segment<T> > { typedef segment_concept type; };
+  struct geometry_concept< Segment<T> > {
+    typedef segment_concept type;
+  };
 
   template <typename T>
   struct segment_traits< Segment<T> > {

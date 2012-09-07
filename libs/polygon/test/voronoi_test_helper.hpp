@@ -1,4 +1,4 @@
-// Boost.Polygon library voronoi_test_helper.hpp file 
+// Boost.Polygon library voronoi_test_helper.hpp file
 
 //          Copyright Andrii Sydorchuk 2010-2011.
 // Distributed under the Boost Software License, Version 1.0.
@@ -10,11 +10,13 @@
 #ifndef VORONOI_TEST_HELPER
 #define VORONOI_TEST_HELPER
 
+#include <algorithm>
 #include <iostream>
 #include <iterator>
 #include <fstream>
 #include <map>
 #include <vector>
+#include <utility>
 
 #include <boost/polygon/polygon.hpp>
 using namespace boost::polygon;
@@ -28,7 +30,8 @@ enum kOrientation {
 };
 
 template <typename VERTEX>
-kOrientation get_orientation(const VERTEX& v1, const VERTEX& v2, const VERTEX& v3) {
+kOrientation get_orientation(
+    const VERTEX& v1, const VERTEX& v2, const VERTEX& v3) {
   typename VERTEX::coordinate_type lhs = (v2.x() - v1.x()) * (v3.y() - v2.y());
   typename VERTEX::coordinate_type rhs = (v2.y() - v1.y()) * (v3.x() - v2.x());
   if (lhs == rhs) {
@@ -57,12 +60,14 @@ bool verify_cell_convexity(const OUTPUT& output) {
         if (edge->vertex0() != NULL &&
             edge->vertex1() != NULL &&
             edge->next()->vertex1() != NULL) {
-          if (get_orientation(*edge->vertex0(), *edge->vertex1(), *edge->next()->vertex1()) != LEFT) {
+          if (get_orientation(*edge->vertex0(),
+                              *edge->vertex1(),
+                              *edge->next()->vertex1()) != LEFT) {
             return false;
           }
         }
         edge = edge->next();
-      } while(edge != cell_it->incident_edge());
+      } while (edge != cell_it->incident_edge());
   }
   return true;
 }
@@ -82,7 +87,9 @@ bool verify_incident_edges_ccw_order(const OUTPUT& output) {
         return false;
       }
       if (edge->vertex1() != NULL && next_edge->vertex1() != NULL &&
-          get_orientation(*edge->vertex1(), *edge->vertex0(), *next_edge->vertex1()) == LEFT) {
+          get_orientation(*edge->vertex1(),
+                          *edge->vertex0(),
+                          *next_edge->vertex1()) == LEFT) {
         return false;
       }
       edge = edge->rot_next();
@@ -94,7 +101,7 @@ bool verify_incident_edges_ccw_order(const OUTPUT& output) {
 template <typename VERTEX>
 struct cmp {
   bool operator()(const VERTEX& v1, const VERTEX& v2) const {
-    if (v1.x() != v2.x()) 
+    if (v1.x() != v2.x())
       return v1.x() < v2.x();
     return v1.y() < v2.y();
   }
@@ -121,7 +128,8 @@ bool verfiy_no_line_edge_intersections(const Output &output) {
 }
 
 template <typename Point2D>
-bool intersection_check(const std::map< Point2D, std::vector<Point2D>, cmp<Point2D> > &edge_map) {
+bool intersection_check(
+    const std::map< Point2D, std::vector<Point2D>, cmp<Point2D> > &edge_map) {
   // Iterate over map of edges and check if there are any intersections.
   // All the edges are stored by the low x value. That's why we iterate
   // left to right checking for intersections between all pairs of edges
@@ -129,7 +137,7 @@ bool intersection_check(const std::map< Point2D, std::vector<Point2D>, cmp<Point
   // Complexity. Approximately N*sqrt(N). Worst case N^2.
   typedef Point2D point_type;
   typedef typename point_type::coordinate_type coordinate_type;
-  typedef typename std::map< point_type, std::vector<point_type>, cmp<Point2D> >::const_iterator
+  typedef typename std::map<point_type, std::vector<point_type>, cmp<Point2D> >::const_iterator
       edge_map_iterator;
   typedef typename std::vector<point_type>::size_type size_type;
   edge_map_iterator edge_map_it1, edge_map_it2, edge_map_it_bound;
@@ -152,8 +160,8 @@ bool intersection_check(const std::map< Point2D, std::vector<Point2D>, cmp<Point
           const point_type &point4 = edge_map_it2->second[j];
           coordinate_type min_y2 = (std::min)(point3.y(), point4.y());
           coordinate_type max_y2 = (std::max)(point3.y(), point4.y());
-          
-          // In most cases it is enought to make 
+
+          // In most cases it is enought to make
           // simple intersection check in the y dimension.
           if (!(max_y1 > min_y2 && max_y2 > min_y1))
             continue;
@@ -192,7 +200,8 @@ bool verify_output(const Output &output, kVerification mask) {
 }
 
 template <typename PointIterator>
-void save_points(PointIterator first, PointIterator last, const char* file_name) {
+void save_points(
+    PointIterator first, PointIterator last, const char* file_name) {
   std::ofstream ofs(file_name);
   ofs << std::distance(first, last) << std::endl;
   for (PointIterator it = first; it != last; ++it) {
@@ -202,7 +211,8 @@ void save_points(PointIterator first, PointIterator last, const char* file_name)
 }
 
 template <typename SegmentIterator>
-void save_segments(SegmentIterator first, SegmentIterator last, const char* file_name) {
+void save_segments(
+     SegmentIterator first, SegmentIterator last, const char* file_name) {
   std::ofstream ofs(file_name);
   ofs << std::distance(first, last) << std::endl;
   for (SegmentIterator it = first; it != last; ++it) {
@@ -222,14 +232,16 @@ void clean_segment_set(std::vector< segment_data<T> >& data) {
   std::vector<std::pair<half_edge, segment_id> > half_edges_out;
   segment_id id = 0;
   half_edges.reserve(data.size());
-  for (typename std::vector< segment_data<T> >::iterator it = data.begin(); it != data.end(); ++it) {
+  for (typename std::vector< segment_data<T> >::iterator it = data.begin();
+       it != data.end(); ++it) {
     Point l = it->low();
     Point h = it->high();
     half_edges.push_back(std::make_pair(half_edge(l, h), id++));
   }
   half_edges_out.reserve(half_edges.size());
-  //apparently no need to pre-sort data when calling validate_scan
-  line_intersection<Unit>::validate_scan(half_edges_out, half_edges.begin(), half_edges.end());
+  // Apparently no need to pre-sort data when calling validate_scan.
+  line_intersection<Unit>::validate_scan(
+      half_edges_out, half_edges.begin(), half_edges.end());
   std::vector< segment_data<T> > result;
   result.reserve(half_edges_out.size());
   for (std::size_t i = 0; i < half_edges_out.size(); ++i) {
@@ -243,7 +255,6 @@ void clean_segment_set(std::vector< segment_data<T> >& data) {
   }
   std::swap(result, data);
 }
-
-} // voronoi_test_helper
+}  // voronoi_test_helper
 
 #endif
