@@ -24,8 +24,7 @@ namespace insert_tests {
 test::seed_t initialize_seed(243432);
 
 template <class X>
-void unique_insert_tests1(X*,
-    test::random_generator generator = test::default_generator)
+void unique_insert_tests1(X*, test::random_generator generator)
 {
     test::check_instances check_;
 
@@ -63,8 +62,7 @@ void unique_insert_tests1(X*,
 }
 
 template <class X>
-void equivalent_insert_tests1(X*,
-    test::random_generator generator = test::default_generator)
+void equivalent_insert_tests1(X*, test::random_generator generator)
 {
     std::cerr<<"insert(value) tests for containers with equivalent keys.\n";
 
@@ -97,8 +95,7 @@ void equivalent_insert_tests1(X*,
 }
 
 template <class X>
-void insert_tests2(X*,
-    test::random_generator generator = test::default_generator)
+void insert_tests2(X*, test::random_generator generator)
 {
     typedef BOOST_DEDUCED_TYPENAME test::ordered<X> tracker_type;
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
@@ -266,8 +263,7 @@ void insert_tests2(X*,
 #if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
 template <class X>
-void unique_emplace_tests1(X*,
-    test::random_generator generator = test::default_generator)
+void unique_emplace_tests1(X*, test::random_generator generator)
 {
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
     typedef test::ordered<X> ordered;
@@ -303,8 +299,7 @@ void unique_emplace_tests1(X*,
 }
 
 template <class X>
-void equivalent_emplace_tests1(X*,
-    test::random_generator generator = test::default_generator)
+void equivalent_emplace_tests1(X*, test::random_generator generator)
 {
     std::cerr<<"emplace(value) tests for containers with equivalent keys.\n";
 
@@ -336,7 +331,7 @@ void equivalent_emplace_tests1(X*,
 #endif
 
 template <class X>
-void map_tests(X*, test::random_generator generator = test::default_generator)
+void map_tests(X*, test::random_generator generator)
 {
     std::cerr<<"map tests.\n";
 
@@ -366,8 +361,7 @@ void map_tests(X*, test::random_generator generator = test::default_generator)
 // value type.
 
 template <class X>
-void map_insert_range_test1(X*,
-    test::random_generator generator = test::default_generator)
+void map_insert_range_test1(X*, test::random_generator generator)
 {
     std::cerr<<"map_insert_range_test1\n";
 
@@ -388,8 +382,7 @@ void map_insert_range_test1(X*,
 }
 
 template <class X>
-void map_insert_range_test2(X*,
-    test::random_generator generator = test::default_generator)
+void map_insert_range_test2(X*, test::random_generator generator)
 {
     std::cerr<<"map_insert_range_test2\n";
 
