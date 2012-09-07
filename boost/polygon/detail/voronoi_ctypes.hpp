@@ -10,10 +10,12 @@
 #ifndef BOOST_POLYGON_DETAIL_VORONOI_CTYPES
 #define BOOST_POLYGON_DETAIL_VORONOI_CTYPES
 
+#include <boost/cstdint.hpp>
+
 #include <cmath>
 #include <cstring>
-
-#include <boost/cstdint.hpp>
+#include <utility>
+#include <vector>
 
 namespace boost {
 namespace polygon {
@@ -70,7 +72,7 @@ struct extened_exponent_fpt_traits;
 
 template <>
 class extened_exponent_fpt_traits<fpt64> {
-public:
+ public:
   typedef int exp_type;
   static const int kMaxSignificantExpDif;
 };
@@ -82,7 +84,7 @@ const int extened_exponent_fpt_traits<fpt64>::kMaxSignificantExpDif = 54;
 // numbers or NaNs.
 template <typename _fpt, typename _traits = extened_exponent_fpt_traits<_fpt> >
 class extended_exponent_fpt {
-public:
+ public:
   typedef _fpt fpt_type;
   typedef typename _traits::exp_type exp_type;
 
@@ -193,7 +195,7 @@ public:
     return std::ldexp(val_, exp_);
   }
 
-private:
+ private:
   fpt_type val_;
   exp_type exp_;
 };
@@ -223,7 +225,7 @@ bool is_zero(const extended_exponent_fpt<_fpt>& that) {
 // Supports next set of arithmetic operations: +, -, *.
 template<std::size_t N>
 class extended_int {
-public:
+ public:
   static const uint64 kUInt64LowMask;
   static const uint64 kUInt64HighMask;
 
@@ -482,7 +484,7 @@ public:
     return std::ldexp(p.first, p.second);
   }
 
-private:
+ private:
   void add(const uint32* c1, std::size_t sz1,
            const uint32* c2, std::size_t sz2) {
     if (sz1 < sz2) {

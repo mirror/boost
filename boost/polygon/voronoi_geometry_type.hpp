@@ -37,7 +37,8 @@ bool belongs(
     const SourceCategory& source_category,
     const GeometryCategory& geometry_category) {
   return (static_cast<std::size_t>(source_category) >>
-      SOURCE_CATEGORY_GEOMETRY_SHIFT) == static_cast<std::size_t>(geometry_category);
+              SOURCE_CATEGORY_GEOMETRY_SHIFT) ==
+         static_cast<std::size_t>(geometry_category);
 }
 }  // polygon
 }  // boost

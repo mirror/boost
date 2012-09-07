@@ -72,7 +72,8 @@ typename enable_if<
   void
 >::type
 insert(const Segment& segment, VB* vb) {
-  vb->insert_segment(x(low(segment)), y(low(segment)), x(high(segment)), y(high(segment)));
+  vb->insert_segment(x(low(segment)), y(low(segment)),
+                     x(high(segment)), y(high(segment)));
 }
 
 template <typename SegmentIterator, typename VB>

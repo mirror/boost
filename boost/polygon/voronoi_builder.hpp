@@ -12,6 +12,8 @@
 
 #include <algorithm>
 #include <map>
+#include <queue>
+#include <utility>
 #include <vector>
 
 #include "detail/voronoi_ctypes.hpp"
@@ -43,7 +45,7 @@ template <typename T,
           typename CTT = detail::voronoi_ctype_traits<T>,
           typename VP = detail::voronoi_predicates<CTT> >
 class voronoi_builder {
-public:
+ public:
   typedef typename CTT::int_type int_type;
   typedef typename CTT::fpt_type fpt_type;
 
@@ -90,7 +92,7 @@ public:
 
   // Run sweepline algorithm and fill output data structure.
   template <typename OUTPUT>
-  void construct(OUTPUT *output) {
+  void construct(OUTPUT* output) {
     // Init structures.
     output->_reserve(site_events_.size());
     init_sites_queue();
@@ -128,7 +130,7 @@ public:
     site_events_.clear();
   }
 
-private:
+ private:
   typedef detail::point_2d<int_type> point_type;
   typedef detail::site_event<int_type> site_event_type;
   typedef typename std::vector<site_event_type>::const_iterator
@@ -152,7 +154,7 @@ private:
   typedef typename beach_line_type::iterator beach_line_iterator;
   typedef std::pair<circle_event_type, beach_line_iterator> event_type;
   typedef struct {
-    bool operator()(const event_type &lhs, const event_type &rhs) const {
+    bool operator()(const event_type& lhs, const event_type& rhs) const {
       return predicate(rhs.first, lhs.first);
     }
     event_comparison_predicate predicate;
@@ -180,7 +182,7 @@ private:
   }
 
   template <typename OUTPUT>
-  void init_beach_line(OUTPUT *output) {
+  void init_beach_line(OUTPUT* output) {
     if (site_events_.empty())
       return;
     if (site_events_.size() == 1) {
@@ -190,10 +192,10 @@ private:
     } else {
       int skip = 0;
 
-      while(site_event_iterator_ != site_events_.end() &&
-            VP::is_vertical(site_event_iterator_->point0(),
-                            site_events_.begin()->point0()) &&
-            VP::is_vertical(*site_event_iterator_)) {
+      while (site_event_iterator_ != site_events_.end() &&
+             VP::is_vertical(site_event_iterator_->point0(),
+                             site_events_.begin()->point0()) &&
+             VP::is_vertical(*site_event_iterator_)) {
         ++site_event_iterator_;
         ++skip;
       }
@@ -211,7 +213,7 @@ private:
   // Init beach line with the two first sites.
   // The first site is always a point.
   template <typename OUTPUT>
-  void init_beach_line_default(OUTPUT *output) {
+  void init_beach_line_default(OUTPUT* output) {
     // Get the first and the second site event.
     site_event_iterator_type it_first = site_events_.begin();
     site_event_iterator_type it_second = site_events_.begin();
@@ -224,7 +226,7 @@ private:
 
   // Init beach line with collinear sites.
   template <typename OUTPUT>
-  void init_beach_line_collinear_sites(OUTPUT *output) {
+  void init_beach_line_collinear_sites(OUTPUT* output) {
     site_event_iterator_type it_first = site_events_.begin();
     site_event_iterator_type it_second = site_events_.begin();
     ++it_second;
@@ -233,8 +235,7 @@ private:
       key_type new_node(*it_first, *it_second);
 
       // Update the output.
-      edge_type *edge =
-          output->_insert_new_edge(*it_first, *it_second).first;
+      edge_type* edge = output->_insert_new_edge(*it_first, *it_second).first;
 
       // Insert a new bisector into the beach line.
       beach_line_.insert(beach_line_.end(),
@@ -246,15 +247,15 @@ private:
     }
   }
 
-  void deactivate_circle_event(value_type &value) {
-    if (value.circle_event()) {
-      value.circle_event()->deactivate();
-      value.circle_event(NULL);
+  void deactivate_circle_event(value_type* value) {
+    if (value->circle_event()) {
+      value->circle_event()->deactivate();
+      value->circle_event(NULL);
     }
   }
 
   template <typename OUTPUT>
-  void process_site_event(OUTPUT *output) {
+  void process_site_event(OUTPUT* output) {
     // Get next site event to process.
     site_event_type site_event = *site_event_iterator_;
 
@@ -294,7 +295,7 @@ private:
         --left_it;
 
         // Get the second site of the last node
-        const site_event_type &site_arc = left_it->first.right_site();
+        const site_event_type& site_arc = left_it->first.right_site();
 
         // Insert new nodes into the beach line. Update the output.
         right_it = insert_new_arc(
@@ -308,7 +309,7 @@ private:
                               site_event, right_it);
       } else if (right_it == beach_line_.begin()) {
         // The above arc corresponds to the first site of the first node.
-        const site_event_type &site_arc = right_it->first.left_site();
+        const site_event_type& site_arc = right_it->first.left_site();
 
         // Insert new nodes into the beach line. Update the output.
         left_it = insert_new_arc(
@@ -328,14 +329,14 @@ private:
       } else {
         // The above arc corresponds neither to the first,
         // nor to the last site in the beach line.
-        const site_event_type &site_arc2 = right_it->first.left_site();
-        const site_event_type &site3 = right_it->first.right_site();
+        const site_event_type& site_arc2 = right_it->first.left_site();
+        const site_event_type& site3 = right_it->first.right_site();
 
         // Remove the candidate circle from the event queue.
-        deactivate_circle_event(right_it->second);
+        deactivate_circle_event(&right_it->second);
         --left_it;
-        const site_event_type &site_arc1 = left_it->first.right_site();
-        const site_event_type &site1 = left_it->first.left_site();
+        const site_event_type& site_arc1 = left_it->first.right_site();
+        const site_event_type& site1 = left_it->first.left_site();
 
         // Insert new nodes into the beach line. Update the output.
         beach_line_iterator new_node_it =
@@ -366,10 +367,10 @@ private:
   // why we use const_cast there and take all the responsibility that
   // map data structure keeps correct ordering.
   template <typename OUTPUT>
-  void process_circle_event(OUTPUT *output) {
+  void process_circle_event(OUTPUT* output) {
     // Get the topmost circle event.
-    const event_type &e = circle_events_.top();
-    const circle_event_type &circle_event = e.first;
+    const event_type& e = circle_events_.top();
+    const circle_event_type& circle_event = e.first;
     beach_line_iterator it_first = e.second;
     beach_line_iterator it_last = it_first;
 
@@ -377,11 +378,11 @@ private:
     site_event_type site3 = it_first->first.right_site();
 
     // Get the half-edge corresponding to the second bisector - (B, C).
-    edge_type *bisector2 = it_first->second.edge();
+    edge_type* bisector2 = it_first->second.edge();
 
     // Get the half-edge corresponding to the first bisector - (A, B).
     --it_first;
-    edge_type *bisector1 = it_first->second.edge();
+    edge_type* bisector1 = it_first->second.edge();
 
     // Get the A site.
     site_event_type site1 = it_first->first.left_site();
@@ -392,7 +393,7 @@ private:
     }
 
     // Change the (A, B) bisector node to the (A, C) bisector node.
-    const_cast<key_type &>(it_first->first).right_site(site3);
+    const_cast<key_type&>(it_first->first).right_site(site3);
 
     // Insert the new bisector into the beach line.
     it_first->second.edge(output->_insert_new_edge(
@@ -408,9 +409,9 @@ private:
     // Check new triplets formed by the neighboring arcs
     // to the left for potential circle events.
     if (it_first != beach_line_.begin()) {
-      deactivate_circle_event(it_first->second);
+      deactivate_circle_event(&it_first->second);
       --it_first;
-      const site_event_type &site_l1 = it_first->first.left_site();
+      const site_event_type& site_l1 = it_first->first.left_site();
       activate_circle_event(site_l1, site1, site3, it_last);
     }
 
@@ -418,8 +419,8 @@ private:
     // to the right for potential circle events.
     ++it_last;
     if (it_last != beach_line_.end()) {
-      deactivate_circle_event(it_last->second);
-      const site_event_type &site_r1 = it_last->first.right_site();
+      deactivate_circle_event(&it_last->second);
+      const site_event_type& site_r1 = it_last->first.right_site();
       activate_circle_event(site1, site3, site_r1, it_last);
     }
   }
@@ -427,9 +428,9 @@ private:
   // Insert new nodes into the beach line. Update the output.
   template <typename OUTPUT>
   beach_line_iterator insert_new_arc(
-      const site_event_type &site_arc1, const site_event_type &site_arc2,
-      const site_event_type &site_event, beach_line_iterator position,
-      OUTPUT *output) {
+      const site_event_type& site_arc1, const site_event_type &site_arc2,
+      const site_event_type& site_event, beach_line_iterator position,
+      OUTPUT* output) {
     // Create two new bisectors with opposite directions.
     key_type new_left_node(site_arc1, site_event);
     key_type new_right_node(site_event, site_arc2);
@@ -468,9 +469,9 @@ private:
 
   // Add a new circle event to the event queue.
   // bisector_node corresponds to the (site2, site3) bisector.
-  void activate_circle_event(const site_event_type &site1,
-                             const site_event_type &site2,
-                             const site_event_type &site3,
+  void activate_circle_event(const site_event_type& site1,
+                             const site_event_type& site2,
+                             const site_event_type& site3,
                              beach_line_iterator bisector_node) {
     circle_event_type c_event;
     // Check if the three input sites create a circle event.
@@ -478,18 +479,18 @@ private:
       // Add the new circle event to the circle events queue.
       // Update bisector's circle event iterator to point to the
       // new circle event in the circle event queue.
-      event_type &e = circle_events_.push(
+      event_type& e = circle_events_.push(
           std::pair<circle_event_type, beach_line_iterator>(
               c_event, bisector_node));
       bisector_node->second.circle_event(&e.first);
     }
   }
 
-private:
+ private:
   point_comparison_predicate point_comparison_;
   struct end_point_comparison {
-    bool operator() (const end_point_type &end1,
-                     const end_point_type &end2) const {
+    bool operator() (const end_point_type& end1,
+                     const end_point_type& end2) const {
       return point_comparison(end2.first, end1.first);
     }
     point_comparison_predicate point_comparison;
@@ -504,7 +505,7 @@ private:
   circle_formation_predicate_type circle_formation_predicate_;
   std::size_t index_;
 
-  //Disallow copy constructor and operator=
+  // Disallow copy constructor and operator=
   voronoi_builder(const voronoi_builder&);
   void operator=(const voronoi_builder&);
 };

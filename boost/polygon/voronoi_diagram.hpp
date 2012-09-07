@@ -11,6 +11,7 @@
 #define BOOST_POLYGON_VORONOI_DIAGRAM
 
 #include <vector>
+#include <utility>
 
 #include "detail/voronoi_ctypes.hpp"
 #include "detail/voronoi_structures.hpp"
@@ -32,7 +33,7 @@ class voronoi_edge;
 // Cell may contain point or segment site inside.
 template <typename T>
 class voronoi_cell {
-public:
+ public:
   typedef T coordinate_type;
   typedef std::size_t color_type;
   typedef voronoi_edge<coordinate_type> voronoi_edge_type;
@@ -79,7 +80,7 @@ public:
     color_ |= color << BITS_SHIFT;
   }
 
-private:
+ private:
   // 5 color bits are reserved.
   enum Bits {
     BITS_SHIFT = 0x5,
@@ -98,7 +99,7 @@ private:
 //   3) mutable color member
 template <typename T>
 class voronoi_vertex {
-public:
+ public:
   typedef T coordinate_type;
   typedef std::size_t color_type;
   typedef voronoi_edge<coordinate_type> voronoi_edge_type;
@@ -126,7 +127,7 @@ public:
     color_ |= color << BITS_SHIFT;
   }
 
-private:
+ private:
   // 5 color bits are reserved.
   enum Bits {
     BITS_SHIFT = 0x5,
@@ -150,7 +151,7 @@ private:
 //   6) mutable color member
 template <typename T>
 class voronoi_edge {
-public:
+ public:
   typedef T coordinate_type;
   typedef voronoi_cell<coordinate_type> voronoi_cell_type;
   typedef voronoi_vertex<coordinate_type> voronoi_vertex_type;
@@ -250,7 +251,7 @@ public:
     color_ |= color << BITS_SHIFT;
   }
 
-private:
+ private:
   // 5 color bits are reserved.
   enum Bits {
     BIT_IS_LINEAR = 0x1,  // linear is opposite to curved
@@ -275,7 +276,7 @@ struct voronoi_diagram_traits {
   typedef voronoi_vertex<coordinate_type> vertex_type;
   typedef voronoi_edge<coordinate_type> edge_type;
   typedef class {
-  public:
+   public:
     enum { ULPS = 128 };
     bool operator()(const vertex_type& v1, const vertex_type& v2) const {
       return (ulp_cmp(v1.x(), v2.x(), ULPS) ==
@@ -283,7 +284,7 @@ struct voronoi_diagram_traits {
              (ulp_cmp(v1.y(), v2.y(), ULPS) ==
               detail::ulp_comparison<T>::EQUAL);
     }
-  private:
+   private:
     typename detail::ulp_comparison<T> ulp_cmp;
   } vertex_equality_predicate_type;
 };
@@ -292,7 +293,7 @@ struct voronoi_diagram_traits {
 // CCW ordering is used on the faces perimeter and around the vertices.
 template <typename T, typename TRAITS = voronoi_diagram_traits<T> >
 class voronoi_diagram {
-public:
+ public:
   typedef typename TRAITS::coordinate_type coordinate_type;
   typedef typename TRAITS::cell_type cell_type;
   typedef typename TRAITS::vertex_type vertex_type;
@@ -411,8 +412,10 @@ public:
   // new Voronoi vertex point. Returns a pair of pointers to a new half-edges.
   template <typename CT1, typename CT2>
   std::pair<void*, void*> _insert_new_edge(
-      const detail::site_event<CT1>& site1, const detail::site_event<CT1>& site3,
-      const detail::circle_event<CT2>& circle, void* data12, void* data23) {
+      const detail::site_event<CT1>& site1,
+      const detail::site_event<CT1>& site3,
+      const detail::circle_event<CT2>& circle,
+      void* data12, void* data23) {
     edge_type* edge12 = static_cast<edge_type*>(data12);
     edge_type* edge23 = static_cast<edge_type*>(data23);
 
@@ -566,7 +569,7 @@ public:
     }
   }
 
-private:
+ private:
   typedef typename TRAITS::vertex_equality_predicate_type
     vertex_equality_predicate_type;
 

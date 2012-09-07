@@ -22,7 +22,7 @@ namespace detail {
 // Cartesian 2D point data structure.
 template <typename T>
 class point_2d {
-public:
+ public:
   typedef T coordinate_type;
 
   point_2d() {}
@@ -57,7 +57,7 @@ public:
     return *this;
   }
 
-private:
+ private:
   coordinate_type x_;
   coordinate_type y_;
 };
@@ -85,7 +85,7 @@ private:
 // Note: for all sites is_inverse_ flag is equal to false by default.
 template <typename T>
 class site_event {
-public:
+ public:
   typedef T coordinate_type;
   typedef point_2d<T> point_type;
 
@@ -101,7 +101,7 @@ public:
       sorted_index_(0),
       flags_(0) {}
 
-  site_event(const point_type& point) :
+  explicit site_event(const point_type& point) :
       point0_(point),
       point1_(point),
       sorted_index_(0),
@@ -218,7 +218,7 @@ public:
     return (point0_.x() != point1_.x()) || (point0_.y() != point1_.y());
   }
 
-private:
+ private:
   enum Bits {
     IS_INVERSE = 0x20  // 32
   };
@@ -244,7 +244,7 @@ private:
 // NOTE: lower_y coordinate is always equal to center_y.
 template <typename T>
 class circle_event {
-public:
+ public:
   typedef T coordinate_type;
 
   circle_event() : is_active_(true) {}
@@ -297,7 +297,7 @@ public:
     return *this;
   }
 
-private:
+ private:
   coordinate_type center_x_;
   coordinate_type center_y_;
   coordinate_type lower_x_;
@@ -313,7 +313,7 @@ private:
 // events ordering.
 template <typename T, typename Predicate>
 class ordered_queue {
-public:
+ public:
   ordered_queue() {}
 
   bool empty() const {
@@ -342,7 +342,7 @@ public:
     c_list_.clear();
   }
 
-private:
+ private:
   typedef typename std::list<T>::iterator list_iterator_type;
 
   struct comparison {
@@ -358,7 +358,7 @@ private:
                        comparison > c_;
   std::list<T> c_list_;
 
-  //Disallow copy constructor and operator=
+  // Disallow copy constructor and operator=
   ordered_queue(const ordered_queue&);
   void operator=(const ordered_queue&);
 };
@@ -374,7 +374,7 @@ private:
 // processed by the algorithm later (has greater index).
 template <typename Site>
 class beach_line_node_key {
-public:
+ public:
   typedef Site site_type;
 
   // Constructs degenerate bisector, used to search an arc that is above
@@ -416,7 +416,7 @@ public:
     return *this;
   }
 
-private:
+ private:
   site_type left_site_;
   site_type right_site_;
 };
@@ -427,7 +427,7 @@ private:
 // queue if the edge corresponds to the right bisector of the circle event.
 template <typename Edge, typename Circle>
 class beach_line_node_data {
-public:
+ public:
   explicit beach_line_node_data(Edge* new_edge) :
       circle_event_(NULL),
       edge_(new_edge) {}
@@ -450,7 +450,7 @@ public:
     return *this;
   }
 
-private:
+ private:
   Circle* circle_event_;
   Edge* edge_;
 };
