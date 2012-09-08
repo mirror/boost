@@ -22,8 +22,7 @@ typedef long double fpt80;
 #include <boost/timer/timer.hpp>
 
 #include <boost/polygon/voronoi.hpp>
-using boost::polygon::voronoi_builder;
-using boost::polygon::voronoi_diagram;
+using namespace boost::polygon;
 
 struct my_ulp_comparison {
   enum Result {
@@ -88,20 +87,13 @@ struct my_fpt_converter {
 // Voronoi diagram traits.
 struct my_voronoi_diagram_traits {
   typedef fpt80 coordinate_type;
-  typedef struct {
-    template <typename CT>
-    fpt80 operator()(const CT& that) const {
-      return static_cast<fpt80>(that);
-    }
-  } ctype_converter_type;
-  typedef detail::point_2d<coordinate_type> point_type;
   typedef voronoi_cell<coordinate_type> cell_type;
   typedef voronoi_vertex<coordinate_type> vertex_type;
   typedef voronoi_edge<coordinate_type> edge_type;
-  typedef struct {
+  typedef class {
   public:
     enum { ULPS = 128 };
-    bool operator()(const point_type &v1, const point_type &v2) const {
+    bool operator()(const vertex_type &v1, const vertex_type &v2) const {
       return (ulp_cmp(v1.x(), v2.x(), ULPS) == my_ulp_comparison::EQUAL &&
               ulp_cmp(v1.y(), v2.y(), ULPS) == my_ulp_comparison::EQUAL);
     }
@@ -146,8 +138,8 @@ int main() {
 
   printf("Construction done in: %s seconds.\n", ftime.c_str());
   printf("Resulting Voronoi graph has the following stats:\n");
-  printf("Number of Voronoi cells: %d.\n", vd.num_cells());
-  printf("Number of Voronoi vertices: %d.\n", vd.num_vertices());
-  printf("Number of Voronoi edges: %d.\n", vd.num_edges());
+  printf("Number of Voronoi cells: %lu.\n", vd.num_cells());
+  printf("Number of Voronoi vertices: %lu.\n", vd.num_vertices());
+  printf("Number of Voronoi edges: %lu.\n", vd.num_edges());
   return 0;
 }

@@ -266,7 +266,8 @@ class extended_int {
       this->count_ = -this->count_;
   }
 
-  extended_int(const extended_int& that) {
+  template<std::size_t M>
+  extended_int(const extended_int<M>& that) {
     this->count_ = that.count();
     std::memcpy(this->chunks_, that.chunks(), that.size() * sizeof(uint32));
   }
@@ -300,7 +301,8 @@ class extended_int {
     return *this;
   }
 
-  extended_int& operator=(const extended_int& that) {
+  template<std::size_t M>
+  extended_int& operator=(const extended_int<M>& that) {
     this->count_ = that.count();
     std::memcpy(this->chunks_, that.chunks(), that.size() * sizeof(uint32));
     return *this;

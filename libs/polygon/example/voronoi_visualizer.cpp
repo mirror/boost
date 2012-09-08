@@ -14,9 +14,7 @@
 #include <QtOpenGL/QGLWidget>
 #include <QtGui/QtGui>
 
-#include <boost/polygon/point_data.hpp>
-#include <boost/polygon/rectangle_data.hpp>
-#include <boost/polygon/segment_data.hpp>
+#include <boost/polygon/polygon.hpp>
 #include <boost/polygon/voronoi.hpp>
 using namespace boost::polygon;
 
@@ -107,9 +105,9 @@ class GLWidget : public QGLWidget {
 
  private:
   typedef double coordinate_type;
-  typedef point_data<double> point_type;
-  typedef segment_data<double> segment_type;
-  typedef rectangle_data<double> rect_type;
+  typedef point_data<coordinate_type> point_type;
+  typedef segment_data<coordinate_type> segment_type;
+  typedef rectangle_data<coordinate_type> rect_type;
   typedef voronoi_builder<int> VB;
   typedef voronoi_diagram<coordinate_type> VD;
   typedef VD::cell_type cell_type;
@@ -217,9 +215,11 @@ class GLWidget : public QGLWidget {
       glVertex2f(point.x(), point.y());
     }
     for (std::size_t i = 0; i < segment_data_.size(); ++i) {
-      point_type lp = deconvolve(low(segment_data_[i]), shift_);
-      point_type hp = deconvolve(high(segment_data_[i]), shift_);
+      point_type lp = low(segment_data_[i]);
+      lp = deconvolve(lp, shift_);
       glVertex2f(lp.x(), lp.y());
+      point_type hp = high(segment_data_[i]);
+      hp = deconvolve(hp, shift_);
       glVertex2f(hp.x(), hp.y());
     }
     glEnd();
@@ -231,9 +231,11 @@ class GLWidget : public QGLWidget {
     glLineWidth(2.7f);
     glBegin(GL_LINES);
     for (std::size_t i = 0; i < segment_data_.size(); ++i) {
-      point_type lp = deconvolve(low(segment_data_[i]), shift_);
-      point_type hp = deconvolve(high(segment_data_[i]), shift_);
+      point_type lp = low(segment_data_[i]);
+      lp = deconvolve(lp, shift_);
       glVertex2f(lp.x(), lp.y());
+      point_type hp = high(segment_data_[i]);
+      hp = deconvolve(hp, shift_);
       glVertex2f(hp.x(), hp.y());
     }
     glEnd();

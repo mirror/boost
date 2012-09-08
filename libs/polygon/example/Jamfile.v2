@@ -18,11 +18,11 @@ project voronoi_example
 
 exe voronoi-visualizer
     :
-      voronoi_visualizer.cpp
-      [ cast _ moccable-cpp : voronoi_visualizer.cpp ]
-      /qt//QtOpenGL 
+        voronoi_visualizer.cpp
+        [ cast _ moccable-cpp : voronoi_visualizer.cpp ]
+        /qt//QtOpenGL 
     : 
-      <target-os>windows:<library>opengl
+        <target-os>windows:<library>opengl
     ;
 
 alias "basic-tutorial"

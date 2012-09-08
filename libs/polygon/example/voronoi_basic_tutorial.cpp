@@ -149,7 +149,7 @@ int main() {
     }
     for (voronoi_diagram<double>::const_cell_iterator it = vd.cells().begin();
          it != vd.cells().end(); ++it) {
-      printf("%d ", it->color());
+      printf("%lu ", it->color());
     }
     printf("\n");
     printf("\n");

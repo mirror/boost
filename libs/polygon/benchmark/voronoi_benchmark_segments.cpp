@@ -110,7 +110,6 @@ std::vector<double> get_intersection_runtime() {
       }
       clean_segment_set(ssd);
     }
-    double time_per_test = timer.elapsed() / NUM_RUNS[i];
     running_times.push_back(timer.elapsed());
   }
   return running_times;
