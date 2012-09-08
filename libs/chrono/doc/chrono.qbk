@@ -2531,6 +2531,8 @@ When `BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING` is defined the lib don't 
 
 This allow to be closer to the standard and to avoid the Boost.System dependency, making possible to have Boost.Chrono as a header-only library.
 
+By default `BOOST_CHRONO_PROVIDE_HYBRID_ERROR_HANDLING` is defined.
+
 [endsect] [/section:header_only How to Build Boost.Chrono as a Header Only Library?]
 
 [section:header_only How to Build Boost.Chrono as a Header Only Library?]
@@ -2542,6 +2544,33 @@ If in addition `BOOST_USE_WINDOWS_H` is defined `<windows.h>` is included, other
 However, you will either need to define `BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING` or link with Boost.System.
 
 [endsect] [/section:header_only How to Build Boost.Chrono as a Header Only Library?]
+
+[section:deprecated_io Deprecated IO]
+
+Version 2.0.0 deprecates the preceding IO features. 
+
+These deprecated features will be provided by default up to boost 1.55. 
+If you don't want to include the deprecated features you could define `BOOST_CHRONO_DONT_PROVIDES_DEPRECATED_IO_SINCE_V2_0_0`. 
+Since 1.55 these features will not be included any more by default. 
+Since this version, if you want to include the deprecated features yet you could define `BOOST_CHRONO_PROVIDES_DEPRECATED_IO_SINCE_V2_0_0`. 
+These deprecated features will be only available until boost 1.58, that is you have 1 year and a half to move to the new features.
+
+[endsect]
+[section:version Version]
+
+`BOOST_CHRONO_VERSION` defines the Boost.Chrono version. 
+The default version is 1. In this case the following breaking or extending macros are defined if the opposite is not requested: 
+
+* `BOOST_CHRONO_PROVIDES_DEPRECATED_IO_SINCE_V2_0_0`
+
+The user can request the version 2 by defining `BOOST_CHRONO_VERSION` to 2. In this case the following breaking or extending macros are defined if the opposite is not requested: 
+
+* Breaking change `BOOST_CHRONO_DONT_PROVIDES_DEPRECATED_IO_SINCE_V2_0_0 `
+
+The default value for `BOOST_THREAD_VERSION` will be changed to 2 since Boost 1.55.
+
+[endsect]
+
 
 [endsect] [/section:conf Configuration Macros]
 
@@ -7218,31 +7247,26 @@ All the units are given using the suffix "s" following the System International 
 
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-
-
-[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section [*Version 2.0.0, December 1, 2012 - 1.52] ]
 
 [*New Features:]
 
 * Enhance chrono I/O
-    * [@http://svn.boost.org/trac/boost/ticket/5980 #5980] Take care of the Howard Hinnant [@http://home.roadrunner.com/~hinnant/bloomington/chrono_io.html proposal] which has the advantage to provide I/O for system clocks using the Gregorian Calendar.
-    * [@http://svn.boost.org/trac/boost/ticket/5981 #5981] Add i/o state savers.
-    * [@http://svn.boost.org/trac/boost/ticket/7058 #7058] Make it work wehn BOOST_NO_EXCEPTIONS is defined.
+    * [@http://svn.boost.org/trac/boost/ticket/5980 #5980] Enhance chrono I/O with H. Hinnant proposal [@http://home.roadrunner.com/~hinnant/bloomington/chrono_io.html proposal] which has the advantage to provide I/O for system clocks using the Gregorian Calendar.
+    * [@http://svn.boost.org/trac/boost/ticket/5981 #5981] Add i/o state savers for duration and time_point formatting state.
     * [@http://svn.boost.org/trac/boost/ticket/7059 #7059] Add low level i/o facilities.
 
 [*Deprecated:]
 
 * The chrono i/o version included in Boost.Chrono 1.2.x has been completly refactored in version 2.0.0 
 * chrono I/O: The manipulators __duration_short, __duration_long are depreceated. You should use the parameterized form __duration_fmt or the renamed manipulators __duration_symbol and __duration_prefix  instead.
-* chrono I/O: The duraction_punc<> facet is depreceated. You should use the __get_duration_style free function to get the informations and use the duration_units facet for localization purposes.
+* chrono I/O: The __duration_punct<> facet is depreceated. You should use the __get_duration_style free function to get the informations and use the __duration_units facet for localization purposes.
 
 When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not available.
 
 [*Fixes:]
 
-  
-[/* [@http://svn.boost.org/trac/boost/ticket/6094 #6094] 1 secondALPHA should be an invalid input for a duration.]
+* [@http://svn.boost.org/trac/boost/ticket/6871 #6871] chrono_io.hpp: operator<<(ostream& os, ...) modifies the state of os.
 
 [endsect] [/section [*Version 2.0.0] ]
 
@@ -7758,6 +7782,7 @@ Thanks to Ronald Bock for reporting Valgind issues and for the many suggestions 
 
 * Include Stopwatches.
 * Include chrono::date as defined by Howard Hinnant [@http://home.roadrunner.com/~hinnant/bloomington/date.html here].
+* Add User defined literals for some durations.
 
 [endsect]
 

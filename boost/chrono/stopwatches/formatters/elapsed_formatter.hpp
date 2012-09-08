@@ -8,9 +8,8 @@
 #define BOOST_CHRONO_STOPWATCHES_FORMATTERS_ELAPSED_HPP
 
 #include <boost/chrono/stopwatches/formatters/base_formatter.hpp>
-//#include <boost/chrono/detail/system.hpp>
+#include <boost/chrono/chrono_io.hpp>
 #include <boost/current_function.hpp>
-//#include <boost/chrono/stopwatches/detail/adaptive_string.hpp>
 #include <boost/format.hpp>
 #include <boost/format/group.hpp>
 #include <boost/cstdint.hpp>

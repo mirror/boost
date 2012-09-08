@@ -8,9 +8,8 @@
 #define BOOST_CHRONO_STOPWATCHES_FORMATTERS_ACCUMULATOR_SET_HPP
 
 #include <boost/chrono/stopwatches/formatters/base_formatter.hpp>
-//#include <boost/chrono/detail/system.hpp>
+#include <boost/chrono/chrono_io.hpp>
 #include <boost/current_function.hpp>
-//#include <boost/chrono/stopwatches/detail/adaptive_string.hpp>
 #include <boost/accumulators/framework/accumulator_set.hpp>
 #include <boost/accumulators/statistics/count.hpp>
 #include <boost/accumulators/statistics/sum.hpp>

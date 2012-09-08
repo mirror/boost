@@ -1497,9 +1497,9 @@ Models of `Stopclock`:
 
       basic_strict_stopclock();
 
-#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+    #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       explicit basic_strict_stopclock(system::error_code & ec);
-#endif
+    #endif
 
       explicit basic_strict_stopclock(formatter_type const& fmt);
 
@@ -1527,9 +1527,9 @@ Models of `Stopclock`:
       {
       }
 
-#if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
+    #if !defined BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
       explicit strict_stopclock(system::error_code & ec);
-#endif
+    #endif
       explicit strict_stopclock(formatter_type const& fmt);
       explicit strict_stopclock(const typename Formatter::char_type* fmt);
       explicit strict_stopclock(typename Formatter::string_type const& fmt);
