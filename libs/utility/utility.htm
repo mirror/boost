@@ -230,51 +230,6 @@ typedef boost::result_of&lt;
 &gt;::type type; // type is int</pre>
                 </blockquote>
 
-                <p>The <code>result</code> template must be specialized for every valid calling signature of the function object.
-                If the <code>operator()</code> accepts arguments by (possibly <code>const</code>) reference and/or is <code>const</code>
-                qualified, the <code>result</code> specialization must take this into account. <a href="../type_traits/doc/html/index.html">Type traits</a>
-                and more generic specializations may help to reduce the number of <code>result</code> specializations. This way <code>result_of</code> users
-                will be able to specify argument types exactly according to the function object call expression. For example:</p>
-
-                <blockquote>
-                <pre>struct functor {
-    template&lt;class&gt; struct result;
-
-    // Use template parameter F to match the function object. This will allow result deduction for both const and non-const functor.
-    template&lt;class F, class T&gt;
-    struct result&lt;F(T)&gt; {
-        // When argument type is matched like above, remember that the type may be a (const-qualified) reference.
-        // Use type traits to transform the argument type.
-        typedef typename remove_cv&lt;typename remove_reference&lt;T&gt;::type&gt;::type argument_type;
-        typedef argument_type type;
-    };
-
-    // The operator can be called on both const and non-const functor. The argument can be lvalue or rvalue.
-    template&lt;class T&gt;
-    T operator()(T const&amp; x) const
-    {
-        return x;
-    }
-};
-
-// All following result_of uses are valid and result in int
-typedef boost::result_of&lt; functor(int) &gt;::type type1; // the argument is rvalue
-functor f;
-type1 r1 = f(10);
-
-typedef boost::result_of&lt; const functor(int) &gt;::type type2; // the function object is const
-const functor cf;
-type2 r2 = cf(10);
-
-typedef boost::result_of&lt; functor(int&amp;) &gt;::type type3; // the argument is lvalue
-int a = 10;
-type3 r3 = f(a);
-
-typedef boost::result_of&lt; functor(int const&amp;) &gt;::type type4; // the argument is const lvalue
-const int ca = 10;
-type4 r4 = f(ca);</pre>
-                </blockquote>
-
                 <p>Since <code>decltype</code> is a new language
                 feature recently standardized in C++11,
                 if you are writing a function object
