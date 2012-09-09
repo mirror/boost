@@ -33,6 +33,15 @@
 
 #elif defined(_WIN32_WCE)
 
+#if _WIN32_WCE >= 0x600
+
+extern "C" long __cdecl _InterlockedIncrement( long volatile * );
+extern "C" long __cdecl _InterlockedDecrement( long volatile * );
+extern "C" long __cdecl _InterlockedCompareExchange( long volatile *, long, long );
+extern "C" long __cdecl _InterlockedExchange( long volatile *, long );
+extern "C" long __cdecl _InterlockedExchangeAdd( long volatile *, long );
+
+#else
 // under Windows CE we still have old-style Interlocked* functions
 
 extern "C" long __cdecl InterlockedIncrement( long* );
@@ -40,6 +49,8 @@ extern "C" long __cdecl InterlockedDecrement( long* );
 extern "C" long __cdecl InterlockedCompareExchange( long*, long, long );
 extern "C" long __cdecl InterlockedExchange( long*, long );
 extern "C" long __cdecl InterlockedExchangeAdd( long*, long );
+
+#endif
 
 # define BOOST_INTERLOCKED_INCREMENT InterlockedIncrement
 # define BOOST_INTERLOCKED_DECREMENT InterlockedDecrement
