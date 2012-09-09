@@ -18,11 +18,14 @@ the iterator has been incremented. A Function Input Iterator models the
 
 .. _InputIterator: http://www.sgi.com/tech/stl/InputIterator.html
 
-Like the Generator Iterator, the Function Input Iterator takes a function
-that models the Generator_ concept (which is basically a nullary or 0-arity
-function object). Each increment of the function Function Input Iterator
-invokes the generator function and stores the value in the iterator. When
-the iterator is dereferenced the stored value is returned.
+The Function Input Iterator takes a function that models the Generator_ concept
+(which is basically a nullary or 0-arity function object). The first dereference
+of the iterator at a given position invokes the generator function and stores
+and returns the result; subsequent dereferences at the same position simply
+return the same stored result. Incrementing the iterator places it at a new
+position, hence a subsequent dereference will generate a new value via another
+invokation of the generator function. This ensures the generator function is
+invoked precisely when the iterator is requested to return a (new) value.
 
 .. _Generator: http://www.sgi.com/tech/stl/Generator.html
 
