@@ -1,9 +1,12 @@
 :Author:
-    `Dean Michael Berris <mailto:mikhailberis@gmail.com>`_
+    `Dean Michael Berris <mailto:me@deanberris.com>`_
 
 :License:
     Distributed under the Boost Software License, Version 1.0
     (See accompanying file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
+
+:Copyright:
+    Copyright 2012 Google, Inc.
 
 Function Input Iterator
 =======================
@@ -58,7 +61,7 @@ Synopsis
 
         template <class Function, class State>
         typename function_input_iterator<Function, State>
-        make_function_input_iterator(Function & f);
+        make_function_input_iterator(Function & f, State s);
 
         struct infinite;
     }
@@ -112,7 +115,7 @@ it with the ``boost::infinite`` helper class.
     copy(
             make_function_input_iterator(f,infinite()),
             make_function_input_iterator(f,infinite()),
-            ostream_iterator<int>(count, " ")
+            ostream_iterator<int>(cout, " ")
         );
    
 Above, instead of creating a huge vector we rely on the STL copy algorithm
