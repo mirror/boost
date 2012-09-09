@@ -100,7 +100,7 @@ struct make_pairing_heap_base
  * the complexity analysis is yet unsolved. For details, consult:
  *
  * Pettie, Seth (2005), "Towards a final analysis of pairing heaps",
- * Proc. 46th Annual IEEE Symposium on Foundations of Computer Science, pp. 174–183
+ * Proc. 46th Annual IEEE Symposium on Foundations of Computer Science, pp. 174-183
  *
  * The template parameter T is the type to be managed by the container.
  * The user can specify additional options and if no options are provided default options are used.
@@ -656,7 +656,7 @@ private:
 
     node_pointer merge_node_list(node_child_list & children)
     {
-        assert(!children.empty());
+        BOOST_HEAP_ASSERT(!children.empty());
         node_pointer merged = merge_first_pair(children);
         if (children.empty())
             return merged;

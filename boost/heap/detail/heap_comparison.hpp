@@ -141,8 +141,8 @@ bool heap_equality(Heap1 const & lhs, Heap2 const & rhs)
                                       heap_equivalence_copy
                                      >::type equivalence_check;
 
-    equivalence_check check;
-    return check(lhs, rhs);
+    equivalence_check eq_check;
+    return eq_check(lhs, rhs);
 }
 
 
