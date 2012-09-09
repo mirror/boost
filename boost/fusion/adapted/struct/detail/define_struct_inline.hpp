@@ -203,7 +203,7 @@
     BOOST_FUSION_DEFINE_STRUCT_INLINE_ITERATOR_IMPL_IMPL(                       \
         NAME,                                                                   \
         ATTRIBUTES_SEQ,                                                         \
-        BOOST_PP_SEQ_SIZE(ATTRIBUTES_SEQ))
+        BOOST_PP_DEC(BOOST_PP_SEQ_SIZE((0)ATTRIBUTES_SEQ)))
 
 #define BOOST_FUSION_DEFINE_STRUCT_INLINE_ITERATOR_IMPL_IMPL(                   \
     NAME, ATTRIBUTES_SEQ, ATTRIBUTES_SEQ_SIZE)                                  \
@@ -304,17 +304,22 @@
 #define BOOST_FUSION_DEFINE_STRUCT_INLINE_MEMBERS_IMPL_IMPL(                    \
     NAME, ATTRIBUTES_SEQ, ATTRIBUTES_SEQ_SIZE)                                  \
                                                                                 \
+    /* Note: second BOOST_PP_IF is necessary to avoid MSVC warning when */      \
+    /*       calling BOOST_FUSION_IGNORE_1 with no arguments.           */      \
     NAME()                                                                      \
         BOOST_PP_IF(                                                            \
-            BOOST_PP_SEQ_SIZE(ATTRIBUTES_SEQ),                                  \
+            ATTRIBUTES_SEQ_SIZE,                                                \
             BOOST_FUSION_MAKE_DEFAULT_INIT_LIST,                                \
             BOOST_FUSION_IGNORE_1)                                              \
-                (ATTRIBUTES_SEQ)                                                \
+                (BOOST_PP_IF(                                                   \
+                    ATTRIBUTES_SEQ_SIZE,                                        \
+                    ATTRIBUTES_SEQ,                                             \
+                    0))                                                         \
     {                                                                           \
     }                                                                           \
                                                                                 \
     BOOST_PP_IF(                                                                \
-        BOOST_PP_SEQ_SIZE(ATTRIBUTES_SEQ),                                      \
+        ATTRIBUTES_SEQ_SIZE,                                                    \
         BOOST_FUSION_MAKE_COPY_CONSTRUCTOR,                                     \
         BOOST_FUSION_IGNORE_2)                                                  \
             (NAME, ATTRIBUTES_SEQ)                                              \

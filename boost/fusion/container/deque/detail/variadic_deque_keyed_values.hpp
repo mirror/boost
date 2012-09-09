@@ -38,12 +38,13 @@ namespace boost { namespace fusion { namespace detail
             );
         }
 
-        static type forward_(Head&& head, Tail&&... tail)
+        template <typename Head_, typename ...Tail_>
+        static type forward_(Head_&& head, Tail_&&... tail)
         {
             return type(
-                std::forward<Head>(head)
-              , deque_keyed_values_impl<next_index, Tail...>::
-                  forward_(std::forward<Tail>(tail)...)
+                std::forward<Head_>(head)
+              , deque_keyed_values_impl<next_index, Tail_...>::
+                  forward_(std::forward<Tail_>(tail)...)
             );
         }
     };

@@ -93,7 +93,9 @@ namespace boost { namespace fusion { namespace detail
             return value_;
         }
 
-        keyed_element(Value const& value, Rest const& rest)
+        keyed_element(
+            typename detail::call_param<Value>::type value
+          , Rest const& rest)
             : Rest(rest), value_(value)
         {}
 
