@@ -200,7 +200,7 @@ class transform_multiallocation_chain
    void splice_after(iterator after_this, transform_multiallocation_chain &x, iterator before_begin, iterator before_end, size_type n)
    {  holder_.splice_after(after_this.base(), x.holder_, before_begin.base(), before_end.base(), n);  }
 
-   void incorporate_after(iterator after_this, void_pointer begin, void_pointer before_end, size_type n)
+   void incorporate_after(iterator after_this, pointer begin, pointer before_end, size_type n)
    {  holder_.incorporate_after(after_this.base(), begin, before_end, n);  }
 
    void pop_front()

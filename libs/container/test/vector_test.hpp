@@ -152,43 +152,47 @@ int vector_test()
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
          }
          {
+            boostvector->resize(100);
+            stdvector->resize(100);
+            if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
+
             IntType aux_vect[50];
             for(int i = 0; i < 50; ++i){
-               IntType new_int(-1);
+               IntType new_int(-2);
                aux_vect[i] = boost::move(new_int);
             }
             int aux_vect2[50];
             for(int i = 0; i < 50; ++i){
-               aux_vect2[i] = -1;
+               aux_vect2[i] = -2;
             }
+            typename MyBoostVector::size_type old_size = boostvector->size();
             typename MyBoostVector::iterator insert_it =
-               boostvector->insert(boostvector->begin()
+               boostvector->insert(boostvector->begin() + old_size
                               ,boost::make_move_iterator(&aux_vect[0])
                               ,boost::make_move_iterator(aux_vect + 50));
-            if(boostvector->begin() != insert_it) return 1;
-            stdvector->insert(stdvector->begin(), aux_vect2, aux_vect2 + 50);
+            if(boostvector->begin() + old_size != insert_it) return 1;
+            stdvector->insert(stdvector->begin() + old_size, aux_vect2, aux_vect2 + 50);
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
 
             for(int i = 0; i < 50; ++i){
-               IntType new_int(-1);
+               IntType new_int(-3);
                aux_vect[i] = boost::move(new_int);
             }
 
             for(int i = 0; i < 50; ++i){
-               aux_vect2[i] = -1;
+               aux_vect2[i] = -3;
             }
+            old_size = boostvector->size();
             //Now try with input iterators instead
-            insert_it = boostvector->insert(boostvector->begin()
-//                              ,boost::make_move_iterator(make_input_from_forward_iterator(&aux_vect[0]))
-//                              ,boost::make_move_iterator(make_input_from_forward_iterator(aux_vect + 50))
-                              ,boost::make_move_iterator(&aux_vect[0])
-                              ,boost::make_move_iterator(aux_vect + 50)
+            insert_it = boostvector->insert(boostvector->begin() + old_size
+                              ,boost::make_move_iterator(make_input_from_forward_iterator(&aux_vect[0]))
+                              ,boost::make_move_iterator(make_input_from_forward_iterator(aux_vect + 50))
                            );
-            if(boostvector->begin() != insert_it) return 1;
-            stdvector->insert(stdvector->begin(), aux_vect2, aux_vect2 + 50);
+            if(boostvector->begin() + old_size != insert_it) return 1;
+            stdvector->insert(stdvector->begin() + old_size, aux_vect2, aux_vect2 + 50);
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
          }
-/*
+/*       //deque has no reserve
          boostvector->reserve(boostvector->size()*2);
          stdvector->reserve(stdvector->size()*2);
          if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
@@ -201,13 +205,27 @@ int vector_test()
          MyStdVector(*stdvector).swap(*stdvector);
          if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
 
+         {  //push_back with not enough capacity
          IntType push_back_this(1);
          boostvector->push_back(boost::move(push_back_this));
          stdvector->push_back(int(1));
          boostvector->push_back(IntType(1));
          stdvector->push_back(int(1));
-
          if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
+         }
+         {  //push_back with enough capacity
+         boostvector->pop_back();
+         boostvector->pop_back();
+         stdvector->pop_back();
+         stdvector->pop_back();
+
+         IntType push_back_this(1);
+         boostvector->push_back(boost::move(push_back_this));
+         stdvector->push_back(int(1));
+         boostvector->push_back(IntType(1));
+         stdvector->push_back(int(1));
+         if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
+         }
 
          if(!vector_copyable_only(boostvector, stdvector
                         ,container_detail::bool_<boost::container::test::is_copyable<IntType>::value>())){
@@ -245,7 +263,7 @@ int vector_test()
             stdvector->assign(l.begin(), l.end());
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
          }
-/*
+/*       deque has no reserve or capacity
          std::size_t cap = boostvector->capacity();
          boostvector->reserve(cap*2);
          stdvector->reserve(cap*2);

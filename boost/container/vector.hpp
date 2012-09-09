@@ -1521,7 +1521,7 @@ class vector : private container_detail::vector_alloc_holder<A>
                               container_detail::is_same<AllocVersion, allocator_v1>::value >::type * = 0)
    {
       if(this->members_.m_capacity){
-         if(!size()){
+         if(!this->size()){
             this->prot_deallocate();
          }
          else{
