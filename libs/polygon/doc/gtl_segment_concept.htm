@@ -14,6 +14,8 @@
 
 
 
+
+
   
 
   
@@ -23,7 +25,7 @@
 
   <tbody>
     <tr>
-      <td style="background-color: rgb(238, 238, 238);" valign="top" nowrap="1">
+      <td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top">
       <div style="padding: 5px;" align="center"> <img src="images/boost.png" border="0" height="86" width="277" /><a title="www.boost.org home page" href="http://www.boost.org/" tabindex="2" style="border: medium none ;"> </a> </div>
       <div style="margin: 5px;">
       <h3 class="navbar">Contents</h3>
@@ -70,7 +72,7 @@ Extraction</a></li>
         <li><a href="voronoi_predicates.htm">Voronoi Predicates</a></li>
         <li><a href="voronoi_robust_fpt.htm">Voronoi Robust FPT</a><br />
         </li>
-        <li><a href="voronoi_utils.htm">Voronoi Utils</a></li>
+        
       </ul>
       <h3 class="navbar">Other Resources</h3>
       <ul>
@@ -141,7 +143,7 @@ struct segment_mutable_traits {<br />
           <tr>
             <td width="586"><font face="Courier New">template
 &lt;typename Segment&gt;<br />point_type <b>get</b>(const Segment&amp; segment, direction_1d dir)</font></td>
-            <td>Returns the low or high endpoint of an object that models a segment, depending on
+            <td>Returns the low or high endpoint of an object that models segment, depending on
 the direction_1d value.<font face="Courier New">&nbsp;</font></td>
           </tr>
           <tr>
@@ -149,8 +151,9 @@ the direction_1d value.<font face="Courier New">&nbsp;</font></td>
 &lt;typename </font><font face="Courier New">Segment</font><font face="Courier New">, typename Point&gt;<br />
 void <b>set</b>(</font><font face="Courier New">Segment</font><font face="Courier New">&amp; segment, direction_1d dir,<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const Point&amp; </font><span style="font-family: Courier New;">point</span><font face="Courier New">)</font></td>
-            <td>Sets the low or high endpoint of an object that models a segment to an object that models a
-point, depending on the direction_1d value.</td>
+            <td>Sets
+the low or high endpoint of an object that models segment to an object
+that models point, depending on the direction_1d value.</td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template &lt;typename Segment, typename Point1, typename Point2&gt;<br />
@@ -159,22 +162,22 @@ Segment<b> construct</b>(const Point1&amp; low, const Point2&amp; high)</font></
           </tr>
           <tr>
             <td><font face="Courier New">template &lt;typename Segment1, typename </font><font face="Courier New">Segment2</font><font face="Courier New">&gt;<br /></font><font face="Courier New">Segment1</font><font face="Courier New"> <span style="font-weight: bold;">copy_construct</span>(const </font><font face="Courier New">Segment2</font><font face="Courier New">&amp; segment)</font></td>
-            <td style="text-align: left;">Copy constructs an object that is a model of segment given another segment.</td>
+            <td style="text-align: left;">Copy constructs an object that models segment given another segment.</td>
           </tr>
 <tr>
             <td width="586"><font face="Courier New">template
 &lt;typename </font><font face="Courier New">Segment1</font><font face="Courier New">, typename </font><font face="Courier New">Segment2&gt;</font><br />
             <font face="Courier New">Segment1</font><font face="Courier New">&amp; <b>assign</b>(</font><font face="Courier New">Segment1</font><font face="Courier New">&amp; segment1,<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const </font><font face="Courier New">Segment2</font><font face="Courier New">&amp; segment2)</font></td>
-            <td>Copies data from the second object that models a segment into
-the first object that models a segment.</td>
+            <td>Copies data from the second object that models segment into
+the first object that models segment.</td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
 &lt;typename </font><font face="Courier New">Segment1</font><font face="Courier New">, typename </font><font face="Courier New">Segment1</font><font face="Courier New">&gt;<br />
 bool <b>equivalence</b>(const </font><font face="Courier New">Segment1</font><font face="Courier New">&amp; segment1,<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const </font><font face="Courier New">Segment1</font><font face="Courier New">&amp; segment2)</font></td>
-            <td>Given two objects that model a segment, compares and
+            <td>Given two objects that model segment, compares and
 returns true if their low and high values are respectively equal.</td>
           </tr>
           <tr>
@@ -183,7 +186,7 @@ returns true if their low and high values are respectively equal.</td>
             <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const Point&amp; point)</span><br />
             </td>
             <td>Implements
-a robust orientation test for two objects that model segment and point.
+a robust orientation test of two objects that model segment and point.
 Returns 0, if the point is collinear to the segment.<br />
 Returns 1, if the point lies to the left of the segment.<br />
 Returns -1, if the point lies to the right of the segment.<br />
@@ -196,10 +199,10 @@ Returns -1, if the point lies to the right of the segment.<br />
             <span style="font-family: Courier New,Courier,monospace;">int orientation</span><span style="font-family: Courier New,Courier,monospace;">(const </span><span style="font-family: Courier New,Courier,monospace;">Segment1</span><span style="font-family: Courier New,Courier,monospace;">&amp; segment1,</span><br style="font-family: Courier New,Courier,monospace;" />
 
             <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const Segment2&amp; segment2)</span></td>
-            <td>Implements a robust orientation test for two objects
-that are models of segment. Note: the segments are treated as math.
+            <td>Implements a robust orientation test of two objects
+that model segment. Note: segments are treated as math.
 vectors.<br />
-Returns 0, if the segments are collinear.<br />
+Returns 0, if segments are collinear.<br />
 Returns 1, if the second segment is CCW oriented to the first segment.<br />
 Returns -1, if the second segment is CW oriented to the first segment.<br />
             </td>
@@ -209,7 +212,7 @@ Returns -1, if the second segment is CW oriented to the first segment.<br />
             <span style="font-family: Courier New,Courier,monospace;">bool </span><span style="font-weight: bold; font-family: Courier New,Courier,monospace;">contains</span><span style="font-family: Courier New,Courier,monospace;">(const </span><font face="Courier New">Segment</font><span style="font-family: Courier New,Courier,monospace;">&amp; segment,</span><br style="font-family: Courier New,Courier,monospace;" />
             <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp; const Point&amp; value,</span><span style="font-family: Courier New,Courier,monospace;"> bool consider_touch)</span><br />
             </td>
-            <td>Returns true if an object that is a model of segment contains an object that is a model of point, else false.<br />
+            <td>Returns true if an object that models segment contains an object that models point, else false.<br />
             </td>
           </tr>
           <tr>
@@ -218,44 +221,44 @@ Returns -1, if the second segment is CW oriented to the first segment.<br />
             <span style="font-family: Courier New,Courier,monospace;">bool </span><span style="font-weight: bold; font-family: Courier New,Courier,monospace;">contains</span><span style="font-family: Courier New,Courier,monospace;">(const </span><span style="font-family: Courier New,Courier,monospace;">Segment1</span><span style="font-family: Courier New,Courier,monospace;">&amp; segment1,</span><br style="font-family: Courier New,Courier,monospace;" />
 
             <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp; const </span><span style="font-family: Courier New,Courier,monospace;">Segment</span><span style="font-family: Courier New,Courier,monospace;">2&amp; segment2,</span> <span style="font-family: Courier New,Courier,monospace;">bool consider_touch)</span></td>
-            <td>Returns true if the first object contains the second one, else false. Both objects model a segment.<br />
+            <td>Returns true if the first object contains the second one, else false. Both objects model segment.<br />
             </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename <span style="font-family: Courier New,Courier,monospace;">Segment</span>&gt;<br />
 point_type <span style="font-weight: bold;">low</span>(const <span style="font-family: Courier New,Courier,monospace;">Segment</span>&amp; segment)<br />
             </td>
-            <td>Returns the low endpoint of an object that is a model of segment.<br />
+            <td>Returns the low endpoint of an object that models segment.<br />
             </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename <span style="font-family: Courier New,Courier,monospace;">Segment</span>&gt;<br />
 point_type <span style="font-weight: bold;">high</span>(const <span style="font-family: Courier New,Courier,monospace;">Segment</span>&amp; segment)</td>
-            <td>Returns the high endpoint of an object that is a model of segment.<br />
+            <td>Returns the high endpoint of an object that models segment.<br />
             </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename <span style="font-family: Courier New,Courier,monospace;">Segment</span>&gt;<br />
 point_type <span style="font-weight: bold;">center</span>(const <span style="font-family: Courier New,Courier,monospace;">Segment</span>&amp; segment)</td>
-            <td>Returns the central point of an object that is a model of segment.<br />
+            <td>Returns the central point of an object that models segment.<br />
             </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename <span style="font-family: Courier New,Courier,monospace;">Segment</span>, typename Point&gt;<br />void <span style="font-weight: bold;">low</span>(<span style="font-family: Courier New,Courier,monospace;">Segment</span>&amp; segment, const Point&amp; point)</td>
-            <td>Sets the low endpoint of an object that is a model of segment.<br />
+            <td>Sets the low endpoint of an object that models segment.<br />
             </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename <span style="font-family: Courier New,Courier,monospace;">Segment, typename Point</span>&gt;<br />
 void <span style="font-weight: bold;">high</span>(<span style="font-family: Courier New,Courier,monospace;">Segment</span>&amp; segment, const Point&amp; point)</td>
-            <td>Sets the high endpoint of an object that is a model of segment.<br />
+            <td>Sets the high endpoint of an object that models of segment.<br />
             </td>
           </tr>
           <tr>
             <td><span style="font-family: Courier New,Courier,monospace;">template &lt;typename </span><span style="font-family: Courier New,Courier,monospace;">Segment</span><span style="font-family: Courier New,Courier,monospace;">&gt;</span><br style="font-family: Courier New,Courier,monospace;" />
             <span style="font-family: Courier New,Courier,monospace;">distance_type <span style="font-weight: bold;">length</span>(const </span><span style="font-family: Courier New,Courier,monospace;">Segment</span><span style="font-family: Courier New,Courier,monospace;">&amp; segment)</span><br />
             </td>
-            <td>Returns length of an object that is a model of segment.<br />
+            <td>Returns length of an object that models segment.<br />
             </td>
           </tr>
 
@@ -265,14 +268,14 @@ void <span style="font-weight: bold;">high</span>(<span style="font-family: Cour
           <tr>
             <td width="586"><font face="Courier New">template
 &lt;typename </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&gt;<br /></font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; <b>scale_up</b>(</font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; </font><font face="Courier New">segment</font><font face="Courier New">, <br />&nbsp;&nbsp;&nbsp; unsigned_area_type factor)</font></td>
-            <td>Multiplies x and y coordinates of both endpoints of an object that is a model of segment by unsigned factor.</td>
+            <td>Multiplies x and y coordinates of both endpoints of an object that models segment by unsigned factor.</td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
 &lt;typename </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&gt;<br />
             </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; <b>scale_down</b>(</font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; </font><font face="Courier New">segment</font><font face="Courier New">, <br />
 &nbsp;&nbsp;&nbsp; unsigned_area_type factor)</font></td>
-            <td>Divides x and y coordinates of both endpoints of an object that is a model of segment by unsigned factor.</td>
+            <td>Divides x and y coordinates of both endpoints of an object that models segment by unsigned factor.</td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
@@ -280,14 +283,14 @@ void <span style="font-weight: bold;">high</span>(<span style="font-family: Cour
             </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; <b>scale</b>(</font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; </font><font face="Courier New">segment</font><font face="Courier New">, const Scale&amp; sc) </font></td>
             <td>Calls
 the scale member function of the scaling type on the low and high endpoint of
-an object that is a model of segment and updates the segment with the
+an object that models segment and updates the segment with the
 scaled endpoints.</td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
 &lt;typename </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">, typename Transform&gt;<br /></font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; <b>transform</b>(</font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; segment, const </font><font face="Courier New">Transform</font><font face="Courier New">&amp; tr) </font></td>
             <td>Calls the transform member function of transform type
-on the low and high endpoints of an object that is a model of segment and updates the segment with the transformed endpoints.</td>
+on the low and high endpoints of an object that models segment and updates the segment with the transformed endpoints.</td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
@@ -295,20 +298,20 @@ on the low and high endpoints of an object that is a model of segment and update
             </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; <b>move</b>(</font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; segment, orientation_2d<br />
 &nbsp;&nbsp;&nbsp; coordinate_difference displacement)</font></td>
             <td>Adds displacement value to the x or y coordinates of both endpoints of an object
-that is a model of segment indicated by the orientation_2d.</td>
+that models segment indicated by the orientation_2d.</td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
 &lt;</font><span style="font-family: Courier New,Courier,monospace;">Segment, Point</span><font face="Courier New">&gt;<br />
             </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; <b>convolve</b>(</font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; segment, const Point&amp; point)</font></td>
-            <td>Convolves both endpoints of an object that models a segment with an object that models a point.<br />
+            <td>Convolves both endpoints of an object that models segment with an object that models a point.<br />
 </td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
 &lt;</font><span style="font-family: Courier New,Courier,monospace;">Segment, Point</span><font face="Courier New">&gt;<br />
             </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; <b>deconvolve</b>(</font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; segment, const Point&amp; point)</font></td>
-            <td>Deconvolves both endpoints of an object that models a segment with an object that models a point. </td>
+            <td>Deconvolves both endpoints of an object that models segment with an object that models a point. </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename Segment1, typename Segment2&gt;<br />
@@ -318,7 +321,7 @@ bool <span style="font-weight: bold;">abuts</span>(const Segment1&amp; segment1,
 
 
 &nbsp;&nbsp;&nbsp; const Segment2&amp; segment2, direction_1d dir)</td>
-            <td>Returns true if two objects that model a segment abut, depending on the direction_1d value.</td>
+            <td>Returns true if two objects that model segment abut, depending on the direction_1d value.</td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename Segment1, typename Segment2&gt;<br />
@@ -326,7 +329,7 @@ bool <span style="font-weight: bold;">abuts</span>(const Segment1&amp; segment1,
 bool <span style="font-weight: bold;">abuts</span>(const Segment1&amp; segment1,<br />
 
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const Segment2&amp; segment2)</td>
-            <td>Returns true if two objects that model a segment abut: either the first one to the second one or vice versa.</td>
+            <td>Returns true if two objects that model segment abut: either the first one to the second one or vice versa.</td>
           </tr>
 
           
@@ -336,7 +339,7 @@ bool <span style="font-weight: bold;">abuts</span>(const Segment1&amp; segment1,
             <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const Segment2&amp; segment2,<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; bool consider_touch)</span><br />
             </td>
-            <td>Returns true if two objects that model a segment intersect, else false.<br />
+            <td>Returns true if two objects that model segment intersect, else false.<br />
             </td>
           </tr>
           
@@ -346,8 +349,8 @@ bool <span style="font-weight: bold;">abuts</span>(const Segment1&amp; segment1,
 &lt;typename </font><span style="font-family: Courier New,Courier,monospace;">Segment, typename Point</span><font face="Courier New">&gt;<br />distance_type <b>euclidean_distance</b>(<br />
 &nbsp;&nbsp;&nbsp; const </font><span style="font-family: Courier New,Courier,monospace;">Segment</span><font face="Courier New">&amp; segment, const Point&amp; point)</font>
             </td>
-            <td>Returns distance from an object that is a model of segment
-to an object that is a model of point.
+            <td>Returns distance from an object that models segment
+to an object that models point.
             </td>
           </tr>
           <tr>
@@ -355,7 +358,7 @@ to an object that is a model of point.
 &lt;typename Segment1, typename </font><font face="Courier New">Segment2</font><font face="Courier New">&gt;<br />distance_type <b>euclidean_distance</b>(<br />
 &nbsp;&nbsp;&nbsp; const </font><font face="Courier New">Segment1</font><font face="Courier New">&amp; segment1, const </font><font face="Courier New">Segment2</font><font face="Courier New">&amp; segment2)</font>
             </td>
-            <td>Returns distance between two objects that are models of segment.
+            <td>Returns distance between two objects that model segment.
             </td>
           </tr>
           
@@ -366,10 +369,10 @@ to an object that is a model of point.
       </table>
       <h1>Segment Data</h1>
       <p> </p>
-      <p>The library provides a model of the segment concept declared <font face="Courier New">template&lt;typename T&gt; segment_data </font>where
+      <p>The library provides a model of the segment concept declared <font face="Courier New">template&lt;typename T&gt; segment_data</font>, where
 T is the coordinate type.</p>
       <p>This data type is used internally when a segment is needed and
-is available to the library user who finds it convenient to use a
+is available to the library user, who finds it convenient to use a
 library segment data type instead of providing their own.&nbsp; The data
 type is implemented to be convenient to use with the library traits.</p><h2>Members</h2>
       <table style="width: 100%;" id="table2" border="1">
@@ -468,7 +471,7 @@ const</font></td>
       </td>
     </tr>
     <tr>
-      <td style="background-color: rgb(238, 238, 238);" valign="top" nowrap="1"> &nbsp;</td>
+      <td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top"> &nbsp;</td>
       <td style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" valign="top" width="100%">
       <table class="docinfo" id="table3" frame="void" rules="none">
         <colgroup> <col class="docinfo-name" /><col class="docinfo-content" /> </colgroup> <tbody valign="top">

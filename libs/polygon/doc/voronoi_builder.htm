@@ -9,6 +9,8 @@
 
 
 
+
+
   
   <meta http-equiv="Content-Language" content="en-us">
 
@@ -65,7 +67,7 @@ Extraction</a></li>
         <li><a href="voronoi_predicates.htm">Voronoi Predicates</a></li>
         <li><a href="voronoi_robust_fpt.htm">Voronoi Robust FPT</a><br>
         </li>
-        <li><a href="voronoi_utils.htm">Voronoi Utils</a></li>
+        
       </ul>
       <h3 class="navbar">Other Resources</h3>
       <ul>
@@ -101,7 +103,7 @@ the builder geometries are not the same as for the rest of the
 Boost.Polygon library. The main differences are in the following:<br>
       <ul>
         <li>The input coordinate type is not required to be integral (while it
-still should be integer type)</li>
+still should be an integer type)</li>
         <li>The output coordinate type (for
 Voronoi vertices) is required to be IEEE-754 floating point type</li>
       </ul>
@@ -119,13 +121,11 @@ Boost.Polygon itself:<br>
 
       <span style="font-family: Courier New,Courier,monospace;">#include &lt;voronoi_builder.hpp&gt;</span><br style="font-family: Courier New,Courier,monospace;">
 
-      <span style="font-family: Courier New,Courier,monospace;">#include &lt;voronoi_diagram.hpp&gt;</span><br style="font-family: Courier New,Courier,monospace;">
-
-      <span style="font-family: Courier New,Courier,monospace;">#include &lt;voronoi_utils.hpp&gt;<br>
+      <span style="font-family: Courier New,Courier,monospace;">#include &lt;voronoi_diagram.hpp&gt;</span><span style="font-family: Courier New,Courier,monospace;"><br>
       <br>
       </span>This
 also gives a way to build Voronoi construction API on top of the
-Voronoi builder data strcture for the other Boost libraries.<br>
+Voronoi builder data structure for the other Boost libraries.<br>
       <h2>Declaration<br>
       </h2>
 
@@ -142,11 +142,11 @@ typename VP = detail::voronoi_predicates&lt;CTT&gt; &gt;</span><br style="font-f
 voronoi_builder;</span><br>
       <br>
       <span style="font-family: 'Courier New',Courier,monospace;">T</span></font>
-- specifies coordinate type of the input geometries (points and
+- specifies the coordinate type of the input geometries (points and
 segments).<br>
 
       <font face="Courier New"> <span style="font-family: 'Courier New',Courier,monospace;">CTT</span></font>
-- defines input/output coordinate type used by VP.<br>
+- defines input/output coordinate type traits used by Voronoi predicates (VP).<br>
 
       <font face="Courier New"> <span style="font-family: 'Courier New',Courier,monospace;">VP</span></font>
 - predicate kernel, that provides builder with robust and
@@ -159,8 +159,8 @@ integer), however this will also require manual set up of the
 coordinate type traits. Default voronoi_predicates&lt;<font face="Courier New"><span style="font-family: 'Courier New',Courier,monospace;">CTT</span></font>&gt;
 structure provides correct and efficient predicates as soon as types defined by <font face="Courier New"> <span style="font-family: 'Courier New',Courier,monospace;">CTT</span></font>
 satisfy the requirements explained at the end of this page. In case those
-requirements are not satisfied for the user provided <font face="Courier New"> <span style="font-family: 'Courier New',Courier,monospace;">CTT</span></font>,
-proper <font face="Courier New"> <span style="font-family: 'Courier New',Courier,monospace;">VP</span></font>
+requirements are not satisfied for the user provided coordinate type traits,<font face="Courier New"><span style="font-family: 'Courier New',Courier,monospace;"></span></font>
+the proper predicates kernel
 implementation is required.<span style="font-family: Courier New,Courier,monospace;"></span><br>
 <h2>Member Functions</h2>
       <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
@@ -203,16 +203,12 @@ Returns index number of the inserted site.<br>
           <tr>
             <td style="font-family: 'Courier New',Courier,monospace;">
 template &lt;typename OUTPUT&gt;<br>
-void construct(OUTPUT *output)<br>
+void construct(OUTPUT* output)<br>
             </td>
             <td width="693">Runs sweepline
 algorithm over the set of the inserted geometries, outputs site and
 circle events to the OUTPUT data structure. It's responsibility of the
-output structure builder object to process them. For example both
-Voronoi diagram and Delaunay triangulation could be constructed from
-the Voronoi builder events, however internally they are different data
-structures, so it's up to them to process properly events produced by
-the builder object.<br>
+output data structure to process them.<br>
             </td>
           </tr>
           <tr>
@@ -228,7 +224,7 @@ list of the inserted geometries. Sets index counter to zero.<br>
       <h1>Voronoi Coordinate Type Traits</h1>
 
       
-      <p>The library provides the default coordinate type traits for the
+      <p>The library provides the default coordinate type traits specialization for the
 32-bit signed integer type:</p>
 
       <font style="font-family: 'Courier New',Courier,monospace;" face="Courier New">

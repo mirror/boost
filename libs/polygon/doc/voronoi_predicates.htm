@@ -4,6 +4,8 @@
 
 
 
+
+
   
   <meta http-equiv="Content-Language" content="en-us">
 
@@ -67,8 +69,7 @@ Extraction</a></li>
         <li>Voronoi Predicates</li>
         <li><a href="voronoi_robust_fpt.htm">Voronoi Robust FPT</a><br>
         </li>
-        <li><a href="voronoi_utils.htm">Voronoi Utils</a><br>
-        </li>
+        
       </ul>
       <h3 class="navbar">Other Resources</h3>
       <ul>
@@ -97,8 +98,8 @@ or false (e.g. it may answer a question: "is it sunny today?").<br>
 
 Voronoi predicates contain implementation of a set of the geometric
 predicates used by the <a href="voronoi_builder.htm">Voronoi builder</a>.
-Except of those it also provides
-functors that allow to compute coordinates of the centers of the
+Except of those they also provide
+functors that allow to compute the coordinates of the centers of the
 inscribed
 circles (those correspond to the Voronoi vertices) within the given
 relative error precision range (64 machine epsilons). This means that
@@ -162,7 +163,7 @@ quickly evaluate the result of the expression. While this approach has
 a good speed
 performance it doesn't produce reliable results all the time (as in the
 example above). The way to solve the issue is apart from computing
-result of the expression compute the relative error of it also. This
+result of the expression compute the relative error of it as well. This
 will
 give us the range of values the evaluated result belongs to and based
 on that we can
@@ -185,7 +186,7 @@ predicates could be divided onto two categories:<br>
       <br>
 
 1) mathematical transformation of the predicate exists that evaluates
-exact result:<span style="font-family: Courier New,Courier,monospace;"><br>
+the exact result:<span style="font-family: Courier New,Courier,monospace;"><br>
       <br>
 Predicate: A/B + C/D ?&lt; 0;<br>
 After math. transform: (A*D + B*C) / (B * D) ?&lt; 0;<br>

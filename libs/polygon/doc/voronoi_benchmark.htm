@@ -7,6 +7,8 @@
 
 
 
+
+
   
   <meta http-equiv="Content-Language" content="en-us">
 
@@ -63,7 +65,7 @@ Extraction</a></li>
         <li><a href="voronoi_predicates.htm">Voronoi Predicates</a></li>
         <li><a href="voronoi_robust_fpt.htm">Voronoi Robust FPT</a><br>
         </li>
-        <li><a href="voronoi_utils.htm">Voronoi Utils</a></li>
+        
       </ul>
       <h3 class="navbar">Other Resources</h3>
       <ul>
@@ -96,14 +98,14 @@ output topology<br>
 </li>
       </ul>Below is the list of libraries included in this benchmark sorted by the number of conditions each of them satisfies:<br>
       <ul>
-        <li>Boost.Polygon Voronoi - satisfies all three items above, implements sweep-line algorithm.<br>
+        <li>Boost.Polygon Voronoi - satisfies all the conditions above, implements sweep-line algorithm.<br>
         </li>
-        <li>CGAL - satisfies the first two items, implements incremental algorithm. CGAL is a well-known
+        <li>CGAL - satisfies the first two conditions, implements incremental algorithm. CGAL is a well-known
 library in the computational geometry area, especially for its
 robustness.<br>
 </li>
         <li>S-Hull
-- doesn't satisfy any of the above items. S-Hull is a non-robust
+- doesn't satisfy any of the above conditions. S-Hull is a non-robust
 implementation of the sweep-hull algorithm used to construct Delaunay
 triangulation of a set of points.<br>
         </li>
@@ -474,7 +476,7 @@ Linux-64<br>
         </tbody>
       </table>
       <span style="font-weight: bold;"></span>
-      <h2>Voronoi Benchmark Conclusions</h2>
+      <h2>Voronoi Benchmark Summary</h2>
 The main conclusions for the benchmark results above are following:<br>
       <ul>
         <li>There is no input size range were CGAL would outperform
@@ -527,5 +529,6 @@ http://www.boost.org/LICENSE_1_0.txt</a>)</td>
     </tr>
   </tbody>
 </table>
+
 
 </body></html>

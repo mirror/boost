@@ -14,6 +14,8 @@
 
 
 
+
+
   
   <meta http-equiv="Content-Language" content="en-us">
 
@@ -34,7 +36,7 @@
 
   <tbody>
     <tr>
-      <td style="background-color: rgb(238, 238, 238);" valign="top" nowrap="1">
+      <td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top">
       <div style="padding: 5px;" align="center"> <img src="images/boost.png" border="0" height="86" width="277"><a title="www.boost.org home page" tabindex="2" style="border: medium none ;" href="http://www.boost.org/"> </a></div>
       <div style="margin: 5px;">
       <h3 class="navbar">Contents</h3>
@@ -80,8 +82,7 @@ Extraction</a></li>
         <li><a href="voronoi_predicates.htm">Voronoi Predicates</a></li>
         <li><a href="voronoi_robust_fpt.htm">Voronoi Robust FPT</a><br>
         </li>
-        <li><a href="voronoi_utils.htm">Voronoi Utils</a><br>
-        </li>
+        
       </ul>
       <h3 class="navbar">Other Resources</h3>
       <ul>
@@ -123,7 +124,7 @@ The strong sides of the
 library and main benefits comparing to the other implementations are
 discussed in the following paragraphs.<span style="font-weight: bold;"></span><br>
       <h2>Robustness and Efficiency</h2>
-Lets explain a bit those terms. The efficiency is simply measured by
+Let's explain a bit those terms. The efficiency is simply measured by
 the time it takes the algorithm to execute. The robustness is a bit
 more harder to explain. But those of you who had the experience with
 the following situations would understand what it doesn't mean: application segfaults randomly, algorithm output contains
@@ -132,8 +133,7 @@ while should be inside). In other words robust implementation doesn't
 fail and produces expected output in 100% of cases, thus user can rely
 on
 it. Robustness is a weak place of the most non-commercial
-implementations of any complex geometric algorithm. The main issues of
-that could be divided onto two main categories: memory management
+implementations of any complex geometric algorithm. The main issues could be divided onto two main categories: memory management
 issues, numeric stability issues. Our implementation avoids the
 first type of issues using pure STL data structures, thus you won't find
 any operator new in the code. The second category of problems is
@@ -191,8 +191,8 @@ grid of [-2^42; 2^42] x [-2^42; 2^42].&nbsp; Let's choose the long double
 for the output geometries within our Solar System will be on its boundaries
 and equal to 2^-64 * 2^42 * 2^6 = 2^-18 metres. In the output we are going to
 consider vertices with both coordinates that are within 2^-17 metres (8
-micrometres) distance to be equal. Come on, that distance is equal to
-the size of a bacteria. Can you even see those?<br>
+micrometres) distance to be equal. That distance is equal to
+the size of a bacteria and is relative to the Solar System size.<br>
       <h2>Fully Functional with Segments</h2>
 There are not many implementations of the Voronoi diagram construction
 algorithm that could
@@ -201,7 +201,7 @@ Support of the
 segments allows to discretize any input geometry (circle, ellipse,
 parabola). Of course as the result those might have floating-point
 coordinates, but that is resolved using scaling and snapping to the
-integer grid. This functionality is very handy as allows to compute
+integer grid. This functionality is very handy as it allows to compute
 the medial axis transform of the arbitrary set of input geometries. So
 one may start
 using it for the next generation pattern recognition or computer vision
@@ -295,11 +295,8 @@ following two lines of code (if corresponding input types satisfy the Boost.Poly
       <span style="font-family: Courier New,Courier,monospace;">voronoi_diagram&lt;double&gt;
 vd;</span><br style="font-family: Courier New,Courier,monospace;">
       <span style="font-family: Courier New,Courier,monospace;">construct_voronoi(points.begin(), points.end(), &amp;vd);</span><br>
-      <br>
-Isn't that simple? The library also provides the clear interfaces to
-      <a href="voronoi_basic_tutorial.htm">associate user data</a> with the output geometries, efficiently <a href="voronoi_diagram.htm">traverse Voronoi graph</a> and utilities to
-      <a href="voronoi_utils.htm">visualize output primitives</a> (e.g.
-discretization of the parabolic edges, clipping of the linear edges).
+      <br>The library also provides the clear interfaces to
+      <a href="voronoi_basic_tutorial.htm">associate user data</a> with the output geometries and efficiently <a href="voronoi_diagram.htm">traverse Voronoi graph</a>.
 More details on those are covered in the <a href="voronoi_basic_tutorial.htm">basic Voronoi tutorial</a>. Advanced usage of the library with the configuration of the coordinate
 types is explained in the <a href="voronoi_advanced_tutorial.htm">advanced
 Voronoi tutorial</a>.
@@ -317,10 +314,9 @@ On the other hand voronoi.hpp header provides integration routines with
 the Boost.Polygon concepts and models with a drawback of additional
 dependencies. <h2>Extensible for the User Provided Coordinate Types</h2>
 Our implementation is coordinate type agnostic. That means that as soon
-as user provides types satisfy the set of restrictions of the <a href="voronoi_builder.htm">Voronoi builder</a> coordinate type traits
-and implement methods required by the library no changes are required
-neither
-from the algorithm, nor from the implementation of the predicates. So it's
+as user provided types satisfy the set of restrictions of the <a href="voronoi_builder.htm">Voronoi builder</a> coordinate type traits
+and implement methods required by the library, no changes are required
+neither to the algorithm, nor to the implementation of the predicates. So it's
 possible to
 construct Voronoi diagram for the 256-bit integer input coordinate type
 and
@@ -331,7 +327,7 @@ internal code.<br>
 Below one may find the list of the main directions for the future
 development of the library.<br>
 High-priority tasks that already have approximate implementation plan
-are following (some of those may be proposed as future GSoC projects):<br>
+are the following (some of those may be proposed as future GSoC projects):<br>
       <ul>
         <li>Implementing Delaunay triangulation data structure.<br>
 Note: only data structure needs to be implemented that properly
@@ -387,14 +383,14 @@ benchmarks nobody else can reproduce. The opposite story is with
 the Boost.Polygon Voronoi library. We provide pure implementation and
 benchmarks one may run on
 his PC. In case community finds it useful we will incrementally
-add more documentation on the theoretical side of our realization. The
+add more documentation on the theoretical side of our implementation. The
 authors would like to acknowledge the Steven Fortune's article <span style="font-family: Arial,Helvetica,sans-serif;"><span style="font-weight: bold;"></span></span>"<a href="http://dl.acm.org/citation.cfm?id=10549">A Sweepline algorithm
 for Voronoi diagrams</a>", that contains the fundamental ideas of the
 current implementation.<br>
       </td>
     </tr>
     <tr>
-      <td style="background-color: rgb(238, 238, 238);" valign="top" nowrap="1">&nbsp;</td>
+      <td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top">&nbsp;</td>
       <td style="padding-left: 10px; padding-right: 10px; padding-bottom: 10px;" valign="top" width="100%">
       <table class="docinfo" id="table2" frame="void" rules="none">
         <colgroup> <col class="docinfo-name"><col class="docinfo-content"> </colgroup> <tbody valign="top">

@@ -1,6 +1,7 @@
 <!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
 <html><head>
 
+
   
   <meta http-equiv="Content-Type" content="text/html; charset=windows-1252"><title>Voronoi Advanced Tutorial</title></head><body>
 <h1>Voronoi Advanced Tutorial<br>
@@ -24,10 +25,8 @@ of this tutorial.<br>
 
 <img style="width: 665px; height: 369px;" alt="" src="images/rover.jpg"><br>
 
-<br>
-
-Yes, we are going to talk about Mars. So lets imagine that NASA is
-planning to send a new robot to Mars. Each day center situated on Earth
+<br>Lets imagine that NASA is
+planning to send a new robot to Mars. Each day the center situated on Earth
 will send a destination point coordinates the robot needs to reach by
 the end of the day. Of course we'd like to save as much energy as
 possible thus choosing the shortest possible path. This would be a
@@ -96,7 +95,7 @@ chip. Considering the fact that it may take weeks or months to get an
 integrated circuit manufactured, designers often spend large amounts of
 time analyzing their layouts to avoid costly mistakes. One of the
 common static analysis checks is minimum distance requirement between
-the components of an integrated circuit (distance should be not less
+the components of an integrated circuit (distance should be greater
 than
 specified value).<br>
 
@@ -137,8 +136,8 @@ pair of closest objects within the discretization precision.<br>
 
 The above two examples show usage of the default Voronoi coordinate
 types
-in the macro and micro world. The main point of those was to give user
-understanding of a scale the default coordinate types provides. There
+in the macro and micro world. The main point of those was to give the user
+understanding of a scale that the default coordinate types provide. There
 are
 two main points we didn't mention before, but that would be relevant to
 the most real world problems:<br>
@@ -162,11 +161,10 @@ measuring
 devices.<br>
   </li>
 </ul>
-
 The second statement means that there is actually no point to provide
 implementation that operates with floating-point input coordinates,
-because those always could be snapped to the integer grid. In case you
-are not satisfied with the precision that the 32-bit integer grid
+because those always could be snapped to the integer grid. In case the
+user is not satisfied with the precision that the 32-bit integer grid
 provides or would like to retrieve coordinates of the output geometries
 within a smaller
 relative error, follow the next paragraph.<br>
@@ -293,7 +291,7 @@ return static_cast&lt;fpt80&gt;(that);</span><br style="font-family: Courier New
 template &lt;size_t N&gt;</span><br style="font-family: Courier New,Courier,monospace;">
 
 <span style="font-family: Courier New,Courier,monospace;">&nbsp; fpt80
-operator()(const typename detail::extended_int&lt;N&gt; &amp;that)
+operator()(const typename detail::extended_int&lt;N&gt;&amp; that)
 const {</span><br style="font-family: Courier New,Courier,monospace;">
 
 <span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
@@ -331,28 +329,7 @@ traits:<br>
 my_voronoi_diagram_traits {</span><br style="font-family: Courier New,Courier,monospace;">
 
 <span style="font-family: Courier New,Courier,monospace;">&nbsp;
-typedef fpt80 coordinate_type;</span><br style="font-family: Courier New,Courier,monospace;">
-
-<span style="font-family: Courier New,Courier,monospace;">&nbsp;
-typedef struct {</span><br style="font-family: Courier New,Courier,monospace;">
-
-<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
-template &lt;typename CT&gt;</span><br style="font-family: Courier New,Courier,monospace;">
-
-<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
-fpt80 operator()(const CT&amp; that) const {</span><br style="font-family: Courier New,Courier,monospace;">
-
-<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-return static_cast&lt;fpt80&gt;(that);</span><br style="font-family: Courier New,Courier,monospace;">
-
-<span style="font-family: Courier New,Courier,monospace;">&nbsp;&nbsp;&nbsp;
-}</span><br style="font-family: Courier New,Courier,monospace;">
-
-<span style="font-family: Courier New,Courier,monospace;">&nbsp; }
-ctype_converter_type;</span><br style="font-family: Courier New,Courier,monospace;">
-
-<span style="font-family: Courier New,Courier,monospace;">&nbsp;
-typedef detail::point_2d&lt;coordinate_type&gt; point_type;</span><br style="font-family: Courier New,Courier,monospace;">
+typedef fpt80 coordinate_type;</span><span style="font-family: Courier New,Courier,monospace;"></span><span style="font-family: Courier New,Courier,monospace;"></span><br style="font-family: Courier New,Courier,monospace;">
 
 <span style="font-family: Courier New,Courier,monospace;">&nbsp;
 typedef voronoi_cell&lt;coordinate_type&gt; cell_type;</span><br style="font-family: Courier New,Courier,monospace;">
@@ -398,7 +375,7 @@ vertex_equality_predicate_type;</span><br style="font-family: Courier New,Courie
 
 <span style="font-family: Courier New,Courier,monospace;"></span><br>
 
-Above we simply declared the Voronoi primitive types, type converter
+Above we simply declared the Voronoi primitive types
 and vertex
 equality predicate using the new coordinate type and corresponding ulp
 comparison structure. As we are done with the declaration of the
@@ -416,10 +393,13 @@ generator and distribution. MAX is equal to 2^48.</span><br>
 gen(std::time(0));</span><br style="font-family: Courier New,Courier,monospace;">
 
 <span style="font-family: Courier New,Courier,monospace;">boost::random::uniform_int_distribution&lt;boost::int64_t&gt;
-distr(-MAX, MAX-1);</span><span style="font-family: Courier New,Courier,monospace;"><br>
+distr(-MAX, MAX-1);<br>
+<br>
+</span><span style="font-family: Courier New,Courier,monospace;">
 // Declaring and configuring Voronoi builder with the new coordinate
 type traits.<br>
-voronoi_builder&lt;boost::int64_t, my_voronoi_ctype_traits&gt; vb;</span><span style="font-family: Courier New,Courier,monospace;"></span><br style="font-family: Courier New,Courier,monospace;">
+voronoi_builder&lt;boost::int64_t, my_voronoi_ctype_traits&gt; vb;</span><br>
+<span style="font-family: Courier New,Courier,monospace;"></span><br style="font-family: Courier New,Courier,monospace;">
 
 <span style="font-family: Courier New,Courier,monospace;">// Voronoi
 builder initialization step.<br>
@@ -455,9 +435,9 @@ Voronoi graph. Probably the hardest part of this tutorial is
 the declaration of the ulp comparison structure. The library provides
 efficient well-commented cross-platform implementation for 64-bit
 floating-point type (double). So the best advice would be to follow
-that implementation, but before doing that really consider if&nbsp; the
+that implementation, but before doing that really consider thoughtfully if the
 default
-coordinate types are not capable to solve your problem.<br>
+coordinate types are not capable to deal with your problem.<br>
 
 <br>
 
@@ -477,5 +457,6 @@ http://www.boost.org/LICENSE_1_0.txt</a>)</td>
     </tr>
   </tbody>
 </table>
+
 
 </body></html>
