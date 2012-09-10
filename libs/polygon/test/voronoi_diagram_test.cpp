@@ -107,6 +107,5 @@ BOOST_AUTO_TEST_CASE(voronoi_diagram_test) {
   BOOST_CHECK(vd.num_cells() == 0);
   BOOST_CHECK(vd.num_vertices() == 0);
   BOOST_CHECK(vd.num_edges() == 0);
-  BOOST_CHECK(vd.num_half_edges() == 0);
   vd.clear();
 }

@@ -75,7 +75,7 @@ class voronoi_cell {
   void incident_edge(voronoi_edge_type* e) { incident_edge_ = e; }
 
   color_type color() const { return color_ >> BITS_SHIFT; }
-  void color(const color_type& color) const {
+  void color(color_type color) const {
     color_ &= BITS_MASK;
     color_ |= color << BITS_SHIFT;
   }
@@ -122,7 +122,7 @@ class voronoi_vertex {
   void incident_edge(voronoi_edge_type* e) { incident_edge_ = e; }
 
   color_type color() const { return color_ >> BITS_SHIFT; }
-  void color(const color_type& color) const {
+  void color(color_type color) const {
     color_ &= BITS_MASK;
     color_ |= color << BITS_SHIFT;
   }
@@ -246,7 +246,7 @@ class voronoi_edge {
   }
 
   color_type color() const { return color_ >> BITS_SHIFT; }
-  void color(const color_type& color) const {
+  void color(color_type color) const {
     color_ &= BITS_MASK;
     color_ |= color << BITS_SHIFT;
   }
@@ -336,10 +336,6 @@ class voronoi_diagram {
   }
 
   std::size_t num_edges() const {
-    return edges_.size() >> 1;
-  }
-
-  std::size_t num_half_edges() const {
     return edges_.size();
   }
 
