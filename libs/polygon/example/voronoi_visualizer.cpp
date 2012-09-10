@@ -7,7 +7,6 @@
 
 // See http://www.boost.org for updates, documentation, and revision history.
 
-#include <cassert>
 #include <iostream>
 #include <vector>
 
@@ -296,7 +295,6 @@ class GLWidget : public QGLWidget {
     const cell_type& cell2 = *edge.twin()->cell();
     point_type origin, direction;
     // Infinite edges could not be created by two segment sites.
-    assert(cell1.contains_point() || cell2.contains_point());
     if (cell1.contains_point() && cell2.contains_point()) {
       point_type p1 = retrieve_point(cell1);
       point_type p2 = retrieve_point(cell2);

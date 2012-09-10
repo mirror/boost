@@ -81,8 +81,8 @@ VP::circle_formation_predicate<site_type, circle_type, CEP_type, lazy_CFF_type> 
     CHECK_CIRCLE(c2, c_x, c_y, l_x); }
 
 BOOST_AUTO_TEST_CASE(orientation_test) {
-  int min_int = std::numeric_limits<int>::min();
-  int max_int = std::numeric_limits<int>::max();
+  int min_int = (std::numeric_limits<int>::min)();
+  int max_int = (std::numeric_limits<int>::max)();
   point_type point1(min_int, min_int);
   point_type point2(0, 0);
   point_type point3(max_int, max_int);
@@ -383,8 +383,8 @@ BOOST_AUTO_TEST_CASE(circle_formation_predicate_test1) {
 }
 
 BOOST_AUTO_TEST_CASE(circle_formation_predicate_test2) {
-  int min_int = std::numeric_limits<int>::min();
-  int max_int = std::numeric_limits<int>::max();
+  int min_int = (std::numeric_limits<int>::min)();
+  int max_int = (std::numeric_limits<int>::max)();
   site_type site1(min_int, min_int);
   site_type site2(min_int, max_int);
   site_type site3(max_int-1, max_int-1);

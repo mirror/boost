@@ -316,7 +316,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(grid_test, T, test_types) {
     test_output_large.clear();
     point_vec_small.clear();
     point_vec_large.clear();
-    int koef = std::numeric_limits<int>::max() / max_value[k];
+    int koef = (std::numeric_limits<int>::max)() / max_value[k];
     for (int i = 0; i < grid_size[k]; i++) {
       for (int j = 0; j < grid_size[k]; j++) {
         point_vec_small.push_back(point_data<T>(i, j));
@@ -347,7 +347,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(random_test, T, test_types) {
   int max_value[] = {5, 50, 50, 5000};
   int array_length = sizeof(num_points) / sizeof(int);
   for (int k = 0; k < array_length; k++) {
-    int koef = std::numeric_limits<int>::max() / max_value[k];
+    int koef = (std::numeric_limits<int>::max)() / max_value[k];
     for (int i = 0; i < num_runs[k]; i++) {
       test_output_small.clear();
       test_output_large.clear();
@@ -519,7 +519,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_grid_test, T, test_types) {
     segments_small.clear();
     segments_large.clear();
     int cur_sz = grid_size[k];
-    int koef = std::numeric_limits<int>::max() / max_value[k];
+    int koef = (std::numeric_limits<int>::max)() / max_value[k];
     for (int i = 0; i < cur_sz + 1; i++)
       for (int j = 0; j < cur_sz; j++) {
         point_data<T> point1_1(10 * i, 10 * j);
@@ -592,7 +592,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_random_test2, T, test_types) {
   int max_value[] = {10, 60, 125, 200};
   int array_length = sizeof(num_segments) / sizeof(int);
   for (int k = 0; k < array_length; k++) {
-    int koef = std::numeric_limits<int>::max() / max_value[k];
+    int koef = (std::numeric_limits<int>::max)() / max_value[k];
     for (int i = 0; i < num_runs[k]; i++) {
       test_output_small.clear();
       test_output_large.clear();
