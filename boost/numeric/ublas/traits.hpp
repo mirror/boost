@@ -41,6 +41,14 @@ namespace {
     // we'll find either std::abs or else another version via ADL:
     return abs (t);
   }
+  // unsigned types are always non-negative
+  template<> unsigned int boost_numeric_ublas_abs (const unsigned int& t) {
+    return t;
+  }
+  // unsigned types are always non-negative
+  template<> unsigned long boost_numeric_ublas_abs (const unsigned long& t) {
+    return t;
+  }
 }
 
 namespace boost { namespace numeric { namespace ublas {
