@@ -130,7 +130,7 @@ protected:
     {}
 
     priority_queue_mutable_wrapper(priority_queue_mutable_wrapper const & rhs):
-        objects(rhs.objects)
+        q_(rhs.q_), objects(rhs.objects)
     {
         for (typename object_list::iterator it = objects.begin(); it != objects.end(); ++it)
             q_.push(it);
@@ -138,6 +138,7 @@ protected:
 
     priority_queue_mutable_wrapper & operator=(priority_queue_mutable_wrapper const & rhs)
     {
+        q_ = rhs.q_;
         objects = rhs.objects;
         q_.clear();
         for (typename object_list::iterator it = objects.begin(); it != objects.end(); ++it)
