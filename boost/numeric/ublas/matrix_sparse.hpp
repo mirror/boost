@@ -4397,11 +4397,15 @@ namespace boost { namespace numeric { namespace ublas {
             if (! sorted_ && filled_ > 0) {
                 typedef index_triple_array<index_array_type, index_array_type, value_array_type> array_triple;
                 array_triple ita (filled_, index1_data_, index2_data_, value_data_);
+#ifndef BOOST_UBLAS_COO_ALWAYS_DO_FULL_SORT
                 const typename array_triple::iterator iunsorted = ita.begin () + sorted_filled_;
                 // sort new elements and merge
                 std::sort (iunsorted, ita.end ());
                 std::inplace_merge (ita.begin (), iunsorted, ita.end ());
-                
+#else
+                const typename array_triple::iterator iunsorted = ita.begin ();
+                std::sort (iunsorted, ita.end ());
+#endif                
                 // sum duplicates with += and remove
                 array_size_type filled = 0;
                 for (array_size_type i = 1; i < filled_; ++ i) {

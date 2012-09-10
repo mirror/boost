@@ -152,6 +152,13 @@ test-suite numeric/uBLAS
       ]
       [ run test_coordinate_matrix_sort.cpp
       ]
+      [ run test_coordinate_matrix_sort.cpp
+       :
+       :
+       : <define>BOOST_UBLAS_COO_ALWAYS_DO_FULL_SORT
+       : test_coordinate_matrix_always_do_full_sort
+       :
+      ]
       [ run test_complex_norms.cpp
       ]
 	  [ run test_assignment.cpp
