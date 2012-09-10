@@ -158,6 +158,8 @@ test-suite numeric/uBLAS
 	  ]
 	  [ run test_triangular.cpp
 	  ]
+	  [ run test_ticket7296.cpp
+	  ]
       [ run test_inplace_solve.cpp
         : 
         : 
