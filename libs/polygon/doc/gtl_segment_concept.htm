@@ -468,6 +468,88 @@ const</font></td>
           </tr>
         </tbody>
       </table>
+
+      <h1>Segment Utils</h1>
+      <p> </p>
+      <p>The library provides several algorithms for the manipulation of
+        sets of segment data. In particular, the generalize line segment
+        intersection algorithm used for polygon set operations is exposed
+        through several interfaces to allow it to be used with any
+        collection or sequence of objects that model the <font face="Courier New">segment_concept</font>.
+      </p><h2>Functions</h2>
+      <table style="width: 100%;" id="table2" border="1">
+        <tbody>
+
+
+          <tr>
+            <td width="586"><font face="Courier New">template
+&lt;typename segment_container_type&gt;<b><br />
+            </b>void <b>intersect_segments</b>(segment_container_type&amp; segments)
+            </font></td>
+            <td>Modifies the contents of the container of segments such
+              that segments are split at their intersection points.
+              Postconditions: no segments intersect except at their end
+              points.  Useful to satisfy the precondition of voronoi diagram
+              construction. 
+              Expected n log n runtime, worst case quadratic runtime wrt. vertices + intersections.
+            </td>
+          </tr>
+          <tr>
+            <td width="586"><font face="Courier New">template
+&lt;typename line_segment_type, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename line_segment_iterator_type&gt;<b><br />
+            </b>void <b>intersect_segments</b>(<br />
+&nbsp;&nbsp;vector&ltpair&ltsize_t,
+            line_segment_type&gt &gt &amp; result, <br />
+&nbsp;&nbsp;line_segment_iterator_type begin_segs, <br />
+&nbsp;&nbsp;line_segment_iterator_type end_segs)
+            </font></td>
+            <td>Accumulates the result of splitting the segments in the
+              iterator range at their intersection points into the result container.
+              Postconditions: no segments intersect except at their end
+              points. The index of the input segment is paired with each
+              resultant segment
+              that was split to produce it to associate the result segments with
+              the inputs segments.
+              Expected n log n runtime, worst case quadratic runtime wrt. vertices + intersections.
+            </td>
+          </tr>
+          <tr>
+            <td width="586"><font face="Courier New">template
+&lt;typename point_container_type, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename line_segment_iterator_type&gt;<b><br />
+            </b>size_t <b>segment_intersections</b>(point_container_type&amp; result, <br />
+&nbsp;&nbsp;line_segment_iterator_type begin_segs, <br />
+&nbsp;&nbsp;line_segment_iterator_type end_segs)
+            </font></td>
+            <td>
+              Accumlates the intersection points of the iterator range of line segments
+              into the result container of points.  Trivial intersections consisting
+              of abutting line segments that are an end point are not reported.
+              Expected n log n runtime, worst case quadratic runtime wrt. vertices + intersections.
+            </td>
+          </tr>
+          <tr>
+            <td width="586"><font face="Courier New">template
+&lt;typename rectangle_type, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename
+                line_segment_iterator_type&gt;<b><br />
+            </b>void <b>segments_extents</b>(rectangle_type&amp; envelope,<br />
+&nbsp;&nbsp;line_segment_iterator_type begin_segs, <br />
+&nbsp;&nbsp;line_segment_iterator_type end_segs)
+            </font></td>
+            <td>Computes the bounding rectangle of the the iterator range of
+              line segments.
+              Linear runtime.
+            </td>
+          </tr>
+
+
+
+
+        </tbody>
+      </table>
+
       </td>
     </tr>
     <tr>

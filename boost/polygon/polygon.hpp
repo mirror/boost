@@ -93,4 +93,6 @@
 
 #include "polygon_set_concept.hpp"
 
+#include "segment_utils.hpp"
+
 #endif
