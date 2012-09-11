@@ -16,6 +16,7 @@
 
 
 
+
   
   <meta http-equiv="Content-Language" content="en-us">
 
@@ -214,15 +215,17 @@ defines the following static functions to integrate the Voronoi library function
         <tbody>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename Point, typename VB&gt;<br>
-void insert(const Point &amp;point, VB *vb)<br>
+size_t <span style="font-weight: bold;">insert</span>(const Point &amp;point, VB *vb)<br>
             </td>
             <td>Inserts a point into the Voronoi builder data structure.<br>
 Point type should model the point concept.<br>
+
+Returns index number of the inserted site.<br>
             </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename PointIterator, typename VB&gt;<br>
-void insert(PointIterator first, <br>
+void <span style="font-weight: bold;">insert</span>(PointIterator first, <br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; PointIterator last,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VB *vb)<br>
             </td>
@@ -232,15 +235,17 @@ Corresponding point type should model the point concept.<br>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename Segment, typename VB&gt;<br>
-void insert(const Segment &amp;segment, VB *vb)<br>
+size_t <span style="font-weight: bold;">insert</span>(const Segment &amp;segment, VB *vb)<br>
             </td>
             <td>Inserts a segment into the Voronoi builder data structure.<br>
 Segment type should model the segment concept.<br>
+
+Returns index number of the inserted site.<br>
             </td>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename SegmentIterator, typename VB&gt;<br>
-void insert(SegmentIterator first,<br>
+void <span style="font-weight: bold;">insert</span>(SegmentIterator first,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; SegmentIterator last,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; VB *vb)<br>
             </td>
@@ -250,8 +255,7 @@ Corresponding segment type should model the segment concept.<br>
           </tr>
 <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename PointIterator, typename VD&gt;<br>
-void construct_voronoi(PointIterator first,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+void <span style="font-weight: bold;">construct_voronoi</span>(PointIterator first,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 PointIterator last,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 VD *vd)<br>
@@ -261,7 +265,7 @@ VD *vd)<br>
           </tr>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename SegmentIterator, typename VD&gt;<br>
-void construct_voronoi(SegmentIterator first,<br>
+void <span style="font-weight: bold;">construct_voronoi</span>(SegmentIterator first,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 SegmentIterator last,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -273,7 +277,7 @@ VD *vd)<br>
           <tr>
             <td style="font-family: Courier New,Courier,monospace;">template &lt;typename PointIterator,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename SegmentIterator,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename VD&gt;<br>void construct_voronoi(PointIterator p_first,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename VD&gt;<br>void <span style="font-weight: bold;">construct_voronoi</span>(PointIterator p_first,<br>
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 PointIterator p_last,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 SegmentIterator s_first,<br>

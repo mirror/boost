@@ -39,10 +39,10 @@ typename enable_if<
       typename geometry_concept<Point>::type
     >::type
   >::type,
-  void
+  std::size_t
 >::type
 insert(const Point& point, VB* vb) {
-  vb->insert_point(x(point), y(point));
+  return vb->insert_point(x(point), y(point));
 }
 
 template <typename PointIterator, typename VB>
@@ -69,11 +69,12 @@ typename enable_if<
       typename geometry_concept<Segment>::type
     >::type
   >::type,
-  void
+  std::size_t
 >::type
 insert(const Segment& segment, VB* vb) {
-  vb->insert_segment(x(low(segment)), y(low(segment)),
-                     x(high(segment)), y(high(segment)));
+  return vb->insert_segment(
+      x(low(segment)), y(low(segment)),
+      x(high(segment)), y(high(segment)));
 }
 
 template <typename SegmentIterator, typename VB>

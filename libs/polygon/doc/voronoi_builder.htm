@@ -11,6 +11,7 @@
 
 
 
+
   
   <meta http-equiv="Content-Language" content="en-us">
 
@@ -166,14 +167,15 @@ implementation is required.<span style="font-family: Courier New,Courier,monospa
       <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
         <tbody>
           <tr>
-            <td style="font-family: 'Courier New',Courier,monospace;">
-voronoi_builder()</td>
+            <td style="font-family: 'Courier New',Courier,monospace;"><span style="font-weight: bold;">
+voronoi_builder</span>()</td>
             <td width="693">Default
 constructor.</td>
           </tr>
           <tr>
-            <td><span style="font-family: Courier New,Courier,monospace;">int insert_point(const int_type&amp; x,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const int_type&amp; y)</span><br>
+            <td><span style="font-family: Courier New,Courier,monospace;">size_t <span style="font-weight: bold;">insert_point</span>(const int_type&amp; x,<br>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+const int_type&amp; y)</span><br>
             </td>
             <td>Inserts a point object with
 the specified coordinates into the Voronoi builder.<br>
@@ -184,10 +186,10 @@ Returns index number of the inserted site.<br>
           
           
           <tr>
-            <td><span style="font-family: Courier New,Courier,monospace;">int insert_segment(const int_type&amp; x1,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-const int_type&amp; y1,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <td><span style="font-family: Courier New,Courier,monospace;">size_t <span style="font-weight: bold;">insert_segment</span>(const int_type&amp; x1,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+const int_type&amp; y1,<br>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 const int_type&amp; x2,<br>
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
 const int_type&amp; y2)</span><br>
             </td>
             <td>Inserts a segment object
@@ -203,7 +205,7 @@ Returns index number of the inserted site.<br>
           <tr>
             <td style="font-family: 'Courier New',Courier,monospace;">
 template &lt;typename OUTPUT&gt;<br>
-void construct(OUTPUT* output)<br>
+void <span style="font-weight: bold;">construct</span>(OUTPUT* output)<br>
             </td>
             <td width="693">Runs sweepline
 algorithm over the set of the inserted geometries, outputs site and
@@ -213,7 +215,7 @@ output data structure to process them.<br>
           </tr>
           <tr>
             <td style="font-family: 'Courier New',Courier,monospace;">
-void clear()<br>
+void <span style="font-weight: bold;">clear</span>()<br>
             </td>
             <td width="693">Clears the
 list of the inserted geometries. Sets index counter to zero.<br>
@@ -258,14 +260,14 @@ X-bit signed integer coordinate type):<br>
 <table style="text-align: left; width: 100%;" border="1" cellpadding="2" cellspacing="2">
         <tbody>
           <tr>
-            <td style="font-family: 'Courier New',Courier,monospace;">int_type<br>
+            <td style="font-family: 'Courier New',Courier,monospace; font-weight: bold;">int_type<br>
             </td>
             <td style="vertical-align: top;">At least X-bit signed
 integer type. <br>
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace;">
+            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace; font-weight: bold;">
 int_x2_type<br>
             </td>
             <td style="vertical-align: top;">At least 2X-bit signed
@@ -273,7 +275,7 @@ integer type.<br>
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace;">
+            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace; font-weight: bold;">
 uint_x2_type<br>
             </td>
             <td style="vertical-align: top;">At least 2X-bit unsigned
@@ -281,7 +283,7 @@ integer type.<br>
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace;">
+            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace; font-weight: bold;">
 big_int_type<br>
             </td>
             <td style="vertical-align: top;">At least 8X-bit signed
@@ -290,7 +292,7 @@ At least 64X-bit signed integer type for voronoi of segments.<br>
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace;">
+            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace; font-weight: bold;">
 fpt_type<br>
             </td>
             <td style="vertical-align: top;">IEEE-754 floating point
@@ -299,7 +301,7 @@ type, with mantissa at least (X+16) bits and exponent able to handle
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace;">
+            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace; font-weight: bold;">
 efpt_type<br>
             </td>
             <td style="vertical-align: top;">IEEE-754 floating point
@@ -308,7 +310,7 @@ type, with mantissa at least (X+16) bits and exponent able to handle
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace;">
+            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace; font-weight: bold;">
 ulp_cmp_type<br>
             </td>
             <td style="vertical-align: top;">Ulp comparison structure
@@ -317,7 +319,7 @@ that checks if two fpt_type values are withing the given ulp range
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace;">
+            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace; font-weight: bold;">
 to_fpt_converter_type<br>
             </td>
             <td style="vertical-align: top;">Type converter structure
@@ -326,7 +328,7 @@ fpt_type using operator().<br>
             </td>
           </tr>
           <tr>
-            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace;">
+            <td style="vertical-align: top; font-family: 'Courier New',Courier,monospace; font-weight: bold;">
 to_efpt_converter_type<br>
             </td>
             <td style="vertical-align: top;">Type converter structure
