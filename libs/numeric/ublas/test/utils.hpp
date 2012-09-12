@@ -376,10 +376,10 @@ bool rel_close_to(::std::complex<T1> const& x, ::std::complex<T2> const& y, T3 t
 																/* [/BOOST_UBLAS_TEST_CHECK_MATRIX_REL_CLOSE] */
 
 ///< Output the error message \a x.
-#ifdef __func__ 
-# define BOOST_UBLAS_TEST_ERROR(x) ::std::cerr << "[Error (" << __FILE__ << ":" << __func__ << ":" << __LINE__ << ")>> " << BOOST_UBLAS_TEST_EXPAND_(x) << ::std::endl
+#ifdef _MSC_VER
+# define BOOST_UBLAS_TEST_ERROR(x) ::std::cerr << "[Error (" << __FILE__ << ":" << __FUNCTION__ << ":" << __LINE__ << ")>> " << BOOST_UBLAS_TEST_EXPAND_(x) << ::std::endl
 #else
-# define BOOST_UBLAS_TEST_ERROR(x) ::std::cerr << "[Error (" << __FILE__ << ":" << __LINE__ << ")>> " << BOOST_UBLAS_TEST_EXPAND_(x) << ::std::endl
+# define BOOST_UBLAS_TEST_ERROR(x) ::std::cerr << "[Error (" << __FILE__ << ":" << __func__ << ":" << __LINE__ << ")>> " << BOOST_UBLAS_TEST_EXPAND_(x) << ::std::endl
 #endif
 
 #endif // BOOST_NUMERIC_UBLAS_TEST_UTILS_HPP
