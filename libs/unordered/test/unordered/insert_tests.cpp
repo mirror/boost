@@ -229,6 +229,24 @@ void insert_tests2(X*, test::random_generator generator)
         test::check_equivalent_keys(x);
     }
 
+    std::cerr<<"insert range with rehash tests.\n";
+
+    {
+        test::check_instances check_;
+
+        X x;
+
+        test::random_values<X> v(1000, generator);
+
+        x.insert(*v.begin());
+        x.clear();
+
+        x.insert(v.begin(), v.end());
+
+        test::check_container(x, v);
+        test::check_equivalent_keys(x);
+    }
+
     std::cerr<<"insert input iterator range tests.\n";
 
     {

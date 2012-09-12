@@ -748,7 +748,7 @@ namespace boost { namespace unordered { namespace detail {
         // strong otherwise exception safety
         void rehash_impl(std::size_t num_buckets)
         {
-            BOOST_ASSERT(this->size_);
+            BOOST_ASSERT(this->buckets_);
 
             this->create_buckets(num_buckets);
             previous_pointer prev = this->get_previous_start();
