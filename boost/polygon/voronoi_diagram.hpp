@@ -40,11 +40,10 @@ class voronoi_cell {
   typedef std::size_t source_index_type;
   typedef SourceCategory source_category_type;
 
-  voronoi_cell(const source_index_type& source_index,
-               const source_category_type& source_category,
-               voronoi_edge_type* edge) :
+  voronoi_cell(source_index_type source_index,
+               source_category_type source_category) :
       source_index_(source_index),
-      incident_edge_(edge),
+      incident_edge_(NULL),
       color_(source_category) {}
 
   // Returns true if the cell contains point site, false else.
@@ -104,12 +103,10 @@ class voronoi_vertex {
   typedef std::size_t color_type;
   typedef voronoi_edge<coordinate_type> voronoi_edge_type;
 
-  voronoi_vertex(const coordinate_type& x,
-                 const coordinate_type& y,
-                 voronoi_edge_type* edge) :
+  voronoi_vertex(const coordinate_type& x, const coordinate_type& y) :
       x_(x),
       y_(y),
-      incident_edge_(edge),
+      incident_edge_(NULL),
       color_(0) {}
 
   const coordinate_type& x() const { return x_; }
@@ -181,7 +178,6 @@ class voronoi_edge {
 
   voronoi_vertex_type* vertex1() { return twin_->vertex0(); }
   const voronoi_vertex_type* vertex1() const { return twin_->vertex0(); }
-  void vertex1(voronoi_vertex_type* v) { twin_->vertex0(v); }
 
   voronoi_edge_type* twin() { return twin_; }
   const voronoi_edge_type* twin() const { return twin_; }
@@ -197,21 +193,13 @@ class voronoi_edge {
 
   // Returns a pointer to the rotation next edge
   // over the starting point of the half-edge.
-  voronoi_edge_type* rot_next() {
-    return prev_->twin();
-  }
-  const voronoi_edge_type* rot_next() const {
-    return prev_->twin();
-  }
+  voronoi_edge_type* rot_next() { return prev_->twin(); }
+  const voronoi_edge_type* rot_next() const { return prev_->twin(); }
 
   // Returns a pointer to the rotation prev edge
   // over the starting point of the half-edge.
-  voronoi_edge_type* rot_prev() {
-    return twin_->next();
-  }
-  const voronoi_edge_type* rot_prev() const {
-    return twin_->next();
-  }
+  voronoi_edge_type* rot_prev() { return twin_->next(); }
+  const voronoi_edge_type* rot_prev() const { return twin_->next(); }
 
   // Returns true if the edge is finite (segment, parabolic arc).
   // Returns false if the edge is infinite (ray, line).
@@ -300,15 +288,12 @@ class voronoi_diagram {
   typedef typename TRAITS::edge_type edge_type;
 
   typedef std::vector<cell_type> cell_container_type;
-  typedef typename cell_container_type::iterator cell_iterator;
   typedef typename cell_container_type::const_iterator const_cell_iterator;
 
   typedef std::vector<vertex_type> vertex_container_type;
-  typedef typename vertex_container_type::iterator vertex_iterator;
   typedef typename vertex_container_type::const_iterator const_vertex_iterator;
 
   typedef std::vector<edge_type> edge_container_type;
-  typedef typename edge_container_type::iterator edge_iterator;
   typedef typename edge_container_type::const_iterator const_edge_iterator;
 
   voronoi_diagram() {}
@@ -351,8 +336,7 @@ class voronoi_diagram {
 
   template <typename CT>
   void _process_single_site(const detail::site_event<CT>& site) {
-    cells_.push_back(cell_type(
-         site.initial_index(), site.source_category(), NULL));
+    cells_.push_back(cell_type(site.initial_index(), site.source_category()));
   }
 
   // Insert a new half-edge into the output data structure.
@@ -380,13 +364,13 @@ class voronoi_diagram {
     // Add the initial cell during the first edge insertion.
     if (cells_.empty()) {
       cells_.push_back(cell_type(
-          site1.initial_index(), site1.source_category(), NULL));
+          site1.initial_index(), site1.source_category()));
     }
 
     // The second site represents a new site during site event
     // processing. Add a new cell to the cell records.
     cells_.push_back(cell_type(
-      site2.initial_index(), site2.source_category(), NULL));
+        site2.initial_index(), site2.source_category()));
 
     // Set up pointers to cells.
     edge1.cell(&cells_[site_index1]);
@@ -416,7 +400,7 @@ class voronoi_diagram {
     edge_type* edge23 = static_cast<edge_type*>(data23);
 
     // Add a new Voronoi vertex.
-    vertices_.push_back(vertex_type(circle.x(), circle.y(), NULL));
+    vertices_.push_back(vertex_type(circle.x(), circle.y()));
     vertex_type& new_vertex = vertices_.back();
 
     // Update vertex pointers of the old edges.
@@ -566,6 +550,9 @@ class voronoi_diagram {
   }
 
  private:
+  typedef typename cell_container_type::iterator cell_iterator;
+  typedef typename vertex_container_type::iterator vertex_iterator;
+  typedef typename edge_container_type::iterator edge_iterator;
   typedef typename TRAITS::vertex_equality_predicate_type
     vertex_equality_predicate_type;
 

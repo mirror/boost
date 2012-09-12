@@ -39,8 +39,8 @@ namespace polygon {
 // leftmost event is retrieved by comparing the current site event and the
 // topmost element from the circle event queue. STL map (red-black tree)
 // container was chosen to hold state of the beach line. The keys of the map
-// correspond to the neighboring sites that form a bisector and values to the
-// corresponding Voronoi edge in the output data structure.
+// correspond to the neighboring sites that form a bisector and values map to
+// the corresponding Voronoi edges in the output data structure.
 template <typename T,
           typename CTT = detail::voronoi_ctype_traits<T>,
           typename VP = detail::voronoi_predicates<CTT> >

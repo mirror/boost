@@ -20,7 +20,7 @@ typedef voronoi_edge<double> voronoi_edge_type;
 typedef voronoi_diagram<double> voronoi_diagram_type;
 
 BOOST_AUTO_TEST_CASE(voronoi_cell_test) {
-  voronoi_cell_type cell(1, SOURCE_CATEGORY_INITIAL_SEGMENT, NULL);
+  voronoi_cell_type cell(1, SOURCE_CATEGORY_INITIAL_SEGMENT);
   cell.color(27);
   BOOST_CHECK(!cell.contains_point());
   BOOST_CHECK(cell.contains_segment());
@@ -37,7 +37,7 @@ BOOST_AUTO_TEST_CASE(voronoi_cell_test) {
 }
 
 BOOST_AUTO_TEST_CASE(voronoi_vertex_test) {
-  voronoi_vertex_type vertex(1, 2, NULL);
+  voronoi_vertex_type vertex(1, 2);
   vertex.color(27);
   BOOST_CHECK(vertex.is_degenerate());
   BOOST_CHECK(vertex.x() == 1);
@@ -86,17 +86,19 @@ BOOST_AUTO_TEST_CASE(voronoi_edge_test) {
   BOOST_CHECK(edge1.rot_next() == &edge1);
   BOOST_CHECK(edge1.rot_prev() == &edge1);
 
-  voronoi_cell_type cell(1, SOURCE_CATEGORY_INITIAL_SEGMENT, NULL);
+  voronoi_cell_type cell(1, SOURCE_CATEGORY_INITIAL_SEGMENT);
   edge1.cell(&cell);
   BOOST_CHECK(edge1.cell() == &cell);
 
-  voronoi_vertex_type vertex0(1, 2, NULL);
+  voronoi_vertex_type vertex0(1, 2);
   edge1.vertex0(&vertex0);
   BOOST_CHECK(edge1.vertex0() == &vertex0);
+  BOOST_CHECK(edge2.vertex1() == &vertex0);
 
-  voronoi_vertex_type vertex1(2, 1, NULL);
-  edge1.vertex1(&vertex1);
+  voronoi_vertex_type vertex1(2, 1);
+  edge2.vertex0(&vertex1);
   BOOST_CHECK(edge1.vertex1() == &vertex1);
+  BOOST_CHECK(edge2.vertex0() == &vertex1);
 
   BOOST_CHECK(edge1.is_finite());
   BOOST_CHECK(edge2.is_finite());
