@@ -112,3 +112,11 @@ BOOST_AUTO_TEST_CASE( d_ary_heap_mutable_stable_test )
     run_d_ary_heap_mutable_test<4, true>();
     run_d_ary_heap_mutable_test<5, true>();
 }
+
+BOOST_AUTO_TEST_CASE( d_ary_heap_compare_lookup_test )
+{
+    typedef boost::heap::d_ary_heap<int, boost::heap::arity<2>,
+                                    boost::heap::compare<less_with_T>,
+                                    boost::heap::allocator<std::allocator<int> > > pri_queue;
+    run_common_heap_tests<pri_queue>();
+}

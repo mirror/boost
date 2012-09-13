@@ -440,4 +440,13 @@ void run_reserve_heap_tests(void)
     check_q(q, data);
 }
 
+struct less_with_T
+{
+    typedef int T;
+    bool operator()(const int& a, const int& b) const
+    {
+        return a < b;
+    }
+};
+
 #endif // COMMON_HEAP_TESTS_HPP_INCLUDED

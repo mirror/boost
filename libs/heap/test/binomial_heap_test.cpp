@@ -58,3 +58,11 @@ BOOST_AUTO_TEST_CASE( binomial_heap_test )
     run_binomial_heap_test<true, false>();
     run_binomial_heap_test<true, true>();
 }
+
+BOOST_AUTO_TEST_CASE( binomial_heap_compare_lookup_test )
+{
+    typedef boost::heap::binomial_heap<int,
+                                       boost::heap::compare<less_with_T>,
+                                       boost::heap::allocator<std::allocator<int> > > pri_queue;
+    run_common_heap_tests<pri_queue>();
+}

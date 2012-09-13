@@ -106,3 +106,11 @@ BOOST_AUTO_TEST_CASE( skew_heap_mutable_test )
     run_skew_heap_mutable_test<true, false>();
     run_skew_heap_mutable_test<true, true>();
 }
+
+BOOST_AUTO_TEST_CASE( skew_heap_compare_lookup_test )
+{
+    typedef boost::heap::skew_heap<int,
+                                   boost::heap::compare<less_with_T>,
+                                   boost::heap::allocator<std::allocator<int> > > pri_queue;
+    run_common_heap_tests<pri_queue>();
+}
