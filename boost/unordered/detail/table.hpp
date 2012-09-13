@@ -429,7 +429,7 @@ namespace boost { namespace unordered { namespace detail {
                 a.construct();
 
                 (constructor.get() +
-                    static_cast<std::ptrdiff_t>(bucket_count_))->next_ =
+                    static_cast<std::ptrdiff_t>(new_count))->next_ =
                         a.release();
             }
 
