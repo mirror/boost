@@ -589,9 +589,7 @@ class stable_vector
             ::value>::type * = 0)
    {
       while(!holder.empty()){
-         const node_ptr n = holder.front();
-         holder.pop_front();
-         this->deallocate_one(n);
+         this->deallocate_one(holder.pop_front());
       }
    }
 
@@ -1697,8 +1695,7 @@ class stable_vector
                               , node_ptr_traits::static_cast_from(pool_first_ref)
                               , node_ptr_traits::static_cast_from(pool_last_ref)
                               , internal_data.pool_size);
-      node_ptr ret = holder.front();
-      holder.pop_front();
+      node_ptr ret = holder.pop_front();
       --this->internal_data.pool_size;
       if(!internal_data.pool_size){
          pool_first_ref = pool_last_ref = node_ptr();

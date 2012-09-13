@@ -247,8 +247,7 @@ struct node_alloc_holder
          Node *p = 0;
          BOOST_TRY{
                for(difference_type i = 0; i < n; ++i, ++beg, --constructed){
-               p = container_detail::to_raw_pointer(mem.front());
-               mem.pop_front();
+               p = container_detail::to_raw_pointer(mem.pop_front());
                //This can throw
                constructed = 0;
                boost::container::construct_in_place(this->node_alloc(), container_detail::addressof(p->m_data), beg);

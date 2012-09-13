@@ -1723,7 +1723,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //New situation in Case A (hole_size == 0):
    // range is moved through move assignments
    //
-   //       first_pos   last_pos         old_limit
+   //       first_pos   last_pos         limit_pos
    //             |       |                  | 
    // ____________V_______V__________________V_____________
    //|   prefix'  |       |  | range |suffix'|raw_mem      ~
@@ -1735,7 +1735,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //New situation in Case B (hole_size > 0):
    // range is moved through uninitialized moves
    //
-   //       first_pos   last_pos         old_limit
+   //       first_pos   last_pos         limit_pos
    //             |       |                  | 
    // ____________V_______V__________________V________________
    //|    prefix' |       |                  | [hole] | range |
@@ -1746,31 +1746,33 @@ class vector : private container_detail::vector_alloc_holder<A>
    //New situation in Case C (hole_size == 0):
    // range is moved through move assignments and uninitialized moves
    //
-   //       first_pos   last_pos         old_limit
+   //       first_pos   last_pos         limit_pos
    //             |       |                  | 
    // ____________V_______V__________________V___
    //|   prefix'  |       |              | range |
    //|___________________________________|___^___|
    //                 |                      |
    //                 |_>_>_>_>_>_>_>_>_>_>_>^
-   size_type priv_insert_ordered_at_shift_range(size_type first_pos, size_type last_pos, size_type limit_pos, size_type shift_count)
+   size_type priv_insert_ordered_at_shift_range
+      (size_type first_pos, size_type last_pos, size_type limit_pos, size_type shift_count)
    {
       BOOST_ASSERT(first_pos <= last_pos);
       BOOST_ASSERT(last_pos <= limit_pos);
       //
       T* const begin_ptr = container_detail::to_raw_pointer(this->members_.m_start);
+      T* const first_ptr = begin_ptr + first_pos;
+      T* const last_ptr  = begin_ptr + last_pos;
 
       size_type hole_size = 0;
       //Case A:
       if((last_pos + shift_count) <= limit_pos){
          //All move assigned
-         boost::move_backward(begin_ptr + first_pos, begin_ptr + last_pos, begin_ptr + last_pos + shift_count);
+         boost::move_backward(first_ptr, last_ptr, last_ptr + shift_count);
       }
       //Case B:
       else if((first_pos + shift_count) >= limit_pos){
          //All uninitialized_moved
-         ::boost::container::uninitialized_move_alloc
-            (this->alloc(), begin_ptr + first_pos, begin_ptr + last_pos, begin_ptr + first_pos + shift_count);
+         ::boost::container::uninitialized_move_alloc(this->alloc(), first_ptr, last_ptr, first_ptr + shift_count);
          hole_size = last_pos + shift_count - limit_pos;
       }
       //Case C:
@@ -1778,10 +1780,9 @@ class vector : private container_detail::vector_alloc_holder<A>
          //Some uninitialized_moved
          T* const limit_ptr    = begin_ptr + limit_pos;
          T* const boundary_ptr = limit_ptr - shift_count;
-         ::boost::container::uninitialized_move_alloc
-            (this->alloc(), boundary_ptr, begin_ptr + last_pos, limit_ptr);
+         ::boost::container::uninitialized_move_alloc(this->alloc(), boundary_ptr, last_ptr, limit_ptr);
          //The rest is move assigned
-         boost::move_backward(begin_ptr + first_pos, boundary_ptr, limit_ptr);
+         boost::move_backward(first_ptr, boundary_ptr, limit_ptr);
       }
       return hole_size;
    }

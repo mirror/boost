@@ -45,13 +45,29 @@ class basic_multiallocation_chain
                     > slist_impl_t;
    slist_impl_t slist_impl_;
 
-   static node & to_node(VoidPointer p)
-   {  return *static_cast<node*>(static_cast<void*>(container_detail::to_raw_pointer(p))); }
+   typedef typename boost::intrusive::pointer_traits
+      <VoidPointer>::template rebind_pointer<node>::type    node_ptr;
+   typedef typename boost::intrusive::
+      pointer_traits<node_ptr>                              node_ptr_traits;
+
+   static node & build_node(const VoidPointer &p)
+   {
+      return *::new (static_cast<node*>(static_cast<void*>(container_detail::to_raw_pointer(p)))) node;
+   }
+
+   static VoidPointer destroy_node(node &n)
+   {
+      VoidPointer retptr = node_ptr_traits::pointer_to(n);
+      n.~node();
+      return retptr;
+   }
+
+   static node_ptr to_node_ptr(VoidPointer p)
+   {  return node_ptr_traits::static_cast_from(p);   }
 
    BOOST_MOVABLE_BUT_NOT_COPYABLE(basic_multiallocation_chain)
 
    public:
-
 
    typedef VoidPointer  void_pointer;
    typedef typename slist_impl_t::iterator iterator;
@@ -94,19 +110,21 @@ class basic_multiallocation_chain
    {  slist_impl_.clear(); }
 
    iterator insert_after(iterator it, void_pointer m)
-   {  return slist_impl_.insert_after(it, to_node(m));   }
+   {  return slist_impl_.insert_after(it, build_node(m));   }
 
    void push_front(void_pointer m)
-   {  return slist_impl_.push_front(to_node(m));   }
+   {  return slist_impl_.push_front(build_node(m));  }
 
    void push_back(void_pointer m)
-   {  return slist_impl_.push_back(to_node(m));   }
+   {  return slist_impl_.push_back(build_node(m));   }
 
-   void pop_front()
-   {  return slist_impl_.pop_front();   }
-
-   void *front()
-   {  return &*slist_impl_.begin();   }
+   void_pointer pop_front()
+   {
+      node & n = slist_impl_.front();
+      void_pointer ret = destroy_node(n);
+      slist_impl_.pop_front();
+      return ret;
+   }
 
    void splice_after(iterator after_this, basic_multiallocation_chain &x, iterator before_begin, iterator before_end)
    {  slist_impl_.splice_after(after_this, x.slist_impl_, before_begin, before_end);   }
@@ -118,10 +136,12 @@ class basic_multiallocation_chain
    {  slist_impl_.splice_after(after_this, x.slist_impl_);   }
 
    void incorporate_after(iterator after_this, void_pointer begin , iterator before_end)
-   {  slist_impl_.incorporate_after(after_this, &to_node(begin), &to_node(before_end));   }
+   {
+      slist_impl_.incorporate_after(after_this, to_node_ptr(begin), to_node_ptr(before_end));
+   }
 
    void incorporate_after(iterator after_this, void_pointer begin, void_pointer before_end, size_type n)
-   {  slist_impl_.incorporate_after(after_this, &to_node(begin), &to_node(before_end), n);   }
+   {  slist_impl_.incorporate_after(after_this, to_node_ptr(begin), to_node_ptr(before_end), n);   }
 
    void swap(basic_multiallocation_chain &x)
    {  slist_impl_.swap(x.slist_impl_);   }
@@ -203,11 +223,8 @@ class transform_multiallocation_chain
    void incorporate_after(iterator after_this, pointer begin, pointer before_end, size_type n)
    {  holder_.incorporate_after(after_this.base(), begin, before_end, n);  }
 
-   void pop_front()
-   {  holder_.pop_front();  }
-
-   pointer front()
-   {  return cast(holder_.front());   }
+   pointer pop_front()
+   {  return cast(holder_.pop_front());  }
 
    bool empty() const
    {  return holder_.empty(); }
