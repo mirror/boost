@@ -1,6 +1,12 @@
 #ifndef BOOST_ATOMIC_DETAIL_GCC_SPARC_HPP
 #define BOOST_ATOMIC_DETAIL_GCC_SPARC_HPP
 
+//  Copyright (c) 2010 Helge Bahmann
+//
+//  Distributed under the Boost Software License, Version 1.0.
+//  See accompanying file LICENSE_1_0.txt or copy at
+//  http://www.boost.org/LICENSE_1_0.txt)
+
 namespace boost {
 namespace atomics {
 namespace detail {
