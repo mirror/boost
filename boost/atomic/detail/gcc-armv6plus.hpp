@@ -239,3 +239,4 @@ public:
 #endif /* !defined(BOOST_ATOMIC_FORCE_FALLBACK) */
 
 #endif
+
