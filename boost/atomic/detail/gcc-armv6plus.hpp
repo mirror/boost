@@ -1,5 +1,5 @@
-#ifndef BOOST_ATOMIC_DETAIL_GCC_ARMV6P_HPP
-#define BOOST_ATOMIC_DETAIL_GCC_ARMV6P_HPP
+#ifndef BOOST_ATOMIC_DETAIL_GCC_ARMV6PLUS_HPP
+#define BOOST_ATOMIC_DETAIL_GCC_ARMV6PLUS_HPP
 
 //  Distributed under the Boost Software License, Version 1.0.
 //  See accompanying file LICENSE_1_0.txt or copy at
