@@ -8,6 +8,9 @@
 import common ;
 
 project boost/atomic
+    : requirements
+      <link>shared:<define>BOOST_ATOMIC_DYN_LINK=1
+      <define>BOOST_ATOMIC_SOURCE
     : source-location ../src
     ;
 
