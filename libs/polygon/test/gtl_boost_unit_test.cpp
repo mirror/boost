@@ -3665,7 +3665,7 @@ int main() {
     }    
   }
 
-    if(1){
+  if (1) {
     using namespace boost::polygon;
     typedef point_data<int> Point;
     typedef segment_data<int> Dls;
@@ -3678,46 +3678,40 @@ int main() {
     Dls dls3(pt1, pt4);
     Dls dls4(pt2, pt1);
     typedef std::vector<segment_data<int> > Dlss;
-    Dlss dlss;
+    Dlss dlss, result;
     dlss.push_back(dls1);
     dlss.push_back(dls2);
     dlss.push_back(dls3);
     dlss.push_back(dls4);
     rectangle_data<int> rect;
-    segments_extents(rect, dlss.begin(), dlss.end());
-    assert_s(area(rect) == 400.0, "extents");
-    intersect_segments(dlss);
-    for(Dlss::iterator itr = dlss.begin(); itr != dlss.end(); ++itr) {
+    envelope_segments(dlss.begin(), dlss.end(), &rect);
+    assert_s(area(rect) == 400.0, "envelope");
+    intersect_segments(dlss.begin(), dlss.end(), &result);
+    dlss.swap(result);
+    for (Dlss::iterator itr = dlss.begin(); itr != dlss.end(); ++itr) {
       std::cout << *itr << std::endl;
     }
     assert_s(dlss.size() == 5, "intersection");
-    std::vector<Point> ips;
-    std::size_t nips = segment_intersections(ips, dlss.begin(), dlss.end());
-    assert_s(nips == 0, "points0");
     Dls dls5(Point(0,5), Point(5,0));
     dlss.push_back(dls5);
-    nips = segment_intersections(ips, dlss.begin(), dlss.end());
-    assert_s(nips == 2, "points1");
-    //for(std::size_t i = 0; i < ips.size(); ++i) {
-    //  std::cout << ips[i] << std::endl;
-    //}
-    assert_s(ips[0] == Point(2,2), "points2");
-    assert_s(ips[1] == Point(5,0), "points3");
     std::cout << std::endl;
-    intersect_segments(dlss);
-    for(Dlss::iterator itr = dlss.begin(); itr != dlss.end(); ++itr) {
+    result.clear();
+    intersect_segments(dlss.begin(), dlss.end(), &result);
+    dlss.swap(result);
+    for (Dlss::iterator itr = dlss.begin(); itr != dlss.end(); ++itr) {
       std::cout << *itr << std::endl;
     }
     assert_s(dlss.size() == 11, "intersection2");
   }
   
-  if(1){
+  if (1) {
     using namespace boost::polygon;
     std::vector<std::pair<std::size_t, segment_data<int> > > segs;
     segment_data<int> sarray[2];
     sarray[0] = segment_data<int>(point_data<int>(0,0), point_data<int>(10,10));
     sarray[1] = segment_data<int>(point_data<int>(10,0), point_data<int>(0,10));
-    intersect_segments(segs, sarray, sarray+2);
+    std::iterator_traits<segment_data<int>*>::value_type s = sarray[0];
+    intersect_segments(sarray, sarray+2, &segs);
     std::cout << segs.size() << std::endl;
     assert_s(segs.size() == 4, "intersection3");
   }

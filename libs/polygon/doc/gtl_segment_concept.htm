@@ -1,9 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head>
-<!--
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head><!--
     Copyright 2009-2010 Intel Corporation
     license banner
 --><title>Boost Polygon Library: Segment Concept</title>
+
+
 
 
 
@@ -483,30 +484,33 @@ const</font></td>
 
           <tr>
             <td width="586"><font face="Courier New">template
-&lt;typename segment_container_type&gt;<b><br />
-            </b>void <b>intersect_segments</b>(segment_container_type&amp; segments)
+&lt;typename SegmentIterator,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename SegmentContainer&gt;<b><br />
+            </b>void <b>intersect_segments</b>(<br />
+&nbsp;&nbsp;&nbsp; SegmentIterator first,<br />
+&nbsp;&nbsp;&nbsp; SegmentIterator last,<br />
+&nbsp;&nbsp;&nbsp; SegmentContainer* result)
             </font></td>
-            <td>Modifies the contents of the container of segments such
-              that segments are split at their intersection points.
-              Postconditions: no segments intersect except at their end
+            <td>Accumulates
+the result of splitting the segments in the iterator range at their
+intersection points into the result container. Preconditions: segment
+type used by all the input structures should model segment concept.Postconditions: no segments intersect except at their end
               points.  Useful to satisfy the precondition of voronoi diagram
               construction. 
               Expected n log n runtime, worst case quadratic runtime wrt. vertices + intersections.
-            </td>
+             </td>
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
-&lt;typename line_segment_type, <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename line_segment_iterator_type&gt;<b><br />
+&lt;typename SegmentIterator,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename Segment&gt;<b><br />
             </b>void <b>intersect_segments</b>(<br />
-&nbsp;&nbsp;vector&ltpair&ltsize_t,
-            line_segment_type&gt &gt &amp; result, <br />
-&nbsp;&nbsp;line_segment_iterator_type begin_segs, <br />
-&nbsp;&nbsp;line_segment_iterator_type end_segs)
-            </font></td>
+&nbsp;&nbsp;&nbsp; SegmentIterator first,<br />
+&nbsp;&nbsp;&nbsp; SegmentIterator last,<br />
+&nbsp;&nbsp;&nbsp; vector&lt;pair&lt;size_t, Segment&gt;* result)</font></td>
             <td>Accumulates the result of splitting the segments in the
               iterator range at their intersection points into the result container.
-              Postconditions: no segments intersect except at their end
+              Preconditions: segment type used by all the input structures should model segment concept. Postconditions: no segments intersect except at their end
               points. The index of the input segment is paired with each
               resultant segment
               that was split to produce it to associate the result segments with
@@ -514,34 +518,20 @@ const</font></td>
               Expected n log n runtime, worst case quadratic runtime wrt. vertices + intersections.
             </td>
           </tr>
+          
           <tr>
             <td width="586"><font face="Courier New">template
-&lt;typename point_container_type, <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename line_segment_iterator_type&gt;<b><br />
-            </b>size_t <b>segment_intersections</b>(point_container_type&amp; result, <br />
-&nbsp;&nbsp;line_segment_iterator_type begin_segs, <br />
-&nbsp;&nbsp;line_segment_iterator_type end_segs)
+&lt;typename </font><font face="Courier New">SegmentIterator</font><font face="Courier New">, <br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename Rectangle&gt;<b><br />
+            </b>void <span style="font-weight: bold;">envelope_segments</span><b></b>(<br />
+&nbsp;&nbsp;&nbsp; </font><font face="Courier New">SegmentIterator first,<br />&nbsp; &nbsp; SegmentIterator last,<br />
+&nbsp;&nbsp;&nbsp; Rectangle* rect</font><font face="Courier New">)
             </font></td>
-            <td>
-              Accumlates the intersection points of the iterator range of line segments
-              into the result container of points.  Trivial intersections consisting
-              of abutting line segments that are an end point are not reported.
-              Expected n log n runtime, worst case quadratic runtime wrt. vertices + intersections.
-            </td>
-          </tr>
-          <tr>
-            <td width="586"><font face="Courier New">template
-&lt;typename rectangle_type, <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename
-                line_segment_iterator_type&gt;<b><br />
-            </b>void <b>segments_extents</b>(rectangle_type&amp; envelope,<br />
-&nbsp;&nbsp;line_segment_iterator_type begin_segs, <br />
-&nbsp;&nbsp;line_segment_iterator_type end_segs)
-            </font></td>
-            <td>Computes the bounding rectangle of the the iterator range of
-              line segments.
-              Linear runtime.
-            </td>
+            <td>Computes
+the bounding rectangle of the iterator range of line segments.
+Preconditions: segment type and rectangle type used by the input
+structures should model segment concept and rectangle concept
+respectively. Linear runtime. </td>
           </tr>
 
 
@@ -573,5 +563,6 @@ http://www.boost.org/LICENSE_1_0.txt</a>)</td>
     </tr>
   </tbody>
 </table>
+
 
 </body></html>
