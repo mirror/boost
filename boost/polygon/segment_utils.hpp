@@ -16,7 +16,7 @@
 namespace boost {
 namespace polygon {
 
-template <typename SegmentIterator, typename Segment>
+template <typename Segment, typename SegmentIterator>
 typename enable_if<
   typename gtl_and<
     typename gtl_if<
@@ -35,8 +35,8 @@ typename enable_if<
   void
 >::type
 intersect_segments(
-    SegmentIterator first, SegmentIterator last,
-    std::vector<std::pair<std::size_t, Segment> >* result) {
+    std::vector<std::pair<std::size_t, Segment> >& result,
+    SegmentIterator first, SegmentIterator last) {
   typedef typename segment_traits<Segment>::coordinate_type Unit;
   typedef typename scanline_base<Unit>::Point Point;
   typedef typename scanline_base<Unit>::half_edge half_edge;
@@ -58,16 +58,16 @@ intersect_segments(
         half_edges_out, half_edges.begin(), half_edges.end());
   }
 
-  result->reserve(result->size() + half_edges_out.size());
+  result.reserve(result.size() + half_edges_out.size());
   for (std::size_t i = 0; i < half_edges_out.size(); ++i) {
     std::size_t id = (std::size_t)(half_edges_out[i].second);
     Point l = half_edges_out[i].first.first;
     Point h = half_edges_out[i].first.second;
-    result->push_back(std::make_pair(id, construct<Segment>(l, h)));
+    result.push_back(std::make_pair(id, construct<Segment>(l, h)));
   }
 }
 
-template <typename SegmentIterator, typename SegmentContainer>
+template <typename SegmentContainer, typename SegmentIterator>
 typename enable_if<
   typename gtl_and<
     typename gtl_if<
@@ -88,9 +88,9 @@ typename enable_if<
   void
 >::type
 intersect_segments(
+    SegmentContainer& result,
     SegmentIterator first,
-    SegmentIterator last,
-    SegmentContainer* result) {
+    SegmentIterator last) {
   typedef typename SegmentContainer::value_type segment_type;
   typedef typename segment_traits<segment_type>::coordinate_type Unit;
   typedef typename scanline_base<Unit>::Point Point;
@@ -113,15 +113,15 @@ intersect_segments(
         half_edges_out, half_edges.begin(), half_edges.end());
   }
 
-  result->reserve(result->size() + half_edges_out.size());
+  result.reserve(result.size() + half_edges_out.size());
   for (std::size_t i = 0; i < half_edges_out.size(); ++i) {
     Point l = half_edges_out[i].first.first;
     Point h = half_edges_out[i].first.second;
-    result->push_back(construct<segment_type>(l, h));
+    result.push_back(construct<segment_type>(l, h));
   }
 }
 
-template <typename SegmentIterator, typename Rectangle>
+template <typename Rectangle, typename SegmentIterator>
 typename enable_if<
   typename gtl_and<
     typename gtl_if<
@@ -140,15 +140,15 @@ typename enable_if<
   bool
 >::type
 envelope_segments(
+    Rectangle& rect,
     SegmentIterator first,
-    SegmentIterator last,
-    Rectangle* rect) {
+    SegmentIterator last) {
   for (SegmentIterator it = first; it != last; ++it) {
     if (it == first) {
-      set_points(*rect, low(*it), high(*it));
+      set_points(rect, low(*it), high(*it));
     } else {
-      encompass(*rect, low(*it));
-      encompass(*rect, high(*it));
+      encompass(rect, low(*it));
+      encompass(rect, high(*it));
     }
   }
   return first != last;

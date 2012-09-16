@@ -3684,9 +3684,9 @@ int main() {
     dlss.push_back(dls3);
     dlss.push_back(dls4);
     rectangle_data<int> rect;
-    envelope_segments(dlss.begin(), dlss.end(), &rect);
+    envelope_segments(rect, dlss.begin(), dlss.end());
     assert_s(area(rect) == 400.0, "envelope");
-    intersect_segments(dlss.begin(), dlss.end(), &result);
+    intersect_segments(result, dlss.begin(), dlss.end());
     dlss.swap(result);
     for (Dlss::iterator itr = dlss.begin(); itr != dlss.end(); ++itr) {
       std::cout << *itr << std::endl;
@@ -3696,7 +3696,7 @@ int main() {
     dlss.push_back(dls5);
     std::cout << std::endl;
     result.clear();
-    intersect_segments(dlss.begin(), dlss.end(), &result);
+    intersect_segments(result, dlss.begin(), dlss.end());
     dlss.swap(result);
     for (Dlss::iterator itr = dlss.begin(); itr != dlss.end(); ++itr) {
       std::cout << *itr << std::endl;
@@ -3711,7 +3711,7 @@ int main() {
     sarray[0] = segment_data<int>(point_data<int>(0,0), point_data<int>(10,10));
     sarray[1] = segment_data<int>(point_data<int>(10,0), point_data<int>(0,10));
     std::iterator_traits<segment_data<int>*>::value_type s = sarray[0];
-    intersect_segments(sarray, sarray+2, &segs);
+    intersect_segments(segs, sarray, sarray+2);
     std::cout << segs.size() << std::endl;
     assert_s(segs.size() == 4, "intersection3");
   }

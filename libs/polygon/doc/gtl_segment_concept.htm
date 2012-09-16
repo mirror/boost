@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head>
+<!--
     Copyright 2009-2010 Intel Corporation
     license banner
 --><title>Boost Polygon Library: Segment Concept</title>
@@ -484,12 +485,13 @@ const</font></td>
 
           <tr>
             <td width="586"><font face="Courier New">template
-&lt;typename SegmentIterator,<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename SegmentContainer&gt;<b><br />
+&lt;</font><font face="Courier New">typename SegmentContainer</font><font face="Courier New">,</font><font face="Courier New"><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename SegmentIterator</font><font face="Courier New">&gt;<b><br />
             </b>void <b>intersect_segments</b>(<br />
+&nbsp;&nbsp;&nbsp; </font><font face="Courier New">SegmentContainer* result,</font><br />
+            <font face="Courier New">
 &nbsp;&nbsp;&nbsp; SegmentIterator first,<br />
-&nbsp;&nbsp;&nbsp; SegmentIterator last,<br />
-&nbsp;&nbsp;&nbsp; SegmentContainer* result)
+&nbsp;&nbsp;&nbsp; SegmentIterator last)
             </font></td>
             <td>Accumulates
 the result of splitting the segments in the iterator range at their
@@ -502,30 +504,32 @@ type used by all the input structures should model segment concept.Postcondition
           </tr>
           <tr>
             <td width="586"><font face="Courier New">template
-&lt;typename SegmentIterator,<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename Segment&gt;<b><br />
+&lt;</font><font face="Courier New">typename Segment,</font><font face="Courier New"><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font face="Courier New">typename SegmentIterator</font><font face="Courier New">&gt;<b><br />
             </b>void <b>intersect_segments</b>(<br />
+&nbsp;&nbsp;&nbsp; </font><font face="Courier New">vector&lt;pair&lt;size_t, Segment&gt;* result,</font><br />
+            <font face="Courier New">
 &nbsp;&nbsp;&nbsp; SegmentIterator first,<br />
-&nbsp;&nbsp;&nbsp; SegmentIterator last,<br />
-&nbsp;&nbsp;&nbsp; vector&lt;pair&lt;size_t, Segment&gt;* result)</font></td>
-            <td>Accumulates the result of splitting the segments in the
-              iterator range at their intersection points into the result container.
-              Preconditions: segment type used by all the input structures should model segment concept. Postconditions: no segments intersect except at their end
-              points. The index of the input segment is paired with each
-              resultant segment
-              that was split to produce it to associate the result segments with
-              the inputs segments.
-              Expected n log n runtime, worst case quadratic runtime wrt. vertices + intersections.
-            </td>
+&nbsp;&nbsp;&nbsp; SegmentIterator last)</font></td>
+            <td>Accumulates
+the result of splitting the segments in the iterator range at their
+intersection points into the result container. Preconditions: segment
+type used by all the input structures should model segment concept.
+Postconditions: no segments intersect except at their end points. The
+index of the input segment is paired with each resultant segment that
+was split to produce it to associate the result segments with the
+inputs segments. Expected n log n runtime, worst case quadratic runtime
+wrt. vertices + intersections. </td>
           </tr>
           
           <tr>
             <td width="586"><font face="Courier New">template
-&lt;typename </font><font face="Courier New">SegmentIterator</font><font face="Courier New">, <br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; typename Rectangle&gt;<b><br />
-            </b>void <span style="font-weight: bold;">envelope_segments</span><b></b>(<br />
-&nbsp;&nbsp;&nbsp; </font><font face="Courier New">SegmentIterator first,<br />&nbsp; &nbsp; SegmentIterator last,<br />
-&nbsp;&nbsp;&nbsp; Rectangle* rect</font><font face="Courier New">)
+&lt;</font><font face="Courier New">typename Rectangle,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; </font><font face="Courier New">typename </font><font face="Courier New">SegmentIterator</font><font face="Courier New">&gt;<b><br />
+            </b>void <span style="font-weight: bold;">envelope_segments</span>(<br />
+&nbsp;&nbsp;&nbsp; </font><font face="Courier New">Rectangle* rect,</font><br />
+            <font face="Courier New">
+&nbsp;&nbsp;&nbsp; </font><font face="Courier New">SegmentIterator first,<br />&nbsp; &nbsp; SegmentIterator last</font><font face="Courier New">)
             </font></td>
             <td>Computes
 the bounding rectangle of the iterator range of line segments.
