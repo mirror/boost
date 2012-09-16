@@ -553,8 +553,14 @@ The simple way is to decompress (or checkout from SVN) the files in your BOOST_R
 [heading Building Boost.Chrono ]
 [/=================================]
 
-__Boost_Chrono__ can be configured as a header-only library. When __BOOST_CHRONO_HEADER_ONLY and BOOST_ERROR_CODE_HEADER_ONLY are defined the Boost.Chrono is a header-only library. 
-Otherwise is not a header only library and you need to compile it and build the library before use, for example using:
+__Boost_Chrono__ can be configured as a header-only library defining __BOOST_CHRONO_HEADER_ONLY. 
+However Boost.Chrono depends on the non header-only library Boost.System, so that you will need to link with boost_system.
+
+Boost.System has un undocumented feature (use of macro BOOST_ERROR_CODE_HEADER_ONLY) to make it header only, but it is buggy 
+(see [@http://svn.boost.org/trac/boost/ticket/7347 #7347] duplicate symbol while BOOST_ERROR_CODE_HEADER_ONLY is defined)
+
+ 
+If __BOOST_CHRONO_HEADER_ONLY is not defined you need to compile it and build the library before use, for example using:
 
     bjam libs/chrono/build
 
@@ -7266,7 +7272,13 @@ When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not availabl
 
 [*Fixes:]
 
+* [@http://svn.boost.org/trac/boost/ticket/7381 #7381] C++11 compliance: unresolved symbol when assigning a constexpr duration to a non-const local variable.
+
+[*Would not fix:]
+
 * [@http://svn.boost.org/trac/boost/ticket/6871 #6871] chrono_io.hpp: operator<<(ostream& os, ...) modifies the state of os.
+
+  * The neww io interface provided in version 2 solves this issue. You should move to the new version. 
 
 [endsect] [/section [*Version 2.0.0] ]
 
