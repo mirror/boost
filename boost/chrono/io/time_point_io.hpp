@@ -15,10 +15,11 @@
 #include <boost/chrono/io/duration_io.hpp>
 #include <boost/chrono/io/ios_base_state.hpp>
 #include <boost/chrono/io/utility/manip_base.hpp>
-#include <boost/chrono/chrono.hpp>
+#include <boost/chrono/time_point.hpp>
 #include <boost/chrono/clock_string.hpp>
 #include <boost/chrono/round.hpp>
 #include <boost/chrono/detail/scan_keyword.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 #include <cstring>
 #include <locale>
 #include <string.h>
@@ -222,15 +223,11 @@ namespace boost
     {
 
       typedef std::basic_string<CharT, Traits> string_type;
-#ifndef BOOST_NO_EXCEPTIONS
       bool failed = false;
-      try // BOOST_NO_EXCEPTIONS protected
-#endif
+      BOOST_TRY
       {
         std::ios_base::iostate err = std::ios_base::goodbit;
-#ifndef BOOST_NO_EXCEPTIONS
-        try // BOOST_NO_EXCEPTIONS protected
-#endif
+        BOOST_TRY
         {
           typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
           if (opfx)
@@ -252,31 +249,30 @@ namespace boost
             os.width(0);
           }
         }
-#ifndef BOOST_NO_EXCEPTIONS
-        catch (...) // BOOST_NO_EXCEPTIONS protected
+        BOOST_CATCH (...)
         {
           bool flag = false;
-          try // BOOST_NO_EXCEPTIONS protected
+          BOOST_TRY
           {
             os.setstate(std::ios_base::failbit);
           }
-          catch (std::ios_base::failure ) // BOOST_NO_EXCEPTIONS protected
+          BOOST_CATCH (std::ios_base::failure )
           {
             flag = true;
           }
+          BOOST_CATCH_END
           if (flag) throw;
         }
-#endif
+        BOOST_CATCH_END
         if (err) os.setstate(err);
         return os;
       }
-#ifndef BOOST_NO_EXCEPTIONS
-      catch (...) // BOOST_NO_EXCEPTIONS protected
+      BOOST_CATCH (...)
       {
         failed = true;
       }
+      BOOST_CATCH_END
       if (failed) os.setstate(std::ios_base::failbit | std::ios_base::badbit);
-#endif
       return os;
     }
 
@@ -287,9 +283,7 @@ namespace boost
       //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       std::ios_base::iostate err = std::ios_base::goodbit;
 
-#ifndef BOOST_NO_EXCEPTIONS
-      try // BOOST_NO_EXCEPTIONS protected
-#endif
+      BOOST_TRY
       {
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
@@ -309,26 +303,26 @@ namespace boost
           }
         }
       }
-#ifndef BOOST_NO_EXCEPTIONS
-      catch (...) // BOOST_NO_EXCEPTIONS protected
+      BOOST_CATCH (...)
       {
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         bool flag = false;
-        try
+        BOOST_TRY
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           is.setstate(std::ios_base::failbit);
         }
-        catch (std::ios_base::failure ) // BOOST_NO_EXCEPTIONS protected
+        BOOST_CATCH (std::ios_base::failure )
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           flag = true;
         }
+        BOOST_CATCH_END
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         if (flag) throw;
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       }
-#endif
+      BOOST_CATCH_END
       if (err) is.setstate(err);
       //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       return is;
@@ -407,9 +401,7 @@ namespace boost
       {
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         bool failed = false;
-#ifndef BOOST_NO_EXCEPTIONS
-        try // BOOST_NO_EXCEPTIONS protected
-#endif
+        BOOST_TRY
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           const CharT* pb = 0; //nullptr;
@@ -514,13 +506,12 @@ namespace boost
             }
           }
         }
-#ifndef BOOST_NO_EXCEPTIONS
-        catch (...) // BOOST_NO_EXCEPTIONS protected
+        BOOST_CATCH (...)
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           failed = true;
         }
-#endif
+        BOOST_CATCH_END
         if (failed)
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
@@ -597,9 +588,7 @@ namespace boost
       if (ok)
       {
         std::ios_base::iostate err = std::ios_base::goodbit;
-#ifndef BOOST_NO_EXCEPTIONS
-        try
-#endif
+        BOOST_TRY
         {
           const CharT* pb = 0; //nullptr;
           const CharT* pe = pb;
@@ -689,12 +678,11 @@ namespace boost
             tp = system_clock::from_time_t(t) - minu;
           }
         }
-#ifndef BOOST_NO_EXCEPTIONS
-        catch (...) // BOOST_NO_EXCEPTIONS protected
+        BOOST_CATCH (...)
         {
           err |= std::ios_base::badbit | std::ios_base::failbit;
         }
-#endif
+        BOOST_CATCH_END
         exit: is.setstate(err);
       }
       return is;
