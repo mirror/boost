@@ -231,11 +231,9 @@ namespace boost { namespace unordered { namespace detail {
                 Key const& k,
                 Pred const& eq) const
         {
-            if (!this->size_) return iterator();
-
             std::size_t bucket_index =
                 policy::to_bucket(this->bucket_count_, key_hash);
-            iterator n = this->get_start(bucket_index);
+            iterator n = this->begin(bucket_index);
 
             for (;;)
             {
@@ -288,9 +286,8 @@ namespace boost { namespace unordered { namespace detail {
         bool equals(table_impl const& other) const
         {
             if(this->size_ != other.size_) return false;
-            if(!this->size_) return true;
     
-            for(iterator n1 = this->get_start(); n1.node_; ++n1)
+            for(iterator n1 = this->begin(); n1.node_; ++n1)
             {
                 iterator n2 = other.find_matching_node(n1);
 

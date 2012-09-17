@@ -276,6 +276,21 @@ void insert_tests2(X*, test::random_generator generator)
 
         test::check_equivalent_keys(x);
     }
+
+    std::cerr<<"insert copy iterator range test 2.\n";
+
+    {
+        test::check_instances check_;
+
+        X x;
+
+        test::random_values<X> v1(500, generator);
+        test::random_values<X> v2(500, generator);
+        x.insert(test::copy_iterator(v1.begin()), test::copy_iterator(v1.end()));
+        x.insert(test::copy_iterator(v2.begin()), test::copy_iterator(v2.end()));
+
+        test::check_equivalent_keys(x);
+    }
 }
 
 #if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
