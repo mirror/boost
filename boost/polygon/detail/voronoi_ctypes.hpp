@@ -74,10 +74,10 @@ template <>
 class extened_exponent_fpt_traits<fpt64> {
  public:
   typedef int exp_type;
-  static const int kMaxSignificantExpDif;
+  enum {
+    MAX_SIGNIFICANT_EXP_DIF = 54
+  };
 };
-
-const int extened_exponent_fpt_traits<fpt64>::kMaxSignificantExpDif = 54;
 
 // Floating point type wrapper. Allows to extend exponent boundaries to the
 // integer type range. This class does not handle division by zero, subnormal
@@ -115,11 +115,11 @@ class extended_exponent_fpt {
 
   extended_exponent_fpt operator+(const extended_exponent_fpt& that) const {
     if (this->val_ == 0.0 ||
-        that.exp_ > this->exp_ + _traits::kMaxSignificantExpDif) {
+        that.exp_ > this->exp_ + _traits::MAX_SIGNIFICANT_EXP_DIF) {
       return that;
     }
     if (that.val_ == 0.0 ||
-        this->exp_ > that.exp_ + _traits::kMaxSignificantExpDif) {
+        this->exp_ > that.exp_ + _traits::MAX_SIGNIFICANT_EXP_DIF) {
       return *this;
     }
     if (this->exp_ >= that.exp_) {
@@ -135,11 +135,11 @@ class extended_exponent_fpt {
 
   extended_exponent_fpt operator-(const extended_exponent_fpt& that) const {
     if (this->val_ == 0.0 ||
-        that.exp_ > this->exp_ + _traits::kMaxSignificantExpDif) {
+        that.exp_ > this->exp_ + _traits::MAX_SIGNIFICANT_EXP_DIF) {
       return extended_exponent_fpt(-that.val_, that.exp_);
     }
     if (that.val_ == 0.0 ||
-        this->exp_ > that.exp_ + _traits::kMaxSignificantExpDif) {
+        this->exp_ > that.exp_ + _traits::MAX_SIGNIFICANT_EXP_DIF) {
       return *this;
     }
     if (this->exp_ >= that.exp_) {

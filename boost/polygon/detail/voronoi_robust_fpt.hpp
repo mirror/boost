@@ -440,6 +440,13 @@ class robust_sqrt_expr {
   static const unsigned int EVAL3_MAX_RELATIVE_ERROR;
   static const unsigned int EVAL4_MAX_RELATIVE_ERROR;
 
+  enum MAX_RELATIVE_ERROR {
+    MAX_RELATIVE_ERROR_EVAL1 = 4,
+    MAX_RELATIVE_ERROR_EVAL2 = 7,
+    MAX_RELATIVE_ERROR_EVAL3 = 16,
+    MAX_RELATIVE_ERROR_EVAL4 = 25
+  };
+
   // Evaluates expression (re = 4 EPS):
   // A[0] * sqrt(B[0]).
   _fpt eval1(_int* A, _int* B) {
@@ -499,19 +506,6 @@ class robust_sqrt_expr {
   _int tB[5];
   _converter convert;
 };
-
-template <typename _int, typename _fpt, typename _converter>
-const unsigned int robust_sqrt_expr<_int, _fpt, _converter>::
-    EVAL1_MAX_RELATIVE_ERROR = 4;
-template <typename _int, typename _fpt, typename _converter>
-const unsigned int robust_sqrt_expr<_int, _fpt, _converter>::
-    EVAL2_MAX_RELATIVE_ERROR = 7;
-template <typename _int, typename _fpt, typename _converter>
-const unsigned int robust_sqrt_expr<_int, _fpt, _converter>::
-    EVAL3_MAX_RELATIVE_ERROR = 16;
-template <typename _int, typename _fpt, typename _converter>
-const unsigned int robust_sqrt_expr<_int, _fpt, _converter>::
-    EVAL4_MAX_RELATIVE_ERROR = 25;
 }  // detail
 }  // polygon
 }  // boost
