@@ -56,7 +56,6 @@ namespace unordered
     private:
 
         typedef boost::unordered::detail::map<A, K, T, H, P> types;
-        typedef typename types::allocator value_allocator;
         typedef typename types::traits allocator_traits;
         typedef typename types::table table;
 
@@ -542,7 +541,6 @@ namespace unordered
     private:
 
         typedef boost::unordered::detail::multimap<A, K, T, H, P> types;
-        typedef typename types::allocator value_allocator;
         typedef typename types::traits allocator_traits;
         typedef typename types::table table;
 

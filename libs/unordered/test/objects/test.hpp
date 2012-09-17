@@ -186,9 +186,8 @@ namespace test
         }
     };
 
-    // allocator1 and allocator2 are pretty similar.
     // allocator1 only has the old fashioned 'construct' method and has
-    // a few less typedefs
+    // a few less typedefs. allocator2 uses a custom pointer class.
 
     template <class T>
     class allocator1
@@ -273,6 +272,127 @@ namespace test
         };
     };
 
+    template <class T> class ptr;
+    template <class T> class const_ptr;
+
+    struct void_ptr
+    {
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+        template <typename T>
+        friend class ptr;
+    private:
+#endif
+
+        void* ptr_;
+
+    public:
+        void_ptr() : ptr_(0) {}
+
+        template <typename T>
+        explicit void_ptr(ptr<T> const& x) : ptr_(x.ptr_) {}
+
+        // I'm not using the safe bool idiom because the containers should be
+        // able to cope with bool conversions.
+        operator bool() const { return !!ptr_; }
+
+        bool operator==(void_ptr const& x) const { return ptr_ == x.ptr_; }
+        bool operator!=(void_ptr const& x) const { return ptr_ != x.ptr_; }
+    };
+
+    class void_const_ptr
+    {
+#if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
+        template <typename T>
+        friend class const_ptr;
+    private:
+#endif
+
+        void* ptr_;
+
+    public:
+        void_const_ptr() : ptr_(0) {}
+
+        template <typename T>
+        explicit void_const_ptr(const_ptr<T> const& x) : ptr_(x.ptr_) {}
+
+        // I'm not using the safe bool idiom because the containers should be
+        // able to cope with bool conversions.
+        operator bool() const { return !!ptr_; }
+
+        bool operator==(void_const_ptr const& x) const { return ptr_ == x.ptr_; }
+        bool operator!=(void_const_ptr const& x) const { return ptr_ != x.ptr_; }
+    };
+
+    template <class T>
+    class ptr
+    {
+        friend class allocator2<T>;
+        friend class const_ptr<T>;
+        friend struct void_ptr;
+
+        T* ptr_;
+
+        ptr(T* x) : ptr_(x) {}
+    public:
+        ptr() : ptr_(0) {}
+        explicit ptr(void_ptr const& x) : ptr_((T*) x.ptr_) {}
+
+        T& operator*() const { return *ptr_; }
+        T* operator->() const { return ptr_; }
+        ptr& operator++() { ++ptr_; return *this; }
+        ptr operator++(int) { ptr tmp(*this); ++ptr_; return tmp; }
+        ptr operator+(std::ptrdiff_t s) const { return ptr<T>(ptr_ + s); }
+        friend ptr operator+(std::ptrdiff_t s, ptr p)
+            { return ptr<T>(s + p.ptr_); }
+        T& operator[](std::ptrdiff_t s) const { return ptr_[s]; }
+        bool operator!() const { return !ptr_; }
+
+        // I'm not using the safe bool idiom because the containers should be
+        // able to cope with bool conversions.
+        operator bool() const { return !!ptr_; }
+
+        bool operator==(ptr const& x) const { return ptr_ == x.ptr_; }
+        bool operator!=(ptr const& x) const { return ptr_ != x.ptr_; }
+        bool operator<(ptr const& x) const { return ptr_ < x.ptr_; }
+        bool operator>(ptr const& x) const { return ptr_ > x.ptr_; }
+        bool operator<=(ptr const& x) const { return ptr_ <= x.ptr_; }
+        bool operator>=(ptr const& x) const { return ptr_ >= x.ptr_; }
+    };
+
+    template <class T>
+    class const_ptr
+    {
+        friend class allocator2<T>;
+        friend struct const_void_ptr;
+
+        T const* ptr_;
+
+        const_ptr(T const* ptr) : ptr_(ptr) {}
+    public:
+        const_ptr() : ptr_(0) {}
+        const_ptr(ptr<T> const& x) : ptr_(x.ptr_) {}
+        explicit const_ptr(void_const_ptr const& x) : ptr_((T const*) x.ptr_) {}
+
+        T const& operator*() const { return *ptr_; }
+        T const* operator->() const { return ptr_; }
+        const_ptr& operator++() { ++ptr_; return *this; }
+        const_ptr operator++(int) { const_ptr tmp(*this); ++ptr_; return tmp; }
+        const_ptr operator+(std::ptrdiff_t s) const
+            { return const_ptr(ptr_ + s); }
+        friend const_ptr operator+(std::ptrdiff_t s, const_ptr p)
+            { return ptr<T>(s + p.ptr_); }
+        T const& operator[](int s) const { return ptr_[s]; }
+        bool operator!() const { return !ptr_; }
+        operator bool() const { return !!ptr_; }
+
+        bool operator==(const_ptr const& x) const { return ptr_ == x.ptr_; }
+        bool operator!=(const_ptr const& x) const { return ptr_ != x.ptr_; }
+        bool operator<(const_ptr const& x) const { return ptr_ < x.ptr_; }
+        bool operator>(const_ptr const& x) const { return ptr_ > x.ptr_; }
+        bool operator<=(const_ptr const& x) const { return ptr_ <= x.ptr_; }
+        bool operator>=(const_ptr const& x) const { return ptr_ >= x.ptr_; }
+    };
+
     template <class T>
     class allocator2
     {
@@ -285,8 +405,10 @@ namespace test
     public:
         typedef std::size_t size_type;
         typedef std::ptrdiff_t difference_type;
-        typedef T* pointer;
-        typedef T const* const_pointer;
+        typedef void_ptr void_pointer;
+        typedef void_const_ptr const_void_pointer;
+        typedef ptr<T> pointer;
+        typedef const_ptr<T> const_pointer;
         typedef T& reference;
         typedef T const& const_reference;
         typedef T value_type;
@@ -326,9 +448,9 @@ namespace test
         }
 
         pointer allocate(size_type n) {
-            pointer ptr(static_cast<T*>(::operator new(n * sizeof(T))));
-            detail::tracker.track_allocate((void*) ptr, n, sizeof(T), tag_);
-            return ptr;
+            pointer p(static_cast<T*>(::operator new(n * sizeof(T))));
+            detail::tracker.track_allocate((void*) p.ptr_, n, sizeof(T), tag_);
+            return p;
         }
 
         pointer allocate(size_type n, void const* u)
@@ -340,8 +462,8 @@ namespace test
 
         void deallocate(pointer p, size_type n)
         {
-            detail::tracker.track_deallocate((void*) p, n, sizeof(T), tag_);
-            ::operator delete((void*) p);
+            detail::tracker.track_deallocate((void*) p.ptr_, n, sizeof(T), tag_);
+            ::operator delete((void*) p.ptr_);
         }
 
         void construct(T* p, T const& t) {

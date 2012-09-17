@@ -125,16 +125,15 @@ namespace boost { namespace unordered { namespace detail {
     {
         typedef boost::unordered::detail::multiset<A, T, H, P> types;
 
+        typedef A allocator;
         typedef T value_type;
         typedef H hasher;
         typedef P key_equal;
         typedef T key_type;
 
-        typedef typename boost::unordered::detail::rebind_wrap<
-                A, value_type>::type allocator;
-
         typedef boost::unordered::detail::allocator_traits<allocator> traits;
-        typedef boost::unordered::detail::pick_grouped_node<allocator, value_type> pick;
+        typedef boost::unordered::detail::pick_grouped_node<allocator,
+            value_type> pick;
         typedef typename pick::node node;
         typedef typename pick::bucket bucket;
         typedef typename pick::link_pointer link_pointer;
@@ -150,16 +149,15 @@ namespace boost { namespace unordered { namespace detail {
     {
         typedef boost::unordered::detail::multimap<A, K, M, H, P> types;
 
+        typedef A allocator;
         typedef std::pair<K const, M> value_type;
         typedef H hasher;
         typedef P key_equal;
         typedef K key_type;
 
-        typedef typename boost::unordered::detail::rebind_wrap<
-                A, value_type>::type allocator;
-
         typedef boost::unordered::detail::allocator_traits<allocator> traits;
-        typedef boost::unordered::detail::pick_grouped_node<allocator, value_type> pick;
+        typedef boost::unordered::detail::pick_grouped_node<allocator,
+                value_type> pick;
         typedef typename pick::node node;
         typedef typename pick::bucket bucket;
         typedef typename pick::link_pointer link_pointer;
@@ -177,7 +175,6 @@ namespace boost { namespace unordered { namespace detail {
         typedef boost::unordered::detail::table<Types> table;
         typedef typename table::value_type value_type;
         typedef typename table::bucket bucket;
-        typedef typename table::buckets buckets;
         typedef typename table::policy policy;
         typedef typename table::node_pointer node_pointer;
         typedef typename table::node_allocator node_allocator;
@@ -204,12 +201,17 @@ namespace boost { namespace unordered { namespace detail {
 
         grouped_table_impl(grouped_table_impl const& x)
           : table(x, node_allocator_traits::
-                select_on_container_copy_construction(x.node_alloc())) {}
+                select_on_container_copy_construction(x.node_alloc()))
+        {
+            this->init(x);
+        }
 
         grouped_table_impl(grouped_table_impl const& x,
                 node_allocator const& a)
           : table(x, a)
-        {}
+        {
+            this->init(x);
+        }
 
         grouped_table_impl(grouped_table_impl& x,
                 boost::unordered::detail::move_tag m)
@@ -220,7 +222,9 @@ namespace boost { namespace unordered { namespace detail {
                 node_allocator const& a,
                 boost::unordered::detail::move_tag m)
           : table(x, a, m)
-        {}
+        {
+            this->move_init(x);
+        }
 
         // Accessors
 
@@ -230,6 +234,8 @@ namespace boost { namespace unordered { namespace detail {
                 Key const& k,
                 Pred const& eq) const
         {
+            if (!this->size_) return iterator();
+
             std::size_t bucket_index =
                 policy::to_bucket(this->bucket_count_, key_hash);
             iterator n = this->get_start(bucket_index);
@@ -487,8 +493,7 @@ namespace boost { namespace unordered { namespace detail {
         iterator emplace(BOOST_UNORDERED_EMPLACE_ARGS)
         {
             node_constructor a(this->node_alloc());
-            a.construct_node();
-            a.construct_value(BOOST_UNORDERED_EMPLACE_FORWARD);
+            a.construct_with_value(BOOST_UNORDERED_EMPLACE_FORWARD);
 
             return iterator(emplace_impl(a));
         }
@@ -507,8 +512,7 @@ namespace boost { namespace unordered { namespace detail {
             std::size_t distance = boost::unordered::detail::distance(i, j);
             if(distance == 1) {
                 node_constructor a(this->node_alloc());
-                a.construct_node();
-                a.construct_value2(*i);
+                a.construct_with_value2(*i);
                 emplace_impl(a);
             }
             else {
@@ -517,8 +521,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 node_constructor a(this->node_alloc());
                 for (; i != j; ++i) {
-                    a.construct_node();
-                    a.construct_value2(*i);
+                    a.construct_with_value2(*i);
                     emplace_impl_no_rehash(a);
                 }
             }
@@ -530,8 +533,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             node_constructor a(this->node_alloc());
             for (; i != j; ++i) {
-                a.construct_node();
-                a.construct_value2(*i);
+                a.construct_with_value2(*i);
                 emplace_impl(a);
             }
         }
@@ -710,20 +712,12 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // copy_buckets_to
-        //
-        // Basic exception safety. If an exception is thrown this will
-        // leave dst partially filled and the buckets unset.
+        // fill_buckets
 
-        static void copy_buckets_to(buckets const& src, buckets& dst)
+        template <class NodeCreator>
+        static void fill_buckets(iterator n, table& dst,
+            NodeCreator& creator)
         {
-            BOOST_ASSERT(!dst.buckets_);
-
-            dst.create_buckets();
-
-            node_constructor a(dst.node_alloc());
-
-            iterator n = src.get_start();
             previous_pointer prev = dst.get_previous_start();
 
             while (n.node_) {
@@ -733,10 +727,7 @@ namespace boost { namespace unordered { namespace detail {
                         static_cast<node_pointer>(n.node_->group_prev_)->next_
                     ));
 
-                a.construct_node();
-                a.construct_value2(*n);
-
-                node_pointer first_node = a.release();
+                node_pointer first_node = creator.create(*n);
                 node_pointer end = first_node;
                 first_node->hash_ = key_hash;
                 prev->next_ = static_cast<link_pointer>(first_node);
@@ -744,56 +735,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 for (++n; n != group_end; ++n)
                 {
-                    a.construct_node();
-                    a.construct_value2(*n);
-                    end = a.release();
-                    end->hash_ = key_hash;
-                    add_after_node(end, first_node);
-                    ++dst.size_;
-                }
-
-                prev = place_in_bucket(dst, prev, end);
-            }
-        }
-
-        ////////////////////////////////////////////////////////////////////////
-        // move_buckets_to
-        //
-        // Basic exception safety. The source nodes are left in an unusable
-        // state if an exception throws.
-
-        static void move_buckets_to(buckets& src, buckets& dst)
-        {
-            BOOST_ASSERT(!dst.buckets_);
-
-            dst.create_buckets();
-
-            node_constructor a(dst.node_alloc());
-
-            iterator n = src.get_start();
-            previous_pointer prev = dst.get_previous_start();
-
-            while (n.node_) {
-                std::size_t key_hash = n.node_->hash_;
-                iterator group_end(
-                    static_cast<node_pointer>(
-                        static_cast<node_pointer>(n.node_->group_prev_)->next_
-                    ));
-
-                a.construct_node();
-                a.construct_value2(boost::move(*n));
-
-                node_pointer first_node = a.release();
-                node_pointer end = first_node;
-                first_node->hash_ = key_hash;
-                prev->next_ = static_cast<link_pointer>(first_node);
-                ++dst.size_;
-
-                for(++n; n != group_end; ++n)
-                {
-                    a.construct_node();
-                    a.construct_value2(boost::move(*n));
-                    end = a.release();
+                    end = creator.create(*n);
                     end->hash_ = key_hash;
                     add_after_node(end, first_node);
                     ++dst.size_;
@@ -806,33 +748,19 @@ namespace boost { namespace unordered { namespace detail {
         // strong otherwise exception safety
         void rehash_impl(std::size_t num_buckets)
         {
-            BOOST_ASSERT(this->size_);
+            BOOST_ASSERT(this->buckets_);
 
-            buckets dst(this->node_alloc(), num_buckets);
-            dst.create_buckets();
-
-            previous_pointer src_start = this->get_previous_start();
-            previous_pointer dst_start = dst.get_previous_start();
-
-            dst_start->next_ = src_start->next_;
-            src_start->next_ = link_pointer();
-            dst.size_ = this->size_;
-            this->size_ = 0;
-
-            previous_pointer prev = dst_start;
+            this->create_buckets(num_buckets);
+            previous_pointer prev = this->get_previous_start();
             while (prev->next_)
-                prev = place_in_bucket(dst, prev,
+                prev = place_in_bucket(*this, prev,
                     static_cast<node_pointer>(
                         static_cast<node_pointer>(prev->next_)->group_prev_));
-
-            // Swap the new nodes back into the container and setup the
-            // variables.
-            dst.swap(*this); // no throw
         }
 
         // Iterate through the nodes placing them in the correct buckets.
         // pre: prev->next_ is not null.
-        static previous_pointer place_in_bucket(buckets& dst,
+        static previous_pointer place_in_bucket(table& dst,
                 previous_pointer prev, node_pointer end)
         {
             bucket_pointer b = dst.get_bucket(policy::to_bucket(
