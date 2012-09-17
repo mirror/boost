@@ -400,7 +400,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 move_nodes<node_allocator> move(node_alloc());
                 node_holder<node_allocator> nodes(x);
-                table_impl::fill_buckets(nodes.get_start(), *this, move);
+                table_impl::fill_buckets(nodes.begin(), *this, move);
             }
         }
 
@@ -765,11 +765,8 @@ namespace boost { namespace unordered { namespace detail {
                 // elements, assigning to them if possible, and deleting
                 // any that are left over.
                 move_assign_nodes<table> assign(*this);
-
-                if (x.size_) {
-                    node_holder<node_allocator> nodes(x);
-                    table_impl::fill_buckets(nodes.get_start(), *this, assign);
-                }
+                node_holder<node_allocator> nodes(x);
+                table_impl::fill_buckets(nodes.begin(), *this, assign);
             }
         }
         
