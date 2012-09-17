@@ -712,7 +712,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 // Delete everything with current allocators before assigning
                 // the new ones.
-                if (buckets_) delete_buckets();
+                delete_buckets();
                 allocators_.assign(x.allocators_);
 
                 // Copy over other data, all no throw.
@@ -743,7 +743,7 @@ namespace boost { namespace unordered { namespace detail {
 
         void move_assign(table& x, true_type)
         {
-            if(buckets_) delete_buckets();
+            delete_buckets();
             allocators_.move_assign(x.allocators_);
             move_assign_no_alloc(x);
         }
@@ -751,7 +751,7 @@ namespace boost { namespace unordered { namespace detail {
         void move_assign(table& x, false_type)
         {
             if (node_alloc() == x.node_alloc()) {
-                if(buckets_) delete_buckets();
+                delete_buckets();
                 move_assign_no_alloc(x);
             }
             else {
@@ -881,7 +881,7 @@ namespace boost { namespace unordered { namespace detail {
         using namespace std;
 
         if(!size_) {
-            if(buckets_) delete_buckets();
+            delete_buckets();
             bucket_count_ = policy::new_bucket_count(min_buckets);
         }
         else {
