@@ -187,7 +187,7 @@ namespace boost { namespace unordered { namespace detail {
         std::size_t bucket_count_;
         std::size_t size_;
         float mlf_;
-        std::size_t max_load_; // Only use if buckets_.
+        std::size_t max_load_;
         bucket_pointer buckets_;
 
         ////////////////////////////////////////////////////////////////////////
@@ -292,10 +292,10 @@ namespace boost { namespace unordered { namespace detail {
     
             // From 6.3.1/13:
             // Only resize when size >= mlf_ * count
-            max_load_ = boost::unordered::detail::double_to_size(ceil(
+            max_load_ = buckets_ ? boost::unordered::detail::double_to_size(ceil(
                     static_cast<double>(mlf_) *
                     static_cast<double>(bucket_count_)
-                ));
+                )) : 0;
 
         }
 
@@ -303,7 +303,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             BOOST_ASSERT(z > 0);
             mlf_ = (std::max)(z, minimum_max_load_factor);
-            if (buckets_) recalculate_max_load();
+            recalculate_max_load();
         }
 
         std::size_t min_buckets_for_size(std::size_t size) const
@@ -362,6 +362,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             x.buckets_ = bucket_pointer();
             x.size_ = 0;
+            x.max_load_ = 0;
         }
 
         table(table& x, node_allocator const& a,
@@ -487,6 +488,7 @@ namespace boost { namespace unordered { namespace detail {
             size_ = other.size_;
             other.buckets_ = bucket_pointer();
             other.size_ = 0;
+            other.max_load_ = 0;
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -536,6 +538,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 destroy_buckets();
                 buckets_ = bucket_pointer();
+                max_load_ = 0;
             }
 
             BOOST_ASSERT(!size_);
@@ -680,7 +683,7 @@ namespace boost { namespace unordered { namespace detail {
 
             if (!size_ && !x.size_) return;
 
-            if (!buckets_ || x.size_ >= max_load_) {
+            if (x.size_ >= max_load_) {
                 create_buckets(min_buckets_for_size(x.size_));
             }
             else {
@@ -760,7 +763,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 if (!size_ && !x.size_) return;
 
-                if (!buckets_ || x.size_ >= max_load_) {
+                if (x.size_ >= max_load_) {
                     create_buckets(min_buckets_for_size(x.size_));
                 }
                 else {
@@ -784,9 +787,9 @@ namespace boost { namespace unordered { namespace detail {
             boost::unordered::detail::set_hash_functions<hasher, key_equal>
                 new_func_this(*this, x);
             // No throw from here.
-            move_buckets_from(x);
             mlf_ = x.mlf_;
             max_load_ = x.max_load_;
+            move_buckets_from(x);
             new_func_this.commit();
         }
 
