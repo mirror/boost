@@ -496,6 +496,11 @@ void test_allocator()
 
 void test_wallocator()
 {
+// Following test cause compilation error on MSVC2012:
+// (Reason: cannot convert from 'std::_Wrap_alloc<_Alloc>' to 'const my_allocator<CharT>')
+// 
+// MSVC developer is notified about this issue
+#if !defined(_MSC_VER) || (_MSC_VER < 1700)
     typedef std::basic_string< wchar_t
                              , std::char_traits<wchar_t>
                              , my_allocator<wchar_t>
@@ -508,6 +513,7 @@ void test_wallocator()
     BOOST_CHECK(boost::lexical_cast<my_string>(1) == L"1");
     BOOST_CHECK(boost::lexical_cast<my_string>(L"s") == s);
     BOOST_CHECK(boost::lexical_cast<my_string>(std::wstring(L"s")) == s);
+#endif
 }
 
 #endif
