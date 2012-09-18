@@ -40,11 +40,7 @@ namespace boost { namespace proto
             /// \param e The current expression.
             /// \return \c e
             /// \throw nothrow
-            #ifdef BOOST_PROTO_STRICT_RESULT_OF
-            result_type
-            #else
-            typename impl::expr_param 
-            #endif
+            BOOST_PROTO_RETURN_TYPE_STRICT_LOOSE(result_type, typename impl::expr_param)
             operator()(
                 typename impl::expr_param e
               , typename impl::state_param
@@ -77,11 +73,7 @@ namespace boost { namespace proto
             /// \param s The current state.
             /// \return \c s
             /// \throw nothrow
-            #ifdef BOOST_PROTO_STRICT_RESULT_OF
-            result_type
-            #else
-            typename impl::state_param 
-            #endif
+            BOOST_PROTO_RETURN_TYPE_STRICT_LOOSE(result_type, typename impl::state_param)
             operator ()(
                 typename impl::expr_param
               , typename impl::state_param s
