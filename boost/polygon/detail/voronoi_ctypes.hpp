@@ -74,10 +74,10 @@ template <>
 class extened_exponent_fpt_traits<fpt64> {
  public:
   typedef int exp_type;
-  static const int kMaxSignificantExpDif;
+  enum {
+    MAX_SIGNIFICANT_EXP_DIF = 54
+  };
 };
-
-const int extened_exponent_fpt_traits<fpt64>::kMaxSignificantExpDif = 54;
 
 // Floating point type wrapper. Allows to extend exponent boundaries to the
 // integer type range. This class does not handle division by zero, subnormal
@@ -115,11 +115,11 @@ class extended_exponent_fpt {
 
   extended_exponent_fpt operator+(const extended_exponent_fpt& that) const {
     if (this->val_ == 0.0 ||
-        that.exp_ > this->exp_ + _traits::kMaxSignificantExpDif) {
+        that.exp_ > this->exp_ + _traits::MAX_SIGNIFICANT_EXP_DIF) {
       return that;
     }
     if (that.val_ == 0.0 ||
-        this->exp_ > that.exp_ + _traits::kMaxSignificantExpDif) {
+        this->exp_ > that.exp_ + _traits::MAX_SIGNIFICANT_EXP_DIF) {
       return *this;
     }
     if (this->exp_ >= that.exp_) {
@@ -135,11 +135,11 @@ class extended_exponent_fpt {
 
   extended_exponent_fpt operator-(const extended_exponent_fpt& that) const {
     if (this->val_ == 0.0 ||
-        that.exp_ > this->exp_ + _traits::kMaxSignificantExpDif) {
+        that.exp_ > this->exp_ + _traits::MAX_SIGNIFICANT_EXP_DIF) {
       return extended_exponent_fpt(-that.val_, that.exp_);
     }
     if (that.val_ == 0.0 ||
-        this->exp_ > that.exp_ + _traits::kMaxSignificantExpDif) {
+        this->exp_ > that.exp_ + _traits::MAX_SIGNIFICANT_EXP_DIF) {
       return *this;
     }
     if (this->exp_ >= that.exp_) {
@@ -226,9 +226,6 @@ bool is_zero(const extended_exponent_fpt<_fpt>& that) {
 template<std::size_t N>
 class extended_int {
  public:
-  static const uint64 kUInt64LowMask;
-  static const uint64 kUInt64HighMask;
-
   extended_int() {}
 
   extended_int(int32 that) {
@@ -245,12 +242,12 @@ class extended_int {
 
   extended_int(int64 that) {
     if (that > 0) {
-      this->chunks_[0] = static_cast<uint32>(that & kUInt64LowMask);
+      this->chunks_[0] = static_cast<uint32>(that);
       this->chunks_[1] = that >> 32;
       this->count_ = this->chunks_[1] ? 2 : 1;
     } else if (that < 0) {
       that = -that;
-      this->chunks_[0] = static_cast<uint32>(that & kUInt64LowMask);
+      this->chunks_[0] = static_cast<uint32>(that);
       this->chunks_[1] = that >> 32;
       this->count_ = this->chunks_[1] ? -2 : -1;
     } else {
@@ -287,12 +284,12 @@ class extended_int {
 
   extended_int& operator=(int64 that) {
     if (that > 0) {
-      this->chunks_[0] = static_cast<uint32>(that & kUInt64LowMask);
+      this->chunks_[0] = static_cast<uint32>(that);
       this->chunks_[1] = that >> 32;
       this->count_ = this->chunks_[1] ? 2 : 1;
     } else if (that < 0) {
       that = -that;
-      this->chunks_[0] = static_cast<uint32>(that & kUInt64LowMask);
+      this->chunks_[0] = static_cast<uint32>(that);
       this->chunks_[1] = that >> 32;
       this->count_ = this->chunks_[1] ? -2 : -1;
     } else {
@@ -497,16 +494,16 @@ class extended_int {
     uint64 temp = 0;
     for (std::size_t i = 0; i < sz2; ++i) {
       temp += static_cast<uint64>(c1[i]) + static_cast<uint64>(c2[i]);
-      this->chunks_[i] = static_cast<uint32>(temp & kUInt64LowMask);
+      this->chunks_[i] = static_cast<uint32>(temp);
       temp >>= 32;
     }
     for (std::size_t i = sz2; i < sz1; ++i) {
       temp += static_cast<uint64>(c1[i]);
-      this->chunks_[i] = static_cast<uint32>(temp & kUInt64LowMask);
+      this->chunks_[i] = static_cast<uint32>(temp);
       temp >>= 32;
     }
     if (temp && (this->count_ != N)) {
-      this->chunks_[this->count_] = static_cast<uint32>(temp & kUInt64LowMask);
+      this->chunks_[this->count_] = static_cast<uint32>(temp);
       ++this->count_;
     }
   }
@@ -565,14 +562,14 @@ class extended_int {
         if (second >= sz2)
           continue;
         tmp = static_cast<uint64>(c1[first]) * static_cast<uint64>(c2[second]);
-        cur += tmp & kUInt64LowMask;
+        cur += static_cast<uint32>(tmp);
         nxt += tmp >> 32;
       }
-      this->chunks_[shift] = static_cast<uint32>(cur & kUInt64LowMask);
+      this->chunks_[shift] = static_cast<uint32>(cur);
       cur = nxt + (cur >> 32);
     }
     if (cur && (this->count_ != N)) {
-      this->chunks_[this->count_] = static_cast<uint32>(cur & kUInt64LowMask);
+      this->chunks_[this->count_] = static_cast<uint32>(cur);
       ++this->count_;
     }
   }
@@ -580,11 +577,6 @@ class extended_int {
   uint32 chunks_[N];
   int32 count_;
 };
-
-template <std::size_t N>
-const uint64 extended_int<N>::kUInt64LowMask = 0x00000000ffffffffULL;
-template <std::size_t N>
-const uint64 extended_int<N>::kUInt64HighMask = 0xffffffff00000000ULL;
 
 template <std::size_t N>
 bool is_pos(const extended_int<N>& that) {

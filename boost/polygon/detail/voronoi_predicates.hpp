@@ -1390,41 +1390,47 @@ class voronoi_predicates {
           static_cast<int_x2_type>(site1.x0(true)),
           static_cast<int_x2_type>(site1.y1(true)) -
           static_cast<int_x2_type>(site1.y0(true))), to_fpt(1.0));
-      robust_dif_type denom, c_x, c_y, r;
 
       // denom = cross_12 * len3 + cross_23 * len1 + cross_31 * len2.
+      robust_dif_type denom;
       denom += cross_12 * len3;
       denom += cross_23 * len1;
       denom += cross_31 * len2;
 
       // denom * r = (b2 * c_x - a2 * c_y - c2 * denom) / len2.
+      robust_dif_type r;
       r -= cross_12 * c3;
       r -= cross_23 * c1;
       r -= cross_31 * c2;
 
+      robust_dif_type c_x;
       c_x += a1 * c2 * len3;
       c_x -= a2 * c1 * len3;
       c_x += a2 * c3 * len1;
       c_x -= a3 * c2 * len1;
       c_x += a3 * c1 * len2;
       c_x -= a1 * c3 * len2;
+
+      robust_dif_type c_y;
       c_y += b1 * c2 * len3;
       c_y -= b2 * c1 * len3;
       c_y += b2 * c3 * len1;
       c_y -= b3 * c2 * len1;
       c_y += b3 * c1 * len2;
       c_y -= b1 * c3 * len2;
-      robust_dif_type lower_x(c_x + r);
-      bool recompute_c_x = c_x.dif().ulp() > ULPS;
-      bool recompute_c_y = c_y.dif().ulp() > ULPS;
-      bool recompute_lower_x = lower_x.dif().ulp() > ULPS;
-      bool recompute_denom = denom.dif().ulp() > ULPS;
-      c_event = circle_type(
-          c_x.dif().fpv() / denom.dif().fpv(),
-          c_y.dif().fpv() / denom.dif().fpv(),
-          lower_x.dif().fpv() / denom.dif().fpv());
-      if (recompute_c_x || recompute_c_y ||
-          recompute_lower_x || recompute_denom) {
+
+      robust_dif_type lower_x = c_x + r;
+
+      robust_fpt_type denom_dif = denom.dif();
+      robust_fpt_type c_x_dif = c_x.dif() / denom_dif;
+      robust_fpt_type c_y_dif = c_y.dif() / denom_dif;
+      robust_fpt_type lower_x_dif = lower_x.dif() / denom_dif;
+
+      bool recompute_c_x = c_x_dif.ulp() > ULPS;
+      bool recompute_c_y = c_y_dif.ulp() > ULPS;
+      bool recompute_lower_x = lower_x_dif.ulp() > ULPS;
+      c_event = circle_type(c_x_dif.fpv(), c_y_dif.fpv(), lower_x_dif.fpv());
+      if (recompute_c_x || recompute_c_y || recompute_lower_x) {
         exact_circle_formation_functor_.sss(
             site1, site2, site3, c_event,
             recompute_c_x, recompute_c_y, recompute_lower_x);

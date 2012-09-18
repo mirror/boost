@@ -82,7 +82,9 @@ class robust_fpt {
   typedef _fpt relative_error_type;
 
   // Rounding error is at most 1 EPS.
-  static const relative_error_type ROUNDING_ERROR;
+  enum {
+    ROUNDING_ERROR = 1
+  };
 
   robust_fpt() : fpv_(0.0), re_(0.0) {}
   explicit robust_fpt(floating_point_type fpv) :
@@ -214,10 +216,6 @@ class robust_fpt {
   floating_point_type fpv_;
   relative_error_type re_;
 };
-
-template <typename T>
-const typename robust_fpt<T>::relative_error_type
-  robust_fpt<T>::ROUNDING_ERROR = 1;
 
 template <typename T>
 robust_fpt<T> get_sqrt(const robust_fpt<T>& that) {
@@ -435,10 +433,12 @@ robust_dif<T> operator/(const robust_dif<T>& lhs, const T& val) {
 template <typename _int, typename _fpt, typename _converter>
 class robust_sqrt_expr {
  public:
-  static const unsigned int EVAL1_MAX_RELATIVE_ERROR;
-  static const unsigned int EVAL2_MAX_RELATIVE_ERROR;
-  static const unsigned int EVAL3_MAX_RELATIVE_ERROR;
-  static const unsigned int EVAL4_MAX_RELATIVE_ERROR;
+  enum MAX_RELATIVE_ERROR {
+    MAX_RELATIVE_ERROR_EVAL1 = 4,
+    MAX_RELATIVE_ERROR_EVAL2 = 7,
+    MAX_RELATIVE_ERROR_EVAL3 = 16,
+    MAX_RELATIVE_ERROR_EVAL4 = 25
+  };
 
   // Evaluates expression (re = 4 EPS):
   // A[0] * sqrt(B[0]).
@@ -499,19 +499,6 @@ class robust_sqrt_expr {
   _int tB[5];
   _converter convert;
 };
-
-template <typename _int, typename _fpt, typename _converter>
-const unsigned int robust_sqrt_expr<_int, _fpt, _converter>::
-    EVAL1_MAX_RELATIVE_ERROR = 4;
-template <typename _int, typename _fpt, typename _converter>
-const unsigned int robust_sqrt_expr<_int, _fpt, _converter>::
-    EVAL2_MAX_RELATIVE_ERROR = 7;
-template <typename _int, typename _fpt, typename _converter>
-const unsigned int robust_sqrt_expr<_int, _fpt, _converter>::
-    EVAL3_MAX_RELATIVE_ERROR = 16;
-template <typename _int, typename _fpt, typename _converter>
-const unsigned int robust_sqrt_expr<_int, _fpt, _converter>::
-    EVAL4_MAX_RELATIVE_ERROR = 25;
 }  // detail
 }  // polygon
 }  // boost
