@@ -45,6 +45,9 @@ struct slist_node_traits
    static node_ptr get_next(const const_node_ptr & n)
    {  return n->next_;  }
 
+   static node_ptr get_next(const node_ptr & n)
+   {  return n->next_;  }
+
    static void set_next(const node_ptr & n, const node_ptr & next)
    {  n->next_ = next;  }
 };

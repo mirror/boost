@@ -47,10 +47,16 @@ struct list_node_traits
    static node_ptr get_previous(const const_node_ptr & n)
    {  return n->prev_;  }
 
+   static node_ptr get_previous(const node_ptr & n)
+   {  return n->prev_;  }
+
    static void set_previous(const node_ptr & n, const node_ptr & prev)
    {  n->prev_ = prev;  }
 
    static node_ptr get_next(const const_node_ptr & n)
+   {  return n->next_;  }
+
+   static node_ptr get_next(const node_ptr & n)
    {  return n->next_;  }
 
    static void set_next(const node_ptr & n, const node_ptr & next)

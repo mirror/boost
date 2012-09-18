@@ -71,10 +71,16 @@ struct default_rbtree_node_traits_impl
    static node_ptr get_parent(const const_node_ptr & n)
    {  return n->parent_;  }
 
+   static node_ptr get_parent(const node_ptr & n)
+   {  return n->parent_;  }
+
    static void set_parent(const node_ptr & n, const node_ptr & p)
    {  n->parent_ = p;  }
 
    static node_ptr get_left(const const_node_ptr & n)
+   {  return n->left_;  }
+
+   static node_ptr get_left(const node_ptr & n)
    {  return n->left_;  }
 
    static void set_left(const node_ptr & n, const node_ptr & l)
@@ -83,10 +89,16 @@ struct default_rbtree_node_traits_impl
    static node_ptr get_right(const const_node_ptr & n)
    {  return n->right_;  }
 
+   static node_ptr get_right(const node_ptr & n)
+   {  return n->right_;  }
+
    static void set_right(const node_ptr & n, const node_ptr & r)
    {  n->right_ = r;  }
 
    static color get_color(const const_node_ptr & n)
+   {  return n->color_;  }
+
+   static color get_color(const node_ptr & n)
    {  return n->color_;  }
 
    static void set_color(const node_ptr & n, color c)
@@ -117,10 +129,16 @@ struct compact_rbtree_node_traits_impl
    static node_ptr get_parent(const const_node_ptr & n)
    {  return ptr_bit::get_pointer(n->parent_);  }
 
+   static node_ptr get_parent(const node_ptr & n)
+   {  return ptr_bit::get_pointer(n->parent_);  }
+
    static void set_parent(const node_ptr & n, const node_ptr & p)
    {  ptr_bit::set_pointer(n->parent_, p);  }
 
    static node_ptr get_left(const const_node_ptr & n)
+   {  return n->left_;  }
+
+   static node_ptr get_left(const node_ptr & n)
    {  return n->left_;  }
 
    static void set_left(const node_ptr & n, const node_ptr & l)
@@ -129,10 +147,16 @@ struct compact_rbtree_node_traits_impl
    static node_ptr get_right(const const_node_ptr & n)
    {  return n->right_;  }
 
+   static node_ptr get_right(const node_ptr & n)
+   {  return n->right_;  }
+
    static void set_right(const node_ptr & n, const node_ptr & r)
    {  n->right_ = r;  }
 
    static color get_color(const const_node_ptr & n)
+   {  return (color)ptr_bit::get_bits(n->parent_);  }
+
+   static color get_color(const node_ptr & n)
    {  return (color)ptr_bit::get_bits(n->parent_);  }
 
    static void set_color(const node_ptr & n, color c)
