@@ -1807,10 +1807,15 @@ namespace boost { namespace numeric { namespace ublas {
             if (! sorted_ && filled_ > 0) {
                 typedef index_pair_array<index_array_type, value_array_type> array_pair;
                 array_pair ipa (filled_, index_data_, value_data_);
+#ifndef BOOST_UBLAS_COO_ALWAYS_DO_FULL_SORT
                 const typename array_pair::iterator iunsorted = ipa.begin () + sorted_filled_;
                 // sort new elements and merge
                 std::sort (iunsorted, ipa.end ());
                 std::inplace_merge (ipa.begin (), iunsorted, ipa.end ());
+#else
+                const typename array_pair::iterator iunsorted = ipa.begin ();
+                std::sort (iunsorted, ipa.end ());
+#endif                
 
                 // sum duplicates with += and remove
                 size_type filled = 0;
