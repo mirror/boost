@@ -1359,7 +1359,7 @@ namespace boost { namespace numeric { namespace ublas {
 #endif
         typedef const matrix_reference<const self_type> const_closure_type;
         typedef matrix_reference<self_type> closure_type;
-        typedef mapped_vector<T, typename A::value_type> vector_temporary_type;
+        typedef mapped_vector<T> vector_temporary_type;
         typedef self_type matrix_temporary_type;
         typedef typename A::value_type::second_type vector_data_value_type;
         typedef sparse_tag storage_category;
@@ -1530,7 +1530,7 @@ namespace boost { namespace numeric { namespace ublas {
         template<class C>          // Container assignment without temporary
         BOOST_UBLAS_INLINE
         mapped_vector_of_mapped_vector &operator = (const matrix_container<C> &m) {
-            resize (m ().size1 (), m ().size2 ());
+            resize (m ().size1 (), m ().size2 (), false);
             assign (m);
             return *this;
         }
