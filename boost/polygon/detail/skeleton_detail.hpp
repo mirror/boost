@@ -108,10 +108,26 @@ namespace boost { namespace polygon {
         UnitOut x_out = gint.x() + ((p1.x() - gint.x())*dist2/dist1 + (p2.x()-gint.x()))/2;
         UnitOut y_out = gint.y() + ((p1.y() - gint.y())*dist2/dist1 + (p2.y()-gint.y()))/2;
         point_data<UnitOut> end_point(x_out, y_out);
+        if(orientation(segment2, end_point) < 0) {
+          x_out = gint.x() - ((p1.x() - gint.x())*dist2/dist1 + (p2.x()-gint.x()))/2;
+          y_out = gint.y() - ((p1.y() - gint.y())*dist2/dist1 + (p2.y()-gint.y()))/2;
+          end_point = point_data<UnitOut>(x_out, y_out);
+        }
+        std::cout << x_out << " " << y_out << "\n";
         if(orientation(segment2, end_point) != orientation(segment3, end_point)) { 
           std::cout << "we want the other bisector in this case\n";
           y_out = gint.y() + ((p1.x() - gint.x())*dist2/dist1 + (p2.x()-gint.x()))/2;
           x_out = gint.x() - ((p1.y() - gint.y())*dist2/dist1 + (p2.y()-gint.y()))/2;
+          end_point = point_data<UnitOut>(x_out, y_out);
+          std::cout << x_out << " " << y_out << "\n";
+          std::cout << segment2.low().x() << " " << segment2.low().y() << " " << 
+            segment2.high().x() << " " << segment2.high().y() << " " << std::endl;
+          if(orientation(segment2, end_point) < 0) {
+            y_out = gint.y() - ((p1.x() - gint.x())*dist2/dist1 + (p2.x()-gint.x()))/2;
+            x_out = gint.x() + ((p1.y() - gint.y())*dist2/dist1 + (p2.y()-gint.y()))/2;
+            end_point = point_data<UnitOut>(x_out, y_out);
+            std::cout << x_out << " " << y_out << "\n";
+          }
         }
         end_point = point_data<UnitOut>(x_out, y_out);
         segment1.high(end_point);
@@ -172,13 +188,15 @@ namespace boost { namespace polygon {
         edge_type edge; //the edge that is next between this future intersection and the one stored in *next
         future_intersection* prev;
         future_intersection* next;
+        future_intersection* next_split_edge;
         skeleton_node* parent_node;
         output_coordinate_type active_distance;
         //split events that refer to the edge between this and next
         std::vector<typename std::set<event>::iterator> active_splits_on_next;
         std::string label;
         bool is_dead;
-        future_intersection() : prev(0x0), next(0x0), parent_node(0x0), is_dead(false), active_distance(-1.0) {
+        future_intersection() : prev(0x0), next(0x0), next_split_edge(0x0), 
+                                parent_node(0x0), is_dead(false), active_distance(-1.0) {
           static char local_label = 'a';
           label = local_label;
           if(local_label == 'z')
@@ -287,7 +305,7 @@ namespace boost { namespace polygon {
         do {
           debug1("loop");
           if(orientation(current->prev->edge, current->edge) < 1) {
-            std::cout << "initialize reflex vertex\n";
+            //std::cout << "initialize reflex vertex\n";
             future_intersection* inner = current->next->next;
             while(inner != current) {
               event e2;
@@ -385,8 +403,7 @@ namespace boost { namespace polygon {
         std::cout << s.low().x() << "," << s.low().y() << "->" << s.high().x() << "," << s.high().y() << "\n";
       }
 
-      static bool compute_split_event_point(point_data<output_coordinate_type>& point, 
-                                           edge_type e1, edge_type e2, edge_type e3, edge_type e4, edge_type e5) {
+      static bool compute_split_event_point(event& e, edge_type e1, edge_type e2, edge_type e3, edge_type e4, edge_type e5) {
         debug1("compute_split_event_point");
         segment_type segment1, segment2, segment3, segment4, segment5;
         print_segment(e1);
@@ -403,51 +420,45 @@ namespace boost { namespace polygon {
           return false;
         }
         //compute the bisector of e1 and e2, this is the reflex vertex bisector
-        if(bisector(segment1, e1, e2)) {
-          debug1("has bisector1");
-          if(bisector(segment2, e3, e4)) {
-            debug1("has bisector2");
-            if(bisector(segment3, e4, e5)) {
-              debug1("has bisector3");
-              //compute the edge event point using e1, e2, e2, e4 or e1, e2, e1, e4 if e4 is parallel to e2
-              if(bisector(segment4, e1, e4)) {
-                if(!generalized_intersection(point, segment1, segment4)) {
-                  debug1("no intersection 2");
-                  return false;
-                }
-              } else if(bisector(segment5, e2, e4)) {
-                if(!generalized_intersection(point, segment1, segment5)) {
-                  debug1("no intersection 2");
-                  return false;
-                }
-              } else {
-                debug1("no bisector4");
-                return false;
-              }
-              std::cout << point.x() << " " << point.y() << std::endl;
-              //test that point is on the coorect side of e1 and e2 and e4
-              if(orientation(e1, point) <= 0)
-                return false;
-              if(orientation(e2, point) <= 0)
-                return false;
-              if(orientation(e4, point) <= 0)
-                return false;
-              debug1("passed simple orientation tests");
+        if(bisector(segment2, e3, e4)) {
+          debug1("has bisector2");
+          if(bisector(segment3, e4, e5)) {
+            debug1("has bisector3");
+            segment_data<coordinate_type> s1, s2, s3;
+            assign(s1, e1);
+            assign(s2, e2);
+            assign(s3, e4);
+            if(!create_event()(s1, s2, s3, &e)) {
+              return false;
+            }
+            
+            point_data<output_coordinate_type> point = e.point;
+            std::cout << point.x() << " " << point.y() << std::endl;
+            //test that point is on the coorect side of e1 and e2 and e4
+            if(orientation(e1, point) <= 0)
+              return false;
+            if(orientation(e2, point) <= 0)
+              return false;
+            if(orientation(e4, point) <= 0)
+              return false;
+            debug1("passed simple orientation tests");
               //test that the point is on the correct side of the besector of e3,e4 and e4,e5
               //it should be clockwise the bisector of e3,e4 and counterclockwise the bisector of e4,e5
               //if e3,e4/e4e5 are concave then the correct sides will be reversed
-              if(orientation(e3, e4) == orientation(segment2, point))
-                return false;
-              debug1("passed complex orientation test1");
-              if(orientation(e4, e5) != orientation(segment3, point))
-                return false;
-              debug1("passed complex orientation test2");
-              //we seem to have a good split event point
-              return true;
-            }
+            print_segment(e3);
+            print_segment(e4);
+            print_segment(segment2);
+            std::cout << orientation(e3, e4) << " " << orientation(segment2, point) << std::endl;
+            if(orientation(e3, e4) == orientation(segment2, point))
+              return false;
+            debug1("passed complex orientation test1");
+            if(orientation(e4, e5) != orientation(segment3, point))
+              return false;
+            debug1("passed complex orientation test2");
+            //we seem to have a good split event point
+            return true;
           }
         }
-          
         return false;
       }
 
@@ -478,21 +489,6 @@ namespace boost { namespace polygon {
         point_data<output_coordinate_type> pt;
         if(compute_split_event_point(e, first->prev->edge, first->edge, opposite->prev->edge, opposite->edge, opposite->next->edge)) {
           std::cout << "found split event point\n";
-          segment_type s1;
-          assign(s1, opposite->edge);
-          print_segment(opposite->edge);
-          std::cout << pt.x() << " " << pt.y() << std::endl;
-          output_coordinate_type dist = distance_squared_to_line(pt, s1);
-          std::cout << "distance to split " << sqrt(dist) << std::endl;
-          segment_data<coordinate_type> segment1, segment2, segment3;
-          assign(segment1, first->prev->edge);
-          assign(segment2, first->edge);
-          assign(segment3, opposite->edge);
-          event e2;
-          create_event()(segment1, segment2, segment3, &e);
-          std::cout << "Andrii's point " << e.x() << " " << e.y() << " " << e.r() << std::endl;
-          e.point = pt;
-          e.distance = dist;
           e.parent = first;
           e.split_on_next = opposite;
           return true;
@@ -500,23 +496,21 @@ namespace boost { namespace polygon {
         return false;
       }
 
-      static bool compute_edge_event_point(point_data<output_coordinate_type>& point, 
+      static bool compute_edge_event_point(event& e, 
                                            edge_type e1, edge_type e2, edge_type e3, edge_type e4) {
-        segment_type segment1, segment2;
-        if(bisector(segment1, e1, e2)) {
-          if(bisector(segment2, e3, e4)) {
-            return (generalized_intersection(point, segment1, segment2));
-          }
-        }
-        return false;
-          
+        segment_data<coordinate_type> s1, s2, s3;
+        assign(s1, e1);
+        assign(s2, e2);
+        assign(s3, e4);
+        return create_event()(s1, s2, s3, &e);
       }
 
       static bool compute_edge_event(event& e, future_intersection* first, future_intersection* second, 
                                      const rectangle_data<output_coordinate_type>& domain) {
         point_data<output_coordinate_type> pt;
-        if(compute_edge_event_point(pt, first->prev->edge, first->edge, second->prev->edge, second->edge)) {
+        if(compute_edge_event_point(e, first->prev->edge, first->edge, second->prev->edge, second->edge)) {
           debug1("domain");
+          point_data<output_coordinate_type> pt = e.point;
           std::cout << pt.x() << " " << pt.y() << std::endl;
           //edge event points outside (or on the boundary of) the polygon bounding box are useless and not worth processing
           //they would never be reached by the forward progress of the algorithm through the event queue
@@ -525,19 +519,6 @@ namespace boost { namespace polygon {
             //compute distance from point to edge
             segment_type s1;
             assign(s1, first->edge);
-            output_coordinate_type dist = distance_squared_to_line(pt, s1);
-            output_coordinate_type dist2 = euclidean_distance(s1, pt);
-            std::cout << "distance " << dist2 << std::endl;
-            std::cout << "distance^2 " << dist << std::endl;
-            segment_data<coordinate_type> segment1, segment2, segment3;
-            assign(segment1, first->prev->edge);
-            assign(segment2, first->edge);
-            assign(segment3, second->edge);
-            event e2;
-            create_event()(segment1, segment2, segment3, &e);
-            std::cout << "Andrii's point " << e.x() << " " << e.y() << " " << e.r() << std::endl;
-            e.point = pt;
-            e.distance = dist;
             e.parent = first;
             e.parent2 = second;
             e.split_on_next = 0x0;
@@ -607,6 +588,26 @@ namespace boost { namespace polygon {
           std::cout << current_event.parent->parent_node->label << "->" << skeleton.back()->label << std::endl;
           skeleton.back()->add_edge(current_event.parent->parent_node);
           current_event.parent->parent_node = skeleton.back();
+
+          //if the split_on_next edge was previously split it will have a circular linked list of potential
+          //future intersections that we need to search for the right one
+          if(current_event.split_on_next->next_split_edge) {
+            future_intersection* current = current_event.split_on_next;
+            do{
+              std::cout << current << std::endl;
+              if(!current->is_dead) {
+                debug1("is alive");
+                event e2;
+                if(compute_split_event(e2, current_event.parent, current)) {
+                  debug1("found correct split edge");
+                  current_event.split_on_next = current;
+                  break;
+                }
+              }
+              current = current->next_split_edge;
+            } while (current != current_event.split_on_next);
+          }
+
           //event parent node is not dead
           //create one new future intersection associated with the with a copy of the "opposite" edge as its edge
           //that split edge will appear in both rings
@@ -617,6 +618,16 @@ namespace boost { namespace polygon {
           new_active->edge = current_event.split_on_next->edge;
           new_active->prev = current_event.parent->prev;
           new_active->next = current_event.split_on_next->next;
+
+          //link new future intersection into the circular list of future intersections
+          //associated with splits of this edge
+          new_active->next_split_edge = current_event.split_on_next->next_split_edge;
+          if(new_active->next_split_edge == 0x0)
+            new_active->next_split_edge = current_event.split_on_next;
+          std::cout << "next split edge " << new_active->next_split_edge << std::endl;
+          current_event.split_on_next->next_split_edge = new_active;
+          std::cout << "next split edge " << new_active << std::endl;
+
           new_active->parent_node = skeleton.back();
           new_active->active_distance = -1;
           new_active->next->prev = new_active;
@@ -658,7 +669,7 @@ namespace boost { namespace polygon {
             current_event.parent->next->parent_node->add_edge(current_event.parent->prev->parent_node);
             std::cout << current_event.parent->next->parent_node->label << "->" << current_event.parent->prev->parent_node->label << std::endl;
             current_event.parent->prev->is_dead = true;
-            current_event.parent->prev->parent_node->linked_nodes[0] = current_event.parent->next->parent_node;
+            current_event.parent->prev->parent_node->add_edge(current_event.parent->next->parent_node);
             std::cout << current_event.parent->prev->parent_node->label << "->" << current_event.parent->next->parent_node->label << std::endl;
             current_event.parent->next->is_dead = true;
             return;
@@ -680,7 +691,7 @@ namespace boost { namespace polygon {
         while(!event_queue.empty()) {
           event current_event = event_queue.top();
           event_queue.pop();
-          if(bound >=0 && current_event.distance > bound*bound)
+          if(bound >=0 && current_event.distance > bound)
             break;
           if(!current_event.parent->is_dead &&
              (current_event.parent2 == 0x0 || !current_event.parent2->is_dead))
@@ -715,180 +726,147 @@ namespace boost { namespace polygon {
         std::vector<skeleton_node*> skeleton; 
         std::vector<future_intersection*> all_faces;
         event_queue_type event_queue;
-        // initialize_skeleton(skeleton, all_faces, event_queue, rect);
-        // if(skeleton.size() == 4 && all_faces.size() == 4) {
-        //   stdcout << event_queue.size() << stdendl;
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) {
-        //     std::cout << (*itr) << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
-        //       ((*itr)->linked_nodes[0]) << " " <<
-        //       ((*itr)->linked_nodes[1]) << " " << 
-        //       ((*itr)->linked_nodes[2]) << "\n";
-        //   }
-        //   execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
-        //   for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
-        //       itr != all_faces.end(); ++itr)
-        //     delete *itr;
-        //   all_faces.clear();
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) {
-        //     std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
-        //       ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
-        //   }
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) 
-        //     delete *itr;
-        //   skeleton.clear();
-        //   {
-        //   point_data<coordinate_type> pts[] = {point_data<coordinate_type>(120, 200),
-        //                                        point_data<coordinate_type>(300, 200),
-        //                                        point_data<coordinate_type>(300, 500),
-        //                                        point_data<coordinate_type>(100, 500),
-        //                                        point_data<coordinate_type>(100, 220),
-        //   };
-        //   polygon_data<coordinate_type> poly(pts, pts+5);
-        //   stdcout << "five point case\n";
-        //   initialize_skeleton(skeleton, all_faces, event_queue, poly);
-        //   execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) {
-        //     std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
-        //       ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
-        //   }
-        //   }
-        //   for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
-        //       itr != all_faces.end(); ++itr)
-        //     delete *itr;
-        //   all_faces.clear();
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) 
-        //     delete *itr;
-        //   skeleton.clear();
+        initialize_skeleton(skeleton, all_faces, event_queue, rect);
+        if(skeleton.size() == 4 && all_faces.size() == 4) {
+          stdcout << event_queue.size() << stdendl;
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr) << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ((*itr)->linked_nodes[0]) << " " <<
+              ((*itr)->linked_nodes[1]) << " " << 
+              ((*itr)->linked_nodes[2]) << "\n";
+          }
+          execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
+          for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
+              itr != all_faces.end(); ++itr)
+            delete *itr;
+          all_faces.clear();
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
+          }
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) 
+            delete *itr;
+          skeleton.clear();
+          {
+          point_data<coordinate_type> pts[] = {point_data<coordinate_type>(120, 200),
+                                               point_data<coordinate_type>(300, 200),
+                                               point_data<coordinate_type>(300, 500),
+                                               point_data<coordinate_type>(100, 500),
+                                               point_data<coordinate_type>(100, 220),
+          };
+          polygon_data<coordinate_type> poly(pts, pts+5);
+          stdcout << "five point case\n";
+          initialize_skeleton(skeleton, all_faces, event_queue, poly);
+          execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
+          }
+          }
+          for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
+              itr != all_faces.end(); ++itr)
+            delete *itr;
+          all_faces.clear();
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) 
+            delete *itr;
+          skeleton.clear();
 
-        //   {
-        //   point_data<coordinate_type> pts[] = {point_data<coordinate_type>(120, 200),
-        //                                        point_data<coordinate_type>(280, 200),
-        //                                        point_data<coordinate_type>(300, 220),
-        //                                        point_data<coordinate_type>(300, 480),
-        //                                        point_data<coordinate_type>(280, 500),
-        //                                        point_data<coordinate_type>(120, 500),
-        //                                        point_data<coordinate_type>(100, 480),
-        //                                        point_data<coordinate_type>(100, 220),
-        //   };
-        //   polygon_data<coordinate_type> poly(pts, pts+8);
-        //   stdcout << "eight point case\n";
-        //   initialize_skeleton(skeleton, all_faces, event_queue, poly);
-        //   execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) {
-        //     std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
-        //       ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
-        //   }
-        //   }
+          {
+          point_data<coordinate_type> pts[] = {point_data<coordinate_type>(120, 200),
+                                               point_data<coordinate_type>(280, 200),
+                                               point_data<coordinate_type>(300, 220),
+                                               point_data<coordinate_type>(300, 480),
+                                               point_data<coordinate_type>(280, 500),
+                                               point_data<coordinate_type>(120, 500),
+                                               point_data<coordinate_type>(100, 480),
+                                               point_data<coordinate_type>(100, 220),
+          };
+          polygon_data<coordinate_type> poly(pts, pts+8);
+          stdcout << "eight point case\n";
+          initialize_skeleton(skeleton, all_faces, event_queue, poly);
+          execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
+          }
+          }
 
-        //   for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
-        //       itr != all_faces.end(); ++itr)
-        //     delete *itr;
-        //   all_faces.clear();
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) 
-        //     delete *itr;
-        //   skeleton.clear();
-        //   {
-        //   point_data<coordinate_type> pts[] = {point_data<coordinate_type>(120, 200),
-        //                                        point_data<coordinate_type>(280, 200),
-        //                                        point_data<coordinate_type>(300, 220),
-        //                                        point_data<coordinate_type>(300, 480-100),
-        //                                        point_data<coordinate_type>(280, 500-100),
-        //                                        point_data<coordinate_type>(120, 500-100),
-        //                                        point_data<coordinate_type>(100, 480-100),
-        //                                        point_data<coordinate_type>(100, 220),
-        //   };
-        //   polygon_data<coordinate_type> poly(pts, pts+8);
-        //   stdcout << "co-circular eight point case\n";
-        //   initialize_skeleton(skeleton, all_faces, event_queue, poly);
-        //   execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) {
-        //     std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
-        //       ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
-        //   }
-        //   }
+          for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
+              itr != all_faces.end(); ++itr)
+            delete *itr;
+          all_faces.clear();
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) 
+            delete *itr;
+          skeleton.clear();
+          {
+          point_data<coordinate_type> pts[] = {point_data<coordinate_type>(120, 200),
+                                               point_data<coordinate_type>(280, 200),
+                                               point_data<coordinate_type>(300, 220),
+                                               point_data<coordinate_type>(300, 480-100),
+                                               point_data<coordinate_type>(280, 500-100),
+                                               point_data<coordinate_type>(120, 500-100),
+                                               point_data<coordinate_type>(100, 480-100),
+                                               point_data<coordinate_type>(100, 220),
+          };
+          polygon_data<coordinate_type> poly(pts, pts+8);
+          stdcout << "co-circular eight point case\n";
+          initialize_skeleton(skeleton, all_faces, event_queue, poly);
+          execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
+          }
+          }
 
-        //   for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
-        //       itr != all_faces.end(); ++itr)
-        //     delete *itr;
-        //   all_faces.clear();
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) 
-        //     delete *itr;
-        //   skeleton.clear();
+          for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
+              itr != all_faces.end(); ++itr)
+            delete *itr;
+          all_faces.clear();
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) 
+            delete *itr;
+          skeleton.clear();
 
 
 
-        //   {
-        //   point_data<coordinate_type> pts[] = {point_data<coordinate_type>(100, 200),
-        //                                        point_data<coordinate_type>(150, 220),
-        //                                        point_data<coordinate_type>(200, 200),
-        //                                        point_data<coordinate_type>(180, 250),
-        //                                        point_data<coordinate_type>(200, 300),
-        //                                        point_data<coordinate_type>(150, 280),
-        //                                        point_data<coordinate_type>(100, 300),
-        //                                        point_data<coordinate_type>(120, 250),
-        //   };
-        //   polygon_data<coordinate_type> poly(pts, pts+8);
-        //   stdcout << "ninja star\n";
-        //   initialize_skeleton(skeleton, all_faces, event_queue, poly);
-        //   execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) {
-        //     std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
-        //       ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
-        //   }
-        //   }
-
-        //   for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
-        //       itr != all_faces.end(); ++itr)
-        //     delete *itr;
-        //   all_faces.clear();
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) 
-        //     delete *itr;
-        //   skeleton.clear();
-
-        //   {
-        //   point_data<coordinate_type> pts[] = {point_data<coordinate_type>(100, 200),
-        //                                        point_data<coordinate_type>(140, 240),
-        //                                        point_data<coordinate_type>(200, 200),
-        //                                        point_data<coordinate_type>(160, 240),
-        //                                        point_data<coordinate_type>(200, 300),
-        //                                        point_data<coordinate_type>(160, 260),
-        //                                        point_data<coordinate_type>(100, 300),
-        //                                        point_data<coordinate_type>(140, 260),
-        //   };
-        //   polygon_data<coordinate_type> poly(pts, pts+8);
-        //   stdcout << "evil ninja star\n";
-        //   initialize_skeleton(skeleton, all_faces, event_queue, poly);
-        //   std::cout << event_queue.size() << " GREP\n";
-        //   execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
-        //   for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
-        //       itr != skeleton.end(); ++itr) {
-        //     std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
-        //       ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
-        //       ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
-        //   }
-        //   }
+          {
+          point_data<coordinate_type> pts[] = {point_data<coordinate_type>(100, 200),
+                                               point_data<coordinate_type>(150, 220),
+                                               point_data<coordinate_type>(200, 200),
+                                               point_data<coordinate_type>(180, 250),
+                                               point_data<coordinate_type>(200, 300),
+                                               point_data<coordinate_type>(150, 280),
+                                               point_data<coordinate_type>(100, 300),
+                                               point_data<coordinate_type>(120, 250),
+          };
+          polygon_data<coordinate_type> poly(pts, pts+8);
+          stdcout << "ninja star\n";
+          initialize_skeleton(skeleton, all_faces, event_queue, poly);
+          execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
+          }
+          }
 
           for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
               itr != all_faces.end(); ++itr)
@@ -900,6 +878,38 @@ namespace boost { namespace polygon {
           skeleton.clear();
 
           {
+          point_data<coordinate_type> pts[] = {point_data<coordinate_type>(100, 200),
+                                               point_data<coordinate_type>(140, 240),
+                                               point_data<coordinate_type>(200, 200),
+                                               point_data<coordinate_type>(160, 240),
+                                               point_data<coordinate_type>(200, 300),
+                                               point_data<coordinate_type>(160, 260),
+                                               point_data<coordinate_type>(100, 300),
+                                               point_data<coordinate_type>(140, 260),
+          };
+          polygon_data<coordinate_type> poly(pts, pts+8);
+          stdcout << "evil ninja star\n";
+          initialize_skeleton(skeleton, all_faces, event_queue, poly);
+          std::cout << event_queue.size() << " GREP\n";
+          execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
+          }
+          }
+
+          for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
+              itr != all_faces.end(); ++itr)
+            delete *itr;
+          all_faces.clear();
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) 
+            delete *itr;
+          skeleton.clear();
+
           {
           point_data<coordinate_type> pts[] = {point_data<coordinate_type>(100, 200),
                                                point_data<coordinate_type>(300, 200),
@@ -917,6 +927,43 @@ namespace boost { namespace polygon {
               ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
               ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
               ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
+          }
+          }
+
+          for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
+              itr != all_faces.end(); ++itr)
+            delete *itr;
+          all_faces.clear();
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) 
+            delete *itr;
+          skeleton.clear();
+
+          {
+          point_data<coordinate_type> pts[] = {point_data<coordinate_type>(100, 200),
+                                               point_data<coordinate_type>(300, 200),
+                                               point_data<coordinate_type>(300, 500),
+                                               point_data<coordinate_type>(100, 500),
+                                               point_data<coordinate_type>(100, 490),
+                                               point_data<coordinate_type>(120, 490),
+                                               point_data<coordinate_type>(100, 489),
+                                               point_data<coordinate_type>(100, 450),
+                                               point_data<coordinate_type>(122, 450),
+                                               point_data<coordinate_type>(100, 449),
+                                               point_data<coordinate_type>(100, 420),
+                                               point_data<coordinate_type>(120, 420),
+                                               point_data<coordinate_type>(100, 419),
+          };
+          polygon_data<coordinate_type> poly(pts, pts+10);
+          stdcout << "multiple split\n";
+          initialize_skeleton(skeleton, all_faces, event_queue, poly);
+          execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("null"))  << " " <<
+              ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("null"))  << " " <<
+              ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("null"))  << "\n";
           }
           }
 
