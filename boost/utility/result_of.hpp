@@ -25,6 +25,7 @@
 #include <boost/type_traits/is_member_function_pointer.hpp>
 #include <boost/type_traits/remove_cv.hpp>
 #include <boost/utility/declval.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #ifndef BOOST_RESULT_OF_NUM_ARGS
 #  define BOOST_RESULT_OF_NUM_ARGS 16
@@ -59,7 +60,22 @@ namespace detail {
 BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
 template<typename F, typename FArgs, bool HasResultType> struct tr1_result_of_impl;
-template<typename F> struct cpp0x_result_of_impl;
+
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+
+template<typename F> class is_callable;
+template<typename F, bool TestCallability = true> struct cpp0x_result_of_impl;
+
+#else // BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+
+template<typename T>
+struct result_of_always_void
+{
+    typedef void type;
+};
+template<typename F, typename Enable = void> struct cpp0x_result_of_impl {};
+
+#endif // BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
 
 template<typename F>
 struct result_of_void_impl
