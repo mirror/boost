@@ -7,11 +7,6 @@
 #include <boost/numeric/ublas/io.hpp>
 
 
-#include <sys/times.h>
-#include <sys/time.h>
-#include <sys/stat.h>
-
-
 namespace ublas  = boost::numeric::ublas;
 
 template<class mat, class vec>
