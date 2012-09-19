@@ -11,7 +11,9 @@
 #ifndef BOOST_POLYGON_DETAIL_SKELETON_PREDICATES
 #define BOOST_POLYGON_DETAIL_SKELETON_PREDICATES
 
+#ifndef BOOST_POLYGON_NO_DEPS
 #include <boost/cstdint.hpp>
+#endif
 
 #include <cmath>
 
