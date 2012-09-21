@@ -4391,6 +4391,54 @@ namespace boost { namespace numeric { namespace ublas {
             m1.swap (m2);
         }
 
+        // replacement if STL lower bound algorithm for use of inplace_merge
+        array_size_type lower_bound (array_size_type beg, array_size_type end, array_size_type target) const {
+            while (end > beg) {
+                array_size_type mid = (beg + end) / 2;
+                if (((index1_data_[mid] < index1_data_[target]) ||
+                     ((index1_data_[mid] == index1_data_[target]) &&
+                      (index2_data_[mid] < index2_data_[target])))) {
+                    beg = mid + 1;
+                } else {
+                    end = mid;
+                }
+            }
+            return beg;
+        }
+
+        // specialized replacement of STL inplace_merge to avoid compilation
+        // problems with respect to the array_triple iterator
+        void inplace_merge (array_size_type beg, array_size_type mid, array_size_type end) const {
+            array_size_type len_lef = mid - beg;
+            array_size_type len_rig = end - mid;
+
+            if (len_lef == 1 && len_rig == 1) {
+                if ((index1_data_[mid] < index1_data_[beg]) ||
+                    ((index1_data_[mid] == index1_data_[beg]) && (index2_data_[mid] < index2_data_[beg])))
+                    {
+                        std::swap(index1_data_[beg], index1_data_[mid]);
+                        std::swap(index2_data_[beg], index2_data_[mid]);
+                        std::swap(value_data_[beg], value_data_[mid]);
+                    }
+            } else if (len_lef > 0 && len_rig > 0) {
+                array_size_type lef_mid, rig_mid;
+                if (len_lef >= len_rig) {
+                    lef_mid = (beg + mid) / 2;
+                    rig_mid = lower_bound(mid, end, lef_mid);
+                } else {
+                    rig_mid = (mid + end) / 2;
+                    lef_mid = lower_bound(beg, mid, rig_mid);
+                }
+                std::rotate(&index1_data_[0] + lef_mid, &index1_data_[0] + mid, &index1_data_[0] + rig_mid);
+                std::rotate(&index2_data_[0] + lef_mid, &index2_data_[0] + mid, &index2_data_[0] + rig_mid);
+                std::rotate(&value_data_[0] + lef_mid, &value_data_[0] + mid, &value_data_[0] + rig_mid);
+
+                array_size_type new_mid = lef_mid + rig_mid - mid;
+                inplace_merge(beg, lef_mid, new_mid);
+                inplace_merge(new_mid, rig_mid, end);
+            }
+        }
+
         // Sorting and summation of duplicates
         BOOST_UBLAS_INLINE
         void sort () const {
@@ -4401,7 +4449,7 @@ namespace boost { namespace numeric { namespace ublas {
                 const typename array_triple::iterator iunsorted = ita.begin () + sorted_filled_;
                 // sort new elements and merge
                 std::sort (iunsorted, ita.end ());
-                std::inplace_merge (ita.begin (), iunsorted, ita.end ());
+                inplace_merge(0, sorted_filled_, filled_);
 #else
                 const typename array_triple::iterator iunsorted = ita.begin ();
                 std::sort (iunsorted, ita.end ());

@@ -198,4 +198,8 @@ test-suite numeric/uBLAS
         : test_inplace_solve_mvov
         :
       ]
+      [ run test_coordinate_vector_inplace_merge.cpp 
+      ]
+      [ run test_coordinate_matrix_inplace_merge.cpp 
+      ]
     ;
