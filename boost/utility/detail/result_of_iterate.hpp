@@ -58,16 +58,78 @@ struct result_of<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
 
 namespace detail {
 
+#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+
 template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
          BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
-struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
+class is_callable<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))> {
+    typedef char (&pass)[1];
+    typedef char (&fail)[2];
+
+    template<typename G BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
+             BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename S)>
+    struct sub {};
+    template<typename S>
+    struct stub {};
+
+    template<typename G BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
+             BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename S)>
+    static pass test(sub<G BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
+                         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),S)>
+                   , stub<
+                          decltype(
+                              boost::declval<G>()(
+                                  BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<S, >() BOOST_PP_INTERCEPT)
+                              )
+                          )
+                      >* x = 0);
+    static fail test(...);
+
+public:
+    const static bool value = sizeof(pass) == sizeof(test(sub<F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
+                                                              BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)
+                                                          >()));
+    typedef typename boost::mpl::bool_<value>::type type;
+};
+
+template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
+         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), true>
+    : lazy_enable_if<
+          is_callable<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
+        , cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), false>
+      >
+{};
+
+template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
+         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), false>
 {
   typedef decltype(
     boost::declval<F>()(
-      BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), declval<T, >() BOOST_PP_INTERCEPT)
+      BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<T, >() BOOST_PP_INTERCEPT)
     )
   ) type;
 };
+
+#else // BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+
+template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
+         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), 
+                            typename result_of_always_void<decltype(
+                                boost::declval<F>()(
+                                    BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<T, >() BOOST_PP_INTERCEPT)
+                                )
+                            )>::type> {
+  typedef decltype(
+    boost::declval<F>()(
+      BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<T, >() BOOST_PP_INTERCEPT)
+    )
+  ) type;
+};
+
+#endif // BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
 
 } // namespace detail 
 
