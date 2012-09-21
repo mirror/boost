@@ -54,6 +54,9 @@
 
 #include <boost/numeric/ublas/detail/config.hpp>
 #include <boost/numeric/ublas/traits.hpp>
+
+#include <boost/math/special_functions/fpclassify.hpp> // isnan, isinf
+
 #include <cmath>
 #include <complex>
 #include <cstddef>
@@ -63,14 +66,17 @@
 
 namespace boost { namespace numeric { namespace ublas { namespace test { namespace detail { namespace /*<unnamed>*/ {
 
+  using ::std::abs;
+  using ::std::max;
+
 /// Check if the given complex number is a NaN.
+// read the comments in fpclassify as well
 template <typename T>
 BOOST_UBLAS_INLINE
-bool complex_isnan(::std::complex<T> const& z)
+bool (isnan)(::std::complex<T> const& z)
 {
-    using namespace ::std;
 	// According to IEEE, NaN is different even by itself
-	return (z != z) || isnan(z.real()) || isnan(z.imag());
+  return (z != z) || (boost::math::isnan)(z.real()) || (boost::math::isnan)(z.imag());
 }
 
 /// Check if two (real) numbers are close each other (wrt a given tolerance).
@@ -81,8 +87,7 @@ bool close_to(T1 x, T2 y, T3 tol)
 	typedef typename promote_traits<typename promote_traits<T1,T2>::promote_type,
 									T3>::promote_type real_type;
 
-    using namespace ::std;
-    if (isnan(x) || isnan(y))
+    if ((boost::math::isnan)(x) || (boost::math::isnan)(y))
     {
         // According to IEEE, NaN is different even by itself
         return false;
@@ -98,7 +103,7 @@ bool close_to(::std::complex<T1> const& x, ::std::complex<T2> const& y, T3 tol)
 	typedef typename promote_traits<typename promote_traits<T1,T2>::promote_type,
 									T3>::promote_type real_type;
 
-    if (complex_isnan(x) || complex_isnan(y))
+    if ((isnan)(x) || (isnan)(y))
     {
         // According to IEEE, NaN is different even by itself
         return false;
@@ -106,7 +111,6 @@ bool close_to(::std::complex<T1> const& x, ::std::complex<T2> const& y, T3 tol)
 	::std::complex<real_type> xx(x);
 	::std::complex<real_type> yy(y);
 
-    using namespace ::std;
     return abs(xx-yy) <= (max(abs(xx), abs(yy))*tol);
 }
 
@@ -118,8 +122,7 @@ bool rel_close_to(T1 x, T2 y, T3 tol)
 	typedef typename promote_traits<typename promote_traits<T1,T2>::promote_type,
 									T3>::promote_type real_type;
 
-    using namespace ::std;
-    if (isnan(x) || isnan(y))
+    if ((boost::math::isnan)(x) || (boost::math::isnan)(y))
     {
         // According to IEEE, NaN is different even by itself
         return false;
@@ -135,7 +138,7 @@ bool rel_close_to(::std::complex<T1> const& x, ::std::complex<T2> const& y, T3 t
 	typedef typename promote_traits<typename promote_traits<T1,T2>::promote_type,
 									T3>::promote_type real_type;
 
-    if (complex_isnan(x) || complex_isnan(y))
+    if ((isnan)(x) || (isnan)(y))
     {
         // According to IEEE, NaN is different even by itself
         return false;
@@ -143,7 +146,6 @@ bool rel_close_to(::std::complex<T1> const& x, ::std::complex<T2> const& y, T3 t
 	::std::complex<real_type> xx(x);
 	::std::complex<real_type> yy(y);
 
-    using namespace ::std;
     return abs(xx-yy)/abs(yy) <= tol;
 }
 
