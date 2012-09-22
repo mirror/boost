@@ -157,6 +157,9 @@ test-suite numeric/uBLAS
 	  [ run test_assignment.cpp
 	  ]
 	  [ run test_triangular.cpp
+        :
+        :
+        : <library>/boost/timer//boost_timer
 	  ]
 	  [ run test_ticket7296.cpp
 	  ]
@@ -180,5 +183,9 @@ test-suite numeric/uBLAS
         : <define>USE_MAPPED_VECTOR_OF_MAPPED_VECTOR
         : test_inplace_solve_mvov
         :
+      ]
+      [ run test_coordinate_vector_inplace_merge.cpp 
+      ]
+      [ run test_coordinate_matrix_inplace_merge.cpp 
       ]
     ;
