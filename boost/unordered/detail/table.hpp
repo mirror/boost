@@ -187,7 +187,7 @@ namespace boost { namespace unordered { namespace detail {
         std::size_t bucket_count_;
         std::size_t size_;
         float mlf_;
-        std::size_t max_load_; // Only use if buckets_.
+        std::size_t max_load_;
         bucket_pointer buckets_;
 
         ////////////////////////////////////////////////////////////////////////
@@ -222,6 +222,7 @@ namespace boost { namespace unordered { namespace detail {
 
         bucket_pointer get_bucket(std::size_t bucket_index) const
         {
+            BOOST_ASSERT(buckets_);
             return buckets_ + static_cast<std::ptrdiff_t>(bucket_index);
         }
 
@@ -235,14 +236,15 @@ namespace boost { namespace unordered { namespace detail {
             return get_bucket(bucket_index)->next_;
         }
 
-        iterator get_start() const
+        iterator begin() const
         {
-            return iterator(static_cast<node_pointer>(
-                        get_previous_start()->next_));
+            return size_ ? iterator(static_cast<node_pointer>(
+                        get_previous_start()->next_)) : iterator();
         }
 
-        iterator get_start(std::size_t bucket_index) const
+        iterator begin(std::size_t bucket_index) const
         {
+            if (!size_) return iterator();
             previous_pointer prev = get_previous_start(bucket_index);
             return prev ? iterator(static_cast<node_pointer>(prev->next_)) :
                 iterator();
@@ -257,8 +259,7 @@ namespace boost { namespace unordered { namespace detail {
 
         std::size_t bucket_size(std::size_t index) const
         {
-            if (!size_) return 0;
-            iterator it = get_start(index);
+            iterator it = begin(index);
             if (!it.node_) return 0;
 
             std::size_t count = 0;
@@ -292,10 +293,10 @@ namespace boost { namespace unordered { namespace detail {
     
             // From 6.3.1/13:
             // Only resize when size >= mlf_ * count
-            max_load_ = boost::unordered::detail::double_to_size(ceil(
+            max_load_ = buckets_ ? boost::unordered::detail::double_to_size(ceil(
                     static_cast<double>(mlf_) *
                     static_cast<double>(bucket_count_)
-                ));
+                )) : 0;
 
         }
 
@@ -303,7 +304,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             BOOST_ASSERT(z > 0);
             mlf_ = (std::max)(z, minimum_max_load_factor);
-            if (buckets_) recalculate_max_load();
+            recalculate_max_load();
         }
 
         std::size_t min_buckets_for_size(std::size_t size) const
@@ -362,6 +363,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             x.buckets_ = bucket_pointer();
             x.size_ = 0;
+            x.max_load_ = 0;
         }
 
         table(table& x, node_allocator const& a,
@@ -383,7 +385,7 @@ namespace boost { namespace unordered { namespace detail {
             if (x.size_) {
                 create_buckets(bucket_count_);
                 copy_nodes<node_allocator> copy(node_alloc());
-                table_impl::fill_buckets(x.get_start(), *this, copy);
+                table_impl::fill_buckets(x.begin(), *this, copy);
             }
         }
 
@@ -398,7 +400,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 move_nodes<node_allocator> move(node_alloc());
                 node_holder<node_allocator> nodes(x);
-                table_impl::fill_buckets(nodes.get_start(), *this, move);
+                table_impl::fill_buckets(nodes.begin(), *this, move);
             }
         }
 
@@ -487,6 +489,7 @@ namespace boost { namespace unordered { namespace detail {
             size_ = other.size_;
             other.buckets_ = bucket_pointer();
             other.size_ = 0;
+            other.max_load_ = 0;
         }
 
         ////////////////////////////////////////////////////////////////////////
@@ -524,7 +527,7 @@ namespace boost { namespace unordered { namespace detail {
         void delete_buckets()
         {
             if(buckets_) {
-                delete_nodes(get_start(), iterator());
+                delete_nodes(begin(), iterator());
 
                 if (bucket::extra_node) {
                     node_pointer n = static_cast<node_pointer>(
@@ -536,6 +539,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 destroy_buckets();
                 buckets_ = bucket_pointer();
+                max_load_ = 0;
             }
 
             BOOST_ASSERT(!size_);
@@ -545,7 +549,7 @@ namespace boost { namespace unordered { namespace detail {
         {
             if(!size_) return;
 
-            delete_nodes(get_start(), iterator());
+            delete_nodes(begin(), iterator());
             get_previous_start()->next_ = link_pointer();
             clear_buckets();
 
@@ -649,13 +653,6 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // Iterators
-
-        iterator begin() const {
-            return !buckets_ ? iterator() : get_start();
-        }
-
-        ////////////////////////////////////////////////////////////////////////
         // Assignment
 
         void assign(table const& x)
@@ -680,7 +677,7 @@ namespace boost { namespace unordered { namespace detail {
 
             if (!size_ && !x.size_) return;
 
-            if (!buckets_ || x.size_ >= max_load_) {
+            if (x.size_ >= max_load_) {
                 create_buckets(min_buckets_for_size(x.size_));
             }
             else {
@@ -691,10 +688,7 @@ namespace boost { namespace unordered { namespace detail {
             // assigning to them if possible, and deleting any that are
             // left over.
             assign_nodes<table> assign(*this);
-
-            if (x.size_) {
-                table_impl::fill_buckets(x.get_start(), *this, assign);
-            }
+            table_impl::fill_buckets(x.begin(), *this, assign);
         }
 
         void assign(table const& x, true_type)
@@ -709,7 +703,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 // Delete everything with current allocators before assigning
                 // the new ones.
-                if (buckets_) delete_buckets();
+                delete_buckets();
                 allocators_.assign(x.allocators_);
 
                 // Copy over other data, all no throw.
@@ -722,7 +716,7 @@ namespace boost { namespace unordered { namespace detail {
                 if (x.size_) {
                     create_buckets(bucket_count_);
                     copy_nodes<node_allocator> copy(node_alloc());
-                    table_impl::fill_buckets(x.get_start(), *this, copy);
+                    table_impl::fill_buckets(x.begin(), *this, copy);
                 }
             }
         }
@@ -740,7 +734,7 @@ namespace boost { namespace unordered { namespace detail {
 
         void move_assign(table& x, true_type)
         {
-            if(buckets_) delete_buckets();
+            delete_buckets();
             allocators_.move_assign(x.allocators_);
             move_assign_no_alloc(x);
         }
@@ -748,7 +742,7 @@ namespace boost { namespace unordered { namespace detail {
         void move_assign(table& x, false_type)
         {
             if (node_alloc() == x.node_alloc()) {
-                if(buckets_) delete_buckets();
+                delete_buckets();
                 move_assign_no_alloc(x);
             }
             else {
@@ -760,7 +754,7 @@ namespace boost { namespace unordered { namespace detail {
 
                 if (!size_ && !x.size_) return;
 
-                if (!buckets_ || x.size_ >= max_load_) {
+                if (x.size_ >= max_load_) {
                     create_buckets(min_buckets_for_size(x.size_));
                 }
                 else {
@@ -771,11 +765,8 @@ namespace boost { namespace unordered { namespace detail {
                 // elements, assigning to them if possible, and deleting
                 // any that are left over.
                 move_assign_nodes<table> assign(*this);
-
-                if (x.size_) {
-                    node_holder<node_allocator> nodes(x);
-                    table_impl::fill_buckets(nodes.get_start(), *this, assign);
-                }
+                node_holder<node_allocator> nodes(x);
+                table_impl::fill_buckets(nodes.begin(), *this, assign);
             }
         }
         
@@ -784,9 +775,9 @@ namespace boost { namespace unordered { namespace detail {
             boost::unordered::detail::set_hash_functions<hasher, key_equal>
                 new_func_this(*this, x);
             // No throw from here.
-            move_buckets_from(x);
             mlf_ = x.mlf_;
             max_load_ = x.max_load_;
+            move_buckets_from(x);
             new_func_this.commit();
         }
 
@@ -878,7 +869,7 @@ namespace boost { namespace unordered { namespace detail {
         using namespace std;
 
         if(!size_) {
-            if(buckets_) delete_buckets();
+            delete_buckets();
             bucket_count_ = policy::new_bucket_count(min_buckets);
         }
         else {

@@ -444,10 +444,12 @@ namespace boost { namespace unordered { namespace detail {
             base(b.node_alloc()),
             nodes_()
         {
-            typename Table::previous_pointer prev = b.get_previous_start();
-            nodes_ = static_cast<node_pointer>(prev->next_);
-            prev->next_ = link_pointer();
-            b.size_ = 0;
+            if (b.size_) {
+                typename Table::previous_pointer prev = b.get_previous_start();
+                nodes_ = static_cast<node_pointer>(prev->next_);
+                prev->next_ = link_pointer();
+                b.size_ = 0;
+            }
         }
 
         ~node_holder();
@@ -508,7 +510,7 @@ namespace boost { namespace unordered { namespace detail {
             }
         }
 
-        iterator get_start() const
+        iterator begin() const
         {
             return iterator(nodes_);
         }

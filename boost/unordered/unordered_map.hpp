@@ -469,16 +469,14 @@ namespace unordered
 
         local_iterator begin(size_type n)
         {
-            return table_.size_ ? local_iterator(
-                table_.get_start(n), n, table_.bucket_count_) :
-                local_iterator();
+            return local_iterator(
+                table_.begin(n), n, table_.bucket_count_);
         }
 
         const_local_iterator begin(size_type n) const
         {
-            return table_.size_ ? const_local_iterator(
-                table_.get_start(n), n, table_.bucket_count_) :
-                const_local_iterator();
+            return const_local_iterator(
+                table_.begin(n), n, table_.bucket_count_);
         }
 
         local_iterator end(size_type)
@@ -493,9 +491,8 @@ namespace unordered
 
         const_local_iterator cbegin(size_type n) const
         {
-            return table_.size_ ? const_local_iterator(
-                table_.get_start(n), n, table_.bucket_count_) :
-                const_local_iterator();
+            return const_local_iterator(
+                table_.begin(n), n, table_.bucket_count_);
         }
 
         const_local_iterator cend(size_type) const
@@ -951,16 +948,14 @@ namespace unordered
 
         local_iterator begin(size_type n)
         {
-            return table_.size_ ? local_iterator(
-                table_.get_start(n), n, table_.bucket_count_) :
-                local_iterator();
+            return local_iterator(
+                table_.begin(n), n, table_.bucket_count_);
         }
 
         const_local_iterator begin(size_type n) const
         {
-            return table_.size_ ? const_local_iterator(
-                table_.get_start(n), n, table_.bucket_count_) :
-                const_local_iterator();
+            return const_local_iterator(
+                table_.begin(n), n, table_.bucket_count_);
         }
 
         local_iterator end(size_type)
@@ -975,9 +970,8 @@ namespace unordered
 
         const_local_iterator cbegin(size_type n) const
         {
-            return table_.size_ ? const_local_iterator(
-                table_.get_start(n), n, table_.bucket_count_) :
-                const_local_iterator();
+            return const_local_iterator(
+                table_.begin(n), n, table_.bucket_count_);
         }
 
         const_local_iterator cend(size_type) const
