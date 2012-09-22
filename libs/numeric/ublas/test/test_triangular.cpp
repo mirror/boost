@@ -6,6 +6,7 @@
 #include <boost/numeric/ublas/triangular.hpp>
 #include <boost/numeric/ublas/io.hpp>
 
+#include <boost/timer/timer.hpp>
 
 namespace ublas  = boost::numeric::ublas;
 
@@ -28,7 +29,7 @@ namespace ublas  = boost::numeric::ublas;
 
 
 int main() {
-  const int n=10000;
+  const int n=7000;
 #if 1
   ublas::compressed_matrix<double, ublas::row_major>     mat_row_upp(n, n);
   ublas::compressed_matrix<double, ublas::column_major>  mat_col_upp(n, n);
@@ -71,62 +72,54 @@ int main() {
 
   std::cerr << "Starting..." << std::endl;
   {
-    clock_t start = clock();
+    boost::timer::auto_cpu_timer t(std::cerr, "col_low x: %t sec CPU, %w sec real\n");
     ublas::vector<double>  x(b);
     ublas::inplace_solve(mat_col_low,  x, ublas::lower_tag());
-    std::cerr << "Col_low x: " << clock()-start << std::endl;
     std::cerr << "delta: " << diff(mat_col_low, x, b) << "\n";
   }
   {
-    clock_t start = clock();
+    boost::timer::auto_cpu_timer t(std::cerr, "row_low x: %t sec CPU, %w sec real\n");
     ublas::vector<double>  x(b);
     ublas::inplace_solve(mat_row_low, x, ublas::lower_tag());
-    std::cerr << "Row_low x: " << clock()-start << std::endl;
     std::cerr << "delta: " << diff(mat_row_low, x, b) << "\n";
   }
 
   {
-    clock_t start = clock();
+    boost::timer::auto_cpu_timer t(std::cerr, "col_upp x: %t sec CPU, %w sec real\n");
     ublas::vector<double>  x(b);
     ublas::inplace_solve(mat_col_upp,  x, ublas::upper_tag());
-    std::cerr << "col_upp x: " << clock()-start << std::endl;
     std::cerr << "delta: " << diff(mat_col_upp, x, b) << "\n";
   }
   {
-    clock_t start = clock();
+    boost::timer::auto_cpu_timer t(std::cerr, "row_upp x: %t sec CPU, %w sec real\n");
     ublas::vector<double>  x(b);
     ublas::inplace_solve(mat_row_upp, x, ublas::upper_tag());
-    std::cerr << "row_upp x: " << clock()-start << std::endl;
     std::cerr << "delta: " << diff(mat_row_upp, x, b) << "\n";
   }
 
-//   {
-//     clock_t start = clock();
-//     ublas::vector<double>  x(b);
-//     ublas::inplace_solve(x, mat_col_low, ublas::lower_tag());
-//     std::cerr << "x col_low: " << clock()-start << std::endl;
-//     std::cerr << "delta: " << diff(x, mat_col_low, b) << "\n";
-//   }
   {
-    clock_t start = clock();
+    boost::timer::auto_cpu_timer t(std::cerr, "x col_low: %t sec CPU, %w sec real\n");
+    ublas::vector<double>  x(b);
+    ublas::inplace_solve(x, mat_col_low, ublas::lower_tag());
+    std::cerr << "delta: " << diff(x, mat_col_low, b) << "\n";
+  }
+  {
+    boost::timer::auto_cpu_timer t(std::cerr, "x row_low: %t sec CPU, %w sec real\n");
     ublas::vector<double>  x(b);
     ublas::inplace_solve(x, mat_row_low, ublas::lower_tag());
-    std::cerr << "x row_low: " << clock()-start << std::endl;
     std::cerr << "delta: " << diff(x, mat_row_low, b) << "\n";
   }
 
-//   {
-//     clock_t start = clock();
-//     ublas::vector<double>  x(b);
-//     ublas::inplace_solve(x, mat_col_upp, ublas::upper_tag());
-//     std::cerr << "x col_upp: " << clock()-start << std::endl;
-//     std::cerr << "delta: " << diff(x, mat_col_upp, b) << "\n";
-//   }
   {
-    clock_t start = clock();
+    boost::timer::auto_cpu_timer t(std::cerr, "x col_upp: %t sec CPU, %w sec real\n");
+    ublas::vector<double>  x(b);
+    ublas::inplace_solve(x, mat_col_upp, ublas::upper_tag());
+    std::cerr << "delta: " << diff(x, mat_col_upp, b) << "\n";
+  }
+  {
+    boost::timer::auto_cpu_timer t(std::cerr, "x row_upp: %t sec CPU, %w sec real\n");
     ublas::vector<double>  x(b);
     ublas::inplace_solve(x, mat_row_upp, ublas::upper_tag());
-    std::cerr << "x row_upp: " << clock()-start << std::endl;
     std::cerr << "delta: " << diff(x, mat_row_upp, b) << "\n";
   }
 
