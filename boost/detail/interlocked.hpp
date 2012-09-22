@@ -65,7 +65,7 @@ extern "C" long __cdecl InterlockedExchangeAdd( long*, long );
 
 #elif defined( BOOST_MSVC ) || defined( BOOST_INTEL_WIN )
 
-#if defined( BOOST_MSVC ) && BOOST_MSVC >= 1600
+#if defined( BOOST_MSVC ) && BOOST_MSVC >= 1500
 
 #include <intrin.h>
 
