@@ -2,7 +2,7 @@
 #define DATE_TIME_TIME_DURATION_HPP___
 
 /* Copyright (c) 2002,2003 CrystalClear Software, Inc.
- * Use, modification and distribution is subject to the 
+ * Use, modification and distribution is subject to the
  * Boost Software License, Version 1.0. (See accompanying
  * file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
  * Author: Jeff Garland, Bart Garst
@@ -179,7 +179,7 @@ namespace date_time {
       return duration_type(ticks_);
     }
     //! Division operations on a duration with an integer.
-    duration_type operator/=(int divisor) 
+    duration_type operator/=(int divisor)
     {
       ticks_ = ticks_ / divisor;
       return duration_type(ticks_);
@@ -251,7 +251,7 @@ namespace date_time {
     }
 
   protected:
-    explicit time_duration(impl_type in) : ticks_(in) {};
+    explicit time_duration(impl_type in) : ticks_(in) {}
     impl_type ticks_;
   };
 

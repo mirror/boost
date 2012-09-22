@@ -208,7 +208,7 @@ namespace local_time {
     }
 
     //! Simple destructor, releases time zone if last referrer
-    ~local_date_time_base() {};
+    ~local_date_time_base() {}
 
     //! Copy constructor
     local_date_time_base(const local_date_time_base& rhs) :

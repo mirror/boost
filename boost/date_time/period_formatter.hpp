@@ -114,10 +114,10 @@ namespace boost { namespace date_time {
     {
       m_range_option = option;
     }
-    void delimiter_strings(const string_type& separator,
-                           const string_type& start_delim,
-                           const string_type& open_end_delim,
-                           const string_type& closed_end_delim)
+    void delimiter_strings(const string_type& ,
+                           const string_type& ,
+                           const string_type& ,
+                           const string_type& )
     {
       m_period_separator;
       m_period_start_delimeter;

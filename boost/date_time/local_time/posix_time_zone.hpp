@@ -115,7 +115,7 @@ namespace local_time{
         calc_rules(dst_begin, dst_end);
       }
     }
-    virtual ~posix_time_zone_base() {};
+    virtual ~posix_time_zone_base() {}
     //!String for the zone when not in daylight savings (eg: EST)
     virtual string_type std_zone_abbrev()const
     {
