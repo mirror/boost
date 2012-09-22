@@ -157,14 +157,14 @@ namespace boost { namespace polygon {
         future_intersection* parent2;
         //refer back to the edge between the target and its next
         future_intersection* split_on_next; //if null is an edge event
-
+        
         bool operator<(const event& that) const {
           debug1("event::operator<");
-          return distance < that.distance;
+          return distance < that.distance; 
         }
         bool operator>(const event& that) const {
           debug1("event::operator>");
-          return distance > that.distance;
+          return distance > that.distance; 
         }
 
         output_coordinate_type x() const { return point.x(); }
@@ -271,6 +271,25 @@ namespace boost { namespace polygon {
 
       //static member functions
 
+      static void find_split_event(future_intersection* first, future_intersection* second, event_queue_type& event_queue) {
+        if(orientation(first->edge, second->edge) < 1) {
+          //std::cout << "initialize reflex vertex\n";
+          future_intersection* inner = second->next->next;
+          while(inner != second) {
+            event e2;
+            if(compute_split_event(e2, second, inner)) {
+              if(e2.distance <= e2.parent->active_distance || e2.parent->active_distance < 0) {
+                //split event has no parent2
+                std::cout << "inserting split event\n";
+                event_queue.push(e2);
+                e2.parent->active_distance = e2.distance;
+              }
+            }
+            inner = inner->next;
+          }
+        }
+      }
+
       //ORIGINAL POLYGON EDGES
       //simply copy the original polygon edges into the future intersection edge pair data structure
       static void initialize_skeleton_edges(std::vector<skeleton_node*>& skeleton, 
@@ -304,22 +323,7 @@ namespace boost { namespace polygon {
         current = head;
         do {
           debug1("loop");
-          if(orientation(current->prev->edge, current->edge) < 1) {
-            //std::cout << "initialize reflex vertex\n";
-            future_intersection* inner = current->next->next;
-            while(inner != current) {
-              event e2;
-              if(compute_split_event(e2, current, inner)) {
-                if(e2.distance <= e2.parent->active_distance || e2.parent->active_distance < 0) {
-                  //split event has no parent2
-                  std::cout << "inserting split event\n";
-                  event_queue.push(e2);
-                  e2.parent->active_distance = e2.distance;
-                }
-              }
-              inner = inner->next;
-            }
-          }
+          find_split_event(current->prev, current, event_queue);
           event e;
           if(compute_edge_event(e, current, current->next, domain)) {
             if((e.distance <= e.parent->active_distance || e.parent->active_distance < 0) &&
@@ -439,7 +443,11 @@ namespace boost { namespace polygon {
               return false;
             if(orientation(e2, point) <= 0)
               return false;
+            if(orientation(e3, point) <= 0)
+              return false;
             if(orientation(e4, point) <= 0)
+              return false;
+            if(orientation(e5, point) <= 0)
               return false;
             debug1("passed simple orientation tests");
               //test that the point is on the correct side of the besector of e3,e4 and e4,e5
@@ -447,13 +455,24 @@ namespace boost { namespace polygon {
               //if e3,e4/e4e5 are concave then the correct sides will be reversed
             print_segment(e3);
             print_segment(e4);
-            print_segment(segment2);
-            std::cout << orientation(e3, e4) << " " << orientation(segment2, point) << std::endl;
-            if(orientation(e3, e4) == orientation(segment2, point))
+            //print_segment(segment2);
+            if((distance_squared_to_line(point, e4) - distance_squared_to_line(point, e3)) > 1e-6)
               return false;
+            // std::cout << orientation(e3, e4) << " " << orientation(segment2, point) << std::endl;
+            // if(orientation(e3, e4) == orientation(segment2, point))
+            //   return false;
             debug1("passed complex orientation test1");
-            if(orientation(e4, e5) != orientation(segment3, point))
+            print_segment(e4);
+            print_segment(e5);
+            print_segment(segment3);
+            std::cout << distance_squared_to_line(point, e4) << " " << distance_squared_to_line(point, e5) << "\n";
+            std::cout << (distance_squared_to_line(point, e4) > distance_squared_to_line(point, e5)) << "\n";
+            std::cout << (distance_squared_to_line(point, e4) - distance_squared_to_line(point, e5)) << std::endl;
+            std::cout << (distance_squared_to_line(point, e4) - distance_squared_to_line(point, e5) > 1e-6) << std::endl;
+            if((distance_squared_to_line(point, e4) - distance_squared_to_line(point, e5)) > 1e-6)
               return false;
+            //if(orientation(e4, e5) != orientation(segment3, point))
+            //  return false;
             debug1("passed complex orientation test2");
             //we seem to have a good split event point
             return true;
@@ -490,6 +509,7 @@ namespace boost { namespace polygon {
         if(compute_split_event_point(e, first->prev->edge, first->edge, opposite->prev->edge, opposite->edge, opposite->next->edge)) {
           std::cout << "found split event point\n";
           e.parent = first;
+          e.parent2 = first->prev;
           e.split_on_next = opposite;
           return true;
         }
@@ -582,15 +602,9 @@ namespace boost { namespace polygon {
           
           std::cout << "split event " << current_event.point.x() << " " << current_event.point.y() << std::endl;
           print_ring(current_event.parent);
-          //create one new skeleton node with the event parent future intersection's parent-node connected to it
-          skeleton.push_back(new skeleton_node(current_event.point));
-          current_event.parent->parent_node->add_edge(skeleton.back());
-          std::cout << current_event.parent->parent_node->label << "->" << skeleton.back()->label << std::endl;
-          skeleton.back()->add_edge(current_event.parent->parent_node);
-          current_event.parent->parent_node = skeleton.back();
-
           //if the split_on_next edge was previously split it will have a circular linked list of potential
           //future intersections that we need to search for the right one
+          bool found = false;
           if(current_event.split_on_next->next_split_edge) {
             future_intersection* current = current_event.split_on_next;
             do{
@@ -601,12 +615,99 @@ namespace boost { namespace polygon {
                 if(compute_split_event(e2, current_event.parent, current)) {
                   debug1("found correct split edge");
                   current_event.split_on_next = current;
+                  found = true;
                   break;
                 }
               }
               current = current->next_split_edge;
             } while (current != current_event.split_on_next);
+          } else {
+            found = true;
           }
+          if(!found)
+            return;
+          //this is the dual split event of a pseudo split
+          if(current_event.parent->prev != current_event.parent2)
+            return;
+          //check for pseudo split
+          std::cout << distance_squared_to_line(current_event.point, current_event.split_on_next->edge) << std::endl;
+          std::cout << distance_squared_to_line(current_event.point, current_event.split_on_next->next->edge) << std::endl;
+
+          if(abs(distance_squared_to_line(current_event.point, current_event.split_on_next->edge) -
+                 distance_squared_to_line(current_event.point, current_event.split_on_next->next->edge)) < 1e-6) {
+            std::cout << "pseudo split 1\n";
+
+            skeleton.push_back(new skeleton_node(current_event.point));
+            current_event.parent->parent_node->add_edge(skeleton.back());
+            std::cout << current_event.parent->parent_node->label << "->" << skeleton.back()->label << std::endl;
+            skeleton.back()->add_edge(current_event.parent->parent_node);
+            current_event.parent->parent_node = skeleton.back();
+            
+            skeleton.push_back(new skeleton_node(current_event.point));
+            current_event.split_on_next->next->parent_node->add_edge(skeleton.back());
+            std::cout << current_event.split_on_next->next->parent_node->label << "->" << skeleton.back()->label << std::endl;
+            skeleton.back()->add_edge(current_event.split_on_next->next->parent_node);
+            current_event.split_on_next->next->parent_node = skeleton.back();
+
+            skeleton.back()->add_edge(skeleton[skeleton.size()-2]);
+            skeleton[skeleton.size()-2]->add_edge(skeleton.back());
+
+            current_event.parent->prev = current_event.split_on_next;
+            current_event.parent2->next = current_event.split_on_next->next;
+            current_event.split_on_next->next->prev = current_event.parent2;
+            current_event.split_on_next->next = current_event.parent;
+
+            current_event.parent->active_distance = -1;
+            current_event.parent2->active_distance = -1;
+            current_event.parent->prev->active_distance = -1;
+            current_event.parent2->next->active_distance = -1;
+
+            find_edge_event(current_event.parent->prev, current_event.parent, event_queue, domain);
+            find_edge_event(current_event.parent, current_event.parent->next, event_queue, domain);
+            find_edge_event(current_event.parent2, current_event.parent2->next, event_queue, domain);
+            find_edge_event(current_event.parent2->next, current_event.parent2->next->next, event_queue, domain);
+            find_split_event(current_event.parent->prev, current_event.parent, event_queue);
+            find_split_event(current_event.parent2, current_event.parent2->next, event_queue);
+            print_ring(current_event.parent);
+            print_ring(current_event.parent2);
+            return;
+          }
+          if(abs(distance_squared_to_line(current_event.point, current_event.split_on_next->edge) -
+                 distance_squared_to_line(current_event.point, current_event.split_on_next->prev->edge)) < 1e-6) {
+            //event point is on the boundary of the "zone" of the opposite edge
+            std::cout << "pseudo split 2\n";
+            skeleton.push_back(new skeleton_node(current_event.point));
+            current_event.parent->parent_node->add_edge(skeleton.back());
+            std::cout << current_event.parent->parent_node->label << "->" << skeleton.back()->label << std::endl;
+            skeleton.back()->add_edge(current_event.parent->parent_node);
+            current_event.parent->parent_node = skeleton.back();
+            
+            skeleton.push_back(new skeleton_node(current_event.point));
+            current_event.split_on_next->parent_node->add_edge(skeleton.back());
+            std::cout << current_event.split_on_next->parent_node->label << "->" << skeleton.back()->label << std::endl;
+            skeleton.back()->add_edge(current_event.split_on_next->parent_node);
+            current_event.split_on_next->parent_node = skeleton.back();
+            
+            
+
+            current_event.parent->prev = current_event.split_on_next->prev;
+            current_event.parent2->next = current_event.split_on_next;
+            current_event.split_on_next->prev->next = current_event.parent;
+            current_event.split_on_next->prev = current_event.parent2;
+            find_edge_event(current_event.parent->prev, current_event.parent, event_queue, domain);
+            find_edge_event(current_event.parent, current_event.parent->next, event_queue, domain);
+            find_edge_event(current_event.parent2, current_event.parent2->next, event_queue, domain);
+            find_edge_event(current_event.parent2->next, current_event.parent2->next->next, event_queue, domain);
+            print_ring(current_event.parent);
+            print_ring(current_event.parent2);
+            return;
+          }
+          //create one new skeleton node with the event parent future intersection's parent-node connected to it
+          skeleton.push_back(new skeleton_node(current_event.point));
+          current_event.parent->parent_node->add_edge(skeleton.back());
+          std::cout << current_event.parent->parent_node->label << "->" << skeleton.back()->label << std::endl;
+          skeleton.back()->add_edge(current_event.parent->parent_node);
+          current_event.parent->parent_node = skeleton.back();
 
           //event parent node is not dead
           //create one new future intersection associated with the with a copy of the "opposite" edge as its edge
@@ -644,8 +745,13 @@ namespace boost { namespace polygon {
           find_edge_event(current_event.split_on_next->next, current_event.split_on_next->next->next, event_queue, domain);
           print_ring(current_event.split_on_next);
           print_ring(new_active);
+
+          //find split event here to handle ties between reflex vertices that generate a new reflect vertex
+          //find_split_event(current_event.parent->prev, current_event.parent->next, event_queue);
         } else {
           //edge event
+          if(current_event.parent->next != current_event.parent2)
+            return;
           std::cout << "event " << current_event.point.x() << " " << current_event.point.y() << std::endl;
           std::cout << current_event.parent->parent_node->label << " " << current_event.parent2->parent_node->label << std::endl;
           skeleton.push_back(new skeleton_node(current_event.point));
@@ -676,11 +782,11 @@ namespace boost { namespace polygon {
           }
           current_event.parent->active_distance = -1;
           current_event.parent2->active_distance = -1;
-          //the following two blocks should be refactored
           find_edge_event(current_event.parent->prev, current_event.parent->next, event_queue, domain);
           find_edge_event(current_event.parent->next, current_event.parent->next->next, event_queue, domain);
 
-          //TODO, find split event here to handle ties between reflex vertices that generate a new reflect vertex
+          //we may need to search i-2 and i+2 for edge events
+
         }
       }
 
@@ -694,7 +800,7 @@ namespace boost { namespace polygon {
           if(bound >=0 && current_event.distance > bound)
             break;
           if(!current_event.parent->is_dead &&
-             (current_event.parent2 == 0x0 || !current_event.parent2->is_dead))
+             !current_event.parent2->is_dead)
             process_event(current_event, skeleton, all_faces, event_queue, domain);
         }
       }
@@ -967,6 +1073,37 @@ namespace boost { namespace polygon {
           }
           }
 
+          for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
+              itr != all_faces.end(); ++itr)
+            delete *itr;
+          all_faces.clear();
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) 
+            delete *itr;
+          skeleton.clear();
+
+          {
+          point_data<coordinate_type> pts[] = {point_data<coordinate_type>(100, 201),
+                                               point_data<coordinate_type>(120, 220),
+                                               point_data<coordinate_type>(101, 200),
+                                               point_data<coordinate_type>(299, 200),
+                                               point_data<coordinate_type>(280, 220),
+                                               point_data<coordinate_type>(300, 201),
+                                               point_data<coordinate_type>(300, 500),
+                                               point_data<coordinate_type>(100, 500),
+          };
+          polygon_data<coordinate_type> poly(pts, pts+8);
+          stdcout << "2nd order reflex vertex\n";
+          initialize_skeleton(skeleton, all_faces, event_queue, poly);
+          execute_skeleton(skeleton, all_faces, event_queue, domain, 1000);
+          for(typename std::vector<skeleton_node*>::iterator itr = skeleton.begin();
+              itr != skeleton.end(); ++itr) {
+            std::cout << (*itr)->label << " " << (*itr)->vertex.x() << " " << (*itr)->vertex.y() << " " <<
+              ( ((*itr)->linked_nodes[0]) ? (*itr)->linked_nodes[0]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[1]) ? (*itr)->linked_nodes[1]->label : std::string("0"))  << " " <<
+              ( ((*itr)->linked_nodes[2]) ? (*itr)->linked_nodes[2]->label : std::string("0"))  << "\n";
+          }
+          }
           for(typename std::vector<future_intersection*>::iterator itr = all_faces.begin();
               itr != all_faces.end(); ++itr)
             delete *itr;
