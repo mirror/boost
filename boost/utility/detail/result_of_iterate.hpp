@@ -23,31 +23,29 @@
 #endif
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct tr1_result_of<F(BOOST_RESULT_OF_ARGS)>
     : mpl::if_<
           mpl::or_< is_pointer<F>, is_member_function_pointer<F> >
         , boost::detail::tr1_result_of_impl<
-            typename remove_cv<F>::type, 
-            typename remove_cv<F>::type(BOOST_RESULT_OF_ARGS), 
+            typename remove_cv<F>::type,
+            typename remove_cv<F>::type(BOOST_RESULT_OF_ARGS),
             (boost::detail::has_result_type<F>::value)>
         , boost::detail::tr1_result_of_impl<
             F,
-            F(BOOST_RESULT_OF_ARGS), 
+            F(BOOST_RESULT_OF_ARGS),
             (boost::detail::has_result_type<F>::value)> >::type { };
 #endif
 
 #ifdef BOOST_RESULT_OF_USE_DECLTYPE
 
 // Uses declval following N3225 20.7.7.6 when F is not a pointer.
-template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct result_of<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
     : mpl::if_<
           is_member_function_pointer<F>
         , detail::tr1_result_of_impl<
-            typename remove_cv<F>::type, 
+            typename remove_cv<F>::type,
             typename remove_cv<F>::type(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), false
           >
         , detail::cpp0x_result_of_impl<
@@ -58,51 +56,60 @@ struct result_of<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
 
 namespace detail {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+#ifdef BOOST_NO_SFINAE_EXPR
 
-template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
-class is_callable<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))> {
-    typedef char (&pass)[1];
-    typedef char (&fail)[2];
+template<typename F>
+struct BOOST_PP_CAT(result_of_is_callable_fun_2_, BOOST_PP_ITERATION());
 
-    template<typename G BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-             BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename S)>
-    struct sub {};
-    template<typename S>
-    struct stub {};
-
-    template<typename G BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-             BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename S)>
-    static pass test(sub<G BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-                         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),S)>
-                   , stub<
-                          decltype(
-                              boost::declval<G>()(
-                                  BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<S, >() BOOST_PP_INTERCEPT)
-                              )
-                          )
-                      >* x = 0);
-    static fail test(...);
-
-public:
-    const static bool value = sizeof(pass) == sizeof(test(sub<F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-                                                              BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)
-                                                          >()));
-    typedef typename boost::mpl::bool_<value>::type type;
+template<typename R BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename T)>
+struct BOOST_PP_CAT(result_of_is_callable_fun_2_, BOOST_PP_ITERATION())<R(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), T))> {
+    R operator()(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), T)) const;
+    typedef result_of_private_type const &(*pfn_t)(...);
+    operator pfn_t() const volatile;
 };
 
-template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename F>
+struct BOOST_PP_CAT(result_of_is_callable_fun_, BOOST_PP_ITERATION());
+
+template<typename F>
+struct BOOST_PP_CAT(result_of_is_callable_fun_, BOOST_PP_ITERATION())<F *>
+  : BOOST_PP_CAT(result_of_is_callable_fun_2_, BOOST_PP_ITERATION())<F>
+{};
+
+template<typename F>
+struct BOOST_PP_CAT(result_of_is_callable_fun_, BOOST_PP_ITERATION())<F &>
+  : BOOST_PP_CAT(result_of_is_callable_fun_2_, BOOST_PP_ITERATION())<F>
+{};
+
+template<typename F>
+struct BOOST_PP_CAT(result_of_select_call_wrapper_type_, BOOST_PP_ITERATION())
+  : mpl::eval_if<
+        is_class<typename remove_reference<F>::type>,
+        result_of_wrap_callable<result_of_callable_class, F>,
+        mpl::identity<BOOST_PP_CAT(result_of_is_callable_fun_, BOOST_PP_ITERATION())<typename remove_cv<F>::type> >
+    >
+{};
+
+template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename T)>
+struct BOOST_PP_CAT(result_of_is_callable_, BOOST_PP_ITERATION()) {
+    typedef typename BOOST_PP_CAT(result_of_select_call_wrapper_type_, BOOST_PP_ITERATION())<F>::type wrapper_t;
+    static const bool value = (
+        sizeof(result_of_no_type) == sizeof(detail::result_of_is_private_type(
+            (boost::declval<wrapper_t>()(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<T, >() BOOST_PP_INTERCEPT)), 0)
+        ))
+    );
+    typedef mpl::bool_<value> type;
+};
+
+template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), true>
     : lazy_enable_if<
-          is_callable<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
+          BOOST_PP_CAT(result_of_is_callable_, BOOST_PP_ITERATION())<F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), T)>
         , cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), false>
       >
 {};
 
-template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), false>
 {
   typedef decltype(
@@ -112,11 +119,10 @@ struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), fal
   ) type;
 };
 
-#else // BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+#else // BOOST_NO_SFINAE_EXPR
 
-template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
-struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), 
+template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
+struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)),
                             typename result_of_always_void<decltype(
                                 boost::declval<F>()(
                                     BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<T, >() BOOST_PP_INTERCEPT)
@@ -129,15 +135,14 @@ struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)),
   ) type;
 };
 
-#endif // BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+#endif // BOOST_NO_SFINAE_EXPR
 
-} // namespace detail 
+} // namespace detail
 
 #else // defined(BOOST_RESULT_OF_USE_DECLTYPE)
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-template<typename F BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct result_of<F(BOOST_RESULT_OF_ARGS)>
     : tr1_result_of<F(BOOST_RESULT_OF_ARGS)> { };
 #endif
@@ -146,27 +151,24 @@ struct result_of<F(BOOST_RESULT_OF_ARGS)>
 
 #undef BOOST_RESULT_OF_ARGS
 
-#if BOOST_PP_ITERATION() >= 1 
+#if BOOST_PP_ITERATION() >= 1
 
 namespace detail {
 
-template<typename R,  typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R,  typename FArgs BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct tr1_result_of_impl<R (*)(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), FArgs, false>
 {
   typedef R type;
 };
 
-template<typename R,  typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R,  typename FArgs BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct tr1_result_of_impl<R (&)(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), FArgs, false>
 {
   typedef R type;
 };
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
-template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R, typename FArgs BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct tr1_result_of_impl<R (T0::*)
                      (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T)),
                  FArgs, false>
@@ -174,8 +176,7 @@ struct tr1_result_of_impl<R (T0::*)
   typedef R type;
 };
 
-template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R, typename FArgs BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct tr1_result_of_impl<R (T0::*)
                      (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
                      const,
@@ -184,8 +185,7 @@ struct tr1_result_of_impl<R (T0::*)
   typedef R type;
 };
 
-template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R, typename FArgs BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct tr1_result_of_impl<R (T0::*)
                      (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
                      volatile,
@@ -194,8 +194,7 @@ struct tr1_result_of_impl<R (T0::*)
   typedef R type;
 };
 
-template<typename R, typename FArgs BOOST_PP_COMMA_IF(BOOST_PP_ITERATION())
-         BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),typename T)>
+template<typename R, typename FArgs BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct tr1_result_of_impl<R (T0::*)
                      (BOOST_PP_ENUM_SHIFTED_PARAMS(BOOST_PP_ITERATION(),T))
                      const volatile,

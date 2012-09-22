@@ -10,20 +10,25 @@
 #define BOOST_RESULT_OF_HPP
 
 #include <boost/config.hpp>
-#include <boost/preprocessor/iteration/iterate.hpp> 
-#include <boost/preprocessor/punctuation/comma_if.hpp> 
-#include <boost/preprocessor/repetition/enum_params.hpp> 
-#include <boost/preprocessor/repetition/enum_binary_params.hpp> 
-#include <boost/preprocessor/repetition/enum_shifted_params.hpp> 
-#include <boost/preprocessor/facilities/intercept.hpp> 
+#include <boost/preprocessor/cat.hpp>
+#include <boost/preprocessor/iteration/iterate.hpp>
+#include <boost/preprocessor/repetition/enum_params.hpp>
+#include <boost/preprocessor/repetition/enum_trailing_params.hpp>
+#include <boost/preprocessor/repetition/enum_binary_params.hpp>
+#include <boost/preprocessor/repetition/enum_shifted_params.hpp>
+#include <boost/preprocessor/facilities/intercept.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/mpl/if.hpp>
+#include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/mpl/or.hpp>
+#include <boost/type_traits/is_class.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_member_function_pointer.hpp>
 #include <boost/type_traits/remove_cv.hpp>
+#include <boost/type_traits/remove_reference.hpp>
 #include <boost/utility/declval.hpp>
 #include <boost/utility/enable_if.hpp>
 
@@ -61,21 +66,68 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
 template<typename F, typename FArgs, bool HasResultType> struct tr1_result_of_impl;
 
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+#ifdef BOOST_NO_SFINAE_EXPR
 
-template<typename F> class is_callable;
+template<typename T> T result_of_decay(T);
+
+struct result_of_private_type
+{
+  result_of_private_type const &operator,(int) const;
+};
+
+template<typename C>
+struct result_of_callable_class : C {
+    result_of_callable_class();
+    typedef result_of_private_type const &(*pfn_t)(...);
+    operator pfn_t() const volatile;
+};
+
+typedef char result_of_yes_type;      // sizeof(result_of_yes_type) == 1
+typedef char (&result_of_no_type)[2]; // sizeof(result_of_no_type)  == 2
+
+template<typename T>
+result_of_no_type result_of_is_private_type(T const &);
+
+result_of_yes_type result_of_is_private_type(result_of_private_type const &);
+
+template<template<typename> class Wrapper, typename C>
+struct result_of_wrap_callable {
+  typedef Wrapper<C> type;
+};
+
+template<template<typename> class Wrapper, typename C>
+struct result_of_wrap_callable<Wrapper, C &> {
+  typedef typename result_of_wrap_callable<Wrapper, C>::type &type;
+};
+
+template<template<typename> class Wrapper, typename C>
+struct result_of_wrap_callable<Wrapper, C const> {
+  typedef typename result_of_wrap_callable<Wrapper, C>::type const type;
+};
+
+template<template<typename> class Wrapper, typename C>
+struct result_of_wrap_callable<Wrapper, C volatile> {
+  typedef typename result_of_wrap_callable<Wrapper, C>::type volatile type;
+};
+
+template<template<typename> class Wrapper, typename C>
+struct result_of_wrap_callable<Wrapper, C const volatile> {
+  typedef typename result_of_wrap_callable<Wrapper, C>::type const volatile type;
+};
+
 template<typename F, bool TestCallability = true> struct cpp0x_result_of_impl;
 
-#else // BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+#else // BOOST_NO_SFINAE_EXPR
 
 template<typename T>
 struct result_of_always_void
 {
-    typedef void type;
+  typedef void type;
 };
+
 template<typename F, typename Enable = void> struct cpp0x_result_of_impl {};
 
-#endif // BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+#endif // BOOST_NO_SFINAE_EXPR
 
 template<typename F>
 struct result_of_void_impl
