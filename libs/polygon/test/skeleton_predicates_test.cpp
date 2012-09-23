@@ -27,7 +27,7 @@ typedef point_data<int32> point_type;
 typedef segment_data<int32> segment_type;
 typedef skeleton_ctype_traits<int32> ctraits_type;
 typedef intersection_event<fpt64> event_type;
-typename skeleton_predicates<ctraits_type>::event_formation_predicate<
+skeleton_predicates<ctraits_type>::event_formation_predicate<
     segment_data<int32>, intersection_event<fpt64> > create_event;
 
 BOOST_AUTO_TEST_CASE(event_predicate_test1) {
