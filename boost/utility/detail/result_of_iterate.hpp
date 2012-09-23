@@ -56,37 +56,37 @@ struct result_of<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
 
 namespace detail {
 
-#ifdef BOOST_NO_SFINAE_EXPR
+#ifdef BOOST_RESULT_OF_NO_SFINAE_EXPR
 
 template<typename F>
-struct BOOST_PP_CAT(result_of_is_callable_fun_2_, BOOST_PP_ITERATION());
+struct BOOST_PP_CAT(result_of_callable_fun_2_, BOOST_PP_ITERATION());
 
 template<typename R BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(), typename T)>
-struct BOOST_PP_CAT(result_of_is_callable_fun_2_, BOOST_PP_ITERATION())<R(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), T))> {
+struct BOOST_PP_CAT(result_of_callable_fun_2_, BOOST_PP_ITERATION())<R(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), T))> {
     R operator()(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(), T)) const;
     typedef result_of_private_type const &(*pfn_t)(...);
     operator pfn_t() const volatile;
 };
 
 template<typename F>
-struct BOOST_PP_CAT(result_of_is_callable_fun_, BOOST_PP_ITERATION());
+struct BOOST_PP_CAT(result_of_callable_fun_, BOOST_PP_ITERATION());
 
 template<typename F>
-struct BOOST_PP_CAT(result_of_is_callable_fun_, BOOST_PP_ITERATION())<F *>
-  : BOOST_PP_CAT(result_of_is_callable_fun_2_, BOOST_PP_ITERATION())<F>
+struct BOOST_PP_CAT(result_of_callable_fun_, BOOST_PP_ITERATION())<F *>
+  : BOOST_PP_CAT(result_of_callable_fun_2_, BOOST_PP_ITERATION())<F>
 {};
 
 template<typename F>
-struct BOOST_PP_CAT(result_of_is_callable_fun_, BOOST_PP_ITERATION())<F &>
-  : BOOST_PP_CAT(result_of_is_callable_fun_2_, BOOST_PP_ITERATION())<F>
+struct BOOST_PP_CAT(result_of_callable_fun_, BOOST_PP_ITERATION())<F &>
+  : BOOST_PP_CAT(result_of_callable_fun_2_, BOOST_PP_ITERATION())<F>
 {};
 
 template<typename F>
 struct BOOST_PP_CAT(result_of_select_call_wrapper_type_, BOOST_PP_ITERATION())
   : mpl::eval_if<
         is_class<typename remove_reference<F>::type>,
-        result_of_wrap_callable<result_of_callable_class, F>,
-        mpl::identity<BOOST_PP_CAT(result_of_is_callable_fun_, BOOST_PP_ITERATION())<typename remove_cv<F>::type> >
+        result_of_wrap_callable_class<F>,
+        mpl::identity<BOOST_PP_CAT(result_of_callable_fun_, BOOST_PP_ITERATION())<typename remove_cv<F>::type> >
     >
 {};
 
@@ -119,7 +119,7 @@ struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), fal
   ) type;
 };
 
-#else // BOOST_NO_SFINAE_EXPR
+#else // BOOST_RESULT_OF_NO_SFINAE_EXPR
 
 template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)),
@@ -135,7 +135,7 @@ struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)),
   ) type;
 };
 
-#endif // BOOST_NO_SFINAE_EXPR
+#endif // BOOST_RESULT_OF_NO_SFINAE_EXPR
 
 } // namespace detail
 

@@ -54,6 +54,10 @@
 #  endif
 #endif
 
+#if defined(BOOST_NO_SFINAE_EXPR) || (BOOST_WORKAROUND(__GNUC__, == 4) && __GNUC_MINOR__ < 5)
+#  define BOOST_RESULT_OF_NO_SFINAE_EXPR
+#endif
+
 namespace boost {
 
 template<typename F> struct result_of;
@@ -66,20 +70,13 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
 template<typename F, typename FArgs, bool HasResultType> struct tr1_result_of_impl;
 
-#ifdef BOOST_NO_SFINAE_EXPR
+#ifdef BOOST_RESULT_OF_NO_SFINAE_EXPR
 
 template<typename T> T result_of_decay(T);
 
 struct result_of_private_type
 {
   result_of_private_type const &operator,(int) const;
-};
-
-template<typename C>
-struct result_of_callable_class : C {
-    result_of_callable_class();
-    typedef result_of_private_type const &(*pfn_t)(...);
-    operator pfn_t() const volatile;
 };
 
 typedef char result_of_yes_type;      // sizeof(result_of_yes_type) == 1
@@ -90,34 +87,41 @@ result_of_no_type result_of_is_private_type(T const &);
 
 result_of_yes_type result_of_is_private_type(result_of_private_type const &);
 
-template<template<typename> class Wrapper, typename C>
-struct result_of_wrap_callable {
-  typedef Wrapper<C> type;
+template<typename C>
+struct result_of_callable_class : C {
+    result_of_callable_class();
+    typedef result_of_private_type const &(*pfn_t)(...);
+    operator pfn_t() const volatile;
 };
 
-template<template<typename> class Wrapper, typename C>
-struct result_of_wrap_callable<Wrapper, C &> {
-  typedef typename result_of_wrap_callable<Wrapper, C>::type &type;
+template<typename C>
+struct result_of_wrap_callable_class {
+  typedef result_of_callable_class<C> type;
 };
 
-template<template<typename> class Wrapper, typename C>
-struct result_of_wrap_callable<Wrapper, C const> {
-  typedef typename result_of_wrap_callable<Wrapper, C>::type const type;
+template<typename C>
+struct result_of_wrap_callable_class<C const> {
+  typedef result_of_callable_class<C> const type;
 };
 
-template<template<typename> class Wrapper, typename C>
-struct result_of_wrap_callable<Wrapper, C volatile> {
-  typedef typename result_of_wrap_callable<Wrapper, C>::type volatile type;
+template<typename C>
+struct result_of_wrap_callable_class<C volatile> {
+  typedef result_of_callable_class<C> volatile type;
 };
 
-template<template<typename> class Wrapper, typename C>
-struct result_of_wrap_callable<Wrapper, C const volatile> {
-  typedef typename result_of_wrap_callable<Wrapper, C>::type const volatile type;
+template<typename C>
+struct result_of_wrap_callable_class<C const volatile> {
+  typedef result_of_callable_class<C> const volatile type;
+};
+
+template<typename C>
+struct result_of_wrap_callable_class<C &> {
+  typedef typename result_of_wrap_callable_class<C>::type &type;
 };
 
 template<typename F, bool TestCallability = true> struct cpp0x_result_of_impl;
 
-#else // BOOST_NO_SFINAE_EXPR
+#else // BOOST_RESULT_OF_NO_SFINAE_EXPR
 
 template<typename T>
 struct result_of_always_void
@@ -127,7 +131,7 @@ struct result_of_always_void
 
 template<typename F, typename Enable = void> struct cpp0x_result_of_impl {};
 
-#endif // BOOST_NO_SFINAE_EXPR
+#endif // BOOST_RESULT_OF_NO_SFINAE_EXPR
 
 template<typename F>
 struct result_of_void_impl
