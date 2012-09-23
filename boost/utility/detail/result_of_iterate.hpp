@@ -15,6 +15,12 @@
 # error Boost result_of - do not include this file!
 #endif
 
+// This header generate spurious warnings on gcc, which we supress by
+// treating it as a system header.
+#if defined(__GNUC__) && (__GNUC__ >= 4) 
+#pragma GCC system_header 
+#endif
+
 // CWPro8 requires an argument in a function type specialization
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3002)) && BOOST_PP_ITERATION() == 0
 # define BOOST_RESULT_OF_ARGS void
