@@ -74,18 +74,19 @@ template<typename F, typename FArgs, bool HasResultType> struct tr1_result_of_im
 
 template<typename T> T result_of_decay(T);
 
-struct result_of_private_type
-{
-  result_of_private_type const &operator,(int) const;
+struct result_of_private_type {};
+
+struct result_of_weird_type {
+  template<typename T>
+  friend result_of_weird_type operator,(T const &, result_of_weird_type);
+  friend result_of_private_type operator,(result_of_private_type, result_of_weird_type);
 };
 
 typedef char result_of_yes_type;      // sizeof(result_of_yes_type) == 1
 typedef char (&result_of_no_type)[2]; // sizeof(result_of_no_type)  == 2
 
-template<typename T>
-result_of_no_type result_of_is_private_type(T const &);
-
-result_of_yes_type result_of_is_private_type(result_of_private_type const &);
+result_of_no_type result_of_is_private_type(result_of_weird_type);
+result_of_yes_type result_of_is_private_type(result_of_private_type);
 
 template<typename C>
 struct result_of_callable_class : C {

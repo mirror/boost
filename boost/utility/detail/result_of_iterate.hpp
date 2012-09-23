@@ -15,12 +15,6 @@
 # error Boost result_of - do not include this file!
 #endif
 
-// This header generate spurious warnings on gcc, which we supress by
-// treating it as a system header.
-#if defined(__GNUC__) && (__GNUC__ >= 4) 
-#pragma GCC system_header 
-#endif
-
 // CWPro8 requires an argument in a function type specialization
 #if BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3002)) && BOOST_PP_ITERATION() == 0
 # define BOOST_RESULT_OF_ARGS void
@@ -101,7 +95,7 @@ struct BOOST_PP_CAT(result_of_is_callable_, BOOST_PP_ITERATION()) {
     typedef typename BOOST_PP_CAT(result_of_select_call_wrapper_type_, BOOST_PP_ITERATION())<F>::type wrapper_t;
     static const bool value = (
         sizeof(result_of_no_type) == sizeof(detail::result_of_is_private_type(
-            (boost::declval<wrapper_t>()(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<T, >() BOOST_PP_INTERCEPT)), 0)
+            (boost::declval<wrapper_t>()(BOOST_PP_ENUM_BINARY_PARAMS(BOOST_PP_ITERATION(), boost::declval<T, >() BOOST_PP_INTERCEPT)), result_of_weird_type())
         ))
     );
     typedef mpl::bool_<value> type;
