@@ -585,6 +585,22 @@ struct is_bidirectional_iterator<T, false>
    static const bool value = false;
 };
 
+template<class T, class IIterator>
+struct iiterator_types
+{
+   typedef typename std::iterator_traits<IIterator>::pointer         it_pointer;
+   typedef typename std::iterator_traits<IIterator>::difference_type difference_type;
+   typedef typename ::boost::intrusive::pointer_traits<it_pointer>::
+      template rebind_pointer<T>::type                               pointer;
+   typedef typename ::boost::intrusive::pointer_traits<it_pointer>::
+      template rebind_pointer<const T>::type                         const_pointer;
+   typedef typename ::boost::intrusive::
+      pointer_traits<pointer>::reference                             reference;
+   typedef typename ::boost::intrusive::
+      pointer_traits<const_pointer>::reference                       const_reference;
+};
+
+
 }  //namespace container_detail {
 
 }  //namespace container {
@@ -593,4 +609,3 @@ struct is_bidirectional_iterator<T, false>
 #include <boost/container/detail/config_end.hpp>
 
 #endif   //#ifndef BOOST_CONTAINER_DETAIL_ITERATORS_HPP
-

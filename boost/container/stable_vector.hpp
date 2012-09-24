@@ -466,9 +466,6 @@ class stable_vector
    typedef typename index_traits_type::index_iterator index_iterator;
    typedef typename index_traits_type::
       const_index_iterator                            const_index_iterator;
-
-   typedef typename container_detail::
-      move_const_ref_type<T>::type                    insert_const_ref_type;
    typedef boost::intrusive::
       pointer_traits
          <typename allocator_traits_type::pointer>    ptr_traits;
@@ -601,27 +598,35 @@ class stable_vector
    {  this->priv_node_alloc().deallocate_individual(boost::move(holder));  }
 
    friend class stable_vector_detail::clear_on_destroy<stable_vector>;
+   typedef stable_vector_detail::iterator
+      < T
+      , typename allocator_traits<A>::reference
+      , typename allocator_traits<A>::pointer>              iterator_impl;
+   typedef stable_vector_detail::iterator
+      < T
+      , typename allocator_traits<A>::const_reference
+      , typename allocator_traits<A>::const_pointer>        const_iterator_impl;
    ///@endcond
    public:
 
-
-   // types:
-
-   typedef typename allocator_traits_type::reference              reference;
-   typedef typename allocator_traits_type::const_reference        const_reference;
-   typedef typename allocator_traits_type::pointer                pointer;
-   typedef typename allocator_traits_type::const_pointer          const_pointer;
-   typedef stable_vector_detail::iterator
-      <T,T&, pointer>                                 iterator;
-   typedef stable_vector_detail::iterator
-      <T,const T&, const_pointer>                     const_iterator;
-   typedef typename index_type::size_type             size_type;
-   typedef typename iterator::difference_type         difference_type;
-   typedef T                                          value_type;
-   typedef A                                          allocator_type;
-   typedef std::reverse_iterator<iterator>            reverse_iterator;
-   typedef std::reverse_iterator<const_iterator>      const_reverse_iterator;
-   typedef node_allocator_type                        stored_allocator_type;
+   //////////////////////////////////////////////
+   //
+   //                    types
+   //
+   //////////////////////////////////////////////
+   typedef T                                                                  value_type;
+   typedef typename ::boost::container::allocator_traits<A>::pointer          pointer;
+   typedef typename ::boost::container::allocator_traits<A>::const_pointer    const_pointer;
+   typedef typename ::boost::container::allocator_traits<A>::reference        reference;
+   typedef typename ::boost::container::allocator_traits<A>::const_reference  const_reference;
+   typedef typename ::boost::container::allocator_traits<A>::size_type        size_type;
+   typedef typename ::boost::container::allocator_traits<A>::difference_type  difference_type;
+   typedef A                                                                  allocator_type;
+   typedef node_allocator_type                                                stored_allocator_type;
+   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                              iterator;
+   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                        const_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<iterator>)            reverse_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<const_iterator>)      const_reverse_iterator;
 
    ///@cond
    private:
@@ -636,6 +641,11 @@ class stable_vector
    ///@endcond
 
    public:
+   //////////////////////////////////////////////
+   //
+   //          construct/copy/destroy
+   //
+   //////////////////////////////////////////////
 
    //! <b>Effects</b>: Default constructs a stable_vector.
    //!
@@ -842,6 +852,18 @@ class stable_vector
       return *this;
    }
 
+
+   //! <b>Effects</b>: Assigns the n copies of val to *this.
+   //!
+   //! <b>Throws</b>: If memory allocation throws or T's copy constructor throws.
+   //!
+   //! <b>Complexity</b>: Linear to n.
+   void assign(size_type n, const T& t)
+   {
+      typedef constant_iterator<value_type, difference_type> cvalue_iterator;
+      this->assign(cvalue_iterator(t, n), cvalue_iterator());
+   }
+
    //! <b>Effects</b>: Assigns the the range [first, last) to *this.
    //!
    //! <b>Throws</b>: If memory allocation throws or
@@ -868,17 +890,6 @@ class stable_vector
       else{
          this->insert(last1, first, last);
       }
-   }
-
-   //! <b>Effects</b>: Assigns the n copies of val to *this.
-   //!
-   //! <b>Throws</b>: If memory allocation throws or T's copy constructor throws.
-   //!
-   //! <b>Complexity</b>: Linear to n.
-   void assign(size_type n, const T& t)
-   {
-      typedef constant_iterator<value_type, difference_type> cvalue_iterator;
-      this->assign(cvalue_iterator(t, n), cvalue_iterator());
    }
 
    //! <b>Effects</b>: Returns a copy of the internal allocator.
@@ -908,6 +919,12 @@ class stable_vector
    //! <b>Note</b>: Non-standard extension.
    stored_allocator_type &get_stored_allocator() BOOST_CONTAINER_NOEXCEPT
    {  return this->priv_node_alloc(); }
+
+   //////////////////////////////////////////////
+   //
+   //                iterators
+   //
+   //////////////////////////////////////////////
 
    //! <b>Effects</b>: Returns an iterator to the first element contained in the stable_vector.
    //!
@@ -1011,6 +1028,20 @@ class stable_vector
    const_reverse_iterator crend()const
    {  return this->rend(); }
 
+   //////////////////////////////////////////////
+   //
+   //                capacity
+   //
+   //////////////////////////////////////////////
+
+   //! <b>Effects</b>: Returns true if the stable_vector contains no elements.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //!
+   //! <b>Complexity</b>: Constant.
+   bool empty() const
+   {  return this->index.size() <= ExtraPointers;  }
+
    //! <b>Effects</b>: Returns the number of the elements contained in the stable_vector.
    //!
    //! <b>Throws</b>: Nothing.
@@ -1030,30 +1061,21 @@ class stable_vector
    size_type max_size() const
    {  return this->index.max_size() - ExtraPointers;  }
 
-   //! <b>Effects</b>: Number of elements for which memory has been allocated.
-   //!   capacity() is always greater than or equal to size().
+   //! <b>Effects</b>: Inserts or erases elements at the end such that
+   //!   the size becomes n. New elements are default constructed.
    //!
-   //! <b>Throws</b>: Nothing.
+   //! <b>Throws</b>: If memory allocation throws, or T's copy constructor throws.
    //!
-   //! <b>Complexity</b>: Constant.
-   size_type capacity() const
+   //! <b>Complexity</b>: Linear to the difference between size() and new_size.
+   void resize(size_type n)
    {
-      const size_type index_size             = this->index.size();
-      BOOST_ASSERT(!index_size || index_size >= ExtraPointers);
-      const size_type bucket_extra_capacity = this->index.capacity()- index_size;
-      const size_type node_extra_capacity   = this->internal_data.pool_size;
-      const size_type extra_capacity        = (bucket_extra_capacity < node_extra_capacity)
-         ? bucket_extra_capacity : node_extra_capacity;
-      return (index_size ? (index_size - ExtraPointers + extra_capacity) : index_size);
+      typedef default_construct_iterator<value_type, difference_type> default_iterator;
+      STABLE_VECTOR_CHECK_INVARIANT;
+      if(n > this->size())
+         this->insert(this->cend(), default_iterator(n - this->size()), default_iterator());
+      else if(n < this->size())
+         this->erase(this->cbegin() + n, this->cend());
    }
-
-   //! <b>Effects</b>: Returns true if the stable_vector contains no elements.
-   //!
-   //! <b>Throws</b>: Nothing.
-   //!
-   //! <b>Complexity</b>: Constant.
-   bool empty() const
-   {  return this->index.size() <= ExtraPointers;  }
 
    //! <b>Effects</b>: Inserts or erases elements at the end such that
    //!   the size becomes n. New elements are copy constructed from x.
@@ -1070,20 +1092,21 @@ class stable_vector
          this->erase(this->cbegin() + n, this->cend());
    }
 
-   //! <b>Effects</b>: Inserts or erases elements at the end such that
-   //!   the size becomes n. New elements are default constructed.
+   //! <b>Effects</b>: Number of elements for which memory has been allocated.
+   //!   capacity() is always greater than or equal to size().
    //!
-   //! <b>Throws</b>: If memory allocation throws, or T's copy constructor throws.
+   //! <b>Throws</b>: Nothing.
    //!
-   //! <b>Complexity</b>: Linear to the difference between size() and new_size.
-   void resize(size_type n)
+   //! <b>Complexity</b>: Constant.
+   size_type capacity() const
    {
-      typedef default_construct_iterator<value_type, difference_type> default_iterator;
-      STABLE_VECTOR_CHECK_INVARIANT;
-      if(n > this->size())
-         this->insert(this->cend(), default_iterator(n - this->size()), default_iterator());
-      else if(n < this->size())
-         this->erase(this->cbegin() + n, this->cend());
+      const size_type index_size             = this->index.size();
+      BOOST_ASSERT(!index_size || index_size >= ExtraPointers);
+      const size_type bucket_extra_capacity = this->index.capacity()- index_size;
+      const size_type node_extra_capacity   = this->internal_data.pool_size;
+      const size_type extra_capacity        = (bucket_extra_capacity < node_extra_capacity)
+         ? bucket_extra_capacity : node_extra_capacity;
+      return (index_size ? (index_size - ExtraPointers + extra_capacity) : index_size);
    }
 
    //! <b>Effects</b>: If n is less than or equal to capacity(), this call has no
@@ -1115,6 +1138,86 @@ class stable_vector
          }
       }
    }
+
+   //! <b>Effects</b>: Tries to deallocate the excess of memory created
+   //!   with previous allocations. The size of the stable_vector is unchanged
+   //!
+   //! <b>Throws</b>: If memory allocation throws.
+   //!
+   //! <b>Complexity</b>: Linear to size().
+   void shrink_to_fit()
+   {
+      if(this->capacity()){
+         //First empty allocated node pool
+         this->priv_clear_pool();
+         //If empty completely destroy the index, let's recover default-constructed state
+         if(this->empty()){
+            this->index.clear();
+            this->index.shrink_to_fit();
+            this->internal_data.end_node.up = node_base_ptr_ptr();
+         }
+         //Otherwise, try to shrink-to-fit the index and readjust pointers if necessary
+         else{
+            const void* old_ptr = &index[0];
+            this->index.shrink_to_fit();
+            bool realloced = &index[0] != old_ptr;
+            //Fix the pointers for the newly allocated buffer
+            if(realloced){
+               index_traits_type::fix_up_pointers_from(this->index, this->index.begin());
+            }
+         }
+      }
+   }
+
+   //////////////////////////////////////////////
+   //
+   //               element access
+   //
+   //////////////////////////////////////////////
+
+   //! <b>Requires</b>: !empty()
+   //!
+   //! <b>Effects</b>: Returns a reference to the first
+   //!   element of the container.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //!
+   //! <b>Complexity</b>: Constant.
+   reference front()
+   {  return static_cast<node_reference>(*this->index.front()).value;  }
+
+   //! <b>Requires</b>: !empty()
+   //!
+   //! <b>Effects</b>: Returns a const reference to the first
+   //!   element of the container.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //!
+   //! <b>Complexity</b>: Constant.
+   const_reference front() const
+   {  return static_cast<const_node_reference>(*this->index.front()).value;  }
+
+   //! <b>Requires</b>: !empty()
+   //!
+   //! <b>Effects</b>: Returns a reference to the last
+   //!   element of the container.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //!
+   //! <b>Complexity</b>: Constant.
+   reference back()
+   {  return static_cast<node_reference>(*this->index[this->size() - ExtraPointers]).value;  }
+
+   //! <b>Requires</b>: !empty()
+   //!
+   //! <b>Effects</b>: Returns a const reference to the last
+   //!   element of the container.
+   //!
+   //! <b>Throws</b>: Nothing.
+   //!
+   //! <b>Complexity</b>: Constant.
+   const_reference back()const
+   {  return static_cast<const_node_reference>(*this->index[this->size() - ExtraPointers]).value;  }
 
    //! <b>Requires</b>: size() > n.
    //!
@@ -1168,49 +1271,86 @@ class stable_vector
       return operator[](n);
    }
 
-   //! <b>Requires</b>: !empty()
-   //!
-   //! <b>Effects</b>: Returns a reference to the first
-   //!   element of the container.
-   //!
-   //! <b>Throws</b>: Nothing.
-   //!
-   //! <b>Complexity</b>: Constant.
-   reference front()
-   {  return static_cast<node_reference>(*this->index.front()).value;  }
+   //////////////////////////////////////////////
+   //
+   //                modifiers
+   //
+   //////////////////////////////////////////////
 
-   //! <b>Requires</b>: !empty()
-   //!
-   //! <b>Effects</b>: Returns a const reference to the first
-   //!   element of the container.
-   //!
-   //! <b>Throws</b>: Nothing.
-   //!
-   //! <b>Complexity</b>: Constant.
-   const_reference front() const
-   {  return static_cast<const_node_reference>(*this->index.front()).value;  }
+   #if defined(BOOST_CONTAINER_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
 
-   //! <b>Requires</b>: !empty()
+   //! <b>Effects</b>: Inserts an object of type T constructed with
+   //!   std::forward<Args>(args)... in the end of the stable_vector.
    //!
-   //! <b>Effects</b>: Returns a reference to the last
-   //!   element of the container.
+   //! <b>Throws</b>: If memory allocation throws or the in-place constructor throws.
    //!
-   //! <b>Throws</b>: Nothing.
-   //!
-   //! <b>Complexity</b>: Constant.
-   reference back()
-   {  return static_cast<node_reference>(*this->index[this->size() - ExtraPointers]).value;  }
+   //! <b>Complexity</b>: Amortized constant time.
+   template<class ...Args>
+   void emplace_back(Args &&...args)
+   {
+      typedef emplace_functor<Args...>         EmplaceFunctor;
+      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type> EmplaceIterator;
+      EmplaceFunctor &&ef = EmplaceFunctor(boost::forward<Args>(args)...);
+      this->insert(this->cend(), EmplaceIterator(ef), EmplaceIterator());
+   }
 
-   //! <b>Requires</b>: !empty()
+   //! <b>Requires</b>: position must be a valid iterator of *this.
    //!
-   //! <b>Effects</b>: Returns a const reference to the last
-   //!   element of the container.
+   //! <b>Effects</b>: Inserts an object of type T constructed with
+   //!   std::forward<Args>(args)... before position
    //!
-   //! <b>Throws</b>: Nothing.
+   //! <b>Throws</b>: If memory allocation throws or the in-place constructor throws.
    //!
-   //! <b>Complexity</b>: Constant.
-   const_reference back()const
-   {  return static_cast<const_node_reference>(*this->index[this->size() - ExtraPointers]).value;  }
+   //! <b>Complexity</b>: If position is end(), amortized constant time
+   //!   Linear time otherwise.
+   template<class ...Args>
+   iterator emplace(const_iterator position, Args && ...args)
+   {
+      //Just call more general insert(pos, size, value) and return iterator
+      size_type pos_n = position - cbegin();
+      typedef emplace_functor<Args...>         EmplaceFunctor;
+      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type> EmplaceIterator;
+      EmplaceFunctor &&ef = EmplaceFunctor(boost::forward<Args>(args)...);
+      this->insert(position, EmplaceIterator(ef), EmplaceIterator());
+      return iterator(this->begin() + pos_n);
+   }
+
+   #else
+
+   #define BOOST_PP_LOCAL_MACRO(n)                                                              \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)       \
+   void emplace_back(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                        \
+   {                                                                                            \
+      typedef BOOST_PP_CAT(BOOST_PP_CAT(emplace_functor, n), arg)                               \
+         BOOST_PP_EXPR_IF(n, <) BOOST_PP_ENUM_PARAMS(n, P) BOOST_PP_EXPR_IF(n, >)               \
+            EmplaceFunctor;                                                                     \
+      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type>  EmplaceIterator;   \
+      EmplaceFunctor ef BOOST_PP_LPAREN_IF(n)                                                   \
+                        BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)                   \
+                        BOOST_PP_RPAREN_IF(n);                                                  \
+      this->insert(this->cend() , EmplaceIterator(ef), EmplaceIterator());                      \
+   }                                                                                            \
+                                                                                                \
+   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)       \
+   iterator emplace(const_iterator pos                                                          \
+           BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                         \
+   {                                                                                            \
+      typedef BOOST_PP_CAT(BOOST_PP_CAT(emplace_functor, n), arg)                               \
+         BOOST_PP_EXPR_IF(n, <) BOOST_PP_ENUM_PARAMS(n, P) BOOST_PP_EXPR_IF(n, >)               \
+            EmplaceFunctor;                                                                     \
+      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type>  EmplaceIterator;   \
+      EmplaceFunctor ef BOOST_PP_LPAREN_IF(n)                                                   \
+                        BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)                   \
+                        BOOST_PP_RPAREN_IF(n);                                                  \
+      size_type pos_n = pos - this->cbegin();                                                   \
+      this->insert(pos, EmplaceIterator(ef), EmplaceIterator());                                \
+      return iterator(this->begin() + pos_n);                                                   \
+   }                                                                                            \
+   //!
+   #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
+   #include BOOST_PP_LOCAL_ITERATE()
+
+   #endif   //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 
    #if defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
    //! <b>Effects</b>: Inserts a copy of x at the end of the stable_vector.
@@ -1231,16 +1371,6 @@ class stable_vector
    #else
    BOOST_MOVE_CONVERSION_AWARE_CATCH(push_back, T, void, priv_push_back)
    #endif
-
-   //! <b>Effects</b>: Removes the last element from the stable_vector.
-   //!
-   //! <b>Throws</b>: Nothing.
-   //!
-   //! <b>Complexity</b>: Constant time.
-   void pop_back()
-   {  this->erase(this->end()-1);   }
-
-
 
    #if defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
    //! <b>Requires</b>: position must be a valid iterator of *this.
@@ -1355,80 +1485,13 @@ class stable_vector
    }
    #endif
 
-   #if defined(BOOST_CONTAINER_PERFECT_FORWARDING) || defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
-
-   //! <b>Effects</b>: Inserts an object of type T constructed with
-   //!   std::forward<Args>(args)... in the end of the stable_vector.
+   //! <b>Effects</b>: Removes the last element from the stable_vector.
    //!
-   //! <b>Throws</b>: If memory allocation throws or the in-place constructor throws.
+   //! <b>Throws</b>: Nothing.
    //!
-   //! <b>Complexity</b>: Amortized constant time.
-   template<class ...Args>
-   void emplace_back(Args &&...args)
-   {
-      typedef emplace_functor<Args...>         EmplaceFunctor;
-      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type> EmplaceIterator;
-      EmplaceFunctor &&ef = EmplaceFunctor(boost::forward<Args>(args)...);
-      this->insert(this->cend(), EmplaceIterator(ef), EmplaceIterator());
-   }
-
-   //! <b>Requires</b>: position must be a valid iterator of *this.
-   //!
-   //! <b>Effects</b>: Inserts an object of type T constructed with
-   //!   std::forward<Args>(args)... before position
-   //!
-   //! <b>Throws</b>: If memory allocation throws or the in-place constructor throws.
-   //!
-   //! <b>Complexity</b>: If position is end(), amortized constant time
-   //!   Linear time otherwise.
-   template<class ...Args>
-   iterator emplace(const_iterator position, Args && ...args)
-   {
-      //Just call more general insert(pos, size, value) and return iterator
-      size_type pos_n = position - cbegin();
-      typedef emplace_functor<Args...>         EmplaceFunctor;
-      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type> EmplaceIterator;
-      EmplaceFunctor &&ef = EmplaceFunctor(boost::forward<Args>(args)...);
-      this->insert(position, EmplaceIterator(ef), EmplaceIterator());
-      return iterator(this->begin() + pos_n);
-   }
-
-   #else
-
-   #define BOOST_PP_LOCAL_MACRO(n)                                                              \
-   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)       \
-   void emplace_back(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                        \
-   {                                                                                            \
-      typedef BOOST_PP_CAT(BOOST_PP_CAT(emplace_functor, n), arg)                               \
-         BOOST_PP_EXPR_IF(n, <) BOOST_PP_ENUM_PARAMS(n, P) BOOST_PP_EXPR_IF(n, >)               \
-            EmplaceFunctor;                                                                     \
-      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type>  EmplaceIterator;   \
-      EmplaceFunctor ef BOOST_PP_LPAREN_IF(n)                                                   \
-                        BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)                   \
-                        BOOST_PP_RPAREN_IF(n);                                                  \
-      this->insert(this->cend() , EmplaceIterator(ef), EmplaceIterator());                      \
-   }                                                                                            \
-                                                                                                \
-   BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)       \
-   iterator emplace(const_iterator pos                                                          \
-           BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                         \
-   {                                                                                            \
-      typedef BOOST_PP_CAT(BOOST_PP_CAT(emplace_functor, n), arg)                               \
-         BOOST_PP_EXPR_IF(n, <) BOOST_PP_ENUM_PARAMS(n, P) BOOST_PP_EXPR_IF(n, >)               \
-            EmplaceFunctor;                                                                     \
-      typedef emplace_iterator<value_type, EmplaceFunctor, difference_type>  EmplaceIterator;   \
-      EmplaceFunctor ef BOOST_PP_LPAREN_IF(n)                                                   \
-                        BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)                   \
-                        BOOST_PP_RPAREN_IF(n);                                                  \
-      size_type pos_n = pos - this->cbegin();                                                   \
-      this->insert(pos, EmplaceIterator(ef), EmplaceIterator());                                \
-      return iterator(this->begin() + pos_n);                                                   \
-   }                                                                                            \
-   //!
-   #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
-   #include BOOST_PP_LOCAL_ITERATE()
-
-   #endif   //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
+   //! <b>Complexity</b>: Constant time.
+   void pop_back()
+   {  this->erase(--this->cend());   }
 
    //! <b>Effects</b>: Erases the element at position pos.
    //!
@@ -1490,36 +1553,6 @@ class stable_vector
    //! <b>Complexity</b>: Linear to the number of elements in the stable_vector.
    void clear()
    {   this->erase(this->cbegin(),this->cend()); }
-
-   //! <b>Effects</b>: Tries to deallocate the excess of memory created
-   //!   with previous allocations. The size of the stable_vector is unchanged
-   //!
-   //! <b>Throws</b>: If memory allocation throws.
-   //!
-   //! <b>Complexity</b>: Linear to size().
-   void shrink_to_fit()
-   {
-      if(this->capacity()){
-         //First empty allocated node pool
-         this->priv_clear_pool();
-         //If empty completely destroy the index, let's recover default-constructed state
-         if(this->empty()){
-            this->index.clear();
-            this->index.shrink_to_fit();
-            this->internal_data.end_node.up = node_base_ptr_ptr();
-         }
-         //Otherwise, try to shrink-to-fit the index and readjust pointers if necessary
-         else{
-            const void* old_ptr = &index[0];
-            this->index.shrink_to_fit();
-            bool realloced = &index[0] != old_ptr;
-            //Fix the pointers for the newly allocated buffer
-            if(realloced){
-               index_traits_type::fix_up_pointers_from(this->index, this->index.begin());
-            }
-         }
-      }
-   }
 
    /// @cond
 
