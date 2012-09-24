@@ -27,6 +27,8 @@ doxygen autodoc
         <doxygen:param>MACRO_EXPANSION=YES
         <doxygen:param>"PREDEFINED=\"insert_const_ref_type= const T&\" \\
                                    \"BOOST_CONTAINER_DOXYGEN_INVOKED\" \\
+                                   \"BOOST_CONTAINER_IMPDEF(T)=implementation_defined\" \\
+                                   \"BOOST_CONTAINER_SEEDOC(T)=see_documentation\" \\
                                    \"BOOST_RV_REF(T)=T &&\" \\
                                    \"BOOST_RV_REF_BEG=\" \\
                                    \"BOOST_RV_REF_END=&&\" \\
