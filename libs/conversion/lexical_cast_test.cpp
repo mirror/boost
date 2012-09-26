@@ -88,6 +88,7 @@ void test_char16_conversions();
 #if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
 void test_char32_conversions();
 #endif
+void test_getting_pointer_to_function();
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
@@ -125,6 +126,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
 #if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
     suite->add(BOOST_TEST_CASE(&test_char32_conversions));
 #endif
+    suite->add(BOOST_TEST_CASE(&test_getting_pointer_to_function));
 
     return suite;
 }
@@ -598,5 +600,19 @@ void test_char32_conversions()
     BOOST_CHECK(U"1" == lexical_cast<std::u32string>(U'1'));
 }
 #endif
+
+template <class To, class From, class Func>
+To try_cast_by_ptr(const From& from, const Func& f) {
+    return f(from);
+};
+
+void test_getting_pointer_to_function()
+{
+    // Just checking that &lexical_cast<To, From> is not ambiguous
+    (void)&lexical_cast<int, const char*>;
+    BOOST_CHECK_EQUAL(100, try_cast_by_ptr<int>("100", &boost::lexical_cast<int, const char[4]>));
+    BOOST_CHECK_EQUAL(100, try_cast_by_ptr<int>("100", &boost::lexical_cast<int, std::string>));
+    BOOST_CHECK_EQUAL(std::string("100"), try_cast_by_ptr<std::string>(100, &boost::lexical_cast<std::string, int>));
+}
 
 
