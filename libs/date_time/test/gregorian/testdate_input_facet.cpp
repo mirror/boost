@@ -79,7 +79,7 @@ int main(){
 
     date_input_facet* f = new date_input_facet();
     f->get(sitr, str_end, ss, m);
-    check("No extra characters consumed", m = greg_month(Mar) && *sitr == '.');
+    check("No extra characters consumed", m == greg_month(Mar) && *sitr == '.');
   }
  
   // set up initial objects
