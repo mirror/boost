@@ -56,7 +56,7 @@ struct result_of<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T))>
 
 namespace detail {
 
-#ifdef BOOST_RESULT_OF_NO_SFINAE_EXPR
+#ifdef BOOST_NO_SFINAE_EXPR
 
 template<typename F>
 struct BOOST_PP_CAT(result_of_callable_fun_2_, BOOST_PP_ITERATION());
@@ -119,7 +119,7 @@ struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)), fal
   ) type;
 };
 
-#else // BOOST_RESULT_OF_NO_SFINAE_EXPR
+#else // BOOST_NO_SFINAE_EXPR
 
 template<typename F BOOST_PP_ENUM_TRAILING_PARAMS(BOOST_PP_ITERATION(),typename T)>
 struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)),
@@ -135,7 +135,7 @@ struct cpp0x_result_of_impl<F(BOOST_PP_ENUM_PARAMS(BOOST_PP_ITERATION(),T)),
   ) type;
 };
 
-#endif // BOOST_RESULT_OF_NO_SFINAE_EXPR
+#endif // BOOST_NO_SFINAE_EXPR
 
 } // namespace detail
 

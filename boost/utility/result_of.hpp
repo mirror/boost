@@ -54,10 +54,6 @@
 #  endif
 #endif
 
-#if defined(BOOST_NO_SFINAE_EXPR) || (BOOST_WORKAROUND(__GNUC__, == 4) && __GNUC_MINOR__ < 5)
-#  define BOOST_RESULT_OF_NO_SFINAE_EXPR
-#endif
-
 namespace boost {
 
 template<typename F> struct result_of;
@@ -70,9 +66,7 @@ BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)
 
 template<typename F, typename FArgs, bool HasResultType> struct tr1_result_of_impl;
 
-#ifdef BOOST_RESULT_OF_NO_SFINAE_EXPR
-
-template<typename T> T result_of_decay(T);
+#ifdef BOOST_NO_SFINAE_EXPR
 
 struct result_of_private_type {};
 
@@ -122,7 +116,7 @@ struct result_of_wrap_callable_class<C &> {
 
 template<typename F, bool TestCallability = true> struct cpp0x_result_of_impl;
 
-#else // BOOST_RESULT_OF_NO_SFINAE_EXPR
+#else // BOOST_NO_SFINAE_EXPR
 
 template<typename T>
 struct result_of_always_void
@@ -132,7 +126,7 @@ struct result_of_always_void
 
 template<typename F, typename Enable = void> struct cpp0x_result_of_impl {};
 
-#endif // BOOST_RESULT_OF_NO_SFINAE_EXPR
+#endif // BOOST_NO_SFINAE_EXPR
 
 template<typename F>
 struct result_of_void_impl
