@@ -184,7 +184,7 @@ void load(Archive & ar,
 
 //!override needed b/c no default constructor
 template<class Archive>
-inline void load_construct_data(Archive & ar, 
+inline void load_construct_data(Archive & /*ar*/, 
                                 boost::posix_time::time_period* tp, 
                                 const unsigned int /*file_version*/)
 {
