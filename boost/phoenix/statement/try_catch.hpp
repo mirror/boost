@@ -17,6 +17,11 @@
 #include <boost/phoenix/core/is_nullary.hpp>
 #include <boost/proto/functional/fusion/pop_front.hpp>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4355) // 'this' : used in base member initializer list
+#endif
+
 namespace boost { namespace phoenix
 {
     template <typename Expr>
@@ -100,6 +105,10 @@ namespace boost { namespace phoenix
     struct try_catch_eval
     {
         typedef void result_type;
+
+        template <typename Try, typename Context>
+        void operator()(Try const &, Context const &) const
+        {}
 
         // bring in the operator overloads
         #include <boost/phoenix/statement/detail/try_catch_eval.hpp>
@@ -357,5 +366,9 @@ namespace boost { namespace phoenix
     try_gen const try_ = {};
 #endif
 }}
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif
