@@ -107,8 +107,8 @@ Library features defined in [@boost:boost/lexical_cast.hpp boost/lexical_cast.hp
 Returns the result of streaming arg into a standard library string-based stream and then out as a Target object. Where Target is either `std::string` or `std::wstring`, stream extraction takes the whole content of the string, including spaces, rather than relying on the default `operator>>` behavior. If the conversion is unsuccessful, a `bad_lexical_cast` exception is thrown.
 
 ``
-    template <typename Target, typename CharType>
-      Target lexical_cast(const CharType* chars, std::size_t count);
+    template <typename Target>
+      Target lexical_cast(const AnyCharacterType* chars, std::size_t count);
 ``
 Takes an array of `count` characters as input parameter and streams them out as a Target object. If the conversion is unsuccessful, a `bad_lexical_cast` exception is thrown. This call may be useful for processing nonzero terminated array of characters or processing just some part of character array.
 
