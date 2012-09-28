@@ -932,7 +932,7 @@ class basic_string
    //! <b>Complexity</b>: Constant.
    //!
    //! <b>Note</b>: Non-standard extension.
-   const stored_allocator_type &get_stored_allocator() const BOOST_CONTAINER_NOEXCEPT
+   stored_allocator_type &get_stored_allocator() BOOST_CONTAINER_NOEXCEPT
    {  return this->alloc(); }
 
    //! <b>Effects</b>: Returns a reference to the internal allocator.
@@ -942,7 +942,7 @@ class basic_string
    //! <b>Complexity</b>: Constant.
    //!
    //! <b>Note</b>: Non-standard extension.
-   stored_allocator_type &get_stored_allocator() BOOST_CONTAINER_NOEXCEPT
+   const stored_allocator_type &get_stored_allocator() const BOOST_CONTAINER_NOEXCEPT
    {  return this->alloc(); }
 
    //! <b>Effects</b>: Returns the number of the elements contained in the vector.

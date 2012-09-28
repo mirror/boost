@@ -256,10 +256,24 @@ class map
    allocator_type get_allocator() const
    { return m_tree.get_allocator(); }
 
-   const stored_allocator_type &get_stored_allocator() const
+   //! <b>Effects</b>: Returns a reference to the internal allocator.
+   //!
+   //! <b>Throws</b>: Nothing
+   //!
+   //! <b>Complexity</b>: Constant.
+   //!
+   //! <b>Note</b>: Non-standard extension.
+   stored_allocator_type &get_stored_allocator()
    { return m_tree.get_stored_allocator(); }
 
-   stored_allocator_type &get_stored_allocator()
+   //! <b>Effects</b>: Returns a reference to the internal allocator.
+   //!
+   //! <b>Throws</b>: Nothing
+   //!
+   //! <b>Complexity</b>: Constant.
+   //!
+   //! <b>Note</b>: Non-standard extension.
+   const stored_allocator_type &get_stored_allocator() const
    { return m_tree.get_stored_allocator(); }
 
    //! <b>Effects</b>: Returns an iterator to the first element contained in the container.
@@ -998,10 +1012,24 @@ class multimap
    allocator_type get_allocator() const
    { return m_tree.get_allocator(); }
 
-   const stored_allocator_type &get_stored_allocator() const
+   //! <b>Effects</b>: Returns a reference to the internal allocator.
+   //!
+   //! <b>Throws</b>: Nothing
+   //!
+   //! <b>Complexity</b>: Constant.
+   //!
+   //! <b>Note</b>: Non-standard extension.
+   stored_allocator_type &get_stored_allocator()
    { return m_tree.get_stored_allocator(); }
 
-   stored_allocator_type &get_stored_allocator()
+   //! <b>Effects</b>: Returns a reference to the internal allocator.
+   //!
+   //! <b>Throws</b>: Nothing
+   //!
+   //! <b>Complexity</b>: Constant.
+   //!
+   //! <b>Note</b>: Non-standard extension.
+   const stored_allocator_type &get_stored_allocator() const
    { return m_tree.get_stored_allocator(); }
 
    //! <b>Effects</b>: Returns an iterator to the first element contained in the container.

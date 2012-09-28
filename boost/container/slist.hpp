@@ -519,12 +519,14 @@ class slist
    allocator_type get_allocator() const
    {  return allocator_type(this->node_alloc()); }
 
-   //! <b>Effects</b>: Returns a copy of the internal allocator.
+   //! <b>Effects</b>: Returns a reference to the internal allocator.
    //!
-   //! <b>Throws</b>: If allocator's copy constructor throws.
+   //! <b>Throws</b>: Nothing
    //!
    //! <b>Complexity</b>: Constant.
-   const stored_allocator_type &get_stored_allocator() const
+   //!
+   //! <b>Note</b>: Non-standard extension.
+   stored_allocator_type &get_stored_allocator()
    {  return this->node_alloc(); }
 
    //! <b>Effects</b>: Returns a reference to the internal allocator.
@@ -534,7 +536,7 @@ class slist
    //! <b>Complexity</b>: Constant.
    //!
    //! <b>Note</b>: Non-standard extension.
-   stored_allocator_type &get_stored_allocator()
+   const stored_allocator_type &get_stored_allocator() const
    {  return this->node_alloc(); }
 
    //////////////////////////////////////////////
