@@ -124,13 +124,13 @@ namespace boost { namespace phoenix {
         
         template <typename Context>
         result_type
-        operator()(Context &) const
+        operator()(Context const &) const
         {
         }
 
         template <typename Cond, typename Cases, typename Context>
         result_type
-        operator()(Cond const & cond, Cases const & cases, Context & ctx) const
+        operator()(Cond const & cond, Cases const & cases, Context const & ctx) const
         {
             this->evaluate(
                     ctx
@@ -145,7 +145,7 @@ namespace boost { namespace phoenix {
             template <typename Context, typename Cond, typename Cases>
             result_type
             evaluate(
-                Context & ctx
+                Context const & ctx
               , Cond const & cond
               , Cases const & cases
               , mpl::int_<1>
@@ -171,7 +171,7 @@ namespace boost { namespace phoenix {
             template <typename Context, typename Cond, typename Cases>
             result_type
             evaluate(
-                Context & ctx
+                Context const & ctx
               , Cond const & cond
               , Cases const & cases
               , mpl::int_<1>
