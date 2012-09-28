@@ -491,9 +491,9 @@ class flat_tree
       const const_iterator beg(this->cbegin());
       const_iterator pos(beg);
       const value_compare &value_comp = this->m_data;
+      skips[0u] = 0u;
       //Loop in burst sizes
       while(len){
-         skips[0u] = 0u;
          const size_type burst = len < BurstSize ? len : BurstSize;
          size_type unique_burst = 0u;
          const const_iterator cend(this->cend());
@@ -503,20 +503,23 @@ class flat_tree
             --len;
             pos = const_cast<const flat_tree&>(*this).priv_lower_bound(pos, cend, KeyOfValue()(val));
             //Check if already present
-            if(pos != cend && !value_comp(*pos, val)){
-               ++skips[unique_burst];
+            if(pos != cend && !value_comp(val, *pos)){
+               if(unique_burst > 0){
+                  ++skips[unique_burst-1];
+               }
                continue;
             }
 
             //If not present, calculate position
             positions[unique_burst] = static_cast<size_type>(pos - beg);
-            if(++unique_burst < burst)
-               skips[unique_burst] = 0u;
+            skips[unique_burst++] = 0u;
          }
-         //Insert all in a single step in the precalculated positions
-         this->m_data.m_vect.insert_ordered_at(unique_burst, positions + unique_burst, skips + unique_burst, first);
-         //Next search position updated
-         pos += unique_burst;
+         if(unique_burst){
+            //Insert all in a single step in the precalculated positions
+            this->m_data.m_vect.insert_ordered_at(unique_burst, positions + unique_burst, skips + unique_burst, first);
+            //Next search position updated
+            pos += unique_burst;
+         }
       }
    }
 

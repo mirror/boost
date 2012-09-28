@@ -683,15 +683,6 @@ class vector : private container_detail::vector_alloc_holder<A>
    allocator_type get_allocator() const BOOST_CONTAINER_NOEXCEPT
    { return this->alloc();  }
 
-   //! <b>Effects</b>: Returns a reference to the internal allocator.
-   //!
-   //! <b>Throws</b>: Nothing
-   //!
-   //! <b>Complexity</b>: Constant.
-   //!
-   //! <b>Note</b>: Non-standard extension.
-   const stored_allocator_type &get_stored_allocator() const BOOST_CONTAINER_NOEXCEPT
-   {  return this->alloc(); }
 
    //! <b>Effects</b>: Returns a reference to the internal allocator.
    //!
@@ -701,6 +692,16 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Note</b>: Non-standard extension.
    stored_allocator_type &get_stored_allocator() BOOST_CONTAINER_NOEXCEPT
+   {  return this->alloc(); }
+
+   //! <b>Effects</b>: Returns a reference to the internal allocator.
+   //!
+   //! <b>Throws</b>: Nothing
+   //!
+   //! <b>Complexity</b>: Constant.
+   //!
+   //! <b>Note</b>: Non-standard extension.
+   const stored_allocator_type &get_stored_allocator() const BOOST_CONTAINER_NOEXCEPT
    {  return this->alloc(); }
 
    //////////////////////////////////////////////
@@ -957,7 +958,7 @@ class vector : private container_detail::vector_alloc_holder<A>
    //!
    //! <b>Complexity</b>: Linear to size().
    void shrink_to_fit()
-   {  priv_shrink_to_fit(alloc_version());   }
+   {  this->priv_shrink_to_fit(alloc_version());   }
 
    //////////////////////////////////////////////
    //
@@ -1535,6 +1536,10 @@ class vector : private container_detail::vector_alloc_holder<A>
       //Loop for each insertion backwards, first moving the elements after the insertion point,
       //then inserting the element.
       while(insertions_left){
+         if(do_skip){
+            size_type n = *(--last_skip_it);
+            std::advance(last_value_it, -difference_type(n));
+         }
          const size_type pos = static_cast<size_type>(*(--last_position_it));
          BOOST_ASSERT(pos <= old_size_pos);
          //If needed shift the range after the insertion point and the previous insertion point.
@@ -1568,12 +1573,6 @@ class vector : private container_detail::vector_alloc_holder<A>
             }
             //Insert the new value in the already constructed range
             begin_ptr[pos + insertions_left - 1] = *(--last_value_it);
-         }
-         if(do_skip){
-            size_type n = *(--last_skip_it);
-            while(n--){
-               --last_value_it;
-            }
          }
          --insertions_left;
          hole_size = new_hole_size;
