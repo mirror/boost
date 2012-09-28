@@ -623,7 +623,8 @@ use [*Boost.Container]? There are several reasons for that:
   [@https://svn.boost.org/trac/boost/ticket/7139 #7139],
   [@https://svn.boost.org/trac/boost/ticket/7215 #7215],
   [@https://svn.boost.org/trac/boost/ticket/7232 #7232],
-  [@https://svn.boost.org/trac/boost/ticket/7269 #7269].
+  [@https://svn.boost.org/trac/boost/ticket/7269 #7269],
+  [@https://svn.boost.org/trac/boost/ticket/7439 #7439].
 *  Implemented LWG Issue #149 (range insertion now returns an iterator) & cleaned up insertion code in most containers
 *  Corrected aliasing errors.
 
