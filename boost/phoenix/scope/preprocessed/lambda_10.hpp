@@ -12,7 +12,7 @@ namespace boost { namespace phoenix
 {
     struct lambda_eval
     {
-        typedef void proto_is_callable_;
+        BOOST_PROTO_CALLABLE()
         template <typename Sig>
         struct result;
         template <
