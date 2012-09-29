@@ -227,6 +227,26 @@ namespace boost { namespace proto
             Extends<Expr> that = {e};
             return that;
         }
+
+    #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+        template<typename Class, typename Member>
+        BOOST_FORCEINLINE
+        Extends<expr<tag::terminal, proto::term<Member Class::*> > > operator ()(expr<tag::terminal, proto::term<Member Class::*> > const &e) const
+        {
+            Extends<expr<tag::terminal, proto::term<Member Class::*> > > that;
+            that.proto_expr_ = e;
+            return that;
+        }
+
+        template<typename Class, typename Member>
+        BOOST_FORCEINLINE
+        Extends<basic_expr<tag::terminal, proto::term<Member Class::*> > > operator ()(basic_expr<tag::terminal, proto::term<Member Class::*> > const &e) const
+        {
+            Extends<basic_expr<tag::terminal, proto::term<Member Class::*> > > that;
+            that.proto_expr_ = e;
+            return that;
+        }
+    #endif
     };
 
     /// \brief A generator that replaces child nodes held by

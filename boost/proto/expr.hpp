@@ -90,6 +90,17 @@ namespace boost { namespace proto
             return that;
         }
 
+    #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1700))
+        template<typename T, typename Expr, typename C, typename U>
+        BOOST_FORCEINLINE
+        Expr make_terminal(T &t, Expr *, proto::term<U C::*> *)
+        {
+            Expr that;
+            that.child0 = t;
+            return that;
+        }
+    #endif
+
         template<typename T, typename U>
         struct same_cv
         {

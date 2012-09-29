@@ -18,6 +18,11 @@
 #include <boost/proto/make_expr.hpp>
 #include <boost/proto/fusion.hpp>
 
+#ifdef _MSC_VER
+#pragma warning(push)
+#pragma warning(disable: 4065) // switch statement contains 'default' but no 'case' labels
+#endif
+
 BOOST_PHOENIX_DEFINE_EXPRESSION(
     (boost)(phoenix)(switch_case)
   , (proto::terminal<proto::_>)
@@ -286,6 +291,10 @@ namespace boost { namespace phoenix {
     }
 
 }}
+
+#ifdef _MSC_VER
+#pragma warning(pop)
+#endif
 
 #endif
 
