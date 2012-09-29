@@ -234,7 +234,7 @@ namespace boost { namespace proto
         Extends<expr<tag::terminal, proto::term<Member Class::*> > > operator ()(expr<tag::terminal, proto::term<Member Class::*> > const &e) const
         {
             Extends<expr<tag::terminal, proto::term<Member Class::*> > > that;
-            that.proto_expr_ = e;
+            proto::value(that.proto_expr_) = proto::value(e);
             return that;
         }
 
@@ -243,7 +243,7 @@ namespace boost { namespace proto
         Extends<basic_expr<tag::terminal, proto::term<Member Class::*> > > operator ()(basic_expr<tag::terminal, proto::term<Member Class::*> > const &e) const
         {
             Extends<basic_expr<tag::terminal, proto::term<Member Class::*> > > that;
-            that.proto_expr_ = e;
+            proto::value(that.proto_expr_) = proto::value(e);
             return that;
         }
     #endif
