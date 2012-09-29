@@ -2573,7 +2573,7 @@ The user can request the version 2 by defining `BOOST_CHRONO_VERSION` to 2. In t
 
 * Breaking change `BOOST_CHRONO_DONT_PROVIDES_DEPRECATED_IO_SINCE_V2_0_0 `
 
-The default value for `BOOST_THREAD_VERSION` will be changed to 2 since Boost 1.55.
+The default value for `BOOST_CHRONO_VERSION` will be changed to 2 since Boost 1.55.
 
 [endsect]
 
