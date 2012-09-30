@@ -374,7 +374,7 @@ namespace unnecessary_copy_tests
         // COPY_COUNT(1) would be okay here.
         reset();
         x.emplace();
-#   if BOOST_WORKAROUND(BOOST_MSVC, >= 1800)
+#   if BOOST_WORKAROUND(BOOST_MSVC, >= 1700)
         // This is a little odd, Visual C++ 11 seems to move the pair, which
         // results in one copy (for the const key) and one move (for the
         // non-const mapped value). Since 'emplace(boost::move(a))' (see below)
