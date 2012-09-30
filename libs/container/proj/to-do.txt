@@ -2,6 +2,9 @@
 ->Add an example with stateful allocators
 ->Add test to check convertible types in push_back/insert
 ->Add SCARY iterators.
+->Align with C++11 [multi]map::insert(P &&p) overload.
+->Unify all allocator version traits in one class (starting from stable_vector_detail::allocator_version_wrapper)
+   maybe in allocator_traits?
 
 
 Review allocator traits
@@ -53,21 +56,9 @@ Add hash for containers
 
 Add std:: hashing support
 
-Take out from class definition iterators in slist & list
-
 Fix trivial destructor after move and other optimizing traits
 
-Define typedefs exactly like the standard to generate better documentation. for implementation defined types:
-   #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
-      #define BOOST_CONTAINER_IMPLDEF(TYPE) TYPE
-   #else
-      #define BOOST_CONTAINER_IMPLDEF(TYPE) implementation_defined
-   #endif
 Mark previous() in slist/and forward_list as non-standard
-
-Replace all insert_const_ref_type with BOOST_MOVE_CONVERSION_AWARE_CATCH_XXX
-
-
 
 Function order:
 

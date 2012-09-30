@@ -414,7 +414,8 @@ class flat_tree
    void insert_equal(ordered_range_t, FwdIt first, FwdIt last
       #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
       , typename container_detail::enable_if_c
-         < container_detail::is_forward_iterator<FwdIt>::value
+         < !container_detail::is_input_iterator<FwdIt>::value &&
+		   container_detail::is_forward_iterator<FwdIt>::value
          >::type * = 0
       #endif
       )

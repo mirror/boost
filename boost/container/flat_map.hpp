@@ -28,27 +28,23 @@
 #include <boost/container/detail/mpl.hpp>
 #include <boost/container/allocator_traits.hpp>
 #include <boost/move/move.hpp>
+#include <boost/move/move_helpers.hpp>
 
-#ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 namespace boost {
 namespace container {
-#else
-namespace boost {
-namespace container {
-#endif
 
 /// @cond
 // Forward declarations of operators == and <, needed for friend declarations.
-template <class Key, class T, class Pred, class A>
+template <class Key, class T, class Compare, class Allocator>
 class flat_map;
 
-template <class Key, class T, class Pred, class A>
-inline bool operator==(const flat_map<Key,T,Pred,A>& x,
-                       const flat_map<Key,T,Pred,A>& y);
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator==(const flat_map<Key,T,Compare,Allocator>& x,
+                       const flat_map<Key,T,Compare,Allocator>& y);
 
-template <class Key, class T, class Pred, class A>
-inline bool operator<(const flat_map<Key,T,Pred,A>& x,
-                      const flat_map<Key,T,Pred,A>& y);
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator<(const flat_map<Key,T,Compare,Allocator>& x,
+                      const flat_map<Key,T,Compare,Allocator>& y);
 
 namespace container_detail{
 
@@ -78,9 +74,9 @@ static D force_copy(S s)
 //! flat_map<Key,T> the key_type is Key and the value_type is std::pair<Key,T>
 //! (unlike std::map<Key, T> which value_type is std::pair<<b>const</b> Key, T>).
 //!
-//! Pred is the ordering function for Keys (e.g. <i>std::less<Key></i>).
+//! Compare is the ordering function for Keys (e.g. <i>std::less<Key></i>).
 //!
-//! A is the allocator to allocate the value_types
+//! Allocator is the allocator to allocate the value_types
 //! (e.g. <i>allocator< std::pair<Key, T> ></i>).
 //!
 //! flat_map is similar to std::map but it's implemented like an ordered vector.
@@ -90,9 +86,9 @@ static D force_copy(S s)
 //! Erasing an element of a flat_map invalidates iterators and references
 //! pointing to elements that come after (their keys are bigger) the erased element.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class Key, class T, class Pred = std::less<Key>, class A = std::allocator< std::pair< Key, T> > >
+template <class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator< std::pair< Key, T> > >
 #else
-template <class Key, class T, class Pred, class A>
+template <class Key, class T, class Compare, class Allocator>
 #endif
 class flat_map
 {
@@ -103,43 +99,33 @@ class flat_map
    typedef container_detail::flat_tree<Key,
                            std::pair<Key, T>,
                            container_detail::select1st< std::pair<Key, T> >,
-                           Pred,
-                           A> tree_t;
+                           Compare,
+                           Allocator> tree_t;
 
    //This is the real tree stored here. It's based on a movable pair
    typedef container_detail::flat_tree<Key,
                            container_detail::pair<Key, T>,
                            container_detail::select1st<container_detail::pair<Key, T> >,
-                           Pred,
-                           typename allocator_traits<A>::template portable_rebind_alloc
+                           Compare,
+                           typename allocator_traits<Allocator>::template portable_rebind_alloc
                               <container_detail::pair<Key, T> >::type> impl_tree_t;
    impl_tree_t m_flat_tree;  // flat tree representing flat_map
 
    typedef typename impl_tree_t::value_type              impl_value_type;
-   typedef typename impl_tree_t::pointer                 impl_pointer;
-   typedef typename impl_tree_t::const_pointer           impl_const_pointer;
-   typedef typename impl_tree_t::reference               impl_reference;
-   typedef typename impl_tree_t::const_reference         impl_const_reference;
-   typedef typename impl_tree_t::value_compare           impl_value_compare;
-   typedef typename impl_tree_t::iterator                impl_iterator;
    typedef typename impl_tree_t::const_iterator          impl_const_iterator;
-   typedef typename impl_tree_t::reverse_iterator        impl_reverse_iterator;
-   typedef typename impl_tree_t::const_reverse_iterator  impl_const_reverse_iterator;
    typedef typename impl_tree_t::allocator_type          impl_allocator_type;
-   typedef allocator_traits<A>                           allocator_traits_type;
    typedef container_detail::flat_tree_value_compare
-      < Pred
+      < Compare
       , container_detail::select1st< std::pair<Key, T> >
-      , std::pair<Key, T> >                                                value_compare_impl;
+      , std::pair<Key, T> >                                                         value_compare_impl;
    typedef typename container_detail::get_flat_tree_iterators
-         <typename allocator_traits<A>::pointer>::iterator                 iterator_impl;
+         <typename allocator_traits<Allocator>::pointer>::iterator                  iterator_impl;
    typedef typename container_detail::get_flat_tree_iterators
-      <typename allocator_traits<A>::pointer>::const_iterator              const_iterator_impl;
+      <typename allocator_traits<Allocator>::pointer>::const_iterator               const_iterator_impl;
    typedef typename container_detail::get_flat_tree_iterators
-         <typename allocator_traits<A>::pointer>::reverse_iterator         reverse_iterator_impl;
+         <typename allocator_traits<Allocator>::pointer>::reverse_iterator          reverse_iterator_impl;
    typedef typename container_detail::get_flat_tree_iterators
-         <typename allocator_traits<A>::pointer>::const_reverse_iterator   const_reverse_iterator_impl;
-
+         <typename allocator_traits<Allocator>::pointer>::const_reverse_iterator    const_reverse_iterator_impl;
    /// @endcond
 
    public:
@@ -149,24 +135,24 @@ class flat_map
    //                    types
    //
    //////////////////////////////////////////////
-   typedef Key                                                             key_type;
-   typedef T                                                               mapped_type;
-   typedef typename std::pair<key_type, mapped_type>                       value_type;
-   typedef typename boost::container::allocator_traits<A>::pointer         pointer;
-   typedef typename boost::container::allocator_traits<A>::const_pointer   const_pointer;
-   typedef typename boost::container::allocator_traits<A>::reference       reference;
-   typedef typename boost::container::allocator_traits<A>::const_reference const_reference;
-   typedef typename boost::container::allocator_traits<A>::size_type       size_type;
-   typedef typename boost::container::allocator_traits<A>::difference_type difference_type;
-   typedef A                                                               allocator_type;
-   typedef BOOST_CONTAINER_IMPDEF(A)                                       stored_allocator_type;
-   typedef BOOST_CONTAINER_IMPDEF(value_compare_impl)                      value_compare;
-   typedef Pred                                                            key_compare;
-   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                           iterator;
-   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                     const_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(reverse_iterator_impl)                   reverse_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(const_reverse_iterator_impl)             const_reverse_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(impl_value_type)                         movable_value_type;
+   typedef Key                                                                      key_type;
+   typedef T                                                                        mapped_type;
+   typedef std::pair<Key, T>                                                        value_type;
+   typedef typename boost::container::allocator_traits<Allocator>::pointer          pointer;
+   typedef typename boost::container::allocator_traits<Allocator>::const_pointer    const_pointer;
+   typedef typename boost::container::allocator_traits<Allocator>::reference        reference;
+   typedef typename boost::container::allocator_traits<Allocator>::const_reference  const_reference;
+   typedef typename boost::container::allocator_traits<Allocator>::size_type        size_type;
+   typedef typename boost::container::allocator_traits<Allocator>::difference_type  difference_type;
+   typedef Allocator                                                                allocator_type;
+   typedef BOOST_CONTAINER_IMPDEF(Allocator)                                        stored_allocator_type;
+   typedef BOOST_CONTAINER_IMPDEF(value_compare_impl)                               value_compare;
+   typedef Compare                                                                  key_compare;
+   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                                    iterator;
+   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                              const_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(reverse_iterator_impl)                            reverse_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(const_reverse_iterator_impl)                      const_reverse_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(impl_value_type)                                  movable_value_type;
 
    public:
    //////////////////////////////////////////////
@@ -185,7 +171,7 @@ class flat_map
    //! comparison object and allocator.
    //!
    //! <b>Complexity</b>: Constant.
-   explicit flat_map(const Pred& comp, const allocator_type& a = allocator_type())
+   explicit flat_map(const Compare& comp, const allocator_type& a = allocator_type())
       : m_flat_tree(comp, container_detail::force<impl_allocator_type>(a)) {}
 
    //! <b>Effects</b>: Constructs an empty flat_map using the specified comparison object and
@@ -194,7 +180,7 @@ class flat_map
    //! <b>Complexity</b>: Linear in N if the range [first ,last ) is already sorted using
    //! comp and otherwise N logN, where N is last - first.
    template <class InputIterator>
-   flat_map(InputIterator first, InputIterator last, const Pred& comp = Pred(),
+   flat_map(InputIterator first, InputIterator last, const Compare& comp = Compare(),
          const allocator_type& a = allocator_type())
       : m_flat_tree(true, first, last, comp, container_detail::force<impl_allocator_type>(a))
    {}
@@ -211,7 +197,7 @@ class flat_map
    //! <b>Note</b>: Non-standard extension.
    template <class InputIterator>
    flat_map( ordered_unique_range_t, InputIterator first, InputIterator last
-           , const Pred& comp = Pred(), const allocator_type& a = allocator_type())
+           , const Compare& comp = Compare(), const allocator_type& a = allocator_type())
       : m_flat_tree(ordered_range, first, last, comp, a)
    {}
 
@@ -466,7 +452,7 @@ class flat_map
    //! Effects: If there is no key equivalent to x in the flat_map, inserts
    //!   value_type(x, T()) into the flat_map.
    //!
-   //! Returns: A reference to the mapped_type corresponding to x in *this.
+   //! Returns: Allocator reference to the mapped_type corresponding to x in *this.
    //!
    //! Complexity: Logarithmic.
    mapped_type &operator[](const key_type& k);
@@ -474,16 +460,16 @@ class flat_map
    //! Effects: If there is no key equivalent to x in the flat_map, inserts
    //! value_type(move(x), T()) into the flat_map (the key is move-constructed)
    //!
-   //! Returns: A reference to the mapped_type corresponding to x in *this.
+   //! Returns: Allocator reference to the mapped_type corresponding to x in *this.
    //!
    //! Complexity: Logarithmic.
    mapped_type &operator[](key_type &&k) ;
 
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH( operator[] , key_type, mapped_type&, priv_subscript)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH( operator[] , key_type, mapped_type&, this->priv_subscript)
    #endif
 
-   //! Returns: A reference to the element whose key is equivalent to x.
+   //! Returns: Allocator reference to the element whose key is equivalent to x.
    //!
    //! Throws: An exception object of type out_of_range if no such element is present.
    //!
@@ -497,7 +483,7 @@ class flat_map
       return i->second;
    }
 
-   //! Returns: A reference to the element whose key is equivalent to x.
+   //! Returns: Allocator reference to the element whose key is equivalent to x.
    //!
    //! Throws: An exception object of type out_of_range if no such element is present.
    //!
@@ -790,7 +776,7 @@ class flat_map
    iterator find(const key_type& x)
       { return container_detail::force_copy<iterator>(m_flat_tree.find(x)); }
 
-   //! <b>Returns</b>: A const_iterator pointing to an element with the key
+   //! <b>Returns</b>: Allocator const_iterator pointing to an element with the key
    //!   equivalent to x, or end() if such an element is not found.
    //!
    //! <b>Complexity</b>: Logarithmic.s
@@ -810,7 +796,7 @@ class flat_map
    iterator lower_bound(const key_type& x)
       {  return container_detail::force_copy<iterator>(m_flat_tree.lower_bound(x)); }
 
-   //! <b>Returns</b>: A const iterator pointing to the first element with key not
+   //! <b>Returns</b>: Allocator const iterator pointing to the first element with key not
    //!   less than k, or a.end() if such an element is not found.
    //!
    //! <b>Complexity</b>: Logarithmic
@@ -824,7 +810,7 @@ class flat_map
    iterator upper_bound(const key_type& x)
       {  return container_detail::force_copy<iterator>(m_flat_tree.upper_bound(x)); }
 
-   //! <b>Returns</b>: A const iterator pointing to the first element with key not
+   //! <b>Returns</b>: Allocator const iterator pointing to the first element with key not
    //!   less than x, or end() if such an element is not found.
    //!
    //! <b>Complexity</b>: Logarithmic
@@ -876,39 +862,39 @@ class flat_map
    /// @endcond
 };
 
-template <class Key, class T, class Pred, class A>
-inline bool operator==(const flat_map<Key,T,Pred,A>& x,
-                       const flat_map<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator==(const flat_map<Key,T,Compare,Allocator>& x,
+                       const flat_map<Key,T,Compare,Allocator>& y)
    {  return x.m_flat_tree == y.m_flat_tree;  }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator<(const flat_map<Key,T,Pred,A>& x,
-                      const flat_map<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator<(const flat_map<Key,T,Compare,Allocator>& x,
+                      const flat_map<Key,T,Compare,Allocator>& y)
    {  return x.m_flat_tree < y.m_flat_tree;   }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator!=(const flat_map<Key,T,Pred,A>& x,
-                       const flat_map<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator!=(const flat_map<Key,T,Compare,Allocator>& x,
+                       const flat_map<Key,T,Compare,Allocator>& y)
    {  return !(x == y); }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator>(const flat_map<Key,T,Pred,A>& x,
-                      const flat_map<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator>(const flat_map<Key,T,Compare,Allocator>& x,
+                      const flat_map<Key,T,Compare,Allocator>& y)
    {  return y < x;  }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator<=(const flat_map<Key,T,Pred,A>& x,
-                       const flat_map<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator<=(const flat_map<Key,T,Compare,Allocator>& x,
+                       const flat_map<Key,T,Compare,Allocator>& y)
    {  return !(y < x);  }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator>=(const flat_map<Key,T,Pred,A>& x,
-                       const flat_map<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator>=(const flat_map<Key,T,Compare,Allocator>& x,
+                       const flat_map<Key,T,Compare,Allocator>& y)
    {  return !(x < y);  }
 
-template <class Key, class T, class Pred, class A>
-inline void swap(flat_map<Key,T,Pred,A>& x,
-                 flat_map<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline void swap(flat_map<Key,T,Compare,Allocator>& x,
+                 flat_map<Key,T,Compare,Allocator>& y)
    {  x.swap(y);  }
 
 /// @cond
@@ -917,25 +903,25 @@ inline void swap(flat_map<Key,T,Pred,A>& x,
 /*
 //!has_trivial_destructor_after_move<> == true_type
 //!specialization for optimizations
-template <class K, class T, class C, class A>
-struct has_trivial_destructor_after_move<boost::container::flat_map<K, T, C, A> >
+template <class K, class T, class C, class Allocator>
+struct has_trivial_destructor_after_move<boost::container::flat_map<K, T, C, Allocator> >
 {
-   static const bool value = has_trivial_destructor<A>::value && has_trivial_destructor<C>::value;
+   static const bool value = has_trivial_destructor<Allocator>::value && has_trivial_destructor<C>::value;
 };
 */
 namespace container {
 
 // Forward declaration of operators < and ==, needed for friend declaration.
-template <class Key, class T, class Pred, class A>
+template <class Key, class T, class Compare, class Allocator>
 class flat_multimap;
 
-template <class Key, class T, class Pred, class A>
-inline bool operator==(const flat_multimap<Key,T,Pred,A>& x,
-                       const flat_multimap<Key,T,Pred,A>& y);
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator==(const flat_multimap<Key,T,Compare,Allocator>& x,
+                       const flat_multimap<Key,T,Compare,Allocator>& y);
 
-template <class Key, class T, class Pred, class A>
-inline bool operator<(const flat_multimap<Key,T,Pred,A>& x,
-                      const flat_multimap<Key,T,Pred,A>& y);
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator<(const flat_multimap<Key,T,Compare,Allocator>& x,
+                      const flat_multimap<Key,T,Compare,Allocator>& y);
 /// @endcond
 
 //! A flat_multimap is a kind of associative container that supports equivalent keys
@@ -948,14 +934,14 @@ inline bool operator<(const flat_multimap<Key,T,Pred,A>& x,
 //! flat_multimap<Key,T> the key_type is Key and the value_type is std::pair<Key,T>
 //! (unlike std::multimap<Key, T> which value_type is std::pair<<b>const</b> Key, T>).
 //!
-//! Pred is the ordering function for Keys (e.g. <i>std::less<Key></i>).
+//! Compare is the ordering function for Keys (e.g. <i>std::less<Key></i>).
 //!
-//! A is the allocator to allocate the value_types
+//! Allocator is the allocator to allocate the value_types
 //! (e.g. <i>allocator< std::pair<Key, T> ></i>).
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class Key, class T, class Pred = std::less<Key>, class A = std::allocator< std::pair< Key, T> > >
+template <class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator< std::pair< Key, T> > >
 #else
-template <class Key, class T, class Pred, class A>
+template <class Key, class T, class Compare, class Allocator>
 #endif
 class flat_multimap
 {
@@ -965,41 +951,32 @@ class flat_multimap
    typedef container_detail::flat_tree<Key,
                            std::pair<Key, T>,
                            container_detail::select1st< std::pair<Key, T> >,
-                           Pred,
-                           A> tree_t;
+                           Compare,
+                           Allocator> tree_t;
    //This is the real tree stored here. It's based on a movable pair
    typedef container_detail::flat_tree<Key,
                            container_detail::pair<Key, T>,
                            container_detail::select1st<container_detail::pair<Key, T> >,
-                           Pred,
-                           typename allocator_traits<A>::template portable_rebind_alloc
+                           Compare,
+                           typename allocator_traits<Allocator>::template portable_rebind_alloc
                               <container_detail::pair<Key, T> >::type> impl_tree_t;
    impl_tree_t m_flat_tree;  // flat tree representing flat_map
 
    typedef typename impl_tree_t::value_type              impl_value_type;
-   typedef typename impl_tree_t::pointer                 impl_pointer;
-   typedef typename impl_tree_t::const_pointer           impl_const_pointer;
-   typedef typename impl_tree_t::reference               impl_reference;
-   typedef typename impl_tree_t::const_reference         impl_const_reference;
-   typedef typename impl_tree_t::value_compare           impl_value_compare;
-   typedef typename impl_tree_t::iterator                impl_iterator;
    typedef typename impl_tree_t::const_iterator          impl_const_iterator;
-   typedef typename impl_tree_t::reverse_iterator        impl_reverse_iterator;
-   typedef typename impl_tree_t::const_reverse_iterator  impl_const_reverse_iterator;
    typedef typename impl_tree_t::allocator_type          impl_allocator_type;
-   typedef allocator_traits<A>                           allocator_traits_type;
    typedef container_detail::flat_tree_value_compare
-      < Pred
+      < Compare
       , container_detail::select1st< std::pair<Key, T> >
-      , std::pair<Key, T> >                                                value_compare_impl;
+      , std::pair<Key, T> >                                                         value_compare_impl;
    typedef typename container_detail::get_flat_tree_iterators
-         <typename allocator_traits<A>::pointer>::iterator                 iterator_impl;
+         <typename allocator_traits<Allocator>::pointer>::iterator                  iterator_impl;
    typedef typename container_detail::get_flat_tree_iterators
-      <typename allocator_traits<A>::pointer>::const_iterator              const_iterator_impl;
+      <typename allocator_traits<Allocator>::pointer>::const_iterator               const_iterator_impl;
    typedef typename container_detail::get_flat_tree_iterators
-         <typename allocator_traits<A>::pointer>::reverse_iterator         reverse_iterator_impl;
+         <typename allocator_traits<Allocator>::pointer>::reverse_iterator          reverse_iterator_impl;
    typedef typename container_detail::get_flat_tree_iterators
-         <typename allocator_traits<A>::pointer>::const_reverse_iterator   const_reverse_iterator_impl;
+         <typename allocator_traits<Allocator>::pointer>::const_reverse_iterator    const_reverse_iterator_impl;
    /// @endcond
 
    public:
@@ -1009,24 +986,24 @@ class flat_multimap
    //                    types
    //
    //////////////////////////////////////////////
-   typedef Key                                                             key_type;
-   typedef T                                                               mapped_type;
-   typedef typename std::pair<key_type, mapped_type>                       value_type;
-   typedef typename boost::container::allocator_traits<A>::pointer         pointer;
-   typedef typename boost::container::allocator_traits<A>::const_pointer   const_pointer;
-   typedef typename boost::container::allocator_traits<A>::reference       reference;
-   typedef typename boost::container::allocator_traits<A>::const_reference const_reference;
-   typedef typename boost::container::allocator_traits<A>::size_type       size_type;
-   typedef typename boost::container::allocator_traits<A>::difference_type difference_type;
-   typedef A                                                               allocator_type;
-   typedef BOOST_CONTAINER_IMPDEF(A)                                       stored_allocator_type;
-   typedef BOOST_CONTAINER_IMPDEF(value_compare_impl)                      value_compare;
-   typedef Pred                                                            key_compare;
-   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                           iterator;
-   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                     const_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(reverse_iterator_impl)                   reverse_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(const_reverse_iterator_impl)             const_reverse_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(impl_value_type)                         movable_value_type;
+   typedef Key                                                                      key_type;
+   typedef T                                                                        mapped_type;
+   typedef std::pair<Key, T>                                                        value_type;
+   typedef typename boost::container::allocator_traits<Allocator>::pointer          pointer;
+   typedef typename boost::container::allocator_traits<Allocator>::const_pointer    const_pointer;
+   typedef typename boost::container::allocator_traits<Allocator>::reference        reference;
+   typedef typename boost::container::allocator_traits<Allocator>::const_reference  const_reference;
+   typedef typename boost::container::allocator_traits<Allocator>::size_type        size_type;
+   typedef typename boost::container::allocator_traits<Allocator>::difference_type  difference_type;
+   typedef Allocator                                                                allocator_type;
+   typedef BOOST_CONTAINER_IMPDEF(Allocator)                                        stored_allocator_type;
+   typedef BOOST_CONTAINER_IMPDEF(value_compare_impl)                               value_compare;
+   typedef Compare                                                                  key_compare;
+   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                                    iterator;
+   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                              const_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(reverse_iterator_impl)                            reverse_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(const_reverse_iterator_impl)                      const_reverse_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(impl_value_type)                                  movable_value_type;
 
    //////////////////////////////////////////////
    //
@@ -1044,7 +1021,7 @@ class flat_multimap
    //!   object and allocator.
    //!
    //! <b>Complexity</b>: Constant.
-   explicit flat_multimap(const Pred& comp,
+   explicit flat_multimap(const Compare& comp,
                           const allocator_type& a = allocator_type())
       : m_flat_tree(comp, container_detail::force<impl_allocator_type>(a)) { }
 
@@ -1055,7 +1032,7 @@ class flat_multimap
    //! comp and otherwise N logN, where N is last - first.
    template <class InputIterator>
    flat_multimap(InputIterator first, InputIterator last,
-            const Pred& comp        = Pred(),
+            const Compare& comp        = Compare(),
             const allocator_type& a = allocator_type())
       : m_flat_tree(false, first, last, comp, container_detail::force<impl_allocator_type>(a))
    {}
@@ -1071,7 +1048,7 @@ class flat_multimap
    //! <b>Note</b>: Non-standard extension.
    template <class InputIterator>
    flat_multimap(ordered_range_t, InputIterator first, InputIterator last,
-            const Pred& comp        = Pred(),
+            const Compare& comp        = Compare(),
             const allocator_type& a = allocator_type())
       : m_flat_tree(ordered_range, first, last, comp, a)
    {}
@@ -1595,7 +1572,7 @@ class flat_multimap
    iterator lower_bound(const key_type& x)
       {  return container_detail::force_copy<iterator>(m_flat_tree.lower_bound(x)); }
 
-   //! <b>Returns</b>: A const iterator pointing to the first element with key
+   //! <b>Returns</b>: Allocator const iterator pointing to the first element with key
    //!   not less than k, or a.end() if such an element is not found.
    //!
    //! <b>Complexity</b>: Logarithmic
@@ -1609,7 +1586,7 @@ class flat_multimap
    iterator upper_bound(const key_type& x)
       {return container_detail::force_copy<iterator>(m_flat_tree.upper_bound(x)); }
 
-   //! <b>Returns</b>: A const iterator pointing to the first element with key
+   //! <b>Returns</b>: Allocator const iterator pointing to the first element with key
    //!   not less than x, or end() if such an element is not found.
    //!
    //! <b>Complexity</b>: Logarithmic
@@ -1625,8 +1602,7 @@ class flat_multimap
    //! <b>Effects</b>: Equivalent to std::make_pair(this->lower_bound(k), this->upper_bound(k)).
    //!
    //! <b>Complexity</b>: Logarithmic
-   std::pair<const_iterator,const_iterator>
-      equal_range(const key_type& x) const
+   std::pair<const_iterator,const_iterator> equal_range(const key_type& x) const
       {  return container_detail::force_copy<std::pair<const_iterator,const_iterator> >(m_flat_tree.equal_range(x));   }
 
    /// @cond
@@ -1640,38 +1616,38 @@ class flat_multimap
    /// @endcond
 };
 
-template <class Key, class T, class Pred, class A>
-inline bool operator==(const flat_multimap<Key,T,Pred,A>& x,
-                       const flat_multimap<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator==(const flat_multimap<Key,T,Compare,Allocator>& x,
+                       const flat_multimap<Key,T,Compare,Allocator>& y)
    {  return x.m_flat_tree == y.m_flat_tree;  }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator<(const flat_multimap<Key,T,Pred,A>& x,
-                      const flat_multimap<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator<(const flat_multimap<Key,T,Compare,Allocator>& x,
+                      const flat_multimap<Key,T,Compare,Allocator>& y)
    {  return x.m_flat_tree < y.m_flat_tree;   }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator!=(const flat_multimap<Key,T,Pred,A>& x,
-                       const flat_multimap<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator!=(const flat_multimap<Key,T,Compare,Allocator>& x,
+                       const flat_multimap<Key,T,Compare,Allocator>& y)
    {  return !(x == y);  }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator>(const flat_multimap<Key,T,Pred,A>& x,
-                      const flat_multimap<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator>(const flat_multimap<Key,T,Compare,Allocator>& x,
+                      const flat_multimap<Key,T,Compare,Allocator>& y)
    {  return y < x;  }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator<=(const flat_multimap<Key,T,Pred,A>& x,
-                       const flat_multimap<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator<=(const flat_multimap<Key,T,Compare,Allocator>& x,
+                       const flat_multimap<Key,T,Compare,Allocator>& y)
    {  return !(y < x);  }
 
-template <class Key, class T, class Pred, class A>
-inline bool operator>=(const flat_multimap<Key,T,Pred,A>& x,
-                       const flat_multimap<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline bool operator>=(const flat_multimap<Key,T,Compare,Allocator>& x,
+                       const flat_multimap<Key,T,Compare,Allocator>& y)
    {  return !(x < y);  }
 
-template <class Key, class T, class Pred, class A>
-inline void swap(flat_multimap<Key,T,Pred,A>& x, flat_multimap<Key,T,Pred,A>& y)
+template <class Key, class T, class Compare, class Allocator>
+inline void swap(flat_multimap<Key,T,Compare,Allocator>& x, flat_multimap<Key,T,Compare,Allocator>& y)
    {  x.swap(y);  }
 
 }}
@@ -1682,10 +1658,10 @@ namespace boost {
 /*
 //!has_trivial_destructor_after_move<> == true_type
 //!specialization for optimizations
-template <class K, class T, class C, class A>
-struct has_trivial_destructor_after_move< boost::container::flat_multimap<K, T, C, A> >
+template <class K, class T, class C, class Allocator>
+struct has_trivial_destructor_after_move< boost::container::flat_multimap<K, T, C, Allocator> >
 {
-   static const bool value = has_trivial_destructor<A>::value && has_trivial_destructor<C>::value;
+   static const bool value = has_trivial_destructor<Allocator>::value && has_trivial_destructor<C>::value;
 };
 */
 }  //namespace boost {
