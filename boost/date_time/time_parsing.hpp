@@ -116,6 +116,7 @@ namespace date_time {
         
         break;
       }
+      default: break;
       }//switch
       pos++;
     }
@@ -280,6 +281,7 @@ namespace date_time {
             
             break;
           }
+          default: break;
       };
       pos++;
     }
