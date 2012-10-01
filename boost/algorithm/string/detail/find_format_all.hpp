@@ -134,9 +134,9 @@ namespace boost {
                 while( M )
                 {
                     // Copy the beginning of the sequence
-                    insert( Output, ::boost::end(Output), LastMatch, M.begin() );
+                    boost::algorithm::detail::insert( Output, ::boost::end(Output), LastMatch, M.begin() );
                     // Copy formated result
-                    insert( Output, ::boost::end(Output), M.format_result() );
+                    boost::algorithm::detail::insert( Output, ::boost::end(Output), M.format_result() );
 
                     // Proceed to the next match
                     LastMatch=M.end();
