@@ -25,11 +25,11 @@ namespace boost { namespace proto { namespace detail
     template<typename T>
     yes_type check_is_iostream(
         typename T::failure *
-        , typename T::Init *
-        , typename T::fmtflags *
-        , typename T::iostate *
-        , typename T::openmode *
-        , typename T::seekdir *
+      , typename T::Init *
+      , typename T::fmtflags *
+      , typename T::iostate *
+      , typename T::openmode *
+      , typename T::seekdir *
     );
 
     template<typename T>
