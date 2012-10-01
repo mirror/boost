@@ -7,8 +7,8 @@
 // See http://www.boost.org/libs/container for documentation.
 //
 
-#ifndef BOOST_CONTAINER_LIST_HPP_
-#define BOOST_CONTAINER_LIST_HPP_
+#ifndef BOOST_CONTAINER_LIST_HPP
+#define BOOST_CONTAINER_LIST_HPP
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -43,13 +43,8 @@
 #include <algorithm>
 #include <stdexcept>
 
-#ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 namespace boost {
 namespace container {
-#else
-namespace boost {
-namespace container {
-#endif
 
 /// @cond
 namespace container_detail {
@@ -73,10 +68,10 @@ struct list_node
    T m_data;
 };
 
-template<class A>
+template<class Allocator>
 struct intrusive_list_type
 {
-   typedef boost::container::allocator_traits<A>   allocator_traits_type;
+   typedef boost::container::allocator_traits<Allocator>   allocator_traits_type;
    typedef typename allocator_traits_type::value_type value_type;
    typedef typename boost::intrusive::pointer_traits
       <typename allocator_traits_type::pointer>::template
@@ -213,27 +208,27 @@ class list_iterator
 //! not be invalidated or made to point to different elements unless that invalidation
 //! or mutation is explicit.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class T, class A = std::allocator<T> >
+template <class T, class Allocator = std::allocator<T> >
 #else
-template <class T, class A>
+template <class T, class Allocator>
 #endif
 class list
    : protected container_detail::node_alloc_holder
-      <A, typename container_detail::intrusive_list_type<A>::type>
+      <Allocator, typename container_detail::intrusive_list_type<Allocator>::type>
 {
    /// @cond
    typedef typename
-      container_detail::intrusive_list_type<A>::type Icont;
-   typedef container_detail::node_alloc_holder<A, Icont>        AllocHolder;
-   typedef typename AllocHolder::NodePtr              NodePtr;
-   typedef typename AllocHolder::NodeAlloc            NodeAlloc;
-   typedef typename AllocHolder::ValAlloc             ValAlloc;
-   typedef typename AllocHolder::Node                 Node;
-   typedef container_detail::allocator_destroyer<NodeAlloc>     Destroyer;
-   typedef typename AllocHolder::allocator_v1         allocator_v1;
-   typedef typename AllocHolder::allocator_v2         allocator_v2;
-   typedef typename AllocHolder::alloc_version        alloc_version;
-   typedef boost::container::allocator_traits<A>      allocator_traits_type;
+      container_detail::intrusive_list_type<Allocator>::type Icont;
+   typedef container_detail::node_alloc_holder<Allocator, Icont>  AllocHolder;
+   typedef typename AllocHolder::NodePtr                          NodePtr;
+   typedef typename AllocHolder::NodeAlloc                        NodeAlloc;
+   typedef typename AllocHolder::ValAlloc                         ValAlloc;
+   typedef typename AllocHolder::Node                             Node;
+   typedef container_detail::allocator_destroyer<NodeAlloc>       Destroyer;
+   typedef typename AllocHolder::allocator_v1                     allocator_v1;
+   typedef typename AllocHolder::allocator_v2                     allocator_v2;
+   typedef typename AllocHolder::alloc_version                    alloc_version;
+   typedef boost::container::allocator_traits<Allocator>          allocator_traits_type;
 
    class equal_to_value
    {
@@ -277,19 +272,19 @@ class list
    //
    //////////////////////////////////////////////
 
-   typedef T                                                                  value_type;
-   typedef typename ::boost::container::allocator_traits<A>::pointer          pointer;
-   typedef typename ::boost::container::allocator_traits<A>::const_pointer    const_pointer;
-   typedef typename ::boost::container::allocator_traits<A>::reference        reference;
-   typedef typename ::boost::container::allocator_traits<A>::const_reference  const_reference;
-   typedef typename ::boost::container::allocator_traits<A>::size_type        size_type;
-   typedef typename ::boost::container::allocator_traits<A>::difference_type  difference_type;
-   typedef A                                                                  allocator_type;
-   typedef BOOST_CONTAINER_IMPDEF(NodeAlloc)                                  stored_allocator_type;
-   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                              iterator;
-   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                        const_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<iterator>)            reverse_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<const_iterator>)      const_reverse_iterator;
+   typedef T                                                                           value_type;
+   typedef typename ::boost::container::allocator_traits<Allocator>::pointer           pointer;
+   typedef typename ::boost::container::allocator_traits<Allocator>::const_pointer     const_pointer;
+   typedef typename ::boost::container::allocator_traits<Allocator>::reference         reference;
+   typedef typename ::boost::container::allocator_traits<Allocator>::const_reference   const_reference;
+   typedef typename ::boost::container::allocator_traits<Allocator>::size_type         size_type;
+   typedef typename ::boost::container::allocator_traits<Allocator>::difference_type   difference_type;
+   typedef Allocator                                                                   allocator_type;
+   typedef BOOST_CONTAINER_IMPDEF(NodeAlloc)                                           stored_allocator_type;
+   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                                       iterator;
+   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                                 const_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<iterator>)                     reverse_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<const_iterator>)               const_reverse_iterator;
 
    //////////////////////////////////////////////
    //
@@ -323,7 +318,7 @@ class list
    //!
    //! <b>Complexity</b>: Linear to n.
    explicit list(size_type n)
-      : AllocHolder(A())
+      : AllocHolder(Allocator())
    {  this->resize(n);  }
 
    //! <b>Effects</b>: Constructs a list that will use a copy of allocator a
@@ -333,7 +328,7 @@ class list
    //!   throws or T's default or copy constructor throws.
    //!
    //! <b>Complexity</b>: Linear to n.
-   list(size_type n, const T& value, const A& a = A())
+   list(size_type n, const T& value, const Allocator& a = Allocator())
       : AllocHolder(a)
    {  this->insert(this->cbegin(), n, value);  }
 
@@ -393,7 +388,7 @@ class list
    //!
    //! <b>Complexity</b>: Linear to the range [first, last).
    template <class InpIt>
-   list(InpIt first, InpIt last, const A &a = A())
+   list(InpIt first, InpIt last, const Allocator &a = Allocator())
       : AllocHolder(a)
    {  this->insert(this->cbegin(), first, last);  }
 
@@ -506,20 +501,24 @@ class list
    allocator_type get_allocator() const
    {  return allocator_type(this->node_alloc()); }
 
-   //! <b>Effects</b>: Returns a copy of the internal allocator.
+   //! <b>Effects</b>: Returns a reference to the internal allocator.
    //!
-   //! <b>Throws</b>: If allocator's copy constructor throws.
+   //! <b>Throws</b>: Nothing
    //!
    //! <b>Complexity</b>: Constant.
-   const stored_allocator_type &get_stored_allocator() const
+   //!
+   //! <b>Note</b>: Non-standard extension.
+   stored_allocator_type &get_stored_allocator()
    {  return this->node_alloc(); }
 
-   //! <b>Effects</b>: Returns a copy of the internal allocator.
+   //! <b>Effects</b>: Returns a reference to the internal allocator.
    //!
-   //! <b>Throws</b>: If allocator's copy constructor throws.
+   //! <b>Throws</b>: Nothing
    //!
    //! <b>Complexity</b>: Constant.
-   stored_allocator_type &get_stored_allocator()
+   //!
+   //! <b>Note</b>: Non-standard extension.
+   const stored_allocator_type &get_stored_allocator() const
    {  return this->node_alloc(); }
 
    //////////////////////////////////////////////
@@ -1426,13 +1425,13 @@ class list
 
 };
 
-template <class T, class A>
-inline bool operator==(const list<T,A>& x, const list<T,A>& y)
+template <class T, class Allocator>
+inline bool operator==(const list<T,Allocator>& x, const list<T,Allocator>& y)
 {
    if(x.size() != y.size()){
       return false;
    }
-   typedef typename list<T,A>::const_iterator const_iterator;
+   typedef typename list<T,Allocator>::const_iterator const_iterator;
    const_iterator end1 = x.end();
 
    const_iterator i1 = x.begin();
@@ -1444,39 +1443,39 @@ inline bool operator==(const list<T,A>& x, const list<T,A>& y)
    return i1 == end1;
 }
 
-template <class T, class A>
-inline bool operator<(const list<T,A>& x,
-                      const list<T,A>& y)
+template <class T, class Allocator>
+inline bool operator<(const list<T,Allocator>& x,
+                      const list<T,Allocator>& y)
 {
   return std::lexicographical_compare(x.begin(), x.end(), y.begin(), y.end());
 }
 
-template <class T, class A>
-inline bool operator!=(const list<T,A>& x, const list<T,A>& y)
+template <class T, class Allocator>
+inline bool operator!=(const list<T,Allocator>& x, const list<T,Allocator>& y)
 {
   return !(x == y);
 }
 
-template <class T, class A>
-inline bool operator>(const list<T,A>& x, const list<T,A>& y)
+template <class T, class Allocator>
+inline bool operator>(const list<T,Allocator>& x, const list<T,Allocator>& y)
 {
   return y < x;
 }
 
-template <class T, class A>
-inline bool operator<=(const list<T,A>& x, const list<T,A>& y)
+template <class T, class Allocator>
+inline bool operator<=(const list<T,Allocator>& x, const list<T,Allocator>& y)
 {
   return !(y < x);
 }
 
-template <class T, class A>
-inline bool operator>=(const list<T,A>& x, const list<T,A>& y)
+template <class T, class Allocator>
+inline bool operator>=(const list<T,Allocator>& x, const list<T,Allocator>& y)
 {
   return !(x < y);
 }
 
-template <class T, class A>
-inline void swap(list<T, A>& x, list<T, A>& y)
+template <class T, class Allocator>
+inline void swap(list<T, Allocator>& x, list<T, Allocator>& y)
 {
   x.swap(y);
 }
@@ -1487,10 +1486,10 @@ inline void swap(list<T, A>& x, list<T, A>& y)
 /*
 //!has_trivial_destructor_after_move<> == true_type
 //!specialization for optimizations
-template <class T, class A>
-struct has_trivial_destructor_after_move<boost::container::list<T, A> >
+template <class T, class Allocator>
+struct has_trivial_destructor_after_move<boost::container::list<T, Allocator> >
 {
-   static const bool value = has_trivial_destructor<A>::value;
+   static const bool value = has_trivial_destructor<Allocator>::value;
 };
 */
 namespace container {
@@ -1501,4 +1500,4 @@ namespace container {
 
 #include <boost/container/detail/config_end.hpp>
 
-#endif // BOOST_CONTAINER_LIST_HPP_
+#endif // BOOST_CONTAINER_LIST_HPP

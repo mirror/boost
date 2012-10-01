@@ -275,26 +275,6 @@ class iterator
    node_ptr pn;
 };
 
-template<class A, unsigned int Version>
-struct select_multiallocation_chain
-{
-   typedef typename A::multiallocation_chain type;
-};
-
-template<class A>
-struct select_multiallocation_chain<A, 1>
-{
-   typedef typename boost::intrusive::pointer_traits
-      <typename allocator_traits<A>::pointer>::
-         template rebind_pointer<void>::type                void_ptr;
-   typedef container_detail::basic_multiallocation_chain
-      <void_ptr>                                            multialloc_cached_counted;
-   typedef boost::container::container_detail::
-      transform_multiallocation_chain
-         < multialloc_cached_counted
-         , typename allocator_traits<A>::value_type>        type;
-};
-
 template<class VoidPtr, class VoidAllocator>
 struct index_traits
 {
@@ -386,6 +366,89 @@ struct index_traits
    #endif   //STABLE_VECTOR_ENABLE_INVARIANT_CHECKING
 };
 
+template<class Allocator, unsigned Version = boost::container::container_detail::version<Allocator>::value>
+struct allocator_version_wrapper
+{
+   typedef ::boost::container::container_detail::integral_constant
+      <unsigned, Version> alloc_version;
+
+   typedef typename Allocator::multiallocation_chain multiallocation_chain;
+
+   typedef typename boost::container::allocator_traits<Allocator>::pointer    pointer;
+   typedef typename boost::container::allocator_traits<Allocator>::size_type  size_type;
+
+   static pointer allocate_one(Allocator &a)
+   {  return a.allocate_one();   }
+
+   static void deallocate_one(Allocator &a, const pointer &p)
+   {  a.deallocate_one(p);   }
+
+   static multiallocation_chain allocate_individual(Allocator &a, size_type n)
+   {  return a.allocate_individual(n);   }
+
+   static void deallocate_individual(Allocator &a, multiallocation_chain &holder)
+   {  a.deallocate_individual(::boost::move(holder));   }
+};
+
+template<class Allocator>
+struct allocator_version_wrapper<Allocator, 1>
+{
+   typedef ::boost::container::container_detail::integral_constant
+      <unsigned, 1> alloc_version;
+
+   typedef typename boost::container::allocator_traits<Allocator>::pointer    pointer;
+   typedef typename boost::container::allocator_traits<Allocator>::size_type  size_type;
+   typedef typename boost::container::allocator_traits<Allocator>::value_type value_type;
+
+   typedef typename boost::intrusive::pointer_traits<pointer>::
+         template rebind_pointer<void>::type                void_ptr;
+   typedef container_detail::basic_multiallocation_chain
+      <void_ptr>                                            multialloc_cached_counted;
+   typedef boost::container::container_detail::
+      transform_multiallocation_chain
+         < multialloc_cached_counted, value_type>           multiallocation_chain;
+
+   static pointer allocate_one(Allocator &a)
+   {  return a.allocate(1);   }
+
+   static void deallocate_one(Allocator &a, const pointer &p)
+   {  a.deallocate(p, 1);   }
+
+   static void deallocate_individual(Allocator &a, multiallocation_chain &holder)
+   {
+      while(!holder.empty()){
+         a.deallocate(holder.pop_front(), 1);
+      }
+   }
+
+   struct allocate_individual_rollback
+   {
+      allocate_individual_rollback(Allocator &a, multiallocation_chain &chain)
+         : mr_a(a), mr_chain(chain)
+      {}
+
+      ~allocate_individual_rollback()
+      {
+         allocator_version_wrapper::deallocate_individual(mr_a, mr_chain);
+      }
+
+      Allocator &mr_a;
+      multiallocation_chain &mr_chain;
+   };
+
+   static multiallocation_chain allocate_individual(Allocator &a, size_type n)
+   {
+      multiallocation_chain m;
+      multiallocation_chain m_ret;
+      allocate_individual_rollback rollback(a, m);
+      while(n--){
+         m.push_front(a.allocate(1));
+      }
+      m.swap(m_ret);
+      return ::boost::move(m_ret);
+   }
+};
+
 } //namespace stable_vector_detail
 
 #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
@@ -438,14 +501,14 @@ struct index_traits
 //! Exception safety: As stable_vector does not internally copy elements around, some
 //! operations provide stronger exception safety guarantees than in std::vector.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
-template <class T, class A = std::allocator<T> >
+template <class T, class Allocator = std::allocator<T> >
 #else
-template <class T, class A>
+template <class T, class Allocator>
 #endif
 class stable_vector
 {
    ///@cond
-   typedef allocator_traits<A>                        allocator_traits_type;
+   typedef allocator_traits<Allocator>                allocator_traits_type;
    typedef typename boost::intrusive::pointer_traits
       <typename allocator_traits_type::pointer>::
          template rebind_pointer<void>::type          void_ptr;
@@ -487,125 +550,35 @@ class stable_vector
       integral_constant<unsigned, 2>                  allocator_v2;
    typedef ::boost::container::container_detail::integral_constant
       <unsigned, boost::container::container_detail::
-      version<A>::value>                              alloc_version;
+      version<Allocator>::value>                              alloc_version;
    typedef typename allocator_traits_type::
       template portable_rebind_alloc
          <node_type>::type                            node_allocator_type;
-   typedef typename stable_vector_detail::
-      select_multiallocation_chain
-      < node_allocator_type
-      , alloc_version::value
-      >::type                                         multiallocation_chain;
+
+   typedef stable_vector_detail::allocator_version_wrapper<node_allocator_type> allocator_version_wrapper_t;
+   typedef typename allocator_version_wrapper_t::multiallocation_chain multiallocation_chain;
 
    node_ptr allocate_one()
-   {  return this->allocate_one(alloc_version());   }
+   {  return allocator_version_wrapper_t::allocate_one(this->priv_node_alloc());   }
 
-   template<class AllocatorVersion>
-   node_ptr allocate_one(AllocatorVersion,
-      typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
-            ::value>::type * = 0)
-   {  return this->priv_node_alloc().allocate(1);   }
-
-   template<class AllocatorVersion>
-   node_ptr allocate_one(AllocatorVersion,
-      typename boost::container::container_detail::enable_if_c
-         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
-            ::value>::type * = 0)
-   {  return this->priv_node_alloc().allocate_one();   }
-
-   void deallocate_one(node_ptr p)
-   {  return this->deallocate_one(p, alloc_version());   }
-
-   template<class AllocatorVersion>
-   void deallocate_one(node_ptr p, AllocatorVersion,
-      typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
-            ::value>::type * = 0)
-   {  this->priv_node_alloc().deallocate(p, 1);   }
-
-   template<class AllocatorVersion>
-   void deallocate_one(node_ptr p, AllocatorVersion,
-      typename boost::container::container_detail::enable_if_c
-         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
-            ::value>::type * = 0)
-   {  this->priv_node_alloc().deallocate_one(p);   }
+   void deallocate_one(const node_ptr &p)
+   {  allocator_version_wrapper_t::deallocate_one(this->priv_node_alloc(), p);   }
 
    multiallocation_chain allocate_individual(typename allocator_traits_type::size_type n)
-   {  return this->allocate_individual(n, alloc_version());   }
-
-   struct allocate_individual_rollback
-   {
-      allocate_individual_rollback(stable_vector &sv, multiallocation_chain &chain)
-         : mr_sv(sv), mr_chain(chain)
-      {}
-
-      ~allocate_individual_rollback()
-      {
-         if(!mr_chain.empty()){
-            mr_sv.deallocate_individual(mr_chain);
-         }
-      }
-
-      stable_vector &mr_sv;
-      multiallocation_chain &mr_chain;
-   };
-
-   template<class AllocatorVersion>
-   multiallocation_chain allocate_individual
-      (typename allocator_traits_type::size_type n, AllocatorVersion,
-      typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
-            ::value>::type * = 0)
-   {
-      multiallocation_chain m;
-      multiallocation_chain m_ret;
-      allocate_individual_rollback rollback(*this, m);
-      while(n--){
-         m.push_front(this->allocate_one());
-      }
-      m.swap(m_ret);
-      return ::boost::move(m_ret);
-   }
-
-   template<class AllocatorVersion>
-   multiallocation_chain allocate_individual
-      (typename allocator_traits_type::size_type n, AllocatorVersion,
-      typename boost::container::container_detail::enable_if_c
-         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
-            ::value>::type * = 0)
-   {  return this->priv_node_alloc().allocate_individual(n);   }
+   {  return allocator_version_wrapper_t::allocate_individual(this->priv_node_alloc(), n);   }
 
    void deallocate_individual(multiallocation_chain &holder)
-   {  this->deallocate_individual(holder, alloc_version());   }
-
-   template<class AllocatorVersion>
-   void deallocate_individual(multiallocation_chain & holder, AllocatorVersion,
-      typename boost::container::container_detail::enable_if_c
-         <boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
-            ::value>::type * = 0)
-   {
-      while(!holder.empty()){
-         this->deallocate_one(holder.pop_front());
-      }
-   }
-
-   template<class AllocatorVersion>
-   void deallocate_individual(multiallocation_chain & holder, AllocatorVersion,
-      typename boost::container::container_detail::enable_if_c
-         <!boost::container::container_detail::is_same<AllocatorVersion, allocator_v1>
-            ::value>::type * = 0)
-   {  this->priv_node_alloc().deallocate_individual(boost::move(holder));  }
+   {  allocator_version_wrapper_t::deallocate_individual(this->priv_node_alloc(), holder);   }
 
    friend class stable_vector_detail::clear_on_destroy<stable_vector>;
    typedef stable_vector_detail::iterator
       < T
-      , typename allocator_traits<A>::reference
-      , typename allocator_traits<A>::pointer>              iterator_impl;
+      , typename allocator_traits<Allocator>::reference
+      , typename allocator_traits<Allocator>::pointer>              iterator_impl;
    typedef stable_vector_detail::iterator
       < T
-      , typename allocator_traits<A>::const_reference
-      , typename allocator_traits<A>::const_pointer>        const_iterator_impl;
+      , typename allocator_traits<Allocator>::const_reference
+      , typename allocator_traits<Allocator>::const_pointer>        const_iterator_impl;
    ///@endcond
    public:
 
@@ -614,19 +587,19 @@ class stable_vector
    //                    types
    //
    //////////////////////////////////////////////
-   typedef T                                                                  value_type;
-   typedef typename ::boost::container::allocator_traits<A>::pointer          pointer;
-   typedef typename ::boost::container::allocator_traits<A>::const_pointer    const_pointer;
-   typedef typename ::boost::container::allocator_traits<A>::reference        reference;
-   typedef typename ::boost::container::allocator_traits<A>::const_reference  const_reference;
-   typedef typename ::boost::container::allocator_traits<A>::size_type        size_type;
-   typedef typename ::boost::container::allocator_traits<A>::difference_type  difference_type;
-   typedef A                                                                  allocator_type;
-   typedef node_allocator_type                                                stored_allocator_type;
-   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                              iterator;
-   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                        const_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<iterator>)            reverse_iterator;
-   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<const_iterator>)      const_reverse_iterator;
+   typedef T                                                                           value_type;
+   typedef typename ::boost::container::allocator_traits<Allocator>::pointer           pointer;
+   typedef typename ::boost::container::allocator_traits<Allocator>::const_pointer     const_pointer;
+   typedef typename ::boost::container::allocator_traits<Allocator>::reference         reference;
+   typedef typename ::boost::container::allocator_traits<Allocator>::const_reference   const_reference;
+   typedef typename ::boost::container::allocator_traits<Allocator>::size_type         size_type;
+   typedef typename ::boost::container::allocator_traits<Allocator>::difference_type   difference_type;
+   typedef Allocator                                                                   allocator_type;
+   typedef node_allocator_type                                                         stored_allocator_type;
+   typedef BOOST_CONTAINER_IMPDEF(iterator_impl)                                       iterator;
+   typedef BOOST_CONTAINER_IMPDEF(const_iterator_impl)                                 const_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<iterator>)                     reverse_iterator;
+   typedef BOOST_CONTAINER_IMPDEF(std::reverse_iterator<const_iterator>)               const_reverse_iterator;
 
    ///@cond
    private:
@@ -1863,46 +1836,46 @@ class stable_vector
    /// @endcond
 };
 
-template <typename T,typename A>
-bool operator==(const stable_vector<T,A>& x,const stable_vector<T,A>& y)
+template <typename T,typename Allocator>
+bool operator==(const stable_vector<T,Allocator>& x,const stable_vector<T,Allocator>& y)
 {
    return x.size()==y.size()&&std::equal(x.begin(),x.end(),y.begin());
 }
 
-template <typename T,typename A>
-bool operator< (const stable_vector<T,A>& x,const stable_vector<T,A>& y)
+template <typename T,typename Allocator>
+bool operator< (const stable_vector<T,Allocator>& x,const stable_vector<T,Allocator>& y)
 {
    return std::lexicographical_compare(x.begin(),x.end(),y.begin(),y.end());
 }
 
-template <typename T,typename A>
-bool operator!=(const stable_vector<T,A>& x,const stable_vector<T,A>& y)
+template <typename T,typename Allocator>
+bool operator!=(const stable_vector<T,Allocator>& x,const stable_vector<T,Allocator>& y)
 {
    return !(x==y);
 }
 
-template <typename T,typename A>
-bool operator> (const stable_vector<T,A>& x,const stable_vector<T,A>& y)
+template <typename T,typename Allocator>
+bool operator> (const stable_vector<T,Allocator>& x,const stable_vector<T,Allocator>& y)
 {
    return y<x;
 }
 
-template <typename T,typename A>
-bool operator>=(const stable_vector<T,A>& x,const stable_vector<T,A>& y)
+template <typename T,typename Allocator>
+bool operator>=(const stable_vector<T,Allocator>& x,const stable_vector<T,Allocator>& y)
 {
    return !(x<y);
 }
 
-template <typename T,typename A>
-bool operator<=(const stable_vector<T,A>& x,const stable_vector<T,A>& y)
+template <typename T,typename Allocator>
+bool operator<=(const stable_vector<T,Allocator>& x,const stable_vector<T,Allocator>& y)
 {
    return !(x>y);
 }
 
 // specialized algorithms:
 
-template <typename T, typename A>
-void swap(stable_vector<T,A>& x,stable_vector<T,A>& y)
+template <typename T, typename Allocator>
+void swap(stable_vector<T,Allocator>& x,stable_vector<T,Allocator>& y)
 {
    x.swap(y);
 }

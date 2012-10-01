@@ -41,7 +41,7 @@ namespace container {
 namespace container_detail {
 
 template<class Key, class Value, class KeyCompare, class KeyOfValue>
-struct value_compare_impl
+struct tree_value_compare
    :  public KeyCompare
 {
    typedef Value        value_type;
@@ -49,7 +49,7 @@ struct value_compare_impl
    typedef KeyOfValue   key_of_value;
    typedef Key          key_type;
 
-   value_compare_impl(const key_compare &kcomp)
+   tree_value_compare(const key_compare &kcomp)
       :  key_compare(kcomp)
    {}
 
@@ -209,13 +209,13 @@ class rbtree
    : protected container_detail::node_alloc_holder
       < A
       , typename container_detail::intrusive_rbtree_type
-         <A, value_compare_impl<Key, Value, KeyCompare, KeyOfValue> 
+         <A, tree_value_compare<Key, Value, KeyCompare, KeyOfValue> 
          >::type
       , KeyCompare
       >
 {
    typedef typename container_detail::intrusive_rbtree_type
-         < A, value_compare_impl
+         < A, tree_value_compare
             <Key, Value, KeyCompare, KeyOfValue>
          >::type                                            Icont;
    typedef container_detail::node_alloc_holder 
@@ -315,7 +315,7 @@ class rbtree
    typedef Value                                      value_type;
    typedef A                                          allocator_type;
    typedef KeyCompare                                 key_compare;
-   typedef value_compare_impl< Key, Value
+   typedef tree_value_compare< Key, Value
                         , KeyCompare, KeyOfValue>     value_compare;
    typedef typename boost::container::
       allocator_traits<A>::pointer                    pointer;
