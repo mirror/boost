@@ -37,8 +37,10 @@ namespace boost {
                 : f(&f_), state(state_) {}
 
             void increment() {
-                BOOST_ASSERT(value);
-                value = none;
+                if(value)
+                    value = none;
+                else
+                    (*f)();
                 ++state;
             }
 
@@ -72,8 +74,10 @@ namespace boost {
                 : f(f_), state(state_) {}
 
             void increment() {
-                BOOST_ASSERT(value);
-                value = none;
+                if(value)
+                    value = none;
+                else
+                    (*f)();
                 ++state;
             }
 
