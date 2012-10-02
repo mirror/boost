@@ -222,6 +222,9 @@ namespace boost { namespace proto
 
         template<typename T, typename Void = void>
         struct is_aggregate_;
+
+        template<typename Expr>
+        struct flat_view;
     }
 
     typedef detail::ignore const ignore;
