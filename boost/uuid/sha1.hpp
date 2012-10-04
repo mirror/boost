@@ -19,6 +19,7 @@
 #include <stdexcept>
 #include <boost/throw_exception.hpp>
 #include <cstddef>
+#include <string>
 
 #ifdef BOOST_NO_STDC_NAMESPACE
 namespace std {
