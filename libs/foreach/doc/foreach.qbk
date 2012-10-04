@@ -193,7 +193,7 @@ name conflicts in your code.
  result in an additional expansion of these macros. Instead, use the 
  form shown above.]
 
-Lasstly, a word of warning. Lots of folks use a `foreach` macro as a short form
+Lastly, a word of warning. Lots of folks use a `foreach` macro as a short form
 for `BOOST_FOREACH`. I discourage this. It leads to name conflicts within the
 `BOOST_FOREACH` macro itself, where `foreach` is the name of a namespace. Besides,
 `foreach` is a common-eough identifier; even [@http://qt.digia.com/ Qt] defines
