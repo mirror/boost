@@ -10,9 +10,6 @@ import testing ;
 
 project
     : requirements
-        <toolset>gcc:<cxxflags>-std=c++0x
-        <toolset>darwin:<cxxflags>-std=c++0x
-        <toolset>gcc:<cxxflags>-DBOOST_RESULT_OF_USE_DECLTYPE
     ;
 
 {
