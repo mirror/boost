@@ -618,7 +618,16 @@ namespace boost { namespace unordered { namespace detail {
             {
                 for(;;) {
                     n = static_cast<node_pointer>(n->next_);
-                    if (n == end) return;
+                    if (n == end) {
+                        if (n) {
+                            std::size_t new_bucket_index =
+                                policy::to_bucket(bucket_count_, n->hash_);
+                            if (bucket_index != new_bucket_index) {
+                                get_bucket(new_bucket_index)->next_ = prev;
+                            }
+                        }
+                        return;
+                    }
 
                     std::size_t new_bucket_index =
                         policy::to_bucket(bucket_count_, n->hash_);

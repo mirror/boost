@@ -3,6 +3,9 @@
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
 
+[template ticket[number]'''<ulink
+    url="https://svn.boost.org/trac/boost/ticket/'''[number]'''">'''#[number]'''</ulink>''']
+
 [section:changes Change Log]
 
 [h2 Review Version]
@@ -211,6 +214,7 @@ C++11 support has resulted in some breaking changes:
 
 * Faster assign, which assigns to existing nodes where possible, rather than
   creating entirely new nodes and copy constructing.
+* Fixed bug in `erase_range` ([ticket 7471]).
 * Reverted some of the internal changes to how nodes are created, especially
   for C++11 compilers. 'construct' and 'destroy' should work a little better
   for C++11 allocators.
