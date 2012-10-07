@@ -44,8 +44,10 @@ struct ratio_string
 #include <boost/static_string/static_string.hpp>
 #endif
 
-#if defined(BOOST_NO_CXX11_UNICODE_LITERALS) || defined(BOOST_NO_CXX11_CHAR16_T) || defined(BOOST_NO_CXX11_CHAR32_T)
-//~ #define BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined(BOOST_NO_CXX11_UNICODE_LITERALS) || defined(BOOST_NO_CXX11_CHAR16_T) || defined(BOOST_NO_CXX11_CHAR32_T) || defined(BOOST_NO_CXX11_U16STRING) || defined(BOOST_NO_CXX11_U32STRING)
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
+#undef BOOST_RATIO_HAS_UNICODE_SUPPORT
+#endif
 #else
 #define BOOST_RATIO_HAS_UNICODE_SUPPORT 1
 #endif
