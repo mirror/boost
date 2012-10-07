@@ -340,17 +340,17 @@ namespace detail
 namespace detail {
     template <class T, bool = is_arithmetic<T>::value>
     struct chrono_numeric_limits {
-        static BOOST_CONSTEXPR T lowest() throw() {return (std::numeric_limits<T>::min)  ();}
+        static BOOST_CHRONO_LIB_CONSTEXPR T lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW {return (std::numeric_limits<T>::min)  ();}
     };
 
     template <class T>
     struct chrono_numeric_limits<T,true> {
-        static BOOST_CONSTEXPR T lowest() throw() {return (std::numeric_limits<T>::min)  ();}
+        static BOOST_CHRONO_LIB_CONSTEXPR T lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW {return (std::numeric_limits<T>::min)  ();}
     };
 
     template <>
     struct chrono_numeric_limits<float,true> {
-        static BOOST_CONSTEXPR float lowest() throw()
+        static BOOST_CHRONO_LIB_CONSTEXPR float lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
         {
             return -(std::numeric_limits<float>::max) ();
         }
@@ -358,7 +358,7 @@ namespace detail {
 
     template <>
     struct chrono_numeric_limits<double,true> {
-        static BOOST_CONSTEXPR double lowest() throw()
+        static BOOST_CHRONO_LIB_CONSTEXPR double lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
         {
             return -(std::numeric_limits<double>::max) ();
         }
@@ -366,7 +366,7 @@ namespace detail {
 
     template <>
     struct chrono_numeric_limits<long double,true> {
-        static BOOST_CONSTEXPR long double lowest() throw()
+        static BOOST_CHRONO_LIB_CONSTEXPR long double lowest() BOOST_CHRONO_LIB_NOEXCEPT_OR_THROW
         {
             return -(std::numeric_limits<long double>::max)();
         }
@@ -381,12 +381,12 @@ template <class Rep>
 struct duration_values
 {
     static BOOST_CONSTEXPR Rep zero() {return Rep(0);}
-    static BOOST_CONSTEXPR Rep max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    static BOOST_CHRONO_LIB_CONSTEXPR Rep max BOOST_PREVENT_MACRO_SUBSTITUTION ()
     {
         return (std::numeric_limits<Rep>::max)();
     }
 
-    static BOOST_CONSTEXPR Rep min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+    static BOOST_CHRONO_LIB_CONSTEXPR Rep min BOOST_PREVENT_MACRO_SUBSTITUTION ()
     {
         return detail::numeric_limits<Rep>::lowest();
     }
@@ -513,11 +513,11 @@ namespace chrono {
         {
             return duration(duration_values<rep>::zero());
         }
-        static BOOST_CONSTEXPR duration min BOOST_PREVENT_MACRO_SUBSTITUTION ()
+        static BOOST_CHRONO_LIB_CONSTEXPR duration min BOOST_PREVENT_MACRO_SUBSTITUTION ()
         {
             return duration((duration_values<rep>::min)());
         }
-        static BOOST_CONSTEXPR duration max BOOST_PREVENT_MACRO_SUBSTITUTION ()
+        static BOOST_CHRONO_LIB_CONSTEXPR duration max BOOST_PREVENT_MACRO_SUBSTITUTION ()
         {
             return duration((duration_values<rep>::max)());
         }
