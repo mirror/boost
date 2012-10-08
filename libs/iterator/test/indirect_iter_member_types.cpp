@@ -82,7 +82,7 @@ int main()
     typedef boost::indirect_iterator<char**, int, std::random_access_iterator_tag, long&, short> Iter;
     STATIC_ASSERT_SAME(Iter::value_type, int);
     STATIC_ASSERT_SAME(Iter::reference, long&);  
-    STATIC_ASSERT_SAME(Iter::pointer, int*);  
+    STATIC_ASSERT_SAME(Iter::pointer, long*);  
     STATIC_ASSERT_SAME(Iter::difference_type, short);  
   }
   return 0;
