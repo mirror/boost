@@ -49,8 +49,10 @@ struct ratio_string
 #include <boost/static_string/static_string.hpp>
 #endif
 
-#if defined(BOOST_NO_CXX11_UNICODE_LITERALS) || defined(BOOST_NO_CXX11_CHAR16_T) || defined(BOOST_NO_CXX11_CHAR32_T)
-//~ #define BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined(BOOST_NO_CXX11_UNICODE_LITERALS) || defined(BOOST_NO_CXX11_CHAR16_T) || defined(BOOST_NO_CXX11_CHAR32_T) || defined(BOOST_NO_CXX11_U16STRING) || defined(BOOST_NO_CXX11_U32STRING)
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
+#undef BOOST_RATIO_HAS_UNICODE_SUPPORT
+#endif
 #else
 #define BOOST_RATIO_HAS_UNICODE_SUPPORT 1
 #endif
@@ -120,7 +122,7 @@ struct ratio_string<atto, char>
     static std::string prefix()  {return std::string("atto");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<atto, char16_t>
@@ -165,7 +167,7 @@ struct ratio_string<femto, char>
     static std::string prefix()  {return std::string("femto");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<femto, char16_t>
@@ -209,7 +211,7 @@ struct ratio_string<pico, char>
     static std::string prefix()  {return std::string("pico");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<pico, char16_t>
@@ -253,7 +255,7 @@ struct ratio_string<nano, char>
     static std::string prefix()  {return std::string("nano");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<nano, char16_t>
@@ -297,7 +299,7 @@ struct ratio_string<micro, char>
     static std::string prefix()  {return std::string("micro");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<micro, char16_t>
@@ -341,7 +343,7 @@ struct ratio_string<milli, char>
     static std::string prefix()  {return std::string("milli");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<milli, char16_t>
@@ -385,7 +387,7 @@ struct ratio_string<centi, char>
     static std::string prefix()  {return std::string("centi");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<centi, char16_t>
@@ -430,7 +432,7 @@ struct ratio_string<deci, char>
     static std::string prefix()  {return std::string("deci");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<deci, char16_t>
@@ -477,7 +479,7 @@ struct ratio_string<deca, char>
     static std::string prefix()  {return std::string("deca");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<deca, char16_t>
@@ -521,7 +523,7 @@ struct ratio_string<hecto, char>
     static std::string prefix()  {return std::string("hecto");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<hecto, char16_t>
@@ -565,7 +567,7 @@ struct ratio_string<kilo, char>
     static std::string prefix()  {return std::string("kilo");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<kilo, char16_t>
@@ -610,7 +612,7 @@ struct ratio_string<mega, char>
     static std::string prefix()  {return std::string("mega");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<mega, char16_t>
@@ -655,7 +657,7 @@ struct ratio_string<giga, char>
     static std::string prefix()  {return std::string("giga");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<giga, char16_t>
@@ -700,7 +702,7 @@ struct ratio_string<tera, char>
     static std::string prefix()  {return std::string("tera");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<tera, char16_t>
@@ -744,7 +746,7 @@ struct ratio_string<peta, char>
     static std::string prefix()  {return std::string("peta");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<peta, char16_t>
@@ -788,7 +790,7 @@ struct ratio_string<exa, char>
     static std::string prefix()  {return std::string("exa");}
 };
 
-#if BOOST_RATIO_HAS_UNICODE_SUPPORT
+#if defined BOOST_RATIO_HAS_UNICODE_SUPPORT
 
 template <>
 struct ratio_string<exa, char16_t>
