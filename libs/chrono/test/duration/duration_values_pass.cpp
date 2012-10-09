@@ -15,7 +15,7 @@
 #include <boost/detail/lightweight_test.hpp>
 
 #include "../rep.h"
-#ifdef BOOST_NO_CONSTEXPR
+#if defined BOOST_NO_CXX11_NUMERIC_LIMITS || defined BOOST_NO_CXX11_CONSTEXPR
 #define BOOST_CONSTEXPR_ASSERT(C) BOOST_TEST(C)
 #else
 #include <boost/static_assert.hpp>
@@ -30,7 +30,7 @@ void check_max()
     BOOST_TEST((D::max)().count() == max_rep);
     {
       typedef typename D::rep Rep;
-      BOOST_CONSTEXPR Rep max_rep = (boost::chrono::duration_values<Rep>::max)();
+      BOOST_CHRONO_LIB_CONSTEXPR Rep max_rep = (boost::chrono::duration_values<Rep>::max)();
       BOOST_CONSTEXPR_ASSERT((D::max)().count() == max_rep);
     }
 }
@@ -43,7 +43,7 @@ void check_min()
     BOOST_TEST((D::min)().count() == min_rep);
     {
       typedef typename D::rep Rep;
-      BOOST_CONSTEXPR Rep min_rep = (boost::chrono::duration_values<Rep>::min)();
+      BOOST_CHRONO_LIB_CONSTEXPR Rep min_rep = (boost::chrono::duration_values<Rep>::min)();
       BOOST_CONSTEXPR_ASSERT((D::min)().count() == min_rep);
 
     }

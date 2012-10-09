@@ -14,7 +14,7 @@
 #include <boost/chrono/chrono.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-#ifdef BOOST_NO_CONSTEXPR
+#if defined BOOST_NO_CXX11_NUMERIC_LIMITS || defined BOOST_NO_CXX11_CONSTEXPR
 #define BOOST_CONSTEXPR_ASSERT(C) BOOST_TEST(C)
 #else
 #include <boost/static_assert.hpp>

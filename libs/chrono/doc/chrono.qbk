@@ -7273,6 +7273,7 @@ When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not availabl
 [*Fixes:]
 
 * [@http://svn.boost.org/trac/boost/ticket/7381 #7381] C++11 compliance: unresolved symbol when assigning a constexpr duration to a non-const local variable.
+* [@http://svn.boost.org/trac/boost/ticket/7479 #7479] Compiles fails with compilers supporting constexpr fails if the standard library doesn't provides the constexpr interface
 
 [*Would not fix:]
 
