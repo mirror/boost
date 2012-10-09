@@ -1857,7 +1857,7 @@ The specialization relays on the __ratio_greater_equal template class.
 
 [*Features:]
 
-* [@http://svn.boost.org/trac/boost/ticket/XXXX #XXXX] Replace the short_name and long_name functions by symbol and prefix functions respectively.
+* Replace the short_name and long_name functions by symbol and prefix functions respectively.
 
 [*Deprecated:]
 
