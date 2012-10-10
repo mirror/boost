@@ -230,7 +230,7 @@ namespace boost
         BOOST_TRY
         {
           typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
-          if (opfx)
+          if (bool(opfx))
           {
             if (!std::has_facet<time_point_put<CharT> >(os.getloc()))
             {
@@ -287,7 +287,7 @@ namespace boost
       {
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
-        if (ipfx)
+        if (bool(ipfx))
         {
           //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
           if (!std::has_facet<time_point_get<CharT> >(is.getloc()))
@@ -397,7 +397,7 @@ namespace boost
     {
       //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       typename std::basic_ostream<CharT, Traits>::sentry ok(os);
-      if (ok)
+      if (bool(ok))
       {
         //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
         bool failed = false;
@@ -585,7 +585,7 @@ namespace boost
     operator>>(std::basic_istream<CharT, Traits>& is, time_point<system_clock, Duration>& tp)
     {
       typename std::basic_istream<CharT, Traits>::sentry ok(is);
-      if (ok)
+      if (bool(ok))
       {
         std::ios_base::iostate err = std::ios_base::goodbit;
         BOOST_TRY

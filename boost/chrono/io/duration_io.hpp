@@ -127,7 +127,7 @@ namespace boost
         BOOST_TRY
         {
           typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
-          if (opfx)
+          if (bool(opfx))
           {
             if (!std::has_facet<duration_put<CharT> >(os.getloc()))
             {
