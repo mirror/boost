@@ -185,7 +185,7 @@ namespace boost
       BOOST_TRY
       {
         typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
-        if (ipfx)
+        if (bool(ipfx))
         {
           if (!std::has_facet<duration_get<CharT> >(is.getloc()))
           {
