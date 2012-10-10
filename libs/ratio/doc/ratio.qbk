@@ -1867,10 +1867,6 @@ The ratio_string<>::short_name and ratio_string<>::long_name are deprecated. Use
 
 * [@http://svn.boost.org/trac/boost/ticket/7478 #7478] Compiles fails with compilers supporting char16_t and char32_t fails if the library doesn't provides std::u16string and std::u32string.
 
-Currently there are no macros BOOST_NO_CXX11_U16STRING and BOOST_NO_CXX11_U32STRING signaling that the standard library doesn't provides std::u16string or std::u32string. The committed change avoids the compile error when Boost.Config will provide these macros. In the mean time the user needs to define them explicitly while using Boost.Ratio in these conditions.
-
-
-
 [endsect]
 
 [section [*Version 1.0.3, August 1, 2012 - 1.51] ]
