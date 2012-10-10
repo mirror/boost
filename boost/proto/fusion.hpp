@@ -21,7 +21,8 @@
 #include <boost/fusion/include/iterator_base.hpp>
 #include <boost/fusion/include/intrinsic.hpp>
 #include <boost/fusion/include/single_view.hpp>
-#include <boost/fusion/include/transform_view.hpp>
+#include <boost/fusion/include/transform.hpp>
+#include <boost/fusion/include/as_list.hpp>
 #include <boost/fusion/include/is_segmented.hpp>
 #include <boost/fusion/sequence/comparison/enable_comparison.hpp>
 #include <boost/proto/proto_fwd.hpp>
@@ -61,25 +62,6 @@ namespace boost { namespace proto
             Expr &expr;
         };
 
-        template<typename Expr>
-        struct flat_view
-        {
-            typedef Expr expr_type;
-            typedef fusion::forward_traversal_tag category;
-            typedef
-                tag::proto_flat_view<
-                    typename Expr::proto_tag
-                  , typename Expr::proto_domain
-                >
-            fusion_tag;
-
-            explicit flat_view(Expr &e)
-              : expr_(e)
-            {}
-
-            Expr &expr_;
-        };
-
         template<typename Tag>
         struct as_element
         {
@@ -113,6 +95,33 @@ namespace boost { namespace proto
             {
                 return typename result<as_element(Expr const &)>::type(e);
             }
+        };
+
+        template<typename Expr>
+        struct flat_view
+          : fusion::sequence_base<flat_view<Expr> >
+        {
+            typedef fusion::forward_traversal_tag category;
+            typedef
+                tag::proto_flat_view<
+                    typename Expr::proto_tag
+                  , typename Expr::proto_domain
+                >
+            fusion_tag;
+            typedef
+                typename fusion::result_of::as_list<
+                    typename fusion::result_of::transform<
+                        Expr
+                      , as_element<typename Expr::proto_tag>
+                    >::type
+                >::type
+            segments_type;
+
+            explicit flat_view(Expr &e)
+              : segs_(fusion::as_list(fusion::transform(e, as_element<typename Expr::proto_tag>())))
+            {}
+
+            segments_type segs_;
         };
     }
 
@@ -637,18 +646,11 @@ namespace boost { namespace fusion
             template<typename Sequence>
             struct apply
             {
-                typedef typename Sequence::expr_type::proto_tag proto_tag;
-
-                typedef
-                    fusion::transform_view<
-                        typename Sequence::expr_type
-                      , proto::detail::as_element<proto_tag>
-                    >
-                type;
-
+                typedef typename Sequence::segments_type const &type;
+                            
                 static type call(Sequence &sequence)
                 {
-                    return type(sequence.expr_, proto::detail::as_element<proto_tag>());
+                    return sequence.segs_;
                 }
             };
         };
