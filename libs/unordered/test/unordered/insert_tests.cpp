@@ -16,6 +16,7 @@
 #include "../helpers/equivalent.hpp"
 #include "../helpers/invariants.hpp"
 #include "../helpers/input_iterator.hpp"
+#include "../helpers/helpers.hpp"
 
 #include <iostream>
 
@@ -293,8 +294,6 @@ void insert_tests2(X*, test::random_generator generator)
     }
 }
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
-
 template <class X>
 void unique_emplace_tests1(X*, test::random_generator generator)
 {
@@ -361,7 +360,73 @@ void equivalent_emplace_tests1(X*, test::random_generator generator)
     test::check_equivalent_keys(x);
 }
 
-#endif
+template <class X>
+void move_emplace_tests(X*, test::random_generator generator)
+{
+    typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
+    typedef test::ordered<X> ordered;
+
+    std::cerr<<"emplace(move(value)) tests for containers with unique keys.\n";
+
+    X x;
+    test::ordered<X> tracker = test::create_ordered(x);
+
+    test::random_values<X> v(1000, generator);
+
+    for(BOOST_DEDUCED_TYPENAME test::random_values<X>::iterator it = v.begin();
+            it != v.end(); ++it)
+    {
+
+        BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
+        float b = x.max_load_factor();
+
+		typename X::value_type value = *it;
+        x.emplace(boost::move(value));
+        tracker.insert(*it);
+        tracker.compare_key(x, *it);
+
+        if(static_cast<double>(x.size()) < b * static_cast<double>(old_bucket_count))
+            BOOST_TEST(x.bucket_count() == old_bucket_count);
+    }
+
+    test::check_equivalent_keys(x);
+    tracker.compare(x);
+}
+
+template <class X>
+void default_emplace_tests(X*, test::random_generator)
+{
+    std::cerr<<"emplace() tests.\n";
+    bool is_unique = test::has_unique_keys<X>::value;
+
+    X x;
+
+    x.emplace();
+    BOOST_TEST(x.size() == 1);
+    x.emplace();
+    BOOST_TEST(x.size() == is_unique ? 1: 2);
+    x.emplace();
+    BOOST_TEST(x.size() == is_unique ? 1: 3);
+    
+    typename X::value_type y;
+    BOOST_TEST(x.count(test::get_key<X>(y)) ==  is_unique ? 1: 3);
+    BOOST_TEST(*x.equal_range(test::get_key<X>(y)).first == y);
+
+    x.emplace(y);
+    BOOST_TEST(x.size() ==  is_unique ? 1: 4);
+    BOOST_TEST(x.count(test::get_key<X>(y)) ==  is_unique ? 1: 4);
+    BOOST_TEST(*x.equal_range(test::get_key<X>(y)).first == y);
+    
+    x.clear();
+    BOOST_TEST(x.empty());
+    x.emplace(y);
+    BOOST_TEST(x.size() == 1);
+    x.emplace(y);
+    BOOST_TEST(x.size() == is_unique ? 1: 2);
+    
+    BOOST_TEST(x.count(test::get_key<X>(y)) == is_unique ? 1: 2);
+    BOOST_TEST(*x.equal_range(test::get_key<X>(y)).first == y);
+}
 
 template <class X>
 void map_tests(X*, test::random_generator generator)
@@ -434,9 +499,9 @@ void map_insert_range_test2(X*, test::random_generator generator)
     test::check_equivalent_keys(x);
 }
 
-boost::unordered_set<test::object,
+boost::unordered_set<test::movable,
     test::hash, test::equal_to,
-    std::allocator<test::object> >* test_set_std_alloc;
+    std::allocator<test::movable> >* test_set_std_alloc;
 boost::unordered_multimap<test::object, test::object,
     test::hash, test::equal_to,
     std::allocator<test::object> >* test_multimap_std_alloc;
@@ -444,12 +509,12 @@ boost::unordered_multimap<test::object, test::object,
 boost::unordered_set<test::object,
     test::hash, test::equal_to,
     test::allocator1<test::object> >* test_set;
-boost::unordered_multiset<test::object,
+boost::unordered_multiset<test::movable,
     test::hash, test::equal_to,
-    test::allocator2<test::object> >* test_multiset;
-boost::unordered_map<test::object, test::object,
+    test::allocator2<test::movable> >* test_multiset;
+boost::unordered_map<test::movable, test::movable,
     test::hash, test::equal_to,
-    test::allocator2<test::object> >* test_map;
+    test::allocator2<test::movable> >* test_map;
 boost::unordered_multimap<test::object, test::object,
     test::hash, test::equal_to,
     test::allocator1<test::object> >* test_multimap;
@@ -472,7 +537,6 @@ UNORDERED_TEST(insert_tests2,
     ((default_generator)(generate_collisions))
 )
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
 UNORDERED_TEST(unique_emplace_tests1,
     ((test_set_std_alloc)(test_set)(test_map))
     ((default_generator)(generate_collisions))
@@ -482,7 +546,18 @@ UNORDERED_TEST(equivalent_emplace_tests1,
     ((test_multimap_std_alloc)(test_multiset)(test_multimap))
     ((default_generator)(generate_collisions))
 )
-#endif
+
+UNORDERED_TEST(move_emplace_tests,
+    ((test_set_std_alloc)(test_multimap_std_alloc)(test_set)(test_map)
+    	(test_multiset)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
+
+UNORDERED_TEST(default_emplace_tests,
+    ((test_set_std_alloc)(test_multimap_std_alloc)(test_set)(test_map)
+    	(test_multiset)(test_multimap))
+    ((default_generator)(generate_collisions))
+)
 
 UNORDERED_TEST(map_tests,
     ((test_map))

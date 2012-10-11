@@ -20,8 +20,17 @@ namespace unnecessary_copy_tests
     public:
         static int copies;
         static int moves;
-        count_copies() : tag_(0) { ++copies; }
-        explicit count_copies(int tag) : tag_(tag) { ++copies; }
+        static int id_count;
+
+        count_copies() : tag_(0), id_(++id_count) {
+            ++copies;
+            trace_op("Default construct");
+        }
+
+        explicit count_copies(int tag) : tag_(tag), id_(++id_count) {
+            ++copies;
+            trace_op("Tag construct");
+        }
 
         // This bizarre constructor is an attempt to confuse emplace.
         //
@@ -33,17 +42,30 @@ namespace unnecessary_copy_tests
         // The second emplace should use the single argument contructor for
         // the key, and this constructor for the value.
         count_copies(count_copies const&, count_copies const& x)
-            : tag_(x.tag_) { ++copies; }
+            : tag_(x.tag_), id_(++id_count)
+        {
+            ++copies;
+            trace_op("Pair construct");
+        }
 
-        count_copies(count_copies const& x) : tag_(x.tag_) { ++copies; }
-        count_copies(BOOST_RV_REF(count_copies) x) : tag_(x.tag_) {
+        count_copies(count_copies const& x) : tag_(x.tag_), id_(++id_count)
+        {
+            ++copies;
+            trace_op("Copy construct");
+        }
+
+        count_copies(BOOST_RV_REF(count_copies) x) :
+            tag_(x.tag_), id_(++id_count)
+        {
             x.tag_ = -1; ++moves;
+            trace_op("Move construct");
         }
 
         count_copies& operator=(BOOST_COPY_ASSIGN_REF(count_copies) p) // Copy assignment
         {
             tag_ = p.tag_;
             ++copies;
+            trace_op("Copy assign");
             return *this;
         }
 
@@ -51,10 +73,21 @@ namespace unnecessary_copy_tests
         {
             tag_ = p.tag_;
             ++moves;
+            trace_op("Move assign");
             return *this;
         }
 
+        ~count_copies() {
+            trace_op("Destruct");
+        }
+        
+        void trace_op(char const* str) {
+            BOOST_LIGHTWEIGHT_TEST_OSTREAM << str << ": " << tag_
+                << " (#" << id_ << ")" <<std::endl;
+        }
+
         int tag_;
+        int id_;
     };
 
     bool operator==(count_copies const& x, count_copies const& y) {
@@ -69,6 +102,9 @@ namespace unnecessary_copy_tests
     void reset() {
         count_copies::copies = 0;
         count_copies::moves = 0;
+
+        BOOST_LIGHTWEIGHT_TEST_OSTREAM
+            << "\nReset\n" << std::endl;
     }
 }
 
@@ -122,6 +158,7 @@ namespace unnecessary_copy_tests
 {
     int count_copies::copies;
     int count_copies::moves;
+    int count_copies::id_count;
 
     template <class T>
     void unnecessary_copy_insert_test(T*)
@@ -337,7 +374,16 @@ namespace unnecessary_copy_tests
         // COPY_COUNT(1) would be okay here.
         reset();
         x.emplace();
+#   if BOOST_WORKAROUND(BOOST_MSVC, >= 1700)
+        // This is a little odd, Visual C++ 11 seems to move the pair, which
+        // results in one copy (for the const key) and one move (for the
+        // non-const mapped value). Since 'emplace(boost::move(a))' (see below)
+        // has the normal result, it must be some odd consequence of how
+        // Visual C++ 11 handles calling move for default arguments.
+        COPY_COUNT(3); MOVE_COUNT(1);
+#   else
         COPY_COUNT(2); MOVE_COUNT(0);
+#   endif
 #endif
 
         reset();

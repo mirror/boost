@@ -12,6 +12,7 @@
 #include "../helpers/random_values.hpp"
 #include "../helpers/tracker.hpp"
 #include "../helpers/metafunctions.hpp"
+#include "../objects/test.hpp"
 
 namespace rehash_tests
 {
@@ -36,6 +37,9 @@ void rehash_empty_test1(X*)
 
     x.rehash(0);
     BOOST_TEST(postcondition(x, 0));
+
+    x.rehash(10000000);
+    BOOST_TEST(postcondition(x, 10000000));
 }
 
 template <class X>
@@ -54,6 +58,10 @@ void rehash_empty_test2(X*, test::random_generator generator)
     tracker.compare(x);
 
     BOOST_TEST(postcondition(x, 10000));
+    
+    x.rehash(10000000);
+    tracker.compare(x);
+    BOOST_TEST(postcondition(x, 10000000));
 }
 
 template <class X>
@@ -73,7 +81,6 @@ void rehash_empty_test3(X*, test::random_generator generator)
 
     BOOST_TEST(postcondition(x, 0));
 }
-
 
 template <class X>
 void rehash_test1(X*, test::random_generator generator)
@@ -96,6 +103,35 @@ void rehash_test1(X*, test::random_generator generator)
 
     x.rehash(1000); BOOST_TEST(postcondition(x, 1000));
     tracker.compare(x);
+}
+
+template <class X>
+void reserve_empty_test1(X*)
+{
+    X x;
+
+    x.reserve(10000);
+    BOOST_TEST(x.bucket_count() >= 10000);
+
+    x.reserve(0);
+
+    x.reserve(10000000);
+    BOOST_TEST(x.bucket_count() >= 10000000);
+}
+
+template <class X>
+void reserve_empty_test2(X*)
+{
+    X x;
+    x.max_load_factor(0.25);
+
+    x.reserve(10000);
+    BOOST_TEST(x.bucket_count() >= 40000);
+
+    x.reserve(0);
+
+    x.reserve(10000000);
+    BOOST_TEST(x.bucket_count() >= 40000000);
 }
 
 template <class X>
@@ -165,34 +201,44 @@ void reserve_test2(X*, test::random_generator generator)
 }
 
 boost::unordered_set<int>* int_set_ptr;
-boost::unordered_multiset<int>* int_multiset_ptr;
-boost::unordered_map<int, int>* int_map_ptr;
+boost::unordered_multiset<test::object,
+    test::hash, test::equal_to,
+    test::allocator2<test::object> >* test_multiset_ptr;
+boost::unordered_map<test::movable, test::movable,
+    test::hash, test::equal_to,
+    test::allocator2<test::movable> >* test_map_ptr;
 boost::unordered_multimap<int, int>* int_multimap_ptr;
 
 using test::default_generator;
 using test::generate_collisions;
 
 UNORDERED_TEST(rehash_empty_test1,
-    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+    ((int_set_ptr)(test_multiset_ptr)(test_map_ptr)(int_multimap_ptr))
 )
 UNORDERED_TEST(rehash_empty_test2,
-    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+    ((int_set_ptr)(test_multiset_ptr)(test_map_ptr)(int_multimap_ptr))
     ((default_generator)(generate_collisions))
 )
 UNORDERED_TEST(rehash_empty_test3,
-    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+    ((int_set_ptr)(test_multiset_ptr)(test_map_ptr)(int_multimap_ptr))
     ((default_generator)(generate_collisions))
 )
 UNORDERED_TEST(rehash_test1,
-    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+    ((int_set_ptr)(test_multiset_ptr)(test_map_ptr)(int_multimap_ptr))
     ((default_generator)(generate_collisions))
 )
+UNORDERED_TEST(reserve_empty_test1,
+    ((int_set_ptr)(test_multiset_ptr)(test_map_ptr)(int_multimap_ptr))
+)
+UNORDERED_TEST(reserve_empty_test2,
+    ((int_set_ptr)(test_multiset_ptr)(test_map_ptr)(int_multimap_ptr))
+)
 UNORDERED_TEST(reserve_test1,
-    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+    ((int_set_ptr)(test_multiset_ptr)(test_map_ptr)(int_multimap_ptr))
     ((default_generator)(generate_collisions))
 )
 UNORDERED_TEST(reserve_test2,
-    ((int_set_ptr)(int_multiset_ptr)(int_map_ptr)(int_multimap_ptr))
+    ((int_set_ptr)(test_multiset_ptr)(test_map_ptr)(int_multimap_ptr))
     ((default_generator)(generate_collisions))
 )
 

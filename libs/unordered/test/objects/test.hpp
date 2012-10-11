@@ -18,6 +18,7 @@ namespace test
     // Note that the default hash function will work for any equal_to (but not
     // very well).
     class object;
+    class movable;
     class implicitly_convertible;
     class hash;
     class less;
@@ -25,6 +26,7 @@ namespace test
     template <class T> class allocator1;
     template <class T> class allocator2;
     object generate(object const*);
+    movable generate(movable const*);
     implicitly_convertible generate(implicitly_convertible const*);
 
     inline void ignore_variable(void const*) {}
@@ -67,6 +69,81 @@ namespace test
         }
     };
 
+    class movable : private counted_object
+    {
+        friend class hash;
+        friend class equal_to;
+        friend class less;
+        int tag1_, tag2_;
+        
+        BOOST_COPYABLE_AND_MOVABLE(movable)
+    public:
+        explicit movable(int t1 = 0, int t2 = 0) : tag1_(t1), tag2_(t2) {}
+        
+        movable(movable const& x) :
+            counted_object(x), tag1_(x.tag1_), tag2_(x.tag2_)
+        {
+            BOOST_TEST(x.tag1_ != -1);
+        }
+        
+        movable(BOOST_RV_REF(movable) x) :
+            counted_object(x), tag1_(x.tag1_), tag2_(x.tag2_)
+        {
+            BOOST_TEST(x.tag1_ != -1);
+            x.tag1_ = -1;
+            x.tag2_ = -1;
+        }
+
+        movable& operator=(BOOST_COPY_ASSIGN_REF(movable) x) // Copy assignment
+        {
+            BOOST_TEST(x.tag1_ != -1);
+            tag1_ = x.tag1_;
+            tag2_ = x.tag2_;
+            return *this;
+        }
+
+        movable& operator=(BOOST_RV_REF(movable) x) //Move assignment
+        {
+            BOOST_TEST(x.tag1_ != -1);
+            tag1_ = x.tag1_;
+            tag2_ = x.tag2_;
+            x.tag1_ = -1;
+            x.tag2_ = -1;
+            return *this;
+        }
+
+        ~movable() {
+            tag1_ = -1;
+            tag2_ = -1;
+        }
+
+        friend bool operator==(movable const& x1, movable const& x2) {
+            BOOST_TEST(x1.tag1_ != -1 && x2.tag1_ != -1);
+            return x1.tag1_ == x2.tag1_ && x1.tag2_ == x2.tag2_;
+        }
+
+        friend bool operator!=(movable const& x1, movable const& x2) {
+            BOOST_TEST(x1.tag1_ != -1 && x2.tag1_ != -1);
+            return x1.tag1_ != x2.tag1_ || x1.tag2_ != x2.tag2_;
+        }
+
+        friend bool operator<(movable const& x1, movable const& x2) {
+            BOOST_TEST(x1.tag1_ != -1 && x2.tag1_ != -1);
+            return x1.tag1_ < x2.tag1_ ||
+                (x1.tag1_ == x2.tag1_ && x1.tag2_ < x2.tag2_);
+        }
+
+        friend movable generate(movable const*) {
+            int* x = 0;
+            return movable(generate(x), generate(x));
+        }
+
+        friend std::ostream& operator<<(std::ostream& out, movable const& o)
+        {
+            return out<<"("<<o.tag1_<<","<<o.tag2_<<")";
+        }
+    };
+
     class implicitly_convertible : private counted_object
     {
         int tag1_, tag2_;
@@ -81,6 +158,11 @@ namespace test
             return object(tag1_, tag2_);
         }
 
+        operator movable() const
+        {
+            return movable(tag1_, tag2_);
+        }
+
         friend implicitly_convertible generate(implicitly_convertible const*) {
             int* x = 0;
             return implicitly_convertible(generate(x), generate(x));
@@ -92,6 +174,7 @@ namespace test
         }
     };
 
+    // Note: This is a deliberately bad hash function.
     class hash
     {
         int type_;
@@ -99,6 +182,17 @@ namespace test
         explicit hash(int t = 0) : type_(t) {}
 
         std::size_t operator()(object const& x) const {
+            switch(type_) {
+            case 1:
+                return x.tag1_;
+            case 2:
+                return x.tag2_;
+            default:
+                return x.tag1_ + x.tag2_; 
+            }
+        }
+
+        std::size_t operator()(movable const& x) const {
             switch(type_) {
             case 1:
                 return x.tag1_;
@@ -126,6 +220,10 @@ namespace test
         return hash()(x);
     }
 
+    std::size_t hash_value(test::movable const& x) {
+        return hash()(x);
+    }
+
     class less
     {
         int type_;
@@ -133,6 +231,17 @@ namespace test
         explicit less(int t = 0) : type_(t) {}
 
         bool operator()(object const& x1, object const& x2) const {
+            switch(type_) {
+            case 1:
+                return x1.tag1_ < x2.tag1_;
+            case 2:
+                return x1.tag2_ < x2.tag2_;
+            default:
+                return x1 < x2;
+            }
+        }
+
+        bool operator()(movable const& x1, movable const& x2) const {
             switch(type_) {
             case 1:
                 return x1.tag1_ < x2.tag1_;
@@ -159,6 +268,17 @@ namespace test
         explicit equal_to(int t = 0) : type_(t) {}
 
         bool operator()(object const& x1, object const& x2) const {
+            switch(type_) {
+            case 1:
+                return x1.tag1_ == x2.tag1_;
+            case 2:
+                return x1.tag2_ == x2.tag2_;
+            default:
+                return x1 == x2;
+            }
+        }
+
+        bool operator()(movable const& x1, movable const& x2) const {
             switch(type_) {
             case 1:
                 return x1.tag1_ == x2.tag1_;

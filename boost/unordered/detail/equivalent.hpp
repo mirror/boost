@@ -676,9 +676,9 @@ namespace boost { namespace unordered { namespace detail {
 
                     if(begin == group2) {
                         link_pointer end1 = group1->group_prev_;
-                        link_pointer end2 = group2->group_prev_;
+                        link_pointer end2 = end->group_prev_;
                         group1->group_prev_ = end2;
-                        group2->group_prev_ = end1;
+                        end->group_prev_ = end1;
                     }
                 }
             }
