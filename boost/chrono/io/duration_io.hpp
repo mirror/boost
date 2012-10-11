@@ -130,7 +130,7 @@ namespace boost
 #endif
         {
           typename std::basic_ostream<CharT, Traits>::sentry opfx(os);
-          if (opfx)
+          if (bool(opfx))
           {
             if (!std::has_facet<duration_put<CharT> >(os.getloc()))
             {
@@ -191,7 +191,7 @@ namespace boost
 #endif
       {
         typename std::basic_istream<CharT, Traits>::sentry ipfx(is);
-        if (ipfx)
+        if (bool(ipfx))
         {
           if (!std::has_facet<duration_get<CharT> >(is.getloc()))
           {
