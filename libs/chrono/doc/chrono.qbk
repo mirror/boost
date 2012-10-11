@@ -7274,7 +7274,8 @@ When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not availabl
 
 * [@http://svn.boost.org/trac/boost/ticket/7381 #7381] C++11 compliance: unresolved symbol when assigning a constexpr duration to a non-const local variable.
 * [@http://svn.boost.org/trac/boost/ticket/7479 #7479] Compiles fails with compilers supporting constexpr fails if the standard library doesn't provides the constexpr interface
-
+* [@http://svn.boost.org/trac/boost/ticket/7493 #7493] compile fail on intel-linux-12.1.3.0x because of bug on explicit bool conversion
+   
 [*Would not fix:]
 
 * [@http://svn.boost.org/trac/boost/ticket/6871 #6871] chrono_io.hpp: operator<<(ostream& os, ...) modifies the state of os.
