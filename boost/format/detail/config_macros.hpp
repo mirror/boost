@@ -80,6 +80,10 @@ namespace boost {
   // -end N.S. boost
 #endif // needs_using_declaration
 
+#if ! defined(BOOST_NO_STD_LOCALE)
+#include <locale>
+#endif
+
 
 // ***  hide std::locale if it doesnt exist. 
 // this typedef is either std::locale or int, avoids placing ifdefs everywhere
