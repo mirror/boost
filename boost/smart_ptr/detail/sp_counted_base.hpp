@@ -35,10 +35,10 @@
 #elif defined( __SNC__ )
 # include <boost/smart_ptr/detail/sp_counted_base_snc_ps3.hpp>
 
-#elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) )
+#elif defined( __GNUC__ ) && ( defined( __i386__ ) || defined( __x86_64__ ) ) && !defined(__PATHSCALE__)
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_x86.hpp>
 
-#elif defined( __GNUC__ ) && defined( __ia64__ ) && !defined( __INTEL_COMPILER )
+#elif defined( __GNUC__ ) && defined( __ia64__ ) && !defined( __INTEL_COMPILER ) && !defined(__PATHSCALE__)
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_ia64.hpp>
 
 #elif defined(__HP_aCC) && defined(__ia64)
@@ -50,10 +50,10 @@
 #elif defined( __MWERKS__ ) && defined( __POWERPC__ )
 # include <boost/smart_ptr/detail/sp_counted_base_cw_ppc.hpp>
 
-#elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) || defined( __ppc ) )
+#elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) || defined( __ppc ) ) && !defined(__PATHSCALE__)
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_ppc.hpp>
 
-#elif defined( __GNUC__ ) && ( defined( __mips__ ) || defined( _mips ) )
+#elif defined( __GNUC__ ) && ( defined( __mips__ ) || defined( _mips ) ) && !defined(__PATHSCALE__)
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_mips.hpp>
 
 #elif defined( BOOST_SP_HAS_SYNC )
