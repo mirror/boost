@@ -31,9 +31,9 @@ struct div_t {
 
 inline div_t muldivmod(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t m)
 {
-    static const int bits =
+    const int bits =
         ::std::numeric_limits< ::boost::uintmax_t>::digits / 2;
-    static const ::boost::uintmax_t mask = (::boost::uintmax_t(1) << bits) - 1;
+    const ::boost::uintmax_t mask = (::boost::uintmax_t(1) << bits) - 1;
     typedef ::boost::uint_t<bits>::fast digit_t;
 
     int shift = std::numeric_limits< ::boost::uintmax_t>::digits - 1
