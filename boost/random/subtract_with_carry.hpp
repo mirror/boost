@@ -354,7 +354,7 @@ public:
                                                boost::uint32_t, value)
     { init_modulus(); seed(value); }
     /**
-     * Creates a new \subtract_with_carry_01_engine and seeds with with values
+     * Creates a new \subtract_with_carry_01_engine and seeds with values
      * produced by seq.generate().
      */
     BOOST_RANDOM_DETAIL_SEED_SEQ_CONSTRUCTOR(subtract_with_carry_01_engine,
