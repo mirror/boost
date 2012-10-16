@@ -147,6 +147,8 @@ public:
             // Vol. 2, 3rd ed., page 106
             x[i] = (f * (x[i-1] ^ (x[i-1] >> (w-2))) + i) & mask;
         }
+
+        normalize_state();
     }
     
     /**
@@ -157,13 +159,7 @@ public:
         detail::seed_array_int<w>(seq, x);
         i = n;
 
-        // fix up the state if it's all zeroes.
-        if((x[0] & (~static_cast<UIntType>(0) << r)) == 0) {
-            for(std::size_t j = 1; j < n; ++j) {
-                if(x[j] != 0) return;
-            }
-            x[0] = static_cast<UIntType>(1) << (w-1);
-        }
+        normalize_state();
     }
 
     /** Sets the state of the generator using values from an iterator range. */
@@ -173,13 +169,7 @@ public:
         detail::fill_array_int<w>(first, last, x);
         i = n;
 
-        // fix up the state if it's all zeroes.
-        if((x[0] & (~static_cast<UIntType>(0) << r)) == 0) {
-            for(std::size_t j = 1; j < n; ++j) {
-                if(x[j] != 0) return;
-            }
-            x[0] = static_cast<UIntType>(1) << (w-1);
-        }
+        normalize_state();
     }
   
     /** Returns the smallest value that the generator can produce. */
@@ -330,6 +320,35 @@ private:
             *(last - sz) = (y0 & upper_mask) | (y1 & lower_mask);
             y0 = y1;
         }
+    }
+
+    /**
+     * Converts an arbitrary array into a valid generator state.
+     * First we normalize x[0], so that it contains the same
+     * value we would get by running the generator forwards
+     * and then in reverse.  (The low order r bits are redundant).
+     * Then, if the state consists of all zeros, we set the
+     * high order bit of x[0] to 1.  This function only needs to
+     * be called by seed, since the state transform preserves
+     * this relationship.
+     */
+    void normalize_state()
+    {
+        const UIntType upper_mask = (~static_cast<UIntType>(0)) << r;
+        const UIntType lower_mask = ~upper_mask;
+        UIntType y0 = x[m-1] ^ x[n-1];
+        if(y0 & (static_cast<UIntType>(1) << (w-1))) {
+            y0 = ((y0 ^ a) << 1) | 1;
+        } else {
+            y0 = y0 << 1;
+        }
+        x[0] = (x[0] & upper_mask) | (y0 & lower_mask);
+
+        // fix up the state if it's all zeroes.
+        for(std::size_t j = 0; j < n; ++j) {
+            if(x[j] != 0) return;
+        }
+        x[0] = static_cast<UIntType>(1) << (w-1);
     }
 
     /**
