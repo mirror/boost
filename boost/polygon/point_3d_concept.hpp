@@ -99,6 +99,20 @@ namespace boost { namespace polygon{
     return lvalue;
   }
 
+  struct y_p3d_x : gtl_yes {};
+
+  template <typename point_type>
+  typename enable_if< typename gtl_and<y_p3d_x, typename is_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type,
+                       typename point_3d_coordinate_type<point_type>::type >::type
+  x(const point_type& point) { return get(point, HORIZONTAL); }
+
+  struct y_p3d_y : gtl_yes {};
+
+  template <typename point_type>
+  typename enable_if< typename gtl_and<y_p3d_y, typename is_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type,
+                       typename point_3d_coordinate_type<point_type>::type >::type
+  y(const point_type& point) { return get(point, VERTICAL); }
+
   struct y_p3d_z : gtl_yes {};
 
   template <typename point_type>
@@ -106,16 +120,16 @@ namespace boost { namespace polygon{
                        typename point_3d_coordinate_type<point_type>::type >::type
   z(const point_type& point) { return get(point, PROXIMAL); }
 
-  struct y_p3d_x : gtl_yes {};
+  struct y_p3d_x2 : gtl_yes {};
 
   template <typename point_type, typename coordinate_type>
-  typename enable_if< typename gtl_and<y_p3d_x, typename is_mutable_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type, void>::type
+  typename enable_if< typename gtl_and<y_p3d_x2, typename is_mutable_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type, void>::type
   x(point_type& point, coordinate_type value) { set(point, HORIZONTAL, value); }
 
-  struct y_p3d_y : gtl_yes {};
+  struct y_p3d_y2 : gtl_yes {};
 
   template <typename point_type, typename coordinate_type>
-  typename enable_if< typename gtl_and<y_p3d_y, typename is_mutable_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type, void>::type
+  typename enable_if< typename gtl_and<y_p3d_y2, typename is_mutable_point_3d_concept<typename geometry_concept<point_type>::type>::type>::type, void>::type
   y(point_type& point, coordinate_type value) { set(point, VERTICAL, value); }
 
   struct y_p3d_z2 : gtl_yes {};
@@ -267,4 +281,3 @@ namespace boost { namespace polygon{
 }
 }
 #endif
-

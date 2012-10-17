@@ -3113,37 +3113,6 @@ int main() {
     std::cout << equivalence(pwhs, polys) << std::endl;
   }
   {
-    typedef point_3d_data<int> Point3D;
-    Point3D p3d1(0, 1, 3), p3d2(0, 1, 2);
-    if(equivalence(p3d1, p3d2)) return 1;
-    if(euclidean_distance(p3d1, p3d2) != 1) return 1;
-    if(euclidean_distance(p3d1, p3d2, PROXIMAL) != 1) return 1;
-    if(manhattan_distance(p3d1, p3d2) != 1) return 1;
-    assign(p3d1, p3d2);
-    if(!equivalence(p3d1, p3d2)) return 1;
-    p3d1 = construct<Point3D>(x(p3d1), y(p3d1), z(p3d1));
-    if(!equivalence(p3d1, p3d2)) return 1;
-    convolve(p3d1, p3d2);
-    if(equivalence(p3d1, p3d2)) return 1;
-    deconvolve(p3d1, p3d2);
-    if(!equivalence(p3d1, p3d2)) return 1;
-    if(get(p3d1, PROXIMAL) != 2) return 1;
-    scale(p3d1, anisotropic_scale_factor<double>(2, 2, 2));
-    if(equivalence(p3d1, p3d2)) return 1;
-    scale_down(p3d1, 2);
-    if(!equivalence(p3d1, p3d2)) return 1;
-    scale_up(p3d1, 2);
-    if(equivalence(p3d1, p3d2)) return 1;
-    scale_down(p3d1, 2);
-    set(p3d1, PROXIMAL, 3);
-    if(equivalence(p3d1, p3d2)) return 1;
-    axis_transformation atr = axis_transformation::END;
-    transform(p3d1, atr);
-    if(z(p3d1) != -3) return 1;
-    z(p3d1, 2);
-    if(!equivalence(p3d1, p3d2)) return 1;
-  }
-  {
     polygon_90_set_data<int> ps1(HORIZONTAL), ps2(VERTICAL);
     ps1 += rectangle_data<int>(0, 0, 10, 120);
     assign(ps1, ps2);
@@ -3236,16 +3205,6 @@ int main() {
     ps45.insert(polygon_90_with_holes_data<int>());
     polygon_with_holes_data<int> pwh;
     snap_to_45(pwh);
-  }
-  {
-    point_data<int> pt(1,2);
-    point_3d_data<int> pt3d(1,2,3);
-    equivalence(pt, pt3d);
-    deconvolve(pt, pt3d);
-    manhattan_distance(pt, pt3d);
-    move(pt, HORIZONTAL, 1);
-    scale(pt, anisotropic_scale_factor<double>(2, 2, 2));
-    pt = pt3d;
   }
   {
     polygon_90_set_data<int> ps90_1, ps90_2;
@@ -3710,7 +3669,6 @@ int main() {
     segment_data<int> sarray[2];
     sarray[0] = segment_data<int>(point_data<int>(0,0), point_data<int>(10,10));
     sarray[1] = segment_data<int>(point_data<int>(10,0), point_data<int>(0,10));
-    std::iterator_traits<segment_data<int>*>::value_type s = sarray[0];
     intersect_segments(segs, sarray, sarray+2);
     std::cout << segs.size() << std::endl;
     assert_s(segs.size() == 4, "intersection3");
