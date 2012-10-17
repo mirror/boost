@@ -3220,8 +3220,8 @@ int main() {
     bloat(ps90_1, 1);
     scale_up(ps90_1, 2);
     scale_down(ps90_1, 2);
-    scale(ps90_1, anisotropic_scale_factor<double>(2, 2, 2));
-    scale(ps90_1, anisotropic_scale_factor<double>(0.5, 0.5, 0.5));
+    scale(ps90_1, anisotropic_scale_factor<double>(2, 2));
+    scale(ps90_1, anisotropic_scale_factor<double>(0.5, 0.5));
     axis_transformation atr;
     transform(ps90_1, atr);
     std::cout << area(ps90_1) << std::endl;
