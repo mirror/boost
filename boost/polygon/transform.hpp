@@ -5,90 +5,39 @@
     Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
     http://www.boost.org/LICENSE_1_0.txt).
 */
+
 #ifndef BOOST_POLYGON_TRANSFORM_HPP
 #define BOOST_POLYGON_TRANSFORM_HPP
+
 #include "isotropy.hpp"
-#include "point_3d_concept.hpp"
-namespace boost { namespace polygon{
+
+namespace boost {
+namespace polygon{
 // Transformation of Coordinate Systems
 // Enum meaning:
-// Select which direction_3d to change the positive direction of each
+// Select which direction_2d to change the positive direction of each
 // axis in the old coordinate system to map it to the new coordiante system.
-// The first direction_3d listed for each enum is the direction to map the
+// The first direction_2d listed for each enum is the direction to map the
 // positive horizontal direction to.
-// The second direction_3d listed for each enum is the direction to map the
+// The second direction_2d listed for each enum is the direction to map the
 // positive vertical direction to.
-// The third direction_3d listed for each enum is the direction to map the
-// positive proximal direction to.
 // The zero position bit (LSB) indicates whether the horizontal axis flips
 // when transformed.
 // The 1st postion bit indicates whether the vertical axis flips when
 // transformed.
 // The 2nd position bit indicates whether the horizontal and vertical axis
 // swap positions when transformed.
-// Note that the first eight values are the complete set of 2D transforms.
-// The 3rd position bit indicates whether the proximal axis flips when
-// transformed.
-// The 4th position bit indicates whether the proximal and horizontal axis are
-// swapped when transformed.  It changes the meaning of the 2nd position bit
-// to mean that the horizontal and vertical axis are swapped in their new
-// positions, naturally.
-// The 5th position bit (MSB) indicates whether the proximal and vertical axis
-// are swapped when transformed.  It is mutually exclusive with the 4th postion
-// bit, making the maximum legal value 48 (decimal).  It similarly changes the
-// meaning of the 2nd position bit to mean that the horizontal and vertical are
-// swapped in their new positions.
 // Enum Values:
-// 000000 EAST NORTH UP
-// 000001 WEST NORTH UP
-// 000010 EAST SOUTH UP
-// 000011 WEST SOUTH UP
-// 000100 NORTH EAST UP
-// 000101 SOUTH EAST UP
-// 000110 NORTH WEST UP
-// 000111 SOUTH WEST UP
-// 001000 EAST NORTH DOWN
-// 001001 WEST NORTH DOWN
-// 001010 EAST SOUTH DOWN
-// 001011 WEST SOUTH DOWN
-// 001100 NORTH EAST DOWN
-// 001101 SOUTH EAST DOWN
-// 001110 NORTH WEST DOWN
-// 001111 SOUTH WEST DOWN
-// 010000 UP NORTH EAST
-// 010001 DOWN NORTH EAST
-// 010010 UP SOUTH EAST
-// 010011 DOWN SOUTH EAST
-// 010100 NORTH UP EAST
-// 010101 SOUTH UP EAST
-// 010110 NORTH DOWN EAST
-// 010111 SOUTH DOWN EAST
-// 011000 UP NORTH WEST
-// 011001 DOWN NORTH WEST
-// 011010 UP SOUTH WEST
-// 011011 DOWN SOUTH WEST
-// 011100 NORTH UP WEST
-// 011101 SOUTH UP WEST
-// 011110 NORTH DOWN WEST
-// 011111 SOUTH DOWN WEST
-// 100000 EAST UP NORTH
-// 100001 WEST UP NORTH
-// 100010 EAST DOWN NORTH
-// 100011 WEST DOWN NORTH
-// 100100 UP EAST NORTH
-// 100101 DOWN EAST NORTH
-// 100110 UP WEST NORTH
-// 100111 DOWN WEST NORTH
-// 101000 EAST UP SOUTH
-// 101001 WEST UP SOUTH
-// 101010 EAST DOWN SOUTH
-// 101011 WEST DOWN SOUTH
-// 101100 UP EAST SOUTH
-// 101101 DOWN EAST SOUTH
-// 101110 UP WEST SOUTH
-// 101111 DOWN WEST SOUTH
+//   000 EAST NORTH
+//   001 WEST NORTH
+//   010 EAST SOUTH
+//   011 WEST SOUTH
+//   100 NORTH EAST
+//   101 SOUTH EAST
+//   110 NORTH WEST
+//   111 SOUTH WEST
 class axis_transformation {
-public:
+ public:
   // Enum Names and values
   // NULL_TRANSFORM = 0, BEGIN_TRANSFORM = 0,
   // ENU = 0, EAST_NORTH_UP = 0, EN = 0, EAST_NORTH = 0,
@@ -404,97 +353,137 @@ public:
 
 private:
   scale_factor_type scale_[3];
-
-  //friend std::ostream& operator<< (std::ostream& o, const Scale& r);
-  //friend std::istream& operator>> (std::istream& i, Scale& r);
 };
 
-// Transformation object, stores and provides services for transformations
-
-// Transformation object stores an axistransformation, a scale factor and a translation.
-// The tranlation is the position of the origin of the new system of coordinates in the old system.
-// The scale scales the coordinates before they are transformed.
+// Transformation object, stores and provides services for transformations.
+// Consits of axis transformation, scale factor and translation.
+// The tranlation is the position of the origin of the new coordinate system of
+// in the old system. Coordinates are scaled before they are transformed.
 template <typename coordinate_type>
 class transformation {
-public:
-  transformation();
-  transformation(axis_transformation atr);
-  transformation(axis_transformation::ATR atr);
+ public:
+  transformation() : atr_(), p_(0, 0) {}
+  transformation(axis_transformation atr) : atr_(atr), p_(0, 0) {}
+  transformation(axis_transformation::ATR atr) : atr_(atr), p_(0, 0) {}
+  transformation(const transformation& tr) : atr_(tr.atr_), p_(tr.p_) {}
+
   template <typename point_type>
-  transformation(const point_type& p);
+  transformation(const point_type& p) : atr_(), p_(0, 0) {
+    set_translation(p);
+  }
+
   template <typename point_type>
-  transformation(axis_transformation atr, const point_type& p);
+  transformation(axis_transformation atr,
+                 const point_type& p) : atr_(atr), p_(0, 0) {
+    set_translation(p);
+  }
+
   template <typename point_type>
-  transformation(axis_transformation atr, const point_type& referencePt, const point_type& destinationPt);
-  transformation(const transformation& tr);
+  transformation(axis_transformation atr,
+                 const point_type& referencePt,
+                 const point_type& destinationPt) : atr_(), p_(0, 0) {
+    transformation<coordinate_type> tmp(referencePt);
+    transformation<coordinate_type> rotRef(atr);
+    transformation<coordinate_type> tmpInverse = tmp.inverse();
+    point_type decon(referencePt);
+    deconvolve(decon, destinationPt);
+    transformation<coordinate_type> displacement(decon);
+    tmp += rotRef;
+    tmp += tmpInverse;
+    tmp += displacement;
+    (*this) = tmp;
+  }
 
   // equivalence operator
-  bool operator==(const transformation& tr) const;
+  bool operator==(const transformation& tr) const {
+    return (atr_ == tr.atr_) && (p_ == tr.p_);
+  }
 
   // inequivalence operator
-  bool operator!=(const transformation& tr) const;
+  bool operator!=(const transformation& tr) const {
+    return !(*this == tr);
+  }
 
   // ordering
-  bool operator<(const transformation& tr) const;
+  bool operator<(const transformation& tr) const {
+    return (atr_ < tr.atr_) || ((atr_ == tr.atr_) && (p_ < tr.p_));
+  }
 
   // concatenation operator
-  transformation operator+(const transformation& tr) const;
+  transformation operator+(const transformation& tr) const {
+    transformation<coordinate_type> retval(*this);
+    return retval+=tr;
+  }
 
   // concatenate this with that
-  const transformation& operator+=(const transformation& tr);
+  const transformation& operator+=(const transformation& tr) {
+    coordinate_type x, y;
+    transformation<coordinate_type> inv = inverse();
+    inv.transform(x, y);
+    p_.set(HORIZONTAL, p_.get(HORIZONTAL) + x);
+    p_.set(VERTICAL, p_.get(VERTICAL) + y);
+    //concatenate axis transforms
+    atr_ += tr.atr_;
+    return *this;
+  }
 
   // get the axis_transformation portion of this
-  inline axis_transformation get_axis_transformation() const {return atr_;}
+  axis_transformation get_axis_transformation() const {
+    return atr_;
+  }
 
   // set the axis_transformation portion of this
-  void set_axis_transformation(const axis_transformation& atr);
+  void set_axis_transformation(const axis_transformation& atr) {
+    atr_ = atr;
+  }
 
   // get the translation portion of this as a point3d
   template <typename point_type>
-  void get_translation(point_type& translation) const;
+  void get_translation(point_type& p) const {
+    assign(p, p_);
+  }
 
   // set the translation portion of this with a point3d
   template <typename point_type>
-  void set_translation(const point_type& p);
+  void set_translation(const point_type& p) {
+    assign(p_, p);
+  }
 
   // apply the 2D portion of this transformation to the two coordinates given
-  void transform(coordinate_type& x, coordinate_type& y) const;
-
-  // apply this transformation to the three coordinates given
-  void transform(coordinate_type& x, coordinate_type& y, coordinate_type& z) const;
+  void transform(coordinate_type& x, coordinate_type& y) const {
+    y -= p_.get(VERTICAL);
+    x -= p_.get(HORIZONTAL);
+    atr_.transform(x, y);
+  }
 
   // invert this transformation
-  transformation& invert();
+  transformation& invert() {
+    coordinate_type x = p_.get(HORIZONTAL), y = p_.get(VERTICAL);
+    atr_.transform(x, y);
+    x *= -1;
+    y *= -1;
+    p_ = point_data<coordinate_type>(x, y);
+    atr_.invert();
+    return *this;
+  }
 
   // get the inverse of this transformation
-  transformation inverse() const;
+  transformation inverse() const {
+    transformation<coordinate_type> ret_val(*this);
+    return ret_val.invert();
+  }
 
-  inline void get_directions(direction_2d& horizontal_dir,
-                             direction_2d& vertical_dir) const {
-    return atr_.get_directions(horizontal_dir, vertical_dir); }
+  void get_directions(direction_2d& horizontal_dir,
+                      direction_2d& vertical_dir) const {
+    return atr_.get_directions(horizontal_dir, vertical_dir);
+  }
 
-  inline void get_directions(direction_3d& horizontal_dir,
-                             direction_3d& vertical_dir,
-                             direction_3d& proximal_dir) const {
-    return atr_.get_directions(horizontal_dir, vertical_dir, proximal_dir); }
-
-private:
+ private:
   axis_transformation atr_;
-  point_3d_data<coordinate_type> p_;
-
-  template <typename point_type>
-  void construct_dispatch(axis_transformation atr, point_type p, point_concept tag);
-  template <typename point_type>
-  void construct_dispatch(axis_transformation atr, point_type p, point_3d_concept tag);
-  template <typename point_type>
-  void construct_dispatch(axis_transformation atr, point_type rp, point_type dp, point_concept tag);
-  template <typename point_type>
-  void construct_dispatch(axis_transformation atr, point_type rp, point_type dp, point_3d_concept tag);
-
-  //friend std::ostream& operator<< (std::ostream& o, const transformation& tr);
-  //friend std::istream& operator>> (std::istream& i, transformation& tr);
+  point_data<coordinate_type> p_;
 };
-}
-}
+}  // polygon
+}  // boost
+
 #include "detail/transform_detail.hpp"
 #endif
