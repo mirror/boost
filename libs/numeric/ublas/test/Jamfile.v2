@@ -205,4 +205,11 @@ test-suite numeric/uBLAS
       ]
       [ run test_coordinate_matrix_inplace_merge.cpp 
       ]
+      [ run test_banded_storage_layout.cpp
+        :
+        :
+        :
+        :
+        :
+      ]
     ;
