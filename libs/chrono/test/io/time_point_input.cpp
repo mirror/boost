@@ -20,6 +20,20 @@ void test_good(std::string str, D res)
   BOOST_TEST( (tp == boost::chrono::time_point<Clock, D>(res)));
 }
 
+template <typename D>
+void test_good_system_clock(std::string str, D res)
+{
+  typedef boost::chrono::system_clock Clock;
+
+  std::istringstream in(str + boost::chrono::clock_string<Clock, char>::since());
+  boost::chrono::time_point<Clock, D> tp;
+  in >> tp;
+  BOOST_TEST(in.eof());
+  BOOST_TEST(!in.fail());
+  std::cout << "Expected= " << boost::chrono::time_point<Clock, D>(res) << std::endl;
+  std::cout << "Obtained= " << tp << std::endl;
+  BOOST_TEST( (tp == boost::chrono::time_point<Clock, D>(res)));
+}
 template <typename Clock, typename D>
 void test_fail(const char* str, D)
 {
@@ -91,6 +105,47 @@ void check_all()
 
 }
 
+void check_all_system_clock()
+{
+  using namespace boost::chrono;
+  using namespace boost;
+
+  //test_good_system_clock ("1970-01-01 02:00:00.000000 +0000", hours(2));
+  //test_good_system_clock ("5000 hours", hours(5000));
+//  test_good<Clock> ("5000 minutes", minutes(5000));
+//  test_good<Clock> ("5000 seconds", seconds(5000));
+//  test_good<Clock> ("1 seconds", seconds(1));
+//  test_good<Clock> ("1 second", seconds(1));
+//  test_good<Clock> ("-1 seconds", seconds(-1));
+//  test_good<Clock> ("0 second", seconds(0));
+//  test_good<Clock> ("0 seconds", seconds(0));
+//  test_good<Clock> ("5000 milliseconds", milliseconds(5000));
+//  test_good<Clock> ("5000 microseconds", microseconds(5000));
+//  test_good<Clock> ("5000 nanoseconds", nanoseconds(5000));
+//  test_good<Clock> ("5000 deciseconds", duration<boost::int_least64_t, deci> (5000));
+//  test_good<Clock> ("5000 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (5000));
+//
+//  test_good<Clock> ("5000 h", hours(5000));
+//#if BOOST_CHRONO_VERSION==2
+//  test_good<Clock>("5000 min", minutes(5000));
+//#else
+//  test_good<Clock> ("5000 m", minutes(5000));
+//#endif
+//  test_good<Clock> ("5000 s", seconds(5000));
+//  test_good<Clock> ("5000 ms", milliseconds(5000));
+//  test_good<Clock> ("5000 ns", nanoseconds(5000));
+//  test_good<Clock> ("5000 ds", duration<boost::int_least64_t, deci> (5000));
+//  test_good<Clock> ("5000 [1/30]s", duration<boost::int_least64_t, ratio<1, 30> > (5000));
+//
+//  test_good<Clock> ("5000 milliseconds", seconds(5));
+//  test_good<Clock> ("5 milliseconds", nanoseconds(5000000));
+//  test_good<Clock> ("4000 ms", seconds(4));
+//  test_fail<Clock> ("3001 ms", seconds(3));
+//  test_fail_epoch<Clock> ("3001 ms", seconds(3));
+//  test_fail_epoch<Clock> ("3001 ms since", seconds(3));
+
+}
+
 int main()
 {
   std::cout << "high_resolution_clock=" << std::endl;
@@ -99,8 +154,8 @@ int main()
   std::cout << "steady_clock=" << std::endl;
   check_all<boost::chrono::steady_clock> ();
 #endif
-  //std::cout << "system_clock=";
-  //check_all<boost::chrono::system_clock>();
+  std::cout << "system_clock=";
+  check_all_system_clock();
 
 #if defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
   std::cout << "thread_clock="<< std::endl;

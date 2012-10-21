@@ -24,6 +24,9 @@
 #include <locale>
 #include <string.h>
 
+#define  BOOST_CHRONO_INTERNAL_TIMEGM defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+//#define  BOOST_CHRONO_INTERNAL_TIMEGM
+
 namespace boost
 {
   namespace chrono
@@ -332,7 +335,7 @@ namespace boost
 
     namespace detail
     {
-#if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+#if defined BOOST_CHRONO_INTERNAL_TIMEGM
     int is_leap(int year)
     {
       if(year % 400 == 0)
@@ -412,7 +415,7 @@ namespace boost
 
           timezone tz = get_timezone(os);
           std::locale loc = os.getloc();
-          time_t t = system_clock::to_time_t(tp);
+          time_t t = system_clock::to_time_t(time_point_cast<system_clock::duration>(tp));
           std::tm tm;
           if (tz == timezone::local)
           {
@@ -629,12 +632,14 @@ namespace boost
             minutes min = detail::extract_z(i, eof, err, ct);
             if (err & std::ios_base::failbit) goto exit;
             time_t t;
-#if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+#if defined BOOST_CHRONO_INTERNAL_TIMEGM
             t = detail::internal_timegm(&tm);
 #else
             t = timegm(&tm);
 #endif
-            tp = system_clock::from_time_t(t) - min + round<microseconds> (duration<double> (sec));
+            tp = time_point_cast<Duration>(
+                system_clock::from_time_t(t) - min + round<microseconds> (duration<double> (sec))
+                );
           }
           else
           {
@@ -652,7 +657,7 @@ namespace boost
               }
               It i(is);
               It eof;
-              minu = extract_z(i, eof, err, ct);
+              minu = detail::extract_z(i, eof, err, ct);
               if (err & std::ios_base::failbit) goto exit;
               if (fz + 2 != pe)
               {
@@ -668,14 +673,20 @@ namespace boost
             tm.tm_isdst = -1;
             time_t t;
             if (tz == timezone::utc || fz != pe)
-#if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+            {
+#if defined BOOST_CHRONO_INTERNAL_TIMEGM
               t = detail::internal_timegm(&tm);
 #else
               t = timegm(&tm);
 #endif
+            }
             else
+            {
               t = mktime(&tm);
-            tp = system_clock::from_time_t(t) - minu;
+            }
+            tp = time_point_cast<Duration>(
+                system_clock::from_time_t(t) - minu
+                );
           }
         }
         BOOST_CATCH (...)
