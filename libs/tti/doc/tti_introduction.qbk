@@ -7,23 +7,23 @@
 
 [section:tti_intro Introduction]
 
-Welcome to the Type Traits Introspection library version 1.5.
+Welcome to the Boost Type Traits Introspection library, abbreviated TTI.
 
-The Type Traits Introspection library, or TTI for short, is a library 
-of macros generating metafunctions, and a set of parallel nullary type 
-metafunctions, which provide the ability to introspect by name the 
-elements of a type at compile time. 
+TTI is a library of macros generating metafunctions which provide the 
+ability to introspect by name the elements of a type at compile time.
 
 The name of the library is chosen because the library offers 
 compile time functionality on a type, similar to the Boost Type Traits library, 
 and because the functionality the library offers is the ability to introspect 
-a type about the existence of a specific element. 
+a type about the existence of a specific element within that type.
 
 I use the word "introspect" in a very broad sense here. Normally language 
 introspection means initially asking for information to be returned by name, 
 which can then further be used to introspect for more specific information.
 In the TTI library one must always supply the name, and use the functionality 
-for the correct type of inner element to find out if the particular named entity exists.
+provided for the correct type of inner element to find out if that particular 
+named entity exists.
+
 You may prefer the term "query" instead of "introspection" to denote what this 
 library does, but I use terminology based on the word "introspect" throughout 
 this documentation.
@@ -36,20 +36,13 @@ The functionality of the library may be summed up as:
   subsequently invoked to determine whether or not the 
   element exists within the type. These generated metafunctions 
   will be called "macro metafunctions" in the documentation.
-* Provide a set of named metafunctions which can operate 
-  on the generated macro metafunctions using a different syntax
-  which some programmers may find easier to use. These named 
-  metafunctions will be called "nullary type metafunctions"
-  in the documentation. This set of nullary type metafunctions
-  can be completely ignored by programmers who do not find 
-  their syntax useful since they have the exact
-  same functionality as the macro metafunctions above.
    
 The library is dependent on Boost PP, Boost MPL, 
 Boost Type Traits, and Boost Function Types. 
+
 The library is also dependent on the variadic macro support 
-of the Boost PP library currently in the sandbox 
-if the variadic macros in the library are used.
+of the Boost PP library if the variadic macros in the library 
+are used. 
 
 The library is a header only library.
 
@@ -80,7 +73,7 @@ If the general header file `boost/tti/tti_vm.hpp`
 or the specific header file 
 [headerref boost/tti/vm_has_template_check_params.hpp `vm_has_template_check_params.hpp`],
 are used, the library uses variadic macros and is also dependent 
-on the variadic macro support of the Boost PP library currently in the Boost trunk.
+on the variadic macro support of the Boost PP library.
 
 [endsect]
 

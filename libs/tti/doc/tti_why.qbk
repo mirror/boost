@@ -25,7 +25,7 @@ library is Boost MPL, where there is functionality, in the form of macros and me
 to determine whether an enclosing type has a particular nested type or nested 
 class template. An example with a library which was never submitted to Boost 
 is the Concept Traits Library from which much of the functionality of this 
-library, related to type traits, was taken and improved upon.
+library, related to type traits, was taken and expanded.
 
 It may also be possible that some other Boost libraries, highly dependent 
 on advanced template metaprogramming techniques, also have internal 

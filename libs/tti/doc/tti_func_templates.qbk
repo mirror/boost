@@ -34,9 +34,9 @@ more orthogonal, since both class templates and function templates would be supp
 My efforts to discuss this on the major C++ newsgroups have 
 met with arguments both against its practical usage and the justification
 that one can pass a function template to another template nested in a non-template 
-class. But of course we can do the same thing with class templates, which is in fact
-what Boost MPL does to pass templates as metadata, yet we still have template template 
-parameters as class templates.
+class, which serves as a type. But of course we can do the same thing with class templates, 
+which is in fact what Boost MPL does to pass templates as metadata, yet we still have 
+template template parameters as class templates.
 
 Nonetheless the fact that we can pass class templates as a template parameter but not
 function templates as a template parameter is the major factor why there is no really good
@@ -48,11 +48,12 @@ There is, however, an alternate but less certain way of introspecting a function
 I will endeavor to explain why this way is not currently included in the TTI library, 
 but first I will explain what it is.
 
-It is possible to check whether some particular instantiation of a nested function 
-template exists at compile-time without generating a compiler error. While this does
-not prove that the nested function template does not exist, since the instantiation itself may be 
-incorrect and fail even when the nested function template exists, it provides a partially
-flawed means of checking.
+It is possible to check whether some particular [*instantiation] of a nested function 
+template exists at compile-time without generating a compiler error. Although checking if 
+some particular instantiation of a nested function template exists at compile-time does
+not prove that the nested function template itself does or does not exist, 
+since the instantiation itself may be incorrect and fail even when the nested function 
+template exists, it provides a partial, if flawed, means of checking.
 
 The code to do this for member function templates looks like this 
 ( similar code also exists for static member function templates ):
@@ -73,9 +74,9 @@ The code to do this for member function templates looks like this
     };
     
 where 'SomeFuncTemplateName' is the name of the nested function template, 
-followed by some parameters to instantiate it. The 'class T' is the 
-type of the instantiated member function template as a member function, and 
-'class C' is the type of the enclosing class.
+followed by some parameters to instantiate it. The 'class C' is the type of 
+the enclosing class and the 'class T' is the type of the instantiated member 
+function template as a member function.
 
 As an example if we had:
 

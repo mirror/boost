@@ -7,11 +7,11 @@
 
 [section:tti_functionality General Functionality]
 
-The elements about which a template metaprogrammer might be interested in finding 
-out at compile time about a type are:
+The elements of a type about which a template metaprogrammer might be interested in finding 
+out at compile time are:
 
 * Does it have a nested type with a particular name ?
-* Does it have a nested type with a particular name which is a typedef for a particular type ?
+* Does it have a nested type with a particular name which is also a typedef for a particular type ?
 * Does it have a nested class template with a particular name ?
 * Does it have a nested class template with a particular name and a particular signature ?
 * Does it have a member function with a particular name and a particular signature ?
@@ -20,7 +20,17 @@ out at compile time about a type are:
 * Does it have a static member data with a particular name and of a particular type ?
 
 These are the compile-time questions which the TTI library answers. It does this 
-by creating metafunctions which can be used at compile-time.
+by creating metafunctions which can be used at compile-time using C++ macros.
+Each of the metafunctions created returns a compile time constant bool value
+which answers one of the above questions at compile time. When the particular 
+element above exists the value is 'true', or more precisely boost::mpl::true_,
+while if the element does not exist the value is 'false', or more precisely
+boost::mpl::false_. In either case the type of this value is boost::mpl::bool_.
+
+This constant bool value, in the terminology of the Boost MPL library, is called an 'integral 
+constant wrapper' and the metafunction generated is called a 'numerical metafunction'. The 
+results from calling the metafunction can be passed to other metafunctions for type selection,
+the most popular of these being the boolean-valued operators in the Boost MPL library.
 
 All of the questions above attempt to find an answer about an inner element with 
 a particular name. In order to do this using template metaprogramming, macros are used 
@@ -51,7 +61,7 @@ Once either of these two macro forms are used for a particular type of inner ele
 corresponding macro metafunction works exactly the same way and has the exact same functionality. 
 
 In the succeeding documentation all macro metafunctions will be referred by their simple form 
-name, but remember that the complex form can alternatively always be used instead.
+name, but remember that the complex form can always be used instead.
 
 [heading Macro Metafunction Name Generation]
 
@@ -59,26 +69,29 @@ For the simple macro form, even though it is fairly easy to remember the algorit
 the generated metafunction is named, TTI also provides, for each macro metafunction,
 a corresponding 'naming' macro which the end-user can use and whose sole purpose 
 is to expand to the metafunction name. The naming macro for each macro metafunction has the form:
-'corresponding-macro'_GEN(name). As an example, BOOST_TTI_HAS_TYPE(MyType) creates a metafunction 
+'corresponding-macro'_GEN(name). 
+
+As an example, BOOST_TTI_HAS_TYPE(MyType) creates a metafunction 
 which looks for a nested type called 'MyType' within some enclosing type. The name of the metafunction
 generated, given our algorithm above is 'has_type_MyType'. A corresponding macro called 
 BOOST_TTI_HAS_TYPE_GEN, invoked as BOOST_TTI_HAS_TYPE_GEN(MyType) in our example, expands to the 
-same 'has_type_MyType'. These name generating macros, for each of the metafunction generating macros, 
+same 'has_type_MyType' name. These name generating macros, for each of the metafunction generating macros, 
 are purely a convenience for end-users who find using them easier than remembering the name-generating 
 algorithm given above.
 
 [section:tti_functionality_nm_gen Macro metafunction name generation considerations]
 
 Because having a double underscore ( __ ) in a name is reserved by the C++ implementation,
-creating C++ identifiers with double underscores should not avoided by the end-user. When using 
+creating C++ identifiers with double underscores should be avoided by the end-user. When using 
 a TTI macro to generate a metafunction using the simple macro form, TTI appends a single 
 underscore to the macro name preceding the name of the element that is being introspected.
 The reason for doing this is because Boost discourages as non=portable C++ identifiers with mixed
 case letters and the underscore then becomes the normal way to separate parts of an identifier 
 name so that it looks understandable. Because of this decision to use the underscore to generate
 the metafunction name from the macro name, any inner element starting with an underscore will cause
-the identifier for the metafunction name being generated to contain a double underscore. A rule
-to avoid this problem is:
+the identifier for the metafunction name being generated to contain a double underscore. 
+
+A rule to avoid this problem is:
 
 * When the name of the inner element to be introspected begins with an underscore, use
 the complex macro form, where the name of the metafunction is specifically given.
@@ -177,7 +190,7 @@ if the metafunction being generated by TTI is named 'MyMetafunction' using the c
 macro form, do not create any C++ construct with an identifier starting with 'MyMetaFunction',
 such as 'MyMetaFunction_Enumeration' or 'MyMetaFunctionHelper' in the same scope. 
 All names starting wih the metafunction name in the current scope should be considered 
-out of bounds for the programmer using TTI to use.
+out of bounds for the programmer using TTI.
 
 [endsect]
 

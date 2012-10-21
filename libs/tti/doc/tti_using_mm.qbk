@@ -5,14 +5,14 @@
   http://www.boost.org/LICENSE_1_0.txt).
 ]
 
-[section:tti_usingMM Using the Macro Metafunctions]
+[section:tti_usingMM An example using the Macro Metafunctions]
 [#sectti_usingMM]
 
 Using the macro metafunctions can be illustrated by first creating some hypothetical
 user-defined type with corresponding nested types and other inner elements.
 With this type we can illustrate the use of the macro metafunctions. This is 
 just meant to serve as a model for what a type T might entail from within 
-a class or function template.
+a class or function template where 'T' is a type passed to the template.
 
  // An enclosing type
 
