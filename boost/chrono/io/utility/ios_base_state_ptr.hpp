@@ -53,12 +53,10 @@ namespace boost
     {
       xalloc_key_initializer()
       {
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
         if (!detail::xalloc_key_holder<T>::initialized)
         {
           detail::xalloc_key_holder<T>::value = std::ios_base::xalloc();
           detail::xalloc_key_holder<T>::initialized = true;
-          std::cout << __FILE__ << ":" << __LINE__ << " " << detail::xalloc_key_holder<T>::value <<std::endl;
         }
       }
     };
@@ -81,7 +79,6 @@ namespace boost
       explicit ios_state_ptr(std::ios_base& ios) :
         ios_(ios)
       {
-        std::cout << __FILE__ << ":" << __LINE__ << std::endl;
 
       }
       /**
