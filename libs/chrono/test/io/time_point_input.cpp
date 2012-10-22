@@ -26,13 +26,16 @@ void test_good_system_clock(std::string str, D res)
 {
   typedef boost::chrono::system_clock Clock;
 
-  std::istringstream in(str + boost::chrono::clock_string<Clock, char>::since());
+  std::istringstream in(str);
   boost::chrono::time_point<Clock, D> tp;
   in >> tp;
   BOOST_TEST(in.eof());
   BOOST_TEST(!in.fail());
+  std::cout << "Input=    " << str << std::endl;
   std::cout << "Expected= " << boost::chrono::time_point<Clock, D>(res) << std::endl;
   std::cout << "Obtained= " << tp << std::endl;
+  std::cout << "Expected= " << boost::chrono::duration_cast<boost::chrono::nanoseconds>(boost::chrono::time_point<Clock, D>(res).time_since_epoch()).count() << std::endl;
+  std::cout << "Obtained= " << boost::chrono::duration_cast<boost::chrono::nanoseconds>(tp.time_since_epoch()).count() << std::endl;
   BOOST_TEST( (tp == boost::chrono::time_point<Clock, D>(res)));
 }
 #endif
@@ -143,7 +146,7 @@ int main()
   std::cout << "steady_clock=" << std::endl;
   check_all<boost::chrono::steady_clock> ();
 #endif
-  std::cout << "system_clock=";
+  std::cout << "system_clock=" << std::endl;
 #if BOOST_CHRONO_VERSION >= 2
   check_all_system_clock();
 #else
