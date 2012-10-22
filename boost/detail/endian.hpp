@@ -57,7 +57,7 @@
    || defined(_POWER) || defined(__powerpc__) \
    || defined(__ppc__) || defined(__hpux) || defined(__hppa) \
    || defined(_MIPSEB) || defined(_POWER) \
-   || defined(__s390__)
+   || defined(__s390__) || defined(__ARMEB__)
 # define BOOST_BIG_ENDIAN
 # define BOOST_BYTE_ORDER 4321
 #elif defined(__i386__) || defined(__alpha__) \
@@ -66,7 +66,9 @@
    || defined(_M_ALPHA) || defined(__amd64) \
    || defined(__amd64__) || defined(_M_AMD64) \
    || defined(__x86_64) || defined(__x86_64__) \
-   || defined(_M_X64) || defined(__bfin__)
+   || defined(_M_X64) || defined(__bfin__) \
+   || defined(__ARMEL__) \ 
+   || (defined(_WIN32) && defined(__ARM__) && defined(_MSC_VER)) // ARM Windows CE don't define anything reasonably unique, but there are no big-endian Windows versions 
 
 # define BOOST_LITTLE_ENDIAN
 # define BOOST_BYTE_ORDER 1234
@@ -76,3 +78,4 @@
 
 
 #endif
+
