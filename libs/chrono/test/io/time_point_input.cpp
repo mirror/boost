@@ -147,7 +147,7 @@ int main()
   check_all<boost::chrono::steady_clock> ();
 #endif
   std::cout << "system_clock=" << std::endl;
-#if BOOST_CHRONO_VERSION >= 2
+#if BOOST_CHRONO_VERSION >= 2  && defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
   check_all_system_clock();
 #else
   check_all<boost::chrono::system_clock> ();

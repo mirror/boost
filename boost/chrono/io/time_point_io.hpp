@@ -708,6 +708,7 @@ namespace boost
 #endif
     } // detail
 
+#if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
     template <class CharT, class Traits, class Duration>
     std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& os, const time_point<system_clock, Duration>& tp)
@@ -838,6 +839,7 @@ namespace boost
       //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       return os;
     }
+#endif
 
     namespace detail
     {
@@ -901,6 +903,7 @@ namespace boost
 
     } // detail
 
+#if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
     template <class CharT, class Traits, class Duration>
     std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, time_point<system_clock, Duration>& tp)
@@ -1034,6 +1037,7 @@ namespace boost
       }
       return is;
     }
+#endif
 #endif //UTC
   } // chrono
 

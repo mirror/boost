@@ -41,7 +41,7 @@ void test_good_symbol(const char* str, D d)
 {
   std::ostringstream out;
   boost::chrono::time_point<Clock, D> tp(d);
-#if BOOST_CHRONO_VERSION==2
+#if BOOST_CHRONO_VERSION>=2
   out << boost::chrono::duration_fmt(boost::chrono::duration_style::symbol) << tp;
 #else
   out << boost::chrono::duration_short << tp;
@@ -96,7 +96,7 @@ void check_all()
   using namespace boost::chrono;
   using namespace boost;
 
-#if BOOST_CHRONO_VERSION==2
+#if BOOST_CHRONO_VERSION>=2
   test_good<Clock>("2 hours", hours(2), duration_style::prefix);
   test_good<Clock>("2 h", hours(2), duration_style::symbol);
 #endif
@@ -114,7 +114,7 @@ void check_all()
   test_good_prefix<Clock> ("2 [1/30]seconds", duration<boost::int_least64_t, ratio<1, 30> > (2));
 
   test_good_symbol<Clock> ("2 h", hours(2));
-#if BOOST_CHRONO_VERSION==2
+#if BOOST_CHRONO_VERSION>=2
   test_good_symbol<Clock>("2 min", minutes(2));
 #else
   test_good_symbol<Clock> ("2 m", minutes(2));
@@ -126,7 +126,7 @@ void check_all()
   test_good_symbol<Clock> ("2 [1/30]s", duration<boost::int_least64_t, ratio<1, 30> > (2));
 }
 
-#if BOOST_CHRONO_VERSION==2
+#if BOOST_CHRONO_VERSION >= 2
 void check_all_system_clock()
 {
   using namespace boost::chrono;
@@ -166,7 +166,7 @@ int main()
   check_all<boost::chrono::steady_clock> ();
 #endif
   std::cout << "system_clock=" << std::endl;
-#if BOOST_CHRONO_VERSION==2
+#if BOOST_CHRONO_VERSION >= 2  && defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
   check_all_system_clock();
 #else
   check_all<boost::chrono::system_clock> ();
