@@ -12,7 +12,7 @@ project boost/chrono
     : source-location ../src
     : requirements
         <target-os>freebsd:<linkflags>"-lrt" 
-        <target-os>linux:<linkflags>"-lrt" 
+        <target-os>linux:<linkflags>"-lrt -lpthread" 
         <toolset>pgi:<linkflags>"-lrt" 
         #<threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
