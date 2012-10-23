@@ -636,10 +636,6 @@ Windows with
 
 * MSVC 10.0
 
-Cygwin 1.7 with
-
-* GCC 4.3.4
-
 MinGW with
 
 * GCC 4.5.0
@@ -649,12 +645,36 @@ MinGW with
 * GCC 4.6.0
 * GCC 4.6.0 -std=c++0x
 
+Ubuntu with
+* GCC 4.4.6
+* GCC 4.4.6 -std=c++0x
+* GCC 4.5.4
+* GCC 4.5.4 -std=c++0x
+* GCC 4.6.1
+* GCC 4.6.1 -std=c++0x
+* Intel 12.1.3
+* Intel 12.1.3 -std=c++0x
+
 OsX with
 
 * GCC 4.1.2
+* GCC 4.6.2
+* GCC 4.6.2 -std=c++0x
+* GCC 4.7.0
+* GCC 4.7.0 -std=c++0x
+* GCC 4.7.1
+* GCC 4.7.1 -std=c++0x
 * clang 1.6
 * clang 2.9
 * clang 2.9 -std=c++0x
+* clang 3.0
+* clang 3.0 -std=c++0x
+* clang 3.1
+* clang 3.1 -std=c++0x
+* clang 3.1 -std=c++0x -stdlib=libc++
+* clang 3.2
+* clang 3.2 -std=c++11
+* clang 3.2 -std=c++11 -stdlib=libc++
 
 
 The committed code is tested with much more compilers. There are two compilers (VACPP and Borland) that don't provide the needed features.
@@ -1397,7 +1417,21 @@ This simple I/O will make duration so much more accessible to programmers.
 
 [endsect]
 
-[section:system_clock_time_point_io system_clock::time_point]
+[section:system_clock_time_point_io `system_clock::time_point`]
+
+[warning 
+
+This feature has been disable defining `BOOST_CHRONO_DONT_PROVIDE_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT` until a fix for the following ticket is found:
+
+- [@http://svn.boost.org/trac/boost/ticket/7547 #7547] time_point<system_clock> input version 2 fails to compile 
+
+- [@http://svn.boost.org/trac/boost/ticket/7546 #7546] time_point<system_clock> output version 2 fails to compile 
+
+In this case the io operators behave like any time_point as defined in next section.
+
+In order to enable this features on compilers working with, you will need to define `BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT`.
+
+]
 
 __system_clock is special. It is the only clock that has conversions between its `time_point` and `time_t`. C subsequently relates time_t to the [@http://en.wikipedia.org/wiki/Gregorian_calendar Gregorian calendar] via `ctime`, `gmtime`, `localtime`, and `strftime`. Neither C, nor POSIX relate `time_t` to any calendar other than the [@http://en.wikipedia.org/wiki/Gregorian_calendar Gregorian calendar]. ISO 8601 is specified only in terms of the [@http://en.wikipedia.org/wiki/Gregorian_calendar Gregorian calendar].
 
@@ -2562,6 +2596,26 @@ Since this version, if you want to include the deprecated features yet you could
 These deprecated features will be only available until boost 1.58, that is you have 1 year and a half to move to the new features.
 
 [endsect]
+
+
+[section:system_clock_time_point time_point<system_clock,D> specialization limitation]
+
+[warning
+
+The time_point<system_clock,D> formatter/parser specializations don't work yet. It has been disable defining `BOOST_CHRONO_DONT_PROVIDE_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT` until a fix for the following ticket is found:
+
+- [@http://svn.boost.org/trac/boost/ticket/7547 #7547] time_point<system_clock> input version 2 fails to compile 
+
+- [@http://svn.boost.org/trac/boost/ticket/7546 #7546] time_point<system_clock> output version 2 fails to compile 
+
+In this case the io operators behave like any time_point as if the specialization was removed.
+
+In order to enable this features on compilers working with, you will need to define `BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT`.
+
+]
+
+[endsect]
+
 [section:version Version]
 
 `BOOST_CHRONO_VERSION` defines the Boost.Chrono version. 
@@ -6284,6 +6338,8 @@ __returns The epoch string associated to the __thread_clock.
 
         // system_clock I/O
 
+    #if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
+    
         template <class CharT, class Traits, class __Duration>
           basic_ostream<CharT, Traits>&
           operator<<(basic_ostream<CharT, Traits>& os,
@@ -6293,7 +6349,8 @@ __returns The epoch string associated to the __thread_clock.
           basic_istream<CharT, Traits>&
           operator>>(basic_istream<CharT, Traits>& is,
                      time_point<system_clock, __Duration>& tp);
-
+    #endif
+    
         // Other Clocks I/O
 
         template <class CharT, class Traits, class __Clock, class __Duration>
@@ -6308,6 +6365,8 @@ __returns The epoch string associated to the __thread_clock.
 
     }
     }
+
+
 
 [section:manip I/O Manipulators]
 [section:time_fmt1 Non Member Function `time_fmt(__timezone)` ]
@@ -6340,6 +6399,21 @@ __returns: An unspecified object that when streamed to a `basic_ostream<CharT, T
 [section:streams I/O Streams Operations]
 
 [section:system_clock `system_clock`]
+
+[warning
+
+The time_point<system_clock,D> formatter/parser specializations don't work yet. It has been disable defining `BOOST_CHRONO_DONT_PROVIDE_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT` until a fix for the following ticket is found:
+
+- [@http://svn.boost.org/trac/boost/ticket/7547 #7547] time_point<system_clock> input version 2 fails to compile 
+
+- [@http://svn.boost.org/trac/boost/ticket/7546 #7546] time_point<system_clock> output version 2 fails to compile 
+
+In this case the io operators behave like any time_point as if the specialization was removed.
+
+In order to enable this features on compilers working with, you will need to define `BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT`.
+
+]
+
 [section:op_out Non Member Function `operator<<()`]
 
         template <class CharT, class Traits, class __Duration>
@@ -7253,7 +7327,7 @@ All the units are given using the suffix "s" following the System International 
 
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section [*Version 2.0.0, December 1, 2012 - 1.52] ]
+[section [*Version 2.0.0, October 23, 2012 - 1.52] ]
 
 [*New Features:]
 
@@ -7275,12 +7349,31 @@ When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not availabl
 * [@http://svn.boost.org/trac/boost/ticket/7381 #7381] C++11 compliance: unresolved symbol when assigning a constexpr duration to a non-const local variable.
 * [@http://svn.boost.org/trac/boost/ticket/7479 #7479] Compiles fails with compilers supporting constexpr fails if the standard library doesn't provides the constexpr interface
 * [@http://svn.boost.org/trac/boost/ticket/7493 #7493] compile fail on intel-linux-12.1.3.0x because of bug on explicit bool conversion
+* [@http://svn.boost.org/trac/boost/ticket/7542 #7542] Missing -lpthread in chrono/io tester Sandia-clang-trunk
    
 [*Would not fix:]
 
 * [@http://svn.boost.org/trac/boost/ticket/6871 #6871] chrono_io.hpp: operator<<(ostream& os, ...) modifies the state of os.
 
   * The neww io interface provided in version 2 solves this issue. You should move to the new version. 
+
+[*Known bugs not fixed yet:]
+
+* [@http://svn.boost.org/trac/boost/ticket/7525 #7525] Wrong clock_string<system_clock>::since() on Windows 
+
+[warning
+
+The time_point<system_clock,D> formatter/parser specializations don't work yet. It has been disable defining `BOOST_CHRONO_DONT_PROVIDE_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT` until a fix for the following ticket is found:
+
+- [@http://svn.boost.org/trac/boost/ticket/7547 #7547] time_point<system_clock> input version 2 fails to compile 
+
+- [@http://svn.boost.org/trac/boost/ticket/7546 #7546] time_point<system_clock> output version 2 fails to compile 
+
+In this case the io operators behave like any time_point as if the specialization was removed.
+
+In order to enable this features on compilers working with, you will need to define `BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT`.
+
+]
 
 [endsect] [/section [*Version 2.0.0] ]
 
@@ -7795,8 +7888,8 @@ Thanks to Ronald Bock for reporting Valgind issues and for the many suggestions 
 [heading For later releases]
 
 * Include Stopwatches.
-* Include chrono::date as defined by Howard Hinnant [@http://home.roadrunner.com/~hinnant/bloomington/date.html here].
 * Add User defined literals for some durations.
+* Include chrono::date as defined by Howard Hinnant [@http://home.roadrunner.com/~hinnant/bloomington/date.html here].
 
 [endsect]
 
