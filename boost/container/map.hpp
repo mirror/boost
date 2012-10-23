@@ -951,9 +951,9 @@ class multimap
    //!
    //! <b>Complexity</b>: Linear in N.
    template <class InputIterator>
-   multimap(ordered_range_t ordered_range, InputIterator first, InputIterator last, const Compare& comp = Compare(),
+   multimap(ordered_range_t ordered_range_, InputIterator first, InputIterator last, const Compare& comp = Compare(),
          const allocator_type& a = allocator_type())
-      : m_tree(ordered_range, first, last, comp, a)
+      : m_tree(ordered_range_, first, last, comp, a)
    {}
 
    //! <b>Effects</b>: Copy constructs a multimap.

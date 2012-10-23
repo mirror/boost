@@ -365,7 +365,7 @@ class flat_set
    //! <b>Throws</b>: Nothing.
    //!
    //! <b>Complexity</b>: Constant.
-   size_type capacity() const          
+   size_type capacity() const
       { return m_flat_tree.capacity(); }
 
    //! <b>Effects</b>: If n is less than or equal to capacity(), this call has no
@@ -377,8 +377,8 @@ class flat_set
    //!
    //! <b>Note</b>: If capacity() is less than "count", iterators and references to
    //!   to values might be invalidated.
-   void reserve(size_type count)      
-      { m_flat_tree.reserve(count);   }
+   void reserve(size_type count_)
+      { m_flat_tree.reserve(count_);   }
 
    //! <b>Effects</b>: Tries to deallocate the excess of memory created
    //    with previous allocations. The size of the vector is unchanged
@@ -1045,7 +1045,7 @@ class flat_multiset
    //! <b>Throws</b>: Nothing.
    //!
    //! <b>Complexity</b>: Constant.
-   size_type capacity() const          
+   size_type capacity() const
       { return m_flat_tree.capacity(); }
 
    //! <b>Effects</b>: If n is less than or equal to capacity(), this call has no
@@ -1057,8 +1057,8 @@ class flat_multiset
    //!
    //! <b>Note</b>: If capacity() is less than "count", iterators and references to
    //!   to values might be invalidated.
-   void reserve(size_type count)      
-      { m_flat_tree.reserve(count);   }
+   void reserve(size_type count_)
+      { m_flat_tree.reserve(count_);   }
 
    //! <b>Effects</b>: Tries to deallocate the excess of memory created
    //    with previous allocations. The size of the vector is unchanged

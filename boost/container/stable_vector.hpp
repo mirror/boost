@@ -1094,7 +1094,7 @@ class stable_vector
       if(n > this->max_size())
          throw std::bad_alloc();
 
-      size_type size         = this->size();  
+      size_type size_        = this->size();  
       size_type old_capacity = this->capacity();
       if(n > old_capacity){
          index_traits_type::initialize_end_node(this->index, this->internal_data.end_node, n);
@@ -1106,8 +1106,8 @@ class stable_vector
             index_traits_type::fix_up_pointers_from(this->index, this->index.begin());
          }
          //Now fill pool if data is not enough
-         if((n - size) > this->internal_data.pool_size){
-            this->priv_increase_pool((n - size) - this->internal_data.pool_size);
+         if((n - size_) > this->internal_data.pool_size){
+            this->priv_increase_pool((n - size_) - this->internal_data.pool_size);
          }
       }
    }

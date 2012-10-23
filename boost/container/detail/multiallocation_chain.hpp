@@ -126,22 +126,22 @@ class basic_multiallocation_chain
       return ret;
    }
 
-   void splice_after(iterator after_this, basic_multiallocation_chain &x, iterator before_begin, iterator before_end)
-   {  slist_impl_.splice_after(after_this, x.slist_impl_, before_begin, before_end);   }
+   void splice_after(iterator after_this, basic_multiallocation_chain &x, iterator before_begin_, iterator before_end)
+   {  slist_impl_.splice_after(after_this, x.slist_impl_, before_begin_, before_end);   }
 
-   void splice_after(iterator after_this, basic_multiallocation_chain &x, iterator before_begin, iterator before_end, size_type n)
-   {  slist_impl_.splice_after(after_this, x.slist_impl_, before_begin, before_end, n);   }
+   void splice_after(iterator after_this, basic_multiallocation_chain &x, iterator before_begin_, iterator before_end, size_type n)
+   {  slist_impl_.splice_after(after_this, x.slist_impl_, before_begin_, before_end, n);   }
 
    void splice_after(iterator after_this, basic_multiallocation_chain &x)
    {  slist_impl_.splice_after(after_this, x.slist_impl_);   }
 
-   void incorporate_after(iterator after_this, void_pointer begin , iterator before_end)
+   void incorporate_after(iterator after_this, void_pointer begin_ , iterator before_end)
    {
-      slist_impl_.incorporate_after(after_this, to_node_ptr(begin), to_node_ptr(before_end));
+      slist_impl_.incorporate_after(after_this, to_node_ptr(begin_), to_node_ptr(before_end));
    }
 
-   void incorporate_after(iterator after_this, void_pointer begin, void_pointer before_end, size_type n)
-   {  slist_impl_.incorporate_after(after_this, to_node_ptr(begin), to_node_ptr(before_end), n);   }
+   void incorporate_after(iterator after_this, void_pointer begin_, void_pointer before_end, size_type n)
+   {  slist_impl_.incorporate_after(after_this, to_node_ptr(begin_), to_node_ptr(before_end), n);   }
 
    void swap(basic_multiallocation_chain &x)
    {  slist_impl_.swap(x.slist_impl_);   }
@@ -217,11 +217,11 @@ class transform_multiallocation_chain
    void swap(transform_multiallocation_chain &other_chain)
    {  holder_.swap(other_chain.holder_); }
 
-   void splice_after(iterator after_this, transform_multiallocation_chain &x, iterator before_begin, iterator before_end, size_type n)
-   {  holder_.splice_after(after_this.base(), x.holder_, before_begin.base(), before_end.base(), n);  }
+   void splice_after(iterator after_this, transform_multiallocation_chain &x, iterator before_begin_, iterator before_end, size_type n)
+   {  holder_.splice_after(after_this.base(), x.holder_, before_begin_.base(), before_end.base(), n);  }
 
-   void incorporate_after(iterator after_this, pointer begin, pointer before_end, size_type n)
-   {  holder_.incorporate_after(after_this.base(), begin, before_end, n);  }
+   void incorporate_after(iterator after_this, pointer begin_, pointer before_end, size_type n)
+   {  holder_.incorporate_after(after_this.base(), begin_, before_end, n);  }
 
    pointer pop_front()
    {  return cast(holder_.pop_front());  }
