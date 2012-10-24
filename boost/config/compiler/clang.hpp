@@ -29,6 +29,8 @@
 // Clang supports "long long" in all compilation modes.
 #define BOOST_HAS_LONG_LONG
 
+#define BOOST_SYMBOL_VISIBLE __attribute__((__visibility__("default")))
+
 #if !__has_feature(cxx_auto_type)
 #  define BOOST_NO_CXX11_AUTO_DECLARATIONS
 #  define BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS
