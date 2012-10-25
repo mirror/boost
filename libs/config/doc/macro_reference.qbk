@@ -368,6 +368,9 @@ the names of the header needed to access hash_set and hash_map;
 `BOOST_STD_EXTENSION_NAMESPACE` will provide the namespace in which the two
 class templates reside.
 ]]
+[[`BOOST_HAS_INT128`][Compiler][
+The compiler has `__int128` and `unsigned __int128` as native types which are distinct
+from all the regular C++ integer types.]]
 [[`BOOST_HAS_LOG1P`][Platform][
 The platform has the functions `log1p`, `log1pf` and `log1pl` in `<math.h>`.
 ]]

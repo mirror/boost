@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.74.0">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="../index.html" title="Boost.Config">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="guidelines_for_boost_authors.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section boost_config_boost_macro_reference" lang="en">
+<div class="section boost_config_boost_macro_reference">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_config.boost_macro_reference"></a><a class="link" href="boost_macro_reference.html" title="Boost Macro Reference">Boost Macro Reference</a>
 </h2></div></div></div>
@@ -46,7 +46,7 @@
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code">Macros
       for libraries with separate source code</a></span></dt>
 </dl></div>
-<div class="section boost_config_boost_macro_reference_macros_that_describe_c__03_defects" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_that_describe_c__03_defects">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_c__03_defects"></a><a name="config_defects"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__03_defects" title="Macros that describe C++03 defects">Macros
       that describe C++03 defects</a>
@@ -1338,7 +1338,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section boost_config_boost_macro_reference_macros_that_describe_optional_features" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_that_describe_optional_features">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_optional_features"></a><a name="config_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features" title="Macros that describe optional features">Macros
       that describe optional features</a>
@@ -1510,6 +1510,26 @@
                   will contain the names of the header needed to access hash_set
                   and hash_map; <code class="computeroutput"><span class="identifier">BOOST_STD_EXTENSION_NAMESPACE</span></code>
                   will provide the namespace in which the two class templates reside.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_HAS_INT128</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Compiler
+                </p>
+              </td>
+<td>
+                <p>
+                  The compiler has <code class="computeroutput"><span class="identifier">__int128</span></code>
+                  and <code class="computeroutput"><span class="keyword">unsigned</span> <span class="identifier">__int128</span></code>
+                  as native types which are distinct from all the regular C++ integer
+                  types.
                 </p>
               </td>
 </tr>
@@ -2247,7 +2267,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section boost_config_boost_macro_reference_macros_that_describe_possible_c___future_features" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_that_describe_possible_c___future_features">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_possible_c___future_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c___future_features" title="Macros that describe possible C++ future features">Macros
       that describe possible C++ future features</a>
@@ -2287,7 +2307,7 @@
 </tr></tbody>
 </table></div>
 </div>
-<div class="section boost_config_boost_macro_reference_macros_that_describe_c__11_features_not_supported" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_that_describe_c__11_features_not_supported">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_c__11_features_not_supported"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__11_features_not_supported" title="Macros that describe C++11 features not supported">Macros
       that describe C++11 features not supported</a>
@@ -2941,7 +2961,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section boost_config_boost_macro_reference_macros_that_allow_use_of_c__11_features_with_c__03_compilers" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_that_allow_use_of_c__11_features_with_c__03_compilers">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_allow_use_of_c__11_features_with_c__03_compilers"></a><a name="config_11_for_03"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_allow_use_of_c__11_features_with_c__03_compilers" title="Macros that allow use of C++11 features with C++03 compilers">Macros
       that allow use of C++11 features with C++03 compilers</a>
@@ -3085,7 +3105,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section boost_config_boost_macro_reference_boost_helper_macros" lang="en">
+<div class="section boost_config_boost_macro_reference_boost_helper_macros">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_helper_macros"></a><a name="config_helpers"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros" title="Boost Helper Macros">Boost
       Helper Macros</a>
@@ -3481,7 +3501,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section boost_config_boost_macro_reference_boost_informational_macros" lang="en">
+<div class="section boost_config_boost_macro_reference_boost_informational_macros">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_informational_macros"></a><a name="config_info_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros" title="Boost Informational Macros">Boost
       Informational Macros</a>
@@ -3759,7 +3779,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section boost_config_boost_macro_reference_boost_deprecated_macros" lang="en">
+<div class="section boost_config_boost_macro_reference_boost_deprecated_macros">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_deprecated_macros"></a><a name="deprecated_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_deprecated_macros" title="Boost Deprecated Macros">Boost
       Deprecated Macros</a>
@@ -4704,7 +4724,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code" title="Macros for libraries with separate source code">Macros
       for libraries with separate source code</a>
@@ -4721,14 +4741,14 @@
         The following macros and helper headers are of use to authors whose libraries
         include separate source code, and are intended to address several issues:
       </p>
-<div class="itemizedlist"><ul type="disc">
-<li>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
+<li class="listitem">
             Controlling shared library symbol visibility
           </li>
-<li>
+<li class="listitem">
             Fixing the ABI of the compiled library
           </li>
-<li>
+<li class="listitem">
             Selecting which compiled library to link against based upon the compilers
             settings
           </li>
@@ -4737,7 +4757,7 @@
         See <a href="http://svn.boost.org/trac/boost/wiki/Guidelines/Separate" target="_top">Guidelines
         for Authors of Boost Libraries Containing Separate Source</a>
       </p>
-<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_macros_controlling_shared_library_symbol_visibility" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_macros_controlling_shared_library_symbol_visibility">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.macros_controlling_shared_library_symbol_visibility"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.macros_controlling_shared_library_symbol_visibility" title="Macros controlling shared library symbol visibility">Macros
         controlling shared library symbol visibility</a>
@@ -4892,7 +4912,7 @@
 <span class="special">...</span>
 </pre>
 </div>
-<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_abi_fixing" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_abi_fixing">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing" title="ABI Fixing">ABI
         Fixing</a>
@@ -4950,7 +4970,7 @@
           to point to their own prefix/suffix headers if they so wish.
         </p>
 </div>
-<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_automatic_library_selection" lang="en">
+<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_automatic_library_selection">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection" title="Automatic library selection">Automatic
         library selection</a>
@@ -4977,7 +4997,7 @@
         </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl>
+<dl class="variablelist">
 <dt><span class="term"><code class="computeroutput"><span class="identifier">BOOST_LIB_NAME</span></code></span></dt>
 <dd><p>
                 Required: An identifier containing the basename of the library, for
