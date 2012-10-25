@@ -3,9 +3,18 @@
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
+
+//===-------------------------- locale ------------------------------------===//
 //
+//                     The LLVM Compiler Infrastructure
+//
+// This file is dual licensed under the MIT and the University of Illinois Open
+// Source Licenses. See LICENSE.TXT for details.
+//
+//===----------------------------------------------------------------------===//
+
 // This code was adapted by Vicente from Howard Hinnant's experimental work
-// on chrono i/o to Boost
+// on chrono i/o to Boost and some functions from libc++/locale to emulate the missing time_get::get()
 
 #ifndef BOOST_CHRONO_IO_TIME_POINT_IO_HPP
 #define BOOST_CHRONO_IO_TIME_POINT_IO_HPP
@@ -23,12 +32,320 @@
 #include <locale>
 #include <string.h>
 
+#define  BOOST_CHRONO_INTERNAL_TIMEGM defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+//#define  BOOST_CHRONO_INTERNAL_TIMEGM 1
+
+#define  BOOST_CHRONO_USES_INTERNAL_TIME_GET
+
 namespace boost
 {
   namespace chrono
   {
     namespace detail
     {
+
+      template <class CharT, class InputIterator = std::istreambuf_iterator<CharT> >
+      struct time_get
+      {
+        std::time_get<CharT> const &that_;
+        time_get(std::time_get<CharT> const& that) : that_(that) {}
+
+        typedef std::time_get<CharT> facet;
+        typedef typename facet::iter_type iter_type;
+        typedef typename facet::char_type char_type;
+        typedef std::basic_string<char_type> string_type;
+
+        static int
+        get_up_to_n_digits(
+            InputIterator& b, InputIterator e,
+            std::ios_base::iostate& err,
+            const std::ctype<CharT>& ct,
+            int n)
+        {
+            // Precondition:  n >= 1
+            if (b == e)
+            {
+                err |= std::ios_base::eofbit | std::ios_base::failbit;
+                return 0;
+            }
+            // get first digit
+            CharT c = *b;
+            if (!ct.is(std::ctype_base::digit, c))
+            {
+                err |= std::ios_base::failbit;
+                return 0;
+            }
+            int r = ct.narrow(c, 0) - '0';
+            for (++b, --n; b != e && n > 0; ++b, --n)
+            {
+                // get next digit
+                c = *b;
+                if (!ct.is(std::ctype_base::digit, c))
+                    return r;
+                r = r * 10 + ct.narrow(c, 0) - '0';
+            }
+            if (b == e)
+                err |= std::ios_base::eofbit;
+            return r;
+        }
+
+
+        void get_day(
+            int& d,
+            iter_type& b, iter_type e,
+            std::ios_base::iostate& err,
+            const std::ctype<char_type>& ct) const
+        {
+            int t = get_up_to_n_digits(b, e, err, ct, 2);
+            if (!(err & std::ios_base::failbit) && 1 <= t && t <= 31)
+                d = t;
+            else
+                err |= std::ios_base::failbit;
+        }
+
+        void get_month(
+            int& m,
+            iter_type& b, iter_type e,
+            std::ios_base::iostate& err,
+            const std::ctype<char_type>& ct) const
+        {
+            int t = get_up_to_n_digits(b, e, err, ct, 2) - 1;
+            if (!(err & std::ios_base::failbit) && t <= 11)
+                m = t;
+            else
+                err |= std::ios_base::failbit;
+        }
+
+
+        void get_year4(int& y,
+                                                      iter_type& b, iter_type e,
+                                                      std::ios_base::iostate& err,
+                                                      const std::ctype<char_type>& ct) const
+        {
+            int t = get_up_to_n_digits(b, e, err, ct, 4);
+            if (!(err & std::ios_base::failbit))
+                y = t - 1900;
+        }
+
+        void
+        get_hour(int& h,
+                                                     iter_type& b, iter_type e,
+                                                     std::ios_base::iostate& err,
+                                                     const std::ctype<char_type>& ct) const
+        {
+            int t = get_up_to_n_digits(b, e, err, ct, 2);
+            if (!(err & std::ios_base::failbit) && t <= 23)
+                h = t;
+            else
+                err |= std::ios_base::failbit;
+        }
+
+        void
+        get_minute(int& m,
+                                                       iter_type& b, iter_type e,
+                                                       std::ios_base::iostate& err,
+                                                       const std::ctype<char_type>& ct) const
+        {
+            int t = get_up_to_n_digits(b, e, err, ct, 2);
+            if (!(err & std::ios_base::failbit) && t <= 59)
+                m = t;
+            else
+                err |= std::ios_base::failbit;
+        }
+
+        void
+        get_second(int& s,
+                                                       iter_type& b, iter_type e,
+                                                       std::ios_base::iostate& err,
+                                                       const std::ctype<char_type>& ct) const
+        {
+            int t = get_up_to_n_digits(b, e, err, ct, 2);
+            if (!(err & std::ios_base::failbit) && t <= 60)
+                s = t;
+            else
+                err |= std::ios_base::failbit;
+        }
+
+
+
+        InputIterator get(
+            iter_type b, iter_type e,
+            std::ios_base& iob,
+            std::ios_base::iostate& err,
+            std::tm* tm,
+            char fmt, char) const
+        {
+            err = std::ios_base::goodbit;
+            const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(iob.getloc());
+
+            switch (fmt)
+            {
+//            case 'a':
+//            case 'A':
+//                that_.get_weekdayname(tm->tm_wday, b, e, err, ct);
+//                break;
+//            case 'b':
+//            case 'B':
+//            case 'h':
+//              that_.get_monthname(tm->tm_mon, b, e, err, ct);
+//                break;
+//            case 'c':
+//                {
+//                const string_type& fm = this->c();
+//                b = that_.get(b, e, iob, err, tm, fm.data(), fm.data() + fm.size());
+//                }
+//                break;
+            case 'd':
+            case 'e':
+              get_day(tm->tm_mday, b, e, err, ct);
+              //std::cerr << "tm_mday= "<< tm->tm_mday << std::endl;
+
+                break;
+//            case 'D':
+//                {
+//                const char_type fm[] = {'%', 'm', '/', '%', 'd', '/', '%', 'y'};
+//                b = that_.get(b, e, iob, err, tm, fm, fm + sizeof(fm)/sizeof(fm[0]));
+//                }
+//                break;
+//            case 'F':
+//                {
+//                const char_type fm[] = {'%', 'Y', '-', '%', 'm', '-', '%', 'd'};
+//                b = that_.get(b, e, iob, err, tm, fm, fm + sizeof(fm)/sizeof(fm[0]));
+//                }
+//                break;
+            case 'H':
+              get_hour(tm->tm_hour, b, e, err, ct);
+              //std::cerr << "tm_hour= "<< tm->tm_hour << std::endl;
+                break;
+//            case 'I':
+//              that_.get_12_hour(tm->tm_hour, b, e, err, ct);
+//                break;
+//            case 'j':
+//              that_.get_day_year_num(tm->tm_yday, b, e, err, ct);
+//                break;
+            case 'm':
+              get_month(tm->tm_mon, b, e, err, ct);
+              //std::cerr << "tm_mon= "<< tm->tm_mon << std::endl;
+                break;
+            case 'M':
+              get_minute(tm->tm_min, b, e, err, ct);
+              //std::cerr << "tm_min= "<< tm->tm_min << std::endl;
+                break;
+//            case 'n':
+//            case 't':
+//              that_.get_white_space(b, e, err, ct);
+//                break;
+//            case 'p':
+//              that_.get_am_pm(tm->tm_hour, b, e, err, ct);
+//                break;
+//            case 'r':
+//                {
+//                const char_type fm[] = {'%', 'I', ':', '%', 'M', ':', '%', 'S', ' ', '%', 'p'};
+//                b = that_.get(b, e, iob, err, tm, fm, fm + sizeof(fm)/sizeof(fm[0]));
+//                }
+//                break;
+//            case 'R':
+//                {
+//                const char_type fm[] = {'%', 'H', ':', '%', 'M'};
+//                b = that_.get(b, e, iob, err, tm, fm, fm + sizeof(fm)/sizeof(fm[0]));
+//                }
+//                break;
+//            case 'S':
+//              that_.get_second(tm->tm_sec, b, e, err, ct);
+//                break;
+//            case 'T':
+//                {
+//                const char_type fm[] = {'%', 'H', ':', '%', 'M', ':', '%', 'S'};
+//                b = that_.get(b, e, iob, err, tm, fm, fm + sizeof(fm)/sizeof(fm[0]));
+//                }
+//                break;
+//            case 'w':
+//              that_.get_weekday(tm->tm_wday, b, e, err, ct);
+//                break;
+//            case 'x':
+//                return that_.get_date(b, e, iob, err, tm);
+//            case 'X':
+//                {
+//                const string_type& fm = this->X();
+//                b = that_.get(b, e, iob, err, tm, fm.data(), fm.data() + fm.size());
+//                }
+//                break;
+//            case 'y':
+//              that_.get_year(tm->tm_year, b, e, err, ct);
+                break;
+            case 'Y':
+              get_year4(tm->tm_year, b, e, err, ct);
+              //std::cerr << "tm_year= "<< tm->tm_year << std::endl;
+                break;
+//            case '%':
+//              that_.get_percent(b, e, err, ct);
+//                break;
+            default:
+                err |= std::ios_base::failbit;
+            }
+            return b;
+        }
+
+
+        InputIterator get(
+          iter_type b, iter_type e,
+          std::ios_base& iob,
+          std::ios_base::iostate& err, std::tm* tm,
+          const char_type* fmtb, const char_type* fmte) const
+        {
+          const std::ctype<char_type>& ct = std::use_facet<std::ctype<char_type> >(iob.getloc());
+          err = std::ios_base::goodbit;
+          while (fmtb != fmte && err == std::ios_base::goodbit)
+          {
+              if (b == e)
+              {
+                  err = std::ios_base::failbit;
+                  break;
+              }
+              if (ct.narrow(*fmtb, 0) == '%')
+              {
+                  if (++fmtb == fmte)
+                  {
+                      err = std::ios_base::failbit;
+                      break;
+                  }
+                  char cmd = ct.narrow(*fmtb, 0);
+                  char opt = '\0';
+                  if (cmd == 'E' || cmd == '0')
+                  {
+                      if (++fmtb == fmte)
+                      {
+                          err = std::ios_base::failbit;
+                          break;
+                      }
+                      opt = cmd;
+                      cmd = ct.narrow(*fmtb, 0);
+                  }
+                  b = get(b, e, iob, err, tm, cmd, opt);
+                  ++fmtb;
+              }
+              else if (ct.is(std::ctype_base::space, *fmtb))
+              {
+                  for (++fmtb; fmtb != fmte && ct.is(std::ctype_base::space, *fmtb); ++fmtb)
+                      ;
+                  for (        ;    b != e    && ct.is(std::ctype_base::space, *b);    ++b)
+                      ;
+              }
+              else if (ct.toupper(*b) == ct.toupper(*fmtb))
+              {
+                  ++b;
+                  ++fmtb;
+              }
+              else
+                  err = std::ios_base::failbit;
+          }
+          if (b == e)
+              err |= std::ios_base::eofbit;
+          return b;
+        }
+
+      };
+
 
       template <class CharT>
       class time_manip: public manip<time_manip<CharT> >
@@ -338,7 +655,7 @@ namespace boost
 
     namespace detail
     {
-#if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+#if BOOST_CHRONO_INTERNAL_TIMEGM
     int is_leap(int year)
     {
       if(year % 400 == 0)
@@ -397,6 +714,7 @@ namespace boost
 #endif
     } // detail
 
+#if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
     template <class CharT, class Traits, class Duration>
     std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& os, const time_point<system_clock, Duration>& tp)
@@ -420,7 +738,7 @@ namespace boost
 
           timezone tz = get_timezone(os);
           std::locale loc = os.getloc();
-          time_t t = system_clock::to_time_t(tp);
+          time_t t = system_clock::to_time_t(time_point_cast<system_clock::duration>(tp));
           std::tm tm;
           if (tz == timezone::local)
           {
@@ -530,6 +848,7 @@ namespace boost
       //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
       return os;
     }
+#endif
 
     namespace detail
     {
@@ -578,17 +897,22 @@ namespace boost
             }
             min = min * 10 + cn - '0';
           }
-          if (++b == e) err |= std::ios_base::eofbit;
+          if (++b == e) {
+            err |= std::ios_base::eofbit;
+          }
           min += hr * 60;
           min *= sn;
         }
         else
+        {
           err |= std::ios_base::eofbit | std::ios_base::failbit;
+        }
         return minutes(min);
       }
 
     } // detail
 
+#if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
     template <class CharT, class Traits, class Duration>
     std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, time_point<system_clock, Duration>& tp)
@@ -619,7 +943,12 @@ namespace boost
             { '%', 'Y', '-', '%', 'm', '-', '%', 'd', ' ', '%', 'H', ':', '%', 'M', ':' };
             pb = pattern;
             pe = pb + sizeof (pattern) / sizeof(CharT);
+#if defined BOOST_CHRONO_USES_INTERNAL_TIME_GET
+            const detail::time_get<CharT>& dtg(tg);
+            dtg.get(is, 0, is, err, &tm, pb, pe);
+#else
             tg.get(is, 0, is, err, &tm, pb, pe);
+#endif
             if (err & std::ios_base::failbit) goto exit;
             double sec;
             CharT c = CharT();
@@ -629,6 +958,7 @@ namespace boost
               err |= std::ios_base::failbit;
               goto exit;
             }
+            //std::cerr << "sec= "<< sec << std::endl;
             It i(is);
             It eof;
             c = *i;
@@ -638,21 +968,30 @@ namespace boost
               goto exit;
             }
             minutes min = detail::extract_z(i, eof, err, ct);
+            //std::cerr << "min= "<< min.count() << std::endl;
+
             if (err & std::ios_base::failbit) goto exit;
             time_t t;
-#if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+#if BOOST_CHRONO_INTERNAL_TIMEGM
             t = detail::internal_timegm(&tm);
 #else
             t = timegm(&tm);
 #endif
-            tp = system_clock::from_time_t(t) - min + round<microseconds> (duration<double> (sec));
+            tp = time_point_cast<Duration>(
+                system_clock::from_time_t(t) - min + round<microseconds> (duration<double> (sec))
+                );
           }
           else
           {
             const CharT z[2] =
             { '%', 'z' };
             const CharT* fz = std::search(pb, pe, z, z + 2);
+#if defined BOOST_CHRONO_USES_INTERNAL_TIME_GET
+            const detail::time_get<CharT>& dtg(tg);
+            dtg.get(is, 0, is, err, &tm, pb, fz);
+#else
             tg.get(is, 0, is, err, &tm, pb, fz);
+#endif
             minutes minu(0);
             if (fz != pe)
             {
@@ -663,7 +1002,7 @@ namespace boost
               }
               It i(is);
               It eof;
-              minu = extract_z(i, eof, err, ct);
+              minu = detail::extract_z(i, eof, err, ct);
               if (err & std::ios_base::failbit) goto exit;
               if (fz + 2 != pe)
               {
@@ -672,21 +1011,32 @@ namespace boost
                   err |= std::ios_base::failbit;
                   goto exit;
                 }
+#if defined BOOST_CHRONO_USES_INTERNAL_TIME_GET
+                const detail::time_get<CharT>& dtg(tg);
+                dtg.get(is, 0, is, err, &tm, fz + 2, pe);
+#else
                 tg.get(is, 0, is, err, &tm, fz + 2, pe);
+#endif
                 if (err & std::ios_base::failbit) goto exit;
               }
             }
             tm.tm_isdst = -1;
             time_t t;
             if (tz == timezone::utc || fz != pe)
-#if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+            {
+#if BOOST_CHRONO_INTERNAL_TIMEGM
               t = detail::internal_timegm(&tm);
 #else
               t = timegm(&tm);
 #endif
+            }
             else
+            {
               t = mktime(&tm);
-            tp = system_clock::from_time_t(t) - minu;
+            }
+            tp = time_point_cast<Duration>(
+                system_clock::from_time_t(t) - minu
+                );
           }
         }
 #ifndef BOOST_NO_EXCEPTIONS
@@ -699,6 +1049,7 @@ namespace boost
       }
       return is;
     }
+#endif
 #endif //UTC
   } // chrono
 
