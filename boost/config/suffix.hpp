@@ -489,6 +489,18 @@ namespace boost{
 #  endif
 }
 #endif
+// same again for __int128:
+#if defined(BOOST_HAS_INT128) && defined(__cplusplus)
+namespace boost{
+#  ifdef __GNUC__
+   __extension__ typedef __int128 int128_type;
+   __extension__ typedef unsigned __int128 uint128_type;
+#  else
+   typedef __int128 int128_type;
+   typedef unsigned __int128 uint128_type;
+#  endif
+}
+#endif
 
 // BOOST_[APPEND_]EXPLICIT_TEMPLATE_[NON_]TYPE macros --------------------------//
 //
