@@ -540,9 +540,9 @@ class splaytree_impl
    void insert_equal(Iterator b, Iterator e)
    {
       if(this->empty()){
-         iterator end(this->end());
+         iterator end_(this->end());
          for (; b != e; ++b)
-            this->insert_equal(end, *b);
+            this->insert_equal(end_, *b);
       }
    }
 

@@ -48,7 +48,7 @@ class flat_tree_value_compare
    typedef Value              first_argument_type;
    typedef Value              second_argument_type;
    typedef bool               return_type;
-   public:    
+   public:
    flat_tree_value_compare()
       : Compare()
    {}
@@ -65,7 +65,7 @@ class flat_tree_value_compare
 
    const Compare &get_comp() const
       {  return *this;  }
-  
+
    Compare &get_comp()
       {  return *this;  }
 };
@@ -238,7 +238,7 @@ class flat_tree
    flat_tree&  operator=(BOOST_RV_REF(flat_tree) mx)
    {  m_data = boost::move(mx.m_data); return *this;  }
 
-   public:   
+   public:
    // accessors:
    Compare key_comp() const
    { return this->m_data.get_comp(); }
@@ -446,11 +446,11 @@ class flat_tree
       //Loop in burst sizes
       while(len){
          const size_type burst = len < BurstSize ? len : BurstSize;
-         const const_iterator cend(this->cend());
+         const const_iterator cend_(this->cend());
          len -= burst;
          for(size_type i = 0; i != burst; ++i){
             //Get the insertion position for each key
-            pos = const_cast<const flat_tree&>(*this).priv_upper_bound(pos, cend, KeyOfValue()(*first));
+            pos = const_cast<const flat_tree&>(*this).priv_upper_bound(pos, cend_, KeyOfValue()(*first));
             positions[i] = static_cast<size_type>(pos - beg);
             ++first;
          }
@@ -497,14 +497,14 @@ class flat_tree
       while(len){
          const size_type burst = len < BurstSize ? len : BurstSize;
          size_type unique_burst = 0u;
-         const const_iterator cend(this->cend());
+         const const_iterator cend_(this->cend());
          while(unique_burst < burst && len > 0){
             //Get the insertion position for each key
             const value_type & val = *first++;
             --len;
-            pos = const_cast<const flat_tree&>(*this).priv_lower_bound(pos, cend, KeyOfValue()(val));
+            pos = const_cast<const flat_tree&>(*this).priv_lower_bound(pos, cend_, KeyOfValue()(val));
             //Check if already present
-            if(pos != cend && !value_comp(val, *pos)){
+            if(pos != cend_ && !value_comp(val, *pos)){
                if(unique_burst > 0){
                   ++skips[unique_burst-1];
                }
@@ -692,22 +692,22 @@ class flat_tree
    // set operations:
    iterator find(const key_type& k)
    {
-      const Compare &key_comp = this->m_data.get_comp();
+      const Compare &key_comp_ = this->m_data.get_comp();
       iterator i = this->lower_bound(k);
 
-      if (i != this->end() && key_comp(k, KeyOfValue()(*i))){ 
-         i = this->end(); 
+      if (i != this->end() && key_comp_(k, KeyOfValue()(*i))){
+         i = this->end();
       }
       return i;
    }
 
    const_iterator find(const key_type& k) const
    {
-      const Compare &key_comp = this->m_data.get_comp();
+      const Compare &key_comp_ = this->m_data.get_comp();
       const_iterator i = this->lower_bound(k);
 
-      if (i != this->end() && key_comp(k, KeyOfValue()(*i))){ 
-         i = this->end(); 
+      if (i != this->end() && key_comp_(k, KeyOfValue()(*i))){
+         i = this->end();
       }
       return i;
    }
@@ -737,11 +737,11 @@ class flat_tree
    std::pair<const_iterator, const_iterator> equal_range(const key_type& k) const
    {  return this->priv_equal_range(this->begin(), this->end(), k);  }
 
-   size_type capacity() const          
+   size_type capacity() const
    { return this->m_data.m_vect.capacity(); }
 
-   void reserve(size_type count)      
-   { this->m_data.m_vect.reserve(count);   }
+   void reserve(size_type count_)
+   { this->m_data.m_vect.reserve(count_);   }
 
    private:
    struct insert_commit_data
@@ -780,13 +780,13 @@ class flat_tree
    }
 
    std::pair<iterator,bool> priv_insert_unique_prepare
-      (const_iterator beg, const_iterator end, const value_type& val, insert_commit_data &commit_data)
+      (const_iterator beg, const_iterator end_, const value_type& val, insert_commit_data &commit_data)
    {
       const value_compare &value_comp  = this->m_data;
-      commit_data.position = this->priv_lower_bound(beg, end, KeyOfValue()(val));
+      commit_data.position = this->priv_lower_bound(beg, end_, KeyOfValue()(val));
       return std::pair<iterator,bool>
          ( *reinterpret_cast<iterator*>(&commit_data.position)
-         , commit_data.position == end || value_comp(val, *commit_data.position));
+         , commit_data.position == end_ || value_comp(val, *commit_data.position));
    }
 
    std::pair<iterator,bool> priv_insert_unique_prepare
@@ -854,7 +854,7 @@ class flat_tree
    RanIt priv_lower_bound(RanIt first, RanIt last,
                           const key_type & key) const
    {
-      const Compare &key_comp = this->m_data.get_comp();
+      const Compare &key_comp_ = this->m_data.get_comp();
       KeyOfValue key_extract;
       difference_type len = last - first, half;
       RanIt middle;
@@ -864,7 +864,7 @@ class flat_tree
          middle = first;
          middle += half;
 
-         if (key_comp(key_extract(*middle), key)) {
+         if (key_comp_(key_extract(*middle), key)) {
             ++middle;
             first = middle;
             len = len - half - 1;
@@ -879,7 +879,7 @@ class flat_tree
    RanIt priv_upper_bound(RanIt first, RanIt last,
                           const key_type & key) const
    {
-      const Compare &key_comp = this->m_data.get_comp();
+      const Compare &key_comp_ = this->m_data.get_comp();
       KeyOfValue key_extract;
       difference_type len = last - first, half;
       RanIt middle;
@@ -889,12 +889,12 @@ class flat_tree
          middle = first;
          middle += half;
 
-         if (key_comp(key, key_extract(*middle))) {
+         if (key_comp_(key, key_extract(*middle))) {
             len = half;
          }
          else{
             first = ++middle;
-            len = len - half - 1; 
+            len = len - half - 1;
          }
       }
       return first;
@@ -904,7 +904,7 @@ class flat_tree
    std::pair<RanIt, RanIt>
       priv_equal_range(RanIt first, RanIt last, const key_type& key) const
    {
-      const Compare &key_comp = this->m_data.get_comp();
+      const Compare &key_comp_ = this->m_data.get_comp();
       KeyOfValue key_extract;
       difference_type len = last - first, half;
       RanIt middle, left, right;
@@ -914,12 +914,12 @@ class flat_tree
          middle = first;
          middle += half;
 
-         if (key_comp(key_extract(*middle), key)){
+         if (key_comp_(key_extract(*middle), key)){
             first = middle;
             ++first;
             len = len - half - 1;
          }
-         else if (key_comp(key, key_extract(*middle))){
+         else if (key_comp_(key, key_extract(*middle))){
             len = half;
          }
          else {

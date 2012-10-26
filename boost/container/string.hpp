@@ -1322,10 +1322,10 @@ class basic_string
    //! <b>Returns</b>: *this
    basic_string& insert(size_type pos, const basic_string& s)
    {
-      const size_type size = this->size();
-      if (pos > size)
+      const size_type size_ = this->size();
+      if (pos > size_)
          this->throw_out_of_range();
-      if (size > this->max_size() - s.size())
+      if (size_ > this->max_size() - s.size())
          this->throw_length_error();
       this->insert(this->priv_addr() + pos, s.begin(), s.end());
       return *this;
@@ -1341,12 +1341,12 @@ class basic_string
    //! <b>Returns</b>: *this
    basic_string& insert(size_type pos1, const basic_string& s, size_type pos2, size_type n)
    {
-      const size_type size = this->size();
+      const size_type size_ = this->size();
       const size_type str_size = s.size();
-      if (pos1 > size || pos2 > str_size)
+      if (pos1 > size_ || pos2 > str_size)
          this->throw_out_of_range();
       size_type len = container_detail::min_value(n, str_size - pos2);
-      if (size > this->max_size() - len)
+      if (size_ > this->max_size() - len)
          this->throw_length_error();
       const CharT *beg_ptr = container_detail::to_raw_pointer(s.begin()) + pos2;
       const CharT *end_ptr = beg_ptr + len;
@@ -1949,12 +1949,12 @@ class basic_string
    //! <b>Returns</b>: find(basic_string<CharT,traits,Allocator>(1,c), pos).
    size_type find(CharT c, size_type pos = 0) const
    {
-      const size_type size = this->size();
-      if (pos >= size)
+      const size_type size_ = this->size();
+      if (pos >= size_)
          return npos;
       else {
-         const pointer addr    = this->priv_addr();
-         pointer finish = addr + size;
+         const pointer addr = this->priv_addr();
+         pointer finish = addr + size_;
          const const_iterator result =
             std::find_if(addr + pos, finish,
                   std::bind2nd(Eq_traits<Traits>(), c));
@@ -2039,12 +2039,12 @@ class basic_string
    //! <b>Returns</b>: find_first_of(basic_string(s, n), pos).
    size_type find_first_of(const CharT* s, size_type pos, size_type n) const
    {
-      const size_type size = this->size();
-      if (pos >= size)
+      const size_type size_ = this->size();
+      if (pos >= size_)
          return npos;
       else {
-         const pointer addr    = this->priv_addr();
-         pointer finish = addr + size;
+         const pointer addr = this->priv_addr();
+         pointer finish = addr + size_;
          const_iterator result = std::find_first_of
             (addr + pos, finish, s, s + n, Eq_traits<Traits>());
          return result != finish ? result - this->begin() : npos;

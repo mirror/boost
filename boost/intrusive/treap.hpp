@@ -627,9 +627,9 @@ class treap_impl
    template<class Iterator>
    void insert_equal(Iterator b, Iterator e)
    {
-      iterator end(this->end());
+      iterator end_(this->end());
       for (; b != e; ++b)
-         this->insert_equal(end, *b);
+         this->insert_equal(end_, *b);
    }
 
    //! <b>Requires</b>: value must be an lvalue
@@ -696,9 +696,9 @@ class treap_impl
    void insert_unique(Iterator b, Iterator e)
    {
       if(this->empty()){
-         iterator end(this->end());
+         iterator end_(this->end());
          for (; b != e; ++b)
-            this->insert_unique(end, *b);
+            this->insert_unique(end_, *b);
       }
       else{
          for (; b != e; ++b)

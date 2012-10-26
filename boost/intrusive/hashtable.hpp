@@ -424,20 +424,20 @@ struct group_functions
    {
       node_ptr nxt_ptr(node_traits::get_next(to_erase_ptr));
       node_ptr prev_in_group_ptr(group_traits::get_next(to_erase_ptr));
-      bool last_in_group = (end_ptr == nxt_ptr) ||
+      bool last_in_group_bool = (end_ptr == nxt_ptr) ||
          (group_traits::get_next(nxt_ptr) != to_erase_ptr);
-      bool first_in_group = node_traits::get_next(prev_in_group_ptr) != to_erase_ptr;
+      bool first_in_group_bool = node_traits::get_next(prev_in_group_ptr) != to_erase_ptr;
 
-      if(first_in_group && last_in_group){
+      if(first_in_group_bool && last_in_group_bool){
          group_algorithms::init(to_erase_ptr);
       }
-      else if(first_in_group){
+      else if(first_in_group_bool){
          group_algorithms::unlink_after(nxt_ptr);
       }
-      else if(last_in_group){
-         node_ptr first_in_group =
+      else if(last_in_group_bool){
+         node_ptr first_in_group_ptr =
             get_first_in_group_of_last_in_group(to_erase_ptr);
-         group_algorithms::unlink_after(first_in_group);
+         group_algorithms::unlink_after(first_in_group_ptr);
       }
       else{
          group_algorithms::unlink_after(nxt_ptr);
@@ -896,12 +896,12 @@ class hashtable_impl
    {
       this->priv_initialize_buckets();
       this->priv_size_traits().set_size(size_type(0));
-      size_type bucket_size = this->priv_bucket_count();
-      BOOST_INTRUSIVE_INVARIANT_ASSERT(bucket_size != 0);
+      size_type bucket_size_ = this->priv_bucket_count();
+      BOOST_INTRUSIVE_INVARIANT_ASSERT(bucket_size_ != 0);
       //Check power of two bucket array if the option is activated
       BOOST_INTRUSIVE_INVARIANT_ASSERT
-         (!power_2_buckets || (0 == (bucket_size & (bucket_size-1))));
-      this->priv_split_traits().set_size(bucket_size>>1);
+         (!power_2_buckets || (0 == (bucket_size_ & (bucket_size_-1))));
+      this->priv_split_traits().set_size(bucket_size_>>1);
    }
 
    //! <b>Effects</b>: to-do
@@ -1026,9 +1026,9 @@ class hashtable_impl
          return this->begin() == this->end();
       }
       else{
-         size_type bucket_count = this->priv_bucket_count();
+         size_type bucket_count_ = this->priv_bucket_count();
          const bucket_type *b = boost::intrusive::detail::to_raw_pointer(this->priv_bucket_pointer());
-         for (size_type n = 0; n < bucket_count; ++n, ++b){
+         for (size_type n = 0; n < bucket_count_; ++n, ++b){
             if(!b->empty()){
                return false;
             }
@@ -1049,9 +1049,9 @@ class hashtable_impl
          return this->priv_size_traits().get_size();
       else{
          size_type len = 0;
-         size_type bucket_count = this->priv_bucket_count();
+         size_type bucket_count_ = this->priv_bucket_count();
          const bucket_type *b = boost::intrusive::detail::to_raw_pointer(this->priv_bucket_pointer());
-         for (size_type n = 0; n < bucket_count; ++n, ++b){
+         for (size_type n = 0; n < bucket_count_; ++n, ++b){
             len += b->size();
          }
          return len;
@@ -1468,9 +1468,9 @@ class hashtable_impl
          siterator first_local_it(b.slist_it());
          size_type first_bucket_num = this->priv_get_bucket_num(first_local_it);
 
-         const bucket_ptr bucket_pointer = this->priv_bucket_pointer();
+         const bucket_ptr bucket_pointer_ = this->priv_bucket_pointer();
          siterator before_first_local_it
-            = this->priv_get_previous(bucket_pointer[first_bucket_num], first_local_it);
+            = this->priv_get_previous(bucket_pointer_[first_bucket_num], first_local_it);
          size_type last_bucket_num;
          siterator last_local_it;
 
@@ -1478,7 +1478,7 @@ class hashtable_impl
          //of the last bucket
          if(e == this->end()){
             last_bucket_num   = this->bucket_count() - 1;
-            last_local_it     = bucket_pointer[last_bucket_num].end();
+            last_local_it     = bucket_pointer_[last_bucket_num].end();
          }
          else{
             last_local_it     = e.slist_it();
@@ -1533,7 +1533,7 @@ class hashtable_impl
       siterator it =
          this->priv_find(key, hash_func, equal_func, bucket_num, h, prev);
       bool success = it != this->priv_invalid_local_it();
-      size_type count(0);
+      size_type count_(0);
       if(!success){
          return 0;
       }
@@ -1541,12 +1541,12 @@ class hashtable_impl
          siterator last = bucket_type::s_iterator_to
             (*node_traits::get_next(group_functions_t::get_last_in_group
                (hashtable_impl::dcast_bucket_ptr(it.pointed_node()), optimize_multikey_t())));
-         this->priv_erase_range_impl(bucket_num, prev, last, disposer, count);
+         this->priv_erase_range_impl(bucket_num, prev, last, disposer, count_);
       }
       else{
          //If found erase all equal values
          bucket_type &b = this->priv_bucket_pointer()[bucket_num];
-         for(siterator end = b.end(); it != end; ++count, ++it){
+         for(siterator end_ = b.end(); it != end_; ++count_, ++it){
             slist_node_ptr n(it.pointed_node());
             const value_type &v = this->priv_value_from_slist_node(n);
             if(compare_hash){
@@ -1563,7 +1563,7 @@ class hashtable_impl
          b.erase_after_and_dispose(prev, it, make_node_disposer(disposer));
       }
       this->priv_erasure_update_cache();
-      return count;
+      return count_;
    }
 
    //! <b>Effects</b>: Erases all of the elements.
@@ -1630,9 +1630,9 @@ class hashtable_impl
    template<class KeyType, class KeyHasher, class KeyValueEqual>
    size_type count(const KeyType &key, const KeyHasher &hash_func, const KeyValueEqual &equal_func) const
    {
-      size_type bucket_n1, bucket_n2, count;
-      this->priv_equal_range(key, hash_func, equal_func, bucket_n1, bucket_n2, count);
-      return count;
+      size_type bucket_n1, bucket_n2, count_;
+      this->priv_equal_range(key, hash_func, equal_func, bucket_n1, bucket_n2, count_);
+      return count_;
    }
 
    //! <b>Effects</b>: Finds an iterator to the first element is equal to
@@ -1746,9 +1746,9 @@ class hashtable_impl
    std::pair<iterator,iterator> equal_range
       (const KeyType &key, KeyHasher hash_func, KeyValueEqual equal_func)
    {
-      size_type bucket_n1, bucket_n2, count;
+      size_type bucket_n1, bucket_n2, count_;
       std::pair<siterator, siterator> ret = this->priv_equal_range
-         (key, hash_func, equal_func, bucket_n1, bucket_n2, count);
+         (key, hash_func, equal_func, bucket_n1, bucket_n2, count_);
       return std::pair<iterator, iterator>
          (iterator(ret.first, this), iterator(ret.second, this));
    }
@@ -1788,9 +1788,9 @@ class hashtable_impl
    std::pair<const_iterator,const_iterator> equal_range
       (const KeyType &key, KeyHasher hash_func, KeyValueEqual equal_func) const
    {
-      size_type bucket_n1, bucket_n2, count;
+      size_type bucket_n1, bucket_n2, count_;
       std::pair<siterator, siterator> ret =
-         this->priv_equal_range(key, hash_func, equal_func, bucket_n1, bucket_n2, count);
+         this->priv_equal_range(key, hash_func, equal_func, bucket_n1, bucket_n2, count_);
       return std::pair<const_iterator, const_iterator>
          (const_iterator(ret.first, this), const_iterator(ret.second, this));
    }
@@ -2102,9 +2102,9 @@ class hashtable_impl
 
          if(!fast_shrink){
             siterator before_i(old_bucket.before_begin());
-            siterator end(old_bucket.end());
+            siterator end_(old_bucket.end());
             siterator i(old_bucket.begin());
-            for(;i != end; ++i){
+            for(;i != end_; ++i){
                const value_type &v = this->priv_value_from_slist_node(i.pointed_node());
                const std::size_t hash_value = this->priv_stored_or_compute_hash(v, store_hash_t());
                const size_type new_n = this->priv_hash_to_bucket(hash_value, new_bucket_count, new_bucket_count);
@@ -2159,19 +2159,19 @@ class hashtable_impl
    {
       //This function is only available for containers with incremental hashing
       BOOST_STATIC_ASSERT(( incremental && power_2_buckets ));
-      const size_type split_idx       = this->priv_split_traits().get_size();
-      const size_type bucket_count    = this->priv_bucket_count();
-      const bucket_ptr bucket_pointer = this->priv_bucket_pointer();
+      const size_type split_idx        = this->priv_split_traits().get_size();
+      const size_type bucket_count_    = this->priv_bucket_count();
+      const bucket_ptr bucket_pointer_ = this->priv_bucket_pointer();
 
       if(grow){
          //Test if the split variable can be changed
-         if(split_idx >= bucket_count)
+         if(split_idx >= bucket_count_)
             return false;
 
-         const size_type bucket_to_rehash = split_idx - bucket_count/2;
-         bucket_type &old_bucket = bucket_pointer[bucket_to_rehash];
+         const size_type bucket_to_rehash = split_idx - bucket_count_/2;
+         bucket_type &old_bucket = bucket_pointer_[bucket_to_rehash];
          siterator before_i(old_bucket.before_begin());
-         const siterator end(old_bucket.end());
+         const siterator end_(old_bucket.end());
          siterator i(old_bucket.begin());
          this->priv_split_traits().increment();
 
@@ -2179,8 +2179,8 @@ class hashtable_impl
          //moving elements from old_bucket to the target bucket, all moved
          //elements are moved back to the original one.
          detail::incremental_rehash_rollback<bucket_type, split_traits> rollback
-            ( bucket_pointer[split_idx], old_bucket, this->priv_split_traits());
-         for(;i != end; ++i){
+            ( bucket_pointer_[split_idx], old_bucket, this->priv_split_traits());
+         for(;i != end_; ++i){
             const value_type &v = this->priv_value_from_slist_node(i.pointed_node());
             const std::size_t hash_value = this->priv_stored_or_compute_hash(v, store_hash_t());
             const size_type new_n = this->priv_hash_to_bucket(hash_value);
@@ -2191,7 +2191,7 @@ class hashtable_impl
                before_i = last;
             }
             else{
-               bucket_type &new_b = bucket_pointer[new_n];
+               bucket_type &new_b = bucket_pointer_[new_n];
                new_b.splice_after(new_b.before_begin(), old_bucket, before_i, last);
             }
             i = before_i;
@@ -2202,11 +2202,11 @@ class hashtable_impl
       }
       else{
          //Test if the split variable can be changed
-         if(split_idx <= bucket_count/2)
+         if(split_idx <= bucket_count_/2)
             return false;
-         const size_type target_bucket_num = split_idx - 1 - bucket_count/2;
-         bucket_type &target_bucket = bucket_pointer[target_bucket_num];
-         bucket_type &source_bucket = bucket_pointer[split_idx-1];
+         const size_type target_bucket_num = split_idx - 1 - bucket_count_/2;
+         bucket_type &target_bucket = bucket_pointer_[target_bucket_num];
+         bucket_type &source_bucket = bucket_pointer_[split_idx-1];
          target_bucket.splice_after(target_bucket.cbefore_begin(), source_bucket);
          this->priv_split_traits().decrement();
          this->priv_insertion_update_cache(target_bucket_num);
@@ -2324,12 +2324,12 @@ class hashtable_impl
    std::size_t priv_hash_to_bucket(std::size_t hash_value) const
    {  return this->priv_hash_to_bucket(hash_value, this->priv_real_bucket_traits().bucket_count(), this->priv_split_traits().get_size()); }
 
-   std::size_t priv_hash_to_bucket(std::size_t hash_value, std::size_t bucket_count, std::size_t split) const
+   std::size_t priv_hash_to_bucket(std::size_t hash_value, std::size_t bucket_count_, std::size_t split) const
    {
-      std::size_t bucket_number = hashtable_impl::priv_hash_to_bucket_impl(hash_value, bucket_count, power_2_buckets_t());
+      std::size_t bucket_number = hashtable_impl::priv_hash_to_bucket_impl(hash_value, bucket_count_, power_2_buckets_t());
       if(incremental)
          if(bucket_number >= split)
-            bucket_number -= bucket_count/2;
+            bucket_number -= bucket_count_/2;
       return bucket_number;
    }
 
@@ -2413,20 +2413,20 @@ class hashtable_impl
 
    template<class Disposer>
    void priv_erase_range_impl
-      (size_type bucket_num, siterator before_first_it, siterator end, Disposer disposer, size_type &num_erased)
+      (size_type bucket_num, siterator before_first_it, siterator end_, Disposer disposer, size_type &num_erased)
    {
       const bucket_ptr buckets = this->priv_bucket_pointer();
       bucket_type &b = buckets[bucket_num];
 
-      if(before_first_it == b.before_begin() && end == b.end()){
+      if(before_first_it == b.before_begin() && end_ == b.end()){
          this->priv_erase_range_impl(bucket_num, 1, disposer, num_erased);
       }
       else{
          num_erased = 0;
          siterator to_erase(before_first_it);
          ++to_erase;
-         slist_node_ptr end_ptr = end.pointed_node();
-         while(to_erase != end){
+         slist_node_ptr end_ptr = end_.pointed_node();
+         while(to_erase != end_){
             group_functions_t::erase_from_group(end_ptr, hashtable_impl::dcast_bucket_ptr(to_erase.pointed_node()), optimize_multikey_t());
             to_erase = b.erase_after_and_dispose(before_first_it, make_node_disposer(disposer));
             ++num_erased;
@@ -2447,8 +2447,8 @@ class hashtable_impl
          siterator b_begin(b.before_begin());
          siterator nxt(b_begin);
          ++nxt;
-         siterator end(b.end());
-         while(nxt != end){
+         siterator end_(b.end());
+         while(nxt != end_){
             group_functions_t::init_group(hashtable_impl::dcast_bucket_ptr(nxt.pointed_node()), optimize_multikey_t());
             nxt = b.erase_after_and_dispose
                (b_begin, make_node_disposer(disposer));
@@ -2648,8 +2648,8 @@ class hashtable_impl
    siterator priv_begin(detail::false_) const
    {
       size_type n = 0;
-      size_type bucket_count = this->priv_bucket_count();
-      for (n = 0; n < bucket_count; ++n){
+      size_type bucket_count_ = this->priv_bucket_count();
+      for (n = 0; n < bucket_count_; ++n){
          bucket_type &b = this->priv_bucket_pointer()[n];
          if(!b.empty()){
             return b.begin();
@@ -2772,9 +2772,9 @@ class hashtable_impl
    void priv_initialize_buckets()
    {  this->priv_clear_buckets(this->priv_bucket_pointer(), this->priv_bucket_count());  }
 
-   void priv_clear_buckets(bucket_ptr buckets_ptr, size_type bucket_count)
+   void priv_clear_buckets(bucket_ptr buckets_ptr, size_type bucket_count_)
    {
-      for(; bucket_count--; ++buckets_ptr){
+      for(; bucket_count_--; ++buckets_ptr){
          if(safemode_or_autounlink){
             hashtable_impl::priv_clear_group_nodes(*buckets_ptr, optimize_multikey_t());
             buckets_ptr->clear_and_dispose(detail::init_disposer<node_algorithms>());
@@ -2877,10 +2877,10 @@ class hashtable_impl
       , KeyValueEqual equal_func
       , size_type &bucket_number_first
       , size_type &bucket_number_second
-      , size_type &count) const
+      , size_type &count_) const
    {
       std::size_t h;
-      count = 0;
+      count_ = 0;
       siterator prev;
       //Let's see if the element is present
       std::pair<siterator, siterator> to_return
@@ -2892,39 +2892,41 @@ class hashtable_impl
       }
       //If it's present, find the first that it's not equal in
       //the same bucket
-      bucket_type &b = this->priv_bucket_pointer()[bucket_number_first];
-      siterator it = to_return.first;
-      if(optimize_multikey){
-         to_return.second = bucket_type::s_iterator_to
-            (*node_traits::get_next(group_functions_t::get_last_in_group
-               (hashtable_impl::dcast_bucket_ptr(it.pointed_node()), optimize_multikey_t())));
-         count = std::distance(it, to_return.second);
-         if(to_return.second !=  b.end()){
-            bucket_number_second = bucket_number_first;
-            return to_return;
-         }
-      }
-      else{
-         ++count;
-         ++it;
-         while(it != b.end()){
-            const value_type &v = this->priv_value_from_slist_node(it.pointed_node());
-            if(compare_hash){
-               std::size_t hv = this->priv_stored_or_compute_hash(v, store_hash_t());
-               if(hv != h || !equal_func(key, v)){
-                  to_return.second = it;
-                  bucket_number_second = bucket_number_first;
-                  return to_return;
-               }
-            }
-            else if(!equal_func(key, v)){
-               to_return.second = it;
-               bucket_number_second = bucket_number_first;
-               return to_return;
-            }
-            ++it;
-            ++count;
-         }
+      {
+          bucket_type &b = this->priv_bucket_pointer()[bucket_number_first];
+          siterator it = to_return.first;
+          if(optimize_multikey){
+             to_return.second = bucket_type::s_iterator_to
+                (*node_traits::get_next(group_functions_t::get_last_in_group
+                   (hashtable_impl::dcast_bucket_ptr(it.pointed_node()), optimize_multikey_t())));
+             count_ = std::distance(it, to_return.second);
+             if(to_return.second !=  b.end()){
+                bucket_number_second = bucket_number_first;
+                return to_return;
+             }
+          }
+          else{
+             ++count_;
+             ++it;
+             while(it != b.end()){
+                const value_type &v = this->priv_value_from_slist_node(it.pointed_node());
+                if(compare_hash){
+                   std::size_t hv = this->priv_stored_or_compute_hash(v, store_hash_t());
+                   if(hv != h || !equal_func(key, v)){
+                      to_return.second = it;
+                      bucket_number_second = bucket_number_first;
+                      return to_return;
+                   }
+                }
+                else if(!equal_func(key, v)){
+                   to_return.second = it;
+                   bucket_number_second = bucket_number_first;
+                   return to_return;
+                }
+                ++it;
+                ++count_;
+             }
+          }
       }
 
       //If we reached the end, find the first, non-empty bucket
