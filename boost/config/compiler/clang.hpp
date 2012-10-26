@@ -29,7 +29,14 @@
 // Clang supports "long long" in all compilation modes.
 #define BOOST_HAS_LONG_LONG
 
-#define BOOST_SYMBOL_VISIBLE __attribute__((__visibility__("default")))
+//
+// Dynamic shared object (DSO) and dynamic-link library (DLL) support
+//
+#if !defined(_WIN32) && !defined(__WIN32__) && !defined(WIN32)
+#  define BOOST_SYMBOL_EXPORT __attribute__((__visibility__("default")))
+#  define BOOST_SYMBOL_IMPORT
+#  define BOOST_SYMBOL_VISIBLE __attribute__((__visibility__("default")))
+#endif
 
 #if !__has_feature(cxx_auto_type)
 #  define BOOST_NO_CXX11_AUTO_DECLARATIONS
