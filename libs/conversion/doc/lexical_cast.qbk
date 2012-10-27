@@ -235,7 +235,7 @@ It breaks my `operator>>` that works only in presence of this flag. Can you remo
   * [*Answer:]      May be in a future version. There is no requirement in
 __proposallong__ to reset the flag but
 remember that __proposalshort__ is not yet accepted by the committee. By the way, it's a great opportunity to
-make your `operator>>` conform to the standard.
+make your `operator>>` more general.
 Read a good C++ book, study `std::sentry` and [@boost:libs/io/doc/ios_state.html `ios_state_saver`].
 
 [pre
