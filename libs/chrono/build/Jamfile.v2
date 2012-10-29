@@ -11,9 +11,9 @@
 project boost/chrono
     : source-location ../src
     : requirements
-        <target-os>freebsd:<linkflags>"-lrt" 
-        <target-os>linux:<linkflags>"-lrt -lpthread" 
-        <toolset>pgi:<linkflags>"-lrt" 
+        <target-os>freebsd:<linkflags>"-lrt"
+        <target-os>linux:<linkflags>"-lrt -lpthread"
+        <toolset>pgi:<linkflags>"-lrt"
         #<threading>single:<define>BOOST_CHRONO_THREAD_DISABLED
         <library>/boost/system//boost_system
         #<define>BOOST_ERROR_CODE_HEADER_ONLY
@@ -27,7 +27,7 @@ project boost/chrono
         #<define>BOOST_COMMON_TYPE_USES_ARRAY_ASSERT
         #<define>BOOST_RATIO_USES_ARRAY_ASSERT
         #<define>BOOST_CHRONO_USES_ARRAY_ASSERT
-        <toolset>sun:<define>__typeof__=__typeof__ 
+        <toolset>sun:<define>__typeof__=__typeof__
         <define>BOOST_SYSTEM_NO_DEPRECATED
         #<toolset>gcc-3.4.4:<linkflags>--enable-auto-import
         #<toolset>gcc-4.3.4:<linkflags>--enable-auto-import
@@ -52,6 +52,8 @@ project boost/chrono
         <toolset>gcc-mingw-4.6.3:<cxxflags>-fdiagnostics-show-option
         <toolset>gcc-mingw-4.7.0:<cxxflags>-fdiagnostics-show-option
         <toolset>gcc-mingw-4.8.0:<cxxflags>-fdiagnostics-show-option
+        <toolset>msvc:<cxxflags>/wd4512
+
 # Note: Some of the remarks from the Intel compiler are disabled
 # remark #193: zero used for undefined preprocessing identifier "XXX"
 # remark #304: access control not specified ("public" by default)
@@ -65,7 +67,7 @@ project boost/chrono
         <toolset>intel:<cxxflags>-wd193,304,383,444
         <toolset>intel:<cxxflags>-wd593,981
         <toolset>intel:<cxxflags>-wd1418
-	  <toolset>intel:<cxxflags>-wd2415 
+	  <toolset>intel:<cxxflags>-wd2415
 
 
 
@@ -85,7 +87,7 @@ project boost/chrono
         #<define>BOOST_CHRONO_USES_ARRAY_ASSERT
         #<toolset>vacpp:<define>BOOST_COMMON_TYPE_DONT_USE_TYPEOF
         <toolset>vacpp:<define>BOOST_TYPEOF_EMULATION
-        <toolset>sun:<define>__typeof__=__typeof__ 
+        <toolset>sun:<define>__typeof__=__typeof__
 
         <define>BOOST_SYSTEM_NO_DEPRECATED
         <link>shared:<define>BOOST_CHRONO_DYN_LINK=1
@@ -98,7 +100,7 @@ project boost/chrono
 
 SOURCES = chrono thread_clock process_cpu_clocks ;
 
- 
+
 lib boost_chrono
     : $(SOURCES).cpp
     :
