@@ -22,6 +22,7 @@ namespace boost
     template<typename CharT = char, typename Traits = std::char_traits<CharT> >
     class base_formatter
     {
+      base_formatter& operator=(base_formatter const& rhs) ;
 
     public:
       typedef std::basic_ostream<CharT, Traits> ostream_type;
