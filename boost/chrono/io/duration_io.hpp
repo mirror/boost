@@ -105,6 +105,8 @@ namespace boost
       }
 
     private:
+      duration_style_io_saver& operator=(duration_style_io_saver const& rhs) ;
+
       state_type& s_save_;
       aspect_type a_save_;
     };

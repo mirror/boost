@@ -521,6 +521,8 @@ namespace boost
         set_timezone(s_save_, a_save_);
       }
     private:
+      timezone_io_saver& operator=(timezone_io_saver const& rhs) ;
+
       state_type& s_save_;
       aspect_type a_save_;
     };
@@ -709,6 +711,7 @@ namespace boost
     } // detail
 
 #if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
+
     template <class CharT, class Traits, class Duration>
     std::basic_ostream<CharT, Traits>&
     operator<<(std::basic_ostream<CharT, Traits>& os, const time_point<system_clock, Duration>& tp)
@@ -904,6 +907,7 @@ namespace boost
     } // detail
 
 #if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
+
     template <class CharT, class Traits, class Duration>
     std::basic_istream<CharT, Traits>&
     operator>>(std::basic_istream<CharT, Traits>& is, time_point<system_clock, Duration>& tp)
@@ -1037,6 +1041,7 @@ namespace boost
       }
       return is;
     }
+
 #endif
 #endif //UTC
   } // chrono
