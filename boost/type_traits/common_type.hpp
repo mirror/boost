@@ -57,7 +57,7 @@
 //----------------------------------------------------------------------------//
 //                                                                            //
 //                           C++03 implementation of                          //
-//             20.6.7 Other transformations [meta.trans.other]                //
+//             20.9.7.6 Other transformations [meta.trans.other]              //
 //                          Written by Howard Hinnant                         //
 //      Adapted for Boost by Beman Dawes, Vicente Botet and  Jeffrey Hellrung //
 //                                                                            //

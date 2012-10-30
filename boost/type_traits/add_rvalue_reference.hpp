@@ -21,7 +21,7 @@
 //----------------------------------------------------------------------------//
 //                                                                            //
 //                           C++03 implementation of                          //
-//             20.7.6.2 Reference modifications [meta.trans.ref]              //
+//             20.9.7.2 Reference modifications [meta.trans.ref]              //
 //                          Written by Vicente J. Botet Escriba               //
 //                                                                            //
 // If T names an object or function type then the member typedef type
