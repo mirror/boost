@@ -67,34 +67,93 @@ struct const_cast_tag {};
 struct dynamic_cast_tag {};
 struct polymorphic_cast_tag {};
 
-template<class T> struct shared_ptr_traits
+// sp_element, element_type
+
+template< class T > struct sp_element
 {
-    typedef T & reference;
+    typedef T type;
 };
 
-template<> struct shared_ptr_traits<void>
+#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+template< class T > struct sp_element< T[] >
 {
-    typedef void reference;
+    typedef T type;
+};
+
+#endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+// sp_dereference, return type of operator*
+
+template< class T > struct sp_dereference
+{
+    typedef T & type;
+};
+
+template<> struct sp_dereference< void >
+{
+    typedef void type;
 };
 
 #if !defined(BOOST_NO_CV_VOID_SPECIALIZATIONS)
 
-template<> struct shared_ptr_traits<void const>
+template<> struct sp_dereference< void const >
 {
-    typedef void reference;
+    typedef void type;
 };
 
-template<> struct shared_ptr_traits<void volatile>
+template<> struct sp_dereference< void volatile >
 {
-    typedef void reference;
+    typedef void type;
 };
 
-template<> struct shared_ptr_traits<void const volatile>
+template<> struct sp_dereference< void const volatile >
 {
-    typedef void reference;
+    typedef void type;
 };
 
-#endif
+#endif // !defined(BOOST_NO_CV_VOID_SPECIALIZATIONS)
+
+#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+template< class T > struct sp_dereference< T[] >
+{
+    typedef void type;
+};
+
+#endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+// sp_member_access, return type of operator->
+
+template< class T > struct sp_member_access
+{
+    typedef T * type;
+};
+
+#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+template< class T > struct sp_member_access< T[] >
+{
+    typedef void type;
+};
+
+#endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+// sp_array_access, return type of operator[]
+
+template< class T > struct sp_array_access
+{
+    typedef void type;
+};
+
+#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+template< class T > struct sp_array_access< T[] >
+{
+    typedef T & type;
+};
+
+#endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
 // enable_shared_from_this support
 
@@ -144,6 +203,47 @@ template< class T, class R > struct sp_enable_if_auto_ptr< std::auto_ptr< T >, R
 
 #endif
 
+// sp_assert_convertible
+
+template< class T > inline void sp_assert_convertible( T * )
+{
+}
+
+// pointer constructor helper
+
+template< class T, class Y > inline void sp_pointer_construct( boost::shared_ptr< T > * ppx, Y * p, boost::detail::shared_count & pn )
+{
+    boost::detail::shared_count( p ).swap( pn );
+    boost::detail::sp_enable_shared_from_this( ppx, p, p );
+}
+
+#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+template< class T, class Y > inline void sp_pointer_construct( boost::shared_ptr< T[] > * /*ppx*/, Y * p, boost::detail::shared_count & pn )
+{
+    sp_assert_convertible< T[] >( static_cast< Y (*) [] >( 0 ) );
+
+    boost::detail::shared_count( p, boost::checked_array_deleter< T >() ).swap( pn );
+}
+
+#endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+// deleter constructor helper
+
+template< class T, class Y > inline void sp_deleter_construct( boost::shared_ptr< T > * ppx, Y * p )
+{
+    boost::detail::sp_enable_shared_from_this( ppx, p, p );
+}
+
+#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+template< class T, class Y > inline void sp_deleter_construct( boost::shared_ptr< T[] > * /*ppx*/, Y * /*p*/ )
+{
+    sp_assert_convertible< T[] >( static_cast< Y (*) [] >( 0 ) );
+}
+
+#endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
 } // namespace detail
 
 
@@ -164,19 +264,16 @@ private:
 
 public:
 
-    typedef T element_type;
-    typedef T value_type;
-    typedef T * pointer;
-    typedef typename boost::detail::shared_ptr_traits<T>::reference reference;
+    typedef typename boost::detail::sp_element< T >::type element_type;
 
-    shared_ptr(): px(0), pn() // never throws in 1.30+
+    shared_ptr(): px( 0 ), pn() // never throws in 1.30+
     {
     }
 
     template<class Y>
-    explicit shared_ptr( Y * p ): px( p ), pn( p ) // Y must be complete
+    explicit shared_ptr( Y * p ): px( p ), pn() // Y must be complete
     {
-        boost::detail::sp_enable_shared_from_this( this, p, p );
+        boost::detail::sp_pointer_construct( this, p, pn );
     }
 
     //
@@ -185,16 +282,16 @@ public:
     // shared_ptr will release p by calling d(p)
     //
 
-    template<class Y, class D> shared_ptr(Y * p, D d): px(p), pn(p, d)
+    template<class Y, class D> shared_ptr( Y * p, D d ): px( p ), pn( p, d )
     {
-        boost::detail::sp_enable_shared_from_this( this, p, p );
+        boost::detail::sp_deleter_construct( this, p );
     }
 
     // As above, but with allocator. A's copy constructor shall not throw.
 
     template<class Y, class D, class A> shared_ptr( Y * p, D d, A a ): px( p ), pn( p, d, a )
     {
-        boost::detail::sp_enable_shared_from_this( this, p, p );
+        boost::detail::sp_deleter_construct( this, p );
     }
 
 //  generated copy constructor, destructor are fine...
@@ -210,8 +307,10 @@ public:
 #endif
 
     template<class Y>
-    explicit shared_ptr(weak_ptr<Y> const & r): pn(r.pn) // may throw
+    explicit shared_ptr( weak_ptr<Y> const & r ): pn( r.pn ) // may throw
     {
+        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+
         // it is now safe to copy r.px, as pn(r.pn) did not throw
         px = r.px;
     }
@@ -237,11 +336,12 @@ public:
 #endif
     : px( r.px ), pn( r.pn ) // never throws
     {
+        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
     }
 
     // aliasing
     template< class Y >
-    shared_ptr( shared_ptr<Y> const & r, T * p ): px( p ), pn( r.pn ) // never throws
+    shared_ptr( shared_ptr<Y> const & r, element_type * p ): px( p ), pn( r.pn ) // never throws
     {
     }
 
@@ -278,9 +378,12 @@ public:
     template<class Y>
     explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn()
     {
+        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+
         Y * tmp = r.get();
         pn = boost::detail::shared_count(r);
-        boost::detail::sp_enable_shared_from_this( this, tmp, tmp );
+
+        boost::detail::sp_deleter_construct( this, tmp );
     }
 
 #if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
@@ -288,11 +391,15 @@ public:
     template<class Ap>
     explicit shared_ptr( Ap r, typename boost::detail::sp_enable_if_auto_ptr<Ap, int>::type = 0 ): px( r.get() ), pn()
     {
-        typename Ap::element_type * tmp = r.get();
-        pn = boost::detail::shared_count( r );
-        boost::detail::sp_enable_shared_from_this( this, tmp, tmp );
-    }
+        typedef typename Ap::element_type Y;
 
+        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+
+        Y * tmp = r.get();
+        pn = boost::detail::shared_count( r );
+
+        boost::detail::sp_deleter_construct( this, tmp );
+    }
 
 #endif // BOOST_NO_SFINAE, BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
@@ -301,11 +408,14 @@ public:
 #if !defined( BOOST_NO_CXX11_SMART_PTR )
 
     template< class Y, class D >
-    shared_ptr( std::unique_ptr< Y, D > && r): px( r.get() ), pn()
+    shared_ptr( std::unique_ptr< Y, D > && r ): px( r.get() ), pn()
     {
-        Y * tmp = r.get();
+        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+
+        typename std::unique_ptr< Y, D >::pointer tmp = r.get();
         pn = boost::detail::shared_count( r );
-        boost::detail::sp_enable_shared_from_this( this, tmp, tmp );
+
+        boost::detail::sp_deleter_construct( this, tmp );
     }
 
 #endif
@@ -347,7 +457,6 @@ public:
         return *this;
     }
 
-
 #endif // BOOST_NO_SFINAE, BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #endif // BOOST_NO_AUTO_PTR
@@ -374,6 +483,8 @@ public:
 #endif
     : px( r.px ), pn() // never throws
     {
+        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+
         pn.swap( r.pn );
         r.px = 0;
     }
@@ -398,10 +509,10 @@ public:
         this_type().swap(*this);
     }
 
-    template<class Y> void reset(Y * p) // Y must be complete
+    template<class Y> void reset( Y * p ) // Y must be complete
     {
-        BOOST_ASSERT(p == 0 || p != px); // catch self-reset errors
-        this_type(p).swap(*this);
+        BOOST_ASSERT( p == 0 || p != px ); // catch self-reset errors
+        this_type( p ).swap( *this );
     }
 
     template<class Y, class D> void reset( Y * p, D d )
@@ -414,24 +525,32 @@ public:
         this_type( p, d, a ).swap( *this );
     }
 
-    template<class Y> void reset( shared_ptr<Y> const & r, T * p )
+    template<class Y> void reset( shared_ptr<Y> const & r, element_type * p )
     {
         this_type( r, p ).swap( *this );
     }
 
-    reference operator* () const // never throws
+    typename boost::detail::sp_dereference< T >::type operator* () const // never throws
     {
-        BOOST_ASSERT(px != 0);
+        BOOST_ASSERT( px != 0 );
         return *px;
     }
 
-    T * operator-> () const // never throws
+    typename boost::detail::sp_member_access< T >::type operator-> () const // never throws
     {
-        BOOST_ASSERT(px != 0);
+        BOOST_ASSERT( px != 0 );
         return px;
     }
 
-    T * get() const // never throws
+    typename boost::detail::sp_array_access< T >::type operator[] ( std::ptrdiff_t i ) const // never throws
+    {
+        BOOST_ASSERT( px != 0 );
+        BOOST_ASSERT( i >= 0 );
+
+        return px[ i ];
+    }
+
+    element_type * get() const // never throws
     {
         return px;
     }
@@ -449,7 +568,7 @@ public:
         return pn.use_count();
     }
 
-    void swap(shared_ptr<T> & other) // never throws
+    void swap( shared_ptr & other ) // never throws
     {
         std::swap(px, other.px);
         pn.swap(other.pn);
@@ -488,7 +607,7 @@ private:
 
 #endif
 
-    T * px;                     // contained pointer
+    element_type * px;                 // contained pointer
     boost::detail::shared_count pn;    // reference counter
 
 };  // shared_ptr
