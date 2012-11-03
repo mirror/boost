@@ -83,7 +83,7 @@ public:
 #endif
     : px(r.lock().get()), pn(r.pn) // never throws
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
     }
 
 #if defined( BOOST_HAS_RVALUE_REFS )
@@ -100,7 +100,7 @@ public:
 #endif
     : px( r.lock().get() ), pn( static_cast< boost::detail::weak_count && >( r.pn ) ) // never throws
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
         r.px = 0;
     }
 
@@ -132,7 +132,7 @@ public:
 #endif
     : px( r.px ), pn( r.pn ) // never throws
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
     }
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
@@ -140,7 +140,7 @@ public:
     template<class Y>
     weak_ptr & operator=( weak_ptr<Y> const & r ) // never throws
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
 
         px = r.lock().get();
         pn = r.pn;
@@ -162,7 +162,7 @@ public:
     template<class Y>
     weak_ptr & operator=( shared_ptr<Y> const & r ) // never throws
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
 
         px = r.px;
         pn = r.pn;
@@ -204,7 +204,7 @@ public:
     }
 
     template<typename Y>
-    void _internal_aliasing_assign(weak_ptr<Y> const & r, T * px2)
+    void _internal_aliasing_assign(weak_ptr<Y> const & r, element_type * px2)
     {
         px = px2;
         pn = r.pn;

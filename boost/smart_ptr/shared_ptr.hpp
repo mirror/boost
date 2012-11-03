@@ -205,8 +205,10 @@ template< class T, class R > struct sp_enable_if_auto_ptr< std::auto_ptr< T >, R
 
 // sp_assert_convertible
 
-template< class T > inline void sp_assert_convertible( T * )
+template< class Y, class T > inline void sp_assert_convertible()
 {
+    T* p = static_cast< Y* >( 0 );
+    (void)p;
 }
 
 // pointer constructor helper
@@ -221,7 +223,7 @@ template< class T, class Y > inline void sp_pointer_construct( boost::shared_ptr
 
 template< class T, class Y > inline void sp_pointer_construct( boost::shared_ptr< T[] > * /*ppx*/, Y * p, boost::detail::shared_count & pn )
 {
-    sp_assert_convertible< T[] >( static_cast< Y (*) [] >( 0 ) );
+    sp_assert_convertible< Y[], T[] >();
 
     boost::detail::shared_count( p, boost::checked_array_deleter< T >() ).swap( pn );
 }
@@ -239,7 +241,7 @@ template< class T, class Y > inline void sp_deleter_construct( boost::shared_ptr
 
 template< class T, class Y > inline void sp_deleter_construct( boost::shared_ptr< T[] > * /*ppx*/, Y * /*p*/ )
 {
-    sp_assert_convertible< T[] >( static_cast< Y (*) [] >( 0 ) );
+    sp_assert_convertible< Y[], T[] >();
 }
 
 #endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
@@ -309,7 +311,7 @@ public:
     template<class Y>
     explicit shared_ptr( weak_ptr<Y> const & r ): pn( r.pn ) // may throw
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
 
         // it is now safe to copy r.px, as pn(r.pn) did not throw
         px = r.px;
@@ -336,7 +338,7 @@ public:
 #endif
     : px( r.px ), pn( r.pn ) // never throws
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
     }
 
     // aliasing
@@ -378,7 +380,7 @@ public:
     template<class Y>
     explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn()
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
 
         Y * tmp = r.get();
         pn = boost::detail::shared_count(r);
@@ -393,7 +395,7 @@ public:
     {
         typedef typename Ap::element_type Y;
 
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
 
         Y * tmp = r.get();
         pn = boost::detail::shared_count( r );
@@ -410,7 +412,7 @@ public:
     template< class Y, class D >
     shared_ptr( std::unique_ptr< Y, D > && r ): px( r.get() ), pn()
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
 
         typename std::unique_ptr< Y, D >::pointer tmp = r.get();
         pn = boost::detail::shared_count( r );
@@ -483,7 +485,7 @@ public:
 #endif
     : px( r.px ), pn() // never throws
     {
-        boost::detail::sp_assert_convertible< T >( static_cast< Y* >( 0 ) );
+        boost::detail::sp_assert_convertible< Y, T >();
 
         pn.swap( r.pn );
         r.px = 0;

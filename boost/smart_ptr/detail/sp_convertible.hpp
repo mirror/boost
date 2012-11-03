@@ -48,6 +48,31 @@ template< class Y, class T > struct sp_convertible
     enum _vt { value = sizeof( (f)( static_cast<Y*>(0) ) ) == sizeof(yes) };
 };
 
+template< class Y, class T > struct sp_convertible< Y, T[] >
+{
+    enum _vt { value = false };
+};
+
+template< class T > struct sp_convertible< T[], T[] >
+{
+    enum _vt { value = true };
+};
+
+template< class T > struct sp_convertible< T[], T const [] >
+{
+    enum _vt { value = true };
+};
+
+template< class T > struct sp_convertible< T[], T volatile [] >
+{
+    enum _vt { value = true };
+};
+
+template< class T > struct sp_convertible< T[], T const volatile [] >
+{
+    enum _vt { value = true };
+};
+
 struct sp_empty
 {
 };
