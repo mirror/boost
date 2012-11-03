@@ -86,7 +86,11 @@ void test_round_conversion_double()
 
 void test_round_conversion_long_double()
 {
+// We do not run tests on compilers with bugs
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_round_conversion<long double>();
     test_msvc_magic_values<long double>();
+#endif
+    BOOST_CHECK(true);
 }
 

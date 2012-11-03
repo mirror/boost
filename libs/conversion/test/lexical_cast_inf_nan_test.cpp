@@ -186,7 +186,11 @@ void test_inf_nan_double()
 
 void test_inf_nan_long_double()
 {
+// We do not run tests on compilers with bugs
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_inf_nan_templated<long double >();
+#endif
+    BOOST_CHECK(true);
 }
 
 unit_test::test_suite *init_unit_test_suite(int, char *[])

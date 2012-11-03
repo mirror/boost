@@ -243,9 +243,15 @@ void test_conversion_to_bool()
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>(0));
     BOOST_CHECK_THROW(lexical_cast<bool>(123), bad_lexical_cast);
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>(1.0));
+    BOOST_CHECK_THROW(lexical_cast<bool>(-123), bad_lexical_cast);
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>(0.0));
+    BOOST_CHECK_THROW(lexical_cast<bool>(1234), bad_lexical_cast);
+#if !defined(_CRAYC)
+    // Looks like a bug in CRAY compiler (throws bad_lexical_cast)
+    // TODO: localize the bug and report it to developers.
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>(true));
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>(false));
+#endif
     BOOST_CHECK_EQUAL(true, lexical_cast<bool>("1"));
     BOOST_CHECK_EQUAL(false, lexical_cast<bool>("0"));
     BOOST_CHECK_THROW(lexical_cast<bool>(""), bad_lexical_cast);
@@ -602,7 +608,7 @@ void test_char32_conversions()
 #endif
 
 template <class To, class From, class Func>
-To try_cast_by_ptr(const From& from, const Func& f) {
+To try_cast_by_ptr(const From& from, Func f) {
     return f(from);
 };
 
