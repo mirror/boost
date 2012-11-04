@@ -95,6 +95,10 @@ int main()
         catch( boost::bad_weak_ptr const& )
         {
         }
+        catch( ... )
+        {
+            BOOST_ERROR( "px2[0].shared_from_this() threw something else than bad_weak_ptr" );
+        }
 
         BOOST_TEST( X::allocations == 1 );
         BOOST_TEST( X::instances == 3 );
@@ -210,6 +214,10 @@ int main()
         catch( boost::bad_weak_ptr const& )
         {
         }
+        catch( ... )
+        {
+            BOOST_ERROR( "px2[0].shared_from_this() threw something else than bad_weak_ptr" );
+        }
 
         px2.reset();
 
@@ -236,6 +244,10 @@ int main()
         catch( boost::bad_weak_ptr const& )
         {
         }
+        catch( ... )
+        {
+            BOOST_ERROR( "px2[0].shared_from_this() threw something else than bad_weak_ptr" );
+        }
 
         px2.reset();
 
@@ -258,6 +270,10 @@ int main()
         catch( boost::bad_weak_ptr const& )
         {
         }
+        catch( ... )
+        {
+            BOOST_ERROR( "px[0].shared_from_this() threw something else than bad_weak_ptr" );
+        }
 
         px.reset();
 
@@ -278,6 +294,10 @@ int main()
         }
         catch( boost::bad_weak_ptr const& )
         {
+        }
+        catch( ... )
+        {
+            BOOST_ERROR( "px[0].shared_from_this() threw something else than bad_weak_ptr" );
         }
 
         px.reset();
