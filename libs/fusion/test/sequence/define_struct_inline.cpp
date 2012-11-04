@@ -26,6 +26,16 @@ struct cls
     )
 };
 
+template <typename = int>
+struct tpl_cls
+{
+    BOOST_FUSION_DEFINE_STRUCT_INLINE(
+        point,
+        (int, x)
+        (int, y)
+    )
+};
+
 namespace ns
 {
     BOOST_FUSION_DEFINE_STRUCT_INLINE(s, (int, m))
@@ -33,8 +43,8 @@ namespace ns
     BOOST_FUSION_DEFINE_STRUCT_INLINE(empty_struct, )
 }
 
-int
-main()
+template <typename Point>
+void run_test()
 {
     using namespace boost::fusion;
 
@@ -48,8 +58,8 @@ main()
     }
     
     {
-        BOOST_MPL_ASSERT_NOT((traits::is_view<cls::point>));
-        cls::point p(123, 456);
+        BOOST_MPL_ASSERT_NOT((traits::is_view<Point>));
+        Point p(123, 456);
 
         std::cout << at_c<0>(p) << std::endl;
         std::cout << at_c<1>(p) << std::endl;
@@ -60,8 +70,8 @@ main()
         at_c<1>(p) = 9;
         BOOST_TEST(p == make_vector(6, 9));
 
-        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<cls::point>::value == 2);
-        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<cls::point>::value);
+        BOOST_STATIC_ASSERT(boost::fusion::result_of::size<Point>::value == 2);
+        BOOST_STATIC_ASSERT(!boost::fusion::result_of::empty<Point>::value);
 
         BOOST_TEST(front(p) == 6);
         BOOST_TEST(back(p) == 9);
@@ -69,7 +79,7 @@ main()
 
     {
         vector<int, float> v1(4, 2);
-        cls::point v2(5, 3);
+        Point v2(5, 3);
         vector<long, double> v3(5, 4);
         BOOST_TEST(v1 < v2);
         BOOST_TEST(v1 <= v2);
@@ -82,15 +92,15 @@ main()
     }
 
     {
-        // conversion from cls::point to vector
-        cls::point p(5, 3);
+        // conversion from Point to vector
+        Point p(5, 3);
         vector<int, long> v(p);
         v = p;
     }
 
     {
-        // conversion from cls::point to list
-        cls::point p(5, 3);
+        // conversion from Point to list
+        Point p(5, 3);
         list<int, long> l(p);
         l = p;
     }
@@ -105,13 +115,20 @@ main()
     }
 
     {
-        cls::point p = make_list(5,3);
+        Point p = make_list(5,3);
         BOOST_TEST(p == make_vector(5,3));
 
         p = make_list(3,5);
         BOOST_TEST(p == make_vector(3,5));
     }
+}
 
+int
+main()
+{
+    run_test<cls::point>();        // test with non-template enclosing class
+    run_test<tpl_cls<>::point>();  // test with template enclosing class
     return boost::report_errors();
+
 }
 
