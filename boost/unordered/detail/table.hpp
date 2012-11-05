@@ -164,8 +164,6 @@ namespace boost { namespace unordered { namespace detail {
             const_node_pointer;
         typedef typename bucket_allocator_traits::pointer
             bucket_pointer;
-        typedef typename bucket::previous_pointer
-            previous_pointer;
         typedef boost::unordered::detail::node_constructor<node_allocator>
             node_constructor;
 
@@ -226,12 +224,12 @@ namespace boost { namespace unordered { namespace detail {
             return buckets_ + static_cast<std::ptrdiff_t>(bucket_index);
         }
 
-        previous_pointer get_previous_start() const
+        link_pointer get_previous_start() const
         {
             return get_bucket(bucket_count_)->first_from_start();
         }
 
-        previous_pointer get_previous_start(std::size_t bucket_index) const
+        link_pointer get_previous_start(std::size_t bucket_index) const
         {
             return get_bucket(bucket_index)->next_;
         }
@@ -245,7 +243,7 @@ namespace boost { namespace unordered { namespace detail {
         iterator begin(std::size_t bucket_index) const
         {
             if (!size_) return iterator();
-            previous_pointer prev = get_previous_start(bucket_index);
+            link_pointer prev = get_previous_start(bucket_index);
             return prev ? iterator(static_cast<node_pointer>(prev->next_)) :
                 iterator();
         }
@@ -584,7 +582,7 @@ namespace boost { namespace unordered { namespace detail {
         // This is called after erasing a node or group of nodes to fix up
         // the bucket pointers.
         void fix_buckets(bucket_pointer this_bucket,
-                previous_pointer prev, node_pointer next)
+                link_pointer prev, node_pointer next)
         {
             if (!next)
             {
@@ -608,7 +606,7 @@ namespace boost { namespace unordered { namespace detail {
         // This is called after erasing a range of nodes to fix any bucket
         // pointers into that range.
         void fix_buckets_range(std::size_t bucket_index,
-                previous_pointer prev, node_pointer begin, node_pointer end)
+                link_pointer prev, node_pointer begin, node_pointer end)
         {
             node_pointer n = begin;
 
@@ -640,7 +638,7 @@ namespace boost { namespace unordered { namespace detail {
 
             // Iterate through the remaining nodes, clearing out the bucket
             // pointers.
-            get_bucket(bucket_index)->next_ = previous_pointer();
+            get_bucket(bucket_index)->next_ = link_pointer();
             for(;;) {
                 n = static_cast<node_pointer>(n->next_);
                 if (n == end) break;
@@ -649,7 +647,7 @@ namespace boost { namespace unordered { namespace detail {
                     policy::to_bucket(bucket_count_, n->hash_);
                 if (bucket_index != new_bucket_index) {
                     bucket_index = new_bucket_index;
-                    get_bucket(bucket_index)->next_ = previous_pointer();
+                    get_bucket(bucket_index)->next_ = link_pointer();
                 }
             };
 

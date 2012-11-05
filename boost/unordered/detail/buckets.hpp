@@ -445,7 +445,7 @@ namespace boost { namespace unordered { namespace detail {
             nodes_()
         {
             if (b.size_) {
-                typename Table::previous_pointer prev = b.get_previous_start();
+                typename Table::link_pointer prev = b.get_previous_start();
                 nodes_ = static_cast<node_pointer>(prev->next_);
                 prev->next_ = link_pointer();
                 b.size_ = 0;
@@ -537,12 +537,12 @@ namespace boost { namespace unordered { namespace detail {
     template <typename NodePointer>
     struct bucket
     {
-        typedef NodePointer previous_pointer;
-        previous_pointer next_;
+        typedef NodePointer link_pointer;
+        link_pointer next_;
 
         bucket() : next_() {}
 
-        previous_pointer first_from_start()
+        link_pointer first_from_start()
         {
             return next_;
         }
@@ -552,12 +552,12 @@ namespace boost { namespace unordered { namespace detail {
 
     struct ptr_bucket
     {
-        typedef ptr_bucket* previous_pointer;
-        previous_pointer next_;
+        typedef ptr_bucket* link_pointer;
+        link_pointer next_;
 
         ptr_bucket() : next_(0) {}
 
-        previous_pointer first_from_start()
+        link_pointer first_from_start()
         {
             return this;
         }
