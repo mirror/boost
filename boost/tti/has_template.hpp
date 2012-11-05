@@ -13,8 +13,8 @@
 /** \file
 */
 
-#if !defined(TTI_HAS_TEMPLATE_HPP)
-#define TTI_HAS_TEMPLATE_HPP
+#if !defined(BOOST_TTI_HAS_TEMPLATE_HPP)
+#define BOOST_TTI_HAS_TEMPLATE_HPP
 
 #include <boost/config.hpp>
 #include <boost/tti/gen/has_template_gen.hpp>
@@ -39,8 +39,8 @@
       BOOST_PP_VARIADIC_SIZE(__VA_ARGS__), \
       1 \
       ), \
-    TTI_VM_DETAIL_TRAIT_HAS_TEMPLATE, \
-    TTI_VM_DETAIL_CHECK_MORE_THAN_TWO \
+    BOOST_TTI_DETAIL_VM_TRAIT_HAS_TEMPLATE, \
+    BOOST_TTI_DETAIL_VM_CHECK_MORE_THAN_TWO \
     ) \
     (trait,__VA_ARGS__) \
 /**/
@@ -66,8 +66,8 @@
   BOOST_PP_IIF \
     ( \
     BOOST_PP_IS_BINARY(params), \
-    TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS, \
-    TTI_DETAIL_TRAIT_CHECK_IS_NIL \
+    BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS, \
+    BOOST_TTI_DETAIL_TRAIT_CHECK_IS_NIL \
     ) \
     (trait,name,params) \
 /**/
@@ -156,4 +156,4 @@
 /**/
 
 #endif // BOOST_TTI_VERSION_1_5
-#endif // TTI_HAS_TEMPLATE_HPP
+#endif // BOOST_TTI_HAS_TEMPLATE_HPP
