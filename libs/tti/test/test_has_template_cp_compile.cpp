@@ -10,7 +10,7 @@
 int main()
   {
   
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
   // You can always instantiate without compiler errors
   
@@ -23,7 +23,7 @@ int main()
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_GEN(SomeMemberTemplate)<AnotherType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_GEN(SimpleTMP)<AnotherType>));
   
-#else
+#else // BOOST_TTI_VERSION_1_5
 
   // You can always instantiate without compiler errors
   
@@ -36,7 +36,7 @@ int main()
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(SomeMemberTemplate)<AnotherType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(SimpleTMP)<AnotherType>));
   
-#endif
+#endif // !BOOST_TTI_VERSION_1_5
 
   BOOST_MPL_ASSERT((HaveCL<AType>));
   BOOST_MPL_ASSERT((HaveAnotherMT<AType>));

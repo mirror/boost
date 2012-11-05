@@ -18,7 +18,7 @@
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
 
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
 #include <boost/preprocessor/array/enum.hpp>
 #include <boost/preprocessor/array/size.hpp>
@@ -196,7 +196,7 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 
 #endif // !BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE
 
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
 #define TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpArray) \
   TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(BOOST_PP_CAT(trait,_detail),name,tpArray) \
@@ -229,7 +229,7 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 #endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 #endif // !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 
-#else // !BOOST_TTI_VERSION_1_6
+#else // BOOST_TTI_VERSION_1_5
 
 #if !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
@@ -253,6 +253,6 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 #endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 #endif // !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 
-#endif // BOOST_TTI_VERSION_1_6
+#endif // !BOOST_TTI_VERSION_1_5
 
 #endif // TTI_DETAIL_TEMPLATE_PARAMS_HPP

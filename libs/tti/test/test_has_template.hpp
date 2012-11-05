@@ -10,7 +10,7 @@
 #include "test_structs.hpp"
 #include <boost/tti/has_template.hpp>
 
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
 #if BOOST_PP_VARIADICS
 
@@ -23,7 +23,7 @@ BOOST_TTI_TRAIT_HAS_TEMPLATE(ATemplateWithParms,ManyParameters)
 BOOST_TTI_HAS_TEMPLATE(SimpleTMP,BOOST_PP_NIL)
 BOOST_TTI_HAS_TEMPLATE(TemplateNotExist)
 
-#else
+#else // !BOOST_PP_VARIADICS
 
 BOOST_TTI_HAS_TEMPLATE(ATPMemberTemplate,BOOST_PP_NIL)
 BOOST_TTI_TRAIT_HAS_TEMPLATE(HaveCL,CLMemberTemplate,BOOST_PP_NIL)
@@ -34,9 +34,9 @@ BOOST_TTI_TRAIT_HAS_TEMPLATE(ATemplateWithParms,ManyParameters,BOOST_PP_NIL)
 BOOST_TTI_HAS_TEMPLATE(SimpleTMP,BOOST_PP_NIL)
 BOOST_TTI_HAS_TEMPLATE(TemplateNotExist,BOOST_PP_NIL)
 
-#endif
+#endif // BOOST_PP_VARIADICS
 
-#else // !(BOOST_TTI_VERSION_1_6)
+#else // BOOST_TTI_VERSION_1_5
 
 BOOST_TTI_HAS_TEMPLATE(ATPMemberTemplate)
 BOOST_TTI_TRAIT_HAS_TEMPLATE(HaveCL,CLMemberTemplate)
@@ -47,6 +47,6 @@ BOOST_TTI_TRAIT_HAS_TEMPLATE(ATemplateWithParms,ManyParameters)
 BOOST_TTI_HAS_TEMPLATE(SimpleTMP)
 BOOST_TTI_HAS_TEMPLATE(TemplateNotExist)
 
-#endif // BOOST_TTI_VERSION_1_6 && !BOOST_PP_VARIADICS
+#endif // !BOOST_TTI_VERSION_1_5
 
 #endif // TEST_HAS_TEMPLATE_HPP

@@ -71,12 +71,12 @@ alias ttismf
 
 alias ttitmp
     :
-        [ run test_has_template.cpp : : : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile test_has_template_compile.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_fail.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_fail2.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_fail3.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_fail4.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ run test_has_template.cpp : : : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile test_has_template_compile.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_fail.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_fail2.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_fail3.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_fail4.cpp : <define>BOOST_PP_VARIADICS=0 ]
     ;
 
 alias ttitmpv : : 
@@ -99,7 +99,6 @@ alias ttitmpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_v ]
         [ compile test_has_template_compile.cpp : 
@@ -110,7 +109,6 @@ alias ttitmpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_compile_v ]
         [ compile-fail test_has_template_fail.cpp : 
@@ -121,7 +119,6 @@ alias ttitmpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_fail_v ]
         [ compile-fail test_has_template_fail2.cpp : 
@@ -132,7 +129,6 @@ alias ttitmpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_fail2_v ]
         [ compile-fail test_has_template_fail3.cpp : 
@@ -143,7 +139,6 @@ alias ttitmpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_fail3_v ]
         [ compile-fail test_has_template_fail4.cpp : 
@@ -154,19 +149,18 @@ alias ttitmpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_fail4_v ]
     ;
 
 alias ttitmpcp
     :
-        [ run test_has_template_cp.cpp : : : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile test_has_template_cp_compile.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_cp_fail.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_cp_fail2.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_cp_fail3.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_cp_fail4.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ run test_has_template_cp.cpp : : : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile test_has_template_cp_compile.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail2.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail3.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail4.cpp : <define>BOOST_PP_VARIADICS=0 ]
     ;
     
 alias ttitmpcpv : : 
@@ -189,7 +183,6 @@ alias ttitmpcpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_cp_v ]
         [ compile test_has_template_cp_compile.cpp : 
@@ -200,7 +193,6 @@ alias ttitmpcpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_cp_compile_v ]
         [ compile-fail test_has_template_cp_fail.cpp : 
@@ -211,7 +203,6 @@ alias ttitmpcpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_cp_fail_v ]
         [ compile-fail test_has_template_cp_fail2.cpp : 
@@ -222,7 +213,6 @@ alias ttitmpcpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_cp_fail2_v ]
         [ compile-fail test_has_template_cp_fail3.cpp : 
@@ -233,7 +223,6 @@ alias ttitmpcpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_cp_fail3_v ]
         [ compile-fail test_has_template_cp_fail4.cpp : 
@@ -244,7 +233,6 @@ alias ttitmpcpv
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6 
           <define>BOOST_PP_VARIADICS=1 : 
           test_has_template_cp_fail4_v  ]
     ;
@@ -294,7 +282,6 @@ alias ttivm
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6
           <define>BOOST_PP_VARIADICS=1 ]
         [ compile test_vm_has_template_cp_compile.cpp : 
           <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
@@ -304,7 +291,6 @@ alias ttivm
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6
           <define>BOOST_PP_VARIADICS=1 ]
         [ compile-fail test_vm_has_template_cp_fail.cpp : 
           <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
@@ -314,7 +300,6 @@ alias ttivm
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6
           <define>BOOST_PP_VARIADICS=1 ]
         [ compile-fail test_vm_has_template_cp_fail2.cpp : 
           <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
@@ -324,7 +309,6 @@ alias ttivm
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6
           <define>BOOST_PP_VARIADICS=1 ]
         [ compile-fail test_vm_has_template_cp_fail3.cpp : 
           <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
@@ -334,7 +318,6 @@ alias ttivm
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6
           <define>BOOST_PP_VARIADICS=1 ]
         [ compile-fail test_vm_has_template_cp_fail4.cpp : 
           <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
@@ -344,7 +327,6 @@ alias ttivm
           <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
           <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_TTI_VERSION_1_6
           <define>BOOST_PP_VARIADICS=1 ]
     ;
     

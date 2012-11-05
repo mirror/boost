@@ -19,7 +19,7 @@
 #include <boost/config.hpp>
 #include <boost/tti/gen/has_template_gen.hpp>
 
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
 #include <boost/preprocessor/config/config.hpp>
 #include <boost/preprocessor/control/iif.hpp>
@@ -83,7 +83,7 @@
 
 #endif // BOOST_PP_VARIADICS
 
-#else // !BOOST_TTI_VERSION_1_6
+#else // BOOST_TTI_VERSION_1_5
 
 #include <boost/mpl/has_xxx.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -155,5 +155,5 @@
   ) \
 /**/
 
-#endif // BOOST_TTI_VERSION_1_6
+#endif // BOOST_TTI_VERSION_1_5
 #endif // TTI_HAS_TEMPLATE_HPP

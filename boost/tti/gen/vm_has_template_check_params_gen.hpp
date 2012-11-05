@@ -7,7 +7,7 @@
 #if !defined(TTI_VM_TEMPLATE_PARAMS_GEN_HPP)
 #define TTI_VM_TEMPLATE_PARAMS_GEN_HPP
 
-#if !defined(BOOST_TTI_VERSION_1_6)
+#if defined(BOOST_TTI_VERSION_1_5)
 
 #include <boost/preprocessor/config/config.hpp>
 

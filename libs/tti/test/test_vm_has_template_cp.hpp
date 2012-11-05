@@ -13,7 +13,7 @@
 
 #include "test_structs.hpp"
 
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
 #include <boost/tti/has_template.hpp>
 
@@ -28,7 +28,7 @@ BOOST_TTI_HAS_TEMPLATE(TemplateNotExist,int,class,template <class> class ATempla
 BOOST_TTI_TRAIT_HAS_TEMPLATE(WrongParametersForMP,ManyParameters,class,class,int,class,template <class,class> class InnerTemplate,class,long)
 BOOST_TTI_TRAIT_HAS_TEMPLATE(WrongParameters2ForMP,ManyParameters,class,long,int,class,template <class> class InnerTemplate,class,long)
 
-#else // !BOOST_TTI_VERSION_1_6
+#else // BOOST_TTI_VERSION_1_5
 
 #include <boost/tti/vm_has_template_check_params.hpp>
 
@@ -43,7 +43,7 @@ BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS(TemplateNotExist,int,class,template <clas
 BOOST_TTI_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(WrongParametersForMP,ManyParameters,class,class,int,class,template <class,class> class InnerTemplate,class,long)
 BOOST_TTI_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(WrongParameters2ForMP,ManyParameters,class,long,int,class,template <class> class InnerTemplate,class,long)
 
-#endif // BOOST_TTI_VERSION_1_6
+#endif // !BOOST_TTI_VERSION_1_5
 
 #endif // BOOST_PP_VARIADICS
 

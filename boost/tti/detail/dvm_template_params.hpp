@@ -18,7 +18,7 @@
 #include <boost/preprocessor/variadic/size.hpp>
 #include "dtemplate_params.hpp"
 
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/comparison/equal.hpp>
@@ -61,7 +61,7 @@
 
 #endif // !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
 #define TTI_VM_DETAIL_CHECK_MORE_THAN_TWO(trait,...) \
   BOOST_PP_IIF \
@@ -150,7 +150,7 @@
     }; \
 /**/
 
-#endif // BOOST_TTI_VERSION_1_6
+#endif // !BOOST_TTI_VERSION_1_5
 
 #endif // BOOST_PP_VARIADICS
 

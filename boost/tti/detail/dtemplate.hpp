@@ -7,7 +7,7 @@
 #if !defined(TTI_DETAIL_TEMPLATE_HPP)
 #define TTI_DETAIL_TEMPLATE_HPP
 
-#if defined(BOOST_TTI_VERSION_1_6)
+#if !defined(BOOST_TTI_VERSION_1_5)
 
 #include <boost/config.hpp>
 #include <boost/mpl/has_xxx.hpp>
@@ -47,5 +47,5 @@
     }; \
 /**/
 
-#endif // BOOST_TTI_VERSION_1_6
+#endif // !BOOST_TTI_VERSION_1_5
 #endif // !TTI_DETAIL_TEMPLATE_HPP

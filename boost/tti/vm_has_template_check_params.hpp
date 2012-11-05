@@ -7,7 +7,7 @@
 #if !defined(TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_HPP)
 #define TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_HPP
 
-#if !defined(BOOST_TTI_VERSION_1_6)
+#if defined(BOOST_TTI_VERSION_1_5)
 
 #include <boost/preprocessor/config/config.hpp>
 
@@ -99,5 +99,5 @@
 /**/
 
 #endif // BOOST_PP_VARIADICS
-#endif // !BOOST_TTI_VERSION_1_6
+#endif // BOOST_TTI_VERSION_1_5
 #endif // TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_HPP
