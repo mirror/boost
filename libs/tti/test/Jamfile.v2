@@ -18,49 +18,239 @@ project tti_tests : requirements <warnings>on
                                  <toolset>gcc-4.5.2:<cxxflags>-Wno-variadic-macros
                                  <toolset>gcc-4.6.0:<cxxflags>-Wno-variadic-macros
                                  ;
-
-alias tti
-    : 
-        [ run test_has_member_const.cpp ]
+                                 
+alias ttimfsig
+    :
         [ run test_has_member.cpp ]
         [ compile test_has_member_compile.cpp ]
         [ compile-fail test_has_member_fail.cpp ]
         [ compile-fail test_has_member_fail2.cpp ]
+    ;
+
+alias ttimd
+    :
         [ run test_has_mem_data.cpp ]
         [ compile test_has_mem_data_compile.cpp ]
         [ compile-fail test_has_mem_data_fail.cpp ]
         [ compile-fail test_has_mem_data_fail2.cpp ]
         [ compile-fail test_has_mem_data_fail3.cpp ]
+    ;
+
+alias ttimfn
+    :
         [ run test_has_mem_fun.cpp ]
-        [ run test_has_mem_fun_const.cpp ]
         [ compile test_has_mem_fun_compile.cpp ]
         [ compile-fail test_has_mem_fun_fail.cpp ]
         [ compile-fail test_has_mem_fun_fail2.cpp ]
+    ;
+
+alias ttismfsig
+    :
         [ run test_has_static_member.cpp ]
         [ compile test_has_static_member_compile.cpp ]
         [ compile-fail test_has_static_member_fail.cpp ]
         [ compile-fail test_has_static_member_fail2.cpp ]
+    ;
+
+alias ttismd
+    :
         [ run test_has_static_mem_data.cpp ]
         [ compile test_has_static_mem_data_compile.cpp ]
         [ compile-fail test_has_static_mem_data_fail.cpp ]
         [ compile-fail test_has_static_mem_data_fail2.cpp ]
         [ compile-fail test_has_static_mem_data_fail3.cpp ]
+    ;
+
+alias ttismf
+    :
         [ run test_has_static_mem_fun.cpp ]
         [ compile test_has_static_mem_fun_compile.cpp ]
         [ compile-fail test_has_static_mem_fun_fail.cpp ]
         [ compile-fail test_has_static_mem_fun_fail2.cpp ]
-        [ run test_has_template.cpp ]
-        [ compile test_has_template_compile.cpp ]
-        [ compile-fail test_has_template_fail.cpp ]
-        [ compile-fail test_has_template_fail2.cpp ]
-        [ compile-fail test_has_template_fail3.cpp ]
-        [ compile-fail test_has_template_fail4.cpp ]
-        [ run test_has_template_cp.cpp ]
-        [ compile test_has_template_cp_compile.cpp ]
-        [ compile-fail test_has_template_cp_fail.cpp ]
-        [ compile-fail test_has_template_cp_fail2.cpp ]
-        [ compile-fail test_has_template_cp_fail3.cpp ]
-        [ compile-fail test_has_template_cp_fail4.cpp ]
+    ;
+
+alias ttitmp
+    :
+        [ run test_has_template.cpp : : : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile test_has_template_compile.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_fail.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_fail2.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_fail3.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_fail4.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+    ;
+
+alias ttitmpv : : 
+        <toolset>gcc
+        <toolset-gcc:version>3.4.2
+    ;
+    
+alias ttitmpv : : 
+        <toolset>gcc
+        <toolset-gcc:version>3.4.5
+    ;
+    
+alias ttitmpv
+    :
+        [ run test_has_template.cpp : : : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_v ]
+        [ compile test_has_template_compile.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_compile_v ]
+        [ compile-fail test_has_template_fail.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_fail_v ]
+        [ compile-fail test_has_template_fail2.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_fail2_v ]
+        [ compile-fail test_has_template_fail3.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_fail3_v ]
+        [ compile-fail test_has_template_fail4.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_fail4_v ]
+    ;
+
+alias ttitmpcp
+    :
+        [ run test_has_template_cp.cpp : : : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile test_has_template_cp_compile.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail2.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail3.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail4.cpp : <define>BOOST_TTI_VERSION_1_6 <define>BOOST_PP_VARIADICS=0 ]
+    ;
+    
+alias ttitmpcpv : : 
+        <toolset>gcc
+        <toolset-gcc:version>3.4.2
+    ;
+    
+alias ttitmpcpv : : 
+        <toolset>gcc
+        <toolset-gcc:version>3.4.5
+    ;
+    
+alias ttitmpcpv
+    :
+        [ run test_has_template_cp.cpp : : : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_cp_v ]
+        [ compile test_has_template_cp_compile.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_cp_compile_v ]
+        [ compile-fail test_has_template_cp_fail.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_cp_fail_v ]
+        [ compile-fail test_has_template_cp_fail2.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_cp_fail2_v ]
+        [ compile-fail test_has_template_cp_fail3.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_cp_fail3_v ]
+        [ compile-fail test_has_template_cp_fail4.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6 
+          <define>BOOST_PP_VARIADICS=1 : 
+          test_has_template_cp_fail4_v  ]
+    ;
+    
+alias ttity
+    :
         [ run test_has_type.cpp ]
         [ compile test_has_type_compile.cpp ]
         [ compile-fail test_has_type_fail.cpp ]
@@ -73,8 +263,99 @@ alias tti
         [ compile-fail test_has_type_ct_fail3.cpp ]
         [ compile-fail test_has_type_ct_fail4.cpp ]
         [ compile-fail test_has_type_ct_fail5.cpp ]
+    ;
+
+alias ttimemty
+    :
         [ run test_mem_type.cpp ]
         [ compile test_mem_type_compile.cpp ]
+    ;
+
+
+alias tti : ttimfsig ttimd ttimfn ttismfsig ttismd ttismf ttitmp ttitmpcp ttity ttimemty ;
+
+alias ttivm : : 
+        <toolset>gcc
+        <toolset-gcc:version>3.4.2
+    ;
+    
+alias ttivm : : 
+        <toolset>gcc
+        <toolset-gcc:version>3.4.5
+    ;
+    
+alias ttivm
+    :
+        [ run test_vm_has_template_cp.cpp : : : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6
+          <define>BOOST_PP_VARIADICS=1 ]
+        [ compile test_vm_has_template_cp_compile.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6
+          <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_has_template_cp_fail.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6
+          <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_has_template_cp_fail2.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6
+          <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_has_template_cp_fail3.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6
+          <define>BOOST_PP_VARIADICS=1 ]
+        [ compile-fail test_vm_has_template_cp_fail4.cpp : 
+          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
+          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
+          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
+          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
+          <define>BOOST_TTI_VERSION_1_6
+          <define>BOOST_PP_VARIADICS=1 ]
+    ;
+    
+alias ttitemplate : ttitmp ttitmpcp ;
+
+alias ttitemplate_vm : ttitmpv ttitmpcpv ttivm ;
+
+alias ttitemplate_all : ttitemplate ttitemplate_vm ;
+
+alias ttimf
+    :
         [ run test_mf_has_mem_data.cpp ]
         [ compile test_mf_has_mem_data_compile.cpp ]
         [ compile-fail test_mf_has_mem_data_fail.cpp ]
@@ -119,62 +400,8 @@ alias tti
         [ compile test_mf_mem_type_compile.cpp ]
     ;
 
-alias ttivm
-    : 
-        [ run test_vm_has_template_cp.cpp : : : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile test_vm_has_template_cp_compile.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile-fail test_vm_has_template_cp_fail.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile-fail test_vm_has_template_cp_fail2.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile-fail test_vm_has_template_cp_fail3.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile-fail test_vm_has_template_cp_fail4.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
+alias ttivmmf
+    :
         [ run test_vm_mf_has_template_cp.cpp : : : 
           <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
           <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__

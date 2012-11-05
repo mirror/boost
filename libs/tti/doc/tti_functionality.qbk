@@ -20,7 +20,7 @@ out at compile time are:
 * Does it have a static member data with a particular name and of a particular type ?
 
 These are the compile-time questions which the TTI library answers. It does this 
-by creating metafunctions which can be used at compile-time using C++ macros.
+by creating metafunctions, which can be used at compile-time, using C++ macros.
 Each of the metafunctions created returns a compile time constant bool value
 which answers one of the above questions at compile time. When the particular 
 element above exists the value is 'true', or more precisely boost::mpl::true_,
@@ -45,11 +45,11 @@ templates in whatever scope the user invokes the macro, and come in two forms:
 # In the simplest macro form, which I call the simple form, the 'name' of the inner element 
   is used directly to generate the name 
   of the metafunction as well as serving as the 'name' to introspect. In generating the name of 
-  the metafunction from the macro name, the `BOOST_TTI_` ( or `BOOST_TTI_VM_` ) prefix is removed,
+  the metafunction from the macro name, the `BOOST_TTI_` prefix is removed,
   the rest of the macro name is changed to lower case, and an underscore ( '_' ) followed 
   by the 'name' is appended.  As an example, for the macro `BOOST_TTI_HAS_TYPE(MyType)` the 
   name of the metafunction is `has_type_MyType` and it will look for an inner type called 'MyType'.
-# In the more complicated macro form, which I call the complex form, the macro starts with 
+# In a more complicated macro form, which I call the complex form, the macro starts with 
   `BOOST_TTI_TRAIT_` and a 'trait' name is passed as the first parameter, with the 'name' of the inner 
   element as the second parameter. The 'trait' name serves solely to completely name the metafunction in 
   whatever scope the macro is invoked. As an example, for the macro 
@@ -61,7 +61,9 @@ Once either of these two macro forms are used for a particular type of inner ele
 corresponding macro metafunction works exactly the same way and has the exact same functionality. 
 
 In the succeeding documentation all macro metafunctions will be referred by their simple form 
-name, but remember that the complex form can always be used instead.
+name, but remember that the complex form can always be used instead. The complex form is useful
+whenever using the simple form could create a duplicate name in the same name space, thereby
+violating the C++ one definition rule.
 
 [heading Macro Metafunction Name Generation]
 

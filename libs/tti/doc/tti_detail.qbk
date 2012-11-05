@@ -68,7 +68,7 @@ specifies whether or not the inner element exists.
     [[headerref boost/tti/has_type.hpp `has_type.hpp`]]
   ]
   [
-    [Class Template]
+    [Class Template ( using variadic macros )]
     [
     [macroref BOOST_TTI_HAS_TEMPLATE](name)
     ]
@@ -82,28 +82,42 @@ specifies whether or not the inner element exists.
     [[headerref boost/tti/has_template.hpp `has_template.hpp`]]
   ]
   [
-    [Class Template with params]
+    [Class Template ( not using variadic macros )]
     [
-    [macroref BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS](name,ppSeq[footnote A Boost PP data sequence with each comma separated portion of the template parameters as its own sequence element.])
+    [macroref BOOST_TTI_HAS_TEMPLATE](name,BOOST_PP_NIL)
     ]
     [
-    `has_template_check_params_'name'`
+    `has_template_'name'`
     
     class T = enclosing type
+    
+    All of the template parameters must be 'class' ( or 'typename' ) parameters
     ]
-    [[headerref boost/tti/has_template_check_params.hpp `has_template_check_params.hpp`]]
+    [[headerref boost/tti/has_template.hpp `has_template.hpp`]]
   ]
   [
-    [Class Template with params using variadic macros[footnote General header file is `boost/tti/tti_vm.hpp`.]]
+    [Class Template with params ( using variadic macros )]
     [
-    [macroref BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS](name,...[footnote The template parameters as variadic data.])
+    [macroref BOOST_TTI_HAS_TEMPLATE](name,...[footnote The template parameters as variadic data.])
     ]
     [
-    `has_template_check_params_'name'`
+    `has_template_'name'`
     
     class T = enclosing type
     ]
-    [[headerref boost/tti/vm_has_template_check_params.hpp `vm_has_template_check_params.hpp`]]
+    [[headerref boost/tti/has_template.hpp `has_template.hpp`]]
+  ]
+  [
+    [Class Template with params]
+    [
+    [macroref BOOST_TTI_HAS_TEMPLATE](name,ppArray[footnote The template parameters as the tuple part of the PP array.])
+    ]
+    [
+    `has_template_'name'`
+    
+    class T = enclosing type
+    ]
+    [[headerref boost/tti/has_template.hpp `has_template.hpp`]]
   ]
   [
     [Member data]

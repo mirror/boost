@@ -7,9 +7,11 @@
 
 [section:tti_detail_has_template_check_params Introspecting an inner class template with specific parameters]
 
-The TTI macro [macroref BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS]  
-introspects an inner class template, with specific template
-parameters, of a class. 
+The TTI macro [macroref BOOST_TTI_HAS_TEMPLATE], 
+besides being used to introspect an inner class template
+with all class ( or typename ) template parameters,
+can also be used to introspect an inner class template 
+with specific template parameters.
 
 BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS takes 
 two macro parameters. The first is the name of an inner class template 

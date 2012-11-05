@@ -24,7 +24,6 @@
 [include tti_detail.qbk]
 [include tti_detail_has_type.qbk]
 [include tti_detail_has_template.qbk]
-[include tti_detail_has_template_check_params.qbk]
 [include tti_detail_has_member_data.qbk]
 [include tti_detail_has_member_function.qbk]
 [include tti_detail_has_member_function_with_sig.qbk]

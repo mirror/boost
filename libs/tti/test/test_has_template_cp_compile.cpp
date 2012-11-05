@@ -10,6 +10,21 @@
 int main()
   {
   
+#if defined(BOOST_TTI_VERSION_1_6)
+
+  // You can always instantiate without compiler errors
+  
+  BOOST_TTI_HAS_TEMPLATE_GEN(TemplateNotExist)<AnotherType> aVar1;
+  
+  // Compile time asserts
+  
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_GEN(ATPMemberTemplate)<AType>));
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_GEN(AMemberTemplate)<AType>));
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_GEN(SomeMemberTemplate)<AnotherType>));
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_GEN(SimpleTMP)<AnotherType>));
+  
+#else
+
   // You can always instantiate without compiler errors
   
   BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(TemplateNotExist)<AnotherType> aVar1;
@@ -17,12 +32,15 @@ int main()
   // Compile time asserts
   
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(ATPMemberTemplate)<AType>));
-  BOOST_MPL_ASSERT((HaveCL<AType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(AMemberTemplate)<AType>));
-  BOOST_MPL_ASSERT((HaveAnotherMT<AType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(SomeMemberTemplate)<AnotherType>));
-  BOOST_MPL_ASSERT((ATemplateWithParms<AnotherType>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(SimpleTMP)<AnotherType>));
+  
+#endif
+
+  BOOST_MPL_ASSERT((HaveCL<AType>));
+  BOOST_MPL_ASSERT((HaveAnotherMT<AType>));
+  BOOST_MPL_ASSERT((ATemplateWithParms<AnotherType>));
   
   return 0;
 

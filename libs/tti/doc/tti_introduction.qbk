@@ -9,10 +9,14 @@
 
 Welcome to the Boost Type Traits Introspection library, abbreviated TTI.
 
-TTI is a library of macros generating metafunctions which provide the 
-ability to introspect by name the elements of a type at compile time.
+TTI is a library which provides the ability to introspect by name the elements 
+of a type at compile time.
 
-The name of the library is chosen because the library offers 
+TTI works through macros generating metafunctions. The metafunctions are 
+then used to introspect elements of a type at compile time, always passing
+at minimum to each metafunction the type being introspected.
+
+The name of the library has been chosen because the library offers 
 compile time functionality on a type, similar to the Boost Type Traits library, 
 and because the functionality the library offers is the ability to introspect 
 a type about the existence of a specific element within that type.
@@ -20,9 +24,9 @@ a type about the existence of a specific element within that type.
 I use the word "introspect" in a very broad sense here. Normally language 
 introspection means initially asking for information to be returned by name, 
 which can then further be used to introspect for more specific information.
-In the TTI library one must always supply the name, and use the functionality 
-provided for the correct type of inner element to find out if that particular 
-named entity exists.
+In the TTI library one must always know and supply the name, and use the 
+functionality provided for the correct type of inner element to find out 
+if that particular named entity exists.
 
 You may prefer the term "query" instead of "introspection" to denote what this 
 library does, but I use terminology based on the word "introspect" throughout 
@@ -36,6 +40,11 @@ The functionality of the library may be summed up as:
   subsequently invoked to determine whether or not the 
   element exists within the type. These generated metafunctions 
   will be called "macro metafunctions" in the documentation.
+   
+* Provide the means to create a typedef for a type which may
+  not exist. This typedef type can be used as a type in the 
+  metafunctions of the library without producing compile-time 
+  errors.
    
 The library is dependent on Boost PP, Boost MPL, 
 Boost Type Traits, and Boost Function Types. 
@@ -52,28 +61,55 @@ the TTI library.
 
 [section:tti_headers Header Files]
 
-There are two separate general header files in the library, 
-divided depending on whether or not the library 
-functionality supporting variadic macros is to be used,
-which bring in all the rest of the specific header files.
+There are is a single header file, `boost/tti/tti.hpp`, 
+which includes all the header files in the library.
 
-# The main header, which does not require using the library 
-support for variadic macros, is `boost/tti/tti.hpp`.
-This can be used for the vast majority of functionality in the library.
-# The secondary header, which uses a small subset of the 
-library functionality, providing an alternate use of particular 
-macros with variadic macro support, is `boost/tti/tti_vm.hpp`.
+There are also separate specific header files for each of the elements 
+to be introspected by the library. This allows for finer-grained inclusion
+of the nested elements to be introspected. These header files are:
 
-There are also separate specific header files for each of the elements to be 
-introspected by the library. This allows for finer-grained inclusion
-of nested elements to be introspected. These individual header files 
-will be given when discussing the individual elements.
-
-If the general header file `boost/tti/tti_vm.hpp`
-or the specific header file 
-[headerref boost/tti/vm_has_template_check_params.hpp `vm_has_template_check_params.hpp`],
-are used, the library uses variadic macros and is also dependent 
-on the variadic macro support of the Boost PP library.
+[table:tbhfiles TTI Header Files
+  [
+    [Introspected Element]
+    [Specific Header File]
+  ]
+  [
+    [Type]
+    [[headerref boost/tti/has_type.hpp `has_type.hpp`]]
+  ]
+  [
+    [Class Template]
+    [[headerref boost/tti/has_template.hpp `has_template.hpp`]]
+  ]
+  [
+    [Member data]
+    [[headerref boost/tti/has_member_data.hpp `has_member_data.hpp`]]
+  ]
+  [
+    [Member function as individual types]
+    [[headerref boost/tti/has_member_function.hpp `has_member_function.hpp`]]
+  ]
+  [
+    [Member function as a composite type]
+    [[headerref boost/tti/has_member_function_with_sig.hpp `has_member_function_with_sig.hpp`]]
+  ]
+  [
+    [Static member data]
+    [[headerref boost/tti/has_static_member_data.hpp `has_static_member_data.hpp`]]
+  ]
+  [
+    [Static member function as individual types]
+    [[headerref boost/tti/has_static_member_function.hpp `has_static_member_function.hpp`]]
+  ]
+  [
+    [Static member function as a composite type]
+    [[headerref boost/tti/has_static_member_function_with_sig.hpp `has_static_member_function_with_sig.hpp`]]
+  ]
+  [
+    [Member Type Creation]
+    [[headerref boost/tti/member_type.hpp `member_type.hpp`]]
+  ]
+]
 
 [endsect]
 

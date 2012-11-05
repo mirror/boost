@@ -4,14 +4,6 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_HAS_TEMPLATE_HPP)
-#define TTI_HAS_TEMPLATE_HPP
-
-#include <boost/config.hpp>
-#include <boost/mpl/has_xxx.hpp>
-#include <boost/preprocessor/cat.hpp>
-#include <boost/tti/gen/has_template_gen.hpp>
-
 /*
 
   The succeeding comments in this file are in doxygen format.
@@ -20,6 +12,81 @@
 
 /** \file
 */
+
+#if !defined(TTI_HAS_TEMPLATE_HPP)
+#define TTI_HAS_TEMPLATE_HPP
+
+#include <boost/config.hpp>
+#include <boost/tti/gen/has_template_gen.hpp>
+
+#if defined(BOOST_TTI_VERSION_1_6)
+
+#include <boost/preprocessor/config/config.hpp>
+#include <boost/preprocessor/control/iif.hpp>
+
+#if BOOST_PP_VARIADICS
+
+#include <boost/preprocessor/comparison/equal.hpp>
+#include <boost/preprocessor/variadic/elem.hpp>
+#include <boost/preprocessor/variadic/size.hpp>
+#include <boost/tti/detail/dvm_template_params.hpp>
+
+#define BOOST_TTI_TRAIT_HAS_TEMPLATE(trait,...) \
+  BOOST_PP_IIF \
+    ( \
+    BOOST_PP_EQUAL \
+      ( \
+      BOOST_PP_VARIADIC_SIZE(__VA_ARGS__), \
+      1 \
+      ), \
+    TTI_VM_DETAIL_TRAIT_HAS_TEMPLATE, \
+    TTI_VM_DETAIL_CHECK_MORE_THAN_TWO \
+    ) \
+    (trait,__VA_ARGS__) \
+/**/
+
+#define BOOST_TTI_HAS_TEMPLATE(...) \
+  BOOST_TTI_TRAIT_HAS_TEMPLATE \
+    ( \
+    BOOST_TTI_HAS_TEMPLATE_GEN \
+      ( \
+      BOOST_PP_VARIADIC_ELEM(0,__VA_ARGS__) \
+      ), \
+    __VA_ARGS__ \
+    ) \
+/**/
+
+#else // !BOOST_PP_VARIADICS
+
+#include <boost/preprocessor/detail/is_binary.hpp>
+#include <boost/tti/detail/dtemplate.hpp>
+#include <boost/tti/detail/dtemplate_params.hpp>
+
+#define BOOST_TTI_TRAIT_HAS_TEMPLATE(trait,name,params) \
+  BOOST_PP_IIF \
+    ( \
+    BOOST_PP_IS_BINARY(params), \
+    TTI_TRAIT_HAS_TEMPLATE_CHECK_PARAMS, \
+    TTI_DETAIL_TRAIT_CHECK_IS_NIL \
+    ) \
+    (trait,name,params) \
+/**/
+  
+#define BOOST_TTI_HAS_TEMPLATE(name,params) \
+  BOOST_TTI_TRAIT_HAS_TEMPLATE \
+  ( \
+  BOOST_TTI_HAS_TEMPLATE_GEN(name), \
+  name, \
+  params \
+  ) \
+/**/
+
+#endif // BOOST_PP_VARIADICS
+
+#else // !BOOST_TTI_VERSION_1_6
+
+#include <boost/mpl/has_xxx.hpp>
+#include <boost/preprocessor/cat.hpp>
 
 /// Expands to a metafunction which tests whether an inner class template with a particular name exists.
 /**
@@ -88,4 +155,5 @@
   ) \
 /**/
 
+#endif // BOOST_TTI_VERSION_1_6
 #endif // TTI_HAS_TEMPLATE_HPP

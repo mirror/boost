@@ -12,10 +12,20 @@ int main()
   
 #if BOOST_PP_VARIADICS
 
+#if defined(BOOST_TTI_VERSION_1_6)
+
+  // TemplateNotExist does not exist at all
+  
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_GEN(TemplateNotExist)<AType>));
+  
+#else
+
   // TemplateNotExist does not exist at all
   
   BOOST_MPL_ASSERT((BOOST_TTI_VM_HAS_TEMPLATE_CHECK_PARAMS_GEN(TemplateNotExist)<AType>));
   
+#endif
+
 #else
   
   BOOST_MPL_ASSERT((boost::mpl::false_));

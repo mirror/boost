@@ -7,6 +7,8 @@
 #if !defined(TTI_HAS_TEMPLATE_CHECK_PARAMS_HPP)
 #define TTI_HAS_TEMPLATE_CHECK_PARAMS_HPP
 
+#if !defined(BOOST_TTI_VERSION_1_6)
+
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/tti/gen/has_template_check_params_gen.hpp>
@@ -95,4 +97,5 @@
   ) \
 /**/
 
-#endif // TTI_HAS_TEMPLATE_CHECK_PARAMS_HPP
+#endif // !BOOST_TTI_VERSION_1_6
+#endif // !TTI_HAS_TEMPLATE_CHECK_PARAMS_HPP

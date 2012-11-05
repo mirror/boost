@@ -7,6 +7,8 @@
 #if !defined(TTI_VM_TEMPLATE_PARAMS_GEN_HPP)
 #define TTI_VM_TEMPLATE_PARAMS_GEN_HPP
 
+#if !defined(BOOST_TTI_VERSION_1_6)
+
 #include <boost/preprocessor/config/config.hpp>
 
 #if BOOST_PP_VARIADICS
@@ -33,4 +35,5 @@
 /**/
 
 #endif // BOOST_PP_VARIADICS
+#endif
 #endif // TTI_VM_TEMPLATE_PARAMS_GEN_HPP
