@@ -168,14 +168,13 @@ namespace boost { namespace unordered { namespace detail {
             node_constructor;
 
         typedef boost::unordered::iterator_detail::
-            iterator<node_pointer, value_type> iterator;
+            iterator<node> iterator;
         typedef boost::unordered::iterator_detail::
-            c_iterator<const_node_pointer, node_pointer, value_type> c_iterator;
+            c_iterator<node, const_node_pointer> c_iterator;
         typedef boost::unordered::iterator_detail::
-            l_iterator<node_pointer, value_type, policy> l_iterator;
+            l_iterator<node, policy> l_iterator;
         typedef boost::unordered::iterator_detail::
-            cl_iterator<const_node_pointer, node_pointer, value_type, policy>
-            cl_iterator;
+            cl_iterator<node, const_node_pointer, policy> cl_iterator;
 
         ////////////////////////////////////////////////////////////////////////
         // Members
@@ -236,16 +235,14 @@ namespace boost { namespace unordered { namespace detail {
 
         iterator begin() const
         {
-            return size_ ? iterator(static_cast<node_pointer>(
-                        get_previous_start()->next_)) : iterator();
+            return size_ ? iterator(get_previous_start()->next_) : iterator();
         }
 
         iterator begin(std::size_t bucket_index) const
         {
             if (!size_) return iterator();
             link_pointer prev = get_previous_start(bucket_index);
-            return prev ? iterator(static_cast<node_pointer>(prev->next_)) :
-                iterator();
+            return prev ? iterator(prev->next_) : iterator();
         }
 
         float load_factor() const
