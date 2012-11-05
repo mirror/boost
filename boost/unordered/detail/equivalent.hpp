@@ -545,9 +545,7 @@ namespace boost { namespace unordered { namespace detail {
             std::size_t key_hash = this->hash(k);
             std::size_t bucket_index =
                 policy::to_bucket(this->bucket_count_, key_hash);
-            bucket_pointer this_bucket = this->get_bucket(bucket_index);
-
-            link_pointer prev = this_bucket->next_;
+            link_pointer prev = this->get_previous_start(bucket_index);
             if (!prev) return 0;
 
             for (;;)
@@ -565,13 +563,12 @@ namespace boost { namespace unordered { namespace detail {
                 prev = static_cast<node_pointer>(prev->next_)->group_prev_;
             }
 
-            node_pointer pos = static_cast<node_pointer>(prev->next_);
-            link_pointer end1 =
-                static_cast<node_pointer>(pos->group_prev_)->next_;
-            node_pointer end = static_cast<node_pointer>(end1);
-            prev->next_ = end1;
-            this->fix_buckets(this_bucket, prev, end);
-            return this->delete_nodes(c_iterator(pos), c_iterator(end));
+            node_pointer first_node = static_cast<node_pointer>(prev->next_);
+            link_pointer end = static_cast<node_pointer>(first_node->group_prev_)->next_;
+
+            std::size_t count = this->delete_nodes(prev, end);
+            this->fix_bucket(bucket_index, prev);
+            return count;
         }
 
         iterator erase(c_iterator r)
@@ -579,126 +576,72 @@ namespace boost { namespace unordered { namespace detail {
             BOOST_ASSERT(r.node_);
             iterator next(r.node_);
             ++next;
-
-            bucket_pointer this_bucket = this->get_bucket(
-                policy::to_bucket(this->bucket_count_, r.node_->hash_));
-            link_pointer prev = unlink_node(*this_bucket, r.node_);
-
-            this->fix_buckets(this_bucket, prev, next.node_);
-
-            this->delete_node(r);
-
+            erase_nodes(r.node_, next.node_);
             return next;
         }
 
         iterator erase_range(c_iterator r1, c_iterator r2)
         {
             if (r1 == r2) return iterator(r2.node_);
-
-            std::size_t bucket_index =
-                policy::to_bucket(this->bucket_count_, r1.node_->hash_);
-            link_pointer prev = unlink_nodes(
-                *this->get_bucket(bucket_index), r1.node_, r2.node_);
-            this->fix_buckets_range(bucket_index, prev, r1.node_, r2.node_);
-            this->delete_nodes(r1, r2);
-
+            erase_nodes(r1.node_, r2.node_);
             return iterator(r2.node_);
         }
 
-        static link_pointer unlink_node(bucket& b, node_pointer n)
+        link_pointer erase_nodes(node_pointer begin, node_pointer end)
         {
-            node_pointer next = static_cast<node_pointer>(n->next_);
-            link_pointer prev = n->group_prev_;
+            std::size_t bucket_index =
+                policy::to_bucket(this->bucket_count_, begin->hash_);
 
-            if(prev->next_ != n) {
-                // The node is at the beginning of a group.
+            // Split the groups containing 'begin' and 'end'.
+            // And get the pointer to the node before begin while
+            // we're at it.
+            link_pointer prev = split_groups(begin, end);
 
-                // Find the previous node pointer:
-                prev = b.next_;
-                while(prev->next_ != n) {
-                    prev = static_cast<node_pointer>(prev->next_)->group_prev_;
-                }
-
-                // Remove from group
-                if (next && next->group_prev_ == n)
-                {
-                    next->group_prev_ = n->group_prev_;
-                }
-            }
-            else if (next && next->group_prev_ == n)
-            {
-                // The deleted node is not at the end of the group, so
-                // change the link from the next node.
-                next->group_prev_ = n->group_prev_;
-            }
-            else {
-                // The deleted node is at the end of the group, so the
-                // first node in the group is pointing to it.
-                // Find that to change its pointer.
-                node_pointer x = static_cast<node_pointer>(n->group_prev_);
-                while (x->group_prev_ != n) {
-                    x = static_cast<node_pointer>(x->group_prev_);
-                }
-                x->group_prev_ = n->group_prev_;
-            }
-
-            prev->next_ = next;
-            return prev;
-        }
-
-        static link_pointer unlink_nodes(bucket& b,
-                node_pointer begin, node_pointer end)
-        {
-            link_pointer prev = begin->group_prev_;
-
-            if (prev->next_ != begin) {
-                // The node is at the beginning of a group.
-
-                // Find the previous node pointer:
-                prev = b.next_;
+            // If we don't have a 'prev' it means that begin is at the
+            // beginning of a block, so search through the blocks in the
+            // same bucket.
+            if (!prev) {
+                prev = this->get_previous_start(bucket_index);
                 while (prev->next_ != begin)
                     prev = static_cast<node_pointer>(prev->next_)->group_prev_;
-
-                if (end) split_group(end);
-            }
-            else {
-                node_pointer group1 = split_group(begin);
-
-                if (end) {
-                    node_pointer group2 = split_group(end);
-
-                    if(begin == group2) {
-                        link_pointer end1 = group1->group_prev_;
-                        link_pointer end2 = end->group_prev_;
-                        group1->group_prev_ = end2;
-                        end->group_prev_ = end1;
-                    }
-                }
             }
 
-            prev->next_ = end;
+            // Delete the nodes.
+            do {
+                link_pointer group_end =
+                    static_cast<node_pointer>(
+                        static_cast<node_pointer>(prev->next_)->group_prev_)->next_;
+                this->delete_nodes(prev, group_end);
+                bucket_index = this->fix_bucket(bucket_index, prev);
+            } while(prev->next_ != end);
 
             return prev;
         }
 
-        // Break a ciruclar list into two, with split as the beginning
-        // of the second group (if split is at the beginning then don't
-        // split).
-        static node_pointer split_group(node_pointer split)
+        static link_pointer split_groups(node_pointer begin, node_pointer end)
         {
-            // Find first node in group.
-            node_pointer first = split;
-            while (static_cast<node_pointer>(first->group_prev_)->next_ ==
-                    first)
-                first = static_cast<node_pointer>(first->group_prev_);
+            node_pointer prev = static_cast<node_pointer>(begin->group_prev_);
+            if (prev->next_ != begin) prev = node_pointer();
 
-            if(first == split) return split;
+            if (end) {
+                node_pointer first = end;
+                while (first != begin && static_cast<node_pointer>(first->group_prev_)->next_ == first) {
+                    first = static_cast<node_pointer>(first->group_prev_);
+                }
 
-            link_pointer last = first->group_prev_;
-            first->group_prev_ = split->group_prev_;
-            split->group_prev_ = last;
+                boost::swap(first->group_prev_, end->group_prev_);
+                if (first == begin) return prev;
+            }
 
-            return first;
+            if (prev) {
+                node_pointer first = prev;
+                while (static_cast<node_pointer>(first->group_prev_)->next_ == first) {
+                    first = static_cast<node_pointer>(first->group_prev_);
+                }
+                boost::swap(first->group_prev_, begin->group_prev_);
+            }
+
+            return prev;
         }
 
         ////////////////////////////////////////////////////////////////////////

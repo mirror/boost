@@ -519,9 +519,7 @@ namespace boost { namespace unordered { namespace detail {
             std::size_t key_hash = this->hash(k);
             std::size_t bucket_index =
                 policy::to_bucket(this->bucket_count_, key_hash);
-            bucket_pointer this_bucket = this->get_bucket(bucket_index);
-
-            link_pointer prev = this_bucket->next_;
+            link_pointer prev = this->get_previous_start(bucket_index);
             if (!prev) return 0;
 
             for (;;)
@@ -539,11 +537,11 @@ namespace boost { namespace unordered { namespace detail {
                 prev = prev->next_;
             }
 
-            node_pointer pos = static_cast<node_pointer>(prev->next_);
-            node_pointer end = static_cast<node_pointer>(pos->next_);
-            prev->next_ = pos->next_;
-            this->fix_buckets(this_bucket, prev, end);
-            return this->delete_nodes(c_iterator(pos), c_iterator(end));
+            link_pointer end = static_cast<node_pointer>(prev->next_)->next_;
+
+            std::size_t count = this->delete_nodes(prev, end);
+            this->fix_bucket(bucket_index, prev);
+            return count;
         }
 
         iterator erase(c_iterator r)
@@ -551,44 +549,31 @@ namespace boost { namespace unordered { namespace detail {
             BOOST_ASSERT(r.node_);
             iterator next(r.node_);
             ++next;
-
-            bucket_pointer this_bucket = this->get_bucket(
-                policy::to_bucket(this->bucket_count_, r.node_->hash_));
-            link_pointer prev = unlink_node(*this_bucket, r.node_);
-
-            this->fix_buckets(this_bucket, prev, next.node_);
-
-            this->delete_node(r);
-
+            erase_nodes(r.node_, next.node_);
             return next;
         }
 
         iterator erase_range(c_iterator r1, c_iterator r2)
         {
             if (r1 == r2) return iterator(r2.node_);
-
-            std::size_t bucket_index =
-                policy::to_bucket(this->bucket_count_, r1.node_->hash_);
-            link_pointer prev = unlink_nodes(
-                *this->get_bucket(bucket_index), r1.node_, r2.node_);
-            this->fix_buckets_range(bucket_index, prev, r1.node_, r2.node_);
-            this->delete_nodes(r1, r2);
-
+            erase_nodes(r1.node_, r2.node_);
             return iterator(r2.node_);
         }
 
-        static link_pointer unlink_node(bucket& b, node_pointer n)
+        void erase_nodes(node_pointer begin, node_pointer end)
         {
-            return unlink_nodes(b, n, static_cast<node_pointer>(n->next_));
-        }
+            std::size_t bucket_index =
+                policy::to_bucket(this->bucket_count_, begin->hash_);
 
-        static link_pointer unlink_nodes(bucket& b,
-                node_pointer begin, node_pointer end)
-        {
-            link_pointer prev = b.next_;
-            while (prev->next_ != begin) prev = prev->next_;
-            prev->next_ = end;
-            return prev;
+            // Find the node before begin.
+            link_pointer prev = this->get_previous_start(bucket_index);
+            while(prev->next_ != begin) prev = prev->next_;
+
+            // Delete the nodes.
+            do {
+                this->delete_node(prev);
+                bucket_index = this->fix_bucket(bucket_index, prev);
+            } while (prev->next_ != end);
         }
 
         ////////////////////////////////////////////////////////////////////////

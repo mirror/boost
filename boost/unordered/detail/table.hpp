@@ -498,26 +498,29 @@ namespace boost { namespace unordered { namespace detail {
             delete_buckets();
         }
 
-        void delete_node(c_iterator n)
+        void delete_node(link_pointer prev)
         {
+            node_pointer n = static_cast<node_pointer>(prev->next_);
+            prev->next_ = n->next_;
+
             boost::unordered::detail::destroy_value_impl(node_alloc(),
-                n.node_->value_ptr());
+                n->value_ptr());
             node_allocator_traits::destroy(node_alloc(),
-                    boost::addressof(*n.node_));
-            node_allocator_traits::deallocate(node_alloc(), n.node_, 1);
+                    boost::addressof(*n));
+            node_allocator_traits::deallocate(node_alloc(), n, 1);
             --size_;
         }
 
-        std::size_t delete_nodes(c_iterator begin, c_iterator end)
+        std::size_t delete_nodes(link_pointer prev, link_pointer end)
         {
+            BOOST_ASSERT(prev->next_ != end);
+
             std::size_t count = 0;
 
-            while(begin != end) {
-                c_iterator n = begin;
-                ++begin;
-                delete_node(n);
+            do {
+                delete_node(prev);
                 ++count;
-            }
+            } while (prev->next_ != end);
 
             return count;
         }
@@ -525,7 +528,7 @@ namespace boost { namespace unordered { namespace detail {
         void delete_buckets()
         {
             if(buckets_) {
-                delete_nodes(begin(), iterator());
+                if (size_) delete_nodes(get_previous_start(), link_pointer());
 
                 if (bucket::extra_node) {
                     node_pointer n = static_cast<node_pointer>(
@@ -545,10 +548,9 @@ namespace boost { namespace unordered { namespace detail {
 
         void clear()
         {
-            if(!size_) return;
+            if (!size_) return;
 
-            delete_nodes(begin(), iterator());
-            get_previous_start()->next_ = link_pointer();
+            delete_nodes(get_previous_start(), link_pointer());
             clear_buckets();
 
             BOOST_ASSERT(!size_);
@@ -577,86 +579,33 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         ////////////////////////////////////////////////////////////////////////
-        // Fix buckets after erase
+        // Fix buckets after delete
+        //
 
-        // This is called after erasing a node or group of nodes to fix up
-        // the bucket pointers.
-        void fix_buckets(bucket_pointer this_bucket,
-                link_pointer prev, node_pointer next)
+        std::size_t fix_bucket(std::size_t bucket_index, link_pointer prev)
         {
-            if (!next)
+            link_pointer end = prev->next_;
+            std::size_t bucket_index2 = bucket_index;
+
+            if (end)
             {
-                if (this_bucket->next_ == prev)
-                    this_bucket->next_ = node_pointer();
-            }
-            else
-            {
-                bucket_pointer next_bucket = get_bucket(
-                    policy::to_bucket(bucket_count_, next->hash_));
+                bucket_index2 = policy::to_bucket(bucket_count_,
+                    static_cast<node_pointer>(end)->hash_);
 
-                if (next_bucket != this_bucket)
-                {
-                    next_bucket->next_ = prev;
-                    if (this_bucket->next_ == prev)
-                        this_bucket->next_ = node_pointer();
-                }
-            }
-        }
+                // If begin and end are in the same bucket, then
+                // there's nothing to do.
+                if (bucket_index == bucket_index2) return bucket_index2;
 
-        // This is called after erasing a range of nodes to fix any bucket
-        // pointers into that range.
-        void fix_buckets_range(std::size_t bucket_index,
-                link_pointer prev, node_pointer begin, node_pointer end)
-        {
-            node_pointer n = begin;
-
-            // If we're not at the start of the current bucket, then
-            // go to the start of the next bucket.
-            if (get_bucket(bucket_index)->next_ != prev)
-            {
-                for(;;) {
-                    n = static_cast<node_pointer>(n->next_);
-                    if (n == end) {
-                        if (n) {
-                            std::size_t new_bucket_index =
-                                policy::to_bucket(bucket_count_, n->hash_);
-                            if (bucket_index != new_bucket_index) {
-                                get_bucket(new_bucket_index)->next_ = prev;
-                            }
-                        }
-                        return;
-                    }
-
-                    std::size_t new_bucket_index =
-                        policy::to_bucket(bucket_count_, n->hash_);
-                    if (bucket_index != new_bucket_index) {
-                        bucket_index = new_bucket_index;
-                        break;
-                    }
-                }
+                // Update the bucket containing end.
+                get_bucket(bucket_index2)->next_ = prev;
             }
 
-            // Iterate through the remaining nodes, clearing out the bucket
-            // pointers.
-            get_bucket(bucket_index)->next_ = link_pointer();
-            for(;;) {
-                n = static_cast<node_pointer>(n->next_);
-                if (n == end) break;
+            // Check if this bucket is now empty.
+            bucket_pointer this_bucket = get_bucket(bucket_index);
+            if (this_bucket->next_ == prev)
+                this_bucket->next_ = link_pointer();
 
-                std::size_t new_bucket_index =
-                    policy::to_bucket(bucket_count_, n->hash_);
-                if (bucket_index != new_bucket_index) {
-                    bucket_index = new_bucket_index;
-                    get_bucket(bucket_index)->next_ = link_pointer();
-                }
-            };
-
-            // Finally fix the bucket containing the trailing node.
-            if (n) {
-                get_bucket(
-                    policy::to_bucket(bucket_count_, n->hash_))->next_
-                    = prev;
-            }
+            return bucket_index2;
         }
 
         ////////////////////////////////////////////////////////////////////////
