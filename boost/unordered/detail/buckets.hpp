@@ -578,8 +578,6 @@ namespace boost { namespace unordered { namespace detail {
     ///////////////////////////////////////////////////////////////////
     //
     // Hash Policy
-    //
-    // Don't really want table to derive from this, but will for now.
 
     template <typename SizeT>
     struct prime_policy

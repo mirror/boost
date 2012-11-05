@@ -125,7 +125,6 @@ namespace boost { namespace unordered { namespace detail {
 
     template <typename Types>
     struct table :
-        Types::policy,
         boost::unordered::detail::functions<
             typename Types::hasher,
             typename Types::key_equal>
@@ -244,6 +243,11 @@ namespace boost { namespace unordered { namespace detail {
             link_pointer prev = get_previous_start(bucket_index);
             return prev ? iterator(prev->next_) : iterator();
         }
+        
+        std::size_t hash_to_bucket(std::size_t hash) const
+        {
+            return policy::to_bucket(bucket_count_, hash);
+        }
 
         float load_factor() const
         {
@@ -258,8 +262,7 @@ namespace boost { namespace unordered { namespace detail {
             if (!it.node_) return 0;
 
             std::size_t count = 0;
-            while(it.node_ && policy::to_bucket(
-                        bucket_count_, it.node_->hash_) == index)
+            while(it.node_ && hash_to_bucket(it.node_->hash_) == index)
             {
                 ++count;
                 ++it;
@@ -586,7 +589,7 @@ namespace boost { namespace unordered { namespace detail {
 
             if (end)
             {
-                bucket_index2 = policy::to_bucket(bucket_count_,
+                bucket_index2 = hash_to_bucket(
                     static_cast<node_pointer>(end)->hash_);
 
                 // If begin and end are in the same bucket, then
