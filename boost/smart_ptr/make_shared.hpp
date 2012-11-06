@@ -117,6 +117,10 @@ template< class T > struct sp_if_not_array< T[] >
 {
 };
 
+template< class T, std::size_t N > struct sp_if_not_array< T[N] >
+{
+};
+
 #endif
 
 } // namespace detail
