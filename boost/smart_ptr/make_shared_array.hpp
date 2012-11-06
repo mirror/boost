@@ -19,7 +19,7 @@ namespace boost {
     template<typename T>
     inline typename detail::sp_if_array<T>::type
     make_shared(std::size_t size) {
-        typedef typename remove_cv<shared_ptr<T>::element_type>::type T1;
+        typedef typename remove_cv<typename shared_ptr<T>::element_type>::type T1;
         T1* p1 = 0;
         detail::make_array_helper<T1> a1(size, &p1);
         detail::array_deleter<T1> d1;
@@ -33,7 +33,7 @@ namespace boost {
     template<typename T, typename... Args>
     inline typename detail::sp_if_array<T>::type
     make_shared(std::size_t size, Args&&... args) {
-        typedef typename remove_cv<shared_ptr<T>::element_type>::type T1;
+        typedef typename remove_cv<typename shared_ptr<T>::element_type>::type T1;
         T1* p1 = 0;
         detail::make_array_helper<T1> a1(size, &p1);
         detail::array_deleter<T1> d1;
@@ -47,7 +47,7 @@ namespace boost {
     template<typename T>
     inline typename detail::sp_if_array<T>::type
     make_shared_noinit(std::size_t size) {
-        typedef typename remove_cv<shared_ptr<T>::element_type>::type T1;
+        typedef typename remove_cv<typename shared_ptr<T>::element_type>::type T1;
         T1* p1 = 0;
         detail::make_array_helper<T1> a1(size, &p1);
         detail::array_deleter<T1> d1;

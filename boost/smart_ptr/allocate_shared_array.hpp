@@ -19,7 +19,7 @@ namespace boost {
     template<typename T, typename A>
     inline typename detail::sp_if_array<T>::type 
     allocate_shared(const A& allocator, size_t size) {
-        typedef typename remove_cv<shared_ptr<T>::element_type>::type T1;
+        typedef typename remove_cv<typename shared_ptr<T>::element_type>::type T1;
         T1* p1 = 0;
         detail::allocate_array_helper<A, T1> a1(allocator, size, &p1);
         detail::array_deleter<T1> d1;
@@ -33,7 +33,7 @@ namespace boost {
     template<typename T, typename A, typename... Args>
     inline typename detail::sp_if_array<T>::type
     allocate_shared(const A& allocator, size_t size, Args&&... args) {
-        typedef typename remove_cv<shared_ptr<T>::element_type>::type T1;
+        typedef typename remove_cv<typename shared_ptr<T>::element_type>::type T1;
         T1* p1 = 0;
         detail::allocate_array_helper<A, T1> a1(allocator, size, &p1);
         detail::array_deleter<T1> d1;

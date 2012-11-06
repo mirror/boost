@@ -16,10 +16,10 @@ namespace boost {
     namespace detail {
         template<typename A, typename T, typename Y = T>
         class allocate_array_helper {
-            template<typename A, typename T, typename Y>
+            template<typename A9, typename T9, typename Y9>
             friend class allocate_array_helper;
-            typedef typename A::rebind<Y>   ::other A2;
-            typedef typename A::rebind<char>::other A3;
+            typedef typename A::template rebind<Y>   ::other A2;
+            typedef typename A::template rebind<char>::other A3;
         public:
             typedef typename A2::value_type      value_type;
             typedef typename A2::pointer         pointer;

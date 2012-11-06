@@ -16,16 +16,16 @@ namespace boost {
     namespace detail {
         template<typename T, typename Y = T>
         class make_array_helper {
-            template<typename T, typename Y>
+            template<typename T2, typename Y2>
             friend class make_array_helper;
         public:
-            typedef typename Y           value_type;
-            typedef typename Y*          pointer;
-            typedef typename const Y*    const_pointer;
-            typedef typename Y&          reference;
-            typedef typename const Y&    const_reference;
-            typedef typename std::size_t size_type;
-            typedef typename ptrdiff_t   difference_type;
+            typedef Y           value_type;
+            typedef Y*          pointer;
+            typedef const Y*    const_pointer;
+            typedef Y&          reference;
+            typedef const Y&    const_reference;
+            typedef std::size_t size_type;
+            typedef ptrdiff_t   difference_type;
             template<typename U>
             struct rebind {
                 typedef make_array_helper<T, U> other;
