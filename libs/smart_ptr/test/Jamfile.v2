@@ -128,5 +128,12 @@ import testing ;
           [ compile-fail array_fail_dereference.cpp ]
           [ compile-fail array_fail_member_access.cpp ]
           [ compile-fail array_fail_array_access.cpp ]
+          
+          [ run make_shared_array_test.cpp ]
+          [ run make_shared_array_throws_test.cpp ]
+          [ run make_shared_array_esft_test.cpp ]
+          [ run allocate_shared_array_test.cpp ]
+          [ run allocate_shared_array_throws_test.cpp ]
+          [ run allocate_shared_array_esft_test.cpp ]
         ;
 }
