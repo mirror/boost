@@ -9,7 +9,7 @@
 #ifndef BOOST_SMART_PTR_MAKE_SHARED_ARRAY_HPP
 #define BOOST_SMART_PTR_MAKE_SHARED_ARRAY_HPP
 
-#include <boost/shared_ptr.hpp>
+#include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/detail/array_deleter.hpp>
 #include <boost/smart_ptr/detail/make_array_helper.hpp>
 #include <boost/smart_ptr/detail/sp_if_array.hpp>

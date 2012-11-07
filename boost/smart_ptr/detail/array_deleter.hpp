@@ -10,6 +10,7 @@
 #define BOOST_SMART_PTR_DETAIL_ARRAY_DELETER_HPP
 
 #include <boost/config.hpp>
+#include <boost/smart_ptr/detail/array_helper.hpp>
 #include <cstddef>
 
 namespace boost {
@@ -25,23 +26,20 @@ namespace boost {
             }
             void construct(T* memory, std::size_t count) {
                 for (object = memory; size < count; size++) {
-                    void* p1 = object + size;
-                    ::new(p1) T();
+                    array_helper<T>::create(object[size]);
                 }
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
             template<typename... Args>
             void construct(T* memory, std::size_t count, Args&&... args) {
                 for (object = memory; size < count; size++) {
-                    void* p1 = object + size;
-                    ::new(p1) T(args...);
+                    array_helper<T>::create(object[size], args...);
                 }
             }
 #endif
             void construct_noinit(T* memory, std::size_t count) {
                 for (object = memory; size < count; size++) {
-                    void* p1 = object + size;
-                    ::new(p1) T;
+                    array_helper<T>::create_noinit(object[size]);
                 }
             }
             void operator()(T*) {
@@ -50,7 +48,7 @@ namespace boost {
         private:
             void destroy() {
                 while (size > 0) {
-                    object[--size].~T();
+                    array_helper<T>::destroy(object[--size]);
                 }
             }
             std::size_t size;
