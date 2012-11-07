@@ -53,24 +53,9 @@ template< class Y, class T > struct sp_convertible< Y, T[] >
     enum _vt { value = false };
 };
 
-template< class T > struct sp_convertible< T[], T[] >
+template< class Y, class T > struct sp_convertible< Y[], T[] >
 {
-    enum _vt { value = true };
-};
-
-template< class T > struct sp_convertible< T[], T const [] >
-{
-    enum _vt { value = true };
-};
-
-template< class T > struct sp_convertible< T[], T volatile [] >
-{
-    enum _vt { value = true };
-};
-
-template< class T > struct sp_convertible< T[], T const volatile [] >
-{
-    enum _vt { value = true };
+    enum _vt { value = sp_convertible< Y[1], T[1] >::value };
 };
 
 struct sp_empty
