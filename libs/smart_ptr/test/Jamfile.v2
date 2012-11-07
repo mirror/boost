@@ -72,6 +72,7 @@ import testing ;
           [ run sp_unique_ptr_test.cpp ]
           [ run sp_array_test.cpp ]
           [ compile sp_array_cv_test.cpp ]
+          [ run sp_convertible_test.cpp ]
 
           [ compile-fail array_fail_spa_sp_c.cpp ]
           [ compile-fail array_fail_sp_spa_c.cpp ]
