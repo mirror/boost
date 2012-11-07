@@ -13,6 +13,14 @@ namespace boost {
     namespace detail {
         template<typename T>
         struct array_helper {
+            static void create(T& value) {
+                void* p1 = &value;
+                ::new(p1) T();
+            }
+            static void create_noinit(T& value) {
+                void* p1 = &value;
+                ::new(p1) T;
+            }
             static void destroy(T& value) {
                 value.~T();        
             }
