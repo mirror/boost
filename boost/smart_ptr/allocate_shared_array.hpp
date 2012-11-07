@@ -44,7 +44,7 @@ namespace boost {
         size_t n1 = size * detail::array_size<T1>::size;
         detail::allocate_array_helper<A, T2> a1(allocator, n1, &p2);
         detail::array_deleter<T2> d1;
-        shared_ptr<T> s1(p2, d1, a1);
+        shared_ptr<T> s1(p1, d1, a1);
         detail::array_deleter<T2>* d2;
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
