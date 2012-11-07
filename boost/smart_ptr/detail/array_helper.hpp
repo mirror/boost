@@ -36,12 +36,12 @@ namespace boost {
         template<typename T, size_t N>
         struct array_helper<T[N]> {
             static void create(T value[N]) {
-                void* p1 = &value;
-                ::new(p1) T[N]();
+                array_helper<T[N-1]>::create(value);
+                array_helper<T>::create(value[N-1]);
             }
             static void create_noinit(T value[N]) {
-                void* p1 = &value;
-                ::new(p1) T[N];
+                array_helper<T[N-1]>::create_noinit(value, args);
+                array_helper<T>::create_noinit(value[N-1], args);
             }
             static void destroy(T value[N]) {
                 array_helper<T>::destroy(value[N-1]);
@@ -57,6 +57,10 @@ namespace boost {
         };
         template<typename T>
         struct array_helper<T[0]> {
+            static void create(T[]) {
+            }
+            static void create_noinit(T[]) {
+            }
             static void destroy(T[]) {
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
