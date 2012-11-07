@@ -49,7 +49,7 @@ namespace boost {
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
         d2->construct(p2, n1, std::forward<Args>(args)...);
-        return shared_ptr<T>(s1, p1)
+        return shared_ptr<T>(s1, p1);
     }
 #endif
 }
