@@ -10,7 +10,6 @@
 #define BOOST_SMART_PTR_DETAIL_ARRAY_DELETER_HPP
 
 #include <boost/config.hpp>
-#include <boost/smart_ptr/detail/array_helper.hpp>
 #include <cstddef>
 
 namespace boost {
@@ -24,31 +23,34 @@ namespace boost {
             ~array_deleter() {
                 destroy();
             }
-            void construct(T* memory, std::size_t count) {
-                for (object = memory; size < count; size++) {
-                    array_helper<T>::create(object[size]);
+            void construct(void* memory, std::size_t count) {
+                for (object = static_cast<T*>(memory); size < count; size++) {
+                    void* p1 = object + size;
+                    ::new(p1) T();
                 }
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
             template<typename... Args>
-            void construct(T* memory, std::size_t count, Args&&... args) {
-                for (object = memory; size < count; size++) {
-                    array_helper<T>::create(object[size], args...);
+            void construct(void* memory, std::size_t count, Args&&... args) {
+                for (object = static_cast<T*>(memory); size < count; size++) {
+                    void* p1 = object + size;
+                    ::new(p1) T(args...);
                 }
             }
 #endif
-            void construct_noinit(T* memory, std::size_t count) {
-                for (object = memory; size < count; size++) {
-                    array_helper<T>::create_noinit(object[size]);
+            void construct_noinit(void* memory, std::size_t count) {
+                for (object = static_cast<T*>(memory); size < count; size++) {
+                    void* p1 = object + size;
+                    ::new(p1) T;
                 }
             }
-            void operator()(T*) {
+            void operator()(const void*) {
                 destroy();
             }
         private:
             void destroy() {
                 while (size > 0) {
-                    array_helper<T>::destroy(object[--size]);
+                    object[--size].~T();
                 }
             }
             std::size_t size;
