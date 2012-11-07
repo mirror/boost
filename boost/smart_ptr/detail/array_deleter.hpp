@@ -23,23 +23,23 @@ namespace boost {
             ~array_deleter() {
                 destroy();
             }
-            void construct(void* memory, std::size_t count) {
-                for (object = static_cast<T*>(memory); size < count; size++) {
+            void construct(T* memory, std::size_t count) {
+                for (object = memory; size < count; size++) {
                     void* p1 = object + size;
                     ::new(p1) T();
                 }
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
             template<typename... Args>
-            void construct(void* memory, std::size_t count, Args&&... args) {
-                for (object = static_cast<T*>(memory); size < count; size++) {
+            void construct(T* memory, std::size_t count, Args&&... args) {
+                for (object = memory; size < count; size++) {
                     void* p1 = object + size;
                     ::new(p1) T(args...);
                 }
             }
 #endif
-            void construct_noinit(void* memory, std::size_t count) {
-                for (object = static_cast<T*>(memory); size < count; size++) {
+            void construct_noinit(T* memory, std::size_t count) {
+                for (object = memory; size < count; size++) {
                     void* p1 = object + size;
                     ::new(p1) T;
                 }
