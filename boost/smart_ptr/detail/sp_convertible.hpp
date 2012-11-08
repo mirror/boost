@@ -58,6 +58,11 @@ template< class Y, class T > struct sp_convertible< Y[], T[] >
     enum _vt { value = sp_convertible< Y[1], T[1] >::value };
 };
 
+template< class Y, std::size_t N, class T > struct sp_convertible< Y[N], T[] >
+{
+    enum _vt { value = sp_convertible< Y[1], T[1] >::value };
+};
+
 struct sp_empty
 {
 };

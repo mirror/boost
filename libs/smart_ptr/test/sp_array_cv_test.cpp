@@ -14,29 +14,47 @@ struct X
 {
 };
 
+class B
+{
+};
+
+class D: public B
+{
+};
+
+#define TEST_CONV( T, U ) \
+    { \
+        boost::shared_ptr< T > p1; \
+        boost::shared_ptr< U > p2( p1 ); \
+        p2 = p1; \
+        boost::shared_ptr< U > p3 = boost::shared_ptr< T >(); \
+        p3 = boost::shared_ptr< T >(); \
+    }
+
+#define TEST_CV_TRUE( T, U ) \
+    TEST_CONV( T, U ) \
+    TEST_CONV( T, const U ) \
+    TEST_CONV( T, volatile U ) \
+    TEST_CONV( T, const volatile U ) \
+    TEST_CONV( const T, const U ) \
+    TEST_CONV( const T, const volatile U ) \
+    TEST_CONV( volatile T, volatile U ) \
+    TEST_CONV( volatile T, const volatile U ) \
+    TEST_CONV( const volatile T, const volatile U )
+
 int main()
 {
-    boost::shared_ptr< X[] > px;
+    TEST_CV_TRUE( X, X )
+    TEST_CV_TRUE( X, void )
+    TEST_CV_TRUE( D, B )
 
-    boost::shared_ptr< X const[] > pcx( px );
-    boost::shared_ptr< X volatile[] > pvx( px );
+    TEST_CV_TRUE( X[], X[] )
+    TEST_CV_TRUE( X[3], X[3] )
 
-    boost::shared_ptr< X const volatile[] > pcvx( px );
-    boost::shared_ptr< X const volatile[] > pcvx2( pcx );
-    boost::shared_ptr< X const volatile[] > pcvx3( pvx );
+    TEST_CV_TRUE( X[3], X[] )
 
-    boost::shared_ptr< void > pv( px );
-
-    boost::shared_ptr< void const > pcv( px );
-    boost::shared_ptr< void const > pcv2( pcx );
-
-    boost::shared_ptr< void volatile > pvv( px );
-    boost::shared_ptr< void volatile > pvv2( pvx );
-
-    boost::shared_ptr< void const volatile > pcvv( px );
-    boost::shared_ptr< void const volatile > pcvv2( pcx );
-    boost::shared_ptr< void const volatile > pcvv3( pvx );
-    boost::shared_ptr< void const volatile > pcvv4( pcvx );
+    TEST_CV_TRUE( X[], void )
+    TEST_CV_TRUE( X[3], void )
 
     return 0;
 }

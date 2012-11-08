@@ -81,6 +81,11 @@ template< class T > struct sp_element< T[] >
     typedef T type;
 };
 
+template< class T, std::size_t N > struct sp_element< T[N] >
+{
+    typedef T type;
+};
+
 #endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
 // sp_dereference, return type of operator*
@@ -121,6 +126,11 @@ template< class T > struct sp_dereference< T[] >
     typedef void type;
 };
 
+template< class T, std::size_t N > struct sp_dereference< T[N] >
+{
+    typedef void type;
+};
+
 #endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
 // sp_member_access, return type of operator->
@@ -133,6 +143,11 @@ template< class T > struct sp_member_access
 #if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
 template< class T > struct sp_member_access< T[] >
+{
+    typedef void type;
+};
+
+template< class T, std::size_t N > struct sp_member_access< T[N] >
 {
     typedef void type;
 };
@@ -151,6 +166,27 @@ template< class T > struct sp_array_access
 template< class T > struct sp_array_access< T[] >
 {
     typedef T & type;
+};
+
+template< class T, std::size_t N > struct sp_array_access< T[N] >
+{
+    typedef T & type;
+};
+
+#endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+// sp_extent, for operator[] index check
+
+template< class T > struct sp_extent
+{
+    enum _vt { value = 0 };
+};
+
+#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+
+template< class T, std::size_t N > struct sp_extent< T[N] >
+{
+    enum _vt { value = N };
 };
 
 #endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
@@ -207,8 +243,9 @@ template< class T, class R > struct sp_enable_if_auto_ptr< std::auto_ptr< T >, R
 
 template< class Y, class T > inline void sp_assert_convertible()
 {
-    T* p = static_cast< Y* >( 0 );
-    (void)p;
+    // static_assert( sp_convertible< Y, T >::value );
+    typedef char tmp[ sp_convertible< Y, T >::value? 1: -1 ];
+    (void)sizeof( tmp );
 }
 
 // pointer constructor helper
@@ -224,7 +261,12 @@ template< class T, class Y > inline void sp_pointer_construct( boost::shared_ptr
 template< class T, class Y > inline void sp_pointer_construct( boost::shared_ptr< T[] > * /*ppx*/, Y * p, boost::detail::shared_count & pn )
 {
     sp_assert_convertible< Y[], T[] >();
+    boost::detail::shared_count( p, boost::checked_array_deleter< T >() ).swap( pn );
+}
 
+template< class T, std::size_t N, class Y > inline void sp_pointer_construct( boost::shared_ptr< T[N] > * /*ppx*/, Y * p, boost::detail::shared_count & pn )
+{
+    sp_assert_convertible< Y[N], T[N] >();
     boost::detail::shared_count( p, boost::checked_array_deleter< T >() ).swap( pn );
 }
 
@@ -242,6 +284,11 @@ template< class T, class Y > inline void sp_deleter_construct( boost::shared_ptr
 template< class T, class Y > inline void sp_deleter_construct( boost::shared_ptr< T[] > * /*ppx*/, Y * /*p*/ )
 {
     sp_assert_convertible< Y[], T[] >();
+}
+
+template< class T, std::size_t N, class Y > inline void sp_deleter_construct( boost::shared_ptr< T[N] > * /*ppx*/, Y * /*p*/ )
+{
+    sp_assert_convertible< Y[N], T[N] >();
 }
 
 #endif // !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
@@ -547,7 +594,7 @@ public:
     typename boost::detail::sp_array_access< T >::type operator[] ( std::ptrdiff_t i ) const // never throws
     {
         BOOST_ASSERT( px != 0 );
-        BOOST_ASSERT( i >= 0 );
+        BOOST_ASSERT( i >= 0 && ( i < boost::detail::sp_extent< T >::value || boost::detail::sp_extent< T >::value == 0 ) );
 
         return px[ i ];
     }

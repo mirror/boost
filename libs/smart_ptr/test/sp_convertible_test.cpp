@@ -78,7 +78,7 @@ int main()
     TEST_CV_FALSE( X[3], X[4] )
     TEST_CV_FALSE( D[3], B[3] )
 
-    //TEST_CV_TRUE( X[3], X[] )
+    TEST_CV_TRUE( X[3], X[] )
     TEST_CV_FALSE( X[], X[3] )
 
     TEST_CV_TRUE( X[], void )
