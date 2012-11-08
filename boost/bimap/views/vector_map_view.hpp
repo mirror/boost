@@ -41,7 +41,7 @@ class vector_map_view
     public BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR(
         vector_map_adaptor,
         Tag,BimapType,
-        reverse_iterator_type_by, const_reverse_iterator_type_by
+        reverse_map_view_iterator, const_reverse_map_view_iterator
     ),
 
     public ::boost::bimaps::detail::
@@ -50,7 +50,7 @@ class vector_map_view
     typedef BOOST_BIMAP_MAP_VIEW_CONTAINER_ADAPTOR(
         vector_map_adaptor,
         Tag,BimapType,
-        reverse_iterator_type_by, const_reverse_iterator_type_by
+        reverse_map_view_iterator, const_reverse_map_view_iterator
 
     ) base_;
 
@@ -273,7 +273,7 @@ typedef BOOST_DEDUCED_TYPENAME MAP_VIEW::TYPENAME                             \
 /*===========================================================================*/
 #define BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEFS_BODY(MAP_VIEW,SIDE)               \
     BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,reverse_iterator)        \
-    BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,const_reverse_iterator)  \
+    BOOST_BIMAP_MAP_VIEW_EXTRA_TYPEDEF(MAP_VIEW,SIDE,const_reverse_iterator)
 /*===========================================================================*/
 
 namespace detail {
