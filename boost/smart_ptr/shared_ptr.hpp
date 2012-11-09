@@ -243,9 +243,18 @@ template< class T, class R > struct sp_enable_if_auto_ptr< std::auto_ptr< T >, R
 
 template< class Y, class T > inline void sp_assert_convertible()
 {
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
+
     // static_assert( sp_convertible< Y, T >::value );
     typedef char tmp[ sp_convertible< Y, T >::value? 1: -1 ];
     (void)sizeof( tmp );
+
+#else
+
+    T* p = static_cast< Y* >( 0 );
+    (void)p;
+
+#endif
 }
 
 // pointer constructor helper
