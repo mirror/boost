@@ -10,6 +10,9 @@
 #define BOOST_SMART_PTR_DETAIL_ARRAY_TRAITS_HPP
 
 #include <boost/type_traits/remove_cv.hpp>
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+#include <initializer_list>
+#endif
 
 namespace boost {
     namespace detail {
@@ -17,22 +20,37 @@ namespace boost {
         struct array_type {
             typedef typename boost::remove_cv<T>::type type;
         };
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
         template<typename T, size_t N>
         struct array_type<T[N]> {
             typedef typename array_type<T>::type type;
         };
+#endif
         template<typename T>
         struct array_size {
             enum {
                 size = 1
             };
         };
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
         template<typename T, size_t N>
         struct array_size<T[N]> {
             enum {
                 size = N * array_size<T>::size
             };
         };
+#endif
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+        template<typename T> 
+        struct array_list {
+        };
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+        template<typename T>
+        struct array_list<T[]> {
+            typedef std::initializer_list<T> type;
+        };
+#endif
+#endif
     }
 }
 

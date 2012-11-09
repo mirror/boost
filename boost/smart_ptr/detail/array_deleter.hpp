@@ -38,6 +38,14 @@ namespace boost {
                 }
             }
 #endif
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+            void construct(T* memory, std::size_t count, const T* list) {
+                for (object = memory; size < count; size++) {
+                    void* p1 = object + size;
+                    ::new(p1) T(list[size]);
+                }
+            }
+#endif
             void construct_noinit(T* memory, std::size_t count) {
                 for (object = memory; size < count; size++) {
                     void* p1 = object + size;
