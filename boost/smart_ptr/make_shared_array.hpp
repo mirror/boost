@@ -58,19 +58,19 @@ namespace boost {
     make_shared(std::size_t size, typename detail::array_list<T>::type list) {
         typedef typename shared_ptr<T>::element_type  T1;
         typedef typename detail::array_type<T1>::type T2;
-        typedef const T1* L1;
-        typedef const T2* L2;
+        typedef const T2 T3;
         T1* p1 = 0;
         T2* p2 = 0;
-        L1 l1 = list.begin();
+        T3* p3 = 0;
         size_t n1 = size * detail::array_size<T1>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
-        detail::array_deleter<T2>* d2;
+        detail::array_deleter<T2>* d2;        
+        p3 = reinterpret_cast<T3*>(list.begin());
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
-        d2->construct(p2, n1, L2(l1));
+        d2->construct(p2, n1, p3);
         return shared_ptr<T>(s1, p1);
     }
 #endif
