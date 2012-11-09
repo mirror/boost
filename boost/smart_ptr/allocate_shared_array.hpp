@@ -55,14 +55,14 @@ namespace boost {
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template<typename T, typename A>
     inline typename detail::sp_if_array<T>::type
-    allocate_shared(const A& allocator, size_t size, typename detail::array_list<T>::type list) {
+    allocate_shared(const A& allocator, typename detail::array_list<T>::type list) {
         typedef typename shared_ptr<T>::element_type  T1;
         typedef typename detail::array_type<T1>::type T2;
         typedef const T2 T3;
         T1* p1 = 0;
         T2* p2 = 0;
         T3* p3 = 0;
-        size_t n1 = size * detail::array_size<T1>::size;
+        size_t n1 = list.size() * detail::array_size<T1>::size;
         detail::allocate_array_helper<A, T2> a1(allocator, n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
