@@ -56,6 +56,10 @@ namespace boost {
         struct array_list<T[]> {
             typedef std::initializer_list<T> type;
         };
+        template<typename T, size_t N>
+        struct array_list<T[N]> {
+            typedef std::initializer_list<T> type;
+        };
 #endif
     }
 }

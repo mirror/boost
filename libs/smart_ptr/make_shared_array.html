@@ -50,9 +50,15 @@
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template&lt;typename T, typename... Args&gt;
     shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(std::initializer_list&lt;T&gt; list);
+    
+    template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(std::initializer_list&lt;T&gt; list);
         
     template&lt;typename T, typename A, typename... Args&gt;
     shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, std::initializer_list&lt;T&gt; list);
+    
+    template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, std::initializer_list&lt;T&gt; list);
 #endif
 
     template&lt;typename T&gt;
