@@ -23,7 +23,7 @@ namespace boost {
         typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        size_t n1 = size * detail::array_size<T1>::size;
+        size_t n1 = size * detail::array_total<T1>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -41,7 +41,7 @@ namespace boost {
         typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        size_t n1 = size * detail::array_size<T1>::size;
+        size_t n1 = size * detail::array_total<T1>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -58,7 +58,7 @@ namespace boost {
         typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        size_t n1 = detail::array_size<T>::size;
+        size_t n1 = detail::array_total<T>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -79,7 +79,7 @@ namespace boost {
         T1* p1 = 0;
         T2* p2 = 0;
         T3* p3 = 0;
-        size_t n1 = list.size() * detail::array_size<T1>::size;
+        size_t n1 = list.size() * detail::array_total<T1>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -93,13 +93,14 @@ namespace boost {
     template<typename T>
     inline typename detail::sp_if_size_array<T>::type
     make_shared(typename detail::array_list<T>::type list) {
+        BOOST_ASSERT(list.size() == detail::array_size<T>::size);
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
         typedef const T2 T3;
         T1* p1 = 0;
         T2* p2 = 0;
         T3* p3 = 0;
-        size_t n1 = detail::array_size<T>::size;
+        size_t n1 = detail::array_total<T>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -118,7 +119,7 @@ namespace boost {
         typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        size_t n1 = size * detail::array_size<T1>::size;
+        size_t n1 = size * detail::array_total<T1>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -135,7 +136,7 @@ namespace boost {
         typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        size_t n1 = detail::array_size<T>::size;
+        size_t n1 = detail::array_total<T>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);

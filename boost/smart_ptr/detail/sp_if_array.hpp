@@ -23,7 +23,7 @@ namespace boost {
         template<typename T>
         struct sp_if_size_array {
         };
-        template<typename T, size_t N>
+        template<typename T, std::size_t N>
         struct sp_if_size_array<T[N]> {
             typedef boost::shared_ptr<T[N]> type;
         };

@@ -13,7 +13,6 @@
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
 #endif
-#include <cstddef>
 
 namespace boost {
     namespace detail {
@@ -27,14 +26,23 @@ namespace boost {
         };
         template<typename T>
         struct array_size {
+        };
+        template<typename T, size_t N>
+        struct array_size<T[N]> {
+            enum {
+                size = N
+            };
+        };
+        template<typename T>
+        struct array_total {
             enum {
                 size = 1
             };
         };
         template<typename T, std::size_t N>
-        struct array_size<T[N]> {
+        struct array_total<T[N]> {
             enum {
-                size = N * array_size<T>::size
+                size = N * array_total<T>::size
             };
         };
         template<typename T> 
