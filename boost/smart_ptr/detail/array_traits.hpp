@@ -13,43 +13,45 @@
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
 #endif
+#include <cstddef>
 
 namespace boost {
     namespace detail {
         template<typename T>
-        struct array_type {
+        struct array_base {
             typedef typename boost::remove_cv<T>::type type;
         };
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-        template<typename T, size_t N>
-        struct array_type<T[N]> {
-            typedef typename array_type<T>::type type;
+        template<typename T, std::size_t N>
+        struct array_base<T[N]> {
+            typedef typename array_base<T>::type type;
         };
-#endif
         template<typename T>
         struct array_size {
             enum {
                 size = 1
             };
         };
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-        template<typename T, size_t N>
+        template<typename T, std::size_t N>
         struct array_size<T[N]> {
             enum {
                 size = N * array_size<T>::size
             };
         };
-#endif
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         template<typename T> 
+        struct array_inner {
+        };
+        template<typename T>
+        struct array_inner<T[]> {
+            typedef T type;
+        };
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+        template<typename T>
         struct array_list {
         };
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
         template<typename T>
         struct array_list<T[]> {
             typedef std::initializer_list<T> type;
         };
-#endif
 #endif
     }
 }

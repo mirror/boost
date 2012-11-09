@@ -19,8 +19,8 @@ namespace boost {
     template<typename T, typename A>
     inline typename detail::sp_if_array<T>::type 
     allocate_shared(const A& allocator, size_t size) {
-        typedef typename shared_ptr<T>::element_type  T1;
-        typedef typename detail::array_type<T1>::type T2;
+        typedef typename detail::array_inner<T>::type T1;
+        typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
         size_t n1 = size * detail::array_size<T1>::size;
@@ -37,8 +37,8 @@ namespace boost {
     template<typename T, typename A, typename... Args>
     inline typename detail::sp_if_array<T>::type
     allocate_shared(const A& allocator, size_t size, Args&&... args) {
-        typedef typename shared_ptr<T>::element_type  T1;
-        typedef typename detail::array_type<T1>::type T2;
+        typedef typename detail::array_inner<T>::type T1;
+        typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
         size_t n1 = size * detail::array_size<T1>::size;
@@ -56,8 +56,8 @@ namespace boost {
     template<typename T, typename A>
     inline typename detail::sp_if_array<T>::type
     allocate_shared(const A& allocator, typename detail::array_list<T>::type list) {
-        typedef typename shared_ptr<T>::element_type  T1;
-        typedef typename detail::array_type<T1>::type T2;
+        typedef typename detail::array_inner<T>::type T1;
+        typedef typename detail::array_base<T1>::type T2;
         typedef const T2 T3;
         T1* p1 = 0;
         T2* p2 = 0;
