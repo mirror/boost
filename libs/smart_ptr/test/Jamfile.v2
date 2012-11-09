@@ -144,5 +144,6 @@ import testing ;
           [ run allocate_shared_arrays_create_test.cpp ]
           [ run allocate_shared_array_throws_test.cpp ]
           [ run allocate_shared_array_esft_test.cpp ]
+          [ run allocate_shared_array_args_test.cpp ]
         ;
 }
