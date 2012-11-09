@@ -28,21 +28,38 @@
     <h2><a name="Synopsis">Synopsis</a></h2>
     <pre>namespace boost {
     template&lt;typename T&gt;
-    shared_ptr&lt;T&gt; <a href="#functions">make_shared</a>(size_t size);
+    shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(size_t size);
 
     template&lt;typename T, typename A&gt;
-    shared_ptr&lt;T&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size);
+    shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size);
     
 #if defined(BOOST_HAS_VARIADIC_TMPL) &amp;&amp; defined(BOOST_HAS_RVALUE_REFS)
     template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T&gt; <a href="#functions">make_shared</a>(size_t size, Args&amp;&amp;... args);
+    shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(size_t size, Args&amp;&amp;... args);
+    
+    template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(Args&amp;&amp;... args);
     
     template&lt;typename T, typename A, typename... Args&gt;
     shared_ptr&lt;T&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size, Args&amp;&amp;... args);
+    
+    template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, Args&amp;&amp;... args);
+#endif
+
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+    template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(std::initializer_list&lt;T&gt; list);
+        
+    template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, std::initializer_list&lt;T&gt; list);
 #endif
 
     template&lt;typename T&gt;
     shared_ptr&lt;T&gt; <a href="#functions">make_shared_noinit</a>(size_t size);
+    
+    template&lt;typename T&gt;
+    shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared_noinit</a>();
 }</pre>
     <h2><a name="functions">Free Functions</a></h2>
     <pre>template&lt;typename T, typename... Args&gt;

@@ -44,6 +44,10 @@ namespace boost {
         struct array_inner<T[]> {
             typedef T type;
         };
+        template<typename T, size_t N>
+        struct array_inner<T[N]> {
+            typedef T type;
+        };
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         template<typename T>
         struct array_list {

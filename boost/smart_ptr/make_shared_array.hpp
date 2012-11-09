@@ -51,6 +51,23 @@ namespace boost {
         d2->construct(p2, n1, std::forward<Args>(args)...);
         return shared_ptr<T>(s1, p1);
     }
+    template<typename T, typename... Args>
+    inline typename detail::sp_if_size_array<T>::type
+    make_shared(Args&&... args) {
+        typedef typename detail::array_inner<T>::type T1;
+        typedef typename detail::array_base<T1>::type T2;
+        T1* p1 = 0;
+        T2* p2 = 0;
+        size_t n1 = detail::array_size<T>::size;
+        detail::make_array_helper<T2> a1(n1, &p2);
+        detail::array_deleter<T2> d1;
+        shared_ptr<T> s1(p1, d1, a1);
+        detail::array_deleter<T2>* d2;
+        p1 = reinterpret_cast<T1*>(p2);        
+        d2 = get_deleter<detail::array_deleter<T2> >(s1);
+        d2->construct(p2, n1, std::forward<Args>(args)...);
+        return shared_ptr<T>(s1, p1);
+    }
 #endif
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template<typename T>
@@ -82,6 +99,23 @@ namespace boost {
         T1* p1 = 0;
         T2* p2 = 0;
         size_t n1 = size * detail::array_size<T1>::size;
+        detail::make_array_helper<T2> a1(n1, &p2);
+        detail::array_deleter<T2> d1;
+        shared_ptr<T> s1(p1, d1, a1);
+        detail::array_deleter<T2>* d2;
+        p1 = reinterpret_cast<T1*>(p2);        
+        d2 = get_deleter<detail::array_deleter<T2> >(s1);
+        d2->construct_noinit(p2, n1);
+        return shared_ptr<T>(s1, p1);
+    }
+    template<typename T>
+    inline typename detail::sp_if_size_array<T>::type
+    make_shared_noinit() {
+        typedef typename detail::array_inner<T>::type T1;
+        typedef typename detail::array_base<T1>::type T2;
+        T1* p1 = 0;
+        T2* p2 = 0;
+        size_t n1 = detail::array_size<T>::size;
         detail::make_array_helper<T2> a1(n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
