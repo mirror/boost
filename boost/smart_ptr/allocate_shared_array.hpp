@@ -14,6 +14,9 @@
 #include <boost/smart_ptr/detail/array_deleter.hpp>
 #include <boost/smart_ptr/detail/array_traits.hpp>
 #include <boost/smart_ptr/detail/sp_if_array.hpp>
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+#include <initializer_list>
+#endif
 
 namespace boost {
     template<typename T, typename A>
@@ -72,7 +75,7 @@ namespace boost {
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template<typename T, typename A>
     inline typename detail::sp_if_array<T>::type
-    allocate_shared(const A& allocator, typename detail::array_list<T>::type list) {
+    allocate_shared(const A& allocator, std::initializer_list<typename detail::array_inner<T>::type> list) {
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
         typedef const T2 T3;
@@ -92,7 +95,7 @@ namespace boost {
     }
     template<typename T, typename A>
     inline typename detail::sp_if_size_array<T>::type
-    allocate_shared(const A& allocator, typename detail::array_list<T>::type list) {
+    allocate_shared(const A& allocator, std::initializer_list<typename detail::array_inner<T>::type> list) {
         BOOST_ASSERT(list.size() == detail::array_size<T>::size);
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
@@ -113,7 +116,7 @@ namespace boost {
     }
     template<typename T, typename A>
     inline typename detail::sp_if_array<T>::type
-    allocate_shared(const A& allocator, std::size_t size, typename detail::inner_list<T>::type list) {
+    allocate_shared(const A& allocator, std::size_t size, std::initializer_list<typename detail::arrays_inner<T>::type> list) {
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
         typedef const T2 T3;

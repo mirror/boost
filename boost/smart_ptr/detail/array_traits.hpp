@@ -10,9 +10,6 @@
 #define BOOST_SMART_PTR_DETAIL_ARRAY_TRAITS_HPP
 
 #include <boost/type_traits/remove_cv.hpp>
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
-#include <initializer_list>
-#endif
 
 namespace boost {
     namespace detail {
@@ -56,26 +53,13 @@ namespace boost {
         struct array_inner<T[N]> {
             typedef T type;
         };
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
-        template<typename T>
-        struct array_list {
+        template<typename T> 
+        struct arrays_inner {
         };
-        template<typename T>
-        struct array_list<T[]> {
-            typedef std::initializer_list<T> type;
+        template<typename T, size_t N> 
+        struct arrays_inner<T[][N]> {
+            typedef T type;
         };
-        template<typename T, size_t N>
-        struct array_list<T[N]> {
-            typedef std::initializer_list<T> type;
-        };
-        template<typename T>
-        struct inner_list {
-        };
-        template<typename T, size_t N>
-        struct inner_list<T[][N]> {
-            typedef std::initializer_list<T> type;
-        };
-#endif
     }
 }
 
