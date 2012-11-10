@@ -116,7 +116,8 @@ namespace boost {
     }
     template<typename T>
     inline typename detail::sp_if_array<T>::type
-    make_shared(std::size_t size, std::initializer_list<typename detail::arrays_inner<T>::type> list) {
+    make_shared(std::size_t size, 
+        std::initializer_list<typename detail::arrays_inner<T>::type> list) {
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
         typedef const T2 T3;
