@@ -8,6 +8,7 @@
  */
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/smart_ptr/make_shared_array.hpp>
+#include <string>
 
 int main() {
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
@@ -24,6 +25,20 @@ int main() {
         BOOST_TEST(a1[0][1] == 1);
         BOOST_TEST(a1[1][0] == 2);
         BOOST_TEST(a1[1][1] == 3);
+    }
+    {
+        boost::shared_ptr<int[][2]> a1 = boost::make_shared<int[][2]>(2, {0, 1});
+        BOOST_TEST(a1[0][0] == 0);
+        BOOST_TEST(a1[0][1] == 1);
+        BOOST_TEST(a1[1][0] == 0);
+        BOOST_TEST(a1[1][1] == 1);
+    }
+    {
+        boost::shared_ptr<int[][2][2]> a1 = boost::make_shared<int[][2][2]>(2, { {0, 1}, {2, 3} });
+        BOOST_TEST(a1[0][0][0] == 0);
+        BOOST_TEST(a1[0][0][1] == 1);
+        BOOST_TEST(a1[1][1][0] == 2);
+        BOOST_TEST(a1[1][1][1] == 3);
     }
 #endif
     return boost::report_errors();

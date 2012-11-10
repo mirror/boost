@@ -18,12 +18,12 @@
 namespace boost {
     template<typename T, typename A>
     inline typename detail::sp_if_array<T>::type 
-    allocate_shared(const A& allocator, size_t size) {
+    allocate_shared(const A& allocator, std::size_t size) {
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        size_t n1 = size * detail::array_total<T1>::size;
+        std::size_t n1 = size * detail::array_total<T1>::size;
         detail::allocate_array_helper<A, T2> a1(allocator, n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -36,12 +36,12 @@ namespace boost {
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
     template<typename T, typename A, typename... Args>
     inline typename detail::sp_if_array<T>::type
-    allocate_shared(const A& allocator, size_t size, Args&&... args) {
+    allocate_shared(const A& allocator, std::size_t size, Args&&... args) {
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        size_t n1 = size * detail::array_total<T1>::size;
+        std::size_t n1 = size * detail::array_total<T1>::size;
         detail::allocate_array_helper<A, T2> a1(allocator, n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -58,7 +58,7 @@ namespace boost {
         typedef typename detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        size_t n1 = detail::array_total<T>::size;
+        std::size_t n1 = detail::array_total<T>::size;
         detail::allocate_array_helper<A, T2> a1(allocator, n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -79,7 +79,7 @@ namespace boost {
         T1* p1 = 0;
         T2* p2 = 0;
         T3* p3 = 0;
-        size_t n1 = list.size() * detail::array_total<T1>::size;
+        std::size_t n1 = list.size() * detail::array_total<T1>::size;
         detail::allocate_array_helper<A, T2> a1(allocator, n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -87,7 +87,7 @@ namespace boost {
         p3 = reinterpret_cast<T3*>(list.begin());
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
-        d2->construct(p2, n1, p3);
+        d2->construct_list(p2, n1, p3);
         return shared_ptr<T>(s1, p1);
     }
     template<typename T, typename A>
@@ -100,7 +100,7 @@ namespace boost {
         T1* p1 = 0;
         T2* p2 = 0;
         T3* p3 = 0;
-        size_t n1 = detail::array_total<T>::size;
+        std::size_t n1 = detail::array_total<T>::size;
         detail::allocate_array_helper<A, T2> a1(allocator, n1, &p2);
         detail::array_deleter<T2> d1;
         shared_ptr<T> s1(p1, d1, a1);
@@ -108,7 +108,28 @@ namespace boost {
         p3 = reinterpret_cast<T3*>(list.begin());
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
-        d2->construct(p2, n1, p3);
+        d2->construct_list(p2, n1, p3);
+        return shared_ptr<T>(s1, p1);
+    }
+    template<typename T, typename A>
+    inline typename detail::sp_if_array<T>::type
+    allocate_shared(const A& allocator, std::size_t size, typename detail::inner_list<T>::type list) {
+        typedef typename detail::array_inner<T>::type T1;
+        typedef typename detail::array_base<T1>::type T2;
+        typedef const T2 T3;
+        T1* p1 = 0;
+        T2* p2 = 0;
+        T3* p3 = 0;
+        std::size_t n0 = detail::array_total<T1>::size;
+        std::size_t n1 = n0 * list.size();
+        detail::allocate_array_helper<A, T2> a1(allocator, n1, &p2);
+        detail::array_deleter<T2> d1;
+        shared_ptr<T> s1(p1, d1, a1);
+        detail::array_deleter<T2>* d2;
+        p3 = reinterpret_cast<T3*>(list.begin());
+        p1 = reinterpret_cast<T1*>(p2);
+        d2 = get_deleter<detail::array_deleter<T2> >(s1);
+        d2->construct_list(p2, n1, p3, n0);
         return shared_ptr<T>(s1, p1);
     }
 #endif

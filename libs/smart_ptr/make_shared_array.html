@@ -49,16 +49,22 @@
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(std::initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
     
     template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(std::initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
+    
+    template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[][N]&gt; <a href="#functions">make_shared</a>(size_t size, initializer_list&lt;T&gt; list);
         
     template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, std::initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
     
     template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, std::initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
+    
+    template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size, initializer_list&lt;T&gt; list);
 #endif
 
     template&lt;typename T&gt;
@@ -74,7 +80,7 @@ template&lt;typename T, typename A, typename... Args&gt;
     shared_ptr&lt;T&gt; allocate_shared(const A&amp; allocator, size_t size, Args&amp;&amp;... args);</pre>
     <blockquote>
       <p><b>Requires:</b> The expression 
-        <code>new(pointer) T(std::forward&lt;Args&gt;(args)...)</code>, where 
+        <code>new(pointer) T(forward&lt;Args&gt;(args)...)</code>, where 
         <code>pointer</code> is a <code>void*</code> pointing to storage 
         suitable to hold an object of type <code>T</code>, shall be 
         well-formed. <code>A</code> shall be an <em>Allocator</em>, as 
@@ -85,7 +91,7 @@ template&lt;typename T, typename A, typename... Args&gt;
         <code>T</code> and size <code>size</code> and constructs an array 
         of objects in it via the placement new expression 
         <code>new(pointer) T()</code> or 
-        <code>new(pointer) T(std::forward&lt;Args&gt;(args)...)</code>.
+        <code>new(pointer) T(forward&lt;Args&gt;(args)...)</code>.
         <code>allocate_shared</code> uses a copy of 
         <code>allocator</code> to allocate memory.  If an exception is thrown, 
         has no effect.</p>
