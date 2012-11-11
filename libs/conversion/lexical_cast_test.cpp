@@ -607,17 +607,21 @@ void test_char32_conversions()
 }
 #endif
 
-template <class To, class From, class Func>
-To try_cast_by_ptr(const From& from, Func f) {
-    return f(from);
-};
-
 void test_getting_pointer_to_function()
 {
     // Just checking that &lexical_cast<To, From> is not ambiguous
-    BOOST_CHECK_EQUAL(100, try_cast_by_ptr<int>("100", &boost::lexical_cast<int, const char[4]>));
-    BOOST_CHECK_EQUAL(100, try_cast_by_ptr<int>("100", &boost::lexical_cast<int, std::string>));
-    BOOST_CHECK_EQUAL(std::string("100"), try_cast_by_ptr<std::string>(100, &boost::lexical_cast<std::string, int>));
+    typedef char char_arr[4];    
+    typedef int(*f1)(const char_arr&);
+    f1 p1 = &boost::lexical_cast<int, char_arr>;
+    BOOST_CHECK(p1);
+
+    typedef int(*f2)(const std::string&);
+    f2 p2 = &boost::lexical_cast<int, std::string>;
+    BOOST_CHECK(p2);
+
+    typedef std::string(*f3)(const int&);
+    f3 p3 = &boost::lexical_cast<std::string, int>;
+    BOOST_CHECK(p3);
 }
 
 
