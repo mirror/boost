@@ -33,6 +33,7 @@ test-suite variant
     [ run variant_comparison_test.cpp ]
     [ run variant_visit_test.cpp ]
     [ run hash_variant_test.cpp ]
+    [ run rvalue_test.cpp ]
    ; 
 
 
