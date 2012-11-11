@@ -38,7 +38,21 @@ int main() {
     }
     BOOST_TEST(type::instances == 0);
     try {
-        boost::shared_ptr<type[]> a1 = boost::make_shared_noinit<type[]>(6);
+        boost::make_shared<type[][2]>(3);
+        BOOST_ERROR("make_shared did not throw");
+    } catch (...) {
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    try {
+        boost::make_shared_noinit<type[]>(6);
+        BOOST_ERROR("make_shared_noinit did not throw");
+    } catch (...) {
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    try {
+        boost::make_shared_noinit<type[][2]>(3);
         BOOST_ERROR("make_shared_noinit did not throw");
     } catch (...) {
         BOOST_TEST(type::instances == 0);

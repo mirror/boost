@@ -36,5 +36,12 @@ int main() {
     } catch (...) {
         BOOST_TEST(type::instances == 0);
     }
+    BOOST_TEST(type::instances == 0);
+    try {
+        boost::allocate_shared<type[][2]>(std::allocator<type>(), 3);
+        BOOST_ERROR("allocate_shared did not throw");
+    } catch (...) {
+        BOOST_TEST(type::instances == 0);
+    }
     return boost::report_errors();
 }

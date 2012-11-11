@@ -59,11 +59,40 @@ int main() {
         BOOST_TEST(a1.get() != 0);        
         BOOST_TEST(a1.use_count() == 1);
         BOOST_TEST(type::instances == 8);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
     }
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
     BOOST_TEST(type::instances == 0);
     {
         boost::shared_ptr<type[][2][2]> a1 = boost::allocate_shared<type[][2][2]>(std::allocator<type>(), 2, 1, 5);
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(type::instances == 8);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<type[2][2][2]> a1 = boost::allocate_shared<type[2][2][2]>(std::allocator<type>(), 1, 5);
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(type::instances == 8);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<const type[][2][2]> a1 = boost::allocate_shared<const type[][2][2]>(std::allocator<type>(), 2, 1, 5);
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(type::instances == 8);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<const type[2][2][2]> a1 = boost::allocate_shared<const type[2][2][2]>(std::allocator<type>(), 1, 5);
         BOOST_TEST(a1.get() != 0);
         BOOST_TEST(a1.use_count() == 1);
         BOOST_TEST(type::instances == 8);

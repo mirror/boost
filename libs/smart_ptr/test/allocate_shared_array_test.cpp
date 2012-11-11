@@ -70,15 +70,53 @@ int main() {
         BOOST_TEST(a2 != 0);
         BOOST_TEST(size_t(a2) % boost::alignment_of<type>::value == 0);
         BOOST_TEST(type::instances == 3);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
     }
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
     BOOST_TEST(type::instances == 0);
     {
         boost::shared_ptr<type[]> a1 = boost::allocate_shared<type[]>(std::allocator<type>(), 3, 1, 5);
         type* a2 = a1.get();
+        BOOST_TEST(a1.use_count() == 1);        
+        BOOST_TEST(a2 != 0);
+        BOOST_TEST(size_t(a2) % boost::alignment_of<type>::value == 0);        
         BOOST_TEST(type::instances == 3);
+        boost::weak_ptr<type[]> w1 = a1;
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<type[3]> a1 = boost::allocate_shared<type[3]>(std::allocator<type>(), 1, 5);
+        type* a2 = a1.get();
+        BOOST_TEST(a1.use_count() == 1);        
         BOOST_TEST(a2 != 0);
         BOOST_TEST(size_t(a2) % boost::alignment_of<type>::value == 0);
+        BOOST_TEST(type::instances == 3);
+        boost::weak_ptr<type[3]> w1 = a1;
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<const type[]> a1 = boost::allocate_shared<const type[]>(std::allocator<type>(), 3, 1, 5);
+        const type* a2 = a1.get();
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(a2 != 0);
+        BOOST_TEST(size_t(a2) % boost::alignment_of<type>::value == 0);        
+        BOOST_TEST(type::instances == 3);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<const type[3]> a1 = boost::allocate_shared<const type[3]>(std::allocator<type>(), 1, 5);
+        const type* a2 = a1.get();
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(a2 != 0);
+        BOOST_TEST(size_t(a2) % boost::alignment_of<type>::value == 0);        
+        BOOST_TEST(type::instances == 3);
         a1.reset();
         BOOST_TEST(type::instances == 0);
     }

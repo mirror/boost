@@ -34,7 +34,7 @@ int main() {
         try {
             a1[0].shared_from_this();
             BOOST_ERROR("shared_from_this did not throw");
-        } catch (const boost::bad_weak_ptr&) {
+        } catch (...) {
             BOOST_TEST(type::instances == 3);
         }
     }

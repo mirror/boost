@@ -110,21 +110,5 @@ int main() {
         BOOST_TEST(a1[1][0][0][0].i == 0);
     }
 #endif
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
-    {
-        boost::shared_ptr<int[]> a1 = boost::make_shared<int[]>({ 0, 1, 2, 3 });
-        BOOST_TEST(a1[0] == 0);
-        BOOST_TEST(a1[1] == 1);
-        BOOST_TEST(a1[2] == 2);
-        BOOST_TEST(a1[3] == 3);
-    }
-    {
-        boost::shared_ptr<int[4]> a1 = boost::make_shared<int[4]>({ 0, 1, 2, 3 });
-        BOOST_TEST(a1[0] == 0);
-        BOOST_TEST(a1[1] == 1);
-        BOOST_TEST(a1[2] == 2);
-        BOOST_TEST(a1[3] == 3);
-    }
-#endif
     return boost::report_errors();
 }
