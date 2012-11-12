@@ -78,7 +78,14 @@ public:
     explicit split_interval_map(const value_type& value_pair): base_type()
     { this->add(value_pair); }
 
-    /// Copy assignment operator
+    /// Assignment operator
+    split_interval_map& operator = (const split_interval_map& src)
+    { 
+        base_type::operator=(src);
+        return *this;
+    }
+
+    /// Assignment operator for base type
     template<class SubType>
     split_interval_map& operator =
         (const interval_base_map<SubType,DomainT,CodomainT,

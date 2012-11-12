@@ -116,6 +116,13 @@ public:
     }
 
     /// Assignment operator
+    interval_set& operator = (const interval_set& src)
+    { 
+        base_type::operator=(src);
+        return *this;
+    }
+
+    /// Assignment operator for base type
     template<class SubType>
     interval_set& operator =
         (const interval_base_set<SubType,DomainT,Compare,Interval,Alloc>& src)

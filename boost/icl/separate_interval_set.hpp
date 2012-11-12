@@ -107,6 +107,13 @@ public:
     explicit separate_interval_set(const interval_type& itv): base_type() { this->add(itv); }
 
     /// Assignment operator
+    separate_interval_set& operator = (const separate_interval_set& src)
+    { 
+        base_type::operator=(src);
+        return *this;
+    }
+
+    /// Assignment operator for base type
     template<class SubType>
     separate_interval_set& operator =
         (const interval_base_set<SubType,DomainT,Compare,Interval,Alloc>& src)

@@ -105,6 +105,13 @@ public:
     explicit split_interval_set(const domain_type& itv): base_type() { this->add(itv); }
 
     /// Assignment operator
+    split_interval_set& operator = (const split_interval_set& src)
+    { 
+        base_type::operator=(src);
+        return *this;
+    }
+
+    /// Assignment operator for base type
     template<class SubType>
     split_interval_set& operator =
         (const interval_base_set<SubType,DomainT,Compare,Interval,Alloc>& src)

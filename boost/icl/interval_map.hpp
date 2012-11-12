@@ -94,6 +94,13 @@ public:
 
 
     /// Assignment operator
+    interval_map& operator = (const interval_map& src)
+    { 
+        base_type::operator=(src);
+        return *this;
+    }
+
+    /// Assignment operator for base type
     template<class SubType>
     interval_map& operator =
         (const interval_base_map<SubType,DomainT,CodomainT,
