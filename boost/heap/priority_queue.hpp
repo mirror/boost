@@ -11,6 +11,7 @@
 
 #include <algorithm>
 #include <queue>
+#include <utility>
 #include <vector>
 
 #include <boost/assert.hpp>

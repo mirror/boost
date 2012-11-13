@@ -1,5 +1,17 @@
+/*=============================================================================
+    Copyright (c) 2010 Tim Blechmann
+
+    Use, modification and distribution is subject to the Boost Software
+    License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
+    http://www.boost.org/LICENSE_1_0.txt)
+=============================================================================*/
+
 #define BOOST_TEST_MAIN
+#ifdef BOOST_HEAP_INCLUDE_TESTS
+#include <boost/test/included/unit_test.hpp>
+#else
 #include <boost/test/unit_test.hpp>
+#endif
 
 #include <algorithm>
 
@@ -99,4 +111,12 @@ BOOST_AUTO_TEST_CASE( d_ary_heap_mutable_stable_test )
     run_d_ary_heap_mutable_test<3, true>();
     run_d_ary_heap_mutable_test<4, true>();
     run_d_ary_heap_mutable_test<5, true>();
+}
+
+BOOST_AUTO_TEST_CASE( d_ary_heap_compare_lookup_test )
+{
+    typedef boost::heap::d_ary_heap<int, boost::heap::arity<2>,
+                                    boost::heap::compare<less_with_T>,
+                                    boost::heap::allocator<std::allocator<int> > > pri_queue;
+    run_common_heap_tests<pri_queue>();
 }
