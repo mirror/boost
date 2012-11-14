@@ -24,7 +24,7 @@ namespace boost {
         template<typename T>
         struct array_size {
         };
-        template<typename T, size_t N>
+        template<typename T, std::size_t N>
         struct array_size<T[N]> {
             enum {
                 size = N
@@ -49,15 +49,19 @@ namespace boost {
         struct array_inner<T[]> {
             typedef T type;
         };
-        template<typename T, size_t N>
+        template<typename T, std::size_t N>
         struct array_inner<T[N]> {
             typedef T type;
         };
         template<typename T> 
         struct arrays_inner {
         };
-        template<typename T, size_t N> 
+        template<typename T, std::size_t N> 
         struct arrays_inner<T[][N]> {
+            typedef T type;
+        };
+        template<typename T, std::size_t M, std::size_t N> 
+        struct arrays_inner<T[M][N]> {
             typedef T type;
         };
     }
