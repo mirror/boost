@@ -29,7 +29,7 @@ private:
 
 public:
 
-    typedef T element_type;
+    typedef typename boost::detail::sp_element< T >::type element_type;
 
     weak_ptr(): px(0), pn() // never throws in 1.30+
     {
@@ -83,6 +83,7 @@ public:
 #endif
     : px(r.lock().get()), pn(r.pn) // never throws
     {
+        boost::detail::sp_assert_convertible< Y, T >();
     }
 
 #if defined( BOOST_HAS_RVALUE_REFS )
@@ -99,6 +100,7 @@ public:
 #endif
     : px( r.lock().get() ), pn( static_cast< boost::detail::weak_count && >( r.pn ) ) // never throws
     {
+        boost::detail::sp_assert_convertible< Y, T >();
         r.px = 0;
     }
 
@@ -130,15 +132,19 @@ public:
 #endif
     : px( r.px ), pn( r.pn ) // never throws
     {
+        boost::detail::sp_assert_convertible< Y, T >();
     }
 
 #if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1300)
 
     template<class Y>
-    weak_ptr & operator=(weak_ptr<Y> const & r) // never throws
+    weak_ptr & operator=( weak_ptr<Y> const & r ) // never throws
     {
+        boost::detail::sp_assert_convertible< Y, T >();
+
         px = r.lock().get();
         pn = r.pn;
+
         return *this;
     }
 
@@ -154,10 +160,13 @@ public:
 #endif
 
     template<class Y>
-    weak_ptr & operator=(shared_ptr<Y> const & r) // never throws
+    weak_ptr & operator=( shared_ptr<Y> const & r ) // never throws
     {
+        boost::detail::sp_assert_convertible< Y, T >();
+
         px = r.px;
         pn = r.pn;
+
         return *this;
     }
 
@@ -165,7 +174,7 @@ public:
 
     shared_ptr<T> lock() const // never throws
     {
-        return shared_ptr<element_type>( *this, boost::detail::sp_nothrow_tag() );
+        return shared_ptr<T>( *this, boost::detail::sp_nothrow_tag() );
     }
 
     long use_count() const // never throws
@@ -195,7 +204,7 @@ public:
     }
 
     template<typename Y>
-    void _internal_aliasing_assign(weak_ptr<Y> const & r, T * px2)
+    void _internal_aliasing_assign(weak_ptr<Y> const & r, element_type * px2)
     {
         px = px2;
         pn = r.pn;
@@ -223,7 +232,7 @@ private:
 
 #endif
 
-    T * px;                       // contained pointer
+    element_type * px;            // contained pointer
     boost::detail::weak_count pn; // reference counter
 
 };  // weak_ptr

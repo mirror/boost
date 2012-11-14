@@ -5,7 +5,7 @@
 //  shared_array.hpp
 //
 //  (C) Copyright Greg Colvin and Beman Dawes 1998, 1999.
-//  Copyright (c) 2001, 2002 Peter Dimov
+//  Copyright (c) 2001, 2002, 2012 Peter Dimov
 //
 //  Distributed under the Boost Software License, Version 1.0. (See
 //  accompanying file LICENSE_1_0.txt or copy at
@@ -25,6 +25,7 @@
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
 
+#include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/detail/shared_count.hpp>
 #include <boost/detail/workaround.hpp>
 
@@ -55,8 +56,14 @@ public:
 
     typedef T element_type;
 
-    explicit shared_array(T * p = 0): px(p), pn(p, deleter())
+    shared_array(): px( 0 ), pn() // never throws
     {
+    }
+
+    template<class Y>
+    explicit shared_array( Y * p ): px( p ), pn( p, checked_array_deleter<Y>() )
+    {
+        boost::detail::sp_assert_convertible< Y[], T[] >();
     }
 
     //
@@ -65,8 +72,16 @@ public:
     // shared_array will release p by calling d(p)
     //
 
-    template<class D> shared_array(T * p, D d): px(p), pn(p, d)
+    template<class Y, class D> shared_array( Y * p, D d ): px( p ), pn( p, d )
     {
+        boost::detail::sp_assert_convertible< Y[], T[] >();
+    }
+
+    // As above, but with allocator. A's copy constructor shall not throw.
+
+    template<class Y, class D, class A> shared_array( Y * p, D d, A a ): px( p ), pn( p, d, a )
+    {
+        boost::detail::sp_assert_convertible< Y[], T[] >();
     }
 
 //  generated copy constructor, destructor are fine...
@@ -79,7 +94,37 @@ public:
     {
     }
 
+    shared_array( shared_array && r ): px( r.px ), pn() // never throws
+    {
+        pn.swap( r.pn );
+        r.px = 0;
+    }
+
 #endif
+
+    // conversion
+
+    template<class Y>
+#if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
+
+    shared_array( shared_array<Y> const & r, typename boost::detail::sp_enable_if_convertible< Y[], T[] >::type = boost::detail::sp_empty() )
+
+#else
+
+    shared_array( shared_array<Y> const & r )
+
+#endif
+    : px( r.px ), pn( r.pn ) // never throws
+    {
+        boost::detail::sp_assert_convertible< Y[], T[] >();
+    }
+
+    // aliasing
+
+    template< class Y >
+    shared_array( shared_array<Y> const & r, element_type * p ): px( p ), pn( r.pn ) // never throws
+    {
+    }
 
     // assignment
 
@@ -89,15 +134,58 @@ public:
         return *this;
     }
 
-    void reset(T * p = 0)
+#if !defined(BOOST_MSVC) || (BOOST_MSVC >= 1400)
+
+    template<class Y>
+    shared_array & operator=( shared_array<Y> const & r ) // never throws
     {
-        BOOST_ASSERT(p == 0 || p != px);
-        this_type(p).swap(*this);
+        this_type( r ).swap( *this );
+        return *this;
     }
 
-    template <class D> void reset(T * p, D d)
+#endif
+
+#if defined( BOOST_HAS_RVALUE_REFS )
+
+    shared_array & operator=( shared_array && r ) // never throws
     {
-        this_type(p, d).swap(*this);
+        this_type( static_cast< shared_array && >( r ) ).swap( *this );
+        return *this;
+    }
+
+    template<class Y>
+    shared_array & operator=( shared_array<Y> && r ) // never throws
+    {
+        this_type( static_cast< shared_array<Y> && >( r ) ).swap( *this );
+        return *this;
+    }
+
+#endif
+
+    void reset() // never throws
+    {
+        this_type().swap( *this );
+    }
+
+    template<class Y> void reset( Y * p ) // Y must be complete
+    {
+        BOOST_ASSERT( p == 0 || p != px ); // catch self-reset errors
+        this_type( p ).swap( *this );
+    }
+
+    template<class Y, class D> void reset( Y * p, D d )
+    {
+        this_type( p, d ).swap( *this );
+    }
+
+    template<class Y, class D, class A> void reset( Y * p, D d, A a )
+    {
+        this_type( p, d, a ).swap( *this );
+    }
+
+    template<class Y> void reset( shared_array<Y> const & r, element_type * p )
+    {
+        this_type( r, p ).swap( *this );
     }
 
     T & operator[] (std::ptrdiff_t i) const // never throws
@@ -137,6 +225,8 @@ public:
     }
 
 private:
+
+    template<class Y> friend class shared_array;
 
     T * px;                     // contained pointer
     detail::shared_count pn;    // reference counter
