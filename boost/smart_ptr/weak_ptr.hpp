@@ -194,10 +194,11 @@ public:
         pn.swap(other.pn);
     }
 
-    void _internal_assign(T * px2, boost::detail::shared_count const & pn2)
+    template<typename Y>
+    void _internal_aliasing_assign(weak_ptr<Y> const & r, T * px2)
     {
         px = px2;
-        pn = pn2;
+        pn = r.pn;
     }
 
     template<class Y> bool owner_before( weak_ptr<Y> const & rhs ) const
