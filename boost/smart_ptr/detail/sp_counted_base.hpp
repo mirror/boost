@@ -47,7 +47,7 @@
 #elif defined( __MWERKS__ ) && defined( __POWERPC__ )
 # include <boost/smart_ptr/detail/sp_counted_base_cw_ppc.hpp>
 
-#elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) || defined( __ppc ) ) && !defined(__PATHSCALE__)
+#elif defined( __GNUC__ ) && ( defined( __powerpc__ ) || defined( __ppc__ ) || defined( __ppc ) ) && !defined(__PATHSCALE__) && !defined( _AIX )
 # include <boost/smart_ptr/detail/sp_counted_base_gcc_ppc.hpp>
 
 #elif defined( __GNUC__ ) && ( defined( __mips__ ) || defined( _mips ) ) && !defined(__PATHSCALE__)
