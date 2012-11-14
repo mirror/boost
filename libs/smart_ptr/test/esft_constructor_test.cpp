@@ -13,14 +13,13 @@
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
-
-#include <boost/smart_ptr/enable_shared_from_this2.hpp>
+#include <boost/smart_ptr/enable_shared_from_raw.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/weak_ptr.hpp>
 #include <boost/detail/lightweight_test.hpp>
 #include <memory>
 
-class X: public boost::enable_shared_from_this2< X >
+class X: public boost::enable_shared_from_raw
 {
 private:
 
@@ -42,7 +41,7 @@ public:
     explicit X( int expected, boost::shared_ptr<X> *early_px = 0 ): destroyed_( 0 ), deleted_( 0 ), expected_( expected )
     {
         ++instances;
-        if( early_px ) *early_px = shared_from_this();
+        if( early_px ) *early_px = shared_from_raw(this);
     }
 
     ~X()
@@ -75,7 +74,7 @@ bool are_shared_owners(const boost::shared_ptr<T> &a, const boost::shared_ptr<U>
     return !(a < b) && !(b < a);
 }
 
-struct Y: public boost::enable_shared_from_this2<Y>
+struct Y: public boost::enable_shared_from_raw
 {};
 
 int main()
@@ -87,14 +86,15 @@ int main()
         X* x = new X( 1, &early_px );
         BOOST_TEST( early_px.use_count() > 0 );
         BOOST_TEST( boost::get_deleter<X::deleter_type>(early_px) == 0 );
+        BOOST_TEST( early_px.get() == x );
         boost::shared_ptr<X> px( x, &X::deleter2 );
         BOOST_TEST( early_px.use_count() == 2 && px.use_count() == 2 );
         BOOST_TEST(are_shared_owners(early_px, px));
         px.reset();
         BOOST_TEST( early_px.use_count() == 1 );
         BOOST_TEST( X::instances == 1 );
-        // X::deleter_type *pd = boost::get_deleter<X::deleter_type>(early_px);
-        // BOOST_TEST(pd && *pd == &X::deleter2 );
+        X::deleter_type *pd = boost::get_deleter<X::deleter_type>(early_px);
+        BOOST_TEST(pd && *pd == &X::deleter2 );
     }
 
     BOOST_TEST( X::instances == 0 );
@@ -117,7 +117,7 @@ int main()
 
     {
         boost::shared_ptr<X> early_px;
-        X x( 1, &early_px );
+        X x( 2, &early_px );
         BOOST_TEST( early_px.use_count() > 0 );
         boost::shared_ptr<X> px( &x, &X::deleter );
         BOOST_TEST( early_px.use_count() == 2 && px.use_count() == 2 );
@@ -125,13 +125,11 @@ int main()
         BOOST_TEST( px.use_count() == 1 );
         BOOST_TEST( X::instances == 1 );
         px.reset();
-        try
-        {
-            x.shared_from_this();
-            BOOST_ERROR("x did not throw bad_weak_ptr");
-        }
-        catch( const boost::bad_weak_ptr & )
-        {}
+        // test reinitialization after all shared_ptr have expired
+        early_px = shared_from_raw(&x);
+        px.reset( &x, &X::deleter );
+        BOOST_TEST(are_shared_owners(early_px, px));
+        early_px.reset();
     }
 
     BOOST_TEST( X::instances == 0 );
@@ -157,7 +155,7 @@ int main()
         px.reset();
         try
         {
-            y.shared_from_this();
+            shared_from_raw(&y);
         }
         catch( const boost::bad_weak_ptr & )
         {
