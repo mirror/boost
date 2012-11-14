@@ -37,6 +37,10 @@
 #include <functional>       // std::less
 #include <new>              // std::bad_alloc
 
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+# include <boost/utility/addressof.hpp>
+#endif
+
 namespace boost
 {
 
@@ -55,6 +59,38 @@ struct sp_nothrow_tag {};
 template< class D > struct sp_inplace_tag
 {
 };
+
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+
+template< class T > class sp_reference_wrapper
+{ 
+public:
+
+    explicit sp_reference_wrapper( T & t): t_( boost::addressof( t ) )
+    {
+    }
+
+    template< class Y > void operator()( Y * p ) const
+    {
+        (*t_)( p );
+    }
+
+private:
+
+    T * t_;
+};
+
+template< class D > struct sp_convert_reference
+{
+    typedef D type;
+};
+
+template< class D > struct sp_convert_reference< D& >
+{
+    typedef sp_reference_wrapper< D > type;
+};
+
+#endif
 
 class weak_count;
 
@@ -299,6 +335,33 @@ public:
     }
 
 #endif 
+
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+
+    template<class Y, class D>
+    explicit shared_count( std::unique_ptr<Y, D> & r ): pi_( 0 )
+#if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
+        , id_(shared_count_id)
+#endif
+    {
+        typedef typename sp_convert_reference<D>::type D2;
+
+        D2 d2( r.get_deleter() );
+        pi_ = new sp_counted_impl_pd< Y*, D2 >( r.get(), d2 );
+
+#ifdef BOOST_NO_EXCEPTIONS
+
+        if( pi_ == 0 )
+        {
+            boost::throw_exception( std::bad_alloc() );
+        }
+
+#endif
+
+        r.release();
+    }
+
+#endif
 
     ~shared_count() // nothrow
     {

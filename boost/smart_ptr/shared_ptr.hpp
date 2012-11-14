@@ -304,6 +304,18 @@ public:
 
 #endif // BOOST_NO_AUTO_PTR
 
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+
+    template< class Y, class D >
+    shared_ptr( std::unique_ptr< Y, D > && r): px( r.get() ), pn()
+    {
+        Y * tmp = r.get();
+        pn = boost::detail::shared_count( r );
+        boost::detail::sp_enable_shared_from_this( this, tmp, tmp );
+    }
+
+#endif
+
     // assignment
 
     shared_ptr & operator=( shared_ptr const & r ) // never throws
