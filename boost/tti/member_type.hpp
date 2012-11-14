@@ -56,8 +56,8 @@
     
 */
 #define BOOST_TTI_TRAIT_MEMBER_TYPE(trait,name) \
-    TTI_DETAIL_TRAIT_HAS_TYPE_MEMBER_TYPE(trait,name) \
-    TTI_DETAIL_TRAIT_MEMBER_TYPE(trait,name) \
+    BOOST_TTI_DETAIL_TRAIT_HAS_TYPE_MEMBER_TYPE(trait,name) \
+    BOOST_TTI_DETAIL_TRAIT_MEMBER_TYPE(trait,name) \
     template<class TTI_T> \
     struct trait : \
       boost::mpl::eval_if \

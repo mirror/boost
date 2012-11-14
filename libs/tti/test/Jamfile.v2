@@ -30,6 +30,7 @@ alias ttimfsig
 alias ttimd
     :
         [ run test_has_mem_data.cpp ]
+        [ run test_has_mem_data2.cpp ]
         [ compile test_has_mem_data_compile.cpp ]
         [ compile-fail test_has_mem_data_fail.cpp ]
         [ compile-fail test_has_mem_data_fail2.cpp ]
@@ -38,7 +39,7 @@ alias ttimd
 
 alias ttimfn
     :
-        [ run test_has_mem_fun.cpp ]
+        [ run test_has_mem_fun.cpp : : : <toolset>gcc-4.6.0:<cxxflags>-std=c++0x ]
         [ compile test_has_mem_fun_compile.cpp ]
         [ compile-fail test_has_mem_fun_fail.cpp ]
         [ compile-fail test_has_mem_fun_fail2.cpp ]

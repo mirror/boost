@@ -4,8 +4,8 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_DETAIL_TYPE_HPP)
-#define TTI_DETAIL_TYPE_HPP
+#if !defined(BOOST_TTI_DETAIL_TYPE_HPP)
+#define BOOST_TTI_DETAIL_TYPE_HPP
 
 #include <boost/config.hpp>
 #include <boost/mpl/bool.hpp>
@@ -16,7 +16,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/tti/detail/dnotype.hpp>
 
-#define TTI_DETAIL_TRAIT_HAS_TYPE(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_TYPE(trait,name) \
 BOOST_MPL_HAS_XXX_TRAIT_NAMED_DEF(BOOST_PP_CAT(trait,_detail_mpl), name, false) \
 template<class T,class U,class B> \
 struct BOOST_PP_CAT(trait,_detail) \
@@ -27,8 +27,7 @@ struct BOOST_PP_CAT(trait,_detail) \
       boost::is_same<typename T::name,U>, \
       boost::mpl::true_, \
       boost::mpl::false_ \
-      >::type \
-  type; \
+      >::type type; \
   BOOST_STATIC_CONSTANT(bool,value=type::value); \
   }; \
 \
@@ -47,4 +46,4 @@ struct BOOST_PP_CAT(trait,_detail)<T,BOOST_TTI_NAMESPACE::detail::notype,boost::
   }; \
 /**/
 
-#endif // TTI_DETAIL_TYPE_HPP
+#endif // BOOST_TTI_DETAIL_TYPE_HPP

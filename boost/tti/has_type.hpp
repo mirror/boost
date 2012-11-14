@@ -7,7 +7,6 @@
 #if !defined(TTI_HAS_TYPE_HPP)
 #define TTI_HAS_TYPE_HPP
 
-#include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/tti/gen/has_type_gen.hpp>
 #include <boost/tti/gen/namespace_gen.hpp>
@@ -51,7 +50,7 @@
     
 */
 #define BOOST_TTI_TRAIT_HAS_TYPE(trait,name) \
-  TTI_DETAIL_TRAIT_HAS_TYPE(trait,name) \
+  BOOST_TTI_DETAIL_TRAIT_HAS_TYPE(trait,name) \
   template<class TTI_T,class TTI_U = BOOST_TTI_NAMESPACE::detail::notype> \
   struct trait : \
     BOOST_PP_CAT(trait,_detail) \

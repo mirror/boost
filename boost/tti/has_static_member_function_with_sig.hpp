@@ -54,7 +54,7 @@
                           
 */
 #define BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION_WITH_SIG(trait,name) \
-  TTI_DETAIL_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION(trait,name) \
+  BOOST_TTI_DETAIL_TRAIT_HAS_COMP_STATIC_MEMBER_FUNCTION(trait,name) \
   template<class TTI_T,class TTI_Type> \
   struct trait : \
     BOOST_PP_CAT(trait,_detail)<TTI_T,TTI_Type> \

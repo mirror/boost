@@ -13,6 +13,7 @@
 
 #if BOOST_PP_VARIADICS
 
+#include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/tti/gen/vm_has_template_check_params_gen.hpp>
 #include <boost/tti/detail/dvm_template_params.hpp>

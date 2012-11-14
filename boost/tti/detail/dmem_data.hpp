@@ -8,18 +8,24 @@
 #define TTI_DETAIL_MEM_DATA_HPP
 
 #include <boost/config.hpp>
+#include <boost/function_types/components.hpp>
+#include <boost/function_types/is_member_object_pointer.hpp>
+#include <boost/mpl/assert.hpp>
 #include <boost/mpl/bool.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
 #include <boost/preprocessor/cat.hpp>
+#include <boost/tti/detail/ddeftype.hpp>
+#include <boost/tti/detail/dftclass.hpp>
+#include <boost/tti/gen/namespace_gen.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
-#if !defined(BOOST_MSVC)
-#include <boost/tti/detail/dmem_fun.hpp>
-#endif
+#include <boost/type_traits/is_same.hpp>
 
 #if defined(BOOST_MSVC)
 
-#define TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
+#define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
   template<class T,class C> \
-  struct BOOST_PP_CAT(trait,_detail) \
+  struct BOOST_PP_CAT(trait,_detail_hmd) \
     { \
     template<class> \
     struct return_of; \
@@ -73,8 +79,15 @@
 
 #else // !defined(BOOST_MSVC)
 
-#define TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
-  TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
+#include <boost/tti/detail/dmem_fun.hpp>
+
+#define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
+  BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait,name) \
+  template<class T,class C> \
+  struct BOOST_PP_CAT(trait,_detail_hmd) : \
+    BOOST_PP_CAT(trait,_detail_types)<T,C> \
+    { \
+    }; \
 /**/
 
 #endif // defined(BOOST_MSVC)
@@ -85,15 +98,49 @@ namespace boost
     {
     namespace detail
       {
-      template
-        <
-        class T,
-        class R
-        >
+      
+      template<class T,class R>
       struct ptmd
         {
         typedef R T::* type;
         };
+        
+      template<class T>
+      struct dmem_check_ptmd :
+        boost::mpl::identity<T>
+        {
+        BOOST_MPL_ASSERT((boost::function_types::is_member_object_pointer<T>));
+        };
+        
+      template<class T>
+      struct dmem_check_ptec :
+        BOOST_TTI_NAMESPACE::detail::class_type<T>
+        {
+        BOOST_MPL_ASSERT((boost::function_types::is_member_object_pointer<T>));
+        };
+        
+      template<class T,class T2>
+      struct dmem_get_type :
+        boost::mpl::eval_if
+          <
+          boost::is_same<T2,BOOST_TTI_NAMESPACE::detail::deftype>,
+          BOOST_TTI_NAMESPACE::detail::dmem_check_ptmd<T>,
+          BOOST_TTI_NAMESPACE::detail::ptmd<T,T2>
+          >
+        {
+        };
+        
+      template<class T,class T2>
+      struct dmem_get_enclosing :
+        boost::mpl::eval_if
+          <
+          boost::is_same<T2,BOOST_TTI_NAMESPACE::detail::deftype>,
+          BOOST_TTI_NAMESPACE::detail::dmem_check_ptec<T>,
+          boost::mpl::identity<T>
+          >
+        {
+        };
+        
       }
     }
   }
