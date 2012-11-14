@@ -99,7 +99,7 @@ namespace boost {
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
         typedef const T2 T3;
-    BOOST_ASSERT(list.size() == detail::array_size<T>::size);
+        BOOST_ASSERT(list.size() == detail::array_size<T>::size);
         T1* p1 = 0;
         T2* p2 = 0;
         T3* p3 = 0;
@@ -142,7 +142,7 @@ namespace boost {
         typedef typename detail::array_inner<T>::type T1;
         typedef typename detail::array_base<T1>::type T2;
         typedef const T2 T3;
-    BOOST_ASSERT(list.size() == detail::array_size<T1>::size);
+        BOOST_ASSERT(list.size() == detail::array_size<T1>::size);
         T1* p1 = 0;
         T2* p2 = 0;
         T3* p3 = 0;
