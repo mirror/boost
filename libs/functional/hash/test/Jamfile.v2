@@ -52,7 +52,6 @@ test-suite functional/hash
         [ run implicit_test.cpp ]
         [ run hash_no_ext_macro_1.cpp ]
         [ run hash_no_ext_macro_2.cpp ]
-        [ compile-fail deprecated_container_fwd.cpp ]
     ;
 
 test-suite functional/hash_no_ext
