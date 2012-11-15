@@ -68,11 +68,8 @@ namespace boost {
         
         // construct/copy
         BOOST_CONSTEXPR basic_string_ref ()
-#ifdef BOOST_NO_CXX11_NULLPTR
             : ptr_(NULL), len_(0) {}
-#else
-            : ptr_(nullptr), len_(0) {}
-#endif
+
         BOOST_CONSTEXPR basic_string_ref (const basic_string_ref &rhs)
             : ptr_(rhs.ptr_), len_(rhs.len_) {}
 
@@ -83,7 +80,7 @@ namespace boost {
             }
             
         basic_string_ref(const charT* str)
-            : ptr_(str), len_(std::strlen(str)) {}
+            : ptr_(str), len_(traits::length(str)) {}
 
         template<typename Allocator>
         basic_string_ref(const std::basic_string<charT, traits, Allocator>& str)
@@ -105,14 +102,14 @@ namespace boost {
 #endif
         
         // iterators
-        BOOST_CONSTEXPR const_iterator  begin()          const { return ptr_; }
-        BOOST_CONSTEXPR const_iterator cbegin()          const { return ptr_; }
-        BOOST_CONSTEXPR const_iterator    end()          const { return ptr_ + len_; }
-        BOOST_CONSTEXPR const_iterator   cend()          const { return ptr_ + len_; }
-                  const_reverse_iterator  rbegin() const { return const_reverse_iterator (end()); }
-                  const_reverse_iterator crbegin() const { return const_reverse_iterator (end()); }
-                  const_reverse_iterator  rend()   const { return const_reverse_iterator (begin()); }
-                  const_reverse_iterator crend()   const { return const_reverse_iterator (begin()); }
+        BOOST_CONSTEXPR const_iterator   begin() const { return ptr_; }
+        BOOST_CONSTEXPR const_iterator  cbegin() const { return ptr_; }
+        BOOST_CONSTEXPR const_iterator     end() const { return ptr_ + len_; }
+        BOOST_CONSTEXPR const_iterator    cend() const { return ptr_ + len_; }
+                const_reverse_iterator  rbegin() const { return const_reverse_iterator (end()); }
+                const_reverse_iterator crbegin() const { return const_reverse_iterator (end()); }
+                const_reverse_iterator    rend() const { return const_reverse_iterator (begin()); }
+                const_reverse_iterator   crend() const { return const_reverse_iterator (begin()); }
         
         // capacity
         BOOST_CONSTEXPR size_type size()     const { return len_; }
@@ -160,24 +157,24 @@ namespace boost {
             }
         
         int compare(basic_string_ref x) const {
-            int cmp = std::memcmp ( ptr_, x.ptr_, std::min(len_, x.len_));
+            int cmp = traits::compare ( ptr_, x.ptr_, std::min(len_, x.len_));
             return cmp != 0 ? cmp : ( len_ == x.len_ ? 0 : len_ < x.len_ ? -1 : 1 );
             }
         
         bool starts_with(charT c) const { return !empty() && front() == c; }
         bool starts_with(basic_string_ref x) const {
-            return len_ >= x.len_ && std::memcmp ( ptr_, x.ptr_, x.len_ ) == 0;
+            return len_ >= x.len_ && traits::compare ( ptr_, x.ptr_, x.len_ ) == 0;
             }
         
         bool ends_with(charT c) const { return !empty() && back() == c; }
         bool ends_with(basic_string_ref x) const {
-            return len_ >= x.len_ && std::memcmp ( ptr_ + len_ - x.len_, x.ptr_, x.len_ ) == 0;
+            return len_ >= x.len_ && traits::compare ( ptr_ + len_ - x.len_, x.ptr_, x.len_ ) == 0;
             }
 
 
 //  Have to use traits here
         size_type find(basic_string_ref s) const {
-            const_iterator iter = std::find_if ( this->cbegin (), this->cend (), 
+            const_iterator iter = std::search ( this->cbegin (), this->cend (), 
                                                 s.cbegin (), s.cend (), traits::eq );
             return iter = this->cend () ? npos : std::distance ( this->cbegin (), iter );
             }
@@ -194,7 +191,7 @@ namespace boost {
             }
                         
         size_type rfind(basic_string_ref s) const {
-            const_iterator iter = std::find_if ( this->crbegin (), this->crend (), 
+            const_iterator iter = std::search ( this->crbegin (), this->crend (), 
                                                 s.crbegin (), s.crend (), traits::eq );
             return iter == this->crend () ? npos : reverse_distance ( this->crbegin (), iter );
             }
