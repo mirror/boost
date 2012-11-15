@@ -504,6 +504,45 @@ namespace boost {
         };
     }
 
+    namespace detail // array_to_pointer_decay<T>
+    {
+        template<class T>
+        struct array_to_pointer_decay
+        {
+            typedef T type;
+        };
+
+        template<class T, std::size_t N>
+        struct array_to_pointer_decay<T[N]>
+        {
+            typedef const T * type;
+        };
+    }
+
+    namespace detail // is_this_float_conversion_optimized<Float, Char>
+    {
+        // this metafunction evaluates to true, if we have optimized comnversion 
+        // from Float type to Char array. 
+        // Must be in sync with lexical_stream_limited_src<Char, ...>::shl_real_type(...)
+        template <typename Float, typename Char>
+        struct is_this_float_conversion_optimized 
+        {
+            typedef boost::type_traits::ice_and<
+                boost::is_float<Float>::value,
+#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_SWPRINTF) && !defined(__MINGW32__)
+                boost::type_traits::ice_or<
+                    boost::type_traits::ice_eq<sizeof(Char), sizeof(char) >::value,
+                    boost::is_same<Char, wchar_t>::value
+                >::value
+#else
+                boost::type_traits::ice_eq<sizeof(Char), sizeof(char) >::value
+#endif
+            > result_type;
+
+            BOOST_STATIC_CONSTANT(bool, value = (result_type::value) );
+        };
+    }
+    
     namespace detail // lcast_src_length
     {
         // Return max. length of string representation of Source;
@@ -611,6 +650,64 @@ namespace boost {
         };
 
 #endif // #ifndef BOOST_LCAST_NO_COMPILE_TIME_PRECISION
+    }
+
+    namespace detail // lexical_cast_stream_traits<Source, Target>
+    {
+        template <class Source, class Target>
+        struct lexical_cast_stream_traits {
+            typedef BOOST_DEDUCED_TYPENAME boost::detail::array_to_pointer_decay<Source>::type src;
+            typedef BOOST_DEDUCED_TYPENAME boost::remove_cv<src>::type            no_cv_src;
+                
+            typedef boost::detail::deduce_source_char<no_cv_src>                           deduce_src_char_metafunc;
+            typedef BOOST_DEDUCED_TYPENAME deduce_src_char_metafunc::type           src_char_t;
+            typedef BOOST_DEDUCED_TYPENAME boost::detail::deduce_target_char<Target>::type target_char_t;
+                
+            typedef BOOST_DEDUCED_TYPENAME boost::detail::widest_char<
+                target_char_t, src_char_t
+            >::type char_type;
+
+#if !defined(BOOST_NO_CHAR16_T) && defined(BOOST_NO_UNICODE_LITERALS)
+            BOOST_STATIC_ASSERT_MSG(( !boost::is_same<char16_t, src_char_t>::value
+                                        && !boost::is_same<char16_t, target_char_t>::value),
+                "Your compiler does not have full support for char16_t" );
+#endif
+#if !defined(BOOST_NO_CHAR32_T) && defined(BOOST_NO_UNICODE_LITERALS)
+            BOOST_STATIC_ASSERT_MSG(( !boost::is_same<char32_t, src_char_t>::value
+                                        && !boost::is_same<char32_t, target_char_t>::value),
+                "Your compiler does not have full support for char32_t" );
+#endif
+
+            typedef BOOST_DEDUCED_TYPENAME boost::detail::deduce_char_traits<
+                char_type, Target, no_cv_src
+            >::type traits;
+
+            typedef boost::type_traits::ice_and<
+                boost::is_same<char, src_char_t>::value,                                  // source is not a wide character based type
+                boost::type_traits::ice_ne<sizeof(char), sizeof(target_char_t) >::value,  // target type is based on wide character
+                boost::type_traits::ice_not<
+                    boost::detail::is_char_or_wchar<no_cv_src>::value                     // single character widening is optimized
+                >::value                                                                  // and does not requires stringbuffer
+            >   is_string_widening_required_t;
+
+            typedef boost::type_traits::ice_not< boost::type_traits::ice_or<
+                boost::is_integral<no_cv_src>::value,
+                boost::detail::is_this_float_conversion_optimized<no_cv_src, char_type >::value,
+                boost::detail::is_char_or_wchar<
+                    BOOST_DEDUCED_TYPENAME deduce_src_char_metafunc::stage1_type          // if we did not get character type at stage1
+                >::value                                                                  // then we have no optimization for that type
+            >::value >   is_source_input_not_optimized_t;
+
+            // If we have an optimized conversion for
+            // Source, we do not need to construct stringbuf.
+            BOOST_STATIC_CONSTANT(bool, requires_stringbuf = 
+                (boost::type_traits::ice_or<
+                    is_string_widening_required_t::value, is_source_input_not_optimized_t::value
+                >::value)
+            );
+            
+            typedef boost::detail::lcast_src_length<no_cv_src> len_t;
+        };
     }
 
     namespace detail // '0', '+' and '-' constants
@@ -2040,18 +2137,6 @@ namespace boost {
 
     namespace detail
     {
-        template<class T>
-        struct array_to_pointer_decay
-        {
-            typedef T type;
-        };
-
-        template<class T, std::size_t N>
-        struct array_to_pointer_decay<T[N]>
-        {
-            typedef const T * type;
-        };
-
         template<typename T>
         struct is_stdstring
         {
@@ -2115,28 +2200,6 @@ namespace boost {
             );
         };
 
-
-        // this metafunction evaluates to true, if we have optimized comnversion 
-        // from Float type to Char array. 
-        // Must be in sync with lexical_stream_limited_src<Char, ...>::shl_real_type(...)
-        template <typename Float, typename Char>
-        struct is_this_float_conversion_optimized 
-        {
-            typedef boost::type_traits::ice_and<
-                boost::is_float<Float>::value,
-#if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_SWPRINTF) && !defined(__MINGW32__)
-                boost::type_traits::ice_or<
-                    boost::type_traits::ice_eq<sizeof(Char), sizeof(char) >::value,
-                    boost::is_same<Char, wchar_t>::value
-                >::value
-#else
-                boost::type_traits::ice_eq<sizeof(Char), sizeof(char) >::value
-#endif
-            > result_type;
-
-            BOOST_STATIC_CONSTANT(bool, value = (result_type::value) );
-        };
-
         template<typename Target, typename Source>
         struct is_char_array_to_stdstring
         {
@@ -2178,67 +2241,21 @@ namespace boost {
         {
             static inline Target lexical_cast_impl(const Source& arg)
             {
-                typedef BOOST_DEDUCED_TYPENAME boost::detail::array_to_pointer_decay<Source>::type src;
-                typedef BOOST_DEDUCED_TYPENAME boost::remove_cv<src>::type            no_cv_src;
+                typedef lexical_cast_stream_traits<Source, Target>  stream_trait;
                 
-                typedef boost::detail::deduce_source_char<no_cv_src>                           deduce_src_char_metafunc;
-                typedef BOOST_DEDUCED_TYPENAME deduce_src_char_metafunc::type           src_char_t;
-                typedef BOOST_DEDUCED_TYPENAME boost::detail::deduce_target_char<Target>::type target_char_t;
-                
-                typedef BOOST_DEDUCED_TYPENAME boost::detail::widest_char<
-                    target_char_t, src_char_t
-                >::type char_type;
-
-#if !defined(BOOST_NO_CHAR16_T) && defined(BOOST_NO_UNICODE_LITERALS)
-                BOOST_STATIC_ASSERT_MSG(( !boost::is_same<char16_t, src_char_t>::value
-                                          && !boost::is_same<char16_t, target_char_t>::value),
-                    "Your compiler does not have full support for char16_t" );
-#endif
-#if !defined(BOOST_NO_CHAR32_T) && defined(BOOST_NO_UNICODE_LITERALS)
-                BOOST_STATIC_ASSERT_MSG(( !boost::is_same<char32_t, src_char_t>::value
-                                          && !boost::is_same<char32_t, target_char_t>::value),
-                    "Your compiler does not have full support for char32_t" );
-#endif
-
-                typedef BOOST_DEDUCED_TYPENAME boost::detail::deduce_char_traits<
-                    char_type, Target, no_cv_src
-                >::type traits;
-
-                typedef boost::type_traits::ice_and<
-                    boost::is_same<char, src_char_t>::value,                                  // source is not a wide character based type
-                    boost::type_traits::ice_ne<sizeof(char), sizeof(target_char_t) >::value,  // target type is based on wide character
-                    boost::type_traits::ice_not<
-                        boost::detail::is_char_or_wchar<no_cv_src>::value                     // single character widening is optimized
-                    >::value                                                                  // and does not requires stringbuffer
-                >   is_string_widening_required_t;
-
-                typedef boost::type_traits::ice_not< boost::type_traits::ice_or<
-                    boost::is_integral<no_cv_src>::value,
-                    boost::detail::is_this_float_conversion_optimized<no_cv_src, char_type >::value,
-                    boost::detail::is_char_or_wchar<
-                        BOOST_DEDUCED_TYPENAME deduce_src_char_metafunc::stage1_type          // if we did not get character type at stage1
-                    >::value                                                                  // then we have no optimization for that type
-                >::value >   is_source_input_not_optimized_t;
+                typedef detail::lexical_stream_limited_src<
+                    BOOST_DEDUCED_TYPENAME stream_trait::char_type, 
+                    BOOST_DEDUCED_TYPENAME stream_trait::traits, 
+                    stream_trait::requires_stringbuf 
+                > interpreter_type;
 
                 // Target type must be default constructible
-                Target result;
+                Target result;               
 
-                // If we have an optimized conversion for
-                // Source, we do not need to construct stringbuf.
-                BOOST_STATIC_CONSTANT(bool, requires_stringbuf = 
-                    (boost::type_traits::ice_or<
-                        is_string_widening_required_t::value, is_source_input_not_optimized_t::value
-                    >::value)
-                );
-               
-                typedef detail::lexical_stream_limited_src<char_type, traits, requires_stringbuf > interpreter_type;
+                BOOST_DEDUCED_TYPENAME stream_trait::char_type buf[stream_trait::len_t::value + 1];
+                stream_trait::len_t::check_coverage();
 
-                typedef detail::lcast_src_length<no_cv_src> lcast_src_length;
-                std::size_t const src_len = lcast_src_length::value;
-                char_type buf[src_len + 1];
-                lcast_src_length::check_coverage();
-
-                interpreter_type interpreter(buf, buf + src_len);
+                interpreter_type interpreter(buf, buf + stream_trait::len_t::value + 1);
 
                 // Disabling ADL, by directly specifying operators.
                 if(!(interpreter.operator <<(arg) && interpreter.operator >>(result)))
