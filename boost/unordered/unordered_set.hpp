@@ -448,8 +448,7 @@ namespace unordered
 
         size_type bucket(const key_type& k) const
         {
-            return table::to_bucket(table_.bucket_count_,
-                table_.hash(k));
+            return table_.hash_to_bucket(table_.hash(k));
         }
 
         local_iterator begin(size_type n)
@@ -917,8 +916,7 @@ namespace unordered
 
         size_type bucket(const key_type& k) const
         {
-            return table::to_bucket(table_.bucket_count_,
-                table_.hash(k));
+            return table_.hash_to_bucket(table_.hash(k));
         }
 
         local_iterator begin(size_type n)

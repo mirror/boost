@@ -37,49 +37,50 @@ namespace boost { namespace unordered { namespace iterator_detail {
     //
     // all no throw
 
-    template <typename NodePointer, typename Value> struct iterator;
-    template <typename ConstNodePointer, typename NodePointer,
-        typename Value> struct c_iterator;
-    template <typename NodePointer, typename Value, typename Policy>
-        struct l_iterator;
-    template <typename ConstNodePointer, typename NodePointer,
-        typename Value, typename Policy> struct cl_iterator;
+    template <typename Node> struct iterator;
+    template <typename Node, typename ConstNodePointer> struct c_iterator;
+    template <typename Node, typename Policy> struct l_iterator;
+    template <typename Node, typename ConstNodePointer, typename Policy>
+        struct cl_iterator;
 
     // Local Iterators
     //
     // all no throw
 
-    template <typename NodePointer, typename Value, typename Policy>
+    template <typename Node, typename Policy>
     struct l_iterator
         : public boost::iterator<
-            std::forward_iterator_tag, Value, std::ptrdiff_t,
-            NodePointer, Value&>
+            std::forward_iterator_tag,
+            typename Node::value_type,
+            std::ptrdiff_t,
+            typename Node::node_pointer,
+            typename Node::value_type&>
     {
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-        template <typename ConstNodePointer, typename NodePointer2,
-                typename Value2, typename Policy2>
+        template <typename Node2, typename ConstNodePointer, typename Policy2>
         friend struct boost::unordered::iterator_detail::cl_iterator;
     private:
 #endif
-        typedef NodePointer node_pointer;
-        typedef boost::unordered::iterator_detail::iterator<NodePointer, Value>
-            iterator;
+        typedef typename Node::node_pointer node_pointer;
+        typedef boost::unordered::iterator_detail::iterator<Node> iterator;
         node_pointer ptr_;
         std::size_t bucket_;
         std::size_t bucket_count_;
 
     public:
 
+        typedef typename Node::value_type value_type;
+
         l_iterator() : ptr_() {}
 
         l_iterator(iterator x, std::size_t b, std::size_t c)
             : ptr_(x.node_), bucket_(b), bucket_count_(c) {}
 
-        Value& operator*() const {
+        value_type& operator*() const {
             return ptr_->value();
         }
 
-        Value* operator->() const {
+        value_type* operator->() const {
             return ptr_->value_ptr();
         }
 
@@ -106,25 +107,28 @@ namespace boost { namespace unordered { namespace iterator_detail {
         }
     };
 
-    template <typename ConstNodePointer, typename NodePointer, typename Value,
-             typename Policy>
+    template <typename Node, typename ConstNodePointer, typename Policy>
     struct cl_iterator
         : public boost::iterator<
-            std::forward_iterator_tag, Value, std::ptrdiff_t,
-            ConstNodePointer, Value const&>
+            std::forward_iterator_tag,
+            typename Node::value_type,
+            std::ptrdiff_t,
+            ConstNodePointer,
+            typename Node::value_type const&>
     {
         friend struct boost::unordered::iterator_detail::l_iterator
-            <NodePointer, Value, Policy>;
+            <Node, Policy>;
     private:
 
-        typedef NodePointer node_pointer;
-        typedef boost::unordered::iterator_detail::iterator<NodePointer, Value>
-            iterator;
+        typedef typename Node::node_pointer node_pointer;
+        typedef boost::unordered::iterator_detail::iterator<Node> iterator;
         node_pointer ptr_;
         std::size_t bucket_;
         std::size_t bucket_count_;
 
     public:
+
+        typedef typename Node::value_type value_type;
 
         cl_iterator() : ptr_() {}
 
@@ -132,16 +136,15 @@ namespace boost { namespace unordered { namespace iterator_detail {
             ptr_(x.node_), bucket_(b), bucket_count_(c) {}
 
         cl_iterator(boost::unordered::iterator_detail::l_iterator<
-                NodePointer, Value, Policy> const& x) :
+                Node, Policy> const& x) :
             ptr_(x.ptr_), bucket_(x.bucket_), bucket_count_(x.bucket_count_)
         {}
 
-        Value const&
-            operator*() const {
+        value_type const& operator*() const {
             return ptr_->value();
         }
 
-        Value const* operator->() const {
+        value_type const* operator->() const {
             return ptr_->value_ptr();
         }
 
@@ -168,18 +171,21 @@ namespace boost { namespace unordered { namespace iterator_detail {
         }
     };
 
-    template <typename NodePointer, typename Value>
+    template <typename Node>
     struct iterator
         : public boost::iterator<
-            std::forward_iterator_tag, Value, std::ptrdiff_t,
-            NodePointer, Value&>
+            std::forward_iterator_tag,
+            typename Node::value_type,
+            std::ptrdiff_t,
+            typename Node::node_pointer,
+            typename Node::value_type&>
     {
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
-        template <typename, typename, typename>
+        template <typename, typename>
         friend struct boost::unordered::iterator_detail::c_iterator;
-        template <typename, typename, typename>
+        template <typename, typename>
         friend struct boost::unordered::iterator_detail::l_iterator;
-        template <typename, typename, typename, typename>
+        template <typename, typename, typename>
         friend struct boost::unordered::iterator_detail::cl_iterator;
         template <typename>
         friend struct boost::unordered::detail::table;
@@ -189,20 +195,23 @@ namespace boost { namespace unordered { namespace iterator_detail {
         friend struct boost::unordered::detail::grouped_table_impl;
     private:
 #endif
-        typedef NodePointer node_pointer;
+        typedef typename Node::node_pointer node_pointer;
         node_pointer node_;
 
     public:
 
+        typedef typename Node::value_type value_type;
+
         iterator() : node_() {}
 
-        explicit iterator(node_pointer const& x) : node_(x) {}
+        explicit iterator(typename Node::link_pointer x) :
+            node_(static_cast<node_pointer>(x)) {}
 
-        Value& operator*() const {
+        value_type& operator*() const {
             return node_->value();
         }
 
-        Value* operator->() const {
+        value_type* operator->() const {
             return &node_->value();
         }
 
@@ -226,14 +235,16 @@ namespace boost { namespace unordered { namespace iterator_detail {
         }
     };
 
-    template <typename ConstNodePointer, typename NodePointer, typename Value>
+    template <typename Node, typename ConstNodePointer>
     struct c_iterator
         : public boost::iterator<
-            std::forward_iterator_tag, Value, std::ptrdiff_t,
-            ConstNodePointer, Value const&>
+            std::forward_iterator_tag,
+            typename Node::value_type,
+            std::ptrdiff_t,
+            ConstNodePointer,
+            typename Node::value_type const&>
     {
-        friend struct boost::unordered::iterator_detail::iterator<
-                NodePointer, Value>;
+        friend struct boost::unordered::iterator_detail::iterator<Node>;
 
 #if !defined(BOOST_NO_MEMBER_TEMPLATE_FRIENDS)
         template <typename>
@@ -245,26 +256,26 @@ namespace boost { namespace unordered { namespace iterator_detail {
 
     private:
 #endif
-
-        typedef NodePointer node_pointer;
-        typedef boost::unordered::iterator_detail::iterator<NodePointer, Value>
-            iterator;
+        typedef typename Node::node_pointer node_pointer;
+        typedef boost::unordered::iterator_detail::iterator<Node> iterator;
         node_pointer node_;
 
     public:
 
+        typedef typename Node::value_type value_type;
+
         c_iterator() : node_() {}
 
-        explicit c_iterator(node_pointer const& x) : node_(x) {}
+        explicit c_iterator(typename Node::link_pointer x) :
+            node_(static_cast<node_pointer>(x)) {}
 
-        c_iterator(boost::unordered::iterator_detail::iterator<
-                NodePointer, Value> const& x) : node_(x.node_) {}
+        c_iterator(iterator const& x) : node_(x.node_) {}
 
-        Value const& operator*() const {
+        value_type const& operator*() const {
             return node_->value();
         }
 
-        Value const* operator->() const {
+        value_type const* operator->() const {
             return &node_->value();
         }
 
@@ -398,7 +409,7 @@ namespace boost { namespace unordered { namespace detail {
 
             node_allocator_traits::construct(alloc_,
                 boost::addressof(*node_), node());
-            node_->init(static_cast<typename node::link_pointer>(node_));
+            node_->init(node_);
             node_constructed_ = true;
         }
         else {
@@ -432,8 +443,7 @@ namespace boost { namespace unordered { namespace detail {
         typedef typename node_allocator_traits::pointer node_pointer;
         typedef typename node::value_type value_type;
         typedef typename node::link_pointer link_pointer;
-        typedef boost::unordered::iterator_detail::
-            iterator<node_pointer, value_type> iterator;
+        typedef boost::unordered::iterator_detail::iterator<node> iterator;
 
         node_pointer nodes_;
 
@@ -445,7 +455,7 @@ namespace boost { namespace unordered { namespace detail {
             nodes_()
         {
             if (b.size_) {
-                typename Table::previous_pointer prev = b.get_previous_start();
+                typename Table::link_pointer prev = b.get_previous_start();
                 nodes_ = static_cast<node_pointer>(prev->next_);
                 prev->next_ = link_pointer();
                 b.size_ = 0;
@@ -484,7 +494,7 @@ namespace boost { namespace unordered { namespace detail {
                 assign_impl(v);
                 node_pointer p = nodes_;
                 nodes_ = static_cast<node_pointer>(p->next_);
-                p->init(static_cast<typename node::link_pointer>(p));
+                p->init(p);
                 p->next_ = link_pointer();
                 return p;
             }
@@ -500,7 +510,7 @@ namespace boost { namespace unordered { namespace detail {
                 move_assign_impl(v);
                 node_pointer p = nodes_;
                 nodes_ = static_cast<node_pointer>(p->next_);
-                p->init(static_cast<typename node::link_pointer>(p));
+                p->init(p);
                 p->next_ = link_pointer();
                 return p;
             }
@@ -537,12 +547,12 @@ namespace boost { namespace unordered { namespace detail {
     template <typename NodePointer>
     struct bucket
     {
-        typedef NodePointer previous_pointer;
-        previous_pointer next_;
+        typedef NodePointer link_pointer;
+        link_pointer next_;
 
         bucket() : next_() {}
 
-        previous_pointer first_from_start()
+        link_pointer first_from_start()
         {
             return next_;
         }
@@ -552,12 +562,12 @@ namespace boost { namespace unordered { namespace detail {
 
     struct ptr_bucket
     {
-        typedef ptr_bucket* previous_pointer;
-        previous_pointer next_;
+        typedef ptr_bucket* link_pointer;
+        link_pointer next_;
 
         ptr_bucket() : next_(0) {}
 
-        previous_pointer first_from_start()
+        link_pointer first_from_start()
         {
             return this;
         }
@@ -568,8 +578,6 @@ namespace boost { namespace unordered { namespace detail {
     ///////////////////////////////////////////////////////////////////
     //
     // Hash Policy
-    //
-    // Don't really want table to derive from this, but will for now.
 
     template <typename SizeT>
     struct prime_policy
