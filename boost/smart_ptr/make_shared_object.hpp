@@ -67,12 +67,12 @@ private:
 
 public:
 
-    sp_ms_deleter(): initialized_( false )
+    sp_ms_deleter() BOOST_NOEXCEPT : initialized_( false )
     {
     }
 
     // optimization: do not copy storage_
-    sp_ms_deleter( sp_ms_deleter const & ): initialized_( false )
+    sp_ms_deleter( sp_ms_deleter const & ) BOOST_NOEXCEPT : initialized_( false )
     {
     }
 
@@ -86,12 +86,12 @@ public:
         destroy();
     }
 
-    void * address()
+    void * address() BOOST_NOEXCEPT
     {
         return storage_.data_;
     }
 
-    void set_initialized()
+    void set_initialized() BOOST_NOEXCEPT
     {
         initialized_ = true;
     }
@@ -99,7 +99,7 @@ public:
 
 #if defined( BOOST_HAS_RVALUE_REFS )
 
-template< class T > T&& sp_forward( T & t )
+template< class T > T&& sp_forward( T & t ) BOOST_NOEXCEPT
 {
     return static_cast< T&& >( t );
 }

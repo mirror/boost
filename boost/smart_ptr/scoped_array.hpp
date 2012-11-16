@@ -53,7 +53,7 @@ public:
 
     typedef T element_type;
 
-    explicit scoped_array( T * p = 0 ) : px( p ) // never throws
+    explicit scoped_array( T * p = 0 ) BOOST_NOEXCEPT : px( p )
     {
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
         boost::sp_array_constructor_hook( px );
@@ -68,20 +68,20 @@ public:
         boost::checked_array_delete( px );
     }
 
-    void reset(T * p = 0) // never throws
+    void reset(T * p = 0) // never throws (but has a BOOST_ASSERT in it, so not marked with BOOST_NOEXCEPT)
     {
         BOOST_ASSERT( p == 0 || p != px ); // catch self-reset errors
         this_type(p).swap(*this);
     }
 
-    T & operator[](std::ptrdiff_t i) const // never throws
+    T & operator[](std::ptrdiff_t i) const // never throws (but has a BOOST_ASSERT in it, so not marked with BOOST_NOEXCEPT)
     {
         BOOST_ASSERT( px != 0 );
         BOOST_ASSERT( i >= 0 );
         return px[i];
     }
 
-    T * get() const // never throws
+    T * get() const BOOST_NOEXCEPT
     {
         return px;
     }
@@ -89,7 +89,7 @@ public:
 // implicit conversion to "bool"
 #include <boost/smart_ptr/detail/operator_bool.hpp>
 
-    void swap(scoped_array & b) // never throws
+    void swap(scoped_array & b) BOOST_NOEXCEPT
     {
         T * tmp = b.px;
         b.px = px;
@@ -97,7 +97,7 @@ public:
     }
 };
 
-template<class T> inline void swap(scoped_array<T> & a, scoped_array<T> & b) // never throws
+template<class T> inline void swap(scoped_array<T> & a, scoped_array<T> & b) BOOST_NOEXCEPT
 {
     a.swap(b);
 }
