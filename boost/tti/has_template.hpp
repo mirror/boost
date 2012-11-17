@@ -157,7 +157,7 @@
     generates a metafunction called "has_template_'name'" where 'name' is the first variadic parameter.
     
               template<class TTI_T>
-              struct trait
+              struct has_template_'name'
                 {
                 static const value = unspecified;
                 typedef mpl::bool_<true-or-false> type;
@@ -218,6 +218,62 @@
 #include <boost/tti/detail/dtemplate.hpp>
 #include <boost/tti/detail/dtemplate_params.hpp>
 
+/// Expands to a metafunction which tests whether an inner class template with a particular name exists.
+/**
+
+    trait  = the name of the metafunction.
+    name   = the inner class template name.
+    params = If the  parameter is BOOST_PP_NIL the inner class template 
+             being introspected must be all template type parameters ( template parameters 
+             starting with `class` or `typename` ) and any number of template type parameters
+             can occur.
+            
+             If the parameter is a Boost preprocessor library array, then the inner class 
+             template must have its template parameters matching the sequence in the tuple portion 
+             of the Boost PP array.
+            
+             Otherwise a compiler error occurs.
+    
+    generates a metafunction called "trait" where 'trait' is the first macro parameter.
+    
+              template<class TTI_T>
+              struct trait
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
+              The metafunction types and return:
+    
+                TTI_T = the enclosing type in which to look for our 'name'.
+                
+                returns = 'value' is true if the 'name' template exists within the enclosing type,
+                          otherwise 'value' is false.
+                          
+    Examples:
+    
+    1) Search for an inner class template called 'MyTemplate', with all template type parameters,
+       nested within the class 'MyClass' using a metafunction name of 'MyMeta'.
+    
+       BOOST_TTI_TRAIT_HAS_TEMPLATE(MyMeta,MyTemplate,BOOST_PP_NIL)
+    
+       MyMeta<MyClass>::value
+    
+       is a compile time boolean constant which is either 'true' or 'false'
+       if the nested template exists.
+    
+    2) Search for an inner class template called 'MyTemplate', with template parameters 
+       of 'class T,int x,template<class> class U', nested within the class 'MyClass' 
+       using a metafunction name of 'MyMeta'.
+    
+       BOOST_TTI_TRAIT_HAS_TEMPLATE(MyMeta,MyTemplate,(3,(class,int,template<class> class)))
+    
+       MyMeta<MyClass>::value
+    
+       is a compile time boolean constant which is either 'true' or 'false'
+       if the nested template exists.
+    
+*/
 #define BOOST_TTI_TRAIT_HAS_TEMPLATE(trait,name,params) \
   BOOST_PP_IIF \
     ( \
@@ -228,6 +284,60 @@
     (trait,name,params) \
 /**/
   
+/// Expands to a metafunction which tests whether an inner class template with a particular name exists.
+/**
+
+    name   = the inner class template name.
+    params = If the  parameter is BOOST_PP_NIL the inner class template 
+             being introspected must be all template type parameters ( template parameters 
+             starting with `class` or `typename` ) and any number of template type parameters
+             can occur.
+            
+             If the parameter is a Boost preprocessor library array, then the inner class 
+             template must have its template parameters matching the sequence in the tuple portion 
+             of the Boost PP array.
+            
+             Otherwise a compiler error occurs.
+    
+    generates a metafunction called "trait" where 'trait' is the first macro parameter.
+    
+              template<class TTI_T>
+              struct trait
+                {
+                static const value = unspecified;
+                typedef mpl::bool_<true-or-false> type;
+                };
+
+              The metafunction types and return:
+    
+                TTI_T = the enclosing type in which to look for our 'name'.
+                
+                returns = 'value' is true if the 'name' template exists within the enclosing type,
+                          otherwise 'value' is false.
+                          
+    Examples:
+    
+    1) Search for an inner class template called 'MyTemplate', with all template type parameters,
+       nested within the class 'MyClass'.
+    
+       BOOST_TTI_HAS_TEMPLATE(MyTemplate,BOOST_PP_NIL)
+    
+       has_template_MyTemplate<MyClass>::value
+    
+       is a compile time boolean constant which is either 'true' or 'false'
+       if the nested template exists.
+    
+    2) Search for an inner class template called 'MyTemplate' with template parameters 
+       of 'class T,int x,template<class> class U' nested within the class 'MyClass'.
+    
+       BOOST_TTI_HAS_TEMPLATE(MyTemplate,(3,(class,int,template<class> class)))
+    
+       has_template_MyTemplate<MyClass>::value
+    
+       is a compile time boolean constant which is either 'true' or 'false'
+       if the nested template exists.
+       
+*/
 #define BOOST_TTI_HAS_TEMPLATE(name,params) \
   BOOST_TTI_TRAIT_HAS_TEMPLATE \
   ( \
@@ -251,10 +361,10 @@
     
     name  = the name of the inner template.
 
-    generates a metafunction called "trait" where 'trait' is the macro parameter.
+    generates a metafunction called "has_template_'name'" where 'name' is the mscro parameter.
     
               template<class TTI_T>
-              struct trait
+              struct has_template_'name'
                 {
                 static const value = unspecified;
                 typedef mpl::bool_<true-or-false> type;

@@ -209,17 +209,17 @@ First we generate metafunctions for various inner class template names:
  
  // Using variadic macro, `specific parameters`
  
- BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(Template6,class X,int Y)
- BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(Template7,typename A,template<class,class> struct B,long C)
- BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(Template8,double X,typename Y)
- BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(Template9,typename A,class B,typename C,class D,typename E,short F)
+ BOOST_TTI_HAS_TEMPLATE(Template6,class X,int Y)
+ BOOST_TTI_HAS_TEMPLATE(Template7,typename A,template<class,class> struct B,long C)
+ BOOST_TTI_HAS_TEMPLATE(Template8,double X,typename Y)
+ BOOST_TTI_HAS_TEMPLATE(Template9,typename A,class B,typename C,class D,typename E,short F)
  
  // or using non-variadic macro, `specific parameters`
  
- BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(Template6,(2,(class X,int Y)))
- BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(Template7,(4,(typename A,template<class,class> struct B,long C)))
- BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(Template8,(2,(double X,typename Y)))
- BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS(Template9,(6,(typename A,class B,typename C,class D,typename E,short F)))
+ BOOST_TTI_HAS_TEMPLATE(Template6,(2,(class X,int Y)))
+ BOOST_TTI_HAS_TEMPLATE(Template7,(4,(typename A,template<class,class> struct B,long C)))
+ BOOST_TTI_HAS_TEMPLATE(Template8,(2,(double X,typename Y)))
+ BOOST_TTI_HAS_TEMPLATE(Template9,(6,(typename A,class B,typename C,class D,typename E,short F)))
  
 Next let us create some user-defined types we want to introspect. 
 
