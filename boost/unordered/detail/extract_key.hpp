@@ -138,7 +138,7 @@ namespace detail {
 #define BOOST_UNORDERED_KEY_FROM_TUPLE(namespace_)                          \
         template <typename T2>                                              \
         static no_key extract(boost::unordered::piecewise_construct_t,      \
-                namespace_ tuple<> const&, BOOST_FWD_REF(T2))               \
+                namespace_ tuple<> const&, T2 const&)                       \
         {                                                                   \
             return no_key();                                                \
         }                                                                   \
@@ -146,7 +146,7 @@ namespace detail {
         template <typename T, typename T2>                                  \
         static typename is_key<key_type, T>::type                           \
             extract(boost::unordered::piecewise_construct_t,                \
-                namespace_ tuple<T> const& k, BOOST_FWD_REF(T2))            \
+                namespace_ tuple<T> const& k, T2 const&)                    \
         {                                                                   \
             return typename is_key<key_type, T>::type(                      \
                 namespace_ get<0>(k));                                      \

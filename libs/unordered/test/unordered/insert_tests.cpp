@@ -698,6 +698,12 @@ derived_from_piecewise_construct_t piecewise_rvalue() {
     return derived_from_piecewise_construct_t();
 }
 
+struct convertible_to_piecewise {
+    operator boost::unordered::piecewise_construct_t() const {
+        return boost::unordered::piecewise_construct;
+    }
+};
+
 UNORDERED_AUTO_TEST(map_emplace_test2)
 {
     boost::unordered_map<overloaded_constructor, overloaded_constructor> x;
@@ -706,7 +712,7 @@ UNORDERED_AUTO_TEST(map_emplace_test2)
     BOOST_TEST(x.find(overloaded_constructor()) != x.end() &&
         x.find(overloaded_constructor())->second == overloaded_constructor());
 
-    x.emplace(boost::unordered::piecewise_construct, boost::make_tuple(1), boost::make_tuple());
+    x.emplace(convertible_to_piecewise(), boost::make_tuple(1), boost::make_tuple());
     BOOST_TEST(x.find(overloaded_constructor(1)) != x.end() &&
         x.find(overloaded_constructor(1))->second == overloaded_constructor());
 
