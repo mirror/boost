@@ -14,6 +14,7 @@
 
 #include <boost/config.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/smart_ptr/detail/sp_forward.hpp>
 #include <boost/type_traits/type_with_alignment.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #include <cstddef>
@@ -96,15 +97,6 @@ public:
         initialized_ = true;
     }
 };
-
-#if defined( BOOST_HAS_RVALUE_REFS )
-
-template< class T > T&& sp_forward( T & t ) BOOST_NOEXCEPT
-{
-    return static_cast< T&& >( t );
-}
-
-#endif
 
 template< class T > struct sp_if_not_array
 {

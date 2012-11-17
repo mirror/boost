@@ -14,6 +14,7 @@
 #include <boost/smart_ptr/detail/array_deleter.hpp>
 #include <boost/smart_ptr/detail/array_traits.hpp>
 #include <boost/smart_ptr/detail/sp_if_array.hpp>
+#include <boost/smart_ptr/detail/sp_forward.hpp>
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
 #endif
@@ -51,7 +52,7 @@ namespace boost {
         detail::array_deleter<T2>* d2;
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
-        d2->construct(p2, n1, std::forward<Args>(args)...);
+        d2->construct(p2, n1, boost::detail::sp_forward<Args>(args)...);
         return shared_ptr<T>(s1, p1);
     }
     template<typename T, typename A, typename... Args>
@@ -68,7 +69,7 @@ namespace boost {
         detail::array_deleter<T2>* d2;
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
-        d2->construct(p2, n1, std::forward<Args>(args)...);
+        d2->construct(p2, n1, boost::detail::sp_forward<Args>(args)...);
         return shared_ptr<T>(s1, p1);
     }
 #endif
