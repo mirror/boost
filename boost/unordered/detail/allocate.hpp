@@ -921,36 +921,25 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 #endif
 
     ////////////////////////////////////////////////////////////////////////////
-    // SFINAE traits for construction.
+    // Trait to check for piecewise construction.
 
-    // Decide which construction method to use for a three argument
-    // call. Note that this is difficult to do using overloads because
-    // the arguments are packed into 'emplace_args3'.
-    //
-    // The decision is made on the first argument.
-
-
-    template <typename A, typename B, typename A0>
-    struct check3_base {
+    template <typename A0>
+    struct use_piecewise {
         static choice1::type test(choice1,
             boost::unordered::piecewise_construct_t);
 
-        static choice3::type test(choice3, ...);
+        static choice2::type test(choice2, ...);
 
-        enum { value =
+        enum { value = sizeof(choice1::type) ==
             sizeof(test(choose(), boost::unordered::detail::make<A0>())) };
     };
 
-    template <typename A, typename B, typename A0>
-    struct piecewise3 {
-        enum { value = check3_base<A,B,A0>::value == sizeof(choice1::type) };
-    };
-
-// TODO: Full construct?
 #if !defined(BOOST_NO_VARIADIC_TEMPLATES)
 
     ////////////////////////////////////////////////////////////////////////////
     // Construct from variadic parameters
+
+    // For the standard pair constructor.
 
     template <typename Alloc, typename T, typename... Args>
     inline void construct_value_impl(Alloc& alloc, T* address,
@@ -960,9 +949,14 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
             address, boost::forward<Args>(args)...);
     }
 
+    // Special case for piece_construct
+    //
+    // TODO: When possible, it might be better to use std::pair's
+    // constructor for std::piece_construct with std::tuple.
+
     template <typename Alloc, typename A, typename B,
         typename A0, typename A1, typename A2>
-    inline typename enable_if<piecewise3<A, B, A0>, void>::type
+    inline typename enable_if<use_piecewise<A0>, void>::type
         construct_value_impl(Alloc& alloc, std::pair<A, B>* address,
             BOOST_FWD_REF(A0), BOOST_FWD_REF(A1) a1, BOOST_FWD_REF(A2) a2)
     {
@@ -977,20 +971,8 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
 ////////////////////////////////////////////////////////////////////////////////
 // Construct from emplace_args
 
-#define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                    \
-    template <                                                              \
-        typename Alloc, typename T,                                         \
-        BOOST_PP_ENUM_PARAMS_Z(z, num_params, typename A)                   \
-    >                                                                       \
-    inline void construct_value_impl(Alloc&, T* address,                    \
-        boost::unordered::detail::BOOST_PP_CAT(emplace_args,num_params) <   \
-            BOOST_PP_ENUM_PARAMS_Z(z, num_params, A)                        \
-        > const& args)                                                      \
-    {                                                                       \
-        new((void*) address) T(                                             \
-            BOOST_PP_ENUM_##z(num_params, BOOST_UNORDERED_CALL_FORWARD,     \
-                args.a));                                                   \
-    }
+    // Explicitly write out first three overloads for the sake of sane
+    // error messages.
 
     template <typename Alloc, typename T, typename A0>
     inline void construct_value_impl(Alloc&, T* address,
@@ -1020,16 +1002,35 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
         );
     }
 
+    // Use a macro for the rest.
+
+#define BOOST_UNORDERED_CONSTRUCT_IMPL(z, num_params, _)                    \
+    template <                                                              \
+        typename Alloc, typename T,                                         \
+        BOOST_PP_ENUM_PARAMS_Z(z, num_params, typename A)                   \
+    >                                                                       \
+    inline void construct_value_impl(Alloc&, T* address,                    \
+        boost::unordered::detail::BOOST_PP_CAT(emplace_args,num_params) <   \
+            BOOST_PP_ENUM_PARAMS_Z(z, num_params, A)                        \
+        > const& args)                                                      \
+    {                                                                       \
+        new((void*) address) T(                                             \
+            BOOST_PP_ENUM_##z(num_params, BOOST_UNORDERED_CALL_FORWARD,     \
+                args.a));                                                   \
+    }
+
     BOOST_PP_REPEAT_FROM_TO(4, BOOST_UNORDERED_EMPLACE_LIMIT,
         BOOST_UNORDERED_CONSTRUCT_IMPL, _)
 
 #undef BOOST_UNORDERED_CONSTRUCT_IMPL
 
+    // Construct with piece_construct
+
     template <typename Alloc, typename A, typename B,
         typename A0, typename A1, typename A2>
     inline void construct_value_impl(Alloc& alloc, std::pair<A, B>* address,
             boost::unordered::detail::emplace_args3<A0, A1, A2> const& args,
-            typename enable_if<piecewise3<A, B, A0>, void*>::type = 0)
+            typename enable_if<use_piecewise<A0>, void*>::type = 0)
     {
         boost::unordered::detail::construct_from_tuple(alloc,
             boost::addressof(address->first), args.a1);
