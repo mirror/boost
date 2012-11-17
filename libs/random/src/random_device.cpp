@@ -14,6 +14,7 @@
 
 #include <boost/random/random_device.hpp>
 #include <boost/config.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/assert.hpp>
 #include <boost/detail/workaround.hpp>
 #include <string>
@@ -113,9 +114,9 @@ private:
       sizeof(buf),
       NULL);
 
-    throw std::invalid_argument("boost::random_device: " + msg + 
+    boost::throw_exception(std::invalid_argument("boost::random_device: " + msg + 
                                 " Cryptopraphic Service Provider " + provider + 
-                                ": " + std::string(&buf[0], &buf[0] + num));
+                                ": " + std::string(&buf[0], &buf[0] + num)));
   }
   const std::string provider;
   HCRYPTPROV hProv;
@@ -183,9 +184,9 @@ public:
 
 private:
   void error(const std::string & msg) {
-    throw std::invalid_argument("boost::random_device: " + msg + 
+    boost::throw_exception(std::invalid_argument("boost::random_device: " + msg + 
                                 " random-number pseudo-device " + path + 
-                                ": " + strerror(errno));
+                                ": " + strerror(errno)));
   }
   const std::string path;
   int fd;
