@@ -44,7 +44,6 @@ test-suite unordered
         [ run load_factor_tests.cpp ]
         [ run rehash_tests.cpp ]
         [ run equality_tests.cpp ]
-        [ run equality_deprecated.cpp ]
         [ run swap_tests.cpp ]
 
         [ run compile_set.cpp : :

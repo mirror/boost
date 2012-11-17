@@ -290,13 +290,8 @@ namespace boost { namespace unordered { namespace detail {
             {
                 iterator n2 = other.find_matching_node(n1);
 
-#if !defined(BOOST_UNORDERED_DEPRECATED_EQUALITY)
                 if (!n2.node_ || *n1 != *n2)
                     return false;
-#else
-                if (!n2.node_ || !extractor::compare_mapped(*n1, *n2))
-                    return false;
-#endif
             }
     
             return true;

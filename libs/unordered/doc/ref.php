@@ -1106,9 +1106,7 @@ EOL;
               </description>
               <notes>
                 <para>The behavior of this function was changed to match
-                  the C++11 standard in Boost 1.48. If you wish to use
-                  the old behaviour, define the macro
-                  <code>BOOST_UNORDERED_DEPRECATED_EQUALITY</code>.</para>
+                  the C++11 standard in Boost 1.48.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
               </notes>
@@ -1149,9 +1147,7 @@ EOL;
               </description>
               <notes>
                 <para>The behavior of this function was changed to match
-                  the C++11 standard in Boost 1.48. If you wish to use
-                  the old behaviour, define the macro
-                  <code>BOOST_UNORDERED_DEPRECATED_EQUALITY</code>.</para>
+                  the C++11 standard in Boost 1.48.</para>
                 <para>Behavior is undefined if the two containers don't have
                     equivalent equality predicates.</para>
               </notes>

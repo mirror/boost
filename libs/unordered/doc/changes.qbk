@@ -222,6 +222,7 @@ C++11 support has resulted in some breaking changes:
 
 [h2 Boost 1.53.0]
 
-* Remove support for the old pre-standard variadic pair constructors.
+* Remove support for the old pre-standard variadic pair constructors, and
+  equality implementation. Both have been deprecated since Boost 1.48.
 
 [endsect]

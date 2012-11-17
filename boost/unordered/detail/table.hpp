@@ -18,6 +18,18 @@
 #pragma warning(disable:4127) // conditional expression is constant
 #endif
 
+#if defined(BOOST_UNORDERED_DEPRECATED_EQUALITY)
+
+#if defined(__EDG__)
+#elif defined(_MSC_VER) || defined(__BORLANDC__) || defined(__DMC__)
+#pragma message("Warning: BOOST_UNORDERED_DEPRECATED_EQUALITY is no longer supported.")
+#elif defined(__GNUC__) || defined(__HP_aCC) || \
+    defined(__SUNPRO_CC) || defined(__IBMCPP__)
+#warning "BOOST_UNORDERED_DEPRECATED_EQUALITY is no longer supported."
+#endif
+
+#endif
+
 namespace boost { namespace unordered { namespace detail {
 
     ////////////////////////////////////////////////////////////////////////////

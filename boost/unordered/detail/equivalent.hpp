@@ -302,8 +302,6 @@ namespace boost { namespace unordered { namespace detail {
             return true;
         }
 
-#if !defined(BOOST_UNORDERED_DEPRECATED_EQUALITY)
-
         static bool group_equals(iterator n1, iterator end1,
                 iterator n2, iterator end2)
         {
@@ -363,26 +361,6 @@ namespace boost { namespace unordered { namespace detail {
                 if (*n == v) ++count;
             return count;
         }
-
-#else
-
-        static bool group_equals(iterator n1, iterator end1,
-                iterator n2, iterator end2)
-        {
-            for(;;)
-            {
-                if(!extractor::compare_mapped(*n1, *n2))
-                    return false;
-
-                ++n1;
-                ++n2;
-
-                if (n1 == end1) return n2 == end2;
-                if (n2 == end2) return false;
-            }
-        }
-
-#endif
 
         // Emplace/Insert
 

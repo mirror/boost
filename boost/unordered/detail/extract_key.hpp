@@ -75,11 +75,6 @@ namespace detail {
             return no_key();
         }
 #endif
-
-        static bool compare_mapped(value_type const&, value_type const&)
-        {
-            return true;
-        }
     };
 
     template <class Key, class ValueType>
@@ -182,11 +177,6 @@ BOOST_UNORDERED_KEY_FROM_TUPLE(boost::)
 #if !defined(BOOST_NO_CXX11_HDR_TUPLE)
 BOOST_UNORDERED_KEY_FROM_TUPLE(std::)
 #endif
-
-        static bool compare_mapped(value_type const& x, value_type const& y)
-        {
-            return x.second == y.second;
-        }
     };
 }}}
 
