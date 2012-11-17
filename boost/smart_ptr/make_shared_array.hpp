@@ -52,7 +52,7 @@ namespace boost {
         detail::array_deleter<T2>* d2;
         p1 = reinterpret_cast<T1*>(p2);        
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
-		d2->construct(p2, n1, boost::detail::sp_forward<Args>(args)...);
+        d2->construct(p2, n1, detail::sp_forward<Args>(args)...);
         return shared_ptr<T>(s1, p1);
     }
     template<typename T, typename... Args>
@@ -69,7 +69,7 @@ namespace boost {
         detail::array_deleter<T2>* d2;
         p1 = reinterpret_cast<T1*>(p2);        
         d2 = get_deleter<detail::array_deleter<T2> >(s1);
-        d2->construct(p2, n1, boost::detail::sp_forward<Args>(args)...);
+        d2->construct(p2, n1, detail::sp_forward<Args>(args)...);
         return shared_ptr<T>(s1, p1);
     }
 #endif
