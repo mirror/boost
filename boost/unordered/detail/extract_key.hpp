@@ -93,11 +93,6 @@ namespace detail {
             return v.first;
         }
             
-        static key_type const& extract(key_type const& v)
-        {
-            return v;
-        }
-
         template <class Second>
         static key_type const& extract(std::pair<key_type, Second> const& v)
         {
@@ -111,26 +106,19 @@ namespace detail {
             return v.first;
         }
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
-        template <class Arg1, class... Args>
-        static key_type const& extract(key_type const& k,
-            Arg1 const&, Args const&...)
+        template <class Arg1>
+        static key_type const& extract(key_type const& k, Arg1 const&)
         {
             return k;
         }
 
+#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
         template <class... Args>
         static no_key extract(Args const&...)
         {
             return no_key();
         }
 #else
-
-        template <class Arg1>
-        static key_type const& extract(key_type const& k, Arg1 const&)
-        {
-            return k;
-        }
 
         static no_key extract()
         {
@@ -194,7 +182,6 @@ BOOST_UNORDERED_KEY_FROM_TUPLE(boost::)
 #if !defined(BOOST_NO_CXX11_HDR_TUPLE)
 BOOST_UNORDERED_KEY_FROM_TUPLE(std::)
 #endif
-
 
         static bool compare_mapped(value_type const& x, value_type const& y)
         {

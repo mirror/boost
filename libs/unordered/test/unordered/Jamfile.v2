@@ -34,9 +34,6 @@ test-suite unordered
         [ run move_tests.cpp ]
         [ run assign_tests.cpp ]
         [ run insert_tests.cpp ]
-        [ run insert_tests.cpp : :
-            : <define>BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT
-            : insert_deprecated ]
         [ run insert_stable_tests.cpp ]
         [ run unnecessary_copy_tests.cpp ]
         [ run erase_tests.cpp ]
