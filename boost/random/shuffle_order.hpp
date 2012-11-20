@@ -98,7 +98,7 @@ public:
      */
     explicit shuffle_order_engine(const base_type & rng) : _rng(rng) { init(); }
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     explicit shuffle_order_engine(base_type&& rng) : _rng(rng) { init(); }
 #endif
 

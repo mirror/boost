@@ -22,7 +22,7 @@ namespace boost {
 namespace random {
 namespace detail {
 
-#if !defined(BOOST_NO_CONSTEXPR)
+#if !defined(BOOST_NO_CXX11_CONSTEXPR)
 #define BOOST_RANDOM_DETAIL_CONSTEXPR constexpr
 #elif defined(BOOST_MSVC)
 #define BOOST_RANDOM_DETAIL_CONSTEXPR __forceinline
@@ -35,7 +35,7 @@ namespace detail {
 template<int Shift>
 struct integer_log2_impl
 {
-#if defined(BOOST_NO_CONSTEXPR)
+#if defined(BOOST_NO_CXX11_CONSTEXPR)
     template<class T>
     BOOST_RANDOM_DETAIL_CONSTEXPR static int apply(T t, int accum)
     {
