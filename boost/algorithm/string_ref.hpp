@@ -28,7 +28,7 @@
 namespace boost {
     
     namespace detail {
-    //  A helper functor for when we don't have lambdas
+    //  A helper functor because sometimes we don't have lambdas
         template <typename charT, typename traits>
         class string_ref_traits_eq {
         public:
@@ -88,11 +88,6 @@ namespace boost {
 
         BOOST_CONSTEXPR basic_string_ref(const charT* str, size_type len)
             : ptr_(str), len_(len) {}
-
-#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
-//  !! How do I do this? Look how initializer_lists work!
-        basic_string_ref(std::initializer_list<charT> il);  // TODO
-#endif
 
 #ifndef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
         template<typename Allocator>
@@ -180,13 +175,8 @@ namespace boost {
             }
         
         size_type find(charT c) const {
-#ifdef BOOST_NO_CXX11_LAMBDAS
             const_iterator iter = std::find_if ( this->cbegin (), this->cend (), 
                                     detail::string_ref_traits_eq<charT, traits> ( c ));
-#else
-            const_iterator iter = std::find_if ( this->cbegin (), this->cend (), 
-                                    [c] ( charT val ) { return traits::eq ( c, val ); } );
-#endif
             return iter == this->cend () ? npos : std::distance ( this->cbegin (), iter );
             }
                         
@@ -197,13 +187,8 @@ namespace boost {
             }
 
         size_type rfind(charT c) const {
-#ifdef BOOST_NO_CXX11_LAMBDAS
             const_reverse_iterator iter = std::find_if ( this->crbegin (), this->crend (), 
                                     detail::string_ref_traits_eq<charT, traits> ( c ));
-#else
-            const_reverse_iterator iter = std::find_if ( this->crbegin (), this->crend (), 
-                                    [c] ( charT val ) { return traits::eq ( c, val ); } );
-#endif
             return iter == this->crend () ? npos : reverse_distance ( this->crbegin (), iter );
             }
         
