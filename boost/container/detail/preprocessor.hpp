@@ -47,7 +47,7 @@
 //This cast is ugly but it is necessary until "perfect forwarding"
 //is achieved in C++0x. Meanwhile, if we want to be able to
 //bind rvalues with non-const references, we have to be ugly
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    #define BOOST_CONTAINER_PP_PARAM_LIST(z, n, data) \
    BOOST_PP_CAT(P, n) && BOOST_PP_CAT(p, n) \
    //!
@@ -55,13 +55,13 @@
    #define BOOST_CONTAINER_PP_PARAM_LIST(z, n, data) \
    const BOOST_PP_CAT(P, n) & BOOST_PP_CAT(p, n) \
    //!
-#endif   //#ifndef BOOST_NO_RVALUE_REFERENCES
+#endif   //#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 #define BOOST_CONTAINER_PP_CONST_REF_PARAM_LIST_Q(z, n, Data) \
 const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
 //!
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    #define BOOST_CONTAINER_PP_PARAM(U, u) \
    U && u \
    //!
@@ -69,22 +69,22 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
    #define BOOST_CONTAINER_PP_PARAM(U, u) \
    const U & u \
    //!
-#endif   //#ifndef BOOST_NO_RVALUE_REFERENCES
+#endif   //#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
    #define BOOST_CONTAINER_PP_PARAM_INIT(z, n, data) \
    BOOST_PP_CAT(m_p, n) (::boost::forward< BOOST_PP_CAT(P, n) >( BOOST_PP_CAT(p, n) ))           \
    //!
 
-#else //BOOST_NO_RVALUE_REFERENCES
+#else //BOOST_NO_CXX11_RVALUE_REFERENCES
 
    #define BOOST_CONTAINER_PP_PARAM_INIT(z, n, data) \
    BOOST_PP_CAT(m_p, n) (const_cast<BOOST_PP_CAT(P, n) &>(BOOST_PP_CAT(p, n))) \
    //!
-#endif   //#ifndef BOOST_NO_RVALUE_REFERENCES
+#endif   //#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
    #if defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
 
@@ -160,25 +160,25 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
 
    #endif //defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
 
-#else //BOOST_NO_RVALUE_REFERENCES
+#else //BOOST_NO_CXX11_RVALUE_REFERENCES
 
    #define BOOST_CONTAINER_PP_PARAM_DEFINE(z, n, data)  \
    BOOST_PP_CAT(P, n) & BOOST_PP_CAT(m_p, n);             \
    //!
-#endif   //#ifndef BOOST_NO_RVALUE_REFERENCES
+#endif   //#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
 
    #define BOOST_CONTAINER_PP_MEMBER_FORWARD(z, n, data) BOOST_PP_CAT(this->m_p, n).get() \
    //!
 
-#else //!defined(BOOST_NO_RVALUE_REFERENCES) && defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
+#else //!defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
 
    #define BOOST_CONTAINER_PP_MEMBER_FORWARD(z, n, data) \
    ::boost::forward< BOOST_PP_CAT(P, n) >( BOOST_PP_CAT(this->m_p, n) ) \
    //!
 
-#endif   //!defined(BOOST_NO_RVALUE_REFERENCES) && defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
+#endif   //!defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && defined(BOOST_MOVE_MSVC_10_MEMBER_RVALUE_REF_BUG)
 
 #define BOOST_CONTAINER_PP_PARAM_INC(z, n, data)   \
   BOOST_PP_CAT(++this->m_p, n)                     \

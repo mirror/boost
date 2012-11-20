@@ -165,11 +165,11 @@ struct allocator_traits
          propagate_on_container_swap, boost::false_type)
             propagate_on_container_swap;
 
-      #if !defined(BOOST_NO_TEMPLATE_ALIASES)
+      #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
          //C++11
          template <typename T> using rebind_alloc  = typename boost::intrusive::detail::type_rebinder<Alloc, T>::type;
          template <typename T> using rebind_traits = allocator_traits< rebind_alloc<T> >;
-      #else    // #if !defined(BOOST_NO_TEMPLATE_ALIASES)
+      #else    // #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
          //Some workaround for C++03 or C++11 compilers with no template aliases
          template <typename T>
          struct rebind_alloc : boost::intrusive::detail::type_rebinder<Alloc,T>::type
@@ -196,7 +196,7 @@ struct allocator_traits
          struct rebind_traits
             : allocator_traits<typename boost::intrusive::detail::type_rebinder<Alloc, T>::type>
          {};
-      #endif   // #if !defined(BOOST_NO_TEMPLATE_ALIASES)
+      #endif   // #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
       template <class T>
       struct portable_rebind_alloc
       {  typedef typename boost::intrusive::detail::type_rebinder<Alloc, T>::type type;  };

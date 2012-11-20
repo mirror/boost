@@ -90,7 +90,7 @@ struct remove_reference<T&>
    typedef T type;
 };
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 template<class T>
 struct remove_reference<T&&>

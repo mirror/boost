@@ -336,7 +336,7 @@ struct is_class< ::boost::container::container_detail::pair<T1, T2> >
    : public ::boost::true_type
 {};
 
-#ifdef BOOST_NO_RVALUE_REFERENCES
+#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 template<class T1, class T2>
 struct has_move_emulation_enabled< ::boost::container::container_detail::pair<T1, T2> >
