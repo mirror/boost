@@ -109,9 +109,13 @@ template< class T > struct sp_if_not_array< T[] >
 {
 };
 
+#if !defined( __BORLANDC__ ) || !BOOST_WORKAROUND( __BORLANDC__, < 0x600 )
+
 template< class T, std::size_t N > struct sp_if_not_array< T[N] >
 {
 };
+
+#endif
 
 #endif
 
