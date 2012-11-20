@@ -32,7 +32,7 @@
 #include <boost/throw_exception.hpp>
 #include <functional>
 
-#ifdef BOOST_NO_VARIADIC_TEMPLATES
+#ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
 #include <boost/signals2/preprocessed_signal.hpp>
 #else
 #include <boost/signals2/variadic_signal.hpp>
