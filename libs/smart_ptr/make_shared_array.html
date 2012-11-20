@@ -12,12 +12,14 @@
       <A href="#Synopsis">Synopsis</A><br>
       <A href="#functions">Free Functions</A><br>
       <A href="#example">Example</A><br>
+      <A href="#history">History</A><br>
     <h2><a name="Introduction">Introduction</a></h2>
-    <p>One criticism of Boost <a href="shared_array.htm">shared_array</a> is 
-      the lack of utility similar to <a href="make_shared.htm">make_shared</a> 
-      which ensures only a single allocation for an array. A second criticism 
-      is Boost <code>shared_array</code> does not support custom allocators 
-      and so also lacks an <code>allocate_shared</code> utility.</p>
+    <p>Originally the Boost function templates <code>make_shared</code> and 
+      <code>allocate_shared</code> were for efficient allocation of single 
+      objects only. There was a need to have efficient, single, allocation of 
+      arrays. One criticism of <a href="shared_array.htm">shared_array</a> was 
+      always the lack of a <a href="make_shared.htm">make_shared</a> utility 
+      which ensures only a single allocation for an array.</p>
     <p>The header files &lt;boost/smart_ptr/make_shared_array.hpp&gt; and 
       &lt;boost/smart_ptr/allocate_shared_array.hpp&gt; provide new function 
       templates, <code>make_shared</code> and <code>allocate_shared</code>, 
@@ -55,10 +57,10 @@
     shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
     
     template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[][N]&gt; <a href="#functions">make_shared</a>(size_t size, initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[][N]&gt; <a href="#functions">make_shared</a>(size_t size, initializer_list&lt;T[N]&gt; list);
     
     template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[M][N]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[M][N]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T[N]&gt; list);
 
     template&lt;typename T, typename A, typename... Args&gt;
     shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
@@ -67,10 +69,10 @@
     shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
     
     template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size, initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size, initializer_list&lt;T[N]&gt; list);
     
     template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[M][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[M][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T[N]&gt; list);
 #endif
 
     template&lt;typename T&gt;
@@ -81,9 +83,9 @@
 }</pre>
     <h2><a name="functions">Free Functions</a></h2>
     <pre>template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T&gt; make_shared(size_t size, Args&amp;&amp;... args);
+    shared_ptr&lt;T[]&gt; make_shared(size_t size, Args&amp;&amp;... args);
 template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T&gt; allocate_shared(const A&amp; allocator, size_t size, Args&amp;&amp;... args);</pre>
+    shared_ptr&lt;T[]&gt; allocate_shared(const A&amp; allocator, size_t size, Args&amp;&amp;... args);</pre>
     <blockquote>
       <p><b>Requires:</b> The expression 
         <code>new(pointer) T(forward&lt;Args&gt;(args)...)</code>, where 
@@ -122,6 +124,58 @@ template&lt;typename T, typename A, typename... Args&gt;
         take any constructor arguments. These overloads invoke the default 
         constructor of <code>T</code> for each array element.</p>
     </blockquote>
+    <pre>template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[N]&gt; make_shared(Args&amp;&amp;... args);
+template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[N]&gt; allocate_shared(const A&amp; allocator, Args&amp;&amp;... args);</pre>
+    <blockquote>
+      <p><b>Description:</b> These overloads of the utilities above are for a 
+        fixed size array.</p>
+    </blockquote>
+    <pre>template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[]&gt; make_shared(initializer_list&lt;T&gt; list);
+template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[]&gt; allocate_shared(const A&amp; allocator, initializer_list&lt;T&gt; list);</pre>
+    <blockquote>
+      <p><b>Description:</b> These overloads initialize the array elements 
+        from the initializer list.</p>
+    </blockquote>
+    <pre>template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[N]&gt; make_shared(initializer_list&lt;T&gt; list);
+template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[N]&gt; allocate_shared(const A&amp; allocator, initializer_list&lt;T&gt; list);</pre>
+    <blockquote>
+      <p><b>Description:</b> These overloads of the utilities above are for a 
+        fixed size array.</p>
+    </blockquote>
+    <pre>template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[][N]&gt; make_shared(size_t size, initializer_list&lt;T[N]&gt; list);
+template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[][N]&gt; allocate_shared(const A&amp; allocator, size_t size, initializer_list&lt;T[N]&gt; list);</pre>
+    <blockquote>
+      <p><b>Description:</b> These overloads initialize inner array elements 
+        from the initializer list.</p>
+    </blockquote>
+    <pre>template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[M][N]&gt; make_shared(initializer_list&lt;T[N]&gt; list);
+template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[M][N]&gt; allocate_shared(const A&amp; allocator, initializer_list&lt;T[N]&gt; list);</pre>
+    <blockquote>
+      <p><b>Description:</b> These overloads of the utilities above are for a 
+        fixed size array.</p>
+    </blockquote>
+    <pre>template&lt;typename T&gt;
+    shared_ptr&lt;T[]&gt; make_shared_noinit(size_t size);</pre>
+    <blockquote>
+      <p><b>Description:</b> This overload does not perform value 
+        initialization of elements.</p>
+    </blockquote>
+    <pre>template&lt;typename T&gt;
+    shared_ptr&lt;T[N]&gt; make_shared_noinit();</pre>
+    <blockquote>
+      <p><b>Description:</b> This overload of the utility above is used for a 
+        fixed size array.</p>
+    </blockquote>
     <h2><a name="example">Example</a></h2>
     <p>An example of each overload of make_shared for arrays:</p>
     <blockquote>
@@ -135,6 +189,9 @@ boost::shared_ptr&lt;int[5][3]&gt; a7 = boost::make_shared&lt;int[5][3]&gt;({1, 
 boost::shared_ptr&lt;int[]&gt; a8 = boost::make_shared_noinit&lt;int[]&gt;(size);
 boost::shared_ptr&lt;int[5]&gt; a9 = boost::make_shared_noinit&lt;int[5]&gt;();</pre>
     </blockquote>
+    <h2><a name="history">History</a></h2>
+    <p>November 2012. Glen Fernandes contributed implementations of 
+      make_shared and allocate_shared for arrays.</p>
     <hr>
     <p>$Date: 2012-10-30 10:12:25 -0800 (Tue, 30 Oct 2012) $</p>
     <p><small>Copyright 2012 Glen Fernandes. Distributed under the Boost 
