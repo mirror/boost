@@ -198,7 +198,7 @@ public:
         return *this; 
     } 
 
-#   ifndef BOOST_NO_RVALUE_REFERENCES
+#   ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     //==========================================================================
     //= Move semantics
     //==========================================================================
@@ -218,7 +218,7 @@ public:
         return *this; 
     } 
     //==========================================================================
-#   endif // BOOST_NO_RVALUE_REFERENCES
+#   endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
     void swap(map& src) { base_type::swap(src); }
 
