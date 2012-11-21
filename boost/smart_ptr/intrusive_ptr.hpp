@@ -58,7 +58,7 @@ public:
 
     typedef T element_type;
 
-    intrusive_ptr(): px( 0 )
+    intrusive_ptr() BOOST_NOEXCEPT : px( 0 )
     {
     }
 
@@ -110,12 +110,12 @@ public:
 
 #if defined( BOOST_HAS_RVALUE_REFS )
 
-    intrusive_ptr(intrusive_ptr && rhs): px( rhs.px )
+    intrusive_ptr(intrusive_ptr && rhs) BOOST_NOEXCEPT : px( rhs.px )
     {
         rhs.px = 0;
     }
 
-    intrusive_ptr & operator=(intrusive_ptr && rhs)
+    intrusive_ptr & operator=(intrusive_ptr && rhs) BOOST_NOEXCEPT
     {
         this_type( static_cast< intrusive_ptr && >( rhs ) ).swap(*this);
         return *this;
@@ -135,7 +135,7 @@ public:
         return *this;
     }
 
-    void reset()
+    void reset() BOOST_NOEXCEPT
     {
         this_type().swap( *this );
     }
@@ -145,7 +145,7 @@ public:
         this_type( rhs ).swap( *this );
     }
 
-    T * get() const
+    T * get() const BOOST_NOEXCEPT
     {
         return px;
     }
@@ -165,7 +165,7 @@ public:
 // implicit conversion to "bool"
 #include <boost/smart_ptr/detail/operator_bool.hpp>
 
-    void swap(intrusive_ptr & rhs)
+    void swap(intrusive_ptr & rhs) BOOST_NOEXCEPT
     {
         T * tmp = px;
         px = rhs.px;

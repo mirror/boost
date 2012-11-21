@@ -52,7 +52,7 @@ namespace boost {
                 return static_cast<std::size_t>(-1) / sizeof(Y);
             }
             pointer allocate(size_type count, const void* = 0) {
-                std::size_t a1 = alignment_of<T>::value;
+                std::size_t a1 = boost::alignment_of<T>::value;
                 std::size_t n1 = count * sizeof(Y) + a1 - 1;
                 void*  p1 = ::operator new(n1 + size);
                 char*  p2 = static_cast<char*>(p1) + n1;

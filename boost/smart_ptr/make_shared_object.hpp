@@ -14,6 +14,7 @@
 
 #include <boost/config.hpp>
 #include <boost/smart_ptr/shared_ptr.hpp>
+#include <boost/smart_ptr/detail/sp_forward.hpp>
 #include <boost/type_traits/type_with_alignment.hpp>
 #include <boost/type_traits/alignment_of.hpp>
 #include <cstddef>
@@ -67,12 +68,12 @@ private:
 
 public:
 
-    sp_ms_deleter(): initialized_( false )
+    sp_ms_deleter() BOOST_NOEXCEPT : initialized_( false )
     {
     }
 
     // optimization: do not copy storage_
-    sp_ms_deleter( sp_ms_deleter const & ): initialized_( false )
+    sp_ms_deleter( sp_ms_deleter const & ) BOOST_NOEXCEPT : initialized_( false )
     {
     }
 
@@ -86,25 +87,16 @@ public:
         destroy();
     }
 
-    void * address()
+    void * address() BOOST_NOEXCEPT
     {
         return storage_.data_;
     }
 
-    void set_initialized()
+    void set_initialized() BOOST_NOEXCEPT
     {
         initialized_ = true;
     }
 };
-
-#if defined( BOOST_HAS_RVALUE_REFS )
-
-template< class T > T&& sp_forward( T & t )
-{
-    return static_cast< T&& >( t );
-}
-
-#endif
 
 template< class T > struct sp_if_not_array
 {
@@ -117,9 +109,13 @@ template< class T > struct sp_if_not_array< T[] >
 {
 };
 
+#if !defined( __BORLANDC__ ) || !BOOST_WORKAROUND( __BORLANDC__, < 0x600 )
+
 template< class T, std::size_t N > struct sp_if_not_array< T[N] >
 {
 };
+
+#endif
 
 #endif
 
