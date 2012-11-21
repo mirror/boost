@@ -85,7 +85,7 @@ namespace boost { namespace unordered { namespace detail {
     // Either forwarding variadic arguments, or storing the arguments in
     // emplace_args##n
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
 #define BOOST_UNORDERED_EMPLACE_TEMPLATE typename... Args
 #define BOOST_UNORDERED_EMPLACE_ARGS BOOST_FWD_REF(Args)... args
@@ -136,7 +136,7 @@ namespace boost { namespace unordered { namespace detail {
 #define BOOST_UNORDERED_EMPLACE_ARGS2 create_emplace_args
 #define BOOST_UNORDERED_EMPLACE_ARGS3 create_emplace_args
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
 #define BOOST_UNORDERED_EARGS_MEMBER(z, n, _)                               \
     typedef BOOST_FWD_REF(BOOST_PP_CAT(A, n)) BOOST_PP_CAT(Arg, n);         \
@@ -342,7 +342,7 @@ namespace boost { namespace unordered { namespace detail {
 #       include <boost/type_traits/is_same.hpp>
 #   endif
 
-#   if !defined(BOOST_NO_VARIADIC_TEMPLATES) && \
+#   if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && \
         !defined(BOOST_NO_SFINAE_EXPR)
 #       define BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT 1
 #   else
@@ -432,7 +432,7 @@ namespace boost { namespace unordered { namespace detail {
         max_size, U const, (), 0
     );
 
-#       if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#       if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
     template <typename T, typename ValueType, typename... Args>
     BOOST_UNORDERED_HAS_FUNCTION(
@@ -763,7 +763,7 @@ namespace boost { namespace unordered { namespace detail {
     ////////////////////////////////////////////////////////////////////////////
     // call_construct
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
 #   if BOOST_UNORDERED_DETAIL_FULL_CONSTRUCT
 
@@ -812,7 +812,7 @@ namespace boost { namespace unordered { namespace detail {
     //
     // Used for piecewise construction.
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
 #   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)              \
     template<typename Alloc, typename T>                                    \
@@ -934,7 +934,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
             sizeof(test(choose(), boost::unordered::detail::make<A0>())) };
     };
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
     ////////////////////////////////////////////////////////////////////////////
     // Construct from variadic parameters
@@ -966,7 +966,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
             boost::addressof(address->second), boost::forward<A2>(a2));
     }
 
-#else // BOOST_NO_VARIADIC_TEMPLATES
+#else // BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
 ////////////////////////////////////////////////////////////////////////////////
 // Construct from emplace_args
@@ -1038,7 +1038,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
             boost::addressof(address->second), args.a2);
     }
 
-#endif // BOOST_NO_VARIADIC_TEMPLATES
+#endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
 }}}
 

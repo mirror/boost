@@ -438,8 +438,8 @@ namespace boost { namespace unordered { namespace detail {
             this->add_node(a, key_hash, this->find_node(key_hash, k));
         }
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
-#   if defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+#   if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         iterator emplace(boost::unordered::detail::emplace_args1<
                 boost::unordered::detail::please_ignore_this_overload> const&)
         {

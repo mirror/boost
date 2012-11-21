@@ -56,7 +56,7 @@ namespace detail {
             return no_key();
         }
         
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template <class... Args>
         static no_key extract(Args const&...)
         {
@@ -107,7 +107,7 @@ namespace detail {
             return k;
         }
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template <class... Args>
         static no_key extract(Args const&...)
         {
@@ -133,7 +133,7 @@ namespace detail {
         }
 #endif
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
 #define BOOST_UNORDERED_KEY_FROM_TUPLE(namespace_)                          \
         template <typename T2>                                              \
