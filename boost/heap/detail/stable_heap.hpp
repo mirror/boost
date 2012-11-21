@@ -359,12 +359,12 @@ struct heap_base<T, Cmp, constant_time_size, StabilityCounterType, true>:
         return std::make_pair(val, count);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <class... Args>
     internal_type make_node(Args&&... args)
     {
         stability_counter_type count = ++counter_;
-        if (counter_ == std::numeric_limits<stability_counter_type>::max())
+        if (counter_ == (std::numeric_limits<stability_counter_type>::max)())
             BOOST_THROW_EXCEPTION(std::runtime_error("boost::heap counter overflow"));
         return std::make_pair(std::forward<T>(args)..., count);
     }

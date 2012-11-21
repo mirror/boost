@@ -213,7 +213,7 @@ public:
         siftup(q_.size() - 1);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <class... Args>
     void emplace(Args&&... args)
     {
@@ -351,7 +351,7 @@ private:
         typedef typename container_type::const_iterator container_iterator;
         const size_t first_index = first_child_index(index);
 
-        const size_type last_index = std::min(first_index + D - 1, size() - 1);
+        const size_type last_index = (std::min)(first_index + D - 1, size() - 1);
 
         return last_index;
     }
@@ -587,7 +587,7 @@ public:
         return super_t::push(v);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /// \copydoc boost::heap::priority_queue::emplace
     template <class... Args>
     typename mpl::if_c<is_mutable, handle_type, void>::type emplace(Args&&... args)
