@@ -354,7 +354,7 @@ struct heap_base<T, Cmp, constant_time_size, StabilityCounterType, true>:
     internal_type make_node(T const & val)
     {
         stability_counter_type count = ++counter_;
-        if (counter_ == std::numeric_limits<stability_counter_type>::max())
+        if (counter_ == (std::numeric_limits<stability_counter_type>::max)())
             BOOST_THROW_EXCEPTION(std::runtime_error("boost::heap counter overflow"));
         return std::make_pair(val, count);
     }
