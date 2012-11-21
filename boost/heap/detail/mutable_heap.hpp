@@ -382,7 +382,7 @@ public:
     {
         list_iterator it = handle.iterator;
         value_type const & current_value = it->first;
-        value_compare const & cmp = q_;
+        value_compare const & cmp = q_.value_comp();
         if (cmp(v, current_value))
             decrease(handle, v);
         else

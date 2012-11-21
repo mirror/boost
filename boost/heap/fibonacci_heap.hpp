@@ -426,7 +426,7 @@ public:
     /** \copydoc boost::heap::fibonacci_heap::update(handle_type, const_reference)
      *
      * \b Rationale: The lazy update function is a modification of the traditional update, that just invalidates
-     *               the iterator the the object referred to by the handle.
+     *               the iterator to the object referred to by the handle.
      * */
     void update_lazy(handle_type handle, const_reference v)
     {
@@ -457,7 +457,7 @@ public:
     /** \copydoc boost::heap::fibonacci_heap::update (handle_type handle)
      *
      * \b Rationale: The lazy update function is a modification of the traditional update, that just invalidates
-     *               the iterator the the object referred to by the handle.
+     *               the iterator to the object referred to by the handle.
      * */
     void update_lazy (handle_type handle)
     {
