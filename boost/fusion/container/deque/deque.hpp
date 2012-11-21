@@ -13,7 +13,7 @@
 ///////////////////////////////////////////////////////////////////////////////
 // With variadics, we will use the PP version version
 ///////////////////////////////////////////////////////////////////////////////
-#if defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 # include <boost/fusion/container/deque/detail/pp_deque.hpp>
 #else
 # if !defined(BOOST_FUSION_HAS_VARIADIC_DEQUE)
@@ -93,7 +93,7 @@ namespace boost { namespace fusion
           : base(seq)
         {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template <typename ...Elements>
         deque(deque<Elements...>&& seq)
           : base(std::forward<deque<Elements...>>(seq))
@@ -104,7 +104,7 @@ namespace boost { namespace fusion
           : base(seq)
         {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         deque(deque&& seq)
           : base(std::forward<deque>(seq))
         {}
@@ -119,7 +119,7 @@ namespace boost { namespace fusion
           : base(detail::deque_keyed_values<Head_, Tail_...>::construct(head, tail...))
         {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template <typename Head_, typename ...Tail_>
         explicit deque(Head_&& head, Tail_&&... tail)
           : base(detail::deque_keyed_values<Head, Tail...>
@@ -147,7 +147,7 @@ namespace boost { namespace fusion
             return *this;
         }
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template <typename T>
         deque& operator=(T&& rhs)
         {

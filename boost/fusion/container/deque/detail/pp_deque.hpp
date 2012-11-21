@@ -91,7 +91,7 @@ namespace boost { namespace fusion {
             : base(rhs)
             {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         explicit deque(T0&& t0)
             : base(std::forward<T0>(t0), detail::nil_keyed_element())
             {}
@@ -106,7 +106,7 @@ namespace boost { namespace fusion {
             : base(seq)
             {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename U)>
         deque(deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)>&& seq)
             : base(std::forward<deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)>>(seq))
@@ -134,7 +134,7 @@ namespace boost { namespace fusion {
             return *this;
         }
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template <typename T>
         deque&
         operator=(T&& rhs)

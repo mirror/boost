@@ -49,7 +49,7 @@
         BOOST_PP_CAT(vector_data, N)()
             : BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_MEMBER_DEFAULT_INIT, _) {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         BOOST_PP_CAT(vector_data, N)(BOOST_PP_ENUM_BINARY_PARAMS(N, T, && _))
             : BOOST_PP_ENUM(N, FUSION_VECTOR_ARG_FWD, _) {}
 #endif
@@ -63,7 +63,7 @@
             BOOST_PP_CAT(vector_data, N) const& other)
             : BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_COPY_INIT, _) {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         BOOST_PP_CAT(vector_data, N)(
             BOOST_PP_CAT(vector_data, N)&& other)
             : BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_FWD, _) {}
@@ -123,7 +123,7 @@
                 N, typename detail::call_param<T, >::type _))
             : base_type(BOOST_PP_ENUM_PARAMS(N, _)) {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if (N == 1)
         explicit
 #endif
@@ -131,7 +131,7 @@
             : base_type(BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_FORWARD, _)) {}
 #endif
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         BOOST_PP_CAT(vector, N)(BOOST_PP_CAT(vector, N)&& rhs)
             : base_type(std::forward<base_type>(rhs)) {}
 #endif
@@ -178,7 +178,7 @@
             return *this;
         }
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         BOOST_PP_CAT(vector, N)&
         operator=(BOOST_PP_CAT(vector, N)&& vec)
         {

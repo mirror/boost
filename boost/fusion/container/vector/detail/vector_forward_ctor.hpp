@@ -37,7 +37,7 @@
         N, typename detail::call_param<T, >::type _))
         : vec(BOOST_PP_ENUM_PARAMS(N, _)) {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #if N == 1
     explicit
 #endif

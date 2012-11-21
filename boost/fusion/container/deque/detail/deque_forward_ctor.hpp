@@ -34,7 +34,7 @@ deque(BOOST_PP_ENUM_BINARY_PARAMS(N, typename add_reference<typename add_const<T
     : base(detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(N, T)>::construct(BOOST_PP_ENUM_PARAMS(N, t)))
 {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 deque(BOOST_PP_ENUM_BINARY_PARAMS(N, T, && t))
     : base(detail::deque_keyed_values<BOOST_PP_ENUM_PARAMS(N, T)>::
 		forward_(BOOST_PP_ENUM(N, FUSION_DEQUE_FORWARD_CTOR_FORWARD, _)))
