@@ -437,7 +437,7 @@ public: // internal visitor interface
 //
 // Internal visitor that moves the value it visits into the given buffer.
 //
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 class move_into
     : public static_visitor<>
 {
@@ -1613,7 +1613,7 @@ public: // structors, cont.
         indicate_which(operand.which());
     }
     
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     variant(variant&& operand)
     {
         // Move the value of operand into *this...
@@ -1778,7 +1778,7 @@ private: // helpers, for modifiers (below)
     
     friend class assigner;
    
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     // class move_assigner
     //
     // Internal visitor that "move assigns" the visited value to the given variant
@@ -1921,7 +1921,7 @@ private: // helpers, for modifiers (below)
     };
 
     friend class move_assigner;
-#endif // BOOST_NO_RVALUE_REFERENCES
+#endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
     void variant_assign(const variant& rhs)
     {
@@ -1940,7 +1940,7 @@ private: // helpers, for modifiers (below)
         }
     }
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     void variant_assign(variant&& rhs)
     {
         // If the contained types are EXACTLY the same...
@@ -1957,7 +1957,7 @@ private: // helpers, for modifiers (below)
             rhs.internal_apply_visitor(visitor); 
         }
     }
-#endif // BOOST_NO_RVALUE_REFERENCES
+#endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
 private: // helpers, for modifiers (below)
 
@@ -1979,7 +1979,7 @@ private: // helpers, for modifiers (below)
         }
     }
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     template <typename T>
     void move_assign(T&& rhs)
     {
@@ -1997,18 +1997,18 @@ private: // helpers, for modifiers (below)
             variant_assign( detail::variant::move(temp) );
         }
     }
-#endif // BOOST_NO_RVALUE_REFERENCES
+#endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
 public: // modifiers
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     template <class T>
     typename boost::enable_if<boost::is_rvalue_reference<T&&>, variant& >::type operator=(T&& rhs)
     {
         move_assign( detail::variant::move(rhs) );
         return *this;
     }
-#endif // BOOST_NO_RVALUE_REFERENCES
+#endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
     template <typename T>
     variant& operator=(const T& rhs)
@@ -2024,13 +2024,13 @@ public: // modifiers
         return *this;
     }
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     variant& operator=(variant&& rhs)
     {
         variant_assign( detail::variant::move(rhs) );
         return *this;
     }
-#endif // BOOST_NO_RVALUE_REFERENCES
+#endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
     void swap(variant& rhs)
     {
