@@ -35,7 +35,10 @@
 // rather than including <memory> directly:
 #include <boost/config/no_tr1/memory.hpp>  // std::auto_ptr
 #include <functional>       // std::less
-#include <new>              // std::bad_alloc
+
+#ifdef BOOST_NO_EXCEPTIONS
+# include <new>              // std::bad_alloc
+#endif
 
 #if !defined( BOOST_NO_CXX11_SMART_PTR )
 # include <boost/utility/addressof.hpp>
