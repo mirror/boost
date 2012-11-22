@@ -359,7 +359,7 @@ public:
         return handle_type(n);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /**
      * \b Effects: Adds a new element to the priority queue. The element is directly constructed in-place. Returns handle to element.
      *
@@ -610,7 +610,7 @@ public:
 
         rhs.set_size(0);
 
-        super_t::set_stability_count(std::max(super_t::get_stability_count(),
+        super_t::set_stability_count((std::max)(super_t::get_stability_count(),
                                      rhs.get_stability_count()));
         rhs.set_stability_count(0);
     }

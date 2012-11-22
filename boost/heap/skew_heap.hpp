@@ -423,7 +423,7 @@ public:
         return push_helper::push(this, v);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /**
      * \b Effects: Adds a new element to the priority queue. The element is directly constructed in-place.
      *
@@ -564,7 +564,7 @@ public:
         rhs.root = NULL;
         sanity_check();
 
-        super_t::set_stability_count(std::max(super_t::get_stability_count(),
+        super_t::set_stability_count((std::max)(super_t::get_stability_count(),
                                      rhs.get_stability_count()));
         rhs.set_stability_count(0);
     }
@@ -762,7 +762,7 @@ private:
             self->push_internal(v);
         }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template <class... Args>
         static void emplace(skew_heap * self, Args&&... args)
         {
@@ -778,7 +778,7 @@ private:
             return handle_type(self->push_internal(v));
         }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template <class... Args>
         static handle_type emplace(skew_heap * self, Args&&... args)
         {
@@ -798,7 +798,7 @@ private:
         return n;
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <class... Args>
     node_pointer emplace_internal(Args&&... args)
     {

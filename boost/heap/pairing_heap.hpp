@@ -357,7 +357,7 @@ public:
         return handle_type(n);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /**
      * \b Effects: Adds a new element to the priority queue. The element is directly constructed in-place. Returns handle to element.
      *
@@ -579,7 +579,7 @@ public:
         rhs.set_size(0);
         rhs.root = NULL;
 
-        super_t::set_stability_count(std::max(super_t::get_stability_count(),
+        super_t::set_stability_count((std::max)(super_t::get_stability_count(),
                                      rhs.get_stability_count()));
         rhs.set_stability_count(0);
     }
@@ -674,7 +674,7 @@ private:
 
     node_pointer merge_first_pair(node_child_list & children)
     {
-        assert(!children.empty());
+        BOOST_HEAP_ASSERT(!children.empty());
         node_pointer first_child = static_cast<node_pointer>(&children.front());
         children.pop_front();
         if (children.empty())
