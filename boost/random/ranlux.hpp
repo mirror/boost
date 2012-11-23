@@ -37,7 +37,7 @@ namespace detail {
  * The levels are given in
  * 
  *  @blockquote
- *  "RANLUX: A Fortran implementation ofthe high-quality
+ *  "RANLUX: A Fortran implementation of the high-quality
  *  pseudorandom number generator of Luescher", F. James,
  *  Computer Physics Communications 79 (1994) 111-114
  *  @endblockquote
