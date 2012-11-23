@@ -19,6 +19,9 @@ project tti_tests : requirements <warnings>on
                                  <toolset>gcc-4.6.0:<cxxflags>-Wno-variadic-macros
                                  ;
                                  
+#
+# Member functions composite syntax
+#
 alias ttimfsig
     :
         [ run test_has_member.cpp ]
@@ -27,6 +30,9 @@ alias ttimfsig
         [ compile-fail test_has_member_fail2.cpp ]
     ;
 
+#
+# Member data
+#
 alias ttimd
     :
         [ run test_has_mem_data.cpp ]
@@ -37,14 +43,20 @@ alias ttimd
         [ compile-fail test_has_mem_data_fail3.cpp ]
     ;
 
+#
+# Member functions specific syntax
+#
 alias ttimfn
     :
-        [ run test_has_mem_fun.cpp : : : <toolset>gcc-4.6.0:<cxxflags>-std=c++0x ]
+        [ run test_has_mem_fun.cpp ]
         [ compile test_has_mem_fun_compile.cpp ]
         [ compile-fail test_has_mem_fun_fail.cpp ]
         [ compile-fail test_has_mem_fun_fail2.cpp ]
     ;
 
+#
+# Static member functions composite syntax
+#
 alias ttismfsig
     :
         [ run test_has_static_member.cpp ]
@@ -53,6 +65,9 @@ alias ttismfsig
         [ compile-fail test_has_static_member_fail2.cpp ]
     ;
 
+#
+# Static member data
+#
 alias ttismd
     :
         [ run test_has_static_mem_data.cpp ]
@@ -62,7 +77,10 @@ alias ttismd
         [ compile-fail test_has_static_mem_data_fail3.cpp ]
     ;
 
-alias ttismf
+#
+# Static member functions
+#
+alias ttismfn
     :
         [ run test_has_static_mem_fun.cpp ]
         [ compile test_has_static_mem_fun_compile.cpp ]
@@ -70,6 +88,9 @@ alias ttismf
         [ compile-fail test_has_static_mem_fun_fail2.cpp ]
     ;
 
+#
+# Templates 
+#
 alias ttitmp
     :
         [ run test_has_template.cpp : : : <define>BOOST_PP_VARIADICS=0 ]
@@ -79,6 +100,51 @@ alias ttitmp
         [ compile-fail test_has_template_fail3.cpp : <define>BOOST_PP_VARIADICS=0 ]
         [ compile-fail test_has_template_fail4.cpp : <define>BOOST_PP_VARIADICS=0 ]
     ;
+
+#
+# Templates, check params
+#
+alias ttitmpcp
+    :
+        [ run test_has_template_cp.cpp : : : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile test_has_template_cp_compile.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail2.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail3.cpp : <define>BOOST_PP_VARIADICS=0 ]
+        [ compile-fail test_has_template_cp_fail4.cpp : <define>BOOST_PP_VARIADICS=0 ]
+    ;
+    
+#
+# Type
+#
+alias ttity
+    :
+        [ run test_has_type.cpp ]
+        [ compile test_has_type_compile.cpp ]
+        [ compile-fail test_has_type_fail.cpp ]
+        [ compile-fail test_has_type_fail2.cpp ]
+        [ compile-fail test_has_type_fail3.cpp ]
+        [ run test_has_type_ct.cpp ]
+        [ compile test_has_type_ct_compile.cpp ]
+        [ compile-fail test_has_type_ct_fail.cpp ]
+        [ compile-fail test_has_type_ct_fail2.cpp ]
+        [ compile-fail test_has_type_ct_fail3.cpp ]
+        [ compile-fail test_has_type_ct_fail4.cpp ]
+        [ compile-fail test_has_type_ct_fail5.cpp ]
+    ;
+
+#
+# Nested type
+#
+alias ttimemty
+    :
+        [ run test_mem_type.cpp ]
+        [ compile test_mem_type_compile.cpp ]
+    ;
+#
+# All of tti, non-variadic macros
+#
+alias tti : ttimfsig ttimd ttimfn ttismfsig ttismd ttismfn ttitmp ttitmpcp ttity ttimemty ;
 
 alias ttitmpv : : 
         <toolset>gcc
@@ -90,6 +156,9 @@ alias ttitmpv : :
         <toolset-gcc:version>3.4.5
     ;
     
+#
+# Templates, variadic macro
+#
 alias ttitmpv
     :
         [ run test_has_template.cpp : : : 
@@ -154,16 +223,6 @@ alias ttitmpv
           test_has_template_fail4_v ]
     ;
 
-alias ttitmpcp
-    :
-        [ run test_has_template_cp.cpp : : : <define>BOOST_PP_VARIADICS=0 ]
-        [ compile test_has_template_cp_compile.cpp : <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_cp_fail.cpp : <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_cp_fail2.cpp : <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_cp_fail3.cpp : <define>BOOST_PP_VARIADICS=0 ]
-        [ compile-fail test_has_template_cp_fail4.cpp : <define>BOOST_PP_VARIADICS=0 ]
-    ;
-    
 alias ttitmpcpv : : 
         <toolset>gcc
         <toolset-gcc:version>3.4.2
@@ -174,6 +233,9 @@ alias ttitmpcpv : :
         <toolset-gcc:version>3.4.5
     ;
     
+#
+# Templates, variadic macro, check params, non-variadic syntax
+#
 alias ttitmpcpv
     :
         [ run test_has_template_cp.cpp : : : 
@@ -238,42 +300,20 @@ alias ttitmpcpv
           test_has_template_cp_fail4_v  ]
     ;
     
-alias ttity
-    :
-        [ run test_has_type.cpp ]
-        [ compile test_has_type_compile.cpp ]
-        [ compile-fail test_has_type_fail.cpp ]
-        [ compile-fail test_has_type_fail2.cpp ]
-        [ compile-fail test_has_type_fail3.cpp ]
-        [ run test_has_type_ct.cpp ]
-        [ compile test_has_type_ct_compile.cpp ]
-        [ compile-fail test_has_type_ct_fail.cpp ]
-        [ compile-fail test_has_type_ct_fail2.cpp ]
-        [ compile-fail test_has_type_ct_fail3.cpp ]
-        [ compile-fail test_has_type_ct_fail4.cpp ]
-        [ compile-fail test_has_type_ct_fail5.cpp ]
-    ;
-
-alias ttimemty
-    :
-        [ run test_mem_type.cpp ]
-        [ compile test_mem_type_compile.cpp ]
-    ;
-
-
-alias tti : ttimfsig ttimd ttimfn ttismfsig ttismd ttismf ttitmp ttitmpcp ttity ttimemty ;
-
-alias ttivm : : 
+alias ttitmpcpvm : : 
         <toolset>gcc
         <toolset-gcc:version>3.4.2
     ;
     
-alias ttivm : : 
+alias ttitmpcpvm : : 
         <toolset>gcc
         <toolset-gcc:version>3.4.5
     ;
     
-alias ttivm
+#
+# Templates, variadic macro, check params, variadic syntax
+#
+alias ttitmpcpvm
     :
         [ run test_vm_has_template_cp.cpp : : : 
           <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
@@ -331,103 +371,17 @@ alias ttivm
           <define>BOOST_PP_VARIADICS=1 ]
     ;
     
+#
+# Templates, non-variadic macro
+#
 alias ttitemplate : ttitmp ttitmpcp ;
 
-alias ttitemplate_vm : ttitmpv ttitmpcpv ttivm ;
+#
+# Templates, variadic macro
+#
+alias ttivm : ttitmpv ttitmpcpv ttitmpcpvm ;
 
-alias ttitemplate_all : ttitemplate ttitemplate_vm ;
-
-alias ttimf
-    :
-        [ run test_mf_has_mem_data.cpp ]
-        [ compile test_mf_has_mem_data_compile.cpp ]
-        [ compile-fail test_mf_has_mem_data_fail.cpp ]
-        [ compile-fail test_mf_has_mem_data_fail2.cpp ]
-        [ compile-fail test_mf_has_mem_data_fail3.cpp ]
-        [ run test_mf_has_mem_fun.cpp ]
-        [ compile test_mf_has_mem_fun_compile.cpp ]
-        [ compile-fail test_mf_has_mem_fun_fail.cpp ]
-        [ compile-fail test_mf_has_mem_fun_fail2.cpp ]
-        [ compile-fail test_mf_has_mem_fun_fail3.cpp ]
-        [ run test_mf_has_static_data.cpp ]
-        [ compile test_mf_has_static_data_compile.cpp ]
-        [ compile-fail test_mf_has_static_data_fail.cpp ]
-        [ compile-fail test_mf_has_static_data_fail2.cpp ]
-        [ compile-fail test_mf_has_static_data_fail3.cpp ]
-        [ run test_mf_has_static_fun.cpp ]
-        [ compile test_mf_has_static_fun_compile.cpp ]
-        [ compile-fail test_mf_has_static_fun_fail.cpp ]
-        [ compile-fail test_mf_has_static_fun_fail2.cpp ]
-        [ compile-fail test_mf_has_static_fun_fail3.cpp ]
-        [ run test_mf_has_template.cpp ]
-        [ compile test_mf_has_template_compile.cpp ]
-        [ compile-fail test_mf_has_template_fail.cpp ]
-        [ compile-fail test_mf_has_template_fail2.cpp ]
-        [ compile-fail test_mf_has_template_fail3.cpp ]
-        [ compile-fail test_mf_has_template_fail4.cpp ]
-        [ run test_mf_has_template_cp.cpp ]
-        [ compile test_mf_has_template_cp_compile.cpp ]
-        [ compile-fail test_mf_has_template_cp_fail.cpp ]
-        [ compile-fail test_mf_has_template_cp_fail2.cpp ]
-        [ compile-fail test_mf_has_template_cp_fail3.cpp ]
-        [ run test_mf_has_type.cpp ]
-        [ compile test_mf_has_type_compile.cpp ]
-        [ compile-fail test_mf_has_type_fail.cpp ]
-        [ compile-fail test_mf_has_type_fail2.cpp ]
-        [ run test_mf_has_type_ct.cpp ]
-        [ compile test_mf_has_type_ct_compile.cpp ]
-        [ compile-fail test_mf_has_type_ct_fail.cpp ]
-        [ compile-fail test_mf_has_type_ct_fail2.cpp ]
-        [ compile-fail test_mf_has_type_ct_fail3.cpp ]
-        [ run test_mf_mem_type.cpp ]
-        [ compile test_mf_mem_type_compile.cpp ]
-    ;
-
-alias ttivmmf
-    :
-        [ run test_vm_mf_has_template_cp.cpp : : : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile test_vm_mf_has_template_cp_compile.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile-fail test_vm_mf_has_template_cp_fail.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile-fail test_vm_mf_has_template_cp_fail2.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-        [ compile-fail test_vm_mf_has_template_cp_fail3.cpp : 
-          <toolset>gcc-4.3.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.3.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.4.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.4.0:<cxxflags>-U__STRICT_ANSI__
-          <toolset>gcc-4.5.0:<cxxflags>-std=c++0x
-          <toolset>gcc-4.5.2:<cxxflags>-std=c++0x
-          <toolset>gcc-4.6.0:<cxxflags>-std=c++0x
-          <define>BOOST_PP_VARIADICS=1 ]
-    ;
+#
+# All templates
+#
+alias ttitemplate_all : ttitemplate ttivm ;

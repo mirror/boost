@@ -17,18 +17,8 @@
 #include <boost/preprocessor/punctuation/comma_if.hpp>
 #include <boost/preprocessor/repetition/repeat.hpp>
 #include <boost/preprocessor/repetition/enum.hpp>
-
-#if !defined(BOOST_TTI_VERSION_1_5)
-
 #include <boost/preprocessor/array/enum.hpp>
 #include <boost/preprocessor/array/size.hpp>
-
-#else
-
-#include <boost/preprocessor/seq/enum.hpp>
-#include <boost/preprocessor/seq/size.hpp>
-
-#endif
 
 #if !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 
@@ -196,8 +186,6 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 
 #endif // !BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE
 
-#if !defined(BOOST_TTI_VERSION_1_5)
-
 #define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpArray) \
   BOOST_TTI_DETAIL_TRAIT_CALL_HAS_TEMPLATE_CHECK_PARAMS(BOOST_PP_CAT(trait,_detail),name,tpArray) \
   template<class TTI_T> \
@@ -228,31 +216,5 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 
 #endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 #endif // !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
-
-#else // BOOST_TTI_VERSION_1_5
-
-#if !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
-
-#define BOOST_TTI_DETAIL_TRAIT_CALL_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpSeq) \
-  BOOST_TTI_DETAIL_HAS_MEMBER_WITH_FUNCTION_SFINAE \
-    (  \
-      ( BOOST_PP_ADD(BOOST_PP_SEQ_SIZE(tpSeq),4), ( trait, name, 1, false, BOOST_PP_SEQ_ENUM(tpSeq) ) )  \
-    )  \
-/**/
-
-#else // BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
-
-#define BOOST_TTI_DETAIL_TRAIT_CALL_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpSeq) \
-  BOOST_TTI_DETAIL_HAS_MEMBER_WITH_TEMPLATE_SFINAE \
-    ( \
-      ( BOOST_PP_ADD(BOOST_PP_SEQ_SIZE(tpSeq),4), ( trait, name, 1, false, BOOST_PP_SEQ_ENUM(tpSeq) ) )  \
-    ) \
-/**/
-
-#endif // !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
-#endif // !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
-
-#endif // !BOOST_TTI_VERSION_1_5
 
 #endif // BOOST_TTI_DETAIL_TEMPLATE_PARAMS_HPP

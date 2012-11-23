@@ -16,10 +16,6 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/preprocessor/arithmetic/add.hpp>
 #include <boost/preprocessor/variadic/size.hpp>
-#include "dtemplate_params.hpp"
-
-#if !defined(BOOST_TTI_VERSION_1_5)
-
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/comparison/equal.hpp>
 #include <boost/preprocessor/control/iif.hpp>
@@ -29,9 +25,8 @@
 #include <boost/preprocessor/seq/seq.hpp>
 #include <boost/preprocessor/variadic/elem.hpp>
 #include <boost/preprocessor/variadic/to_seq.hpp>
-#include "dtemplate.hpp"
-
-#endif
+#include <boost/tti/detail/dtemplate.hpp>
+#include <boost/tti/detail/dtemplate_params.hpp>
 
 #if !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
 #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
@@ -60,8 +55,6 @@
 /**/
 
 #endif // !defined(BOOST_MPL_CFG_NO_HAS_XXX_TEMPLATE)
-
-#if !defined(BOOST_TTI_VERSION_1_5)
 
 #define BOOST_TTI_DETAIL_VM_CHECK_MORE_THAN_TWO(trait,...) \
   BOOST_PP_IIF \
@@ -149,8 +142,6 @@
     BOOST_STATIC_CONSTANT(bool,value=type::value); \
     }; \
 /**/
-
-#endif // !BOOST_TTI_VERSION_1_5
 
 #endif // BOOST_PP_VARIADICS
 

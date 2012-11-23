@@ -12,16 +12,16 @@ int main()
   
   // You can always instantiate without compiler errors
   
-  BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(someFunctionMember)<double (AnotherType::*)(short,short,long,int)> aVar3;
+  BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(someFunctionMember)<double (AnotherType::*)(short,short,long,int)> aVar3;
   
   // Compile time asserts
   
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(VoidFunction)<void (AType::*)()>));
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(VoidFunction)<void (AType::*)()>));
   BOOST_MPL_ASSERT((FunctionReturningInt<int (AType::*)()>));
   BOOST_MPL_ASSERT((FunctionReturningInt<double (AnotherType::*)(int)>));
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(aFunction)<AType (AnotherType::*)(int)>));
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(aFunction)<AType (AnotherType::*)(int)>));
   BOOST_MPL_ASSERT((AnotherIntFunction<int (AnotherType::*)(AType)>));
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(sFunction)<AType::AnIntType (AnotherType::*)(int,long,double)>));
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(sFunction)<AType::AnIntType (AnotherType::*)(int,long,double)>));
   
   return 0;
 

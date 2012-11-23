@@ -10,8 +10,8 @@
 [section:tti_detail_has_template_macro Using the BOOST_TTI_HAS_TEMPLATE macro]
 
 The TTI macro [macroref BOOST_TTI_HAS_TEMPLATE] introspects
-an inner class template of a class. The macro must specify 
-the name of the class template to introspect.
+an inner class template of a class. The macro must specify,
+at the least, the name of the class template to introspect.
 
 [heading Two forms of introspection]
  
@@ -280,7 +280,9 @@ programmers doing compile time template metaprogramming.
 It should be noticed that once we create our metafunction for 
 introspecting an inner class template by name, we can reuse the 
 metafunction for introspecting any enclosing user-defined type 
-for that name.
+for that name. However we will be successful or not as long as 
+we are introspecting the inner class template for either 
+template type parameters or specific parameters each time.
 
 [endsect]
 

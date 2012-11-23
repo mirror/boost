@@ -15,14 +15,22 @@ parameter which is the name of an inner member data whose existence
 the programmer wants to check. The macro generates a metafunction
 called 'has_member_data_'name_of_inner_member_data'. 
 
-The metafunction can be invoked by passing it the enclosing type 
-to introspect and the type of the member data.
+The metafunction can be invoked in two different ways.
+
+The first way is by passing it two parameters. The first parameter
+is the enclosing type to introspect and the second parameter is the
+type of the member data.
+
+The second way is by passing it a single parameter, which is a pointer
+to member type. This type has the form of:
+
+ MemberData_Type Enclosing_Type::*
 
 The metafunction returns a single type called 'type', which is a 
 boost::mpl::bool_. As a convenience the metafunction 
 returns the value of this type directly as a compile time bool constant 
-called 'value'. This is true or false depending on whether the inner 
-member data, of the specified type, exists or not.
+called 'value'. This value is true or false depending on whether the 
+inner member data, of the specified type, exists or not.
 
 [heading Generating the metafunction]
 
@@ -36,10 +44,16 @@ generates a metafunction called 'has_member_data_AMemberData' in the current sco
 [heading Invoking the metafunction]
 
 You invoke the metafunction by instantiating the template with an enclosing 
-type to introspect and the type of the member data. A return value called 
-'value' is a compile time bool constant.
+type to introspect and the type of the member data, or by instantating the
+template with a pointer to member data type. The return value called 'value' 
+is a compile time bool constant telling you whether or not the member data .
+exists.
 
   has_member_data_AMemberData<Enclosing_Type,MemberData_Type>::value
+  
+  OR
+  
+  has_member_data_AMemberData<MemberData_Type Enclosing_Type::*>::value
   
 [heading Examples]
 
@@ -71,16 +85,21 @@ Finally we invoke our metafunction and return our value.
 This all happens at compile time, and can be used by 
 programmers doing compile time template metaprogramming.
   
+We will show both forms in the following examples. 
+Both forms are completely interchangeable as to the result
+desired.
+
  has_member_data_data1<Top,int>::value; // true
  has_member_data_data1<Top,long>::value; // false
- has_member_data_data1<Top2,int>::value; // false
- has_member_data_data1<Top2,long>::value; // true
  
- has_member_data_data2<Top,AClass *>::value; // true
+ has_member_data_data1<Top2,int>::value; // false
+ has_member_data_data1<long Top2::*>::value; // true
+ 
+ has_member_data_data2<AClass * Top::*>::value; // true
  has_member_data_data2<Top,int *>::value; // false
  
- has_member_data_data3<Top2,int>::value; // false
- has_member_data_data3<Top2,Top>::value; // true;
+ has_member_data_data3<int Top2::*>::value; // false
+ has_member_data_data3<Top Top2::*>::value; // true;
    
 It should be noticed that once we create our metafunction for 
 introspecting an inner member data by name, we can reuse the 

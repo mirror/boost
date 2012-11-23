@@ -19,7 +19,7 @@ int main()
   
   BOOST_MPL_ASSERT((HaveTheSIntFunction<AType,int (long,double)>));
   BOOST_MPL_ASSERT((TheTIntFunction<AnotherType,AType (long,double)>));
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION_WITH_SIG_GEN(TSFunction)<AnotherType,AType::AStructType (AType::AnIntType,double)>));
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION_GEN(TSFunction)<AnotherType,AType::AStructType (AType::AnIntType,double)>));
   
   return 0;
 

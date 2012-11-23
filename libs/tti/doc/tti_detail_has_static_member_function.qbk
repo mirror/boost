@@ -15,12 +15,23 @@ parameter which is the name of an inner static member function whose existence
 the programmer wants to check. The macro generates a metafunction
 called 'has_static_member_function_'name_of_inner_static_member_function'. 
 
-The metafunction can be invoked by passing it the enclosing type to 
-introspect and a signature for the static member function as separate template 
+The metafunction can be invoked in two different ways.
+
+The first way is by passing it the enclosing type to introspect and a 
+signature for the static member function as separate template 
 arguments. The signature for the static member function consists of a return 
 type, optional parameter types in the form of a boost::mpl forward 
 sequence of types, and an optional Boost FunctionTypes tag type. A 
 typical boost::mpl forward sequence of types is a boost::mpl::vector<>.
+
+The second way is by passing it the enclosing type to introspect and a
+signature for the static member function as a function. The function 
+has the form of:
+
+ Return_Type ( Parameter_Types )
+
+where the Parameter_Types may be empty, or a comma-separated 
+list of parameter types if there are more than one parameter type.
 
 The metafunction returns a single type called 'type', which is a 
 boost::mpl::bool_. As a convenience the metafunction 
@@ -41,7 +52,10 @@ generates a metafunction called 'has_static_member_function_AStaticMemberFunctio
 
 You invoke the metafunction by instantiating the template with an enclosing 
 type to introspect and the signature of the static member function as a series of template
-parameters. A return value called 'value' is a compile time bool constant.
+parameters. Alternatively you can invoke the metafunction by passing it an enclosing type
+and the signature of the static member function as a single function type.
+
+A return value called 'value' is a compile time bool constant.
 
   has_static_member_function_AStaticMemberFunction
     <
@@ -49,6 +63,14 @@ parameters. A return value called 'value' is a compile time bool constant.
     StaticMemberFunction_ReturnType,
     boost::mpl::vector<StaticMemberFunction_ParameterTypes>, // optional, can be any mpl forward sequence
     boost::function_types::SomeTagType                       // optional, can be any FunctionTypes tag type
+    >::value
+
+  OR  
+  
+  has_static_member_function_AStaticMemberFunction
+    <
+    Enclosing_Type,
+    Return_Type ( Parameter_Types )
     >::value
 
 [heading Examples]
@@ -79,16 +101,20 @@ Finally we invoke our metafunction and return our value.
 This all happens at compile time, and can be used by 
 programmers doing compile time template metaprogramming.
   
+We will show both forms in the following examples. 
+Both forms are completely interchangeable as to the result
+desired.
+
  has_static_member_function_function1<Top,int>::value; // true
- has_static_member_function_function1<Top,int,boost::mpl::vector<> >::value; // true
+ has_static_member_function_function1<Top,int ()>::value; // true
  has_static_member_function_function1<Top2,int>::value; // false
  
  has_static_member_function_function2<Top,AClass,boost::mpl::vector<double,short *> >::value; // true
  has_static_member_function_function2<Top2,AClass,boost::mpl::vector<double,short *> >::value; // false
- has_static_member_function_function2<Top2,long,boost::mpl::vector<Top &,int,bool,short,float> >::value; // true
+ has_static_member_function_function2<Top2,long (Top &,int,bool,short,float)>::value; // true
  
- has_static_member_function_function3<Top2,int>::value; // false
- has_static_member_function_function3<Top2,Top *,boost::mpl::vector<long,int,AClass &> >::value; // true;
+ has_static_member_function_function3<Top2,int ()>::value; // false
+ has_static_member_function_function3<Top2,Top * (long,int,AClass &)>::value; // true;
    
 It should be noticed that once we create our metafunction for 
 introspecting an inner static member function by name, we can reuse the 

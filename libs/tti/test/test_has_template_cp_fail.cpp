@@ -10,21 +10,10 @@
 int main()
   {
   
-  
-#if !defined(BOOST_TTI_VERSION_1_5)
-
   // TemplateNotExist does not exist at all
   
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_GEN(TemplateNotExist)<AType>));
   
-#else // BOOST_TTI_VERSION_1_5
-
-  // TemplateNotExist does not exist at all
-  
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_TEMPLATE_CHECK_PARAMS_GEN(TemplateNotExist)<AType>));
-  
-#endif // !BOOST_TTI_VERSION_1_5
-
   return 0;
 
   }

@@ -45,6 +45,19 @@
     }; \
 /**/
 
+#define BOOST_TTI_DETAIL_TRAIT_HAS_CALL_TYPES_MEMBER_FUNCTION(trait,name) \
+  BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait,name) \
+  template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG> \
+  struct BOOST_PP_CAT(trait,_detail_call_types) : \
+    BOOST_PP_CAT(trait,_detail_types) \
+      < \
+      typename BOOST_TTI_NAMESPACE::detail::ptmf_seq<TTI_T,TTI_R,TTI_FS,TTI_TAG>::type, \
+      typename boost::remove_const<TTI_T>::type \
+      > \
+    { \
+    }; \
+/**/
+
 #define BOOST_TTI_DETAIL_TRAIT_CHECK_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   template<class TTI_T> \
@@ -56,7 +69,7 @@
 /**/
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
-  BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait,name) \
+  BOOST_TTI_DETAIL_TRAIT_HAS_CALL_TYPES_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_CHECK_HAS_COMP_MEMBER_FUNCTION(trait,name) \
   template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG> \
   struct BOOST_PP_CAT(trait,_detail_hmf) \
@@ -71,7 +84,7 @@
         boost::is_same<TTI_TAG,boost::function_types::null_tag> \
         >, \
       BOOST_PP_CAT(trait,_detail_check_comp)<TTI_T>, \
-      BOOST_PP_CAT(trait,_detail_types)<typename BOOST_TTI_NAMESPACE::detail::ptmf_seq<TTI_T,TTI_R,TTI_FS,TTI_TAG>::type,typename boost::remove_const<TTI_T>::type> \
+      BOOST_PP_CAT(trait,_detail_call_types)<TTI_T,TTI_R,TTI_FS,TTI_TAG> \
       >::type type; \
     \
     BOOST_STATIC_CONSTANT(bool,value=type::value); \

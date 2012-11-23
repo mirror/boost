@@ -13,7 +13,7 @@ int main()
   BOOST_TEST((HaveTheSIntFunction<AType,int (long,double)>::value));
   BOOST_TEST((!TheTIntFunction<AType,AType (long,double)>::value));
   BOOST_TEST((TheTIntFunction<AnotherType,AType (long,double)>::value));
-  BOOST_TEST((BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION_WITH_SIG_GEN(TSFunction)<AnotherType,AType::AStructType (AType::AnIntType,double)>::value));
+  BOOST_TEST((BOOST_TTI_HAS_STATIC_MEMBER_FUNCTION_GEN(TSFunction)<AnotherType,AType::AStructType (AType::AnIntType,double)>::value));
   BOOST_TEST((!Pickedname<AnotherType,void ()>::value));
   
   return boost::report_errors();

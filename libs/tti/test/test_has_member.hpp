@@ -8,13 +8,13 @@
 #define TEST_HAS_MEMBER_HPP
 
 #include "test_structs.hpp"
-#include <boost/tti/has_member_function_with_sig.hpp>
+#include <boost/tti/has_member_function.hpp>
 
-BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG(VoidFunction)
-BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION_WITH_SIG(FunctionReturningInt,IntFunction)
-BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG(aFunction)
-BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION_WITH_SIG(AnotherIntFunction,anotherFunction)
-BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG(sFunction)
-BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG(someFunctionMember)
+BOOST_TTI_HAS_MEMBER_FUNCTION(VoidFunction)
+BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(FunctionReturningInt,IntFunction)
+BOOST_TTI_HAS_MEMBER_FUNCTION(aFunction)
+BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(AnotherIntFunction,anotherFunction)
+BOOST_TTI_HAS_MEMBER_FUNCTION(sFunction)
+BOOST_TTI_HAS_MEMBER_FUNCTION(someFunctionMember)
 
 #endif // TEST_HAS_MEMBER_HPP

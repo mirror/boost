@@ -9,10 +9,8 @@
 
 #include "has_member_data.hpp"
 #include "has_member_function.hpp"
-#include "has_member_function_with_sig.hpp"
 #include "has_static_member_data.hpp"
 #include "has_static_member_function.hpp"
-#include "has_static_member_function_with_sig.hpp"
 #include "has_template.hpp"
 #include "has_type.hpp"
 #include "member_type.hpp"

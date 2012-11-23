@@ -10,13 +10,13 @@
 int main()
   {
   
-  BOOST_TEST(BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(VoidFunction)<void (AType::*)()>::value);
+  BOOST_TEST((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(VoidFunction)<void (AType::*)()>::value));
   BOOST_TEST(FunctionReturningInt<int (AType::*)()>::value);
   BOOST_TEST(FunctionReturningInt<double (AnotherType::*)(int)>::value);
-  BOOST_TEST(BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(aFunction)<AType (AnotherType::*)(int)>::value);
+  BOOST_TEST(BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(aFunction)<AType (AnotherType::*)(int)>::value);
   BOOST_TEST(AnotherIntFunction<int (AnotherType::*)(AType)>::value);
-  BOOST_TEST(BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(sFunction)<AType::AnIntType (AnotherType::*)(int,long,double)>::value);
-  BOOST_TEST(!BOOST_TTI_HAS_MEMBER_FUNCTION_WITH_SIG_GEN(someFunctionMember)<AType (AnotherType::*)(long,int)>::value);
+  BOOST_TEST(BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(sFunction)<AType::AnIntType (AnotherType::*)(int,long,double)>::value);
+  BOOST_TEST(!BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(someFunctionMember)<AType (AnotherType::*)(long,int)>::value);
   
   return boost::report_errors();
 

@@ -7,14 +7,11 @@
 #if !defined(TTI_HAS_STATIC_MEMBER_FUNCTION_HPP)
 #define TTI_HAS_STATIC_MEMBER_FUNCTION_HPP
 
-#include <boost/config.hpp>
 #include <boost/function_types/property_tags.hpp>
 #include <boost/mpl/vector.hpp>
 #include <boost/preprocessor/cat.hpp>
-#include <boost/tti/gen/has_static_member_function_gen.hpp>
-#include <boost/tti/gen/namespace_gen.hpp>
 #include <boost/tti/detail/dstatic_mem_fun.hpp>
-#include <boost/tti/detail/dtfunction.hpp>
+#include <boost/tti/gen/has_static_member_function_gen.hpp>
 
 /*
 
@@ -59,10 +56,10 @@
                           
 */
 #define BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
-  TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
+  BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
   template<class TTI_T,class TTI_R,class TTI_FS = boost::mpl::vector<>,class TTI_TAG = boost::function_types::null_tag> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<TTI_T,typename BOOST_TTI_NAMESPACE::detail::tfunction_seq<TTI_R,TTI_FS,TTI_TAG>::type> \
+    BOOST_PP_CAT(trait,_detail_hsmf)<TTI_T,TTI_R,TTI_FS,TTI_TAG> \
     { \
     }; \
 /**/
