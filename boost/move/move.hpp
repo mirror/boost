@@ -195,7 +195,7 @@
 #endif   //BOOST_MOVE_AVOID_BOOST_DEPENDENCIES
 
 //Compiler workaround detection
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
    #if defined(__GNUC__) && (__GNUC__ == 4) && (__GNUC_MINOR__ < 5) && !defined(__clang__)
       //Pre-standard rvalue binding rules
@@ -214,7 +214,7 @@
 
 #endif //#if !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
-#if defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_MOVE_DOXYGEN_INVOKED)
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
    //Move emulation rv breaks standard aliasing rules so add workarounds for some compilers
    #if defined(__GNUC__) && (__GNUC__ >= 4)
@@ -454,7 +454,7 @@
 
    }  //namespace boost
 
-#else    //BOOST_NO_RVALUE_REFERENCES
+#else    //BOOST_NO_CXX11_RVALUE_REFERENCES
 
    namespace boost{
 
@@ -645,7 +645,7 @@
 
    #endif   //#if !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
-#endif   //BOOST_NO_RVALUE_REFERENCES
+#endif   //BOOST_NO_CXX11_RVALUE_REFERENCES
 
 namespace boost {
 
@@ -666,7 +666,7 @@ class move_iterator
    public:
    typedef It                                                              iterator_type;
    typedef typename std::iterator_traits<iterator_type>::value_type        value_type;
-   #if !defined(BOOST_NO_RVALUE_REFERENCES) || defined(BOOST_MOVE_DOXYGEN_INVOKED)
+   #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || defined(BOOST_MOVE_DOXYGEN_INVOKED)
    typedef value_type &&                                                   reference;
    #else
    typedef typename BOOST_MOVE_MPL_NS::if_
@@ -695,7 +695,7 @@ class move_iterator
 
    reference operator*() const
    {
-      #if defined(BOOST_NO_RVALUE_REFERENCES) || defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
+      #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
       return *m_it;
       #else
       return ::boost::move(*m_it);
@@ -731,7 +731,7 @@ class move_iterator
 
    reference operator[](difference_type n) const
    {
-      #if defined(BOOST_NO_RVALUE_REFERENCES) || defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
+      #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || defined(BOOST_MOVE_OLD_RVALUE_REF_BINDING_RULES)
       return m_it[n];
       #else
       return ::boost::move(m_it[n]);
@@ -1167,9 +1167,9 @@ namespace move_detail {
 
 // Code from Jeffrey Lee Hellrung, many thanks
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    template< class T> struct forward_type { typedef T type; };
-#else // #ifndef BOOST_NO_RVALUE_REFERENCES
+#else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    template< class T>
    struct forward_type
    { typedef const T &type; };
@@ -1177,16 +1177,16 @@ namespace move_detail {
    template< class T>
    struct forward_type< boost::rv<T> >
    { typedef T type; };
-#endif // #ifndef BOOST_NO_RVALUE_REFERENCES
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 
 
 // Code from Jeffrey Lee Hellrung, many thanks
 
 template< class T > struct is_rvalue_reference : BOOST_MOVE_BOOST_NS::integral_constant<bool, false> { };
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    template< class T > struct is_rvalue_reference< T&& > : BOOST_MOVE_BOOST_NS::integral_constant<bool, true> { };
-#else // #ifndef BOOST_NO_RVALUE_REFERENCES
+#else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    template< class T > struct is_rvalue_reference< boost::rv<T>& >
       :  BOOST_MOVE_BOOST_NS::integral_constant<bool, true>
    {};
@@ -1194,11 +1194,11 @@ template< class T > struct is_rvalue_reference : BOOST_MOVE_BOOST_NS::integral_c
    template< class T > struct is_rvalue_reference< const boost::rv<T>& >
       : BOOST_MOVE_BOOST_NS::integral_constant<bool, true>
    {};
-#endif // #ifndef BOOST_NO_RVALUE_REFERENCES
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    template< class T > struct add_rvalue_reference { typedef T&& type; };
-#else // #ifndef BOOST_NO_RVALUE_REFERENCES
+#else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    namespace detail_add_rvalue_reference
    {
       template< class T
@@ -1222,13 +1222,13 @@ template< class T > struct is_rvalue_reference : BOOST_MOVE_BOOST_NS::integral_c
    struct add_rvalue_reference<T &>
    {  typedef T & type; };
 
-#endif // #ifndef BOOST_NO_RVALUE_REFERENCES
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 template< class T > struct remove_rvalue_reference { typedef T type; };
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    template< class T > struct remove_rvalue_reference< T&& >                  { typedef T type; };
-#else // #ifndef BOOST_NO_RVALUE_REFERENCES
+#else // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
    template< class T > struct remove_rvalue_reference< rv<T> >                { typedef T type; };
    template< class T > struct remove_rvalue_reference< const rv<T> >          { typedef T type; };
    template< class T > struct remove_rvalue_reference< volatile rv<T> >       { typedef T type; };
@@ -1237,7 +1237,7 @@ template< class T > struct remove_rvalue_reference { typedef T type; };
    template< class T > struct remove_rvalue_reference< const rv<T>& >         { typedef T type; };
    template< class T > struct remove_rvalue_reference< volatile rv<T>& >      { typedef T type; };
    template< class T > struct remove_rvalue_reference< const volatile rv<T>& >{ typedef T type; };
-#endif // #ifndef BOOST_NO_RVALUE_REFERENCES
+#endif // #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 template <typename T>
 typename boost::move_detail::add_rvalue_reference<T>::type declval();
