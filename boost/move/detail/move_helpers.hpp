@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2010-2011.
+// (C) Copyright Ion Gaztanaga 2010-2012.
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -12,8 +12,10 @@
 #ifndef BOOST_MOVE_MOVE_HELPERS_HPP
 #define BOOST_MOVE_MOVE_HELPERS_HPP
 
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/type_traits/is_class.hpp>
+#include <boost/move/utility.hpp>
+#include <boost/move/traits.hpp>
 
 #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || (defined(_MSC_VER) && (_MSC_VER == 1600))
 #include <boost/type_traits/is_same.hpp>
