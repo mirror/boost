@@ -10,13 +10,12 @@
 The TTI macro [macroref BOOST_TTI_HAS_TYPE] introspects
 a nested type of a class.
 
-BOOST_TTI_HAS_TYPE takes a single 
-parameter which is the name of an inner type whose existence
-the programmer wants to check. The macro generates a metafunction
-called 'has_type_'name_of_inner_type'. The purpose of the macro
-is to check for the existence by name of an inner type and,
-optionally, check whether that inner type is equivalent to 
-a particular type. This latter functionality is normally only 
+BOOST_TTI_HAS_TYPE takes a single parameter which is the name of 
+an inner type whose existence the programmer wants to check. The 
+macro generates a metafunction called 'has_type_'name_of_inner_type'. 
+The purpose of the macro is to check for the existence by name of an 
+inner type and, optionally, check whether that inner type is equivalent 
+to a particular type. This latter functionality is normally only 
 used to check whether or not the inner type is a typedef for
 another type, since an inner user-defined type declares its
 own type by its name.
@@ -95,8 +94,15 @@ programmers doing compile time template metaprogramming.
  has_type_MyType<Top>::value;  // false
  has_type_MyType<Top2>::value; // true
 
-It should be noticed that once we create our metafunction for 
-introspecting an inner type by name, we can reuse the metafunction 
-for introspecting any enclosing user-defined type for that name.
+[heading Metafunction re-use]
+
+The macro encodes only the name of the inner type for which
+we are searching and the fact that we are introspecting for 
+an inner type within an enclosing type.
+
+Because of this, once we create our metafunction for 
+introspecting an inner type by name, we can reuse the 
+metafunction for introspecting any enclosing type, having 
+any inner type, for that name.
 
 [endsect]

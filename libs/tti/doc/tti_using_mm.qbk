@@ -33,6 +33,7 @@ a class or function template where 'T' is a type passed to the template.
    // Template
    
    template <class> struct AMemberTemplate { };
+   template <class,class,class> struct AnotherMemberTemplate { };
    template <class,class,int,class,template <class> class InnerTemplate,class,long> struct ManyParameters { };
    template <class,class,int,short,class,template <class,int> class InnerTemplate,class> struct MoreParameters { };
    
@@ -109,9 +110,21 @@ Does T have a nested typedef called 'AnIntType' whose type is an 'int' ?
 Does T have a nested class template called 'AMemberTemplate' whose template 
 parameters are all types ('class' or 'typename') ?
 
- BOOST_TTI_HAS_TEMPLATE(AMemberTemplate)
+ BOOST_TTI_HAS_TEMPLATE(AMemberTemplate,BOOST_PP_NIL)
  
  has_template_AMemberTemplate
+   <
+   T
+   >
+
+[heading Template using variadic macros]
+
+Does T have a nested class template called 'AMemberTemplate' whose template 
+parameters are all types ('class' or 'typename') ?
+
+ BOOST_TTI_HAS_TEMPLATE(AnotherMemberTemplate)
+ 
+ has_template_AnotherMemberTemplate
    <
    T
    >
@@ -121,27 +134,21 @@ parameters are all types ('class' or 'typename') ?
 Does T have a nested class template called 'MoreParameters' whose template 
 parameters are specified exactly ?
 
- BOOST_TTI_HAS_TEMPLATE(MoreParameters,(class)(class)(int)(short)(class)(template <class)(int> class InnerTemplate)(class))
+ BOOST_TTI_HAS_TEMPLATE(MoreParameters,(8,(class,class,int,short,class,template <class,int> class,class)))
  
- boost::tti::has_template_check_params_MoreParameters
+ has_template_MoreParameters
    <
    T
    >
 
 [heading Template with params using variadic macros]
 
-[
-note Include the `boost/tti/tti_vm.hpp` general header file, or the 
-`vm_template_params.hpp` specific header file,
-when using this macro.
-]
-
 Does T have a nested class template called 'ManyParameters' whose template 
 parameters are specified exactly ?
 
- BOOST_TTI_HAS_TEMPLATE(ManyParameters,class,class,int,class,template <class> class InnerTemplate,class,long)
+ BOOST_TTI_HAS_TEMPLATE(ManyParameters,class,class,int,class,template <class> class,class,long)
  
- boost::tti::has_template_check_params_ManyParameters
+ has_template_ManyParameters
    <
    T
    >
@@ -152,7 +159,7 @@ Does T have a member data called 'IntBT' whose type is 'AType::BType' ?
 
  BOOST_TTI_HAS_MEMBER_DATA(IntBT)
  
- boost::tti::has_member_data_IntBT
+ has_member_data_IntBT
    <
    T,
    AType::BType
@@ -165,7 +172,7 @@ Does T have a member function called 'IntFunction' whose type is
 
  BOOST_TTI_HAS_MEMBER_FUNCTION(IntFunction)
  
- boost::tti::has_member_function_IntFunction
+ has_member_function_IntFunction
    <
    T,
    int,

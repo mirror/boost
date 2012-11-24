@@ -116,9 +116,15 @@ desired.
  has_static_member_function_function3<Top2,int ()>::value; // false
  has_static_member_function_function3<Top2,Top * (long,int,AClass &)>::value; // true;
    
-It should be noticed that once we create our metafunction for 
-introspecting an inner static member function by name, we can reuse the 
-metafunction for introspecting any enclosing user-defined type,
-with any inner static member function, for that name.
+[heading Metafunction re-use]
+
+The macro encodes only the name of the static member function 
+for which we are searching and the fact that we are 
+introspecting for a static member function within an enclosing type.
+
+Because of this, once we create our metafunction for 
+introspecting a static member function by name, we can reuse the 
+metafunction for introspecting any enclosing type, having any 
+static member function, for that name.
 
 [endsect]
