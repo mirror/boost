@@ -145,10 +145,12 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_erase_burst(
    TEST_INTRUSIVE_SEQUENCE_EXPECTED(testset, testset.begin());
 
    //Ordered erasure
-   iterator it(testset.begin()), itend(testset.end());
-   for(int i = 0; it != itend; ++i){
-      BOOST_TEST(&*it == &values[i]);
-      it = testset.erase(it);
+   {
+      iterator it(testset.begin()), itend(testset.end());
+      for(int i = 0; it != itend; ++i){
+         BOOST_TEST(&*it == &values[i]);
+         it = testset.erase(it);
+      }
    }
 
    BOOST_TEST(testset.empty());

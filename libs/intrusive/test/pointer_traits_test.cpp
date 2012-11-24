@@ -20,7 +20,7 @@ class CompleteSmartPtr
 
    public:
 
-   #if !defined(BOOST_NO_TEMPLATE_ALIASES)
+   #if !defined(BOOST_NO_CXX11_TEMPLATE_ALIASES)
    template <class U> using rebind = CompleteSmartPtr<U>;
    #else
    template <class U> struct rebind

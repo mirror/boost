@@ -6,7 +6,7 @@
  /]
 
 [library Boost.Intrusive
-    [quickbook 1.4]
+    [quickbook 1.5]
     [authors [Krzikalla, Olaf], [Gaztanaga, Ion]]
     [copyright 2005 Olaf Krzikalla, 2006-2012 Ion Gaztanaga]
     [id intrusive]
@@ -3828,6 +3828,14 @@ all the objects to be inserted in intrusive containers in containers like `std::
 [endsect]
 
 [section:release_notes Release Notes]
+
+[section:release_notes_boost_1_53_00 Boost 1.53 Release]
+
+*  Fixed GCC -Wshadow warnings.
+*  Added missing `explicit` keyword in several intrusive container constructors.
+*  Replaced deprecated BOOST_NO_XXXX with newer BOOST_NO_CXX11_XXX macros.
+
+[endsect]
 
 [section:release_notes_boost_1_51_00 Boost 1.51 Release]
 

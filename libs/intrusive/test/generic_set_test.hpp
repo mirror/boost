@@ -305,7 +305,7 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_find(std::vector<type
       cmp_val_lower.value_ = 1;
       cmp_val_upper.value_ = 2;
       //left-closed, right-closed
-      std::pair<iterator,iterator> range = testset.bounded_range (cmp_val_lower, cmp_val_upper, true, true);
+      range = testset.bounded_range (cmp_val_lower, cmp_val_upper, true, true);
       BOOST_TEST (range.first->value_ == 1);
       BOOST_TEST (range.second->value_ == 3);
       BOOST_TEST (std::distance (range.first, range.second) == 2);
