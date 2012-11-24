@@ -26,7 +26,7 @@
 #include <boost/container/detail/mpl.hpp>
 #include <boost/container/detail/version_type.hpp>
 #include <boost/container/detail/multiallocation_chain.hpp>
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <memory>
 #include <algorithm>
 #include <cstddef>
@@ -55,7 +55,7 @@ class simple_allocator
    {}
 
    T* allocate(std::size_t n)
-   {  return (T*)::new char[sizeof(T)*n];  }
+   { return (T*)::new char[sizeof(T)*n];  }
 
    void deallocate(T*p, std::size_t)
    { delete[] ((char*)p);}
@@ -168,8 +168,8 @@ class dummy_test_allocator
    //!preferred_elements. The number of actually allocated elements is
    //!will be assigned to received_size. Memory allocated with this function
    //!must be deallocated only with deallocate_one().
-   multiallocation_chain allocate_individual(size_type)
-   {  return multiallocation_chain(); }
+   void allocate_individual(size_type, multiallocation_chain &)
+   {}
 
    //!Allocates many elements of size == 1 in a contiguous block
    //!of memory. The minimum number to be allocated is min_elements,
@@ -177,7 +177,7 @@ class dummy_test_allocator
    //!preferred_elements. The number of actually allocated elements is
    //!will be assigned to received_size. Memory allocated with this function
    //!must be deallocated only with deallocate_one().
-   void deallocate_individual(multiallocation_chain)
+   void deallocate_individual(multiallocation_chain &)
    {}
 
    //!Allocates many elements of size elem_size in a contiguous block
@@ -186,7 +186,7 @@ class dummy_test_allocator
    //!preferred_elements. The number of actually allocated elements is
    //!will be assigned to received_size. The elements must be deallocated
    //!with deallocate(...)
-   void deallocate_many(multiallocation_chain)
+   void deallocate_many(multiallocation_chain &)
    {}
 };
 

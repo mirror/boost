@@ -13,7 +13,8 @@
 
 #include <boost/container/detail/config_begin.hpp>
 #include <boost/container/detail/workaround.hpp>
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
+#include <ostream>
 
 namespace boost {
 namespace container {

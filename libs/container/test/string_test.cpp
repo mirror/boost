@@ -330,9 +330,6 @@ int string_test()
 
       //Check addition
       {
-         typedef std::basic_string<CharType> StdString;
-         typedef basic_string<CharType> BoostString;
-        
          BoostString bs2 = string_literals<CharType>::String();
          StdString   ss2 = string_literals<CharType>::String();
          BoostString bs3 = string_literals<CharType>::Suffix();

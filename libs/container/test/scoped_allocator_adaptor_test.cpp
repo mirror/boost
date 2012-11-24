@@ -11,7 +11,7 @@
 #include <boost/container/scoped_allocator_fwd.hpp>
 #include <cstddef>
 #include <boost/container/detail/mpl.hpp>
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/type_traits/integral_constant.hpp>
 #include <memory>
 

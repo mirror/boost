@@ -19,6 +19,8 @@
 #include "print_container.hpp"
 #include <boost/container/detail/utilities.hpp>
 #include <boost/container/detail/pair.hpp>
+#include <boost/move/iterator.hpp>
+#include <boost/move/utility.hpp>
 #include <string>
 
 template<class T1, class T2, class T3, class T4>
@@ -104,7 +106,6 @@ int map_test ()
          if(!CheckEqualContainers(boostmap2, stdmap2)) return 1;
          if(!CheckEqualContainers(boostmultimap2, stdmultimap2)) return 1;
 
-/*
          MyBoostMap *boostmap3 = new MyBoostMap
                ( ordered_unique_range
                , boost::make_move_iterator(&aux_vect[0])
@@ -124,12 +125,14 @@ int map_test ()
             std::cout << "Error in construct<MyBoostMultiMap>(MyBoostMultiMap3)" << std::endl;
             return 1;
          }
-*/
-         IntType i0(0);
-         boostmap2->erase(i0);
-         boostmultimap2->erase(i0);
-         stdmap2->erase(0);
-         stdmultimap2->erase(0);
+
+         {
+            IntType i0(0);
+            boostmap2->erase(i0);
+            boostmultimap2->erase(i0);
+            stdmap2->erase(0);
+            stdmultimap2->erase(0);
+         }
          {
             IntType i0(0);
             IntType i1(1);
@@ -146,10 +149,10 @@ int map_test ()
          delete boostmultimap2;
          delete stdmap2;
          delete stdmultimap2;
-         //delete boostmap3;
-         //delete boostmultimap3;
-         //delete stdmap3;
-         //delete stdmultimap3;
+         delete boostmap3;
+         delete boostmultimap3;
+         delete stdmap3;
+         delete stdmultimap3;
       }
       {
          //This is really nasty, but we have no other simple choice
