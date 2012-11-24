@@ -11,9 +11,11 @@
 #ifndef BOOST_MOVE_TEST_COPYMOVABLE_HPP
 #define BOOST_MOVE_TEST_COPYMOVABLE_HPP
 
+#include <boost/move/detail/config_begin.hpp>
+
 //[movable_definition 
 //header file "copy_movable.hpp"
-#include <boost/move/move.hpp>
+#include <boost/move/core.hpp>
 
 //A copy_movable class
 class copy_movable
@@ -42,5 +44,7 @@ class copy_movable
 };
 
 //]
+
+#include <boost/move/detail/config_end.hpp>
 
 #endif //BOOST_MOVE_TEST_COPYMOVABLE_HPP

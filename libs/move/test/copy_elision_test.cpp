@@ -2,6 +2,7 @@
 // Software License, Version 1.0. (See accompanying
 // file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/move/detail/config_begin.hpp>
 #include <iostream>
 
 #ifdef NO_MOVE
@@ -11,7 +12,7 @@
 # define BOOST_COPYABLE_AND_MOVABLE(X)
 # define MOVE(x) (x)
 #else
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 # define MOVE(x) boost::move(x)
 #endif
 
@@ -91,17 +92,17 @@ unsigned X::instances = 0;
 struct trace
 {
     trace(char const* name)
-        : name(name)
+        : m_name(name)
     {
-        std::cout << "->: " << name << "\n";
+        std::cout << "->: " << m_name << "\n";
     }
     
     ~trace()
     {
-        std::cout << "<-: " << name << "\n";
+        std::cout << "<-: " << m_name << "\n";
     }
     
-    char const* name;
+    char const* m_name;
 };
 
 void sink(X a)
@@ -168,3 +169,5 @@ int main(int argc, char* argv[])
     CHECK_COPIES( X a = ternary( argc != 1000 ), 0, 2, "Return result of ternary operation again" );
     return 0;
 }
+
+#include <boost/move/detail/config_end.hpp>

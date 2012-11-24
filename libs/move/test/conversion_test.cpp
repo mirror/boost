@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright David Abrahams, Vicente Botet, Ion Gaztanaga 2010-2011.
+// (C) Copyright David Abrahams, Vicente Botet, Ion Gaztanaga 2010-2012.
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -8,12 +8,14 @@
 // See http://www.boost.org/libs/move for documentation.
 //
 //////////////////////////////////////////////////////////////////////////////
-#include <boost/move/move.hpp>
+#include <boost/move/detail/config_begin.hpp>
+#include <boost/move/utility.hpp>
 
 #include <boost/type_traits/aligned_storage.hpp>
 #include <boost/type_traits/is_class.hpp>
 #include <cassert>
-#include <boost/move/move_helpers.hpp>
+#include <new>
+#include <boost/move/detail/move_helpers.hpp>
 
 
 enum ConstructionType { Copied, Moved, Other };
@@ -105,11 +107,11 @@ class container
 
    template<class U>
    void priv_push_back(BOOST_MOVE_CATCH_FWD(U) x)
-      { new (&storage_) T(::boost::forward<U>(x)); }
+      { ::new (&storage_) T(::boost::forward<U>(x)); }
 
    template<class U>
    iterator priv_insert(const_iterator, BOOST_MOVE_CATCH_FWD(U) x)
-      { new (&storage_) T(::boost::forward<U>(x)); return 0;  }
+      { ::new (&storage_) T(::boost::forward<U>(x)); return 0;  }
 };
 
 
@@ -292,8 +294,10 @@ int main()
    return 0;
 }
 
+#include <boost/move/detail/config_end.hpp>
+
 /*
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/type_traits/is_same.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/mpl/if.hpp>
@@ -366,7 +370,7 @@ class conversion_target_movable
 
 struct not_a_type;
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #define BOOST_MOVE_CATCH_CONST(U)  \
    typename ::boost::mpl::if_< ::boost::is_class<T>, BOOST_CATCH_CONST_RLVALUE(U), const U &>::type
 #define BOOST_MOVE_CATCH_RVALUE(U)\
@@ -470,7 +474,7 @@ class container
    {  return priv_push_back(::boost::move(x));  }
 
    //Tricks for C++03
-   #if defined(BOOST_NO_RVALUE_REFERENCES)
+   #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
    void push_back(T &x)
    { priv_push_back(const_cast<const T &>(x)); }
 

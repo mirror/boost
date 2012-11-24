@@ -7,7 +7,7 @@
 [library Boost.Move
     [quickbook 1.5]
     [authors [Gaztanaga, Ion]]
-    [copyright 2008-2010 Ion Gaztanaga]
+    [copyright 2008-2012 Ion Gaztanaga]
     [id move]
     [dirname move]
     [purpose Move semantics]
@@ -318,7 +318,7 @@ This library makes this emulation easy with the help of `BOOST_FWD_REF` and
 [import ../example/doc_construct_forward.cpp]
 [construct_forward_example]
 
-Constructor forwarding comes handful to implement placement insertion in containers with
+Constructor forwarding comes in handy to implement placement insertion in containers with
 just N overloads if the implementor accepts the limitations of this type of forwarding for
 C++03 compilers. In compilers with rvalue references perfect forwarding is achieved.
 
@@ -778,7 +778,7 @@ presence of three overloads and the conversion operators in C++03 compilers:
 [section:thanks_to Thanks and credits]
 
 Thanks to all that developed ideas for move emulation: the first emulation was based on Howard Hinnant
-emulation code for `unique_ptr`, David Abrahams suggested the use of `class rv` class,
+emulation code for `unique_ptr`, David Abrahams suggested the use of `class rv`,
 and Klaus Triendl discovered how to bind const rlvalues using `class rv`.
 
 Many thanks to all boosters that have tested, reviewed and improved the library.
@@ -786,6 +786,15 @@ Many thanks to all boosters that have tested, reviewed and improved the library.
 [endsect]
 
 [section:release_notes Release Notes]
+
+[section:release_notes_boost_1_53_00 Boost 1.53 Release]
+
+*  Better header segregation (bug
+  [@https://svn.boost.org/trac/boost/ticket/6524 #6524]).
+*  Small documentation fixes
+*  Replaced deprecated BOOST_NO_XXXX with newer BOOST_NO_CXX11_XXX macros.
+
+[endsect]
 
 [section:release_notes_boost_1_51_00 Boost 1.51 Release]
 
