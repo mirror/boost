@@ -21,7 +21,7 @@
 
 #include "config_begin.hpp"
 
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 
 namespace boost {
 namespace container {

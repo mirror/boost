@@ -28,7 +28,7 @@
 #include <boost/container/detail/memory_util.hpp>
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/container/detail/mpl.hpp>
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <limits> //numeric_limits<>::max()
 #include <new>    //placement new
 #include <memory> //std::allocator

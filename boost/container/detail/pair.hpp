@@ -27,7 +27,7 @@
 
 #include <utility>   //std::pair
 
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/type_traits/is_class.hpp>
 
 #ifndef BOOST_CONTAINER_PERFECT_FORWARDING

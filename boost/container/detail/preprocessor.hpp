@@ -17,6 +17,7 @@
 
 #include <boost/container/detail/config_begin.hpp>
 #include <boost/container/detail/workaround.hpp>
+#include <boost/move/utility.hpp>
 
 #ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 //#error "This file is not needed when perfect forwarding is available"
@@ -38,6 +39,7 @@
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/arithmetic/add.hpp>
 #include <boost/preprocessor/iteration/iterate.hpp>
+#include <boost/move/utility.hpp>
 
 #define BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS 10
 
@@ -97,7 +99,7 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
          template<class T>
          struct ref_holder<T &>
          {
-            ref_holder(T &t)
+            explicit ref_holder(T &t)
                : t_(t)
             {}
             T &t_;
@@ -107,7 +109,7 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
          template<class T>
          struct ref_holder<const T>
          {
-            ref_holder(const T &t)
+            explicit ref_holder(const T &t)
                : t_(t)
             {}
             const T &t_;
@@ -117,7 +119,7 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
          template<class T>
          struct ref_holder<const T &&>
          {
-            ref_holder(const T &t)
+            explicit ref_holder(const T &t)
                : t_(t)
             {}
             const T &t_;
@@ -127,7 +129,7 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
          template<class T>
          struct ref_holder
          {
-            ref_holder(T &&t)
+            explicit ref_holder(T &&t)
                : t_(t)
             {}
             T &t_;
@@ -137,10 +139,10 @@ const BOOST_PP_CAT(Q, n) & BOOST_PP_CAT(q, n) \
          template<class T>
          struct ref_holder<T &&>
          {
-            ref_holder(T &&t)
-               : t(t)
+            explicit ref_holder(T &&t)
+               : t_(t)
             {}
-            T &t;
+            T &t_;
             T && get()  { return ::boost::move(t_); }
          };
 

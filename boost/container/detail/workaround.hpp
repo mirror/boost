@@ -18,8 +18,12 @@
    #define BOOST_CONTAINER_PERFECT_FORWARDING
 #endif
 
-#if defined(BOOST_NO_CXX11_NOEXCEPT)
-   #define BOOST_CONTAINER_NOEXCEPT
+#if defined(BOOST_NO_NOEXCEPT)
+   #if defined(BOOST_MSVC)
+      #define BOOST_CONTAINER_NOEXCEPT throw()
+   #else
+      #define BOOST_CONTAINER_NOEXCEPT
+   #endif
    #define BOOST_CONTAINER_NOEXCEPT_IF(x)
 #else
    #define BOOST_CONTAINER_NOEXCEPT    noexcept

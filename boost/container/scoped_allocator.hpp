@@ -30,8 +30,8 @@
 #include <boost/container/detail/utilities.hpp>
 #include <utility>
 #include <boost/container/detail/pair.hpp>
-#include <boost/move/move.hpp>
-
+#include <boost/move/utility.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 namespace boost { namespace container {
 
@@ -1338,52 +1338,56 @@ class scoped_allocator_adaptor
    void construct_pair(Pair* p)
    {
       this->construct(container_detail::addressof(p->first));
-      try {
+      BOOST_TRY{
          this->construct(container_detail::addressof(p->second));
       }
-      catch (...) {
+      BOOST_CATCH(...){
          this->destroy(container_detail::addressof(p->first));
-         throw;
+         BOOST_RETHROW
       }
+      BOOST_CATCH_END
    }
 
    template <class Pair, class U, class V>
    void construct_pair(Pair* p, BOOST_FWD_REF(U) x, BOOST_FWD_REF(V) y)
    {
       this->construct(container_detail::addressof(p->first), ::boost::forward<U>(x));
-      try {
+      BOOST_TRY{
          this->construct(container_detail::addressof(p->second), ::boost::forward<V>(y));
       }
-      catch (...) {
+      BOOST_CATCH(...){
          this->destroy(container_detail::addressof(p->first));
-         throw;
+         BOOST_RETHROW
       }
+      BOOST_CATCH_END
    }
 
    template <class Pair, class Pair2>
    void construct_pair(Pair* p, const Pair2& pr)
    {
       this->construct(container_detail::addressof(p->first), pr.first);
-      try {
+      BOOST_TRY{
          this->construct(container_detail::addressof(p->second), pr.second);
       }
-      catch (...) {
+      BOOST_CATCH(...){
          this->destroy(container_detail::addressof(p->first));
-         throw;
+         BOOST_RETHROW
       }
+      BOOST_CATCH_END
    }
 
    template <class Pair, class Pair2>
    void construct_pair(Pair* p, BOOST_RV_REF(Pair2) pr)
    {
       this->construct(container_detail::addressof(p->first), ::boost::move(pr.first));
-      try {
+      BOOST_TRY{
          this->construct(container_detail::addressof(p->second), ::boost::move(pr.second));
       }
-      catch (...) {
+      BOOST_CATCH(...){
          this->destroy(container_detail::addressof(p->first));
-         throw;
+         BOOST_RETHROW
       }
+      BOOST_CATCH_END
    }
 
    //template <class T1, class T2, class... Args1, class... Args2>
