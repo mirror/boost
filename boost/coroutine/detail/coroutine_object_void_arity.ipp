@@ -40,11 +40,10 @@ private:
 
     void enter_()
     {
-        holder< coroutine_object * > hldr_to( & this->caller_, this);
         holder< void > * hldr_from(
             reinterpret_cast< holder< void > * >( context::jump_fcontext(
-                hldr_to.ctx, this->callee_,
-                reinterpret_cast< intptr_t >( & hldr_to),
+                & this->caller_, this->callee_,
+                reinterpret_cast< intptr_t >( this),
                 this->preserve_fpu() ) ) );
         this->callee_ = hldr_from->ctx;
         if ( this->except_) rethrow_exception( this->except_);
@@ -52,16 +51,13 @@ private:
 
     void enter_( typename detail::param< arg_type >::type arg)
     {
-        holder<
-            tuple< coroutine_object *,
-            typename detail::param< arg_type >::type >
-        > hldr_to(
-            & this->caller_, tuple< coroutine_object *,
-            typename detail::param< arg_type >::type >( this, arg) );
+        tuple< coroutine_object *,
+               typename detail::param< arg_type >::type
+        > tpl( this, arg);
         holder< void > * hldr_from(
             reinterpret_cast< holder< void > * >( context::jump_fcontext(
-                hldr_to.ctx, this->callee_,
-                reinterpret_cast< intptr_t >( & hldr_to),
+                & this->caller_, this->callee_,
+                reinterpret_cast< intptr_t >( & tpl),
                 this->preserve_fpu() ) ) );
         this->callee_ = hldr_from->ctx;
         if ( this->except_) rethrow_exception( this->except_);
@@ -213,15 +209,15 @@ public:
         stack_alloc_.deallocate( stack_.sp, stack_.size);
     }
 
-    void run( context::fcontext_t * callee)
+    void run()
     {
-        Caller c( callee, false, this->preserve_fpu(), alloc_);
+        Caller c( & this->caller_, false, this->preserve_fpu(), alloc_);
         run_( c);
     }
 
-    void run( context::fcontext_t * callee, typename detail::param< arg_type >::type arg)
+    void run( typename detail::param< arg_type >::type arg)
     {
-        Caller c( callee, false, this->preserve_fpu(), alloc_);
+        Caller c( & this->caller_, false, this->preserve_fpu(), alloc_);
         c.impl_->result_ = arg;
         run_( c);
     }
@@ -266,11 +262,10 @@ private:
 
     void enter_()
     {
-        holder< coroutine_object * > hldr_to( & this->caller_, this);
         holder< void > * hldr_from(
             reinterpret_cast< holder< void > * >( context::jump_fcontext(
-                hldr_to.ctx, this->callee_,
-                reinterpret_cast< intptr_t >( & hldr_to),
+                & this->caller_, this->callee_,
+                reinterpret_cast< intptr_t >( this),
                 this->preserve_fpu() ) ) );
         this->callee_ = hldr_from->ctx;
         if ( this->except_) rethrow_exception( this->except_);
@@ -278,16 +273,13 @@ private:
 
     void enter_( typename detail::param< arg_type >::type arg)
     {
-        holder<
-            tuple< coroutine_object *,
-            typename detail::param< arg_type >::type >
-        > hldr_to(
-            & this->caller_, tuple< coroutine_object *,
-            typename detail::param< arg_type >::type >( this, arg) );
+        tuple< coroutine_object *,
+               typename detail::param< arg_type >::type
+        > tpl( this, arg);
         holder< void > * hldr_from(
             reinterpret_cast< holder< void > * >( context::jump_fcontext(
-                hldr_to.ctx, this->callee_,
-                reinterpret_cast< intptr_t >( & hldr_to),
+                & this->caller_, this->callee_,
+                reinterpret_cast< intptr_t >( & tpl),
                 this->preserve_fpu() ) ) );
         this->callee_ = hldr_from->ctx;
         if ( this->except_) rethrow_exception( this->except_);
@@ -377,15 +369,15 @@ public:
         stack_alloc_.deallocate( stack_.sp, stack_.size);
     }
 
-    void run( context::fcontext_t * callee)
+    void run()
     {
-        Caller c( callee, false, this->preserve_fpu(), alloc_);
+        Caller c( & this->caller_, false, this->preserve_fpu(), alloc_);
         run_( c);
     }
 
-    void run( context::fcontext_t * callee, typename detail::param< arg_type >::type arg)
+    void run( typename detail::param< arg_type >::type arg)
     {
-        Caller c( callee, false, this->preserve_fpu(), alloc_);
+        Caller c( & this->caller_, false, this->preserve_fpu(), alloc_);
         c.impl_->result_ = arg;
         run_( c);
     }
@@ -430,11 +422,10 @@ private:
 
     void enter_()
     {
-        holder< coroutine_object * > hldr_to( & this->caller_, this);
         holder< void > * hldr_from(
             reinterpret_cast< holder< void > * >( context::jump_fcontext(
-                hldr_to.ctx, this->callee_,
-                reinterpret_cast< intptr_t >( & hldr_to),
+                & this->caller_, this->callee_,
+                reinterpret_cast< intptr_t >( this),
                 this->preserve_fpu() ) ) );
         this->callee_ = hldr_from->ctx;
         if ( this->except_) rethrow_exception( this->except_);
@@ -442,16 +433,13 @@ private:
 
     void enter_( typename detail::param< arg_type >::type arg)
     {
-        holder<
-            tuple< coroutine_object *,
-            typename detail::param< arg_type >::type >
-        > hldr_to(
-            & this->caller_, tuple< coroutine_object *,
-            typename detail::param< arg_type >::type >( this, arg) );
+        tuple< coroutine_object *,
+               typename detail::param< arg_type >::type
+        > tpl( this, arg);
         holder< void > * hldr_from(
             reinterpret_cast< holder< void > * >( context::jump_fcontext(
-                hldr_to.ctx, this->callee_,
-                reinterpret_cast< intptr_t >( & hldr_to),
+                & this->caller_, this->callee_,
+                reinterpret_cast< intptr_t >( & tpl),
                 this->preserve_fpu() ) ) );
         this->callee_ = hldr_from->ctx;
         if ( this->except_) rethrow_exception( this->except_);
@@ -541,15 +529,15 @@ public:
         stack_alloc_.deallocate( stack_.sp, stack_.size);
     }
 
-    void run( context::fcontext_t * callee)
+    void run()
     {
-        Caller c( callee, false, this->preserve_fpu(), alloc_);
+        Caller c( & this->caller_, false, this->preserve_fpu(), alloc_);
         run_( c);
     }
 
-    void run( context::fcontext_t * callee, typename detail::param< arg_type >::type arg)
+    void run( typename detail::param< arg_type >::type arg)
     {
-        Caller c( callee, false, this->preserve_fpu(), alloc_);
+        Caller c( & this->caller_, false, this->preserve_fpu(), alloc_);
         c.impl_->result_ = arg;
         run_( c);
     }

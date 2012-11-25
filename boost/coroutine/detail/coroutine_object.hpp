@@ -34,31 +34,25 @@ namespace boost {
 namespace coroutines {
 namespace detail {
 
-template< typename Context >
+template< typename Coroutine >
 void trampoline1( intptr_t vp)
 {
     BOOST_ASSERT( vp);
 
-    holder< Context * > * hldr(
-        reinterpret_cast< holder< Context * > * >( vp) );
-    Context * ctx( hldr->data.get() );
-
-    ctx->run( hldr->ctx);
+    reinterpret_cast< Coroutine * >( vp)->run();
 }
 
-template< typename Context, typename Arg >
+template< typename Coroutine, typename Arg >
 void trampoline2( intptr_t vp)
 {
     BOOST_ASSERT( vp);
 
-    holder< tuple< Context *, Arg > > * hldr(
-        reinterpret_cast< holder< tuple< Context *, Arg > > * >( vp) );
-    Context * ctx( get< 0 >( hldr->data.get() ) );
-    Arg arg( get< 1 >( hldr->data.get() ) );
-//  Context * ctx( hldr->data.get().get< 0 >() );
-//  Arg arg( hldr->data.get().get< 1 >() );
+    tuple< Coroutine *, Arg > * tpl(
+        reinterpret_cast< tuple< Coroutine *, Arg > * >( vp) );
+    Coroutine * coro( get< 0 >( * tpl) );
+    Arg arg( get< 1 >( * tpl) );
 
-    ctx->run( hldr->ctx, arg);
+    coro->run( arg);
 }
 
 template<
