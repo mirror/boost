@@ -53,8 +53,10 @@ void trampoline2( intptr_t vp)
 
     holder< tuple< Context *, Arg > > * hldr(
         reinterpret_cast< holder< tuple< Context *, Arg > > * >( vp) );
-    Context * ctx( hldr->data.get().get< 0 >() );
-    Arg arg( hldr->data.get().get< 1 >() );
+    Context * ctx( get< 0 >( hldr->data.get() ) );
+    Arg arg( get< 1 >( hldr->data.get() ) );
+//  Context * ctx( hldr->data.get().get< 0 >() );
+//  Arg arg( hldr->data.get().get< 1 >() );
 
     ctx->run( hldr->ctx, arg);
 }
