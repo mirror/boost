@@ -166,7 +166,7 @@ public:
         impl_()
     {}
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 #ifdef BOOST_MSVC
     typedef void ( * coroutine_fn) ( caller_type &);
 
@@ -713,7 +713,7 @@ public:
         impl_()
     {}
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 #ifdef BOOST_MSVC
     typedef void ( * coroutine_fn) ( caller_type &);
 

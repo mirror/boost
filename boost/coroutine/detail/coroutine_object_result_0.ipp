@@ -66,7 +66,7 @@ private:
     }
 
 public:
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     coroutine_object( BOOST_RV_REF( Fn) fn, attributes const& attr,
                       StackAllocator const& stack_alloc,
                       allocator_t const& alloc) :
