@@ -92,7 +92,7 @@ TT_TEST_BEGIN(common_type)
     typedef tt::common_type<C1C2&, C1&>::type T1;
     typedef tt::common_type<C3*, C2*>::type T2;
     typedef tt::common_type<int*, int const*>::type T3;
-#if defined(BOOST_NO_DECLTYPE) && !defined(BOOST_COMMON_TYPE_DONT_USE_TYPEOF)
+#if defined(BOOST_NO_CXX11_DECLTYPE) && !defined(BOOST_COMMON_TYPE_DONT_USE_TYPEOF)
     // fails if BOOST_COMMON_TYPE_DONT_USE_TYPEOF:
     typedef tt::common_type<int volatile*, int const*>::type T4;
 #endif

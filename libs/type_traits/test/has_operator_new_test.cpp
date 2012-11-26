@@ -188,7 +188,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<cmf>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<enum_UDT>::value, false);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<int&>::value, false);
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<int&&>::value, false);
 #endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::has_new_operator<const int&>::value, false);

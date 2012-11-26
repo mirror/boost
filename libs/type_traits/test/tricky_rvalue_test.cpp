@@ -18,7 +18,7 @@
 
 TT_TEST_BEGIN(rvalue_reference_test)
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_reference<int (&&)(int)>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_rvalue_reference<int (&)(int)>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_rvalue_reference<int (&&)(int)>::value, true);
