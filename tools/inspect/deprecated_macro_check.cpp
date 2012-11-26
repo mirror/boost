@@ -1,4 +1,5 @@
-//  assert_macro_check implementation  ------------------------------------------------//
+//  deprecated macro check implementation  ---------------------------------------------//
+//	Protect against ourself: boostinspect:ndprecated_macros
 
 //  Copyright Eric Niebler 2010.
 //  Based on the assert_macro_check checker by Marshall Clow
@@ -100,16 +101,6 @@ namespace boost
     {
       if (contents.find( "boostinspect:" "ndprecated_macros" ) != string::npos)
         return;
-
-      // Check files iff (a) they are in the boost directory, or (b) they
-      // are in the src directory under libs.
-      if (m_from_boost_root) {
-        path relative( relative_to( full_path, fs::initial_path() ) );
-        path::const_iterator pbeg = relative.begin(), pend = relative.end();
-        if (pbeg != std::find(pbeg, pend, "boost") &&
-          !(pbeg == std::find(pbeg, pend, "libs") && pend != std::find(pbeg, pend, "src")))
-          return;
-      }
 
       const char **ptr;
       long errors = 0;
