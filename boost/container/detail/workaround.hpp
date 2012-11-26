@@ -18,7 +18,7 @@
    #define BOOST_CONTAINER_PERFECT_FORWARDING
 #endif
 
-#if defined(BOOST_NO_NOEXCEPT)
+#if defined(BOOST_NO_CXX11_NOEXCEPT)
    #if defined(BOOST_MSVC)
       #define BOOST_CONTAINER_NOEXCEPT throw()
    #else
