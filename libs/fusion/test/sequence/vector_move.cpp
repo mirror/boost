@@ -8,7 +8,7 @@
 
 #include <boost/config.hpp>
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
 #include <boost/fusion/container/vector/vector.hpp>
 
@@ -22,7 +22,7 @@
 int
 main()
 {
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     test();
 #endif
 

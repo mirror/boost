@@ -75,7 +75,7 @@ main()
         //~ std::cout << pop_back(l) << std::endl;
     //~ }
 
-#ifndef BOOST_NO_AUTO_DECLARATIONS
+#ifndef BOOST_NO_CXX11_AUTO_DECLARATIONS
     {
         auto vec = make_vector(1, 3.14, "hello");
 

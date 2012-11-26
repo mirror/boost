@@ -6,7 +6,7 @@
 ==============================================================================*/
 #include <boost/config.hpp>
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #error "Valid only on compilers that support rvalues"
 #endif
 
