@@ -137,7 +137,7 @@ void unordered_destructible_test(X&)
 
     X x1;
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     X x2(rvalue_default<X>());
     X x3 = rvalue_default<X>();
     // This can only be done if propagate_on_container_move_assignment::value
@@ -453,7 +453,7 @@ void unordered_movable_test(X& x, Key& k, T& /* t */, Hash& hf, Pred& eq)
     typedef BOOST_DEDUCED_TYPENAME X::iterator iterator;
     typedef BOOST_DEDUCED_TYPENAME X::const_iterator const_iterator;
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     X x1(rvalue_default<X>());
     X x2(boost::move(x1));
     x1 = rvalue_default<X>();
