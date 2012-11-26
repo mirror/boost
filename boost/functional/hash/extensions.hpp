@@ -149,7 +149,7 @@ namespace boost
         }
     }
 
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <typename... T>
     inline std::size_t hash_value(std::tuple<T...> const& v)
     {
