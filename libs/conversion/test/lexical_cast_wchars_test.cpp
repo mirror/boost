@@ -58,7 +58,7 @@ void test_char_types_conversions_wchar_t()
 
 void test_char_types_conversions_char16_t()
 {
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
     test_impl(u"Test array of chars");
 #endif
 
@@ -67,7 +67,7 @@ void test_char_types_conversions_char16_t()
 
 void test_char_types_conversions_char32_t()
 {
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
     test_impl(U"Test array of chars");
 #endif
 

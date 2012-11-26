@@ -71,12 +71,12 @@ void testing_boost_containers_string_widening()
     BOOST_CHECK(boost::lexical_cast<boost::container::wstring>(char_array) == wchar_array);
 #endif
 
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
     const char16_t char16_array[] = u"Test string";
     BOOST_CHECK(boost::lexical_cast<boost::container::basic_string<char16_t> >(char_array) == char16_array);
 #endif
 
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
     const char32_t char32_array[] = U"Test string";
     BOOST_CHECK(boost::lexical_cast<boost::container::basic_string<char32_t> >(char_array) == char32_array);
 #endif

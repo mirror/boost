@@ -82,10 +82,10 @@ void test_wallocator();
 #endif
 void test_char_types_conversions();
 void operators_overload_test();
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
 void test_char16_conversions();
 #endif
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
 void test_char32_conversions();
 #endif
 void test_getting_pointer_to_function();
@@ -120,10 +120,10 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
 
     suite->add(BOOST_TEST_CASE(&test_char_types_conversions));
     suite->add(BOOST_TEST_CASE(&operators_overload_test));
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
     suite->add(BOOST_TEST_CASE(&test_char16_conversions));
 #endif
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
     suite->add(BOOST_TEST_CASE(&test_char32_conversions));
 #endif
     suite->add(BOOST_TEST_CASE(&test_getting_pointer_to_function));
@@ -591,7 +591,7 @@ void operators_overload_test()
 }
 
 
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
 void test_char16_conversions()
 {
     BOOST_CHECK(u"100" == lexical_cast<std::u16string>(u"100"));
@@ -599,7 +599,7 @@ void test_char16_conversions()
 }
 #endif
 
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
 void test_char32_conversions()
 {
     BOOST_CHECK(U"100" == lexical_cast<std::u32string>(U"100"));
