@@ -112,7 +112,7 @@ namespace boost
             return *target;
         }
 
-#ifndef BOOST_NO_NOEXCEPT
+#ifndef BOOST_NO_CXX11_NOEXCEPT
         virtual const char *what() const noexcept
 #else
         virtual const char *what() const throw()
@@ -122,7 +122,7 @@ namespace boost
                    "source type value could not be interpreted as target";
         }
 
-#ifndef BOOST_NO_NOEXCEPT
+#ifndef BOOST_NO_CXX11_NOEXCEPT
         virtual ~bad_lexical_cast() BOOST_NOEXCEPT
 #else
         virtual ~bad_lexical_cast() throw()
@@ -185,10 +185,10 @@ namespace boost {
                     #ifndef BOOST_LCAST_NO_WCHAR_T
                         boost::is_same< T, wchar_t >::value,
                     #endif
-                    #ifndef BOOST_NO_CHAR16_T
+                    #ifndef BOOST_NO_CXX11_CHAR16_T
                         boost::is_same< T, char16_t >::value,
                     #endif
-                    #ifndef BOOST_NO_CHAR32_T
+                    #ifndef BOOST_NO_CXX11_CHAR32_T
                         boost::is_same< T, char32_t >::value,
                     #endif
                     boost::is_same< T, unsigned char >::value,
@@ -667,12 +667,12 @@ namespace boost {
                 target_char_t, src_char_t
             >::type char_type;
 
-#if !defined(BOOST_NO_CHAR16_T) && defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && defined(BOOST_NO_CXX11_UNICODE_LITERALS)
             BOOST_STATIC_ASSERT_MSG(( !boost::is_same<char16_t, src_char_t>::value
                                         && !boost::is_same<char16_t, target_char_t>::value),
                 "Your compiler does not have full support for char16_t" );
 #endif
-#if !defined(BOOST_NO_CHAR32_T) && defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && defined(BOOST_NO_CXX11_UNICODE_LITERALS)
             BOOST_STATIC_ASSERT_MSG(( !boost::is_same<char32_t, src_char_t>::value
                                         && !boost::is_same<char32_t, target_char_t>::value),
                 "Your compiler does not have full support for char32_t" );
@@ -738,7 +738,7 @@ namespace boost {
         };
 #endif
 
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
         template<>
         struct lcast_char_constants<char16_t>
         {
@@ -751,7 +751,7 @@ namespace boost {
         };
 #endif
 
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
         template<>
         struct lcast_char_constants<char32_t>
         {
@@ -1101,7 +1101,7 @@ namespace boost {
         }
 
 #endif
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
         template <class T>
         bool parse_inf_nan(const char16_t* begin, const char16_t* end, T& value) BOOST_NOEXCEPT
         {
@@ -1117,7 +1117,7 @@ namespace boost {
             return put_inf_nan_impl(begin, end, value, u"nan", u"infinity");
         }
 #endif
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
         template <class T>
         bool parse_inf_nan(const char32_t* begin, const char32_t* end, T& value) BOOST_NOEXCEPT
         {
@@ -1704,12 +1704,12 @@ namespace boost {
             bool operator<<(wchar_t ch)                 { return shl_char(ch); }
 #endif
 #endif
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
             bool operator<<(char16_t ch)                { return shl_char(ch); }
             bool operator<<(char16_t * str)             { return shl_char_array(str); }
             bool operator<<(char16_t const * str)       { return shl_char_array(str); }
 #endif
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
             bool operator<<(char32_t ch)                { return shl_char(ch); }
             bool operator<<(char32_t * str)             { return shl_char_array(str); }
             bool operator<<(char32_t const * str)       { return shl_char_array(str); }
@@ -1961,10 +1961,10 @@ namespace boost {
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_INTRINSIC_WCHAR_T)
             bool operator>>(wchar_t& output)                    { return shr_xchar(output); }
 #endif
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
             bool operator>>(char16_t& output)                   { return shr_xchar(output); }
 #endif
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
             bool operator>>(char32_t& output)                   { return shr_xchar(output); }
 #endif
             template<class Alloc>
