@@ -68,7 +68,7 @@ void fill_q(pri_queue & q, data_container const & data)
         q.push(data[i]);
 }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 template <typename pri_queue, typename data_container>
 void fill_emplace_q(pri_queue & q, data_container const & data)
 {
@@ -108,7 +108,7 @@ void pri_queue_test_sequential_reverse_push(void)
 template <typename pri_queue>
 void pri_queue_test_emplace(void)
 {
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     for (int i = 0; i != test_size; ++i)
     {
         pri_queue q;
