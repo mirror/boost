@@ -42,11 +42,6 @@ namespace boost_no_cxx11_hdr_chrono = empty_boost;
 #else
 namespace boost_no_cxx11_hdr_functional = empty_boost;
 #endif
-#ifndef BOOST_NO_STD_UNORDERED
-#include "boost_no_std_unordered.ipp"
-#else
-namespace boost_no_std_unordered = empty_boost;
-#endif
 #ifndef BOOST_NO_CTYPE_FUNCTIONS
 #include "boost_no_ctype_functions.ipp"
 #else
@@ -944,11 +939,6 @@ int main( int, char *[] )
    if(0 != boost_has_tr1_function::test())
    {
       std::cerr << "Failed test for BOOST_HAS_TR1_FUNCTION at: " << __FILE__ << ":" << __LINE__ << std::endl;
-      ++error_count;
-   }
-   if(0 != boost_no_std_unordered::test())
-   {
-      std::cerr << "Failed test for BOOST_NO_STD_UNORDERED at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_ctype_functions::test())

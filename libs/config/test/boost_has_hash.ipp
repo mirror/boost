@@ -11,12 +11,12 @@
 //                 or hash_map classes.
 
 #if defined(__GLIBCXX__) || (defined(__GLIBCPP__) && __GLIBCPP__>=20020514) // GCC >= 3.1.0
-#  ifdef BOOST_NO_STD_UNORDERED
+#  ifdef BOOST_NO_CXX11_STD_UNORDERED
 #    define BOOST_STD_EXTENSION_NAMESPACE __gnu_cxx
 #    include <ext/hash_set>
 #    include <ext/hash_map>
 #  else
-     // If we have BOOST_NO_STD_UNORDERED *not* defined, then we must 
+     // If we have BOOST_NO_CXX11_STD_UNORDERED *not* defined, then we must 
      // not include the <ext/*> headers as they clash with the C++0x
      // headers.  ie in any given translation unit we can include one
      // or the other, but not both.

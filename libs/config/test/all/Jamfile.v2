@@ -55,9 +55,6 @@ test-suite "BOOST_HAS_TR1_REGEX" :
 test-suite "BOOST_HAS_TR1_FUNCTION" : 
 [ run ../has_tr1_function_pass.cpp ]
 [ compile-fail ../has_tr1_function_fail.cpp ] ;
-test-suite "BOOST_NO_STD_UNORDERED" : 
-[ run ../no_std_unordered_pass.cpp ]
-[ compile-fail ../no_std_unordered_fail.cpp ] ;
 test-suite "BOOST_NO_CTYPE_FUNCTIONS" : 
 [ run ../no_ctype_functions_pass.cpp ]
 [ compile-fail ../no_ctype_functions_fail.cpp ] ;

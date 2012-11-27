@@ -636,7 +636,7 @@ scoped enumerations (`enum class`).
 [[`BOOST_NO_CXX11_STATIC_ASSERT`][The compiler does not support
 `static_assert`. 
 ]]                  
-[[`BOOST_NO_CXX11_STD_UNORDERD`][The standard library does not support
+[[`BOOST_NO_CXX11_STD_UNORDERED`][The standard library does not support
 <unordered_map> and <unordered_set>. 
 ]]                  
 [[`BOOST_NO_CXX11_UNICODE_LITERALS`][The compiler does not support
@@ -1048,7 +1048,7 @@ They will be removed in a future version of boost.
 [[`BOOST_NO_RVALUE_REFERENCES`][`BOOST_NO_CXX11_RVALUE_REFERENCES`][Boost 1.51][]]
 [[`BOOST_NO_SCOPED_ENUMS`][`BOOST_NO_CXX11_SCOPED_ENUMS`][Boost 1.51][]]
 [[`BOOST_NO_STATIC_ASSERT`][`BOOST_NO_CXX11_STATIC_ASSERT`][Boost 1.51][]]
-[[`BOOST_NO_STD_UNORDERD`][`BOOST_NO_CXX11_STD_UNORDERD`][Boost 1.51][]]
+[[`BOOST_NO_STD_UNORDERED`][`BOOST_NO_CXX11_STD_UNORDERED`][Boost 1.51][]]
 [[`BOOST_NO_UNICODE_LITERALS`][`BOOST_NO_CXX11_UNICODE_LITERALS`][Boost 1.51][]]
 [[`BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX`][`BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX`][Boost 1.51][]]
 [[`BOOST_NO_VARIADIC_TEMPLATES`][`BOOST_NO_CXX11_VARIADIC_TEMPLATES`][Boost 1.51][]]
