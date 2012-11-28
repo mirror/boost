@@ -92,8 +92,7 @@ namespace std {
 }
 #endif
 
-#if !defined(__MSL_CPP__) && !defined(__LIBCOMO__) \
-    && !defined(_LIBCPP_VERSION)
+#if defined(_MSC_VER) && (_MSC_VER < 1700)
     #define BOOST_CODECVT_DO_LENGTH_CONST const
 #else
     #define BOOST_CODECVT_DO_LENGTH_CONST
