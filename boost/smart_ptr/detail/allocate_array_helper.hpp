@@ -13,8 +13,10 @@
 
 namespace boost {
     namespace detail {
-        template<typename A, typename T, typename Y = T>
-        class allocate_array_helper {
+        template<typename A, typename T, typename Y = char>
+        class allocate_array_helper;
+        template<typename A, typename T, typename Y>
+        class allocate_array_helper<A, T[], Y> {
             template<typename A9, typename T9, typename Y9>
             friend class allocate_array_helper;
             typedef typename A::template rebind<Y>   ::other A2;
@@ -29,7 +31,7 @@ namespace boost {
             typedef typename A2::difference_type difference_type;
             template<typename U>
             struct rebind {
-                typedef allocate_array_helper<A, T, U> other;
+                typedef allocate_array_helper<A, T[], U> other;
             };
             allocate_array_helper(const A& allocator, std::size_t size, T** data)
                 : allocator(allocator),
@@ -37,7 +39,7 @@ namespace boost {
                   data(data) {
             }
             template<class U>
-            allocate_array_helper(const allocate_array_helper<A, T, U>& other) 
+            allocate_array_helper(const allocate_array_helper<A, T[], U>& other) 
                 : allocator(other.allocator),
                   size(other.size),
                   data(other.data) {
@@ -75,11 +77,11 @@ namespace boost {
                 allocator.destroy(memory);
             }
             template<typename U>
-            bool operator==(const allocate_array_helper<A, T, U>& other) const {
+            bool operator==(const allocate_array_helper<A, T[], U>& other) const {
                 return allocator == other.allocator;
             }
             template<typename U>
-            bool operator!=(const allocate_array_helper<A, T, U>& other) const {
+            bool operator!=(const allocate_array_helper<A, T[], U>& other) const {
                 return !(*this == other); 
             }
         private:

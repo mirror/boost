@@ -15,7 +15,9 @@
 namespace boost {
     namespace detail {
         template<typename T>
-        class array_deleter {
+        class array_deleter;
+        template<typename T>
+        class array_deleter<T[]> {
         public:
             array_deleter() 
                 : size(0) {

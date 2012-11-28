@@ -28,12 +28,12 @@ namespace boost {
         T1* p1 = 0;
         T2* p2 = 0;
         std::size_t n1 = size * boost::detail::array_total<T1>::size;
-        boost::detail::make_array_helper<T2> a1(n1, &p2);
-        boost::detail::array_deleter<T2> d1;
+        boost::detail::make_array_helper<T2[]> a1(n1, &p2);
+        boost::detail::array_deleter<T2[]> d1;
         boost::shared_ptr<T> s1(p1, d1, a1);
-        boost::detail::array_deleter<T2>* d2;
+        boost::detail::array_deleter<T2[]>* d2;
         p1 = reinterpret_cast<T1*>(p2);        
-        d2 = get_deleter<boost::detail::array_deleter<T2> >(s1);
+        d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
         d2->construct(p2, n1);
         return boost::shared_ptr<T>(s1, p1);
     }
@@ -46,12 +46,12 @@ namespace boost {
         T1* p1 = 0;
         T2* p2 = 0;
         std::size_t n1 = size * boost::detail::array_total<T1>::size;
-        boost::detail::make_array_helper<T2> a1(n1, &p2);
-        boost::detail::array_deleter<T2> d1;
+        boost::detail::make_array_helper<T2[]> a1(n1, &p2);
+        boost::detail::array_deleter<T2[]> d1;
         boost::shared_ptr<T> s1(p1, d1, a1);
-        boost::detail::array_deleter<T2>* d2;
+        boost::detail::array_deleter<T2[]>* d2;
         p1 = reinterpret_cast<T1*>(p2);        
-        d2 = get_deleter<boost::detail::array_deleter<T2> >(s1);
+        d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
         d2->construct(p2, n1, boost::detail::sp_forward<Args>(args)...);
         return boost::shared_ptr<T>(s1, p1);
     }
@@ -84,13 +84,13 @@ namespace boost {
         T2* p2 = 0;
         T3* p3 = 0;
         std::size_t n1 = list.size() * boost::detail::array_total<T1>::size;
-        boost::detail::make_array_helper<T2> a1(n1, &p2);
-        boost::detail::array_deleter<T2> d1;
+        boost::detail::make_array_helper<T2[]> a1(n1, &p2);
+        boost::detail::array_deleter<T2[]> d1;
         boost::shared_ptr<T> s1(p1, d1, a1);
-        boost::detail::array_deleter<T2>* d2;        
+        boost::detail::array_deleter<T2[]>* d2;        
         p3 = reinterpret_cast<T3*>(list.begin());
         p1 = reinterpret_cast<T1*>(p2);
-        d2 = get_deleter<boost::detail::array_deleter<T2> >(s1);
+        d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
         d2->construct_list(p2, n1, p3);
         return boost::shared_ptr<T>(s1, p1);
     }
@@ -127,13 +127,13 @@ namespace boost {
         T3* p3 = 0;
         enum { M = boost::detail::array_total<T1>::size };
         std::size_t n1 = M * size;
-        boost::detail::make_array_helper<T2> a1(n1, &p2);
-        boost::detail::array_deleter<T2> d1;
+        boost::detail::make_array_helper<T2[]> a1(n1, &p2);
+        boost::detail::array_deleter<T2[]> d1;
         boost::shared_ptr<T> s1(p1, d1, a1);
-        boost::detail::array_deleter<T2>* d2;        
+        boost::detail::array_deleter<T2[]>* d2;        
         p3 = reinterpret_cast<T3*>(list.begin());
         p1 = reinterpret_cast<T1*>(p2);
-        d2 = get_deleter<boost::detail::array_deleter<T2> >(s1);
+        d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
         d2->construct_list(p2, n1, p3, M);
         return boost::shared_ptr<T>(s1, p1);
     }
@@ -168,12 +168,12 @@ namespace boost {
         T1* p1 = 0;
         T2* p2 = 0;
         std::size_t n1 = size * boost::detail::array_total<T1>::size;
-        boost::detail::make_array_helper<T2> a1(n1, &p2);
-        boost::detail::array_deleter<T2> d1;
+        boost::detail::make_array_helper<T2[]> a1(n1, &p2);
+        boost::detail::array_deleter<T2[]> d1;
         boost::shared_ptr<T> s1(p1, d1, a1);
-        boost::detail::array_deleter<T2>* d2;
+        boost::detail::array_deleter<T2[]>* d2;
         p1 = reinterpret_cast<T1*>(p2);        
-        d2 = get_deleter<boost::detail::array_deleter<T2> >(s1);
+        d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
         d2->construct_noinit(p2, n1);
         return boost::shared_ptr<T>(s1, p1);
     }

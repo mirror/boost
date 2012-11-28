@@ -13,8 +13,10 @@
 
 namespace boost {
     namespace detail {
-        template<typename T, typename Y = T>
-        class make_array_helper {
+        template<typename T, typename Y = char>
+        class make_array_helper;
+        template<typename T, typename Y>
+        class make_array_helper<T[], Y> {
             template<typename T2, typename Y2>
             friend class make_array_helper;
         public:
@@ -27,14 +29,14 @@ namespace boost {
             typedef ptrdiff_t   difference_type;
             template<typename U>
             struct rebind {
-                typedef make_array_helper<T, U> other;
+                typedef make_array_helper<T[], U> other;
             };
             make_array_helper(std::size_t size, T** data)
                 : size(sizeof(T) * size),
                   data(data) {
             }
             template<class U>
-            make_array_helper(const make_array_helper<T, U>& other) 
+            make_array_helper(const make_array_helper<T[], U>& other) 
                 : size(other.size),
                   data(other.data) {
             }
@@ -70,11 +72,11 @@ namespace boost {
                 memory->~Y();
             }
             template<typename U>
-            bool operator==(const make_array_helper<T, U>& other) const {
+            bool operator==(const make_array_helper<T[], U>& other) const {
                 return true;
             }
             template<typename U>
-            bool operator!=(const make_array_helper<T, U>& other) const {
+            bool operator!=(const make_array_helper<T[], U>& other) const {
                 return !(*this == other); 
             }
         private:
