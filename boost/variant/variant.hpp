@@ -1468,6 +1468,74 @@ private: // helpers, for structors, cont. (below)
 
     friend class convert_copy_into;
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    class convert_move_into
+        : public static_visitor<int>
+    {
+    private: // representation
+
+        void* storage_;
+
+    public: // structors
+
+        explicit convert_move_into(void* storage) BOOST_NOEXCEPT
+            : storage_(storage)
+        {
+        }
+
+    public: // internal visitor interfaces (below)
+
+        template <typename T>
+        int internal_visit(T& operand, int) const
+        {
+            // NOTE TO USER :
+            // Compile error here indicates one of the source variant's types 
+            // cannot be unambiguously converted to the destination variant's
+            // types (or that no conversion exists).
+            //
+            return initializer::initialize(storage_, detail::variant::move(operand) );
+        }
+
+        template <typename T>
+        int internal_visit(boost::detail::reference_content<T>& operand, long) const
+        {
+            return internal_visit( operand.get(), 1L );
+        }
+
+        template <typename T>
+        int internal_visit(const boost::detail::reference_content<T>& operand, long) const
+        {
+            return internal_visit( operand.get(), 1L );
+        }
+
+        template <typename T>
+        int internal_visit(boost::detail::variant::backup_holder<T>& operand, long) const
+        {
+            return internal_visit( operand.get(), 1L );
+        }
+
+        template <typename T>
+        int internal_visit(const boost::detail::variant::backup_holder<T>& operand, long) const
+        {
+            return internal_visit( operand.get(), 1L );
+        }
+
+        template <typename T>
+        int internal_visit(boost::recursive_wrapper<T>& operand, long) const
+        {
+            return internal_visit( operand.get(), 1L );
+        }
+
+        template <typename T>
+        int internal_visit(const boost::recursive_wrapper<T>& operand, long) const
+        {
+            return internal_visit( operand.get(), 1L );
+        }
+    };
+
+    friend class convert_move_into;
+#endif
+
 private: // helpers, for structors, below 
 
     template <typename T>
@@ -1490,6 +1558,28 @@ private: // helpers, for structors, below
             );
     }
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    template <typename T>
+    typename boost::enable_if<boost::is_rvalue_reference<T&&> >::type convert_construct(
+          T&& operand
+        , int
+        , mpl::false_ = mpl::false_() // is_foreign_variant
+        )
+    {
+        // NOTE TO USER :
+        // Compile error here indicates that the given type is not 
+        // unambiguously convertible to one of the variant's types
+        // (or that no conversion exists).
+        //
+        indicate_which(
+              initializer::initialize(
+                  storage_.address()
+                , detail::variant::move(operand)
+                )
+            );
+    }
+#endif
+
     template <typename Variant>
     void convert_construct(
           Variant& operand
@@ -1502,6 +1592,21 @@ private: // helpers, for structors, below
               operand.internal_apply_visitor(visitor)
             );
     }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    template <typename Variant>
+    typename boost::enable_if<boost::is_rvalue_reference<Variant&&> >::type convert_construct(
+          Variant&& operand
+        , long
+        , mpl::true_// is_foreign_variant
+        )
+    {
+        convert_move_into visitor(storage_.address());
+        indicate_which(
+              operand.internal_apply_visitor(visitor)
+            );
+    }
+#endif
 
     template <typename Variant>
     void convert_construct_variant(Variant& operand)
@@ -1530,6 +1635,35 @@ private: // helpers, for structors, below
             );
     }
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    template <typename Variant>
+    typename boost::enable_if<boost::is_rvalue_reference<Variant&&> >::type convert_construct_variant(Variant&& operand)
+    {
+        // [Determine if the given variant is itself a bounded type, or if its
+        //  content needs to be converted (i.e., it is a 'foreign' variant):]
+        //
+
+        typedef typename mpl::find_if<
+              types
+            , is_same<
+                  add_const<mpl::_1>
+                , const Variant
+                >
+            >::type found_it;
+
+        typedef typename mpl::end<types>::type not_found;
+        typedef typename is_same<
+              found_it, not_found
+            >::type is_foreign_variant;
+
+        // Convert move construct from operand:
+        convert_construct(
+              detail::variant::move(operand), 1L
+            , is_foreign_variant()
+            );
+    }
+#endif
+
     template <BOOST_VARIANT_ENUM_PARAMS(typename U)>
     void convert_construct(
           boost::variant<BOOST_VARIANT_ENUM_PARAMS(U)>& operand
@@ -1547,6 +1681,17 @@ private: // helpers, for structors, below
     {
         convert_construct_variant(operand);    
     }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    template <BOOST_VARIANT_ENUM_PARAMS(typename U)>
+    void convert_construct(
+          boost::variant<BOOST_VARIANT_ENUM_PARAMS(U)>&& operand
+        , long
+        )
+    {
+        convert_construct_variant( detail::variant::move(operand) );    
+    }
+#endif
 
 public: // structors, cont.
 
@@ -1597,8 +1742,15 @@ public: // structors, cont.
     {
         convert_construct(operand, 1L);
     }
-
 #endif // BOOST_VARIANT_AUX_BROKEN_CONSTRUCTOR_TEMPLATE_ORDERING workarounds
+    
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    template <class T>
+    variant(T&& operand, typename boost::enable_if<boost::is_rvalue_reference<T&&> >::type* = 0)
+    {
+        convert_construct( detail::variant::move(operand), 1L);
+    }
+#endif
 
 public: // structors, cont.
 
