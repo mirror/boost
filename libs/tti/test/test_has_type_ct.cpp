@@ -4,7 +4,7 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#include "test_has_type_ct.hpp"
+#include "test_has_type.hpp"
 #include <boost/detail/lightweight_test.hpp>
 
 int main()
