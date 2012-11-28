@@ -62,9 +62,7 @@ namespace boost {
         typedef typename boost::detail::array_base<T1>::type T2;
         T1* p1 = 0;
         T2* p2 = 0;
-        enum {
-            N = boost::detail::array_total<T>::size
-        };
+        enum { N = boost::detail::array_total<T>::size };
         boost::detail::allocate_array_helper<A, T2[N]> a1(allocator, &p2);
         boost::detail::array_deleter<T2[N]> d1;
         boost::shared_ptr<T> s1(p1, d1, a1);
@@ -108,9 +106,7 @@ namespace boost {
         T1* p1 = 0;
         T2* p2 = 0;
         T3* p3 = 0;
-        enum {
-            N = boost::detail::array_total<T>::size
-        };
+        enum { N = boost::detail::array_total<T>::size };
         boost::detail::allocate_array_helper<A, T2[N]> a1(allocator, &p2);
         boost::detail::array_deleter<T2[N]> d1;
         boost::shared_ptr<T> s1(p1, d1, a1);
