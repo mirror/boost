@@ -70,6 +70,69 @@ namespace boost {
             std::size_t size;
             T* object;
         };
+        template<typename T, std::size_t N>
+        class array_deleter<T[N]> {
+        public:
+            array_deleter() 
+                : object(0) {
+            }
+            ~array_deleter() {
+                destroy();
+            }
+            void construct(T* memory) {
+                object = memory;
+                for (std::size_t i = 0; i < N; i++) {
+                    void* p1 = object + i;
+                    ::new(p1) T();
+                }
+            }
+#if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
+            template<typename... Args>
+            void construct(T* memory, Args&&... args) {
+                object = memory;
+                for (std::size_t i = 0; i < N; i++) {
+                    void* p1 = object + i;
+                    ::new(p1) T(args...);
+                }
+            }
+#endif
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+            void construct_list(T* memory, const T* list) {
+                object = memory;
+                for (std::size_t i = 0; i < N; i++) {
+                    void* p1 = object + i;
+                    ::new(p1) T(list[i]);
+                }
+            }
+            void construct_list(T* memory, const T* list, std::size_t n) {
+                object = memory;
+                for (std::size_t i = 0; i < N; i++) {
+                    void* p1 = object + i;
+                    ::new(p1) T(list[i % n]);
+                }
+            }
+#endif
+            void construct_noinit(T* memory) {
+                object = memory;
+                for (std::size_t i = 0; i < N; i++) {
+                    void* p1 = object + i;
+                    ::new(p1) T;
+                }
+            }
+            void operator()(const void*) {
+                destroy();
+            }
+        private:
+            void destroy() {
+                if (object) {
+                    for (std::size_t i = N; i > 0; ) {
+                        object[--i].~T();
+                    }
+                    object = 0;
+                }
+            }
+            T* object;
+        };
     }
 }
 
