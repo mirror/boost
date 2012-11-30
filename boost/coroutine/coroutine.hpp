@@ -286,7 +286,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, stack_allocator, std::allocator< coroutine >,
@@ -323,7 +324,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, std::allocator< coroutine >,
@@ -359,7 +361,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, Allocator,
@@ -397,7 +400,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, stack_allocator, std::allocator< coroutine >,
@@ -434,7 +438,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, std::allocator< coroutine >,
@@ -470,7 +475,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, Allocator,
@@ -508,7 +514,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, stack_allocator, std::allocator< coroutine >,
@@ -545,7 +552,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, std::allocator< coroutine >,
@@ -581,7 +589,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, Allocator,
@@ -864,7 +873,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, stack_allocator, std::allocator< coroutine >,
@@ -902,7 +912,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, stack_allocator, std::allocator< coroutine >,
@@ -939,7 +950,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, std::allocator< coroutine >,
@@ -976,7 +988,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, std::allocator< coroutine >,
@@ -1012,7 +1025,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, Allocator,
@@ -1048,7 +1062,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, Allocator,
@@ -1086,7 +1101,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, stack_allocator, std::allocator< coroutine >,
@@ -1124,7 +1140,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, stack_allocator, std::allocator< coroutine >,
@@ -1161,7 +1178,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, std::allocator< coroutine >,
@@ -1197,7 +1215,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, Allocator,
@@ -1235,7 +1254,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, stack_allocator, std::allocator< coroutine >,
@@ -1272,7 +1292,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, std::allocator< coroutine >,
@@ -1308,7 +1329,8 @@ public:
         impl_()
     {
 //      BOOST_STATIC_ASSERT((
-//          is_same< void, typename result_of< Fn() >::type >::value));
+//          is_same< typename result_of< Fn( caller_type &) >::type, void >::value
+//      ));
         typedef detail::coroutine_object<
                 Signature,
                 Fn, StackAllocator, Allocator,
