@@ -51,12 +51,6 @@ namespace boost {
         struct array_inner<T[N]> {
             typedef T type;
         };
-        template<typename T> 
-        struct arrays_inner;
-        template<typename T, std::size_t N> 
-        struct arrays_inner<T[][N]> {
-            typedef T type;
-        };
     }
 }
 
