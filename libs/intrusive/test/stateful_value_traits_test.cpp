@@ -53,8 +53,8 @@ struct stateful_value_traits
 
    static const link_mode_type link_mode = normal_link;
 
-   stateful_value_traits(pointer values, node_ptr node_array)
-      :  values_(values),  node_array_(node_array)
+   stateful_value_traits(pointer vals, node_ptr node_array)
+      :  values_(vals),  node_array_(node_array)
    {}
 
    node_ptr to_node_ptr (value_type &value)
