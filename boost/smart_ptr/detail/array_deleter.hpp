@@ -40,7 +40,6 @@ namespace boost {
                 }
             }
 #endif
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
             void construct_list(T* memory, std::size_t count, const T* list) {
                 for (object = memory; size < count; size++) {
                     void* p1 = object + size;
@@ -53,7 +52,6 @@ namespace boost {
                     ::new(p1) T(list[size % n]);
                 }
             }
-#endif
             void construct_noinit(T* memory, std::size_t count) {
                 for (object = memory; size < count; size++) {
                     void* p1 = object + size;
@@ -98,7 +96,6 @@ namespace boost {
                 }
             }
 #endif
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
             void construct_list(T* memory, const T* list) {
                 object = memory;
                 for (std::size_t i = 0; i < N; i++) {
@@ -113,7 +110,6 @@ namespace boost {
                     ::new(p1) T(list[i % n]);
                 }
             }
-#endif
             void construct_noinit(T* memory) {
                 object = memory;
                 for (std::size_t i = 0; i < N; i++) {

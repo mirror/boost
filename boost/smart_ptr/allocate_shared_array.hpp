@@ -122,7 +122,7 @@ namespace boost {
         return boost::shared_ptr<T>(s1, p1);
     }
 #endif
-#ifndef BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
+#if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
     template<typename T, typename A>
     inline typename boost::detail::sp_if_size_array<T>::type
     allocate_shared(const A& allocator, const T& list) {

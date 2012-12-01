@@ -50,7 +50,7 @@ int main() {
         BOOST_TEST(a1[3].value == 3);
     }
 #endif
-#ifndef BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
+#if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
     {
         boost::shared_ptr<int[4]> a1 = boost::allocate_shared<int[4]>(std::allocator<int>(), { 0, 1, 2, 3 });
         BOOST_TEST(a1[0] == 0);

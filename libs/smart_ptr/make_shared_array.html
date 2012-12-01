@@ -63,7 +63,7 @@
     shared_ptr&lt;T[][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size, initializer_list&lt;T&gt; list);
 #endif
     
-#ifndef BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
+#if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
     template&lt;typename T, typename... Args&gt;
     shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(const T (&amp;list)[N]);
 
