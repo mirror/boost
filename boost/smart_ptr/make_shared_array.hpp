@@ -97,28 +97,6 @@ namespace boost {
         return boost::shared_ptr<T>(s1, p1);
     }    
     template<typename T>
-    inline typename boost::detail::sp_if_size_array<T>::type
-    make_shared(const T& list) {
-        typedef typename boost::detail::array_inner<T>::type T1;
-        typedef typename boost::detail::array_base<T1>::type T2;
-        typedef const T2 T3;
-        enum { 
-            N = boost::detail::array_total<T>::size 
-        };
-        T1* p1 = 0;
-        T2* p2 = 0;
-        T3* p3 = 0;
-        boost::detail::make_array_helper<T2[N]> a1(&p2);
-        boost::detail::array_deleter<T2[N]> d1;
-        boost::shared_ptr<T> s1(p1, d1, a1);
-        boost::detail::array_deleter<T2[N]>* d2;        
-        p3 = reinterpret_cast<T3*>(list);
-        p1 = reinterpret_cast<T1*>(p2);
-        d2 = get_deleter<boost::detail::array_deleter<T2[N]> >(s1);
-        d2->construct_list(p2, p3);
-        return boost::shared_ptr<T>(s1, p1);
-    }
-    template<typename T>
     inline typename boost::detail::sp_if_array<T>::type
     make_shared(std::size_t size, 
         std::initializer_list<typename boost::detail::arrays_inner<T>::type> list) {
@@ -140,6 +118,30 @@ namespace boost {
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
         d2->construct_list(p2, n1, p3, M);
+        return boost::shared_ptr<T>(s1, p1);
+    }
+#endif
+#ifndef BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
+    template<typename T>
+    inline typename boost::detail::sp_if_size_array<T>::type
+    make_shared(const T& list) {
+        typedef typename boost::detail::array_inner<T>::type T1;
+        typedef typename boost::detail::array_base<T1>::type T2;
+        typedef const T2 T3;
+        enum { 
+            N = boost::detail::array_total<T>::size 
+        };
+        T1* p1 = 0;
+        T2* p2 = 0;
+        T3* p3 = 0;
+        boost::detail::make_array_helper<T2[N]> a1(&p2);
+        boost::detail::array_deleter<T2[N]> d1;
+        boost::shared_ptr<T> s1(p1, d1, a1);
+        boost::detail::array_deleter<T2[N]>* d2;        
+        p3 = reinterpret_cast<T3*>(list);
+        p1 = reinterpret_cast<T1*>(p2);
+        d2 = get_deleter<boost::detail::array_deleter<T2[N]> >(s1);
+        d2->construct_list(p2, p3);
         return boost::shared_ptr<T>(s1, p1);
     }
     template<typename T>

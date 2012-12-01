@@ -29,21 +29,7 @@ int main() {
         BOOST_TEST(a1[3] == 3);
     }
     {
-        boost::shared_ptr<int[4]> a1 = boost::allocate_shared<int[4]>(std::allocator<int>(), { 0, 1, 2, 3 });
-        BOOST_TEST(a1[0] == 0);
-        BOOST_TEST(a1[1] == 1);
-        BOOST_TEST(a1[2] == 2);
-        BOOST_TEST(a1[3] == 3);
-    }
-    {
         boost::shared_ptr<const int[]> a1 = boost::allocate_shared<const int[]>(std::allocator<int>(), { 0, 1, 2, 3 });
-        BOOST_TEST(a1[0] == 0);
-        BOOST_TEST(a1[1] == 1);
-        BOOST_TEST(a1[2] == 2);
-        BOOST_TEST(a1[3] == 3);
-    }
-    {
-        boost::shared_ptr<const int[4]> a1 = boost::allocate_shared<const int[4]>(std::allocator<int>(), { 0, 1, 2, 3 });
         BOOST_TEST(a1[0] == 0);
         BOOST_TEST(a1[1] == 1);
         BOOST_TEST(a1[2] == 2);
@@ -57,14 +43,30 @@ int main() {
         BOOST_TEST(a1[3].value == 3);
     }
     {
-        boost::shared_ptr<type[4]> a1 = boost::allocate_shared<type[4]>(std::allocator<type>(), { 0, 1, 2, 3 });
+        boost::shared_ptr<const type[]> a1 = boost::allocate_shared<const type[]>(std::allocator<type>(), { 0, 1, 2, 3 });
         BOOST_TEST(a1[0].value == 0);
         BOOST_TEST(a1[1].value == 1);
         BOOST_TEST(a1[2].value == 2);
         BOOST_TEST(a1[3].value == 3);
     }
+#endif
+#ifndef BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
     {
-        boost::shared_ptr<const type[]> a1 = boost::allocate_shared<const type[]>(std::allocator<type>(), { 0, 1, 2, 3 });
+        boost::shared_ptr<int[4]> a1 = boost::allocate_shared<int[4]>(std::allocator<int>(), { 0, 1, 2, 3 });
+        BOOST_TEST(a1[0] == 0);
+        BOOST_TEST(a1[1] == 1);
+        BOOST_TEST(a1[2] == 2);
+        BOOST_TEST(a1[3] == 3);
+    }
+    {
+        boost::shared_ptr<const int[4]> a1 = boost::allocate_shared<const int[4]>(std::allocator<int>(), { 0, 1, 2, 3 });
+        BOOST_TEST(a1[0] == 0);
+        BOOST_TEST(a1[1] == 1);
+        BOOST_TEST(a1[2] == 2);
+        BOOST_TEST(a1[3] == 3);
+    }
+    {
+        boost::shared_ptr<type[4]> a1 = boost::allocate_shared<type[4]>(std::allocator<type>(), { 0, 1, 2, 3 });
         BOOST_TEST(a1[0].value == 0);
         BOOST_TEST(a1[1].value == 1);
         BOOST_TEST(a1[2].value == 2);
