@@ -1,6 +1,6 @@
 //////////////////////////////////////////////////////////////////////////////
 //
-// (C) Copyright Ion Gaztanaga 2010-2011.
+// (C) Copyright Ion Gaztanaga 2010-2012.
 // Distributed under the Boost Software License, Version 1.0.
 // (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
@@ -12,19 +12,21 @@
 #ifndef BOOST_MOVE_MOVE_HELPERS_HPP
 #define BOOST_MOVE_MOVE_HELPERS_HPP
 
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/type_traits/is_class.hpp>
+#include <boost/move/utility.hpp>
+#include <boost/move/traits.hpp>
 
-#if defined(BOOST_NO_RVALUE_REFERENCES) || (defined(_MSC_VER) && (_MSC_VER == 1600))
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) || (defined(_MSC_VER) && (_MSC_VER == 1600))
 #include <boost/type_traits/is_same.hpp>
 #include <boost/utility/enable_if.hpp>
 #endif
-#if defined(BOOST_NO_RVALUE_REFERENCES) 
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) 
 #include <boost/mpl/if.hpp>
 #endif
 
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 struct not_a_type;
 #define BOOST_MOVE_CATCH_CONST(U)  \
    typename ::boost::mpl::if_< ::boost::is_class<U>, BOOST_CATCH_CONST_RLVALUE(U), const U &>::type
@@ -37,7 +39,7 @@ struct not_a_type;
 #define BOOST_MOVE_CATCH_FWD(U)    U &&
 #endif
 
-#ifdef BOOST_NO_RVALUE_REFERENCES
+#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 #define BOOST_MOVE_CONVERSION_AWARE_CATCH(PUB_FUNCTION, TYPE, RETURN_VALUE, FWD_FUNCTION)\
    RETURN_VALUE PUB_FUNCTION(BOOST_MOVE_CATCH_CONST(TYPE) x)\
@@ -104,7 +106,7 @@ struct not_a_type;
 #endif
 
 
-#ifdef BOOST_NO_RVALUE_REFERENCES
+#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 #define BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(PUB_FUNCTION, TYPE, RETURN_VALUE, FWD_FUNCTION, ARG1)\
    RETURN_VALUE PUB_FUNCTION(ARG1 arg1, BOOST_MOVE_CATCH_CONST(TYPE) x)\
