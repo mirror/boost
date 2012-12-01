@@ -1205,10 +1205,6 @@ The primary template provides generic strings. Specializations provide the same 
 
 [section:spe Specializations for `ratio_string<>`]
 
-
-With compilers supporting char16_t and char32_t and with a standard library don't providing std::u16string and std::u32string you will need to 
-define the macros BOOST_NO_CXX11_U16STRING and BOOST_NO_CXX11_U32STRING until Boost.Config defines them.
-
 For each specialization the table gives the return value for `prefix()` and `symbol()`. 
 
 [table The return values of specializations of ratio_string
@@ -1862,10 +1858,6 @@ The specialization relays on the __ratio_greater_equal template class.
 [*Deprecated:]
 
 The ratio_string<>::short_name and ratio_string<>::long_name are deprecated. Use ratio_string<>::symbol and ratio_string<>::prefix respectively. These functions be removed in 1.55.
-
-[*Fixes:]
-
-* [@http://svn.boost.org/trac/boost/ticket/7478 #7478] Compiles fails with compilers supporting char16_t and char32_t fails if the library doesn't provides std::u16string and std::u32string.
 
 [endsect]
 
