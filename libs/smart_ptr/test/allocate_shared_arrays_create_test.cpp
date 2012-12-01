@@ -12,6 +12,20 @@
 int main() {
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
     {
+        boost::shared_ptr<int[]> a1 = boost::allocate_shared<int[]>(std::allocator<int>(), {0, 1, 2, 3});
+        BOOST_TEST(a1[0] == 0);
+        BOOST_TEST(a1[1] == 1);
+        BOOST_TEST(a1[2] == 2);
+        BOOST_TEST(a1[3] == 3);
+    }
+    {
+        boost::shared_ptr<int[4]> a1 = boost::allocate_shared<int[4]>(std::allocator<int>(), {0, 1, 2, 3});
+        BOOST_TEST(a1[0] == 0);
+        BOOST_TEST(a1[1] == 1);
+        BOOST_TEST(a1[2] == 2);
+        BOOST_TEST(a1[3] == 3);
+    }
+    {
         boost::shared_ptr<int[][2]> a1 = boost::allocate_shared<int[][2]>(std::allocator<int>(), { {0, 1}, {2, 3} });
         BOOST_TEST(a1[0][0] == 0);
         BOOST_TEST(a1[0][1] == 1);

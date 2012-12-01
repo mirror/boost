@@ -54,25 +54,25 @@
     shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
 
     template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(const T (&amp;list)[N]);
 
     template&lt;typename T, typename... Args&gt;
     shared_ptr&lt;T[][N]&gt; <a href="#functions">make_shared</a>(size_t size, initializer_list&lt;T&gt; list);
 
     template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[M][N]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[M][N]&gt; <a href="#functions">make_shared</a>(const T (&amp;list)[N]);
 
     template&lt;typename T, typename A, typename... Args&gt;
     shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
 
     template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, const T (&amp;list)[N]);
 
     template&lt;typename T, typename A, typename... Args&gt;
     shared_ptr&lt;T[][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size, initializer_list&lt;T&gt; list);
 
     template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[M][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[M][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, const T (&amp;list)[N]);
 #endif
 
     template&lt;typename T&gt;
@@ -141,9 +141,9 @@ template&lt;typename T, typename A, typename... Args&gt;
         from the initializer list.</p>
     </blockquote>
     <pre>template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[N]&gt; make_shared(initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[N]&gt; make_shared(const T (&amp;list)[N]);
 template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[N]&gt; allocate_shared(const A&amp; allocator, initializer_list&lt;T&gt; list);</pre>
+    shared_ptr&lt;T[N]&gt; allocate_shared(const A&amp; allocator, const T (&amp;list)[N]);</pre>
     <blockquote>
       <p><b>Description:</b> These overloads of the utilities above are for a 
         fixed size array.</p>
@@ -157,9 +157,9 @@ template&lt;typename T, typename A, typename... Args&gt;
         from the initializer list.</p>
     </blockquote>
     <pre>template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[M][N]&gt; make_shared(initializer_list&lt;T&gt; list);
+    shared_ptr&lt;T[M][N]&gt; make_shared(const T (&amp;list)[N]);
 template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[M][N]&gt; allocate_shared(const A&amp; allocator, initializer_list&lt;T&gt; list);</pre>
+    shared_ptr&lt;T[M][N]&gt; allocate_shared(const A&amp; allocator, const T (&amp;list)[N]);</pre>
     <blockquote>
       <p><b>Description:</b> These overloads of the utilities above are for a 
         fixed size array.</p>
