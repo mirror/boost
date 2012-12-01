@@ -14,7 +14,7 @@
 #include <boost/type_traits/is_same.hpp>
 #include <boost/type_traits/integral_constant.hpp>
 #include <boost/container/detail/function_detector.hpp>
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <memory>
 
 template<class T>

@@ -11,7 +11,7 @@
 #include <boost/container/detail/workaround.hpp>
 //[doc_move_containers
 #include <boost/container/vector.hpp>
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <cassert>
 
 //Non-copyable class

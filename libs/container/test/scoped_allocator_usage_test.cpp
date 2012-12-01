@@ -1,7 +1,7 @@
 #include <boost/container/detail/config_begin.hpp>
 #include <memory>
 
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/container/vector.hpp>
 #include <boost/container/deque.hpp>
 #include <boost/container/list.hpp>

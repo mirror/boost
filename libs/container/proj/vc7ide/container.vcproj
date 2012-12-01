@@ -243,6 +243,9 @@
 					RelativePath="..\..\..\..\boost\container\detail\allocation_type.hpp">
 				</File>
 				<File
+					RelativePath="..\..\..\..\boost\container\detail\allocator_version_traits.hpp">
+				</File>
+				<File
 					RelativePath="..\..\..\..\boost\container\detail\config_begin.hpp">
 				</File>
 				<File

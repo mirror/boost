@@ -21,7 +21,8 @@
 #include "check_equal_containers.hpp"
 #include "dummy_test_allocator.hpp"
 #include "movable_int.hpp"
-#include <boost/move/move.hpp>
+#include <boost/move/utility.hpp>
+#include <boost/move/iterator.hpp>
 #include <boost/container/detail/mpl.hpp>
 #include <boost/container/detail/type_traits.hpp>
 #include <string>
@@ -148,8 +149,7 @@ bool do_test()
       MyCntDeque *cntdeque = new MyCntDeque;
       MyStdDeque *stddeque = new MyStdDeque;
       //Compare several shared memory deque operations with std::deque
-      int i;
-      for(i = 0; i < max*100; ++i){
+      for(int i = 0; i < max*100; ++i){
          IntType move_me(i);
          cntdeque->insert(cntdeque->end(), boost::move(move_me));
          stddeque->insert(stddeque->end(), i);
@@ -159,7 +159,7 @@ bool do_test()
       cntdeque->clear();
       stddeque->clear();
 
-      for(i = 0; i < max*100; ++i){
+      for(int i = 0; i < max*100; ++i){
          IntType move_me(i);
          cntdeque->push_back(boost::move(move_me));
          stddeque->push_back(i);
@@ -169,7 +169,7 @@ bool do_test()
       cntdeque->clear();
       stddeque->clear();
 
-      for(i = 0; i < max*100; ++i){
+      for(int i = 0; i < max*100; ++i){
          IntType move_me(i);
          cntdeque->push_front(boost::move(move_me));
          stddeque->push_front(i);
@@ -239,7 +239,7 @@ bool do_test()
 
       if(!test::CheckEqualContainers(cntdeque, stddeque)) return false;
 
-      for(i = 0; i < max; ++i){
+      for(int i = 0; i < max; ++i){
          IntType move_me(i);
          cntdeque->insert(cntdeque->begin(), boost::move(move_me));
          stddeque->insert(stddeque->begin(), i);
