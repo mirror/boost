@@ -1380,7 +1380,7 @@ public: // structors
         destroy_content();
     }
 
-    variant() BOOST_NOEXCEPT_IF(boost::has_nothrow_constructor<internal_T0>::type::value)
+    variant()
     {
         // NOTE TO USER :
         // Compile error from here indicates that the first bound
