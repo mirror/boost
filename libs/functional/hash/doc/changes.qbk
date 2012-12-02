@@ -144,5 +144,8 @@
 * Restore `enum` support, which was accidentally removed in the last version.
 * New floating point hasher - will hash the binary representation on more
   platforms, which should be faster.
+* On platforms that are known to have standard floating point, don't use the
+  automatic detection of floating point functions - which can break if there
+  are ambiguous overloads.
 
 [endsect]
