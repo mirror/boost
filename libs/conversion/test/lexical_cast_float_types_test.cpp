@@ -505,7 +505,11 @@ void test_conversion_from_to_double()
 }
 void test_conversion_from_to_long_double()
 {
+// We do not run tests on compilers with bugs
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     test_conversion_from_to_float<long double>();
+#endif
+    BOOST_CHECK(true);
 }
 
 

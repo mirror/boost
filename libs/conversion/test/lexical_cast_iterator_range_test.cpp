@@ -134,7 +134,7 @@ void test_it_range_using_char(CharT* one, CharT* eleven)
     BOOST_CHECK(lexical_cast<std::wstring>(crng2) == L"1");
 #endif
 
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
     typedef std::basic_string<char16_t> my_char16_string;
     BOOST_CHECK(lexical_cast<my_char16_string>(rng1) == u"1");
     BOOST_CHECK(lexical_cast<my_char16_string>(crng1) == u"1");
@@ -142,7 +142,7 @@ void test_it_range_using_char(CharT* one, CharT* eleven)
     BOOST_CHECK(lexical_cast<my_char16_string>(crng2) == u"1");
 #endif
 
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
     typedef std::basic_string<char32_t> my_char32_string;
     BOOST_CHECK(lexical_cast<my_char32_string>(rng1) == U"1");
     BOOST_CHECK(lexical_cast<my_char32_string>(crng1) == U"1");
@@ -194,7 +194,7 @@ void test_wchar_iterator_ranges()
 
 void test_char16_iterator_ranges()
 {
-#if !defined(BOOST_NO_CHAR16_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
     typedef char16_t test_char_type;
     test_char_type data1[] = u"1";
     test_char_type data2[] = u"11";
@@ -206,7 +206,7 @@ void test_char16_iterator_ranges()
 
 void test_char32_iterator_ranges()
 {
-#if !defined(BOOST_NO_CHAR32_T) && !defined(BOOST_NO_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
     typedef char32_t test_char_type;
     test_char_type data1[] = U"1";
     test_char_type data2[] = U"11";

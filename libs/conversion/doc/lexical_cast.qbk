@@ -119,14 +119,13 @@ The requirements on the argument and result types for both functions are:
 * Target is CopyConstructible [20.1.3].
 * Target is DefaultConstructible, meaning that it is possible to default-initialize an object of that type [8.5, 20.1.4].
 
-The character type of the underlying stream is assumed to be `char` unless either the `Source` or the `Target` requires wide-character streaming, in which case the underlying stream uses `wchar_t`, `char16_t` or `char32_t`. Wide-character streaming is currently detected for:
+The character type of the underlying stream is assumed to be `char` unless either the `Source` or the `Target` requires wide-character streaming, in which case the underlying stream uses `wchar_t`. Following types also can use `char16_t` or `char32_t` for wide-character streaming:
 
-* Single character: `wchar_t`, `char16_t`, `char32_t`
-* Arrays of characters: `wchar_t *`, `char16_t *`, `char32_t *`, `const wchar_t *`, `const char16_t *`, `const char32_t *`
+* Single character: `char16_t`, `char32_t`
+* Arrays of characters: `char16_t *`, `char32_t *`, `const char16_t *`, `const char32_t *`
 * Strings: `std::basic_string`, `boost::containers::basic_string`
 * `boost::iterator_range<WideCharPtr>`, where `WideCharPtr` is a pointer to wide-character or pointer to const wide-character
 * `boost::array<CharT, N>` and `std::array<CharT, N>`, `boost::array<const CharT, N>` and `std::array<const CharT, N>` 
-
 
 [important Many compilers and runtime libraries fail to make conversions using new Unicode characters. Make sure that the following code compiles and outputs nonzero values, before using new types:
 ``
@@ -235,7 +234,7 @@ It breaks my `operator>>` that works only in presence of this flag. Can you remo
   * [*Answer:]      May be in a future version. There is no requirement in
 __proposallong__ to reset the flag but
 remember that __proposalshort__ is not yet accepted by the committee. By the way, it's a great opportunity to
-make your `operator>>` conform to the standard.
+make your `operator>>` more general.
 Read a good C++ book, study `std::sentry` and [@boost:libs/io/doc/ios_state.html `ios_state_saver`].
 
 [pre
@@ -272,6 +271,10 @@ limitation of compiler options that you use.
 [endsect]
 
 [section Changes]
+
+* [*boost 1.53.0 :]
+
+    * Much better input and output streams detection for user defined types.
 
 * [*boost 1.52.0 :]
 

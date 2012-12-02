@@ -84,12 +84,12 @@ void test_empty_string()
 #endif
 
 // Currently, no compiler and STL library fully support char16_t and char32_t
-//#ifndef BOOST_NO_CHAR16_T
+//#ifndef BOOST_NO_CXX11_CHAR16_T
 //    std::basic_string<char16_t> v16w;
 //    do_test_on_empty_input(v16w);
 //    BOOST_CHECK_THROW(lexical_cast<char16_t>(v16w), bad_lexical_cast);
 //#endif
-//#ifndef BOOST_NO_CHAR32_T
+//#ifndef BOOST_NO_CXX11_CHAR32_T
 //    std::basic_string<char32_t> v32w;
 //    do_test_on_empty_input(v32w);
 //    BOOST_CHECK_THROW(lexical_cast<char32_t>(v32w), bad_lexical_cast);
