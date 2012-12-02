@@ -35,7 +35,7 @@ int main() {}
 #endif
 #endif
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(BOOST_INTEL_CXX_VERSION)
 #pragma GCC diagnostic ignored "-Wfloat-equal"
 #endif
 

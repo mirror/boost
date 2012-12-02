@@ -16,6 +16,7 @@
 
 #include <boost/preprocessor/cat.hpp>
 #include <boost/functional/hash/detail/limits.hpp>
+#include <boost/utility/enable_if.hpp>
 
 #include "./compile_time.hpp"
 
@@ -26,9 +27,33 @@
 #pragma warning(disable:4310) // cast truncates constant value
 #endif
 
-#if defined(__GNUC__)
+#if defined(__GNUC__) && !defined(BOOST_INTEL_CXX_VERSION)
 #pragma GCC diagnostic ignored "-Wfloat-equal"
 #endif
+
+template <class T>
+void numeric_extra_tests(typename
+    boost::enable_if_c<boost::hash_detail::limits<T>::is_integer,
+        void*>::type = 0)
+{
+    typedef boost::hash_detail::limits<T> limits;
+
+    if(limits::is_signed ||
+        limits::digits <= boost::hash_detail::limits<std::size_t>::digits)
+    {
+        BOOST_TEST(HASH_NAMESPACE::hash_value(T(-5)) == (std::size_t)T(-5));
+    }
+    BOOST_TEST(HASH_NAMESPACE::hash_value(T(0)) == (std::size_t)T(0u));
+    BOOST_TEST(HASH_NAMESPACE::hash_value(T(10)) == (std::size_t)T(10u));
+    BOOST_TEST(HASH_NAMESPACE::hash_value(T(25)) == (std::size_t)T(25u));
+}
+
+template <class T>
+void numeric_extra_tests(typename
+    boost::disable_if_c<boost::hash_detail::limits<T>::is_integer,
+        void*>::type = 0)
+{
+}
 
 template <class T>
 void numeric_test(T*)
@@ -55,17 +80,7 @@ void numeric_test(T*)
     BOOST_TEST(x1(T(10)) == HASH_NAMESPACE::hash_value(T(10)));
     BOOST_TEST(x1(T(25)) == HASH_NAMESPACE::hash_value(T(25)));
 
-    if (limits::is_integer)
-    {
-        if(limits::is_signed ||
-            limits::digits <= boost::hash_detail::limits<std::size_t>::digits)
-        {
-            BOOST_TEST(HASH_NAMESPACE::hash_value(T(-5)) == (std::size_t)T(-5));
-        }
-        BOOST_TEST(HASH_NAMESPACE::hash_value(T(0)) == (std::size_t)T(0u));
-        BOOST_TEST(HASH_NAMESPACE::hash_value(T(10)) == (std::size_t)T(10u));
-        BOOST_TEST(HASH_NAMESPACE::hash_value(T(25)) == (std::size_t)T(25u));
-    }
+    numeric_extra_tests<T>();
 #endif
 }
 
