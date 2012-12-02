@@ -34,8 +34,8 @@ to design high performance code like memory allocation algorithms.
 
 While intrusive containers were and are widely used in C, they
 became more and more forgotten in C++ due to the presence of the standard
-containers which don't support intrusive techniques.[*Boost.Intrusive] not only
-reintroduces this technique to C++, but also encapsulates the implementation in
+containers which don't support intrusive techniques.[*Boost.Intrusive] wants to
+push intrusive containers usage encapsulating the implementation in
 STL-like interfaces. Hence anyone familiar with standard containers can easily use
 [*Boost.Intrusive].
 
@@ -3356,6 +3356,22 @@ To analyze the thread safety, consider the following points:
 
 [endsect]
 
+[section:equal_range_stability Stability and insertion with hint in ordered associative containers with equivalent keys]
+
+[*Boost.Intrusive] ordered associative containers with equivalent keys offer stability guarantees, following
+[@http://open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#233 C++ standard library's defect #233 resolution],
+explained in document [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2005/n1780.html Comments on LWG issue 233: Insertion hints in associative containers].
+This means that:
+
+*  A ['Insert without hint] member function always insert at the upper bound of an equal range.
+*  A ['Insert with hint] member function inserts the new value [*before the hint] if hint's and new node's keys are equivalent.
+*  Implements Andrew Koenig ['as close as possible to hint] proposal. A new element is always be inserted as close to the hint as possible.
+   So, for example, if there is a subsequence of equivalent values, `a.begin()` as the hint means that the new element should be inserted
+   before the subsequence even if `a.begin()` is far away. This allows code to always append (or prepend) an equal range with something
+   as simple as: `m.insert(m.end(), new_node);` or `m.insert(m.begin(), new_node);`
+
+[endsect]
+
 [section:obtaining_same_type_reducing_space Obtaining the same types and reducing symbol length]
 
 The flexible option specification mechanism used by [*Boost.Intrusive] for hooks and containers
@@ -3820,8 +3836,8 @@ The disperse list is again the slowest.
 Intrusive containers can offer performance benefits that cannot be achieved with
 equivalent non-intrusive containers. Memory locality improvements are noticeable
 when the objects to be inserted are small. Minimizing memory allocation/deallocation calls is also
-an important factor and intrusive containers make this simple if the user allocates
-all the objects to be inserted in intrusive containers in containers like `std::vector` or `std::deque`.
+an important factor and intrusive containers make this simple if all objects 
+to be inserted in intrusive containers are allocated using `std::vector` or `std::deque`.
 
 [endsect]
 
@@ -3831,9 +3847,11 @@ all the objects to be inserted in intrusive containers in containers like `std::
 
 [section:release_notes_boost_1_53_00 Boost 1.53 Release]
 
+*  Fixed bug [@https://svn.boost.org/trac/boost/ticket/7529 #7529].
 *  Fixed GCC -Wshadow warnings.
 *  Added missing `explicit` keyword in several intrusive container constructors.
 *  Replaced deprecated BOOST_NO_XXXX with newer BOOST_NO_CXX11_XXX macros.
+*  Small documentation fixes.
 
 [endsect]
 
