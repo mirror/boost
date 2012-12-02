@@ -8,7 +8,6 @@
  */
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/smart_ptr/make_shared_array.hpp>
-#include <string>
 
 int main() {
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
@@ -21,6 +20,22 @@ int main() {
     }
     {
         boost::shared_ptr<int[][2]> a1 = boost::make_shared<int[][2]>({ {0, 1}, {2, 3} });
+        BOOST_TEST(a1[0][0] == 0);
+        BOOST_TEST(a1[0][1] == 1);
+        BOOST_TEST(a1[1][0] == 2);
+        BOOST_TEST(a1[1][1] == 3);
+    }
+#endif
+#if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
+    {
+        boost::shared_ptr<int[4]> a1 = boost::make_shared<int[4]>({0, 1, 2, 3});
+        BOOST_TEST(a1[0] == 0);
+        BOOST_TEST(a1[1] == 1);
+        BOOST_TEST(a1[2] == 2);
+        BOOST_TEST(a1[3] == 3);
+    }
+    {
+        boost::shared_ptr<int[2][2]> a1 = boost::make_shared<int[2][2]>({ {0, 1}, {2, 3} });
         BOOST_TEST(a1[0][0] == 0);
         BOOST_TEST(a1[0][1] == 1);
         BOOST_TEST(a1[1][0] == 2);
@@ -39,22 +54,6 @@ int main() {
         BOOST_TEST(a1[0][0][1] == 1);
         BOOST_TEST(a1[1][1][0] == 2);
         BOOST_TEST(a1[1][1][1] == 3);
-    }
-#endif
-#if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
-    {
-        boost::shared_ptr<int[4]> a1 = boost::make_shared<int[4]>({0, 1, 2, 3});
-        BOOST_TEST(a1[0] == 0);
-        BOOST_TEST(a1[1] == 1);
-        BOOST_TEST(a1[2] == 2);
-        BOOST_TEST(a1[3] == 3);
-    }
-    {
-        boost::shared_ptr<int[2][2]> a1 = boost::make_shared<int[2][2]>({ {0, 1}, {2, 3} });
-        BOOST_TEST(a1[0][0] == 0);
-        BOOST_TEST(a1[0][1] == 1);
-        BOOST_TEST(a1[1][0] == 2);
-        BOOST_TEST(a1[1][1] == 3);
     }
     {
         boost::shared_ptr<int[2][2]> a1 = boost::make_shared<int[2][2]>({ 0, 1 });
