@@ -32,7 +32,7 @@ private:
 
     int fetch_()
     {
-        std::streamsize num = std::min(
+        std::streamsize num = (std::min)(
             static_cast< std::streamsize >( gptr() - eback() ), pb_size);
 
         std::memmove(

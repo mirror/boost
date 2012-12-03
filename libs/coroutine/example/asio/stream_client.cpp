@@ -29,7 +29,7 @@ int main( int argc, char* argv[])
                 desc),
             vm);
         boost::program_options::notify( vm);
- 
+
         if ( vm.count("help") ) {
             std::cout << desc << std::endl;
             return EXIT_SUCCESS;
