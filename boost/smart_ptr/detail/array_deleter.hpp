@@ -24,13 +24,18 @@ namespace boost {
                   object(0) {
             }
             ~array_deleter() {
-                destroy();
+                destroy(size);
             }
             void construct(T* memory) {
                 object = memory;
                 for (std::size_t i = 0; i < size; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T();
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T();
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
@@ -38,39 +43,59 @@ namespace boost {
             void construct(T* memory, Args&&... args) {
                 object = memory;
                 for (std::size_t i = 0; i < size; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T(args...);
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T(args...);
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
 #endif
             void construct_list(T* memory, const T* list) {
                 object = memory;
                 for (std::size_t i = 0; i < size; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T(list[i]);
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T(list[i]);
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
             void construct_list(T* memory, const T* list, std::size_t n) {
                 object = memory;
                 for (std::size_t i = 0; i < size; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T(list[i % n]);
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T(list[i % n]);
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
             void construct_noinit(T* memory) {
                 object = memory;
                 for (std::size_t i = 0; i < size; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T;
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T;
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
             void operator()(const void*) {
-                destroy();
+                destroy(size);
             }
         private:
-            void destroy() {
+            void destroy(std::size_t n) {
                 if (object) {
-                    for (std::size_t i = size; i > 0; ) {
+                    for (std::size_t i = n; i > 0; ) {
                         object[--i].~T();
                     }
                     object = 0;
@@ -86,13 +111,18 @@ namespace boost {
                 : object(0) {
             }
             ~array_deleter() {
-                destroy();
+                destroy(N);
             }
             void construct(T* memory) {
                 object = memory;
                 for (std::size_t i = 0; i < N; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T();
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T();
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
@@ -100,39 +130,59 @@ namespace boost {
             void construct(T* memory, Args&&... args) {
                 object = memory;
                 for (std::size_t i = 0; i < N; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T(args...);
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T(args...);
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
 #endif
             void construct_list(T* memory, const T* list) {
                 object = memory;
                 for (std::size_t i = 0; i < N; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T(list[i]);
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T(list[i]);
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
             void construct_list(T* memory, const T* list, std::size_t n) {
                 object = memory;
                 for (std::size_t i = 0; i < N; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T(list[i % n]);
+                    try {
+                        void* p1 = memory + i;                        
+                        ::new(p1) T(list[i % n]);
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
             void construct_noinit(T* memory) {
                 object = memory;
                 for (std::size_t i = 0; i < N; i++) {
-                    void* p1 = object + i;
-                    ::new(p1) T;
+                    try {
+                        void* p1 = memory + i;
+                        ::new(p1) T;
+                    } catch (...) {
+                        destroy(i);
+                        throw;
+                    }
                 }
             }
             void operator()(const void*) {
-                destroy();
+                destroy(N);
             }
         private:
-            void destroy() {
+            void destroy(std::size_t n) {
                 if (object) {
-                    for (std::size_t i = N; i > 0; ) {
+                    for (std::size_t i = n; i > 0; ) {
                         object[--i].~T();
                     }
                     object = 0;

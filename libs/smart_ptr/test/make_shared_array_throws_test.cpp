@@ -43,6 +43,22 @@ int main() {
     } catch (...) {
         BOOST_TEST(type::instances == 0);
     }
+#if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
+    BOOST_TEST(type::instances == 0);
+    try {
+        boost::make_shared<type[6]>();
+        BOOST_ERROR("make_shared did not throw");
+    } catch (...) {
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    try {
+        boost::make_shared<type[3][2]>();
+        BOOST_ERROR("make_shared did not throw");
+    } catch (...) {
+        BOOST_TEST(type::instances == 0);
+    }
+#endif
     BOOST_TEST(type::instances == 0);
     try {
         boost::make_shared_noinit<type[]>(6);
