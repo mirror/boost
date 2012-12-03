@@ -126,7 +126,7 @@ public:
         ::close( fd);
         if ( ! limit) throw std::bad_alloc();
 
-        std::memset( limit, size_, '\0');
+        std::memset( limit, '\0', size_);
 
         // conforming to POSIX.1-2001
         const int result( ::mprotect( limit, pagesize(), PROT_NONE) );

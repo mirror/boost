@@ -123,7 +123,7 @@ public:
         void * limit = ::VirtualAlloc( 0, size_, MEM_COMMIT, PAGE_READWRITE);
         if ( ! limit) throw std::bad_alloc();
 
-        std::memset( limit, size_, '\0');
+        std::memset( limit, '\0', size_);
 
         DWORD old_options;
         const BOOL result = ::VirtualProtect(
