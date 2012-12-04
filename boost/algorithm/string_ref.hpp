@@ -16,6 +16,7 @@
 #define BOOST_STRING_REF_HPP
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 
 #include <stdexcept>
 #include <algorithm>
@@ -144,11 +145,16 @@ namespace boost {
         // basic_string_ref string operations
         BOOST_CONSTEXPR
         basic_string_ref substr(size_type pos, size_type n=npos) const {
-//          if ( pos > size()) throw std::out_of_range ( "string_ref::substr" );
-//          if ( n == npos || pos + n > size()) n = size () - pos;
-//          return basic_string_ref ( data() + pos, n );
+#if BOOST_WORKAROUND(BOOST_MSVC, <= 1600)
+            // Looks like msvc 8 and 9 have a codegen bug when one branch of
+            // a conditional operator is a throw expression. -EAN 2012/12/04
+            if ( pos > size()) throw std::out_of_range ( "string_ref::substr" );
+            if ( n == npos || pos + n > size()) n = size () - pos;
+            return basic_string_ref ( data() + pos, n );
+#else
             return pos > size() ? throw std::out_of_range ( "string_ref::substr" ) :
                 basic_string_ref ( data() + pos, n == npos || pos + n > size() ? size() - pos : n );
+#endif
             }
         
         int compare(basic_string_ref x) const {
