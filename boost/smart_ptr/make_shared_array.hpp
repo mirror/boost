@@ -167,6 +167,45 @@ namespace boost {
         d2->construct_list(p2, p3, M);
         return boost::shared_ptr<T>(s1, p1);
     }
+#if defined(BOOST_HAS_RVALUE_REFS)
+    template<typename T>
+    inline typename boost::detail::sp_if_array<T>::type
+    make_shared(std::size_t size, 
+        typename boost::detail::array_base<T>::type&& value) {
+        typedef typename boost::detail::array_inner<T>::type T1;
+        typedef typename boost::detail::array_base<T1>::type T2;
+        T1* p1 = 0;
+        T2* p2 = 0;
+        std::size_t n1 = size * boost::detail::array_total<T1>::size;
+        boost::detail::make_array_helper<T2[]> a1(n1, &p2);
+        boost::detail::array_deleter<T2[]> d1(n1);
+        boost::shared_ptr<T> s1(p1, d1, a1);
+        boost::detail::array_deleter<T2[]>* d2;
+        p1 = reinterpret_cast<T1*>(p2);
+        d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
+        d2->construct(p2, boost::detail::sp_forward<T2>(value));
+        return boost::shared_ptr<T>(s1, p1);
+    }
+    template<typename T>
+    inline typename boost::detail::sp_if_size_array<T>::type
+    make_shared(typename boost::detail::array_base<T>::type&& value) {
+        typedef typename boost::detail::array_inner<T>::type T1;
+        typedef typename boost::detail::array_base<T1>::type T2;
+        enum { 
+            N = boost::detail::array_total<T>::size 
+        };
+        T1* p1 = 0;
+        T2* p2 = 0;
+        boost::detail::make_array_helper<T2[N]> a1(&p2);
+        boost::detail::array_deleter<T2[N]> d1;
+        boost::shared_ptr<T> s1(p1, d1, a1);
+        boost::detail::array_deleter<T2[N]>* d2;
+        p1 = reinterpret_cast<T1*>(p2);
+        d2 = get_deleter<boost::detail::array_deleter<T2[N]> >(s1);
+        d2->construct(p2, boost::detail::sp_forward<T2>(value));
+        return boost::shared_ptr<T>(s1, p1);
+    }
+#endif
 #endif
     template<typename T>
     inline typename boost::detail::sp_if_array<T>::type
