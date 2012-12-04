@@ -26,14 +26,6 @@ namespace boost {
             typedef typename array_base<T>::type type;
         };
         template<typename T>
-        struct array_size;
-        template<typename T, std::size_t N>
-        struct array_size<T[N]> {
-            enum {
-                size = N
-            };
-        };
-        template<typename T>
         struct array_total {
             enum {
                 size = 1
