@@ -270,7 +270,7 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
       <para>
         The following library features are
         deprecated, and are only available if your compiler is NOT using
-        variadic templates (i.e. BOOST_NO_VARIADIC_TEMPLATES is defined
+        variadic templates (i.e. BOOST_NO_CXX11_VARIADIC_TEMPLATES is defined
         by Boost.Config).
         <itemizedlist>
           <listitem>

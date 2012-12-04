@@ -10,12 +10,12 @@
 #include <boost/config.hpp>
 #include <boost/test/minimal.hpp>
 
-#ifndef BOOST_NO_VARIADIC_TEMPLATES
+#ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
 int test_main(int, char* [])
 {
   return 0;
 }
-#else // BOOST_NO_VARIADIC_TEMPLATES
+#else // BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
 #include <boost/optional.hpp>
 #include <boost/ref.hpp>
@@ -300,4 +300,4 @@ test_main(int, char* [])
   return 0;
 }
 
-#endif // BOOST_NO_VARIADIC_TEMPLATES
+#endif // BOOST_NO_CXX11_VARIADIC_TEMPLATES
