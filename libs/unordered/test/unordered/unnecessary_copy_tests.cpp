@@ -195,7 +195,7 @@ namespace unnecessary_copy_tests
         reset();
         T x;
         x.emplace(source<BOOST_DEDUCED_TYPENAME T::value_type>());
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         COPY_COUNT(1);
 #else
         COPY_COUNT(2);
@@ -215,7 +215,7 @@ namespace unnecessary_copy_tests
         BOOST_DEDUCED_TYPENAME T::value_type a;
         COPY_COUNT(1); MOVE_COUNT(0);
         x.emplace(boost::move(a));
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         COPY_COUNT(1); MOVE_COUNT(1);
 #else
         // Since std::pair isn't movable, move only works for sets.
@@ -249,7 +249,7 @@ namespace unnecessary_copy_tests
         BOOST_DEDUCED_TYPENAME T::value_type a;
         COPY_COUNT(1); MOVE_COUNT(0);
         x.emplace(boost::move(a));
-#if defined(BOOST_NO_RVALUE_REFERENCES)
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         COPY_COUNT(2); MOVE_COUNT(0);
 #else
         COPY_COUNT(1); MOVE_COUNT(1);
@@ -285,8 +285,8 @@ namespace unnecessary_copy_tests
         // the existing element.
         reset();
         x.emplace();
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES) || \
-    !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) || \
+    !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         // source_cost doesn't make much sense here, but it seems to fit.
         COPY_COUNT(1); MOVE_COUNT(source_cost);
 #else
@@ -313,7 +313,7 @@ namespace unnecessary_copy_tests
         // No move should take place.
         reset();
         x.emplace(boost::move(a));
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         COPY_COUNT(0); MOVE_COUNT(0);
 #else
         COPY_COUNT(0); MOVE_COUNT(1);

@@ -777,7 +777,7 @@ namespace boost { namespace unordered { namespace detail {
     // rvalue parameters when type can't be a BOOST_RV_REF(T) parameter
     // e.g. for int
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 #   define BOOST_UNORDERED_RV_REF(T) BOOST_RV_REF(T)
 #else
     struct please_ignore_this_overload {

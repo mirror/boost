@@ -290,13 +290,8 @@ namespace boost { namespace unordered { namespace detail {
             {
                 iterator n2 = other.find_matching_node(n1);
 
-#if !defined(BOOST_UNORDERED_DEPRECATED_EQUALITY)
                 if (!n2.node_ || *n1 != *n2)
                     return false;
-#else
-                if (!n2.node_ || !extractor::compare_mapped(*n1, *n2))
-                    return false;
-#endif
             }
     
             return true;
@@ -358,8 +353,8 @@ namespace boost { namespace unordered { namespace detail {
             return *add_node(a, key_hash);
         }
 
-#if defined(BOOST_NO_RVALUE_REFERENCES)
-#   if defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+#   if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         emplace_return emplace(boost::unordered::detail::emplace_args1<
                 boost::unordered::detail::please_ignore_this_overload> const&)
         {
@@ -379,7 +374,7 @@ namespace boost { namespace unordered { namespace detail {
         template <BOOST_UNORDERED_EMPLACE_TEMPLATE>
         emplace_return emplace(BOOST_UNORDERED_EMPLACE_ARGS)
         {
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
             return emplace_impl(
                 extractor::extract(BOOST_UNORDERED_EMPLACE_FORWARD),
                 BOOST_UNORDERED_EMPLACE_FORWARD);
@@ -390,7 +385,7 @@ namespace boost { namespace unordered { namespace detail {
 #endif
         }
 
-#if defined(BOOST_NO_VARIADIC_TEMPLATES)
+#if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template <typename A0>
         emplace_return emplace(
                 boost::unordered::detail::emplace_args1<A0> const& args)

@@ -220,4 +220,12 @@ C++11 support has resulted in some breaking changes:
   for C++11 allocators.
 * Simplified the implementation a bit. Hopefully more robust.
 
+[h2 Boost 1.53.0]
+
+* Remove support for the old pre-standard variadic pair constructors, and
+  equality implementation. Both have been deprecated since Boost 1.48.
+* Remove use of deprecated config macros.
+* More internal implementation changes, including a much simpler
+  implementation of `erase`.
+
 [endsect]

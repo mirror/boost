@@ -658,20 +658,6 @@ UNORDERED_AUTO_TEST(map_emplace_test)
     x.emplace(2, 3);
     BOOST_TEST(x.find(2) != x.end() &&
         x.find(2)->second == overloaded_constructor(3));
-
-#if defined (BOOST_UNORDERED_DEPRECATED_PAIR_CONSTRUCT)
-    x.emplace(1);
-    BOOST_TEST(x.find(1) != x.end() &&
-        x.find(1)->second == overloaded_constructor());
-
-    x.emplace(4, 5, 6);
-    BOOST_TEST(x.find(4) != x.end() &&
-        x.find(4)->second == overloaded_constructor(5, 6));
-
-    x.emplace(7, 8, 9, 10);
-    BOOST_TEST(x.find(7) != x.end() &&
-        x.find(7)->second == overloaded_constructor(8, 9, 10));
-#endif
 }
 
 UNORDERED_AUTO_TEST(set_emplace_test)
@@ -705,6 +691,19 @@ UNORDERED_AUTO_TEST(set_emplace_test)
     BOOST_TEST(x.find(check) != x.end() && *x.find(check) == check);
 }
 
+struct derived_from_piecewise_construct_t :
+    boost::unordered::piecewise_construct_t {};
+
+derived_from_piecewise_construct_t piecewise_rvalue() {
+    return derived_from_piecewise_construct_t();
+}
+
+struct convertible_to_piecewise {
+    operator boost::unordered::piecewise_construct_t() const {
+        return boost::unordered::piecewise_construct;
+    }
+};
+
 UNORDERED_AUTO_TEST(map_emplace_test2)
 {
     boost::unordered_map<overloaded_constructor, overloaded_constructor> x;
@@ -713,13 +712,18 @@ UNORDERED_AUTO_TEST(map_emplace_test2)
     BOOST_TEST(x.find(overloaded_constructor()) != x.end() &&
         x.find(overloaded_constructor())->second == overloaded_constructor());
 
-    x.emplace(boost::unordered::piecewise_construct, boost::make_tuple(1), boost::make_tuple());
+    x.emplace(convertible_to_piecewise(), boost::make_tuple(1), boost::make_tuple());
     BOOST_TEST(x.find(overloaded_constructor(1)) != x.end() &&
         x.find(overloaded_constructor(1))->second == overloaded_constructor());
 
-    x.emplace(boost::unordered::piecewise_construct, boost::make_tuple(2,3), boost::make_tuple(4,5,6));
+    x.emplace(piecewise_rvalue(), boost::make_tuple(2,3), boost::make_tuple(4,5,6));
     BOOST_TEST(x.find(overloaded_constructor(2,3)) != x.end() &&
         x.find(overloaded_constructor(2,3))->second == overloaded_constructor(4,5,6));
+
+    derived_from_piecewise_construct_t d;
+    x.emplace(d, boost::make_tuple(9,3,1), boost::make_tuple(10));
+    BOOST_TEST(x.find(overloaded_constructor(9,3,1)) != x.end() &&
+        x.find(overloaded_constructor(9,3,1))->second == overloaded_constructor(10));
 }
 
 UNORDERED_AUTO_TEST(set_emplace_test2)
