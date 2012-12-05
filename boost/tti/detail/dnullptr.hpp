@@ -9,14 +9,14 @@
 
 #include <boost/config.hpp>
 
-#if defined(BOOST_NO_NULLPTR)
+#if defined(BOOST_NO_CXX11_NULLPTR)
 
 #define BOOST_TTI_DETAIL_NULLPTR 0
 
-#else // !BOOST_NO_NULLPTR
+#else // !BOOST_NO_CXX11_NULLPTR
 
 #define BOOST_TTI_DETAIL_NULLPTR nullptr
 
-#endif // BOOST_NO_NULLPTR
+#endif // BOOST_NO_CXX11_NULLPTR
 
 #endif // BOOST_TTI_DETAIL_NULLPTR_HPP
