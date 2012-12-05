@@ -38,7 +38,20 @@ namespace boost {
                     throw;
                 }
             }
-#if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
+#if defined(BOOST_HAS_RVALUE_REFS)
+            void construct(T* memory, T&& value) {
+                std::size_t i = 0;
+                try {
+                    for (object = memory; i < size; i++) {
+                        void* p1 = memory + i;
+                        ::new(p1) T(value);
+                    }
+                } catch (...) {
+                    destroy(i);
+                    throw;
+                }
+            }
+#if defined(BOOST_HAS_VARIADIC_TMPL)
             template<typename... Args>
             void construct(T* memory, Args&&... args) {
                 std::size_t i = 0;
@@ -52,6 +65,7 @@ namespace boost {
                     throw;
                 }
             }
+#endif
 #endif
             void construct_list(T* memory, const T* list) {
                 std::size_t i = 0;
@@ -125,7 +139,20 @@ namespace boost {
                     throw;
                 }
             }
-#if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
+#if defined(BOOST_HAS_RVALUE_REFS)
+            void construct(T* memory, T&& value) {
+                std::size_t i = 0;
+                try {
+                    for (object = memory; i < N; i++) {
+                        void* p1 = memory + i;
+                        ::new(p1) T(value);
+                    }
+                } catch (...) {
+                    destroy(i);
+                    throw;
+                }
+            }
+#if defined(BOOST_HAS_VARIADIC_TMPL)
             template<typename... Args>
             void construct(T* memory, Args&&... args) {
                 std::size_t i = 0;
@@ -139,6 +166,7 @@ namespace boost {
                     throw;
                 }
             }
+#endif
 #endif
             void construct_list(T* memory, const T* list) {
                 std::size_t i = 0;
