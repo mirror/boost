@@ -52,21 +52,21 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_type_'name'`
     
-    class T = enclosing type
+    class TTI_T = enclosing type
     ]
     [[headerref boost/tti/has_type.hpp `has_type.hpp`]]
   ]
   [
-    [Type with check]
+    [Type with lambda expression]
     [
     [macroref BOOST_TTI_HAS_TYPE](name)
     ]
     [
     `has_type_'name'`
     
-    class T = enclosing type
+    class TTI_T = enclosing type
     
-    class U = type to check against
+    class TTI_U = lambda expression invoked with the inner type and returning a boolean constant
     ]
     [[headerref boost/tti/has_type.hpp `has_type.hpp`]]
   ]
@@ -78,7 +78,7 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_template_'name'`
     
-    class T = enclosing type
+    class TTI_T = enclosing type
     
     All of the template parameters must be template type parameters ( 'class' or 'typename' parameters )
     ]
@@ -92,7 +92,7 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_template_'name'`
     
-    class T = enclosing type
+    class TTI_T = enclosing type
     
     All of the template parameters must be template type parameters ( 'class' or 'typename' parameters )
     ]
@@ -106,7 +106,7 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_template_'name'`
     
-    class T = enclosing type
+    class TTI_T = enclosing type
     ]
     [[headerref boost/tti/has_template.hpp `has_template.hpp`]]
   ]
@@ -118,7 +118,7 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_template_'name'`
     
-    class T = enclosing type
+    class TTI_T = enclosing type
     ]
     [[headerref boost/tti/has_template.hpp `has_template.hpp`]]
   ]
@@ -130,12 +130,12 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_member_data_'name'`
     
-    class T = enclosing type 
-                  OR 
-              pointer to member data ( 'MemberData_Type Enclosing_Type::*' )
+    class TTI_T = enclosing type 
+                      OR 
+                  pointer to member data ( 'MemberData_Type Enclosing_Type::*' )
     
-    class R = (optional) data type
-              If the first parameter is the pointer to member data this must not be specified.
+    class TTI_R = (optional) data type
+                  If the first parameter is the pointer to member data this must not be specified.
     ]
     [[headerref boost/tti/has_member_data.hpp `has_member_data.hpp`]]
   ]
@@ -147,22 +147,22 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_member_function_'name'`
     
-    class T   = enclosing type 
-                    OR 
-                pointer to member function 
-                ( 'Return_Type Enclosing_Type::* ( Zero or more comma-separated parameter types )' )
+    class TTI_T   = enclosing type 
+                        OR 
+                    pointer to member function 
+                    ( 'Return_Type Enclosing_Type::* ( Zero or more comma-separated parameter types )' )
     
-    class R   = (optional) return type if the first parameter is the enclosing type.
-                If the first parameter is the pointer to member function this must not be specified.
+    class TTI_R   = (optional) return type if the first parameter is the enclosing type.
+                    If the first parameter is the pointer to member function this must not be specified.
     
-    class FS  = (optional) function parameter types as a Boost MPL forward sequence.
-                If the first parameter is the pointer to member function this must not be specified.
-                If there are no function parameters this does not have to be specified.
-                Defaults to boost::mpl::vector<>.
+    class TTI_FS  = (optional) function parameter types as a Boost MPL forward sequence.
+                    If the first parameter is the pointer to member function this must not be specified.
+                    If there are no function parameters this does not have to be specified.
+                    Defaults to boost::mpl::vector<>.
     
-    class TAG = (optional) Boost `function_types` tag type.
-                If the first parameter is the pointer to member function this must not be specified.
-                Defaults to `boost::function_types::null_tag`.
+    class TTI_TAG = (optional) Boost `function_types` tag type.
+                    If the first parameter is the pointer to member function this must not be specified.
+                    Defaults to `boost::function_types::null_tag`.
     ]
     [[headerref boost/tti/has_member_function.hpp `has_member_function.hpp`]]
   ]
@@ -174,9 +174,9 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_static_member_data_'name'`
     
-    class T = enclosing type
+    class TTI_T = enclosing type
     
-    class Type = data type
+    class TTI_Type = data type
     ]
     [[headerref boost/tti/has_static_member_data.hpp `has_static_member_data.hpp`]]
   ]
@@ -188,20 +188,20 @@ of the boolean constant value. This is always boost::mpl::bool_.
     [
     `has_static_member_function_'name'`
     
-    class T   = enclosing type
+    class TTI_T   = enclosing type
     
-    class R   = return type 
-                    OR 
-                function type ( 'Return_Type (Zero or more comma-separated parameter types)' )
+    class TTI_R   = return type 
+                        OR 
+                    function type ( 'Return_Type (Zero or more comma-separated parameter types)' )
     
-    class FS  = (optional) function parameter types as a Boost MPL forward sequence.
-                If the second parameter is the function type this must not be specified.
-                If there are no function parameters, this does not have to be specified.
-                Defaults to boost::mpl::vector<>.
+    class TTI_FS  = (optional) function parameter types as a Boost MPL forward sequence.
+                    If the second parameter is the function type this must not be specified.
+                    If there are no function parameters, this does not have to be specified.
+                    Defaults to boost::mpl::vector<>.
     
-    class TAG = (optional) Boost `function_types` tag type.
-                If the second parameter is the function type this must not be specified.
-                Defaults to `boost::function_types::null_tag`.
+    class TTI_TAG = (optional) Boost `function_types` tag type.
+                    If the second parameter is the function type this must not be specified.
+                    Defaults to `boost::function_types::null_tag`.
     ]
     [[headerref boost/tti/has_static_member_function.hpp `has_static_member_function.hpp`]]
   ]
