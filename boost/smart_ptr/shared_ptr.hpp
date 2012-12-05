@@ -62,11 +62,6 @@ class enable_shared_from_raw;
 namespace detail
 {
 
-struct static_cast_tag {};
-struct const_cast_tag {};
-struct dynamic_cast_tag {};
-struct polymorphic_cast_tag {};
-
 // sp_element, element_type
 
 template< class T > struct sp_element
@@ -420,36 +415,6 @@ public:
     {
     }
 
-    template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, boost::detail::static_cast_tag)
-    BOOST_NOEXCEPT : px(static_cast<element_type *>(r.px)), pn(r.pn)
-    {
-    }
-
-    template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, boost::detail::const_cast_tag)
-    BOOST_NOEXCEPT : px(const_cast<element_type *>(r.px)), pn(r.pn)
-    {
-    }
-
-    template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, boost::detail::dynamic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
-    {
-        if(px == 0) // need to allocate new counter -- the cast failed
-        {
-            pn = boost::detail::shared_count();
-        }
-    }
-
-    template<class Y>
-    shared_ptr(shared_ptr<Y> const & r, boost::detail::polymorphic_cast_tag): px(dynamic_cast<element_type *>(r.px)), pn(r.pn)
-    {
-        if(px == 0)
-        {
-            boost::throw_exception(std::bad_cast());
-        }
-    }
-
 #ifndef BOOST_NO_AUTO_PTR
 
     template<class Y>
@@ -723,42 +688,44 @@ template<class T> inline void swap(shared_ptr<T> & a, shared_ptr<T> & b) BOOST_N
     a.swap(b);
 }
 
-template<class T, class U> shared_ptr<T> static_pointer_cast(shared_ptr<U> const & r)
+template<class T, class U> shared_ptr<T> static_pointer_cast( shared_ptr<U> const & r ) BOOST_NOEXCEPT
 {
-    return shared_ptr<T>(r, boost::detail::static_cast_tag());
+    (void) static_cast< T* >( static_cast< U* >( 0 ) );
+
+    typedef typename shared_ptr<T>::element_type E;
+
+    E * p = static_cast< E* >( r.get() );
+    return shared_ptr<T>( r, p );
 }
 
-template<class T, class U> shared_ptr<T> const_pointer_cast(shared_ptr<U> const & r)
+template<class T, class U> shared_ptr<T> const_pointer_cast( shared_ptr<U> const & r ) BOOST_NOEXCEPT
 {
-    return shared_ptr<T>(r, boost::detail::const_cast_tag());
+    (void) const_cast< T* >( static_cast< U* >( 0 ) );
+
+    typedef typename shared_ptr<T>::element_type E;
+
+    E * p = const_cast< E* >( r.get() );
+    return shared_ptr<T>( r, p );
 }
 
-template<class T, class U> shared_ptr<T> dynamic_pointer_cast(shared_ptr<U> const & r)
+template<class T, class U> shared_ptr<T> dynamic_pointer_cast( shared_ptr<U> const & r ) BOOST_NOEXCEPT
 {
-    return shared_ptr<T>(r, boost::detail::dynamic_cast_tag());
+    (void) dynamic_cast< T* >( static_cast< U* >( 0 ) );
+
+    typedef typename shared_ptr<T>::element_type E;
+
+    E * p = dynamic_cast< E* >( r.get() );
+    return p? shared_ptr<T>( r, p ): shared_ptr<T>();
 }
 
-// shared_*_cast names are deprecated. Use *_pointer_cast instead.
-
-template<class T, class U> shared_ptr<T> shared_static_cast(shared_ptr<U> const & r)
+template<class T, class U> shared_ptr<T> reinterpret_pointer_cast( shared_ptr<U> const & r ) BOOST_NOEXCEPT
 {
-    return shared_ptr<T>(r, boost::detail::static_cast_tag());
-}
+    (void) reinterpret_cast< T* >( static_cast< U* >( 0 ) );
 
-template<class T, class U> shared_ptr<T> shared_dynamic_cast(shared_ptr<U> const & r)
-{
-    return shared_ptr<T>(r, boost::detail::dynamic_cast_tag());
-}
+    typedef typename shared_ptr<T>::element_type E;
 
-template<class T, class U> shared_ptr<T> shared_polymorphic_cast(shared_ptr<U> const & r)
-{
-    return shared_ptr<T>(r, boost::detail::polymorphic_cast_tag());
-}
-
-template<class T, class U> shared_ptr<T> shared_polymorphic_downcast(shared_ptr<U> const & r)
-{
-    BOOST_ASSERT(dynamic_cast<T *>(r.get()) == r.get());
-    return shared_static_cast<T>(r);
+    E * p = reinterpret_cast< E* >( r.get() );
+    return shared_ptr<T>( r, p );
 }
 
 // get_pointer() enables boost::mem_fn to recognize shared_ptr
