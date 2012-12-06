@@ -2,6 +2,7 @@
 #define BOOST_ATOMIC_DETAIL_GCC_X86_HPP
 
 //  Copyright (c) 2009 Helge Bahmann
+//  Copyright (c) 2012 Tim Blechmann
 //
 //  Distributed under the Boost Software License, Version 1.0.
 //  See accompanying file LICENSE_1_0.txt or copy at
@@ -1510,12 +1511,18 @@ private:
 };
 #endif
 
-#if defined(__i686__) && !defined(__x86_64__)
+#if !defined(__x86_64__) && (defined(__i686__) || defined (__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8))
 
 template<typename T>
 bool
 platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr)
 {
+#ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8
+    const T oldval = __sync_val_compare_and_swap(ptr, expected, desired);
+    const bool result = (oldval == expected);
+    expected = oldval;
+    return result;
+#else
     int scratch;
     T prev = expected;
     /* Make sure ebx is saved and restored properly in case
@@ -1543,6 +1550,7 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr)
     bool success = (prev == expected);
     expected = prev;
     return success;
+#endif
 }
 
 template<typename T>
@@ -1571,7 +1579,7 @@ platform_load64(const volatile T * ptr)
 }
 
 /* pull in 64-bit atomic type using cmpxchg8b above */
-#if defined(__i686__) && !defined(__x86_64__)
+#if !defined(__x86_64__) && (defined(__i686__) || defined (__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8))
 #include <boost/atomic/detail/cas64strong.hpp>
 #endif
 
