@@ -97,7 +97,10 @@ void test_metafunctions()
     test_optimized_types_to_string<__int64>();
 #endif
 
+#if !defined(BOOST_NO_SWPRINTF) && !defined(__MINGW32__)
     test_optimized_types_to_string<float>();
+#endif
+    
     test_optimized_types_to_string<std::string>();
     test_optimized_types_to_string<char*>();
     //test_optimized_types_to_string<char[5]>();
