@@ -1,11 +1,11 @@
 
-//  (C) Copyright Edward Diener 2011
+//  (C) Copyright Edward Diener 2011,2012
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_HAS_STATIC_MEMBER_DATA_HPP)
-#define TTI_HAS_STATIC_MEMBER_DATA_HPP
+#if !defined(BOOST_TTI_HAS_STATIC_MEMBER_DATA_HPP)
+#define BOOST_TTI_HAS_STATIC_MEMBER_DATA_HPP
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -48,7 +48,7 @@
   BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_DATA(trait,name) \
   template<class TTI_T,class TTI_Type> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<TTI_T,TTI_Type> \
+    BOOST_PP_CAT(trait,_detail_hsd)<TTI_T,TTI_Type> \
     { \
     }; \
 /**/
@@ -82,4 +82,4 @@
   ) \
 /**/
 
-#endif // TTI_HAS_STATIC_MEMBER_DATA_HPP
+#endif // BOOST_TTI_HAS_STATIC_MEMBER_DATA_HPP

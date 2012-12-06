@@ -4,8 +4,8 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#if !defined(TTI_MF_MEMBER_TYPE_HPP)
-#define TTI_MF_MEMBER_TYPE_HPP
+#if !defined(BOOST_TTI_MF_MEMBER_TYPE_HPP)
+#define BOOST_TTI_MF_MEMBER_TYPE_HPP
   
 #include <boost/mpl/not.hpp>
 #include <boost/type_traits/is_same.hpp>
@@ -62,4 +62,4 @@ namespace boost
     }
   }
   
-#endif // TTI_MF_MEMBER_TYPE_HPP
+#endif // BOOST_TTI_MF_MEMBER_TYPE_HPP

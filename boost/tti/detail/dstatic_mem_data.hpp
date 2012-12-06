@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2011
+//  (C) Copyright Edward Diener 2011,2012
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -18,7 +18,7 @@
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_DATA(trait,name) \
   template<class T,class Type> \
-  struct BOOST_PP_CAT(trait,_detail) \
+  struct BOOST_PP_CAT(trait,_detail_hsd) \
     { \
     template<bool,typename U> \
     struct menable_if; \
@@ -64,7 +64,7 @@
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_DATA(trait,name) \
   template<class T,class Type> \
-  struct BOOST_PP_CAT(trait,_detail) \
+  struct BOOST_PP_CAT(trait,_detail_hsd) \
     { \
     template<Type *> \
     struct helper; \
