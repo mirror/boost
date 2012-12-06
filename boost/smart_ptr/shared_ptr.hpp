@@ -418,17 +418,30 @@ public:
 #ifndef BOOST_NO_AUTO_PTR
 
     template<class Y>
-    explicit shared_ptr(std::auto_ptr<Y> & r): px(r.get()), pn()
+    explicit shared_ptr( std::auto_ptr<Y> & r ): px(r.get()), pn()
     {
         boost::detail::sp_assert_convertible< Y, T >();
 
         Y * tmp = r.get();
-        pn = boost::detail::shared_count(r);
+        pn = boost::detail::shared_count( r );
 
         boost::detail::sp_deleter_construct( this, tmp );
     }
 
-#if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+#if defined( BOOST_HAS_RVALUE_REFS )
+
+    template<class Y>
+    shared_ptr( std::auto_ptr<Y> && r ): px(r.get()), pn()
+    {
+        boost::detail::sp_assert_convertible< Y, T >();
+
+        Y * tmp = r.get();
+        pn = boost::detail::shared_count( r );
+
+        boost::detail::sp_deleter_construct( this, tmp );
+    }
+
+#elif !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
     template<class Ap>
     explicit shared_ptr( Ap r, typename boost::detail::sp_enable_if_auto_ptr<Ap, int>::type = 0 ): px( r.get() ), pn()
@@ -486,11 +499,20 @@ public:
     template<class Y>
     shared_ptr & operator=( std::auto_ptr<Y> & r )
     {
-        this_type(r).swap(*this);
+        this_type( r ).swap( *this );
         return *this;
     }
 
-#if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+#if defined( BOOST_HAS_RVALUE_REFS )
+
+    template<class Y>
+    shared_ptr & operator=( std::auto_ptr<Y> && r )
+    {
+        this_type( static_cast< std::auto_ptr<Y> && >( r ) ).swap( *this );
+        return *this;
+    }
+
+#elif !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
     template<class Ap>
     typename boost::detail::sp_enable_if_auto_ptr< Ap, shared_ptr & >::type operator=( Ap r )
@@ -502,6 +524,17 @@ public:
 #endif // BOOST_NO_SFINAE, BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #endif // BOOST_NO_AUTO_PTR
+
+#if !defined( BOOST_NO_CXX11_SMART_PTR )
+
+    template<class Y, class D>
+    shared_ptr & operator=( std::unique_ptr<Y, D> && r )
+    {
+        this_type( static_cast< std::unique_ptr<Y, D> && >( r ) ).swap(*this);
+        return *this;
+    }
+
+#endif
 
 // Move support
 
@@ -730,7 +763,7 @@ template<class T, class U> shared_ptr<T> reinterpret_pointer_cast( shared_ptr<U>
 
 // get_pointer() enables boost::mem_fn to recognize shared_ptr
 
-template<class T> inline T * get_pointer(shared_ptr<T> const & p) BOOST_NOEXCEPT
+template<class T> inline typename shared_ptr<T>::element_type * get_pointer(shared_ptr<T> const & p) BOOST_NOEXCEPT
 {
     return p.get();
 }
