@@ -42,18 +42,22 @@
 
               The metafunction types and return:
     
-                TTI_T   = the enclosing type in which to look for our 'name'.
+                TTI_T   = the enclosing type in which to look for our 'name'
+                                            OR
+                          a pointer to member function as a single type.                  
                 
-                TTI_R   = the return type of the member function.
+                TTI_R   = (optional) the return type of the member function
+                          if the first parameter is the enclosing type.
                 
-                TTI_FS  = an optional parameter which are the parameters of the member function as a boost::mpl forward sequence.
+                TTI_FS  = (optional) the parameters of the member function as a boost::mpl forward sequence
+                          if the first parameter is the enclosing type and the member function parameters
+                          are not empty.
                 
-                TTI_TAG = an optional parameter which is a boost::function_types tag to apply to the member function.
+                TTI_TAG = (optional) a boost::function_types tag to apply to the member function
+                          if the first parameter is the enclosing type and a tag is needed.
                 
                 returns = 'value' is true if the 'name' exists, 
                           with the appropriate member function type,
-                          as defined by TTI_R, TTI_FS, and TTI_TAG,
-                          within the enclosing TTI_T type, 
                           otherwise 'value' is false.
                           
 */
@@ -82,18 +86,22 @@
 
               The metafunction types and return:
     
-                TTI_T   = the enclosing type in which to look for our 'name'.
+                TTI_T   = the enclosing type in which to look for our 'name'
+                                            OR
+                          a pointer to member function as a single type.
                 
-                TTI_R   = the return type of the member function.
+                TTI_R   = (optional) the return type of the member function
+                          if the first parameter is the enclosing type.
                 
-                TTI_FS  = an optional parameter which are the parameters of the member function as a boost::mpl forward sequence.
+                TTI_FS  = (optional) the parameters of the member function as a boost::mpl forward sequence
+                          if the first parameter is the enclosing type and the member function parameters
+                          are not empty.
                 
-                TTI_TAG = an optional parameter which is a boost::function_types tag to apply to the member function.
+                TTI_TAG = (optional) a boost::function_types tag to apply to the member function
+                          if the first parameter is the enclosing type and a tag is needed.
                 
                 returns = 'value' is true if the 'name' exists, 
                           with the appropriate member function type,
-                          as defined by TTI_R, TTI_FS, and TTI_TAG,
-                          within the enclosing TTI_T type, 
                           otherwise 'value' is false.
                           
 */

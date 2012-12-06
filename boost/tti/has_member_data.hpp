@@ -41,12 +41,16 @@
 
               The metafunction types and return:
     
-                TTI_T    = the enclosing type in which to look for our 'name'.
+                TTI_T    = the enclosing type in which to look for our 'name'
+                                            OR
+                           The type of the member data in the form of a pointer
+                           to member data.
                 
-                TTI_Type = the type of the member data.
+                TTI_Type = (optional) The type of the member data if the first
+                           parameter is the enclosing type.
                 
-                returns  = 'value' is true if the 'name' exists, with the TTI_Type data type,
-                           within the enclosing TTI_T type, otherwise 'value' is false.
+                returns  = 'value' is true if the 'name' exists, with the correct data type,
+                           otherwise 'value' is false.
                           
 */
 #define BOOST_TTI_TRAIT_HAS_MEMBER_DATA(trait,name) \
@@ -81,12 +85,16 @@
 
               The metafunction types and return:
     
-                TTI_T    = the enclosing type in which to look for our 'name'.
+                TTI_T    = the enclosing type in which to look for our 'name'
+                                            OR
+                           The type of the member data in the form of a pointer
+                           to member data.
                 
-                TTI_Type = the type of the member data.
+                TTI_Type = (optional) The type of the member data if the first
+                           parameter is the enclosing type.
                 
-                returns  = 'value' is true if the 'name' exists, with the TTI_Type data type,
-                           within the enclosing TTI_T type, otherwise 'value' is false.
+                returns  = 'value' is true if the 'name' exists, with the correct data type,
+                           otherwise 'value' is false.
                           
 */
 #define BOOST_TTI_HAS_MEMBER_DATA(name) \
