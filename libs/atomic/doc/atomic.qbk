@@ -9,6 +9,7 @@
     [quickbook 1.4]
     [authors [Bahmann, Helge]]
     [copyright 2011 Helge Bahmann]
+    [copyright 2012 Tim Blechmann]
     [id atomic]
     [dirname atomic]
     [purpose Atomic operations]
@@ -415,6 +416,10 @@ All atomic objects supports the following operations:
       [Initialize to [^initial_value]]
     ]
     [
+      [`bool is_lock_free()`]
+      [Checks if the atomic object is lock-free]
+    ]
+    [
       [`T load(memory_order order)`]
       [Return current value]
     ]
@@ -645,6 +650,8 @@ limitations that cannot be lifted without compiler support:
   as "full compiler barriers" in this implementation. In corner
   cases this may lead to worse code than a C++11 compiler
   could generate.
+* [*No interprocess fallback]: using `atomic<T>` in shared memory only works
+  correctly, if `atomic<T>::is_lock_free == true`
 
 [endsect]
 
