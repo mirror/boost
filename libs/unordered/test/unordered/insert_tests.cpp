@@ -380,7 +380,7 @@ void move_emplace_tests(X*, test::random_generator generator)
         BOOST_DEDUCED_TYPENAME X::size_type old_bucket_count = x.bucket_count();
         float b = x.max_load_factor();
 
-		typename X::value_type value = *it;
+        typename X::value_type value = *it;
         x.emplace(boost::move(value));
         tracker.insert(*it);
         tracker.compare_key(x, *it);
@@ -549,13 +549,13 @@ UNORDERED_TEST(equivalent_emplace_tests1,
 
 UNORDERED_TEST(move_emplace_tests,
     ((test_set_std_alloc)(test_multimap_std_alloc)(test_set)(test_map)
-    	(test_multiset)(test_multimap))
+        (test_multiset)(test_multimap))
     ((default_generator)(generate_collisions))
 )
 
 UNORDERED_TEST(default_emplace_tests,
     ((test_set_std_alloc)(test_multimap_std_alloc)(test_set)(test_map)
-    	(test_multiset)(test_multimap))
+        (test_multiset)(test_multimap))
     ((default_generator)(generate_collisions))
 )
 
