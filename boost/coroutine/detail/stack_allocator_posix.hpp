@@ -93,7 +93,7 @@ public:
         BOOST_ASSERT( maximum_stacksize() >= minimum_stacksize() );
         return maximum_stacksize() == size
             ? size
-            : (std::min)( size, maximum_stacksize() );
+            : std::min( size, maximum_stacksize() );
     }
 
     static std::size_t minimum_stacksize()
@@ -126,7 +126,7 @@ public:
         ::close( fd);
         if ( ! limit) throw std::bad_alloc();
 
-        std::memset( limit, '\0', size_);
+        std::memset( limit, size_, '\0');
 
         // conforming to POSIX.1-2001
         const int result( ::mprotect( limit, pagesize(), PROT_NONE) );

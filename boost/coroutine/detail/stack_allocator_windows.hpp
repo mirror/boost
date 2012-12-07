@@ -89,14 +89,16 @@ public:
 
     static std::size_t default_stacksize()
     {
+        using namespace std;
+
         std::size_t size = 64 * 1024; // 64 kB
         if ( is_stack_unbound() )
-            return (std::max)( size, minimum_stacksize() );
+            return max( size, minimum_stacksize() );
 
         BOOST_ASSERT( maximum_stacksize() >= minimum_stacksize() );
         return maximum_stacksize() == minimum_stacksize()
             ? minimum_stacksize()
-            : (std::min)( size, maximum_stacksize() );
+            : min( size, maximum_stacksize() );
     }
 
     // because Windows seams not to provide a limit for minimum stacksize
@@ -123,7 +125,7 @@ public:
         void * limit = ::VirtualAlloc( 0, size_, MEM_COMMIT, PAGE_READWRITE);
         if ( ! limit) throw std::bad_alloc();
 
-        std::memset( limit, '\0', size_);
+        std::memset( limit, size_, '\0');
 
         DWORD old_options;
         const BOOL result = ::VirtualProtect(
