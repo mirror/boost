@@ -13,7 +13,6 @@
 #include <boost/smart_ptr/detail/array_deleter.hpp>
 #include <boost/smart_ptr/detail/array_traits.hpp>
 #include <boost/smart_ptr/detail/make_array_helper.hpp>
-#include <boost/smart_ptr/detail/sp_forward.hpp>
 #include <boost/smart_ptr/detail/sp_if_array.hpp>
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>

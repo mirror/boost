@@ -9,8 +9,8 @@
 #ifndef BOOST_SMART_PTR_DETAIL_ARRAY_DELETER_HPP
 #define BOOST_SMART_PTR_DETAIL_ARRAY_DELETER_HPP
 
-#include <boost/config.hpp>
-#include <cstddef>
+#include <boost/smart_ptr/detail/array_utility.hpp>
+#include <boost/smart_ptr/detail/sp_forward.hpp>
 
 namespace boost {
     namespace detail {
@@ -24,97 +24,46 @@ namespace boost {
                   object(0) {
             }
             ~array_deleter() {
-                destroy(size);
+                if (object) {
+                    array_destroy(object, size);
+                }
             }
             void construct(T* memory) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < size; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T();
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct(memory, size);
+                object = memory;
             }
 #if defined(BOOST_HAS_RVALUE_REFS)
             void construct(T* memory, T&& value) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < size; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T(value);
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct(memory, size, value);
+                object = memory;                
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL)
             template<typename... Args>
             void construct(T* memory, Args&&... args) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < size; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T(args...);
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct(memory, size, args...);
+                object = memory;
             }
 #endif
 #endif
             void construct_list(T* memory, const T* list) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < size; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T(list[i]);
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct_list(memory, size, list);
+                object = memory;
             }
             void construct_list(T* memory, const T* list, std::size_t n) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < size; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T(list[i % n]);
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct_list(memory, size, list, n);
+                object = memory;
             }
             void construct_noinit(T* memory) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < size; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T;
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct_noinit(memory, size);
+                object = memory;
             }
             void operator()(const void*) {
-                destroy(size);
-            }
-        private:
-            void destroy(std::size_t n) {
                 if (object) {
-                    for (std::size_t i = n; i > 0; ) {
-                        object[--i].~T();
-                    }
+                    array_destroy(object, size);
                     object = 0;
                 }
             }
+        private:
             std::size_t size;
             T* object;
         };
@@ -125,97 +74,46 @@ namespace boost {
                 : object(0) {
             }
             ~array_deleter() {
-                destroy(N);
+                if (object) {
+                    array_destroy(object, N);
+                }
             }
             void construct(T* memory) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < N; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T();
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct(memory, N);
+                object = memory;
             }
 #if defined(BOOST_HAS_RVALUE_REFS)
             void construct(T* memory, T&& value) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < N; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T(value);
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct(memory, N, value);
+                object = memory;                
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL)
             template<typename... Args>
             void construct(T* memory, Args&&... args) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < N; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T(args...);
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct(memory, N, args...);
+                object = memory;
             }
 #endif
 #endif
             void construct_list(T* memory, const T* list) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < N; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T(list[i]);
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct_list(memory, N, list);
+                object = memory;
             }
             void construct_list(T* memory, const T* list, std::size_t n) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < N; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T(list[i % n]);
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct_list(memory, N, list, n);
+                object = memory;
             }
             void construct_noinit(T* memory) {
-                std::size_t i = 0;
-                try {
-                    for (object = memory; i < N; i++) {
-                        void* p1 = memory + i;
-                        ::new(p1) T;
-                    }
-                } catch (...) {
-                    destroy(i);
-                    throw;
-                }
+                array_construct_noinit(memory, N);
+                object = memory;
             }
             void operator()(const void*) {
-                destroy(N);
-            }
-        private:
-            void destroy(std::size_t n) {
                 if (object) {
-                    for (std::size_t i = n; i > 0; ) {
-                        object[--i].~T();
-                    }
+                    array_destroy(object, N);
                     object = 0;
                 }
             }
+        private:
             T* object;
         };
     }
