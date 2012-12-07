@@ -49,9 +49,9 @@ namespace type_traits_detail {
 
     template <typename T>
     struct add_rvalue_reference_imp
-    { 
+    {
        typedef typename boost::type_traits_detail::add_rvalue_reference_helper
-                  <T, (!is_void<T>::value && !is_reference<T>::value) >::type type; 
+                  <T, (is_void<T>::value == false && is_reference<T>::value == false) >::type type;
     };
 
 }
