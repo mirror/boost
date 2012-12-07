@@ -55,7 +55,7 @@ namespace boost {
         }
 #if defined(BOOST_HAS_RVALUE_REFS)
         template<typename T>
-        inline void array_construct(T* memory, std::size_t size, T value) {
+        inline void array_construct_value(T* memory, std::size_t size, T&& value) {
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -69,7 +69,7 @@ namespace boost {
         }
 #if defined(BOOST_HAS_VARIADIC_TMPL)
         template<typename T, typename... Args>
-        inline void array_construct(T* memory, std::size_t size, Args... args) {
+        inline void array_construct_args(T* memory, std::size_t size, Args&&... args) {
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
