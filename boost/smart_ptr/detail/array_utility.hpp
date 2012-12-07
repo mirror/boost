@@ -37,8 +37,7 @@ namespace boost {
         template<typename T>
         inline void array_construct(T* memory, std::size_t size, boost::true_type) {
             for (std::size_t i = 0; i < size; i++) {
-                void* p1 = memory + i;
-                ::new(p1) T();
+                memory[i] = T();
             }
         }
         template<typename T>
