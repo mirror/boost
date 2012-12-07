@@ -1,4 +1,5 @@
 //  Copyright (c) 2011 Helge Bahmann
+//  Copyright (c) 2012 Tim Blechmann
 //
 //  Distributed under the Boost Software License, Version 1.0.
 //  See accompanying file LICENSE_1_0.txt or copy at
@@ -107,6 +108,8 @@ total_store_order_test<store_order, load_order>::run(boost::posix_time::time_dur
         timeout = duration;
 }
 
+volatile int backoff_dummy;
+
 template<boost::memory_order store_order, boost::memory_order load_order>
 void
 total_store_order_test<store_order, load_order>::thread1fn(void)
@@ -144,8 +147,7 @@ total_store_order_test<store_order, load_order>::thread1fn(void)
 
         barrier_.wait();
 
-        volatile int tmp;
-        while(delay--) { tmp = delay; }
+        while(delay--) { backoff_dummy = delay; }
     }
 }
 
@@ -187,8 +189,7 @@ total_store_order_test<store_order, load_order>::thread2fn(void)
 
         barrier_.wait();
 
-        volatile int tmp;
-        while(delay--) { tmp = delay; }
+        while(delay--) { backoff_dummy = delay; }
     }
 }
 
