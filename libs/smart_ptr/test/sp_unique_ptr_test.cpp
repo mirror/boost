@@ -91,6 +91,66 @@ int main()
         p2.reset();
         p3.reset();
         BOOST_TEST( X::instances == 0 );
+
+        p2 = std::unique_ptr<X>( new X );
+        BOOST_TEST( X::instances == 1 );
+
+        p2 = std::unique_ptr<X>( new X );
+        BOOST_TEST( X::instances == 1 );
+
+        p2.reset();
+        BOOST_TEST( X::instances == 0 );
+    }
+
+    {
+        BOOST_TEST( X::instances == 0 );
+
+        std::unique_ptr<X> p( new X );
+        BOOST_TEST( X::instances == 1 );
+
+        boost::shared_ptr<X const> p2( std::move( p ) );
+        BOOST_TEST( X::instances == 1 );
+        BOOST_TEST( p.get() == 0 );
+
+        boost::shared_ptr<X const> p3 = p2->shared_from_this();
+        BOOST_TEST( p2 == p3 );
+        BOOST_TEST( !(p2 < p3) && !(p3 < p2) );
+
+        p2.reset();
+        p3.reset();
+        BOOST_TEST( X::instances == 0 );
+
+        p2 = std::unique_ptr<X>( new X );
+        BOOST_TEST( X::instances == 1 );
+
+        p2 = std::unique_ptr<X>( new X );
+        BOOST_TEST( X::instances == 1 );
+
+        p2.reset();
+        BOOST_TEST( X::instances == 0 );
+    }
+
+    {
+        BOOST_TEST( X::instances == 0 );
+
+        std::unique_ptr<X> p( new X );
+        BOOST_TEST( X::instances == 1 );
+
+        boost::shared_ptr<void> p2( std::move( p ) );
+        BOOST_TEST( X::instances == 1 );
+        BOOST_TEST( p.get() == 0 );
+
+        p2.reset();
+        BOOST_TEST( X::instances == 0 );
+
+        p2 = std::unique_ptr<X>( new X );
+        BOOST_TEST( X::instances == 1 );
+
+        p2 = std::unique_ptr<X>( new X );
+        BOOST_TEST( X::instances == 1 );
+
+        p2.reset();
+        BOOST_TEST( X::instances == 0 );
     }
 
     {
@@ -102,6 +162,15 @@ int main()
         boost::shared_ptr<Y> p2( std::move( p ) );
         BOOST_TEST( Y::instances == 1 );
         BOOST_TEST( p.get() == 0 );
+
+        p2.reset();
+        BOOST_TEST( Y::instances == 0 );
+
+        p2 = std::unique_ptr<Y, YD>( new Y, YD() );
+        BOOST_TEST( Y::instances == 1 );
+
+        p2 = std::unique_ptr<Y, YD>( new Y, YD() );
+        BOOST_TEST( Y::instances == 1 );
 
         p2.reset();
         BOOST_TEST( Y::instances == 0 );
@@ -121,6 +190,15 @@ int main()
 
         p2.reset();
         BOOST_TEST( Y::instances == 0 );
+
+        p2 = std::unique_ptr<Y, YD&>( new Y, yd );
+        BOOST_TEST( Y::instances == 1 );
+
+        p2 = std::unique_ptr<Y, YD&>( new Y, yd );
+        BOOST_TEST( Y::instances == 1 );
+
+        p2.reset();
+        BOOST_TEST( Y::instances == 0 );
     }
 
     {
@@ -134,6 +212,15 @@ int main()
         boost::shared_ptr<Y> p2( std::move( p ) );
         BOOST_TEST( Y::instances == 1 );
         BOOST_TEST( p.get() == 0 );
+
+        p2.reset();
+        BOOST_TEST( Y::instances == 0 );
+
+        p2 = std::unique_ptr<Y, YD const&>( new Y, yd );
+        BOOST_TEST( Y::instances == 1 );
+
+        p2 = std::unique_ptr<Y, YD const&>( new Y, yd );
+        BOOST_TEST( Y::instances == 1 );
 
         p2.reset();
         BOOST_TEST( Y::instances == 0 );
