@@ -94,7 +94,7 @@ namespace boost
 
     template <typename T>
     typename boost::enable_if<boost::is_enum<T>, std::size_t>::type
-    	hash_value(T);
+        hash_value(T);
 
 #if !BOOST_WORKAROUND(__DMC__, <= 0x848)
     template <class T> std::size_t hash_value(T* const&);
@@ -187,9 +187,9 @@ namespace boost
 
     template <typename T>
     typename boost::enable_if<boost::is_enum<T>, std::size_t>::type
-    	hash_value(T v)
+        hash_value(T v)
     {
-    	return static_cast<std::size_t>(v);
+        return static_cast<std::size_t>(v);
     }
 
     // Implementation by Alberto Barbati and Dave Harris.
