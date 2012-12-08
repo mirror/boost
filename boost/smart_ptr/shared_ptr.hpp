@@ -41,7 +41,7 @@
 #include <algorithm>            // for std::swap
 #include <functional>           // for std::less
 #include <typeinfo>             // for std::bad_cast
-#include <cstddef>              // for std::size_t
+#include <cstddef>              // for std::size_t, std::nullptr_t
 
 #if !defined(BOOST_NO_IOSTREAM)
 #if !defined(BOOST_NO_IOSFWD)
@@ -339,6 +339,14 @@ public:
     {
     }
 
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+    shared_ptr( std::nullptr_t ) BOOST_NOEXCEPT : px( 0 ), pn() // never throws
+    {
+    }
+
+#endif
+
     template<class Y>
     explicit shared_ptr( Y * p ): px( p ), pn() // Y must be complete
     {
@@ -356,12 +364,28 @@ public:
         boost::detail::sp_deleter_construct( this, p );
     }
 
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+    template<class D> shared_ptr( std::nullptr_t p, D d ): px( p ), pn( p, d )
+    {
+    }
+
+#endif
+
     // As above, but with allocator. A's copy constructor shall not throw.
 
     template<class Y, class D, class A> shared_ptr( Y * p, D d, A a ): px( p ), pn( p, d, a )
     {
         boost::detail::sp_deleter_construct( this, p );
     }
+
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+    template<class D, class A> shared_ptr( std::nullptr_t p, D d, A a ): px( p ), pn( p, d, a )
+    {
+    }
+
+#endif
 
 //  generated copy constructor, destructor are fine...
 
@@ -579,6 +603,16 @@ public:
 
 #endif
 
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+    shared_ptr & operator=( std::nullptr_t ) BOOST_NOEXCEPT // never throws
+    {
+        this_type().swap(*this);
+        return *this;
+    }
+
+#endif
+
     void reset() BOOST_NOEXCEPT // never throws in 1.30+
     {
         this_type().swap(*this);
@@ -707,6 +741,30 @@ template<class T, class U> inline bool operator!=(shared_ptr<T> const & a, share
 template<class T> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<T> const & b) BOOST_NOEXCEPT
 {
     return a.get() != b.get();
+}
+
+#endif
+
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+template<class T> inline bool operator==( shared_ptr<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+{
+    return p.get() == 0;
+}
+
+template<class T> inline bool operator==( std::nullptr_t, shared_ptr<T> const & p ) BOOST_NOEXCEPT
+{
+    return p.get() == 0;
+}
+
+template<class T> inline bool operator!=( shared_ptr<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+{
+    return p.get() != 0;
+}
+
+template<class T> inline bool operator!=( std::nullptr_t, shared_ptr<T> const & p ) BOOST_NOEXCEPT
+{
+    return p.get() != 0;
 }
 
 #endif

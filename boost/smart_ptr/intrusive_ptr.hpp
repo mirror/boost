@@ -218,6 +218,30 @@ template<class T> inline bool operator!=(intrusive_ptr<T> const & a, intrusive_p
 
 #endif
 
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+template<class T> inline bool operator==( intrusive_ptr<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+{
+    return p.get() == 0;
+}
+
+template<class T> inline bool operator==( std::nullptr_t, intrusive_ptr<T> const & p ) BOOST_NOEXCEPT
+{
+    return p.get() == 0;
+}
+
+template<class T> inline bool operator!=( intrusive_ptr<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+{
+    return p.get() != 0;
+}
+
+template<class T> inline bool operator!=( std::nullptr_t, intrusive_ptr<T> const & p ) BOOST_NOEXCEPT
+{
+    return p.get() != 0;
+}
+
+#endif
+
 template<class T> inline bool operator<(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
 {
     return std::less<T *>()(a.get(), b.get());
