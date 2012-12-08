@@ -243,38 +243,46 @@ __Boost_Ratio should work with an C++03 conforming compiler.  The current versio
 Windows with
 
 * MSVC 10.0
-* MSVC 9.0 Express
-* MSVC 8.0
-
-Cygwin 1.5 with
-
-* GCC 3.4.4
-
-Cygwin 1.7 with
-
-* GCC 4.3.4
 
 MinGW with
 
-* GCC 4.4.0
 * GCC 4.5.0
 * GCC 4.5.0 -std=c++0x
+* GCC 4.5.2
+* GCC 4.5.2 -std=c++0x
 * GCC 4.6.0
 * GCC 4.6.0 -std=c++0x
 
-Ubuntu 10.10
+Ubuntu with
+* GCC 4.4.6
+* GCC 4.4.6 -std=c++0x
+* GCC 4.5.4
+* GCC 4.5.4 -std=c++0x
+* GCC 4.6.1
+* GCC 4.6.1 -std=c++0x
+* Intel 12.1.3
+* Intel 12.1.3 -std=c++0x
 
-* GCC 4.4.5
-* GCC 4.4.5 -std=c++0x
-* GCC 4.5.1
-* GCC 4.5.1 -std=c++0x
-* clang 2.8
+OsX with
 
-Initial versions were tested on:
-
-MacOS with GCC 4.2.4
-
-Ubuntu Linux with GCC 4.2.4
+* GCC 4.1.2
+* GCC 4.6.2
+* GCC 4.6.2 -std=c++0x
+* GCC 4.7.0
+* GCC 4.7.0 -std=c++0x
+* GCC 4.7.1
+* GCC 4.7.1 -std=c++0x
+* clang 1.6
+* clang 2.9
+* clang 2.9 -std=c++0x
+* clang 3.0
+* clang 3.0 -std=c++0x
+* clang 3.1
+* clang 3.1 -std=c++0x
+* clang 3.1 -std=c++0x -stdlib=libc++
+* clang 3.2
+* clang 3.2 -std=c++11
+* clang 3.2 -std=c++11 -stdlib=libc++
 
 [note Please let us know how this works on other platforms/compilers.]
 
@@ -1852,6 +1860,14 @@ The specialization relays on the __ratio_greater_equal template class.
 [/==================================]
 [section:history Appendix A: History]
 [/==================================]
+
+[section [*Version 2.0.1, Febreary 1, 2013 - 1.53] ]
+
+[*Fixes:]
+
+* [@http://svn.boost.org/trac/boost/ticket/7616 #7616] br_mul::nan - warning C4293: '<<' : shift count negative or too big, undefined behavior`.
+
+[endsect]
 
 [section [*Version 2.0.0, November 1, 2012 - 1.52] ]
 
