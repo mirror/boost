@@ -34,13 +34,13 @@ namespace boost {
             }
 #if defined(BOOST_HAS_RVALUE_REFS)
             void construct(T* memory, T&& value) {
-                array_construct_value(memory, size, sp_forward<T>(value));
+                array_construct(memory, size, sp_forward<T>(value));
                 object = memory;                
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL)
             template<typename... Args>
             void construct(T* memory, Args&&... args) {
-                array_construct_args(memory, size, sp_forward<Args>(args)...);
+                array_construct(memory, size, sp_forward<Args>(args)...);
                 object = memory;
             }
 #endif
@@ -49,8 +49,9 @@ namespace boost {
                 array_construct_list(memory, size, list);
                 object = memory;
             }
-            void construct_list(T* memory, const T* list, std::size_t n) {
-                array_construct_list(memory, size, list, n);
+            template<std::size_t M>
+            void construct_list(T* memory, const T* list) {
+                array_construct_list<T, M>(memory, size, list);
                 object = memory;
             }
             void construct_noinit(T* memory) {
@@ -84,13 +85,13 @@ namespace boost {
             }
 #if defined(BOOST_HAS_RVALUE_REFS)
             void construct(T* memory, T&& value) {
-                array_construct_value(memory, N, sp_forward<T>(value));
+                array_construct(memory, N, sp_forward<T>(value));
                 object = memory;                
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL)
             template<typename... Args>
             void construct(T* memory, Args&&... args) {
-                array_construct_args(memory, N, sp_forward<Args>(args)...);
+                array_construct(memory, N, sp_forward<Args>(args)...);
                 object = memory;
             }
 #endif
@@ -99,8 +100,9 @@ namespace boost {
                 array_construct_list(memory, N, list);
                 object = memory;
             }
-            void construct_list(T* memory, const T* list, std::size_t n) {
-                array_construct_list(memory, N, list, n);
+            template<std::size_t M>
+            void construct_list(T* memory, const T* list) {
+                array_construct_list<T, M>(memory, N, list);
                 object = memory;
             }
             void construct_noinit(T* memory) {

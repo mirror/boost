@@ -141,7 +141,7 @@ namespace boost {
         p3 = reinterpret_cast<T3*>(list);
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
-        d2->construct_list(p2, p3, M);
+        d2->construct_list<M>(p2, p3);
         return boost::shared_ptr<T>(s1, p1);
     }
     template<typename T, typename A>
@@ -165,7 +165,7 @@ namespace boost {
         p3 = reinterpret_cast<T3*>(list);
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<boost::detail::array_deleter<T2[N]> >(s1);
-        d2->construct_list(p2, p3, M);
+        d2->construct_list<M>(p2, p3);
         return boost::shared_ptr<T>(s1, p1);
     }
 #if defined(BOOST_HAS_RVALUE_REFS)
