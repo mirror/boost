@@ -13,7 +13,6 @@
 #include <boost/smart_ptr/detail/array_deleter.hpp>
 #include <boost/smart_ptr/detail/array_traits.hpp>
 #include <boost/smart_ptr/detail/make_array_helper.hpp>
-#include <boost/smart_ptr/detail/sp_forward.hpp>
 #include <boost/smart_ptr/detail/sp_if_array.hpp>
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
@@ -141,7 +140,7 @@ namespace boost {
         p3 = reinterpret_cast<T3*>(list);
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<boost::detail::array_deleter<T2[]> >(s1);
-        d2->construct_list(p2, p3, M);
+        d2->construct_list<M>(p2, p3);
         return boost::shared_ptr<T>(s1, p1);
     }
     template<typename T>
@@ -164,7 +163,7 @@ namespace boost {
         p3 = reinterpret_cast<T3*>(list);
         p1 = reinterpret_cast<T1*>(p2);
         d2 = get_deleter<boost::detail::array_deleter<T2[N]> >(s1);
-        d2->construct_list(p2, p3, M);
+        d2->construct_list<M>(p2, p3);
         return boost::shared_ptr<T>(s1, p1);
     }
 #if defined(BOOST_HAS_RVALUE_REFS)
