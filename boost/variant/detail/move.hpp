@@ -82,7 +82,7 @@ public: // metafunction result
 
 } // namespace detail
 
-#ifdef BOOST_NO_RVALUE_REFERENCES
+#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 template <typename T>
 inline

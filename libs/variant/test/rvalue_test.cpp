@@ -15,11 +15,21 @@
 #include "boost/test/minimal.hpp"
 #include "boost/variant.hpp"
 
-// This test requires BOOST_HAS_RVALUE_REFS
+// This test requires rvalue references support
 
-#ifndef BOOST_HAS_RVALUE_REFS
+#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 void run()
+{
+    BOOST_CHECK(true);
+}
+
+void run1()
+{
+    BOOST_CHECK(true);
+}
+
+void run_move_only()
 {
     BOOST_CHECK(true);
 }
@@ -126,6 +136,46 @@ void run()
     BOOST_CHECK(total_count <= move_copy_conting_class::moves_count + move_copy_conting_class::copy_count);
 }
 
+void run1()
+{
+    move_copy_conting_class::moves_count = 0;
+    move_copy_conting_class::copy_count = 0;
+
+    move_copy_conting_class c1;
+    typedef boost::variant<int, move_copy_conting_class> variant_I_type;
+    variant_I_type v1(static_cast<move_copy_conting_class&&>(c1));
+    
+    // Assuring that `move_copy_conting_class` was not copyied
+    BOOST_CHECK(move_copy_conting_class::copy_count == 0);
+    BOOST_CHECK(move_copy_conting_class::moves_count > 0);
+}
+
+struct move_only_structure {
+    move_only_structure(){}
+    move_only_structure(move_only_structure&&){}
+    move_only_structure& operator=(move_only_structure&&) { return *this; }
+
+private:
+    move_only_structure(const move_only_structure&);
+    move_only_structure& operator=(const move_only_structure&);
+};
+
+void run_move_only()
+{
+    move_only_structure mo;
+    boost::variant<int, move_only_structure > vi, vi2(static_cast<move_only_structure&&>(mo));
+    BOOST_CHECK(vi.which() == 0);
+    BOOST_CHECK(vi2.which() == 1);
+
+    vi = 10;
+    vi2 = 10;
+    BOOST_CHECK(vi.which() == 0);
+    BOOST_CHECK(vi2.which() == 0);
+
+    vi = static_cast<move_only_structure&&>(mo);
+    vi2 = static_cast<move_only_structure&&>(mo);
+    BOOST_CHECK(vi.which() == 1);
+}
 
 #endif
 
@@ -133,5 +183,7 @@ void run()
 int test_main(int , char* [])
 {
    run();
+   run1();
+   run_move_only();
    return 0;
 }
