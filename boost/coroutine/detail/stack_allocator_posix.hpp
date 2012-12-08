@@ -93,7 +93,7 @@ public:
         BOOST_ASSERT( maximum_stacksize() >= minimum_stacksize() );
         return maximum_stacksize() == size
             ? size
-            : std::min( size, maximum_stacksize() );
+            : (std::min)( size, maximum_stacksize() );
     }
 
     static std::size_t minimum_stacksize()
