@@ -70,8 +70,7 @@ namespace support_metafunctions_test {
 
     typedef boost::is_same
     <
-        pair_type_by< member_at::left,
-                      BOOST_DEDUCED_TYPENAME bm_type::relation>::type,
+        pair_type_by< member_at::left, bm_type::relation>::type,
         value_type_by< member_at::left , bm_type >::type
 
     >::type test_metafunction_4;
