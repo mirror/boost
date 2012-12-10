@@ -142,7 +142,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<cmf>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<enum_UDT>::value, true);
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<int&>::value, false);
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<int&&>::value, false);
 #endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_pod<const int&>::value, false);

@@ -24,7 +24,7 @@ struct base2 { };
 struct middle2 : public virtual base2 { };
 struct derived2 : public middle2 { };
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
 template<typename T>
 struct test_bug_4530
@@ -100,8 +100,13 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int *, int*>::value), 
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int&, int&>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int*, int[3]>::value), false);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int&, int>::value), true);
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<const int&&, int>::value), true);
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int&&, const int&>::value), true);
+#if !defined(__GNUC__) || ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ > 6)))
+// Machinary required to support this, not available prior to gcc-4.7.0:
+BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int, int&>::value), false);
+#endif
 #endif
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int(&)[4], const int*>::value), true);
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<int(&)(int), int(*)(int)>::value), true);
@@ -177,7 +182,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,char>::value), true)
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<__int64,float>::value), true);
 #endif
 
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 // Test bug case 4530:
 BOOST_CHECK_INTEGRAL_CONSTANT((::tt::is_convertible<test_bug_4530<A4530>,A4530>::value), true);
 #endif

@@ -260,7 +260,7 @@ struct nothrow_copy_UDT
 {
    nothrow_copy_UDT();
    nothrow_copy_UDT(const nothrow_copy_UDT&)throw();
-   ~nothrow_copy_UDT(){};
+   ~nothrow_copy_UDT(){}
    nothrow_copy_UDT& operator=(const nothrow_copy_UDT&);
    bool operator==(const nothrow_copy_UDT&)const
    { return true; }
