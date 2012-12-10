@@ -175,6 +175,11 @@ int main()
     NUMERIC_TEST_NO_LIMITS(boost::ulong_long_type, ulong_long)
 #endif
 
+#if defined(BOOST_HAS_INT128)
+    NUMERIC_TEST_NO_LIMITS(boost::int128_type, int128)
+    NUMERIC_TEST_NO_LIMITS(boost::uint128_type, uint128)
+#endif
+
     NUMERIC_TEST(float, float)
     NUMERIC_TEST(double, double)
 

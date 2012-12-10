@@ -16,6 +16,7 @@
 #include <string>
 #include <boost/limits.hpp>
 #include <boost/type_traits/is_enum.hpp>
+#include <boost/type_traits/is_integral.hpp>
 #include <boost/utility/enable_if.hpp>
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
@@ -40,8 +41,8 @@ namespace boost
         struct enable_hash_value { typedef std::size_t type; };
 
         template <typename T> struct basic_numbers {};
-        template <typename T> struct long_numbers {};
-        template <typename T> struct ulong_numbers {};
+        template <typename T> struct long_numbers;
+        template <typename T> struct ulong_numbers;
         template <typename T> struct float_numbers {};
 
         template <> struct basic_numbers<bool> :
@@ -70,10 +71,25 @@ namespace boost
             boost::hash_detail::enable_hash_value {};
 #endif
 
+        // long_numbers is defined like this to allow for separate
+        // specialization for long_long and int128_type, in case
+        // they conflict.
+        template <typename T> struct long_numbers2 {};
+        template <typename T> struct ulong_numbers2 {};
+        template <typename T> struct long_numbers : long_numbers2<T> {};
+        template <typename T> struct ulong_numbers : long_numbers2<T> {};
+
 #if !defined(BOOST_NO_LONG_LONG)
         template <> struct long_numbers<boost::long_long_type> :
             boost::hash_detail::enable_hash_value {};
         template <> struct ulong_numbers<boost::ulong_long_type> :
+            boost::hash_detail::enable_hash_value {};
+#endif
+
+#if defined(BOOST_HAS_INT128)
+        template <> struct long_numbers2<boost::int128_type> :
+            boost::hash_detail::enable_hash_value {};
+        template <> struct ulong_numbers2<boost::uint128_type> :
             boost::hash_detail::enable_hash_value {};
 #endif
 
