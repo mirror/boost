@@ -20,6 +20,7 @@ test-suite polygon-unit
     :
         [ run polygon_point_test.cpp ]
         [ run polygon_segment_test.cpp ]
+        [ run polygon_interval_test.cpp ]
         [ run gtl_boost_unit_test.cpp ]
     ;
 

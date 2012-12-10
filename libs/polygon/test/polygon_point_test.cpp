@@ -11,7 +11,9 @@
 #include <boost/mpl/list.hpp>
 #include <boost/test/test_case_template.hpp>
 
-#include "boost/polygon/polygon.hpp"
+#include "boost/polygon/point_concept.hpp"
+#include "boost/polygon/point_data.hpp"
+#include "boost/polygon/point_traits.hpp"
 using namespace boost::polygon;
 
 typedef boost::mpl::list<int> test_types;
