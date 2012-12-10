@@ -89,6 +89,18 @@ alias ttismfn
     ;
 
 #
+# Member or static member data
+#
+alias ttidata
+    :
+        [ run test_has_data.cpp ]
+#        [ compile test_has_mem_data_compile.cpp ]
+#        [ compile-fail test_has_mem_data_fail.cpp ]
+#        [ compile-fail test_has_mem_data_fail2.cpp ]
+#        [ compile-fail test_has_mem_data_fail3.cpp ]
+    ;
+
+#
 # Templates 
 #
 alias ttitmp
