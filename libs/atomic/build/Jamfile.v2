@@ -9,6 +9,7 @@ import common ;
 
 project boost/atomic
     : requirements
+      <threading>multi
       <link>shared:<define>BOOST_ATOMIC_DYN_LINK=1
       <define>BOOST_ATOMIC_SOURCE
     : usage-requirements
