@@ -103,6 +103,11 @@ void spot_checks()
    BOOST_CHECK_THROW(boost::u16_to_u32_iterator<const boost::uint16_t*>(bad_seq2, bad_seq2, bad_seq2 + 5), std::out_of_range);
    BOOST_CHECK_THROW(boost::u16_to_u32_iterator<const boost::uint16_t*>(bad_seq2 + 1, bad_seq2 + 1, bad_seq2 + 6), std::out_of_range);
    BOOST_CHECK_THROW(boost::u16_to_u32_iterator<const boost::uint16_t*>(bad_seq2 + 1, bad_seq2, bad_seq2 + 6), std::out_of_range);
+
+   boost::uint8_t bad_seq3[5] = { '.', '*', 0xe4, '.', '*' };
+   BOOST_CHECK_THROW(iterate_over(boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq3, bad_seq3, bad_seq3 + 5), boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq3 + 5, bad_seq3, bad_seq3 + 5)), std::out_of_range);
+   boost::uint8_t bad_seq4[5] = { '.', '*', 0xf6, '.', '*' };
+   BOOST_CHECK_THROW(iterate_over(boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq4, bad_seq4, bad_seq4 + 5), boost::u8_to_u32_iterator<const boost::uint8_t*>(bad_seq4 + 5, bad_seq4, bad_seq4 + 5)), std::out_of_range);
 }
 
 void test(const std::vector< ::boost::uint32_t>& v)

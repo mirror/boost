@@ -15,6 +15,11 @@ Currently open issues can be viewed [@https://svn.boost.org/trac/boost/query?sta
 
 All issues including closed ones can be viewed [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=regex&order=priority&col=id&col=summary&col=status&col=type&col=milestone&col=component here].
 
+[h4 Boost-1.53]
+
+Fixed Issues:
+[@https://svn.boost.org/trac/boost/ticket/7744 #7744], [@https://svn.boost.org/trac/boost/ticket/7644 #7644].
+
 [h4 Boost-1.51]
 
 Fixed issues:
