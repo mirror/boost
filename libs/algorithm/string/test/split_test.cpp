@@ -144,18 +144,35 @@ void iterator_test()
 
 
     find_iterator<string::iterator> fiter=make_find_iterator(str1, first_finder("xx"));
+    find_iterator<string::iterator> fiter2;
+    
     BOOST_CHECK(equals(*fiter, "xx"));
     ++fiter;
-    BOOST_CHECK(equals(*fiter, "xx"));
+    
+    fiter2 = fiter;
+    BOOST_CHECK(equals(*fiter,  "xx"));
+    BOOST_CHECK(equals(*fiter2, "xx"));
+
     ++fiter;
     BOOST_CHECK(fiter==find_iterator<string::iterator>());
+    BOOST_CHECK(equals(*fiter2, "xx"));
+
+    ++fiter2;
+    BOOST_CHECK(fiter2==find_iterator<string::iterator>());
 
     split_iterator<string::iterator> siter=make_split_iterator(str1, token_finder(is_any_of("-"), token_compress_on));
+    split_iterator<string::iterator> siter2;
     BOOST_CHECK(equals(*siter, "xx"));
     ++siter;
-    BOOST_CHECK(equals(*siter, "abc"));
+
+    siter2 = siter;
+    BOOST_CHECK(equals(*siter,  "abc"));
+    BOOST_CHECK(equals(*siter2, "abc"));
+    
     ++siter;
-    BOOST_CHECK(equals(*siter, "xx"));
+    BOOST_CHECK(equals(*siter,  "xx"));
+    BOOST_CHECK(equals(*siter2, "abc"));
+    
     ++siter;
     BOOST_CHECK(equals(*siter, "abb"));
     ++siter;
