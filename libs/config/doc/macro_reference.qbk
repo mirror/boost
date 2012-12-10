@@ -368,6 +368,9 @@ the names of the header needed to access hash_set and hash_map;
 `BOOST_STD_EXTENSION_NAMESPACE` will provide the namespace in which the two
 class templates reside.
 ]]
+[[`BOOST_HAS_INT128`][Compiler][
+The compiler has `__int128` and `unsigned __int128` as native types which are distinct
+from all the regular C++ integer types.]]
 [[`BOOST_HAS_LOG1P`][Platform][
 The platform has the functions `log1p`, `log1pf` and `log1pl` in `<math.h>`.
 ]]
@@ -633,7 +636,7 @@ scoped enumerations (`enum class`).
 [[`BOOST_NO_CXX11_STATIC_ASSERT`][The compiler does not support
 `static_assert`. 
 ]]                  
-[[`BOOST_NO_CXX11_STD_UNORDERD`][The standard library does not support
+[[`BOOST_NO_CXX11_STD_UNORDERED`][The standard library does not support
 <unordered_map> and <unordered_set>. 
 ]]                  
 [[`BOOST_NO_CXX11_UNICODE_LITERALS`][The compiler does not support
@@ -1045,7 +1048,7 @@ They will be removed in a future version of boost.
 [[`BOOST_NO_RVALUE_REFERENCES`][`BOOST_NO_CXX11_RVALUE_REFERENCES`][Boost 1.51][]]
 [[`BOOST_NO_SCOPED_ENUMS`][`BOOST_NO_CXX11_SCOPED_ENUMS`][Boost 1.51][]]
 [[`BOOST_NO_STATIC_ASSERT`][`BOOST_NO_CXX11_STATIC_ASSERT`][Boost 1.51][]]
-[[`BOOST_NO_STD_UNORDERD`][`BOOST_NO_CXX11_STD_UNORDERD`][Boost 1.51][]]
+[[`BOOST_NO_STD_UNORDERED`][`BOOST_NO_CXX11_STD_UNORDERED`][Boost 1.51][]]
 [[`BOOST_NO_UNICODE_LITERALS`][`BOOST_NO_CXX11_UNICODE_LITERALS`][Boost 1.51][]]
 [[`BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX`][`BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX`][Boost 1.51][]]
 [[`BOOST_NO_VARIADIC_TEMPLATES`][`BOOST_NO_CXX11_VARIADIC_TEMPLATES`][Boost 1.51][]]

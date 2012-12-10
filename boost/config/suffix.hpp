@@ -1,4 +1,5 @@
 //  Boost config.hpp configuration header file  ------------------------------//
+//	boostinspect:ndprecated_macros	-- tell the inspect tool to ignore this file
 
 //  Copyright (c) 2001-2003 John Maddock
 //  Copyright (c) 2001 Darin Adler
@@ -488,6 +489,18 @@ namespace boost{
 #  endif
 }
 #endif
+// same again for __int128:
+#if defined(BOOST_HAS_INT128) && defined(__cplusplus)
+namespace boost{
+#  ifdef __GNUC__
+   __extension__ typedef __int128 int128_type;
+   __extension__ typedef unsigned __int128 uint128_type;
+#  else
+   typedef __int128 int128_type;
+   typedef unsigned __int128 uint128_type;
+#  endif
+}
+#endif
 
 // BOOST_[APPEND_]EXPLICIT_TEMPLATE_[NON_]TYPE macros --------------------------//
 //
@@ -647,8 +660,8 @@ namespace std{ using ::type_info; }
 //  Use BOOST_NO_CXX11_HDR_UNORDERED_SET or BOOST_NO_CXX11_HDR_UNORDERED_MAP
 //           instead of BOOST_NO_STD_UNORDERED
 #if defined(BOOST_NO_CXX11_HDR_UNORDERED_MAP) || defined (BOOST_NO_CXX11_HDR_UNORDERED_SET)
-# ifndef BOOST_NO_STD_UNORDERED
-#  define BOOST_NO_STD_UNORDERED
+# ifndef BOOST_NO_CXX11_STD_UNORDERED
+#  define BOOST_NO_CXX11_STD_UNORDERED
 # endif
 #endif
 
@@ -827,9 +840,9 @@ namespace std{ using ::type_info; }
 #if defined(BOOST_NO_CXX11_STATIC_ASSERT) && !defined(BOOST_NO_STATIC_ASSERT)
 #  define BOOST_NO_STATIC_ASSERT
 #endif
-//  Use     BOOST_NO_CXX11_STD_UNORDERD instead of   BOOST_NO_STD_UNORDERD
-#if defined(BOOST_NO_CXX11_STD_UNORDERD) && !defined(BOOST_NO_STD_UNORDERD)
-#  define BOOST_NO_STD_UNORDERD
+//  Use     BOOST_NO_CXX11_STD_UNORDERED instead of   BOOST_NO_STD_UNORDERED
+#if defined(BOOST_NO_CXX11_STD_UNORDERED) && !defined(BOOST_NO_STD_UNORDERED)
+#  define BOOST_NO_STD_UNORDERED
 #endif
 //  Use     BOOST_NO_CXX11_UNICODE_LITERALS instead of   BOOST_NO_UNICODE_LITERALS
 #if defined(BOOST_NO_CXX11_UNICODE_LITERALS) && !defined(BOOST_NO_UNICODE_LITERALS)

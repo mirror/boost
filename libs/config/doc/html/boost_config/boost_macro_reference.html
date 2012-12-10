@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.76.1">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="../index.html" title="Boost.Config">
@@ -556,7 +556,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_NUMERIC_LIMITS_LOWEST</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NUMERIC_LIMITS</span></code>
                 </p>
               </td>
 <td>
@@ -566,7 +566,18 @@
               </td>
 <td>
                 <p>
-                  Static function <code class="computeroutput"><span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">lowest</span><span class="special">()</span></code> is not available for use.
+                  C++11 additions to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">numeric_limits</span></code>
+                  are not available for use. <code class="computeroutput"><span class="keyword">static</span>
+                  <span class="identifier">function</span> <span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">lowest</span><span class="special">()</span></code> the lowest finite value representable
+                  by the numeric type. <code class="computeroutput"><span class="keyword">static</span>
+                  <span class="keyword">int</span> <span class="keyword">const</span>
+                  <span class="identifier">max_digits10</span></code> the number
+                  of decimal digits that are required to make sure that two distinct
+                  values of the type have distinct decimal representations. <code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
+                  <span class="keyword">class</span> <span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">char16_t</span><span class="special">&gt;;</span></code>, see also <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CHAR16_T</span></code>,
+                  <code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;&gt;</span>
+                  <span class="keyword">class</span> <span class="identifier">numeric_limits</span><span class="special">&lt;</span><span class="identifier">char32_t</span><span class="special">&gt;;</span></code> see also <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CHAR32_T</span></code>.
+                  Replaces BOOST_NO_NUMERIC_LIMITS_LOWEST.
                 </p>
               </td>
 </tr>
@@ -1499,6 +1510,26 @@
                   will contain the names of the header needed to access hash_set
                   and hash_map; <code class="computeroutput"><span class="identifier">BOOST_STD_EXTENSION_NAMESPACE</span></code>
                   will provide the namespace in which the two class templates reside.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_HAS_INT128</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Compiler
+                </p>
+              </td>
+<td>
+                <p>
+                  The compiler has <code class="computeroutput"><span class="identifier">__int128</span></code>
+                  and <code class="computeroutput"><span class="keyword">unsigned</span> <span class="identifier">__int128</span></code>
+                  as native types which are distinct from all the regular C++ integer
+                  types.
                 </p>
               </td>
 </tr>
@@ -2573,7 +2604,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_AUTO_DECLARATIONS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_AUTO_DECLARATIONS</span></code>
                 </p>
               </td>
 <td>
@@ -2588,7 +2619,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_AUTO_MULTIDECLARATIONS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS</span></code>
                 </p>
               </td>
 <td>
@@ -2605,7 +2636,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR16_T</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CHAR16_T</span></code>
                 </p>
               </td>
 <td>
@@ -2617,7 +2648,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR32_T</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CHAR32_T</span></code>
                 </p>
               </td>
 <td>
@@ -2629,7 +2660,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_ALIASES</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_TEMPLATE_ALIASES</span></code>
                 </p>
               </td>
 <td>
@@ -2641,7 +2672,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_CONSTEXPR</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CONSTEXPR</span></code>
                 </p>
               </td>
 <td>
@@ -2653,7 +2684,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_DECLTYPE</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_DECLTYPE</span></code>
                 </p>
               </td>
 <td>
@@ -2665,7 +2696,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_DECLTYPE_N3276</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_DECLTYPE_N3276</span></code>
                 </p>
               </td>
 <td>
@@ -2679,7 +2710,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_DEFAULTED_FUNCTIONS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_DEFAULTED_FUNCTIONS</span></code>
                 </p>
               </td>
 <td>
@@ -2692,7 +2723,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_DELETED_FUNCTIONS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_DELETED_FUNCTIONS</span></code>
                 </p>
               </td>
 <td>
@@ -2705,7 +2736,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_EXPLICIT_CONVERSION_OPERATORS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS</span></code>
                 </p>
               </td>
 <td>
@@ -2718,7 +2749,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_EXTERN_TEMPLATE</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_EXTERN_TEMPLATE</span></code>
                 </p>
               </td>
 <td>
@@ -2731,7 +2762,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS</span></code>
                 </p>
               </td>
 <td>
@@ -2744,7 +2775,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_LAMBDAS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_LAMBDAS</span></code>
                 </p>
               </td>
 <td>
@@ -2756,7 +2787,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS</span></code>
                 </p>
               </td>
 <td>
@@ -2783,7 +2814,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_NOEXCEPT</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NOEXCEPT</span></code>
                 </p>
               </td>
 <td>
@@ -2795,7 +2826,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_NULLPTR</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NULLPTR</span></code>
                 </p>
               </td>
 <td>
@@ -2807,7 +2838,19 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_RAW_LITERALS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_RANGE_BASED_FOR</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  The compiler does not support range-based for statements.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_RAW_LITERALS</span></code>
                 </p>
               </td>
 <td>
@@ -2819,7 +2862,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_RVALUE_REFERENCES</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_RVALUE_REFERENCES</span></code>
                 </p>
               </td>
 <td>
@@ -2831,7 +2874,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_SCOPED_ENUMS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_SCOPED_ENUMS</span></code>
                 </p>
               </td>
 <td>
@@ -2843,7 +2886,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_STATIC_ASSERT</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STATIC_ASSERT</span></code>
                 </p>
               </td>
 <td>
@@ -2855,7 +2898,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_STD_UNORDERD</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STD_UNORDERD</span></code>
                 </p>
               </td>
 <td>
@@ -2868,19 +2911,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_ALIASES</span></code>
-                </p>
-              </td>
-<td>
-                <p>
-                  The compiler does not support template aliases.
-                </p>
-              </td>
-</tr>
-<tr>
-<td>
-                <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_UNICODE_LITERALS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_UNICODE_LITERALS</span></code>
                 </p>
               </td>
 <td>
@@ -2893,7 +2924,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX</span></code>
                 </p>
               </td>
 <td>
@@ -2906,7 +2937,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_VARIADIC_TEMPLATES</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_VARIADIC_TEMPLATES</span></code>
                 </p>
               </td>
 <td>
@@ -2918,7 +2949,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_VARIADIC_MACROS</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_VARIADIC_MACROS</span></code>
                 </p>
               </td>
 <td>
@@ -4167,6 +4198,529 @@
 <td>
               </td>
 </tr>
+<tr>
+<td>
+              </td>
+<td>
+              </td>
+<td>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_AUTO_DECLARATIONS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_AUTO_DECLARATIONS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_AUTO_MULTIDECLARATIONS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR16_T</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CHAR16_T</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CHAR32_T</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CHAR32_T</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_TEMPLATE_ALIASES</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_TEMPLATE_ALIASES</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CONSTEXPR</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CONSTEXPR</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_DECLTYPE</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_DECLTYPE</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_DECLTYPE_N3276</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_DECLTYPE_N3276</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_DEFAULTED_FUNCTIONS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_DEFAULTED_FUNCTIONS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_DELETED_FUNCTIONS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_DELETED_FUNCTIONS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_EXPLICIT_CONVERSION_OPERATORS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_EXTERN_TEMPLATE</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_EXTERN_TEMPLATE</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_FUNCTION_TEMPLATE_DEFAULT_ARGS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_LAMBDAS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_LAMBDAS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_LOCAL_CLASS_TEMPLATE_PARAMETERS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_NOEXCEPT</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NOEXCEPT</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_NULLPTR</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NULLPTR</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_RAW_LITERALS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_RAW_LITERALS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_RVALUE_REFERENCES</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_RVALUE_REFERENCES</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_SCOPED_ENUMS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_SCOPED_ENUMS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_STATIC_ASSERT</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STATIC_ASSERT</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_STD_UNORDERD</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STD_UNORDERD</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_UNICODE_LITERALS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_UNICODE_LITERALS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_UNIFIED_INITIALIZATION_SYNTAX</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_VARIADIC_TEMPLATES</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_VARIADIC_TEMPLATES</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_VARIADIC_MACROS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_VARIADIC_MACROS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_NUMERIC_LIMITS_LOWEST</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NUMERIC_LIMITS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
 </tbody>
 </table></div>
 </div>
@@ -4187,7 +4741,7 @@
         The following macros and helper headers are of use to authors whose libraries
         include separate source code, and are intended to address several issues:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Controlling shared library symbol visibility
           </li>
@@ -4443,7 +4997,7 @@
         </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl>
+<dl class="variablelist">
 <dt><span class="term"><code class="computeroutput"><span class="identifier">BOOST_LIB_NAME</span></code></span></dt>
 <dd><p>
                 Required: An identifier containing the basename of the library, for

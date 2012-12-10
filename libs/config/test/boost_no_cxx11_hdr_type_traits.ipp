@@ -76,7 +76,6 @@ int test()
   using std::is_same;
   using std::is_base_of;
   using std::is_convertible;
-  using std::is_explicitly_convertible;
   using std::remove_const;
   using std::remove_volatile;
   using std::remove_cv;
