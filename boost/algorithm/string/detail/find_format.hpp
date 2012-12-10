@@ -118,11 +118,11 @@ namespace boost {
 
                 InputT Output;
                 // Copy the beginning of the sequence
-                insert( Output, ::boost::end(Output), ::boost::begin(Input), M.begin() );
+                boost::algorithm::detail::insert( Output, ::boost::end(Output), ::boost::begin(Input), M.begin() );
                 // Copy formated result
-                insert( Output, ::boost::end(Output), M.format_result() );
+                boost::algorithm::detail::insert( Output, ::boost::end(Output), M.format_result() );
                 // Copy the rest of the sequence
-                insert( Output, ::boost::end(Output), M.end(), ::boost::end(Input) );
+                boost::algorithm::detail::insert( Output, ::boost::end(Output), M.end(), ::boost::end(Input) );
 
                 return Output;
             }
