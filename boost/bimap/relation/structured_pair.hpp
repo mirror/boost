@@ -540,7 +540,8 @@ structured_pair<FirstType,SecondType,::boost::mpl::na,Layout>
 {
     return structured_pair<FirstType,SecondType,::boost::mpl::na,Layout>(p.first,s);
 }
-}
+
+} // namespace detail
 
 
 } // namespace relation

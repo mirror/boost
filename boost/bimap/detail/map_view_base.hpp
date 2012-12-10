@@ -484,7 +484,7 @@ void assign(BOOST_DEDUCED_TYPENAME BASE::size_type n,                         \
             const BOOST_DEDUCED_TYPENAME BASE::value_type& v)                 \
 {                                                                             \
     this->clear();                                                            \
-    for(BOOST_DEDUCED_TYPENAME BASE::size_type i = 0 ; i < n ; ++n)           \
+    for(BOOST_DEDUCED_TYPENAME BASE::size_type i = 0 ; i < n ; ++i)           \
     {                                                                         \
         this->push_back(v);                                                   \
     }                                                                         \

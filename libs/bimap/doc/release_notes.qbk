@@ -14,6 +14,13 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 [section Release notes]
 
+[heading Boost 1.53 release]
+
+* Refactor map_view_iterator to improve error messages.
+* Fixed replace_(left/right/key/data) bug when using relations with info.
+* Fixed vector_of and list_of views `assign(size_type,value_type)` bug.
+* Fixed vector_of views `operator[](size_type)` and `at(size_type)` functions return value.
+
 [heading Boost 1.52 release]
 
 * Fixed unused parameter name warnings in Boost.Bimap ([@https://svn.boost.org/trac/boost/ticket/7425 #7425]).

@@ -464,7 +464,7 @@ mutant_relation<TA,TB,::boost::mpl::na,force_mutable>
     return mutant_relation<TA,TB,::boost::mpl::na,force_mutable>(rel.left,r);  
 }
 
-}
+} // namespace detail
 
 } // namespace relation
 } // namespace bimaps
