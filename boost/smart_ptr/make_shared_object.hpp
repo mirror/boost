@@ -182,6 +182,23 @@ template< class T, class A > typename boost::detail::sp_if_not_array< T >::type 
     return boost::shared_ptr< T >( pt, pt2 );
 }
 
+template< class T, class A > typename boost::detail::sp_if_not_array< T >::type allocate_shared_noinit( A const & a )
+{
+    boost::shared_ptr< T > pt( static_cast< T* >( 0 ), BOOST_SP_MSD( T ), a );
+
+    boost::detail::sp_ms_deleter< T > * pd = static_cast<boost::detail::sp_ms_deleter< T > *>( pt._internal_get_untyped_deleter() );
+
+    void * pv = pd->address();
+
+    ::new( pv ) T;
+    pd->set_initialized();
+
+    T * pt2 = static_cast< T* >( pv );
+
+    boost::detail::sp_enable_shared_from_this( &pt, pt2, pt2 );
+    return boost::shared_ptr< T >( pt, pt2 );
+}
+
 #if defined( BOOST_HAS_VARIADIC_TMPL ) && defined( BOOST_HAS_RVALUE_REFS )
 
 // Variadic templates, rvalue reference
