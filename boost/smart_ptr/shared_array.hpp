@@ -243,6 +243,30 @@ template<class T> inline bool operator!=(shared_array<T> const & a, shared_array
     return a.get() != b.get();
 }
 
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+template<class T> inline bool operator==( shared_array<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+{
+    return p.get() == 0;
+}
+
+template<class T> inline bool operator==( std::nullptr_t, shared_array<T> const & p ) BOOST_NOEXCEPT
+{
+    return p.get() == 0;
+}
+
+template<class T> inline bool operator!=( shared_array<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+{
+    return p.get() != 0;
+}
+
+template<class T> inline bool operator!=( std::nullptr_t, shared_array<T> const & p ) BOOST_NOEXCEPT
+{
+    return p.get() != 0;
+}
+
+#endif
+
 template<class T> inline bool operator<(shared_array<T> const & a, shared_array<T> const & b) BOOST_NOEXCEPT
 {
     return std::less<T*>()(a.get(), b.get());

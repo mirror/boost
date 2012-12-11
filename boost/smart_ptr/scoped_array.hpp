@@ -11,6 +11,7 @@
 //  http://www.boost.org/libs/smart_ptr/scoped_array.htm
 //
 
+#include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
 #include <boost/config.hpp>   // in case ptrdiff_t not in std
@@ -96,6 +97,30 @@ public:
         px = tmp;
     }
 };
+
+#if !defined( BOOST_NO_CXX11_NULLPTR )
+
+template<class T> inline bool operator==( scoped_array<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+{
+    return p.get() == 0;
+}
+
+template<class T> inline bool operator==( std::nullptr_t, scoped_array<T> const & p ) BOOST_NOEXCEPT
+{
+    return p.get() == 0;
+}
+
+template<class T> inline bool operator!=( scoped_array<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+{
+    return p.get() != 0;
+}
+
+template<class T> inline bool operator!=( std::nullptr_t, scoped_array<T> const & p ) BOOST_NOEXCEPT
+{
+    return p.get() != 0;
+}
+
+#endif
 
 template<class T> inline void swap(scoped_array<T> & a, scoped_array<T> & b) BOOST_NOEXCEPT
 {

@@ -75,6 +75,8 @@ import testing ;
           [ run sp_convertible_test.cpp ]
           [ run sp_array_n_test.cpp ]
           [ run sp_array_cast_test.cpp ]
+          [ run sp_zero_compare_test.cpp ]
+          [ run sp_nullptr_test.cpp ]
 
           [ compile-fail array_fail_spa_sp_c.cpp ]
           [ compile-fail array_fail_sp_spa_c.cpp ]
