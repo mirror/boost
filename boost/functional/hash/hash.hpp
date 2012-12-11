@@ -77,7 +77,7 @@ namespace boost
         template <typename T> struct long_numbers2 {};
         template <typename T> struct ulong_numbers2 {};
         template <typename T> struct long_numbers : long_numbers2<T> {};
-        template <typename T> struct ulong_numbers : long_numbers2<T> {};
+        template <typename T> struct ulong_numbers : ulong_numbers2<T> {};
 
 #if !defined(BOOST_NO_LONG_LONG)
         template <> struct long_numbers<boost::long_long_type> :
