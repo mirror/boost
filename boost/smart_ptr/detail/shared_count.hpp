@@ -447,6 +447,11 @@ public:
     {
         return pi_? pi_->get_deleter( ti ): 0;
     }
+
+    void * get_untyped_deleter() const
+    {
+        return pi_? pi_->get_untyped_deleter(): 0;
+    }
 };
 
 

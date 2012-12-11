@@ -696,9 +696,14 @@ public:
         return pn < rhs.pn;
     }
 
-    void * _internal_get_deleter( boost::detail::sp_typeinfo const & ti ) const
+    void * _internal_get_deleter( boost::detail::sp_typeinfo const & ti ) const BOOST_NOEXCEPT
     {
         return pn.get_deleter( ti );
+    }
+
+    void * _internal_get_untyped_deleter() const BOOST_NOEXCEPT
+    {
+        return pn.get_untyped_deleter();
     }
 
     bool _internal_equiv( shared_ptr const & r ) const BOOST_NOEXCEPT
@@ -881,9 +886,9 @@ template<class D, class T> D * basic_get_deleter(shared_ptr<T> const & p)
 
 #else
 
-template<class D, class T> D * basic_get_deleter(shared_ptr<T> const & p)
+template<class D, class T> D * basic_get_deleter( shared_ptr<T> const & p ) BOOST_NOEXCEPT
 {
-    return static_cast<D *>(p._internal_get_deleter(BOOST_SP_TYPEID(D)));
+    return static_cast<D *>( p._internal_get_deleter(BOOST_SP_TYPEID(D)) );
 }
 
 #endif
@@ -904,11 +909,13 @@ public:
     {
         deleter_ = deleter;
     }
-    template<typename D> D* get_deleter() const
+
+	template<typename D> D* get_deleter() const BOOST_NOEXCEPT
     {
-        return boost::detail::basic_get_deleter<D>(deleter_);
+        return boost::detail::basic_get_deleter<D>( deleter_ );
     }
-    template< class T> void operator()( T* )
+
+	template< class T> void operator()( T* )
     {
         BOOST_ASSERT( deleter_.use_count() <= 1 );
         deleter_.reset();
@@ -917,17 +924,19 @@ public:
 
 } // namespace detail
 
-template<class D, class T> D * get_deleter(shared_ptr<T> const & p)
+template<class D, class T> D * get_deleter( shared_ptr<T> const & p ) BOOST_NOEXCEPT
 {
     D *del = boost::detail::basic_get_deleter<D>(p);
-    if(del == 0)
+
+	if(del == 0)
     {
         boost::detail::esft2_deleter_wrapper *del_wrapper = boost::detail::basic_get_deleter<boost::detail::esft2_deleter_wrapper>(p);
 // The following get_deleter method call is fully qualified because
 // older versions of gcc (2.95, 3.2.3) fail to compile it when written del_wrapper->get_deleter<D>()
         if(del_wrapper) del = del_wrapper->::boost::detail::esft2_deleter_wrapper::get_deleter<D>();
     }
-    return del;
+
+	return del;
 }
 
 // atomic access
