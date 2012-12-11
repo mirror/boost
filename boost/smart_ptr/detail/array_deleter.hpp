@@ -34,13 +34,13 @@ namespace boost {
             }
 #if defined(BOOST_HAS_RVALUE_REFS)
             void construct(T* memory, T&& value) {
-                array_construct(memory, size, sp_forward<T>(value));
+                array_construct_value(memory, size, sp_forward<T>(value));
                 object = memory;                
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL)
             template<typename... Args>
             void construct(T* memory, Args&&... args) {
-                array_construct(memory, size, sp_forward<Args>(args)...);
+                array_construct_args(memory, size, sp_forward<Args>(args)...);
                 object = memory;
             }
 #endif
@@ -85,13 +85,13 @@ namespace boost {
             }
 #if defined(BOOST_HAS_RVALUE_REFS)
             void construct(T* memory, T&& value) {
-                array_construct(memory, N, sp_forward<T>(value));
+                array_construct_value(memory, N, sp_forward<T>(value));
                 object = memory;                
             }
 #if defined(BOOST_HAS_VARIADIC_TMPL)
             template<typename... Args>
             void construct(T* memory, Args&&... args) {
-                array_construct(memory, N, sp_forward<Args>(args)...);
+                array_construct_args(memory, N, sp_forward<Args>(args)...);
                 object = memory;
             }
 #endif
