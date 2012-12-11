@@ -94,10 +94,13 @@ alias ttismfn
 alias ttidata
     :
         [ run test_has_data.cpp ]
-#        [ compile test_has_mem_data_compile.cpp ]
-#        [ compile-fail test_has_mem_data_fail.cpp ]
-#        [ compile-fail test_has_mem_data_fail2.cpp ]
-#        [ compile-fail test_has_mem_data_fail3.cpp ]
+        [ compile test_has_data_compile.cpp ]
+        [ compile-fail test_has_data_fail.cpp ]
+        [ compile-fail test_has_data_fail2.cpp ]
+        [ compile-fail test_has_data_fail3.cpp ]
+        [ compile-fail test_has_data_fail4.cpp ]
+        [ compile-fail test_has_data_fail5.cpp ]
+        [ compile-fail test_has_data_fail6.cpp ]
     ;
 
 #
