@@ -127,23 +127,132 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(interval_concept_test1, T, test_types) {
 BOOST_AUTO_TEST_CASE_TEMPLATE(interval_concept_test2, T, test_types) {
   typedef Interval<T> interval_type;
 
-  interval_type interval = construct<interval_type>(1, 3);
-  BOOST_CHECK_EQUAL(center(interval), 2);
-  BOOST_CHECK_EQUAL(delta(interval), 2);
+  interval_type interval1 = construct<interval_type>(1, 3);
+  BOOST_CHECK_EQUAL(center(interval1), 2);
+  BOOST_CHECK_EQUAL(delta(interval1), 2);
 
-  flip(interval, -1);
-  BOOST_CHECK_EQUAL(low(interval), -5);
-  BOOST_CHECK_EQUAL(high(interval), -3);
+  flip(interval1, -1);
+  BOOST_CHECK_EQUAL(low(interval1), -5);
+  BOOST_CHECK_EQUAL(high(interval1), -3);
 
-  scale_up(interval, 2);
-  BOOST_CHECK_EQUAL(low(interval), -10);
-  BOOST_CHECK_EQUAL(high(interval), -6);
+  scale_up(interval1, 2);
+  BOOST_CHECK_EQUAL(low(interval1), -10);
+  BOOST_CHECK_EQUAL(high(interval1), -6);
 
-  scale_down(interval, 2);
-  BOOST_CHECK_EQUAL(low(interval), -5);
-  BOOST_CHECK_EQUAL(high(interval), -3);
+  scale_down(interval1, 2);
+  BOOST_CHECK_EQUAL(low(interval1), -5);
+  BOOST_CHECK_EQUAL(high(interval1), -3);
 
-  move(interval, 5);
-  BOOST_CHECK_EQUAL(low(interval), 0);
-  BOOST_CHECK_EQUAL(high(interval), 2);
+  move(interval1, 5);
+  BOOST_CHECK_EQUAL(low(interval1), 0);
+  BOOST_CHECK_EQUAL(high(interval1), 2);
+
+  convolve(interval1, 1);
+  BOOST_CHECK_EQUAL(low(interval1), 1);
+  BOOST_CHECK_EQUAL(high(interval1), 3);
+
+  deconvolve(interval1, 2);
+  BOOST_CHECK_EQUAL(low(interval1), -1);
+  BOOST_CHECK_EQUAL(high(interval1), 1);
+
+  interval_type interval2 = construct<interval_type>(-1, 2);
+  convolve(interval1, interval2);
+  BOOST_CHECK_EQUAL(low(interval1), -2);
+  BOOST_CHECK_EQUAL(high(interval1), 3);
+
+  deconvolve(interval1, interval2);
+  BOOST_CHECK_EQUAL(low(interval1), -1);
+  BOOST_CHECK_EQUAL(high(interval1), 1);
+
+  reflected_convolve(interval1, interval2);
+  BOOST_CHECK_EQUAL(low(interval1), -3);
+  BOOST_CHECK_EQUAL(high(interval1), 2);
+
+  reflected_deconvolve(interval1, interval2);
+  BOOST_CHECK_EQUAL(low(interval1), -1);
+  BOOST_CHECK_EQUAL(high(interval1), 1);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(interval_concept_test3, T, test_types) {
+  typedef Interval<T> interval_type;
+
+  interval_type interval1 = construct<interval_type>(1, 3);
+  BOOST_CHECK_EQUAL(euclidean_distance(interval1, -2), 3);
+  BOOST_CHECK_EQUAL(euclidean_distance(interval1, 2), 0);
+  BOOST_CHECK_EQUAL(euclidean_distance(interval1, 4), 1);
+
+  interval_type interval2 = construct<interval_type>(-1, 0);
+  BOOST_CHECK_EQUAL(euclidean_distance(interval1, interval2), 1);
+  BOOST_CHECK(!intersects(interval1, interval2));
+  BOOST_CHECK(!boundaries_intersect(interval1, interval2));
+  BOOST_CHECK(!intersect(interval2, interval1));
+  BOOST_CHECK_EQUAL(low(interval2), -1);
+  BOOST_CHECK_EQUAL(high(interval2), 0);
+
+  interval_type interval3 = construct<interval_type>(-1, 6);
+  BOOST_CHECK_EQUAL(euclidean_distance(interval1, interval3), 0);
+  BOOST_CHECK(intersects(interval1, interval3));
+  BOOST_CHECK(!boundaries_intersect(interval1, interval3));
+  BOOST_CHECK(intersect(interval3, interval1));
+  BOOST_CHECK_EQUAL(low(interval3), 1);
+  BOOST_CHECK_EQUAL(high(interval3), 3);
+
+  interval_type interval4 = construct<interval_type>(5, 6);
+  BOOST_CHECK_EQUAL(euclidean_distance(interval1, interval4), 2);
+  BOOST_CHECK(!intersects(interval1, interval4));
+  BOOST_CHECK(!boundaries_intersect(interval1, interval4));
+  BOOST_CHECK(!intersect(interval4, interval1));
+  BOOST_CHECK_EQUAL(low(interval4), 5);
+  BOOST_CHECK_EQUAL(high(interval4), 6);
+
+  interval_type interval5 = construct<interval_type>(3, 5);
+  BOOST_CHECK_EQUAL(euclidean_distance(interval1, interval5), 0);
+  BOOST_CHECK(!intersects(interval1, interval5, false));
+  BOOST_CHECK(boundaries_intersect(interval1, interval5));
+  BOOST_CHECK(intersect(interval5, interval1));
+  BOOST_CHECK_EQUAL(low(interval5), 3);
+  BOOST_CHECK_EQUAL(high(interval5), 3);
+}
+
+BOOST_AUTO_TEST_CASE_TEMPLATE(interval_concept_test4, T, test_types) {
+  typedef Interval<T> interval_type;
+
+  interval_type interval1 = construct<interval_type>(1, 3);
+  interval_type interval2 = construct<interval_type>(3, 5);
+  BOOST_CHECK(!abuts(interval1, interval2, LOW));
+  BOOST_CHECK(abuts(interval1, interval2, HIGH));
+  BOOST_CHECK(abuts(interval1, interval2));
+
+  bloat(interval1, 1);
+  BOOST_CHECK_EQUAL(low(interval1), 0);
+  BOOST_CHECK_EQUAL(high(interval1), 4);
+  BOOST_CHECK(!abuts(interval1, interval2));
+
+  bloat(interval1, LOW, 1);
+  BOOST_CHECK_EQUAL(low(interval1), -1);
+  BOOST_CHECK_EQUAL(high(interval1), 4);
+
+  shrink(interval1, LOW, 1);
+  BOOST_CHECK_EQUAL(low(interval1), 0);
+  BOOST_CHECK_EQUAL(high(interval1), 4);
+
+  shrink(interval1, 1);
+  BOOST_CHECK_EQUAL(low(interval1), 1);
+  BOOST_CHECK_EQUAL(high(interval1), 3);
+
+  BOOST_CHECK(encompass(interval1, 4));
+  BOOST_CHECK_EQUAL(low(interval1), 1);
+  BOOST_CHECK_EQUAL(high(interval1), 4);
+
+  BOOST_CHECK(encompass(interval1, interval2));
+  BOOST_CHECK_EQUAL(low(interval1), 1);
+  BOOST_CHECK_EQUAL(high(interval1), 5);
+
+  interval1 = get_half(interval1, LOW);
+  BOOST_CHECK_EQUAL(low(interval1), 1);
+  BOOST_CHECK_EQUAL(high(interval1), 3);
+
+  BOOST_CHECK(join_with(interval1, interval2));
+  BOOST_CHECK_EQUAL(low(interval1), 1);
+  BOOST_CHECK_EQUAL(high(interval1), 5);
 }
