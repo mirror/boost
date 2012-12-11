@@ -42,7 +42,7 @@ void test_sequence ( Container const &c ) {
     ba::copy_if ( c, back_inserter ( v ), is_false);
     BOOST_CHECK ( v.size () == 0 );
 
-//	All the elements
+//  All the elements
     v.clear ();
     ba::copy_if ( c.begin (), c.end (), back_inserter ( v ), is_true);
     BOOST_CHECK ( v.size () == c.size ());
@@ -54,7 +54,7 @@ void test_sequence ( Container const &c ) {
     BOOST_CHECK ( v.size () == c.size ());
     BOOST_CHECK ( std::equal ( c.begin (), c.end (), v.begin ()));
 
-//	Some of the elements
+//  Some of the elements
     v.clear ();
     ba::copy_if ( c.begin (), c.end (), back_inserter ( v ), is_even );
     BOOST_CHECK ( v.size () == std::count_if ( c.begin (), c.end (), is_even ));
