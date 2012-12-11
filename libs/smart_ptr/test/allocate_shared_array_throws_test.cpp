@@ -59,5 +59,19 @@ int main() {
         BOOST_TEST(type::instances == 0);
     }
 #endif
+    BOOST_TEST(type::instances == 0);
+    try {
+        boost::allocate_shared_noinit<type[]>(std::allocator<type>(), 6);
+        BOOST_ERROR("allocate_shared_noinit did not throw");
+    } catch (...) {
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    try {
+        boost::allocate_shared_noinit<type[][2]>(std::allocator<type>(), 3);
+        BOOST_ERROR("allocate_shared_noinit did not throw");
+    } catch (...) {
+        BOOST_TEST(type::instances == 0);
+    }
     return boost::report_errors();
 }

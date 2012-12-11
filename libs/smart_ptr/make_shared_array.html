@@ -96,6 +96,12 @@
 
     template&lt;typename T&gt;
     shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared_noinit</a>();
+    
+    template&lt;typename T, typename A&gt;
+    shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared_noinit</a>(const A&amp; allocator, size_t size);
+
+    template&lt;typename T, typename A&gt;
+    shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared_noinit</a>(const A&amp; allocator);
 }</pre>
     <h2><a name="functions">Free Functions</a></h2>
     <pre>template&lt;typename T, typename... Args&gt;
@@ -197,13 +203,17 @@ template&lt;typename T, typename A&gt;
         fixed size array.</p>
     </blockquote>
     <pre>template&lt;typename T&gt;
-    shared_ptr&lt;T[]&gt; make_shared_noinit(size_t size);</pre>
+    shared_ptr&lt;T[]&gt; make_shared_noinit(size_t size);
+template&lt;typename T, typename A&gt;
+    shared_ptr&lt;T[]&gt; make_shared_noinit(const A&amp; allocator, size_t size);</pre>
     <blockquote>
       <p><b>Description:</b> This overload does not perform value 
         initialization of elements.</p>
     </blockquote>
     <pre>template&lt;typename T&gt;
-    shared_ptr&lt;T[N]&gt; make_shared_noinit();</pre>
+    shared_ptr&lt;T[N]&gt; make_shared_noinit();
+template&lt;typename T, typename A&gt;
+    shared_ptr&lt;T[N]&gt; make_shared_noinit(const A&amp; allocator);</pre>
     <blockquote>
       <p><b>Description:</b> This overload of the utility above is used for a 
         fixed size array.</p>
