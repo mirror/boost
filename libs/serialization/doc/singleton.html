@@ -138,16 +138,15 @@ In order to be used as
 <a target="singleton.hpp" href = "../../../boost/serialization/singleton.hpp">
 <code style="white-space: normal">
 singleton&lt;T&gt;
-</code> 
-</a>
-, the type T must be default constructable.
+</code>
+</a>, the type T must be default constructable. 
 It doesn't require static variables - though it may have them.
 Since the library guarentees that only one instance of 
 <a target="singleton.hpp" href = "../../../boost/serialization/singleton.hpp">
 <code style="white-space: normal">
 singleton&lt;T&gt;
-</code> 
-</a>
+</code>
+</a> 
 and all accesss is through the above static interface
 functions, common member functions of T become
 the functional equivalent of 
@@ -162,12 +161,12 @@ The first way is illustrated by and excerpt from the file
 which contains the following code:
 
 <pre><code>
-typedef std::set<const extended_type_info *, key_compare> ktmap;
+typedef std::set&lt;const extended_type_info *, key_compare&gt; ktmap;
 ...
 void
 extended_type_info::key_register(const char *key) {
     ...
-    result = singleton<ktmap>::get_mutable_instance().insert(this);
+    result = singleton&lt;ktmap&gt;::get_mutable_instance().insert(this);
     ...
 }
 </code></pre>
