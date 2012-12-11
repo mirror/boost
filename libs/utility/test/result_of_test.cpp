@@ -104,7 +104,7 @@ struct no_result_type_or_result
   cv_overload_check<const int> operator()() const;
   cv_overload_check<volatile int> operator()() volatile;
   cv_overload_check<const volatile int> operator()() const volatile;
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
   short operator()(int&&);
   int operator()(int&);
   long operator()(int const&);
@@ -122,7 +122,7 @@ struct no_result_type_or_result_template
   cv_overload_check<const int> operator()() const;
   cv_overload_check<volatile int> operator()() volatile;
   cv_overload_check<const volatile int> operator()() const volatile;
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
   short operator()(int&&);
   int operator()(int&);
   long operator()(int const&);
@@ -291,7 +291,7 @@ int main()
   BOOST_STATIC_ASSERT((is_same<result_of<const no_result_type_or_result_template<void>(void)>::type, cv_overload_check<const int> >::value));
   BOOST_STATIC_ASSERT((is_same<result_of<volatile no_result_type_or_result_template<void>(void)>::type, cv_overload_check<volatile int> >::value));
   BOOST_STATIC_ASSERT((is_same<result_of<const volatile no_result_type_or_result_template<void>(void)>::type, cv_overload_check<const volatile int> >::value));
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
   BOOST_STATIC_ASSERT((is_same<result_of<no_result_type_or_result(int&&)>::type, short>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<no_result_type_or_result(int&)>::type, int>::value));
   BOOST_STATIC_ASSERT((is_same<result_of<no_result_type_or_result(int const&)>::type, long>::value));
