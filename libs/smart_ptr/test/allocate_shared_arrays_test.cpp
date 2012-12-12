@@ -100,5 +100,61 @@ int main() {
         BOOST_TEST(type::instances == 0);
     }
 #endif
+    {
+        boost::shared_ptr<int[][2][2]> a1 = boost::allocate_shared_noinit<int[][2][2]>(std::allocator<int>(), 2);
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+    }
+    {
+        boost::shared_ptr<int[2][2][2]> a1 = boost::allocate_shared_noinit<int[2][2][2]>(std::allocator<int>());
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+    }    
+    {
+        boost::shared_ptr<const int[][2][2]> a1 = boost::allocate_shared_noinit<const int[][2][2]>(std::allocator<int>(), 2);
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+    }
+    {
+        boost::shared_ptr<const int[2][2][2]> a1 = boost::allocate_shared_noinit<const int[2][2][2]>(std::allocator<int>());
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+    }    
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<type[][2][2]> a1 = boost::allocate_shared_noinit<type[][2][2]>(std::allocator<type>(), 2);
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(type::instances == 8);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<type[2][2][2]> a1 = boost::allocate_shared_noinit<type[2][2][2]>(std::allocator<type>());
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(type::instances == 8);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<const type[][2][2]> a1 = boost::allocate_shared_noinit<const type[][2][2]>(std::allocator<type>(), 2);
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(type::instances == 8);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<const type[2][2][2]> a1 = boost::allocate_shared_noinit<const type[2][2][2]>(std::allocator<type>());
+        BOOST_TEST(a1.get() != 0);
+        BOOST_TEST(a1.use_count() == 1);
+        BOOST_TEST(type::instances == 8);
+        a1.reset();
+        BOOST_TEST(type::instances == 0);
+    }
     return boost::report_errors();
 }

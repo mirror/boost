@@ -38,5 +38,15 @@ int main() {
             BOOST_TEST(type::instances == 3);
         }
     }
+    BOOST_TEST(type::instances == 0);
+    {
+        boost::shared_ptr<type[]> a1 = boost::allocate_shared_noinit<type[]>(std::allocator<type>(), 3);
+        try {
+            a1[0].shared_from_this();
+            BOOST_ERROR("shared_from_this did not throw");
+        } catch (...) {
+            BOOST_TEST(type::instances == 3);
+        }
+    }
     return boost::report_errors();
 }
