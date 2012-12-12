@@ -92,7 +92,7 @@ namespace std {
 }
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER < 1700)
+#if defined(_CPPLIB_VER) && (_CPPLIB_VER < 540)
     #define BOOST_CODECVT_DO_LENGTH_CONST const
 #else
     #define BOOST_CODECVT_DO_LENGTH_CONST
