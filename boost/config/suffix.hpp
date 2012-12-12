@@ -872,7 +872,7 @@ namespace std{ using ::type_info; }
 // Helper macros BOOST_NOEXCEPT, BOOST_NOEXCEPT_IF, BOOST_NOEXCEPT_EXPR
 // These aid the transition to C++11 while still supporting C++03 compilers
 //
-#ifdef BOOST_NO_NOEXCEPT
+#ifdef BOOST_NO_CXX11_NOEXCEPT
 #  define BOOST_NOEXCEPT
 #  define BOOST_NOEXCEPT_IF(Predicate)
 #  define BOOST_NOEXCEPT_EXPR(Expression) false
@@ -883,16 +883,16 @@ namespace std{ using ::type_info; }
 #endif
 
 //
-// Normalize BOOST_NO_STATIC_ASSERT and (depricated) BOOST_HAS_STATIC_ASSERT:
+// Normalize BOOST_NO_CXX11_STATIC_ASSERT and (deprecated) BOOST_HAS_STATIC_ASSERT:
 //
-#if !defined(BOOST_NO_STATIC_ASSERT) && !defined(BOOST_HAS_STATIC_ASSERT)
+#if !defined(BOOST_NO_CXX11_STATIC_ASSERT) && !defined(BOOST_HAS_STATIC_ASSERT)
 #  define BOOST_HAS_STATIC_ASSERT
 #endif
 
 //
 // constexpr workarounds
 // 
-#if defined(BOOST_NO_CONSTEXPR)
+#if defined(BOOST_NO_CXX11_CONSTEXPR)
 #define BOOST_CONSTEXPR
 #define BOOST_CONSTEXPR_OR_CONST const
 #else
@@ -903,16 +903,16 @@ namespace std{ using ::type_info; }
 #define BOOST_STATIC_CONSTEXPR  static BOOST_CONSTEXPR_OR_CONST
 
 //
-// Set BOOST_HAS_RVALUE_REFS when BOOST_NO_RVALUE_REFERENCES is not defined
+// Set BOOST_HAS_RVALUE_REFS when BOOST_NO_CXX11_RVALUE_REFERENCES is not defined
 //
-#if !defined(BOOST_NO_RVALUE_REFERENCES) && !defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_HAS_RVALUE_REFS)
 #define BOOST_HAS_RVALUE_REFS
 #endif
 
 //
-// Set BOOST_HAS_VARIADIC_TMPL when BOOST_NO_VARIADIC_TEMPLATES is not defined
+// Set BOOST_HAS_VARIADIC_TMPL when BOOST_NO_CXX11_VARIADIC_TEMPLATES is not defined
 //
-#if !defined(BOOST_NO_VARIADIC_TEMPLATES) && !defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_HAS_VARIADIC_TMPL)
 #define BOOST_HAS_VARIADIC_TMPL
 #endif
 
