@@ -439,6 +439,11 @@ namespace boost
     BOOST_HASH_SPECIALIZE(boost::ulong_long_type)
 #endif
 
+#if defined(BOOST_HAS_INT128)
+    BOOST_HASH_SPECIALIZE(boost::int128_type)
+    BOOST_HASH_SPECIALIZE(boost::uint128_type)
+#endif
+
 #if !defined(BOOST_NO_CXX11_HDR_TYPEINDEX)
     BOOST_HASH_SPECIALIZE(std::type_index)
 #endif
