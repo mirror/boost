@@ -56,7 +56,7 @@ int main()
         BOOST_TEST( X::instances == 0 );
     }
 
-#if defined( BOOST_HAS_VARIADIC_TMPL ) && !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
+#if !defined( BOOST_NO_CXX11_VARIADIC_TEMPLATES ) && !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     {
         boost::shared_ptr< X[] > px = boost::make_shared< X[] >( 2, 1 );
