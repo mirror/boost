@@ -283,6 +283,7 @@ An Associative Sequence allows efficient retrieval of elements based on keys.
 Like associative sequences in __mpl__, and unlike associative containers in
 __stl__, Fusion associative sequences have no implied ordering relation.
 Instead, type identity is used to impose an equivalence relation on keys.
+Keys are not checked for uniqueness.
 
 [variablelist Notation
     [[`s`]       [An Associative Sequence]]
