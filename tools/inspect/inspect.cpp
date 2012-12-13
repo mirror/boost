@@ -131,7 +131,7 @@ namespace
     string rev("unknown");
     string repos("unknown");
     string command("cd ");
-    command += inspect_root.string() + " & svn info";
+    command += inspect_root.string() + " && svn info";
     FILE* fp = POPEN(command.c_str(), "r");
     if (fp)
     {
