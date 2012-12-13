@@ -84,7 +84,7 @@ struct skew_heap_node:
         children.assign(0);
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     skew_heap_node(value_type && v):
         value(v)
     {
@@ -199,7 +199,7 @@ struct make_skew_heap_base
             base_type(arg)
         {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
         type(type && rhs):
             base_type(std::move(static_cast<base_type&>(rhs))),
             allocator_type(std::move(static_cast<allocator_type&>(rhs)))
@@ -388,7 +388,7 @@ public:
         return *this;
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     /// \copydoc boost::heap::priority_queue::priority_queue(priority_queue &&)
     skew_heap(skew_heap && rhs):
         super_t(std::move(rhs)), root(rhs.root)

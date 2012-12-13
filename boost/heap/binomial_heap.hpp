@@ -62,7 +62,7 @@ struct make_binomial_heap_base
             base_type(arg)
         {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
         type(type const & rhs):
             base_type(rhs), allocator_type(rhs)
         {}
@@ -246,7 +246,7 @@ public:
         return *this;
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     /// \copydoc boost::heap::priority_queue::priority_queue(priority_queue &&)
     binomial_heap(binomial_heap && rhs):
         super_t(std::move(rhs)), top_element(rhs.top_element)

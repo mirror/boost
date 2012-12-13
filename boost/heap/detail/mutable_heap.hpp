@@ -146,7 +146,7 @@ protected:
         return *this;
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     priority_queue_mutable_wrapper (priority_queue_mutable_wrapper && rhs):
         q_(std::move(rhs.q_))
     {

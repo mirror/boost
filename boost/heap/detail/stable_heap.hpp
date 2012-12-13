@@ -34,7 +34,7 @@ struct size_holder
         size_(0)
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     size_holder(size_holder && rhs):
         size_(rhs.size_)
     {
@@ -92,7 +92,7 @@ struct size_holder<false, SizeType>
     size_holder(void)
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     size_holder(size_holder && rhs)
     {}
 
@@ -166,7 +166,7 @@ struct heap_base:
 #endif
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     heap_base(heap_base && rhs):
 #ifndef BOOST_MSVC
         Cmp(std::move(static_cast<Cmp&>(rhs))),
@@ -210,7 +210,7 @@ struct heap_base:
         return val;
     }
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     T && make_node(T && val)
     {
         return std::forward<T>(val);
@@ -300,7 +300,7 @@ struct heap_base<T, Cmp, constant_time_size, StabilityCounterType, true>:
         counter_(0)
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     heap_base(heap_base && rhs):
 #ifndef BOOST_MSVC
         Cmp(std::move(static_cast<Cmp&>(rhs))),

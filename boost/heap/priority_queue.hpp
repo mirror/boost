@@ -123,7 +123,7 @@ public:
         super_t(rhs), q_(rhs.q_)
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     /**
      * \b Effects: C++11-style move constructor.
      *

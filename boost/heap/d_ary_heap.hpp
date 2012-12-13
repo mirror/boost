@@ -155,7 +155,7 @@ public:
         super_t(rhs), q_(rhs.q_)
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     d_ary_heap(d_ary_heap && rhs):
         super_t(std::move(rhs)), q_(std::move(rhs.q_))
     {}
@@ -524,7 +524,7 @@ public:
         super_t(rhs)
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     /// \copydoc boost::heap::priority_queue::priority_queue(priority_queue &&)
     d_ary_heap(d_ary_heap && rhs):
         super_t(std::move(rhs))
