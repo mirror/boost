@@ -86,7 +86,7 @@ public:
 
 //  generated copy constructor, destructor are fine...
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
 // ... except in C++0x, move disables the implicit copy
 
@@ -145,7 +145,7 @@ public:
 
 #endif
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     shared_array & operator=( shared_array && r ) BOOST_NOEXCEPT
     {

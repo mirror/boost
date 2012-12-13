@@ -199,7 +199,7 @@ template< class T, class A > typename boost::detail::sp_if_not_array< T >::type 
     return boost::shared_ptr< T >( pt, pt2 );
 }
 
-#if defined( BOOST_HAS_VARIADIC_TMPL ) && defined( BOOST_HAS_RVALUE_REFS )
+#if defined( BOOST_HAS_VARIADIC_TMPL ) && !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
 // Variadic templates, rvalue reference
 
@@ -237,7 +237,7 @@ template< class T, class A, class Arg1, class... Args > typename boost::detail::
     return boost::shared_ptr< T >( pt, pt2 );
 }
 
-#elif defined( BOOST_HAS_RVALUE_REFS )
+#elif !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
 // For example MSVC 10.0
 

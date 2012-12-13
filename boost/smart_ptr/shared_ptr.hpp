@@ -389,7 +389,7 @@ public:
 
 //  generated copy constructor, destructor are fine...
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
 // ... except in C++0x, move disables the implicit copy
 
@@ -452,7 +452,7 @@ public:
         boost::detail::sp_deleter_construct( this, tmp );
     }
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     template<class Y>
     shared_ptr( std::auto_ptr<Y> && r ): px(r.get()), pn()
@@ -527,7 +527,7 @@ public:
         return *this;
     }
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     template<class Y>
     shared_ptr & operator=( std::auto_ptr<Y> && r )
@@ -562,7 +562,7 @@ public:
 
 // Move support
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     shared_ptr( shared_ptr && r ) BOOST_NOEXCEPT : px( r.px ), pn()
     {

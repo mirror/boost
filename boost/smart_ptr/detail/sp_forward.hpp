@@ -23,7 +23,7 @@ namespace boost
 namespace detail
 {
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
 template< class T > T&& sp_forward( T & t ) BOOST_NOEXCEPT
 {
