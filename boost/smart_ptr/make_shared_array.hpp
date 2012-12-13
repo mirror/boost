@@ -118,7 +118,7 @@ namespace boost {
         p3 = reinterpret_cast<T3*>(list);
         p1 = reinterpret_cast<T1*>(p2);
         D2 d2 = static_cast<D2>(s1._internal_get_untyped_deleter());
-        d2->init_list<M>(p2, p3);
+        d2->template init_list<M>(p2, p3);
         return boost::shared_ptr<T>(s1, p1);
     }
     template<typename T>
@@ -141,7 +141,7 @@ namespace boost {
         p3 = reinterpret_cast<T3*>(list);
         p1 = reinterpret_cast<T1*>(p2);
         D2 d2 = static_cast<D2>(s1._internal_get_untyped_deleter());
-        d2->init_list<M>(p2, p3);
+        d2->template init_list<M>(p2, p3);
         return boost::shared_ptr<T>(s1, p1);
     }
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
