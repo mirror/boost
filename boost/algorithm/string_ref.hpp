@@ -63,7 +63,7 @@ namespace boost {
         typedef const_iterator iterator;
         typedef std::reverse_iterator<const_iterator> const_reverse_iterator;
         typedef const_reverse_iterator reverse_iterator;
-        typedef size_t size_type;
+        typedef std::size_t size_type;
         typedef ptrdiff_t difference_type;
         static BOOST_CONSTEXPR_OR_CONST size_type npos = size_type(-1);
         
@@ -162,18 +162,16 @@ namespace boost {
             return cmp != 0 ? cmp : ( len_ == x.len_ ? 0 : len_ < x.len_ ? -1 : 1 );
             }
         
-        bool starts_with(charT c) const { return !empty() && front() == c; }
+        bool starts_with(charT c) const { return !empty() && traits::eq ( c, front()); }
         bool starts_with(basic_string_ref x) const {
             return len_ >= x.len_ && traits::compare ( ptr_, x.ptr_, x.len_ ) == 0;
             }
         
-        bool ends_with(charT c) const { return !empty() && back() == c; }
+        bool ends_with(charT c) const { return !empty() && traits::eq ( c, back()); }
         bool ends_with(basic_string_ref x) const {
             return len_ >= x.len_ && traits::compare ( ptr_ + len_ - x.len_, x.ptr_, x.len_ ) == 0;
             }
 
-
-//  Have to use traits here
         size_type find(basic_string_ref s) const {
             const_iterator iter = std::search ( this->cbegin (), this->cend (), 
                                                 s.cbegin (), s.cend (), traits::eq );
@@ -187,7 +185,7 @@ namespace boost {
             }
                         
         size_type rfind(basic_string_ref s) const {
-            const_iterator iter = std::search ( this->crbegin (), this->crend (), 
+            const_reverse_iterator iter = std::search ( this->crbegin (), this->crend (), 
                                                 s.crbegin (), s.crend (), traits::eq );
             return iter == this->crend () ? npos : reverse_distance ( this->crbegin (), iter );
             }
@@ -198,27 +196,24 @@ namespace boost {
             return iter == this->crend () ? npos : reverse_distance ( this->crbegin (), iter );
             }
         
-        size_type find_first_of(basic_string_ref s) const {
-            const_iterator iter = std::find_first_of ( this->cbegin (), this->cend (), 
-                                                    s.cbegin (), s.cend (), traits::eq );
-            return iter = this->cend () ? npos : std::distance ( this->cbegin (), iter );
-            }
-        
         size_type find_first_of(charT c) const { return  find (c); }
         size_type find_last_of (charT c) const { return rfind (c); }
-
+        
+        size_type find_first_of(basic_string_ref s) const {
+            const_iterator iter = std::find_first_of 
+            	( this->cbegin (), this->cend (), s.cbegin (), s.cend (), traits::eq );
+            return iter == this->cend () ? npos : std::distance ( this->cbegin (), iter );
+            }
         
         size_type find_last_of(basic_string_ref s) const {
-            const_reverse_iterator iter = std::find_first_of ( this->crbegin (), this->crend (), 
-                                                s.crbegin (), s.crend (), traits::eq );
-            return iter = this->cend () ? npos : reverse_distance ( this->crbegin (), iter);
+            const_reverse_iterator iter = std::find_first_of 
+                ( this->crbegin (), this->crend (), s.cbegin (), s.cend (), traits::eq );
+            return iter == this->crend () ? npos : reverse_distance ( this->crbegin (), iter);
             }
         
         size_type find_first_not_of(basic_string_ref s) const {
-            for ( const_reverse_iterator iter = this->cbegin (); iter != this->cend (); ++iter )
-                if ( 0 == traits::find ( s->ptr_, s.len_, *iter ))
-                    return std::distance ( this->cbegin (), iter );
-            return npos;
+        	const_iterator iter = find_not_of ( this->cbegin (), this->cend (), s );
+            return iter == this->cend () ? npos : std::distance ( this->cbegin (), iter );
             }
         
         size_type find_first_not_of(charT c) const {
@@ -229,10 +224,8 @@ namespace boost {
             }
         
         size_type find_last_not_of(basic_string_ref s) const {
-            for ( const_reverse_iterator iter = this->crbegin (); iter != this->crend (); ++iter )
-                if ( 0 == traits::find ( s.ptr_, s.len_, *iter ))
-                    return reverse_distance ( this->crbegin (), iter );
-            return npos;
+        	const_reverse_iterator iter = find_not_of ( this->crbegin (), this->crend (), s );
+            return iter == this->crend () ? npos : reverse_distance ( this->crbegin (), iter );
             }
         
         size_type find_last_not_of(charT c) const {
@@ -243,9 +236,20 @@ namespace boost {
             }
 
     private:
-        size_type reverse_distance ( reverse_iterator first, reverse_iterator last ) const {
-            return len_ - 1 + std::distance ( first, last );
+        template <typename r_iter>
+        size_type reverse_distance ( r_iter first, r_iter last ) const {
+            return len_ - 1 - std::distance ( first, last );
             }
+        
+        template <typename Iterator>
+        Iterator find_not_of ( Iterator first, Iterator last, basic_string_ref s ) const {
+			for ( ; first != last ; ++first )
+				if ( 0 == traits::find ( s.ptr_, s.len_, *first ))
+					return first;
+			return last;
+			}
+		
+       		
         
         const charT *ptr_;
         std::size_t len_;

@@ -22,10 +22,12 @@ typedef boost::string_ref string_ref;
 void interop ( const std::string &str, string_ref ref ) {
 //  BOOST_CHECK ( str == ref );
     BOOST_CHECK ( str.size () == ref.size ());
-    BOOST_CHECK ( std::equal ( str.begin (), str.end (), ref.begin ()));
+    BOOST_CHECK ( std::equal ( str.begin (),  str.end (),  ref.begin ()));
+    BOOST_CHECK ( std::equal ( str.rbegin (), str.rend (), ref.rbegin ()));
     }
 
-void substr ( const std::string &str ) {
+//  make sure that substrings work just like strings
+void test_substr ( const std::string &str ) {
     const size_t sz = str.size ();
     string_ref ref ( str );
     
@@ -43,6 +45,33 @@ void substr ( const std::string &str ) {
             interop ( str.substr ( i, j ), ref.substr ( i, j ));    
     }
 
+//  make sure that removing prefixes and suffixes work just like strings
+void test_remove ( const std::string &str ) {
+    const size_t sz = str.size ();
+    std::string work;
+    string_ref ref;
+    
+    for ( size_t i = 1; i <= sz; ++i ) {
+      work = str;
+      ref  = str;     
+      while ( ref.size () >= i ) {
+          interop ( work, ref );
+          work.erase ( 0, i );
+          ref.remove_prefix (i);
+          }
+      }
+    
+    for ( size_t i = 1; i < sz; ++ i ) {
+      work = str;
+      ref  = str;     
+      while ( ref.size () >= i ) {
+          interop ( work, ref );
+          work.erase ( work.size () - i, i );
+          ref.remove_suffix (i);
+          }
+      }
+    }
+
 const char *test_strings [] = {
     "",
     "1",
@@ -57,8 +86,9 @@ int test_main( int , char* [] ) {
     
     while ( *p != NULL ) {
         interop ( *p, *p );
-        substr ( *p );
-
+        test_substr ( *p );
+    test_remove ( *p );
+    
         p++;
         }
 
