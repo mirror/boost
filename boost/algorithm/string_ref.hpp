@@ -158,7 +158,7 @@ namespace boost {
             }
         
         int compare(basic_string_ref x) const {
-            int cmp = traits::compare ( ptr_, x.ptr_, std::min(len_, x.len_));
+            int cmp = traits::compare ( ptr_, x.ptr_, (std::min)(len_, x.len_));
             return cmp != 0 ? cmp : ( len_ == x.len_ ? 0 : len_ < x.len_ ? -1 : 1 );
             }
         
