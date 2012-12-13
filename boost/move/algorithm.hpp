@@ -80,6 +80,10 @@ namespace boost {
       return result;
    }
 
+#else
+
+   using ::std::move_backward;
+
 #endif   //!defined(BOOST_MOVE_USE_STANDARD_LIBRARY_MOVE)
 
 //////////////////////////////////////////////////////////////////////////////
