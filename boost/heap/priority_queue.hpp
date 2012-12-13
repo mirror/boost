@@ -129,7 +129,7 @@ public:
      *
      * \b Complexity: Constant.
      *
-     * \b Note: Only available, if BOOST_HAS_RVALUE_REFS is defined
+     * \b Note: Only available, if BOOST_NO_CXX11_RVALUE_REFERENCES is not defined
      * */
     priority_queue(priority_queue && rhs):
         super_t(std::move(rhs)), q_(std::move(rhs.q_))
@@ -140,7 +140,7 @@ public:
      *
      * \b Complexity: Constant.
      *
-     * \b Note: Only available, if BOOST_HAS_RVALUE_REFS is defined
+     * \b Note: Only available, if BOOST_NO_CXX11_RVALUE_REFERENCES is not defined
      * */
     priority_queue & operator=(priority_queue && rhs)
     {
@@ -242,7 +242,7 @@ public:
         std::push_heap(q_.begin(), q_.end(), static_cast<super_t const &>(*this));
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /**
      * \b Effects: Adds a new element to the priority queue. The element is directly constructed in-place.
      *

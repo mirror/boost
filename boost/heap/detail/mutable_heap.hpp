@@ -339,7 +339,7 @@ public:
         return handle_type(ret);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <class... Args>
     handle_type emplace(Args&&... args)
     {

@@ -213,7 +213,7 @@ public:
         siftup(q_.size() - 1);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <class... Args>
     void emplace(Args&&... args)
     {
@@ -587,7 +587,7 @@ public:
         return super_t::push(v);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /// \copydoc boost::heap::priority_queue::emplace
     template <class... Args>
     typename mpl::if_c<is_mutable, handle_type, void>::type emplace(Args&&... args)
