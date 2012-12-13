@@ -243,4 +243,5 @@ struct insert_test_rehash3 : public insert_test_base<T>
 #endif
 
 
-RUN_EXCEPTION_TESTS(ALL_TESTS, CONTAINER_SEQ)
+EXCEPTION_TESTS(ALL_TESTS, CONTAINER_SEQ)
+RUN_TESTS()
