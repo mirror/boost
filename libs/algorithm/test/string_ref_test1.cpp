@@ -102,6 +102,7 @@ int test_main( int , char* [] ) {
         interop ( *p, *p );
         test_substr ( *p );
         test_remove ( *p );
+        null_tests ( *p );
     
         p++;
         }
