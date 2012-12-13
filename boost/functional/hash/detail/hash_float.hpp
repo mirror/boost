@@ -210,8 +210,15 @@ namespace boost
         template <class T>
         inline std::size_t float_hash_value(T v)
         {
+#if defined(fpclassify)
+            switch (fpclassify(v))
+#elif BOOST_HASH_CONFORMANT_FLOATS
+            switch (std::fpclassify(v))
+#else
             using namespace std;
-            switch (fpclassify(v)) {
+            switch (fpclassify(v))
+#endif
+            {
             case FP_ZERO:
                 return 0;
             case FP_INFINITE:
