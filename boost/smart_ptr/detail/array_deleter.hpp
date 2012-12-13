@@ -28,34 +28,34 @@ namespace boost {
                     array_destroy(object, size);
                 }
             }
-            void construct(T* memory) {
-                array_construct(memory, size);
+            void init(T* memory) {
+                array_init(memory, size);
                 object = memory;
             }
-#if defined(BOOST_HAS_RVALUE_REFS)
-            void construct(T* memory, T&& value) {
-                array_construct_value(memory, size, sp_forward<T>(value));
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+            void init_value(T* memory, T&& value) {
+                array_init_value(memory, size, sp_forward<T>(value));
                 object = memory;                
             }
-#if defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
             template<typename... Args>
-            void construct(T* memory, Args&&... args) {
-                array_construct_args(memory, size, sp_forward<Args>(args)...);
+            void init_args(T* memory, Args&&... args) {
+                array_init_args(memory, size, sp_forward<Args>(args)...);
                 object = memory;
             }
 #endif
 #endif
-            void construct_list(T* memory, const T* list) {
-                array_construct_list(memory, size, list);
+            void init_list(T* memory, const T* list) {
+                array_init_list(memory, size, list);
                 object = memory;
             }
             template<std::size_t M>
-            void construct_list(T* memory, const T* list) {
-                array_construct_list<T, M>(memory, size, list);
+            void init_list(T* memory, const T* list) {
+                array_init_list<T, M>(memory, size, list);
                 object = memory;
             }
-            void construct_noinit(T* memory) {
-                array_construct_noinit(memory, size);
+            void noinit(T* memory) {
+                array_noinit(memory, size);
                 object = memory;
             }
             void operator()(const void*) {
@@ -79,34 +79,34 @@ namespace boost {
                     array_destroy(object, N);
                 }
             }
-            void construct(T* memory) {
-                array_construct(memory, N);
+            void init(T* memory) {
+                array_init(memory, N);
                 object = memory;
             }
-#if defined(BOOST_HAS_RVALUE_REFS)
-            void construct(T* memory, T&& value) {
-                array_construct_value(memory, N, sp_forward<T>(value));
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+            void init_value(T* memory, T&& value) {
+                array_init_value(memory, N, sp_forward<T>(value));
                 object = memory;                
             }
-#if defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
             template<typename... Args>
-            void construct(T* memory, Args&&... args) {
-                array_construct_args(memory, N, sp_forward<Args>(args)...);
+            void init_args(T* memory, Args&&... args) {
+                array_init_args(memory, N, sp_forward<Args>(args)...);
                 object = memory;
             }
 #endif
 #endif
-            void construct_list(T* memory, const T* list) {
-                array_construct_list(memory, N, list);
+            void init_list(T* memory, const T* list) {
+                array_init_list(memory, N, list);
                 object = memory;
             }
             template<std::size_t M>
-            void construct_list(T* memory, const T* list) {
-                array_construct_list<T, M>(memory, N, list);
+            void init_list(T* memory, const T* list) {
+                array_init_list<T, M>(memory, N, list);
                 object = memory;
             }
-            void construct_noinit(T* memory) {
-                array_construct_noinit(memory, N);
+            void noinit(T* memory) {
+                array_noinit(memory, N);
                 object = memory;
             }
             void operator()(const void*) {
