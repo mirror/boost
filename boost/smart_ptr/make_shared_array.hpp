@@ -51,7 +51,7 @@ namespace boost {
         typedef boost::detail::array_deleter<T2[]>* D2;
         p1 = reinterpret_cast<T1*>(p2);
         D2 d2 = static_cast<D2>(s1._internal_get_untyped_deleter());
-        d2->init_args(p2, boost::detail::sp_forward<Args>(args)...);
+        d2->init(p2, boost::detail::sp_forward<Args>(args)...);
         return boost::shared_ptr<T>(s1, p1);
     }
     template<typename T, typename... Args>
@@ -70,7 +70,7 @@ namespace boost {
         typedef boost::detail::array_deleter<T2[N]>* D2;
         p1 = reinterpret_cast<T1*>(p2);
         D2 d2 = static_cast<D2>(s1._internal_get_untyped_deleter());
-        d2->init_args(p2, boost::detail::sp_forward<Args>(args)...);
+        d2->init(p2, boost::detail::sp_forward<Args>(args)...);
         return boost::shared_ptr<T>(s1, p1);
     }
 #endif
@@ -182,7 +182,7 @@ namespace boost {
         typedef boost::detail::array_deleter<T2[]>* D2;
         p1 = reinterpret_cast<T1*>(p2);
         D2 d2 = static_cast<D2>(s1._internal_get_untyped_deleter());
-        d2->init_value(p2, boost::detail::sp_forward<T2>(value));
+        d2->init(p2, boost::detail::sp_forward<T2>(value));
         return boost::shared_ptr<T>(s1, p1);
     }
     template<typename T>
@@ -201,7 +201,7 @@ namespace boost {
         typedef boost::detail::array_deleter<T2[N]>* D2;
         p1 = reinterpret_cast<T1*>(p2);
         D2 d2 = static_cast<D2>(s1._internal_get_untyped_deleter());
-        d2->init_value(p2, boost::detail::sp_forward<T2>(value));
+        d2->init(p2, boost::detail::sp_forward<T2>(value));
         return boost::shared_ptr<T>(s1, p1);
     }
 #endif

@@ -33,13 +33,13 @@ namespace boost {
                 object = memory;
             }
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-            void init_value(T* memory, T&& value) {
+            void init(T* memory, T&& value) {
                 array_init_value(memory, size, sp_forward<T>(value));
                 object = memory;                
             }
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
             template<typename... Args>
-            void init_args(T* memory, Args&&... args) {
+            void init(T* memory, Args&&... args) {
                 array_init_args(memory, size, sp_forward<Args>(args)...);
                 object = memory;
             }
@@ -84,13 +84,13 @@ namespace boost {
                 object = memory;
             }
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-            void init_value(T* memory, T&& value) {
+            void init(T* memory, T&& value) {
                 array_init_value(memory, N, sp_forward<T>(value));
                 object = memory;                
             }
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
             template<typename... Args>
-            void init_args(T* memory, Args&&... args) {
+            void init(T* memory, Args&&... args) {
                 array_init_args(memory, N, sp_forward<Args>(args)...);
                 object = memory;
             }
