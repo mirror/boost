@@ -26,6 +26,20 @@ void interop ( const std::string &str, string_ref ref ) {
     BOOST_CHECK ( std::equal ( str.rbegin (), str.rend (), ref.rbegin ()));
     }
 
+void null_tests ( const char *p ) {
+//  All zero-length string-refs should be equal
+    string_ref sr1; // NULL, 0
+    string_ref sr2 ( NULL, 0 );
+    string_ref sr3 ( p, 0 );
+    string_ref sr4 ( p );
+    sr4.clear ();
+    
+    BOOST_CHECK ( sr1 == sr2 );
+    BOOST_CHECK ( sr1 == sr3 );
+    BOOST_CHECK ( sr2 == sr3 );
+    BOOST_CHECK ( sr1 == sr4 );    
+    }
+
 //  make sure that substrings work just like strings
 void test_substr ( const std::string &str ) {
     const size_t sz = str.size ();
@@ -83,11 +97,11 @@ const char *test_strings [] = {
 int test_main( int , char* [] ) {
 
     const char **p = &test_strings[0];
-    
+
     while ( *p != NULL ) {
         interop ( *p, *p );
         test_substr ( *p );
-    test_remove ( *p );
+        test_remove ( *p );
     
         p++;
         }
