@@ -21,7 +21,7 @@ The intention of the `iterator_range` class is to encapsulate two iterators so t
 
 If the template argument is not a model of __forward_traversal_iterator__, one can still use a subset of the interface. In particular, `size()` requires Random Access Traversal Iterators whereas `empty()` only requires Single Pass Iterators.
 
-Recall that many default constructed iterators are [*/singular/] and hence can only be assigned, but not compared or incremented or anything. However, if one creates a default constructed `iterator_range`, then one can still call all its member functions. This design decision avoids the `iterator_range` imposing limitations upon ranges of iterators that are not singular. Any singularity limitation is simply propogated from the underlying iterator type.
+Recall that many default constructed iterators are [*/singular/] and hence can only be assigned, but not compared or incremented or anything. However, if one creates a default constructed `iterator_range`, then one can still call all its member functions. This design decision avoids the `iterator_range` imposing limitations upon ranges of iterators that are not singular. Any singularity limitation is simply propagated from the underlying iterator type.
 
 
 [h4 Synopsis]

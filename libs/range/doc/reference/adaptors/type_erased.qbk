@@ -18,7 +18,7 @@ Let `Rng` be the type of `rng`.
 * [*Template parameters:]
     * `Value` is the `value_type` for the `any_range`. If this is set to boost::use_default, `Value` will be calculated from the
         range type when the adaptor is applied.
-    * `Traversal` is the tag used to identify the traversal of the resultant range. Frequently it is desireable to set a traversal category lower than the source container or range to maximize the number of ranges that can convert to the `any_range`. If this is left as boost::use_default then `Traversal` will be `typename boost::iterator_traversal<boost::range_iterator<Rng>::type>::type`
+    * `Traversal` is the tag used to identify the traversal of the resultant range. Frequently it is desirable to set a traversal category lower than the source container or range to maximize the number of ranges that can convert to the `any_range`. If this is left as boost::use_default then `Traversal` will be `typename boost::iterator_traversal<boost::range_iterator<Rng>::type>::type`
     * `Reference` is the `reference` for the `any_range`. `boost::use_default` will equate to `typename range_reference<Rng>::type`.
     * `Difference` is the `difference_type` for the any_range. `boost::use_default` will equate to `typename boost::range_difference<Rng>::type`
     * `Buffer` is the storage used to allocate the underlying iterator wrappers. This can typically be ignored, but is available as a template parameter for customization. Buffer must be a model of the `AnyIteratorBufferConcept`.
