@@ -22,7 +22,7 @@
 namespace std{ 
     using ::size_t; 
     using ::wcslen;
-#ifndef UNDER_CE && !defined(__PGIC__) 
+#if !defined(UNDER_CE) && !defined(__PGIC__) 
     using ::w_int;
 #endif    
 } // namespace std
@@ -36,7 +36,7 @@ namespace std{
 // NOTE: Use BOOST_WORKAROUND?
 #if (defined(__QNX__) && defined(BOOST_DINKUMWARE_STDLIB))  \
     || defined(__SUNPRO_CC)
-using ::std::wint_t;
+    using ::std::wint_t;
 #endif
 
 #include "test_tools.hpp"
