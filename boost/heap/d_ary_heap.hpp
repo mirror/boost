@@ -155,7 +155,7 @@ public:
         super_t(rhs), q_(rhs.q_)
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     d_ary_heap(d_ary_heap && rhs):
         super_t(std::move(rhs)), q_(std::move(rhs.q_))
     {}
@@ -213,7 +213,7 @@ public:
         siftup(q_.size() - 1);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <class... Args>
     void emplace(Args&&... args)
     {
@@ -524,7 +524,7 @@ public:
         super_t(rhs)
     {}
 
-#ifdef BOOST_HAS_RVALUE_REFS
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     /// \copydoc boost::heap::priority_queue::priority_queue(priority_queue &&)
     d_ary_heap(d_ary_heap && rhs):
         super_t(std::move(rhs))
@@ -587,7 +587,7 @@ public:
         return super_t::push(v);
     }
 
-#if defined(BOOST_HAS_RVALUE_REFS) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     /// \copydoc boost::heap::priority_queue::emplace
     template <class... Args>
     typename mpl::if_c<is_mutable, handle_type, void>::type emplace(Args&&... args)
