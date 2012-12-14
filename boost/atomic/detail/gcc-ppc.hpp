@@ -7,6 +7,12 @@
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/atomic/detail/config.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
 /*
     Refer to: Motorola: "Programming Environments Manual for 32-Bit
     Implementations of the PowerPC Architecture", Appendix E:

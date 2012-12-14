@@ -10,6 +10,12 @@
 #ifndef BOOST_ATOMIC_DETAIL_GENERIC_CAS_HPP
 #define BOOST_ATOMIC_DETAIL_GENERIC_CAS_HPP
 
+#include <boost/atomic/detail/config.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
 namespace boost {
 
 #define BOOST_ATOMIC_THREAD_FENCE 2

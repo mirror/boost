@@ -1,3 +1,6 @@
+#ifndef BOOST_ATOMIC_DETAIL_PLATFORM_HPP
+#define BOOST_ATOMIC_DETAIL_PLATFORM_HPP
+
 //  Copyright (c) 2009 Helge Bahmann
 //
 //  Distributed under the Boost Software License, Version 1.0.
@@ -6,7 +9,11 @@
 
 // Platform selection file
 
-#include <boost/config.hpp>
+#include <boost/atomic/detail/config.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 #if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 
@@ -49,5 +56,7 @@
 #else
 
 #include <boost/atomic/detail/base.hpp>
+
+#endif
 
 #endif

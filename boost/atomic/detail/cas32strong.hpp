@@ -11,7 +11,12 @@
 // a platform_cmpxchg32_strong primitive.
 
 #include <boost/memory_order.hpp>
+#include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/base.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost {
 namespace atomics {

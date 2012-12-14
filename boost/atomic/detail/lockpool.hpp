@@ -8,9 +8,13 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 
-#include <boost/atomic/config.hpp>
+#include <boost/atomic/detail/config.hpp>
 #ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
 #include <boost/thread/mutex.hpp>
+#endif
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
 #endif
 
 namespace boost {

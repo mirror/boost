@@ -10,8 +10,13 @@
 #include <stdint.h>
 
 #include <boost/memory_order.hpp>
+#include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/base.hpp>
 #include <boost/atomic/detail/builder.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 /* fallback implementation for various compilation targets;
 this is *not* efficient, particularly because all operations

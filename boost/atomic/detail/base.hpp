@@ -13,7 +13,12 @@
 
 #include <string.h>
 
+#include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/lockpool.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 #define BOOST_ATOMIC_DECLARE_BASE_OPERATORS \
     operator value_type(void) volatile const \

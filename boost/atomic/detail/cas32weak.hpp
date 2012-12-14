@@ -8,7 +8,12 @@
 //  Copyright (c) 2011 Helge Bahmann
 
 #include <boost/memory_order.hpp>
+#include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/base.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost {
 namespace atomics {

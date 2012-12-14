@@ -7,8 +7,13 @@
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
+#include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/base.hpp>
 #include <boost/atomic/detail/builder.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 /*
   Refer to http://h71000.www7.hp.com/doc/82final/5601/5601pro_004.html

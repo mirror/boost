@@ -8,6 +8,11 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/detail/interlocked.hpp>
+#include <boost/atomic/detail/config.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost {
 namespace atomics {

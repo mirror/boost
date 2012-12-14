@@ -9,6 +9,12 @@
 //  Copyright (c) 2009 Phil Endecott
 //  ARM Code by Phil Endecott, based on other architectures.
 
+#include <boost/atomic/detail/config.hpp>
+
+#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
 // From the ARM Architecture Reference Manual for architecture v6:
 //
 // LDREX{<cond>} <Rd>, [<Rn>]
