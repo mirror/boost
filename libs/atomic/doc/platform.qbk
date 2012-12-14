@@ -305,7 +305,7 @@ The template specializations should be put into a header file
 in the [^boost/atomic/detail] directory, preferrably
 specifying supported compiler and architecture in its name.
 
-The file [^boost/atomic/platform.hpp] must
+The file [^boost/atomic/detail/platform.hpp] must
 subsequently be modified to conditionally include the new
 header.
 
