@@ -36,7 +36,7 @@ private:
 int type::instances = 0;
 
 int main() {
-#if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     BOOST_TEST(type::instances == 0);
     {
         boost::shared_ptr<type[]> a1 = boost::allocate_shared<type[]>(std::allocator<type>(), 2, 1, 2, 3, 4, 5, 6, 7, 8, 9);

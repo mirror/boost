@@ -43,7 +43,7 @@ int main() {
     } catch (...) {
         BOOST_TEST(type::instances == 0);
     }
-#if defined(BOOST_HAS_VARIADIC_TMPL) && defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) && !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     BOOST_TEST(type::instances == 0);
     try {
         boost::make_shared<type[6]>();

@@ -30,13 +30,13 @@ namespace boost {
             array_destroy(memory, size, type);
         }
         template<typename T>
-        inline void array_construct(T* memory, std::size_t size, boost::true_type) {
+        inline void array_init(T* memory, std::size_t size, boost::true_type) {
             for (std::size_t i = 0; i < size; i++) {
                 memory[i] = T();
             }
         }
         template<typename T>
-        inline void array_construct(T* memory, std::size_t size, boost::false_type) {
+        inline void array_init(T* memory, std::size_t size, boost::false_type) {
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -49,13 +49,13 @@ namespace boost {
             }
         }
         template<typename T>
-        inline void array_construct(T* memory, std::size_t size) {
+        inline void array_init(T* memory, std::size_t size) {
             boost::has_trivial_default_constructor<T> type;            
-            array_construct(memory, size, type);
+            array_init(memory, size, type);
         }
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template<typename T>
-        inline void array_construct_value(T* memory, std::size_t size, T&& value) {
+        inline void array_init_value(T* memory, std::size_t size, T&& value) {
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -67,9 +67,9 @@ namespace boost {
                 throw;
             }
         }
-#if defined(BOOST_HAS_VARIADIC_TMPL)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template<typename T, typename... Args>
-        inline void array_construct_args(T* memory, std::size_t size, Args&&... args) {
+        inline void array_init_args(T* memory, std::size_t size, Args&&... args) {
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -84,7 +84,7 @@ namespace boost {
 #endif
 #endif
         template<typename T>
-        inline void array_construct_list(T* memory, std::size_t size, const T* list) {
+        inline void array_init_list(T* memory, std::size_t size, const T* list) {
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -97,7 +97,7 @@ namespace boost {
             }
         }
         template<typename T, std::size_t N>
-        inline void array_construct_list(T* memory, std::size_t size, const T* list) {
+        inline void array_init_list(T* memory, std::size_t size, const T* list) {
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -110,10 +110,10 @@ namespace boost {
             }
         }
         template<typename T>
-        inline void array_construct_noinit(T*, std::size_t, boost::true_type) {
+        inline void array_noinit(T*, std::size_t, boost::true_type) {
         }
         template<typename T>
-        inline void array_construct_noinit(T* memory, std::size_t size, boost::false_type) {
+        inline void array_noinit(T* memory, std::size_t size, boost::false_type) {
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -126,9 +126,9 @@ namespace boost {
             }
         }
         template<typename T>
-        inline void array_construct_noinit(T* memory, std::size_t size) {
+        inline void array_noinit(T* memory, std::size_t size) {
             boost::has_trivial_default_constructor<T> type;
-            array_construct_noinit(memory, size, type);
+            array_noinit(memory, size, type);
         }
     }
 }

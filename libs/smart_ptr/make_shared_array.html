@@ -35,7 +35,7 @@
     template&lt;typename T, typename A&gt;
     shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, size_t size);
     
-#if defined(BOOST_HAS_VARIADIC_TMPL) &amp;&amp; defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES) &amp;&amp; !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     template&lt;typename T, typename... Args&gt;
     shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(size_t size, Args&amp;&amp;... args);
 
@@ -48,15 +48,7 @@
     template&lt;typename T, typename A, typename... Args&gt;
     shared_ptr&lt;T[N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, Args&amp;&amp;... args);
 #endif
-    
-#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
-    template&lt;typename T, typename... Args&gt;
-    shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
-
-    template&lt;typename T, typename A, typename... Args&gt;
-    shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
-#endif
-    
+        
 #if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
     template&lt;typename T, typename... Args&gt;
     shared_ptr&lt;T[N]&gt; <a href="#functions">make_shared</a>(const T (&amp;list)[N]);
@@ -76,7 +68,15 @@
     template&lt;typename T, typename A, typename... Args&gt;
     shared_ptr&lt;T[M][N]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, const T (&amp;list)[N]);
 
-#if defined(BOOST_HAS_RVALUE_REFS)
+#if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
+    template&lt;typename T, typename... Args&gt;
+    shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(initializer_list&lt;T&gt; list);
+
+    template&lt;typename T, typename A, typename... Args&gt;
+    shared_ptr&lt;T[]&gt; <a href="#functions">allocate_shared</a>(const A&amp; allocator, initializer_list&lt;T&gt; list);
+#endif
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
     template&lt;typename T&gt;
     shared_ptr&lt;T[]&gt; <a href="#functions">make_shared</a>(size_t size, T&amp;&amp; value);
 
