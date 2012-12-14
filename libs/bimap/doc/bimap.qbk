@@ -1,7 +1,7 @@
 [library Boost.Bimap
     [quickbook 1.4]
     [authors [Capeletto, Matias]]
-    [copyright 2006-2007 Matias Capeletto]
+    [copyright 2006-2012 Matias Capeletto]
     [category container]
     [id bimap]
     [dirname bimap]
