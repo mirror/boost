@@ -22,9 +22,6 @@
 #include <algorithm>
 #include <functional>
 #include <string>
-#ifndef BOOST_NO_CXX11_HDR_INITIALIZER_LIST
-#include <initializer_list>
-#endif
 
 namespace boost {
     
