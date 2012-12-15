@@ -49,7 +49,7 @@ namespace boost {
 namespace atomics {
 namespace detail {
 
-static inline void fence_before(memory_order order)
+inline void fence_before(memory_order order)
 {
     switch(order) {
         case memory_order_consume:
@@ -61,7 +61,7 @@ static inline void fence_before(memory_order order)
     }
 }
 
-static inline void fence_after(memory_order order)
+inline void fence_after(memory_order order)
 {
     switch(order) {
         case memory_order_acquire:

@@ -10,6 +10,8 @@
 #ifndef BOOST_ATOMIC_DETAIL_GENERIC_CAS_HPP
 #define BOOST_ATOMIC_DETAIL_GENERIC_CAS_HPP
 
+#include <cstddef>
+#include <boost/cstdint.hpp>
 #include <boost/atomic/detail/config.hpp>
 
 #ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
@@ -38,19 +40,19 @@ atomic_thread_fence(memory_order order)
 namespace atomics {
 namespace detail {
 
-static inline void
+inline void
 platform_fence_before(memory_order)
 {
     /* empty, as compare_and_swap is synchronizing already */
 }
 
-static inline void
+inline void
 platform_fence_after(memory_order)
 {
     /* empty, as compare_and_swap is synchronizing already */
 }
 
-static inline void
+inline void
 platform_fence_before_store(memory_order order)
 {
     switch(order) {
@@ -66,14 +68,14 @@ platform_fence_before_store(memory_order order)
     }
 }
 
-static inline void
+inline void
 platform_fence_after_store(memory_order order)
 {
     if (order == memory_order_seq_cst)
         __sync_synchronize();
 }
 
-static inline void
+inline void
 platform_fence_after_load(memory_order order)
 {
     switch(order) {
@@ -90,7 +92,7 @@ platform_fence_after_load(memory_order order)
 }
 
 template<typename T>
-bool
+inline bool
 platform_cmpxchg32_strong(T & expected, T desired, volatile T * ptr)
 {
     T found = __sync_val_compare_and_swap(ptr, expected, desired);

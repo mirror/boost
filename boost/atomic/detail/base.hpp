@@ -13,6 +13,8 @@
 
 #include <string.h>
 
+#include <cstddef>
+#include <boost/cstdint.hpp>
 #include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/lockpool.hpp>
 
@@ -121,7 +123,7 @@ namespace boost {
 namespace atomics {
 namespace detail {
 
-static inline memory_order
+inline memory_order
 calculate_failure_order(memory_order order)
 {
     switch(order) {
@@ -134,7 +136,7 @@ calculate_failure_order(memory_order order)
     }
 }
 
-template<typename T, typename C , unsigned int Size, bool Sign>
+template<typename T, typename C, unsigned int Size, bool Sign>
 class base_atomic {
 private:
     typedef base_atomic this_type;
@@ -145,15 +147,15 @@ public:
 
     explicit base_atomic(const value_type & v)
     {
-        memcpy(&v_, &v, Size);
+        memcpy(&v_, &v, sizeof(value_type));
     }
 
     void
-    store(value_type v, memory_order /*order*/ = memory_order_seq_cst) volatile
+    store(value_type const& v, memory_order /*order*/ = memory_order_seq_cst) volatile
     {
         guard_type guard(const_cast<char *>(v_));
 
-        memcpy(const_cast<char *>(v_), &v, Size);
+        memcpy(const_cast<char *>(v_), &v, sizeof(value_type));
     }
 
     value_type
@@ -162,24 +164,24 @@ public:
         guard_type guard(const_cast<const char *>(v_));
 
         value_type v;
-        memcpy(&v, const_cast<const char *>(v_), Size);
+        memcpy(&v, const_cast<const char *>(v_), sizeof(value_type));
         return v;
     }
 
     bool
     compare_exchange_strong(
         value_type & expected,
-        value_type desired,
+        value_type const& desired,
         memory_order /*success_order*/,
         memory_order /*failure_order*/) volatile
     {
         guard_type guard(const_cast<char *>(v_));
 
-        if (memcmp(const_cast<char *>(v_), &expected, Size) == 0) {
-            memcpy(const_cast<char *>(v_), &desired, Size);
+        if (memcmp(const_cast<char *>(v_), &expected, sizeof(value_type)) == 0) {
+            memcpy(const_cast<char *>(v_), &desired, sizeof(value_type));
             return true;
         } else {
-            memcpy(&expected, const_cast<char *>(v_), Size);
+            memcpy(&expected, const_cast<char *>(v_), sizeof(value_type));
             return false;
         }
     }
@@ -187,7 +189,7 @@ public:
     bool
     compare_exchange_weak(
         value_type & expected,
-        value_type desired,
+        value_type const& desired,
         memory_order success_order,
         memory_order failure_order) volatile
     {
@@ -195,14 +197,14 @@ public:
     }
 
     value_type
-    exchange(value_type v, memory_order /*order*/=memory_order_seq_cst) volatile
+    exchange(value_type const& v, memory_order /*order*/=memory_order_seq_cst) volatile
     {
         guard_type guard(const_cast<char *>(v_));
 
         value_type tmp;
-        memcpy(&tmp, const_cast<char *>(v_), Size);
+        memcpy(&tmp, const_cast<char *>(v_), sizeof(value_type));
 
-        memcpy(const_cast<char *>(v_), &v, Size);
+        memcpy(const_cast<char *>(v_), &v, sizeof(value_type));
         return tmp;
     }
 
@@ -217,7 +219,7 @@ private:
     base_atomic(const base_atomic &) /* = delete */ ;
     void operator=(const base_atomic &) /* = delete */ ;
 
-    char v_[Size];
+    char v_[sizeof(value_type)];
 };
 
 template<typename T, unsigned int Size, bool Sign>

@@ -11,6 +11,8 @@
 // primitive. It is assumed that 64-bit loads/stores are not
 // atomic, so they are funnelled through cmpxchg as well.
 
+#include <cstddef>
+#include <boost/cstdint.hpp>
 #include <boost/memory_order.hpp>
 #include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/base.hpp>
@@ -347,16 +349,16 @@ class base_atomic<T, void, 8, Sign> {
     typedef T value_type;
     typedef uint64_t storage_type;
 public:
-    explicit base_atomic(value_type v) : v_(0)
+    explicit base_atomic(value_type const& v) : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-    base_atomic(void) : v_(0) {}
+    base_atomic(void) {}
 
     void
-    store(value_type value, memory_order order = memory_order_seq_cst) volatile
+    store(value_type const& value, memory_order order = memory_order_seq_cst) volatile
     {
-        storage_type value_s;
+        storage_type value_s = 0;
         memcpy(&value_s, &value, sizeof(value_s));
         platform_fence_before_store(order);
         platform_store64(value_s, &v_);
@@ -374,7 +376,7 @@ public:
     }
 
     value_type
-    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile
     {
         value_type original = load(memory_order_relaxed);
         do {
@@ -385,7 +387,7 @@ public:
     bool
     compare_exchange_weak(
         value_type & expected,
-        value_type desired,
+        value_type const& desired,
         memory_order success_order,
         memory_order failure_order) volatile
     {
@@ -395,11 +397,10 @@ public:
     bool
     compare_exchange_strong(
         value_type & expected,
-        value_type desired,
+        value_type const& desired,
         memory_order success_order,
         memory_order failure_order) volatile
     {
-
         storage_type expected_s = 0, desired_s = 0;
         memcpy(&expected_s, &expected, sizeof(value_type));
         memcpy(&desired_s, &desired, sizeof(value_type));

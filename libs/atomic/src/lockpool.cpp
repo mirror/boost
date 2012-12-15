@@ -10,7 +10,14 @@ namespace boost {
 namespace atomics {
 namespace detail {
 
-lockpool::lock_type lockpool::pool_[41];
+static lockpool::lock_type lock_pool_[41];
+
+// NOTE: This function must NOT be inline. Otherwise MSVC 9 will sometimes generate broken code for modulus operation which result in crashes.
+BOOST_ATOMIC_DECL lockpool::lock_type& lockpool::get_lock_for(const volatile void* addr)
+{
+    std::size_t index = reinterpret_cast<std::size_t>(addr) % (sizeof(lock_pool_) / sizeof(*lock_pool_));
+    return lock_pool_[index];
+}
 
 }
 }

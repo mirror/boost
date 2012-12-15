@@ -30,6 +30,8 @@
 // emulated CAS is only good enough to provide compare_exchange_weak
 // semantics.
 
+#include <cstddef>
+#include <boost/cstdint.hpp>
 #include <boost/memory_order.hpp>
 #include <boost/atomic/detail/config.hpp>
 
@@ -41,14 +43,14 @@ namespace boost {
 namespace atomics {
 namespace detail {
 
-static inline void
+inline void
 arm_barrier(void)
 {
     void (*kernel_dmb)(void) = (void (*)(void)) 0xffff0fa0;
     kernel_dmb();
 }
 
-static inline void
+inline void
 platform_fence_before(memory_order order)
 {
     switch(order) {
@@ -61,7 +63,7 @@ platform_fence_before(memory_order order)
     }
 }
 
-static inline void
+inline void
 platform_fence_after(memory_order order)
 {
     switch(order) {
@@ -73,27 +75,27 @@ platform_fence_after(memory_order order)
     }
 }
 
-static inline void
+inline void
 platform_fence_before_store(memory_order order)
 {
     platform_fence_before(order);
 }
 
-static inline void
+inline void
 platform_fence_after_store(memory_order order)
 {
     if (order == memory_order_seq_cst)
         arm_barrier();
 }
 
-static inline void
+inline void
 platform_fence_after_load(memory_order order)
 {
     platform_fence_after(order);
 }
 
 template<typename T>
-bool
+inline bool
 platform_cmpxchg32(T & expected, T desired, volatile T * ptr)
 {
     typedef T (*kernel_cmpxchg32_t)(T oldval, T newval, volatile T * ptr);
@@ -110,7 +112,7 @@ platform_cmpxchg32(T & expected, T desired, volatile T * ptr)
 }
 
 #define BOOST_ATOMIC_THREAD_FENCE 2
-static inline void
+inline void
 atomic_thread_fence(memory_order order)
 {
     switch(order) {
@@ -124,7 +126,7 @@ atomic_thread_fence(memory_order order)
 }
 
 #define BOOST_ATOMIC_SIGNAL_FENCE 2
-static inline void
+inline void
 atomic_signal_fence(memory_order)
 {
     __asm__ __volatile__ ("" ::: "memory");

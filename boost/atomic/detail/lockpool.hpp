@@ -7,7 +7,6 @@
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-
 #include <boost/atomic/detail/config.hpp>
 #ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
 #include <boost/thread/mutex.hpp>
@@ -23,45 +22,52 @@ namespace detail {
 
 #ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
 
-class lockpool {
+class lockpool
+{
 public:
     typedef mutex lock_type;
-    class scoped_lock {
+    class scoped_lock
+    {
     private:
-        mutex::scoped_lock guard;
+        lock_type& mtx_;
+
+        scoped_lock(scoped_lock const&) /* = delete */;
+        scoped_lock& operator=(scoped_lock const&) /* = delete */;
+
     public:
         explicit
-        scoped_lock(const volatile void * addr) : guard( lock_for(addr) )
+        scoped_lock(const volatile void * addr) : mtx_(get_lock_for(addr))
         {
+            mtx_.lock();
+        }
+        ~scoped_lock()
+        {
+            mtx_.unlock();
         }
     };
-private:
-    static BOOST_ATOMIC_DECL mutex pool_[41];
 
-    static mutex &
-    lock_for(const volatile void * addr)
-    {
-        std::size_t index = reinterpret_cast<std::size_t>(addr) % 41;
-        return pool_[index];
-    }
+private:
+    static BOOST_ATOMIC_DECL lock_type& get_lock_for(const volatile void * addr);
 };
 
 #else
 
-class lockpool {
+class lockpool
+{
 public:
     typedef atomic_flag lock_type;
 
-    class scoped_lock {
+    class scoped_lock
+    {
     private:
-        atomic_flag & flag_;
+        atomic_flag& flag_;
 
         scoped_lock(const scoped_lock &) /* = delete */;
-        void operator=(const scoped_lock &) /* = delete */;
+        scoped_lock& operator=(const scoped_lock &) /* = delete */;
 
     public:
         explicit
-        scoped_lock(const volatile void * addr) : flag_( lock_for(addr) )
+        scoped_lock(const volatile void * addr) : flag_(get_lock_for(addr))
         {
             do {
             } while (flag_.test_and_set(memory_order_acquire));
@@ -74,14 +80,7 @@ public:
     };
 
 private:
-    static BOOST_ATOMIC_DECL atomic_flag pool_[41];
-
-    static lock_type &
-    lock_for(const volatile void * addr)
-    {
-        std::size_t index = reinterpret_cast<std::size_t>(addr) % 41;
-        return pool_[index];
-    }
+    static BOOST_ATOMIC_DECL lock_type& get_lock_for(const volatile void * addr);
 };
 
 #endif

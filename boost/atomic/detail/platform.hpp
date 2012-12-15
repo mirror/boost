@@ -44,9 +44,9 @@
 
     #include <boost/atomic/detail/gcc-sparcv9.hpp>
 
-#elif defined(BOOST_USE_WINDOWS_H) || defined(_WIN32_CE) || defined(BOOST_MSVC) || defined(BOOST_INTEL_WIN) || defined(WIN32) || defined(_WIN32) || defined(__WIN32__) || defined(__CYGWIN__)
+#elif defined(BOOST_WINDOWS) || defined(_WIN32_CE)
 
-    #include <boost/atomic/detail/interlocked.hpp>
+    #include <boost/atomic/detail/windows.hpp>
 
 #elif 0 && defined(__GNUC__) /* currently does not work correctly */
 

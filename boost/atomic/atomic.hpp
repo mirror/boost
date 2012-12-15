@@ -14,7 +14,7 @@
 
 #include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/platform.hpp>
-#include <boost/atomic/detail/type-classifier.hpp>
+#include <boost/atomic/detail/type-classification.hpp>
 #include <boost/type_traits/is_signed.hpp>
 
 #ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
@@ -67,26 +67,26 @@ namespace boost {
 
 #ifndef BOOST_ATOMIC_THREAD_FENCE
 #define BOOST_ATOMIC_THREAD_FENCE 0
-static inline void
-atomic_thread_fence(memory_order)
+inline void atomic_thread_fence(memory_order)
 {
 }
 #endif
 
 #ifndef BOOST_ATOMIC_SIGNAL_FENCE
 #define BOOST_ATOMIC_SIGNAL_FENCE 0
-static inline void
-atomic_signal_fence(memory_order order)
+inline void atomic_signal_fence(memory_order order)
 {
     atomic_thread_fence(order);
 }
 #endif
 
 template<typename T>
-class atomic : public atomics::detail::base_atomic<T, typename atomics::detail::type_classifier<T>::test, sizeof(T), boost::is_signed<T>::value > {
+class atomic :
+    public atomics::detail::base_atomic<T, typename atomics::detail::classify<T>::type, atomics::detail::storage_size_of<T>::value, boost::is_signed<T>::value >
+{
 private:
     typedef T value_type;
-    typedef atomics::detail::base_atomic<T, typename atomics::detail::type_classifier<T>::test, sizeof(T), boost::is_signed<T>::value > super;
+    typedef atomics::detail::base_atomic<T, typename atomics::detail::classify<T>::type, atomics::detail::storage_size_of<T>::value, boost::is_signed<T>::value > super;
 public:
     atomic(void) : super() {}
     explicit atomic(const value_type & v) : super(v) {}
@@ -124,10 +124,18 @@ typedef atomic<boost::long_long_type> atomic_llong;
 #endif
 typedef atomic<void*> atomic_address;
 typedef atomic<bool> atomic_bool;
+typedef atomic<wchar_t> atomic_wchar_t;
+#if !defined(BOOST_NO_CXX11_CHAR16_T)
+typedef atomic<char16_t> atomic_char16_t;
+#endif
+#if !defined(BOOST_NO_CXX11_CHAR32_T)
+typedef atomic<char32_t> atomic_char32_t;
+#endif
 
 #ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
 #define BOOST_ATOMIC_FLAG_LOCK_FREE 0
-class atomic_flag {
+class atomic_flag
+{
 public:
     atomic_flag(void) : v_(false) {}
 
@@ -148,30 +156,6 @@ private:
     atomic<bool> v_;
 };
 #endif
-
-typedef atomic<char> atomic_char;
-typedef atomic<unsigned char> atomic_uchar;
-typedef atomic<signed char> atomic_schar;
-typedef atomic<uint8_t> atomic_uint8_t;
-typedef atomic<int8_t> atomic_int8_t;
-typedef atomic<unsigned short> atomic_ushort;
-typedef atomic<short> atomic_short;
-typedef atomic<uint16_t> atomic_uint16_t;
-typedef atomic<int16_t> atomic_int16_t;
-typedef atomic<unsigned int> atomic_uint;
-typedef atomic<int> atomic_int;
-typedef atomic<uint32_t> atomic_uint32_t;
-typedef atomic<int32_t> atomic_int32_t;
-typedef atomic<unsigned long> atomic_ulong;
-typedef atomic<long> atomic_long;
-typedef atomic<uint64_t> atomic_uint64_t;
-typedef atomic<int64_t> atomic_int64_t;
-#ifdef BOOST_HAS_LONG_LONG
-typedef atomic<boost::ulong_long_type> atomic_ullong;
-typedef atomic<boost::long_long_type> atomic_llong;
-#endif
-typedef atomic<void*> atomic_address;
-typedef atomic<bool> atomic_bool;
 
 }
 

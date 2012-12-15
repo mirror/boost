@@ -7,8 +7,8 @@
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
-#include <stdint.h>
-
+#include <cstddef>
+#include <boost/cstdint.hpp>
 #include <boost/memory_order.hpp>
 #include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/base.hpp>
@@ -25,7 +25,7 @@ each operation) */
 
 #if defined(__GNUC__)
     namespace boost { namespace atomics { namespace detail {
-    static inline int32_t
+    inline int32_t
     fenced_compare_exchange_strong_32(volatile int32_t *ptr, int32_t expected, int32_t desired)
     {
         return __sync_val_compare_and_swap_4(ptr, expected, desired);
@@ -33,7 +33,7 @@ each operation) */
     #define BOOST_ATOMIC_HAVE_CAS32 1
 
     #if defined(__amd64__) || defined(__i686__)
-    static inline int64_t
+    inline int64_t
     fenced_compare_exchange_strong_64(int64_t *ptr, int64_t expected, int64_t desired)
     {
         return __sync_val_compare_and_swap_8(ptr, expected, desired);
@@ -50,14 +50,14 @@ each operation) */
     #endif
 
     namespace boost { namespace atomics { namespace detail {
-    static inline int32_t
+    inline int32_t
     fenced_compare_exchange_strong(int32_t *ptr, int32_t expected, int32_t desired)
     {
         return _InterlockedCompareExchange(reinterpret_cast<volatile long*>(ptr), desired, expected);
     }
     #define BOOST_ATOMIC_HAVE_CAS32 1
     #if defined(_WIN64)
-    static inline int64_t
+    inline int64_t
     fenced_compare_exchange_strong(int64_t *ptr, int64_t expected, int64_t desired)
     {
         return _InterlockedCompareExchange64(ptr, desired, expected);
@@ -68,21 +68,21 @@ each operation) */
 
 #elif (defined(__ICC) || defined(__ECC))
     namespace boost { namespace atomics { namespace detail {
-    static inline int32_t
+    inline int32_t
     fenced_compare_exchange_strong_32(int32_t *ptr, int32_t expected, int32_t desired)
     {
         return _InterlockedCompareExchange((void*)ptr, desired, expected);
     }
     #define BOOST_ATOMIC_HAVE_CAS32 1
     #if defined(__x86_64)
-    static inline int64_t
+    inline int64_t
     fenced_compare_exchange_strong(int64_t *ptr, int64_t expected, int64_t desired)
     {
         return cas64<int>(ptr, expected, desired);
     }
     #define BOOST_ATOMIC_HAVE_CAS64 1
     #elif defined(__ECC)    //IA-64 version
-    static inline int64_t
+    inline int64_t
     fenced_compare_exchange_strong(int64_t *ptr, int64_t expected, int64_t desired)
     {
         return _InterlockedCompareExchange64((void*)ptr, desired, expected);
@@ -94,7 +94,7 @@ each operation) */
 #elif (defined(__SUNPRO_CC) && defined(__sparc))
     #include <sys/atomic.h>
     namespace boost { namespace atomics { namespace detail {
-    static inline int32_t
+    inline int32_t
     fenced_compare_exchange_strong_32(int32_t *ptr, int32_t expected, int32_t desired)
     {
         return atomic_cas_32((volatile unsigned int*)ptr, expected, desired);
@@ -102,7 +102,7 @@ each operation) */
     #define BOOST_ATOMIC_HAVE_CAS32 1
 
     /* FIXME: check for 64 bit mode */
-    static inline int64_t
+    inline int64_t
     fenced_compare_exchange_strong_64(int64_t *ptr, int64_t expected, int64_t desired)
     {
         return atomic_cas_64((volatile unsigned long long*)ptr, expected, desired);
