@@ -37,7 +37,7 @@ public:
 
 //  generated copy constructor, assignment, destructor are fine...
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
 // ... except in C++0x, move disables the implicit copy
 
@@ -86,7 +86,7 @@ public:
         boost::detail::sp_assert_convertible< Y, T >();
     }
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     template<class Y>
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE )
@@ -149,7 +149,7 @@ public:
         return *this;
     }
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     template<class Y>
     weak_ptr & operator=( weak_ptr<Y> && r ) BOOST_NOEXCEPT

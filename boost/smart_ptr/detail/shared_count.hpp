@@ -382,7 +382,7 @@ public:
         if( pi_ != 0 ) pi_->add_ref_copy();
     }
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     shared_count(shared_count && r): pi_(r.pi_) // nothrow
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)
@@ -494,7 +494,7 @@ public:
 
 // Move support
 
-#if defined( BOOST_HAS_RVALUE_REFS )
+#if !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )
 
     weak_count(weak_count && r): pi_(r.pi_) // nothrow
 #if defined(BOOST_SP_ENABLE_DEBUG_HOOKS)

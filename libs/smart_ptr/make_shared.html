@@ -41,7 +41,7 @@
   template&lt;typename T, typename A&gt;
     shared_ptr&lt;T&gt; <a href="#functions">allocate_shared</a>( A const &amp; );
 
-#if defined( BOOST_HAS_VARIADIC_TMPL ) && defined( BOOST_HAS_RVALUE_REFS )	// C++0x prototypes
+#if !defined( BOOST_NO_CXX11_VARIADIC_TEMPLATES ) && !defined( BOOST_NO_CXX11_RVALUE_REFERENCES )	// C++0x prototypes
 
   template&lt;typename T, typename... Args&gt;
     shared_ptr&lt;T&gt; <a href="#functions">make_shared</a>( Args &amp;&amp; ... args );
