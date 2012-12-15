@@ -11,7 +11,7 @@
 #include <algorithm>
 #include <string>
 
-#include <boost/algorithm/string_ref.hpp>
+#include <boost/utility/string_ref.hpp>
 
 
 #include <boost/test/included/test_exec_monitor.hpp>

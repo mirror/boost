@@ -48,10 +48,6 @@ import testing ;
      [ run hex_test4.cpp        : : : : hex_test4 ]
 	 [ compile-fail hex_fail1.cpp ]
 
-# StringRef tests
-	 [ run string_ref_test1.cpp : : : : string_ref_test1 ]
-	 [ run string_ref_test2.cpp : : : : string_ref_test2 ]
-	 
 # Wrapper tests
      [ run wrapper_test1.cpp        : : : : wrapper_test1 ]
    ;
