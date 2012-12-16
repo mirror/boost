@@ -733,64 +733,6 @@ namespace boost { namespace polygon{
 }
 using namespace gtl;
 
-bool testInterval() {
-  interval_data<int> interval(0, 10), interval2(10, 20);
-  if(!abuts(interval, interval2)) return false;
-  if(!boundaries_intersect(interval, interval2)) return false;
-  if(boundaries_intersect(interval, interval2, false)) return false;
-  if(intersect(interval, interval2, false)) return false;
-  if(!intersect(interval, interval2)) return false;
-  if(euclidean_distance(interval, interval2) != 0) return false;
-  encompass(interval, interval2);
-  set(interval, LOW, 0);
-  high(interval, 10);
-  scale(interval, 2.0f);
-  scale(interval, 0.5f);
-  if(low(interval) != 0) return false;
-  if(high(interval) != 10) return false;
-  move(interval, 10);
-  if(!equivalence(interval, interval2)) return false;
-  flip(interval, 10);
-  bloat(interval, -2);
-  shrink(interval, -2);
-  flip(interval, 10);
-  if(!equivalence(interval, interval2)) return false;
-  interval_data<int> half = get_half(interval, LOW);
-  if(high(half) != 15) return false;
-  convolve(interval, interval2);
-  if(high(interval) != 40) return false;
-  deconvolve(interval, interval2);
-  if(!equivalence(interval, interval2)) return false;
-  reflected_convolve(interval, interval2);
-  if(low(interval) != -10) return false;
-  reflected_deconvolve(interval, interval2);
-  if(!equivalence(interval, interval2)) return false;
-  euclidean_distance(interval, 0);
-  move(interval, 20);
-  if(euclidean_distance(interval, interval2) != 10) return false;
-  interval = interval2;
-  move(interval, -5);
-  if(!intersects(interval, interval2)) return false;
-  move(interval, 15);
-  if(!abuts(interval, interval2)) return false;
-  if(abuts(interval, interval2, HIGH)) return false;
-  move(interval, 10);
-  generalized_intersect(interval, interval2);
-  move(interval, -10);
-  if(!equivalence(interval, interval2)) return false;
-  if(get(interval, LOW) != low(interval)) return false;
-  if(get(interval, HIGH) != high(interval)) return false;
-  if(center(interval2) != 15) return false;
-  if(delta(interval2) != 10) return false;
-  assign(interval, interval2);
-  low(interval, 0);
-  if(low(interval) != 0) return false;
-  high(interval, 10);
-  join_with(interval, interval2);
-  if(high(interval) != high(interval2)) return false;
-  return true;
-}
-
 bool testRectangle() {
   rectangle_data<int> rect, rect2;
 #ifdef BOOST_POLYGON_MSVC
@@ -2544,7 +2486,6 @@ int main() {
   p + pwh;
   p90 + pwh;
   p45 + pwh;
-  std::cout << testInterval() << std::endl;
   std::cout << testRectangle() << std::endl;
   std::cout << testPolygon() << std::endl;
   std::cout << testPropertyMerge() << std::endl;

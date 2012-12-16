@@ -23,7 +23,11 @@ class point_data {
  public:
   typedef T coordinate_type;
 
-  point_data() : coords_() {}
+  point_data()
+#ifndef BOOST_POLYGON_MSVC
+    : coords_()
+#endif
+  {}
 
   point_data(coordinate_type x, coordinate_type y) {
     coords_[HORIZONTAL] = x;
@@ -41,13 +45,11 @@ class point_data {
     return *this;
   }
 
-  // TODO(asydorchuk): Deprecated.
   template <typename PointType>
   explicit point_data(const PointType& that) {
     *this = that;
   }
 
-  // TODO(asydorchuk): Deprecated.
   template <typename PointType>
   point_data& operator=(const PointType& that) {
     assign(*this, that);

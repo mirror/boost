@@ -8,6 +8,8 @@
 
 
 
+
+
     <meta http-equiv="content-type" content="text/html;charset=ISO-8859-1" /><!-- <link type="text/css" rel="stylesheet" href="adobe_source.css"> --></head><body><table style="margin: 0pt; padding: 0pt; width: 100%;" border="0" cellpadding="0" cellspacing="0"><tbody><tr>
 <td style="background-color: rgb(238, 238, 238);" nowrap="1" valign="top">
     <div style="padding: 5px;" align="center">
@@ -86,7 +88,7 @@
 The point concept tag is <font face="Courier New">
 point_concept</font></p><p> 
 To register a user defined type as a model of point concept, specialize the 
-geometry concept meta-function for that type.&nbsp; In the example below CPoint is registered as a model of 
+geometry concept meta-function for that type.&nbsp; In the example below <span style="font-family: Courier New,Courier,monospace;">CPoint</span> is registered as a model of 
 point&nbsp; concept.</p><p> 
 <font face="Courier New">template &lt;&gt;<br />
 struct geometry_concept&lt;CPoint&gt; { typedef point_concept type; };</font></p><p> 
@@ -100,7 +102,8 @@ because it would make overloading generic function by concept ambiguous if a
 type modeled more than one concept.</p><p> 
 Below is shown the default point traits.&nbsp; 
 Specialization of these traits is required for types that don't conform to the 
-default behavior.</p><p> 
+default behavior.</p>
+      <p> 
 template &lt;typename T&gt;<br />
 struct point_traits {<br />
 &nbsp;&nbsp;&nbsp;&nbsp; typedef typename T::coordinate_type coordinate_type;<br />
@@ -124,15 +127,16 @@ x_value, typename point_traits&lt;T&gt;::coordinate_type y_value) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return T(x_value, y_value);
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp; }<br />
-};</p><p> 
+};</p>
+<p> 
 Example code <a href="gtl_custom_point.htm">custom_point.cpp</a> demonstrates 
 how to map a 
 		user defined point class to the library point_concept</p><h2>Functions</h2>
 <table id="table1" border="1" width="100%">
 	<tbody><tr>
 		<td width="586"><font face="Courier New">template &lt;typename PointType&gt;<br />
-		coordinate_type <b>get</b>(const PointType&amp; point,<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; orientation_2d)</font></td>
+		coordinate_type <b>get</b>(const PointType&amp; point,<br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+orientation_2d)</font></td>
 		<td>Expects a model of point. Returns 
 		the x or y coordinate of the point, depending on the orientation_2d 
 		value.<br />
@@ -148,14 +152,16 @@ how to map a
 	</tr>
 	<tr>
 		<td width="586"><font face="Courier New">template &lt;typename PointType&gt;<br />PointType <b>construct</b>(coordinate_type x,<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; coordinate_type y)</font></td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+coordinate_type y)</font></td>
 		<td>Construct an object that is a model of point given x and y 
 		coordinate values.</td>
 	</tr>
 	<tr>
 		<td width="586"><font face="Courier New">template &lt;typename PointType1, typename PointType2&gt;<br />
 		PointType1&amp; <b>assign</b>(PointType1&amp; left,<br />
-&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; const PointType2&amp; right)</font></td>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+const PointType2&amp; right)</font></td>
 		<td>Copies data from right object that models point into left object 
 		that models point.</td>
 	</tr>
@@ -303,7 +309,7 @@ convenient to use with the library traits.</p>
 		coordinates.</td>
 	</tr>
 	<tr>
-		<td width="586"><font face="Courier New"><b>point_data</b>(const point_data* 
+		<td width="586"><font face="Courier New"><b>point_data</b>(const point_data&amp; 
 		that)</font></td>
 		<td>Copy construct</td>
 	</tr>
@@ -313,37 +319,39 @@ convenient to use with the library traits.</p>
 		<td>Assignment operator.</td>
 	</tr>
 	<tr>
-		<td width="586"><font face="Courier New"><b></b>point_data&amp; <b>operator=</b>(const T&amp; that) const</font></td>
+		<td width="586"><font face="Courier New">template &lt;typename PointType&gt;<br />
+point_data&amp; <b>operator=</b>(const PointType&amp; that) const</font></td>
 		<td>Assign from an object that is a model of point.</td>
 	</tr>
 	<tr>
 		<td width="586"><font face="Courier New">bool<b> 
-		operator==</b>(const T&amp; that) const</font></td>
-		<td>Compare equality to an object that is a model of point.</td>
+		operator==</b>(const </font><font face="Courier New">point_data</font><font face="Courier New">&amp; that) const</font></td>
+		<td>Equality operator overload.<br />
+</td>
 	</tr>
 	<tr>
 		<td width="586"><font face="Courier New">bool<b> 
-		operator!=</b>(const T&amp; that) const</font></td>
-		<td>Compare inequality to an object that is a model of point.</td>
+		operator!=</b>(const </font><font face="Courier New">point_data</font><font face="Courier New">&amp; that) const</font></td>
+		<td>Inequality operator overload.</td>
 	</tr>
 	<tr>
 		<td width="586"><font face="Courier New"><b> </b>bool<b> 
-		operator&lt;</b>(const T&amp; that) const</font></td>
+		operator&lt;</b>(const </font><font face="Courier New">point_data</font><font face="Courier New">&amp; that) const</font></td>
 		<td>Compares y coordinates then x coordinates to break ties.</td>
 	</tr>
 	<tr>
 		<td width="586"><font face="Courier New"><b> </b>bool<b> 
-		operator&lt;=</b>(const T&amp; that) const</font></td>
+		operator&lt;=</b>(const </font><font face="Courier New">point_data</font><font face="Courier New">&amp; that) const</font></td>
 		<td>Compares y coordinates then x coordinates to break ties.</td>
 	</tr>
 	<tr>
 		<td width="586"><font face="Courier New"><b> </b>bool<b> 
-		operator&gt;</b>(const T&amp; that) const</font></td>
+		operator&gt;</b>(const </font><font face="Courier New">point_data</font><font face="Courier New">&amp; that) const</font></td>
 		<td>Compares low coordinates then high coordinates to break ties.</td>
 	</tr>
 	<tr>
 		<td width="586"><font face="Courier New">bool<b> 
-		operator&gt;=</b>(const T&amp; that) const</font></td>
+		operator&gt;=</b>(const </font><font face="Courier New">point_data</font><font face="Courier New">&amp; that) const</font></td>
 		<td>Compares low coordinates then high coordinates to break ties.</td>
 	</tr>
 	<tr>

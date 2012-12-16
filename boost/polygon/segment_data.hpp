@@ -24,7 +24,11 @@ class segment_data {
   typedef T coordinate_type;
   typedef point_data<T> point_type;
 
-  segment_data() : points_() {}
+  segment_data()
+#ifndef BOOST_POLYGON_MSVC
+    : points_()
+#endif
+  {}
 
   segment_data(const point_type& low, const point_type& high) {
     points_[LOW] = low;
@@ -39,6 +43,12 @@ class segment_data {
   segment_data& operator=(const segment_data& that) {
     points_[0] = that.points_[0];
     points_[1] = that.points_[1];
+    return *this;
+  }
+
+  template <typename SegmentType>
+  segment_data& operator=(const SegmentType& that) {
+    assign(*this, that);
     return *this;
   }
 
