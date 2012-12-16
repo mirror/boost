@@ -151,7 +151,7 @@ namespace boost
 #include <cmath>
 #include <istream>
 
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#ifndef BOOST_NO_CXX11_HDR_ARRAY
 #include <array>
 #endif
 
@@ -294,7 +294,7 @@ namespace boost {
             boost::detail::deduce_character_type_later< boost::array< const Char, N > >
         > {};
 
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#ifndef BOOST_NO_CXX11_HDR_ARRAY
         template < typename Char, std::size_t N >
         struct stream_char_common< std::array<Char, N > >: public boost::mpl::if_c<
             boost::detail::is_char_or_wchar< Char >::value,
@@ -308,7 +308,7 @@ namespace boost {
             Char,
             boost::detail::deduce_character_type_later< std::array< const Char, N > >
         > {};
-#endif // !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#endif
 
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && defined(BOOST_NO_INTRINSIC_WCHAR_T)
         template <>
@@ -1768,7 +1768,7 @@ namespace boost {
             bool operator<<(boost::array<const signed char, N> const& input) BOOST_NOEXCEPT
             { return ((*this) << reinterpret_cast<boost::array<const char, N> const& >(input)); }
  
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#ifndef BOOST_NO_CXX11_HDR_ARRAY
             template <std::size_t N>
             bool operator<<(std::array<CharT, N> const& input) BOOST_NOEXCEPT
             { return shl_char_array_limited(input.begin(), N); }
@@ -1792,7 +1792,7 @@ namespace boost {
             template <std::size_t N>
             bool operator<<(std::array<const signed char, N> const& input) BOOST_NOEXCEPT
             { return ((*this) << reinterpret_cast<boost::array<const char, N> const& >(input)); }
-#endif // !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#endif
             
             template <class InStreamable>
             bool operator<<(const InStreamable& input)  { return shl_input_streamable(input); }
@@ -2009,7 +2009,7 @@ namespace boost {
                 return ((*this) >> reinterpret_cast<boost::array<char, N>& >(output)); 
             }
  
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#ifndef BOOST_NO_CXX11_HDR_ARRAY
             template <std::size_t N>
             bool operator>>(std::array<CharT, N>& output) BOOST_NOEXCEPT
             { 
@@ -2023,11 +2023,11 @@ namespace boost {
             }
 
             template <std::size_t N>
-            bool operator>>(std::array<signed char, N>& in)   
+            bool operator>>(std::array<signed char, N>& output)
             { 
                 return ((*this) >> reinterpret_cast<std::array<char, N>& >(output)); 
             }
-#endif // !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#endif
 
 
             /*

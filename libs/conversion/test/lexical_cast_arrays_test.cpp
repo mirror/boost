@@ -256,7 +256,7 @@ void testing_boost_array_output_conversion()
 
 void testing_std_array_output_conversion()
 {
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#ifndef BOOST_NO_CXX11_HDR_ARRAY
     testing_template_array_output_on_char_value<std::array>();
     testing_template_array_output_on_spec_value<std::array>(100);
     testing_template_array_output_on_spec_value<std::array>(static_cast<short>(100));
@@ -358,7 +358,7 @@ void testing_boost_array_input_conversion()
 
 void testing_std_array_input_conversion()
 {
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#ifndef BOOST_NO_CXX11_HDR_ARRAY
     testing_generic_array_input_conversion<std::array>();
 #endif
 
