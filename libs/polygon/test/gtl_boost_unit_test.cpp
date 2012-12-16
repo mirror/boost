@@ -733,64 +733,6 @@ namespace boost { namespace polygon{
 }
 using namespace gtl;
 
-bool testInterval() {
-  interval_data<int> interval(0, 10), interval2(10, 20);
-  if(!abuts(interval, interval2)) return false;
-  if(!boundaries_intersect(interval, interval2)) return false;
-  if(boundaries_intersect(interval, interval2, false)) return false;
-  if(intersect(interval, interval2, false)) return false;
-  if(!intersect(interval, interval2)) return false;
-  if(euclidean_distance(interval, interval2) != 0) return false;
-  encompass(interval, interval2);
-  set(interval, LOW, 0);
-  high(interval, 10);
-  scale(interval, 2.0f);
-  scale(interval, 0.5f);
-  if(low(interval) != 0) return false;
-  if(high(interval) != 10) return false;
-  move(interval, 10);
-  if(!equivalence(interval, interval2)) return false;
-  flip(interval, 10);
-  bloat(interval, -2);
-  shrink(interval, -2);
-  flip(interval, 10);
-  if(!equivalence(interval, interval2)) return false;
-  interval_data<int> half = get_half(interval, LOW);
-  if(high(half) != 15) return false;
-  convolve(interval, interval2);
-  if(high(interval) != 40) return false;
-  deconvolve(interval, interval2);
-  if(!equivalence(interval, interval2)) return false;
-  reflected_convolve(interval, interval2);
-  if(low(interval) != -10) return false;
-  reflected_deconvolve(interval, interval2);
-  if(!equivalence(interval, interval2)) return false;
-  euclidean_distance(interval, 0);
-  move(interval, 20);
-  if(euclidean_distance(interval, interval2) != 10) return false;
-  interval = interval2;
-  move(interval, -5);
-  if(!intersects(interval, interval2)) return false;
-  move(interval, 15);
-  if(!abuts(interval, interval2)) return false;
-  if(abuts(interval, interval2, HIGH)) return false;
-  move(interval, 10);
-  generalized_intersect(interval, interval2);
-  move(interval, -10);
-  if(!equivalence(interval, interval2)) return false;
-  if(get(interval, LOW) != low(interval)) return false;
-  if(get(interval, HIGH) != high(interval)) return false;
-  if(center(interval2) != 15) return false;
-  if(delta(interval2) != 10) return false;
-  assign(interval, interval2);
-  low(interval, 0);
-  if(low(interval) != 0) return false;
-  high(interval, 10);
-  join_with(interval, interval2);
-  if(high(interval) != high(interval2)) return false;
-  return true;
-}
-
 bool testRectangle() {
   rectangle_data<int> rect, rect2;
 #ifdef BOOST_POLYGON_MSVC
@@ -2544,7 +2486,6 @@ int main() {
   p + pwh;
   p90 + pwh;
   p45 + pwh;
-  std::cout << testInterval() << std::endl;
   std::cout << testRectangle() << std::endl;
   std::cout << testPolygon() << std::endl;
   std::cout << testPropertyMerge() << std::endl;
@@ -3113,37 +3054,6 @@ int main() {
     std::cout << equivalence(pwhs, polys) << std::endl;
   }
   {
-    typedef point_3d_data<int> Point3D;
-    Point3D p3d1(0, 1, 3), p3d2(0, 1, 2);
-    if(equivalence(p3d1, p3d2)) return 1;
-    if(euclidean_distance(p3d1, p3d2) != 1) return 1;
-    if(euclidean_distance(p3d1, p3d2, PROXIMAL) != 1) return 1;
-    if(manhattan_distance(p3d1, p3d2) != 1) return 1;
-    assign(p3d1, p3d2);
-    if(!equivalence(p3d1, p3d2)) return 1;
-    p3d1 = construct<Point3D>(x(p3d1), y(p3d1), z(p3d1));
-    if(!equivalence(p3d1, p3d2)) return 1;
-    convolve(p3d1, p3d2);
-    if(equivalence(p3d1, p3d2)) return 1;
-    deconvolve(p3d1, p3d2);
-    if(!equivalence(p3d1, p3d2)) return 1;
-    if(get(p3d1, PROXIMAL) != 2) return 1;
-    scale(p3d1, anisotropic_scale_factor<double>(2, 2, 2));
-    if(equivalence(p3d1, p3d2)) return 1;
-    scale_down(p3d1, 2);
-    if(!equivalence(p3d1, p3d2)) return 1;
-    scale_up(p3d1, 2);
-    if(equivalence(p3d1, p3d2)) return 1;
-    scale_down(p3d1, 2);
-    set(p3d1, PROXIMAL, 3);
-    if(equivalence(p3d1, p3d2)) return 1;
-    axis_transformation atr = axis_transformation::END;
-    transform(p3d1, atr);
-    if(z(p3d1) != -3) return 1;
-    z(p3d1, 2);
-    if(!equivalence(p3d1, p3d2)) return 1;
-  }
-  {
     polygon_90_set_data<int> ps1(HORIZONTAL), ps2(VERTICAL);
     ps1 += rectangle_data<int>(0, 0, 10, 120);
     assign(ps1, ps2);
@@ -3238,16 +3148,6 @@ int main() {
     snap_to_45(pwh);
   }
   {
-    point_data<int> pt(1,2);
-    point_3d_data<int> pt3d(1,2,3);
-    equivalence(pt, pt3d);
-    deconvolve(pt, pt3d);
-    manhattan_distance(pt, pt3d);
-    move(pt, HORIZONTAL, 1);
-    scale(pt, anisotropic_scale_factor<double>(2, 2, 2));
-    pt = pt3d;
-  }
-  {
     polygon_90_set_data<int> ps90_1, ps90_2;
     ps90_1.insert(rectangle_data<int>(0, 0, 10, 10));
     keep(ps90_1, 0, 1000, 0, 1000, 0, 1000);
@@ -3261,8 +3161,8 @@ int main() {
     bloat(ps90_1, 1);
     scale_up(ps90_1, 2);
     scale_down(ps90_1, 2);
-    scale(ps90_1, anisotropic_scale_factor<double>(2, 2, 2));
-    scale(ps90_1, anisotropic_scale_factor<double>(0.5, 0.5, 0.5));
+    scale(ps90_1, anisotropic_scale_factor<double>(2, 2));
+    scale(ps90_1, anisotropic_scale_factor<double>(0.5, 0.5));
     axis_transformation atr;
     transform(ps90_1, atr);
     std::cout << area(ps90_1) << std::endl;
@@ -3710,7 +3610,6 @@ int main() {
     segment_data<int> sarray[2];
     sarray[0] = segment_data<int>(point_data<int>(0,0), point_data<int>(10,10));
     sarray[1] = segment_data<int>(point_data<int>(10,0), point_data<int>(0,10));
-    std::iterator_traits<segment_data<int>*>::value_type s = sarray[0];
     intersect_segments(segs, sarray, sarray+2);
     std::cout << segs.size() << std::endl;
     assert_s(segs.size() == 4, "intersection3");
