@@ -11,7 +11,7 @@
 #if defined(BOOST_CHRONO_WINDOWS_API) ||  defined(__CYGWIN__)
 
 #include <boost/chrono/detail/static_assert.hpp>
-#if !defined(BOOST_NO_STATIC_ASSERT)
+#if !defined(BOOST_NO_CXX11_STATIC_ASSERT)
 #define NOTHING ""
 #endif
 

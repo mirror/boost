@@ -18,7 +18,7 @@
 #include <boost/system/system_error.hpp>
 #include <boost/detail/lightweight_test.hpp>
 
-#if !defined(BOOST_NO_STATIC_ASSERT)
+#if !defined(BOOST_NO_CXX11_STATIC_ASSERT)
 #define NOTHING ""
 #endif
 

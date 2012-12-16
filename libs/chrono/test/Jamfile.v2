@@ -40,6 +40,7 @@ project
         <toolset>gcc-mingw-4.5.0:<cxxflags>-Wno-missing-field-initializers
         <toolset>gcc-mingw-4.5.0:<cxxflags>-fdiagnostics-show-option
         <toolset>msvc:<cxxflags>/wd4127
+        <toolset>msvc:<cxxflags>/wd4512
 # Note: Some of the remarks from the Intel compiler are disabled
 # remark #193: zero used for undefined preprocessing identifier "XXX"
 # remark #304: access control not specified ("public" by default)
