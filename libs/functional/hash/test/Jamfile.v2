@@ -9,7 +9,7 @@ project hash-tests
     : requirements
         <warnings>all
         <toolset>intel:<warnings>on
-        <toolset>intel:<cxxflags>-strict-ansi
+        #<toolset>intel:<cxxflags>-strict-ansi
         <toolset>gcc:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion -Wfloat-equal -Wshadow"
         <toolset>darwin:<cxxflags>"-pedantic -Wstrict-aliasing -fstrict-aliasing -Wextra -Wsign-promo -Wunused-parameter -Wconversion -Wfloat-equal -Wshadow"
         #<toolset>msvc:<warnings-as-errors>on
