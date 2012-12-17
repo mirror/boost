@@ -29,20 +29,12 @@ class interval_data {
 #endif
   {}
 
-  interval_data(coordinate_type low, coordinate_type high)
-#ifndef BOOST_POLYGON_MSVC
-    : coords_()
-#endif
-  {
+  interval_data(coordinate_type low, coordinate_type high) {
     coords_[LOW] = low;
     coords_[HIGH] = high;
   }
 
-  interval_data(const interval_data& that)
-#ifndef BOOST_POLYGON_MSVC
-    : coords_()
-#endif
-  {
+  interval_data(const interval_data& that) {
     coords_[0] = that.coords_[0];
     coords_[1] = that.coords_[1];
   }
