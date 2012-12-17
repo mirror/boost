@@ -45,6 +45,12 @@ class interval_data {
     return *this;
   }
 
+  template <typename IntervalType>
+  interval_data& operator=(const IntervalType& that) {
+    assign(*this, that);
+    return *this;
+  }
+
   coordinate_type get(direction_1d dir) const {
     return coords_[dir.to_int()];
   }

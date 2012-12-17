@@ -45,13 +45,11 @@ class point_data {
     return *this;
   }
 
-  // TODO(asydorchuk): Deprecated.
   template <typename PointType>
   explicit point_data(const PointType& that) {
     *this = that;
   }
 
-  // TODO(asydorchuk): Deprecated.
   template <typename PointType>
   point_data& operator=(const PointType& that) {
     assign(*this, that);

@@ -46,6 +46,12 @@ class segment_data {
     return *this;
   }
 
+  template <typename SegmentType>
+  segment_data& operator=(const SegmentType& that) {
+    assign(*this, that);
+    return *this;
+  }
+
   point_type get(direction_1d dir) const {
     return points_[dir.to_int()];
   }
