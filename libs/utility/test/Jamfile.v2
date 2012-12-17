@@ -31,6 +31,8 @@ test-suite utility
         [ run ../ref_test.cpp ../../test/build//boost_test_exec_monitor/<link>static ]
         [ compile result_of_test.cpp ]
         [ run ../shared_iterator_test.cpp ]
+        [ run string_ref_test1.cpp ]
+        [ run string_ref_test2.cpp ]
         [ run ../value_init_test.cpp ]
         [ run ../value_init_workaround_test.cpp ]
         [ run ../initialized_test.cpp ]
