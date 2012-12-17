@@ -5,7 +5,7 @@
 
 #include "./config.hpp"
 
-#ifdef TEST_STD_INCLUDES
+#ifdef BOOST_HASH_TEST_STD_INCLUDES
 #  include <functional>
 #else
 #  include <boost/functional/hash.hpp>
@@ -31,10 +31,10 @@ int main() {
     compile_time_tests((test::enum4*) 0);
     compile_time_tests((test::enum_override*) 0);
 
-    HASH_NAMESPACE::hash<test::enum1> hash1;
-    HASH_NAMESPACE::hash<test::enum2> hash2;
-    HASH_NAMESPACE::hash<test::enum3> hash3;
-    HASH_NAMESPACE::hash<test::enum4> hash4;
+    BOOST_HASH_TEST_NAMESPACE::hash<test::enum1> hash1;
+    BOOST_HASH_TEST_NAMESPACE::hash<test::enum2> hash2;
+    BOOST_HASH_TEST_NAMESPACE::hash<test::enum3> hash3;
+    BOOST_HASH_TEST_NAMESPACE::hash<test::enum4> hash4;
 
     BOOST_TEST(hash1(test::enum1a) == hash1(test::enum1a));
 
@@ -50,7 +50,7 @@ int main() {
     BOOST_TEST(hash4(test::enum4a) != hash4(test::enum4b));
     BOOST_TEST(hash4(test::enum4b) == hash4(test::enum4b));
 
-    HASH_NAMESPACE::hash<test::enum_override> hash_override;
+    BOOST_HASH_TEST_NAMESPACE::hash<test::enum_override> hash_override;
 
     BOOST_TEST(hash_override(test::enum_override1) ==
         hash_override(test::enum_override1));
