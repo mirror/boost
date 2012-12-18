@@ -119,7 +119,7 @@ class list_const_iterator
    { return this->m_it->m_data;  }
 
    const_pointer   operator->() const
-   { return ::boost::intrusive::pointer_traits<const_pointer>::to_pointer(this->m_it->m_data); }
+   { return ::boost::intrusive::pointer_traits<const_pointer>::pointer_to(this->m_it->m_data); }
 
    //Increment / Decrement
    list_const_iterator& operator++()      
