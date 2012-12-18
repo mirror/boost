@@ -21,7 +21,7 @@
 // we get 0.995 probability to detect a race (if there is one).
 //
 // Overall this yields 0.995 * 0.995 > 0.99 confidence that the
-// operations truely behave atomic if this test program does not
+// operations truly behave atomic if this test program does not
 // report an error.
 
 #include <algorithm>

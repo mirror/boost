@@ -142,7 +142,7 @@ public:
         implement the operation).
 
         The established memory order will be @c order if the operation
-        is successful. If the operation is unsuccesful, the
+        is successful. If the operation is unsuccessful, the
         memory order will be
 
         - @c memory_order_relaxed if @c order is @c memory_order_acquire ,
@@ -162,7 +162,7 @@ public:
         \param desired Desired new value
         \param success_order Memory ordering constraint if operation
         is successful
-        \param failure_order Memory ordering constraint if operation is unsuccesful
+        \param failure_order Memory ordering constraint if operation is unsuccessful
         \return @c true if value was changed
 
         Atomically performs the following operation
@@ -215,7 +215,7 @@ public:
         where feasible.
 
         The established memory order will be @c order if the operation
-        is successful. If the operation is unsuccesful, the
+        is successful. If the operation is unsuccessful, the
         memory order will be
 
         - @c memory_order_relaxed if @c order is @c memory_order_acquire ,
@@ -235,7 +235,7 @@ public:
         \param desired Desired new value
         \param success_order Memory ordering constraint if operation
         is successful
-        \param failure_order Memory ordering constraint if operation is unsuccesful
+        \param failure_order Memory ordering constraint if operation is unsuccessful
         \return @c true if value was changed
 
         Atomically performs the following operation

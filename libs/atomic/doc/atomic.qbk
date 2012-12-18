@@ -115,7 +115,7 @@ look at the discussion of the correctness of a few of the
 
 [section:mutex Enforcing ['happens-before] through mutual exclusion]
 
-As an introductury example to understand how arguing using
+As an introductory example to understand how arguing using
 ['happens-before] works, consider two threads synchronizing
 using a common mutex:
 
@@ -142,7 +142,7 @@ One can however also arrive at the same conclusion using
 at [^m.lock()]. If this is be thread1, then as a consequence,
 thread2 cannot succeed at [^m.lock()] before thread1 has executed
 [^m.unlock()], consequently A ['happens-before] B in this case.
-By symmetry, if thread2 suceeds at [^m.unlock()] first, we can
+By symmetry, if thread2 succeeds at [^m.unlock()] first, we can
 conclude B ['happens-before] A.
 
 Since this already exhausts all options, we can conclude that
@@ -628,7 +628,7 @@ While [*Boost.Atomic] strives to implement the atomic operations
 from C++11 as faithfully as possible, there are a few
 limitations that cannot be lifted without compiler support:
 
-* [*Using non-POD-classes as template paramater to `atomic<T>` results
+* [*Using non-POD-classes as template parameter to `atomic<T>` results
   in undefined behavior]: This means that any class containing a
   constructor, destructor, virtual methods or access control
   specifications is not a valid argument in C++98. C++11 relaxes
@@ -666,7 +666,7 @@ implementation behaves as expected:
   of [*Boost.Atomic] compiles and has correct value semantics.
 * [*native_api.cpp] verifies that all atomic operations have correct
   value semantics (e.g. "fetch_add" really adds the desired value,
-  returing the previous). It is a rough "smoke-test" to help weed
+  returning the previous). It is a rough "smoke-test" to help weed
   out the most obvious mistakes (for example with overflow,
   signed/unsigned extension, ...).
 * [*lockfree.cpp] verifies that the [*BOOST_ATOMIC_*_LOCKFREE] macros

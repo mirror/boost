@@ -48,7 +48,7 @@
     it that values carried in registers are extended appropriately and
     everything falls into place naturally).
 
-    The register constrant "b"  instructs gcc to use any register
+    The register constraint "b"  instructs gcc to use any register
     except r0; this is sometimes required because the encoding for
     r0 is used to signify "constant zero" in a number of instructions,
     making r0 unusable in this place. For simplicity this constraint
