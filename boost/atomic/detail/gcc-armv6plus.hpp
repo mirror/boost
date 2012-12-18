@@ -57,7 +57,7 @@ namespace detail {
 // indicates the mode, so 1 is added to indicate that the destination code is Thumb.
 // A temporary register is needed for the address and is passed as an argument to these
 // macros.  It must be one of the "low" registers accessible to Thumb code, specified
-// usng the "l" attribute in the asm statement.
+// using the "l" attribute in the asm statement.
 //
 // Architecture v7 introduces "Thumb 2", which does include (almost?) all of the ARM
 // instruction set.  So in v7 we don't need to change to ARM mode; we can write "universal

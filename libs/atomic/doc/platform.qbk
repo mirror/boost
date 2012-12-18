@@ -68,7 +68,7 @@ underlying class:
   Some amount of care must be taken as the "raw" data type
   passed in from the user through [^boost::atomic<T>]
   is visible here -- it thus needs to be type-punned or otherwise
-  manipulated byte-by-byte to avoid using overloaded assigment,
+  manipulated byte-by-byte to avoid using overloaded assignment,
   comparison operators and copy constructors.
 
 [endsect]
@@ -302,7 +302,7 @@ function in the following way:
 [section:platform_atomic_puttogether Putting it altogether]
 
 The template specializations should be put into a header file
-in the [^boost/atomic/detail] directory, preferrably
+in the [^boost/atomic/detail] directory, preferably
 specifying supported compiler and architecture in its name.
 
 The file [^boost/atomic/detail/platform.hpp] must

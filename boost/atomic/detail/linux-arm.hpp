@@ -14,7 +14,7 @@
 // Intel/Marvell XScale chips like the one in the NSLU2) have only atomic swap.
 // On Linux the kernel provides some support that lets us abstract away from
 // these differences: it provides emulated CAS and barrier functions at special
-// addresses that are garaunteed not to be interrupted by the kernel.  Using
+// addresses that are guaranteed not to be interrupted by the kernel.  Using
 // this facility is slightly slower than inline assembler would be, but much
 // faster than a system call.
 //
