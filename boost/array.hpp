@@ -42,6 +42,7 @@
 #include <cstddef>
 #include <stdexcept>
 #include <boost/assert.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/swap.hpp>
 
 // Handles broken standard libraries better than <iterator>
@@ -438,6 +439,22 @@ namespace boost {
 
 } /* namespace boost */
 
+#ifndef BOOST_NO_CXX11_HDR_ARRAY
+//	If we don't have std::array, I'm assuming that we don't have std::get
+namespace std {
+   template <size_t Idx, typename T, size_t N>
+   T &get(boost::array<T,N> &arr) BOOST_NOEXCEPT {
+       BOOST_STATIC_ASSERT_MSG ( Idx < N, "std::get<>(boost::array &) index out of range" );
+       return arr[Idx];
+       }
+    
+   template <size_t Idx, typename T, size_t N>
+   const T &get(const boost::array<T,N> &arr) BOOST_NOEXCEPT {
+       BOOST_STATIC_ASSERT_MSG ( Idx < N, "std::get<>(const boost::array &) index out of range" );
+       return arr[Idx];
+       }
+}
+#endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400)  
 # pragma warning(pop)  
