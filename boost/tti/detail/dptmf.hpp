@@ -26,9 +26,18 @@ namespace boost
         >
       struct ptmf_seq
         {
-        typedef typename boost::mpl::push_front<FS,T>::type tfs1;
-        typedef typename boost::mpl::push_front<tfs1,R>::type tfs2;
-        typedef typename boost::function_types::member_function_pointer<tfs2,TAG>::type type;
+        typedef typename
+        boost::function_types::member_function_pointer
+          <
+          typename
+          boost::mpl::push_front
+            <
+            typename
+            boost::mpl::push_front<FS,T>::type,
+            R
+            >::type,
+          TAG
+          >::type type;
         };
       }
     }
