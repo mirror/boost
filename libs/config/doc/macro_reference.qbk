@@ -409,9 +409,6 @@ The platform has the POSIX API `pthread_yield`.
 [[`BOOST_HAS_PTHREADS`][Platform][
 The platform support POSIX style threads.
 ]]
-[[`BOOST_HAS_RVALUE_REFS`][Compiler][
-The compiler supports C++11 rvalue references.
-]]
 [[`BOOST_HAS_SCHED_YIELD`][Platform][
 The platform has the POSIX API `sched_yield`.
 ]]
@@ -1057,6 +1054,12 @@ They will be removed in a future version of boost.
 [[`BOOST_NO_VARIADIC_TEMPLATES`][`BOOST_NO_CXX11_VARIADIC_TEMPLATES`][Boost 1.51][]]
 [[`BOOST_NO_VARIADIC_MACROS`][`BOOST_NO_CXX11_VARIADIC_MACROS`][Boost 1.51][]]
 [[`BOOST_NO_NUMERIC_LIMITS_LOWEST`][`BOOST_NO_CXX11_NUMERIC_LIMITS`][Boost 1.51][]]
+[[][][][]]
+[[`BOOST_HAS_STATIC_ASSERT`][`BOOST_NO_CXX11_STATIC_ASSERT` (negated)][Boost 1.53][]]
+[[`BOOST_HAS_VARIADIC_TMPL`][`BOOST_NO_CXX11_VARIADIC_TEMPLATES` (negated)][Boost 1.53][]]
+[[`BOOST_HAS_RVALUE_REFS`][`BOOST_NO_CXX11_RVALUE_REFERENCES` (negated)][Boost 1.53][]]
+[[`BOOST_HAS_CHAR_16_T`][`BOOST_NO_CXX11_CHAR_16_T` (negated)][Boost 1.53][]]
+[[`BOOST_HAS_CHAR_32_T`][`BOOST_NO_CXX11_CHAR_32_T` (negated)][Boost 1.53][]]
 ]
 
 [endsect]
