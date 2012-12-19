@@ -7,11 +7,14 @@
 
 #include <string>
 #include <iostream>
-#include <boost/array.hpp>
 #include <algorithm>
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
 #include <array>
 #endif
+
+#include <boost/array.hpp>
+#include <boost/static_assert.hpp>
+
 
 #include <boost/test/included/test_exec_monitor.hpp>
 
@@ -25,42 +28,23 @@ namespace {
         typedef T arr[5];
         test_type           test_case; //   =   { 1, 1, 2, 3, 5 };
     
-        T &aRef = std::get<0> ( test_case );
+        T &aRef = std::get<5> ( test_case );	// should fail to compile
         BOOST_CHECK ( &*test_case.begin () == &aRef );
-        
-        const T &caRef = std::get<0> ( test_case );
-        BOOST_CHECK ( &*test_case.cbegin () == &caRef );
     }
     #endif
-
-    template< class T >
-    void    RunBoostTests()
-    {
-        typedef boost::array< T, 5 >    test_type;
-        typedef T arr[5];
-        test_type           test_case; //   =   { 1, 1, 2, 3, 5 };
-    
-        T &aRef = boost::get<0> ( test_case );
-        BOOST_CHECK ( &*test_case.begin () == &aRef );
-        
-        const T &caRef = boost::get<0> ( test_case );
-        BOOST_CHECK ( &*test_case.cbegin () == &caRef );
-    }
 
 }
 
 int test_main( int , char* [] )
 {
-    RunBoostTests< bool >();
-    RunBoostTests< void * >();
-    RunBoostTests< long double >();
-    RunBoostTests< std::string >();
 
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
     RunStdTests< bool >();
     RunStdTests< void * >();
     RunStdTests< long double >();
     RunStdTests< std::string >();
+#else
+	BOOST_STATIC_ASSERT ( false );	// fail on C++03 systems.
 #endif
     return 0;
 }

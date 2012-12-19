@@ -40,11 +40,8 @@ namespace {
         typedef T arr[5];
         test_type           test_case; //   =   { 1, 1, 2, 3, 5 };
     
-        T &aRef = boost::get<0> ( test_case );
+        T &aRef = boost::get<5> ( test_case );
         BOOST_CHECK ( &*test_case.begin () == &aRef );
-        
-        const T &caRef = boost::get<0> ( test_case );
-        BOOST_CHECK ( &*test_case.cbegin () == &caRef );
     }
 
 }
