@@ -5,16 +5,16 @@
  * http://www.boost.org/LICENSE_1_0.txt)
  */
 
+#include <boost/array.hpp>
+#include <boost/static_assert.hpp>
+
+
 #include <string>
 #include <iostream>
 #include <algorithm>
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
 #include <array>
 #endif
-
-#include <boost/array.hpp>
-#include <boost/static_assert.hpp>
-
 
 #include <boost/test/included/test_exec_monitor.hpp>
 
