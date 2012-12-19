@@ -883,13 +883,6 @@ namespace std{ using ::type_info; }
 #endif
 
 //
-// Normalize BOOST_NO_CXX11_STATIC_ASSERT and (deprecated) BOOST_HAS_STATIC_ASSERT:
-//
-#if !defined(BOOST_NO_CXX11_STATIC_ASSERT) && !defined(BOOST_HAS_STATIC_ASSERT)
-#  define BOOST_HAS_STATIC_ASSERT
-#endif
-
-//
 // constexpr workarounds
 // 
 #if defined(BOOST_NO_CXX11_CONSTEXPR)
@@ -901,6 +894,13 @@ namespace std{ using ::type_info; }
 #endif
 
 #define BOOST_STATIC_CONSTEXPR  static BOOST_CONSTEXPR_OR_CONST
+
+//
+// Set BOOST_HAS_STATIC_ASSERT when BOOST_NO_CXX11_STATIC_ASSERT is not defined
+//
+#if !defined(BOOST_NO_CXX11_STATIC_ASSERT) && !defined(BOOST_HAS_STATIC_ASSERT)
+#  define BOOST_HAS_STATIC_ASSERT
+#endif
 
 //
 // Set BOOST_HAS_RVALUE_REFS when BOOST_NO_CXX11_RVALUE_REFERENCES is not defined
