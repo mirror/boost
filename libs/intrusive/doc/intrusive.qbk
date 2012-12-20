@@ -3847,7 +3847,10 @@ to be inserted in intrusive containers are allocated using `std::vector` or `std
 
 [section:release_notes_boost_1_53_00 Boost 1.53 Release]
 
-*  Fixed bug [@https://svn.boost.org/trac/boost/ticket/7529 #7529].
+*  Fixed bugs
+   [@https://svn.boost.org/trac/boost/ticket/7174 #7174],
+   [@https://svn.boost.org/trac/boost/ticket/7529 #7529],
+   [@https://svn.boost.org/trac/boost/ticket/7815 #7815].
 *  Fixed GCC -Wshadow warnings.
 *  Added missing `explicit` keyword in several intrusive container constructors.
 *  Replaced deprecated BOOST_NO_XXXX with newer BOOST_NO_CXX11_XXX macros.
