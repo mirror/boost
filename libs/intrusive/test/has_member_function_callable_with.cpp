@@ -53,7 +53,7 @@ class has_member_function_named_func
       void func();
    };
 
-   struct Base : public Type, public BaseMixin {};
+   struct Base : public ::boost::intrusive::detail::remove_cv<Type>::type, public BaseMixin {};
    template <typename T, T t> class Helper{};
 
    template <typename U>
