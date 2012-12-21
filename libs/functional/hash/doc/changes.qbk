@@ -142,13 +142,16 @@
 [h2 Boost 1.52.0]
 
 * Restore `enum` support, which was accidentally removed in the last version.
+* New floating point hasher - will hash the binary representation on more
+  platforms, which should be faster.
+
+[h2 Boost 1.53.0]
+
 * Add support for `boost::int128_type` and `boost::uint128_type` where
   available - currently only `__int128` and `unsigned __int128` on some
   versions of gcc.
-* New floating point hasher - will hash the binary representation on more
-  platforms, which should be faster.
-* On platforms that are known to have standard floating point, don't use the
-  automatic detection of floating point functions - which can break if there
-  are ambiguous overloads.
+* On platforms that are known to have the standard floating point functions,
+  don't use automatic detection - which can break if there are ambiguous
+  overloads.
 
 [endsect]
