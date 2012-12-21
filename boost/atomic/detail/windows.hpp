@@ -42,7 +42,7 @@ extern "C" void _mm_mfence(void);
 #pragma intrinsic(_mm_mfence)
 #endif
 
-BOOST_FORCEINLINE void x86_full_fence(void)
+BOOST_FORCEINLINE void hardware_full_fence(void)
 {
 #if defined(_MSC_VER) && (defined(_M_AMD64) || (defined(_M_IX86) && defined(_M_IX86_FP) && _M_IX86_FP >= 2))
     // Use mfence only if SSE2 is available
@@ -55,12 +55,9 @@ BOOST_FORCEINLINE void x86_full_fence(void)
 
 // Define compiler barriers
 #if defined(_MSC_VER) && _MSC_VER >= 1310 && !defined(_WIN32_WCE)
-
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
-
 #define BOOST_ATOMIC_READ_WRITE_BARRIER() _ReadWriteBarrier()
-
 #endif
 
 #ifndef BOOST_ATOMIC_READ_WRITE_BARRIER
@@ -95,6 +92,17 @@ BOOST_FORCEINLINE void
 platform_fence_after_load(memory_order order)
 {
     BOOST_ATOMIC_READ_WRITE_BARRIER();
+
+    // On x86 and x86_64 there is no need for a hardware barrier,
+    // even if seq_cst memory order is requested, because all
+    // seq_cst writes are implemented with lock-prefixed operations
+    // or xchg which has implied lock prefix. Therefore normal loads
+    // are already ordered with seq_cst stores on these architectures.
+
+#if !(defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86)))
+    if (order == memory_order_seq_cst)
+        hardware_full_fence();
+#endif
 }
 
 } // namespace detail
@@ -106,7 +114,7 @@ atomic_thread_fence(memory_order order)
 {
     BOOST_ATOMIC_READ_WRITE_BARRIER();
     if (order == memory_order_seq_cst)
-        atomics::detail::x86_full_fence();
+        atomics::detail::hardware_full_fence();
 }
 
 #define BOOST_ATOMIC_SIGNAL_FENCE 2
