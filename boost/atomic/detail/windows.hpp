@@ -54,7 +54,7 @@ BOOST_FORCEINLINE void x86_full_fence(void)
 }
 
 // Define compiler barriers
-#if defined(_MSC_VER) && _MSC_VER >= 1310
+#if defined(_MSC_VER) && _MSC_VER >= 1310 && !defined(_WIN32_WCE)
 
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
