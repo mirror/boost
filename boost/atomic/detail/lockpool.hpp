@@ -69,8 +69,12 @@ public:
         explicit
         scoped_lock(const volatile void * addr) : flag_(get_lock_for(addr))
         {
-            do {
-            } while (flag_.test_and_set(memory_order_acquire));
+            for (; flag_.test_and_set(memory_order_acquire);)
+            {
+#if defined(BOOST_ATOMIC_X86_PAUSE)
+                BOOST_ATOMIC_X86_PAUSE();
+#endif
+            }
         }
 
         ~scoped_lock(void)

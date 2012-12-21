@@ -28,6 +28,14 @@ namespace boost {
 namespace atomics {
 namespace detail {
 
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+extern "C" void _mm_pause(void);
+#pragma intrinsic(_mm_pause)
+#define BOOST_ATOMIC_X86_PAUSE() _mm_pause()
+#else
+#define BOOST_ATOMIC_X86_PAUSE()
+#endif
+
 // Define hardware barriers
 #if defined(_MSC_VER) && (defined(_M_AMD64) || (defined(_M_IX86) && defined(_M_IX86_FP) && _M_IX86_FP >= 2))
 extern "C" void _mm_mfence(void);
@@ -53,174 +61,40 @@ extern "C" void _ReadWriteBarrier();
 
 #define BOOST_ATOMIC_READ_WRITE_BARRIER() _ReadWriteBarrier()
 
-#if _MSC_VER >= 1400
-
-extern "C" void _ReadBarrier();
-#pragma intrinsic(_ReadBarrier)
-extern "C" void _WriteBarrier();
-#pragma intrinsic(_WriteBarrier)
-
-#define BOOST_ATOMIC_READ_BARRIER() _ReadBarrier()
-#define BOOST_ATOMIC_WRITE_BARRIER() _WriteBarrier()
-
-#endif
 #endif
 
 #ifndef BOOST_ATOMIC_READ_WRITE_BARRIER
 #define BOOST_ATOMIC_READ_WRITE_BARRIER()
 #endif
-#ifndef BOOST_ATOMIC_READ_BARRIER
-#define BOOST_ATOMIC_READ_BARRIER() BOOST_ATOMIC_READ_WRITE_BARRIER()
-#endif
-#ifndef BOOST_ATOMIC_WRITE_BARRIER
-#define BOOST_ATOMIC_WRITE_BARRIER() BOOST_ATOMIC_READ_WRITE_BARRIER()
-#endif
-
-// MSVC (up to 2012, inclusively) optimizer generates a very poor code for switch-case in fence functions.
-// Issuing unconditional compiler barriers generates better code. We may re-enable the main branch if MSVC optimizer improves.
-#ifdef BOOST_MSVC
-#define BOOST_ATOMIC_DETAIL_BAD_SWITCH_CASE_OPTIMIZER
-#endif
 
 BOOST_FORCEINLINE void
-platform_fence_before(memory_order order)
+platform_fence_before(memory_order)
 {
-#ifdef BOOST_ATOMIC_DETAIL_BAD_SWITCH_CASE_OPTIMIZER
-
     BOOST_ATOMIC_READ_WRITE_BARRIER();
-
-#else
-
-    switch(order)
-    {
-    case memory_order_relaxed:
-    case memory_order_consume:
-    case memory_order_acquire:
-        break;
-    case memory_order_release:
-    case memory_order_acq_rel:
-        BOOST_ATOMIC_WRITE_BARRIER();
-        /* release */
-        break;
-    case memory_order_seq_cst:
-        BOOST_ATOMIC_READ_WRITE_BARRIER();
-        /* seq */
-        break;
-    }
-
-#endif
 }
 
 BOOST_FORCEINLINE void
-platform_fence_after(memory_order order)
+platform_fence_after(memory_order)
 {
-#ifdef BOOST_ATOMIC_DETAIL_BAD_SWITCH_CASE_OPTIMIZER
-
     BOOST_ATOMIC_READ_WRITE_BARRIER();
-
-#else
-
-    switch(order)
-    {
-    case memory_order_relaxed:
-    case memory_order_release:
-        break;
-    case memory_order_consume:
-    case memory_order_acquire:
-    case memory_order_acq_rel:
-        BOOST_ATOMIC_READ_BARRIER();
-        break;
-    case memory_order_seq_cst:
-        BOOST_ATOMIC_READ_WRITE_BARRIER();
-        /* seq */
-        break;
-    }
-
-#endif
 }
 
 BOOST_FORCEINLINE void
-platform_fence_before_store(memory_order order)
+platform_fence_before_store(memory_order)
 {
-#ifdef BOOST_ATOMIC_DETAIL_BAD_SWITCH_CASE_OPTIMIZER
-
-    BOOST_ATOMIC_WRITE_BARRIER();
-
-#else
-
-    switch(order)
-    {
-    case memory_order_relaxed:
-    case memory_order_acquire:
-    case memory_order_consume:
-        break;
-    case memory_order_acq_rel:
-    case memory_order_release:
-    case memory_order_seq_cst:
-        BOOST_ATOMIC_WRITE_BARRIER();
-        break;
-    }
-
-#endif
+    BOOST_ATOMIC_READ_WRITE_BARRIER();
 }
 
 BOOST_FORCEINLINE void
-platform_fence_after_store(memory_order order)
+platform_fence_after_store(memory_order)
 {
-#ifdef BOOST_ATOMIC_DETAIL_BAD_SWITCH_CASE_OPTIMIZER
-
-    BOOST_ATOMIC_WRITE_BARRIER();
-    if (order == memory_order_seq_cst)
-        x86_full_fence();
-
-#else
-
-    switch(order)
-    {
-    case memory_order_relaxed:
-    case memory_order_acquire:
-    case memory_order_consume:
-        break;
-    case memory_order_acq_rel:
-    case memory_order_release:
-        BOOST_ATOMIC_WRITE_BARRIER();
-        break;
-    case memory_order_seq_cst:
-        x86_full_fence();
-        break;
-    }
-
-#endif
+    BOOST_ATOMIC_READ_WRITE_BARRIER();
 }
 
 BOOST_FORCEINLINE void
 platform_fence_after_load(memory_order order)
 {
-#ifdef BOOST_ATOMIC_DETAIL_BAD_SWITCH_CASE_OPTIMIZER
-
-    BOOST_ATOMIC_READ_BARRIER();
-    if (order == memory_order_seq_cst)
-        x86_full_fence();
-
-#else
-
-    switch(order)
-    {
-    case memory_order_relaxed:
-    case memory_order_consume:
-        break;
-    case memory_order_acquire:
-    case memory_order_acq_rel:
-        BOOST_ATOMIC_READ_BARRIER();
-        break;
-    case memory_order_release:
-        break;
-    case memory_order_seq_cst:
-        x86_full_fence();
-        break;
-    }
-
-#endif
+    BOOST_ATOMIC_READ_WRITE_BARRIER();
 }
 
 } // namespace detail
@@ -230,106 +104,44 @@ platform_fence_after_load(memory_order order)
 BOOST_FORCEINLINE void
 atomic_thread_fence(memory_order order)
 {
-#ifdef BOOST_ATOMIC_DETAIL_BAD_SWITCH_CASE_OPTIMIZER
-
     BOOST_ATOMIC_READ_WRITE_BARRIER();
     if (order == memory_order_seq_cst)
         atomics::detail::x86_full_fence();
-
-#else
-
-    switch (order)
-    {
-    case memory_order_relaxed:
-        break;
-    case memory_order_consume:
-    case memory_order_acquire:
-        BOOST_ATOMIC_READ_BARRIER();
-        break;
-    case memory_order_release:
-        BOOST_ATOMIC_WRITE_BARRIER();
-        break;
-    case memory_order_acq_rel:
-        BOOST_ATOMIC_READ_WRITE_BARRIER();
-        break;
-    case memory_order_seq_cst:
-        atomics::detail::x86_full_fence();
-        break;
-    }
-
-#endif
 }
 
 #define BOOST_ATOMIC_SIGNAL_FENCE 2
 BOOST_FORCEINLINE void
-atomic_signal_fence(memory_order order)
+atomic_signal_fence(memory_order)
 {
-#ifdef BOOST_ATOMIC_DETAIL_BAD_SWITCH_CASE_OPTIMIZER
-
     BOOST_ATOMIC_READ_WRITE_BARRIER();
-
-#else
-
-    switch (order)
-    {
-    case memory_order_relaxed:
-        break;
-    case memory_order_consume:
-    case memory_order_acquire:
-        BOOST_ATOMIC_READ_BARRIER();
-        break;
-    case memory_order_release:
-        BOOST_ATOMIC_WRITE_BARRIER();
-        break;
-    case memory_order_acq_rel:
-    case memory_order_seq_cst:
-        BOOST_ATOMIC_READ_WRITE_BARRIER();
-        break;
-    }
-
-#endif
 }
 
 #undef BOOST_ATOMIC_READ_WRITE_BARRIER
-#undef BOOST_ATOMIC_READ_BARRIER
-#undef BOOST_ATOMIC_WRITE_BARRIER
 
 class atomic_flag
 {
 private:
     atomic_flag(const atomic_flag &) /* = delete */ ;
     atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
-#ifdef BOOST_ATOMIC_INTERLOCKED_EXCHANGE8
-    char v_;
-#else
-    long v_;
-#endif
+    uint32_t v_;
 public:
     atomic_flag(void) : v_(0) {}
-
-    void
-    clear(memory_order order = memory_order_seq_cst) volatile
-    {
-        atomics::detail::platform_fence_before_store(order);
-#ifdef BOOST_ATOMIC_INTERLOCKED_EXCHANGE8
-        BOOST_ATOMIC_INTERLOCKED_EXCHANGE8(&v_, 0);
-#else
-        BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&v_, 0);
-#endif
-        atomics::detail::platform_fence_after_store(order);
-    }
 
     bool
     test_and_set(memory_order order = memory_order_seq_cst) volatile
     {
         atomics::detail::platform_fence_before(order);
-#ifdef BOOST_ATOMIC_INTERLOCKED_EXCHANGE8
-        const char old = BOOST_ATOMIC_INTERLOCKED_EXCHANGE8(&v_, 1);
-#else
-        const long old = BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&v_, 1);
-#endif
+        const uint32_t old = (uint32_t)BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&v_, 1);
         atomics::detail::platform_fence_after(order);
         return old != 0;
+    }
+
+    void
+    clear(memory_order order = memory_order_seq_cst) volatile
+    {
+        atomics::detail::platform_fence_before_store(order);
+        BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&v_, 0);
+        atomics::detail::platform_fence_after_store(order);
     }
 };
 
@@ -478,7 +290,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -498,7 +313,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -518,7 +336,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -655,7 +476,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -675,7 +499,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -695,7 +522,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -807,7 +637,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -822,7 +655,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed));
+        for(; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -837,7 +673,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -951,7 +790,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -966,7 +808,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
@@ -981,7 +826,10 @@ public:
         return v;
 #else
         value_type tmp = load(memory_order_relaxed);
-        do {} while(!compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed));
+        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
         return tmp;
 #endif
     }
