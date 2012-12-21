@@ -18,9 +18,9 @@
 
 #include <boost/detail/interlocked.hpp>
 
-#define BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE(dest, exchange, compare) BOOST_INTERLOCKED_COMPARE_EXCHANGE(dest, exchange, compare)
-#define BOOST_ATOMIC_INTERLOCKED_EXCHANGE(dest, newval) BOOST_INTERLOCKED_EXCHANGE(dest, newval)
-#define BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD(dest, addend) BOOST_INTERLOCKED_EXCHANGE_ADD(dest, addend)
+#define BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE(dest, exchange, compare) BOOST_INTERLOCKED_COMPARE_EXCHANGE((long*)(dest), exchange, compare)
+#define BOOST_ATOMIC_INTERLOCKED_EXCHANGE(dest, newval) BOOST_INTERLOCKED_EXCHANGE((long*)(dest), newval)
+#define BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD(dest, addend) BOOST_INTERLOCKED_EXCHANGE_ADD((long*)(dest), addend)
 #define BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE_POINTER(dest, exchange, compare) BOOST_INTERLOCKED_COMPARE_EXCHANGE_POINTER(dest, exchange, compare)
 #define BOOST_ATOMIC_INTERLOCKED_EXCHANGE_POINTER(dest, newval) BOOST_INTERLOCKED_EXCHANGE_POINTER(dest, newval)
 #define BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD_POINTER(dest, byte_offset) ((void*)BOOST_INTERLOCKED_EXCHANGE_ADD((long*)(dest), byte_offset))
