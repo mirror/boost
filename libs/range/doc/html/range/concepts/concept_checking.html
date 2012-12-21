@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="random_access_range.html"><img src="../../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../concepts.html"><img src="../../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../../index.html"><img src="../../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="../reference.html"><img src="../../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section range_concepts_concept_checking">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="range.concepts.concept_checking"></a><a class="link" href="concept_checking.html" title="Concept Checking">Concept Checking</a>
 </h3></div></div></div>
@@ -38,7 +38,6 @@
         Range</a> concept.
       </p>
 <p>
-        
 </p>
 <pre class="programlisting"><span class="identifier">BOOST_CONCEPT_ASSERT</span><span class="special">((</span> <span class="identifier">ForwardRangeConcept</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">));</span>
 </pre>
@@ -50,7 +49,6 @@
         ForwardReadableRange, the following code is required.
       </p>
 <p>
-        
 </p>
 <pre class="programlisting"><span class="identifier">BOOST_CONCEPT_ASSERT</span><span class="special">((</span> <span class="identifier">ForwardRangeConcept</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="special">));</span>
 <span class="identifier">BOOST_CONCEPT_ASSERT</span><span class="special">((</span> <span class="identifier">ReadableIteratorConcept</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">type</span><span class="special">&gt;</span> <span class="special">));</span>
@@ -78,9 +76,10 @@
             Access Range</a>
           </li>
 </ul></div>
-<a name="range.concepts.concept_checking.see_also"></a><h5>
-<a name="id652377"></a>
-        <a class="link" href="concept_checking.html#range.concepts.concept_checking.see_also">See also</a>
+<h5>
+<a name="range.concepts.concept_checking.h0"></a>
+        <span><a name="range.concepts.concept_checking.see_also"></a></span><a class="link" href="concept_checking.html#range.concepts.concept_checking.see_also">See
+        also</a>
       </h5>
 <p>
         <a class="link" href="../style_guide.html" title="Terminology and style guidelines">Range Terminology and style guidelines</a>
@@ -94,7 +93,8 @@
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>
-<td align="right"><div class="copyright-footer">Copyright &#169; 2003 -2010 Thorsten Ottosen, Neil Groves<p>
+<td align="right"><div class="copyright-footer">Copyright &#169; 2003-2010 Thorsten Ottosen,
+      Neil Groves<p>
         Distributed under the Boost Software License, Version 1.0. (See accompanying
         file LICENSE_1_0.txt or copy at <a href="http://www.boost.org/LICENSE_1_0.txt" target="_top">http://www.boost.org/LICENSE_1_0.txt</a>)
       </p>
