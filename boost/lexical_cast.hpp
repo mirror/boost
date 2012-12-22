@@ -1771,7 +1771,10 @@ namespace boost {
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
             template <std::size_t N>
             bool operator<<(std::array<CharT, N> const& input) BOOST_NOEXCEPT
-            { return shl_char_array_limited(input.begin(), N); }
+            { 
+                if (input.size()) return shl_char_array_limited(&input[0], N);
+                else return true; 
+            }
 
             template <std::size_t N>
             bool operator<<(std::array<unsigned char, N> const& input) BOOST_NOEXCEPT
@@ -1783,7 +1786,10 @@ namespace boost {
 
             template <std::size_t N>
             bool operator<<(std::array<const CharT, N> const& input) BOOST_NOEXCEPT
-            { return shl_char_array_limited(input.begin(), N); }
+            { 
+                if (input.size()) return shl_char_array_limited(&input[0], N);
+                else return true; 
+            }
 
             template <std::size_t N>
             bool operator<<(std::array<const unsigned char, N> const& input) BOOST_NOEXCEPT
@@ -1984,8 +1990,8 @@ namespace boost {
                     return false;
                 }
 
-                memcpy(output.begin(), start, size * sizeof(CharT));
-                *(output.begin() + size) = Traits::to_char_type(0);
+                memcpy(&output[0], start, size * sizeof(CharT));
+                output[size] = Traits::to_char_type(0);
                 return true;
             }
 
