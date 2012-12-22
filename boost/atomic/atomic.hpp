@@ -132,6 +132,45 @@ typedef atomic<char16_t> atomic_char16_t;
 typedef atomic<char32_t> atomic_char32_t;
 #endif
 
+typedef atomic<int_least8_t> atomic_int_least8_t;
+typedef atomic<uint_least8_t> atomic_uint_least8_t;
+typedef atomic<int_least16_t> atomic_int_least16_t;
+typedef atomic<uint_least16_t> atomic_uint_least16_t;
+typedef atomic<int_least32_t> atomic_int_least32_t;
+typedef atomic<uint_least32_t> atomic_uint_least32_t;
+typedef atomic<int_least64_t> atomic_int_least64_t;
+typedef atomic<uint_least64_t> atomic_uint_least64_t;
+typedef atomic<int_fast8_t> atomic_int_fast8_t;
+typedef atomic<uint_fast8_t> atomic_uint_fast8_t;
+typedef atomic<int_fast16_t> atomic_int_fast16_t;
+typedef atomic<uint_fast16_t> atomic_uint_fast16_t;
+typedef atomic<int_fast32_t> atomic_int_fast32_t;
+typedef atomic<uint_fast32_t> atomic_uint_fast32_t;
+typedef atomic<int_fast64_t> atomic_int_fast64_t;
+typedef atomic<uint_fast64_t> atomic_uint_fast64_t;
+typedef atomic<intmax_t> atomic_intmax_t;
+typedef atomic<uintmax_t> atomic_uintmax_t;
+
+typedef atomic<std::size_t> atomic_size_t;
+typedef atomic<std::ptrdiff_t> atomic_ptrdiff_t;
+
+#if defined(BOOST_WINDOWS) \
+    || (defined(_XOPEN_UNIX) && (_XOPEN_UNIX+0 > 0)) \
+    || defined(__CYGWIN__) \
+    || defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__) \
+    || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+typedef atomic<intptr_t> atomic_intptr_t;
+typedef atomic<uintptr_t> atomic_uintptr_t;
+#elif defined(__GNUC__) || defined(__clang__)
+#if defined(__INTPTR_TYPE__)
+typedef atomic< __INTPTR_TYPE__ > atomic_intptr_t;
+#endif
+#if defined(__UINTPTR_TYPE__)
+typedef atomic< __UINTPTR_TYPE__ > atomic_uintptr_t;
+#endif
+#endif
+
+
 #ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
 #define BOOST_ATOMIC_FLAG_LOCK_FREE 0
 class atomic_flag
