@@ -910,12 +910,12 @@ public:
         deleter_ = deleter;
     }
 
-	template<typename D> D* get_deleter() const BOOST_NOEXCEPT
+    template<typename D> D* get_deleter() const BOOST_NOEXCEPT
     {
         return boost::detail::basic_get_deleter<D>( deleter_ );
     }
 
-	template< class T> void operator()( T* )
+    template< class T> void operator()( T* )
     {
         BOOST_ASSERT( deleter_.use_count() <= 1 );
         deleter_.reset();
@@ -928,7 +928,7 @@ template<class D, class T> D * get_deleter( shared_ptr<T> const & p ) BOOST_NOEX
 {
     D *del = boost::detail::basic_get_deleter<D>(p);
 
-	if(del == 0)
+    if(del == 0)
     {
         boost::detail::esft2_deleter_wrapper *del_wrapper = boost::detail::basic_get_deleter<boost::detail::esft2_deleter_wrapper>(p);
 // The following get_deleter method call is fully qualified because
@@ -936,7 +936,7 @@ template<class D, class T> D * get_deleter( shared_ptr<T> const & p ) BOOST_NOEX
         if(del_wrapper) del = del_wrapper->::boost::detail::esft2_deleter_wrapper::get_deleter<D>();
     }
 
-	return del;
+    return del;
 }
 
 // atomic access
