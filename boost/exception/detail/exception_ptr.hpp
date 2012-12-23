@@ -467,7 +467,7 @@ boost
 
     inline
     std::string
-    diagnostic_information( exception_ptr const & p )
+    diagnostic_information( exception_ptr const & p, bool verbose=true )
         {
         if( p )
             try
@@ -477,7 +477,7 @@ boost
             catch(
             ... )
                 {
-                return current_exception_diagnostic_information();
+                return current_exception_diagnostic_information(verbose);
                 }
         return "<empty>";
         }
