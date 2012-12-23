@@ -50,25 +50,25 @@ static void testing_template_array_output_on_spec_value(T val)
 
     {
         arr_type res1 = lexical_cast<arr_type>(val);
-        BOOST_CHECK_EQUAL(res1.begin(), ethalon);
+        BOOST_CHECK_EQUAL(&res1[0], ethalon);
         const arr_type res2 = lexical_cast<arr_type>(val);
-        BOOST_CHECK_EQUAL(res2.begin(), ethalon);
+        BOOST_CHECK_EQUAL(&res2[0], ethalon);
         BOOST_CHECK_THROW(lexical_cast<short_arr_type>(val), boost::bad_lexical_cast);
     }
     
     {
         uarr_type res1 = lexical_cast<uarr_type>(val);
-        BOOST_CHECK_EQUAL(reinterpret_cast<char*>(res1.begin()), ethalon);
+        BOOST_CHECK_EQUAL(reinterpret_cast<char*>(&res1[0]), ethalon);
         const uarr_type res2 = lexical_cast<uarr_type>(val);
-        BOOST_CHECK_EQUAL(reinterpret_cast<const char*>(res2.begin()), ethalon);
+        BOOST_CHECK_EQUAL(reinterpret_cast<const char*>(&res2[0]), ethalon);
         BOOST_CHECK_THROW(lexical_cast<ushort_arr_type>(val), boost::bad_lexical_cast);
     }
     
     {
         sarr_type res1 = lexical_cast<sarr_type>(val);
-        BOOST_CHECK_EQUAL(reinterpret_cast<char*>(res1.begin()), ethalon);
+        BOOST_CHECK_EQUAL(reinterpret_cast<char*>(&res1[0]), ethalon);
         const sarr_type res2 = lexical_cast<sarr_type>(val);
-        BOOST_CHECK_EQUAL(reinterpret_cast<const char*>(res2.begin()), ethalon);
+        BOOST_CHECK_EQUAL(reinterpret_cast<const char*>(&res2[0]), ethalon);
         BOOST_CHECK_THROW(lexical_cast<sshort_arr_type>(val), boost::bad_lexical_cast);
     }
 
@@ -79,12 +79,12 @@ static void testing_template_array_output_on_spec_value(T val)
 
     {
         warr_type res = lexical_cast<warr_type>(val);
-        BOOST_CHECK(res.begin() == wethalon);
+        BOOST_CHECK(&res[0] == wethalon);
     }
 
     {
         const warr_type res = lexical_cast<warr_type>(val);
-        BOOST_CHECK(res.begin() == wethalon);
+        BOOST_CHECK(&res[0] == wethalon);
     }
     
     BOOST_CHECK_THROW(lexical_cast<wshort_arr_type>(val), boost::bad_lexical_cast);
@@ -98,12 +98,12 @@ static void testing_template_array_output_on_spec_value(T val)
 
     {
         u16arr_type res = lexical_cast<u16arr_type>(val);
-        BOOST_CHECK(res.begin() == u16ethalon);
+        BOOST_CHECK(&res[0] == u16ethalon);
     }
 
     {
         const u16arr_type res = lexical_cast<u16arr_type>(val);
-        BOOST_CHECK(res.begin() == u16ethalon);
+        BOOST_CHECK(&res[0] == u16ethalon);
     }
     
     BOOST_CHECK_THROW(lexical_cast<u16short_arr_type>(val), boost::bad_lexical_cast);
@@ -116,12 +116,12 @@ static void testing_template_array_output_on_spec_value(T val)
 
     {
         u32arr_type res = lexical_cast<u32arr_type>(val);
-        BOOST_CHECK(res.begin() == u32ethalon);
+        BOOST_CHECK(&res[0] == u32ethalon);
     }
 
     {
         const u32arr_type res = lexical_cast<u32arr_type>(val);
-        BOOST_CHECK(res.begin() == u32ethalon);
+        BOOST_CHECK(&res[0] == u32ethalon);
     }
     
     BOOST_CHECK_THROW(lexical_cast<u32short_arr_type>(val), boost::bad_lexical_cast);
@@ -145,25 +145,25 @@ static void testing_template_array_output_on_char_value()
 
     {
         arr_type res1 = lexical_cast<arr_type>(val);
-        BOOST_CHECK_EQUAL(res1.begin(), ethalon);
+        BOOST_CHECK_EQUAL(&res1[0], ethalon);
         const arr_type res2 = lexical_cast<arr_type>(val);
-        BOOST_CHECK_EQUAL(res2.begin(), ethalon);
+        BOOST_CHECK_EQUAL(&res2[0], ethalon);
         BOOST_CHECK_THROW(lexical_cast<short_arr_type>(val), boost::bad_lexical_cast);
     }
     
     {
         uarr_type res1 = lexical_cast<uarr_type>(val);
-        BOOST_CHECK_EQUAL(reinterpret_cast<char*>(res1.begin()), ethalon);
+        BOOST_CHECK_EQUAL(reinterpret_cast<char*>(&res1[0]), ethalon);
         const uarr_type res2 = lexical_cast<uarr_type>(val);
-        BOOST_CHECK_EQUAL(reinterpret_cast<const char*>(res2.begin()), ethalon);
+        BOOST_CHECK_EQUAL(reinterpret_cast<const char*>(&res2[0]), ethalon);
         BOOST_CHECK_THROW(lexical_cast<ushort_arr_type>(val), boost::bad_lexical_cast);
     }
     
     {
         sarr_type res1 = lexical_cast<sarr_type>(val);
-        BOOST_CHECK_EQUAL(reinterpret_cast<char*>(res1.begin()), ethalon);
+        BOOST_CHECK_EQUAL(reinterpret_cast<char*>(&res1[0]), ethalon);
         const sarr_type res2 = lexical_cast<sarr_type>(val);
-        BOOST_CHECK_EQUAL(reinterpret_cast<const char*>(res2.begin()), ethalon);
+        BOOST_CHECK_EQUAL(reinterpret_cast<const char*>(&res2[0]), ethalon);
         BOOST_CHECK_THROW(lexical_cast<sshort_arr_type>(val), boost::bad_lexical_cast);
     }
 
@@ -174,16 +174,16 @@ static void testing_template_array_output_on_char_value()
 
     {
         warr_type res = lexical_cast<warr_type>(val);
-        BOOST_CHECK(res.begin() == wethalon);
+        BOOST_CHECK(&res[0] == wethalon);
         warr_type res3 = lexical_cast<warr_type>(wethalon);
-        BOOST_CHECK(res3.begin() == wethalon);
+        BOOST_CHECK(&res3[0] == wethalon);
     }
 
     {
         const warr_type res = lexical_cast<warr_type>(val);
-        BOOST_CHECK(res.begin() == wethalon);
+        BOOST_CHECK(&res[0] == wethalon);
         const warr_type res3 = lexical_cast<warr_type>(wethalon);
-        BOOST_CHECK(res3.begin() == wethalon);
+        BOOST_CHECK(&res3[0] == wethalon);
     }
     
     BOOST_CHECK_THROW(lexical_cast<wshort_arr_type>(val), boost::bad_lexical_cast);
@@ -198,20 +198,20 @@ static void testing_template_array_output_on_char_value()
     {
 #ifdef BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES
         u16arr_type res = lexical_cast<u16arr_type>(val);
-        BOOST_CHECK(res.begin() == u16ethalon);  
+        BOOST_CHECK(&res[0] == u16ethalon);  
 #endif
 
         u16arr_type res3 = lexical_cast<u16arr_type>(u16ethalon);
-        BOOST_CHECK(res3.begin() == u16ethalon);
+        BOOST_CHECK(&res3[0] == u16ethalon);
     }
 
     {
 #ifdef BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES
         const u16arr_type res = lexical_cast<u16arr_type>(val);
-        BOOST_CHECK(res.begin() == u16ethalon);
+        BOOST_CHECK(&res[0] == u16ethalon);
 #endif
         const u16arr_type res3 = lexical_cast<u16arr_type>(u16ethalon);
-        BOOST_CHECK(res3.begin() == u16ethalon);
+        BOOST_CHECK(&res3[0] == u16ethalon);
     }
     
     BOOST_CHECK_THROW(lexical_cast<u16short_arr_type>(val), boost::bad_lexical_cast);
@@ -225,19 +225,19 @@ static void testing_template_array_output_on_char_value()
     {
 #ifdef BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES
         u32arr_type res = lexical_cast<u32arr_type>(val);
-        BOOST_CHECK(res.begin() == u32ethalon);
+        BOOST_CHECK(&res[0] == u32ethalon);
 #endif
         u32arr_type res3 = lexical_cast<u32arr_type>(u32ethalon);
-        BOOST_CHECK(res3.begin() == u32ethalon);
+        BOOST_CHECK(&res3[0] == u32ethalon);
     }
 
     {
 #ifdef BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES
         const u32arr_type res = lexical_cast<u32arr_type>(val);
-        BOOST_CHECK(res.begin() == u32ethalon);
+        BOOST_CHECK(&res[0] == u32ethalon);
 #endif
         const u32arr_type res3 = lexical_cast<u32arr_type>(u32ethalon);
-        BOOST_CHECK(res3.begin() == u32ethalon);
+        BOOST_CHECK(&res3[0] == u32ethalon);
     }
     
     BOOST_CHECK_THROW(lexical_cast<u32short_arr_type>(val), boost::bad_lexical_cast);
