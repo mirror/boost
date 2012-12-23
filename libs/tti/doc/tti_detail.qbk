@@ -1,5 +1,5 @@
 [/ 
-  (C) Copyright Edward Diener 2011
+  (C) Copyright Edward Diener 2011,2012
   Use, modification and distribution are subject to the Boost Software License,
   Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -204,6 +204,41 @@ of the boolean constant value. This is always boost::mpl::bool_.
                     Defaults to `boost::function_types::null_tag`.
     ]
     [[headerref boost/tti/has_static_member_function.hpp `has_static_member_function.hpp`]]
+  ]
+  [
+    [Data, either member data or static member data]
+    [
+    [macroref BOOST_TTI_HAS_DATA](name)
+    ]
+    [
+    `has_data_'name'`
+    
+    class TTI_T = enclosing type
+    
+    class TTI_Type = data type
+    ]
+    [[headerref boost/tti/has_data.hpp `has_data.hpp`]]
+  ]
+  [
+    [Function, either member function or static member function]
+    [
+    [macroref BOOST_TTI_HAS_FUNCTION](name)
+    ]
+    [
+    `has_function_'name'`
+    
+    class TTI_T   = enclosing type
+    
+    class TTI_R   = return type 
+    
+    class TTI_FS  = (optional) function parameter types as a Boost MPL forward sequence.
+                    If there are no function parameters, this does not have to be specified.
+                    Defaults to boost::mpl::vector<>.
+    
+    class TTI_TAG = (optional) Boost `function_types` tag type.
+                    Defaults to `boost::function_types::null_tag`.
+    ]
+    [[headerref boost/tti/has_function.hpp `has_function.hpp`]]
   ]
 ]
 

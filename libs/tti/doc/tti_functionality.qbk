@@ -1,5 +1,5 @@
 [/ 
-  (C) Copyright Edward Diener 2011
+  (C) Copyright Edward Diener 2011,2012
   Use, modification and distribution are subject to the Boost Software License,
   Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
@@ -11,21 +11,24 @@ The elements of a type about which a template metaprogrammer might be interested
 out at compile time are:
 
 * Does it have a nested type with a particular name ?
-* Does it have a nested type with a particular name which is also a typedef for a particular type ?
+* Does it have a nested type with a particular name which fulfills some other possibility for that nested type.
 * Does it have a nested class template with a particular name ?
 * Does it have a nested class template with a particular name and a particular signature ?
 * Does it have a member function with a particular name and a particular signature ?
-* Does it have a member data with a particular name and of a particular type ?
+* Does it have member data with a particular name and of a particular type ?
 * Does it have a static member function with a particular name and a particular signature ?
-* Does it have a static member data with a particular name and of a particular type ?
+* Does it have static member data with a particular name and of a particular type ?
+* Does it have either member data or static member data with a particular name and of a particular type ?
+* Does it have either a member function or static member function with a particular name and of a particular type ?
 
-These are the compile-time questions which the TTI library answers. It does this 
-by creating metafunctions, which can be used at compile-time, using C++ macros.
-Each of the metafunctions created returns a compile time constant bool value
-which answers one of the above questions at compile time. When the particular 
-element above exists the value is 'true', or more precisely boost::mpl::true_,
-while if the element does not exist the value is 'false', or more precisely
-boost::mpl::false_. In either case the type of this value is boost::mpl::bool_.
+These are some of the compile-time questions which the TTI library answers. It 
+does this by creating metafunctions, which can be used at compile-time, using 
+C++ macros. Each of the metafunctions created returns a compile time constant 
+bool value which answers one of the above questions at compile time. When the 
+particular element above exists the value is 'true', or more precisely 
+boost::mpl::true_, while if the element does not exist the value is 'false', 
+or more precisely boost::mpl::false_. In either case the type of this value 
+is boost::mpl::bool_.
 
 This constant bool value, in the terminology of the Boost MPL library, is called an 'integral 
 constant wrapper' and the metafunction generated is called a 'numerical metafunction'. The 
@@ -75,11 +78,11 @@ is to expand to the metafunction name. The naming macro for each macro metafunct
 
 As an example, BOOST_TTI_HAS_TYPE(MyType) creates a metafunction 
 which looks for a nested type called 'MyType' within some enclosing type. The name of the metafunction
-generated, given our algorithm above is 'has_type_MyType'. A corresponding macro called 
+generated, given our rule above is 'has_type_MyType'. A corresponding macro called 
 BOOST_TTI_HAS_TYPE_GEN, invoked as BOOST_TTI_HAS_TYPE_GEN(MyType) in our example, expands to the 
 same 'has_type_MyType' name. These name generating macros, for each of the metafunction generating macros, 
 are purely a convenience for end-users who find using them easier than remembering the name-generating 
-algorithm given above.
+rule given above.
 
 [section:tti_functionality_nm_gen Macro metafunction name generation considerations]
 
@@ -132,7 +135,7 @@ type which is nested within 'AType'.
 # 'has_type_InnerType<BType>::value' is a compile time constant telling us whether 'InnerType' is a 
 type which is nested within 'BType'.
 
-As another example of this let's consider a single type, called 'CType', for which we want to 
+As another example of metafunction reuse let's consider a single type, called 'CType', for which we want to 
 determine if it has either of two overloaded member functions with the same name of 'AMemberFunction' 
 but with the different function signatures of 'int (int)' and 'double (long)'. For both these 
 member functions we need only generate a single macro metafunction in the current scope by using:
