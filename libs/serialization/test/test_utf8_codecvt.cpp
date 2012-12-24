@@ -22,7 +22,7 @@
 namespace std{ 
     using ::size_t; 
     using ::wcslen;
-#ifndef UNDER_CE    
+#if !defined(UNDER_CE) && !defined(__PGIC__) 
     using ::w_int;
 #endif    
 } // namespace std
@@ -36,12 +36,10 @@ namespace std{
 // NOTE: Use BOOST_WORKAROUND?
 #if (defined(__QNX__) && defined(BOOST_DINKUMWARE_STDLIB))  \
     || defined(__SUNPRO_CC)
-using ::std::wint_t;
+    using ::std::wint_t;
 #endif
 
 #include "test_tools.hpp"
-#include <boost/archive/iterators/istream_iterator.hpp>
-#include <boost/archive/iterators/ostream_iterator.hpp>
 
 #include <boost/archive/add_facet.hpp>
 #include <boost/archive/detail/utf8_codecvt_facet.hpp>
@@ -92,19 +90,19 @@ unsigned char test_data<4>::utf8_encoding[] = {
 
 template<>
 wchar_t test_data<4>::wchar_encoding[] = {
-    0x00000001,
-    0x0000007f,
-    0x00000080,
-    0x000007ff,
-    0x00000800,
-    0x0000ffff,
-    0x00010000,
-    0x0010ffff,
-    0x001fffff,
-    0x00200000,
-    0x03ffffff,
-    0x04000000,
-    0x7fffffff
+    (wchar_t)0x00000001,
+    (wchar_t)0x0000007f,
+    (wchar_t)0x00000080,
+    (wchar_t)0x000007ff,
+    (wchar_t)0x00000800,
+    (wchar_t)0x0000ffff,
+    (wchar_t)0x00010000,
+    (wchar_t)0x0010ffff,
+    (wchar_t)0x001fffff,
+    (wchar_t)0x00200000,
+    (wchar_t)0x03ffffff,
+    (wchar_t)0x04000000,
+    (wchar_t)0x7fffffff
 };
 
 int
@@ -132,7 +130,7 @@ test_main(int /* argc */, char * /* argv */[]) {
                 // so use this instead
                 td::utf8_encoding + 12,
             #endif
-            boost::archive::iterators::ostream_iterator<utf8_t>(ofs)
+            std::ostream_iterator<utf8_t>(ofs)
         );
     }
 
@@ -176,13 +174,13 @@ test_main(int /* argc */, char * /* argv */[]) {
         std::copy(
             from_file.begin(),
             from_file.end(),
-            boost::archive::iterators::ostream_iterator<wchar_t>(ofs)
+            std::ostream_iterator<wchar_t, wchar_t>(ofs)
         );
     }
 
     // Make sure that both files are the same
     {
-        typedef boost::archive::iterators::istream_iterator<utf8_t> is_iter;
+        typedef std::istream_iterator<utf8_t> is_iter;
         is_iter end_iter;
 
         std::ifstream ifs1("test.dat");
@@ -237,7 +235,7 @@ test_main(int /* argc */, char * /* argv */[]) {
         std::copy(
             test3_data,
             test3_data + l,
-            boost::archive::iterators::ostream_iterator<wchar_t>(ofs)
+            std::ostream_iterator<wchar_t, wchar_t>(ofs)
         );
     }
 
@@ -246,11 +244,12 @@ test_main(int /* argc */, char * /* argv */[]) {
         std::wifstream ifs;
         ifs.imbue(*utf8_locale);
         ifs.open("test3.dat");
+        ifs >> std::noskipws;
         BOOST_CHECK(
             std::equal(
                 test3_data,
                 test3_data + l,
-                boost::archive::iterators::istream_iterator<wchar_t>(ifs)
+                std::istream_iterator<wchar_t, wchar_t>(ifs)
             )
         );
     }

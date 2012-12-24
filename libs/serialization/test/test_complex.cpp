@@ -20,10 +20,12 @@
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{
     using ::rand; 
-    using ::fabs; 
     using ::remove;
     #if BOOST_WORKAROUND(BOOST_MSVC, >= 1400) && !defined(UNDER_CE)
         using ::numeric_limits;
+    #endif
+    #if !defined(__PGIC__)
+        using ::fabs;
     #endif
 }
 #endif
