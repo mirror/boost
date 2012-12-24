@@ -565,7 +565,7 @@ After unwinding, a __coro__ is complete.
 Some applications do not use floating-point registers and can disable preserving
 fpu registers for performance reasons.
 
-[note According to the calling convetion the FPU registers are preserved by default.]
+[note According to the calling convention the FPU registers are preserved by default.]
 
 
 [section:coroutine Class `coroutine`]
