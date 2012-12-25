@@ -95,14 +95,18 @@ Does T have a nested type called 'BType' ?
    T
    >
    
-[heading Type checking the typedef]
+[heading Type checking the typedef using a lambda expression]
 
 Does T have a nested typedef called 'AnIntType' whose type is an 'int' ?
 
+ #include <boost/mpl/placeholders.hpp
+ #include <boost/type_traits/is_same.hpp
+ using namespace boost::mpl::placeholders;
+ 
  has_type_AnIntType
    <
    T,
-   int
+   boost::is_same<_1,int>
    >
 
 [heading Template]
@@ -163,6 +167,17 @@ Does T have a member data called 'IntBT' whose type is 'AType::BType' ?
    <
    T,
    AType::BType
+   >
+
+[heading Member data with composite type]
+
+Does T have a member data called 'IntBT' whose type is 'AType::BType' ?
+
+ BOOST_TTI_HAS_MEMBER_DATA(IntBT)
+ 
+ has_member_data_IntBT
+   <
+   AType::BType T::*
    >
 
 [heading Member function with individual types]
@@ -227,6 +242,32 @@ is 'int (long,double)' ?
    <
    T,
    int (long,double)
+   >
+
+[heading Data]
+
+Does T have a member data or static member data called 'DSMember' whose type is 'short' ?
+
+ BOOST_TTI_HAS_DATA(DSMember)
+ 
+ has_static_member_data_DSMember
+   <
+   T,
+   short
+   >
+
+[heading Function]
+
+Does T have a member function or a static member function called 'IntFunction' whose type is 
+'int (short)' ?
+
+ BOOST_TTI_HAS_FUNCTION(IntFunction)
+ 
+ has_function_IntFunction
+   <
+   T,
+   int,
+   boost::mpl::vector<short>
    >
 
 [heading Member type]
