@@ -157,7 +157,7 @@ typedef atomic<std::ptrdiff_t> atomic_ptrdiff_t;
 // PGI seems to not support intptr_t/uintptr_t properly. BOOST_HAS_STDINT_H is not defined for this compiler by Boost.Config.
 #if !defined(__PGIC__)
 
-#if defined(BOOST_WINDOWS) \
+#if (defined(BOOST_WINDOWS) && !defined(_WIN32_WCE)) \
     || (defined(_XOPEN_UNIX) && (_XOPEN_UNIX+0 > 0)) \
     || defined(__CYGWIN__) \
     || defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__) \
