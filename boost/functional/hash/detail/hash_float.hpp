@@ -73,7 +73,9 @@ namespace boost
                 ptr += sizeof(std::size_t);
 
                 while(length >= sizeof(std::size_t)) {
-                    hash_float_combine(seed, *(std::size_t*) ptr);
+                    std::size_t buffer = 0;
+                    std::memcpy(&buffer, ptr, sizeof(std::size_t));
+                    hash_float_combine(seed, buffer);
                     length -= sizeof(std::size_t);
                     ptr += sizeof(std::size_t);
                 }
