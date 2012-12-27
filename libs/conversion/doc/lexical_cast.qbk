@@ -94,8 +94,12 @@ Library features defined in [@boost:boost/lexical_cast.hpp boost/lexical_cast.hp
     namespace boost
     {
         class bad_lexical_cast;
+        
         template<typename Target, typename Source>
           Target lexical_cast(const Source& arg);
+
+        template <typename Target>
+          Target lexical_cast(const AnyCharacterType* chars, std::size_t count);
     }
 ``
 

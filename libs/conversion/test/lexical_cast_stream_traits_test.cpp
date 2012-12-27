@@ -97,7 +97,10 @@ void test_metafunctions()
     test_optimized_types_to_string<__int64>();
 #endif
 
+#if !defined(BOOST_NO_SWPRINTF) && !defined(__MINGW32__)
     test_optimized_types_to_string<float>();
+#endif
+    
     test_optimized_types_to_string<std::string>();
     test_optimized_types_to_string<char*>();
     //test_optimized_types_to_string<char[5]>();
@@ -128,7 +131,7 @@ void test_metafunctions()
     test_optimized_types_to_string_const<boost::iterator_range<const unsigned char*> >();
     test_optimized_types_to_string_const<boost::iterator_range<const signed char*> >();
 
-#if !defined(BOOST_NO_CXX11_HDR_ARRAY) && defined(BOOST_HAS_TR1_ARRAY)
+#ifndef BOOST_NO_CXX11_HDR_ARRAY
     test_optimized_types_to_string<std::array<char, 1> >();
     test_optimized_types_to_string<std::array<char, 5> >();
     test_optimized_types_to_string<std::array<unsigned char, 1> >();
