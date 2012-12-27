@@ -74,7 +74,7 @@ interval_map<ptime, GuestSetT> boost_party()
         cout << when << ": " << who << endl;
     }
 
-	return party;
+    return party;
 }
 //------------------------------------------------------------------------------
 // end example code
@@ -86,10 +86,10 @@ typedef PartyHistory::segment_type SegmentT;
 
 SegmentT episode(const char* from, const char* to, GuestSetT guests)
 {
-	return make_pair( interval<ptime>
-		              ::right_open( time_from_string(from)
-					              , time_from_string(to)   )
-					, guests);
+    return make_pair( interval<ptime>
+                      ::right_open( time_from_string(from)
+                                  , time_from_string(to)   )
+                    , guests);
 }
 
 PartyHistory check_party()
@@ -105,11 +105,11 @@ PartyHistory check_party()
     GuestSetT peter; 
     peter.insert("Peter");
 
-	GuestSetT Diana_Harry_Mary_Susan       = mary_harry + diana_susan;
-	GuestSetT Diana_Harry_Mary_Peter_Susan = Diana_Harry_Mary_Susan + peter;
-	GuestSetT Diana_Peter_Susan            = Diana_Harry_Mary_Peter_Susan - mary_harry;
+    GuestSetT Diana_Harry_Mary_Susan       = mary_harry + diana_susan;
+    GuestSetT Diana_Harry_Mary_Peter_Susan = Diana_Harry_Mary_Susan + peter;
+    GuestSetT Diana_Peter_Susan            = Diana_Harry_Mary_Peter_Susan - mary_harry;
 
-	PartyHistory party;
+    PartyHistory party;
 
     party += episode("2008-05-20 19:30", "2008-05-20 20:10", mary_harry);
     party += episode("2008-05-20 20:10", "2008-05-20 22:15", Diana_Harry_Mary_Susan);
@@ -117,12 +117,12 @@ PartyHistory check_party()
     party += episode("2008-05-20 23:00", "2008-05-21 00:00", Diana_Peter_Susan);
     party += episode("2008-05-21 00:00", "2008-05-21 00:30", peter);
 
-	return party;
+    return party;
 }
 
 BOOST_AUTO_TEST_CASE(icl_example_boost_party)
 {
-	BOOST_CHECK_EQUAL(boost_party(), check_party());
+    BOOST_CHECK_EQUAL(boost_party(), check_party());
 }
 
 
