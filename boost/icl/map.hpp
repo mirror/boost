@@ -34,9 +34,9 @@ Copyright (c) 2007-2011: Joachim Faulhaber
 #include <boost/icl/type_traits/is_element_container.hpp>
 #include <boost/icl/type_traits/has_inverse.hpp>
 #include <boost/icl/type_traits/to_string.hpp>
-#include <boost/icl/functors.hpp>
 
 #include <boost/icl/associative_element_container.hpp>
+#include <boost/icl/functors.hpp>
 
 namespace boost{namespace icl
 {
