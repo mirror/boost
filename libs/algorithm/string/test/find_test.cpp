@@ -9,6 +9,7 @@
 
 #include <boost/algorithm/string/find.hpp>
 #include <boost/algorithm/string/classification.hpp>
+#include <boost/algorithm/string/split.hpp>
 
 // Include unit test framework
 #include <boost/test/included/test_exec_monitor.hpp>
@@ -248,6 +249,20 @@ void find_test()
     ostringstream osstr;
     osstr << find_first( str1, "abc" );
     BOOST_CHECK( osstr.str()=="abc" );
+
+    // Empty string test
+    BOOST_CHECKPOINT( "overlapping" );
+    
+    std::string overlap_target("aaaa");
+    std::vector<boost::iterator_range<std::string::iterator> > overlap_results;
+    boost::algorithm::find_all(overlap_results, overlap_target, string("aaa"));
+    BOOST_CHECK( overlap_results.size() == 2 );
+
+    std::string overlap_target2("aaaabbbbaaaa");
+    boost::algorithm::find_all(overlap_results, overlap_target2, string("bb"));
+    BOOST_CHECK( overlap_results.size() == 3 );
+    boost::algorithm::find_all(overlap_results, overlap_target2, string("aa"));
+    BOOST_CHECK( overlap_results.size() == 6 );
 }
 
 // test main 
