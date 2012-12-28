@@ -26,6 +26,7 @@
 #include <boost/container/detail/type_traits.hpp>
 
 #include <utility>   //std::pair
+#include <algorithm> //std::swap
 
 #include <boost/move/utility.hpp>
 #include <boost/type_traits/is_class.hpp>
