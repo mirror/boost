@@ -36,7 +36,7 @@
                     New comparison predicates <code>is_less</code>, <code>is_not_greater</code>
                 </listitem>
                 <listitem>
-                     Negative indexes support (like Perl) in various algorihtms
+                     Negative indexes support (like Perl) in various algorithms
                      (<code>*_head/tail</code>, <code>*_nth</code>).
                 </listitem>                                      
             </itemizedlist>

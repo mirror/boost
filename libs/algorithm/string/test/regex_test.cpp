@@ -114,7 +114,7 @@ static void replace_test()
     string fmt2("_xXx_");
     vector<int> vec1( str1.begin(), str1.end() );
 
-    // inmutable tests
+    // immutable tests
     
     // basic tests
     BOOST_CHECK( replace_regex_copy( str1, rx1, fmt1 )==string("123_A1C_xxxa23cXXXa456c321") );
