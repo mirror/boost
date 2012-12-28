@@ -72,6 +72,15 @@ namespace
 	"BOOST_NO_NUMERIC_LIMITS_LOWEST",
     NULL
     };
+
+  const char * boost153macros [] = {
+	"BOOST_HAS_STATIC_ASSERT",
+	"BOOST_HAS_RVALUE_REFS",
+	"BOOST_HAS_VARIADIC_TMPL",
+	"BOOST_HAS_CHAR_16_T",
+	"BOOST_HAS_CHAR_32_T",
+    NULL
+    };
 } // unnamed namespace
 
 
@@ -117,6 +126,14 @@ namespace boost
 		if ( contents.find( *ptr ) != string::npos ) {
           ++errors;
           error( library_name, full_path, string ( "Boost macro deprecated in 1.51: " ) + *ptr );
+          }
+      }
+
+      for ( ptr = boost153macros; *ptr != NULL; ++ptr )
+      {
+		if ( contents.find( *ptr ) != string::npos ) {
+          ++errors;
+          error( library_name, full_path, string ( "Boost macro deprecated in 1.53: " ) + *ptr );
           }
       }
 
