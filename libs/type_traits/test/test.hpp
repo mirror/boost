@@ -21,7 +21,7 @@
 #include <typeinfo>
 
 #ifdef __BORLANDC__
-// we have to turn off these warnings overwise we get swamped by the things:
+// we have to turn off these warnings otherwise we get swamped by the things:
 #pragma option -w-8008 -w-8066
 #endif
 
