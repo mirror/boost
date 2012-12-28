@@ -19,6 +19,7 @@
 #include <boost/move/utility.hpp>
 #include <boost/move/iterator.hpp>
 #include <boost/move/algorithm.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 #include <algorithm> //copy, copy_backward
 #include <memory>    //uninitialized_copy
@@ -110,10 +111,22 @@ F uninitialized_move(I f, I l, F r
    )
 {
    typedef typename std::iterator_traits<I>::value_type input_value_type;
-   while (f != l) {
-      ::new(static_cast<void*>(&*r)) input_value_type(boost::move(*f));
-      ++f; ++r;
+
+   F back = r;
+   BOOST_TRY{
+      while (f != l) {
+         void * const addr = static_cast<void*>(::boost::move_detail::addressof(*r));
+         ::new(addr) input_value_type(::boost::move(*f));
+         ++f; ++r;
+      }
    }
+   BOOST_CATCH(...){
+	   for (; back != r; ++back){
+         back->~input_value_type();
+      }
+	   BOOST_RETHROW;
+   }
+   BOOST_CATCH_END
    return r;
 }
 

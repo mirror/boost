@@ -793,6 +793,8 @@ Many thanks to all boosters that have tested, reviewed and improved the library.
   [@https://svn.boost.org/trac/boost/ticket/6524 #6524]).
 *  Small documentation fixes
 *  Replaced deprecated BOOST_NO_XXXX with newer BOOST_NO_CXX11_XXX macros.
+*  Fixed [@https://svn.boost.org/trac/boost/ticket/7830 #7830],
+         [@https://svn.boost.org/trac/boost/ticket/7832 #7832].
 
 [endsect]
 
