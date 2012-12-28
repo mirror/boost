@@ -40,7 +40,7 @@ namespace boost {
 
 #ifndef BOOST_IS_CONVERTIBLE
 
-// is one type convertable to another?
+// is one type convertible to another?
 //
 // there are multiple versions of the is_convertible
 // template, almost every compiler seems to require its
