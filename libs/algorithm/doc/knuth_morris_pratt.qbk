@@ -14,7 +14,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 [heading Overview]
 
-The header file 'knuth_morris_pratt.hpp' contains an an implementation of the Knuth-Morris-Pratt algorithm for searching sequences of values. 
+The header file 'knuth_morris_pratt.hpp' contains an implementation of the Knuth-Morris-Pratt algorithm for searching sequences of values. 
 
 The basic premise of the Knuth-Morris-Pratt algorithm is that when a mismatch occurs, there is information in the pattern being searched for that can be used to determine where the next match could begin, enabling the skipping of some elements of the corpus that have already been examined.
 
@@ -28,7 +28,7 @@ However, the Knuth-Morris-Pratt algorithm cannot be used with comparison predica
 
 Nomenclature: I refer to the sequence being searched for as the "pattern", and the sequence being searched in as the "corpus".
 
-For flexibility, the Knuth-Morris-Pratt algorithm has has two interfaces; an object-based interface and a procedural one. The object-based interface builds the table in the constructor, and uses operator () to perform the search. The procedural interface builds the table and does the search all in one step. If you are going to be searching for the same pattern in multiple corpora, then you should use the object interface, and only build the tables once.
+For flexibility, the Knuth-Morris-Pratt algorithm has two interfaces; an object-based interface and a procedural one. The object-based interface builds the table in the constructor, and uses operator () to perform the search. The procedural interface builds the table and does the search all in one step. If you are going to be searching for the same pattern in multiple corpora, then you should use the object interface, and only build the tables once.
 
 Here is the object interface:
 ``
