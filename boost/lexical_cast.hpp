@@ -767,26 +767,15 @@ namespace boost {
 
     namespace detail // lcast_to_unsigned
     {
-#if (defined _MSC_VER)
-# pragma warning( push )
-// C4146: unary minus operator applied to unsigned type, result still unsigned
-# pragma warning( disable : 4146 )
-#elif defined( __BORLANDC__ )
-# pragma option push -w-8041
-#endif
         template<class T>
         inline
         BOOST_DEDUCED_TYPENAME make_unsigned<T>::type lcast_to_unsigned(T value) BOOST_NOEXCEPT
         {
-            typedef BOOST_DEDUCED_TYPENAME make_unsigned<T>::type result_type;
-            const result_type uvalue = static_cast<result_type>(value);
-            return value < 0 ? -uvalue : uvalue;
+            typedef BOOST_DEDUCED_TYPENAME boost::make_unsigned<T>::type result_type;
+            return static_cast<result_type>(
+                value < 0 ? 0u - static_cast<result_type>(value) : value
+            );
         }
-#if (defined _MSC_VER)
-# pragma warning( pop )
-#elif defined( __BORLANDC__ )
-# pragma option pop
-#endif
     }
 
     namespace detail // lcast_put_unsigned
@@ -1825,19 +1814,11 @@ namespace boost {
                 }
 
                 bool const succeed = lcast_ret_unsigned<Traits>(output, start, finish);
-#if (defined _MSC_VER)
-# pragma warning( push )
-// C4146: unary minus operator applied to unsigned type, result still unsigned
-# pragma warning( disable : 4146 )
-#elif defined( __BORLANDC__ )
-# pragma option push -w-8041
-#endif
-                if (has_minus) output = static_cast<Type>(-output);
-#if (defined _MSC_VER)
-# pragma warning( pop )
-#elif defined( __BORLANDC__ )
-# pragma option pop
-#endif
+
+                if (has_minus) {
+                    output = static_cast<Type>(0u - output);
+                }
+
                 return succeed;
             }
 
@@ -1863,21 +1844,9 @@ namespace boost {
 
                 bool succeed = lcast_ret_unsigned<Traits>(out_tmp, start, finish);
                 if (has_minus) {
-#if (defined _MSC_VER)
-# pragma warning( push )
-// C4146: unary minus operator applied to unsigned type, result still unsigned
-# pragma warning( disable : 4146 )
-#elif defined( __BORLANDC__ )
-# pragma option push -w-8041
-#endif
-                    utype const comp_val = static_cast<utype>(-(std::numeric_limits<Type>::min)());
+                    utype const comp_val = (static_cast<utype>(1) << std::numeric_limits<Type>::digits);
                     succeed = succeed && out_tmp<=comp_val;
-                    output = -out_tmp;
-#if (defined _MSC_VER)
-# pragma warning( pop )
-#elif defined( __BORLANDC__ )
-# pragma option pop
-#endif
+                    output = static_cast<Type>(0u - out_tmp);
                 } else {
                     utype const comp_val = static_cast<utype>((std::numeric_limits<Type>::max)());
                     succeed = succeed && out_tmp<=comp_val;
@@ -2295,11 +2264,14 @@ namespace boost {
 
          static source_type nearbyint ( argument_type s )
          {
-            const source_type orig_div_round = s / Rounder::nearbyint(s);
-            const source_type eps = std::numeric_limits<source_type>::epsilon();
+            const source_type near_int = Rounder::nearbyint(s);
+            if (near_int) {
+                const source_type orig_div_round = s / near_int;
+                const source_type eps = std::numeric_limits<source_type>::epsilon();
 
-            if ((orig_div_round > 1 ? orig_div_round - 1 : 1 - orig_div_round) > eps)
-                BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+                if ((orig_div_round > 1 ? orig_div_round - 1 : 1 - orig_div_round) > eps)
+                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+            }
 
             return s ;
          }
@@ -2337,16 +2309,22 @@ namespace boost {
         {
             static inline Target lexical_cast_impl(const Source &arg)
             {
+                typedef BOOST_DEDUCED_TYPENAME boost::mpl::eval_if_c<
+                        boost::is_float<Source>::value,
+                        boost::mpl::identity<Source>,
+                        boost::make_unsigned<Source>
+                >::type usource_t;
+
                 typedef boost::numeric::converter<
                         Target,
-                        Source,
-                        boost::numeric::conversion_traits<Target,Source>,
-                        nothrow_overflow_handler<Source, Target>,
-                        detect_precision_loss<Source, Target>
+                        usource_t,
+                        boost::numeric::conversion_traits<Target,usource_t>,
+                        nothrow_overflow_handler<usource_t, Target>,
+                        detect_precision_loss<usource_t, Target>
                 > converter_t;
 
                 return (
-                    arg < 0 ? -converter_t::convert(-arg) : converter_t::convert(arg)
+                    arg < 0 ? 0u - converter_t::convert(0u - arg) : converter_t::convert(arg)
                 );
             }
         };
