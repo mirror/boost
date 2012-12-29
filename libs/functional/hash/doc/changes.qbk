@@ -150,5 +150,6 @@
 * On platforms that are known to have standard floating point, don't use the
   automatic detection of floating point functions - which can break if there
   are ambiguous overloads.
+* Fix undefined behaviour when using the binary float hash (Thomas Heller).
 
 [endsect]
