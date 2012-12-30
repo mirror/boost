@@ -677,7 +677,7 @@ namespace boost {
 
     vtable_type* get_vtable() const {
       return reinterpret_cast<vtable_type*>(
-               reinterpret_cast<std::size_t>(vtable) & ~static_cast<size_t>(0x01));
+               reinterpret_cast<std::size_t>(vtable) & ~static_cast<std::size_t>(0x01));
     }
 
     struct clear_type {};
