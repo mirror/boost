@@ -9,8 +9,8 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 
 #include <libs/icl/test/disable_test_warnings.hpp>
 #include "../unit_test_unwarned.hpp"
-#include <boost/icl/set.hpp> // Needed for implicit calls of operator << on
-                             // GuestSets via test macros.
+//#include <boost/icl/set.hpp> // Needed for implicit calls of operator << on
+//JODO CLANG                   // GuestSets via test macros.
 
 //------------------------------------------------------------------------------
 // begin example code. return value added to function boost_party
