@@ -125,7 +125,7 @@ public:
         this->_set.insert(src.begin(), src.end());
     }
 
-#   ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+#   ifndef BOOST_ICL_NO_CXX11_RVALUE_REFERENCES
     //==========================================================================
     //= Move semantics
     //==========================================================================
@@ -142,7 +142,7 @@ public:
         return *this;
     }
     //==========================================================================
-#   endif // BOOST_NO_CXX11_RVALUE_REFERENCES
+#   endif // BOOST_ICL_NO_CXX11_RVALUE_REFERENCES
 
     
 private:

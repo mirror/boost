@@ -94,10 +94,6 @@
   <ItemGroup>
     <ClCompile Include="ex_boost_party.cpp" />
   </ItemGroup>
-  <ItemGroup>
-    <ClInclude Include="..\test_interval_map_shared.hpp" />
-    <ClInclude Include="..\test_type_lists.hpp" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

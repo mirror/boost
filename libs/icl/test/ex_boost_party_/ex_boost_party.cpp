@@ -9,6 +9,8 @@ Copyright (c) 2008-2009: Joachim Faulhaber
 
 #include <libs/icl/test/disable_test_warnings.hpp>
 #include "../unit_test_unwarned.hpp"
+#include <boost/icl/set.hpp> // Needed for implicit calls of operator << on
+                             // GuestSets via test macros.
 
 //------------------------------------------------------------------------------
 // begin example code. return value added to function boost_party
@@ -122,7 +124,11 @@ PartyHistory check_party()
 
 BOOST_AUTO_TEST_CASE(icl_example_boost_party)
 {
-    BOOST_CHECK_EQUAL(boost_party(), check_party());
+    PartyHistory party1 = boost_party();
+    PartyHistory party2 = check_party();
+    bool party_equality = (party1==party2);
+    BOOST_CHECK(party_equality);
+    //BOOST_CHECK_EQUAL(boost_party(), check_party());
 }
 
 

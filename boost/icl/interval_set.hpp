@@ -144,7 +144,7 @@ public:
             prior_ = this->add(prior_, *it_);
     }
 
-#   ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+#   ifndef BOOST_ICL_NO_CXX11_RVALUE_REFERENCES
     //==========================================================================
     //= Move semantics
     //==========================================================================
@@ -161,7 +161,7 @@ public:
         return *this;
     }
     //==========================================================================
-#   endif // BOOST_NO_CXX11_RVALUE_REFERENCES
+#   endif // BOOST_ICL_NO_CXX11_RVALUE_REFERENCES
 
 private:
     // Private functions that shall be accessible by the baseclass:
