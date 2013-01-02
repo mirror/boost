@@ -52,8 +52,8 @@
           </h6>
 <p>
             <code class="computeroutput"><span class="identifier">pop_heap</span></code> removes the
-            largest element from the heap. It is assumed that <code class="computeroutput"><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng</span><span class="special">),</span> <span class="identifier">prior</span><span class="special">(</span><span class="identifier">end</span><span class="special">(</span><span class="identifier">rng</span><span class="special">))</span></code> is already a heap and that the element
-            to be added is <code class="computeroutput"><span class="special">*</span><span class="identifier">prior</span><span class="special">(</span><span class="identifier">end</span><span class="special">(</span><span class="identifier">rng</span><span class="special">))</span></code>.
+            largest element from the heap. It is assumed that <code class="computeroutput"><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng</span><span class="special">),</span> <span class="identifier">prior</span><span class="special">(</span><span class="identifier">end</span><span class="special">(</span><span class="identifier">rng</span><span class="special">))</span></code> is already a heap (and therefore the
+            largest element is <code class="computeroutput"><span class="special">*</span><span class="identifier">begin</span><span class="special">(</span><span class="identifier">rng</span><span class="special">)</span></code>).
           </p>
 <p>
             The ordering relationship is determined by using <code class="computeroutput"><span class="keyword">operator</span><span class="special">&lt;</span></code> in the non-predicate versions, and
