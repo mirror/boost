@@ -93,7 +93,7 @@ What this means is that ['*no*] algorithm with the `_if` suffix is needed. Furth
 
 ``
 std::vector<int> vec;
-boost::replace_copy_if( rng, std::back_inserter(vec), pred );
+boost::replace_copy_if( rng, std::back_inserter(vec), pred, new_value );
 ``
 
 With adaptors and algorithms we can express this as
