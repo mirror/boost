@@ -7,8 +7,8 @@
 
 [table
     [[Syntax] [Code]]
-    [[Pipe] [`rng | boost::adaptors::indexed`]]
-    [[Function] [`boost::adaptors::index(rng)`]]
+    [[Pipe] [`rng | boost::adaptors::indexed(start_index)`]]
+    [[Function] [`boost::adaptors::index(rng, start_index)`]]
 ]
 
 * [*Returns:] A range adapted to return both the element and the associated index. The returned range consists of iterators that have in addition to the usual iterator member functions an `index()` member function that returns the appropriate index for the element in the sequence corresponding with the iterator.
