@@ -225,6 +225,10 @@ namespace
     const detail::reverse_forwarder reversed = detail::reverse_forwarder();
 }
 ``
+Note that this last step only applies if the adaptor takes no arguments. If the adaptor takes arguments 
+(such as `indexed`), then there is no need for a variable. Instead, give the tag type a
+constructor that takes the arguments (and store those arguments in the tag object). A usage
+of the adaptor will then involve construction of an object of the tag type.
 
 [endsect]
 
