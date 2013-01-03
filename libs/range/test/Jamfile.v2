@@ -31,21 +31,7 @@ rule range-test ( name : includes * )
 }
 
 test-suite range :
-    [ compile ../doc/reference/adaptors/examples/adjacent_filtered.cpp : : example_adjacent_filtered ]
-    [ compile ../doc/reference/adaptors/examples/copied.cpp : : example_copied ]
-    [ compile ../doc/reference/adaptors/examples/filtered.cpp : : example_filtered ]
-    [ compile ../doc/reference/adaptors/examples/indexed.cpp : : example_indexed ]
-    [ compile ../doc/reference/adaptors/examples/indirected.cpp : : example_indirected ]
-    [ compile ../doc/reference/adaptors/examples/map_keys.cpp : : example_map_keys ]
-    [ compile ../doc/reference/adaptors/examples/map_values.cpp : : example_map_values ]
-    [ compile ../doc/reference/adaptors/examples/replaced.cpp : : example_replaced ]
-    [ compile ../doc/reference/adaptors/examples/replaced_if.cpp : : example_replaced_if ]
-    [ compile ../doc/reference/adaptors/examples/reversed.cpp : : example_reversed ]
-    [ compile ../doc/reference/adaptors/examples/sliced.cpp : : example_sliced ]
-    [ compile ../doc/reference/adaptors/examples/strided.cpp : : example_strided ]
     [ compile ../doc/reference/adaptors/examples/tokenized.cpp : : example_tokenized ]
-    [ compile ../doc/reference/adaptors/examples/transformed.cpp : : example_transformed ]
-    [ compile ../doc/reference/adaptors/examples/uniqued.cpp : : example_uniqued ]
 	[ compile-fail compile_fail/iterator_range1.cpp ]
 	[ range-test adaptor_test/adjacent_filtered ]
 	[ range-test adaptor_test/copied ]
