@@ -2898,7 +2898,7 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STD_UNORDERD</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STD_UNORDERED</span></code>
                 </p>
               </td>
 <td>
@@ -3063,6 +3063,7 @@
                 <p>
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_NOEXCEPT</span>
+<span class="identifier">BOOST_NOEXCEPT_OR_NOTHROW</span>
 <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span>
 <span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span>
 </pre>
@@ -3071,7 +3072,7 @@
               </td>
 <td>
                 <p>
-                  If <code class="computeroutput"><span class="identifier">BOOST_NO_NOEXCEPT</span></code>
+                  If <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NOEXCEPT</span></code>
                   is defined (i.e. C++03 compliant compilers) these macros are defined
                   as:
                 </p>
@@ -3079,6 +3080,7 @@
 <p>
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_OR_NOTHROW</span> <span class="keyword">throw</span><span class="special">()</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span> <span class="keyword">false</span>
 </pre>
@@ -3086,7 +3088,7 @@
                   </p>
 </blockquote></div>
                 <p>
-                  If <code class="computeroutput"><span class="identifier">BOOST_NO_NOEXCEPT</span></code>
+                  If <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NOEXCEPT</span></code>
                   is not defined (i.e. C++11 compliant compilers) they are defined
                   as:
                 </p>
@@ -3094,6 +3096,7 @@
 <p>
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT</span> <span class="identifier">noexcept</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_OR_NOTHROW</span> <span class="identifier">noexcept</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span> <span class="identifier">noexcept</span><span class="special">((</span><span class="identifier">Predicate</span><span class="special">))</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span> <span class="identifier">noexcept</span><span class="special">((</span><span class="identifier">Expression</span><span class="special">))</span>
 </pre>
@@ -4610,12 +4613,12 @@
 <tr>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_STD_UNORDERD</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_STD_UNORDERED</span></code>
                 </p>
               </td>
 <td>
                 <p>
-                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STD_UNORDERD</span></code>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STD_UNORDERED</span></code>
                 </p>
               </td>
 <td>
@@ -4716,6 +4719,116 @@
 <td>
                 <p>
                   Boost 1.51
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+              </td>
+<td>
+              </td>
+<td>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_HAS_STATIC_ASSERT</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_STATIC_ASSERT</span></code>
+                  (negated)
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.53
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_HAS_VARIADIC_TMPL</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_VARIADIC_TEMPLATES</span></code>
+                  (negated)
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.53
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_HAS_RVALUE_REFS</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_RVALUE_REFERENCES</span></code>
+                  (negated)
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.53
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_HAS_CHAR_16_T</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CHAR_16_T</span></code>
+                  (negated)
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.53
+                </p>
+              </td>
+<td>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_HAS_CHAR_32_T</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_CHAR_32_T</span></code>
+                  (negated)
+                </p>
+              </td>
+<td>
+                <p>
+                  Boost 1.53
                 </p>
               </td>
 <td>

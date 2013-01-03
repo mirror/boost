@@ -700,22 +700,25 @@ with:
 [[
 ``
   BOOST_NOEXCEPT
+  BOOST_NOEXCEPT_OR_NOTHROW
   BOOST_NOEXCEPT_IF(Predicate)
   BOOST_NOEXCEPT_EXPR(Expression)
 ``
 ][
-If `BOOST_NO_NOEXCEPT` is defined (i.e. C++03 compliant compilers) these macros are defined as:
+If `BOOST_NO_CXX11_NOEXCEPT` is defined (i.e. C++03 compliant compilers) these macros are defined as:
 [:
 ``
   #define BOOST_NOEXCEPT
+  #define BOOST_NOEXCEPT_OR_NOTHROW throw()
   #define BOOST_NOEXCEPT_IF(Predicate)
   #define BOOST_NOEXCEPT_EXPR(Expression) false
 ``
 ]
-If `BOOST_NO_NOEXCEPT` is not defined (i.e. C++11 compliant compilers) they are defined as:
+If `BOOST_NO_CXX11_NOEXCEPT` is not defined (i.e. C++11 compliant compilers) they are defined as:
 [:
 ``
   #define BOOST_NOEXCEPT noexcept
+  #define BOOST_NOEXCEPT_OR_NOTHROW noexcept
   #define BOOST_NOEXCEPT_IF(Predicate) noexcept((Predicate))
   #define BOOST_NOEXCEPT_EXPR(Expression) noexcept((Expression))
 ``
