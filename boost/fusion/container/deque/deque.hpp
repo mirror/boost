@@ -11,7 +11,7 @@
 #include <boost/config.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-// With variadics, we will use the PP version version
+// With variadics, we will use the PP version
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 # include <boost/fusion/container/deque/detail/pp_deque.hpp>
