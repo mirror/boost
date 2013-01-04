@@ -34,7 +34,7 @@
 // exception to be thrown if integer read from archive doesn't fit
 // variable being loaded
 class portable_binary_oarchive_exception : 
-    public virtual boost::archive::archive_exception
+    public boost::archive::archive_exception
 {
 public:
     typedef enum {

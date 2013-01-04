@@ -13,7 +13,7 @@
 		<Configuration
 			Name="Debug runtime-dynamic|Win32"
 			OutputDirectory="$(ConfigurationName)"
-			IntermediateDirectory="$(OutDir)"
+			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="2"
 			CharacterSet="0">
 			<Tool
@@ -36,15 +36,16 @@
 				UsePrecompiledHeader="0"
 				ObjectFile="$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multi"
 				ProgramDataBaseFileName="$(ProjectDir)../../../bin.v2/libs/serialization/build/msvc-7.1/debug/threading-multivc70.pdb"
-				WarningLevel="3"
+				WarningLevel="4"
 				Detect64BitPortabilityProblems="FALSE"
-				DebugInformationFormat="1"/>
+				DebugInformationFormat="3"
+				CompileAs="0"/>
 			<Tool
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLinkerTool"
-				AdditionalDependencies="boost_serialization-vc71-mt-gd-1.45.lib"
-				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-gd-1_45.dll"
+				AdditionalDependencies="boost_serialization-vc71-mt-gd-1_53.lib"
+				OutputFile="$(ConfigurationName)\boost_wserialization-vc71-mt-gd-1_53.dll"
 				AdditionalLibraryDirectories="$(ConfigurationName)"
 				GenerateDebugInformation="TRUE"
 				SupportUnloadOfDelayLoadedDLL="FALSE"/>
@@ -283,7 +284,7 @@
 		</Configuration>
 		<Configuration
 			Name="Debug runtime-static|Win32"
-			OutputDirectory="$(SolutionDir)$(ConfigurationName)"
+			OutputDirectory="$(ConfigurationName)"
 			IntermediateDirectory="$(ConfigurationName)"
 			ConfigurationType="4"
 			CharacterSet="0">
@@ -293,11 +294,11 @@
 				Optimization="0"
 				ImproveFloatingPointConsistency="TRUE"
 				AdditionalIncludeDirectories="&quot;$(ProjectDir)..\..\..&quot;"
-				PreprocessorDefinitions="WIN32;_DEBUG;_LIB;BOOST_TEST_NO_AUTO_LINK=1"
+				PreprocessorDefinitions="WIN32;_DEBUG;_LIB"
 				MinimalRebuild="FALSE"
 				BasicRuntimeChecks="0"
 				SmallerTypeCheck="FALSE"
-				RuntimeLibrary="5"
+				RuntimeLibrary="3"
 				BufferSecurityCheck="FALSE"
 				EnableFunctionLevelLinking="TRUE"
 				TreatWChar_tAsBuiltInType="TRUE"
@@ -312,7 +313,7 @@
 				Name="VCCustomBuildTool"/>
 			<Tool
 				Name="VCLibrarianTool"
-				OutputFile="$(ConfigurationName)\libboost_wserialization-vc71-mt-sgd-1.45.lib"/>
+				OutputFile="$(ConfigurationName)\libboost_wserialization-vc71-mt-gd-1.53.lib"/>
 			<Tool
 				Name="VCMIDLTool"/>
 			<Tool
@@ -511,6 +512,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\text_woarchive_impl.ipp">
+			</File>
+			<File
+				RelativePath="..\..\..\boost\detail\utf8_codecvt_facet.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\boost\archive\impl\xml_wiarchive_impl.ipp">
