@@ -27,6 +27,7 @@
 
 #include <boost/smart_ptr/shared_ptr.hpp>
 #include <boost/smart_ptr/detail/shared_count.hpp>
+#include <boost/smart_ptr/detail/sp_nullptr_t.hpp>
 #include <boost/detail/workaround.hpp>
 
 #include <cstddef>            // for std::ptrdiff_t
@@ -245,22 +246,22 @@ template<class T> inline bool operator!=(shared_array<T> const & a, shared_array
 
 #if !defined( BOOST_NO_CXX11_NULLPTR )
 
-template<class T> inline bool operator==( shared_array<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+template<class T> inline bool operator==( shared_array<T> const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
 {
     return p.get() == 0;
 }
 
-template<class T> inline bool operator==( std::nullptr_t, shared_array<T> const & p ) BOOST_NOEXCEPT
+template<class T> inline bool operator==( boost::detail::sp_nullptr_t, shared_array<T> const & p ) BOOST_NOEXCEPT
 {
     return p.get() == 0;
 }
 
-template<class T> inline bool operator!=( shared_array<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+template<class T> inline bool operator!=( shared_array<T> const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
 {
     return p.get() != 0;
 }
 
-template<class T> inline bool operator!=( std::nullptr_t, shared_array<T> const & p ) BOOST_NOEXCEPT
+template<class T> inline bool operator!=( boost::detail::sp_nullptr_t, shared_array<T> const & p ) BOOST_NOEXCEPT
 {
     return p.get() != 0;
 }
