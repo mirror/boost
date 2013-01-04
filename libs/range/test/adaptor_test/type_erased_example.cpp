@@ -13,7 +13,7 @@
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/assign.hpp>
 #include <boost/foreach.hpp>
-#include <algorithm>
+#include <iterator>
 #include <iostream>
 #include <list>
 #include <vector>

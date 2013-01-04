@@ -12,7 +12,7 @@
 #include <boost/range/adaptor/indexed.hpp>
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/assign.hpp>
-#include <algorithm>
+#include <iterator>
 #include <iostream>
 #include <vector>
 

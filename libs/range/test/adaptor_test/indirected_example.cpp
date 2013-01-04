@@ -12,7 +12,7 @@
 #include <boost/range/adaptor/indirected.hpp>
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/shared_ptr.hpp>
-#include <algorithm>
+#include <iterator>
 #include <iostream>
 #include <vector>
 

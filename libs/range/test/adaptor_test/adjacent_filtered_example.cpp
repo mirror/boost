@@ -12,7 +12,7 @@
 #include <boost/range/adaptor/adjacent_filtered.hpp>
 #include <boost/range/algorithm/copy.hpp>
 #include <boost/assign.hpp>
-#include <algorithm>
+#include <iterator>
 #include <functional>
 #include <iostream>
 #include <vector>
