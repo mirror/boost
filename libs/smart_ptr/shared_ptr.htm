@@ -45,9 +45,10 @@ shared_ptr&lt;void&gt; p2( new int(5) );
 			to "break cycles."</p>
 		<p>The class template is parameterized on <code>T</code>, the type of the object pointed
 			to. <code>shared_ptr</code> and most of its member functions place no
-			requirements on <code>T</code>; it is allowed to be an incomplete type, or <code>
-				void</code>. Member functions that do place additional requirements (<a href="#constructors">constructors</a>,
-			<a href="#reset">reset</a>) are explicitly documented below.</p>
+			requirements on <code>T</code>; it is allowed to be an incomplete type, or
+			<code>void</code>. Member functions that do place additional requirements
+			(<a href="#pointer_constructor">constructors</a>, <a href="#reset">reset</a>) are explicitly
+			documented below.</p>
 		<p><code>shared_ptr&lt;T&gt;</code> can be implicitly converted to <code>shared_ptr&lt;U&gt;</code>
 			whenever <code>T*</code> can be implicitly converted to <code>U*</code>.
 			In particular, <code>shared_ptr&lt;T&gt;</code> is implicitly convertible
@@ -119,10 +120,13 @@ void bad()
       typedef <em>see below</em> <a href="#element_type" >element_type</a>;
 
       <a href="#default_constructor" >shared_ptr</a>(); // never throws
+      <a href="#default_constructor" >shared_ptr</a>(std::nullptr_t); // never throws
 
       template&lt;class Y&gt; explicit <a href="#pointer_constructor" >shared_ptr</a>(Y * p);
       template&lt;class Y, class D&gt; <a href="#deleter_constructor" >shared_ptr</a>(Y * p, D d);
       template&lt;class Y, class D, class A&gt; <a href="#deleter_constructor" >shared_ptr</a>(Y * p, D d, A a);
+      template&lt;class D&gt; <a href="#deleter_constructor" >shared_ptr</a>(std::nullptr_t p, D d);
+      template&lt;class D, class A&gt; <a href="#deleter_constructor" >shared_ptr</a>(std::nullptr_t p, D d, A a);
 
       <a href="#destructor" >~shared_ptr</a>(); // never throws
 
@@ -152,6 +156,8 @@ void bad()
 
       template&lt;class Y, class D&gt; shared_ptr &amp; <a href="#assignment" >operator=</a>(std::unique_ptr&lt;Y, D&gt; &amp;&amp; r);
 
+      shared_ptr &amp; <a href="#assignment" >operator=</a>(std::nullptr_t); // never throws
+
       void <a href="#reset" >reset</a>(); // never throws
 
       template&lt;class Y&gt; void <a href="#reset" >reset</a>(Y * p);
@@ -163,19 +169,19 @@ void bad()
       T &amp; <a href="#indirection" >operator*</a>() const; // never throws; only valid when T is not an array type
       T * <a href="#indirection" >operator-&gt;</a>() const; // never throws; only valid when T is not an array type
 
-      element_type &amp; <a href="#indirection" >operator[]</a>( std::ptrdiff_t i ) const; // never throws; only valid when T is an array type
+      element_type &amp; <a href="#indirection" >operator[]</a>(std::ptrdiff_t i) const; // never throws; only valid when T is an array type
 
       element_type * <a href="#get" >get</a>() const; // never throws
 
       bool <a href="#unique" >unique</a>() const; // never throws
       long <a href="#use_count" >use_count</a>() const; // never throws
 
-      operator <a href="#conversions" ><i>unspecified-bool-type</i></a>() const; // never throws
+      explicit <a href="#conversions" >operator bool</a>() const; // never throws
 
       void <a href="#swap" >swap</a>(shared_ptr &amp; b); // never throws
       
-      template&lt;class Y&gt; bool <a href="#owner_before" >owner_before</a>( shared_ptr&lt;Y&gt; const &amp; rhs ) const; // never throws
-      template&lt;class Y&gt; bool <a href="#owner_before" >owner_before</a>( weak_ptr&lt;Y&gt; const &amp; rhs ) const; // never throws
+      template&lt;class Y&gt; bool <a href="#owner_before" >owner_before</a>(shared_ptr&lt;Y&gt; const &amp; rhs) const; // never throws
+      template&lt;class Y&gt; bool <a href="#owner_before" >owner_before</a>(weak_ptr&lt;Y&gt; const &amp; rhs) const; // never throws
   };
 
   template&lt;class T, class U&gt;
@@ -186,6 +192,18 @@ void bad()
 
   template&lt;class T, class U&gt;
     bool <a href="#comparison" >operator&lt;</a>(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws
+
+  template&lt;class T&gt;
+    bool <a href="#comparison" >operator==</a>(shared_ptr&lt;T&gt; const &amp; p, std::nullptr_t); // never throws
+
+  template&lt;class T&gt;
+    bool <a href="#comparison" >operator==</a>(std::nullptr_t, shared_ptr&lt;T&gt; const &amp; p); // never throws
+
+  template&lt;class T&gt;
+    bool <a href="#comparison" >operator!=</a>(shared_ptr&lt;T&gt; const &amp; p, std::nullptr_t); // never throws
+
+  template&lt;class T&gt;
+    bool <a href="#comparison" >operator!=</a>(std::nullptr_t, shared_ptr&lt;T&gt; const &amp; p); // never throws
 
   template&lt;class T&gt; void <a href="#free-swap" >swap</a>(shared_ptr&lt;T&gt; &amp; a, shared_ptr&lt;T&gt; &amp; b); // never throws
 
@@ -217,7 +235,8 @@ void bad()
                 and <code>U</code> when <code>T</code> is <code>U[]</code> or <code>U[N]</code>.</p>
 		</blockquote>
 		<h3 id="default_constructor">default constructor</h3>
-		<pre>shared_ptr(); // never throws</pre>
+		<pre>shared_ptr(); // never throws
+shared_ptr(std::nullptr_t); // never throws</pre>
 		<blockquote>
 			<p><b>Effects:</b> Constructs an <em>empty</em> <code>shared_ptr</code>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 0 &amp;&amp; get() == 0</code>.</p>
@@ -260,7 +279,9 @@ void bad()
 				not have a virtual destructor, or is <code>void</code>.]</em></p>
 		<h3 id="deleter_constructor">constructors taking a deleter</h3>
 		<pre>template&lt;class Y, class D&gt; shared_ptr(Y * p, D d);
-template&lt;class Y, class D, class A&gt; shared_ptr(Y * p, D d, A a);</pre>
+template&lt;class Y, class D, class A&gt; shared_ptr(Y * p, D d, A a);
+template&lt;class D&gt; shared_ptr(std::nullptr_t p, D d);
+template&lt;class D, class A&gt; shared_ptr(std::nullptr_t p, D d, A a);</pre>
 		<blockquote>
 			<p><b>Requirements:</b>
 			    <code>D</code> must be <code>CopyConstructible</code>. The copy constructor and destructor
@@ -273,8 +294,8 @@ template&lt;class Y, class D, class A&gt; shared_ptr(Y * p, D d, A a);</pre>
 			    otherwise, <code>Y*</code> must be convertible to <code>T*</code>.
 			</p>
 			<p><b>Effects:</b> Constructs a <code>shared_ptr</code> that <em>owns</em> the pointer <code>
-					p</code> and the deleter <code>d</code>. The second constructor allocates
-				memory using a copy of <code>a</code>.</p>
+					p</code> and the deleter <code>d</code>. The constructors taking an allocator <code>a</code>
+					allocate memory using a copy of <code>a</code>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.</p>
 			<p><b>Throws:</b> <code>std::bad_alloc</code>, or an implementation-defined
 				exception when a resource other than memory could not be obtained.</p>
@@ -350,8 +371,8 @@ template&lt;class Y&gt; shared_ptr(std::auto_ptr&lt;Y&gt; &amp;&amp; r);</pre>
 		<blockquote>
 			<p><b>Requires:</b> <code>Y*</code> should be convertible to <code>T*</code>.</p>
 			<p><b>Effects:</b>
-			    Equivalent to <code>shared_ptr( r.release(), r.get_deleter() )</code> when <code>D</code> is not a reference type.
-			    Otherwise, equivalent to <code>shared_ptr( r.release(), <em>del</em> )</code>, where <em>del</em> is a deleter
+			    Equivalent to <code>shared_ptr(r.release(), r.get_deleter())</code> when <code>D</code> is not a reference type.
+			    Otherwise, equivalent to <code>shared_ptr(r.release(), <em>del</em>)</code>, where <em>del</em> is a deleter
 			    that stores the reference <code>rd</code> returned from <code>r.get_deleter()</code> and <code>del(p)</code> calls <code>rd(p)</code>.</p>
 			<p><b>Postconditions:</b> <code>use_count() == 1</code>.</p>
 			<p><b>Throws:</b> <code>std::bad_alloc</code>, or an implementation-defined
@@ -401,7 +422,12 @@ template&lt;class Y&gt; shared_ptr &amp; operator=(shared_ptr&lt;Y&gt; &amp;&amp
 template&lt;class Y&gt; shared_ptr &amp; operator=(std::auto_ptr&lt;Y&gt; &amp;&amp; r);
 template&lt;class Y, class D&gt; shared_ptr &amp; operator=(std::unique_ptr&lt;Y, D&gt; &amp;&amp; r);</pre>
 		<blockquote>
-			<p><b>Effects:</b> Equivalent to <code>shared_ptr( std::move(r) ).swap(*this)</code>.</p>
+			<p><b>Effects:</b> Equivalent to <code>shared_ptr(std::move(r)).swap(*this)</code>.</p>
+			<p><b>Returns:</b> <code>*this</code>.</p>
+		</blockquote>
+		<pre>shared_ptr &amp; operator=(std::nullptr_t); // never throws</pre>
+		<blockquote>
+			<p><b>Effects:</b> Equivalent to <code>shared_ptr().swap(*this)</code>.</p>
 			<p><b>Returns:</b> <code>*this</code>.</p>
 		</blockquote>
 		<h3 id="reset">reset</h3>
@@ -438,11 +464,11 @@ template&lt;class Y, class D&gt; shared_ptr &amp; operator=(std::unique_ptr&lt;Y
 			<p><b>Returns:</b> the stored pointer.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
-		<pre>element_type &amp; operator[]( std::ptrdiff_t i ) const; // never throws</pre>
+		<pre>element_type &amp; operator[](std::ptrdiff_t i) const; // never throws</pre>
 		<blockquote>
 			<p><b>Requirements:</b> <code>T</code> should be an array type. The stored pointer must not be 0.
 			    <code>i &gt;= 0</code>. If <code>T</code> is <code>U[N]</code>, <code>i &lt; N</code>.</p>
-			<p><b>Returns:</b> <code>get()[ i ]</code>.</p>
+			<p><b>Returns:</b> <code>get()[i]</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
 		<h3 id="get">get</h3>
@@ -471,15 +497,12 @@ template&lt;class Y, class D&gt; shared_ptr &amp; operator=(std::unique_ptr&lt;Y
 				for debugging and testing purposes, not for production code.</p>
 		</blockquote>
 		<h3 id="conversions">conversions</h3>
-		<pre>operator <i>unspecified-bool-type</i> () const; // never throws</pre>
+		<pre>explicit operator bool() const; // never throws</pre>
 		<blockquote>
-			<p><b>Returns:</b> an unspecified value that, when used in boolean contexts, is
-				equivalent to <code>get() != 0</code>.</p>
+			<p><b>Returns:</b> <code>get() != 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 			<p><b>Notes:</b> This conversion operator allows <code>shared_ptr</code> objects to be
-				used in boolean contexts, like <code>if (p &amp;&amp; p-&gt;valid()) {}</code>.
-				The actual target type is typically a pointer to a member function, avoiding
-				many of the implicit conversion pitfalls.</p>
+				used in boolean contexts, like <code>if(p &amp;&amp; p-&gt;valid()) {}</code>.</p>
 		</blockquote>
 		<p><em>[The conversion to bool is not merely syntactic sugar. It allows <code>shared_ptr</code>s
 				to be declared in conditions when using <a href="#dynamic_pointer_cast">dynamic_pointer_cast</a>
@@ -488,6 +511,13 @@ template&lt;class Y, class D&gt; shared_ptr &amp; operator=(std::unique_ptr&lt;Y
 		<pre>void swap(shared_ptr &amp; b); // never throws</pre>
 		<blockquote>
 			<p><b>Effects:</b> Exchanges the contents of the two smart pointers.</p>
+			<p><b>Throws:</b> nothing.</p>
+		</blockquote>
+		<h3 id="owner_before">swap</h3>
+        <pre>template&lt;class Y&gt; bool owner_before(shared_ptr&lt;Y&gt; const &amp; rhs) const; // never throws
+template&lt;class Y&gt; bool owner_before(weak_ptr&lt;Y&gt; const &amp; rhs) const; // never throws</pre>
+		<blockquote>
+			<p><b>Effects:</b> See the description of <a href="#comparison"><code>operator&lt;</code></a>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
 		<h2 id="functions">Free Functions</h2>
@@ -502,6 +532,22 @@ template&lt;class Y, class D&gt; shared_ptr &amp; operator=(std::unique_ptr&lt;Y
   bool operator!=(shared_ptr&lt;T&gt; const &amp; a, shared_ptr&lt;U&gt; const &amp; b); // never throws</pre>
 		<blockquote>
 			<p><b>Returns:</b> <code>a.get() != b.get()</code>.</p>
+			<p><b>Throws:</b> nothing.</p>
+		</blockquote>
+        <pre>template&lt;class T&gt;
+  bool operator==(shared_ptr&lt;T&gt; const &amp; p, std::nullptr_t); // never throws
+template&lt;class T&gt;
+  bool operator==(std::nullptr_t, shared_ptr&lt;T&gt; const &amp; p); // never throws</pre>
+		<blockquote>
+			<p><b>Returns:</b> <code>p.get() == 0</code>.</p>
+			<p><b>Throws:</b> nothing.</p>
+		</blockquote>
+        <pre>template&lt;class T&gt;
+  bool operator!=(shared_ptr&lt;T&gt; const &amp; p, std::nullptr_t); // never throws
+template&lt;class T&gt;
+  bool operator!=(std::nullptr_t, shared_ptr&lt;T&gt; const &amp; p); // never throws</pre>
+		<blockquote>
+			<p><b>Returns:</b> <code>p.get() != 0</code>.</p>
 			<p><b>Throws:</b> nothing.</p>
 		</blockquote>
 		<pre>template&lt;class T, class U&gt;
@@ -743,7 +789,7 @@ p3.reset(new int(2)); // undefined, multiple writes
 		<p>
 			<b>A.</b> Automatic conversion is believed to be too error prone.
 		</p>
-		<p><b>Q.</b> Why does <code>shared_ptr</code> supply use_count()?</p>
+		<p><b>Q.</b> Why does <code>shared_ptr</code> supply <code>use_count()</code>?</p>
 		<p>
 			<b>A.</b> As an aid to writing test cases and debugging displays. One of the
 			progenitors had <code>use_count()</code>, and it was useful in tracking down bugs in a
@@ -783,7 +829,7 @@ int * p = a.release();
 		</p>
 		<hr />
 		<p><small>Copyright 1999 Greg Colvin and Beman Dawes. Copyright 2002 Darin Adler.
-				Copyright 2002-2005, 2012 Peter Dimov. Distributed under the Boost Software License,
+				Copyright 2002-2005, 2012, 2013 Peter Dimov. Distributed under the Boost Software License,
 				Version 1.0. See accompanying file <a href="../../LICENSE_1_0.txt">LICENSE_1_0.txt</a>
 				or copy at <a href="http://www.boost.org/LICENSE_1_0.txt">http://www.boost.org/LICENSE_1_0.txt</a>.</small></p>
 	</body>
