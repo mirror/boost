@@ -95,13 +95,13 @@ unless you are certain that you understand the consequences.]
   public:
     spinlock() : state_(Unlocked) {}
 
-    lock()
+    void lock()
     {
       while (state_.exchange(Locked, boost::memory_order_acquire) == Locked) {
         /* busy-wait */
       }
     }
-    unlock()
+    void unlock()
     {
       state_.store(Unlocked, boost::memory_order_release);
     }
@@ -186,7 +186,7 @@ object should be as light-weight as possible.
   private:
     static boost::atomic<X *> instance_;
     static boost::mutex instantiation_mutex;
-  }
+  };
 
   boost::atomic<X *> X::instance_(0);
 
@@ -255,7 +255,7 @@ or for communication with interrupt/signal handlers.
       if (tail == head_.load(boost::memory_order_acquire))
         return false;
       value = ring_[tail];
-      tail_.store(next(tail), boost::memory_order_release));
+      tail_.store(next(tail), boost::memory_order_release);
       return true;
     }
   private:
@@ -265,7 +265,7 @@ or for communication with interrupt/signal handlers.
     }
     T ring_[Size];
     boost::atomic<size_t> head_, tail_;
-  }
+  };
 
 [endsect]
 
@@ -321,15 +321,15 @@ retrieved and processed in FIFO order by a single consumer.
     struct node {
       T data;
       node * next;
-    }
+    };
     void push(const T &data)
     {
       node * n = new node;
-      n.data = data;
+      n->data = data;
       node * stale_head = head_.load(boost::memory_order_relaxed);
       do {
-        node->next = stale_head;
-      } while (!head_.compare_exchange_weak(stale_head, node, boost::memory_order_release);
+        n->next = stale_head;
+      } while (!head_.compare_exchange_weak(stale_head, n, boost::memory_order_release));
     }
 
     node * pop_all(void)
@@ -353,7 +353,7 @@ retrieved and processed in FIFO order by a single consumer.
     }
   private:
     boost::atomic<node *> head_;
-  }
+  };
 
 [endsect]
 
