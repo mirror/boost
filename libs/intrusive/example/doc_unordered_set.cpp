@@ -71,8 +71,7 @@ int main()
       base_set.insert(*it);
 
    //Now insert values's and values2's elements in the unordered_multiset
-   for(VectIt it(values.begin()), itend(values.end()),
-             it2(values2.begin()),itend2(values2.end())
+   for(VectIt it(values.begin()), itend(values.end()), it2(values2.begin())
       ; it != itend; ++it, ++it2){
       member_multi_set.insert(*it);
       member_multi_set.insert(*it2);

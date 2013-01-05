@@ -58,8 +58,8 @@ int main()
 
    //Now test lists
    {
-      BaseList::reverse_iterator rbit(baselist.rbegin()), rbitend(baselist.rend());
-      MemberList::iterator mit(memberlist.begin()), mitend(memberlist.end());
+      BaseList::reverse_iterator rbit(baselist.rbegin());
+      MemberList::iterator mit(memberlist.begin());
       VectIt  it(values.begin()), itend(values.end());
 
       //Test the objects inserted in the base hook list

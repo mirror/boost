@@ -72,9 +72,9 @@ int main()
 
    //Now test sets
    {
-      BaseSplaySet::reverse_iterator rbit(baseset.rbegin()), rbitend(baseset.rend());
-      BaseBsSplaySet::iterator bsit(bsbaseset.begin()), bsitend(bsbaseset.end());
-      MemberSplayMultiset::iterator mit(membermultiset.begin()), mitend(membermultiset.end());
+      BaseSplaySet::reverse_iterator rbit(baseset.rbegin());
+      BaseBsSplaySet::iterator bsit(bsbaseset.begin());
+      MemberSplayMultiset::iterator mit(membermultiset.begin());
       VectIt it(values.begin()), itend(values.end());
 
       //Test the objects inserted in the base hook set

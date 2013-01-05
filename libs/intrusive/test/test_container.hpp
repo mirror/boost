@@ -57,7 +57,7 @@ void test_container( Container & c )
       for(i = 0; i < num_elem; ++i){
          ++it;
       }
-      BOOST_TEST( it == c.end() );
+      BOOST_TEST( it == itend );
       BOOST_TEST( c.size() == i );
    }
 
@@ -69,7 +69,7 @@ void test_container( Container & c )
       for(i = 0; i < num_elem; ++i){
          ++it;
       }
-      BOOST_TEST( it == c.cend() );
+      BOOST_TEST( it == itend );
       BOOST_TEST( c.size() == i );
    }
 }

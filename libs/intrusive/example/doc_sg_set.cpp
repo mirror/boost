@@ -68,8 +68,8 @@ int main()
 
    //Now test sg_sets
    {
-      BaseSet::reverse_iterator rbit(baseset.rbegin()), rbitend(baseset.rend());
-      MemberMultiset::iterator mit(membermultiset.begin()), mitend(membermultiset.end());
+      BaseSet::reverse_iterator rbit(baseset.rbegin());
+      MemberMultiset::iterator mit(membermultiset.begin());
       VectIt it(values.begin()), itend(values.end());
 
       //Test the objects inserted in the base hook sg_set
