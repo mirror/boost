@@ -28,6 +28,7 @@
 #include <iterator>
 #include <boost/cstdint.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 namespace boost {
 namespace intrusive {
@@ -692,19 +693,20 @@ class array_initializer
    {
       char *init_buf = (char*)rawbuf;
       std::size_t i = 0;
-      try{
+      BOOST_TRY{
          for(; i != N; ++i){
             new(init_buf)T(init);
             init_buf += sizeof(T);
          }
       }
-      catch(...){
+      BOOST_CATCH(...){
          while(i--){
             init_buf -= sizeof(T);
             ((T*)init_buf)->~T();
          }
-         throw;
+         BOOST_RETHROW;
       }
+      BOOST_CATCH_END
    }
 
    operator T* ()
