@@ -14,6 +14,7 @@
 #include <boost/config.hpp>
 #include <boost/assert.hpp>
 #include <boost/checked_delete.hpp>
+#include <boost/smart_ptr/detail/sp_nullptr_t.hpp>
 #include <boost/detail/workaround.hpp>
 
 #ifndef BOOST_NO_AUTO_PTR
@@ -117,22 +118,22 @@ public:
 
 #if !defined( BOOST_NO_CXX11_NULLPTR )
 
-template<class T> inline bool operator==( scoped_ptr<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+template<class T> inline bool operator==( scoped_ptr<T> const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
 {
     return p.get() == 0;
 }
 
-template<class T> inline bool operator==( std::nullptr_t, scoped_ptr<T> const & p ) BOOST_NOEXCEPT
+template<class T> inline bool operator==( boost::detail::sp_nullptr_t, scoped_ptr<T> const & p ) BOOST_NOEXCEPT
 {
     return p.get() == 0;
 }
 
-template<class T> inline bool operator!=( scoped_ptr<T> const & p, std::nullptr_t ) BOOST_NOEXCEPT
+template<class T> inline bool operator!=( scoped_ptr<T> const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
 {
     return p.get() != 0;
 }
 
-template<class T> inline bool operator!=( std::nullptr_t, scoped_ptr<T> const & p ) BOOST_NOEXCEPT
+template<class T> inline bool operator!=( boost::detail::sp_nullptr_t, scoped_ptr<T> const & p ) BOOST_NOEXCEPT
 {
     return p.get() != 0;
 }
