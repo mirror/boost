@@ -3845,6 +3845,12 @@ to be inserted in intrusive containers are allocated using `std::vector` or `std
 
 [section:release_notes Release Notes]
 
+[section:release_notes_boost_1_54_00 Boost 1.54 Release]
+
+*  Added `BOOST_NO_EXCEPTIONS` support (bug [@https://svn.boost.org/trac/boost/ticket/7849 #7849]).
+
+[endsect]
+
 [section:release_notes_boost_1_53_00 Boost 1.53 Release]
 
 *  Fixed bugs
