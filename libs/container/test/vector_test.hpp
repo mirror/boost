@@ -30,6 +30,7 @@
 #include "input_from_forward_iterator.hpp"
 #include <boost/move/utility.hpp>
 #include <boost/move/iterator.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 
 namespace boost{
 namespace container {
@@ -91,7 +92,7 @@ int vector_test()
    const int max = 100;
 
    {
-      try{
+      BOOST_TRY{
          MyBoostVector *boostvector = new MyBoostVector;
          MyStdVector *stdvector = new MyStdVector;
          boostvector->resize(100);
@@ -292,10 +293,13 @@ int vector_test()
          delete stdvector;
          delete boostvector;
       }
-      catch(std::exception &ex){
+      BOOST_CATCH(std::exception &ex){
+         #ifndef BOOST_NO_EXCEPTIONS
          std::cout << ex.what() << std::endl;
+         #endif
          return 1;
       }
+      BOOST_CATCH_END
    }
    std::cout << std::endl << "Test OK!" << std::endl;
    return 0;

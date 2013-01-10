@@ -29,6 +29,7 @@
 #include "emplace_test.hpp"
 #include "propagate_allocator_test.hpp"
 #include "vector_test.hpp"
+#include <boost/detail/no_exceptions_support.hpp>
 
 using namespace boost::container;
 
@@ -143,7 +144,7 @@ bool do_test()
    typedef deque<IntType>  MyCntDeque;
    typedef std::deque<int> MyStdDeque;
    const int max = 100;
-   try{
+   BOOST_TRY{
       //Shared memory allocator must be always be initialized
       //since it has no default constructor
       MyCntDeque *cntdeque = new MyCntDeque;
@@ -268,10 +269,13 @@ bool do_test()
       delete cntdeque;
       delete stddeque;
    }
-   catch(std::exception &ex){
+   BOOST_CATCH(std::exception &ex){
+      #ifndef BOOST_NO_EXCEPTIONS
       std::cout << ex.what() << std::endl;
+      #endif
       return false;
    }
+   BOOST_CATCH_END
   
    std::cout << std::endl << "Test OK!" << std::endl;
    return true;

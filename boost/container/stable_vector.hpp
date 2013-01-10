@@ -1,4 +1,4 @@
-
+//////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Ion Gaztanaga 2008-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
@@ -29,18 +29,21 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/assert.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/container/detail/allocator_version_traits.hpp>
 #include <boost/container/detail/utilities.hpp>
 #include <boost/container/detail/iterators.hpp>
 #include <boost/container/detail/algorithms.hpp>
 #include <boost/container/allocator_traits.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/intrusive/pointer_traits.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 #include <boost/aligned_storage.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/move/iterator.hpp>
 #include <boost/move/detail/move_helpers.hpp>
 #include <algorithm> //max
-#include <stdexcept>
+
 #include <memory>
 #include <new> //placement new
 
@@ -1010,8 +1013,9 @@ class stable_vector
    void reserve(size_type n)
    {
       STABLE_VECTOR_CHECK_INVARIANT;
-      if(n > this->max_size())
-         throw std::bad_alloc();
+      if(n > this->max_size()){
+         throw_length_error("stable_vector::reserve max_size() exceeded");
+      }
 
       size_type sz         = this->size();  
       size_type old_capacity = this->capacity();
@@ -1143,8 +1147,9 @@ class stable_vector
    //! <b>Complexity</b>: Constant.
    reference at(size_type n)
    {
-      if(n>=this->size())
-         throw std::out_of_range("invalid subscript at stable_vector::at");
+      if(n >= this->size()){
+         throw_out_of_range("vector::at invalid subscript");
+      }
       return operator[](n);
    }
 
@@ -1158,8 +1163,9 @@ class stable_vector
    //! <b>Complexity</b>: Constant.
    const_reference at(size_type n)const
    {
-      if(n>=this->size())
-         throw std::out_of_range("invalid subscript at stable_vector::at");
+      if(n >= this->size()){
+         throw_out_of_range("vector::at invalid subscript");
+      }
       return operator[](n);
    }
 

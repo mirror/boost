@@ -22,7 +22,6 @@
 #include <cstddef>
 #include <memory>
 #include <algorithm>
-#include <stdexcept>
 #include <iterator>
 #include <utility>
 #include <boost/detail/no_exceptions_support.hpp>
@@ -41,6 +40,7 @@
 #include <boost/container/detail/destroyers.hpp>
 #include <boost/container/allocator_traits.hpp>
 #include <boost/container/detail/allocator_version_traits.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/move/iterator.hpp>
 #include <boost/move/detail/move_helpers.hpp>
@@ -2038,8 +2038,9 @@ class vector : private container_detail::vector_alloc_holder<Allocator>
    void priv_check_range(size_type n) const
    {
       //If n is out of range, throw an out_of_range exception
-      if (n >= this->size())
-         throw std::out_of_range("vector::at");
+      if (n >= this->size()){
+         throw_out_of_range("vector::at out of range");
+      }
    }
 
    #ifdef BOOST_CONTAINER_VECTOR_ALLOC_STATS

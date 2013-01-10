@@ -26,11 +26,11 @@
 #include <boost/container/detail/mpl.hpp>
 #include <boost/container/detail/version_type.hpp>
 #include <boost/container/detail/multiallocation_chain.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/move/utility.hpp>
 #include <memory>
 #include <algorithm>
 #include <cstddef>
-#include <stdexcept>
 #include <cassert>
 
 //!\file

@@ -18,6 +18,7 @@
 #include <boost/container/detail/workaround.hpp>
 #include <boost/container/container_fwd.hpp>
 #include <boost/container/detail/version_type.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/move/iterator.hpp>
 #include <boost/move/detail/move_helpers.hpp>
@@ -36,13 +37,11 @@
 #include <boost/container/detail/preprocessor.hpp>
 #endif
 
-#include <stdexcept>
 #include <iterator>
 #include <utility>
 #include <memory>
 #include <functional>
 #include <algorithm>
-#include <stdexcept>
 
 namespace boost {
 namespace container {

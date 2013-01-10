@@ -186,6 +186,9 @@
 				RelativePath="..\..\..\..\boost\container\allocator_traits.hpp">
 			</File>
 			<File
+				RelativePath="..\..\..\..\boost\container\container_exceptions.hpp">
+			</File>
+			<File
 				RelativePath="..\..\..\..\boost\container\container_fwd.hpp">
 			</File>
 			<File
@@ -220,6 +223,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\container\string.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\throw_exception.hpp">
 			</File>
 			<File
 				RelativePath="..\to-do.txt">
@@ -259,6 +265,9 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\boost\container\detail\function_detector.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\hash_table.hpp">
 				</File>
 				<File
 					RelativePath="..\..\..\..\boost\container\detail\iterators.hpp">

@@ -189,6 +189,49 @@ Finally, we can just compile, link, and run!
 
 [endsect]
 
+[section:exception_handling Boost.Container and C++ exceptions]
+
+In some environments, such as game development or embedded systems, C++ exceptions are disabled or a customized error handling is needed.
+According to document [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2271.html N2271 EASTL -- Electronic Arts Standard Template Library]
+exceptions can be disabled for several reasons:
+
+*  ["['Exception handling incurs some kind of cost in all compiler implementations, including those that avoid
+   the cost during normal execution. However, in some cases this cost may arguably offset the cost of the code that it is replacing.]]
+*  ["['Exception handling is often agreed to be a superior solution for handling a large range of function return values. However,
+   avoiding the creation of functions that need large ranges of return values is superior to using exception handling to handle such values.]]
+*  ["['Using exception handling correctly can be difficult in the case of complex software.]]
+*  ["['The execution of throw and catch can be significantly expensive with some implementations.]]
+*  ["['Exception handling violates the don't-pay-for-what-you-don't-use design of C++, as it incurs overhead in any non-leaf function that
+   has destructible stack objects regardless of whether they use exception handling.]]
+*  ["['The approach that game software usually takes is to avoid the need for exception handling where possible; avoid the possibility
+   of circumstances that may lead to exceptions. For example, verify up front that there is enough memory for a subsystem to do its job
+   instead of trying to deal with the problem via exception handling or any other means after it occurs.]]
+*  ["['However, some game libraries may nevertheless benefit from the use of exception handling. It's best, however,
+   if such libraries keep the exception handling internal lest they force their usage of exception handling on the rest of the application.]]
+
+In order to support environments without C++ exception support or environments with special error handling needs,
+[*Boost.Container] changes error signalling behaviour when `BOOST_CONTAINER_USER_DEFINED_THROW_CALLBACKS` or `BOOST_NO_EXCEPTIONS`
+is defined. The former shall be defined by the user and the latter can be either defined by the user or implicitly defined by [*Boost.Confg]
+when the compiler has been invoked with the appropriate flag (like `-fno-exceptions` in GCC).
+
+When dealing with user-defined classes, (e.g. when constructing user-defined classes):
+
+*  If `BOOST_NO_EXCEPTIONS` is defined, the library avoids using `try`/`catch`/`throw` statements. The class writer must handle and
+   propagate error situations internally as no error will be propagated through [*Boost.Container].
+*  If `BOOST_NO_EXCEPTIONS` is *not* defined, the library propagates exceptions offering the exception guarantees detailed in the documentation.
+
+When the library needs to throw an exception (such as `out_of_range` when an incorrect index is used in `vector::at`)], the library calls
+a throw callback declared in `<boost/container/throw_exception.hpp>`:
+
+*  If `BOOST_CONTAINER_USER_DEFINED_THROW_CALLBACKS` is defined, then the programmer must provide its own definition for all
+   `throw_xxx` functions. Those functions can't return, they must throw an exception or call `std::exit` or `std::abort`.
+*  Else if `BOOST_NO_EXCEPTIONS` is defined, a `BOOST_ASSERT_MSG` assertion is triggered
+   (see [@http://www.boost.org/libs/utility/assert.html Boost.Assert] for more information). 
+   If this assertion returns, then `std::abort` is called.
+*  Else, an appropriate standard library exception is thrown (like `std::out_of_range`).
+
+[endsect]
+
 [section:non_standard_containers Non-standard containers]
 
 [section:stable_vector ['stable_vector]]
@@ -569,6 +612,8 @@ use [*Boost.Container]? There are several reasons for that:
    usually implies a no-throw guarantee (if predicate's or allocator's default constructor doesn't throw).
    * Small string optimization for [classref boost::container::basic_string basic_string].
 * New extensions beyond the standard based on user feedback to improve code performance.
+* You need a portable implementation that works when compiling without exceptions support or 
+  you need to customize the error handling when a container needs to signall an exceptional error.
 
 [endsect]
 
@@ -613,6 +658,12 @@ use [*Boost.Container]? There are several reasons for that:
 [endsect]
 
 [section:release_notes Release Notes]
+
+[section:release_notes_boost_1_54_00 Boost 1.54 Release]
+
+*  Support for `BOOST_NO_EXCEPTIONS` [@https://svn.boost.org/trac/boost/ticket/7227 #7227].
+
+[endsect]
 
 [section:release_notes_boost_1_53_00 Boost 1.53 Release]
 

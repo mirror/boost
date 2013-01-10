@@ -28,7 +28,6 @@
 #include <memory>
 #include <algorithm>
 #include <cstddef>
-#include <stdexcept>
 
 //!\file
 //!Describes an heap_allocator_v1 that allocates portions of fixed size

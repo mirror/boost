@@ -44,7 +44,7 @@ int map_test ()
    typedef typename MyStdMap::value_type  StdPairType;
    const int max = 100;
 
-   try{
+   BOOST_TRY{
       MyBoostMap *boostmap = new MyBoostMap;
       MyStdMap *stdmap = new MyStdMap;
       MyBoostMultiMap *boostmultimap = new MyBoostMultiMap;
@@ -467,9 +467,10 @@ int map_test ()
       delete boostmultimap;
       delete stdmultimap;
    }
-   catch(...){
-      throw;
+   BOOST_CATCH(...){
+      BOOST_RETHROW;
    }
+   BOOST_CATCH_END
    return 0;
 }
 
@@ -485,7 +486,7 @@ int map_test_copyable ()
 
    const int max = 100;
 
-   try{
+   BOOST_TRY{
    MyBoostMap *boostmap = new MyBoostMap;
    MyStdMap *stdmap = new MyStdMap;
    MyBoostMultiMap *boostmultimap = new MyBoostMultiMap;
@@ -537,9 +538,10 @@ int map_test_copyable ()
          delete stdmultimap;
       }
    }
-   catch(...){
-      throw;
+   BOOST_CATCH(...){
+      BOOST_RETHROW;
    }
+   BOOST_CATCH_END
    return 0;
 }
 

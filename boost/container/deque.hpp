@@ -46,12 +46,12 @@
 #include <boost/container/detail/mpl.hpp>
 #include <boost/container/allocator_traits.hpp>
 #include <boost/container/container_fwd.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <cstddef>
 #include <iterator>
 #include <boost/assert.hpp>
 #include <memory>
 #include <algorithm>
-#include <stdexcept>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/type_traits/has_trivial_destructor.hpp>
 #include <boost/type_traits/has_trivial_copy.hpp>
@@ -1575,7 +1575,7 @@ class deque : protected deque_base<T, Allocator>
    }
 
    void priv_range_check(size_type n) const
-      {  if (n >= this->size())  BOOST_RETHROW std::out_of_range("deque");   }
+      {  if (n >= this->size())  throw_out_of_range("deque::at out of range");   }
 
    template <class U>
    iterator priv_insert(const_iterator position, BOOST_FWD_REF(U) x)

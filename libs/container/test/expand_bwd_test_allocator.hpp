@@ -19,6 +19,7 @@
 #include <boost/container/detail/workaround.hpp>
 
 #include <boost/container/container_fwd.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/container/detail/allocation_type.hpp>
 #include <boost/assert.hpp>
 #include <boost/container/detail/utilities.hpp>
@@ -26,7 +27,6 @@
 #include <memory>
 #include <algorithm>
 #include <cstddef>
-#include <stdexcept>
 #include <cassert>
 
 //!\file
@@ -146,8 +146,8 @@ class expand_bwd_test_allocator
          return std::pair<pointer, bool>(mp_buffer, true);
       }
       else{
-         assert(0);
-         throw std::bad_alloc();
+         throw_bad_alloc();
+         return std::pair<pointer, bool>(mp_buffer, true);
       }
    }
 

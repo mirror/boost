@@ -443,7 +443,7 @@ int set_test_copyable ()
    typedef typename MyBoostSet::value_type IntType;
    const int max = 100;
 
-   try{
+   BOOST_TRY{
       //Shared memory allocator must be always be initialized
       //since it has no default constructor
       MyBoostSet *boostset = new MyBoostSet;
@@ -492,9 +492,10 @@ int set_test_copyable ()
       delete boostset;
       delete boostmultiset;
    }
-   catch(...){
-      throw;
+   BOOST_CATCH(...){
+      BOOST_RETHROW;
    }
+   BOOST_CATCH_END
    return 0;
 }
 
