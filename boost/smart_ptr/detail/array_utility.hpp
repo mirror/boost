@@ -37,6 +37,7 @@ namespace boost {
         }
         template<typename T>
         inline void array_init(T* memory, std::size_t size, boost::false_type) {
+#if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -47,6 +48,12 @@ namespace boost {
                 array_destroy(memory, i);
                 throw;
             }
+#else
+            for (std::size_t i = 0; i < size; i++) {
+                void* p1 = memory + i;
+                ::new(p1) T();
+            }
+#endif
         }
         template<typename T>
         inline void array_init(T* memory, std::size_t size) {
@@ -56,6 +63,7 @@ namespace boost {
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template<typename T>
         inline void array_init_value(T* memory, std::size_t size, T&& value) {
+#if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -66,10 +74,17 @@ namespace boost {
                 array_destroy(memory, i);
                 throw;
             }
+#else
+            for (std::size_t i = 0; i < size; i++) {
+                void* p1 = memory + i;
+                ::new(p1) T(value);
+            }
+#endif
         }
 #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template<typename T, typename... Args>
         inline void array_init_args(T* memory, std::size_t size, Args&&... args) {
+#if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -80,11 +95,18 @@ namespace boost {
                 array_destroy(memory, i);
                 throw;
             }
+#else
+            for (std::size_t i = 0; i < size; i++) {
+                void* p1 = memory + i;
+                ::new(p1) T(args...);
+            }
+#endif
         }
 #endif
 #endif
         template<typename T>
         inline void array_init_list(T* memory, std::size_t size, const T* list) {
+#if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -95,9 +117,16 @@ namespace boost {
                 array_destroy(memory, i);
                 throw;
             }
+#else
+            for (std::size_t i = 0; i < size; i++) {
+                void* p1 = memory + i;
+                ::new(p1) T(list[i]);
+            }
+#endif
         }
         template<typename T, std::size_t N>
         inline void array_init_list(T* memory, std::size_t size, const T* list) {
+#if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -108,12 +137,19 @@ namespace boost {
                 array_destroy(memory, i);
                 throw;
             }
+#else
+            for (std::size_t i = 0; i < size; i++) {
+                void* p1 = memory + i;
+                ::new(p1) T(list[i % N]);
+            }
+#endif
         }
         template<typename T>
         inline void array_noinit(T*, std::size_t, boost::true_type) {
         }
         template<typename T>
         inline void array_noinit(T* memory, std::size_t size, boost::false_type) {
+#if !defined(BOOST_NO_EXCEPTIONS)
             std::size_t i = 0;
             try {
                 for (; i < size; i++) {
@@ -124,6 +160,12 @@ namespace boost {
                 array_destroy(memory, i);
                 throw;
             }
+#else
+            for (std::size_t i = 0; i < size; i++) {
+                void* p1 = memory + i;
+                ::new(p1) T;
+            }
+#endif
         }
         template<typename T>
         inline void array_noinit(T* memory, std::size_t size) {
