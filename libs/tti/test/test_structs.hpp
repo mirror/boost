@@ -48,6 +48,11 @@ struct AType
   void VoidFunction() { }
   int IntFunction() { return 0; }
   
+  // Const function
+  
+  double AConstFunction(long, char) const { return 2.57; }
+  void WFunction(float, double) const { }
+  
   // Function Templates
   
   template<class X,int Y> int AFuncTemplate(const X &) { return Y; }
@@ -86,6 +91,7 @@ struct AnotherType
   bool cMem;
   long AnInt;
   AType OtherAT;
+  const AType COtherAT;
   AType::AStructType ONestStr;
   
   // Function
@@ -94,6 +100,11 @@ struct AnotherType
   int anotherFunction(AType) { return 0; }
   AType::AnIntType sFunction(int,long,double) { return 0; }
   double IntFunction(int) { return 0; }
+  
+  // Const function
+  
+  int AnotherConstFunction(const AType *, short) const { return 0; }
+  const AType * StillSame(int) const { return &COtherAT; }
   
   // Function Templates
   
@@ -111,8 +122,6 @@ struct AnotherType
   // Static Function Template
   
   template<class X,class Y> static void YetAnotherFuncTemplate(const X &,Y &) { }
-  
-  double PublicIntFunction(int) { return 0; }
   
   static const int CIntValue = 10;
   

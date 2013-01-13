@@ -10,12 +10,15 @@
 #include "test_structs.hpp"
 #include <boost/tti/has_member_function.hpp>
 
+BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(AskIfConst,WFunction) // const
 BOOST_TTI_HAS_MEMBER_FUNCTION(VoidFunction)
+BOOST_TTI_HAS_MEMBER_FUNCTION(AnotherConstFunction) // const
 BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(FunctionReturningInt,IntFunction)
+BOOST_TTI_HAS_MEMBER_FUNCTION(AConstFunction) // const
 BOOST_TTI_HAS_MEMBER_FUNCTION(aFunction)
 BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(AnotherIntFunction,anotherFunction)
 BOOST_TTI_HAS_MEMBER_FUNCTION(sFunction)
+BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(StillTest,StillSame) // const
 BOOST_TTI_HAS_MEMBER_FUNCTION(someFunctionMember)
-BOOST_TTI_HAS_MEMBER_FUNCTION(PublicIntFunction)
 
 #endif // TEST_HAS_MEMBER_FUNCTION_HPP

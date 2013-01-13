@@ -27,19 +27,19 @@
 #include <boost/tti/gen/namespace_gen.hpp>
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait,name) \
-  template<class T,class C> \
+  template<class BOOST_TTI_DETAIL_TP_PMEMF,class BOOST_TTI_DETAIL_TP_C> \
   struct BOOST_PP_CAT(trait,_detail_types) \
     { \
-    template<T> \
+    template<BOOST_TTI_DETAIL_TP_PMEMF> \
     struct helper; \
     \
-    template<class U> \
-    static ::boost::type_traits::yes_type check(helper<&U::name> *); \
+    template<class BOOST_TTI_DETAIL_TP_EC> \
+    static ::boost::type_traits::yes_type check(helper<&BOOST_TTI_DETAIL_TP_EC::name> *); \
     \
-    template<class U> \
+    template<class BOOST_TTI_DETAIL_TP_EC> \
     static ::boost::type_traits::no_type check(...); \
     \
-    BOOST_STATIC_CONSTANT(bool,value=sizeof(check<C>(BOOST_TTI_DETAIL_NULLPTR))==sizeof(::boost::type_traits::yes_type)); \
+    BOOST_STATIC_CONSTANT(bool,value=sizeof(check<BOOST_TTI_DETAIL_TP_C>(BOOST_TTI_DETAIL_NULLPTR))==sizeof(::boost::type_traits::yes_type)); \
     \
     typedef boost::mpl::bool_<value> type; \
     }; \
@@ -47,12 +47,12 @@
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_CALL_TYPES_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_TYPES_MEMBER_FUNCTION(trait,name) \
-  template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG> \
+  template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \
   struct BOOST_PP_CAT(trait,_detail_call_types) : \
     BOOST_PP_CAT(trait,_detail_types) \
       < \
-      typename BOOST_TTI_NAMESPACE::detail::ptmf_seq<TTI_T,TTI_R,TTI_FS,TTI_TAG>::type, \
-      typename boost::remove_const<TTI_T>::type \
+      typename BOOST_TTI_NAMESPACE::detail::ptmf_seq<BOOST_TTI_DETAIL_TP_T,BOOST_TTI_DETAIL_TP_R,BOOST_TTI_DETAIL_TP_FS,BOOST_TTI_DETAIL_TP_TAG>::type, \
+      BOOST_TTI_DETAIL_TP_T \
       > \
     { \
     }; \
@@ -71,7 +71,7 @@
 #define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_CALL_TYPES_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_CHECK_HAS_COMP_MEMBER_FUNCTION(trait,name) \
-  template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG> \
+  template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \
   struct BOOST_PP_CAT(trait,_detail_hmf) \
     { \
     typedef typename \
@@ -79,12 +79,12 @@
       < \
       boost::mpl::and_ \
         < \
-        boost::is_same<TTI_R,BOOST_TTI_NAMESPACE::detail::deftype>, \
-        boost::is_same<TTI_FS,boost::mpl::vector<> >, \
-        boost::is_same<TTI_TAG,boost::function_types::null_tag> \
+        boost::is_same<BOOST_TTI_DETAIL_TP_R,BOOST_TTI_NAMESPACE::detail::deftype>, \
+        boost::is_same<BOOST_TTI_DETAIL_TP_FS,boost::mpl::vector<> >, \
+        boost::is_same<BOOST_TTI_DETAIL_TP_TAG,boost::function_types::null_tag> \
         >, \
-      BOOST_PP_CAT(trait,_detail_check_comp)<TTI_T>, \
-      BOOST_PP_CAT(trait,_detail_call_types)<TTI_T,TTI_R,TTI_FS,TTI_TAG> \
+      BOOST_PP_CAT(trait,_detail_check_comp)<BOOST_TTI_DETAIL_TP_T>, \
+      BOOST_PP_CAT(trait,_detail_call_types)<BOOST_TTI_DETAIL_TP_T,BOOST_TTI_DETAIL_TP_R,BOOST_TTI_DETAIL_TP_FS,BOOST_TTI_DETAIL_TP_TAG> \
       >::type type; \
     \
     BOOST_STATIC_CONSTANT(bool,value=type::value); \

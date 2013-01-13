@@ -22,7 +22,6 @@ int main()
   BOOST_TEST((BOOST_TTI_HAS_FUNCTION_GEN(sFunction)<AnotherType,AType::AnIntType,boost::mpl::vector<int,long,double> >::value));
   BOOST_TEST((!BOOST_TTI_HAS_FUNCTION_GEN(someFunctionMember)<AnotherType,AType,boost::mpl::vector<long,int> >::value));
   BOOST_TEST((TheTIntFunction<AnotherType,AType,boost::mpl::vector<long,double> >::value));
-  BOOST_TEST((BOOST_TTI_HAS_FUNCTION_GEN(PublicIntFunction)<AnotherType,double,boost::mpl::vector<int> >::value));
   
   return boost::report_errors();
 

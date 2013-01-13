@@ -29,6 +29,8 @@ alias ttimfsig
         [ compile test_has_member_compile.cpp ]
         [ compile-fail test_has_member_fail.cpp ]
         [ compile-fail test_has_member_fail2.cpp ]
+        [ compile-fail test_has_member_fail3.cpp ]
+        [ compile-fail test_has_member_fail4.cpp ]
     ;
 
 #
@@ -53,6 +55,8 @@ alias ttimfn
         [ compile test_has_mem_fun_compile.cpp ]
         [ compile-fail test_has_mem_fun_fail.cpp ]
         [ compile-fail test_has_mem_fun_fail2.cpp ]
+        [ compile-fail test_has_mem_fun_fail3.cpp ]
+        [ compile-fail test_has_mem_fun_fail4.cpp ]
     ;
 
 #
