@@ -43,7 +43,7 @@ using quickbook ;
 path-constant boost-images : ../../../doc/src/images ;
 
 xml declval : declval.qbk ;
-boostbook standalone
+boostbook standalone_declval
     :
         declval
     :
@@ -63,7 +63,7 @@ boostbook standalone
      ;
 
 xml string_ref : string_ref.qbk ;
-boostbook standalone
+boostbook standalone_string_ref
     :
         string_ref
     :
@@ -79,5 +79,5 @@ boostbook standalone
         <xsl:param>toc.max.depth=1
         # How far down we go with TOC's
         <xsl:param>generate.section.toc.level=1
-        
+
      ;
