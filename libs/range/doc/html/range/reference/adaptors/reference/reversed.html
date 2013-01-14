@@ -100,11 +100,11 @@
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">adaptor</span><span class="special">/</span><span class="identifier">reversed</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">copy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">assign</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
-<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">algorithm</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
 <span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&gt;</span>
 
-<span class="keyword">void</span> <span class="identifier">reversed_example_test</span><span class="special">()</span>
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">argv</span><span class="special">[])</span>
 <span class="special">{</span>
     <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">adaptors</span><span class="special">;</span>
     <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">assign</span><span class="special">;</span>
@@ -125,7 +125,7 @@
 <p>
             This would produce the output:
 </p>
-<pre class="programlisting"><span class="number">9</span><span class="special">,</span><span class="number">8</span><span class="special">,</span><span class="number">7</span><span class="special">,</span><span class="number">6</span><span class="special">,</span><span class="number">5</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">1</span>
+<pre class="programlisting"><span class="number">9</span><span class="special">,</span><span class="number">8</span><span class="special">,</span><span class="number">7</span><span class="special">,</span><span class="number">6</span><span class="special">,</span><span class="number">5</span><span class="special">,</span><span class="number">4</span><span class="special">,</span><span class="number">3</span><span class="special">,</span><span class="number">2</span><span class="special">,</span><span class="number">1</span><span class="special">,</span>
 </pre>
 <p>
           </p>

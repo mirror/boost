@@ -80,15 +80,8 @@
               </li>
 <li class="listitem">
                 Implement a holder class to hold the arguments required to construct
-                the RangeAdaptor.
-              </li>
-</ol></div>
-<p>
-            The holder combines multiple parameters into one that can be passed as
-            the right operand of <code class="computeroutput"><span class="keyword">operator</span><span class="special">|()</span></code>.
-          </p>
-<p>
-</p>
+                the RangeAdaptor. The holder combines multiple parameters into one
+                that can be passed as the right operand of <code class="computeroutput"><span class="keyword">operator</span><span class="special">|()</span></code>.
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">T</span><span class="special">&gt;</span>
 <span class="keyword">class</span> <span class="identifier">replace_holder</span> <span class="special">:</span> <span class="keyword">public</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_detail</span><span class="special">::</span><span class="identifier">holder2</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span>
 <span class="special">{</span>
@@ -100,23 +93,15 @@
     <span class="keyword">void</span> <span class="keyword">operator</span><span class="special">=(</span><span class="keyword">const</span> <span class="identifier">replace_holder</span><span class="special">&amp;);</span>
 <span class="special">};</span>
 </pre>
-<p>
-          </p>
-<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+              </li>
+<li class="listitem">
                 Define an instance of the holder with the name of the adaptor
-              </li></ol></div>
-<p>
-</p>
 <pre class="programlisting"><span class="keyword">static</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_detail</span><span class="special">::</span><span class="identifier">forwarder2</span><span class="special">&lt;</span><span class="identifier">replace_holder</span><span class="special">&gt;</span>
 <span class="identifier">replaced</span> <span class="special">=</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">range_detail</span><span class="special">::</span><span class="identifier">forwarder2</span><span class="special">&lt;</span><span class="identifier">replace_holder</span><span class="special">&gt;();</span>
 </pre>
-<p>
-          </p>
-<div class="orderedlist"><ol class="orderedlist" type="1"><li class="listitem">
+              </li>
+<li class="listitem">
                 Define <code class="computeroutput"><span class="keyword">operator</span><span class="special">|</span></code>
-              </li></ol></div>
-<p>
-</p>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">typename</span> <span class="identifier">SinglePassRange</span><span class="special">&gt;</span>
 <span class="keyword">inline</span> <span class="identifier">replace_range</span><span class="special">&lt;</span><span class="identifier">SinglePassRange</span><span class="special">&gt;</span>
 <span class="keyword">operator</span><span class="special">|(</span><span class="identifier">SinglePassRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span>
@@ -133,8 +118,8 @@
     <span class="keyword">return</span> <span class="identifier">replace_range</span><span class="special">&lt;</span><span class="keyword">const</span> <span class="identifier">SinglePassRange</span><span class="special">&gt;(</span><span class="identifier">rng</span><span class="special">,</span> <span class="identifier">f</span><span class="special">.</span><span class="identifier">val1</span><span class="special">,</span> <span class="identifier">f</span><span class="special">.</span><span class="identifier">val2</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
-<p>
-          </p>
+              </li>
+</ol></div>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

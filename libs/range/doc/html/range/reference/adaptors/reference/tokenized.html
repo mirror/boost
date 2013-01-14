@@ -26,6 +26,7 @@
 <div class="titlepage"><div><div><h5 class="title">
 <a name="range.reference.adaptors.reference.tokenized"></a><a class="link" href="tokenized.html" title="tokenized">tokenized</a>
 </h5></div></div></div>
+<div class="toc"><dl><dt><span class="section"><a href="tokenized.html#range.reference.adaptors.reference.tokenized.tokenized_example">tokenized_example</a></span></dt></dl></div>
 <div class="informaltable"><table class="table">
 <colgroup>
 <col>
@@ -134,6 +135,50 @@
                 Access Range</a>
               </li>
 </ul></div>
+<div class="section range_reference_adaptors_reference_tokenized_tokenized_example">
+<div class="titlepage"><div><div><h6 class="title">
+<a name="range.reference.adaptors.reference.tokenized.tokenized_example"></a><a class="link" href="tokenized.html#range.reference.adaptors.reference.tokenized.tokenized_example" title="tokenized_example">tokenized_example</a>
+</h6></div></div></div>
+<p>
+</p>
+<pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">adaptor</span><span class="special">/</span><span class="identifier">tokenized</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">range</span><span class="special">/</span><span class="identifier">algorithm</span><span class="special">/</span><span class="identifier">copy</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">assign</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iterator</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">iostream</span><span class="special">&gt;</span>
+<span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">vector</span><span class="special">&gt;</span>
+
+<span class="keyword">int</span> <span class="identifier">main</span><span class="special">(</span><span class="keyword">int</span> <span class="identifier">argc</span><span class="special">,</span> <span class="keyword">const</span> <span class="keyword">char</span><span class="special">*</span> <span class="identifier">argv</span><span class="special">[])</span>
+<span class="special">{</span>
+    <span class="keyword">using</span> <span class="keyword">namespace</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">adaptors</span><span class="special">;</span>
+
+    <span class="keyword">typedef</span> <span class="identifier">boost</span><span class="special">::</span><span class="identifier">sub_match</span><span class="special">&lt;</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span><span class="special">::</span><span class="identifier">iterator</span> <span class="special">&gt;</span> <span class="identifier">match_type</span><span class="special">;</span>
+
+    <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="identifier">input</span> <span class="special">=</span> <span class="string">" a b c d e f g hijklmnopqrstuvwxyz"</span><span class="special">;</span>
+    <span class="identifier">boost</span><span class="special">::</span><span class="identifier">copy</span><span class="special">(</span>
+        <span class="identifier">input</span> <span class="special">|</span> <span class="identifier">tokenized</span><span class="special">(</span><span class="identifier">boost</span><span class="special">::</span><span class="identifier">regex</span><span class="special">(</span><span class="string">"\\w+"</span><span class="special">)),</span>
+        <span class="identifier">std</span><span class="special">::</span><span class="identifier">ostream_iterator</span><span class="special">&lt;</span><span class="identifier">match_type</span><span class="special">&gt;(</span><span class="identifier">std</span><span class="special">::</span><span class="identifier">cout</span><span class="special">,</span> <span class="string">"\n"</span><span class="special">));</span>
+
+    <span class="keyword">return</span> <span class="number">0</span><span class="special">;</span>
+<span class="special">}</span>
+</pre>
+<p>
+            </p>
+</div>
+<p>
+            This would produce the output:
+</p>
+<pre class="programlisting"><span class="identifier">a</span>
+<span class="identifier">b</span>
+<span class="identifier">c</span>
+<span class="identifier">d</span>
+<span class="identifier">e</span>
+<span class="identifier">f</span>
+<span class="identifier">g</span>
+<span class="identifier">hijklmnopqrstuvwxyz</span>
+</pre>
+<p>
+          </p>
 </div>
 <table xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" width="100%"><tr>
 <td align="left"></td>

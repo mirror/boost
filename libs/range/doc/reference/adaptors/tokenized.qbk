@@ -44,6 +44,24 @@
 * [*Range Return Type:] `boost::tokenized_range<typeof(rng)>`
 * [*Returned Range Category:] __random_access_range__
 
+[section:tokenized_example tokenized_example]
+[import ../../../test/adaptor_test/tokenized_example.cpp]
+[tokenized_example]
+[endsect]
+
+This would produce the output:
+``
+a
+b
+c
+d
+e
+f
+g
+hijklmnopqrstuvwxyz
+
+``
+
 [endsect]
 
 
