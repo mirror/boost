@@ -33,14 +33,22 @@ extern const char* environment_finalized_docstring;
  * zero-initialized before it is used. 
  */
 static environment* env; 
-
+  
 bool mpi_init(list python_argv, bool abort_on_exception)
 {
   // If MPI is already initialized, do nothing.
   if (environment::initialized())
     return false;
 
-  // Convert Python argv into C-style argc/argv. 
+#if PY_MAJOR_VERSION >= 3
+  #ifdef BOOST_MPI_HAS_NOARG_INITIALIZATION
+    env = new environment(abort_on_exception);
+  #else
+    #error No argument initialization, supported from MPI 1.2 and up, is needed when using Boost.MPI with Python 3.x
+  #endif
+#else
+  
+  // Convert Python argv into C-style argc/argv.
   int my_argc = extract<int>(python_argv.attr("__len__")());
   char** my_argv = new char*[my_argc];
   for (int arg = 0; arg < my_argc; ++arg)
@@ -53,64 +61,12 @@ bool mpi_init(list python_argv, bool abort_on_exception)
 
   // If anything changed, convert C-style argc/argv into Python argv
   if (mpi_argv != my_argv)
-  {
-#if PY_MAJOR_VERSION >= 3
-
-    wchar_t **argv_copy = (wchar_t **)PyMem_Malloc(sizeof(wchar_t*)*mpi_argc);
-    /* We need a second copy, as Python might modify the first one. */
-    wchar_t **argv_copy2 = (wchar_t **)PyMem_Malloc(sizeof(wchar_t*)*mpi_argc);
-
-    if (!argv_copy || !argv_copy2) {
-      fprintf(stderr, "out of memory\n");
-      return false;
-    }
-
-    std::locale mylocale;
-    mbstate_t mystate;
-
-    const std::codecvt<char, wchar_t, mbstate_t>& myfacet =
-      std::use_facet<std::codecvt<char, wchar_t, mbstate_t> >(mylocale);
-
-    for (int i = 0; i < mpi_argc; i++) 
-    {
-      size_t length = strlen(mpi_argv[i]);
-
-      wchar_t *dest = (wchar_t *) PyMem_Malloc(sizeof(wchar_t) * (length + 1));
-
-      const char *from_next;
-      wchar_t *to_next;
-
-      std::codecvt<wchar_t,char,mbstate_t>::result myresult = 
-        myfacet.out(mystate,
-            mpi_argv[i], mpi_argv[i] + length + 1, from_next,
-            dest, dest+length+1, to_next);
-
-      if (myresult != std::codecvt<wchar_t,char,mbstate_t>::ok )
-      {
-        fprintf(stderr, "failure translating argv\n");
-        return 1;
-      }
-
-      argv_copy2[i] = argv_copy[i] = dest;
-      if (!argv_copy[i])
-          return false;
-    }
-
-    PySys_SetArgv(mpi_argc, argv_copy);
-
-    for (int i = 0; i < mpi_argc; i++) {
-        PyMem_Free(argv_copy2[i]);
-    }
-    PyMem_Free(argv_copy);
-    PyMem_Free(argv_copy2);
-#else
     PySys_SetArgv(mpi_argc, mpi_argv);
-#endif
-  }
 
   for (int arg = 0; arg < mpi_argc; ++arg)
     free(mpi_argv[arg]);
   delete [] mpi_argv;
+#endif
 
   return true;
 }
