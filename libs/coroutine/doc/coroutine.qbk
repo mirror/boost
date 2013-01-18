@@ -36,6 +36,7 @@ __coro_fn__ and from __coro_fn__ by calling __coro_op__ and __coro_get__.
 
         typedef boost::coroutines::coroutine< int( std::string const&) > coro_t;
 
+        // void f( boost::coroutine< std::string const&( int) > & ca)
         void f( coro_t::caller_type & ca)
         {
             ...
@@ -64,6 +65,7 @@ A single arguments can be passed as it is:
 
         typedef boost::coroutines::coroutine< int( std::string const&) > coro_t;
 
+        // void f( boost::coroutine< std::string const&( int) > & ca)
         void f( coro_t::caller_type & ca);
 
         std::string str("abc");
@@ -74,6 +76,7 @@ For multiple arguments __args__ must be used (it is a typedef of __tuple__):
 
         typedef boost::coroutines::coroutine< int( int, std::string const&) > coro_t;
 
+        // void f( boost::coroutine< boost::tuple< int, std::string const& >( int) > & ca)
         void f( coro_t::caller_type & ca);
 
         std::string str("abc");
@@ -199,6 +202,7 @@ __coro_get__ in the other routine.
 
         typedef boost::coroutines::coroutine< int( int) >    coro_t;
 
+        // void fn( boost::coroutines::coroutine< int( int) > & ca)
         void fn( coro_t::caller_type & ca)
         {
             // access the integer argument given to coroutine ctor
@@ -251,6 +255,7 @@ the __tuple__ returned by __coro_get__.
 
         typedef boost::coroutines::coroutine< int(int,int) > coro_t;
 
+        // void fn( boost::coroutines::coroutine< boost::tuple< int, int >( int) > & ca)
         void fn( coro_t::caller_type & ca)
         {
             int a, b;
@@ -297,6 +302,7 @@ after `c` is gone will fail!
 
         typedef boost::coroutines::coroutine< X*() >    coro_t;
 
+        // void fn( boost::coroutines::coroutine< void( X*) > & ca)
         void fn( coro_t::caller_t & ca) {
             X local;
             ca( & local);
@@ -322,6 +328,7 @@ __boost_coroutine__ provides output- and input-iterators using __boost_range__.
         typedef boost::coroutines::coroutine< int() >       coro_t;
         typedef boost::range_iterator< coro_t >::type       iterator_t;
 
+        // void power( boost::coroutines::coroutine< void( int) > & ca, int number, int exponent)
         void power( coro_t::caller_type & ca, int number, int exponent)
         {
             int counter = 0;
@@ -354,6 +361,7 @@ __boost_coroutine__ provides output- and input-iterators using __boost_range__.
         typedef boost::coroutines::coroutine< int() >       coro_t;
         typedef boost::range_iterator< coro_t >::type       iterator_t;
 
+        // void power( boost::coroutines::coroutine< void( int) > & ca, int number, int exponent)
         void power( coro_t::caller_type & ca, int number, int exponent)
         {
             int counter = 0;
@@ -392,6 +400,7 @@ routine. The __coro__ becomes complete, e.g. __coro_bool__ will return 'false'.
 
         typedef boost::coroutines::coroutine< int(int,int) > coro_t;
 
+        // void power( boost::coroutines::coroutine< boost::tuple< int, int >( int) > & ca, int number, int exponent)
         void fn( coro_t::caller_type & ca)
         {
             int a, b;
@@ -436,6 +445,7 @@ __coro_op__.
 
         typedef boost::coroutines::coroutine< void() >    coro_t;
 
+        // void fn( boost::coroutines::coroutine< void() > & ca)
         void fn( coro_t::caller_type & ca)
         {
             ca();
@@ -511,6 +521,7 @@ After unwinding, a __coro__ is complete.
             { std::cout << "~X()" << std::endl; }
         };
 
+        // void fn( boost::coroutines::coroutine< void() > & ca)
         void fn( coro_t::caller_type & ca)
         {
             X x;
