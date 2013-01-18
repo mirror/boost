@@ -541,7 +541,6 @@ namespace boost
     operator<<(std::basic_ostream<CharT, Traits>& os, const time_point<Clock, Duration>& tp)
     {
 
-      typedef std::basic_string<CharT, Traits> string_type;
       bool failed = false;
       BOOST_TRY
       {
@@ -936,6 +935,7 @@ namespace boost
             { '%', 'Y', '-', '%', 'm', '-', '%', 'd', ' ', '%', 'H', ':', '%', 'M', ':' };
             pb = pattern;
             pe = pb + sizeof (pattern) / sizeof(CharT);
+            tm.tm_sec=0;
 #if defined BOOST_CHRONO_USES_INTERNAL_TIME_GET
             const detail::time_get<CharT>& dtg(tg);
             dtg.get(is, 0, is, err, &tm, pb, pe);
