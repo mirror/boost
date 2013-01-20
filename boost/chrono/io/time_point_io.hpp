@@ -36,6 +36,9 @@
 #define  BOOST_CHRONO_INTERNAL_TIMEGM defined BOOST_WINDOWS && ! defined(__CYGWIN__)
 //#define  BOOST_CHRONO_INTERNAL_TIMEGM 1
 
+//#define  BOOST_CHRONO_INTERNAL_GMTIME defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+#define  BOOST_CHRONO_INTERNAL_GMTIME 0
+
 #define  BOOST_CHRONO_USES_INTERNAL_TIME_GET
 
 namespace boost
@@ -646,12 +649,13 @@ namespace boost
       return is;
     }
 
-#ifndef BOOST_CHRONO_NO_UTC_TIMEPOINT
 
     namespace detail
     {
-#if BOOST_CHRONO_INTERNAL_TIMEGM
-    int is_leap(int year)
+
+//#if BOOST_CHRONO_INTERNAL_TIMEGM
+
+    inline int32_t is_leap(int32_t year)
     {
       if(year % 400 == 0)
       return 1;
@@ -661,19 +665,19 @@ namespace boost
       return 1;
       return 0;
     }
-    inline int days_from_0(int year)
+    inline int32_t days_from_0(int32_t year)
     {
       year--;
       return 365 * year + (year / 400) - (year/100) + (year / 4);
     }
-    int days_from_1970(int year)
+    inline int32_t days_from_1970(int32_t year)
     {
       static const int days_from_0_to_1970 = days_from_0(1970);
       return days_from_0(year) - days_from_0_to_1970;
     }
-    int days_from_1jan(int year,int month,int day)
+    inline int32_t days_from_1jan(int32_t year,int32_t month,int32_t day)
     {
-      static const int days[2][12] =
+      static const int32_t days[2][12] =
       {
         { 0,31,59,90,120,151,181,212,243,273,304,334},
         { 0,31,60,91,121,152,182,213,244,274,305,335}
@@ -681,7 +685,7 @@ namespace boost
       return days[is_leap(year)][month-1] + day - 1;
     }
 
-    time_t internal_timegm(std::tm const *t)
+    inline time_t internal_timegm(std::tm const *t)
     {
       int year = t->tm_year + 1900;
       int month = t->tm_mon;
@@ -706,8 +710,101 @@ namespace boost
 
       return result;
     }
-#endif
+//#endif
+
+    /**
+    * from_ymd could be made more efficient by using a table
+    * day_count_table indexed by the y%400.
+    * This table could contain the day_count
+    * by*365 + by/4 - by/100 + by/400
+    *
+    * from_ymd = (by/400)*days_by_400_years+day_count_table[by%400] +
+    * days_in_year_before[is_leap_table[by%400]][m-1] + d;
+    */
+    inline unsigned days_before_years(int32_t y)
+   {
+     return y * 365 + y / 4 - y / 100 + y / 400;
+   }
+
+
+
+   static
+   const unsigned char
+       day_of_year_month[2][366] =
+           {
+           { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 },
+
+           { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12
+
+           } };
+
+   static
+   const int32_t days_in_year_before[2][13] =
+   {
+   { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 },
+   { -1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 } };
+
+   inline std::tm * internal_gmtime(std::time_t const* t, std::tm *tm)
+   {
+     if (t==0) return 0;
+     if (tm==0) return 0;
+
+     tm->tm_year=0;
+     tm->tm_mon=0;
+     tm->tm_mday=0;
+     tm->tm_hour=0;
+     tm->tm_min=0;
+     tm->tm_sec=0;
+
+     const time_t seconds_in_day = 3600 * 24;
+     int32_t days_since_epoch = *t / seconds_in_day;
+     int32_t hms = *t - seconds_in_day*days_since_epoch;
+     if (hms < 0) {
+       //std::cout << "days_since_epoch "<< days_since_epoch << std::endl;
+       //std::cout << "hms "<< hms << std::endl;
+       days_since_epoch-=1;
+       hms = seconds_in_day+hms;
+     }
+
+     int32_t x = days_since_epoch;
+     int32_t y = static_cast<int32_t> (static_cast<long long> (x + 2) * 400
+           / 146097);
+       const int32_t ym1 = y - 1;
+       int32_t doy = x - days_before_years(y);
+       const int32_t doy1 = x - days_before_years(ym1);
+       const int32_t N = std::numeric_limits<int>::digits - 1;
+       const int32_t mask1 = doy >> N; // arithmetic rshift - not portable - but nearly universal
+       const int32_t mask0 = ~mask1;
+       doy = (doy & mask0) | (doy1 & mask1);
+       y = (y & mask0) | (ym1 & mask1);
+       //y -= 32767 + 2;
+       y += 70;
+       tm->tm_year=y;
+       const bool leap = is_leap(y);
+       tm->tm_mon = day_of_year_month[leap][doy]-1;
+       tm->tm_mday = doy - days_in_year_before[leap][day_of_year_month[leap][doy] - 1];
+
+
+     std::cout << "days_since_epoch "<< days_since_epoch << std::endl;
+     std::cout << "hms "<< hms << std::endl;
+     tm->tm_hour = hms / 3600;
+     const int ms = hms % 3600;
+     tm->tm_min = ms / 60;
+     tm->tm_sec = ms % 60;
+
+     std::cout << "t  " << *t << std::endl;
+     std::cout << "year  " << tm->tm_year << std::endl;
+     std::cout << "month " << tm->tm_mon << std::endl;
+     std::cout << "day   " << tm->tm_mday << std::endl;
+//     std::cout << "hour  " << tm->tm_hour << std::endl;
+//     std::cout << "min   " << tm->tm_min << std::endl;
+//     std::cout << "sec   " << tm->tm_sec << std::endl;
+
+     return tm;
+   }
+
     } // detail
+#ifndef BOOST_CHRONO_NO_UTC_TIMEPOINT
 
 #if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
 
@@ -748,8 +845,11 @@ namespace boost
           }
           else
           {
-            //std::cerr << __FILE__ << "[" << __LINE__ << "]"<< std::endl;
-#if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+            //std::cerr << __FILE__ << "[" << __LINE__ << "] "<< t <<  std::endl;
+#if BOOST_CHRONO_INTERNAL_GMTIME
+            if (detail::internal_gmtime(&t, &tm) == 0) failed = true;
+
+#elif defined BOOST_WINDOWS && ! defined(__CYGWIN__)
             std::tm *tmp = 0;
             if((tmp = gmtime(&t)) == 0)
             failed = true;
