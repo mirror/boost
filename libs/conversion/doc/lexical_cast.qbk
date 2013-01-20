@@ -3,7 +3,7 @@
     [version 1.0]
     [copyright 2000-2005 Kevlin Henney]
     [copyright 2006-2010 Alexander Nasonov]
-    [copyright 2011-2012 Antony Polukhin]
+    [copyright 2011-2013 Antony Polukhin]
     [category String and text processing]
     [category Miscellaneous]
     [license
@@ -275,6 +275,10 @@ limitation of compiler options that you use.
 [endsect]
 
 [section Changes]
+
+* [*boost 1.54.0 :]
+
+    * Added code to convert boost::int128_type and boost::uint128_type (requires GCC 4.7 or higher).
 
 * [*boost 1.53.0 :]
 
