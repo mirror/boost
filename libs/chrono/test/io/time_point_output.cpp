@@ -135,30 +135,28 @@ void check_all_system_clock()
   using namespace boost::chrono;
   using namespace boost;
 
+  test_good_system_clock("1970-01-01 02:00:00.000000 +0000", hours(2), duration_style::prefix);
+  test_good_system_clock("1970-01-01 02:00:00.000000 +0000", hours(2), duration_style::symbol);
+
+  test_good_prefix_system_clock("1970-01-01 02:00:00.000000 +0000", hours(2));
+  test_good_prefix_system_clock("1970-01-01 00:02:00.000000 +0000", minutes(2));
+  test_good_prefix_system_clock("1970-01-01 00:00:02.000000 +0000", seconds(2));
+  test_good_prefix_system_clock("1970-01-01 00:00:01.000000 +0000", seconds(1));
   test_good_prefix_system_clock("1969-12-31 23:59:59.000000 +0000", seconds(-1));
   test_good_prefix_system_clock("1970-01-01 00:00:00.000000 +0000", seconds(0));
-//  test_good_system_clock("1970-01-01 02:00:00.000000 +0000", hours(2), duration_style::prefix);
-//  test_good_system_clock("1970-01-01 02:00:00.000000 +0000", hours(2), duration_style::symbol);
-//
-//  test_good_prefix_system_clock("1970-01-01 02:00:00.000000 +0000", hours(2));
-//  test_good_prefix_system_clock("1970-01-01 00:02:00.000000 +0000", minutes(2));
-//  test_good_prefix_system_clock("1970-01-01 00:00:02.000000 +0000", seconds(2));
-//  test_good_prefix_system_clock("1970-01-01 00:00:01.000000 +0000", seconds(1));
-//  test_good_prefix_system_clock("1969-12-31 23:59:59.000000 +0000", seconds(-1));
-//  test_good_prefix_system_clock("1970-01-01 00:00:00.000000 +0000", seconds(0));
-//  test_good_prefix_system_clock("1970-01-01 00:00:00.002000 +0000", milliseconds(2));
-//  test_good_prefix_system_clock("1970-01-01 00:00:00.000002 +0000", microseconds(2));
-//  test_good_prefix_system_clock("1970-01-01 00:00:00.000000 +0000", nanoseconds(2));
-//  test_good_prefix_system_clock("1970-01-01 00:00:00.200000 +0000", duration<boost::int_least64_t, deci> (2));
-//  test_good_prefix_system_clock("1970-01-01 00:00:00.066667 +0000", duration<boost::int_least64_t, ratio<1, 30> > (2));
-//
-//  test_good_symbol_system_clock("1970-01-01 02:00:00.000000 +0000", hours(2));
-//  test_good_symbol_system_clock("1970-01-01 00:02:00.000000 +0000", minutes(2));
-//  test_good_symbol_system_clock("1970-01-01 00:00:02.000000 +0000", seconds(2));
-//  test_good_symbol_system_clock("1970-01-01 00:00:00.002000 +0000", milliseconds(2));
-//  test_good_symbol_system_clock("1970-01-01 00:00:00.000000 +0000", nanoseconds(2));
-//  test_good_symbol_system_clock("1970-01-01 00:00:00.200000 +0000", duration<boost::int_least64_t, deci> (2));
-//  test_good_symbol_system_clock("1970-01-01 00:00:00.066667 +0000", duration<boost::int_least64_t, ratio<1, 30> > (2));
+  test_good_prefix_system_clock("1970-01-01 00:00:00.002000 +0000", milliseconds(2));
+  test_good_prefix_system_clock("1970-01-01 00:00:00.000002 +0000", microseconds(2));
+  test_good_prefix_system_clock("1970-01-01 00:00:00.000000 +0000", nanoseconds(2));
+  test_good_prefix_system_clock("1970-01-01 00:00:00.200000 +0000", duration<boost::int_least64_t, deci> (2));
+  test_good_prefix_system_clock("1970-01-01 00:00:00.066667 +0000", duration<boost::int_least64_t, ratio<1, 30> > (2));
+
+  test_good_symbol_system_clock("1970-01-01 02:00:00.000000 +0000", hours(2));
+  test_good_symbol_system_clock("1970-01-01 00:02:00.000000 +0000", minutes(2));
+  test_good_symbol_system_clock("1970-01-01 00:00:02.000000 +0000", seconds(2));
+  test_good_symbol_system_clock("1970-01-01 00:00:00.002000 +0000", milliseconds(2));
+  test_good_symbol_system_clock("1970-01-01 00:00:00.000000 +0000", nanoseconds(2));
+  test_good_symbol_system_clock("1970-01-01 00:00:00.200000 +0000", duration<boost::int_least64_t, deci> (2));
+  test_good_symbol_system_clock("1970-01-01 00:00:00.066667 +0000", duration<boost::int_least64_t, ratio<1, 30> > (2));
 }
 #endif
 
