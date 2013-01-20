@@ -397,16 +397,7 @@ public:
         node_pointer element = top_element;
         roots.erase(node_list_type::s_iterator_to(*element));
 
-        add_children_to_root(element);
-
-        element->~node();
-        allocator_type::deallocate(element, 1);
-
-        size_holder::decrement();
-        if (!empty())
-            consolidate();
-        else
-            top_element = NULL;
+        finish_erase_or_pop(element);
     }
 
     /**
@@ -542,21 +533,15 @@ public:
      * */
     void erase(handle_type const & handle)
     {
-        node_pointer n = handle.node_;
-        node_pointer parent = n->get_parent();
+        node_pointer element = handle.node_;
+        node_pointer parent = element->get_parent();
 
         if (parent)
-            parent->children.erase(node_list_type::s_iterator_to(*n));
+            parent->children.erase(node_list_type::s_iterator_to(*element));
         else
-            roots.erase(node_list_type::s_iterator_to(*n));
+            roots.erase(node_list_type::s_iterator_to(*element));
 
-        add_children_to_root(n);
-        consolidate();
-
-        n->~node();
-        allocator_type::deallocate(n, 1);
-
-        size_holder::decrement();
+        finish_erase_or_pop(element);
     }
 
     /// \copydoc boost::heap::priority_queue::begin
@@ -755,6 +740,20 @@ private:
                 top_element = n;
         }
         while (it != roots.end());
+    }
+
+    void finish_erase_or_pop(node_pointer erased_node)
+    {
+        add_children_to_root(erased_node);
+
+        erased_node->~node();
+        allocator_type::deallocate(erased_node, 1);
+
+        size_holder::decrement();
+        if (!empty())
+            consolidate();
+        else
+            top_element = NULL;
     }
 
     mutable node_pointer top_element;
