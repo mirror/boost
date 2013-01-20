@@ -47,6 +47,10 @@
 #define BOOST_LCAST_NO_WCHAR_T
 #endif
 
+#if (defined(BOOST_LCAST_HAS_INT128) && !defined(__GNUC__)) || GCC_VERSION > 40700
+#define BOOST_LCAST_HAS_INT128
+#endif
+
 // Test all 65536 values if true:
 bool const lcast_test_small_integral_types_completely = false;
 
@@ -55,6 +59,8 @@ bool const lcast_test_small_integral_types_completely = false;
 int const lcast_integral_test_counter=500;
 
 using namespace boost;
+
+
 
 void test_conversion_from_to_short();
 void test_conversion_from_to_ushort();
@@ -67,6 +73,10 @@ void test_conversion_from_to_uintmax_t();
 #ifdef LCAST_TEST_LONGLONG
 void test_conversion_from_to_longlong();
 void test_conversion_from_to_ulonglong();
+#endif
+#ifdef BOOST_LCAST_HAS_INT128
+void test_conversion_from_to_int128();
+void test_conversion_from_to_uint128();
 #endif
 void test_integral_conversions_on_min_max();
 
@@ -87,6 +97,10 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
 #ifdef LCAST_TEST_LONGLONG
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
+#endif
+#ifdef BOOST_LCAST_HAS_INT128
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_int128));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_uint128));
 #endif
     suite->add(BOOST_TEST_CASE(&test_integral_conversions_on_min_max));
 
@@ -372,7 +386,7 @@ struct restore_oldloc
 };
 
 template<class T>
-void test_conversion_from_to_integral()
+void test_conversion_from_to_integral_minimal()
 {
     char const zero = '0';
     signed char const szero = '0';
@@ -438,7 +452,12 @@ void test_conversion_from_to_integral()
         must_owerflow_str += '0';
         must_owerflow_negative_str += '0';
     }
+}
 
+template<class T>
+void test_conversion_from_to_integral()
+{
+    test_conversion_from_to_integral_minimal<T>();
     typedef std::numpunct<char> numpunct;
 
     restore_oldloc guard;
@@ -534,6 +553,19 @@ void test_conversion_from_to_ulonglong()
     test_conversion_from_to_integral<unsigned __int64>();
 }
 
+#endif
+
+
+#ifdef BOOST_LCAST_HAS_INT128
+void test_conversion_from_to_int128()
+{
+    test_conversion_from_to_integral_minimal<boost::int128_type>();
+}
+
+void test_conversion_from_to_uint128()
+{
+    test_conversion_from_to_integral_minimal<boost::uint128_type>();
+}
 #endif
 
 void test_integral_conversions_on_min_max()
