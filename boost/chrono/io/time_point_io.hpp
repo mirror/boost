@@ -34,12 +34,10 @@
 #include <string.h>
 
 #define  BOOST_CHRONO_INTERNAL_TIMEGM defined BOOST_WINDOWS && ! defined(__CYGWIN__)
-//#define  BOOST_CHRONO_INTERNAL_TIMEGM 1
-
-//#define  BOOST_CHRONO_INTERNAL_GMTIME defined BOOST_WINDOWS && ! defined(__CYGWIN__)
-#define  BOOST_CHRONO_INTERNAL_GMTIME 0
+#define  BOOST_CHRONO_INTERNAL_GMTIME defined BOOST_WINDOWS && ! defined(__CYGWIN__)
 
 #define  BOOST_CHRONO_USES_INTERNAL_TIME_GET
+
 
 namespace boost
 {
@@ -726,11 +724,13 @@ namespace boost
      return y * 365 + y / 4 - y / 100 + y / 400;
    }
 
+   inline std::tm * internal_gmtime(std::time_t const* t, std::tm *tm)
+   {
+      if (t==0) return 0;
+      if (tm==0) return 0;
 
-
-   static
-   const unsigned char
-       day_of_year_month[2][366] =
+      static  const unsigned char
+        day_of_year_month[2][366] =
            {
            { 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 2, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 3, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 4, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 6, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 7, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 8, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 9, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 10, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 11, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12, 12 },
 
@@ -738,27 +738,22 @@ namespace boost
 
            } };
 
-   static
-   const int32_t days_in_year_before[2][13] =
-   {
-   { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 },
-   { -1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 } };
+      static const int32_t days_in_year_before[2][13] =
+     {
+       { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 },
+       { -1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 }
+     };
 
-   inline std::tm * internal_gmtime(std::time_t const* t, std::tm *tm)
-   {
-     if (t==0) return 0;
-     if (tm==0) return 0;
-
-     tm->tm_year=0;
-     tm->tm_mon=0;
-     tm->tm_mday=0;
-     tm->tm_hour=0;
-     tm->tm_min=0;
-     tm->tm_sec=0;
+     //tm->tm_year=0;
+     //tm->tm_mon=0;
+     //tm->tm_mday=0;
+     //tm->tm_hour=0;
+     //tm->tm_min=0;
+     //tm->tm_sec=0;
 
      const time_t seconds_in_day = 3600 * 24;
-     int32_t days_since_epoch = *t / seconds_in_day;
-     int32_t hms = *t - seconds_in_day*days_since_epoch;
+     int32_t days_since_epoch = static_cast<int32_t>(*t / seconds_in_day);
+     int32_t hms = static_cast<int32_t>(*t - seconds_in_day*days_since_epoch);
      if (hms < 0) {
        //std::cout << "days_since_epoch "<< days_since_epoch << std::endl;
        //std::cout << "hms "<< hms << std::endl;
@@ -785,17 +780,17 @@ namespace boost
        tm->tm_mday = doy - days_in_year_before[leap][day_of_year_month[leap][doy] - 1];
 
 
-     std::cout << "days_since_epoch "<< days_since_epoch << std::endl;
-     std::cout << "hms "<< hms << std::endl;
+     //std::cout << "days_since_epoch "<< days_since_epoch << std::endl;
+     //std::cout << "hms "<< hms << std::endl;
      tm->tm_hour = hms / 3600;
      const int ms = hms % 3600;
      tm->tm_min = ms / 60;
      tm->tm_sec = ms % 60;
 
-     std::cout << "t  " << *t << std::endl;
-     std::cout << "year  " << tm->tm_year << std::endl;
-     std::cout << "month " << tm->tm_mon << std::endl;
-     std::cout << "day   " << tm->tm_mday << std::endl;
+     //std::cout << "t  " << *t << std::endl;
+     //std::cout << "year  " << tm->tm_year << std::endl;
+     //std::cout << "month " << tm->tm_mon << std::endl;
+     //std::cout << "day   " << tm->tm_mday << std::endl;
 //     std::cout << "hour  " << tm->tm_hour << std::endl;
 //     std::cout << "min   " << tm->tm_min << std::endl;
 //     std::cout << "sec   " << tm->tm_sec << std::endl;
@@ -837,8 +832,9 @@ namespace boost
 #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
             std::tm *tmp = 0;
             if ((tmp=localtime(&t)) == 0)
-            failed = true;
-            tm =*tmp;
+              failed = true;
+            else
+              tm =*tmp;
 #else
             if (localtime_r(&t, &tm) == 0) failed = true;
 #endif
@@ -852,8 +848,9 @@ namespace boost
 #elif defined BOOST_WINDOWS && ! defined(__CYGWIN__)
             std::tm *tmp = 0;
             if((tmp = gmtime(&t)) == 0)
-            failed = true;
-            tm = *tmp;
+              failed = true;
+            else
+              tm = *tmp;
 #else
             if (gmtime_r(&t, &tm) == 0) failed = true;
 #endif
