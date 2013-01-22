@@ -46,10 +46,14 @@ import testing ;
      [ run hex_test2.cpp        : : : : hex_test2 ]
      [ run hex_test3.cpp        : : : : hex_test3 ]
      [ run hex_test4.cpp        : : : : hex_test4 ]
-	 [ compile-fail hex_fail1.cpp ]
+     [ compile-fail hex_fail1.cpp ]
 
 # Wrapper tests
      [ run wrapper_test1.cpp        : : : : wrapper_test1 ]
+
+# Gather tests
+     [ run gather_test1.cpp        : : : : gather_test1 ]
+     [ compile-fail gather_fail1.cpp ]
    ;
 }
 
