@@ -53,6 +53,10 @@
 #     endif
 #  endif
 
+#ifdef __ANDROID__
+#  define BOOST_TR1_GCC_INCLUDE_PATH include
+#endif
+
 
 #  if (defined(__SGI_STL_PORT) || defined(_STLPORT_VERSION)) && !defined(__BORLANDC__)
 #     ifdef __SUNPRO_CC
