@@ -235,12 +235,60 @@ if you're totally sure that you will need it.
 
 [section:elements New Elements]
 
-New elements in 1.6 (to be documented later):
+[section:block `block`]
 
-* `block`
-* `ordered_list`
-* `itemized_list`
-* `role`
+`block` is a block element that just marks its contents as a block,
+so that they aren't wrapped in paragraph tags. The main use is
+for escaped docbook block tags, such as:
+
+    [template chapter[title] [block'''<chapter><title>'''[title]'''</title>''']]
+    [template chapterend [block'''</chapter>''']]
+
+    [chapter An example chapter]
+
+    Content
+
+    [chapterend]
+
+Without the `block` element, the `chapter` and `chapterend` templates
+would be wrapped in paragraph tags.
+
+[endsect]
+
+[section:lists `ordered_list` and `itemized_list`]
+
+These are used as an alternative to the normal wiki-style markup for
+lists. They make it easier to nest lists inside other elements, and
+nest elements inside lists. The markup is similar to a single level
+table:
+
+    [ordered_list [item1][item2]]
+
+is equivalent to:
+
+    # item1
+    # item2
+
+[endsect]
+
+[section: `role`]
+
+`role` is a phrase element used to mark up the text in the eventual html
+with an a class. For example:
+
+    [role red Text content]
+
+Will generate the docbook:
+
+    <phrase role="red">Text content</phrase>
+
+Which will generate html along the lines of:
+
+    <span class="red">Text content</span>
+
+And then you can use css to style this however you wish.
+
+[endsect]
 
 [endsect]
 
