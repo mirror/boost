@@ -9,7 +9,7 @@
 // For more information, see http://www.boost.org/libs/range/
 //
 // The strided_defect_Trac5014 test case is a modified version of a test case
-// contribued by Michel Morin as part of the trac ticket.
+// contributed by Michel Morin as part of the trac ticket.
 //
 #include <boost/range/adaptor/strided.hpp>
 
