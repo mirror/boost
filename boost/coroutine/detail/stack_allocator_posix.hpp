@@ -59,8 +59,12 @@ rlimit stacksize_limit_()
 {
     rlimit limit;
     // conforming to POSIX.1-2001
+#if defined(BOOST_DISABLE_ASSERTS)
+    ::getrlimit( RLIMIT_STACK, & limit);
+#else
     const int result = ::getrlimit( RLIMIT_STACK, & limit);
     BOOST_ASSERT( 0 == result);
+#endif
     return limit;
 }
 
@@ -129,8 +133,12 @@ public:
         std::memset( limit, size_, '\0');
 
         // conforming to POSIX.1-2001
+#if defined(BOOST_DISABLE_ASSERTS)
+        ::mprotect( limit, pagesize(), PROT_NONE);
+#else
         const int result( ::mprotect( limit, pagesize(), PROT_NONE) );
         BOOST_ASSERT( 0 == result);
+#endif
 
         return static_cast< char * >( limit) + size_;
     }
