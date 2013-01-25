@@ -1419,7 +1419,7 @@ This simple I/O will make duration so much more accessible to programmers.
 
 [section:system_clock_time_point_io `system_clock::time_point`]
 
-[warning 
+[/warning 
 
 This feature has been disable defining `BOOST_CHRONO_DONT_PROVIDE_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT` until a fix for the following ticket is found:
 
@@ -2600,7 +2600,7 @@ These deprecated features will be only available until boost 1.58, that is you h
 
 [section:system_clock_time_point time_point<system_clock,D> specialization limitation]
 
-[warning
+[/warning
 
 The time_point<system_clock,D> formatter/parser specializations don't work yet. It has been disable defining `BOOST_CHRONO_DONT_PROVIDE_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT` until a fix for the following ticket is found:
 
@@ -6337,9 +6337,7 @@ __returns The epoch string associated to the __thread_clock.
         };
 
         // system_clock I/O
-
-    #if defined BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT
-    
+  
         template <class CharT, class Traits, class __Duration>
           basic_ostream<CharT, Traits>&
           operator<<(basic_ostream<CharT, Traits>& os,
@@ -6349,7 +6347,6 @@ __returns The epoch string associated to the __thread_clock.
           basic_istream<CharT, Traits>&
           operator>>(basic_istream<CharT, Traits>& is,
                      time_point<system_clock, __Duration>& tp);
-    #endif
     
         // Other Clocks I/O
 
@@ -6400,7 +6397,7 @@ __returns: An unspecified object that when streamed to a `basic_ostream<CharT, T
 
 [section:system_clock `system_clock`]
 
-[warning
+[/warning
 
 The time_point<system_clock,D> formatter/parser specializations don't work yet. It has been disable defining `BOOST_CHRONO_DONT_PROVIDE_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT` until a fix for the following ticket is found:
 
@@ -7325,6 +7322,25 @@ All the units are given using the suffix "s" following the System International 
 [section:history Appendix: History]
 [/==================================]
 
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section [*Version 2.0.1, January 18, 2013 - 1.53] ]
+
+[*Deprecated:]
+
+* The chrono i/o version included in Boost.Chrono 1.2.x has been completly refactored in version 2.0.0 
+* chrono I/O: The manipulators __duration_short, __duration_long are depreceated. You should use the parameterized form __duration_fmt or the renamed manipulators __duration_symbol and __duration_prefix  instead.
+* chrono I/O: The __duration_punct<> facet is depreceated. You should use the __get_duration_style free function to get the informations and use the __duration_units facet for localization purposes.
+
+When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not available.
+
+[*Fixes:]
+
+* [@http://svn.boost.org/trac/boost/ticket/7546 #7546] time_point<system_clock> output version 2 fails to compile  assigned  viboes  Bugs  Boost 1.53.0  --
+* [@http://svn.boost.org/trac/boost/ticket/7547 #7547] time_point<system_clock> input version 2 fails to compile   assigned  viboes  Bugs  Boost 1.53.0  --
+* [@http://svn.boost.org/trac/boost/ticket/7868 #7868] chrono_io parses time incorrectly (1.53 and 1.52)
+
+
+[endsect] [/section [*Version 2.0.1] ]
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section [*Version 2.0.0, October 23, 2012 - 1.52] ]
@@ -7361,7 +7377,7 @@ When BOOST_CHRONO_VERSION==2 the preceding deprecated functions are not availabl
 
 * [@http://svn.boost.org/trac/boost/ticket/7525 #7525] Wrong clock_string<system_clock>::since() on Windows 
 
-[warning
+[/warning
 
 The time_point<system_clock,D> formatter/parser specializations don't work yet. It has been disable defining `BOOST_CHRONO_DONT_PROVIDE_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT` until a fix for the following ticket is found:
 
