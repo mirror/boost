@@ -32,7 +32,10 @@
           </h6>
 <p>
 </p>
-<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">ForwardRange</span><span class="special">,</span> <span class="keyword">class</span> <span class="identifier">Value</span><span class="special">&gt;</span>
+<pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span>
+    <span class="keyword">class</span> <span class="identifier">ForwardRange</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">Value</span>
+    <span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">ForwardRange</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">lower_bound</span><span class="special">(</span><span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">val</span><span class="special">);</span>
 
@@ -43,6 +46,23 @@
     <span class="special">&gt;</span>
 <span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="identifier">ForwardRange</span><span class="special">,</span> <span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
 <span class="identifier">lower_bound</span><span class="special">(</span><span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">val</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span>
+    <span class="keyword">class</span> <span class="identifier">ForwardRange</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">Value</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">SortPredicate</span>
+    <span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">range_iterator</span><span class="special">&lt;</span><span class="identifier">ForwardRange</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="identifier">lower_bound</span><span class="special">(</span><span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">val</span><span class="special">,</span> <span class="identifier">SortPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
+
+<span class="keyword">template</span><span class="special">&lt;</span>
+    <span class="identifier">range_return_value</span> <span class="identifier">re</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">ForwardRange</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">Value</span><span class="special">,</span>
+    <span class="keyword">class</span> <span class="identifier">SortPredicate</span>
+    <span class="special">&gt;</span>
+<span class="keyword">typename</span> <span class="identifier">range_return</span><span class="special">&lt;</span><span class="identifier">ForwardRange</span><span class="special">,</span><span class="identifier">re</span><span class="special">&gt;::</span><span class="identifier">type</span>
+<span class="identifier">lower_bound</span><span class="special">(</span><span class="identifier">ForwardRange</span><span class="special">&amp;</span> <span class="identifier">rng</span><span class="special">,</span> <span class="identifier">Value</span> <span class="identifier">val</span><span class="special">,</span> <span class="identifier">SortPredicate</span> <span class="identifier">pred</span><span class="special">);</span>
 </pre>
 <p>
           </p>
