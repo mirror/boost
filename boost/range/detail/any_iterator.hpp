@@ -558,7 +558,7 @@ namespace boost
                 }
 
                 // If this is a non-null iterator then we need to put
-                // a clone of this iterators impementation into the other
+                // a clone of this iterators implementation into the other
                 // iterator.
                 // We can't just swap because of the small buffer optimization.
                 if (m_impl)
