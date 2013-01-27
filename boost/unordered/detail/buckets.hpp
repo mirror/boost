@@ -321,9 +321,6 @@ namespace boost { namespace unordered { namespace detail {
     protected:
 
         node_allocator& alloc_;
-
-    private:
-
         node_pointer node_;
         bool node_constructed_;
         bool value_constructed_;
@@ -464,60 +461,61 @@ namespace boost { namespace unordered { namespace detail {
 
         ~node_holder();
 
+        void node_for_assignment()
+        {
+            if (!this->node_ && nodes_) {
+                this->node_ = nodes_;
+                nodes_ = static_cast<node_pointer>(nodes_->next_);
+                this->node_->init(this->node_);
+                this->node_->next_ = link_pointer();
+
+                this->node_constructed_ = true;
+                this->value_constructed_ = true;
+            }
+        }
+
         template <typename T>
         inline void assign_impl(T const& v) {
-            nodes_->value() = v;
+            if (this->node_ && this->value_constructed_) {
+                this->node_->value() = v;
+            }
+            else {
+                this->construct_with_value2(v);
+            }
         }
 
         template <typename T1, typename T2>
         inline void assign_impl(std::pair<T1 const, T2> const& v) {
-            const_cast<T1&>(nodes_->value().first) = v.first;
-            nodes_->value().second = v.second;
+            this->construct_with_value2(v);
         }
 
         template <typename T>
         inline void move_assign_impl(T& v) {
-            nodes_->value() = boost::move(v);
+            if (this->node_ && this->value_constructed_) {
+                this->node_->value() = boost::move(v);
+            }
+            else {
+                this->construct_with_value2(boost::move(v));
+            }
         }
 
         template <typename T1, typename T2>
         inline void move_assign_impl(std::pair<T1 const, T2>& v) {
-            // TODO: Move key as well?
-            const_cast<T1&>(nodes_->value().first) =
-                boost::move(const_cast<T1&>(v.first));
-            nodes_->value().second = boost::move(v.second);
+            this->construct_with_value2(boost::move(v));
         }
 
         node_pointer copy_of(value_type const& v)
         {
-            if (nodes_) {
-                assign_impl(v);
-                node_pointer p = nodes_;
-                nodes_ = static_cast<node_pointer>(p->next_);
-                p->init(p);
-                p->next_ = link_pointer();
-                return p;
-            }
-            else {
-                this->construct_with_value2(v);
-                return base::release();
-            }
+            node_for_assignment();
+            assign_impl(v);
+            return base::release();
         }
 
         node_pointer move_copy_of(value_type& v)
         {
-            if (nodes_) {
-                move_assign_impl(v);
-                node_pointer p = nodes_;
-                nodes_ = static_cast<node_pointer>(p->next_);
-                p->init(p);
-                p->next_ = link_pointer();
-                return p;
-            }
-            else {
-                this->construct_with_value2(boost::move(v));
-                return base::release();
-            }
+            node_for_assignment();
+            move_assign_impl(v);
+            return base::release();
         }
 
         iterator begin() const
