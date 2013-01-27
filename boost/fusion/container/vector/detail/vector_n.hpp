@@ -9,21 +9,34 @@
 #if !defined(FUSION_MACRO_05042005)
 #define FUSION_MACRO_05042005
 
-#define FUSION_VECTOR_MEMBER_DEFAULT_INIT(z, n, _)          m##n()
-#define FUSION_VECTOR_MEMBER_INIT(z, n, _)                  m##n(_##n)
-#define FUSION_VECTOR_MEMBER_COPY_INIT(z, n, _)             m##n(other.m##n)
-#define FUSION_VECTOR_MEMBER_FWD(z, n, _)                   m##n(std::forward<T##n>(other.m##n))
-#define FUSION_VECTOR_ARG_FWD(z, n, _)                      m##n(std::forward<U##n>(_##n))
-#define FUSION_VECTOR_MEMBER_MEMBER_DECL(z, n, _)           T##n m##n;
-#define FUSION_VECTOR_MEMBER_FORWARD(z, n, _)               std::forward<U##n>(_##n)
+#define FUSION_VECTOR_CTOR_DEFAULT_INIT(z, n, _)                                \
+    m##n()
 
-#define FUSION_VECTOR_MEMBER_MEMBER_ASSIGN(z, n, _)                             \
+#define FUSION_VECTOR_CTOR_INIT(z, n, _)                                        \
+    m##n(_##n)
+
+#define FUSION_VECTOR_MEMBER_CTOR_INIT(z, n, _)                                 \
+    m##n(other.m##n)
+
+#define FUSION_VECTOR_CTOR_FORWARD(z, n, _)                                     \
+   m##n(std::forward<T##n>(other.m##n))
+
+#define FUSION_VECTOR_CTOR_ARG_FWD(z, n, _)                                     \
+   m##n(std::forward<U##n>(_##n))
+
+#define FUSION_VECTOR_MEMBER_DECL(z, n, _)                                      \
+    T##n m##n;
+
+#define FUSION_VECTOR_MEMBER_FORWARD(z, n, _)                                   \
+   std::forward<U##n>(_##n)
+
+#define FUSION_VECTOR_MEMBER_ASSIGN(z, n, _)                                    \
     this->BOOST_PP_CAT(m, n) = vec.BOOST_PP_CAT(m, n);
 
-#define FUSION_VECTOR_MEMBER_DEREF_MEMBER_ASSIGN(z, n, _)                       \
+#define FUSION_VECTOR_MEMBER_DEREF_ASSIGN(z, n, _)                              \
     this->BOOST_PP_CAT(m, n) = *BOOST_PP_CAT(i, n);
 
-#define FUSION_VECTOR_MEMBER_MEMBER_FORWARD(z, n, _)                            \
+#define FUSION_VECTOR_MEMBER_MOVE(z, n, _)                                      \
     this->BOOST_PP_CAT(m, n) = std::forward<                                    \
         BOOST_PP_CAT(T, n)>(vec.BOOST_PP_CAT(m, n));
 
@@ -47,33 +60,33 @@
     struct BOOST_PP_CAT(vector_data, N)
     {
         BOOST_PP_CAT(vector_data, N)()
-            : BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_DEFAULT_INIT, _) {}
+            : BOOST_PP_ENUM(N, FUSION_VECTOR_CTOR_DEFAULT_INIT, _) {}
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template <BOOST_PP_ENUM_PARAMS(N, typename U)>
         BOOST_PP_CAT(vector_data, N)(BOOST_PP_ENUM_BINARY_PARAMS(N, U, && _))
-            : BOOST_PP_ENUM(N, FUSION_VECTOR_ARG_FWD, _) {}
+            : BOOST_PP_ENUM(N, FUSION_VECTOR_CTOR_ARG_FWD, _) {}
 #endif
 
         BOOST_PP_CAT(vector_data, N)(
             BOOST_PP_ENUM_BINARY_PARAMS(
                 N, typename detail::call_param<T, >::type _))
-            : BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_INIT, _) {}
+            : BOOST_PP_ENUM(N, FUSION_VECTOR_CTOR_INIT, _) {}
 
         BOOST_PP_CAT(vector_data, N)(
             BOOST_PP_CAT(vector_data, N) const& other)
-            : BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_COPY_INIT, _) {}
+            : BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_CTOR_INIT, _) {}
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         BOOST_PP_CAT(vector_data, N)(
             BOOST_PP_CAT(vector_data, N)&& other)
-            : BOOST_PP_ENUM(N, FUSION_VECTOR_MEMBER_FWD, _) {}
+            : BOOST_PP_ENUM(N, FUSION_VECTOR_CTOR_FORWARD, _) {}
 #endif
 
         BOOST_PP_CAT(vector_data, N)&
         operator=(BOOST_PP_CAT(vector_data, N) const& vec)
         {
-            BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_MEMBER_ASSIGN, _)
+            BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_ASSIGN, _)
             return *this;
         }
 
@@ -97,7 +110,7 @@
             return BOOST_PP_CAT(vector_data, N)(BOOST_PP_ENUM_PARAMS(N, *i));
         }
 
-        BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_MEMBER_DECL, _)
+        BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_DECL, _)
     };
 
     template <BOOST_PP_ENUM_PARAMS(N, typename T)>
@@ -172,7 +185,7 @@
         BOOST_PP_CAT(vector, N)&
         operator=(BOOST_PP_CAT(vector, N)<BOOST_PP_ENUM_PARAMS(N, U)> const& vec)
         {
-            BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_MEMBER_ASSIGN, _)
+            BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_ASSIGN, _)
             return *this;
         }
 
@@ -183,7 +196,7 @@
             typedef typename result_of::begin<Sequence const>::type I0;
             I0 i0 = fusion::begin(seq);
             BOOST_PP_REPEAT_FROM_TO(1, N, FUSION_VECTOR_MEMBER_ITER_DECL_VAR, _)
-            BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_DEREF_MEMBER_ASSIGN, _)
+            BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_DEREF_ASSIGN, _)
             return *this;
         }
 
@@ -198,7 +211,7 @@
         BOOST_PP_CAT(vector, N)&
         operator=(BOOST_PP_CAT(vector, N)&& vec)
         {
-            BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_MEMBER_FORWARD, _)
+            BOOST_PP_REPEAT(N, FUSION_VECTOR_MEMBER_MOVE, _)
             return *this;
         }
 #endif
