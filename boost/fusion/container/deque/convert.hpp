@@ -1,5 +1,5 @@
 /*=============================================================================
-    Copyright (c) 2005-2012 Joel de Guzman
+    Copyright (c) 2005-2013 Joel de Guzman
     Copyright (c) 2006 Dan Marsden
 
     Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -8,11 +8,100 @@
 #if !defined(FUSION_CONVERT_20061213_2207)
 #define FUSION_CONVERT_20061213_2207
 
-#include <boost/fusion/container/deque/detail/as_deque.hpp>
 #include <boost/fusion/container/deque/detail/convert_impl.hpp>
 #include <boost/fusion/container/deque/deque.hpp>
+
+#if defined(BOOST_FUSION_HAS_VARIADIC_DEQUE)
+
+#include <boost/fusion/iterator/equal_to.hpp>
+#include <boost/fusion/iterator/next.hpp>
+#include <boost/fusion/iterator/value_of.hpp>
+#include <boost/fusion/iterator/deref.hpp>
+#include <boost/fusion/sequence/intrinsic/begin.hpp>
+#include <boost/fusion/sequence/intrinsic/end.hpp>
+#include <boost/fusion/container/deque/front_extended_deque.hpp>
+
+///////////////////////////////////////////////////////////////////////////////
+// C++11 variadic implementation
+///////////////////////////////////////////////////////////////////////////////
+namespace boost { namespace fusion
+{
+    namespace detail
+    {
+        template <typename First, typename Last
+          , bool is_empty = result_of::equal_to<First, Last>::value>
+        struct build_deque;
+
+        template <typename First, typename Last>
+        struct build_deque<First, Last, true>
+        {
+            typedef deque<> type;
+            static type
+            call(First const&, Last const&)
+            {
+                return type();
+            }
+        };
+
+        template <typename First, typename Last>
+        struct build_deque<First, Last, false>
+        {
+            typedef
+                build_deque<typename result_of::next<First>::type, Last>
+            next_build_deque;
+
+            typedef front_extended_deque<
+                typename next_build_deque::type
+              , typename result_of::value_of<First>::type>
+            type;
+
+            static type
+            call(First const& f, Last const& l)
+            {
+                typename result_of::value_of<First>::type v = *f;
+                return type(next_build_deque::call(fusion::next(f), l), v);
+            }
+        };
+    }
+
+    namespace result_of
+    {
+        template <typename Sequence>
+        struct as_deque :
+            detail::build_deque<
+                typename result_of::begin<Sequence>::type
+              , typename result_of::end<Sequence>::type
+            >
+        {
+        };
+    }
+
+    template <typename Sequence>
+    inline typename result_of::as_deque<Sequence>::type
+    as_deque(Sequence& seq)
+    {
+        typedef typename result_of::as_deque<Sequence>::gen gen;
+        return gen::call(fusion::begin(seq), fusion::end(seq));
+    }
+
+    template <typename Sequence>
+    inline typename result_of::as_deque<Sequence const>::type
+    as_deque(Sequence const& seq)
+    {
+        typedef typename result_of::as_deque<Sequence const>::gen gen;
+        return gen::call(fusion::begin(seq), fusion::end(seq));
+    }
+}}
+
+#else
+
+///////////////////////////////////////////////////////////////////////////////
+// C++03 (non-variadic) implementation
+///////////////////////////////////////////////////////////////////////////////
+
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
+#include <boost/fusion/container/deque/detail/pp_as_deque.hpp>
 
 namespace boost { namespace fusion
 {
@@ -47,4 +136,5 @@ namespace boost { namespace fusion
     }
 }}
 
+#endif
 #endif

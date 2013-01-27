@@ -38,10 +38,11 @@
         : vec(BOOST_PP_ENUM_PARAMS(N, _)) {}
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+    template <BOOST_PP_ENUM_PARAMS(N, typename U)>
 #if N == 1
     explicit
 #endif
-    vector(BOOST_PP_ENUM_BINARY_PARAMS(N, T, && _))
+    vector(BOOST_PP_ENUM_BINARY_PARAMS(N, U, && _))
         : vec(BOOST_PP_ENUM(N, FUSION_FORWARD_CTOR_MOVE, _)) {}
 #endif
 
