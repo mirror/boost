@@ -2,7 +2,6 @@
 //  Distributed under the Boost Software License, Version 1.0.
 //  See http://www.boost.org/LICENSE_1_0.txt
 
-#define BOOST_CHRONO_VERSION 2
 #include <boost/chrono/chrono_io.hpp>
 #include <sstream>
 #include <boost/detail/lightweight_test.hpp>
@@ -158,7 +157,6 @@ void check_all_system_clock()
   test_good_symbol_system_clock("1970-01-01 00:00:00.200000 +0000", duration<boost::int_least64_t, deci> (2));
   test_good_symbol_system_clock("1970-01-01 00:00:00.066667 +0000", duration<boost::int_least64_t, ratio<1, 30> > (2));
 }
-#endif
 
 void test_gmtime(std::time_t t)
 {
@@ -174,6 +172,7 @@ void test_gmtime(std::time_t t)
     std::cout << "sec   " << tm.tm_sec << std::endl;
   }
 }
+#endif
 
 int main()
 {
