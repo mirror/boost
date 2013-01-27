@@ -68,7 +68,7 @@ namespace boost { namespace fusion { namespace detail
     {
         typedef nil_keyed_element type;
 
-        static type call()
+        static type construct()
         {
             return type();
         }

@@ -6,8 +6,8 @@
     file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 ==============================================================================*/
 #ifndef BOOST_PP_IS_ITERATING
-#if !defined(FUSION_DEQUE_TIE_07192005_1242)
-#define FUSION_DEQUE_TIE_07192005_1242
+#if !defined(FUSION_PP_DEQUE_TIE_07192005_1242)
+#define FUSION_PP_DEQUE_TIE_07192005_1242
 
 #include <boost/preprocessor/iterate.hpp>
 #include <boost/preprocessor/cat.hpp>
@@ -53,7 +53,7 @@ namespace boost { namespace fusion
 
 #define BOOST_FUSION_REF(z, n, data) BOOST_PP_CAT(T, n)&
 
-#define BOOST_PP_FILENAME_1 <boost/fusion/container/generation/deque_tie.hpp>
+#define BOOST_PP_FILENAME_1 <boost/fusion/container/generation/detail/pp_deque_tie.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_DEQUE_SIZE)
 #include BOOST_PP_ITERATE()
 

@@ -92,8 +92,11 @@ namespace boost { namespace fusion {
             {}
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
-        explicit deque(T0&& t0)
-            : base(std::forward<T0>(t0), detail::nil_keyed_element())
+        template <typename T0_>
+        explicit deque(T0_&& t0
+          , typename enable_if<is_convertible<T0_, T0> >::type* /*dummy*/ = 0
+         )
+            : base(std::forward<T0_>(t0), detail::nil_keyed_element())
             {}
 
         explicit deque(deque&& rhs)
@@ -145,6 +148,28 @@ namespace boost { namespace fusion {
 #endif
 
     };
+
+    template <>
+    struct deque<> : detail::nil_keyed_element
+    {
+        typedef deque_tag fusion_tag;
+        typedef bidirectional_traversal_tag category;
+        typedef mpl::int_<0> size;
+        typedef mpl::int_<0> next_up;
+        typedef mpl::int_<0> next_down;
+        typedef mpl::false_ is_view;
+
+        template <typename Sequence>
+        deque(Sequence const&,
+            typename enable_if<
+                mpl::and_<
+                    traits::is_sequence<Sequence>
+                  , result_of::empty<Sequence>>>::type* /*dummy*/ = 0)
+        {}
+
+        deque() {}
+    };
+
 }}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
