@@ -96,6 +96,9 @@
 #     undef BOOST_CHRONO_HAS_THREAD_CLOCK
 #     undef BOOST_CHRONO_THREAD_CLOCK_IS_STEADY
 #   endif
+#   if defined(__VXWORKS__)
+#     undef BOOST_CHRONO_HAS_PROCESS_CLOCKS
+#   endif
 # endif
 
 #if defined(BOOST_CHRONO_THREAD_DISABLED) && defined(BOOST_CHRONO_HAS_THREAD_CLOCK)
