@@ -46,6 +46,18 @@ namespace boost { namespace fusion
         template <typename T, typename Rest>
         struct push_front_deque;
 
+        template <typename T>
+        struct push_front_deque<T, deque<>>
+        {
+            typedef deque<T> type;
+
+            static type
+            call(T const& first, deque<>)
+            {
+                return type(first);
+            }
+        };
+
         template <typename T, typename ...Rest>
         struct push_front_deque<T, deque<Rest...>>
         {
@@ -54,7 +66,10 @@ namespace boost { namespace fusion
             static type
             call(T const& first, deque<Rest...> const& rest)
             {
-                return type(front_extended_deque<deque<Rest...>, T>(rest, first));
+                typedef
+                    front_extended_deque<deque<Rest...>, T>
+                front_extended;
+                return type(front_extended(rest, first));
             }
         };
 
