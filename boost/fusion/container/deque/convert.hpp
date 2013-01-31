@@ -43,6 +43,21 @@ namespace boost { namespace fusion
             }
         };
 
+        template <typename T, typename Rest>
+        struct push_front_deque;
+
+        template <typename T, typename ...Rest>
+        struct push_front_deque<T, deque<Rest...>>
+        {
+            typedef deque<T, Rest...> type;
+
+            static type
+            call(T const& first, deque<Rest...> const& rest)
+            {
+                return type(front_extended_deque<deque<Rest...>, T>(rest, first));
+            }
+        };
+
         template <typename First, typename Last>
         struct build_deque<First, Last, false>
         {
@@ -50,16 +65,19 @@ namespace boost { namespace fusion
                 build_deque<typename result_of::next<First>::type, Last>
             next_build_deque;
 
-            typedef front_extended_deque<
-                typename next_build_deque::type
-              , typename result_of::value_of<First>::type>
-            type;
+            typedef push_front_deque<
+                typename result_of::value_of<First>::type
+              , typename next_build_deque::type>
+            push_front;
+
+            typedef typename push_front::type type;
 
             static type
             call(First const& f, Last const& l)
             {
                 typename result_of::value_of<First>::type v = *f;
-                return type(next_build_deque::call(fusion::next(f), l), v);
+                return push_front::call(
+                    v, next_build_deque::call(fusion::next(f), l));
             }
         };
     }
@@ -102,6 +120,7 @@ namespace boost { namespace fusion
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 #include <boost/fusion/container/deque/detail/pp_as_deque.hpp>
+#include <boost/fusion/container/deque/front_extended_deque.hpp>
 
 namespace boost { namespace fusion
 {
