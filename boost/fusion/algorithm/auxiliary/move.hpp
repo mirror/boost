@@ -69,7 +69,7 @@ namespace boost { namespace fusion
     move(Seq1&& src, Seq2& dest)
     {
         BOOST_STATIC_ASSERT(
-            result_of::size<Seq1>::value == result_of::size<Seq2>::value);
+            result_of::size<Seq1>::value <= result_of::size<Seq2>::value);
 
         detail::sequence_move<
             Seq1, Seq2>::
