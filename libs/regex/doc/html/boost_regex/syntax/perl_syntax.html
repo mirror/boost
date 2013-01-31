@@ -405,7 +405,8 @@
         characters</a>
       </h6>
 <p>
-        For example =[abc]=, will match any of the characters 'a', 'b', or 'c'.
+        For example <code class="literal">[abc]</code>, will match any of the characters 'a',
+        'b', or 'c'.
       </p>
 <h6>
 <a name="boost_regex.syntax.perl_syntax.h13"></a>
@@ -413,10 +414,11 @@
         ranges</a>
       </h6>
 <p>
-        For example =[a-c]= will match any single character in the range 'a' to 'c'.
-        By default, for Perl regular expressions, a character x is within the range
-        y to z, if the code point of the character lies within the codepoints of
-        the endpoints of the range. Alternatively, if you set the <a class="link" href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions"><code class="literal">collate</code>
+        For example <code class="literal">[a-c]</code> will match any single character in the
+        range 'a' to 'c'. By default, for Perl regular expressions, a character x
+        is within the range y to z, if the code point of the character lies within
+        the codepoints of the endpoints of the range. Alternatively, if you set the
+        <a class="link" href="../ref/syntax_option_type/syntax_option_type_perl.html" title="Options for Perl Regular Expressions"><code class="literal">collate</code>
         flag</a> when constructing the regular expression, then ranges are locale
         sensitive.
       </p>
@@ -426,7 +428,7 @@
       </h6>
 <p>
         If the bracket-expression begins with the ^ character, then it matches the
-        complement of the characters it contains, for example =<code class="literal">a-c</code>=
+        complement of the characters it contains, for example <code class="literal">[^a-c]</code>
         matches any character that is not in the range <code class="literal">a-c</code>.
       </p>
 <h6>
