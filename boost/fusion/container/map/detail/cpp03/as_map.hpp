@@ -15,7 +15,7 @@
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/inc.hpp>
 #include <boost/preprocessor/dec.hpp>
-#include <boost/fusion/container/map/map.hpp>
+#include <boost/fusion/container/map/detail/cpp03/map.hpp>
 #include <boost/fusion/iterator/value_of.hpp>
 #include <boost/fusion/iterator/deref.hpp>
 #include <boost/fusion/iterator/next.hpp>
@@ -44,7 +44,7 @@ namespace boost { namespace fusion { namespace detail
 }}}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
-#include <boost/fusion/container/map/detail/preprocessed/as_map.hpp>
+#include <boost/fusion/container/map/detail/cpp03/preprocessed/as_map.hpp>
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/as_map" FUSION_MAX_MAP_SIZE_STR ".hpp")
@@ -77,7 +77,7 @@ namespace boost { namespace fusion { namespace detail
     typedef typename fusion::result_of::value_of<BOOST_PP_CAT(I, n)>::type      \
         BOOST_PP_CAT(T, n);
 
-#define BOOST_PP_FILENAME_1 <boost/fusion/container/map/detail/as_map.hpp>
+#define BOOST_PP_FILENAME_1 <boost/fusion/container/map/detail/cpp03/as_map.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_MAP_SIZE)
 #include BOOST_PP_ITERATE()
 

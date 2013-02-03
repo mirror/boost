@@ -8,8 +8,8 @@
 #if !defined(FUSION_CONVERT_IMPL_09232005_1340)
 #define FUSION_CONVERT_IMPL_09232005_1340
 
-#include <boost/fusion/container/map/detail/as_map.hpp>
-#include <boost/fusion/container/map/map.hpp>
+#include <boost/fusion/container/map/detail/cpp03/as_map.hpp>
+#include <boost/fusion/container/map/detail/cpp03/map.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/size.hpp>
 

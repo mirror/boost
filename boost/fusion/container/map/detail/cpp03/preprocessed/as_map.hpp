@@ -8,15 +8,15 @@
 ==============================================================================*/
 
 #if FUSION_MAX_MAP_SIZE <= 10
-#include <boost/fusion/container/map/detail/preprocessed/as_map10.hpp>
+#include <boost/fusion/container/map/detail/cpp03/preprocessed/as_map10.hpp>
 #elif FUSION_MAX_MAP_SIZE <= 20
-#include <boost/fusion/container/map/detail/preprocessed/as_map20.hpp>
+#include <boost/fusion/container/map/detail/cpp03/preprocessed/as_map20.hpp>
 #elif FUSION_MAX_MAP_SIZE <= 30
-#include <boost/fusion/container/map/detail/preprocessed/as_map30.hpp>
+#include <boost/fusion/container/map/detail/cpp03/preprocessed/as_map30.hpp>
 #elif FUSION_MAX_MAP_SIZE <= 40
-#include <boost/fusion/container/map/detail/preprocessed/as_map40.hpp>
+#include <boost/fusion/container/map/detail/cpp03/preprocessed/as_map40.hpp>
 #elif FUSION_MAX_MAP_SIZE <= 50
-#include <boost/fusion/container/map/detail/preprocessed/as_map50.hpp>
+#include <boost/fusion/container/map/detail/cpp03/preprocessed/as_map50.hpp>
 #else
 #error "FUSION_MAX_MAP_SIZE out of bounds for preprocessed headers"
 #endif

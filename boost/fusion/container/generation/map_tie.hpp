@@ -15,7 +15,7 @@
 #include <boost/preprocessor/repetition/enum_params_with_a_default.hpp>
 #include <boost/preprocessor/repetition/repeat_from_to.hpp>
 #include <boost/fusion/container/map/map.hpp>
-#include <boost/fusion/container/map/limits.hpp>
+#include <boost/fusion/container/map/detail/cpp03/limits.hpp>
 #include <boost/fusion/support/pair.hpp>
 #include <boost/fusion/container/generation/pair_tie.hpp>
 #include <boost/type_traits/add_reference.hpp>
