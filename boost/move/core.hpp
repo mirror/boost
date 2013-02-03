@@ -18,6 +18,20 @@
 
 #include <boost/move/detail/config_begin.hpp>
 
+#ifdef BOOST_NO_CXX11_DELETED_FUNCTIONS
+   #define BOOST_MOVE_IMPL_NO_COPY_CTOR_OR_ASSIGN(TYPE) \
+      private:\
+      TYPE(TYPE &);\
+      TYPE& operator=(TYPE &);\
+   //
+#else
+   #define BOOST_MOVE_IMPL_NO_COPY_CTOR_OR_ASSIGN(TYPE) \
+      public:\
+      TYPE(TYPE const &) = delete;\
+      TYPE& operator=(TYPE const &) = delete;\
+   //
+#endif   //BOOST_NO_CXX11_DELETED_FUNCTIONS
+
 #if defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
    #include <boost/move/detail/meta_utils.hpp>
@@ -152,9 +166,7 @@
    //
    //////////////////////////////////////////////////////////////////////////////
    #define BOOST_MOVABLE_BUT_NOT_COPYABLE(TYPE)\
-      private:\
-      TYPE(TYPE &);\
-      TYPE& operator=(TYPE &);\
+      BOOST_MOVE_IMPL_NO_COPY_CTOR_OR_ASSIGN(TYPE)\
       public:\
       operator ::boost::rv<TYPE>&() \
       {  return *static_cast< ::boost::rv<TYPE>* >(this);  }\
@@ -210,11 +222,9 @@
    //! and assignment. The user will need to write a move constructor/assignment as explained
    //! in the documentation to fully write a movable but not copyable class.
    #define BOOST_MOVABLE_BUT_NOT_COPYABLE(TYPE)\
+      BOOST_MOVE_IMPL_NO_COPY_CTOR_OR_ASSIGN(TYPE)\
       public:\
       typedef int boost_move_emulation_t;\
-      private:\
-      TYPE(const TYPE &);\
-      TYPE& operator=(const TYPE &);\
    //
 
    //! This macro marks a type as copyable and movable.
