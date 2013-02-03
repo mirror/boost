@@ -838,7 +838,7 @@ namespace boost {
                             if(group < grouping_size)
                             {
                                 char const grp_size = grouping[group];
-                                last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                                last_grp_size = grp_size <= 0 ? static_cast<char>(CHAR_MAX) : grp_size;
                             }
 
                             left = last_grp_size;
@@ -886,7 +886,7 @@ namespace boost {
 
             if (begin > end || *end < czero || *end >= czero + 10)
                 return false;
-            value = *end - czero;
+            value = static_cast<T>(*end - czero);
             --end;
             T multiplier = 1;
             bool multiplier_overflowed = false;
@@ -906,17 +906,17 @@ namespace boost {
                 {
                     unsigned char current_grouping = 0;
                     CharT const thousands_sep = np.thousands_sep();
-                    char remained = grouping[current_grouping] - 1;
+                    char remained = static_cast<char>(grouping[current_grouping] - 1);
                     bool shall_we_return = true;
 
                     for(;end>=begin; --end)
                     {
                         if (remained) {
-                            T const multiplier_10 = multiplier * 10;
+                            T const multiplier_10 = static_cast<T>(multiplier * 10);
                             if (multiplier_10 / 10 != multiplier) multiplier_overflowed = true;
 
-                            T const dig_value = *end - czero;
-                            T const new_sub_value = multiplier_10 * dig_value;
+                            T const dig_value = static_cast<T>(*end - czero);
+                            T const new_sub_value = static_cast<T>(multiplier_10 * dig_value);
 
                             if (*end < czero || *end >= czero + 10
                                     /* detecting overflow */
@@ -926,8 +926,8 @@ namespace boost {
                                     )
                                 return false;
 
-                            value += new_sub_value;
-                            multiplier *= 10;
+                            value = static_cast<T>(value + new_sub_value);
+                            multiplier = static_cast<T>(multiplier * 10);
                             --remained;
                         } else {
                             if ( !Traits::eq(*end, thousands_sep) ) //|| begin == end ) return false;
@@ -960,11 +960,11 @@ namespace boost {
             {
                 while ( begin <= end )
                 {
-                    T const multiplier_10 = multiplier * 10;
+                    T const multiplier_10 = static_cast<T>(multiplier * 10);
                     if (multiplier_10 / 10 != multiplier) multiplier_overflowed = true;
 
-                    T const dig_value = *end - czero;
-                    T const new_sub_value = multiplier_10 * dig_value;
+                    T const dig_value = static_cast<T>(*end - czero);
+                    T const new_sub_value = static_cast<T>(multiplier_10 * dig_value);
 
                     if (*end < czero || *end >= czero + 10
                             /* detecting overflow */
@@ -974,8 +974,8 @@ namespace boost {
                             )
                         return false;
 
-                    value += new_sub_value;
-                    multiplier *= 10;
+                    value = static_cast<T>(value + new_sub_value);
+                    multiplier = static_cast<T>(multiplier * 10);
                     --end;
                 }
             }
@@ -1192,7 +1192,7 @@ namespace boost {
                     : np.grouping()
             );
             std::string::size_type const grouping_size = grouping.size();
-            CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
+            CharT const thousands_sep = static_cast<CharT>(grouping_size ? np.thousands_sep() : 0);
             CharT const decimal_point = np.decimal_point();
             bool found_grouping = false;
             std::string::size_type last_grouping_pos = grouping_size - 1;
@@ -2350,7 +2350,7 @@ namespace boost {
                 > converter_t;
 
                 return (
-                    arg < 0 ? 0u - converter_t::convert(0u - arg) : converter_t::convert(arg)
+                    arg < 0 ? static_cast<Target>(0u - converter_t::convert(0u - arg)) : converter_t::convert(arg)
                 );
             }
         };
