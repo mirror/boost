@@ -22,7 +22,7 @@
    std::forward<BOOST_PP_CAT(T_, n)>(BOOST_PP_CAT(t, n))
 
 #define BOOST_PP_FILENAME_1 \
-    <boost/fusion/container/deque/detail/deque_keyed_values_call.hpp>
+    <boost/fusion/container/deque/detail/cpp03/deque_keyed_values_call.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_DEQUE_SIZE)
 #include BOOST_PP_ITERATE()
 

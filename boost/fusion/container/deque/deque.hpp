@@ -14,7 +14,7 @@
 // With variadics, we will use the PP version
 ///////////////////////////////////////////////////////////////////////////////
 #if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
-# include <boost/fusion/container/deque/detail/pp_deque.hpp>
+# include <boost/fusion/container/deque/detail/cpp03/deque.hpp>
 #else
 # if !defined(BOOST_FUSION_HAS_VARIADIC_DEQUE)
 #   define BOOST_FUSION_HAS_VARIADIC_DEQUE
@@ -27,7 +27,7 @@
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/support/is_sequence.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>
-#include <boost/fusion/container/deque/detail/variadic_deque_keyed_values.hpp>
+#include <boost/fusion/container/deque/detail/deque_keyed_values.hpp>
 #include <boost/fusion/container/deque/deque_fwd.hpp>
 #include <boost/fusion/container/deque/detail/value_at_impl.hpp>
 #include <boost/fusion/container/deque/detail/at_impl.hpp>

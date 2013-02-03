@@ -12,7 +12,7 @@
 #error "C++03 only! This file should not have been included"
 #endif
 
-#include <boost/fusion/container/deque/limits.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/limits.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>
 
 #include <boost/preprocessor/iterate.hpp>
@@ -34,7 +34,7 @@ namespace boost { namespace fusion
 }}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
-#include <boost/fusion/container/deque/detail/preprocessed/deque_keyed_values.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque_keyed_values.hpp>
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/deque_keyed_values" FUSION_MAX_DEQUE_SIZE_STR ".hpp")
@@ -89,7 +89,7 @@ namespace boost { namespace fusion { namespace detail
             BOOST_PP_ENUM_SHIFTED_PARAMS(FUSION_MAX_DEQUE_SIZE, T)>::type tail;
         typedef keyed_element<N, T0, tail> type;
 
-#include <boost/fusion/container/deque/detail/deque_keyed_values_call.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/deque_keyed_values_call.hpp>
 
     };
 

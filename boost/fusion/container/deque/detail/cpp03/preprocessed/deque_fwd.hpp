@@ -8,15 +8,15 @@
 ==============================================================================*/
 
 #if FUSION_MAX_DEQUE_SIZE <= 10
-#include <boost/fusion/container/deque/detail/preprocessed/deque_initial_size10.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque10_fwd.hpp>
 #elif FUSION_MAX_DEQUE_SIZE <= 20
-#include <boost/fusion/container/deque/detail/preprocessed/deque_initial_size20.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque20_fwd.hpp>
 #elif FUSION_MAX_DEQUE_SIZE <= 30
-#include <boost/fusion/container/deque/detail/preprocessed/deque_initial_size30.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque30_fwd.hpp>
 #elif FUSION_MAX_DEQUE_SIZE <= 40
-#include <boost/fusion/container/deque/detail/preprocessed/deque_initial_size40.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque40_fwd.hpp>
 #elif FUSION_MAX_DEQUE_SIZE <= 50
-#include <boost/fusion/container/deque/detail/preprocessed/deque_initial_size50.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque50_fwd.hpp>
 #else
 #error "FUSION_MAX_DEQUE_SIZE out of bounds for preprocessed headers"
 #endif

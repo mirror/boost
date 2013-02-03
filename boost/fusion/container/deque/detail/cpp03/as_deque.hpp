@@ -45,7 +45,7 @@ namespace boost { namespace fusion { namespace detail
 }}}
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
-#include <boost/fusion/container/deque/detail/preprocessed/as_deque.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/preprocessed/as_deque.hpp>
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
 #pragma wave option(preserve: 2, line: 0, output: "preprocessed/as_deque" FUSION_MAX_DEQUE_SIZE_STR ".hpp")
@@ -78,7 +78,7 @@ namespace boost { namespace fusion { namespace detail
     typedef typename fusion::result_of::value_of<BOOST_PP_CAT(I, n)>::type      \
         BOOST_PP_CAT(T, n);
 
-#define BOOST_PP_FILENAME_1 <boost/fusion/container/deque/detail/pp_as_deque.hpp>
+#define BOOST_PP_FILENAME_1 <boost/fusion/container/deque/detail/cpp03/as_deque.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_DEQUE_SIZE)
 #include BOOST_PP_ITERATE()
 
