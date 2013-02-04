@@ -105,6 +105,13 @@ namespace boost { namespace fusion
     {
         return l.second != r.second;
     }
+
+    template <typename First, typename SecondL, typename SecondR>
+    inline bool
+    operator<(pair<First, SecondL> const& l, pair<First, SecondR> const& r)
+    {
+        return l.second < r.second;
+    }
 }}
 
 #if defined (BOOST_MSVC)
