@@ -25,6 +25,7 @@
 #include <boost/fusion/container/map/detail/end_impl.hpp>
 #include <boost/fusion/container/map/detail/at_impl.hpp>
 #include <boost/fusion/container/map/detail/at_key_impl.hpp>
+#include <boost/fusion/container/map/detail/value_at_impl.hpp>
 #include <boost/fusion/container/map/detail/value_at_key_impl.hpp>
 #include <boost/fusion/sequence/intrinsic/begin.hpp>
 #include <boost/fusion/sequence/intrinsic/end.hpp>
@@ -52,6 +53,14 @@ namespace boost { namespace fusion
 
         map() {}
 
+        map(map const& seq)
+          : base_type(seq.base())
+        {}
+
+        map(map&& seq)
+          : base_type(std::forward<map>(seq))
+        {}
+
         template <typename Sequence>
         map(Sequence const& seq
           , typename enable_if<traits::is_sequence<Sequence>>::type* /*dummy*/ = 0)
@@ -64,19 +73,36 @@ namespace boost { namespace fusion
           : base_type(begin(seq), detail::map_impl_from_iterator())
         {}
 
+        template <typename Sequence>
+        map(Sequence&& seq
+          , typename enable_if<traits::is_sequence<Sequence>>::type* /*dummy*/ = 0)
+          : base_type(begin(seq), detail::map_impl_from_iterator())
+        {}
+
         template <typename First, typename ...T_>
         map(First const& first, T_ const&... rest)
           : base_type(first, rest...)
         {}
 
         template <typename First, typename ...T_>
-        map(First& first, T_&... rest)
-          : base_type(first, rest...)
+        map(First&& first, T_&&... rest)
+          : base_type(std::forward<First>(first), std::forward<T_>(rest)...)
         {}
+
+        //~ template <typename First, typename ...T_>
+        //~ map(First& first, T_&... rest)
+          //~ : base_type(first, rest...)
+        //~ {}
 
         map& operator=(map const& rhs)
         {
             base_type::operator=(rhs.base());
+            return *this;
+        }
+
+        map& operator=(map&& rhs)
+        {
+            base_type::operator=(std::forward<base_type>(rhs.base()));
             return *this;
         }
 
