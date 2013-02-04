@@ -29,6 +29,7 @@
       public:\
       TYPE(TYPE const &) = delete;\
       TYPE& operator=(TYPE const &) = delete;\
+      private:\
    //
 #endif   //BOOST_NO_CXX11_DELETED_FUNCTIONS
 
