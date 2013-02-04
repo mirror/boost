@@ -20,7 +20,7 @@ namespace boost { namespace fusion
     struct map_iterator
         : iterator_facade<
             map_iterator<Seq, Pos>
-          , random_access_traversal_tag>
+          , typename Seq::category>
     {
         typedef Seq sequence;
         typedef mpl::int_<Pos> index;
@@ -91,22 +91,6 @@ namespace boost { namespace fusion
             }
         };
 
-        //~ template<typename Iterator>
-        //~ struct deref_data
-        //~ {
-            //~ typedef typename Iterator::sequence sequence;
-            //~ typedef typename Iterator::index index;
-            //~ typedef
-                //~ decltype(std::declval<sequence>().get(index()))
-            //~ type;
-
-            //~ static type
-            //~ call(Iterator const& it)
-            //~ {
-                //~ return it.seq_.get(typename Iterator::index());
-            //~ }
-        //~ };
-
         template <typename Iterator, typename N>
         struct advance
         {
@@ -132,7 +116,7 @@ namespace boost { namespace fusion
         {};
 
         template <typename I1, typename I2>
-        struct distance : mpl::minus<typename I2::index, typename I1::index>
+        struct distance
         {
             typedef typename
                 mpl::minus<

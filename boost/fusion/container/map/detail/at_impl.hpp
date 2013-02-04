@@ -24,28 +24,30 @@ namespace boost { namespace fusion
             template <typename Sequence, typename N>
             struct apply
             {
+                typedef mpl::int_<N::value> index;
                 typedef
-                    decltype(std::declval<Sequence>().get(N()))
+                    decltype(std::declval<Sequence>().get(index()))
                 type;
 
                 static type
                 call(Sequence& m)
                 {
-                    return m.get(N());
+                    return m.get(index());
                 }
             };
 
             template <typename Sequence, typename N>
             struct apply<Sequence const, N>
             {
+                typedef mpl::int_<N::value> index;
                 typedef
-                    decltype(std::declval<Sequence const>().get(N()))
+                    decltype(std::declval<Sequence const>().get(index()))
                 type;
 
                 static type
                 call(Sequence const& m)
                 {
-                    return m.get(N());
+                    return m.get(index());
                 }
             };
         };

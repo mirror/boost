@@ -41,7 +41,7 @@ namespace boost { namespace fusion
     inline typename result_of::as_deque<Sequence>::type
     as_deque(Sequence& seq)
     {
-        typedef typename result_of::as_deque<Sequence>::gen gen;
+        typedef result_of::as_deque<Sequence> gen;
         return gen::call(fusion::begin(seq), fusion::end(seq));
     }
 
@@ -49,7 +49,7 @@ namespace boost { namespace fusion
     inline typename result_of::as_deque<Sequence const>::type
     as_deque(Sequence const& seq)
     {
-        typedef typename result_of::as_deque<Sequence const>::gen gen;
+        typedef result_of::as_deque<Sequence const> gen;
         return gen::call(fusion::begin(seq), fusion::end(seq));
     }
 }}

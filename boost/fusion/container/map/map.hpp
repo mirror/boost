@@ -58,6 +58,12 @@ namespace boost { namespace fusion
           : base_type(begin(seq), detail::map_impl_from_iterator())
         {}
 
+        template <typename Sequence>
+        map(Sequence& seq
+          , typename enable_if<traits::is_sequence<Sequence>>::type* /*dummy*/ = 0)
+          : base_type(begin(seq), detail::map_impl_from_iterator())
+        {}
+
         template <typename First, typename ...T_>
         map(First const& first, T_ const&... rest)
           : base_type(first, rest...)
