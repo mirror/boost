@@ -10,10 +10,16 @@
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
 
-#include <boost/fusion/container/vector/vector.hpp>
+#include <boost/fusion/container/map/map.hpp>
 
-#define FUSION_SEQUENCE boost::fusion::vector<std::vector<x>>
-#define FUSION_SEQUENCE2 boost::fusion::vector<std::vector<x>, x>
+struct k1 {};
+struct k2 {};
+
+#define FUSION_SEQUENCE boost::fusion::map<boost::fusion::pair<k1, std::vector<x>>>
+
+#define FUSION_SEQUENCE2 boost::fusion::map<        \
+    boost::fusion::pair<k1, std::vector<x>>,        \
+    boost::fusion::pair<k2, x>>
 
 #include "move.hpp"
 
