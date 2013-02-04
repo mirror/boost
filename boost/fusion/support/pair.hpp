@@ -13,6 +13,8 @@
 #include <boost/fusion/support/detail/access.hpp>
 #include <boost/fusion/support/detail/as_fusion_element.hpp>
 #include <boost/config.hpp>
+#include <boost/utility/enable_if.hpp>
+#include <boost/type_traits/is_convertible.hpp>
 
 #if defined (BOOST_MSVC)
 #  pragma warning(push)

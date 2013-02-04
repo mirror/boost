@@ -64,7 +64,9 @@
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template <BOOST_PP_ENUM_PARAMS(N, typename U)>
-        BOOST_PP_CAT(vector_data, N)(BOOST_PP_ENUM_BINARY_PARAMS(N, U, && _))
+        BOOST_PP_CAT(vector_data, N)(BOOST_PP_ENUM_BINARY_PARAMS(N, U, && _)
+          , typename boost::enable_if<is_convertible<U0, T0> >::type* /*dummy*/ = 0
+        )
             : BOOST_PP_ENUM(N, FUSION_VECTOR_CTOR_ARG_FWD, _) {}
 #endif
 
