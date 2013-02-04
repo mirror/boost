@@ -89,11 +89,6 @@ namespace boost { namespace fusion
           : base_type(std::forward<First>(first), std::forward<T_>(rest)...)
         {}
 
-        //~ template <typename First, typename ...T_>
-        //~ map(First& first, T_&... rest)
-          //~ : base_type(first, rest...)
-        //~ {}
-
         map& operator=(map const& rhs)
         {
             base_type::operator=(rhs.base());
