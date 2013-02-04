@@ -1377,13 +1377,13 @@ range_begin( coroutine< Signature > const& c)
 template< typename Signature >
 inline
 typename coroutine< Signature >::iterator
-range_end( coroutine< Signature > & c)
+range_end( coroutine< Signature > &)
 { return typename coroutine< Signature >::iterator(); }
 
 template< typename Signature >
 inline
 typename coroutine< Signature >::const_iterator
-range_end( coroutine< Signature > const& c)
+range_end( coroutine< Signature > const&)
 { return typename coroutine< Signature >::const_iterator(); }
 
 }
