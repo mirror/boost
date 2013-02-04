@@ -115,7 +115,7 @@ private:
 
     ptr_t  impl_;
 
-    BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine);
+    BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine)
 
     template< typename Allocator >
     coroutine( context::fcontext_t * callee,
@@ -662,7 +662,7 @@ private:
 
     ptr_t  impl_;
 
-    BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine);
+    BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine)
 
     template< typename Allocator >
     coroutine( context::fcontext_t * callee,
