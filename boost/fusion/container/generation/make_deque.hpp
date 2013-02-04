@@ -21,8 +21,6 @@
 
 namespace boost { namespace fusion
 {
-    struct void_;
-
     namespace result_of
     {
         template <typename ...T>

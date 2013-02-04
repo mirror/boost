@@ -164,7 +164,7 @@ namespace boost { namespace fusion {
             typename enable_if<
                 mpl::and_<
                     traits::is_sequence<Sequence>
-                  , result_of::empty<Sequence>>>::type* /*dummy*/ = 0)
+                  , result_of::empty<Sequence> > >::type* /*dummy*/ = 0)
         {}
 
         deque() {}

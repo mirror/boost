@@ -43,6 +43,7 @@
                         >::construct(BOOST_PP_ENUM_SHIFTED_PARAMS(N, t)));
         }
 
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template <BOOST_PP_ENUM_PARAMS(N, typename T_)>
         static type forward_(BOOST_PP_ENUM_BINARY_PARAMS(N, T_, && t))
         {
@@ -54,6 +55,7 @@
         #endif
                         >::forward_(BOOST_PP_ENUM_SHIFTED(N, FUSION_DEQUE_KEYED_VALUES_FORWARD, _)));
         }
+#endif
 
 #undef N
 #endif

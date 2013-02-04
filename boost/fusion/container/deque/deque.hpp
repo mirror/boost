@@ -8,20 +8,17 @@
 #if !defined(BOOST_FUSION_DEQUE_26112006_1649)
 #define BOOST_FUSION_DEQUE_26112006_1649
 
-#include <boost/config.hpp>
+# include <boost/fusion/container/deque/deque_fwd.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
-// With variadics, we will use the PP version
+// Without variadics, we will use the PP version
 ///////////////////////////////////////////////////////////////////////////////
-#if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+#if !defined(BOOST_FUSION_HAS_VARIADIC_DEQUE)
 # include <boost/fusion/container/deque/detail/cpp03/deque.hpp>
 #else
-# if !defined(BOOST_FUSION_HAS_VARIADIC_DEQUE)
-#   define BOOST_FUSION_HAS_VARIADIC_DEQUE
-# endif
 
 ///////////////////////////////////////////////////////////////////////////////
-// C++11 variadic interface
+// C++11 interface
 ///////////////////////////////////////////////////////////////////////////////
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/detail/access.hpp>
