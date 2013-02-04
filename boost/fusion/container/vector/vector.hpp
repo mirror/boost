@@ -140,6 +140,13 @@ namespace boost { namespace fusion
             return *this;
         }
 
+        vector&
+        operator=(vector const& rhs)
+        {
+            vec = rhs.vec;
+            return *this;
+        }
+
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         vector&
         operator=(vector&& rhs)

@@ -74,10 +74,15 @@ namespace boost { namespace fusion
         #include <boost/fusion/container/map/detail/cpp03/map_forward_ctor.hpp>
 
         template <typename T>
-        map&
-        operator=(T const& rhs)
+        map& operator=(T const& rhs)
         {
             data = rhs;
+            return *this;
+        }
+
+        map& operator=(map const& rhs)
+        {
+            data = rhs.data;
             return *this;
         }
 

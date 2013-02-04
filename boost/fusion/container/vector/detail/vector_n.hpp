@@ -204,7 +204,7 @@
         BOOST_PP_CAT(vector, N)&
         operator=(BOOST_PP_CAT(vector, N) const& vec)
         {
-            base_type::operator=(*this);
+            base_type::operator=(vec);
             return *this;
         }
 

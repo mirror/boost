@@ -42,6 +42,12 @@ namespace boost { namespace fusion
             return *this;
         }
 
+        pair& operator=(pair const& rhs)
+        {
+            second = rhs.second;
+            return *this;
+        }
+
         typedef First first_type;
         typedef Second second_type;
         Second second;

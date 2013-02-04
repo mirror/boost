@@ -8,6 +8,7 @@
 #define FUSION_MAP_MAIN_07212005_1106
 
 #include <boost/fusion/container/map/map_fwd.hpp>
+#include <boost/fusion/support/pair.hpp>
 
 ///////////////////////////////////////////////////////////////////////////////
 // Without variadics, we will use the PP version
@@ -29,8 +30,11 @@
 #include <boost/fusion/sequence/intrinsic/end.hpp>
 #include <boost/fusion/sequence/intrinsic/at.hpp>
 #include <boost/fusion/sequence/intrinsic/at_c.hpp>
+#include <boost/fusion/support/is_sequence.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/support/category_of.hpp>
+
+#include <boost/utility/enable_if.hpp>
 
 namespace boost { namespace fusion
 {
@@ -46,11 +50,40 @@ namespace boost { namespace fusion
         typedef mpl::int_<base_type::size> size;
         typedef mpl::false_ is_view;
 
-        map() {};
+        map() {}
 
-        map(typename detail::call_param<T>::type... element)
-          : base_type(element...)
+        template <typename Sequence>
+        map(Sequence const& seq
+          , typename enable_if<traits::is_sequence<Sequence>>::type* /*dummy*/ = 0)
+          : base_type(begin(seq), detail::map_impl_from_iterator())
         {}
+
+        template <typename First, typename ...T_>
+        map(First const& first, T_ const&... rest)
+          : base_type(first, rest...)
+        {}
+
+        template <typename First, typename ...T_>
+        map(First& first, T_&... rest)
+          : base_type(first, rest...)
+        {}
+
+        map& operator=(map const& rhs)
+        {
+            base_type::operator=(rhs.base());
+            return *this;
+        }
+
+        template <typename Sequence>
+        typename enable_if<traits::is_sequence<Sequence>, map&>::type
+        operator=(Sequence const& seq)
+        {
+            base().assign(begin(seq), detail::map_impl_from_iterator());
+            return *this;
+        }
+
+        base_type& base() { return *this; }
+        base_type const& base() const { return *this; }
     };
 }}
 

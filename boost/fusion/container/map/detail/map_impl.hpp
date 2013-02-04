@@ -38,6 +38,10 @@ namespace boost { namespace fusion { namespace detail
         map_impl(Iterator const& iter, map_impl_from_iterator)
         {}
 
+        template <typename Iterator>
+        void assign(Iterator const& iter, map_impl_from_iterator)
+        {}
+
         void get();
         void get_val();
         void get_key();
@@ -156,6 +160,13 @@ namespace boost { namespace fusion { namespace detail
             rest_type::operator=(std::forward<map_impl>(rhs));
             element = std::forward<Pair>(rhs.element);
             return *this;
+        }
+
+        template <typename Iterator>
+        void assign(Iterator const& iter, map_impl_from_iterator fi)
+        {
+            rest_type::assign(fusion::next(iter), fi);
+            element = *iter;
         }
 
         Pair element;
