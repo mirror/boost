@@ -79,12 +79,12 @@ main()
         BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::begin<map_type>::type>::type, char>::value));
         BOOST_STATIC_ASSERT((boost::is_same<boost::fusion::result_of::value_of_data<boost::fusion::result_of::next<boost::fusion::result_of::begin<map_type>::type>::type>::type, std::string>::value));
 
-        //! Test random access interface.
-        pair<int, char> a = at_c<0>(m);
+        // Test random access interface.
+        pair<int, char> a = at_c<0>(m); (void) a;
         pair<double, std::string> b = at_c<1>(m);
     }
 
-    //! iterators & random access interface.
+    // iterators & random access interface.
     {
         typedef pair<boost::mpl::int_<0>, std::string> pair0;
         typedef pair<boost::mpl::int_<1>, std::string> pair1;
@@ -107,12 +107,11 @@ main()
 
         BOOST_TEST((deref(fusion::advance_c<4>(it0)) == deref(it4)));
 
-        //! Bi-directional
+        // Bi-directional
         BOOST_TEST((deref(fusion::prior(it4)) == deref(it3) ));
         BOOST_TEST((deref(fusion::prior(it3)) == deref(it2) ));
         BOOST_TEST((deref(fusion::prior(it2)) == deref(it1) ));
         BOOST_TEST((deref(fusion::prior(it1)) == deref(it0) ));
-
     }
 
     {
