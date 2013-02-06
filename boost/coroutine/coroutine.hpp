@@ -1386,6 +1386,18 @@ typename coroutine< Signature >::const_iterator
 range_end( coroutine< Signature > const&)
 { return typename coroutine< Signature >::const_iterator(); }
 
+template< typename Signature >
+inline
+typename coroutine< Signature >::iterator
+begin( coroutine< Signature > & c)
+{ return boost::begin( c); }
+
+template< typename Signature >
+inline
+typename coroutine< Signature >::iterator
+end( coroutine< Signature > & c)
+{ return boost::end( c); }
+
 }
 
 template< typename Signature >
