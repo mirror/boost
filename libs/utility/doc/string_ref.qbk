@@ -54,7 +54,7 @@ Integrating `string_ref` into your code is fairly simple. Wherever you pass a `c
         return bar.substr ( 2, 3 );
         }
         
-    if ( extract_part ( "ABCDEFG" ).front() == "C" ) { /* do something */ }
+    if ( extract_part ( "ABCDEFG" ).front() == 'C' ) { /* do something */ }
     
 Let's figure out what happens in this (contrived) example.
 
