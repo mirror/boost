@@ -13,10 +13,12 @@
 #include <boost/algorithm/string/predicate.hpp>
 
 // Include unit test framework
-#include <boost/test/included/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 #include <string>
 #include <vector>
+#include <list>
 #include <iostream>
 
 #include <boost/test/test_tools.hpp>
@@ -44,7 +46,7 @@ void iterator_test()
     const char* pch1="xx-abc--xx-abb";
     vector<string> tokens;
     vector< vector<int> > vtokens;
-
+	
     // find_all tests
     find_all(
         tokens,
@@ -179,12 +181,15 @@ void iterator_test()
     BOOST_CHECK(siter==split_iterator<string::iterator>(siter));
     BOOST_CHECK(siter==split_iterator<string::iterator>());
 
+#if 0
+//  Make sure we work with forward iterators
+//	See bug #7989
+    list<char> l1;
+    find_iterator<list<char>::iterator> liter=make_find_iterator(l1, first_finder("xx"));
+#endif
 }
 
-// test main 
-int test_main( int, char*[] )
+BOOST_AUTO_TEST_CASE( test_main )
 {
     iterator_test();
-    
-    return 0;
 }

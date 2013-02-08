@@ -11,7 +11,6 @@
 
 #include <boost/config.hpp>
 #include <boost/algorithm/gather.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
 
 #include <string>
 #include <vector>
@@ -32,7 +31,7 @@ void test_sequence1 () {
     }
 
 
-int test_main( int , char* [] )
+int main ()
 {
   test_sequence1 ();
   return 0;

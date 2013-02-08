@@ -9,7 +9,9 @@
 
 #include <boost/config.hpp>
 #include <boost/algorithm/wrappers.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 #include <functional>
 #include <string>
@@ -67,9 +69,8 @@ void test_str ()
     BOOST_CHECK ( ba::find_ptr ( mm, 55 ) == NULL );
 }
 
-int test_main( int , char* [] )
+BOOST_AUTO_TEST_CASE( test_main )
 {
   test_int ();
   test_str ();
-  return 0;
 }

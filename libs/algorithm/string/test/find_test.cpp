@@ -12,7 +12,8 @@
 #include <boost/algorithm/string/split.hpp>
 
 // Include unit test framework
-#include <boost/test/included/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 #include <string>
 #include <vector>
@@ -45,7 +46,7 @@ void find_test()
 
 
     // find_first
-    BOOST_CHECKPOINT( "find_first" );
+    BOOST_TEST_CHECKPOINT( "find_first" );
 
     nc_result=find_first( str1, string("abc") );
     BOOST_CHECK( 
@@ -66,7 +67,7 @@ void find_test()
     BOOST_CHECK(( (ch_result.begin() - pch1 ) == 3) && ( (ch_result.end() - pch1 ) == 6 ) );
 
     // find_last
-    BOOST_CHECKPOINT( "find_last" );
+    BOOST_TEST_CHECKPOINT( "find_last" );
     
     nc_result=find_last( str1, string("abc") );
     BOOST_CHECK( 
@@ -87,7 +88,7 @@ void find_test()
     BOOST_CHECK(( (ch_result.begin() - pch1 ) == 15) && ( (ch_result.end() - pch1 ) == 18 ) );
 
     // find_nth
-    BOOST_CHECKPOINT( "find_nth" );
+    BOOST_TEST_CHECKPOINT( "find_nth" );
 
     nc_result=find_nth( str1, string("abc"), 1 );
     BOOST_CHECK( 
@@ -125,7 +126,7 @@ void find_test()
     BOOST_CHECK(( (ch_result.begin() - pch1 ) == 9) && ( (ch_result.end() - pch1 ) == 12 ) );
 
     // find_head
-    BOOST_CHECKPOINT( "find_head" );
+    BOOST_TEST_CHECKPOINT( "find_head" );
 
     nc_result=find_head( str1, 6 );
     BOOST_CHECK( 
@@ -146,7 +147,7 @@ void find_test()
     BOOST_CHECK( ( (ch_result.begin() - pch1 ) == 0 ) && ( (ch_result.end() - pch1 ) == 6 ) );
 
     // find_tail
-    BOOST_CHECKPOINT( "find_tail" );
+    BOOST_TEST_CHECKPOINT( "find_tail" );
 
     nc_result=find_tail( str1, 6 );
     BOOST_CHECK( 
@@ -168,7 +169,7 @@ void find_test()
     BOOST_CHECK( ( (ch_result.begin() - pch1 ) == 15 ) && ( (ch_result.end() - pch1 ) == 21 ) );
 
     // find_token
-    BOOST_CHECKPOINT( "find_token" );
+    BOOST_TEST_CHECKPOINT( "find_token" );
 
     nc_result=find_token( str1, is_any_of("abc"), token_compress_on );
     BOOST_CHECK( 
@@ -194,7 +195,7 @@ void find_test()
     BOOST_CHECK( ( (ch_result.begin() - pch1 ) == 3 ) && ( (ch_result.end() - pch1 ) == 4 ) );
 
     // generic find
-    BOOST_CHECKPOINT( "generic find" );
+    BOOST_TEST_CHECKPOINT( "generic find" );
 
     nc_result=find(str1, first_finder(string("abc")));
     BOOST_CHECK( 
@@ -207,7 +208,7 @@ void find_test()
         ( (cv_result.end()-str1.begin()) == 6) );
 
     // multi-type comparison test 
-    BOOST_CHECKPOINT( "multi-type" );
+    BOOST_TEST_CHECKPOINT( "multi-type" );
 
     nc_vresult=find_first( vec1, string("abc") );
     BOOST_CHECK( 
@@ -220,7 +221,7 @@ void find_test()
         ( (cv_result.end()-str1.begin()) == 6) );
 
     // overflow test
-    BOOST_CHECKPOINT( "overflow" );
+    BOOST_TEST_CHECKPOINT( "overflow" );
     
     nc_result=find_first( str2, string("abcd") );
     BOOST_CHECK( nc_result.begin()==nc_result.end() );
@@ -233,7 +234,7 @@ void find_test()
     BOOST_CHECK( string( cv_result.begin(), cv_result.end() )== string("abc") );
 
     // Empty string test
-    BOOST_CHECKPOINT( "empty" );
+    BOOST_TEST_CHECKPOINT( "empty" );
     
     nc_result=find_first( str3, string("abcd") );
     BOOST_CHECK( nc_result.begin()==nc_result.end() );
@@ -251,7 +252,7 @@ void find_test()
     BOOST_CHECK( osstr.str()=="abc" );
 
     // Empty string test
-    BOOST_CHECKPOINT( "overlapping" );
+    BOOST_TEST_CHECKPOINT( "overlapping" );
     
     std::string overlap_target("aaaa");
     std::vector<boost::iterator_range<std::string::iterator> > overlap_results;
@@ -266,9 +267,7 @@ void find_test()
 }
 
 // test main 
-int test_main( int, char*[] )
+BOOST_AUTO_TEST_CASE( test_main )
 {
     find_test();
-    
-    return 0;
 }
