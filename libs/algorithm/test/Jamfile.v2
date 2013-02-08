@@ -61,8 +61,6 @@ alias unit_test_framework
      [ run gather_test1.cpp unit_test_framework        : : : : gather_test1 ]
      [ compile-fail gather_fail1.cpp ]
 
-# Dummy test
-	 [ run dummy_test.cpp unit_test_framework : : : : dummy_test ]
    ;
 }
 
