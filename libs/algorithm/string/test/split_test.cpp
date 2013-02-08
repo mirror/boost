@@ -181,12 +181,10 @@ void iterator_test()
     BOOST_CHECK(siter==split_iterator<string::iterator>(siter));
     BOOST_CHECK(siter==split_iterator<string::iterator>());
 
-#if 0
 //  Make sure we work with forward iterators
 //	See bug #7989
     list<char> l1;
     find_iterator<list<char>::iterator> liter=make_find_iterator(l1, first_finder("xx"));
-#endif
 }
 
 BOOST_AUTO_TEST_CASE( test_main )
