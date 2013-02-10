@@ -222,7 +222,7 @@ rule chrono-run-mt ( sources )
         :   $(sources[1]:B)_h ]
     ;
 }
-rule chrono-run2-mt ( sources : name )
+rule chrono-run2-mt ( sources * : name )
 {
     return
     [ run $(sources) ../build//boost_chrono
@@ -451,6 +451,7 @@ rule chrono-compile2 ( sources : name )
     test-suite "clock"
         :
         [ chrono-run2-mt clock/clock_pass.cpp  : clock_clock_p ]
+        [ chrono-run2-mt one_obj.cpp another_obj.cpp   : two_obj_p ]
         ;
 
     test-suite "stopwatch"
@@ -510,7 +511,8 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run win32_test.cpp  ]
         ;
 
-    test-suite "ts"
+    explicit ts_ ;
+    test-suite ts_
         :
         #[ chrono-run test_xx.cpp  ]
         ;
