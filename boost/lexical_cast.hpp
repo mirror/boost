@@ -1156,6 +1156,12 @@ namespace boost {
 
     namespace detail // lcast_ret_float
     {
+
+// Silence buggy MS warnings like C4244: '+=' : conversion from 'int' to 'unsigned short', possible loss of data 
+#if defined(_MSC_VER) && (_MSC_VER == 1400) 
+#  pragma warning(push) 
+#  pragma warning(disable:4244) 
+#endif 
         template <class T>
         struct mantissa_holder_type
         {
@@ -1397,6 +1403,10 @@ namespace boost {
 
             return true;
         }
+// Unsilence buggy MS warnings like C4244: '+=' : conversion from 'int' to 'unsigned short', possible loss of data 
+#if defined(_MSC_VER) && (_MSC_VER == 1400) 
+#  pragma warning(pop) 
+#endif 
     }
 
     namespace detail // stl_buf_unlocker
