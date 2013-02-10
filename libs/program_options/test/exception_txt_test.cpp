@@ -160,7 +160,7 @@ void test_invalid_option_value_exception_msg()
     const char* argv1[] = { "program", "--int", "A_STRING"};  VEC_STR_PUSH_BACK(argv, argv1); 
     const char* argv2[] = { "program", "-d", "A_STRING"}   ;  VEC_STR_PUSH_BACK(argv, argv2);
     const char* argv3[] = { "program", "/d", "A_STRING"}   ;  VEC_STR_PUSH_BACK(argv, argv3); 
-    const char* argv4[] = { "int_option=A_STRING"}         ;  VEC_STR_PUSH_BACK(argv, argv4); 
+    const char* argv4[] = { "int-option=A_STRING"}         ;  VEC_STR_PUSH_BACK(argv, argv4); 
 
     const char* expected_msg[5] = {
                                 "the argument ('A_STRING') for option '--int-option' is invalid", 
