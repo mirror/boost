@@ -12,7 +12,8 @@
 
 #include <boost/utility/string_ref.hpp>
 
-#include <boost/test/included/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 typedef boost::string_ref string_ref;
 
@@ -240,7 +241,8 @@ const char *test_strings [] = {
     NULL
     };
     
-int test_main( int , char* [] ) {
+BOOST_AUTO_TEST_CASE( test_main )
+{
     const char **p = &test_strings[0];
     
     while ( *p != NULL ) {
@@ -251,6 +253,4 @@ int test_main( int , char* [] ) {
 
         p++;
         }
-
-    return 0;
-    }
+}
