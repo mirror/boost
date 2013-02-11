@@ -1261,10 +1261,9 @@ class vector : private container_detail::vector_alloc_holder<Allocator>
    {
       T *const pos = container_detail::to_raw_pointer(position.get_ptr());
       T *const beg = container_detail::to_raw_pointer(this->members_.m_start);
-      ::boost::move(pos + 1, beg + this->members_.m_size, pos);
+      //Move elements forward and destroy last
+      base_t::destroy(::boost::move(pos + 1, beg + this->members_.m_size, pos));
       --this->members_.m_size;
-      //Destroy last element
-      base_t::destroy(container_detail::to_raw_pointer(this->members_.m_start) + this->members_.m_size);
       return iterator(position.get_ptr());
    }
 
