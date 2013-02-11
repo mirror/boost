@@ -10,8 +10,8 @@
 #include <boost/array.hpp>
 #include <algorithm>
 
-#include <boost/test/included/test_exec_monitor.hpp>
-
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 namespace {
     template< class T >
@@ -30,12 +30,11 @@ namespace {
     }
 }
 
-int test_main( int , char* [] )
+BOOST_AUTO_TEST_CASE( test_main )
 {
     RunTests< bool >();
     RunTests< void * >();
     RunTests< long double >();
     RunTests< std::string >();
-    return 0;
 }
 

@@ -4,16 +4,21 @@
 
 import testing ;
 
+alias unit_test_framework
+    : # sources
+        /boost//unit_test_framework
+    ;        
+
 test-suite array :
-    [ run array0.cpp ]
+    [ run array0.cpp unit_test_framework  : : : : array0 ]
     [ run array1.cpp ]
     [ run array2.cpp ]
     [ run array3.cpp ]
     [ run array4.cpp ]
     [ run array5.cpp ]
-    [ run array6.cpp ]
-    [ run array7.cpp ]
+    [ run array6.cpp unit_test_framework  : : : : array6 ]
+    [ run array7.cpp unit_test_framework  : : : : array7 ]
     [ compile-fail array_getfail1.cpp ]
     [ compile-fail array_getfail2.cpp ]
-    [ run array_hash.cpp ]
+    [ run array_hash.cpp unit_test_framework  : : : : array_hash ]
     ;

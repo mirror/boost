@@ -16,7 +16,8 @@
 #include <array>
 #endif
 
-#include <boost/test/included/test_exec_monitor.hpp>
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 namespace {
 
@@ -35,9 +36,8 @@ namespace {
 
 }
 
-int test_main( int , char* [] )
+BOOST_AUTO_TEST_CASE( test_main )
 {
-
 #ifndef BOOST_NO_CXX11_HDR_ARRAY
     RunStdTests< bool >();
     RunStdTests< void * >();
@@ -46,6 +46,5 @@ int test_main( int , char* [] )
 #else
 	BOOST_STATIC_ASSERT ( false );	// fail on C++03 systems.
 #endif
-    return 0;
 }
 
