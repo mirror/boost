@@ -116,6 +116,9 @@ template class flat_multiset
    , std::allocator<test::movable_and_copyable_int>
    >;
 
+//As flat container iterators are typedefs for vector::[const_]iterator,
+//no need to explicit instantiate them
+
 }} //boost::container
 
 
