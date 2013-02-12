@@ -81,8 +81,8 @@ struct coroutine_op< Signature, D, Result, 0 >
         }
 
     public:
-        typedef typename std::iterator_traits< iterator >::pointer      pointer_t;
-        typedef typename std::iterator_traits< iterator >::reference    reference_t;
+        typedef typename iterator::pointer      pointer_t;
+        typedef typename iterator::reference    reference_t;
 
         iterator() :
             dp_( 0), val_()
@@ -152,8 +152,8 @@ struct coroutine_op< Signature, D, Result, 0 >
         }
 
     public:
-        typedef typename std::iterator_traits< iterator >::pointer      pointer_t;
-        typedef typename std::iterator_traits< iterator >::reference    reference_t;
+        typedef typename iterator::pointer      pointer_t;
+        typedef typename iterator::reference    reference_t;
 
         const_iterator() :
             dp_( 0), val_()
