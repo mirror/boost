@@ -12,7 +12,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
-#include <boost/context/fcontext.hpp>
 #include <boost/move/move.hpp>
 #include <boost/range.hpp>
 #include <boost/static_assert.hpp>
@@ -25,6 +24,7 @@
 
 #include <boost/coroutine/attributes.hpp>
 #include <boost/coroutine/detail/arg.hpp>
+#include <boost/coroutine/detail/coroutine_context.hpp>
 #include <boost/coroutine/detail/coroutine_base.hpp>
 #include <boost/coroutine/detail/coroutine_get.hpp>
 #include <boost/coroutine/detail/coroutine_object.hpp>
@@ -118,7 +118,7 @@ private:
     BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine)
 
     template< typename Allocator >
-    coroutine( context::fcontext_t * callee,
+    coroutine( detail::coroutine_context const& callee,
                bool unwind, bool preserve_fpu,
                Allocator const& alloc) :
         detail::coroutine_op<
@@ -665,7 +665,7 @@ private:
     BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine)
 
     template< typename Allocator >
-    coroutine( context::fcontext_t * callee,
+    coroutine( detail::coroutine_context const& callee,
                bool unwind, bool preserve_fpu,
                Allocator const& alloc) :
         detail::coroutine_op<

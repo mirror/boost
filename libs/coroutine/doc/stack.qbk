@@ -15,20 +15,19 @@ which is required to model a __stack_allocator_concept__.
 [heading __stack_allocator_concept__]
 A __stack_allocator__ must satisfy the __stack_allocator_concept__ requirements
 shown in the following table, in which `a` is an object of a
-__stack_allocator__ type, `p` is a `void *`, and `s` is a `std::size_t`:
+__stack_allocator__ type, `sctx` is a `stack_context`, and `size` is a `std::size_t`:
 
 [table
     [[expression][return type][notes]]
     [
-        [`a.allocate( s)`]
-        [`void *`]
-        [returns a pointer to `s` bytes allocated from the stack]
+        [`a.allocate( sctx, size)`]
+        [`void`]
+        [creates a stack of at least `size` bytes and stores both values in `sctx`]
     ]
     [
-        [`a.deallocate( p, s)`]
+        [`a.deallocate( sctx)`]
         [`void`]
-        [deallocates `s` bytes of memory beginning at `p`,
-        a pointer previously returned by `a.allocate()`]
+        [deallocates the stack created by `a.allocate()`]
     ]
 ]
 
@@ -68,9 +67,9 @@ virtual addresses are used.]
 
             static std::size_t minimum_stacksize();
 
-            void * allocate( std::size_t size);
+            void allocate( stack_context &, std::size_t size);
 
-            void deallocate( void * sp, std::size_t size);
+            void deallocate( stack_context &);
         }
 
 [heading `static bool is_stack_unbound()`]
@@ -97,23 +96,68 @@ If the stack is unbound then the present implementation returns the maximum of
 environment (Win32 4kB/Win64 8kB, defined by rlimit on POSIX).]]
 ]
 
-[heading `void * allocate( std::size_t size)`]
+[heading `void allocate( stack_context & sctx, std::size_t size)`]
 [variablelist
 [[Preconditions:] [`minimum_stacksize() > size` and
 `! is_stack_unbound() && ( maximum_stacksize() < size)`.]]
-[[Effects:] [Allocates memory of `size` Bytes and appends one guard page at the
-end of the allocated memory.]]
+[[Effects:] [Allocates memory of at least `size` Bytes and stores a pointer
+to the stack and its actual size in `sctx`.]]
 [[Returns:] [Returns pointer to the start address of the new stack. Depending
 on the architecture the stack grows downwards/upwards the returned address is
 the highest/lowest address of the stack.]]
 ]
 
-[heading `void deallocate( void * sp, std::size_t size)`]
+[heading `void deallocate( stack_context & sctx)`]
 [variablelist
-[[Preconditions:] [`sp` is valid, `minimum_stacksize() > size` and
+[[Preconditions:] [`sctx.sp` is valid, `minimum_stacksize() > sctx.size` and
 `! is_stack_unbound() && ( maximum_stacksize() < size)`.]]
 [[Effects:] [Deallocates the stack space.]]
 ]
+
+[endsect]
+
+
+[section:stack_context Class ['stack_context]]
+
+__boost_coroutine__ provides the class __stack_context__ which will contain
+the stack pointer and the size of the stack.
+In case of a __segmented_stack__ __stack_context__ contains some extra controll
+structures.
+
+        struct stack_context
+        {
+            void    *   sp;
+            std::size_t size;
+
+            // might contain addition controll structures
+            // for instance for segmented stacks
+        }
+
+[heading `void * sp`]
+[variablelist
+[[Value:] [Pointer to the beginning of the stack.]]
+]
+
+[heading `std::size_t size`]
+[variablelist
+[[Value:] [Actual size of the stack.]]
+]
+
+[endsect]
+
+
+[section:segmented_stack Segmented stacks]
+
+__boost_coroutine__ supports usage of a __segmented_stack__, e. g. the size of the
+stack of a coroutine grows on demand. The coroutine is created with a stack with
+an minimal stack and if the coroutine is execute the stack size is increased as
+required.
+
+Segmented stack are currently only supported by [*gcc] from version [*4.7] onwards.
+n order to use __segmented_stack__ compile __boost_coroutine__ with
+[*cxxflags="-fsplit-stack -DBOOST_USE_SEGMENTED_STACKS" linkflags="-static-libgcc"]
+at b2/bjam command-line and compile the application using __boost_coroutine__ with
+[*cxxflags="-fsplit-stack -DBOOST_USE_SEGMENTED_STACKS"].
 
 [endsect]
 
