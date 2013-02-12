@@ -28,6 +28,32 @@
 namespace boost { namespace container { namespace container_detail {
 
 template<class A, class FwdIt, class Iterator>
+struct move_insert_range_proxy
+{
+   typedef typename allocator_traits<A>::size_type size_type;
+   typedef typename allocator_traits<A>::value_type value_type;
+
+   move_insert_range_proxy(A& a, FwdIt first)
+      :  a_(a), first_(first)
+   {}
+
+   void uninitialized_copy_n_and_update(Iterator pos, size_type n)
+   {
+      this->first_ = ::boost::container::uninitialized_move_alloc_n_source
+         (this->a_, this->first_, n, pos);
+   }
+
+   void copy_n_and_update(Iterator pos, size_type n)
+   {
+      this->first_ = ::boost::container::move_n_source(this->first_, n, pos);
+   }
+
+   A &a_;
+   FwdIt first_;
+};
+
+
+template<class A, class FwdIt, class Iterator>
 struct insert_range_proxy
 {
    typedef typename allocator_traits<A>::size_type size_type;

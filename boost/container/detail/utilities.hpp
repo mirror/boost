@@ -572,6 +572,62 @@ inline I copy_or_move_n_source(I f, typename std::iterator_traits<I>::difference
    return f;
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//
+//                         move
+//
+//////////////////////////////////////////////////////////////////////////////
+
+template
+<typename I,   // I models InputIterator
+typename F>   // F models ForwardIterator
+inline F move(I f, I l, F r)
+{
+   while (f != l) {
+      *r = ::boost::move(*f);
+      ++f; ++r;
+   }
+   return r;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                         move_n
+//
+//////////////////////////////////////////////////////////////////////////////
+
+template
+<typename I,   // I models InputIterator
+typename F>   // F models ForwardIterator
+inline F move_n(I f, typename std::iterator_traits<I>::difference_type n, F r)
+{
+   while (n--) {
+      *r = ::boost::move(*f);
+      ++f; ++r;
+   }
+   return r;
+}
+
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                         move_n_source
+//
+//////////////////////////////////////////////////////////////////////////////
+
+template
+<typename I,   // I models InputIterator
+typename F>   // F models ForwardIterator
+inline I move_n_source(I f, typename std::iterator_traits<I>::difference_type n, F r)
+{
+   while (n--) {
+      *r = ::boost::move(*f);
+      ++f; ++r;
+   }
+   return f;
+}
+
 }  //namespace container {
 }  //namespace boost {
 
