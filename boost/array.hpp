@@ -13,6 +13,7 @@
  * accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
  *
+ *  9 Jan 2013 - (mtc) Added constexpr
  * 14 Apr 2012 - (mtc) Added support for boost::hash
  * 28 Dec 2010 - (mtc) Added cbegin and cend (and crbegin and crend) for C++Ox compatibility.
  * 10 Mar 2010 - (mtc) fill method added, matching resolution of the standard library working group.
@@ -121,19 +122,17 @@ namespace boost {
         // operator[]
         reference operator[](size_type i) 
         { 
-            BOOST_ASSERT_MSG( i < N, "out of range" );
-            return elems[i];
+            return BOOST_ASSERT_MSG( i < N, "out of range" ), elems[i]; 
         }
         
-        const_reference operator[](size_type i) const 
+        BOOST_CONSTEXPR const_reference operator[](size_type i) const 
         {     
-            BOOST_ASSERT_MSG( i < N, "out of range" );
-            return elems[i]; 
+            return BOOST_ASSERT_MSG( i < N, "out of range" ), elems[i]; 
         }
 
         // at() with range check
-        reference at(size_type i) { rangecheck(i); return elems[i]; }
-        const_reference at(size_type i) const { rangecheck(i); return elems[i]; }
+        reference                       at(size_type i)       { return rangecheck(i), elems[i]; }
+        BOOST_CONSTEXPR const_reference at(size_type i) const { return rangecheck(i), elems[i]; }
     
         // front() and back()
         reference front() 
@@ -141,7 +140,7 @@ namespace boost {
             return elems[0]; 
         }
         
-        const_reference front() const 
+        BOOST_CONSTEXPR const_reference front() const 
         {
             return elems[0];
         }
@@ -151,15 +150,15 @@ namespace boost {
             return elems[N-1]; 
         }
         
-        const_reference back() const 
+        BOOST_CONSTEXPR const_reference back() const 
         { 
             return elems[N-1]; 
         }
 
         // size is constant
-        static size_type size() { return N; }
-        static bool empty() { return false; }
-        static size_type max_size() { return N; }
+        static BOOST_CONSTEXPR size_type size() { return N; }
+        static BOOST_CONSTEXPR bool empty() { return false; }
+        static BOOST_CONSTEXPR size_type max_size() { return N; }
         enum { static_size = N };
 
         // swap (note: linear complexity)
@@ -190,11 +189,8 @@ namespace boost {
         }
 
         // check range (may be private because it is static)
-        static void rangecheck (size_type i) {
-            if (i >= size()) {
-                std::out_of_range e("array<>: index out of range");
-                boost::throw_exception(e);
-            }
+        static BOOST_CONSTEXPR bool rangecheck (size_type i) {
+            return i > size() ? boost::throw_exception(std::out_of_range ("array<>: index out of range")), true : true;
         }
 
     };
@@ -265,14 +261,14 @@ namespace boost {
             return failed_rangecheck();
         }
 
-        const_reference operator[](size_type /*i*/) const
+        BOOST_CONSTEXPR const_reference operator[](size_type /*i*/) const
         {
             return failed_rangecheck();
         }
 
         // at() with range check
         reference at(size_type /*i*/)               {   return failed_rangecheck(); }
-        const_reference at(size_type /*i*/) const   {   return failed_rangecheck(); }
+        BOOST_CONSTEXPR const_reference at(size_type /*i*/) const   {   return failed_rangecheck(); }
 
         // front() and back()
         reference front()
@@ -280,7 +276,7 @@ namespace boost {
             return failed_rangecheck();
         }
 
-        const_reference front() const
+        BOOST_CONSTEXPR const_reference front() const
         {
             return failed_rangecheck();
         }
@@ -290,15 +286,15 @@ namespace boost {
             return failed_rangecheck();
         }
 
-        const_reference back() const
+        BOOST_CONSTEXPR const_reference back() const
         {
             return failed_rangecheck();
         }
 
         // size is constant
-        static size_type size() { return 0; }
-        static bool empty() { return true; }
-        static size_type max_size() { return 0; }
+        static BOOST_CONSTEXPR size_type size() { return 0; }
+        static BOOST_CONSTEXPR bool empty() { return true; }
+        static BOOST_CONSTEXPR size_type max_size() { return 0; }
         enum { static_size = 0 };
 
         void swap (array<T,0>& /*y*/) {
