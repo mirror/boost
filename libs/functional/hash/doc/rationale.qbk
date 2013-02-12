@@ -38,7 +38,7 @@ function, such as [@http://www.concentric.net/~ttwang/tech/inthash.htm
 Thomas Wang's hash function]. This this may not work as
 well as a hash algorithm tailored for the input.
 
-For strings that are several fast, high quality hash functions
+For strings there are several fast, high quality hash functions
 available (for example [@http://code.google.com/p/smhasher/ MurmurHash3]
 and [@http://code.google.com/p/cityhash/ Google's CityHash]),
 although they tend to be more machine specific.
