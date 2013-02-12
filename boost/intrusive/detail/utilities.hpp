@@ -132,6 +132,12 @@ struct size_holder
    void increment()
    {  ++size_; }
 
+   void increase(SizeType n)
+   {  size_ += n; }
+
+   void decrease(SizeType n)
+   {  size_ -= n; }
+
    SizeType size_;
 };
 
@@ -151,6 +157,12 @@ struct size_holder<false, SizeType>
    {}
 
    void increment()
+   {}
+
+   void increase(SizeType)
+   {}
+
+   void decrease(SizeType)
    {}
 };
 
