@@ -5,6 +5,10 @@
 
 xml coro : coro.qbk ;
 
+path-constant images_location : html ;
+path-constant here : . ;
+
+
 boostbook standalone
     :
         coro
@@ -22,4 +26,6 @@ boostbook standalone
         <xsl:param>generate.section.toc.level=10
         # Path for links to Boost:
         <xsl:param>boost.root=../../../..
+        <format>pdf:<xsl:param>img.src.path=$(images_location)/
     ;
+
