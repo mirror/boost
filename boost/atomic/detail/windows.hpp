@@ -3,6 +3,7 @@
 
 //  Copyright (c) 2009 Helge Bahmann
 //  Copyright (c) 2012 Andrey Semashev
+//  Copyright (c) 2013 Tim Blechmann
 //
 //  Distributed under the Boost Software License, Version 1.0.
 //  See accompanying file LICENSE_1_0.txt or copy at
@@ -133,10 +134,10 @@ private:
     atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
     uint32_t v_;
 public:
-    atomic_flag(void) : v_(0) {}
+    atomic_flag(void) BOOST_NOEXCEPT : v_(0) {}
 
     bool
-    test_and_set(memory_order order = memory_order_seq_cst) volatile
+    test_and_set(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         atomics::detail::platform_fence_before(order);
         const uint32_t old = (uint32_t)BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&v_, 1);
@@ -145,7 +146,7 @@ public:
     }
 
     void
-    clear(memory_order order = memory_order_seq_cst) volatile
+    clear(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         atomics::detail::platform_fence_before_store(order);
         BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&v_, 0);
@@ -195,11 +196,11 @@ class base_atomic<T, int, 1, Sign>
 #endif
     typedef T difference_type;
 public:
-    explicit base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
-    store(value_type v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             platform_fence_before(order);
@@ -210,7 +211,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
         value_type v = static_cast< value_type >(v_);
         platform_fence_after_load(order);
@@ -218,7 +219,7 @@ public:
     }
 
     value_type
-    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
 #ifdef BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD8
@@ -231,14 +232,14 @@ public:
     }
 
     value_type
-    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         typedef typename make_signed< value_type >::type signed_value_type;
         return fetch_add(static_cast< value_type >(-static_cast< signed_value_type >(v)), order);
     }
 
     value_type
-    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
 #ifdef BOOST_ATOMIC_INTERLOCKED_EXCHANGE8
@@ -255,7 +256,7 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         value_type previous = expected;
         platform_fence_before(success_order);
@@ -278,13 +279,13 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     value_type
-    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #ifdef BOOST_ATOMIC_INTERLOCKED_AND8
         platform_fence_before(order);
@@ -307,7 +308,7 @@ public:
     }
 
     value_type
-    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #ifdef BOOST_ATOMIC_INTERLOCKED_OR8
         platform_fence_before(order);
@@ -330,7 +331,7 @@ public:
     }
 
     value_type
-    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #ifdef BOOST_ATOMIC_INTERLOCKED_XOR8
         platform_fence_before(order);
@@ -353,7 +354,7 @@ public:
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void) const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -381,11 +382,11 @@ class base_atomic<T, int, 2, Sign>
 #endif
     typedef T difference_type;
 public:
-    explicit base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
-    store(value_type v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             platform_fence_before(order);
@@ -396,7 +397,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
         value_type v = static_cast< value_type >(v_);
         platform_fence_after_load(order);
@@ -404,7 +405,7 @@ public:
     }
 
     value_type
-    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
 #ifdef BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD16
@@ -417,14 +418,14 @@ public:
     }
 
     value_type
-    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         typedef typename make_signed< value_type >::type signed_value_type;
         return fetch_add(static_cast< value_type >(-static_cast< signed_value_type >(v)), order);
     }
 
     value_type
-    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
 #ifdef BOOST_ATOMIC_INTERLOCKED_EXCHANGE16
@@ -441,7 +442,7 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         value_type previous = expected;
         platform_fence_before(success_order);
@@ -464,13 +465,13 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     value_type
-    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #ifdef BOOST_ATOMIC_INTERLOCKED_AND16
         platform_fence_before(order);
@@ -493,7 +494,7 @@ public:
     }
 
     value_type
-    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #ifdef BOOST_ATOMIC_INTERLOCKED_OR16
         platform_fence_before(order);
@@ -516,7 +517,7 @@ public:
     }
 
     value_type
-    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #ifdef BOOST_ATOMIC_INTERLOCKED_XOR16
         platform_fence_before(order);
@@ -539,7 +540,7 @@ public:
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void) const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -559,11 +560,11 @@ class base_atomic<T, int, 4, Sign>
     typedef value_type storage_type;
     typedef T difference_type;
 public:
-    explicit base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
-    store(value_type v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             platform_fence_before(order);
@@ -574,7 +575,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
         value_type v = static_cast< value_type >(v_);
         platform_fence_after_load(order);
@@ -582,7 +583,7 @@ public:
     }
 
     value_type
-    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
         v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD(&v_, v));
@@ -591,14 +592,14 @@ public:
     }
 
     value_type
-    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         typedef typename make_signed< value_type >::type signed_value_type;
         return fetch_add(static_cast< value_type >(-static_cast< signed_value_type >(v)), order);
     }
 
     value_type
-    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
         v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&v_, v));
@@ -611,7 +612,7 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         value_type previous = expected;
         platform_fence_before(success_order);
@@ -630,13 +631,13 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     value_type
-    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #if defined(BOOST_ATOMIC_INTERLOCKED_AND)
         platform_fence_before(order);
@@ -654,7 +655,7 @@ public:
     }
 
     value_type
-    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #if defined(BOOST_ATOMIC_INTERLOCKED_OR)
         platform_fence_before(order);
@@ -672,7 +673,7 @@ public:
     }
 
     value_type
-    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #if defined(BOOST_ATOMIC_INTERLOCKED_XOR)
         platform_fence_before(order);
@@ -690,7 +691,7 @@ public:
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void)const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -712,11 +713,11 @@ class base_atomic<T, int, 8, Sign>
     typedef value_type storage_type;
     typedef T difference_type;
 public:
-    explicit base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
-    store(value_type v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             platform_fence_before(order);
@@ -727,7 +728,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
     {
         value_type v = static_cast< value_type >(v_);
         platform_fence_after_load(order);
@@ -735,7 +736,7 @@ public:
     }
 
     value_type
-    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
         v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64(&v_, v));
@@ -744,14 +745,14 @@ public:
     }
 
     value_type
-    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         typedef typename make_signed< value_type >::type signed_value_type;
         return fetch_add(static_cast< value_type >(-static_cast< signed_value_type >(v)), order);
     }
 
     value_type
-    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
         v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE64(&v_, v));
@@ -764,7 +765,7 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         value_type previous = expected;
         platform_fence_before(success_order);
@@ -783,13 +784,13 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     value_type
-    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #if defined(BOOST_ATOMIC_INTERLOCKED_AND64)
         platform_fence_before(order);
@@ -807,7 +808,7 @@ public:
     }
 
     value_type
-    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #if defined(BOOST_ATOMIC_INTERLOCKED_OR64)
         platform_fence_before(order);
@@ -825,7 +826,7 @@ public:
     }
 
     value_type
-    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
 #if defined(BOOST_ATOMIC_INTERLOCKED_XOR64)
         platform_fence_before(order);
@@ -843,7 +844,7 @@ public:
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void)const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -866,11 +867,11 @@ class base_atomic<void*, void*, sizeof_pointer, Sign>
     typedef base_atomic this_type;
     typedef void* value_type;
 public:
-    explicit base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
-    store(value_type v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             platform_fence_before(order);
@@ -880,14 +881,14 @@ public:
         }
     }
 
-    value_type load(memory_order order = memory_order_seq_cst) const volatile
+    value_type load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
     {
         value_type v = const_cast<const volatile value_type &>(v_);
         platform_fence_after_load(order);
         return v;
     }
 
-    value_type exchange(value_type v, memory_order order = memory_order_seq_cst) volatile
+    value_type exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
         v = (value_type)BOOST_ATOMIC_INTERLOCKED_EXCHANGE_POINTER(&v_, v);
@@ -897,7 +898,7 @@ public:
 
     bool compare_exchange_strong(value_type & expected, value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         value_type previous = expected;
         platform_fence_before(success_order);
@@ -913,13 +914,13 @@ public:
 
     bool compare_exchange_weak(value_type & expected, value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void)const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -938,11 +939,11 @@ class base_atomic<T*, void*, sizeof_pointer, Sign>
     typedef T* value_type;
     typedef ptrdiff_t difference_type;
 public:
-    explicit base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
-    store(value_type v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             platform_fence_before(order);
@@ -953,7 +954,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
     {
         value_type v = const_cast<const volatile value_type &>(v_);
         platform_fence_after_load(order);
@@ -961,7 +962,7 @@ public:
     }
 
     value_type
-    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
         v = (value_type)BOOST_ATOMIC_INTERLOCKED_EXCHANGE_POINTER(&v_, v);
@@ -974,7 +975,7 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         value_type previous = expected;
         platform_fence_before(success_order);
@@ -993,13 +994,13 @@ public:
         value_type & expected,
         value_type desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     value_type
-    fetch_add(difference_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_add(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         v = v * sizeof(*v_);
         platform_fence_before(order);
@@ -1009,13 +1010,13 @@ public:
     }
 
     value_type
-    fetch_sub(difference_type v, memory_order order = memory_order_seq_cst) volatile
+    fetch_sub(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         return fetch_add(-v, order);
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void)const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -1039,14 +1040,13 @@ class base_atomic<T, void, 1, Sign>
     typedef uint32_t storage_type;
 #endif
 public:
-    explicit base_atomic(value_type const& v) : v_(0)
-    {
-        memcpy(&v_, &v, sizeof(value_type));
-    }
+    BOOST_CONSTEXPR base_atomic(value_type const& v) BOOST_NOEXCEPT:
+        v_(*reinterpret_cast<storage_type*>(&v))
+    {}
     base_atomic(void) {}
 
     void
-    store(value_type const& v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             storage_type tmp = 0;
@@ -1059,7 +1059,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
         storage_type tmp = const_cast<volatile storage_type &>(v_);
         platform_fence_after_load(order);
@@ -1069,7 +1069,7 @@ public:
     }
 
     value_type
-    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         storage_type tmp = 0;
         memcpy(&tmp, &v, sizeof(value_type));
@@ -1090,7 +1090,7 @@ public:
         value_type & expected,
         value_type const& desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         storage_type expected_s = 0, desired_s = 0;
         memcpy(&expected_s, &expected, sizeof(value_type));
@@ -1115,13 +1115,13 @@ public:
         value_type & expected,
         value_type const& desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void) const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -1144,14 +1144,14 @@ class base_atomic<T, void, 2, Sign>
     typedef uint32_t storage_type;
 #endif
 public:
-    explicit base_atomic(value_type const& v) : v_(0)
-    {
-        memcpy(&v_, &v, sizeof(value_type));
-    }
+    BOOST_CONSTEXPR base_atomic(value_type const& v) BOOST_NOEXCEPT:
+        v_(*reinterpret_cast<storage_type*>(&v))
+    {}
+
     base_atomic(void) {}
 
     void
-    store(value_type const& v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             storage_type tmp = 0;
@@ -1164,7 +1164,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
     {
         storage_type tmp = const_cast<volatile storage_type &>(v_);
         platform_fence_after_load(order);
@@ -1174,7 +1174,7 @@ public:
     }
 
     value_type
-    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         storage_type tmp = 0;
         memcpy(&tmp, &v, sizeof(value_type));
@@ -1195,7 +1195,7 @@ public:
         value_type & expected,
         value_type const& desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         storage_type expected_s = 0, desired_s = 0;
         memcpy(&expected_s, &expected, sizeof(value_type));
@@ -1220,13 +1220,13 @@ public:
         value_type & expected,
         value_type const& desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void)const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -1252,7 +1252,7 @@ public:
     base_atomic(void) {}
 
     void
-    store(value_type const& v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             storage_type tmp = 0;
@@ -1265,7 +1265,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
     {
         storage_type tmp = const_cast<volatile storage_type &>(v_);
         platform_fence_after_load(order);
@@ -1275,7 +1275,7 @@ public:
     }
 
     value_type
-    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         storage_type tmp = 0;
         memcpy(&tmp, &v, sizeof(value_type));
@@ -1292,7 +1292,7 @@ public:
         value_type & expected,
         value_type const& desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         storage_type expected_s = 0, desired_s = 0;
         memcpy(&expected_s, &expected, sizeof(value_type));
@@ -1313,13 +1313,13 @@ public:
         value_type & expected,
         value_type const& desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void)const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -1347,7 +1347,7 @@ public:
     base_atomic(void) {}
 
     void
-    store(value_type const& v, memory_order order = memory_order_seq_cst) volatile
+    store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         if (order != memory_order_seq_cst) {
             storage_type tmp = 0;
@@ -1360,7 +1360,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst) const volatile
+    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
     {
         storage_type tmp = const_cast<volatile storage_type &>(v_);
         platform_fence_after_load(order);
@@ -1370,7 +1370,7 @@ public:
     }
 
     value_type
-    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile
+    exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         storage_type tmp = 0;
         memcpy(&tmp, &v, sizeof(value_type));
@@ -1387,7 +1387,7 @@ public:
         value_type & expected,
         value_type const& desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         storage_type expected_s = 0, desired_s = 0;
         memcpy(&expected_s, &expected, sizeof(value_type));
@@ -1408,13 +1408,13 @@ public:
         value_type & expected,
         value_type const& desired,
         memory_order success_order,
-        memory_order failure_order) volatile
+        memory_order failure_order) volatile BOOST_NOEXCEPT
     {
         return compare_exchange_strong(expected, desired, success_order, failure_order);
     }
 
     bool
-    is_lock_free(void) const volatile
+    is_lock_free(void)const volatile BOOST_NOEXCEPT
     {
         return true;
     }

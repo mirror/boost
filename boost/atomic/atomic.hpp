@@ -2,6 +2,7 @@
 #define BOOST_ATOMIC_ATOMIC_HPP
 
 //  Copyright (c) 2011 Helge Bahmann
+//  Copyright (c) 2013 Tim Blechmann
 //
 //  Distributed under the Boost Software License, Version 1.0.
 //  See accompanying file LICENSE_1_0.txt or copy at
@@ -88,17 +89,23 @@ private:
     typedef T value_type;
     typedef atomics::detail::base_atomic<T, typename atomics::detail::classify<T>::type, atomics::detail::storage_size_of<T>::value, boost::is_signed<T>::value > super;
 public:
-    atomic(void) : super() {}
-    explicit atomic(const value_type & v) : super(v) {}
+    atomic(void) BOOST_NOEXCEPT : super() {}
+    BOOST_CONSTEXPR atomic(value_type v) BOOST_NOEXCEPT: super(v) {}
 
-    atomic & operator=(value_type v) volatile
+    atomic & operator=(value_type v) volatile BOOST_NOEXCEPT
     {
         super::operator=(v);
         return *const_cast<atomic *>(this);
     }
+
 private:
+#ifdef BOOST_NO_CXX11_DELETED_FUNCTIONS
     atomic(const atomic &) /* =delete */ ;
-    atomic & operator=(const atomic &) /* =delete */ ;
+    atomic & operator=(const atomic &) volatile /* =delete */ ;
+#else
+    atomic(const atomic &) = delete;
+    atomic & operator=(const atomic &) volatile = delete;
+#endif
 };
 
 typedef atomic<char> atomic_char;
