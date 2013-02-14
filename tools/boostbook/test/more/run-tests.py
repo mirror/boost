@@ -90,7 +90,7 @@ def normalize_boostbook_ids(doc):
         if(id in ids):
             print 'Duplicate id: ' + id
         
-        match = re.match("(id|.+_id)(\d+)((?:-bb)?)", id)
+        match = re.match("(id|.+_id)([mp]?\d+)((?:-bb)?)", id)
         if(match):
             count = 1
             if(match.group(1) in id_bases):
