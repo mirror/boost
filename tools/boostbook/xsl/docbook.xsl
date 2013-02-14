@@ -431,12 +431,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   <xsl:template match="chapter">
     <xsl:if test="$boost.include.libraries=''">
       <chapter>
-        <xsl:for-each select="./@*">
-          <xsl:attribute name="{name(.)}">
-            <xsl:value-of select="."/>
-          </xsl:attribute>
-        </xsl:for-each>
-
+        <xsl:copy-of select="@*" />
         <xsl:apply-templates/>
       </chapter>
     </xsl:if>
