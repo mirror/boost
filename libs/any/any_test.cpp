@@ -53,6 +53,26 @@ namespace any_tests // test suite
     const test_case_iterator begin = test_cases;
     const test_case_iterator end =
         test_cases + (sizeof test_cases / sizeof *test_cases);
+
+    
+
+    struct copy_counter
+    {
+
+    public:
+
+        copy_counter() {}
+        copy_counter(const copy_counter&) { ++count; }
+        copy_counter& operator=(const copy_counter&) { ++count; }
+        static int get_count() { return count; }
+
+    private:
+
+        static int count;
+
+    };
+
+    int copy_counter::count = 0;
 }
 
 namespace any_tests // test definitions
@@ -175,6 +195,12 @@ namespace any_tests // test definitions
             any_cast<std::string>(&swapped),
             "comparing address in swapped against original");
         check_equal(swap_result, &original, "address of swap result");
+
+        any copy1 = copy_counter();
+        any copy2 = copy_counter();
+        int count = copy_counter::get_count();
+        swap(copy1, copy2);
+        check_equal(count, copy_counter::get_count(), "checking that free swap doesn't make any copies.");
     }
 
     void test_null_copying()
