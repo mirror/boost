@@ -18,9 +18,13 @@
 #include <boost/detail/workaround.hpp>
 
 #ifndef BOOST_NO_CXX11_STATIC_ASSERT
-#  define BOOST_STATIC_ASSERT_MSG( B, Msg ) static_assert(B, Msg)
+#  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
+#     define BOOST_STATIC_ASSERT_MSG( ... ) static_assert(__VA_ARGS__)
+#  else
+#     define BOOST_STATIC_ASSERT_MSG( ... ) static_assert(__VA_ARGS__)
+#  endif
 #else
-#  define BOOST_STATIC_ASSERT_MSG( B, Msg ) BOOST_STATIC_ASSERT( B )
+#     define BOOST_STATIC_ASSERT_MSG( B, Msg ) BOOST_STATIC_ASSERT( B )
 #endif
 
 #ifdef __BORLANDC__
@@ -39,13 +43,33 @@
 // then enable this:
 //
 #if defined(__GNUC__) && ((__GNUC__ > 3) || ((__GNUC__ == 3) && (__GNUC_MINOR__ >= 4)))
-#  define BOOST_STATIC_ASSERT_BOOL_CAST( x ) ((x) == 0 ? false : true)
+#  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
+#     define BOOST_STATIC_ASSERT_BOOL_CAST( ... ) ((__VA_ARGS__) == 0 ? false : true)
+#  else
+#     define BOOST_STATIC_ASSERT_BOOL_CAST( x ) ((x) == 0 ? false : true)
+#  endif
 #else
-#  define BOOST_STATIC_ASSERT_BOOL_CAST(x) (bool)(x)
+#  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
+#     define BOOST_STATIC_ASSERT_BOOL_CAST( ... ) (bool)(__VA_ARGS__)
+#  else
+#     define BOOST_STATIC_ASSERT_BOOL_CAST(x) (bool)(x)
+#  endif
+#endif
+//
+// If the compiler warns about unused typedefs then enable this:
+//
+#if defined(__GNUC__) && ((__GNUC__ > 4) || ((__GNUC__ == 4) && (__GNUC_MINOR__ >= 7)))
+#  define BOOST_STATIC_ASSERT_UNUSED_ATTRIBUTE __attribute__((unused))
+#else
+#  define BOOST_STATIC_ASSERT_UNUSED_ATTRIBUTE
 #endif
 
 #ifndef BOOST_NO_CXX11_STATIC_ASSERT
-#  define BOOST_STATIC_ASSERT( B ) static_assert(B, #B)
+#  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
+#     define BOOST_STATIC_ASSERT( ... ) static_assert(__VA_ARGS__, #__VA_ARGS__)
+#  else
+#     define BOOST_STATIC_ASSERT( B ) static_assert(B, #B)
+#  endif
 #else
 
 namespace boost{
@@ -119,17 +143,29 @@ template<int x> struct static_assert_test{};
        sizeof(::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST( B ) >) )
 #else
 // generic version
-#define BOOST_STATIC_ASSERT( B ) \
-   typedef ::boost::static_assert_test<\
-      sizeof(::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST( B ) >)>\
-         BOOST_JOIN(boost_static_assert_typedef_, __LINE__)
+#  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
+#     define BOOST_STATIC_ASSERT( ... ) \
+         typedef ::boost::static_assert_test<\
+            sizeof(::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST( __VA_ARGS__ ) >)>\
+               BOOST_JOIN(boost_static_assert_typedef_, __LINE__) BOOST_STATIC_ASSERT_UNUSED_ATTRIBUTE
+#  else
+#     define BOOST_STATIC_ASSERT( B ) \
+         typedef ::boost::static_assert_test<\
+            sizeof(::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST( B ) >)>\
+               BOOST_JOIN(boost_static_assert_typedef_, __LINE__) BOOST_STATIC_ASSERT_UNUSED_ATTRIBUTE
+#  endif
 #endif
 
 #else
 // alternative enum based implementation:
-#define BOOST_STATIC_ASSERT( B ) \
-   enum { BOOST_JOIN(boost_static_assert_enum_, __LINE__) \
-      = sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >) }
+#  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
+#    define BOOST_STATIC_ASSERT( ... ) \
+         enum { BOOST_JOIN(boost_static_assert_enum_, __LINE__) \
+            = sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( __VA_ARGS__ ) >) }
+#  else
+         enum { BOOST_JOIN(boost_static_assert_enum_, __LINE__) \
+            = sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >) }
+#  endif
 #endif
 #endif // defined(BOOST_NO_CXX11_STATIC_ASSERT)
 

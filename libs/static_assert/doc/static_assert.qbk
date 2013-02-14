@@ -151,10 +151,10 @@ using something like this:
    class myclass
    {
    private:
-      BOOST_STATIC_ASSERT((std::numeric_limits<UnsignedInt>::digits >= 16)
-                           && std::numeric_limits<UnsignedInt>::is_specialized
-                           && std::numeric_limits<UnsignedInt>::is_integer
-                           && !std::numeric_limits<UnsignedInt>::is_signed);
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<UnsignedInt>::is_specialized, "myclass can only be specialized for types with numeric_limits support.");
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<UnsignedInt>::digits >= 16, "Template argument UnsignedInt must have at least 16 bits precision.")
+      BOOST_STATIC_ASSERT_MSG(std::numeric_limits<UnsignedInt>::is_integer, "Template argument UnsignedInt must be an integer.");
+      BOOST_STATIC_ASSERT_MSG(!std::numeric_limits<UnsignedInt>::is_signed, "Template argument UnsignedInt must not be signed.");
    public:
       /* details here */
    };
