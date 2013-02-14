@@ -37,15 +37,15 @@ struct move_insert_range_proxy
       :  a_(a), first_(first)
    {}
 
-   void uninitialized_copy_n_and_update(Iterator pos, size_type n)
+   void uninitialized_copy_n_and_update(Iterator p, size_type n)
    {
       this->first_ = ::boost::container::uninitialized_move_alloc_n_source
-         (this->a_, this->first_, n, pos);
+         (this->a_, this->first_, n, p);
    }
 
-   void copy_n_and_update(Iterator pos, size_type n)
+   void copy_n_and_update(Iterator p, size_type n)
    {
-      this->first_ = ::boost::container::move_n_source(this->first_, n, pos);
+      this->first_ = ::boost::container::move_n_source(this->first_, n, p);
    }
 
    A &a_;
@@ -63,15 +63,15 @@ struct insert_range_proxy
       :  a_(a), first_(first)
    {}
 
-   void uninitialized_copy_n_and_update(Iterator pos, size_type n)
+   void uninitialized_copy_n_and_update(Iterator p, size_type n)
    {
       this->first_ = ::boost::container::uninitialized_copy_or_move_alloc_n_source
-         (this->a_, this->first_, n, pos);
+         (this->a_, this->first_, n, p);
    }
 
-   void copy_n_and_update(Iterator pos, size_type n)
+   void copy_n_and_update(Iterator p, size_type n)
    {
-      this->first_ = ::boost::container::copy_or_move_n_source(this->first_, n, pos);
+      this->first_ = ::boost::container::copy_or_move_n_source(this->first_, n, p);
    }
 
    A &a_;
@@ -90,7 +90,7 @@ struct insert_n_copies_proxy
    {}
 
    void uninitialized_copy_n_and_update(Iterator p, size_type n)
-   {  std::uninitialized_fill_n(p, n, v_);   }
+   {  boost::container::uninitialized_fill_alloc_n(this->a_, v_, n, p);  }
 
    void copy_n_and_update(Iterator p, size_type n)
    {  std::fill_n(p, n, v_);  }
@@ -112,22 +112,7 @@ struct insert_default_constructed_n_proxy
    {}
 
    void uninitialized_copy_n_and_update(Iterator p, size_type n)
-   {
-      Iterator orig_p = p;
-      size_type n_left = n;
-      BOOST_TRY{
-         for(; n_left--; ++p){
-            alloc_traits::construct(this->a_, container_detail::to_raw_pointer(&*p));
-         }
-      }
-      BOOST_CATCH(...){
-         for(; orig_p != p; ++orig_p){
-            alloc_traits::destroy(this->a_, container_detail::to_raw_pointer(&*orig_p++));
-         }
-         BOOST_RETHROW
-      }
-      BOOST_CATCH_END
-   }
+   {  boost::container::uninitialized_default_alloc_n(this->a_, n, p);  }
 
    void copy_n_and_update(Iterator, size_type)
    {
