@@ -123,11 +123,11 @@ struct coroutine_op< Signature, D, Result, 0 >
         { return const_cast< optional< Result > & >( val_).get_ptr(); }
     };
 
-    class const_iterator : public std::iterator< std::input_iterator_tag, typename remove_reference< const Result >::type >
+    class const_iterator : public std::iterator< std::input_iterator_tag, const typename remove_reference< Result >::type >
     {
     private:
-        D                       *   dp_;
-        optional< const Result >    val_;
+        D                   *   dp_;
+        optional< Result >      val_;
 
         void fetch_()
         {
@@ -152,15 +152,15 @@ struct coroutine_op< Signature, D, Result, 0 >
         }
 
     public:
-        typedef typename iterator::pointer      pointer_t;
-        typedef typename iterator::reference    reference_t;
+        typedef typename const_iterator::pointer      pointer_t;
+        typedef typename const_iterator::reference    reference_t;
 
         const_iterator() :
             dp_( 0), val_()
         {}
 
-        explicit const_iterator( D * dp) :
-            dp_( dp), val_()
+        explicit const_iterator( D const* dp) :
+            dp_( const_cast< D * >( dp) ), val_()
         { fetch_(); }
 
         const_iterator( const_iterator const& other) :

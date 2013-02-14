@@ -42,6 +42,7 @@ typedef coro::coroutine< int(int) > coro_int_int;
 typedef coro::coroutine< int*(int*) > coro_ptr;
 typedef coro::coroutine< int const&(int const&) > coro_ref;
 typedef coro::coroutine< boost::tuple<int&,int&>(int&,int&) > coro_tuple;
+typedef coro::coroutine< const int *() > coro_const_int_ptr_void;
 
 struct X : private boost::noncopyable
 {
@@ -198,6 +199,12 @@ void f18( coro_int_int::caller_type & self)
     {
         self( -1);
     }
+}
+
+void f19( coro_const_int_ptr_void::caller_type & self, std::vector< const int * > & vec)
+{
+    BOOST_FOREACH( const int * ptr, vec)
+    { self( ptr); }
 }
 
 void test_move()
@@ -410,16 +417,51 @@ void test_exceptions()
 
 void test_output_iterator()
 {
-    std::vector< int > vec;
-    coro_int_void coro( f16);
-    BOOST_FOREACH( int i, coro)
-    { vec.push_back( i); }
-    BOOST_CHECK_EQUAL( ( std::size_t)5, vec.size() );
-    BOOST_CHECK_EQUAL( ( int)1, vec[0] );
-    BOOST_CHECK_EQUAL( ( int)2, vec[1] );
-    BOOST_CHECK_EQUAL( ( int)3, vec[2] );
-    BOOST_CHECK_EQUAL( ( int)4, vec[3] );
-    BOOST_CHECK_EQUAL( ( int)5, vec[4] );
+    {
+        std::vector< int > vec;
+        coro_int_void coro( f16);
+        BOOST_FOREACH( int i, coro)
+        { vec.push_back( i); }
+        BOOST_CHECK_EQUAL( ( std::size_t)5, vec.size() );
+        BOOST_CHECK_EQUAL( ( int)1, vec[0] );
+        BOOST_CHECK_EQUAL( ( int)2, vec[1] );
+        BOOST_CHECK_EQUAL( ( int)3, vec[2] );
+        BOOST_CHECK_EQUAL( ( int)4, vec[3] );
+        BOOST_CHECK_EQUAL( ( int)5, vec[4] );
+    }
+    {
+        std::vector< int > vec;
+        coro_int_void coro( f16);
+        coro_int_void::iterator e = boost::end( coro);
+        for (
+            coro_int_void::iterator i = boost::begin( coro);
+            i != e; ++i)
+        { vec.push_back( * i); }
+        BOOST_CHECK_EQUAL( ( std::size_t)5, vec.size() );
+        BOOST_CHECK_EQUAL( ( int)1, vec[0] );
+        BOOST_CHECK_EQUAL( ( int)2, vec[1] );
+        BOOST_CHECK_EQUAL( ( int)3, vec[2] );
+        BOOST_CHECK_EQUAL( ( int)4, vec[3] );
+        BOOST_CHECK_EQUAL( ( int)5, vec[4] );
+    }
+    {
+        int i1 = 1, i2 = 2, i3 = 3;
+        std::vector< const int* > vec_in;
+        vec_in.push_back( & i1);
+        vec_in.push_back( & i2);
+        vec_in.push_back( & i3);
+        std::vector< const int* > vec_out;
+        coro_const_int_ptr_void coro( boost::bind( f19, _1, boost::ref( vec_in) ) );
+        coro_const_int_ptr_void::const_iterator e = boost::const_end( coro);
+        for (
+            coro_const_int_ptr_void::const_iterator i = boost::const_begin( coro);
+            i != e; ++i)
+        { vec_out.push_back( * i); }
+        BOOST_CHECK_EQUAL( ( std::size_t)3, vec_out.size() );
+        BOOST_CHECK_EQUAL( & i1, vec_out[0] );
+        BOOST_CHECK_EQUAL( & i2, vec_out[1] );
+        BOOST_CHECK_EQUAL( & i3, vec_out[2] );
+    }
 }
 
 void test_input_iterator()
@@ -464,7 +506,6 @@ void test_post()
     coro( -1);
     BOOST_CHECK( ! coro);
 }
-
 
 boost::unit_test::test_suite * init_unit_test_suite( int, char* [])
 {

@@ -9,9 +9,6 @@ import boostbook ;
 import quickbook ;
 import modules ;
 
-path-constant images_location : html ;
-path-constant here : . ;
-
 boostbook coro
     :
         coro.qbk
@@ -29,7 +26,4 @@ boostbook coro
         <xsl:param>toc.max.depth=3
         # How far down we go with TOC's
         <xsl:param>generate.section.toc.level=10
-        <format>pdf:<xsl:param>img.src.path=$(images_location)/
     ;
-
-
