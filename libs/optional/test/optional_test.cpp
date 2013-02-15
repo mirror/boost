@@ -840,11 +840,19 @@ void test_with_builtin_types()
   test_none( ARG(double) ) ;
 }
 
+// MSVC < 11.0 doesn't destroy X when we call ptr->VBase::VBase.
+// Make sure that we work around this bug.
+struct VBase : virtual X
+{
+    VBase(int v) : X(v) {}
+};
+
 void test_with_class_type()
 {
   TRACE( std::endl << BOOST_CURRENT_FUNCTION   );
 
   test_basics( ARG(X) );
+  test_basics( ARG(VBase) );
   test_conditional_ctor_and_get_valur_or( ARG(X) );
   test_direct_value_manip( ARG(X) );
   test_uninitialized_access( ARG(X) );
