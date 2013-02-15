@@ -35,12 +35,12 @@
     optional<string> name ;
     if ( database.open() )
     {
-        name.reset ( database.lookup(employer_name) ) ;
+        name = database.lookup(employer_name) ;
     }
     else
     {
         if ( can_ask_user )
-            name.reset ( user.ask(employer_name) ) ;
+            name = user.ask(employer_name) ;
     }
 
     if ( name )
@@ -63,7 +63,7 @@
         void clip_in_rect ( rect const& rect )
         {
             ....
-            m_clipping_rect.reset ( rect ) ; // initialized here.
+            m_clipping_rect = rect ; // initialized here.
         }
 
         void draw ( canvas& cvs )
