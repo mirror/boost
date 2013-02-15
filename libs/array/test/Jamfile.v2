@@ -18,7 +18,7 @@ test-suite array :
     [ run array5.cpp ]
     [ run array6.cpp unit_test_framework  : : : : array6 ]
     [ run array7.cpp unit_test_framework  : : : : array7 ]
-    [ run array_constexpr.cpp unit_test_framework  : : : : array_constexpr ]
+#    [ run array_constexpr.cpp unit_test_framework  : : : : array_constexpr ]
     [ compile-fail array_getfail1.cpp ]
     [ compile-fail array_getfail2.cpp ]
     [ run array_hash.cpp unit_test_framework  : : : : array_hash ]

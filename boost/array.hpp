@@ -125,14 +125,14 @@ namespace boost {
             return BOOST_ASSERT_MSG( i < N, "out of range" ), elems[i]; 
         }
         
-        BOOST_CONSTEXPR const_reference operator[](size_type i) const 
+        /*BOOST_CONSTEXPR*/ const_reference operator[](size_type i) const 
         {     
             return BOOST_ASSERT_MSG( i < N, "out of range" ), elems[i]; 
         }
 
         // at() with range check
-        reference                       at(size_type i)       { return rangecheck(i), elems[i]; }
-        BOOST_CONSTEXPR const_reference at(size_type i) const { return rangecheck(i), elems[i]; }
+        reference                           at(size_type i)       { return rangecheck(i), elems[i]; }
+        /*BOOST_CONSTEXPR*/ const_reference at(size_type i) const { return rangecheck(i), elems[i]; }
     
         // front() and back()
         reference front() 
@@ -261,14 +261,14 @@ namespace boost {
             return failed_rangecheck();
         }
 
-        BOOST_CONSTEXPR const_reference operator[](size_type /*i*/) const
+        /*BOOST_CONSTEXPR*/ const_reference operator[](size_type /*i*/) const
         {
             return failed_rangecheck();
         }
 
         // at() with range check
         reference at(size_type /*i*/)               {   return failed_rangecheck(); }
-        BOOST_CONSTEXPR const_reference at(size_type /*i*/) const   {   return failed_rangecheck(); }
+        /*BOOST_CONSTEXPR*/ const_reference at(size_type /*i*/) const   { return failed_rangecheck(); }
 
         // front() and back()
         reference front()
