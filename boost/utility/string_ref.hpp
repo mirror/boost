@@ -155,7 +155,7 @@ namespace boost {
             }
         
         int compare(basic_string_ref x) const {
-            int cmp = traits::compare ( ptr_, x.ptr_, (std::min)(len_, x.len_));
+            const int cmp = traits::compare ( ptr_, x.ptr_, (std::min)(len_, x.len_));
             return cmp != 0 ? cmp : ( len_ == x.len_ ? 0 : len_ < x.len_ ? -1 : 1 );
             }
         
@@ -172,7 +172,7 @@ namespace boost {
         size_type find(basic_string_ref s) const {
             const_iterator iter = std::search ( this->cbegin (), this->cend (), 
                                                 s.cbegin (), s.cend (), traits::eq );
-            return iter = this->cend () ? npos : std::distance ( this->cbegin (), iter );
+            return iter == this->cend () ? npos : std::distance ( this->cbegin (), iter );
             }
         
         size_type find(charT c) const {
@@ -198,7 +198,7 @@ namespace boost {
         
         size_type find_first_of(basic_string_ref s) const {
             const_iterator iter = std::find_first_of 
-            	( this->cbegin (), this->cend (), s.cbegin (), s.cend (), traits::eq );
+                ( this->cbegin (), this->cend (), s.cbegin (), s.cend (), traits::eq );
             return iter == this->cend () ? npos : std::distance ( this->cbegin (), iter );
             }
         

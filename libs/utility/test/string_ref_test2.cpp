@@ -95,23 +95,33 @@ void find ( const char *arg ) {
     const char *p;
 
 //  Look for each character in the string(searching from the start)
-  p = arg;
-  sr1 = arg;
-  while ( *p ) {
-    string_ref::size_type pos = sr1.find(*p);
-    BOOST_CHECK ( pos != string_ref::npos && ( pos <= ptr_diff ( p, arg )));
-    ++p;
-    }
+    p = arg;
+    sr1 = arg;
+    while ( *p ) {
+      string_ref::size_type pos = sr1.find(*p);
+      BOOST_CHECK ( pos != string_ref::npos && ( pos <= ptr_diff ( p, arg )));
+      ++p;
+      }
   
 //  Look for each character in the string (searching from the end)
     p = arg;
     sr1 = arg;
     while ( *p ) {
-    string_ref::size_type pos = sr1.rfind(*p);
-    BOOST_CHECK ( pos != string_ref::npos && pos < sr1.size () && ( pos >= ptr_diff ( p, arg )));
-    ++p;
-    }
+      string_ref::size_type pos = sr1.rfind(*p);
+      BOOST_CHECK ( pos != string_ref::npos && pos < sr1.size () && ( pos >= ptr_diff ( p, arg )));
+      ++p;
+      }
 
+//	Look for pairs on characters (searching from the start)
+    sr1 = arg;
+    p = arg;
+	while ( *p && *(p+1)) {
+		string_ref sr3 ( p, 2 );
+		string_ref::size_type pos = sr1.find ( sr3 );
+		BOOST_CHECK ( pos != string_ref::npos && pos <= ( p - arg ));
+		p++;
+		}
+		
     sr1 = arg;
     p = arg;
 //  for all possible chars, see if we find them in the right place.
@@ -231,6 +241,56 @@ void find ( const char *arg ) {
 
     }
 
+#if 0
+void to_string ( const char *arg ) {
+    string_ref sr1;
+	std::string str1;
+	std::string str2;
+
+	str1.assign ( arg );
+	sr1 = arg;
+//	str2 = sr1.to_string<std::allocator<char> > ();
+	str2 = sr1.to_string ();
+	BOOST_CHECK ( str1 == str2 );
+
+#ifndef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+	std::string str3 = static_cast<std::string> ( sr1 );
+	BOOST_CHECK ( str1 == str3 );
+#endif
+    }
+
+void compare ( const char *arg ) {
+    string_ref sr1;
+	std::string str1;
+	std::string str2 = str1;
+
+	str1.assign ( arg );
+	sr1 = arg;
+	BOOST_CHECK ( sr1  == str1);	// compare string and string_ref
+	BOOST_CHECK ( str1 == sr1 );	// compare string_ref and string
+	BOOST_CHECK ( sr1  == arg );	// compare string_ref and pointer
+	BOOST_CHECK ( arg  == sr1 );	// compare pointer and string_ref
+
+	if ( sr1.size () > 0 ) {
+		(*str1.rbegin())++;
+		BOOST_CHECK ( sr1  != str1 );
+		BOOST_CHECK ( str1 != sr1 );
+		BOOST_CHECK ( sr1 < str1 );
+		BOOST_CHECK ( sr1 <= str1 );
+		BOOST_CHECK ( str1 > sr1 );
+		BOOST_CHECK ( str1 >= sr1 );
+
+		(*str1.rbegin()) -= 2;
+		BOOST_CHECK ( sr1  != str1 );
+		BOOST_CHECK ( str1 != sr1 );
+		BOOST_CHECK ( sr1 > str1 );
+		BOOST_CHECK ( sr1 >= str1 );
+		BOOST_CHECK ( str1 < sr1 );
+		BOOST_CHECK ( str1 <= sr1 );
+		}
+    }
+#endif
+
 const char *test_strings [] = {
     "",
     "0",
@@ -250,7 +310,9 @@ BOOST_AUTO_TEST_CASE( test_main )
         ends_with ( *p );
         reverse ( *p );
         find ( *p );
-
+//        to_string ( *p );
+//		compare ( *p );
+		
         p++;
         }
 }
