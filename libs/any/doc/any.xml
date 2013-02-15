@@ -396,6 +396,22 @@ public:
             </method>
           </method-group>
         </class>
+        
+        <function name="swap">
+          <type>void</type>
+          <parameter name="lhs">
+            <paramtype><classname>any</classname> &amp;</paramtype>
+          </parameter>
+          <parameter name="rhs">
+              <paramtype><classname>any</classname> &amp;</paramtype>
+          </parameter>
+
+            <effects><simpara>Exchange of the contents of
+            <code>lhs</code> and
+            <code>rhs</code>.</simpara></effects>
+
+            <throws><simpara>Nothing.</simpara></throws>
+        </function>
 
         <overloaded-function name="any_cast">
           <signature>
