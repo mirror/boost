@@ -660,7 +660,7 @@ __SPACE__
 [: `optional<T>::operator `['unspecified-bool-type]`() const ;`]
 
 * [*Returns:] An unspecified value which if used on a boolean context
-is equivalent to (`get() != 0`)
+is equivalent to (`get_ptr() != 0`)
 * [*Throws:] Nothing.
 * [*Example:]
 ``
@@ -697,15 +697,7 @@ __SPACE__
 
 [: `bool optional<T>::is_initialized() const ;`]
 
-* [*Returns: ] `true` if the `optional` is initialized, `false` otherwise.
-* [*Throws:] Nothing.
-* [*Example:]
-``
-optional<T> def ;
-assert ( !def.is_initialized() );
-optional<T> opt ( v ) ;
-assert ( opt.is_initialized() );
-``
+* [*Deprecated:] Same as `operator `['unspecified-bool-type]`() ;`
 
 __SPACE__
 
