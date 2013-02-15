@@ -386,7 +386,7 @@ __SPACE__
 * [*Effect:] (Re)binds the wrapped reference.
 * [*Postconditions: ] `*this` is initialized and it references the same
 object referenced by `rhs`.
-* [*Notes:] If `*this` was initialized, is is ['rebound] to the new object.
+* [*Notes:] If `*this` was initialized, it is ['rebound] to the new object.
 See [link boost_optional.rebinding_semantics_for_assignment_of_optional_references here] for details on this behavior.
 * [*Example:]
 ``
@@ -445,7 +445,7 @@ __SPACE__
 * [*Postconditions:] If `*rhs` is initialized, `*this` is initialized and it
 references the same object referenced by `*rhs`; otherwise, `*this` is
 uninitialized (and references no object).
-* [*Notes:] If `*this` was initialized and so is *rhs, this is is ['rebound] to
+* [*Notes:] If `*this` was initialized and so is `*rhs`, `*this` is ['rebound] to
 the new object. See [link boost_optional.rebinding_semantics_for_assignment_of_optional_references here] for details on this behavior.
 * [*Example:]
 ``
