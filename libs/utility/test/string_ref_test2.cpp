@@ -118,7 +118,7 @@ void find ( const char *arg ) {
 	while ( *p && *(p+1)) {
 		string_ref sr3 ( p, 2 );
 		string_ref::size_type pos = sr1.find ( sr3 );
-		BOOST_CHECK ( pos != string_ref::npos && pos <= ( p - arg ));
+		BOOST_CHECK ( pos != string_ref::npos && pos <= static_cast<string_ref::size_type>( p - arg ));
 		p++;
 		}
 		
@@ -241,7 +241,7 @@ void find ( const char *arg ) {
 
     }
 
-#if 0
+
 void to_string ( const char *arg ) {
     string_ref sr1;
 	std::string str1;
@@ -289,7 +289,6 @@ void compare ( const char *arg ) {
 		BOOST_CHECK ( str1 <= sr1 );
 		}
     }
-#endif
 
 const char *test_strings [] = {
     "",
@@ -310,8 +309,8 @@ BOOST_AUTO_TEST_CASE( test_main )
         ends_with ( *p );
         reverse ( *p );
         find ( *p );
-//        to_string ( *p );
-//		compare ( *p );
+        to_string ( *p );
+		compare ( *p );
 		
         p++;
         }

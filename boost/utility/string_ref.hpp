@@ -34,6 +34,8 @@ namespace boost {
             bool operator () ( charT val ) const { return traits::eq ( ch_, val ); }
             charT ch_;
             };
+            
+        template<typename T> struct __identity { typedef T type; };
         }
     
     template<typename charT, typename traits> class basic_string_ref;
@@ -94,6 +96,10 @@ namespace boost {
             }
 #endif
         
+        std::basic_string<charT, traits> to_string () const {
+            return std::basic_string<charT, traits> ( ptr_, len_ );
+            }
+
         // iterators
         BOOST_CONSTEXPR const_iterator   begin() const { return ptr_; }
         BOOST_CONSTEXPR const_iterator  cbegin() const { return ptr_; }
@@ -252,38 +258,98 @@ namespace boost {
         std::size_t len_;
         };
     
-    // Comparison operators
+
+//  Comparison operators (3 for each operation)
+//  Equality
     template<typename charT, typename traits>
     bool operator==(basic_string_ref<charT, traits> x, basic_string_ref<charT, traits> y) {
         if ( x.size () != y.size ()) return false;
         return x.compare(y) == 0;
         }
+    template<typename charT, typename traits>
+    bool operator==(basic_string_ref<charT, traits> x, typename detail::__identity<basic_string_ref<charT, traits> >::type y) {
+        if ( x.size () != y.size ()) return false;
+        return x.compare(y) == 0;
+        }
+    template<typename charT, typename traits>
+    bool operator==(typename detail::__identity<basic_string_ref<charT, traits> >::type x, basic_string_ref<charT, traits> y) {
+        if ( x.size () != y.size ()) return false;
+        return x.compare(y) == 0;
+        }
     
+//  Inequality
     template<typename charT, typename traits>
     bool operator!=(basic_string_ref<charT, traits> x, basic_string_ref<charT, traits> y) {
         if ( x.size () != y.size ()) return true;
         return x.compare(y) != 0;
         }
+    template<typename charT, typename traits>
+    bool operator!=(basic_string_ref<charT, traits> x, typename detail::__identity<basic_string_ref<charT, traits> >::type y) {
+        if ( x.size () != y.size ()) return true;
+        return x.compare(y) != 0;
+        }
+    template<typename charT, typename traits>
+    bool operator!=(typename detail::__identity<basic_string_ref<charT, traits> >::type x, basic_string_ref<charT, traits> y) {
+        if ( x.size () != y.size ()) return true;
+        return x.compare(y) != 0;
+        }
 
+//  Less than
     template<typename charT, typename traits>
     bool operator<(basic_string_ref<charT, traits> x, basic_string_ref<charT, traits> y) {
         return x.compare(y) < 0;
         }
+    template<typename charT, typename traits>
+    bool operator<(basic_string_ref<charT, traits> x, typename detail::__identity<basic_string_ref<charT, traits> >::type y) {
+        return x.compare(y) < 0;
+        }
+    template<typename charT, typename traits>
+    bool operator<(typename detail::__identity<basic_string_ref<charT, traits> >::type x, basic_string_ref<charT, traits> y) {
+        return x.compare(y) < 0;
+        }
 
+//  Greater than
     template<typename charT, typename traits>
     bool operator>(basic_string_ref<charT, traits> x, basic_string_ref<charT, traits> y) {
         return x.compare(y) > 0;
         }
+    template<typename charT, typename traits>
+    bool operator>(basic_string_ref<charT, traits> x, typename detail::__identity<basic_string_ref<charT, traits> >::type y) {
+        return x.compare(y) > 0;
+        }
+    template<typename charT, typename traits>
+    bool operator>(typename detail::__identity<basic_string_ref<charT, traits> >::type x, basic_string_ref<charT, traits> y) {
+        return x.compare(y) > 0;
+        }
 
+//  Less than or equal to
     template<typename charT, typename traits>
     bool operator<=(basic_string_ref<charT, traits> x, basic_string_ref<charT, traits> y) {
         return x.compare(y) <= 0;
         }
+    template<typename charT, typename traits>
+    bool operator<=(basic_string_ref<charT, traits> x, typename detail::__identity<basic_string_ref<charT, traits> >::type y) {
+        return x.compare(y) <= 0;
+        }
+    template<typename charT, typename traits>
+    bool operator<=(typename detail::__identity<basic_string_ref<charT, traits> >::type x, basic_string_ref<charT, traits> y) {
+        return x.compare(y) <= 0;
+        }
 
+//  Greater than or equal to
     template<typename charT, typename traits>
     bool operator>=(basic_string_ref<charT, traits> x, basic_string_ref<charT, traits> y) {
         return x.compare(y) >= 0;
         }
+    template<typename charT, typename traits>
+    bool operator>=(basic_string_ref<charT, traits> x, typename detail::__identity<basic_string_ref<charT, traits> >::type y) {
+        return x.compare(y) >= 0;
+        }
+    template<typename charT, typename traits>
+    bool operator>=(typename detail::__identity<basic_string_ref<charT, traits> >::type x, basic_string_ref<charT, traits> y) {
+        return x.compare(y) >= 0;
+        }
+
 
     
     // Inserter
