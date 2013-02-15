@@ -155,9 +155,9 @@ required.
 
 Segmented stack are currently only supported by [*gcc] from version [*4.7] onwards.
 n order to use __segmented_stack__ compile __boost_coroutine__ with
-[*cxxflags="-fsplit-stack -DBOOST_USE_SEGMENTED_STACKS" linkflags="-static-libgcc"]
-at b2/bjam command-line and compile the application using __boost_coroutine__ with
-[*cxxflags="-fsplit-stack -DBOOST_USE_SEGMENTED_STACKS"].
+[*segmented-stacks=on] at b2/bjam command-line. Application using __boost_coroutine__
+with enabled __segmented-stack__ must be compiled with compiler-flags
+[*-fsplit-stack -DBOOST_USE_SEGMENTED_STACKS].
 
 [endsect]
 
