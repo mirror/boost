@@ -120,7 +120,7 @@ a fully constructed object, often temporary, just to follow the copy from:
 
     struct X
     {
-        X ( int, std:::string ) ;
+        X ( int, std::string ) ;
     } ;
 
     class W
@@ -291,7 +291,7 @@ Because of the current implementation (see [link boost_optional.implementation_n
 * `template<class U> optional<T>::operator= ( optional<U> const& )`
 * `template<class InPlaceFactory> optional<T>::operator= ( InPlaceFactory const& )`
 * `template<class TypedInPlaceFactory> optional<T>::operator= ( TypedInPlaceFactory const& ) `
-* `optional<T>:::reset ( T const&)`
+* `optional<T>::reset ( T const&)`
 
 Can only ['guarantee] the [_basic exception safety]: The lvalue optional is
 left [_uninitialized] if an exception is thrown (any previous value is ['first]
