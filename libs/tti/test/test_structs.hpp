@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2011
+//  (C) Copyright Edward Diener 2011,2012
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -53,6 +53,16 @@ struct AType
   double AConstFunction(long, char) const { return 2.57; }
   void WFunction(float, double) const { }
   
+  // Volatile function
+  
+  double AVolatileFunction(long, char) volatile { return 2.58; }
+  void VolFunction(float, double) volatile { }
+  
+  // Const Volatile function
+  
+  double ACVFunction(long, char) const volatile { return 2.59; }
+  void ConstVolFunction(float, double) const volatile { }
+  
   // Function Templates
   
   template<class X,int Y> int AFuncTemplate(const X &) { return Y; }
@@ -91,7 +101,6 @@ struct AnotherType
   bool cMem;
   long AnInt;
   AType OtherAT;
-  const AType COtherAT;
   AType::AStructType ONestStr;
   
   // Function
@@ -103,8 +112,18 @@ struct AnotherType
   
   // Const function
   
-  int AnotherConstFunction(const AType *, short) const { return 0; }
-  const AType * StillSame(int) const { return &COtherAT; }
+  int AnotherConstFunction(AType *, short) const { return 0; }
+  AType StillSame(int) const { return OtherAT; }
+  
+  // Volatile function
+  
+  int AnotherVolatileFunction(AType *, short) volatile { return 0; }
+  bool StillVolatile(int) volatile { return false; }
+  
+  // Const Volatile function
+  
+  int AnotherConstVolatileFunction(AType *, short) const volatile { return 0; }
+  short StillCV(int) const volatile { return 32; }
   
   // Function Templates
   

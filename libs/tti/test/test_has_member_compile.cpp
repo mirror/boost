@@ -23,11 +23,6 @@ int main()
   BOOST_MPL_ASSERT((AnotherIntFunction<int (AnotherType::*)(AType)>));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(sFunction)<AType::AnIntType (AnotherType::*)(int,long,double)>));
   
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(AConstFunction)<double (AType::*)(long,char) const>));
-  BOOST_MPL_ASSERT((StillTest<const AType * (AnotherType::*)(int) const>));
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(AnotherConstFunction)<int (AnotherType::*)(const AType *, short) const>));
-  BOOST_MPL_ASSERT((AskIfConst<void (AType::*)(float,double) const>));
-  
   return 0;
 
   }

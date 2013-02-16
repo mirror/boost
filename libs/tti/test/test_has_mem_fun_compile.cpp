@@ -23,16 +23,6 @@ int main()
   BOOST_MPL_ASSERT((AnotherIntFunction<AnotherType,int,boost::mpl::vector<AType> >));
   BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(sFunction)<AnotherType,AType::AnIntType,boost::mpl::vector<int,long,double> >));
   
-  // Use const enclosing type
-  
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(AnotherConstFunction)<const AnotherType,int,boost::mpl::vector<const AType *, short> >));
-  BOOST_MPL_ASSERT((AskIfConst<const AType,void,boost::mpl::vector<float,double> >));
-  
-  // Use const_qualified
-  
-  BOOST_MPL_ASSERT((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(AConstFunction)<AType,double,boost::mpl::vector<long,char>,boost::function_types::const_qualified>));
-  BOOST_MPL_ASSERT((StillTest<AnotherType,const AType *,boost::mpl::vector<int>,boost::function_types::const_qualified>));
-  
   return 0;
 
   }

@@ -17,25 +17,36 @@ called 'has_member_function_'name_of_inner_member_function'.
 
 The metafunction can be invoked in two different ways.
 
-The first way is by passing it the enclosing type to 
-introspect and a signature for the member function as separate template 
-arguments. The signature for the member function consists of a return 
-type, optional parameter types in the form of a boost::mpl forward 
-sequence of types, and an optional Boost FunctionTypes tag type. A 
-typical boost::mpl forward sequence of types is a boost::mpl::vector<>.
+The first way of invoking the metafunction is by passing it the enclosing 
+type to introspect and a signature for the member function as a series of 
+separate template arguments. The signature for the member function consists 
+of the template arguments of a return type, of optional parameter types in 
+the form of a boost::mpl forward sequence of types, and of an optional Boost 
+FunctionTypes tag type. A typical boost::mpl forward sequence of types is 
+a boost::mpl::vector<>.
 
-The second way is by passing it a single parameter, which is a pointer
-to member function. This type has the form of:
+The optional Boost FunctionTypes tag type may be used to specify 
+cv-qualification. This means you can add 'const', 'volatile', or both by 
+specifying an appropriate tag type. An alternate to using the tag type 
+is to specify the enclosing type as 'const', 'volatile', or both.
+As an example if you specify the tag type as 
+'boost::function_types::const_qualified' or if you specify the enclosing
+type as 'const T', the member function which you are introspecting 
+must be a const function.
 
- Return_Type Enclosing_Type::* ( Parameter_Types )
+The second way of invoking the metafunction is by passing it a single 
+parameter, which is a pointer to member function. This type has the form of:
+
+ Return_Type Enclosing_Type::* ( Parameter_Types ) cv_qualifier(s)
  
 where the Parameter_Types may be empty, or a comma-separated 
 list of parameter types if there are more than one parameter type.
+The cv-qualifier may be 'const', 'volatile', or 'const volatile'.
 
 The metafunction returns a single type called 'type', which is a 
 boost::mpl::bool_. As a convenience the metafunction 
 returns the value of this type directly as a compile time bool constant 
-called 'value'. This is true or false depending on whether the inner 
+called 'value'. This 'value' is true or false depending on whether the inner 
 member function, of the specified signature, exists or not.
 
 [heading Generating the metafunction]
@@ -68,7 +79,7 @@ A return value called 'value' is a compile time bool constant.
   
   has_member_function_AMemberFunction
     <
-    MemberFunction_ReturnType Enclosing_Type::* (MemberFunction_ParameterTypes)
+    MemberFunction_ReturnType Enclosing_Type::* (MemberFunction_ParameterTypes) optional_cv_qualification
     >::value
     
 [heading Examples]

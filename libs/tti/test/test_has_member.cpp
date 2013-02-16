@@ -18,11 +18,6 @@ int main()
   BOOST_TEST(BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(sFunction)<AType::AnIntType (AnotherType::*)(int,long,double)>::value);
   BOOST_TEST(!BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(someFunctionMember)<AType (AnotherType::*)(long,int)>::value);
   
-  BOOST_TEST((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(AConstFunction)<double (AType::*)(long,char) const>::value));
-  BOOST_TEST((StillTest<const AType * (AnotherType::*)(int) const>::value));
-  BOOST_TEST((BOOST_TTI_HAS_MEMBER_FUNCTION_GEN(AnotherConstFunction)<int (AnotherType::*)(const AType *, short) const>::value));
-  BOOST_TEST((AskIfConst<void (AType::*)(float,double) const>::value));
-  
   return boost::report_errors();
 
   }

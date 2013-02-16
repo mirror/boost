@@ -29,8 +29,17 @@ alias ttimfsig
         [ compile test_has_member_compile.cpp ]
         [ compile-fail test_has_member_fail.cpp ]
         [ compile-fail test_has_member_fail2.cpp ]
-        [ compile-fail test_has_member_fail3.cpp ]
-        [ compile-fail test_has_member_fail4.cpp ]
+    ;
+
+#
+# Member functions composite syntax, cv-qualified
+#
+alias ttimfsigcv
+    :
+        [ run test_has_member_cv.cpp ]
+        [ compile test_has_member_cv_compile.cpp ]
+        [ compile-fail test_has_member_cv_fail.cpp ]
+        [ compile-fail test_has_member_cv_fail2.cpp ]
     ;
 
 #
@@ -55,8 +64,17 @@ alias ttimfn
         [ compile test_has_mem_fun_compile.cpp ]
         [ compile-fail test_has_mem_fun_fail.cpp ]
         [ compile-fail test_has_mem_fun_fail2.cpp ]
-        [ compile-fail test_has_mem_fun_fail3.cpp ]
-        [ compile-fail test_has_mem_fun_fail4.cpp ]
+    ;
+
+#
+# Member functions specific syntax
+#
+alias ttimfncv
+    :
+        [ run test_has_mem_fun_cv.cpp ]
+        [ compile test_has_mem_fun_cv_compile.cpp ]
+        [ compile-fail test_has_mem_fun_cv_fail.cpp ]
+        [ compile-fail test_has_mem_fun_cv_fail2.cpp ]
     ;
 
 #
