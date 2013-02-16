@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Detailed Semantics</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Optional">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Optional">
 <link rel="prev" href="synopsis.html" title="Synopsis">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="synopsis.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="examples.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section boost_optional_detailed_semantics">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_optional.detailed_semantics"></a><a class="link" href="detailed_semantics.html" title="Detailed Semantics">Detailed Semantics</a>
 </h2></div></div></div>
@@ -31,7 +31,7 @@
       type, in the sequel, those entries whose semantic depends on <code class="computeroutput"><span class="identifier">T</span></code> being of reference type or not will be
       distinguished using the following convention:
     </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           If the entry reads: <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span></code><span class="emphasis"><em>(not
           a ref)</em></span><code class="computeroutput"><span class="special">&gt;</span></code>, the
@@ -63,9 +63,9 @@
 <p>
       <span class="inlinemediaobject"><img src="../images/space.png" alt="space"></span>
     </p>
-<a name="boost_optional.detailed_semantics.optional_class_member_functions"></a><h4>
-<a name="boost_optional.detailed_semantics.optional_class_member_functions-heading"></a>
-      <a class="link" href="detailed_semantics.html#boost_optional.detailed_semantics.optional_class_member_functions">optional
+<h4>
+<a name="boost_optional.detailed_semantics.h0"></a>
+      <span class="phrase"><a name="boost_optional.detailed_semantics.optional_class_member_functions"></a></span><a class="link" href="detailed_semantics.html#boost_optional.detailed_semantics.optional_class_member_functions">optional
       class member functions</a>
     </h4>
 <p>
@@ -74,7 +74,7 @@
 <a name="reference_optional_constructor"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">optional</span><span class="special">();</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Default-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
         </li>
@@ -89,7 +89,7 @@
           called.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">def</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
@@ -101,7 +101,7 @@
 <a name="reference_optional_constructor_none_t"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">optional</span><span class="special">(</span> <span class="identifier">none_t</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>
           uninitialized.
@@ -118,7 +118,7 @@
           The expression <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">none</span></code> denotes an instance of <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">none_t</span></code> that can be used as the parameter.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="preprocessor">#include</span> <span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">none</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">n</span><span class="special">(</span><span class="identifier">none</span><span class="special">)</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">n</span> <span class="special">)</span> <span class="special">;</span>
@@ -131,7 +131,7 @@
 <a name="reference_optional_constructor_value"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span> </code><span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;::</span><span class="identifier">optional</span><span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">v</span> <span class="special">)</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Directly-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
         </li>
@@ -157,7 +157,7 @@
           has no effect.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">opt</span> <span class="special">==</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
@@ -170,7 +170,7 @@
 <div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;::</span><span class="identifier">optional</span><span class="special">(</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">ref</span> <span class="special">)</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Directly-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
         </li>
@@ -183,13 +183,13 @@
           <span class="bold"><strong>Throws:</strong></span> Nothing.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">vref</span> <span class="special">=</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">vref</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">opt</span> <span class="special">==</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
-<span class="special">++</span> <span class="identifier">v</span> <span class="special">;</span> <span class="comment">// mutate referee
-</span><span class="identifier">assert</span> <span class="special">(*</span><span class="identifier">opt</span> <span class="special">==</span> <span class="identifier">v</span><span class="special">);</span>
+<span class="special">++</span> <span class="identifier">v</span> <span class="special">;</span> <span class="comment">// mutate referee</span>
+<span class="identifier">assert</span> <span class="special">(*</span><span class="identifier">opt</span> <span class="special">==</span> <span class="identifier">v</span><span class="special">);</span>
 </pre>
         </li>
 </ul></div>
@@ -203,7 +203,7 @@
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="special">::</span><span class="identifier">optional</span><span class="special">(</span> <span class="keyword">bool</span> <span class="identifier">condition</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&amp;</span>
         <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
           If condition is true, same as:
         </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -213,7 +213,7 @@
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="special">::</span><span class="identifier">optional</span><span class="special">(</span> <span class="identifier">T</span><span class="special">&amp;</span>
         <span class="identifier">v</span> <span class="special">)</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
           otherwise, same as:
         </li></ul></div>
 <div class="blockquote"><blockquote class="blockquote"><p>
@@ -228,7 +228,7 @@
 <a name="reference_optional_constructor_optional"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span> </code><span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;::</span><span class="identifier">optional</span><span class="special">(</span> <span class="identifier">optional</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Copy-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
         </li>
@@ -256,7 +256,7 @@
           has no effect.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">uninit</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(!</span><span class="identifier">uninit</span><span class="special">);</span>
 
@@ -277,7 +277,7 @@
 <div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;::</span><span class="identifier">optional</span><span class="special">(</span> <span class="identifier">optional</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Copy-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
         </li>
@@ -299,7 +299,7 @@
           will reefer to the same object (they alias).
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">uninit</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(!</span><span class="identifier">uninit</span><span class="special">);</span>
 
@@ -327,7 +327,7 @@
         <code class="computeroutput"><span class="keyword">template</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;</span> <span class="keyword">explicit</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span></code>
         <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;::</span><span class="identifier">optional</span><span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rhs</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Copy-Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>.
         </li>
@@ -359,7 +359,7 @@
           has no effect.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">(</span><span class="number">123.4</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">x</span> <span class="special">==</span> <span class="number">123.4</span> <span class="special">)</span> <span class="special">;</span>
 
@@ -381,7 +381,7 @@
         <span class="keyword">explicit</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span></code>
         <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;::</span><span class="identifier">optional</span><span class="special">(</span> <span class="identifier">TypedInPlaceFactory</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">f</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Constructs an <code class="computeroutput"><span class="identifier">optional</span></code>
           with a value of <code class="computeroutput"><span class="identifier">T</span></code> obtained
@@ -407,14 +407,14 @@
           effect.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="keyword">class</span> <span class="identifier">C</span> <span class="special">{</span> <span class="identifier">C</span> <span class="special">(</span> <span class="keyword">char</span><span class="special">,</span> <span class="keyword">double</span><span class="special">,</span> <span class="identifier">std</span><span class="special">::</span><span class="identifier">string</span> <span class="special">)</span> <span class="special">;</span> <span class="special">}</span> <span class="special">;</span>
 
 <span class="identifier">C</span> <span class="identifier">v</span><span class="special">(</span><span class="char">'A'</span><span class="special">,</span><span class="number">123.4</span><span class="special">,</span><span class="string">"hello"</span><span class="special">);</span>
 
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">C</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">(</span> <span class="identifier">in_place</span>   <span class="special">(</span><span class="char">'A'</span><span class="special">,</span> <span class="number">123.4</span><span class="special">,</span> <span class="string">"hello"</span><span class="special">)</span> <span class="special">);</span> <span class="comment">// InPlaceFactory used
-</span><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">C</span><span class="special">&gt;</span> <span class="identifier">y</span><span class="special">(</span> <span class="identifier">in_place</span><span class="special">&lt;</span><span class="identifier">C</span><span class="special">&gt;(</span><span class="char">'A'</span><span class="special">,</span> <span class="number">123.4</span><span class="special">,</span> <span class="string">"hello"</span><span class="special">)</span> <span class="special">);</span> <span class="comment">// TypedInPlaceFactory used
-</span>
+<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">C</span><span class="special">&gt;</span> <span class="identifier">x</span><span class="special">(</span> <span class="identifier">in_place</span>   <span class="special">(</span><span class="char">'A'</span><span class="special">,</span> <span class="number">123.4</span><span class="special">,</span> <span class="string">"hello"</span><span class="special">)</span> <span class="special">);</span> <span class="comment">// InPlaceFactory used</span>
+<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">C</span><span class="special">&gt;</span> <span class="identifier">y</span><span class="special">(</span> <span class="identifier">in_place</span><span class="special">&lt;</span><span class="identifier">C</span><span class="special">&gt;(</span><span class="char">'A'</span><span class="special">,</span> <span class="number">123.4</span><span class="special">,</span> <span class="string">"hello"</span><span class="special">)</span> <span class="special">);</span> <span class="comment">// TypedInPlaceFactory used</span>
+
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">x</span> <span class="special">==</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">y</span> <span class="special">==</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
@@ -430,7 +430,7 @@
         <span class="identifier">rhs</span> <span class="special">)</span>
         <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Assigns the value <code class="computeroutput"><span class="identifier">rhs</span></code> to an <code class="computeroutput"><span class="identifier">optional</span></code>.
         </li>
@@ -455,7 +455,7 @@
           <span class="emphasis"><em>copy constructor</em></span> fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">;</span>
@@ -477,7 +477,7 @@
         <span class="identifier">rhs</span> <span class="special">)</span>
         <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> (Re)binds the wrapped reference.
         </li>
@@ -486,12 +486,12 @@
           same object referenced by <code class="computeroutput"><span class="identifier">rhs</span></code>.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Notes:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> was initialized, is is <span class="emphasis"><em>rebound</em></span>
+          <span class="bold"><strong>Notes:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> was initialized, it is <span class="emphasis"><em>rebound</em></span>
           to the new object. See <a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html" title="Rebinding semantics for assignment of optional references">here</a>
           for details on this behavior.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
@@ -499,14 +499,14 @@
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">ra</span><span class="special">)</span> <span class="special">;</span>
 
-<span class="identifier">def</span> <span class="special">=</span> <span class="identifier">rb</span> <span class="special">;</span> <span class="comment">// binds 'def' to 'b' through 'rb'
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">def</span> <span class="special">==</span> <span class="identifier">b</span> <span class="special">)</span> <span class="special">;</span>
-<span class="special">*</span><span class="identifier">def</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span> <span class="comment">// changes the value of 'b' to a copy of the value of 'a'
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">b</span> <span class="special">==</span> <span class="identifier">a</span> <span class="special">)</span> <span class="special">;</span>
+<span class="identifier">def</span> <span class="special">=</span> <span class="identifier">rb</span> <span class="special">;</span> <span class="comment">// binds 'def' to 'b' through 'rb'</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">def</span> <span class="special">==</span> <span class="identifier">b</span> <span class="special">)</span> <span class="special">;</span>
+<span class="special">*</span><span class="identifier">def</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span> <span class="comment">// changes the value of 'b' to a copy of the value of 'a'</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">b</span> <span class="special">==</span> <span class="identifier">a</span> <span class="special">)</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">c</span> <span class="special">=</span> <span class="number">3</span><span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rc</span> <span class="special">=</span> <span class="identifier">c</span> <span class="special">;</span>
-<span class="identifier">opt</span> <span class="special">=</span> <span class="identifier">rc</span> <span class="special">;</span> <span class="comment">// REBINDS to 'c' through 'rc'
-</span><span class="identifier">c</span> <span class="special">=</span> <span class="number">4</span> <span class="special">;</span>
+<span class="identifier">opt</span> <span class="special">=</span> <span class="identifier">rc</span> <span class="special">;</span> <span class="comment">// REBINDS to 'c' through 'rc'</span>
+<span class="identifier">c</span> <span class="special">=</span> <span class="number">4</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">opt</span> <span class="special">==</span> <span class="number">4</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
         </li>
@@ -521,7 +521,7 @@
         <span class="identifier">rhs</span> <span class="special">)</span>
         <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Assigns another <code class="computeroutput"><span class="identifier">optional</span></code> to an <code class="computeroutput"><span class="identifier">optional</span></code>.
         </li>
@@ -555,15 +555,15 @@
           <span class="emphasis"><em>copy constructor</em></span> fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 
 <span class="identifier">opt</span> <span class="special">=</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">def</span> <span class="special">)</span> <span class="special">;</span>
-<span class="comment">// previous value (copy of 'v') destroyed from within 'opt'.
-</span></pre>
+<span class="comment">// previous value (copy of 'v') destroyed from within 'opt'.</span>
+</pre>
         </li>
 </ul></div>
 <p>
@@ -575,7 +575,7 @@
         <span class="identifier">rhs</span> <span class="special">)</span>
         <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> (Re)binds thee wrapped reference.
         </li>
@@ -585,12 +585,13 @@
           object).
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Notes:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> was initialized and so is *rhs, this
-          is is <span class="emphasis"><em>rebound</em></span> to the new object. See <a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html" title="Rebinding semantics for assignment of optional references">here</a>
+          <span class="bold"><strong>Notes:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> was initialized and so is <code class="computeroutput"><span class="special">*</span><span class="identifier">rhs</span></code>,
+          <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code>
+          is <span class="emphasis"><em>rebound</em></span> to the new object. See <a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html" title="Rebinding semantics for assignment of optional references">here</a>
           for details on this behavior.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="keyword">int</span> <span class="identifier">a</span> <span class="special">=</span> <span class="number">1</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
@@ -599,15 +600,15 @@
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">ora</span><span class="special">(</span><span class="identifier">ra</span><span class="special">)</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">orb</span><span class="special">(</span><span class="identifier">rb</span><span class="special">)</span> <span class="special">;</span>
 
-<span class="identifier">def</span> <span class="special">=</span> <span class="identifier">orb</span> <span class="special">;</span> <span class="comment">// binds 'def' to 'b' through 'rb' wrapped within 'orb'
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">def</span> <span class="special">==</span> <span class="identifier">b</span> <span class="special">)</span> <span class="special">;</span>
-<span class="special">*</span><span class="identifier">def</span> <span class="special">=</span> <span class="identifier">ora</span> <span class="special">;</span> <span class="comment">// changes the value of 'b' to a copy of the value of 'a'
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">b</span> <span class="special">==</span> <span class="identifier">a</span> <span class="special">)</span> <span class="special">;</span>
+<span class="identifier">def</span> <span class="special">=</span> <span class="identifier">orb</span> <span class="special">;</span> <span class="comment">// binds 'def' to 'b' through 'rb' wrapped within 'orb'</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">def</span> <span class="special">==</span> <span class="identifier">b</span> <span class="special">)</span> <span class="special">;</span>
+<span class="special">*</span><span class="identifier">def</span> <span class="special">=</span> <span class="identifier">ora</span> <span class="special">;</span> <span class="comment">// changes the value of 'b' to a copy of the value of 'a'</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">b</span> <span class="special">==</span> <span class="identifier">a</span> <span class="special">)</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">c</span> <span class="special">=</span> <span class="number">3</span><span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rc</span> <span class="special">=</span> <span class="identifier">c</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">orc</span><span class="special">(</span><span class="identifier">rc</span><span class="special">)</span> <span class="special">;</span>
-<span class="identifier">ora</span> <span class="special">=</span> <span class="identifier">orc</span> <span class="special">;</span> <span class="comment">// REBINDS ora to 'c' through 'rc'
-</span><span class="identifier">c</span> <span class="special">=</span> <span class="number">4</span> <span class="special">;</span>
+<span class="identifier">ora</span> <span class="special">=</span> <span class="identifier">orc</span> <span class="special">;</span> <span class="comment">// REBINDS ora to 'c' through 'rc'</span>
+<span class="identifier">c</span> <span class="special">=</span> <span class="number">4</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">ora</span> <span class="special">==</span> <span class="number">4</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
         </li>
@@ -622,7 +623,7 @@
         <span class="identifier">rhs</span> <span class="special">)</span>
         <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Assigns another convertible optional
           to an optional.
@@ -662,7 +663,7 @@
           converting constructor fails, <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is left properly uninitialized.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt0</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">U</span><span class="special">&gt;</span> <span class="identifier">opt1</span><span class="special">;</span>
@@ -687,7 +688,7 @@
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="identifier">f</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> Assigns an <code class="computeroutput"><span class="identifier">optional</span></code>
           with a value of <code class="computeroutput"><span class="identifier">T</span></code> obtained
@@ -720,7 +721,7 @@
         <code class="computeroutput"><span class="keyword">void</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span></code>
         <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
           <span class="bold"><strong>Deprecated:</strong></span> same as <code class="computeroutput"><span class="keyword">operator</span><span class="special">=</span> <span class="special">(</span> <span class="identifier">T</span>
           <span class="keyword">const</span><span class="special">&amp;</span>
           <span class="identifier">v</span><span class="special">)</span>
@@ -732,7 +733,7 @@
 <a name="reference_optional_reset"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="keyword">void</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">reset</span><span class="special">()</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc"><li class="listitem">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
           <span class="bold"><strong>Deprecated:</strong></span> Same as <code class="computeroutput"><span class="keyword">operator</span><span class="special">=(</span> <span class="identifier">detail</span><span class="special">::</span><span class="identifier">none_t</span> <span class="special">);</span></code>
         </li></ul></div>
 <p>
@@ -765,7 +766,7 @@
         <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;</span>
         <span class="special">&amp;)</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Requirements:</strong></span> <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized
         </li>
@@ -781,7 +782,7 @@
           <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">);</span>
 <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">u</span> <span class="special">=</span> <span class="special">*</span><span class="identifier">opt</span><span class="special">;</span>
@@ -818,7 +819,7 @@
         <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;&amp;</span>
         <span class="identifier">o</span><span class="special">,</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="keyword">default</span> <span class="special">)</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns:</strong></span> A reference to the contained
           value, if any, or <code class="computeroutput"><span class="keyword">default</span></code>.
@@ -827,7 +828,7 @@
           <span class="bold"><strong>Throws:</strong></span> Nothing.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">,</span> <span class="identifier">z</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span><span class="special">;</span>
 <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">y</span> <span class="special">=</span> <span class="identifier">def</span><span class="special">.</span><span class="identifier">get_value_or</span><span class="special">(</span><span class="identifier">z</span><span class="special">);</span>
@@ -867,7 +868,7 @@
         <code class="computeroutput"><span class="keyword">inline</span> <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">get</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span>
         <span class="special">&amp;)</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Requirements: </strong></span> <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized
         </li>
@@ -883,7 +884,7 @@
           <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">T</span><span class="special">&amp;</span> <span class="identifier">vref</span> <span class="special">=</span> <span class="identifier">v</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">vref</span> <span class="special">);</span>
@@ -916,7 +917,7 @@
         <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;</span>
         <span class="special">&amp;)</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized, a pointer to the contained
           value; else <code class="computeroutput"><span class="number">0</span></code> (<span class="emphasis"><em>null</em></span>).
@@ -930,7 +931,7 @@
           so you should not hold nor delete this pointer
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">v</span><span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span> <span class="identifier">copt</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
@@ -953,7 +954,7 @@
         <code class="computeroutput"><span class="identifier">T</span><span class="special">*</span>
         <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span></code> <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;::</span><span class="keyword">operator</span> <span class="special">-&gt;()</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Requirements: </strong></span> <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is initialized.
         </li>
@@ -968,7 +969,7 @@
           <code class="computeroutput"><span class="identifier">BOOST_ASSERT</span><span class="special">()</span></code>.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="keyword">struct</span> <span class="identifier">X</span> <span class="special">{</span> <span class="keyword">int</span> <span class="identifier">mdata</span> <span class="special">;</span> <span class="special">}</span> <span class="special">;</span>
 <span class="identifier">X</span> <span class="identifier">x</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
@@ -982,16 +983,16 @@
 <a name="reference_optional_operator_bool"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span> </code><span class="emphasis"><em>unspecified-bool-type</em></span><code class="computeroutput"><span class="special">()</span> <span class="keyword">const</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns:</strong></span> An unspecified value which if
-          used on a boolean context is equivalent to (<code class="computeroutput"><span class="identifier">get</span><span class="special">()</span> <span class="special">!=</span> <span class="number">0</span></code>)
+          used on a boolean context is equivalent to (<code class="computeroutput"><span class="identifier">get_ptr</span><span class="special">()</span> <span class="special">!=</span> <span class="number">0</span></code>)
         </li>
 <li class="listitem">
           <span class="bold"><strong>Throws:</strong></span> Nothing.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def</span> <span class="special">==</span> <span class="number">0</span> <span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
@@ -1006,7 +1007,7 @@
 <a name="reference_optional_operator_not"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="keyword">operator</span><span class="special">!()</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns:</strong></span> If <code class="computeroutput"><span class="special">*</span><span class="keyword">this</span></code> is uninitialized, <code class="computeroutput"><span class="keyword">true</span></code>;
           else <code class="computeroutput"><span class="keyword">false</span></code>.
@@ -1020,13 +1021,13 @@
           in certain boolean contexts.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">opt</span> <span class="special">);</span>
 <span class="special">*</span><span class="identifier">opt</span> <span class="special">=</span> <span class="identifier">some_T</span> <span class="special">;</span>
 
-<span class="comment">// Notice the "double-bang" idiom here.
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="special">!!</span><span class="identifier">opt</span> <span class="special">)</span> <span class="special">;</span>
+<span class="comment">// Notice the "double-bang" idiom here.</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="special">!!</span><span class="identifier">opt</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
         </li>
 </ul></div>
@@ -1037,30 +1038,18 @@
         <code class="computeroutput"><span class="keyword">bool</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">is_initialized</span><span class="special">()</span>
         <span class="keyword">const</span> <span class="special">;</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
-<li class="listitem">
-          <span class="bold"><strong>Returns: </strong></span> <code class="computeroutput"><span class="keyword">true</span></code>
-          if the <code class="computeroutput"><span class="identifier">optional</span></code> is initialized,
-          <code class="computeroutput"><span class="keyword">false</span></code> otherwise.
-        </li>
-<li class="listitem">
-          <span class="bold"><strong>Throws:</strong></span> Nothing.
-        </li>
-<li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
-<pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
-<span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">def</span><span class="special">.</span><span class="identifier">is_initialized</span><span class="special">()</span> <span class="special">);</span>
-<span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">opt</span> <span class="special">(</span> <span class="identifier">v</span> <span class="special">)</span> <span class="special">;</span>
-<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">opt</span><span class="special">.</span><span class="identifier">is_initialized</span><span class="special">()</span> <span class="special">);</span>
-</pre>
-        </li>
-</ul></div>
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; "><li class="listitem">
+          <span class="bold"><strong>Deprecated:</strong></span> Same as <code class="computeroutput"><span class="keyword">operator</span>
+          </code><span class="emphasis"><em>unspecified-bool-type</em></span><code class="computeroutput"><span class="special">()</span>
+          <span class="special">;</span></code>
+        </li></ul></div>
 <p>
       <span class="inlinemediaobject"><img src="../images/space.png" alt="space"></span>
     </p>
-<a name="boost_optional.detailed_semantics.free_functions"></a><h4>
-<a name="boost_optional.detailed_semantics.free_functions-heading"></a>
-      <a class="link" href="detailed_semantics.html#boost_optional.detailed_semantics.free_functions">Free functions</a>
+<h4>
+<a name="boost_optional.detailed_semantics.h1"></a>
+      <span class="phrase"><a name="boost_optional.detailed_semantics.free_functions"></a></span><a class="link" href="detailed_semantics.html#boost_optional.detailed_semantics.free_functions">Free
+      functions</a>
     </h4>
 <p>
       <span class="inlinemediaobject"><img src="../images/space.png" alt="space"></span>
@@ -1068,17 +1057,17 @@
 <a name="reference_make_optional_value"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span></code> <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;</span> <span class="identifier">make_optional</span><span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">v</span> <span class="special">)</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns: </strong></span> <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">v</span><span class="special">)</span></code> for the <span class="emphasis"><em>deduced</em></span> type
           <code class="computeroutput"><span class="identifier">T</span></code> of <code class="computeroutput"><span class="identifier">v</span></code>.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="keyword">template</span><span class="special">&lt;</span><span class="keyword">class</span> <span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">void</span> <span class="identifier">foo</span> <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">opt</span> <span class="special">)</span> <span class="special">;</span>
 
-<span class="identifier">foo</span> <span class="special">(</span> <span class="identifier">make_optional</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">)</span> <span class="special">;</span> <span class="comment">// Creates an optional&lt;int&gt;
-</span></pre>
+<span class="identifier">foo</span> <span class="special">(</span> <span class="identifier">make_optional</span><span class="special">(</span><span class="number">1</span><span class="special">+</span><span class="number">1</span><span class="special">)</span> <span class="special">)</span> <span class="special">;</span> <span class="comment">// Creates an optional&lt;int&gt;</span>
+</pre>
         </li>
 </ul></div>
 <p>
@@ -1087,14 +1076,14 @@
 <a name="reference_make_optional_bool_value"></a><div class="blockquote"><blockquote class="blockquote"><p>
         <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span></code> <span class="emphasis"><em>(not a ref)</em></span><code class="computeroutput"><span class="special">&gt;</span> <span class="identifier">make_optional</span><span class="special">(</span> <span class="keyword">bool</span> <span class="identifier">condition</span><span class="special">,</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">v</span> <span class="special">)</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns: </strong></span> <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;(</span><span class="identifier">condition</span><span class="special">,</span><span class="identifier">v</span><span class="special">)</span></code>
           for the <span class="emphasis"><em>deduced</em></span> type <code class="computeroutput"><span class="identifier">T</span></code>
           of <code class="computeroutput"><span class="identifier">v</span></code>.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">double</span><span class="special">&gt;</span> <span class="identifier">calculate_foo</span><span class="special">()</span>
 <span class="special">{</span>
   <span class="keyword">double</span> <span class="identifier">val</span> <span class="special">=</span> <span class="identifier">compute_foo</span><span class="special">();</span>
@@ -1116,7 +1105,7 @@
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="identifier">y</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns:</strong></span> If both <code class="computeroutput"><span class="identifier">x</span></code>
           and <code class="computeroutput"><span class="identifier">y</span></code> are initialized,
@@ -1137,7 +1126,7 @@
           instead
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">z</span><span class="special">(</span><span class="number">21</span><span class="special">);</span>
@@ -1147,18 +1136,18 @@
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">optY</span><span class="special">(</span><span class="identifier">y</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">optZ</span><span class="special">(</span><span class="identifier">z</span><span class="special">);</span>
 
-<span class="comment">// Identity always hold
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">==</span> <span class="identifier">def0</span> <span class="special">);</span>
+<span class="comment">// Identity always hold</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">==</span> <span class="identifier">def0</span> <span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">optX</span> <span class="special">==</span> <span class="identifier">optX</span> <span class="special">);</span>
 
-<span class="comment">// Both uninitialized compare equal
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">==</span> <span class="identifier">def1</span> <span class="special">);</span>
+<span class="comment">// Both uninitialized compare equal</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">==</span> <span class="identifier">def1</span> <span class="special">);</span>
 
-<span class="comment">// Only one initialized compare unequal.
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">!=</span> <span class="identifier">optX</span> <span class="special">);</span>
+<span class="comment">// Only one initialized compare unequal.</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">!=</span> <span class="identifier">optX</span> <span class="special">);</span>
 
-<span class="comment">// Both initialized compare as (*lhs == *rhs)
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">optX</span> <span class="special">==</span> <span class="identifier">optY</span> <span class="special">)</span> <span class="special">;</span>
+<span class="comment">// Both initialized compare as (*lhs == *rhs)</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">optX</span> <span class="special">==</span> <span class="identifier">optY</span> <span class="special">)</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">optX</span> <span class="special">!=</span> <span class="identifier">optZ</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
         </li>
@@ -1172,7 +1161,7 @@
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="identifier">y</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns:</strong></span> If <code class="computeroutput"><span class="identifier">y</span></code>
           is not initialized, <code class="computeroutput"><span class="keyword">false</span></code>.
@@ -1194,25 +1183,25 @@
           instead.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">34</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">optX</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">optY</span><span class="special">(</span><span class="identifier">y</span><span class="special">);</span>
 
-<span class="comment">// Identity always hold
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="special">!(</span><span class="identifier">def</span> <span class="special">&lt;</span> <span class="identifier">def</span><span class="special">)</span> <span class="special">);</span>
+<span class="comment">// Identity always hold</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="special">!(</span><span class="identifier">def</span> <span class="special">&lt;</span> <span class="identifier">def</span><span class="special">)</span> <span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">optX</span> <span class="special">==</span> <span class="identifier">optX</span> <span class="special">);</span>
 
-<span class="comment">// Both uninitialized compare equal
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">==</span> <span class="identifier">def1</span> <span class="special">);</span>
+<span class="comment">// Both uninitialized compare equal</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">==</span> <span class="identifier">def1</span> <span class="special">);</span>
 
-<span class="comment">// Only one initialized compare unequal.
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">!=</span> <span class="identifier">optX</span> <span class="special">);</span>
+<span class="comment">// Only one initialized compare unequal.</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">def0</span> <span class="special">!=</span> <span class="identifier">optX</span> <span class="special">);</span>
 
-<span class="comment">// Both initialized compare as (*lhs == *rhs)
-</span><span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">optX</span> <span class="special">==</span> <span class="identifier">optY</span> <span class="special">)</span> <span class="special">;</span>
+<span class="comment">// Both initialized compare as (*lhs == *rhs)</span>
+<span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">optX</span> <span class="special">==</span> <span class="identifier">optY</span> <span class="special">)</span> <span class="special">;</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="identifier">optX</span> <span class="special">!=</span> <span class="identifier">optZ</span> <span class="special">)</span> <span class="special">;</span>
 </pre>
         </li>
@@ -1226,7 +1215,7 @@
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="identifier">y</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns: </strong></span> <code class="computeroutput"><span class="special">!(</span>
           <span class="identifier">x</span> <span class="special">==</span>
@@ -1245,7 +1234,7 @@
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="identifier">y</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns: </strong></span> <code class="computeroutput"><span class="special">(</span>
           <span class="identifier">y</span> <span class="special">&lt;</span>
@@ -1265,7 +1254,7 @@
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="identifier">y</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns: </strong></span> <code class="computeroutput"><span class="special">!(</span>
           <span class="identifier">y</span><span class="special">&lt;</span><span class="identifier">x</span> <span class="special">);</span></code>
@@ -1284,7 +1273,7 @@
         <span class="keyword">const</span><span class="special">&amp;</span>
         <span class="identifier">y</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Returns: </strong></span> <code class="computeroutput"><span class="special">!(</span>
           <span class="identifier">x</span><span class="special">&lt;</span><span class="identifier">y</span> <span class="special">);</span></code>
@@ -1301,7 +1290,7 @@
         <span class="special">(</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span>
         <span class="identifier">x</span><span class="special">,</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;&amp;</span> <span class="identifier">y</span> <span class="special">);</span></code>
       </p></blockquote></div>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
           <span class="bold"><strong>Effect:</strong></span> If both <code class="computeroutput"><span class="identifier">x</span></code>
           and <code class="computeroutput"><span class="identifier">y</span></code> are initialized,
@@ -1331,7 +1320,7 @@
           If only one is initialized, it has the same basic guarantee as <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;::</span><span class="identifier">reset</span><span class="special">(</span> <span class="identifier">T</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="special">)</span></code>.
         </li>
 <li class="listitem">
-          <span class="bold"><strong>Example:</strong></span> 
+          <span class="bold"><strong>Example:</strong></span>
 <pre class="programlisting"><span class="identifier">T</span> <span class="identifier">x</span><span class="special">(</span><span class="number">12</span><span class="special">);</span>
 <span class="identifier">T</span> <span class="identifier">y</span><span class="special">(</span><span class="number">21</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">def0</span> <span class="special">;</span>
@@ -1339,14 +1328,14 @@
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">optX</span><span class="special">(</span><span class="identifier">x</span><span class="special">);</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&gt;</span> <span class="identifier">optY</span><span class="special">(</span><span class="identifier">y</span><span class="special">);</span>
 
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">swap</span><span class="special">(</span><span class="identifier">def0</span><span class="special">,</span><span class="identifier">def1</span><span class="special">);</span> <span class="comment">// no-op
-</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">swap</span><span class="special">(</span><span class="identifier">def0</span><span class="special">,</span><span class="identifier">def1</span><span class="special">);</span> <span class="comment">// no-op</span>
+
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">swap</span><span class="special">(</span><span class="identifier">def0</span><span class="special">,</span><span class="identifier">optX</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">def0</span> <span class="special">==</span> <span class="identifier">x</span> <span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">optX</span> <span class="special">);</span>
 
-<span class="identifier">boost</span><span class="special">::</span><span class="identifier">swap</span><span class="special">(</span><span class="identifier">def0</span><span class="special">,</span><span class="identifier">optX</span><span class="special">);</span> <span class="comment">// Get back to original values
-</span>
+<span class="identifier">boost</span><span class="special">::</span><span class="identifier">swap</span><span class="special">(</span><span class="identifier">def0</span><span class="special">,</span><span class="identifier">optX</span><span class="special">);</span> <span class="comment">// Get back to original values</span>
+
 <span class="identifier">boost</span><span class="special">::</span><span class="identifier">swap</span><span class="special">(</span><span class="identifier">optX</span><span class="special">,</span><span class="identifier">optY</span><span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">optX</span> <span class="special">==</span> <span class="identifier">y</span> <span class="special">);</span>
 <span class="identifier">assert</span> <span class="special">(</span> <span class="special">*</span><span class="identifier">optY</span> <span class="special">==</span> <span class="identifier">x</span> <span class="special">);</span>

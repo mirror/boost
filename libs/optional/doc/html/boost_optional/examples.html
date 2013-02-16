@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Examples</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Optional">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Optional">
 <link rel="prev" href="detailed_semantics.html" title="Detailed Semantics">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="detailed_semantics.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="optional_references.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section boost_optional_examples">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_optional.examples"></a><a class="link" href="examples.html" title="Examples">Examples</a>
 </h2></div></div></div>
@@ -36,7 +36,7 @@
 <dt><span class="section"><a href="examples.html#boost_optional.examples.bypassing_expensive_unnecessary_default_construction">Bypassing
       expensive unnecessary default construction</a></span></dt>
 </dl></div>
-<div class="section">
+<div class="section boost_optional_examples_optional_return_values">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_optional.examples.optional_return_values"></a><a class="link" href="examples.html#boost_optional.examples.optional_return_values" title="Optional return values">Optional
       return values</a>
@@ -45,19 +45,19 @@
 <span class="special">{</span>
     <span class="keyword">if</span> <span class="special">(</span> <span class="special">!</span><span class="identifier">queue</span><span class="special">.</span><span class="identifier">empty</span><span class="special">()</span> <span class="special">)</span>
         <span class="keyword">return</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;(</span><span class="identifier">queue</span><span class="special">.</span><span class="identifier">top</span><span class="special">());</span>
-    <span class="keyword">else</span> <span class="keyword">return</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;();</span> <span class="comment">// uninitialized
-</span><span class="special">}</span>
+    <span class="keyword">else</span> <span class="keyword">return</span> <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;();</span> <span class="comment">// uninitialized</span>
+<span class="special">}</span>
 
 <span class="keyword">void</span> <span class="identifier">receive_async_message</span><span class="special">()</span>
 <span class="special">{</span>
     <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">char</span><span class="special">&gt;</span> <span class="identifier">rcv</span> <span class="special">;</span>
-    <span class="comment">// The safe boolean conversion from 'rcv' is used here.
-</span>    <span class="keyword">while</span> <span class="special">(</span> <span class="special">(</span><span class="identifier">rcv</span> <span class="special">=</span> <span class="identifier">get_async_input</span><span class="special">())</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">timeout</span><span class="special">()</span> <span class="special">)</span>
+    <span class="comment">// The safe boolean conversion from 'rcv' is used here.</span>
+    <span class="keyword">while</span> <span class="special">(</span> <span class="special">(</span><span class="identifier">rcv</span> <span class="special">=</span> <span class="identifier">get_async_input</span><span class="special">())</span> <span class="special">&amp;&amp;</span> <span class="special">!</span><span class="identifier">timeout</span><span class="special">()</span> <span class="special">)</span>
         <span class="identifier">output</span><span class="special">(*</span><span class="identifier">rcv</span><span class="special">);</span>
 <span class="special">}</span>
 </pre>
 </div>
-<div class="section">
+<div class="section boost_optional_examples_optional_local_variables">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_optional.examples.optional_local_variables"></a><a class="link" href="examples.html#boost_optional.examples.optional_local_variables" title="Optional local variables">Optional
       local variables</a>
@@ -65,12 +65,12 @@
 <pre class="programlisting"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">string</span><span class="special">&gt;</span> <span class="identifier">name</span> <span class="special">;</span>
 <span class="keyword">if</span> <span class="special">(</span> <span class="identifier">database</span><span class="special">.</span><span class="identifier">open</span><span class="special">()</span> <span class="special">)</span>
 <span class="special">{</span>
-    <span class="identifier">name</span><span class="special">.</span><span class="identifier">reset</span> <span class="special">(</span> <span class="identifier">database</span><span class="special">.</span><span class="identifier">lookup</span><span class="special">(</span><span class="identifier">employer_name</span><span class="special">)</span> <span class="special">)</span> <span class="special">;</span>
+    <span class="identifier">name</span> <span class="special">=</span> <span class="identifier">database</span><span class="special">.</span><span class="identifier">lookup</span><span class="special">(</span><span class="identifier">employer_name</span><span class="special">)</span> <span class="special">;</span>
 <span class="special">}</span>
 <span class="keyword">else</span>
 <span class="special">{</span>
     <span class="keyword">if</span> <span class="special">(</span> <span class="identifier">can_ask_user</span> <span class="special">)</span>
-        <span class="identifier">name</span><span class="special">.</span><span class="identifier">reset</span> <span class="special">(</span> <span class="identifier">user</span><span class="special">.</span><span class="identifier">ask</span><span class="special">(</span><span class="identifier">employer_name</span><span class="special">)</span> <span class="special">)</span> <span class="special">;</span>
+        <span class="identifier">name</span> <span class="special">=</span> <span class="identifier">user</span><span class="special">.</span><span class="identifier">ask</span><span class="special">(</span><span class="identifier">employer_name</span><span class="special">)</span> <span class="special">;</span>
 <span class="special">}</span>
 
 <span class="keyword">if</span> <span class="special">(</span> <span class="identifier">name</span> <span class="special">)</span>
@@ -78,7 +78,7 @@
 <span class="keyword">else</span> <span class="identifier">print</span><span class="special">(</span><span class="string">"employer's name not found!"</span><span class="special">);</span>
 </pre>
 </div>
-<div class="section">
+<div class="section boost_optional_examples_optional_data_members">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_optional.examples.optional_data_members"></a><a class="link" href="examples.html#boost_optional.examples.optional_data_members" title="Optional data members">Optional
       data members</a>
@@ -89,14 +89,14 @@
 
     <span class="identifier">figure</span><span class="special">()</span>
     <span class="special">{</span>
-        <span class="comment">// data member 'm_clipping_rect' is uninitialized at this point.
-</span>    <span class="special">}</span>
+        <span class="comment">// data member 'm_clipping_rect' is uninitialized at this point.</span>
+    <span class="special">}</span>
 
     <span class="keyword">void</span> <span class="identifier">clip_in_rect</span> <span class="special">(</span> <span class="identifier">rect</span> <span class="keyword">const</span><span class="special">&amp;</span> <span class="identifier">rect</span> <span class="special">)</span>
     <span class="special">{</span>
         <span class="special">....</span>
-        <span class="identifier">m_clipping_rect</span><span class="special">.</span><span class="identifier">reset</span> <span class="special">(</span> <span class="identifier">rect</span> <span class="special">)</span> <span class="special">;</span> <span class="comment">// initialized here.
-</span>    <span class="special">}</span>
+        <span class="identifier">m_clipping_rect</span> <span class="special">=</span> <span class="identifier">rect</span> <span class="special">;</span> <span class="comment">// initialized here.</span>
+    <span class="special">}</span>
 
     <span class="keyword">void</span> <span class="identifier">draw</span> <span class="special">(</span> <span class="identifier">canvas</span><span class="special">&amp;</span> <span class="identifier">cvs</span> <span class="special">)</span>
     <span class="special">{</span>
@@ -106,8 +106,8 @@
         <span class="identifier">cvs</span><span class="special">.</span><span class="identifier">drawXXX</span><span class="special">(..);</span>
     <span class="special">}</span>
 
-    <span class="comment">// this can return NULL.
-</span>    <span class="identifier">rect</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">get_clipping_rect</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">get_pointer</span><span class="special">(</span><span class="identifier">m_clipping_rect</span><span class="special">);</span> <span class="special">}</span>
+    <span class="comment">// this can return NULL.</span>
+    <span class="identifier">rect</span> <span class="keyword">const</span><span class="special">*</span> <span class="identifier">get_clipping_rect</span><span class="special">()</span> <span class="special">{</span> <span class="keyword">return</span> <span class="identifier">get_pointer</span><span class="special">(</span><span class="identifier">m_clipping_rect</span><span class="special">);</span> <span class="special">}</span>
 
     <span class="keyword">private</span> <span class="special">:</span>
 
@@ -116,7 +116,7 @@
 <span class="special">};</span>
 </pre>
 </div>
-<div class="section">
+<div class="section boost_optional_examples_bypassing_expensive_unnecessary_default_construction">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_optional.examples.bypassing_expensive_unnecessary_default_construction"></a><a class="link" href="examples.html#boost_optional.examples.bypassing_expensive_unnecessary_default_construction" title="Bypassing expensive unnecessary default construction">Bypassing
       expensive unnecessary default construction</a>

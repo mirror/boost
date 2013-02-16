@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>A note about optional&lt;bool&gt;</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Optional">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Optional">
 <link rel="prev" href="in_place_factories.html" title="In-Place Factories">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="in_place_factories.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="exception_safety_guarantees.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section boost_optional_a_note_about_optional_bool_">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_optional.a_note_about_optional_bool_"></a><a class="link" href="a_note_about_optional_bool_.html" title="A note about optional&lt;bool&gt;">A note about
     optional&lt;bool&gt;</a>
@@ -54,11 +54,11 @@
 <span class="special">{</span>
     <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">bool</span><span class="special">&gt;</span> <span class="identifier">v</span> <span class="special">=</span> <span class="keyword">try</span><span class="special">();</span>
 
-    <span class="comment">// The following intended to pass the value of 'v' to foo():
-</span>    <span class="identifier">foo</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
-    <span class="comment">// But instead, the initialization state is passed
-</span>    <span class="comment">// due to a typo: it should have been foo(*v).
-</span><span class="special">}</span>
+    <span class="comment">// The following intended to pass the value of 'v' to foo():</span>
+    <span class="identifier">foo</span><span class="special">(</span><span class="identifier">v</span><span class="special">);</span>
+    <span class="comment">// But instead, the initialization state is passed</span>
+    <span class="comment">// due to a typo: it should have been foo(*v).</span>
+<span class="special">}</span>
 </pre>
 <p>
       The only implicit conversion is to <code class="computeroutput"><span class="keyword">bool</span></code>,

@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Rebinding semantics for assignment of optional references</title>
 <link rel="stylesheet" href="../boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Chapter&#160;1.&#160;Boost.Optional">
 <link rel="up" href="../index.html" title="Chapter&#160;1.&#160;Boost.Optional">
 <link rel="prev" href="optional_references.html" title="Optional references">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="optional_references.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="in_place_factories.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section boost_optional_rebinding_semantics_for_assignment_of_optional_references">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_optional.rebinding_semantics_for_assignment_of_optional_references"></a><a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html" title="Rebinding semantics for assignment of optional references">Rebinding
     semantics for assignment of optional references</a>
@@ -36,9 +36,9 @@
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rx</span> <span class="special">=</span> <span class="identifier">x</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">ora</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">orb</span><span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">;</span>
-<span class="identifier">ora</span> <span class="special">=</span> <span class="identifier">orb</span> <span class="special">;</span> <span class="comment">// now 'ora' is bound to 'x' through 'rx'
-</span><span class="special">*</span><span class="identifier">ora</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span> <span class="comment">// Changes value of 'x' through 'ora'
-</span><span class="identifier">assert</span><span class="special">(</span><span class="identifier">x</span><span class="special">==</span><span class="number">2</span><span class="special">);</span> 
+<span class="identifier">ora</span> <span class="special">=</span> <span class="identifier">orb</span> <span class="special">;</span> <span class="comment">// now 'ora' is bound to 'x' through 'rx'</span>
+<span class="special">*</span><span class="identifier">ora</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span> <span class="comment">// Changes value of 'x' through 'ora'</span>
+<span class="identifier">assert</span><span class="special">(</span><span class="identifier">x</span><span class="special">==</span><span class="number">2</span><span class="special">);</span>
 </pre>
 <p>
       If you assign to a bare C++ reference, the assignment is forwarded to the referenced
@@ -48,11 +48,11 @@
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">a</span> <span class="special">;</span>
 <span class="keyword">int</span> <span class="identifier">b</span> <span class="special">=</span> <span class="number">2</span> <span class="special">;</span>
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rb</span> <span class="special">=</span> <span class="identifier">b</span> <span class="special">;</span>
-<span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">rb</span> <span class="special">;</span> <span class="comment">// Changes the value of 'a' to 'b'
-</span><span class="identifier">assert</span><span class="special">(</span><span class="identifier">a</span><span class="special">==</span><span class="identifier">b</span><span class="special">);</span>
+<span class="identifier">ra</span> <span class="special">=</span> <span class="identifier">rb</span> <span class="special">;</span> <span class="comment">// Changes the value of 'a' to 'b'</span>
+<span class="identifier">assert</span><span class="special">(</span><span class="identifier">a</span><span class="special">==</span><span class="identifier">b</span><span class="special">);</span>
 <span class="identifier">b</span> <span class="special">=</span> <span class="number">3</span> <span class="special">;</span>
-<span class="identifier">assert</span><span class="special">(</span><span class="identifier">ra</span><span class="special">!=</span><span class="identifier">b</span><span class="special">);</span> <span class="comment">// 'ra' is not rebound to 'b'
-</span></pre>
+<span class="identifier">assert</span><span class="special">(</span><span class="identifier">ra</span><span class="special">!=</span><span class="identifier">b</span><span class="special">);</span> <span class="comment">// 'ra' is not rebound to 'b'</span>
+</pre>
 <p>
       Now, if you assign to an <span class="emphasis"><em>initialized </em></span> <code class="computeroutput"><span class="identifier">optional</span><span class="special">&lt;</span><span class="identifier">T</span><span class="special">&amp;&gt;</span></code>,
       the effect is to <span class="bold"><strong>rebind</strong></span> to the new object
@@ -64,14 +64,14 @@
 <span class="keyword">int</span><span class="special">&amp;</span> <span class="identifier">rb</span> <span class="special">=</span> <span class="identifier">b</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">ora</span><span class="special">(</span><span class="identifier">ra</span><span class="special">)</span> <span class="special">;</span>
 <span class="identifier">optional</span><span class="special">&lt;</span><span class="keyword">int</span><span class="special">&amp;&gt;</span> <span class="identifier">orb</span><span class="special">(</span><span class="identifier">rb</span><span class="special">)</span> <span class="special">;</span>
-<span class="identifier">ora</span> <span class="special">=</span> <span class="identifier">orb</span> <span class="special">;</span> <span class="comment">// 'ora' is rebound to 'b'
-</span><span class="special">*</span><span class="identifier">ora</span> <span class="special">=</span> <span class="number">3</span> <span class="special">;</span> <span class="comment">// Changes value of 'b' (not 'a')
-</span><span class="identifier">assert</span><span class="special">(</span><span class="identifier">a</span><span class="special">==</span><span class="number">1</span><span class="special">);</span> 
-<span class="identifier">assert</span><span class="special">(</span><span class="identifier">b</span><span class="special">==</span><span class="number">3</span><span class="special">);</span> 
+<span class="identifier">ora</span> <span class="special">=</span> <span class="identifier">orb</span> <span class="special">;</span> <span class="comment">// 'ora' is rebound to 'b'</span>
+<span class="special">*</span><span class="identifier">ora</span> <span class="special">=</span> <span class="number">3</span> <span class="special">;</span> <span class="comment">// Changes value of 'b' (not 'a')</span>
+<span class="identifier">assert</span><span class="special">(</span><span class="identifier">a</span><span class="special">==</span><span class="number">1</span><span class="special">);</span>
+<span class="identifier">assert</span><span class="special">(</span><span class="identifier">b</span><span class="special">==</span><span class="number">3</span><span class="special">);</span>
 </pre>
-<a name="boost_optional.rebinding_semantics_for_assignment_of_optional_references.rationale"></a><h4>
-<a name="boost_optional.rebinding_semantics_for_assignment_of_optional_references.rationale-heading"></a>
-      <a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html#boost_optional.rebinding_semantics_for_assignment_of_optional_references.rationale">Rationale</a>
+<h4>
+<a name="boost_optional.rebinding_semantics_for_assignment_of_optional_references.h0"></a>
+      <span class="phrase"><a name="boost_optional.rebinding_semantics_for_assignment_of_optional_references.rationale"></a></span><a class="link" href="rebinding_semantics_for_assignment_of_optional_references.html#boost_optional.rebinding_semantics_for_assignment_of_optional_references.rationale">Rationale</a>
     </h4>
 <p>
       Rebinding semantics for the assignment of <span class="emphasis"><em>initialized </em></span>
