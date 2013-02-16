@@ -104,8 +104,8 @@ public:
      *
      * Requires: 0 < p < 1
      */
-    explicit geometric_distribution(const RealType& p = RealType(0.5))
-      : _p(p)
+    explicit geometric_distribution(const RealType& p_arg = RealType(0.5))
+      : _p(p_arg)
     {
         BOOST_ASSERT(RealType(0) < _p && _p < RealType(1));
         init();
