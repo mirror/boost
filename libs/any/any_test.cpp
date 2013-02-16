@@ -63,7 +63,7 @@ namespace any_tests // test suite
 
         copy_counter() {}
         copy_counter(const copy_counter&) { ++count; }
-        copy_counter& operator=(const copy_counter&) { ++count; }
+        copy_counter& operator=(const copy_counter&) { ++count; return *this; }
         static int get_count() { return count; }
 
     private:
