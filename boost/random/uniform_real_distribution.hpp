@@ -100,7 +100,7 @@ public:
                             RealType max_arg = RealType(1.0))
           : _min(min_arg), _max(max_arg)
         {
-            BOOST_ASSERT(_min <= _max);
+            BOOST_ASSERT(_min < _max);
         }
 
         /** Returns the minimum value of the distribution. */
@@ -154,7 +154,7 @@ public:
         RealType max_arg = RealType(1.0))
       : _min(min_arg), _max(max_arg)
     {
-        BOOST_ASSERT(min_arg <= max_arg);
+        BOOST_ASSERT(min_arg < max_arg);
     }
     /** Constructs a uniform_real_distribution from its parameters. */
     explicit uniform_real_distribution(const param_type& parm)

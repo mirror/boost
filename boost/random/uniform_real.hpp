@@ -63,7 +63,7 @@ public:
                           RealType max_arg = RealType(1.0))
       : base_type(min_arg, max_arg)
     {
-        BOOST_ASSERT(min_arg <= max_arg);
+        BOOST_ASSERT(min_arg < max_arg);
     }
 
     /** Constructs a uniform_real distribution from its parameters. */
