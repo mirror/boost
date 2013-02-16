@@ -96,8 +96,8 @@ inline div_t muldivmod(boost::uintmax_t a, boost::uintmax_t b, boost::uintmax_t 
 
         quotient[i - 2] = q;
         product[i] = 0;
-        product[i-1] = (rem >> bits) & mask;
-        product[i-2] = rem & mask;
+        product[i-1] = static_cast<digit_t>((rem >> bits) & mask);
+        product[i-2] = static_cast<digit_t>(rem & mask);
     }
 
     div_t result = {
