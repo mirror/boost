@@ -127,7 +127,7 @@ class aligned_storage
     union
     // This works around GCC warnings about breaking strict aliasing rules when casting storage address to T*
 #if defined(BOOST_OPTIONAL_DETAIL_USE_ATTRIBUTE_MAY_ALIAS)
-    __attribute__((may_alias))
+    __attribute__((__may_alias__))
 #endif
     dummy_u
     {
