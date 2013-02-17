@@ -40,6 +40,8 @@ alias ttimfsigcv
         [ compile test_has_member_cv_compile.cpp ]
         [ compile-fail test_has_member_cv_fail.cpp ]
         [ compile-fail test_has_member_cv_fail2.cpp ]
+        [ compile-fail test_has_member_cv_fail3.cpp ]
+        [ compile-fail test_has_member_cv_fail4.cpp ]
     ;
 
 #
@@ -75,6 +77,8 @@ alias ttimfncv
         [ compile test_has_mem_fun_cv_compile.cpp ]
         [ compile-fail test_has_mem_fun_cv_fail.cpp ]
         [ compile-fail test_has_mem_fun_cv_fail2.cpp ]
+        [ compile-fail test_has_mem_fun_cv_fail3.cpp ]
+        [ compile-fail test_has_mem_fun_cv_fail4.cpp ]
     ;
 
 #
