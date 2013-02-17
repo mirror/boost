@@ -167,7 +167,7 @@ class base_atomic<T, int, 2, Sign> {
     typedef T difference_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -301,7 +301,7 @@ class base_atomic<T, int, 4, Sign> {
     typedef T value_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -433,7 +433,7 @@ class base_atomic<void *, void *, 4, Sign> {
     typedef void * value_type;
     typedef ptrdiff_t difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -518,7 +518,7 @@ class base_atomic<T *, void *, 4, Sign> {
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(atomic_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void

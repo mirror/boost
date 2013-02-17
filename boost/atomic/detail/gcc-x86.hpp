@@ -1621,7 +1621,7 @@ platform_store64(T value, volatile T * ptr)
 
 template<typename T>
 inline T
-platform_load64(const volatile BOOST_NOEXCEPT T * ptr)
+platform_load64(const volatile T * ptr) BOOST_NOEXCEPT
 {
     T expected = *ptr;
     for (; !platform_cmpxchg64_strong(expected, expected, const_cast<volatile T*>(ptr));)
