@@ -662,7 +662,7 @@ namespace ptr_container_detail
             
         }
 
-        void range_check_impl( iterator first, iterator last, 
+        void range_check_impl( iterator, iterator, 
                                std::bidirectional_iterator_tag )
         { /* do nothing */ }
 
