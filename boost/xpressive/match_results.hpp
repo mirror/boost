@@ -934,7 +934,7 @@ private:
     (
         OutputIterator out
       , Expr const &format
-      , regex_constants::match_flag_type flags
+      , regex_constants::match_flag_type
       , mpl::size_t<4>
     ) const
     {
