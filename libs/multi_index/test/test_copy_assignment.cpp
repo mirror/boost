@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for copying and assignment.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -17,7 +17,7 @@
 #include <vector>
 #include "pre_multi_index.hpp"
 #include "employee.hpp"
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 using namespace boost::multi_index;
 
@@ -40,17 +40,17 @@ static void test_assign(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
 
   s.assign(&a[0],&a[sa]);
 
-  BOOST_CHECK(s.size()==sa&&std::equal(s.begin(),s.end(),&a[0]));
+  BOOST_TEST(s.size()==sa&&std::equal(s.begin(),s.end(),&a[0]));
 
   s.assign(&a[0],&a[sa]);
 
-  BOOST_CHECK(s.size()==sa&&std::equal(s.begin(),s.end(),&a[0]));
+  BOOST_TEST(s.size()==sa&&std::equal(s.begin(),s.end(),&a[0]));
 
   s.assign((std::size_t)18,37);
-  BOOST_CHECK(s.size()==18&&std::accumulate(s.begin(),s.end(),0)==666);
+  BOOST_TEST(s.size()==18&&std::accumulate(s.begin(),s.end(),0)==666);
 
   s.assign((std::size_t)12,167);
-  BOOST_CHECK(s.size()==12&&std::accumulate(s.begin(),s.end(),0)==2004);
+  BOOST_TEST(s.size()==12&&std::accumulate(s.begin(),s.end(),0)==2004);
 }
 
 #if BOOST_WORKAROUND(__MWERKS__,<=0x3003)
@@ -67,15 +67,15 @@ static void test_integral_assign(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
   Sequence s;
 
   s.assign(5,10);
-  BOOST_CHECK(s.size()==5&&std::accumulate(s.begin(),s.end(),0)==50);
+  BOOST_TEST(s.size()==5&&std::accumulate(s.begin(),s.end(),0)==50);
   s.assign(2u,5u);
-  BOOST_CHECK(s.size()==2&&std::accumulate(s.begin(),s.end(),0)==10);
+  BOOST_TEST(s.size()==2&&std::accumulate(s.begin(),s.end(),0)==10);
 
   s.clear();
   s.insert(s.begin(),5,10);
-  BOOST_CHECK(s.size()==5&&std::accumulate(s.begin(),s.end(),0)==50);
+  BOOST_TEST(s.size()==5&&std::accumulate(s.begin(),s.end(),0)==50);
   s.insert(s.begin(),2u,5u);
-  BOOST_CHECK(s.size()==7&&std::accumulate(s.begin(),s.end(),0)==60);
+  BOOST_TEST(s.size()==7&&std::accumulate(s.begin(),s.end(),0)==60);
 }
 
 void test_copy_assignment()
@@ -90,7 +90,7 @@ void test_copy_assignment()
   al=get<4>(es).get_allocator();
   al=get<5>(es).get_allocator();
 
-  BOOST_CHECK(es2.empty());
+  BOOST_TEST(es2.empty());
 
   es2.insert(employee(0,"Joe",31,1123));
   es2.insert(employee(1,"Robert",27,5601));
@@ -102,34 +102,34 @@ void test_copy_assignment()
 
   employee_set es3(es2);
 
-  BOOST_CHECK(es2==es3);
-  BOOST_CHECK(get<2>(es2)==get<2>(es3));
-  BOOST_CHECK(get<3>(es2)==get<3>(es3));
-  BOOST_CHECK(get<5>(es2)==get<5>(es3));
+  BOOST_TEST(es2==es3);
+  BOOST_TEST(get<2>(es2)==get<2>(es3));
+  BOOST_TEST(get<3>(es2)==get<3>(es3));
+  BOOST_TEST(get<5>(es2)==get<5>(es3));
 
   employee_set es4=employee_set(non_std_allocator<employee>());
   employee_set_by_name& i1=get<name>(es4);
   i1=get<1>(es2);
 
-  BOOST_CHECK(es4==es2);
+  BOOST_TEST(es4==es2);
 
   employee_set es5;
   employee_set_by_age& i2=get<age>(es5);
   i2=get<2>(es2);
 
-  BOOST_CHECK(i2==get<2>(es2));
+  BOOST_TEST(i2==get<2>(es2));
 
   employee_set es6;
   employee_set_as_inserted& i3=get<as_inserted>(es6);
   i3=get<3>(es2);
 
-  BOOST_CHECK(i3==get<3>(es2));
+  BOOST_TEST(i3==get<3>(es2));
 
   employee_set es7;
   employee_set_randomly& i5=get<randomly>(es7);
   i5=get<5>(es2);
 
-  BOOST_CHECK(i5==get<5>(es2));
+  BOOST_TEST(i5==get<5>(es2));
 
   std::list<employee> l;
   l.push_back(employee(3,"Anna",31,5388));
@@ -145,7 +145,7 @@ void test_copy_assignment()
 
   l.sort();
 
-  BOOST_CHECK(es8.size()==l.size()&&
+  BOOST_TEST(es8.size()==l.size()&&
               std::equal(es8.begin(),es8.end(),l.begin()));
 
   /* MSVC++ 6.0 chokes on test_assign without this explicit instantiation */

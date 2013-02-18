@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for safe_mode.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -15,7 +15,7 @@
 #include "employee.hpp"
 #include "pair_of_ints.hpp"
 #include <stdexcept>
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 using namespace boost::multi_index;
 
@@ -210,7 +210,7 @@ static void local_test_safe_mode(
     iterator it=i3.end();
     i3.clear();
     it=it;
-    BOOST_CHECK(it==i3.end());
+    BOOST_TEST(it==i3.end());
   }
 }
 
