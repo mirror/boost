@@ -194,10 +194,10 @@ public:
     // all current archives take a stream as constructor argument
     template <class _Elem, class _Tr>
     polymorphic_iarchive_route(
-        std::basic_istream<_Elem, _Tr> & is,
+        std::basic_istream<_Elem, _Tr> & bis,
         unsigned int flags = 0
     ) :
-        ArchiveImplementation(is, flags)
+        ArchiveImplementation(bis, flags)
     {}
     virtual ~polymorphic_iarchive_route(){};
 };
