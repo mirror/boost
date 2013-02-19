@@ -20,7 +20,7 @@
 #  define BOOST_NO_TYPEID
 #endif
 
-#if defined(__int64)
+#if defined(__int64) && !defined(__GNUC__)
 #  define BOOST_HAS_MS_INT64
 #endif
 
