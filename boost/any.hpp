@@ -162,6 +162,11 @@ namespace boost
 
     };
 
+    inline void swap(any & lhs, any & rhs)
+    {
+        lhs.swap(rhs);
+    }
+
     class bad_any_cast : public std::bad_cast
     {
     public:
