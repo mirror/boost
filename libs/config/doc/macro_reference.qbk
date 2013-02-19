@@ -28,7 +28,7 @@ compiler's conformance with the 2003 standard.
 
 
 [[`BOOST_BCB_PARTIAL_SPECIALIZATION_BUG`][Compiler][
-The compiler exibits certain partial specialisation bug - probably Borland
+The compiler exhibits certain partial specialisation bug - probably Borland
 C++ Builder specific.
 ]]
 [[`BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL`][Compiler][
@@ -429,7 +429,9 @@ The standard library lacks a conforming `std::use_facet`, but has a workaround
 class-version that does the job. This is primarily for the STLport std lib.
 ]]
 [[`BOOST_HAS_TR1_ARRAY`][Standard library][
-The library has a TR1 conforming version of `<array>`.
+The library has a TR1 conforming version of `<array>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_ARRAY.
 ]]
 [[`BOOST_HAS_TR1_COMPLEX_OVERLOADS`][Standard library][
 The library has a version of `<complex>` that supports passing scalars to the
@@ -440,46 +442,74 @@ The library has a version of `<complex>` that includes the new inverse trig
 functions from TR1.
 ]]
 [[`BOOST_HAS_TR1_REFERENCE_WRAPPER`][Standard library][
-The library has TR1 conforming reference wrappers in `<functional>`.
+The library has TR1 conforming reference wrappers in `<functional>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
 ]]
 [[`BOOST_HAS_TR1_RESULT_OF`][Standard library][
-The library has a TR1 conforming result_of template in `<functional>`.
+The library has a TR1 conforming result_of template in `<functional>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
 ]]
 [[`BOOST_HAS_TR1_MEM_FN`][Standard library][
-The library has a TR1 conforming mem_fn function template in `<functional>`.
+The library has a TR1 conforming mem_fn function template in `<functional>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
 ]]
 [[`BOOST_HAS_TR1_BIND`][Standard library][
-The library has a TR1 conforming bind function template in `<functional>`.
+The library has a TR1 conforming bind function template in `<functional>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
 ]]
 [[`BOOST_HAS_TR1_FUNCTION`][Standard library][
-The library has a TR1 conforming function class template in `<functional>`.
+The library has a TR1 conforming function class template in `<functional>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
 ]]
 [[`BOOST_HAS_TR1_HASH`][Standard library][
-The library has a TR1 conforming hash function template in `<functional>`.
+The library has a TR1 conforming hash function template in `<functional>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
 ]]
 [[`BOOST_HAS_TR1_SHARED_PTR`][Standard library][
-The library has a TR1 conforming `shared_ptr` class template in `<memory>`.
+The library has a TR1 conforming `shared_ptr` class template in `<memory>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_SMART_PTR.
 ]]
 [[`BOOST_HAS_TR1_RANDOM`][Standard library][
-The library has a TR1 conforming version of `<random>`.
+The library has a TR1 conforming version of `<random>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_RANDOM.
 ]]
 [[`BOOST_HAS_TR1_REGEX`][Standard library][
-The library has a TR1 conforming version of `<regex>`.
+The library has a TR1 conforming version of `<regex>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_REGEX.
 ]]
 [[`BOOST_HAS_TR1_TUPLE`][Standard library][
-The library has a TR1 conforming version of `<tuple>`.
+The library has a TR1 conforming version of `<tuple>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_TUPLE.
 ]]
 [[`BOOST_HAS_TR1_TYPE_TRAITS`][Standard library][
-The library has a TR1 conforming version of `<type_traits>`.
+The library has a TR1 conforming version of `<type_traits>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_TYPE_TRAITS.
 ]]
 [[`BOOST_HAS_TR1_UTILITY`][Standard library][
-The library has the TR1 additions to `<utility>` (tuple interface to `std::pair`).
+The library has the TR1 additions to `<utility>` (tuple interface to `std::pair`).  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_TUPLE.
 ]]
 [[`BOOST_HAS_TR1_UNORDERED_MAP`][Standard library][
-The library has a TR1 conforming version of `<unordered_map>`.
+The library has a TR1 conforming version of `<unordered_map>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_UNORDERED_MAP.
 ]]
 [[`BOOST_HAS_TR1_UNORDERED_SET`][Standard library][
-The library has a TR1 conforming version of `<unordered_set>`.
+The library has a TR1 conforming version of `<unordered_set>`.  This macro is only guaranteed
+to be defined after including one of the headers from Boost.TR1.  Further this macro
+is now deprecated in favour of BOOST_NO_CXX11_HDR_UNORDERED_SET.
 ]]
 [[`BOOST_HAS_TR1`][Standard library][
 Implies all the other `BOOST_HAS_TR1_*` macros should be set.
@@ -972,6 +1002,11 @@ _MSC_VER.
 Defined to a normalised 9 digit version of _MSC_FULL_VER (which sometimes only has 8 digits), 
 the macro has the form VVMMPPPPP where VV is the major version number, MM is the minor version number, and
 PPPPP is the compiler build number.
+]]
+[[`BOOST_GCC`][`<boost/config.hpp>`][
+Defined if the compiler is really GCC, as opposed to one
+of the many other compilers that also define `__GNUC__`.  Has the value:
+`__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__`.
 ]]
 [[`BOOST_INTEL`][`<boost/config.hpp>`][
 Defined if the compiler is an Intel compiler, takes the same value as the

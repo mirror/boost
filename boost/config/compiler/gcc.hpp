@@ -11,7 +11,12 @@
 
 //  See http://www.boost.org for most recent version.
 
-//  GNU C++ compiler setup:
+//  GNU C++ compiler setup.
+
+//
+// Define BOOST_GCC so we know this is "real" GCC and not some pretender:
+//
+#define BOOST_GCC (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
 
 #if __GNUC__ < 3
 #   if __GNUC_MINOR__ == 91
