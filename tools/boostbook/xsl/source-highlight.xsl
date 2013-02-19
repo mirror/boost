@@ -542,9 +542,7 @@
             </xsl:attribute>
           </xsl:when>
           <xsl:otherwise>
-            <xsl:attribute name="{name(.)}">
-              <xsl:value-of select="."/>
-            </xsl:attribute>
+            <xsl:copy-of select="."/>
           </xsl:otherwise>
         </xsl:choose>
       </xsl:for-each>

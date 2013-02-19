@@ -431,7 +431,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   <xsl:template match="chapter">
     <xsl:if test="$boost.include.libraries=''">
       <chapter>
-        <xsl:copy-of select="@*" />
+        <xsl:copy-of select="./@*" />
         <xsl:apply-templates/>
       </chapter>
     </xsl:if>
@@ -485,11 +485,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
        chapters within chpaters into sections. -->
   <xsl:template match="part/part|part/article">
     <chapter>
-      <xsl:for-each select="./@*">
-        <xsl:attribute name="{name(.)}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
+      <xsl:copy-of select="./@*"/>
       <xsl:apply-templates/>
     </chapter>
   </xsl:template>
@@ -498,11 +494,7 @@ Error: XSL template 'link-or-anchor' called with invalid link-type '<xsl:value-o
   </xsl:template>
   <xsl:template match="part/part/chapter|part/part/appendix">
     <section>
-      <xsl:for-each select="./@*">
-        <xsl:attribute name="{name(.)}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
+      <xsl:copy-of select="./@*"/>
       <xsl:apply-templates/>
     </section>
   </xsl:template>
