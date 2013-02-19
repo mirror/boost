@@ -1,6 +1,6 @@
 /* Boost.MultiIndex test for comparison functions.
  *
- * Copyright 2003-2008 Joaquin M Lopez Munoz.
+ * Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -13,7 +13,7 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include "pre_multi_index.hpp"
 #include "employee.hpp"
-#include <boost/test/test_tools.hpp>
+#include <boost/detail/lightweight_test.hpp>
 
 using namespace boost::multi_index;
 
@@ -60,14 +60,14 @@ void test_comparison()
   es2.insert(employee(2,"John",40,7889));
   es2.insert(employee(3,"Albert",20,9012));
 
-  BOOST_CHECK(es==es&&es<=es&&es>=es&&
+  BOOST_TEST(es==es&&es<=es&&es>=es&&
               i22==i22&&i22<=i22&&i22>=i22&&
               i32==i32&&i32<=i32&&i32>=i32&&
               i52==i52&&i52<=i52&&i52>=i52);
-  BOOST_CHECK(es!=es2&&es2<es&&es>es2&&!(es<=es2)&&!(es2>=es));
-  BOOST_CHECK(i2!=i22&&i22<i2&&i2>i22&&!(i2<=i22)&&!(i22>=i2));
-  BOOST_CHECK(i3!=i32&&i32<i3&&i3>i32&&!(i3<=i32)&&!(i32>=i3));
-  BOOST_CHECK(i5!=i52&&i52<i5&&i5>i52&&!(i5<=i52)&&!(i52>=i5));
+  BOOST_TEST(es!=es2&&es2<es&&es>es2&&!(es<=es2)&&!(es2>=es));
+  BOOST_TEST(i2!=i22&&i22<i2&&i2>i22&&!(i2<=i22)&&!(i22>=i2));
+  BOOST_TEST(i3!=i32&&i32<i3&&i3>i32&&!(i3<=i32)&&!(i32>=i3));
+  BOOST_TEST(i5!=i52&&i52<i5&&i5>i52&&!(i5<=i52)&&!(i52>=i5));
 
   lookup_list<int>::type    l1;
   lookup_list<char>::type   l2;
@@ -103,15 +103,15 @@ void test_comparison()
   l5.push_back(long(5));
   l5.push_back(long(1));
 
-  BOOST_CHECK(l1==l2&&l1<=l2&&l1>=l2);
-  BOOST_CHECK(
+  BOOST_TEST(l1==l2&&l1<=l2&&l1>=l2);
+  BOOST_TEST(
     get<1>(l1)==get<1>(l2)&&get<1>(l1)<=get<1>(l2)&&get<1>(l1)>=get<1>(l2));
-  BOOST_CHECK(
+  BOOST_TEST(
     get<1>(l1)==get<1>(l3)&&get<1>(l1)<=get<1>(l3)&&get<1>(l1)>=get<1>(l3));
-  BOOST_CHECK(l1!=l4&&l4<l1&&l1>l4);
-  BOOST_CHECK(
+  BOOST_TEST(l1!=l4&&l4<l1&&l1>l4);
+  BOOST_TEST(
     get<1>(l1)!=get<1>(l4)&&get<1>(l1)<get<1>(l4)&&get<1>(l4)>get<1>(l1));
-  BOOST_CHECK(l3!=l5&&l5<l3&&l3>l5);
-  BOOST_CHECK(
+  BOOST_TEST(l3!=l5&&l5<l3&&l3>l5);
+  BOOST_TEST(
     get<1>(l3)!=get<1>(l5)&&get<1>(l3)<get<1>(l5)&&get<1>(l5)>get<1>(l3));
 }
