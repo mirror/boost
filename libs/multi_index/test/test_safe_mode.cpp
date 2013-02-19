@@ -29,6 +29,8 @@ try{
     "safe mode violation not expected");\
 }
 
+template<typename T> void prevent_unused_var_warning(const T&){}
+
 template<typename Policy>
 static void local_test_safe_mode(
   std::forward_iterator_tag
@@ -69,21 +71,21 @@ static void local_test_safe_mode(
     iterator it;
     iterator it2;
     bool b=(it==it2);
-    b=true; /* avoid warning about unused var */
+    prevent_unused_var_warning(b);
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
     iterator it=i.begin();
     iterator it2;
     bool b=(it==it2);
-    b=true; /* avoid warning about unused var */
+    prevent_unused_var_warning(b);
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
     iterator it=i.begin();
     iterator it2=i2.begin();
     bool b=(it==it2);
-    b=true; /* avoid warning about unused var */
+    prevent_unused_var_warning(b);
   CATCH_SAFE_MODE(safe_mode::not_same_owner)
 
   TRY_SAFE_MODE
@@ -418,7 +420,7 @@ static void test_integral_bimap(BOOST_EXPLICIT_TEMPLATE_TYPE(IntegralBimap))
     bm.insert(value_type(1,1));
     bm.modify(it,increment_first);
     value_type v=*it;
-    v.first=0; /* avoid warning about unused var */
+    prevent_unused_var_warning(v);
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 
   TRY_SAFE_MODE
@@ -427,7 +429,7 @@ static void test_integral_bimap(BOOST_EXPLICIT_TEMPLATE_TYPE(IntegralBimap))
     bm.insert(value_type(1,1));
     bm.modify(it,increment_second);
     pair_of_ints v=*it;
-    v.first=0; /* avoid warning about unused var */
+    prevent_unused_var_warning(v);
   CATCH_SAFE_MODE(safe_mode::invalid_iterator)
 }
 
