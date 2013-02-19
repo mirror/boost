@@ -18,6 +18,7 @@
 #include <boost/type_traits/is_enum.hpp>
 #include <boost/type_traits/is_member_pointer.hpp>
 #include <boost/type_traits/is_class.hpp>
+#include <boost/type_traits/has_trivial_destructor.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/move/iterator.hpp>
 #include <boost/container/detail/mpl.hpp>
@@ -698,6 +699,58 @@ inline I move_n_source(I f, typename std::iterator_traits<I>::difference_type n,
       ++f; ++r;
    }
    return f;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                         destroy_n
+//
+//////////////////////////////////////////////////////////////////////////////
+
+template
+   <typename A
+   ,typename I>  // I models InputIterator
+inline void destroy_alloc_n(A &a, I f, typename std::iterator_traits<I>::difference_type n
+   ,typename boost::container::container_detail::enable_if_c
+      < !boost::has_trivial_destructor<typename std::iterator_traits<I>::value_type>::value >::type* = 0)
+{
+   while(n--){
+      allocator_traits<A>::destroy(a, container_detail::addressof(*f++));
+   }
+}
+
+template
+   <typename A
+   ,typename I>  // I models InputIterator
+inline void destroy_alloc_n(A &, I, typename std::iterator_traits<I>::difference_type
+   ,typename boost::container::container_detail::enable_if_c
+      < boost::has_trivial_destructor<typename std::iterator_traits<I>::value_type>::value >::type* = 0)
+{}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                         deep_swap_alloc_n
+//
+//////////////////////////////////////////////////////////////////////////////
+
+template
+   <typename A
+   ,typename F // I models ForwardIterator
+   ,typename G // G models ForwardIterator
+   >  
+void deep_swap_alloc_n(A &a, F short_range_f, typename allocator_traits<A>::size_type n_i
+                      , G large_range_f, typename allocator_traits<A>::size_type n_j)
+{
+   typename allocator_traits<A>::size_type n = 0;
+   typedef typename allocator_traits<A>::value_type value_type;
+   for (; n != n_i ; ++short_range_f, ++large_range_f, ++n){
+      //boost::swap(*first_sm, *first_la);            // may throw
+      value_type temp(boost::move(*short_range_f));   // may throw
+      *short_range_f = boost::move(*large_range_f);   // may throw
+      *large_range_f = boost::move(temp);             // may throw
+   }
+   uninitialized_move_alloc_n(a, large_range_f, n_j - n, short_range_f);  // may throw
+   destroy_alloc_n(a, large_range_f, n_j - n);
 }
 
 }  //namespace container {
