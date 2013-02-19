@@ -308,10 +308,22 @@ struct result_of<boost::lambda::lambda_functor<T>()>
     typedef typename boost::lambda::lambda_functor<T>::nullary_return_type type;
 };
 
+template<class T>
+struct result_of<const boost::lambda::lambda_functor<T>()>
+{
+    typedef typename boost::lambda::lambda_functor<T>::nullary_return_type type;
+};
+
 #endif
 
 template<class T>
 struct tr1_result_of<boost::lambda::lambda_functor<T>()>
+{
+    typedef typename boost::lambda::lambda_functor<T>::nullary_return_type type;
+};
+
+template<class T>
+struct tr1_result_of<const boost::lambda::lambda_functor<T>()>
 {
     typedef typename boost::lambda::lambda_functor<T>::nullary_return_type type;
 };
