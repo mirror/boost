@@ -73,7 +73,7 @@ def main(argv):
                         gold_text = file.read()
                     finally:
                         file.close()
-                    compare_xml(filename, doc_text, gold_text)
+                    compare_xml(src_path, doc_text, gold_text)
 
 def run_boostbook(parser, boostbook_xsl, file):
     doc = boostbook_xsl(etree.parse(file, parser))
@@ -117,6 +117,8 @@ def compare_xml(file, doc_text, gold_text):
                 doc_text.splitlines(True)
             )
         )
+        print
+        print
 
 if __name__ == "__main__":
     main(sys.argv[1:])
