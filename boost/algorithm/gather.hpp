@@ -18,7 +18,7 @@
 */
 
 #ifndef BOOST_ALGORITHM_GATHER_HPP
-#define ADOBE_ALGORITHM_GATHER_HPP
+#define BOOST_ALGORITHM_GATHER_HPP
 
 #include <algorithm>                // for std::stable_partition
 #include <functional>
