@@ -271,7 +271,7 @@ is equivalent to:
 
 [endsect]
 
-[section: `role`]
+[section:role `role`]
 
 `role` is a phrase element used to mark up the text in the eventual html
 with an a class. For example:
