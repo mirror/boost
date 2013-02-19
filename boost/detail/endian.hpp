@@ -28,10 +28,12 @@
 #ifndef BOOST_DETAIL_ENDIAN_HPP
 #define BOOST_DETAIL_ENDIAN_HPP
 
+//
+// Special cases come first:
+//
+#if defined (__GLIBC__)
 // GNU libc offers the helpful header <endian.h> which defines
 // __BYTE_ORDER
-
-#if defined (__GLIBC__)
 # include <endian.h>
 # if (__BYTE_ORDER == __LITTLE_ENDIAN)
 #  define BOOST_LITTLE_ENDIAN
@@ -43,8 +45,11 @@
 #  error Unknown machine endianness detected.
 # endif
 # define BOOST_BYTE_ORDER __BYTE_ORDER
+
 #elif defined(__NetBSD__) || defined(__FreeBSD__) || \
     defined(__OpenBSD__) || (__DragonFly__)
+//
+// BSD has endian.h, see https://svn.boost.org/trac/boost/ticket/6013
 #  if defined(__OpenBSD__)
 #  include <machine/endian.h>
 #  else
@@ -60,6 +65,27 @@
 #  error Unknown machine endianness detected.
 # endif
 # define BOOST_BYTE_ORDER _BYTE_ORDER
+
+#elif defined( __ANDROID__ )
+// Adroid specific code, see: https://svn.boost.org/trac/boost/ticket/7528
+// Here we can use machine/_types.h, see:
+// http://stackoverflow.com/questions/6212951/endianness-of-android-ndk
+# include "machine/_types.h"
+# ifdef __ARMEB__
+#  define BOOST_BIG_ENDIAN
+#  define BOOST_BYTE_ORDER 4321
+# else
+#  define BOOST_LITTLE_ENDIAN
+#  define BOOST_BYTE_ORDER 1234
+# endif // __ARMEB__
+
+#elif defined( _XBOX )
+//
+// XBox is always big endian??
+//
+# define BOOST_BIG_ENDIAN
+# define BOOST_BYTE_ORDER 4321
+
 #elif defined(_BIG_ENDIAN) && !defined(_LITTLE_ENDIAN) || \
     defined(__BIG_ENDIAN__) && !defined(__LITTLE_ENDIAN__) || \
     defined(_STLP_BIG_ENDIAN) && !defined(_STLP_LITTLE_ENDIAN)
