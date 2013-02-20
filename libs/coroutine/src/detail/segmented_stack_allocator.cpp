@@ -6,8 +6,6 @@
 
 #define BOOST_COROUTINES_SOURCE
 
-#if defined(BOOST_USE_SEGMENTED_STACKS)
-
 #include <boost/coroutine/detail/segmented_stack_allocator.hpp>
 
 #include <boost/assert.hpp>
@@ -88,6 +86,4 @@ segmented_stack_allocator::deallocate( stack_context & ctx)
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
-#endif
-
 #endif

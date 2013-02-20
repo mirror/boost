@@ -25,13 +25,17 @@ project boost/coroutine
 
 alias allocator_sources
     : detail/standard_stack_allocator_windows.cpp
-      detail/segmented_stack_allocator.cpp
     : <target-os>windows
     ;
 
 alias allocator_sources
     : detail/standard_stack_allocator_posix.cpp
       detail/segmented_stack_allocator.cpp
+   : <segmented-stacks>on
+    ;
+
+alias allocator_sources
+    : detail/standard_stack_allocator_posix.cpp
     ;
 
 explicit yield_sources ;
