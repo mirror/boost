@@ -116,6 +116,13 @@ struct coroutine_op< Signature, D, Result, 0 >
             return * this;
         }
 
+        iterator operator++( int)
+        {
+            iterator tmp( * this);
+            ++*this;
+            return tmp;
+        }
+
         reference_t operator*() const
         { return const_cast< optional< Result > & >( val_).get(); }
 
@@ -185,6 +192,13 @@ struct coroutine_op< Signature, D, Result, 0 >
         {
             increment_();
             return * this;
+        }
+
+        const_iterator operator++( int)
+        {
+            const_iterator tmp( * this);
+            ++*this;
+            return tmp;
         }
 
         reference_t operator*() const
