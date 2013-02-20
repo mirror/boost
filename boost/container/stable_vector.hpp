@@ -945,7 +945,7 @@ class stable_vector
    size_type size() const BOOST_CONTAINER_NOEXCEPT
    {
       const size_type index_size = this->index.size();
-      return index_size ? (index_size - ExtraPointers) : 0;
+      return (index_size - ExtraPointers) & (std::size_t(0u) -std::size_t(index_size != 0));
    }
 
    //! <b>Effects</b>: Returns the largest possible size of the stable_vector.
@@ -1001,7 +1001,9 @@ class stable_vector
       const size_type node_extra_capacity   = this->internal_data.pool_size;
       const size_type extra_capacity        = (bucket_extra_capacity < node_extra_capacity)
          ? bucket_extra_capacity : node_extra_capacity;
-      return (index_size ? (index_size - ExtraPointers + extra_capacity) : index_size);
+      const size_type index_offset =
+         (ExtraPointers + extra_capacity) & (size_type(0u) - size_type(index_size != 0));
+      return index_size - index_offset;
    }
 
    //! <b>Effects</b>: If n is less than or equal to capacity(), this call has no
@@ -1102,7 +1104,7 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Constant.
    reference back() BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<node_reference>(*this->index[this->size() - ExtraPointers]).value;  }
+   {  return static_cast<node_reference>(*this->index[this->size()-1u]).value;  }
 
    //! <b>Requires</b>: !empty()
    //!
@@ -1113,7 +1115,7 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Constant.
    const_reference back() const BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<const_node_reference>(*this->index[this->size() - ExtraPointers]).value;  }
+   {  return static_cast<const_node_reference>(*this->index[this->size()-1u]).value;  }
 
    //! <b>Requires</b>: size() > n.
    //!
