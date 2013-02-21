@@ -14,6 +14,7 @@
 #define BOOST_TEST_MAIN
 #include <boost/test/unit_test.hpp>
 
+#include <ctime>        // for clock_t
 #include <iostream>
 #include <fstream>
 #include <iomanip>
