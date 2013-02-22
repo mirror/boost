@@ -1047,7 +1047,7 @@ private:
   {
     if(n>max_load){
       size_type bc =(std::numeric_limits<size_type>::max)();
-      float     fbc=static_cast<float>(1+n/mlf);
+      float     fbc=static_cast<float>(1+static_cast<double>(n)/mlf);
       if(bc>fbc)bc =static_cast<size_type>(fbc);
       unchecked_rehash(bc);
     }
