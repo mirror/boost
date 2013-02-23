@@ -216,16 +216,16 @@ typedef atomic< __UINTPTR_TYPE__ > atomic_uintptr_t;
 class atomic_flag
 {
 public:
-    atomic_flag(void) : v_(false) {}
+    BOOST_CONSTEXPR atomic_flag(void) BOOST_NOEXCEPT : v_(false) {}
 
     bool
-    test_and_set(memory_order order = memory_order_seq_cst)
+    test_and_set(memory_order order = memory_order_seq_cst) BOOST_NOEXCEPT
     {
         return v_.exchange(true, order);
     }
 
     void
-    clear(memory_order order = memory_order_seq_cst) volatile
+    clear(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         v_.store(false, order);
     }
