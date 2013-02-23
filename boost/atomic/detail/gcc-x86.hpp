@@ -1487,7 +1487,7 @@ class base_atomic<T, void, 8, Sign>
 public:
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
-        memcpy(&tmp, &v, sizeof(value_type));
+        memcpy(&v_, &v, sizeof(value_type));
     }
     base_atomic(void) {}
 
