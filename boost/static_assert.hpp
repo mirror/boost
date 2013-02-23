@@ -17,6 +17,15 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
+#if defined(__GNUC__) && !defined(__GXX_EXPERIMENTAL_CXX0X__)
+//
+// This is horrible, but it seems to be the only we can shut up the
+// "anonymous variadic macros were introduced in C99 [-Wvariadic-macros]"
+// warning that get spewed out otherwise in non-C++11 mode.
+//
+#pragma GCC system_header
+#endif
+
 #ifndef BOOST_NO_CXX11_STATIC_ASSERT
 #  ifndef BOOST_NO_CXX11_VARIADIC_MACROS
 #     define BOOST_STATIC_ASSERT_MSG( ... ) static_assert(__VA_ARGS__)
