@@ -3,7 +3,7 @@
 
 //  Copyright (c) 2009 Helge Bahmann
 //  Copyright (c) 2012 Andrey Semashev
-//  Copyright (c) 2013 Tim Blechmann
+//  Copyright (c) 2013 Tim Blechmann, Andrey Semashev
 //
 //  Distributed under the Boost Software License, Version 1.0.
 //  See accompanying file LICENSE_1_0.txt or copy at
@@ -25,10 +25,6 @@
 #pragma warning(disable: 4100)
 #endif
 
-namespace boost {
-namespace atomics {
-namespace detail {
-
 #if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
 extern "C" void _mm_pause(void);
 #pragma intrinsic(_mm_pause)
@@ -42,6 +38,23 @@ extern "C" void _mm_pause(void);
 extern "C" void _mm_mfence(void);
 #pragma intrinsic(_mm_mfence)
 #endif
+
+// Define compiler barriers
+#if defined(__INTEL_COMPILER)
+#define BOOST_ATOMIC_COMPILER_BARRIER __memory_barrier();
+#elif defined(_MSC_VER) && _MSC_VER >= 1310 && !defined(_WIN32_WCE)
+extern "C" void _ReadWriteBarrier(void);
+#pragma intrinsic(_ReadWriteBarrier)
+#define BOOST_ATOMIC_COMPILER_BARRIER() _ReadWriteBarrier()
+#endif
+
+#ifndef BOOST_ATOMIC_COMPILER_BARRIER
+#define BOOST_ATOMIC_COMPILER_BARRIER()
+#endif
+
+namespace boost {
+namespace atomics {
+namespace detail {
 
 BOOST_FORCEINLINE void hardware_full_fence(void)
 {
@@ -58,41 +71,41 @@ BOOST_FORCEINLINE void hardware_full_fence(void)
 #if defined(_MSC_VER) && _MSC_VER >= 1310 && !defined(_WIN32_WCE)
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic(_ReadWriteBarrier)
-#define BOOST_ATOMIC_READ_WRITE_BARRIER() _ReadWriteBarrier()
+#define BOOST_ATOMIC_COMPILER_BARRIER() _ReadWriteBarrier()
 #endif
 
-#ifndef BOOST_ATOMIC_READ_WRITE_BARRIER
-#define BOOST_ATOMIC_READ_WRITE_BARRIER()
+#ifndef BOOST_ATOMIC_COMPILER_BARRIER
+#define BOOST_ATOMIC_COMPILER_BARRIER()
 #endif
 
 BOOST_FORCEINLINE void
 platform_fence_before(memory_order)
 {
-    BOOST_ATOMIC_READ_WRITE_BARRIER();
+    BOOST_ATOMIC_COMPILER_BARRIER();
 }
 
 BOOST_FORCEINLINE void
 platform_fence_after(memory_order)
 {
-    BOOST_ATOMIC_READ_WRITE_BARRIER();
+    BOOST_ATOMIC_COMPILER_BARRIER();
 }
 
 BOOST_FORCEINLINE void
 platform_fence_before_store(memory_order)
 {
-    BOOST_ATOMIC_READ_WRITE_BARRIER();
+    BOOST_ATOMIC_COMPILER_BARRIER();
 }
 
 BOOST_FORCEINLINE void
 platform_fence_after_store(memory_order)
 {
-    BOOST_ATOMIC_READ_WRITE_BARRIER();
+    BOOST_ATOMIC_COMPILER_BARRIER();
 }
 
 BOOST_FORCEINLINE void
 platform_fence_after_load(memory_order order)
 {
-    BOOST_ATOMIC_READ_WRITE_BARRIER();
+    BOOST_ATOMIC_COMPILER_BARRIER();
 
     // On x86 and x86_64 there is no need for a hardware barrier,
     // even if seq_cst memory order is requested, because all
@@ -113,7 +126,7 @@ platform_fence_after_load(memory_order order)
 BOOST_FORCEINLINE void
 atomic_thread_fence(memory_order order)
 {
-    BOOST_ATOMIC_READ_WRITE_BARRIER();
+    BOOST_ATOMIC_COMPILER_BARRIER();
     if (order == memory_order_seq_cst)
         atomics::detail::hardware_full_fence();
 }
@@ -122,10 +135,10 @@ atomic_thread_fence(memory_order order)
 BOOST_FORCEINLINE void
 atomic_signal_fence(memory_order)
 {
-    BOOST_ATOMIC_READ_WRITE_BARRIER();
+    BOOST_ATOMIC_COMPILER_BARRIER();
 }
 
-#undef BOOST_ATOMIC_READ_WRITE_BARRIER
+#undef BOOST_ATOMIC_COMPILER_BARRIER
 
 class atomic_flag
 {
@@ -134,7 +147,7 @@ private:
     atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
     uint32_t v_;
 public:
-    atomic_flag(void) BOOST_NOEXCEPT : v_(0) {}
+    BOOST_CONSTEXPR atomic_flag(void) BOOST_NOEXCEPT : v_(0) {}
 
     bool
     test_and_set(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -196,7 +209,7 @@ class base_atomic<T, int, 1, Sign>
 #endif
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -382,7 +395,7 @@ class base_atomic<T, int, 2, Sign>
 #endif
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -560,7 +573,7 @@ class base_atomic<T, int, 4, Sign>
     typedef value_type storage_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -713,7 +726,7 @@ class base_atomic<T, int, 8, Sign>
     typedef value_type storage_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -867,7 +880,7 @@ class base_atomic<void*, void*, sizeof_pointer, Sign>
     typedef base_atomic this_type;
     typedef void* value_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -939,7 +952,7 @@ class base_atomic<T*, void*, sizeof_pointer, Sign>
     typedef T* value_type;
     typedef ptrdiff_t difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
     base_atomic(void) {}
 
     void
@@ -1040,9 +1053,16 @@ class base_atomic<T, void, 1, Sign>
     typedef uint32_t storage_type;
 #endif
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) BOOST_NOEXCEPT:
-        v_(*reinterpret_cast<storage_type*>(&v))
-    {}
+#ifdef BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE8
+    BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(reinterpret_cast< storage_type const& >(v))
+    {
+    }
+#else
+    explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
+    {
+        memcpy(&v_, &v, sizeof(value_type));
+    }
+#endif
     base_atomic(void) {}
 
     void
@@ -1144,9 +1164,16 @@ class base_atomic<T, void, 2, Sign>
     typedef uint32_t storage_type;
 #endif
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) BOOST_NOEXCEPT:
-        v_(*reinterpret_cast<storage_type*>(&v))
-    {}
+#ifdef BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE16
+    BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(reinterpret_cast< storage_type const& >(v))
+    {
+    }
+#else
+    explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
+    {
+        memcpy(&v_, &v, sizeof(value_type));
+    }
+#endif
 
     base_atomic(void) {}
 

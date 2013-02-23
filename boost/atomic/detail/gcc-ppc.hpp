@@ -105,13 +105,14 @@ ppc_fence_after_store(memory_order order)
 }
 }
 
-class atomic_flag {
+class atomic_flag
+{
 private:
     atomic_flag(const atomic_flag &) /* = delete */ ;
     atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
     uint32_t v_;
 public:
-    atomic_flag(void) BOOST_NOEXCEPT: v_(false) {}
+    BOOST_CONSTEXPR atomic_flag(void) BOOST_NOEXCEPT : v_(0) {}
 
     void
     clear(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -196,13 +197,14 @@ namespace detail {
 /* integral types */
 
 template<typename T>
-class base_atomic<T, int, 1, true> {
+class base_atomic<T, int, 1, true>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef int32_t storage_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -416,13 +418,14 @@ private:
 };
 
 template<typename T>
-class base_atomic<T, int, 1, false> {
+class base_atomic<T, int, 1, false>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -637,13 +640,14 @@ private:
 };
 
 template<typename T>
-class base_atomic<T, int, 2, true> {
+class base_atomic<T, int, 2, true>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef int32_t storage_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -858,13 +862,14 @@ private:
 };
 
 template<typename T>
-class base_atomic<T, int, 2, false> {
+class base_atomic<T, int, 2, false>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -1079,12 +1084,13 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T, int, 4, Sign> {
+class base_atomic<T, int, 4, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -1295,12 +1301,13 @@ private:
 #if defined(__powerpc64__)
 
 template<typename T, bool Sign>
-class base_atomic<T, int, 8, Sign> {
+class base_atomic<T, int, 8, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -1515,11 +1522,12 @@ private:
 #if !defined(__powerpc64__)
 
 template<bool Sign>
-class base_atomic<void *, void *, 4, Sign> {
+class base_atomic<void *, void *, 4, Sign>
+{
     typedef base_atomic this_type;
     typedef void * value_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -1643,12 +1651,13 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T *, void *, 4, Sign> {
+class base_atomic<T *, void *, 4, Sign>
+{
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -1812,11 +1821,12 @@ private:
 #else
 
 template<bool Sign>
-class base_atomic<void *, void *, 8, Sign> {
+class base_atomic<void *, void *, 8, Sign>
+{
     typedef base_atomic this_type;
     typedef void * value_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -1940,12 +1950,13 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T *, void *, 8, Sign> {
+class base_atomic<T *, void *, 8, Sign>
+{
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -2111,14 +2122,16 @@ private:
 /* generic */
 
 template<typename T, bool Sign>
-class base_atomic<T, void, 1, Sign> {
+class base_atomic<T, void, 1, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) BOOST_NOEXCEPT:
-        v_(*reinterpret_cast<storage_type*>(&v))
-    {}
+    explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
+    {
+        memcpy(&v_, &v, sizeof(value_type));
+    }
     base_atomic(void) {}
 
     void
@@ -2260,14 +2273,16 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T, void, 2, Sign> {
+class base_atomic<T, void, 2, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) BOOST_NOEXCEPT:
-        v_(*reinterpret_cast<storage_type*>(&v))
-    {}
+    explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
+    {
+        memcpy(&v_, &v, sizeof(value_type));
+    }
 
     base_atomic(void) {}
 
@@ -2410,14 +2425,16 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T, void, 4, Sign> {
+class base_atomic<T, void, 4, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) BOOST_NOEXCEPT:
-        v_(*reinterpret_cast<storage_type*>(&v))
-    {}
+    explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
+    {
+        memcpy(&v_, &v, sizeof(value_type));
+    }
 
     base_atomic(void) {}
 
@@ -2562,14 +2579,16 @@ private:
 #if defined(__powerpc64__)
 
 template<typename T, bool Sign>
-class base_atomic<T, void, 8, Sign> {
+class base_atomic<T, void, 8, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint64_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) BOOST_NOEXCEPT:
-        v_(*reinterpret_cast<storage_type*>(&v))
-    {}
+    explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
+    {
+        memcpy(&v_, &v, sizeof(value_type));
+    }
 
     base_atomic(void) {}
 

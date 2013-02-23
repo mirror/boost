@@ -133,13 +133,14 @@ atomic_signal_fence(memory_order)
     __asm__ __volatile__ ("" ::: "memory");
 }
 
-class atomic_flag {
+class atomic_flag
+{
 private:
     atomic_flag(const atomic_flag &) /* = delete */ ;
     atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
     uint32_t v_;
 public:
-    atomic_flag(void) BOOST_NOEXCEPT: v_(false) {}
+    BOOST_CONSTEXPR atomic_flag(void) BOOST_NOEXCEPT : v_(0) {}
 
     void
     clear(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT

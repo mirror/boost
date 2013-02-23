@@ -24,18 +24,6 @@
 #endif
 
 #define BOOST_ATOMIC_DECLARE_BASE_OPERATORS \
-    operator value_type(void) volatile const BOOST_NOEXCEPT \
-    { \
-        return load(memory_order_seq_cst); \
-    } \
-     \
-    this_type & \
-    operator=(value_type v) volatile BOOST_NOEXCEPT \
-    { \
-        store(v, memory_order_seq_cst); \
-        return *const_cast<this_type *>(this); \
-    } \
-     \
     bool \
     compare_exchange_strong( \
         value_type & expected, \
@@ -53,7 +41,6 @@
     { \
         return compare_exchange_weak(expected, desired, order, calculate_failure_order(order)); \
     } \
-     \
 
 #define BOOST_ATOMIC_DECLARE_ADDITIVE_OPERATORS \
     value_type \
@@ -138,7 +125,8 @@ calculate_failure_order(memory_order order)
 }
 
 template<typename T, typename C, unsigned int Size, bool Sign>
-class base_atomic {
+class base_atomic
+{
 private:
     typedef base_atomic this_type;
     typedef T value_type;
@@ -148,8 +136,7 @@ private:
 public:
     base_atomic(void) {}
 
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT:
-        v_(v)
+    BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(v)
     {}
 
     void
@@ -224,8 +211,7 @@ public:
 private:
     char * storage_ptr() volatile const BOOST_NOEXCEPT
     {
-        const char volatile * ptr = reinterpret_cast<const char volatile *>(&v_);
-        return const_cast<char *>(ptr);
+        return const_cast<char *>(&reinterpret_cast<char const volatile &>(v_));
     }
 
     base_atomic(const base_atomic &) /* = delete */ ;
@@ -235,14 +221,15 @@ private:
 };
 
 template<typename T, unsigned int Size, bool Sign>
-class base_atomic<T, int, Size, Sign> {
+class base_atomic<T, int, Size, Sign>
+{
 private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef lockpool::scoped_lock guard_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -360,14 +347,15 @@ private:
 };
 
 template<typename T, unsigned int Size, bool Sign>
-class base_atomic<T *, void *, Size, Sign> {
+class base_atomic<T *, void *, Size, Sign>
+{
 private:
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
     typedef lockpool::scoped_lock guard_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -452,13 +440,14 @@ private:
 };
 
 template<unsigned int Size, bool Sign>
-class base_atomic<void *, void *, Size, Sign> {
+class base_atomic<void *, void *, Size, Sign>
+{
 private:
     typedef base_atomic this_type;
     typedef void * value_type;
     typedef lockpool::scoped_lock guard_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void

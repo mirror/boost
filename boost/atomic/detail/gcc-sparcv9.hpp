@@ -83,13 +83,14 @@ platform_fence_after_load(memory_order order)
 }
 }
 
-class atomic_flag {
+class atomic_flag
+{
 private:
     atomic_flag(const atomic_flag &) /* = delete */ ;
     atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
     uint32_t v_;
 public:
-    atomic_flag(void) : v_(false) {}
+    BOOST_CONSTEXPR atomic_flag(void) BOOST_NOEXCEPT : v_(0) {}
 
     void
     clear(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -100,7 +101,7 @@ public:
     }
 
     bool
-    test_and_set(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT BOOST_NOEXCEPT
+    test_and_set(memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         atomics::detail::platform_fence_before(order);
         uint32_t tmp = 1;
@@ -174,13 +175,14 @@ namespace detail {
 /* integral types */
 
 template<typename T>
-class base_atomic<T, int, 1, true> {
+class base_atomic<T, int, 1, true>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef int32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -192,7 +194,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
         value_type v = const_cast<const volatile storage_type &>(v_);
         platform_fence_after_load(order);
@@ -296,13 +298,14 @@ private:
 };
 
 template<typename T>
-class base_atomic<T, int, 1, false> {
+class base_atomic<T, int, 1, false>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -314,7 +317,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
         value_type v = const_cast<const volatile storage_type &>(v_);
         platform_fence_after_load(order);
@@ -418,13 +421,14 @@ private:
 };
 
 template<typename T>
-class base_atomic<T, int, 2, true> {
+class base_atomic<T, int, 2, true>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef int32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -436,7 +440,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
         value_type v = const_cast<const volatile storage_type &>(v_);
         platform_fence_after_load(order);
@@ -540,13 +544,14 @@ private:
 };
 
 template<typename T>
-class base_atomic<T, int, 2, false> {
+class base_atomic<T, int, 2, false>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -558,7 +563,7 @@ public:
     }
 
     value_type
-    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
         value_type v = const_cast<const volatile storage_type &>(v_);
         platform_fence_after_load(order);
@@ -662,12 +667,13 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T, int, 4, Sign> {
+class base_atomic<T, int, 4, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -783,11 +789,12 @@ private:
 /* pointer types */
 
 template<bool Sign>
-class base_atomic<void *, void *, 4, Sign> {
+class base_atomic<void *, void *, 4, Sign>
+{
     typedef base_atomic this_type;
     typedef void * value_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -858,12 +865,13 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T *, void *, 4, Sign> {
+class base_atomic<T *, void *, 4, Sign>
+{
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) : v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -955,12 +963,13 @@ private:
 /* generic types */
 
 template<typename T, bool Sign>
-class base_atomic<T, void, 1, Sign> {
+class base_atomic<T, void, 1, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) : v_(0)
+    BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
@@ -1044,12 +1053,13 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T, void, 2, Sign> {
+class base_atomic<T, void, 2, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) : v_(0)
+    BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
@@ -1133,12 +1143,13 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T, void, 4, Sign> {
+class base_atomic<T, void, 4, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type const& v) : v_(0)
+    BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }

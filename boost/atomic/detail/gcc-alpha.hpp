@@ -88,7 +88,8 @@ inline void platform_atomic_thread_fence(memory_order order)
 }
 
 template<typename T>
-class atomic_alpha_32 {
+class atomic_alpha_32
+{
 public:
     typedef T integral_type;
     BOOST_CONSTEXPR atomic_alpha_32(T v) BOOST_NOEXCEPT: i(v) {}
@@ -204,7 +205,8 @@ private:
 };
 
 template<typename T>
-class atomic_alpha_64 {
+class atomic_alpha_64
+{
 public:
     typedef T integral_type;
     BOOST_CONSTEXPR atomic_alpha_64(T v) BOOST_NOEXCEPT: i(v) {}
@@ -320,7 +322,9 @@ private:
 };
 
 template<typename T>
-class platform_atomic_integral<T, 4> : public build_atomic_from_typical<build_exchange<atomic_alpha_32<T> > > {
+class platform_atomic_integral<T, 4> :
+    public build_atomic_from_typical<build_exchange<atomic_alpha_32<T> > >
+{
 public:
     typedef build_atomic_from_typical<build_exchange<atomic_alpha_32<T> > > super;
     BOOST_CONSTEXPR platform_atomic_integral(T v) BOOST_NOEXCEPT: super(v) {}
@@ -328,7 +332,9 @@ public:
 };
 
 template<typename T>
-class platform_atomic_integral<T, 8> : public build_atomic_from_typical<build_exchange<atomic_alpha_64<T> > > {
+class platform_atomic_integral<T, 8> :
+    public build_atomic_from_typical<build_exchange<atomic_alpha_64<T> > >
+{
 public:
     typedef build_atomic_from_typical<build_exchange<atomic_alpha_64<T> > > super;
     BOOST_CONSTEXPR platform_atomic_integral(T v) BOOST_NOEXCEPT: super(v) {}
@@ -336,7 +342,9 @@ public:
 };
 
 template<typename T>
-class platform_atomic_integral<T, 1>: public build_atomic_from_larger_type<atomic_alpha_32<uint32_t>, T> {
+class platform_atomic_integral<T, 1> :
+    public build_atomic_from_larger_type<atomic_alpha_32<uint32_t>, T>
+{
 public:
     typedef build_atomic_from_larger_type<atomic_alpha_32<uint32_t>, T> super;
     BOOST_CONSTEXPR platform_atomic_integral(T v) BOOST_NOEXCEPT: super(v) {}
@@ -344,7 +352,9 @@ public:
 };
 
 template<typename T>
-class platform_atomic_integral<T, 2>: public build_atomic_from_larger_type<atomic_alpha_32<uint32_t>, T> {
+class platform_atomic_integral<T, 2> :
+    public build_atomic_from_larger_type<atomic_alpha_32<uint32_t>, T>
+{
 public:
     typedef build_atomic_from_larger_type<atomic_alpha_32<uint32_t>, T> super;
     BOOST_CONSTEXPR platform_atomic_integral(T v) BOOST_NOEXCEPT: super(v) {}

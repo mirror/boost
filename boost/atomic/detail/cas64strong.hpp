@@ -29,12 +29,13 @@ namespace detail {
 /* integral types */
 
 template<typename T, bool Sign>
-class base_atomic<T, int, 8, Sign> {
+class base_atomic<T, int, 8, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -153,12 +154,13 @@ private:
 /* pointer types */
 
 template<bool Sign>
-class base_atomic<void *, void *, 8, Sign> {
+class base_atomic<void *, void *, 8, Sign>
+{
     typedef base_atomic this_type;
     typedef void * value_type;
     typedef ptrdiff_t difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -248,12 +250,13 @@ private:
 };
 
 template<typename T, bool Sign>
-class base_atomic<T *, void *, 8, Sign> {
+class base_atomic<T *, void *, 8, Sign>
+{
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
 
     void
@@ -345,21 +348,23 @@ private:
 /* generic types */
 
 template<typename T, bool Sign>
-class base_atomic<T, void, 8, Sign> {
+class base_atomic<T, void, 8, Sign>
+{
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint64_t storage_type;
 public:
-    BOOST_CONSTEXPR base_atomic(value_type v) BOOST_NOEXCEPT:
-        v_(*reinterpret_cast<storage_type*>(&v))
-    {}
+    explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
+    {
+        memcpy(&v_, &v, sizeof(value_type));
+    }
     base_atomic(void) {}
 
     void
     store(value_type const& value, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         storage_type value_s = 0;
-        memcpy(&value_s, &value, sizeof(value_s));
+        memcpy(&value_s, &value, sizeof(value_type));
         platform_fence_before_store(order);
         platform_store64(value_s, &v_);
         platform_fence_after_store(order);
@@ -371,7 +376,7 @@ public:
         storage_type value_s = platform_load64(&v_);
         platform_fence_after_load(order);
         value_type value;
-        memcpy(&value, &value_s, sizeof(value_s));
+        memcpy(&value, &value_s, sizeof(value_type));
         return value;
     }
 
