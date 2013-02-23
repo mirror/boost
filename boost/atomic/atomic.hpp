@@ -94,7 +94,7 @@ class atomic :
 #if !defined(BOOST_MSVC) || BOOST_MSVC >= 1400
         boost::is_signed<T>::value
 #else
-        // MSVC 2003 has problems instantiating is_signed on non-itegral types
+        // MSVC 2003 has problems instantiating is_signed on non-integral types
         mpl::and_< boost::is_integral<T>, boost::is_signed<T> >::value
 #endif
     >
