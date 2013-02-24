@@ -14,10 +14,11 @@
 #include <ostream>
 #include <boost/range/algorithm_ext/push_back.hpp>
 #include <boost/range/adaptor/transformed.hpp>
+#include <boost/utility/string_ref.hpp>
 
 namespace quickbook { namespace detail {
     void print_char(char ch, std::ostream& out);
-    void print_string(std::basic_string<char> const& str, std::ostream& out);
+    void print_string(boost::string_ref const& str, std::ostream& out);
     char filter_identifier_char(char ch);
 
     template <typename Range>
@@ -33,6 +34,13 @@ namespace quickbook { namespace detail {
     }
 
     std::string escape_uri(std::string uri);
+    inline std::string escape_uri(boost::string_ref const& uri) {
+        return escape_uri(std::string(uri.begin(), uri.end()));
+    }
+
+    inline std::string to_s(boost::string_ref x) {
+        return std::string(x.begin(), x.end());
+    }
 }}
 
 #endif // BOOST_SPIRIT_QUICKBOOK_UTILS_HPP

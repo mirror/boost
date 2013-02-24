@@ -13,7 +13,6 @@
 #include "quickbook.hpp"
 #include "grammar.hpp"
 #include "input_path.hpp"
-#include <boost/filesystem/operations.hpp>
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -69,43 +68,6 @@ namespace quickbook
 
     quickbook_grammar& state::grammar() const {
         return *grammar_;
-    }
-
-    bool state::add_dependency(fs::path const& f) {
-        fs::path p = fs::absolute(f);
-        bool found = fs::exists(fs::status(p));
-
-        // Pop path sections from path until we find an existing
-        // path, adjusting for any dot path sections.
-        fs::path extra;
-        int parent_count = 0;
-        while (!fs::exists(fs::status(p))) {
-            fs::path name = p.filename();
-            p = p.parent_path();
-            if (name == "..") {
-                ++parent_count;
-            }
-            else if (name == ".") {
-            }
-            else if (parent_count) {
-                --parent_count;
-            }
-            else {
-                extra = name / extra;
-            }
-        }
-
-        // If there are any left over ".." sections, then add them
-        // on to the end of the real path, and trust Boost.Filesystem
-        // to sort them out.
-        while (parent_count) {
-            p = p / "..";
-            --parent_count;
-        }
-
-        p = fs::canonical(p) / extra;
-        dependencies[p] |= found;
-        return found;
     }
 
     file_state::file_state(quickbook::state& state, scope_flags scope)

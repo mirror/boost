@@ -10,6 +10,7 @@
 #define BOOST_QUICKBOOK_ID_MANAGER_HPP
 
 #include <boost/scoped_ptr.hpp>
+#include <boost/utility/string_ref.hpp>
 #include <string>
 #include "values.hpp"
 
@@ -53,29 +54,29 @@ namespace quickbook
 
         std::string start_file_with_docinfo(
                 unsigned compatibility_version,
-                std::string const& include_doc_id,
-                std::string const& id,
+                boost::string_ref include_doc_id,
+                boost::string_ref id,
                 value const& title);
 
         void start_file(
                 unsigned compatibility_version,
-                std::string const& include_doc_id,
-                std::string const& id,
+                boost::string_ref include_doc_id,
+                boost::string_ref id,
                 value const& title);
 
         void end_file();
 
-        std::string begin_section(std::string const&, id_category);
+        std::string begin_section(boost::string_ref, id_category);
         void end_section();
         int section_level() const;
 
-        std::string old_style_id(std::string const&, id_category);
-        std::string add_id(std::string const&, id_category);
-        std::string add_anchor(std::string const&, id_category);
+        std::string old_style_id(boost::string_ref, id_category);
+        std::string add_id(boost::string_ref, id_category);
+        std::string add_anchor(boost::string_ref, id_category);
 
         std::string replace_placeholders_with_unresolved_ids(
-                std::string const&) const;
-        std::string replace_placeholders(std::string const&) const;
+                boost::string_ref) const;
+        std::string replace_placeholders(boost::string_ref) const;
         
         unsigned compatibility_version() const;
     private:

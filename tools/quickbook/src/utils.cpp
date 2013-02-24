@@ -29,9 +29,9 @@ namespace quickbook { namespace detail
         }
     }
 
-    void print_string(std::basic_string<char> const& str, std::ostream& out)
+    void print_string(boost::string_ref const& str, std::ostream& out)
     {
-        for (std::string::const_iterator cur = str.begin();
+        for (boost::string_ref::const_iterator cur = str.begin();
             cur != str.end(); ++cur)
         {
             print_char(*cur, out);

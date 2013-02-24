@@ -38,7 +38,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.5.8"
+#define QUICKBOOK_VERSION "Quickbook Version 1.5.9 (dev)"
 
 namespace quickbook
 {
@@ -61,8 +61,9 @@ namespace quickbook
                 end = preset_defines.end();
                 it != end; ++it)
         {
-            parse_iterator first(it->begin());
-            parse_iterator last(it->end());
+            boost::string_ref val(*it);
+            parse_iterator first(val.begin());
+            parse_iterator last(val.end());
 
             cl::parse_info<parse_iterator> info =
                 cl::parse(first, last, state.grammar().command_line_macro);
@@ -85,8 +86,8 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
     void parse_file(quickbook::state& state, value include_doc_id, bool nested_file)
     {
-        parse_iterator first(state.current_file->source.begin());
-        parse_iterator last(state.current_file->source.end());
+        parse_iterator first(state.current_file->source().begin());
+        parse_iterator last(state.current_file->source().end());
 
         cl::parse_info<parse_iterator> info = cl::parse(first, last, state.grammar().doc_info);
         assert(info.hit);
@@ -131,7 +132,7 @@ namespace quickbook
             set_macros(state);
 
             if (state.error_count == 0) {
-                state.add_dependency(filein_);
+                state.dependencies.add_dependency(filein_);
                 state.current_file = load(filein_); // Throws load_error
 
                 parse_file(state);
@@ -147,24 +148,13 @@ namespace quickbook
             if (!deps_out_.empty())
             {
                 fs::ofstream out(deps_out_);
-                BOOST_FOREACH(quickbook::state::dependency_list::value_type
-                        const& d, state.dependencies)
-                {
-                    if (d.second) {
-                        out << detail::path_to_generic(d.first) << std::endl;
-                    }
-                }
+                state.dependencies.write_dependencies(out);
             }
 
             if (!locations_out_.empty())
             {
                 fs::ofstream out(locations_out_);
-                BOOST_FOREACH(quickbook::state::dependency_list::value_type
-                        const& d, state.dependencies)
-                {
-                    out << (d.second ? "+ " : "- ")
-                        << detail::path_to_generic(d.first) << std::endl;
-                }
+                state.dependencies.write_checked_locations(out);
             }
         }
         catch (load_error& e) {

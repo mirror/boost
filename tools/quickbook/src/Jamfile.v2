@@ -27,9 +27,9 @@ exe quickbook
     actions.cpp
     doc_info_actions.cpp
     state.cpp
+    dependency_tracker.cpp
     utils.cpp
     files.cpp
-    string_ref.cpp
     input_path.cpp
     values.cpp
     id_manager.cpp
