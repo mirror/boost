@@ -34,7 +34,7 @@ static const std::size_t N = 1000;
 static const std::size_t N = 100;
 #endif
 
-#define BENCH_SIMPLE_CONSTRUCTION
+//#define BENCH_SIMPLE_CONSTRUCTION
 //#define BENCH_TRIVIAL_TYPE
 
 #ifdef BENCH_TRIVIAL_TYPE
