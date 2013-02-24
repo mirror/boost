@@ -77,6 +77,7 @@ namespace quickbook
         cl::rule<scanner> attribute_value_1_7;
         cl::rule<scanner> escape;
         cl::rule<scanner> raw_escape;
+        cl::rule<scanner> skip_entity;
 
         // Miscellaneous stuff
         cl::rule<scanner> hard_space;

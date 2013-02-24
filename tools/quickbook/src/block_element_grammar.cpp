@@ -169,7 +169,10 @@ namespace quickbook
             ;
 
         local.template_body =
-           *(('[' >> local.template_body >> ']') | (cl::anychar_p - ']'))
+                qbk_ver(106u)
+            >>  *(~cl::eps_p(']') >> skip_entity)
+            |   qbk_ver(0,106u)
+            >>  *(('[' >> local.template_body >> ']') | (cl::anychar_p - ']'))
             >> cl::eps_p(space >> ']')
             >> space
             ;
