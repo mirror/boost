@@ -73,7 +73,7 @@ def main(argv):
                         gold_text = file.read()
                     finally:
                         file.close()
-                    compare_xml(filename, doc_text, gold_text)
+                    compare_xml(src_path, doc_text, gold_text)
 
 def run_boostbook(parser, boostbook_xsl, file):
     doc = boostbook_xsl(etree.parse(file, parser))
@@ -90,7 +90,7 @@ def normalize_boostbook_ids(doc):
         if(id in ids):
             print 'Duplicate id: ' + id
         
-        match = re.match("(id|.+_id)(\d+)((?:-bb)?)", id)
+        match = re.match("(id|.+_id)([mp]?\d+)((?:-bb)?)", id)
         if(match):
             count = 1
             if(match.group(1) in id_bases):
@@ -117,6 +117,8 @@ def compare_xml(file, doc_text, gold_text):
                 doc_text.splitlines(True)
             )
         )
+        print
+        print
 
 if __name__ == "__main__":
     main(sys.argv[1:])

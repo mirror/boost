@@ -422,11 +422,7 @@
     <xsl:param name="highlight" select="false()"/>
 
     <xsl:element name="{name(.)}">
-      <xsl:for-each select="./@*">
-        <xsl:attribute name="{name(.)}">
-          <xsl:value-of select="."/>
-        </xsl:attribute>
-      </xsl:for-each>
+      <xsl:copy-of select="./@*"/>
       <xsl:apply-templates select="./*|./text()" mode="annotation">
         <xsl:with-param name="highlight" select="$highlight"/>
       </xsl:apply-templates>
