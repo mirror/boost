@@ -13,14 +13,20 @@
 
 namespace quickbook
 {
-    bool dependency_tracker::add_dependency(fs::path const& f) {
-        fs::path p = fs::absolute(f);
-        bool found = fs::exists(fs::status(p));
+    // Convert the path to its canonical representation if it exists.
+    // Or something close if it doesn't.
+    static fs::path normalize_path(fs::path const& path)
+    {
+        fs::path p = fs::absolute(path); // The base of the path.
+        fs::path extra; // The non-existant part of the path.
+        int parent_count = 0; // Number of active '..' sections
+
+        // Invariant: path is equivalent to: p / ('..' * parent_count) / extra
+        // i.e. if parent_count == 0: p/extra
+        // if parent_count == 2: p/../../extra
 
         // Pop path sections from path until we find an existing
         // path, adjusting for any dot path sections.
-        fs::path extra;
-        int parent_count = 0;
         while (!fs::exists(fs::status(p))) {
             fs::path name = p.filename();
             p = p.parent_path();
@@ -45,8 +51,14 @@ namespace quickbook
             --parent_count;
         }
 
-        p = fs::canonical(p) / extra;
-        dependencies[p] |= found;
+        // Cannoicalize the existing part of the path, and add 'extra' back to
+        // the end.
+        return fs::canonical(p) / extra;
+    }
+
+    bool dependency_tracker::add_dependency(fs::path const& f) {
+        bool found = fs::exists(fs::status(f));
+        dependencies[normalize_path(f)] |= found;
         return found;
     }
 
