@@ -59,6 +59,14 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "throw_exception_test", "thr
 	ProjectSection(ProjectDependencies) = postProject
 	EndProjectSection
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "static_vector_test", "static_vector_test.vcproj", "{58E1C1C3-096A-84FE-4FA2-D6BA79201C02}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "bench_static_vector", "bench_static_vector.vcproj", "{58E1C1C3-096A-84FE-4FA2-D6BA79201C02}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfiguration) = preSolution
 		Debug = Debug
@@ -127,6 +135,14 @@ Global
 		{5A8D91E0-FA57-284F-84FE-D3A6BA792002}.Debug.Build.0 = Debug|Win32
 		{5A8D91E0-FA57-284F-84FE-D3A6BA792002}.Release.ActiveCfg = Release|Win32
 		{5A8D91E0-FA57-284F-84FE-D3A6BA792002}.Release.Build.0 = Release|Win32
+		{58E1C1C3-096A-84FE-4FA2-D6BA79201C02}.Debug.ActiveCfg = Debug|Win32
+		{58E1C1C3-096A-84FE-4FA2-D6BA79201C02}.Debug.Build.0 = Debug|Win32
+		{58E1C1C3-096A-84F0-4FA2-D6BA79201C02}.Release.ActiveCfg = Release|Win32
+		{58E1C1C3-096A-84F0-4FA2-D6BA79201C02}.Release.Build.0 = Release|Win32
+		{58E1C1C3-096A-84F1-4FA2-D6BA79201C02}.Debug.ActiveCfg = Debug|Win32
+		{58E1C1C3-096A-84F1-4FA2-D6BA79201C02}.Debug.Build.0 = Debug|Win32
+		{58E1C1C3-096A-84F2-4FA2-D6BA79201C02}.Release.ActiveCfg = Release|Win32
+		{58E1C1C3-096A-84F2-4FA2-D6BA79201C02}.Release.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 	EndGlobalSection

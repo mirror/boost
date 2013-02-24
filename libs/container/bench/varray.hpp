@@ -1,4 +1,4 @@
-// Boost.Container static_vector
+// Boost.Container varray
 //
 // Copyright (c) 2012-2013 Adam Wulkiewicz, Lodz, Poland.
 // Copyright (c) 2011-2013 Andrew Hundt.
@@ -7,8 +7,8 @@
 // Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_CONTAINER_STATIC_VECTOR_HPP
-#define BOOST_CONTAINER_STATIC_VECTOR_HPP
+#ifndef BOOST_CONTAINER_VARRAY_HPP
+#define BOOST_CONTAINER_VARRAY_HPP
 
 #if (defined _MSC_VER) && (_MSC_VER >= 1200)
 #  pragma once
@@ -16,90 +16,43 @@
 
 #include <boost/container/detail/config_begin.hpp>
 
-#include <boost/container/vector.hpp>
-#include <boost/aligned_storage.hpp>
+#include "detail/varray.hpp"
 
 namespace boost { namespace container {
 
 /**
- * @defgroup static_vector_non_member static_vector non-member functions
+ * @defgroup varray_non_member varray non-member functions
  */
 
 /**
  * @brief A variable-size array container with fixed capacity.
  *
- * static_vector is a sequence container like boost::container::vector with contiguous storage that can
+ * varray is a sequence container like boost::container::vector with contiguous storage that can
  * change in size, along with the static allocation, low overhead, and fixed capacity of boost::array.
  *
- * A static_vector is a sequence that supports random access to elements, constant time insertion and
+ * A varray is a sequence that supports random access to elements, constant time insertion and
  * removal of elements at the end, and linear time insertion and removal of elements at the beginning or 
- * in the middle. The number of elements in a static_vector may vary dynamically up to a fixed capacity
+ * in the middle. The number of elements in a varray may vary dynamically up to a fixed capacity
  * because elements are stored within the object itself similarly to an array. However, objects are 
- * initialized as they are inserted into static_vector unlike C arrays or std::array which must construct
- * all elements on instantiation. The behavior of static_vector enables the use of statically allocated
+ * initialized as they are inserted into varray unlike C arrays or std::array which must construct
+ * all elements on instantiation. The behavior of varray enables the use of statically allocated
  * elements in cases with complex object lifetime requirements that would otherwise not be trivially 
  * possible.
  *
  * @par Error Handling
- *  Insertion beyond the capacity and out of bounds errors results in calling throw_bad_alloc().
- *  The reason for this is because unlike vectors, static_vector does not perform allocation.
+ *  Insertion beyond the capacity and out of bounds errors result in undefined behavior.
+ *  The reason for this is because unlike vectors, varray does not perform allocation.
  *
  * @tparam Value    The type of element that will be stored.
- * @tparam Capacity The maximum number of elements static_vector can store, fixed at compile time.
+ * @tparam Capacity The maximum number of elements varray can store, fixed at compile time.
  */
-
-
-namespace container_detail {
-
-template<class T, std::size_t N>
-class static_storage_allocator
-{
-   public:
-   typedef T value_type;
-
-   static_storage_allocator() BOOST_CONTAINER_NOEXCEPT
-   {}
-
-   static_storage_allocator(const static_storage_allocator &) BOOST_CONTAINER_NOEXCEPT
-   {}
-
-   static_storage_allocator & operator=(const static_storage_allocator &) BOOST_CONTAINER_NOEXCEPT
-   {}
-
-   T* internal_storage() const BOOST_CONTAINER_NOEXCEPT
-   {  return const_cast<T*>(static_cast<const T*>(static_cast<const void*>(&storage)));  }
-
-   T* internal_storage() BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<T*>(static_cast<void*>(&storage));  }
-
-   static const std::size_t internal_capacity = N;
-
-   typedef boost::container::container_detail::version_type<static_storage_allocator, 0>   version;
-
-   friend bool operator==(const static_storage_allocator &, const static_storage_allocator &) BOOST_CONTAINER_NOEXCEPT
-   {  return false;  }
-
-   friend bool operator!=(const static_storage_allocator &, const static_storage_allocator &) BOOST_CONTAINER_NOEXCEPT
-   {  return true;  }
-
-   private:
-   typename boost::aligned_storage
-      <sizeof(T)*N, boost::alignment_of<T>::value>::type storage;
-};
-
-}  //namespace container_detail {
-
-
 template <typename Value, std::size_t Capacity>
-class static_vector
-    : public vector<Value, container_detail::static_storage_allocator<Value, Capacity> >
+class varray
+    : public container_detail::varray<Value, Capacity>
 {
-    typedef vector<Value, container_detail::static_storage_allocator<Value, Capacity> > base_t;
+    typedef container_detail::varray<Value, Capacity> base_t;
 
-    BOOST_COPYABLE_AND_MOVABLE(static_vector)
-
-   template<class U, std::size_t OtherCapacity>
-   friend class static_vector;
+    BOOST_COPYABLE_AND_MOVABLE(varray)
 
 public:
     //! @brief The type of elements stored in the container.
@@ -125,20 +78,20 @@ public:
     //! @brief The const reverse iterator.
     typedef typename base_t::const_reverse_iterator const_reverse_iterator;
 
-    //! @brief Constructs an empty static_vector.
+    //! @brief Constructs an empty varray.
     //!
     //! @par Throws
     //!   Nothing.
     //!
     //! @par Complexity
     //!   Constant O(1).
-    static_vector() BOOST_CONTAINER_NOEXCEPT
+    varray()
         : base_t()
     {}
 
     //! @pre <tt>count <= capacity()</tt>
     //!
-    //! @brief Constructs a static_vector containing count default constructed Values.
+    //! @brief Constructs a varray containing count default constructed Values.
     //!
     //! @param count    The number of values which will be contained in the container.
     //!
@@ -147,13 +100,13 @@ public:
     //!
     //! @par Complexity
     //!   Linear O(N).
-    explicit static_vector(size_type count)
+    explicit varray(size_type count)
         : base_t(count)
     {}
 
     //! @pre <tt>count <= capacity()</tt>
     //!
-    //! @brief Constructs a static_vector containing count copies of value.
+    //! @brief Constructs a varray containing count copies of value.
     //!
     //! @param count    The number of copies of a values that will be contained in the container.
     //! @param value    The value which will be used to copy construct values.
@@ -163,7 +116,7 @@ public:
     //!
     //! @par Complexity
     //!   Linear O(N).
-    static_vector(size_type count, value_type const& value)
+    varray(size_type count, value_type const& value)
         : base_t(count, value)
     {}
 
@@ -171,7 +124,7 @@ public:
     //!  @li <tt>distance(first, last) <= capacity()</tt>
     //!  @li Iterator must meet the \c ForwardTraversalIterator concept.
     //!
-    //! @brief Constructs a static_vector containing copy of a range <tt>[first, last)</tt>.
+    //! @brief Constructs a varray containing copy of a range <tt>[first, last)</tt>.
     //!
     //! @param first    The iterator to the first element in range.
     //! @param last     The iterator to the one after the last element in range.
@@ -182,28 +135,28 @@ public:
     //! @par Complexity
     //!   Linear O(N).
     template <typename Iterator>
-    static_vector(Iterator first, Iterator last)
+    varray(Iterator first, Iterator last)
         : base_t(first, last)
     {}
 
-    //! @brief Constructs a copy of other static_vector.
+    //! @brief Constructs a copy of other varray.
     //!
-    //! @param other    The static_vector which content will be copied to this one.
+    //! @param other    The varray which content will be copied to this one.
     //!
     //! @par Throws
     //!   If Value's copy constructor throws.
     //!
     //! @par Complexity
     //!   Linear O(N).
-    static_vector(static_vector const& other)
+    varray(varray const& other)
         : base_t(other)
     {}
 
     //! @pre <tt>other.size() <= capacity()</tt>.
     //!
-    //! @brief Constructs a copy of other static_vector.
+    //! @brief Constructs a copy of other varray.
     //!
-    //! @param other    The static_vector which content will be copied to this one.
+    //! @param other    The varray which content will be copied to this one.
     //!
     //! @par Throws
     //!   If Value's copy constructor throws.
@@ -211,18 +164,18 @@ public:
     //! @par Complexity
     //!   Linear O(N).
     template <std::size_t C>
-    static_vector(static_vector<value_type, C> const& other) : base_t(other) {}
+    varray(varray<value_type, C> const& other) : base_t(other) {}
 
-    //! @brief Copy assigns Values stored in the other static_vector to this one.
+    //! @brief Copy assigns Values stored in the other varray to this one.
     //!
-    //! @param other    The static_vector which content will be copied to this one.
+    //! @param other    The varray which content will be copied to this one.
     //!
     //! @par Throws
     //!   If Value's copy constructor or copy assignment throws.
     //!
     //! @par Complexity
     //! Linear O(N).
-    static_vector & operator=(BOOST_COPY_ASSIGN_REF(static_vector) other)
+    varray & operator=(BOOST_COPY_ASSIGN_REF(varray) other)
     {
         base_t::operator=(static_cast<base_t const&>(other));
         return *this;
@@ -230,9 +183,9 @@ public:
 
     //! @pre <tt>other.size() <= capacity()</tt>
     //!
-    //! @brief Copy assigns Values stored in the other static_vector to this one.
+    //! @brief Copy assigns Values stored in the other varray to this one.
     //!
-    //! @param other    The static_vector which content will be copied to this one.
+    //! @param other    The varray which content will be copied to this one.
     //!
     //! @par Throws
     //!   If Value's copy constructor or copy assignment throws.
@@ -242,18 +195,18 @@ public:
     template <std::size_t C>
 // TEMPORARY WORKAROUND
 #if defined(BOOST_NO_RVALUE_REFERENCES)
-    static_vector & operator=(::boost::rv< static_vector<value_type, C> > const& other)
+    varray & operator=(::boost::rv< varray<value_type, C> > const& other)
 #else
-    static_vector & operator=(static_vector<value_type, C> const& other)
+    varray & operator=(varray<value_type, C> const& other)
 #endif
     {
-        base_t::operator=(static_cast<static_vector<value_type, C> const&>(other));
+        base_t::operator=(static_cast<varray<value_type, C> const&>(other));
         return *this;
     }
 
-    //! @brief Move constructor. Moves Values stored in the other static_vector to this one.
+    //! @brief Move constructor. Moves Values stored in the other varray to this one.
     //!
-    //! @param other    The static_vector which content will be moved to this one.
+    //! @param other    The varray which content will be moved to this one.
     //!
     //! @par Throws
     //!   @li If \c boost::has_nothrow_move<Value>::value is \c true and Value's move constructor throws.
@@ -261,15 +214,15 @@ public:
     //!
     //! @par Complexity
     //!   Linear O(N).
-    static_vector(BOOST_RV_REF(static_vector) other)
+    varray(BOOST_RV_REF(varray) other)
         : base_t(boost::move(static_cast<base_t&>(other)))
     {}
 
     //! @pre <tt>other.size() <= capacity()</tt>
     //!
-    //! @brief Move constructor. Moves Values stored in the other static_vector to this one.
+    //! @brief Move constructor. Moves Values stored in the other varray to this one.
     //!
-    //! @param other    The static_vector which content will be moved to this one.
+    //! @param other    The varray which content will be moved to this one.
     //!
     //! @par Throws
     //!   @li If \c boost::has_nothrow_move<Value>::value is \c true and Value's move constructor throws.
@@ -278,13 +231,13 @@ public:
     //! @par Complexity
     //!   Linear O(N).
     template <std::size_t C>
-    static_vector(BOOST_RV_REF_BEG static_vector<value_type, C> BOOST_RV_REF_END other)
-        : base_t(boost::move(static_cast<typename static_vector<value_type, C>::base_t&>(other)))
+    varray(BOOST_RV_REF_2_TEMPL_ARGS(varray, value_type, C) other)
+        : base_t(boost::move(static_cast<container_detail::varray<value_type, C>&>(other)))
     {}
 
-    //! @brief Move assignment. Moves Values stored in the other static_vector to this one.
+    //! @brief Move assignment. Moves Values stored in the other varray to this one.
     //!
-    //! @param other    The static_vector which content will be moved to this one.
+    //! @param other    The varray which content will be moved to this one.
     //!
     //! @par Throws
     //!   @li If \c boost::has_nothrow_move<Value>::value is \c true and Value's move constructor or move assignment throws.
@@ -292,7 +245,7 @@ public:
     //!
     //! @par Complexity
     //!   Linear O(N).
-    static_vector & operator=(BOOST_RV_REF(static_vector) other)
+    varray & operator=(BOOST_RV_REF(varray) other)
     {
         base_t::operator=(boost::move(static_cast<base_t&>(other)));
         return *this;
@@ -300,9 +253,9 @@ public:
 
     //! @pre <tt>other.size() <= capacity()</tt>
     //!
-    //! @brief Move assignment. Moves Values stored in the other static_vector to this one.
+    //! @brief Move assignment. Moves Values stored in the other varray to this one.
     //!
-    //! @param other    The static_vector which content will be moved to this one.
+    //! @param other    The varray which content will be moved to this one.
     //!
     //! @par Throws
     //!   @li If \c boost::has_nothrow_move<Value>::value is \c true and Value's move constructor or move assignment throws.
@@ -311,9 +264,9 @@ public:
     //! @par Complexity
     //!   Linear O(N).
     template <std::size_t C>
-    static_vector & operator=(BOOST_RV_REF_BEG static_vector<value_type, C> BOOST_RV_REF_END other)
+    varray & operator=(BOOST_RV_REF_2_TEMPL_ARGS(varray, value_type, C) other)
     {
-        base_t::operator=(boost::move(static_cast<typename static_vector<value_type, C>::base_t&>(other)));
+        base_t::operator=(boost::move(static_cast<container_detail::varray<value_type, C>&>(other)));
         return *this;
     }
 
@@ -326,11 +279,11 @@ public:
     //!
     //! @par Complexity
     //!   Linear O(N).
-    ~static_vector();
+    ~varray();
 
-    //! @brief Swaps contents of the other static_vector and this one.
+    //! @brief Swaps contents of the other varray and this one.
     //!
-    //! @param other    The static_vector which content will be swapped with this one's content.
+    //! @param other    The varray which content will be swapped with this one's content.
     //!
     //! @par Throws
     //!   @li If \c boost::has_nothrow_move<Value>::value is \c true and Value's move constructor or move assignment throws,
@@ -338,13 +291,13 @@ public:
     //!
     //! @par Complexity
     //!   Linear O(N).
-    void swap(static_vector & other);
+    void swap(varray & other);
 
     //! @pre <tt>other.size() <= capacity() && size() <= other.capacity()</tt>
     //!
-    //! @brief Swaps contents of the other static_vector and this one.
+    //! @brief Swaps contents of the other varray and this one.
     //!
-    //! @param other    The static_vector which content will be swapped with this one's content.
+    //! @param other    The varray which content will be swapped with this one's content.
     //!
     //! @par Throws
     //!   @li If \c boost::has_nothrow_move<Value>::value is \c true and Value's move constructor or move assignment throws,
@@ -353,7 +306,7 @@ public:
     //! @par Complexity
     //!   Linear O(N).
     template <std::size_t C>
-    void swap(static_vector<value_type, C> & other);
+    void swap(varray<value_type, C> & other);
 
     //! @pre <tt>count <= capacity()</tt>
     //!
@@ -395,7 +348,7 @@ public:
     //!
     //! @par Complexity
     //!   Linear O(N).
-    void reserve(size_type count)  BOOST_CONTAINER_NOEXCEPT;
+    void reserve(size_type count);
 
     //! @pre <tt>size() < capacity()</tt>
     //!
@@ -603,7 +556,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    void clear()  BOOST_CONTAINER_NOEXCEPT;
+    void clear();
 
     //! @pre <tt>i < size()</tt>
     //!
@@ -733,7 +686,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    Value * data() BOOST_CONTAINER_NOEXCEPT;
+    Value * data();
 
     //! @brief Const pointer such that <tt>[data(), data() + size())</tt> is a valid range.
     //!   For a non-empty vector <tt>data() == &front()</tt>.
@@ -743,7 +696,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const Value * data() const BOOST_CONTAINER_NOEXCEPT;
+    const Value * data() const;
 
     //! @brief Returns iterator to the first element.
     //!
@@ -754,7 +707,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    iterator begin() BOOST_CONTAINER_NOEXCEPT;
+    iterator begin();
 
     //! @brief Returns const iterator to the first element.
     //!
@@ -765,7 +718,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const_iterator begin() const BOOST_CONTAINER_NOEXCEPT;
+    const_iterator begin() const;
 
     //! @brief Returns const iterator to the first element.
     //!
@@ -776,7 +729,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const_iterator cbegin() const BOOST_CONTAINER_NOEXCEPT;
+    const_iterator cbegin() const;
 
     //! @brief Returns iterator to the one after the last element.
     //!
@@ -787,7 +740,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    iterator end() BOOST_CONTAINER_NOEXCEPT;
+    iterator end();
 
     //! @brief Returns const iterator to the one after the last element.
     //!
@@ -798,7 +751,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const_iterator end() const BOOST_CONTAINER_NOEXCEPT;
+    const_iterator end() const;
 
     //! @brief Returns const iterator to the one after the last element.
     //!
@@ -809,79 +762,79 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const_iterator cend() const BOOST_CONTAINER_NOEXCEPT;
+    const_iterator cend() const;
 
     //! @brief Returns reverse iterator to the first element of the reversed container.
     //!
     //! @return reverse_iterator pointing to the beginning
-    //! of the reversed static_vector.
+    //! of the reversed varray.
     //!
     //! @par Throws
     //!   Nothing.
     //!
     //! @par Complexity
     //!   Constant O(1).
-    reverse_iterator rbegin() BOOST_CONTAINER_NOEXCEPT;
+    reverse_iterator rbegin();
 
     //! @brief Returns const reverse iterator to the first element of the reversed container.
     //!
     //! @return const_reverse_iterator pointing to the beginning
-    //! of the reversed static_vector.
+    //! of the reversed varray.
     //!
     //! @par Throws
     //!   Nothing.
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const_reverse_iterator rbegin() const BOOST_CONTAINER_NOEXCEPT;
+    const_reverse_iterator rbegin() const;
 
     //! @brief Returns const reverse iterator to the first element of the reversed container.
     //!
     //! @return const_reverse_iterator pointing to the beginning
-    //! of the reversed static_vector.
+    //! of the reversed varray.
     //!
     //! @par Throws
     //!   Nothing.
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const_reverse_iterator crbegin() const BOOST_CONTAINER_NOEXCEPT;
+    const_reverse_iterator crbegin() const;
 
     //! @brief Returns reverse iterator to the one after the last element of the reversed container.
     //!
     //! @return reverse_iterator pointing to the one after the last element
-    //! of the reversed static_vector.
+    //! of the reversed varray.
     //!
     //! @par Throws
     //!   Nothing.
     //!
     //! @par Complexity
     //!   Constant O(1).
-    reverse_iterator rend() BOOST_CONTAINER_NOEXCEPT;
+    reverse_iterator rend();
 
     //! @brief Returns const reverse iterator to the one after the last element of the reversed container.
     //!
     //! @return const_reverse_iterator pointing to the one after the last element
-    //! of the reversed static_vector.
+    //! of the reversed varray.
     //!
     //! @par Throws
     //!   Nothing.
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const_reverse_iterator rend() const BOOST_CONTAINER_NOEXCEPT;
+    const_reverse_iterator rend() const;
 
     //! @brief Returns const reverse iterator to the one after the last element of the reversed container.
     //!
     //! @return const_reverse_iterator pointing to the one after the last element
-    //! of the reversed static_vector.
+    //! of the reversed varray.
     //!
     //! @par Throws
     //!   Nothing.
     //!
     //! @par Complexity
     //!   Constant O(1).
-    const_reverse_iterator crend() const BOOST_CONTAINER_NOEXCEPT;
+    const_reverse_iterator crend() const;
 
     //! @brief Returns container's capacity.
     //!
@@ -892,7 +845,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    static size_type capacity() BOOST_CONTAINER_NOEXCEPT;
+    static size_type capacity();
 
     //! @brief Returns container's capacity.
     //!
@@ -903,7 +856,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    static size_type max_size() BOOST_CONTAINER_NOEXCEPT;
+    static size_type max_size();
 
     //! @brief Returns the number of stored elements.
     //!
@@ -914,7 +867,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    size_type size() const BOOST_CONTAINER_NOEXCEPT;
+    size_type size() const;
 
     //! @brief Queries if the container contains elements.
     //!
@@ -926,13 +879,7 @@ public:
     //!
     //! @par Complexity
     //!   Constant O(1).
-    bool empty() const BOOST_CONTAINER_NOEXCEPT;
-#else
-
-   friend void swap(static_vector &x, static_vector &y)
-   {
-      x.swap(y);
-   }
+    bool empty() const;
 
 #endif // BOOST_CONTAINER_DOXYGEN_INVOKED
 
@@ -940,112 +887,103 @@ public:
 
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 
-//! @brief Checks if contents of two static_vectors are equal.
+//! @brief Checks if contents of two varrays are equal.
 //!
-//! @ingroup static_vector_non_member
+//! @ingroup varray_non_member
 //!
-//! @param x    The first static_vector.
-//! @param y    The second static_vector.
+//! @param x    The first varray.
+//! @param y    The second varray.
 //!
 //! @return     \c true if containers have the same size and elements in both containers are equal.
 //!
 //! @par Complexity
 //!   Linear O(N).
 template<typename V, std::size_t C1, std::size_t C2>
-bool operator== (static_vector<V, C1> const& x, static_vector<V, C2> const& y);
+bool operator== (varray<V, C1> const& x, varray<V, C2> const& y);
 
-//! @brief Checks if contents of two static_vectors are not equal.
+//! @brief Checks if contents of two varrays are not equal.
 //!
-//! @ingroup static_vector_non_member
+//! @ingroup varray_non_member
 //!
-//! @param x    The first static_vector.
-//! @param y    The second static_vector.
+//! @param x    The first varray.
+//! @param y    The second varray.
 //!
 //! @return     \c true if containers have different size or elements in both containers are not equal.
 //!
 //! @par Complexity
 //!   Linear O(N).
 template<typename V, std::size_t C1, std::size_t C2>
-bool operator!= (static_vector<V, C1> const& x, static_vector<V, C2> const& y);
+bool operator!= (varray<V, C1> const& x, varray<V, C2> const& y);
 
-//! @brief Lexicographically compares static_vectors.
+//! @brief Lexicographically compares varrays.
 //!
-//! @ingroup static_vector_non_member
+//! @ingroup varray_non_member
 //!
-//! @param x    The first static_vector.
-//! @param y    The second static_vector.
+//! @param x    The first varray.
+//! @param y    The second varray.
 //!
 //! @return     \c true if x compares lexicographically less than y.
 //!
 //! @par Complexity
 //!   Linear O(N).
 template<typename V, std::size_t C1, std::size_t C2>
-bool operator< (static_vector<V, C1> const& x, static_vector<V, C2> const& y);
+bool operator< (varray<V, C1> const& x, varray<V, C2> const& y);
 
-//! @brief Lexicographically compares static_vectors.
+//! @brief Lexicographically compares varrays.
 //!
-//! @ingroup static_vector_non_member
+//! @ingroup varray_non_member
 //!
-//! @param x    The first static_vector.
-//! @param y    The second static_vector.
+//! @param x    The first varray.
+//! @param y    The second varray.
 //!
 //! @return     \c true if y compares lexicographically less than x.
 //!
 //! @par Complexity
 //!   Linear O(N).
 template<typename V, std::size_t C1, std::size_t C2>
-bool operator> (static_vector<V, C1> const& x, static_vector<V, C2> const& y);
+bool operator> (varray<V, C1> const& x, varray<V, C2> const& y);
 
-//! @brief Lexicographically compares static_vectors.
+//! @brief Lexicographically compares varrays.
 //!
-//! @ingroup static_vector_non_member
+//! @ingroup varray_non_member
 //!
-//! @param x    The first static_vector.
-//! @param y    The second static_vector.
+//! @param x    The first varray.
+//! @param y    The second varray.
 //!
 //! @return     \c true if y don't compare lexicographically less than x.
 //!
 //! @par Complexity
 //!   Linear O(N).
 template<typename V, std::size_t C1, std::size_t C2>
-bool operator<= (static_vector<V, C1> const& x, static_vector<V, C2> const& y);
+bool operator<= (varray<V, C1> const& x, varray<V, C2> const& y);
 
-//! @brief Lexicographically compares static_vectors.
+//! @brief Lexicographically compares varrays.
 //!
-//! @ingroup static_vector_non_member
+//! @ingroup varray_non_member
 //!
-//! @param x    The first static_vector.
-//! @param y    The second static_vector.
+//! @param x    The first varray.
+//! @param y    The second varray.
 //!
 //! @return     \c true if x don't compare lexicographically less than y.
 //!
 //! @par Complexity
 //!   Linear O(N).
 template<typename V, std::size_t C1, std::size_t C2>
-bool operator>= (static_vector<V, C1> const& x, static_vector<V, C2> const& y);
+bool operator>= (varray<V, C1> const& x, varray<V, C2> const& y);
 
-//! @brief Swaps contents of two static_vectors.
+//! @brief Swaps contents of two varrays.
 //!
-//! This function calls static_vector::swap().
+//! This function calls varray::swap().
 //!
-//! @ingroup static_vector_non_member
+//! @ingroup varray_non_member
 //!
-//! @param x    The first static_vector.
-//! @param y    The second static_vector.
+//! @param x    The first varray.
+//! @param y    The second varray.
 //!
 //! @par Complexity
 //!   Linear O(N).
 template<typename V, std::size_t C1, std::size_t C2>
-inline void swap(static_vector<V, C1> & x, static_vector<V, C2> & y);
-
-#else
-
-template<typename V, std::size_t C1, std::size_t C2>
-inline void swap(static_vector<V, C1> & x, static_vector<V, C2> & y
-      , typename container_detail::enable_if_c< C1 != C2>::type * = 0)
-{
-   x.swap(y);
-}
+inline void swap(varray<V, C1> & x, varray<V, C2> & y);
 
 #endif // BOOST_CONTAINER_DOXYGEN_INVOKED
 
@@ -1053,4 +991,4 @@ inline void swap(static_vector<V, C1> & x, static_vector<V, C2> & y
 
 #include <boost/container/detail/config_end.hpp>
 
-#endif // BOOST_CONTAINER_STATIC_VECTOR_HPP
+#endif // BOOST_CONTAINER_VARRAY_HPP

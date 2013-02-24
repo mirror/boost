@@ -250,7 +250,19 @@ struct allocator_traits
 
    //! <b>Returns</b>: `a.select_on_container_copy_construction()` if that expression is well-formed;
    //! otherwise, a.
-   static Alloc select_on_container_copy_construction(const Alloc &a)
+   static
+   #if !defined(BOOST_CONTAINER_DOXYGEN_INVOKED)
+   typename container_detail::if_c
+      <  boost::container::container_detail::
+                  has_member_function_callable_with_select_on_container_copy_construction
+                     <const Alloc>::value
+      , Alloc
+      , const Alloc &
+      >::type
+   #else
+   Alloc
+   #endif
+   select_on_container_copy_construction(const Alloc &a)
    {
       const bool value = boost::container::container_detail::
          has_member_function_callable_with_select_on_container_copy_construction
@@ -295,7 +307,7 @@ struct allocator_traits
       static Alloc priv_select_on_container_copy_construction(boost::true_type, const Alloc &a)
       {  return a.select_on_container_copy_construction();  }
 
-      static Alloc priv_select_on_container_copy_construction(boost::false_type, const Alloc &a)
+      static const Alloc &priv_select_on_container_copy_construction(boost::false_type, const Alloc &a)
       {  return a;  }
 
       #if !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)

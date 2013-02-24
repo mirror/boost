@@ -173,6 +173,9 @@
 				RelativePath="..\..\test\set_test.hpp">
 			</File>
 			<File
+				RelativePath="..\..\test\static_vector_test.hpp">
+			</File>
+			<File
 				RelativePath="..\..\test\util.hpp">
 			</File>
 			<File
@@ -220,6 +223,9 @@
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\container\stable_vector.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\static_vector.hpp">
 			</File>
 			<File
 				RelativePath="..\..\..\..\boost\container\string.hpp">
@@ -322,6 +328,26 @@
 				</File>
 				<File
 					RelativePath="..\..\..\..\boost\container\detail\workaround.hpp">
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
+			Name="bench"
+			Filter="">
+			<File
+				RelativePath="..\..\bench\varray.hpp">
+			</File>
+			<Filter
+				Name="detail"
+				Filter="">
+				<File
+					RelativePath="..\..\bench\detail\varray.hpp">
+				</File>
+				<File
+					RelativePath="..\..\bench\detail\varray_concept.hpp">
+				</File>
+				<File
+					RelativePath="..\..\bench\detail\varray_util.hpp">
 				</File>
 			</Filter>
 		</Filter>

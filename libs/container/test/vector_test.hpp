@@ -216,7 +216,12 @@ int vector_test()
          stdvector->push_back(int(1));
          if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
          }
-         {  //push_back with enough capacity
+
+         {  //test back()
+         const IntType test_this(1);
+         if(test_this != boostvector->back())   return 1;
+         }
+         {  //pop_back with enough capacity
          boostvector->pop_back();
          boostvector->pop_back();
          stdvector->pop_back();

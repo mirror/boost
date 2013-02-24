@@ -14,7 +14,7 @@
 #include <boost/container/static_vector.hpp>
 
 #include <boost/shared_ptr.hpp>
-#include "movable.hpp"
+#include "movable_int.hpp"
 
 using namespace boost::container;
 

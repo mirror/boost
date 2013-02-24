@@ -89,10 +89,10 @@ struct insert_n_copies_proxy
       :  a_(a), v_(v)
    {}
 
-   void uninitialized_copy_n_and_update(Iterator p, size_type n)
+   void uninitialized_copy_n_and_update(Iterator p, size_type n) const
    {  boost::container::uninitialized_fill_alloc_n(this->a_, v_, n, p);  }
 
-   void copy_n_and_update(Iterator p, size_type n)
+   void copy_n_and_update(Iterator p, size_type n) const
    {  std::fill_n(p, n, v_);  }
 
    A &a_;
@@ -111,10 +111,10 @@ struct insert_default_constructed_n_proxy
       :  a_(a)
    {}
 
-   void uninitialized_copy_n_and_update(Iterator p, size_type n)
+   void uninitialized_copy_n_and_update(Iterator p, size_type n) const
    {  boost::container::uninitialized_default_alloc_n(this->a_, n, p);  }
 
-   void copy_n_and_update(Iterator, size_type)
+   void copy_n_and_update(Iterator, size_type) const
    {
       BOOST_ASSERT(false);
    }
@@ -134,7 +134,7 @@ struct insert_copy_proxy
       :  a_(a), v_(v)
    {}
 
-   void uninitialized_copy_n_and_update(Iterator p, size_type n)
+   void uninitialized_copy_n_and_update(Iterator p, size_type n) const
    {
       BOOST_ASSERT(n == 1);  (void)n;
       alloc_traits::construct( this->a_
@@ -143,7 +143,7 @@ struct insert_copy_proxy
                               );
    }
 
-   void copy_n_and_update(Iterator p, size_type n)
+   void copy_n_and_update(Iterator p, size_type n) const
    {
       BOOST_ASSERT(n == 1);  (void)n;
       *p =v_;
@@ -165,7 +165,7 @@ struct insert_move_proxy
       :  a_(a), v_(v)
    {}
 
-   void uninitialized_copy_n_and_update(Iterator p, size_type n)
+   void uninitialized_copy_n_and_update(Iterator p, size_type n) const
    {
       BOOST_ASSERT(n == 1);  (void)n;
       alloc_traits::construct( this->a_
@@ -174,7 +174,7 @@ struct insert_move_proxy
                               );
    }
 
-   void copy_n_and_update(Iterator p, size_type n)
+   void copy_n_and_update(Iterator p, size_type n) const
    {
       BOOST_ASSERT(n == 1);  (void)n;
       *p = ::boost::move(v_);

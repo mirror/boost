@@ -663,7 +663,8 @@ use [*Boost.Container]? There are several reasons for that:
 
 *  Support for `BOOST_NO_EXCEPTIONS` [@https://svn.boost.org/trac/boost/ticket/7227 #7227].
 *  Fixed bugs [@https://svn.boost.org/trac/boost/ticket/7921 #7921],
-              [@https://svn.boost.org/trac/boost/ticket/7969 #7969].
+              [@https://svn.boost.org/trac/boost/ticket/7969 #7969],
+              [@https://svn.boost.org/trac/boost/ticket/8118 #8118].
 
 [endsect]
 
