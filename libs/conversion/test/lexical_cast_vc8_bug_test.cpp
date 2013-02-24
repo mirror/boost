@@ -34,7 +34,7 @@ void test_too_long_number(CharT zero)
     o << (limits::max)() << zero;
     s = o.str();
     BOOST_CHECK_THROW(lexical_cast<T>(s), bad_lexical_cast);
-    s[s.size()-1] += 9; // '0' -> '9'
+    s[s.size()-1] += static_cast<CharT>(9); // '0' -> '9'
     BOOST_CHECK_THROW(lexical_cast<T>(s), bad_lexical_cast);
 
     if(limits::is_signed)
@@ -43,7 +43,7 @@ void test_too_long_number(CharT zero)
         o << (limits::min)() << zero;
         s = o.str();
         BOOST_CHECK_THROW(lexical_cast<T>(s), bad_lexical_cast);
-        s[s.size()-1] += 9; // '0' -> '9'
+        s[s.size()-1] += static_cast<CharT>(9); // '0' -> '9'
         BOOST_CHECK_THROW(lexical_cast<T>(s), bad_lexical_cast);
     }
 }

@@ -34,6 +34,7 @@
 #include <boost/test/floating_point_comparison.hpp>
 
 #include <boost/type_traits/integral_promotion.hpp>
+#include <boost/type_traits/make_unsigned.hpp>
 #include <string>
 #include <vector>
 #include <memory>
@@ -47,6 +48,10 @@
 #define BOOST_LCAST_NO_WCHAR_T
 #endif
 
+#if (defined(BOOST_LCAST_HAS_INT128) && !defined(__GNUC__)) || GCC_VERSION > 40700
+#define BOOST_LCAST_HAS_INT128
+#endif
+
 // Test all 65536 values if true:
 bool const lcast_test_small_integral_types_completely = false;
 
@@ -55,6 +60,8 @@ bool const lcast_test_small_integral_types_completely = false;
 int const lcast_integral_test_counter=500;
 
 using namespace boost;
+
+
 
 void test_conversion_from_to_short();
 void test_conversion_from_to_ushort();
@@ -67,6 +74,10 @@ void test_conversion_from_to_uintmax_t();
 #ifdef LCAST_TEST_LONGLONG
 void test_conversion_from_to_longlong();
 void test_conversion_from_to_ulonglong();
+#endif
+#ifdef BOOST_LCAST_HAS_INT128
+void test_conversion_from_to_int128();
+void test_conversion_from_to_uint128();
 #endif
 void test_integral_conversions_on_min_max();
 
@@ -87,6 +98,10 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
 #ifdef LCAST_TEST_LONGLONG
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
+#endif
+#ifdef BOOST_LCAST_HAS_INT128
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_int128));
+    suite->add(BOOST_TEST_CASE(&test_conversion_from_to_uint128));
 #endif
     suite->add(BOOST_TEST_CASE(&test_integral_conversions_on_min_max));
 
@@ -372,7 +387,7 @@ struct restore_oldloc
 };
 
 template<class T>
-void test_conversion_from_to_integral()
+void test_conversion_from_to_integral_minimal()
 {
     char const zero = '0';
     signed char const szero = '0';
@@ -438,7 +453,12 @@ void test_conversion_from_to_integral()
         must_owerflow_str += '0';
         must_owerflow_negative_str += '0';
     }
+}
 
+template<class T>
+void test_conversion_from_to_integral()
+{
+    test_conversion_from_to_integral_minimal<T>();
     typedef std::numpunct<char> numpunct;
 
     restore_oldloc guard;
@@ -536,19 +556,57 @@ void test_conversion_from_to_ulonglong()
 
 #endif
 
+
+#ifdef BOOST_LCAST_HAS_INT128
+void test_conversion_from_to_int128()
+{
+    test_conversion_from_to_integral_minimal<boost::int128_type>();
+}
+
+void test_conversion_from_to_uint128()
+{
+    test_conversion_from_to_integral_minimal<boost::uint128_type>();
+}
+#endif
+
+template <typename SignedT>
+void test_integral_conversions_on_min_max_impl()
+{
+    typedef SignedT signed_t;
+    typedef BOOST_DEDUCED_TYPENAME boost::make_unsigned<signed_t>::type unsigned_t;
+    
+    typedef std::numeric_limits<signed_t> s_limits;
+    typedef std::numeric_limits<unsigned_t> uns_limits;
+
+    BOOST_CHECK_EQUAL(lexical_cast<unsigned_t>((uns_limits::max)()), (uns_limits::max)());
+    BOOST_CHECK_EQUAL(lexical_cast<unsigned_t>((uns_limits::min)()), (uns_limits::min)());
+
+    BOOST_CHECK_EQUAL(lexical_cast<signed_t>((s_limits::max)()), (s_limits::max)());
+    BOOST_CHECK_EQUAL(lexical_cast<signed_t>((uns_limits::min)()), static_cast<signed_t>((uns_limits::min)()));
+
+    BOOST_CHECK_EQUAL(lexical_cast<unsigned_t>((s_limits::max)()), static_cast<unsigned_t>((s_limits::max)()));
+    BOOST_CHECK_EQUAL(lexical_cast<unsigned_t>((s_limits::min)()), static_cast<unsigned_t>((s_limits::min)()));
+}
+
 void test_integral_conversions_on_min_max()
 {
-    typedef std::numeric_limits<int> int_limits;
-    typedef std::numeric_limits<unsigned int> uint_limits;
+    test_integral_conversions_on_min_max_impl<int>();
+    test_integral_conversions_on_min_max_impl<short>();
 
-    BOOST_CHECK_EQUAL(lexical_cast<unsigned int>((uint_limits::max)()), (uint_limits::max)());
-    BOOST_CHECK_EQUAL(lexical_cast<unsigned int>((uint_limits::min)()), (uint_limits::min)());
+#ifdef _MSC_VER
+    test_integral_conversions_on_min_max_impl<long int>();
 
-    BOOST_CHECK_EQUAL(lexical_cast<int>((int_limits::max)()), (int_limits::max)());
-    BOOST_CHECK_EQUAL(lexical_cast<int>((uint_limits::min)()), static_cast<int>((uint_limits::min)()));
+#if defined(BOOST_HAS_LONG_LONG)
+    test_integral_conversions_on_min_max_impl<boost::long_long_type>();
+#elif defined(BOOST_HAS_MS_INT64)
+    test_integral_conversions_on_min_max_impl<__int64>();
+#endif
 
-    BOOST_CHECK_EQUAL(lexical_cast<unsigned int>((int_limits::max)()), static_cast<unsigned int>((int_limits::max)()));
-    BOOST_CHECK_EQUAL(lexical_cast<unsigned int>((int_limits::min)()), static_cast<unsigned int>((int_limits::min)()));
+#ifdef BOOST_LCAST_HAS_INT128
+    test_integral_conversions_on_min_max_impl<boost::int128_type>();
+#endif
+#endif
+
 }
 
 

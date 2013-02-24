@@ -69,6 +69,11 @@
     throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)))
 #endif
 
+#if (defined(BOOST_LCAST_HAS_INT128) && !defined(__GNUC__)) || GCC_VERSION > 40700
+#define BOOST_LCAST_HAS_INT128
+#endif
+
+
 namespace boost
 {
     // exception used to indicate runtime lexical_cast failure
@@ -308,6 +313,11 @@ namespace boost {
             Char,
             boost::detail::deduce_character_type_later< std::array< const Char, N > >
         > {};
+#endif
+
+#ifdef BOOST_LCAST_HAS_INT128
+        template <> struct stream_char_common< boost::int128_type >: public boost::mpl::identity< char > {};
+        template <> struct stream_char_common< boost::uint128_type >: public boost::mpl::identity< char > {};
 #endif
 
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && defined(BOOST_NO_INTRINSIC_WCHAR_T)
@@ -602,6 +612,10 @@ namespace boost {
         BOOST_LCAST_DEF(unsigned __int64)
         BOOST_LCAST_DEF(         __int64)
 #endif
+#ifdef BOOST_LCAST_HAS_INT128
+        BOOST_LCAST_DEF(boost::int128_type)
+        BOOST_LCAST_DEF(boost::uint128_type)
+#endif
 
 #undef BOOST_LCAST_DEF
 
@@ -824,7 +838,7 @@ namespace boost {
                             if(group < grouping_size)
                             {
                                 char const grp_size = grouping[group];
-                                last_grp_size = grp_size <= 0 ? CHAR_MAX : grp_size;
+                                last_grp_size = grp_size <= 0 ? static_cast<char>(CHAR_MAX) : grp_size;
                             }
 
                             left = last_grp_size;
@@ -872,7 +886,7 @@ namespace boost {
 
             if (begin > end || *end < czero || *end >= czero + 10)
                 return false;
-            value = *end - czero;
+            value = static_cast<T>(*end - czero);
             --end;
             T multiplier = 1;
             bool multiplier_overflowed = false;
@@ -892,17 +906,17 @@ namespace boost {
                 {
                     unsigned char current_grouping = 0;
                     CharT const thousands_sep = np.thousands_sep();
-                    char remained = grouping[current_grouping] - 1;
+                    char remained = static_cast<char>(grouping[current_grouping] - 1);
                     bool shall_we_return = true;
 
                     for(;end>=begin; --end)
                     {
                         if (remained) {
-                            T const multiplier_10 = multiplier * 10;
+                            T const multiplier_10 = static_cast<T>(multiplier * 10);
                             if (multiplier_10 / 10 != multiplier) multiplier_overflowed = true;
 
-                            T const dig_value = *end - czero;
-                            T const new_sub_value = multiplier_10 * dig_value;
+                            T const dig_value = static_cast<T>(*end - czero);
+                            T const new_sub_value = static_cast<T>(multiplier_10 * dig_value);
 
                             if (*end < czero || *end >= czero + 10
                                     /* detecting overflow */
@@ -912,8 +926,8 @@ namespace boost {
                                     )
                                 return false;
 
-                            value += new_sub_value;
-                            multiplier *= 10;
+                            value = static_cast<T>(value + new_sub_value);
+                            multiplier = static_cast<T>(multiplier * 10);
                             --remained;
                         } else {
                             if ( !Traits::eq(*end, thousands_sep) ) //|| begin == end ) return false;
@@ -946,11 +960,11 @@ namespace boost {
             {
                 while ( begin <= end )
                 {
-                    T const multiplier_10 = multiplier * 10;
+                    T const multiplier_10 = static_cast<T>(multiplier * 10);
                     if (multiplier_10 / 10 != multiplier) multiplier_overflowed = true;
 
-                    T const dig_value = *end - czero;
-                    T const new_sub_value = multiplier_10 * dig_value;
+                    T const dig_value = static_cast<T>(*end - czero);
+                    T const new_sub_value = static_cast<T>(multiplier_10 * dig_value);
 
                     if (*end < czero || *end >= czero + 10
                             /* detecting overflow */
@@ -960,8 +974,8 @@ namespace boost {
                             )
                         return false;
 
-                    value += new_sub_value;
-                    multiplier *= 10;
+                    value = static_cast<T>(value + new_sub_value);
+                    multiplier = static_cast<T>(multiplier * 10);
                     --end;
                 }
             }
@@ -1142,6 +1156,12 @@ namespace boost {
 
     namespace detail // lcast_ret_float
     {
+
+// Silence buggy MS warnings like C4244: '+=' : conversion from 'int' to 'unsigned short', possible loss of data 
+#if defined(_MSC_VER) && (_MSC_VER == 1400) 
+#  pragma warning(push) 
+#  pragma warning(disable:4244) 
+#endif 
         template <class T>
         struct mantissa_holder_type
         {
@@ -1178,7 +1198,7 @@ namespace boost {
                     : np.grouping()
             );
             std::string::size_type const grouping_size = grouping.size();
-            CharT const thousands_sep = grouping_size ? np.thousands_sep() : 0;
+            CharT const thousands_sep = static_cast<CharT>(grouping_size ? np.thousands_sep() : 0);
             CharT const decimal_point = np.decimal_point();
             bool found_grouping = false;
             std::string::size_type last_grouping_pos = grouping_size - 1;
@@ -1383,6 +1403,10 @@ namespace boost {
 
             return true;
         }
+// Unsilence buggy MS warnings like C4244: '+=' : conversion from 'int' to 'unsigned short', possible loss of data 
+#if defined(_MSC_VER) && (_MSC_VER == 1400) 
+#  pragma warning(pop) 
+#endif 
     }
 
     namespace detail // stl_buf_unlocker
@@ -1723,6 +1747,12 @@ namespace boost {
             bool operator<<(unsigned __int64 n)         { start = lcast_put_unsigned<Traits>(n, finish); return true; }
             bool operator<<(         __int64 n)         { return shl_signed(n); }
 #endif
+
+#ifdef BOOST_LCAST_HAS_INT128
+        bool operator<<(const boost::uint128_type& n)   { start = lcast_put_unsigned<Traits>(n, finish); return true; }
+        bool operator<<(const boost::int128_type& n)    { return shl_signed(n); }
+#endif
+
             bool operator<<(float val)                  { return shl_real_type(val, start, finish); }
             bool operator<<(double val)                 { return shl_real_type(val, start, finish); }
             bool operator<<(long double val)            {
@@ -1916,7 +1946,7 @@ namespace boost {
             }
 
 /************************************ OPERATORS >> ( ... ) ********************************/
-            public:
+        public:
             bool operator>>(unsigned short& output)             { return shr_unsigned(output); }
             bool operator>>(unsigned int& output)               { return shr_unsigned(output); }
             bool operator>>(unsigned long int& output)          { return shr_unsigned(output); }
@@ -1930,6 +1960,12 @@ namespace boost {
             bool operator>>(unsigned __int64& output)           { return shr_unsigned(output); }
             bool operator>>(__int64& output)                    { return shr_signed(output); }
 #endif
+
+#ifdef BOOST_LCAST_HAS_INT128
+            bool operator>>(boost::uint128_type& output)        { return shr_unsigned(output); }
+            bool operator>>(boost::int128_type& output)         { return shr_signed(output); }
+#endif
+
             bool operator>>(char& output)                       { return shr_xchar(output); }
             bool operator>>(unsigned char& output)              { return shr_xchar(output); }
             bool operator>>(signed char& output)                { return shr_xchar(output); }
@@ -2324,7 +2360,7 @@ namespace boost {
                 > converter_t;
 
                 return (
-                    arg < 0 ? 0u - converter_t::convert(0u - arg) : converter_t::convert(arg)
+                    arg < 0 ? static_cast<Target>(0u - converter_t::convert(0u - arg)) : converter_t::convert(arg)
                 );
             }
         };
@@ -2563,6 +2599,7 @@ namespace boost {
 
 #undef BOOST_LCAST_THROW_BAD_CAST
 #undef BOOST_LCAST_NO_WCHAR_T
+#undef BOOST_LCAST_HAS_INT128
 
 #endif // BOOST_LEXICAL_CAST_INCLUDED
 
