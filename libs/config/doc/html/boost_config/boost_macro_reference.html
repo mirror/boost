@@ -3,7 +3,7 @@
 <meta http-equiv="Content-Type" content="text/html; charset=US-ASCII">
 <title>Boost Macro Reference</title>
 <link rel="stylesheet" href="../../../../../doc/src/boostbook.css" type="text/css">
-<meta name="generator" content="DocBook XSL Stylesheets V1.75.2">
+<meta name="generator" content="DocBook XSL Stylesheets V1.77.1">
 <link rel="home" href="../index.html" title="Boost.Config">
 <link rel="up" href="../index.html" title="Boost.Config">
 <link rel="prev" href="../index.html" title="Boost.Config">
@@ -22,7 +22,7 @@
 <div class="spirit-nav">
 <a accesskey="p" href="../index.html"><img src="../../../../../doc/src/images/prev.png" alt="Prev"></a><a accesskey="u" href="../index.html"><img src="../../../../../doc/src/images/up.png" alt="Up"></a><a accesskey="h" href="../index.html"><img src="../../../../../doc/src/images/home.png" alt="Home"></a><a accesskey="n" href="guidelines_for_boost_authors.html"><img src="../../../../../doc/src/images/next.png" alt="Next"></a>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference">
 <div class="titlepage"><div><div><h2 class="title" style="clear: both">
 <a name="boost_config.boost_macro_reference"></a><a class="link" href="boost_macro_reference.html" title="Boost Macro Reference">Boost Macro Reference</a>
 </h2></div></div></div>
@@ -46,7 +46,7 @@
 <dt><span class="section"><a href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code">Macros
       for libraries with separate source code</a></span></dt>
 </dl></div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_that_describe_c__03_defects">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_c__03_defects"></a><a name="config_defects"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__03_defects" title="Macros that describe C++03 defects">Macros
       that describe C++03 defects</a>
@@ -93,7 +93,7 @@
               </td>
 <td>
                 <p>
-                  The compiler exibits certain partial specialisation bug - probably
+                  The compiler exhibits certain partial specialisation bug - probably
                   Borland C++ Builder specific.
                 </p>
               </td>
@@ -1338,7 +1338,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_that_describe_optional_features">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_optional_features"></a><a name="config_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_optional_features" title="Macros that describe optional features">Macros
       that describe optional features</a>
@@ -1832,6 +1832,9 @@
 <td>
                 <p>
                   The library has a TR1 conforming version of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">array</span><span class="special">&gt;</span></code>.
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_HDR_ARRAY.
                 </p>
               </td>
 </tr>
@@ -1884,7 +1887,9 @@
               </td>
 <td>
                 <p>
-                  The library has TR1 conforming reference wrappers in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>.
+                  The library has TR1 conforming reference wrappers in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>. This macro is only guaranteed
+                  to be defined after including one of the headers from Boost.TR1.
+                  Further this macro is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
                 </p>
               </td>
 </tr>
@@ -1901,7 +1906,9 @@
               </td>
 <td>
                 <p>
-                  The library has a TR1 conforming result_of template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>.
+                  The library has a TR1 conforming result_of template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>. This macro is only guaranteed
+                  to be defined after including one of the headers from Boost.TR1.
+                  Further this macro is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
                 </p>
               </td>
 </tr>
@@ -1918,7 +1925,9 @@
               </td>
 <td>
                 <p>
-                  The library has a TR1 conforming mem_fn function template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>.
+                  The library has a TR1 conforming mem_fn function template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>. This macro is only guaranteed
+                  to be defined after including one of the headers from Boost.TR1.
+                  Further this macro is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
                 </p>
               </td>
 </tr>
@@ -1935,7 +1944,9 @@
               </td>
 <td>
                 <p>
-                  The library has a TR1 conforming bind function template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>.
+                  The library has a TR1 conforming bind function template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>. This macro is only guaranteed
+                  to be defined after including one of the headers from Boost.TR1.
+                  Further this macro is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
                 </p>
               </td>
 </tr>
@@ -1952,7 +1963,9 @@
               </td>
 <td>
                 <p>
-                  The library has a TR1 conforming function class template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>.
+                  The library has a TR1 conforming function class template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>. This macro is only guaranteed
+                  to be defined after including one of the headers from Boost.TR1.
+                  Further this macro is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
                 </p>
               </td>
 </tr>
@@ -1969,7 +1982,9 @@
               </td>
 <td>
                 <p>
-                  The library has a TR1 conforming hash function template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>.
+                  The library has a TR1 conforming hash function template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">functional</span><span class="special">&gt;</span></code>. This macro is only guaranteed
+                  to be defined after including one of the headers from Boost.TR1.
+                  Further this macro is now deprecated in favour of BOOST_NO_CXX11_HDR_FUNCTIONAL.
                 </p>
               </td>
 </tr>
@@ -1988,6 +2003,9 @@
                 <p>
                   The library has a TR1 conforming <code class="computeroutput"><span class="identifier">shared_ptr</span></code>
                   class template in <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">memory</span><span class="special">&gt;</span></code>.
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_SMART_PTR.
                 </p>
               </td>
 </tr>
@@ -2005,6 +2023,9 @@
 <td>
                 <p>
                   The library has a TR1 conforming version of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">random</span><span class="special">&gt;</span></code>.
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_HDR_RANDOM.
                 </p>
               </td>
 </tr>
@@ -2022,6 +2043,9 @@
 <td>
                 <p>
                   The library has a TR1 conforming version of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">regex</span><span class="special">&gt;</span></code>.
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_HDR_REGEX.
                 </p>
               </td>
 </tr>
@@ -2039,6 +2063,9 @@
 <td>
                 <p>
                   The library has a TR1 conforming version of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">tuple</span><span class="special">&gt;</span></code>.
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_HDR_TUPLE.
                 </p>
               </td>
 </tr>
@@ -2056,6 +2083,9 @@
 <td>
                 <p>
                   The library has a TR1 conforming version of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">type_traits</span><span class="special">&gt;</span></code>.
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_HDR_TYPE_TRAITS.
                 </p>
               </td>
 </tr>
@@ -2074,6 +2104,9 @@
                 <p>
                   The library has the TR1 additions to <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">utility</span><span class="special">&gt;</span></code>
                   (tuple interface to <code class="computeroutput"><span class="identifier">std</span><span class="special">::</span><span class="identifier">pair</span></code>).
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_HDR_TUPLE.
                 </p>
               </td>
 </tr>
@@ -2091,6 +2124,9 @@
 <td>
                 <p>
                   The library has a TR1 conforming version of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">unordered_map</span><span class="special">&gt;</span></code>.
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_HDR_UNORDERED_MAP.
                 </p>
               </td>
 </tr>
@@ -2108,6 +2144,9 @@
 <td>
                 <p>
                   The library has a TR1 conforming version of <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">unordered_set</span><span class="special">&gt;</span></code>.
+                  This macro is only guaranteed to be defined after including one
+                  of the headers from Boost.TR1. Further this macro is now deprecated
+                  in favour of BOOST_NO_CXX11_HDR_UNORDERED_SET.
                 </p>
               </td>
 </tr>
@@ -2267,7 +2306,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_that_describe_possible_c___future_features">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_possible_c___future_features"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_possible_c___future_features" title="Macros that describe possible C++ future features">Macros
       that describe possible C++ future features</a>
@@ -2307,7 +2346,7 @@
 </tr></tbody>
 </table></div>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_that_describe_c__11_features_not_supported">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_describe_c__11_features_not_supported"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_describe_c__11_features_not_supported" title="Macros that describe C++11 features not supported">Macros
       that describe C++11 features not supported</a>
@@ -2961,7 +3000,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_that_allow_use_of_c__11_features_with_c__03_compilers">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_that_allow_use_of_c__11_features_with_c__03_compilers"></a><a name="config_11_for_03"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_that_allow_use_of_c__11_features_with_c__03_compilers" title="Macros that allow use of C++11 features with C++03 compilers">Macros
       that allow use of C++11 features with C++03 compilers</a>
@@ -3063,6 +3102,7 @@
                 <p>
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="identifier">BOOST_NOEXCEPT</span>
+<span class="identifier">BOOST_NOEXCEPT_OR_NOTHROW</span>
 <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span>
 <span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span>
 </pre>
@@ -3071,7 +3111,7 @@
               </td>
 <td>
                 <p>
-                  If <code class="computeroutput"><span class="identifier">BOOST_NO_NOEXCEPT</span></code>
+                  If <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NOEXCEPT</span></code>
                   is defined (i.e. C++03 compliant compilers) these macros are defined
                   as:
                 </p>
@@ -3079,6 +3119,7 @@
 <p>
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_OR_NOTHROW</span> <span class="keyword">throw</span><span class="special">()</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span> <span class="keyword">false</span>
 </pre>
@@ -3086,7 +3127,7 @@
                   </p>
 </blockquote></div>
                 <p>
-                  If <code class="computeroutput"><span class="identifier">BOOST_NO_NOEXCEPT</span></code>
+                  If <code class="computeroutput"><span class="identifier">BOOST_NO_CXX11_NOEXCEPT</span></code>
                   is not defined (i.e. C++11 compliant compilers) they are defined
                   as:
                 </p>
@@ -3094,6 +3135,7 @@
 <p>
 </p>
 <pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT</span> <span class="identifier">noexcept</span>
+<span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_OR_NOTHROW</span> <span class="identifier">noexcept</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_IF</span><span class="special">(</span><span class="identifier">Predicate</span><span class="special">)</span> <span class="identifier">noexcept</span><span class="special">((</span><span class="identifier">Predicate</span><span class="special">))</span>
 <span class="preprocessor">#define</span> <span class="identifier">BOOST_NOEXCEPT_EXPR</span><span class="special">(</span><span class="identifier">Expression</span><span class="special">)</span> <span class="identifier">noexcept</span><span class="special">((</span><span class="identifier">Expression</span><span class="special">))</span>
 </pre>
@@ -3102,10 +3144,29 @@
 </blockquote></div>
               </td>
 </tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_MSVC_ENABLE_2012_NOV_CTP</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  For Microsoft Visual C++ 2012, enable the C++11 features supplied
+                  by the November 2012 Community Technology Preview. These features
+                  are not automatically enabled because the CTP is non-supported
+                  alpha code that is not recommended for production use. This macro
+                  must be defined before including any Boost headers, and must be
+                  defined for all translation units in the program, including Boost
+                  library builds. This macro will no longer have any effect once
+                  an official Microsoft release supports the CTP features.
+                </p>
+              </td>
+</tr>
 </tbody>
 </table></div>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_boost_helper_macros">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_helper_macros"></a><a name="config_helpers"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_helper_macros" title="Boost Helper Macros">Boost
       Helper Macros</a>
@@ -3501,7 +3562,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_boost_informational_macros">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_informational_macros"></a><a name="config_info_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_informational_macros" title="Boost Informational Macros">Boost
       Informational Macros</a>
@@ -3630,6 +3691,29 @@
                   sometimes only has 8 digits), the macro has the form VVMMPPPPP
                   where VV is the major version number, MM is the minor version number,
                   and PPPPP is the compiler build number.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_GCC</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  <code class="computeroutput"><span class="special">&lt;</span><span class="identifier">boost</span><span class="special">/</span><span class="identifier">config</span><span class="special">.</span><span class="identifier">hpp</span><span class="special">&gt;</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  Defined if the compiler is really GCC, as opposed to one of the
+                  many other compilers that also define <code class="computeroutput"><span class="identifier">__GNUC__</span></code>.
+                  Has the value: <code class="computeroutput"><span class="identifier">__GNUC__</span>
+                  <span class="special">*</span> <span class="number">10000</span>
+                  <span class="special">+</span> <span class="identifier">__GNUC_MINOR__</span>
+                  <span class="special">*</span> <span class="number">100</span>
+                  <span class="special">+</span> <span class="identifier">__GNUC_PATCHLEVEL__</span></code>.
                 </p>
               </td>
 </tr>
@@ -3779,7 +3863,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_boost_deprecated_macros">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.boost_deprecated_macros"></a><a name="deprecated_macros"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.boost_deprecated_macros" title="Boost Deprecated Macros">Boost
       Deprecated Macros</a>
@@ -4834,7 +4918,7 @@
 </tbody>
 </table></div>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code">
 <div class="titlepage"><div><div><h3 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code" title="Macros for libraries with separate source code">Macros
       for libraries with separate source code</a>
@@ -4851,7 +4935,7 @@
         The following macros and helper headers are of use to authors whose libraries
         include separate source code, and are intended to address several issues:
       </p>
-<div class="itemizedlist"><ul class="itemizedlist" type="disc">
+<div class="itemizedlist"><ul class="itemizedlist" style="list-style-type: disc; ">
 <li class="listitem">
             Controlling shared library symbol visibility
           </li>
@@ -4867,7 +4951,7 @@
         See <a href="http://svn.boost.org/trac/boost/wiki/Guidelines/Separate" target="_top">Guidelines
         for Authors of Boost Libraries Containing Separate Source</a>
       </p>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_macros_controlling_shared_library_symbol_visibility">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.macros_controlling_shared_library_symbol_visibility"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.macros_controlling_shared_library_symbol_visibility" title="Macros controlling shared library symbol visibility">Macros
         controlling shared library symbol visibility</a>
@@ -5022,7 +5106,7 @@
 <span class="special">...</span>
 </pre>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_abi_fixing">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.abi_fixing" title="ABI Fixing">ABI
         Fixing</a>
@@ -5080,7 +5164,7 @@
           to point to their own prefix/suffix headers if they so wish.
         </p>
 </div>
-<div class="section">
+<div class="section boost_config_boost_macro_reference_macros_for_libraries_with_separate_source_code_automatic_library_selection">
 <div class="titlepage"><div><div><h4 class="title">
 <a name="boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection"></a><a class="link" href="boost_macro_reference.html#boost_config.boost_macro_reference.macros_for_libraries_with_separate_source_code.automatic_library_selection" title="Automatic library selection">Automatic
         library selection</a>
@@ -5107,7 +5191,7 @@
         </p>
 <div class="variablelist">
 <p class="title"><b></b></p>
-<dl>
+<dl class="variablelist">
 <dt><span class="term"><code class="computeroutput"><span class="identifier">BOOST_LIB_NAME</span></code></span></dt>
 <dd><p>
                 Required: An identifier containing the basename of the library, for

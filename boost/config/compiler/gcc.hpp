@@ -11,7 +11,14 @@
 
 //  See http://www.boost.org for most recent version.
 
-//  GNU C++ compiler setup:
+//  GNU C++ compiler setup.
+
+//
+// Define BOOST_GCC so we know this is "real" GCC and not some pretender:
+//
+#if !defined(__CUDACC__)
+#define BOOST_GCC (__GNUC__ * 10000 + __GNUC_MINOR__ * 100 + __GNUC_PATCHLEVEL__)
+#endif
 
 #if __GNUC__ < 3
 #   if __GNUC_MINOR__ == 91
@@ -147,9 +154,16 @@
 #endif
 
 //
-// Recent GCC versions have __int128 when in 64-bit mode:
+// Recent GCC versions have __int128 when in 64-bit mode.
 //
-#if defined(__SIZEOF_INT128__)
+// We disable this if the compiler is really nvcc as it
+// doesn't actually support __int128 as of CUDA_VERSION=5000
+// even though it defines __SIZEOF_INT128__.  
+// See https://svn.boost.org/trac/boost/ticket/8048
+// Only re-enable this for nvcc if you're absolutely sure
+// of the circumstances under which it's supported:
+//
+#if defined(__SIZEOF_INT128__) && !defined(__CUDACC__)
 #  define BOOST_HAS_INT128
 #endif
 

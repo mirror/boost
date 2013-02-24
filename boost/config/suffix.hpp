@@ -874,10 +874,12 @@ namespace std{ using ::type_info; }
 //
 #ifdef BOOST_NO_CXX11_NOEXCEPT
 #  define BOOST_NOEXCEPT
+#  define BOOST_NOEXCEPT_OR_NOTHROW throw()
 #  define BOOST_NOEXCEPT_IF(Predicate)
 #  define BOOST_NOEXCEPT_EXPR(Expression) false
 #else
 #  define BOOST_NOEXCEPT noexcept
+#  define BOOST_NOEXCEPT_OR_NOTHROW noexcept
 #  define BOOST_NOEXCEPT_IF(Predicate) noexcept((Predicate))
 #  define BOOST_NOEXCEPT_EXPR(Expression) noexcept((Expression))
 #endif
