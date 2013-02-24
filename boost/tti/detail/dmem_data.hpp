@@ -8,6 +8,7 @@
 #define BOOST_TTI_DETAIL_MEM_DATA_HPP
 
 #include <boost/config.hpp>
+#include <boost/detail/workaround.hpp>
 #include <boost/function_types/components.hpp>
 #include <boost/function_types/is_member_object_pointer.hpp>
 #include <boost/mpl/assert.hpp>
@@ -21,7 +22,7 @@
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include <boost/type_traits/is_same.hpp>
 
-#if defined(BOOST_MSVC)
+#if defined(BOOST_MSVC) || (BOOST_WORKAROUND(BOOST_GCC, >= 40400) && BOOST_WORKAROUND(BOOST_GCC, < 40600))
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
   template<class T,class C> \
@@ -30,8 +31,8 @@
     template<class> \
     struct return_of; \
     \
-    template<class R,class C> \
-    struct return_of<R C::*> \
+    template<class R,class IC> \
+    struct return_of<R IC::*> \
       { \
       typedef R type; \
       }; \
