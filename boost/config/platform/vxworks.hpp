@@ -73,6 +73,7 @@
 // Generally available functionality:
 #define BOOST_HAS_THREADS
 #define BOOST_HAS_NANOSLEEP
+#define BOOST_HAS_GETTIMEOFDAY
 #define BOOST_HAS_CLOCK_GETTIME
 #define BOOST_HAS_MACRO_USE_FACET
 
@@ -88,7 +89,6 @@
 
 // Functionality available for RTPs only:
 #ifdef __RTP__
-//#  define BOOST_HAS_GETTIMEOFDAY
 #  define BOOST_HAS_PTHREAD_MUTEXATTR_SETTYPE
 #  define BOOST_HAS_LOG1P
 #  define BOOST_HAS_EXPM1
@@ -122,6 +122,7 @@
 //                 miserably fails to #include the required <sysLib.h> to make
 //                 sysClkRateGet() available! So we manually include it here.
 #ifdef __RTP__
+#  include <time.h>
 #  include <sysLib.h>
 #endif
 
@@ -151,6 +152,7 @@
 // #include Libraries required for the following function adaption
 #include <ioLib.h>
 #include <tickLib.h>
+#include <sys/time.h>
 
 // Use C-linkage for the following helper functions
 extern "C" {
@@ -203,6 +205,18 @@ inline ssize_t readlink(const char*, char*, size_t){
   return -1;
 }
 
+// vxWorks claims to implement gettimeofday in sys/time.h
+// but nevertheless does not provide it! See
+// https://support.windriver.com/olsPortal/faces/maintenance/techtipDetail_noHeader.jspx?docId=16442&contentId=WR_TECHTIP_006256
+// We implement a surrogate version here via clock_gettime:
+inline int gettimeofday(struct timeval *tv, void * /*tzv*/) {
+  struct timespec ts;
+  clock_gettime(CLOCK_MONOTONIC, &ts);
+  tv->tv_sec  = ts.tv_sec;
+  tv->tv_usec = ts.tv_nsec / 1000;
+  return 0;
+}
+
 // vxWorks does provide neither struct tms nor function times()!
 // We implement an empty dummy-function, simply setting the user
 // and system time to the half of thew actual system ticks-value
@@ -221,11 +235,14 @@ struct tms{
 };
 
 inline clock_t times(struct tms *t){
-  clock_t ticks = static_cast<clock_t>(tickGet());
+  struct timespec ts;
+  clock_gettime(CLOCK_THREAD_CPUTIME_ID, &ts);
+  clock_t ticks(static_cast<clock_t>(static_cast<double>(ts.tv_sec)  * CLOCKS_PER_SEC +
+                                     static_cast<double>(ts.tv_nsec) * CLOCKS_PER_SEC / 1000000.0));
   t->tms_utime  = ticks/2U;
   t->tms_stime  = ticks/2U;
-  t->tms_cutime = 0;
-  t->tms_cstime = 0;
+  t->tms_cutime = 0; // vxWorks is lacking the concept of a child process!
+  t->tms_cstime = 0; // -> Set the wait times for childs to 0
   return ticks;
 }
 
@@ -241,13 +258,14 @@ namespace std {
   using ::symlink;
   using ::readlink;
   using ::times;
+  using ::gettimeofday;
 }
 
 // Some more macro-magic:
 // vxWorks-around: Some functions are not present or broken in vxWorks
 //                 but may be patched to life via helper macros...
 
-// Include signal.h which contains a typo to be corrected here
+// Include signal.h which might contain a typo to be corrected here
 #include <signal.h>
 
 #define getpagesize()    sysconf(_SC_PAGESIZE)         // getpagesize is deprecated anyway!
@@ -259,7 +277,7 @@ namespace std {
 #  define FPE_FLTINV     (FPE_FLTSUB+1)                // vxWorks has no FPE_FLTINV, so define one as a dummy
 #endif
 #if !defined(BUS_ADRALN) && defined(BUS_ADRALNR)
-#  define BUS_ADRALN     BUS_ADRALNR                   // Correct a supposed typo in vxWorks' <signal.h>?
+#  define BUS_ADRALN     BUS_ADRALNR                   // Correct a supposed typo in vxWorks' <signal.h>
 #endif
 //typedef int              locale_t;                     // locale_t is a POSIX-extension, currently unpresent in vxWorks!
 
@@ -268,7 +286,3 @@ namespace std {
 
 // vxWorks lies about XSI conformance, there is no nl_types.h:
 #undef BOOST_HAS_NL_TYPES_H
-
-// vxWorks blatantly lies about implementing gettimeofday:
-// Though it even declares a prototype in sys/time.h, linking it fails!
-#undef BOOST_HAS_GETTIMEOFDAY
