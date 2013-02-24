@@ -457,17 +457,17 @@ namespace quickbook
         std::string program(x.begin(), x.end());
 
         // Erase leading blank lines and newlines:
-        std::string::size_type start = program.find_first_not_of(" \t");
-        if (start != std::string::npos &&
-            (program[start] == '\r' || program[start] == '\n'))
+        std::string::size_type start = program.find_first_not_of(" \t\r\n");
+        if (start == std::string::npos) return;
+
+        start = program.find_last_of("\r\n", start);
+        if (start != std::string::npos)
         {
+            ++start;
             program.erase(0, start);
         }
-        start = program.find_first_not_of("\r\n");
-        program.erase(0, start);
 
-        if (program.size() == 0)
-            return; // nothing left to do
+        assert(program.size() != 0);
 
         // Get the first line indent
         std::string::size_type indent = program.find_first_not_of(" \t");
