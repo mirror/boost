@@ -132,7 +132,7 @@ namespace quickbook
             set_macros(state);
 
             if (state.error_count == 0) {
-                state.add_dependency(filein_);
+                state.dependencies.add_dependency(filein_);
                 state.current_file = load(filein_); // Throws load_error
 
                 parse_file(state);
@@ -148,24 +148,13 @@ namespace quickbook
             if (!deps_out_.empty())
             {
                 fs::ofstream out(deps_out_);
-                BOOST_FOREACH(quickbook::state::dependency_list::value_type
-                        const& d, state.dependencies)
-                {
-                    if (d.second) {
-                        out << detail::path_to_generic(d.first) << std::endl;
-                    }
-                }
+                state.dependencies.write_dependencies(out);
             }
 
             if (!locations_out_.empty())
             {
                 fs::ofstream out(locations_out_);
-                BOOST_FOREACH(quickbook::state::dependency_list::value_type
-                        const& d, state.dependencies)
-                {
-                    out << (d.second ? "+ " : "- ")
-                        << detail::path_to_generic(d.first) << std::endl;
-                }
+                state.dependencies.write_checked_locations(out);
             }
         }
         catch (load_error& e) {

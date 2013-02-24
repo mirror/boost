@@ -939,7 +939,7 @@ namespace quickbook
            // Now load the SVG file:
            //
            std::string svg_text;
-           if (state.add_dependency(img)) {
+           if (state.dependencies.add_dependency(img)) {
               fs::ifstream fs(img);
               std::stringstream buffer;
               buffer << fs.rdbuf();
@@ -1877,7 +1877,7 @@ namespace quickbook
                     state.current_file->path.parent_path() / path;
 
                 // See if it can be found locally first.
-                if (state.add_dependency(local_path))
+                if (state.dependencies.add_dependency(local_path))
                 {
                     result.insert(include_search_return(
                         local_path,
@@ -1889,7 +1889,7 @@ namespace quickbook
                 {
                     full /= path;
 
-                    if (state.add_dependency(full))
+                    if (state.dependencies.add_dependency(full))
                     {
                         result.insert(include_search_return(full, path));
                         return result;
@@ -1898,7 +1898,7 @@ namespace quickbook
             }
             else
             {
-                if (state.add_dependency(path)) {
+                if (state.dependencies.add_dependency(path)) {
                     result.insert(include_search_return(path, path));
                     return result;
                 }
