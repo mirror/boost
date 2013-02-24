@@ -37,7 +37,9 @@ void do_test_on_empty_input(T& v)
     BOOST_CHECK_THROW(lexical_cast<int>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<float>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<double>(v), bad_lexical_cast);
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     BOOST_CHECK_THROW(lexical_cast<long double>(v), bad_lexical_cast);
+#endif
     BOOST_CHECK_THROW(lexical_cast<unsigned int>(v), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<unsigned short>(v), bad_lexical_cast);
 #if defined(BOOST_HAS_LONG_LONG)
