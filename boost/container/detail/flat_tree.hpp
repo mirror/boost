@@ -33,6 +33,9 @@
 #include <boost/container/detail/value_init.hpp>
 #include <boost/container/detail/destroyers.hpp>
 #include <boost/container/allocator_traits.hpp>
+#ifdef BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
+#include <boost/intrusive/pointer_traits.hpp>
+#endif
 #include <boost/aligned_storage.hpp>
 
 namespace boost {
@@ -73,10 +76,19 @@ class flat_tree_value_compare
 template<class Pointer>
 struct get_flat_tree_iterators
 {
+   #ifdef BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
+   typedef Pointer                                    iterator;
+   typedef typename boost::intrusive::
+      pointer_traits<Pointer>::element_type           iterator_element_type;
+   typedef typename boost::intrusive::
+      pointer_traits<Pointer>:: template
+         rebind_pointer<const iterator_element_type>::type  const_iterator;
+   #else //BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
    typedef typename container_detail::
       vector_iterator<Pointer>                        iterator;
    typedef typename container_detail::
       vector_const_iterator<Pointer>                  const_iterator;
+   #endif   //BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
    typedef std::reverse_iterator<iterator>            reverse_iterator;
    typedef std::reverse_iterator<const_iterator>      const_reverse_iterator;
 };
@@ -785,7 +797,7 @@ class flat_tree
       const value_compare &value_comp  = this->m_data;
       commit_data.position = this->priv_lower_bound(b, e, KeyOfValue()(val));
       return std::pair<iterator,bool>
-         ( *reinterpret_cast<iterator*>(&commit_data.position)
+         ( iterator(vector_iterator_get_ptr(commit_data.position))
          , commit_data.position == e || value_comp(val, *commit_data.position));
    }
 
@@ -813,10 +825,10 @@ class flat_tree
          if(pos != this->cbegin() && !value_comp(val, pos[-1])){
             if(value_comp(pos[-1], val)){
                commit_data.position = pos;
-               return std::pair<iterator,bool>(*reinterpret_cast<iterator*>(&pos), true);
+               return std::pair<iterator,bool>(iterator(vector_iterator_get_ptr(pos)), true);
             }
             else{
-               return std::pair<iterator,bool>(*reinterpret_cast<iterator*>(&pos), false);
+               return std::pair<iterator,bool>(iterator(vector_iterator_get_ptr(pos)), false);
             }
          }
          return this->priv_insert_unique_prepare(this->cbegin(), pos, val, commit_data);

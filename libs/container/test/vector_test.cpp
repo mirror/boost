@@ -41,8 +41,12 @@ template class boost::container::vector<test::movable_and_copyable_int,
 
 namespace container_detail {
 
+#ifndef BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
+
 template class vector_const_iterator<int*>;
 template class vector_iterator<int*>;
+
+#endif   //BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
 
 }
 

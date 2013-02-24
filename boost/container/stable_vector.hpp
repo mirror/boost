@@ -333,7 +333,8 @@ struct index_traits
    static void readjust_end_node(index_type &index, node_base_type &end_node)
    {
       if(!index.empty()){
-         node_base_ptr &end_node_idx_ref = *(--index_traits::get_fix_up_end(index));
+         index_iterator end_node_it(index_traits::get_fix_up_end(index));
+         node_base_ptr &end_node_idx_ref = *(--end_node_it);
          end_node_idx_ref = node_base_ptr_traits::pointer_to(end_node);
          end_node.up      = node_base_ptr_ptr_traits::pointer_to(end_node_idx_ref);
       }

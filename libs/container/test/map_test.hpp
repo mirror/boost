@@ -179,14 +179,14 @@ int map_test ()
          if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
          if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
 
-         typename MyBoostMap::iterator it;
+         typename MyBoostMap::iterator it = boostmap->begin();
          typename MyBoostMap::const_iterator cit = it;
          (void)cit;
 
-         boostmap->erase(boostmap->begin()++);
-         stdmap->erase(stdmap->begin()++);
-         boostmultimap->erase(boostmultimap->begin()++);
-         stdmultimap->erase(stdmultimap->begin()++);
+         boostmap->erase(boostmap->begin());
+         stdmap->erase(stdmap->begin());
+         boostmultimap->erase(boostmultimap->begin());
+         stdmultimap->erase(stdmultimap->begin());
          if(!CheckEqualPairContainers(boostmap, stdmap)) return 1;
          if(!CheckEqualPairContainers(boostmultimap, stdmultimap)) return 1;
 

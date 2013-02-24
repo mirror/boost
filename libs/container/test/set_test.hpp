@@ -143,20 +143,20 @@ int set_test ()
       return 1;
    }
 
-   typename MyBoostSet::iterator it;
+   typename MyBoostSet::iterator it = boostset->begin();
    typename MyBoostSet::const_iterator cit = it;
    (void)cit;
 
-   boostset->erase(boostset->begin()++);
-   stdset->erase(stdset->begin()++);
-   boostmultiset->erase(boostmultiset->begin()++);
-   stdmultiset->erase(stdmultiset->begin()++);
+   boostset->erase(boostset->begin());
+   stdset->erase(stdset->begin());
+   boostmultiset->erase(boostmultiset->begin());
+   stdmultiset->erase(stdmultiset->begin());
    if(!CheckEqualContainers(boostset, stdset)){
-      std::cout << "Error in boostset->erase(boostset->begin()++)" << std::endl;
+      std::cout << "Error in boostset->erase(boostset->begin())" << std::endl;
       return 1;
    }
    if(!CheckEqualContainers(boostmultiset, stdmultiset)){
-      std::cout << "Error in boostmultiset->erase(boostmultiset->begin()++)" << std::endl;
+      std::cout << "Error in boostmultiset->erase(boostmultiset->begin())" << std::endl;
       return 1;
    }
 
