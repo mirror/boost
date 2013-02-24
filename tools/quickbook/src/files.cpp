@@ -204,51 +204,6 @@ namespace quickbook
                 int indentation = 0) :
             original_pos(original_pos), our_pos(our_pos),
             section_type(section_type), indentation(indentation) {}
-
-        std::string::size_type to_original_pos(std::string::size_type pos)
-        {
-            switch (section_type) {
-            case normal:
-                return pos - our_pos + original_pos;
-            case empty:
-                return original_pos;
-            case indented:
-                // Indented doesn't really work, but that's okay because we
-                // currently don't break up indented code.
-                assert(pos == our_pos);
-                return pos - our_pos + original_pos;
-            default:
-                assert(false);
-                return original_pos;
-            }
-        }
-        
-        // If 'to_original_pos' worked for indented blocks, this wouldn't
-        // be necessary.
-        file_position calculate_position(
-                file_position const& original,
-                file_position const& relative) const
-        {
-            switch (section_type) {
-            case normal:
-                return file_position(
-                    original.line + relative.line - 1,
-                    relative.line == 1 ?
-                        original.column + relative.column - 1 :
-                        relative.column);
-            case empty:
-                return original;
-            case indented:
-                return file_position(
-                    original.line + relative.line - 1,
-                    relative.line == 1 ?
-                        original.column + relative.column - 1 :
-                        relative.column + indentation);
-            default:
-                assert(false);
-                return file_position();
-            }
-        }
     };
 
     struct mapped_section_original_cmp
@@ -329,6 +284,31 @@ namespace quickbook
             mapped_sections.push_back(mapped_file_section(
                 pos - original->source().begin(), source().size(),
                 mapped_file_section::indented, indentation));
+        }
+
+        std::string::size_type to_original_pos(
+            std::vector<mapped_file_section>::const_iterator section,
+            std::string::size_type pos) const
+        {
+            switch (section->section_type) {
+                case mapped_file_section::normal:
+                    return pos - section->our_pos + section->original_pos;
+                case mapped_file_section::empty:
+                    return section->original_pos;
+                case mapped_file_section::indented: {
+                    // Indented doesn't really work, but that's okay because we
+                    // currently don't break up indented code.
+                    unsigned newlines = std::count(
+                        this->source().begin() + section->our_pos,
+                        this->source().begin() + pos, '\n');
+
+                    return pos - section->our_pos + section->original_pos +
+                        newlines * section->indentation;
+                }
+                default:
+                    assert(false);
+                    return section->original_pos;
+            }
         }
 
         virtual file_position position_of(boost::string_ref::const_iterator) const;
@@ -422,8 +402,8 @@ namespace quickbook
             std::string::size_type size = data->new_file->source_.size();
     
             data->new_file->mapped_sections.push_back(mapped_file_section(
-                    start->to_original_pos(begin), size,
-                    start->section_type, start->indentation));
+                    x.data->new_file->to_original_pos(start, begin),
+                    size, start->section_type, start->indentation));
     
             for (++start; start != x.data->new_file->mapped_sections.end() &&
                     start->our_pos < end; ++start)
@@ -512,10 +492,7 @@ namespace quickbook
         assert(section != mapped_sections.begin());
         --section;
 
-        return section->calculate_position(
-            original->position_of(
-                original->source().begin() + section->original_pos),
-            relative_position(source().begin() + section->our_pos, pos)
-        );
+        return original->position_of(original->source().begin() +
+            to_original_pos(section, pos - source().begin()));
     }
 }
