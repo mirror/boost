@@ -310,6 +310,19 @@ namespace quickbook
                     return section->original_pos;
             }
         }
+        
+        std::vector<mapped_file_section>::const_iterator find_section(
+            boost::string_ref::const_iterator pos) const
+        {
+            std::vector<mapped_file_section>::const_iterator section =
+                boost::upper_bound(mapped_sections,
+                    std::string::size_type(pos - source().begin()),
+                    mapped_section_pos_cmp());
+            assert(section != mapped_sections.begin());
+            --section;
+
+            return section;
+        }
 
         virtual file_position position_of(boost::string_ref::const_iterator) const;
     };
@@ -387,11 +400,9 @@ namespace quickbook
 
         if (begin != end)
         {
-            std::vector<mapped_file_section>::iterator start =
-                boost::upper_bound(x.data->new_file->mapped_sections,
-                    begin, mapped_section_pos_cmp());
-            assert(start != x.data->new_file->mapped_sections.begin());
-            --start;
+            std::vector<mapped_file_section>::const_iterator start =
+                x.data->new_file->find_section(
+                    x.data->new_file->source().begin() + begin);
     
             std::string::size_type size = data->new_file->source_.size();
     
@@ -479,14 +490,7 @@ namespace quickbook
 
     file_position mapped_file::position_of(boost::string_ref::const_iterator pos) const
     {
-        std::vector<mapped_file_section>::const_iterator section =
-            boost::upper_bound(mapped_sections,
-                std::string::size_type(pos - source().begin()),
-                mapped_section_pos_cmp());
-        assert(section != mapped_sections.begin());
-        --section;
-
         return original->position_of(original->source().begin() +
-            to_original_pos(section, pos - source().begin()));
+            to_original_pos(find_section(pos), pos - source().begin()));
     }
 }
