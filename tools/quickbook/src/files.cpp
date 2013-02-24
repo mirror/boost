@@ -361,13 +361,7 @@ namespace quickbook
         return data->new_file->source().size();
     }
     
-    void mapped_file_builder::add(char const* x, iterator pos)
-    {
-        data->new_file->add_empty_mapped_file_section(pos);
-        data->new_file->source_.append(x);
-    }
-
-    void mapped_file_builder::add(boost::string_ref x, iterator pos)
+    void mapped_file_builder::add_at_pos(boost::string_ref x, iterator pos)
     {
         data->new_file->add_empty_mapped_file_section(pos);
         data->new_file->source_.append(x.begin(), x.end());

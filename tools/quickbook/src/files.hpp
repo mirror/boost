@@ -125,8 +125,7 @@ namespace quickbook {
         bool empty() const;
         pos get_pos() const;
 
-        void add(char const*, iterator);
-        void add(boost::string_ref, iterator);
+        void add_at_pos(boost::string_ref, iterator);
         void add(boost::string_ref);
         void add(mapped_file_builder const&);
         void add(mapped_file_builder const&, pos, pos);

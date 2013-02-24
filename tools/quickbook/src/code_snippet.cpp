@@ -375,9 +375,9 @@ namespace quickbook
             if (last_code_pos != first) {
                 if (!in_code)
                 {
-                    content.add("\n\n", last_code_pos);
-                    content.add(source_type, last_code_pos);
-                    content.add("```\n", last_code_pos);
+                    content.add_at_pos("\n\n", last_code_pos);
+                    content.add_at_pos(source_type, last_code_pos);
+                    content.add_at_pos("```\n", last_code_pos);
 
                     in_code = true;
                 }
@@ -395,7 +395,7 @@ namespace quickbook
     
         if (in_code)
         {
-            content.add("\n```\n\n", last_code_pos);
+            content.add_at_pos("\n```\n\n", last_code_pos);
             in_code = false;
         }
     }
@@ -413,9 +413,9 @@ namespace quickbook
 
         if (!in_code)
         {
-            content.add("\n\n", first);
-            content.add(source_type, first);
-            content.add("```\n", first);
+            content.add_at_pos("\n\n", first);
+            content.add_at_pos(source_type, first);
+            content.add_at_pos("```\n", first);
             in_code = true;
         }
 
@@ -436,7 +436,7 @@ namespace quickbook
     
             snippet_data& snippet = *snippet_stack;
 
-            content.add("\n", mark_begin);
+            content.add_at_pos("\n", mark_begin);
             content.unindent_and_add(boost::string_ref(mark_begin, mark_end - mark_begin));
 
             if (snippet.id == "!")
@@ -515,13 +515,13 @@ namespace quickbook
         mapped_file_builder f;
         f.start(source_file);
         if (snippet->start_code) {
-            f.add("\n\n", snippet->source_pos);
-            f.add(source_type, snippet->source_pos);
-            f.add("```\n", snippet->source_pos);
+            f.add_at_pos("\n\n", snippet->source_pos);
+            f.add_at_pos(source_type, snippet->source_pos);
+            f.add_at_pos("```\n", snippet->source_pos);
         }
         f.add(content, snippet->start_pos, content.get_pos());
         if (in_code) {
-            f.add("\n```\n\n", position);
+            f.add_at_pos("\n```\n\n", position);
         }
 
         std::vector<std::string> params;

@@ -125,9 +125,9 @@ void simple_map_tests()
 
     { // Generated text
         builder.start(fake_file);
-        builder.add("------\n", line1);
+        builder.add_at_pos("------\n", line1);
         builder.add(boost::string_ref(line1, line1_end - line1));
-        builder.add("\n------\n", line1_end);
+        builder.add_at_pos("\n------\n", line1_end);
         quickbook::file_ptr f1 = builder.release();
         BOOST_TEST_EQ(f1->source(),
             boost::string_ref("------\nFirst Line\n------\n"));
