@@ -195,12 +195,15 @@ namespace quickbook
         std::string::size_type original_pos;
         std::string::size_type our_pos;
         section_types section_type;
+        int indentation;
 
         mapped_file_section(
                 std::string::size_type original_pos,
                 std::string::size_type our_pos,
-                section_types section_type = normal) :
-            original_pos(original_pos), our_pos(our_pos), section_type(section_type) {}
+                section_types section_type = normal,
+                int indentation = 0) :
+            original_pos(original_pos), our_pos(our_pos),
+            section_type(section_type), indentation(indentation) {}
 
         std::string::size_type to_original_pos(std::string::size_type pos)
         {
@@ -238,7 +241,9 @@ namespace quickbook
             case indented:
                 return file_position(
                     original.line + relative.line - 1,
-                    original.column + relative.column - 1);
+                    relative.line == 1 ?
+                        original.column + relative.column - 1 :
+                        relative.column + indentation);
             default:
                 assert(false);
                 return file_position();
@@ -318,10 +323,12 @@ namespace quickbook
                 pos - original->source().begin(), source().size()));
         }
 
-        void add_indented_mapped_file_section(boost::string_ref::const_iterator pos) {
+        void add_indented_mapped_file_section(boost::string_ref::const_iterator pos,
+                int indentation)
+        {
             mapped_sections.push_back(mapped_file_section(
                 pos - original->source().begin(), source().size(),
-                mapped_file_section::indented));
+                mapped_file_section::indented, indentation));
         }
 
         virtual file_position position_of(boost::string_ref::const_iterator) const;
@@ -416,14 +423,14 @@ namespace quickbook
     
             data->new_file->mapped_sections.push_back(mapped_file_section(
                     start->to_original_pos(begin), size,
-                    start->section_type));
+                    start->section_type, start->indentation));
     
             for (++start; start != x.data->new_file->mapped_sections.end() &&
                     start->our_pos < end; ++start)
             {
                 data->new_file->mapped_sections.push_back(mapped_file_section(
                     start->original_pos, start->our_pos - begin + size,
-                    start->section_type));
+                    start->section_type, start->indentation));
             }
     
             data->new_file->source_.append(
@@ -492,7 +499,7 @@ namespace quickbook
             program.erase(pos, (std::min)(indent, next-pos));
         }
 
-        data->new_file->add_indented_mapped_file_section(x.begin() + indent);
+        data->new_file->add_indented_mapped_file_section(x.begin() + indent, indent);
         data->new_file->source_.append(program);
     }
 

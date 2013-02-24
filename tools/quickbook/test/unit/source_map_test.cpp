@@ -188,6 +188,32 @@ void indented_map_tests()
 
     {
         builder.start(fake_file);
+        {
+            quickbook::mapped_file_builder builder2;
+            builder2.start(fake_file);
+            builder2.unindent_and_add(fake_file->source());
+            builder.add(builder2);
+        }
+        quickbook::file_ptr f1 = builder.release();
+
+        BOOST_TEST_EQ(f1->source(),
+            boost::string_ref("Code line1\nCode line2\n"));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin()),
+            quickbook::file_position(1,4));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 1),
+            quickbook::file_position(1,5));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 5),
+            quickbook::file_position(1,9));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 10),
+            quickbook::file_position(1,14));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 11),
+            quickbook::file_position(2,4));
+        BOOST_TEST_EQ(f1->position_of(f1->source().end()),
+            quickbook::file_position(3,4));
+    }
+
+    {
+        builder.start(fake_file);
         builder.unindent_and_add(boost::string_ref(
             fake_file->source().begin() + 3,
             fake_file->source().end() - (fake_file->source().begin() + 3)));
@@ -203,9 +229,9 @@ void indented_map_tests()
         BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 10),
             quickbook::file_position(1,14));
         BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 11),
-            quickbook::file_position(2,4));
+            quickbook::file_position(2,1));
         BOOST_TEST_EQ(f1->position_of(f1->source().end()),
-            quickbook::file_position(3,4));
+            quickbook::file_position(3,1));
     }
 }
 
