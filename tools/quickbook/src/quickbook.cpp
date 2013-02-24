@@ -61,8 +61,9 @@ namespace quickbook
                 end = preset_defines.end();
                 it != end; ++it)
         {
-            parse_iterator first(it->begin());
-            parse_iterator last(it->end());
+            boost::string_ref val(*it);
+            parse_iterator first(val.begin());
+            parse_iterator last(val.end());
 
             cl::parse_info<parse_iterator> info =
                 cl::parse(first, last, state.grammar().command_line_macro);
@@ -85,8 +86,8 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
     void parse_file(quickbook::state& state, value include_doc_id, bool nested_file)
     {
-        parse_iterator first(state.current_file->source.begin());
-        parse_iterator last(state.current_file->source.end());
+        parse_iterator first(state.current_file->source().begin());
+        parse_iterator last(state.current_file->source().end());
 
         cl::parse_info<parse_iterator> info = cl::parse(first, last, state.grammar().doc_info);
         assert(info.hit);

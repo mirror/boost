@@ -11,6 +11,7 @@
 
 #include <boost/config.hpp>
 #include <boost/filesystem/path.hpp>
+#include <boost/utility/string_ref.hpp>
 #include <string>
 #include <stdexcept>
 #include <iostream>
@@ -62,8 +63,10 @@ namespace quickbook
     
 #if QUICKBOOK_WIDE_PATHS
         typedef std::wstring input_string;
+        typedef boost::wstring_ref input_string_ref;
 #else
         typedef std::string input_string;
+        typedef boost::string_ref input_string_ref;
 #endif
 
         // A light wrapper around C++'s streams that gets things right
@@ -76,10 +79,12 @@ namespace quickbook
             typedef std::wostream base_ostream;
             typedef std::wios base_ios;
             typedef std::wstring string;
+            typedef boost::wstring_ref string_ref;
 #else
             typedef std::ostream base_ostream;
             typedef std::ios base_ios;
             typedef std::string string;
+            typedef boost::string_ref string_ref;
 #endif
             base_ostream& base;
 
@@ -91,6 +96,7 @@ namespace quickbook
 
             // std::string should be UTF-8 (what a mess!)
             ostream& operator<<(std::string const&);
+            ostream& operator<<(boost::string_ref);
 
             // Other value types.
             ostream& operator<<(int x);
@@ -109,7 +115,7 @@ namespace quickbook
         fs::path input_to_path(input_string const&);
     
         std::string path_to_generic(fs::path const&);
-        fs::path generic_to_path(std::string const&);
+        fs::path generic_to_path(boost::string_ref);
 
         void initialise_output();
         

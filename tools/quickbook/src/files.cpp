@@ -136,11 +136,11 @@ namespace quickbook
     }
 
     file_position relative_position(
-        std::string::const_iterator begin,
-        std::string::const_iterator iterator)
+        boost::string_ref::const_iterator begin,
+        boost::string_ref::const_iterator iterator)
     {
         file_position pos;
-        std::string::const_iterator line_begin = begin;
+        boost::string_ref::const_iterator line_begin = begin;
 
         while (begin != iterator)
         {
@@ -172,9 +172,9 @@ namespace quickbook
         return pos;
     }
 
-    file_position file::position_of(std::string::const_iterator iterator) const
+    file_position file::position_of(boost::string_ref::const_iterator iterator) const
     {
-        return relative_position(source.begin(), iterator);
+        return relative_position(source().begin(), iterator);
     }
 
     // Mapped files.
@@ -293,9 +293,9 @@ namespace quickbook
         file_ptr original;
         std::vector<mapped_file_section> mapped_sections;
         
-        void add_empty_mapped_file_section(std::string::const_iterator pos) {
+        void add_empty_mapped_file_section(boost::string_ref::const_iterator pos) {
             std::string::size_type original_pos =
-                pos - original->source.begin();
+                pos - original->source().begin();
         
             if (mapped_sections.empty() ||
                     mapped_sections.back().section_type !=
@@ -303,23 +303,23 @@ namespace quickbook
                     mapped_sections.back().original_pos != original_pos)
             {
                 mapped_sections.push_back(mapped_file_section(
-                        original_pos, source.size(),
+                        original_pos, source().size(),
                         mapped_file_section::empty));
             }
         }
 
-        void add_mapped_file_section(std::string::const_iterator pos) {
+        void add_mapped_file_section(boost::string_ref::const_iterator pos) {
             mapped_sections.push_back(mapped_file_section(
-                pos - original->source.begin(), source.size()));
+                pos - original->source().begin(), source().size()));
         }
 
-        void add_indented_mapped_file_section(std::string::const_iterator pos) {
+        void add_indented_mapped_file_section(boost::string_ref::const_iterator pos) {
             mapped_sections.push_back(mapped_file_section(
-                pos - original->source.begin(), source.size(),
+                pos - original->source().begin(), source().size(),
                 mapped_file_section::indented));
         }
 
-        virtual file_position position_of(std::string::const_iterator) const;
+        virtual file_position position_of(boost::string_ref::const_iterator) const;
     };
 
     namespace {
@@ -361,43 +361,43 @@ namespace quickbook
     
     bool mapped_file_builder::empty() const
     {
-        return data->new_file->source.empty();
+        return data->new_file->source().empty();
     }
 
     mapped_file_builder::pos mapped_file_builder::get_pos() const
     {
-        return data->new_file->source.size();
+        return data->new_file->source().size();
     }
     
     void mapped_file_builder::add(char const* x, iterator pos)
     {
         data->new_file->add_empty_mapped_file_section(pos);
-        data->new_file->source.append(x);
+        data->new_file->source_.append(x);
     }
 
-    void mapped_file_builder::add(std::string const& x, iterator pos)
+    void mapped_file_builder::add(boost::string_ref x, iterator pos)
     {
         data->new_file->add_empty_mapped_file_section(pos);
-        data->new_file->source.append(x);
+        data->new_file->source_.append(x.begin(), x.end());
     }
 
-    void mapped_file_builder::add(iterator begin, iterator end)
+    void mapped_file_builder::add(boost::string_ref x)
     {
-        data->new_file->add_mapped_file_section(begin);
-        data->new_file->source.append(begin, end);
+        data->new_file->add_mapped_file_section(x.begin());
+        data->new_file->source_.append(x.begin(), x.end());
     }
 
     void mapped_file_builder::add(mapped_file_builder const& x)
     {
-        add(x, 0, x.data->new_file->source.size());
+        add(x, 0, x.data->new_file->source_.size());
     }
 
     void mapped_file_builder::add(mapped_file_builder const& x,
             pos begin, pos end)
     {
         assert(data->new_file->original == x.data->new_file->original);
-        assert(begin <= x.data->new_file->source.size());
-        assert(end <= x.data->new_file->source.size());
+        assert(begin <= x.data->new_file->source_.size());
+        assert(end <= x.data->new_file->source_.size());
 
         if (begin != end)
         {
@@ -407,7 +407,7 @@ namespace quickbook
             assert(start != x.data->new_file->mapped_sections.begin());
             --start;
     
-            std::string::size_type size = data->new_file->source.size();
+            std::string::size_type size = data->new_file->source_.size();
     
             data->new_file->mapped_sections.push_back(mapped_file_section(
                     start->to_original_pos(begin), size,
@@ -421,15 +421,15 @@ namespace quickbook
                     start->section_type));
             }
     
-            data->new_file->source.append(
-                x.data->new_file->source.begin() + begin,
-            x.data->new_file->source.begin() + end);
+            data->new_file->source_.append(
+                x.data->new_file->source_.begin() + begin,
+            x.data->new_file->source_.begin() + end);
         }
     }
 
-    void mapped_file_builder::unindent_and_add(iterator begin, iterator end)
+    void mapped_file_builder::unindent_and_add(boost::string_ref x)
     {
-        std::string program(begin, end);
+        std::string program(x.begin(), x.end());
 
         // Erase leading blank lines and newlines:
         std::string::size_type start = program.find_first_not_of(" \t");
@@ -487,23 +487,23 @@ namespace quickbook
             program.erase(pos, (std::min)(indent, next-pos));
         }
 
-        data->new_file->add_indented_mapped_file_section(begin + indent);
-        data->new_file->source.append(program);
+        data->new_file->add_indented_mapped_file_section(x.begin() + indent);
+        data->new_file->source_.append(program);
     }
 
-    file_position mapped_file::position_of(std::string::const_iterator pos) const
+    file_position mapped_file::position_of(boost::string_ref::const_iterator pos) const
     {
         std::vector<mapped_file_section>::const_iterator section =
             boost::upper_bound(mapped_sections,
-                std::string::size_type(pos - source.begin()),
+                std::string::size_type(pos - source().begin()),
                 mapped_section_pos_cmp());
         assert(section != mapped_sections.begin());
         --section;
 
         return section->calculate_position(
             original->position_of(
-                original->source.begin() + section->original_pos),
-            relative_position(source.begin() + section->our_pos, pos)
+                original->source().begin() + section->original_pos),
+            relative_position(source().begin() + section->our_pos, pos)
         );
     }
 }

@@ -12,7 +12,6 @@
 #include <boost/spirit/include/classic_confix.hpp>
 #include <boost/shared_ptr.hpp>
 #include <boost/bind.hpp>
-#include <boost/lexical_cast.hpp>
 #include "block_tags.hpp"
 #include "template_stack.hpp"
 #include "actions.hpp"
@@ -30,7 +29,7 @@ namespace quickbook
         code_snippet_actions(std::vector<template_symbol>& storage,
                                 file_ptr source_file,
                                 char const* source_type)
-            : last_code_pos(source_file->source.begin())
+            : last_code_pos(source_file->source().begin())
             , in_code(false)
             , snippet_stack()
             , storage(storage)
@@ -63,13 +62,13 @@ namespace quickbook
             
             std::string id;
             bool start_code;
-            std::string::const_iterator source_pos;
+            string_iterator source_pos;
             mapped_file_builder::pos start_pos;
             boost::shared_ptr<snippet_data> next;
         };
         
         void push_snippet_data(std::string const& id,
-                std::string::const_iterator pos)
+                string_iterator pos)
         {
             boost::shared_ptr<snippet_data> new_snippet(new snippet_data(id));
             new_snippet->next = snippet_stack;
@@ -88,8 +87,8 @@ namespace quickbook
         }
 
         mapped_file_builder content;
-        std::string::const_iterator mark_begin, mark_end;
-        std::string::const_iterator last_code_pos;
+        boost::string_ref::const_iterator mark_begin, mark_end;
+        boost::string_ref::const_iterator last_code_pos;
         bool in_code;
         boost::shared_ptr<snippet_data> snippet_stack;
         std::vector<template_symbol>& storage;
@@ -352,8 +351,8 @@ namespace quickbook
         bool is_python = extension == ".py";
         code_snippet_actions a(storage, load(filename, qbk_version_n), is_python ? "[python]" : "[c++]");
 
-        string_iterator first(a.source_file->source.begin());
-        string_iterator last(a.source_file->source.end());
+        string_iterator first(a.source_file->source().begin());
+        string_iterator last(a.source_file->source().end());
 
         cl::parse_info<string_iterator> info;
 
@@ -383,7 +382,7 @@ namespace quickbook
                     in_code = true;
                 }
 
-                content.add(last_code_pos, first);
+                content.add(boost::string_ref(last_code_pos, first - last_code_pos));
             }
         }
         
@@ -420,7 +419,7 @@ namespace quickbook
             in_code = true;
         }
 
-        content.add(mark_begin, mark_end);
+        content.add(boost::string_ref(mark_begin, mark_end - mark_begin));
     }
 
     void code_snippet_actions::escaped_comment(string_iterator first, string_iterator last)
@@ -438,7 +437,7 @@ namespace quickbook
             snippet_data& snippet = *snippet_stack;
 
             content.add("\n", mark_begin);
-            content.unindent_and_add(mark_begin, mark_end);
+            content.unindent_and_add(boost::string_ref(mark_begin, mark_end - mark_begin));
 
             if (snippet.id == "!")
             {
@@ -530,7 +529,7 @@ namespace quickbook
         file_ptr body = f.release();
 
         storage.push_back(template_symbol(snippet->id, params,
-            qbk_value(body, body->source.begin(), body->source.end(),
+            qbk_value(body, body->source().begin(), body->source().end(),
                 template_tags::snippet)));
     }
 }

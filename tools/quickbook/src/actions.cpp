@@ -63,7 +63,7 @@ namespace quickbook
         }
         
         std::string add_anchor(quickbook::state& state,
-                std::string const& id,
+                boost::string_ref id,
                 id_category::categories category =
                     id_category::explicit_anchor_id)
         {
@@ -474,7 +474,7 @@ namespace quickbook
 
         if (saved_conditional)
         {
-            string_ref macro1 = values.consume().get_quickbook();
+            boost::string_ref macro1 = values.consume().get_quickbook();
             std::string macro(macro1.begin(), macro1.end());
 
             state.conditional = find(state.macro, macro.c_str());
@@ -702,7 +702,7 @@ namespace quickbook
         int code_tag = code_block.get_tag();
 
         value_consumer values = code_block;
-        string_ref code_value = values.consume().get_quickbook();
+        boost::string_ref code_value = values.consume().get_quickbook();
         values.finish();
 
         bool inline_code = code_tag == code_tags::inline_code ||
@@ -710,7 +710,7 @@ namespace quickbook
         bool block = code_tag != code_tags::inline_code;
 
         std::string source_mode = state.source_mode_next.empty() ?
-            state.source_mode : state.source_mode_next.get_quickbook();
+            state.source_mode : detail::to_s(state.source_mode_next.get_quickbook());
         state.source_mode_next = value();
 
         if (inline_code) {
@@ -726,17 +726,17 @@ namespace quickbook
             // preprocess the code section to remove the initial indentation
             mapped_file_builder mapped;
             mapped.start(state.current_file);
-            mapped.unindent_and_add(code_value.begin(), code_value.end());
+            mapped.unindent_and_add(code_value);
 
             file_ptr f = mapped.release();
 
-            if (f->source.empty())
+            if (f->source().empty())
                 return; // Nothing left to do here. The program is empty.
 
             if (qbk_version_n >= 107u) state.start_callouts();
 
-            parse_iterator first_(f->source.begin());
-            parse_iterator last_(f->source.end());
+            parse_iterator first_(f->source().begin());
+            parse_iterator last_(f->source().end());
 
             file_ptr saved_file = f;
             boost::swap(state.current_file, saved_file);
@@ -813,8 +813,8 @@ namespace quickbook
             detail::print_string(v.get_encoded(), out);
         }
         else {
-            std::string value = v.get_quickbook();
-            for(std::string::const_iterator
+            boost::string_ref value = v.get_quickbook();
+            for(boost::string_ref::const_iterator
                 first = value.begin(), last  = value.end();
                 first != last; ++first)
             {
@@ -841,8 +841,10 @@ namespace quickbook
             value_consumer pair = pair_;
             value name = pair.consume();
             value value = pair.consume();
+            std::string name_str(name.get_quickbook().begin(),
+                name.get_quickbook().end());
             pair.finish();
-            if(!attributes.insert(std::make_pair(name.get_quickbook(), value)).second)
+            if(!attributes.insert(std::make_pair(name_str, value)).second)
             {
                 detail::outwarn(name.get_file(), name.get_position())
                     << "Duplicate image attribute: "
@@ -860,7 +862,7 @@ namespace quickbook
         
         std::string fileref = attributes["fileref"].is_encoded() ?
             attributes["fileref"].get_encoded() :
-            attributes["fileref"].get_quickbook();
+            detail::to_s(attributes["fileref"].get_quickbook());
 
         // Check for windows paths, then convert.
         // A bit crude, but there you go.
@@ -1006,7 +1008,7 @@ namespace quickbook
     void macro_definition_action(quickbook::state& state, quickbook::value macro_definition)
     {
         value_consumer values = macro_definition;
-        std::string macro_id = values.consume().get_quickbook();
+        std::string macro_id = detail::to_s(values.consume().get_quickbook());
         value phrase_value = values.optional_consume();
         std::string phrase;
         if (phrase_value.check()) phrase = phrase_value.get_encoded();
@@ -1035,11 +1037,11 @@ namespace quickbook
     void template_body_action(quickbook::state& state, quickbook::value template_definition)
     {
         value_consumer values = template_definition;
-        std::string identifier = values.consume().get_quickbook();
+        std::string identifier = detail::to_s(values.consume().get_quickbook());
 
         std::vector<std::string> template_values;
         BOOST_FOREACH(value const& p, values.consume()) {
-            template_values.push_back(p.get_quickbook());
+            template_values.push_back(detail::to_s(p.get_quickbook()));
         }
 
         BOOST_ASSERT(values.check(template_tags::block) || values.check(template_tags::phrase));
@@ -1207,7 +1209,7 @@ namespace quickbook
             file_ptr saved_current_file = state.current_file;
 
             state.current_file = content.get_file();
-            string_ref source = content.get_quickbook();
+            boost::string_ref source = content.get_quickbook();
 
             parse_iterator first(source.begin());
             parse_iterator last(source.end());
@@ -1363,7 +1365,7 @@ namespace quickbook
         bool template_escape = values.check(template_tags::escape);
         if(template_escape) values.consume();
 
-        std::string identifier = values.consume(template_tags::identifier).get_quickbook();
+        std::string identifier = detail::to_s(values.consume(template_tags::identifier).get_quickbook());
 
         std::vector<value> args;
 
@@ -1480,7 +1482,7 @@ namespace quickbook
         // Note: dst is never actually encoded as boostbook, which
         // is why the result is called with 'print_string' later.
         std::string dst = dst_value.is_encoded() ?
-            dst_value.get_encoded() : dst_value.get_quickbook();
+            dst_value.get_encoded() : detail::to_s(dst_value.get_quickbook());
         
         state.phrase << markup.pre;
         detail::print_string(dst, state.phrase.get());
@@ -1499,7 +1501,7 @@ namespace quickbook
         write_anchors(state, state.out);
 
         value_consumer values = variable_list;
-        std::string title = values.consume(table_tags::title).get_quickbook();
+        std::string title = detail::to_s(values.consume(table_tags::title).get_quickbook());
 
         state.out << "<variablelist>\n";
 
@@ -1538,7 +1540,7 @@ namespace quickbook
 
         std::string element_id;
         if(values.check(general_tags::element_id))
-            element_id = values.consume().get_quickbook();
+            element_id = detail::to_s(values.consume().get_quickbook());
 
         value title = values.consume(table_tags::title);
         bool has_title = !title.empty();
@@ -1785,7 +1787,7 @@ namespace quickbook
         // Counter-intuitively: encoded == plain text here.
 
         std::string path_text = qbk_version_n >= 106u || path.is_encoded() ?
-                path.get_encoded() : path.get_quickbook();
+                path.get_encoded() : detail::to_s(path.get_quickbook());
 
         if(path_text.find('\\') != std::string::npos)
         {

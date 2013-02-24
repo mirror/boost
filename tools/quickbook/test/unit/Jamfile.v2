@@ -20,7 +20,7 @@ project quickbook-unit-tests
         <toolset>darwin:<define>BOOST_DETAIL_CONTAINER_FWD
     ;
 
-run values_test.cpp ../../src/values.cpp ../../src/files.cpp ../../src/string_ref.cpp ;
+run values_test.cpp ../../src/values.cpp ../../src/files.cpp ;
 run post_process_test.cpp ../../src/post_process.cpp ;
 
 # Copied from spirit

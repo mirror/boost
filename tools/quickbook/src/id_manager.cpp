@@ -8,7 +8,7 @@
 
 #include "id_manager.hpp"
 #include "utils.hpp"
-#include "string_ref.hpp"
+#include <boost/utility/string_ref.hpp>
 #include <boost/make_shared.hpp>
 #include <boost/unordered_map.hpp>
 #include <boost/lexical_cast.hpp>
@@ -29,9 +29,9 @@ namespace quickbook
 
     struct id_placeholder;
     struct id_data;
-    std::string replace_ids(id_state& state, std::string const& xml,
+    std::string replace_ids(id_state& state, boost::string_ref xml,
             bool use_resolved_ids = true);
-    std::string process_ids(id_state&, std::string const&);
+    std::string process_ids(id_state&, boost::string_ref);
 
     static const std::size_t max_size = 32;
 
@@ -68,13 +68,15 @@ namespace quickbook
 
         id_placeholder(
                 unsigned index,
-                std::string const& id,
+                boost::string_ref id,
                 id_category category,
                 id_placeholder* parent_ = 0)
           : index(index),
             generation_state(parent_ ? child : unresolved),
-            unresolved_id(parent_ ? parent_->unresolved_id + '.' + id : id),
-            id(id),
+            unresolved_id(parent_ ?
+                parent_->unresolved_id + '.' + detail::to_s(id) :
+                detail::to_s(id)),
+            id(id.begin(), id.end()),
             parent(parent_),
             category(category),
             num_dots(boost::range::count(id, '.') +
@@ -118,39 +120,39 @@ namespace quickbook
         // Placeholder methods
 
         id_placeholder* add_placeholder(
-                std::string const&, id_category, id_placeholder* parent = 0);
+                boost::string_ref, id_category, id_placeholder* parent = 0);
 
-        id_placeholder* get_placeholder(string_ref);
+        id_placeholder* get_placeholder(boost::string_ref);
 
         // Events
 
         id_placeholder* start_file(
                 unsigned compatibility_version,
                 bool document_root,
-                std::string const& include_doc_id,
-                std::string const& id,
+                boost::string_ref include_doc_id,
+                boost::string_ref id,
                 value const& title);
 
         void end_file();
 
         id_placeholder* add_id(
-                std::string const& id,
+                boost::string_ref id,
                 id_category category);
         id_placeholder* old_style_id(
-            std::string const& id,
+            boost::string_ref id,
             id_category category);
         id_placeholder* begin_section(
-                std::string const& id,
+                boost::string_ref id,
                 id_category category);
         void end_section();
 
 private:
         id_placeholder* add_id_to_section(
-                std::string const& id,
+                boost::string_ref id,
                 id_category category,
                 boost::shared_ptr<section_info> const& section);
         id_placeholder* create_new_section(
-                std::string const& id,
+                boost::string_ref id,
                 id_category category);
 
         void switch_section(id_placeholder*);
@@ -210,7 +212,7 @@ private:
         id_placeholder* placeholder_1_6;
 
         section_info(boost::shared_ptr<section_info> const& parent,
-                unsigned compatibility_version, std::string const& id) :
+                unsigned compatibility_version, boost::string_ref id) :
             parent(parent), compatibility_version(compatibility_version),
             level(parent ? parent->level + 1 : 1),
             id_1_1(), placeholder_1_6(0)
@@ -219,7 +221,7 @@ private:
                 id_1_1 = parent->id_1_1;
                 if (!id_1_1.empty() && !id.empty())
                     id_1_1 += ".";
-                id_1_1 += id;
+                id_1_1.append(id.begin(), id.end());
             }
         }
     };
@@ -237,8 +239,8 @@ private:
 
     void id_manager::start_file(
             unsigned compatibility_version,
-            std::string const& include_doc_id,
-            std::string const& id,
+            boost::string_ref include_doc_id,
+            boost::string_ref id,
             value const& title)
     {
         state->start_file(compatibility_version, false, include_doc_id, id, title);
@@ -246,8 +248,8 @@ private:
 
     std::string id_manager::start_file_with_docinfo(
             unsigned compatibility_version,
-            std::string const& include_doc_id,
-            std::string const& id,
+            boost::string_ref include_doc_id,
+            boost::string_ref id,
             value const& title)
     {
         return state->start_file(compatibility_version, true, include_doc_id,
@@ -259,7 +261,7 @@ private:
         state->end_file();
     }
 
-    std::string id_manager::begin_section(std::string const& id,
+    std::string id_manager::begin_section(boost::string_ref id,
             id_category category)
     {
         return state->begin_section(id, category)->to_string();
@@ -275,28 +277,28 @@ private:
         return state->current_file->document->current_section->level;
     }
 
-    std::string id_manager::old_style_id(std::string const& id, id_category category)
+    std::string id_manager::old_style_id(boost::string_ref id, id_category category)
     {
         return state->old_style_id(id, category)->to_string();
     }
 
-    std::string id_manager::add_id(std::string const& id, id_category category)
+    std::string id_manager::add_id(boost::string_ref id, id_category category)
     {
         return state->add_id(id, category)->to_string();
     }
 
-    std::string id_manager::add_anchor(std::string const& id, id_category category)
+    std::string id_manager::add_anchor(boost::string_ref id, id_category category)
     {
         return state->add_placeholder(id, category)->to_string();
     }
 
     std::string id_manager::replace_placeholders_with_unresolved_ids(
-            std::string const& xml) const
+            boost::string_ref xml) const
     {
         return replace_ids(*state, xml, false);
     }
 
-    std::string id_manager::replace_placeholders(std::string const& xml) const
+    std::string id_manager::replace_placeholders(boost::string_ref xml) const
     {
         assert(!state->current_file);
         return process_ids(*state, xml);
@@ -316,12 +318,11 @@ private:
     namespace
     {
         std::string normalize_id(
-                std::string src_id,
+                boost::string_ref src_id,
                 std::size_t prefix = 0,
                 std::size_t size = max_size)
         {
-            std::string id;
-            id.swap(src_id);
+            std::string id(src_id.begin(), src_id.end());
 
             std::size_t src = prefix;
             std::size_t dst = prefix;
@@ -364,7 +365,7 @@ private:
     //
 
     id_placeholder* id_state::add_placeholder(
-            std::string const& id, id_category category,
+            boost::string_ref id, id_category category,
             id_placeholder* parent)
     {
         placeholders.push_back(id_placeholder(
@@ -372,7 +373,7 @@ private:
         return &placeholders.back();
     }
 
-    id_placeholder* id_state::get_placeholder(string_ref value)
+    id_placeholder* id_state::get_placeholder(boost::string_ref value)
     {
         // If this isn't a placeholder id.
         if (value.size() <= 1 || *value.begin() != '$')
@@ -429,8 +430,8 @@ private:
     id_placeholder* id_state::start_file(
             unsigned compatibility_version,
             bool document_root,
-            std::string const& include_doc_id,
-            std::string const& id,
+            boost::string_ref include_doc_id,
+            boost::string_ref id,
             value const& title)
     {
         // Create new file
@@ -451,7 +452,7 @@ private:
         // specified in an 'include' element) unless backwards compatibility
         // is required.
 
-        std::string initial_doc_id;
+        boost::string_ref initial_doc_id;
 
         if (document_root ||
             compatibility_version >= 106u ||
@@ -471,9 +472,9 @@ private:
 
             if (title.check())
                 current_file->document->last_title_1_1 =
-                    title.get_quickbook();
+                    detail::to_s(title.get_quickbook());
 
-            current_file->doc_id_1_1 = !initial_doc_id.empty() ? initial_doc_id :
+            current_file->doc_id_1_1 = !initial_doc_id.empty() ? detail::to_s(initial_doc_id) :
                 detail::make_identifier(current_file->document->last_title_1_1);
         }
         else if (parent) {
@@ -519,7 +520,7 @@ private:
     }
 
     id_placeholder* id_state::add_id(
-            std::string const& id,
+            boost::string_ref id,
             id_category category)
     {
         return add_id_to_section(id, category,
@@ -527,11 +528,11 @@ private:
     }
 
     id_placeholder* id_state::add_id_to_section(
-            std::string const& id,
+            boost::string_ref id,
             id_category category,
             boost::shared_ptr<section_info> const& section)
     {
-        std::string id_part = id;
+        std::string id_part(id.begin(), id.end());
 
         // Note: Normalizing id according to file compatibility version, but
         // adding to section according to section compatibility version.
@@ -562,25 +563,25 @@ private:
     }
 
     id_placeholder* id_state::old_style_id(
-        std::string const& id,
+        boost::string_ref id,
         id_category category)
     {
         return current_file->compatibility_version < 103u ?
             add_placeholder(
-                current_file->document->section_id_1_1 + "." + id, category) :
+                current_file->document->section_id_1_1 + "." + detail::to_s(id), category) :
                 add_id(id, category);
     }
 
     id_placeholder* id_state::begin_section(
-            std::string const& id,
+            boost::string_ref id,
             id_category category)
     {
-        current_file->document->section_id_1_1 = id;
+        current_file->document->section_id_1_1 = detail::to_s(id);
         return create_new_section(id, category);
     }
 
     id_placeholder* id_state::create_new_section(
-            std::string const& id,
+            boost::string_ref id,
             id_category category)
     {
         boost::shared_ptr<section_info> parent =
@@ -618,7 +619,7 @@ private:
             if (parent && !new_section->placeholder_1_6)
                 new_id = current_file->doc_id_1_1 + '.';
 
-            new_id += id;
+            new_id += detail::to_s(id);
 
             p = add_placeholder(new_id, category,
                 new_section->placeholder_1_6);
@@ -654,13 +655,13 @@ private:
         std::vector<std::string> id_attributes;
 
         struct callback {
-            virtual void start(string_ref) {}
-            virtual void id_value(string_ref) {}
-            virtual void finish(string_ref) {}
+            virtual void start(boost::string_ref) {}
+            virtual void id_value(boost::string_ref) {}
+            virtual void finish(boost::string_ref) {}
             virtual ~callback() {}
         };
 
-        void parse(std::string const&, callback&);
+        void parse(boost::string_ref, callback&);
     };
 
     namespace
@@ -724,14 +725,13 @@ private:
         while(it != end && !find_char(text, *it)) ++it;
     }
 
-    void xml_processor::parse(std::string const& source, callback& c)
+    void xml_processor::parse(boost::string_ref source, callback& c)
     {
-        typedef std::string::const_iterator iterator;
+        typedef boost::string_ref::const_iterator iterator;
 
-        string_ref source_ref(source.begin(), source.end());
-        c.start(source_ref);
+        c.start(source);
 
-        iterator it = source_ref.begin(), end = source_ref.end();
+        iterator it = source.begin(), end = source.end();
 
         for(;;)
         {
@@ -770,7 +770,7 @@ private:
                         iterator name_start = it;
                         read_to_one_of(it, end, "= \t\n\r>");
                         if (it == end || *it == '>') break;
-                        string_ref name(name_start, it);
+                        boost::string_ref name(name_start, it - name_start);
                         ++it;
 
                         read_some_of(it, end, "= \t\n\r");
@@ -783,10 +783,10 @@ private:
 
                         it = std::find(it, end, delim);
                         if (it == end) break;
-                        string_ref value(value_start, it);
+                        boost::string_ref value(value_start, it - value_start);
                         ++it;
 
-                        if (boost::find(id_attributes, name)
+                        if (boost::find(id_attributes, detail::to_s(name))
                                 != id_attributes.end())
                         {
                             c.id_value(value);
@@ -800,7 +800,7 @@ private:
             }
         }
 
-        c.finish(source_ref);
+        c.finish(source);
     }
 
     //
@@ -813,7 +813,7 @@ private:
 
     struct id_generation_data
     {
-        id_generation_data(std::string const& src_id)
+        id_generation_data(boost::string_ref src_id)
           : child_start(src_id.rfind('.') + 1),
             id(normalize_id(src_id, child_start, max_size - 1)),
                 // 'max_size - 1' leaves a character to append
@@ -878,11 +878,11 @@ private:
     typedef boost::unordered_map<std::string, id_data> allocated_ids;
     typedef std::vector<id_placeholder*> placeholder_index;
 
-    placeholder_index index_placeholders(id_state&, std::string const& xml);
+    placeholder_index index_placeholders(id_state&, boost::string_ref xml);
     void resolve_id(id_placeholder&, allocated_ids&);
     void generate_id(id_placeholder&, allocated_ids&);
 
-    std::string process_ids(id_state& state, std::string const& xml)
+    std::string process_ids(id_state& state, boost::string_ref xml)
     {
         placeholder_index placeholders = index_placeholders(state, xml);
 
@@ -947,7 +947,7 @@ private:
             count(0)
         {}
 
-        void id_value(string_ref value)
+        void id_value(boost::string_ref value)
         {
             id_placeholder* p = state.get_placeholder(value);
             number(p);
@@ -964,7 +964,7 @@ private:
 
     placeholder_index index_placeholders(
             id_state& state,
-            std::string const& xml)
+            boost::string_ref xml)
     {
         xml_processor processor;
         number_placeholders_callback callback(state);
@@ -1095,7 +1095,7 @@ private:
     {
         id_state& state;
         bool use_resolved_ids;
-        std::string::const_iterator source_pos;
+        boost::string_ref::const_iterator source_pos;
         std::string result;
 
         replace_ids_callback(id_state& state, bool resolved)
@@ -1105,18 +1105,18 @@ private:
             result()
         {}
 
-        void start(string_ref xml)
+        void start(boost::string_ref xml)
         {
             source_pos = xml.begin();
         }
 
-        void id_value(string_ref value)
+        void id_value(boost::string_ref value)
         {
             if (id_placeholder* p = state.get_placeholder(value))
             {
                 assert(!use_resolved_ids ||
                     p->check_state(id_placeholder::generated));
-                std::string const& id = use_resolved_ids ?
+                boost::string_ref id = use_resolved_ids ?
                     p->id : p->unresolved_id;
 
                 result.append(source_pos, value.begin());
@@ -1125,14 +1125,14 @@ private:
             }
         }
 
-        void finish(string_ref xml)
+        void finish(boost::string_ref xml)
         {
             result.append(source_pos, xml.end());
             source_pos = xml.end();
         }
     };
 
-    std::string replace_ids(id_state& state, std::string const& xml,
+    std::string replace_ids(id_state& state, boost::string_ref xml,
             bool use_unresolved_ids)
     {
         xml_processor processor;

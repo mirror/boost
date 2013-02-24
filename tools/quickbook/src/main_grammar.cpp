@@ -224,7 +224,7 @@ namespace quickbook
                 info_.type != element_info::maybe_block)
             {
                 l.state_.source_mode.swap(saved_source_mode_);
-                l.state_.source_mode = l.state_.source_mode_next.get_quickbook();
+                l.state_.source_mode = detail::to_s(l.state_.source_mode_next.get_quickbook());
                 l.state_.source_mode_next = value();
             }
 
