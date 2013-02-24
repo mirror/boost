@@ -17,6 +17,7 @@
 #include <boost/utility/string_ref.hpp>
 #include <stdexcept>
 #include <cassert>
+#include <iosfwd>
 
 namespace quickbook {
 
@@ -32,6 +33,13 @@ namespace quickbook {
 
         int line;
         int column;
+        
+        bool operator==(file_position const& other) const
+        {
+            return line == other.line && column == other.column;
+        }
+        
+        friend std::ostream& operator<<(std::ostream&, file_position const&);
     };
 
     struct file

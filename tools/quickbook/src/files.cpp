@@ -135,6 +135,11 @@ namespace quickbook
         return pos->second;
     }
 
+    std::ostream& operator<<(std::ostream& out, file_position const& x)
+    {
+        return out << "line: " << x.line << ", column: " << x.column;
+    }
+
     file_position relative_position(
         boost::string_ref::const_iterator begin,
         boost::string_ref::const_iterator iterator)
