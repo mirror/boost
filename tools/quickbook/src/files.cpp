@@ -296,14 +296,42 @@ namespace quickbook
                 case mapped_file_section::empty:
                     return section->original_pos;
                 case mapped_file_section::indented: {
-                    // Indented doesn't really work, but that's okay because we
-                    // currently don't break up indented code.
-                    unsigned newlines = std::count(
-                        this->source().begin() + section->our_pos,
-                        this->source().begin() + pos, '\n');
+                    boost::string_ref::size_type our_line = section->our_pos;
+                    unsigned newline_count = 0;
 
-                    return pos - section->our_pos + section->original_pos +
-                        newlines * section->indentation;
+                    for(boost::string_ref::size_type i = section->our_pos;
+                        i != pos; ++i)
+                    {
+                        if (source()[i] == '\n') {
+                            our_line = i + 1;
+                            ++newline_count;
+                        }
+                    }
+                    
+                    if (newline_count == 0)
+                        return pos - section->our_pos + section->original_pos;
+
+                    boost::string_ref::size_type original_line =
+                        section->original_pos;
+                    
+                    while(newline_count > 0) {
+                        if (original->source()[original_line] == '\n')
+                            --newline_count;
+                        ++original_line;
+                    }
+                    
+                    for(unsigned i = section->indentation; i > 0; --i) {
+                        if (original->source()[original_line] == '\n' ||
+                            original->source()[original_line] == '\0') break;
+                        assert(original->source()[original_line] == ' ' ||
+                            original->source()[original_line] == '\t');
+                        ++original_line;
+                    }
+                    
+                    assert(original->source()[original_line] ==
+                        source()[our_line]);
+
+                    return original_line + (pos - our_line);
                 }
                 default:
                     assert(false);

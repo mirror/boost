@@ -183,7 +183,7 @@ void indented_map_tests()
             quickbook::file_position(2,4));
         // TODO: Shouldn't this be (3,1)? Does it matter?
         BOOST_TEST_EQ(f1->position_of(f1->source().end()),
-            quickbook::file_position(3,4));
+            quickbook::file_position(3,1));
     }
 
     {
@@ -209,7 +209,7 @@ void indented_map_tests()
         BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 11),
             quickbook::file_position(2,4));
         BOOST_TEST_EQ(f1->position_of(f1->source().end()),
-            quickbook::file_position(3,4));
+            quickbook::file_position(3,1));
     }
 
     {
@@ -235,9 +235,42 @@ void indented_map_tests()
     }
 }
 
+void indented_map_tests2()
+{
+    boost::string_ref source(
+        "   Code line1\n"
+        "\n"
+        "   Code line2\n");
+    quickbook::file_ptr fake_file = new quickbook::file(
+        "(fake file)", source, 105u);
+
+    quickbook::mapped_file_builder builder;
+    
+    {
+        builder.start(fake_file);
+        builder.unindent_and_add(fake_file->source());
+        quickbook::file_ptr f1 = builder.release();
+        BOOST_TEST_EQ(f1->source(),
+            boost::string_ref("Code line1\n\nCode line2\n"));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin()),
+            quickbook::file_position(1,4));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 1),
+            quickbook::file_position(1,5));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 5),
+            quickbook::file_position(1,9));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 10),
+            quickbook::file_position(1,14));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 11),
+            quickbook::file_position(2,1));
+        BOOST_TEST_EQ(f1->position_of(f1->source().begin() + 12),
+            quickbook::file_position(3,4));
+    }
+}
+
 int main()
 {
     simple_map_tests();
     indented_map_tests();
+    indented_map_tests2();
     return boost::report_errors();
 }
