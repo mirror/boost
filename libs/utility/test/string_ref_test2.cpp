@@ -1,4 +1,4 @@
-/* 
+/*
    Copyright (c) Marshall Clow 2012-2012.
 
    Distributed under the Boost Software License, Version 1.0. (See accompanying
@@ -46,7 +46,7 @@ void ends_with ( const char *arg ) {
     BOOST_CHECK ( !sr2.ends_with ( ++ch ));
     BOOST_CHECK ( sr2.ends_with ( string_ref ()));
     }
-    
+
 void starts_with ( const char *arg ) {
     const size_t sz = strlen ( arg );
     string_ref sr  ( arg );
@@ -85,9 +85,9 @@ void reverse ( const char *arg ) {
 
 //	This helper function eliminates signed vs. unsigned warnings
 string_ref::size_type ptr_diff ( const char *res, const char *base ) {
-	BOOST_CHECK ( res >= base );
-	return static_cast<string_ref::size_type> ( res - base );
-	}
+    BOOST_CHECK ( res >= base );
+    return static_cast<string_ref::size_type> ( res - base );
+    }
 
 void find ( const char *arg ) {
     string_ref sr1;
@@ -102,7 +102,7 @@ void find ( const char *arg ) {
       BOOST_CHECK ( pos != string_ref::npos && ( pos <= ptr_diff ( p, arg )));
       ++p;
       }
-  
+
 //  Look for each character in the string (searching from the end)
     p = arg;
     sr1 = arg;
@@ -115,13 +115,13 @@ void find ( const char *arg ) {
 //	Look for pairs on characters (searching from the start)
     sr1 = arg;
     p = arg;
-	while ( *p && *(p+1)) {
-		string_ref sr3 ( p, 2 );
-		string_ref::size_type pos = sr1.find ( sr3 );
-		BOOST_CHECK ( pos != string_ref::npos && pos <= static_cast<string_ref::size_type>( p - arg ));
-		p++;
-		}
-		
+    while ( *p && *(p+1)) {
+        string_ref sr3 ( p, 2 );
+        string_ref::size_type pos = sr1.find ( sr3 );
+        BOOST_CHECK ( pos != string_ref::npos && pos <= static_cast<string_ref::size_type>( p - arg ));
+        p++;
+        }
+
     sr1 = arg;
     p = arg;
 //  for all possible chars, see if we find them in the right place.
@@ -166,7 +166,7 @@ void find ( const char *arg ) {
         sr1.remove_suffix (1);
         --p;
         }
-        
+
 //  Find everything at the start
     sr1  = arg;
     p    = arg;
@@ -187,7 +187,7 @@ void find ( const char *arg ) {
         sr1.remove_suffix (1);
         --p;
         }
-        
+
 //  Basic sanity checking for "find_first_of / find_first_not_of"
     sr1 = arg;
     sr2 = arg;
@@ -212,7 +212,7 @@ void find ( const char *arg ) {
         BOOST_CHECK ( pos2 != pos1 );
         ++p;
         }
-        
+
 //  Basic sanity checking for "find_last_of / find_last_not_of"
     sr1 = arg;
     sr2 = arg;
@@ -234,7 +234,7 @@ void find ( const char *arg ) {
                 BOOST_CHECK ( sr1[i] == *p );
             BOOST_CHECK ( sr1 [ pos2 ] != *p );
             }
-         
+
         BOOST_CHECK ( pos2 != pos1 );
         ++p;
         }
@@ -244,50 +244,51 @@ void find ( const char *arg ) {
 
 void to_string ( const char *arg ) {
     string_ref sr1;
-	std::string str1;
-	std::string str2;
+    std::string str1;
+    std::string str2;
 
-	str1.assign ( arg );
-	sr1 = arg;
+    str1.assign ( arg );
+    sr1 = arg;
 //	str2 = sr1.to_string<std::allocator<char> > ();
-	str2 = sr1.to_string ();
-	BOOST_CHECK ( str1 == str2 );
+    str2 = sr1.to_string ();
+    BOOST_CHECK ( str1 == str2 );
 
 #ifndef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
-	std::string str3 = static_cast<std::string> ( sr1 );
-	BOOST_CHECK ( str1 == str3 );
+    std::string str3 = static_cast<std::string> ( sr1 );
+    BOOST_CHECK ( str1 == str3 );
 #endif
     }
 
 void compare ( const char *arg ) {
     string_ref sr1;
-	std::string str1;
-	std::string str2 = str1;
+    std::string str1;
+    std::string str2 = str1;
 
-	str1.assign ( arg );
-	sr1 = arg;
-	BOOST_CHECK ( sr1  == str1);	// compare string and string_ref
-	BOOST_CHECK ( str1 == sr1 );	// compare string_ref and string
-	BOOST_CHECK ( sr1  == arg );	// compare string_ref and pointer
-	BOOST_CHECK ( arg  == sr1 );	// compare pointer and string_ref
+    str1.assign ( arg );
+    sr1 = arg;
+    BOOST_CHECK ( sr1  == sr1);	    // compare string_ref and string_ref
+    BOOST_CHECK ( sr1  == str1);	// compare string and string_ref
+    BOOST_CHECK ( str1 == sr1 );	// compare string_ref and string
+    BOOST_CHECK ( sr1  == arg );	// compare string_ref and pointer
+    BOOST_CHECK ( arg  == sr1 );	// compare pointer and string_ref
 
-	if ( sr1.size () > 0 ) {
-		(*str1.rbegin())++;
-		BOOST_CHECK ( sr1  != str1 );
-		BOOST_CHECK ( str1 != sr1 );
-		BOOST_CHECK ( sr1 < str1 );
-		BOOST_CHECK ( sr1 <= str1 );
-		BOOST_CHECK ( str1 > sr1 );
-		BOOST_CHECK ( str1 >= sr1 );
+    if ( sr1.size () > 0 ) {
+        (*str1.rbegin())++;
+        BOOST_CHECK ( sr1  != str1 );
+        BOOST_CHECK ( str1 != sr1 );
+        BOOST_CHECK ( sr1 < str1 );
+        BOOST_CHECK ( sr1 <= str1 );
+        BOOST_CHECK ( str1 > sr1 );
+        BOOST_CHECK ( str1 >= sr1 );
 
-		(*str1.rbegin()) -= 2;
-		BOOST_CHECK ( sr1  != str1 );
-		BOOST_CHECK ( str1 != sr1 );
-		BOOST_CHECK ( sr1 > str1 );
-		BOOST_CHECK ( sr1 >= str1 );
-		BOOST_CHECK ( str1 < sr1 );
-		BOOST_CHECK ( str1 <= sr1 );
-		}
+        (*str1.rbegin()) -= 2;
+        BOOST_CHECK ( sr1  != str1 );
+        BOOST_CHECK ( str1 != sr1 );
+        BOOST_CHECK ( sr1 > str1 );
+        BOOST_CHECK ( sr1 >= str1 );
+        BOOST_CHECK ( str1 < sr1 );
+        BOOST_CHECK ( str1 <= sr1 );
+        }
     }
 
 const char *test_strings [] = {
@@ -299,19 +300,19 @@ const char *test_strings [] = {
     "abc\0asdfadsfasf",
     NULL
     };
-    
+
 BOOST_AUTO_TEST_CASE( test_main )
 {
     const char **p = &test_strings[0];
-    
+
     while ( *p != NULL ) {
         starts_with ( *p );
         ends_with ( *p );
         reverse ( *p );
         find ( *p );
         to_string ( *p );
-		compare ( *p );
-		
+        compare ( *p );
+
         p++;
         }
 }
