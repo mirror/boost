@@ -9,7 +9,9 @@
 
 #include <boost/config.hpp>
 #include <boost/algorithm/cxx11/copy_if.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 #include <algorithm>
 #include <string>
@@ -57,12 +59,12 @@ void test_sequence ( Container const &c ) {
 //  Some of the elements
     v.clear ();
     ba::copy_if ( c.begin (), c.end (), back_inserter ( v ), is_even );
-    BOOST_CHECK ( v.size () == std::count_if ( c.begin (), c.end (), is_even ));
+    BOOST_CHECK ( v.size () == (size_t) std::count_if ( c.begin (), c.end (), is_even ));
     BOOST_CHECK ( ba::all_of ( v.begin (), v.end (), is_even ));
 
     v.clear ();
     ba::copy_if ( c, back_inserter ( v ), is_even );
-    BOOST_CHECK ( v.size () == std::count_if ( c.begin (), c.end (), is_even ));
+    BOOST_CHECK ( v.size () == (size_t) std::count_if ( c.begin (), c.end (), is_even ));
     BOOST_CHECK ( ba::all_of ( v.begin (), v.end (), is_even ));
     }
 
@@ -80,8 +82,7 @@ void test_sequence1 () {
     }
 
 
-int test_main( int , char* [] )
+BOOST_AUTO_TEST_CASE( test_main )
 {
   test_sequence1 ();
-  return 0;
 }

@@ -11,7 +11,9 @@ Try ostream_iterators
 
 #include <boost/config.hpp>
 #include <boost/algorithm/hex.hpp>
-#include <boost/test/included/test_exec_monitor.hpp>
+
+#define BOOST_TEST_MAIN
+#include <boost/test/unit_test.hpp>
 
 #include <string>
 #include <iostream>
@@ -136,10 +138,8 @@ void test_nonhex_input () {
     test_nonhex_input4 ();
     }
 
-int test_main( int , char* [] )
+BOOST_AUTO_TEST_CASE( test_main )
 {
     test_short_input ();
     test_nonhex_input ();
-    
-  return 0;
 }

@@ -58,6 +58,7 @@ Thanks to all the people who have reviewed this library and made suggestions for
 
 [section:Misc Other Algorithms]
 [include clamp-hpp.qbk]
+[include gather.qbk]
 [include hex.qbk]
 [endsect]
 
