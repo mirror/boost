@@ -12,7 +12,7 @@ int main()
   
   // Wrong enclosing type for DSMember
   
-  BOOST_MPL_ASSERT((BOOST_TTI_DATA_GEN(DSMember)<AnotherType,short>));
+  BOOST_MPL_ASSERT((BOOST_TTI_HAS_DATA_GEN(DSMember)<AnotherType,short>));
   
   return 0;
 
