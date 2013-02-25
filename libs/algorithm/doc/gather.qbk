@@ -22,13 +22,13 @@ There are two versions; one takes two iterators, and the other takes a range.
 ``
 namespace boost { namespace algorithm {
 
-template <typename ForwardIterator, typename Pred>
-std::pair<ForwardIterator,ForwardIterator> 
-gather ( ForwardIterator first, ForwardIterator last, ForwardIterator pivot, Pred pred );
+template <typename BidirectionalIterator, typename Pred>
+std::pair<BidirectionalIterator,BidirectionalIterator> 
+gather ( BidirectionalIterator first, BidirectionalIterator last, BidirectionalIterator pivot, Pred pred );
 
-template <typename ForwardRange, typename Pred>
-std::pair<typename boost::range_iterator<ForwardRange>::type, typename boost::range_iterator<ForwardRange>::type>
-gather ( ForwardRange &range, typename boost::range_iterator<ForwardRange>::type pivot, Pred pred );
+template <typename BidirectionalRange, typename Pred>
+std::pair<typename boost::range_iterator<const BidirectionalRange>::type, typename boost::range_iterator<const BidirectionalRange>::type>
+gather ( const BidirectionalRange &range, typename boost::range_iterator<const BidirectionalRange>::type pivot, Pred pred );
 
 }}
 ``
@@ -53,11 +53,11 @@ where `first` and `second` are the fields of the pair that is returned by the ca
 
 [heading Iterator Requirements]
 
-`gather` work on all iterators except input or output iterators.
+`gather` work on bidirectional iterators or better. This requirement comes from the usage of `stable_partition`, which requires bidirectional iterators. Some standard libraries (libstdc++ and libc++, for example) have implementations of `stable_partition` that work with forward iterators. If that is the case, then `gather` will work with forward iterators as well.
 
 [heading Storage Requirements]
 
-`gather` uses stable_partition, which will attempt to allocate temporary memory, but will work in-situ if there is none available.
+`gather` uses `stable_partition`, which will attempt to allocate temporary memory, but will work in-situ if there is none available.
 
 [heading Complexity]
 

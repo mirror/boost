@@ -80,9 +80,10 @@ namespace boost { namespace algorithm {
 */
 
 template <
-    typename ForwardIterator,  // Iter models ForwardIterator
-    typename Pred>  // Pred models UnaryPredicate
-std::pair<ForwardIterator,ForwardIterator> gather ( ForwardIterator first, ForwardIterator last, ForwardIterator pivot, Pred pred )
+    typename BidirectionalIterator,  // Iter models BidirectionalIterator
+    typename Pred>                   // Pred models UnaryPredicate
+std::pair<BidirectionalIterator, BidirectionalIterator> gather 
+        ( BidirectionalIterator first, BidirectionalIterator last, BidirectionalIterator pivot, Pred pred )
 {
 //  The first call partitions everything up to (but not including) the pivot element,
 //  while the second call partitions the rest of the sequence.
@@ -99,14 +100,14 @@ std::pair<ForwardIterator,ForwardIterator> gather ( ForwardIterator first, Forwa
 */
 
 template <
-    typename ForwardRange,    //
+    typename BidirectionalRange,    //
     typename Pred>                  // Pred models UnaryPredicate
 std::pair<
-    typename boost::range_iterator<ForwardRange>::type,
-    typename boost::range_iterator<ForwardRange>::type>
+    typename boost::range_iterator<const BidirectionalRange>::type,
+    typename boost::range_iterator<const BidirectionalRange>::type>
 gather (
-    ForwardRange &range,
-    typename boost::range_iterator<ForwardRange>::type pivot,
+    const BidirectionalRange &range,
+    typename boost::range_iterator<const BidirectionalRange>::type pivot,
     Pred pred )
 {
     return boost::algorithm::gather ( boost::begin ( range ), boost::end ( range ), pivot, pred );
