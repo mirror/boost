@@ -12,7 +12,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
-#include <boost/context/fcontext.hpp>
 #include <boost/move/move.hpp>
 #include <boost/range.hpp>
 #include <boost/static_assert.hpp>
@@ -25,6 +24,7 @@
 
 #include <boost/coroutine/attributes.hpp>
 #include <boost/coroutine/detail/arg.hpp>
+#include <boost/coroutine/detail/coroutine_context.hpp>
 #include <boost/coroutine/detail/coroutine_base.hpp>
 #include <boost/coroutine/detail/coroutine_get.hpp>
 #include <boost/coroutine/detail/coroutine_object.hpp>
@@ -115,10 +115,10 @@ private:
 
     ptr_t  impl_;
 
-    BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine);
+    BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine)
 
     template< typename Allocator >
-    coroutine( context::fcontext_t * callee,
+    coroutine( detail::coroutine_context const& callee,
                bool unwind, bool preserve_fpu,
                Allocator const& alloc) :
         detail::coroutine_op<
@@ -662,10 +662,10 @@ private:
 
     ptr_t  impl_;
 
-    BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine);
+    BOOST_MOVABLE_BUT_NOT_COPYABLE( coroutine)
 
     template< typename Allocator >
-    coroutine( context::fcontext_t * callee,
+    coroutine( detail::coroutine_context const& callee,
                bool unwind, bool preserve_fpu,
                Allocator const& alloc) :
         detail::coroutine_op<
@@ -1377,14 +1377,38 @@ range_begin( coroutine< Signature > const& c)
 template< typename Signature >
 inline
 typename coroutine< Signature >::iterator
-range_end( coroutine< Signature > & c)
+range_end( coroutine< Signature > &)
 { return typename coroutine< Signature >::iterator(); }
 
 template< typename Signature >
 inline
 typename coroutine< Signature >::const_iterator
-range_end( coroutine< Signature > const& c)
+range_end( coroutine< Signature > const&)
 { return typename coroutine< Signature >::const_iterator(); }
+
+template< typename Signature >
+inline
+typename coroutine< Signature >::iterator
+begin( coroutine< Signature > & c)
+{ return boost::begin( c); }
+
+template< typename Signature >
+inline
+typename coroutine< Signature >::iterator
+end( coroutine< Signature > & c)
+{ return boost::end( c); }
+
+template< typename Signature >
+inline
+typename coroutine< Signature >::const_iterator
+begin( coroutine< Signature > const& c)
+{ return boost::const_begin( c); }
+
+template< typename Signature >
+inline
+typename coroutine< Signature >::const_iterator
+end( coroutine< Signature > const& c)
+{ return boost::const_end( c); }
 
 }
 

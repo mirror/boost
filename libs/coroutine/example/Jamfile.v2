@@ -31,21 +31,17 @@ else if [ os.name ] = HPUX
 
 project boost/coroutine/example
     : requirements
-      <library>/boost/context//boost_context
+      <library>../build//boost_coroutine
       <library>/boost/program_options//boost_program_options
       <library>/boost/system//boost_system
       <library>/boost/thread//boost_thread
-      <define>BOOST_ALL_NO_LIB=1
+      <toolset>gcc-4.7,<segmented-stacks>on:<cxxflags>-fsplit-stack
       <threading>multi
-      <os>SOLARIS:<library>socket
-      <os>SOLARIS:<library>nsl
-      <os>NT:<define>_WIN32_WINNT=0x0501
-      <os>NT,<toolset>gcc:<library>ws2_32
-      <os>NT,<toolset>gcc:<library>mswsock
-      <os>NT,<toolset>gcc-cygwin:<define>__USE_W32_SOCKETS
-      <os>HPUX,<toolset>gcc:<define>_XOPEN_SOURCE_EXTENDED
-      <os>HPUX:<library>ipv6
       <link>static
+    ;
+
+exe segmented_stack
+    : segmented_stack.cpp
     ;
 
 exe fibonacci

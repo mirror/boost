@@ -7,6 +7,8 @@
 #ifndef BOOST_COROUTINES_DETAIL_COROUTINE_OBJECT_H
 #define BOOST_COROUTINES_DETAIL_COROUTINE_OBJECT_H
 
+#include <cstddef>
+
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/cstdint.hpp>
@@ -15,6 +17,7 @@
 #include <boost/ref.hpp>
 #include <boost/tuple/tuple.hpp>
 #include <boost/type_traits/function_traits.hpp>
+#include <boost/utility.hpp>
 
 #include <boost/coroutine/attributes.hpp>
 #include <boost/coroutine/detail/arg.hpp>
@@ -25,6 +28,7 @@
 #include <boost/coroutine/detail/holder.hpp>
 #include <boost/coroutine/detail/param.hpp>
 #include <boost/coroutine/flags.hpp>
+#include <boost/coroutine/stack_context.hpp>
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
@@ -54,6 +58,25 @@ void trampoline2( intptr_t vp)
 
     coro->run( arg);
 }
+
+template< typename StackAllocator >
+struct stack_tuple
+{
+    coroutines::stack_context   stack_ctx;
+    StackAllocator              stack_alloc;
+
+    stack_tuple( StackAllocator const& stack_alloc_, std::size_t size) :
+        stack_ctx(),
+        stack_alloc( stack_alloc_)
+    {
+        stack_alloc.allocate( stack_ctx, size);
+    }
+
+    ~stack_tuple()
+    {
+        stack_alloc.deallocate( stack_ctx);
+    }
+};
 
 template<
     typename Signature,
