@@ -452,7 +452,7 @@ error_code</code> synopsis</a></h3>
       cont error_category &amp;  category() const noexcept;
       error_condition        default_error_condition() const noexcept;
       string                 message() const;
-      operator unspecified-bool-type() const;
+      explicit               operator bool() const noexcept;
 
     private:
       int val_;                     // <i>exposition only</i>
@@ -517,20 +517,10 @@ error_code</code> observers</a></h3>
   <pre><code>string message() const;</code></pre>
 <blockquote>
 <p><i>Returns:</i>&nbsp; <code>category().message( value())</code>.</p>
-  <p><i>Throws:</i> Nothing.</p>
 </blockquote>
-<pre>operator unspecified-bool-type() const;</pre>
+<pre>explicit operator bool() const noexcept;</pre>
 <blockquote>
-<p><i>Returns:</i> if <code>value() != 0</code>, returns a value that will evaluate
-<code>true</code> in a boolean context; otherwise, returns a value that will 
-evaluate <code>false</code> in a boolean context. The value type returned shall 
-not be convertible to <code>int</code>.</p>
-<p><i>Throws:</i> nothing.</p>
-<p><i>[Note: </i>This conversion can be used in contexts where a <code>bool</code> 
-is expected ( e.g., an <code>if</code> condition ); however, implicit conversions 
-( e.g., to <code>int</code>) that can occur with <code>bool</code> are not 
-allowed, eliminating some sources of user error. One possible implementation 
-choice for this type is pointer-to-member. <i>--end note ]</i></p>
+<p><i>Returns:</i> <code>value() != 0</code>.</p>
 </blockquote>
 <h2><a name="Class-error_condition">Class <code>error_condition</code></a></h2>
 <p>The class <code>error_condition</code> describes an object used to hold 
@@ -560,10 +550,10 @@ implementation specific. <i>--end note ]</i></p>
       void clear() noexcept;
 
       // observers:
-      int value() const noexcept;
-      const error_category &amp; category() const noexcept;
-      string message() const;
-      operator unspecified-bool-type () const noexcept;
+      int                    value() const noexcept;
+      const error_category&amp;  category() const noexcept;
+      string                 message() const;
+      explicit               operator bool() const noexcept;
 
     private:
       int val_;                      // <i>exposition only</i>
@@ -626,18 +616,9 @@ observers</a></h3>
 <blockquote>
   <p><i>Returns:</i> <code>category().message( value() )</code>.</p>
 </blockquote>
-<pre>operator unspecified-bool-type () const;</pre>
+<pre>explicit operator bool() const noexcept;</pre>
 <blockquote>
-  <p><i>Returns: </i>If <code>value() != 0</code>, returns a value that will 
-  evaluate <code>true</code> in a boolean context; otherwise, returns a value 
-  that will evaluate <code>false</code>. The return type shall not be 
-  convertible to <code>int</code>. </p>
-  <p><i>Throws:</i> Nothing.</p>
-  <p><i>&nbsp;[ Note:</i> This conversion can be used in contexts where a <code>bool</code> 
-  is expected ( e.g., an if condition ); however, implicit conversions ( e.g., to
-  <code>int</code>) that can occur with <code>bool</code> are not allowed, 
-  eliminating some sources of user error. One possible implementation choice for 
-  this type is pointer to member. <i>--end note</i> <i>]</i></p>
+  <p><i>Returns: </i> <code>value() != 0</code>. </p>
 </blockquote>
   <h2><a name="throws-object"><code>throws</code> object</a></h2>
   <pre>extern error_code throws;</pre>
@@ -812,7 +793,7 @@ application program interfaces.</p>
 <hr>
 
 <p>Revised 
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->February 27, 2013<!--webbot bot="Timestamp" endspan i-checksum="41547" --> </font>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%B %d, %Y" startspan -->February 28, 2013<!--webbot bot="Timestamp" endspan i-checksum="41551" --> </font>
 </p>
 
 <p>© Copyright Beman Dawes, 2006, 2007, 2008, 2013</p>

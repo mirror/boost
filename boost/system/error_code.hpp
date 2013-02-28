@@ -270,6 +270,12 @@ namespace boost
       const error_category &  category() const BOOST_SYSTEM_NOEXCEPT { return *m_cat; }
       std::string             message() const  { return m_cat->message(value()); }
 
+#   ifndef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+      explicit operator bool() const BOOST_SYSTEM_NOEXCEPT
+      {
+        return m_val != 0;
+      }
+#   else
       typedef void (*unspecified_bool_type)();
       static void unspecified_bool_true() {}
 
@@ -282,6 +288,7 @@ namespace boost
       {
         return m_val == 0;
       }
+#   endif
 
       // relationals:
       //  the more symmetrical non-member syntax allows enum
@@ -357,6 +364,12 @@ namespace boost
       error_condition         default_error_condition() const BOOST_SYSTEM_NOEXCEPT  { return m_cat->default_error_condition(value()); }
       std::string             message() const  { return m_cat->message(value()); }
 
+#   ifndef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+      explicit operator bool() const BOOST_SYSTEM_NOEXCEPT
+      {
+        return m_val != 0;
+      }
+#   else
       typedef void (*unspecified_bool_type)();
       static void unspecified_bool_true() {}
 
@@ -369,6 +382,7 @@ namespace boost
       {
         return m_val == 0;
       }
+#   endif 
 
       // relationals:
       inline friend bool operator==( const error_code & lhs,

@@ -59,6 +59,17 @@ namespace
 int main( int, char ** )
 {
 
+#ifdef BOOST_NO_CXX11_NOEXCEPT
+  std::cout << "BOOST_NO_CXX11_NOEXCEPT is defined" << std::endl;
+#else
+  std::cout << "BOOST_NO_CXX11_NOEXCEPT is not defined" << std::endl;
+#endif
+#ifdef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+  std::cout << "BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS is defined" << std::endl;
+#else
+  std::cout << "BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS is not defined" << std::endl;
+#endif
+
   std::cout << "Conversion use cases...\n";
   error_condition x1( errc::file_exists );
   //error_code x2( errc::file_exists ); // should fail to compile
