@@ -388,7 +388,7 @@ namespace boost
           || (lhs.m_cat == rhs.m_cat && lhs.m_val < rhs.m_val);
       }
 
-      private:
+    private:
       int                     m_val;
       const error_category *  m_cat;
 
@@ -422,13 +422,13 @@ namespace boost
     //  non-member functions  ------------------------------------------------//
 
     inline bool operator!=( const error_code & lhs,
-                            const error_code & rhs )
+                            const error_code & rhs ) BOOST_SYSTEM_NOEXCEPT
     {
       return !(lhs == rhs);
     }
 
     inline bool operator!=( const error_condition & lhs,
-                            const error_condition & rhs )
+                            const error_condition & rhs ) BOOST_SYSTEM_NOEXCEPT
     {
       return !(lhs == rhs);
     }
@@ -480,11 +480,11 @@ namespace boost
     namespace errc
     {
       //  explicit conversion:
-      inline error_code make_error_code( errc_t e )
+      inline error_code make_error_code( errc_t e ) BOOST_SYSTEM_NOEXCEPT
         { return error_code( e, generic_category() ); }
 
       //  implicit conversion:
-      inline error_condition make_error_condition( errc_t e )
+      inline error_condition make_error_condition( errc_t e ) BOOST_SYSTEM_NOEXCEPT
         { return error_condition( e, generic_category() ); }
     }
 
