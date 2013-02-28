@@ -588,7 +588,7 @@ namespace detail
         // The natural reading order for division is highest digit/bit first.
         // The "reflect" parameter switches this.  However, building a bit mask
         // for the lowest bit is the easiest....
-        new_dividend_bits = reflect_optionally( new_dividend_bits, not reflect,
+        new_dividend_bits = reflect_optionally( new_dividend_bits, !reflect,
          word_length );
 
         // Perform modulo-2 division for each new dividend input bit

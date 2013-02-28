@@ -474,6 +474,12 @@ BOOST_AUTO_TEST_CASE( augmented_crc_test )
 }
 
 BOOST_AUTO_TEST_SUITE ( sub_octet_crc_tests )
+    
+// Optimal computer, via the single-run function
+unsigned crc_f1( const void * buffer, std::size_t byte_count )
+{
+    return boost::crc<3u, 0x03u, 0u, 0u, false, false>( buffer, byte_count );
+}
 
 BOOST_AUTO_TEST_CASE( sub_nybble_polynominal_test )
 {
@@ -507,17 +513,20 @@ BOOST_AUTO_TEST_CASE( sub_nybble_polynominal_test )
     crc_1.process_bytes( samples[3], 4u );
     BOOST_CHECK_EQUAL( crc_1.checksum(), 0u );
 
-    // Optimal computer, via the single-run function
-    BOOST_AUTO( crc_f, &(boost::crc<3u, 0x03u, 0u, 0u, false, false>) );
-
-    BOOST_CHECK_EQUAL( crc_f(samples[ 0 ], 4u), 0u );
-    BOOST_CHECK_EQUAL( crc_f(samples[ 1 ], 4u), 0u );
-    BOOST_CHECK_EQUAL( crc_f(samples[ 2 ], 4u), 0u );
-    BOOST_CHECK_EQUAL( crc_f(samples[ 3 ], 4u), 0u );
+    BOOST_CHECK_EQUAL( crc_f1(samples[ 0 ], 4u), 0u );
+    BOOST_CHECK_EQUAL( crc_f1(samples[ 1 ], 4u), 0u );
+    BOOST_CHECK_EQUAL( crc_f1(samples[ 2 ], 4u), 0u );
+    BOOST_CHECK_EQUAL( crc_f1(samples[ 3 ], 4u), 0u );
 
     // TODO: do similar tests with boost::augmented_crc<3, 0x03>
     // (Now I think that this can't be done right now, since that function reads
     // byte-wise, so the register size needs to be a multiple of CHAR_BIT.)
+}
+
+// Optimal computer, via the single-run function
+unsigned crc_f2( const void * buffer, std::size_t byte_count )
+{
+    return boost::crc<7u, 0x09u, 0u, 0u, false, false>( buffer, byte_count );
 }
 
 BOOST_AUTO_TEST_CASE( sub_octet_polynominal_test )
@@ -547,11 +556,8 @@ BOOST_AUTO_TEST_CASE( sub_octet_polynominal_test )
     crc_1.process_bytes( samples[1], 16u );
     BOOST_CHECK_EQUAL( crc_1.checksum(), results[1] );
 
-    // Optimal computer, via the single-run function
-    BOOST_AUTO( crc_f, &(boost::crc<7u, 0x09u, 0u, 0u, false, false>) );
-
-    BOOST_CHECK_EQUAL( crc_f(samples[ 0 ], 16u), results[0] );
-    BOOST_CHECK_EQUAL( crc_f(samples[ 1 ], 16u), results[1] );
+    BOOST_CHECK_EQUAL( crc_f2(samples[ 0 ], 16u), results[0] );
+    BOOST_CHECK_EQUAL( crc_f2(samples[ 1 ], 16u), results[1] );
 
     // TODO: do similar tests with boost::augmented_crc<7, 0x09>
     // (Now I think that this can't be done right now, since that function reads
