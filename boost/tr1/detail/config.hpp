@@ -159,6 +159,9 @@
 #  if _MSC_VER >= 1600
 #     define BOOST_HAS_CPP_0X
 #  endif
+#  if _MSC_VER >= 1700 
+#     define BOOST_HAS_TR1_COMPLEX_OVERLOADS 
+#  endif 
 #endif
 
 #include <boost/config.hpp>
