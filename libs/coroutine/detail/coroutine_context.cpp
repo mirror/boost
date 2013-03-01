@@ -64,15 +64,19 @@ intptr_t
 coroutine_context::jump( coroutine_context & other, intptr_t param, bool preserve_fpu)
 {
 #if defined(BOOST_USE_SEGMENTED_STACKS)
-    if ( stack_ctx_)
-        __splitstack_getcontext( stack_ctx_->segments_ctx);
-    if ( other.stack_ctx_)
-        __splitstack_setcontext( other.stack_ctx_->segments_ctx);
-#endif
+    BOOST_ASSERT( stack_ctx_);
+    BOOST_ASSERT( other.stack_ctx_);
+
+    __splitstack_getcontext( stack_ctx_->segments_ctx);
+    __splitstack_setcontext( other.stack_ctx_->segments_ctx);
+    intptr_t ret = context::jump_fcontext( ctx_, other.ctx_, param, preserve_fpu);
+
+    BOOST_ASSERT( stack_ctx_);
+    __splitstack_setcontext( stack_ctx_->segments_ctx);
+
+    return ret;
+#else
     return context::jump_fcontext( ctx_, other.ctx_, param, preserve_fpu);
-#if defined(BOOST_USE_SEGMENTED_STACKS)
-    if ( stack_ctx_)
-        __splitstack_setcontext( stack_ctx_->segments_ctx);
 #endif
 }
 

@@ -12,7 +12,6 @@
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
 #include <boost/context/fcontext.hpp>
-#include <boost/utility.hpp>
 
 #include <boost/coroutine/detail/config.hpp>
 #include "boost/coroutine/stack_context.hpp"
@@ -31,8 +30,7 @@ namespace coroutines {
 namespace detail {
 
 
-class BOOST_COROUTINES_DECL coroutine_context : private noncopyable,
-                                                private context::fcontext_t,
+class BOOST_COROUTINES_DECL coroutine_context : private context::fcontext_t,
                                                 private stack_context
                     
 {
