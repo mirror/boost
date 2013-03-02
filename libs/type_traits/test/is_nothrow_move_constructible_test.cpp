@@ -186,9 +186,9 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<int&>::value, 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<int&&>::value, false);
 #endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<const int&>::value, false);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<int[2]>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<int[3][2]>::value, true);
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<int[2][4][5][6][3]>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<int[2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<int[3][2]>::value, false);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<int[2][4][5][6][3]>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<void>::value, false);
 // cases we would like to succeed but can't implement in the language:
