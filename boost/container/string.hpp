@@ -426,7 +426,7 @@ class basic_string_base
    {
       if(this->is_short()){
          if(other.is_short()){
-            container_detail::do_swap(this->members_.m_repr, other.members_.m_repr);
+            boost::container::swap_dispatch(this->members_.m_repr, other.members_.m_repr);
          }
          else{
             short_t short_backup(this->members_.m_repr.short_repr());
@@ -447,7 +447,7 @@ class basic_string_base
             this->members_.m_repr.short_repr() = short_backup;
          }
          else{
-            container_detail::do_swap(this->members_.m_repr.long_repr(), other.members_.m_repr.long_repr());
+            boost::container::swap_dispatch(this->members_.m_repr.long_repr(), other.members_.m_repr.long_repr());
          }
       }
    }

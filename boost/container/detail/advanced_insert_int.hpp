@@ -65,13 +65,12 @@ struct insert_range_proxy
 
    void uninitialized_copy_n_and_update(Iterator p, size_type n)
    {
-      this->first_ = ::boost::container::uninitialized_copy_or_move_alloc_n_source
-         (this->a_, this->first_, n, p);
+      this->first_ = ::boost::container::uninitialized_copy_alloc_n_source(this->a_, this->first_, n, p);
    }
 
    void copy_n_and_update(Iterator p, size_type n)
    {
-      this->first_ = ::boost::container::copy_or_move_n_source(this->first_, n, p);
+      this->first_ = ::boost::container::copy_n_source(this->first_, n, p);
    }
 
    A &a_;

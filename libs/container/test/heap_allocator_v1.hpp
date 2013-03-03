@@ -133,7 +133,7 @@ class heap_allocator_v1
    //!Swap segment manager. Does not throw. If each heap_allocator_v1 is placed in
    //!different memory segments, the result is undefined.
    friend void swap(self_t &alloc1, self_t &alloc2)
-   {  detail::do_swap(alloc1.mp_mngr, alloc2.mp_mngr);   }
+   {  boost::container::boost::container::swap_dispatch(alloc1.mp_mngr, alloc2.mp_mngr);   }
 };
 
 //!Equality test for same type of heap_allocator_v1

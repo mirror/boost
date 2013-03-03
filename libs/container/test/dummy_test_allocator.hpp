@@ -314,15 +314,20 @@ class propagation_test_allocator
    friend bool operator!=(const propagation_test_allocator &, const propagation_test_allocator &)
    {  return false;  }
 
+   void swap(propagation_test_allocator &r)
+   {
+      ++this->swaps_; ++r.swaps_;
+      boost::container::swap_dispatch(this->id_, r.id_);
+      boost::container::swap_dispatch(this->ctr_copies_, r.ctr_copies_);
+      boost::container::swap_dispatch(this->ctr_moves_, r.ctr_moves_);
+      boost::container::swap_dispatch(this->assign_copies_, r.assign_copies_);
+      boost::container::swap_dispatch(this->assign_moves_, r.assign_moves_);
+      boost::container::swap_dispatch(this->swaps_, r.swaps_);
+   }
+
    friend void swap(propagation_test_allocator &l, propagation_test_allocator &r)
    {
-      ++l.swaps_; ++r.swaps_;
-      container_detail::do_swap(l.id_, r.id_);
-      container_detail::do_swap(l.ctr_copies_, r.ctr_copies_);
-      container_detail::do_swap(l.ctr_moves_, r.ctr_moves_);
-      container_detail::do_swap(l.assign_copies_, r.assign_copies_);
-      container_detail::do_swap(l.assign_moves_, r.assign_moves_);
-      container_detail::do_swap(l.swaps_, r.swaps_);
+      l.swap(r);
    }
 
    unsigned int id_;

@@ -157,7 +157,7 @@ class flat_tree
       void swap(Data &d)
       {
          value_compare& mycomp    = *this, & othercomp = d;
-         container_detail::do_swap(mycomp, othercomp);
+         boost::container::swap_dispatch(mycomp, othercomp);
          this->m_vect.swap(d.m_vect);
       }
 

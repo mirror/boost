@@ -1714,7 +1714,7 @@ class stable_vector
 
    void priv_swap_members(stable_vector &x)
    {
-      container_detail::do_swap(this->internal_data.pool_size, x.internal_data.pool_size);
+      boost::container::swap_dispatch(this->internal_data.pool_size, x.internal_data.pool_size);
       index_traits_type::readjust_end_node(this->index, this->internal_data.end_node);
       index_traits_type::readjust_end_node(x.index, x.internal_data.end_node);
    }

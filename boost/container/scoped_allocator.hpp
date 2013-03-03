@@ -584,6 +584,7 @@ class scoped_allocator_adaptor_base
 
    typedef OuterAlloc outer_allocator_type;
    typedef scoped_allocator_adaptor<InnerAllocs...> inner_allocator_type;
+   typedef allocator_traits<inner_allocator_type>   inner_traits_type;
    typedef boost::integral_constant<
       bool,
       outer_traits_type::propagate_on_container_copy_assignment::value ||
@@ -723,6 +724,7 @@ class scoped_allocator_adaptor_base<OuterAlloc, true                            
          ( BOOST_PP_SUB(BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS, n)                          \
          , BOOST_CONTAINER_PP_IDENTITY, nat)                                                    \
       > inner_allocator_type;                                                                   \
+   typedef allocator_traits<inner_allocator_type>   inner_traits_type;                          \
    typedef boost::integral_constant<                                                            \
       bool,                                                                                     \
       outer_traits_type::propagate_on_container_copy_assignment::value ||                       \
@@ -860,6 +862,7 @@ class scoped_allocator_adaptor_base
    typedef OuterAlloc                           outer_allocator_type;
    typedef allocator_traits<OuterAlloc>         outer_traits_type;
    typedef scoped_allocator_adaptor<OuterAlloc> inner_allocator_type;
+   typedef allocator_traits<inner_allocator_type>   inner_traits_type;
    typedef typename outer_traits_type::
       propagate_on_container_copy_assignment    propagate_on_container_copy_assignment;
    typedef typename outer_traits_type::
@@ -1029,6 +1032,7 @@ class scoped_allocator_adaptor
    //! Type: `scoped_allocator_adaptor<OuterAlloc>` if `sizeof...(InnerAllocs)` is zero; otherwise,
    //! `scoped_allocator_adaptor<InnerAllocs...>`.
    typedef typename base_type::inner_allocator_type         inner_allocator_type;
+   typedef allocator_traits<inner_allocator_type>           inner_traits_type;
    typedef typename outer_traits_type::value_type           value_type;
    typedef typename outer_traits_type::size_type            size_type;
    typedef typename outer_traits_type::difference_type      difference_type;
@@ -1220,7 +1224,7 @@ class scoped_allocator_adaptor
       return scoped_allocator_adaptor
          (internal_type_t()
          ,outer_traits_type::select_on_container_copy_construction(this->outer_allocator())
-         ,outer_traits_type::select_on_container_copy_construction(this->inner_allocator())
+         ,inner_traits_type::select_on_container_copy_construction(this->inner_allocator())
          );
    }
    /// @cond

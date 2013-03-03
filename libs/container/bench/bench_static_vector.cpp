@@ -92,7 +92,6 @@ cpu_times time_it()
       rotateTime.resume();
       std::rotate(v.begin(), v.begin() + v.size()/2, v.end());
       rotateTime.stop();
-
       destructionTime.resume();
       delete &v;
      }
@@ -120,16 +119,16 @@ int main()
    try {
       std::cout << "N = " << N << "\n\n";
 
-      std::cout << "varray benchmark:\n";
+      std::cout << "varray benchmark:" << std::endl;
       cpu_times time_varray = time_it<boost::container::varray<boost::container::varray<basic_type_t,N>,N > >();
 
-      std::cout << "boost::container::static_vector benchmark\n";
+      std::cout << "boost::container::static_vector benchmark" << std::endl;
       cpu_times time_boost_static_vector = time_it<boost::container::static_vector<boost::container::static_vector<basic_type_t,N>,N > >();
 
-      std::cout << "boost::container::vector benchmark\n";
+      std::cout << "boost::container::vector benchmark"  << std::endl;
       cpu_times time_boost_vector = time_it<boost::container::vector<boost::container::vector<basic_type_t> > >();
 
-      std::cout << "std::vector benchmark\n";
+      std::cout << "std::vector benchmark" << std::endl;
       cpu_times time_standard_vector = time_it<std::vector<std::vector<basic_type_t> > >();
 
       std::cout << "varray/boost::container::vector total time comparison:";

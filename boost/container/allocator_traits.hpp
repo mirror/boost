@@ -32,7 +32,10 @@
 #include <limits> //numeric_limits<>::max()
 #include <new>    //placement new
 #include <memory> //std::allocator
+
+#if defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 #include <boost/container/detail/preprocessor.hpp>
+#endif
 
 ///@cond
 

@@ -112,9 +112,9 @@ class expand_bwd_test_allocator
 
    friend void swap(self_t &alloc1, self_t &alloc2)
    { 
-      container_detail::do_swap(alloc1.mp_buffer, alloc2.mp_buffer);
-      container_detail::do_swap(alloc1.m_size,    alloc2.m_size);
-      container_detail::do_swap(alloc1.m_offset,  alloc2.m_offset);
+      boost::container::swap_dispatch(alloc1.mp_buffer, alloc2.mp_buffer);
+      boost::container::swap_dispatch(alloc1.m_size,    alloc2.m_size);
+      boost::container::swap_dispatch(alloc1.m_offset,  alloc2.m_offset);
    }
 
    //Experimental version 2 expand_bwd_test_allocator functions
