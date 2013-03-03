@@ -449,4 +449,40 @@ struct less_with_T
     }
 };
 
+
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
+
+class thing {
+public:
+	thing( int a_, int b_, int c_ ) : a(a_), b(b_), c(c_) {}
+public:
+	int a;
+	int b;
+	int c;
+};
+
+class cmpthings {
+public:
+	bool operator() ( const thing& lhs, const thing& rhs ) const  {
+		return lhs.a > rhs.a;
+	}
+	bool operator() ( const thing& lhs, const thing& rhs ) {
+		return lhs.a > rhs.a;
+	}
+};
+
+#define RUN_EMPLACE_TEST(HEAP_TYPE)                                     \
+    do {                                                                \
+        cmpthings ord;                                                  \
+        boost::heap::HEAP_TYPE<thing, boost::heap::compare<cmpthings> > vpq(ord); \
+        vpq.emplace(5, 6, 7);                                           \
+        boost::heap::HEAP_TYPE<thing, boost::heap::compare<cmpthings>, boost::heap::stable<true> > vpq2(ord); \
+        vpq2.emplace(5, 6, 7);                                          \
+    } while(0);
+
+#else
+#define RUN_EMPLACE_TEST(HEAP_TYPE)
+#endif
+
+
 #endif // COMMON_HEAP_TESTS_HPP_INCLUDED

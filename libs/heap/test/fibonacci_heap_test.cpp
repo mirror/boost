@@ -61,6 +61,8 @@ BOOST_AUTO_TEST_CASE( fibonacci_heap_test )
 
     run_fibonacci_heap_test<false, false>();
     run_fibonacci_heap_test<false, true>();
+
+    RUN_EMPLACE_TEST(fibonacci_heap);
 }
 
 BOOST_AUTO_TEST_CASE( fibonacci_heap_compare_lookup_test )

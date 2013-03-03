@@ -57,6 +57,8 @@ BOOST_AUTO_TEST_CASE( binomial_heap_test )
     run_binomial_heap_test<false, true>();
     run_binomial_heap_test<true, false>();
     run_binomial_heap_test<true, true>();
+
+    RUN_EMPLACE_TEST(binomial_heap);
 }
 
 BOOST_AUTO_TEST_CASE( binomial_heap_compare_lookup_test )

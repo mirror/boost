@@ -59,6 +59,8 @@ BOOST_AUTO_TEST_CASE( pairing_heap_test )
     run_pairing_heap_test<false, true>();
     run_pairing_heap_test<true, false>();
     run_pairing_heap_test<true, true>();
+
+    RUN_EMPLACE_TEST(pairing_heap);
 }
 
 BOOST_AUTO_TEST_CASE( pairing_heap_compare_lookup_test )
