@@ -239,6 +239,8 @@
    //
    #endif   //#if !defined(BOOST_MOVE_DOXYGEN_INVOKED)
 
+   namespace boost {
+
    //!This trait yields to a compile-time true boolean if T was marked as
    //!BOOST_MOVABLE_BUT_NOT_COPYABLE or BOOST_COPYABLE_AND_MOVABLE and
    //!rvalue references are not available on the platform. False otherwise.
@@ -247,6 +249,8 @@
    {
       static const bool value = false;
    };
+
+   }  //namespace boost{
 
    //!This macro is used to achieve portable syntax in move
    //!constructors and assignments for classes marked as
