@@ -294,9 +294,15 @@ struct heap_base<T, Cmp, constant_time_size, StabilityCounterType, true>:
 
     struct internal_type
     {
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
         template <class ...Args>
         internal_type(stability_counter_type cnt, Args && ... args):
             first(std::forward<Args>(args)...), second(cnt)
+        {}
+#endif
+
+        internal_type(stability_counter_type const & cnt, T const & value):
+            first(value), second(cnt)
         {}
 
         T first;

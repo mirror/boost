@@ -16,7 +16,6 @@
 #include <list>
 #include <utility>
 
-#include <boost/noncopyable.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/heap/detail/ordered_adaptor_iterator.hpp>
 
