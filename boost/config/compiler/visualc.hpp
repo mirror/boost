@@ -219,7 +219,7 @@
 
 // C++11 features supported by VC++ 11 (aka 2012) November 2012 CTP
 // Because the CTP is unsupported, unrelease, and only alpha quality,
-// it is only supported if BOOST_ENABLE_MSVC_2012_NOV_CTP is defined.
+// it is only supported if BOOST_MSVC_ENABLE_2012_NOV_CTP is defined.
 //
 #if _MSC_FULL_VER < 170051025 || !defined(BOOST_MSVC_ENABLE_2012_NOV_CTP)
 #  define BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
