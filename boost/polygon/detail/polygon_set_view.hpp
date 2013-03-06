@@ -13,7 +13,7 @@ namespace boost { namespace polygon{
   template <typename coordinate_type>
   inline void polygon_set_data<coordinate_type>::clean() const {
     if(dirty_) {
-      polygon_45_set_data<coordinate_type> tmp;
+      //polygon_45_set_data<coordinate_type> tmp;
       //very important:
       //the 45 degree algorithm does not satisfy
       //the precondition of arbitrary polygon formation
