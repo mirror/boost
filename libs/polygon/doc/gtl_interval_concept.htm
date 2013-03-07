@@ -1,9 +1,10 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head>
-<!--
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head><!--
     Copyright 2009-2010 Intel Corporation
     license banner
 --><title>Boost Polygon Library: Interval Concept</title>
+
+
 
 
 
@@ -113,6 +114,8 @@ struct interval_traits {<br />
 <br />
 template &lt;typename T&gt;<br />
 struct interval_mutable_traits {<br />
+&nbsp; </font><font face="Courier New">typedef typename T::coordinate_type coordinate_type;</font><br />
+      <font face="Courier New"><br />
 &nbsp; static inline void set(T&amp; interval, direction_1d dir, </font>
 <br /> 
 <font face="Courier New">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -471,8 +474,8 @@ convenient to use with the library traits.</p>
 		<td>Assign from an object that is a model of interval.</td>
 	</tr>
 	<tr>
-		<td width="586"><font face="Courier New"><b />bool<b> 
-		operator==</b>(const </font><font face="Courier New">interval_data</font><font face="Courier New">&amp; that) const</font></td>
+		<td width="586"><font face="Courier New"><b>bool<b> 
+		operator==</b>(const </b></font><b><font face="Courier New">interval_data</font><font face="Courier New">&amp; that) const</font></b></td>
 		<td>Equality operator overload.</td>
 	</tr>
 	<tr>

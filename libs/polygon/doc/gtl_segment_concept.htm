@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head>
+<!--
     Copyright 2009-2010 Intel Corporation
     license banner
 --><title>Boost Polygon Library: Segment Concept</title>
@@ -102,9 +103,10 @@ Tutorial</a></li>
 concept, specialize the geometry concept meta-function for that
 type.&nbsp; In the example below CSegment is registered as a model of
 the segment concept.</p>
-      <p> <font face="Courier New">template &lt;&gt;<br />
-struct geometry_concept&lt;</font>CSegment<font face="Courier New">&gt;
-{ typedef segment_concept type; };</font></p>
+      <p style="font-family: Courier New,Courier,monospace;"> template &lt;&gt;<br />
+
+struct geometry_concept&lt;CSegment&gt;
+{ typedef segment_concept type; };</p>
       <p> The semantic of a segment is
 that it has a low and high point.&nbsp; A
 std::pair&lt;Point, Point&gt;,
@@ -131,6 +133,8 @@ types that don't conform to the default behavior.</p>
       <span style="font-family: Courier New,Courier,monospace;">};</span><br />
       <br /><span style="font-family: Courier New,Courier,monospace;">template &lt;typename Segment&gt;<br />
 struct segment_mutable_traits {<br />
+&nbsp; </span></span><span style="font-family: Courier New,Courier,monospace;"><span style="font-family: Courier New,Courier,monospace;">typedef typename segment_traits&lt;Segment&gt;::coordinate_type </span></span><span style="font-family: Courier New,Courier,monospace;"><span style="font-family: Courier New,Courier,monospace;">coordinate_type;</span></span><br />
+      <span style="font-family: Courier New,Courier,monospace;"><span style="font-family: Courier New,Courier,monospace;">
 &nbsp; typedef typename segment_traits&lt;Segment&gt;::point_type point_type;<br />
 <br />
 &nbsp; static inline void set(Segment&amp; segment, direction_1d dir, const point_type&amp; point) {<br />

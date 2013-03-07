@@ -1,5 +1,6 @@
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head><!--
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" xmlns:v="urn:schemas-microsoft-com:vml" xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:(null)1="http://www.w3.org/TR/REC-html40" lang="en"><head>
+<!--
     Copyright 2009-2010 Intel Corporation
     license banner
 --><title>Boost Polygon Library: Point Concept</title>
@@ -103,7 +104,7 @@ type modeled more than one concept.</p><p>
 Below is shown the default point traits.&nbsp; 
 Specialization of these traits is required for types that don't conform to the 
 default behavior.</p>
-      <p> 
+      <p style="font-family: Courier New,Courier,monospace;"> 
 template &lt;typename T&gt;<br />
 struct point_traits {<br />
 &nbsp;&nbsp;&nbsp;&nbsp; typedef typename T::coordinate_type coordinate_type;<br />
@@ -117,13 +118,18 @@ orientation_2d orient) {<br />
 <br />
 template &lt;typename T&gt;<br />
 struct point_mutable_traits {<br />
+
+&nbsp;&nbsp;&nbsp;&nbsp; typedef typename T::coordinate_type coordinate_type;<br />
+<br />
 &nbsp;&nbsp;&nbsp;&nbsp; static void set(T&amp; point, orientation_2d orient, 
 typename point_traits&lt;T&gt;::coordinate_type value) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; point.set(orient, value);
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp; }<br />
 &nbsp;&nbsp;&nbsp;&nbsp; static T construct(typename point_traits&lt;T&gt;::coordinate_type 
-x_value, typename point_traits&lt;T&gt;::coordinate_type y_value) {<br />
+x_value,<br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+typename point_traits&lt;T&gt;::coordinate_type y_value) {<br />
 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; return T(x_value, y_value);
 <br />
 &nbsp;&nbsp;&nbsp;&nbsp; }<br />
