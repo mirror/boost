@@ -55,13 +55,11 @@ void test_iterators ( Iterator first, Iterator last, Predicate comp, std::size_t
 template <typename Container, typename Predicate>
 void test_iterator_types ( const Container &c, Predicate comp, std::size_t offset ) {
     typedef std::vector<typename Container::value_type> vec;
-    typedef forward_iterator<typename vec::iterator> FI;
+
     typedef bidirectional_iterator<typename vec::iterator> BDI;
     typedef random_access_iterator<typename vec::iterator> RAI;
     
     vec v;
-    v.assign ( c.begin (), c.end ());
-    test_iterators ( FI  ( v.begin ()), FI  ( v.end ()), comp, offset );
     v.assign ( c.begin (), c.end ());
     test_iterators ( BDI ( v.begin ()), BDI ( v.end ()), comp, offset );
     v.assign ( c.begin (), c.end ());
