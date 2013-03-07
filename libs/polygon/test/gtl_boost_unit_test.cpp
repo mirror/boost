@@ -3565,7 +3565,7 @@ int main() {
     }    
   }
 
-  if (1) {
+  {
     using namespace boost::polygon;
     typedef point_data<int> Point;
     typedef segment_data<int> Dls;
@@ -3604,7 +3604,7 @@ int main() {
     assert_s(dlss.size() == 11, "intersection2");
   }
   
-  if (1) {
+  {
     using namespace boost::polygon;
     std::vector<std::pair<std::size_t, segment_data<int> > > segs;
     segment_data<int> sarray[2];
