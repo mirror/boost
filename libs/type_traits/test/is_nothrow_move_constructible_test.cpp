@@ -200,6 +200,10 @@ BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<nothrow_c
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<nothrow_assign_UDT>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<nothrow_construct_UDT>::value, false);
 
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_NOEXCEPT)
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<nothrow_move_UDT>::value, true);
+#endif
+
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_nothrow_move_constructible<test_abc1>::value, false);
 
 TT_TEST_END
