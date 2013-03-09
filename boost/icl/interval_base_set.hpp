@@ -168,13 +168,6 @@ public:
         BOOST_CONCEPT_ASSERT((LessThanComparableConcept<DomainT>));
     }
 
-    /** Assignment operator */
-    interval_base_set& operator = (const interval_base_set& src) 
-    { 
-        this->_set = src._set;
-        return *this; 
-    }
-
 #   ifndef BOOST_ICL_NO_CXX11_RVALUE_REFERENCES
     //==========================================================================
     //= Move semantics
@@ -188,13 +181,22 @@ public:
     }
 
     /** Move assignment operator */
-    interval_base_set& operator = (interval_base_set&& src) 
-    { 
+    interval_base_set& operator = (interval_base_set src) 
+    {                           //call by value sice 'src' is a "sink value"
         this->_set = boost::move(src._set);
         return *this; 
     }
 
     //==========================================================================
+#   else
+
+    /** Copy assignment operator */
+    interval_base_set& operator = (const interval_base_set& src) 
+    { 
+        this->_set = src._set;
+        return *this; 
+    }
+
 #   endif // BOOST_ICL_NO_CXX11_RVALUE_REFERENCES
 
     /** swap the content of containers */
