@@ -22,7 +22,7 @@ local BOOST_ROOT = [ path.relative-to
                            [ path.make $(boost-root) ]
                            [ path.pwd ] ] ] ;
 
-xml type_erasure : type_erasure.qbk ;
+xml type_erasure : type_erasure.qbk : <dependency>reference ;
 
 doxygen reference
   :
