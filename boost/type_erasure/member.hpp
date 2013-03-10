@@ -99,7 +99,7 @@
  * \endcode
  *
  * \note In C++11 the argument N is ignored and may be omitted.
- * BOOST_TYPE_ERASURE_MEMBER will alway define a variadic concept.
+ * BOOST_TYPE_ERASURE_MEMBER will always define a variadic concept.
  */
 #define BOOST_TYPE_ERASURE_MEMBER(qualified_name, member, N)                                \
     BOOST_TYPE_ERASURE_MEMBER_I(                                                            \

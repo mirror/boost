@@ -57,7 +57,7 @@ void print_impl(std::ostream& os, const char * format, const print_storage& args
 //
 // '%' [ argument-number '$' ] flags * [ width ] [ '.' precision ] [ type-code ] format-specifier
 //
-// Other characters in the format string are writted to the stream unchanged.
+// Other characters in the format string are written to the stream unchanged.
 // In addition the sequence, "%%" can be used to print a literal '%' character.
 // Each component is explained in detail below
 //
@@ -77,14 +77,14 @@ void print_impl(std::ostream& os, const char * format, const print_storage& args
 //
 // width:
 //   Indicates the minimum width to print.  This can be either
-//   an integer or a '*'.  an asterik means to read the next
+//   an integer or a '*'.  an asterisk means to read the next
 //   argument (which must have type int) as the width.
 //
 // precision:
 //   For numeric arguments, indicates the number of digits to print.  For
 //   strings (%s) the precision indicates the maximum number of characters
 //   to print.  Longer strings will be truncated.  As with width
-//   this can be either an integer or a '*'.  an asterik means
+//   this can be either an integer or a '*'.  an asterisk means
 //   to read the next argument (which must have type int) as
 //   the width.  If both the width and the precision are specified
 //   as '*', the width is read first.

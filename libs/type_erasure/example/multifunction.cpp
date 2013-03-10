@@ -60,7 +60,7 @@ typedef boost::make_recursive_variant<
     std::vector<boost::recursive_variant_> >::type variant_type;
 typedef std::vector<variant_type> vector_type;
 
-// Now we'll define a multifuntion that can operate
+// Now we'll define a multifunction that can operate
 // on the leaf nodes of the variant.
 typedef multifunction<void(int), void(double), void(std::string)> function_type;
 

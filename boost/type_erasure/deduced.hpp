@@ -22,7 +22,7 @@ namespace boost {
 namespace type_erasure {
 
 /**
- * A placeholder for an assocated type.  The type corresponding
+ * A placeholder for an associated type.  The type corresponding
  * to this placeholder is deduced by substituting placeholders
  * in the arguments of the metafunction and then evaluating it.
  * 

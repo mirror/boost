@@ -310,7 +310,7 @@ public:
      * \pre @c Concept must contain @ref constructible<T(const T&)>.
      * \pre @c Concept must not refer to any non-deduced placeholder besides @c T.
      * \pre After substituting @c T for @c Tag2, the requirements of
-     *      @c Concept2 must be a superset of of the requirements of
+     *      @c Concept2 must be a superset of the requirements of
      *      @c Concept.
      *
      * \throws std::bad_alloc or whatever that the copy
@@ -349,7 +349,7 @@ public:
      *      placeholders used by @c Concept and values for the corresponding
      *      placeholders in @c Concept2.
      * \pre After substituting placeholders according to @c Map, the
-     *      requirements of @c Concept2 must be a superset of of the
+     *      requirements of @c Concept2 must be a superset of the
      *      requirements of @c Concept.
      *
      * \throws std::bad_alloc or whatever that the copy
@@ -1274,7 +1274,7 @@ public:
      *
      * \pre @c Concept must not refer to any non-deduced placeholder besides @c T.
      * \pre After substituting @c T for @c Tag2, the requirements of
-     *      @c Concept2 must be a superset of of the requirements of
+     *      @c Concept2 must be a superset of the requirements of
      *      @c Concept.
      *
      * \throws std::bad_alloc
@@ -1307,7 +1307,7 @@ public:
      *
      * \pre @c Concept must not refer to any non-deduced placeholder besides @c T.
      * \pre After substituting @c T for @c Tag2, the requirements of
-     *      @c Concept2 must be a superset of of the requirements of
+     *      @c Concept2 must be a superset of the requirements of
      *      @c Concept.
      *
      * \throws std::bad_alloc
@@ -1343,7 +1343,7 @@ public:
      *      placeholders used by @c Concept and values for the corresponding
      *      placeholders in @c Concept2.
      * \pre After substituting placeholders according to @c Map, the
-     *      requirements of @c Concept2 must be a superset of of the
+     *      requirements of @c Concept2 must be a superset of the
      *      requirements of @c Concept.
      *
      * \throws std::bad_alloc
@@ -1367,7 +1367,7 @@ public:
      *      placeholders used by @c Concept and values for the corresponding
      *      placeholders in @c Concept2.
      * \pre After substituting placeholders according to @c Map, the
-     *      requirements of @c Concept2 must be a superset of of the
+     *      requirements of @c Concept2 must be a superset of the
      *      requirements of @c Concept.
      *
      * \throws std::bad_alloc
@@ -1687,7 +1687,7 @@ public:
      *
      * \pre @c Concept must not refer to any non-deduced placeholder besides @c T.
      * \pre After substituting @c T for @c Tag2, the requirements of
-     *      @c Concept2 must be a superset of of the requirements of
+     *      @c Concept2 must be a superset of the requirements of
      *      @c Concept.
      *
      * \throws std::bad_alloc
@@ -1720,7 +1720,7 @@ public:
      *      placeholders used by @c Concept and values for the corresponding
      *      placeholders in @c Concept2.
      * \pre After substituting placeholders according to @c Map, the
-     *      requirements of @c Concept2 must be a superset of of the
+     *      requirements of @c Concept2 must be a superset of the
      *      requirements of @c Concept.
      *
      * \throws std::bad_alloc
@@ -1906,7 +1906,7 @@ public:
      *
      * \pre @c Concept must not refer to any non-deduced placeholder besides @c T.
      * \pre After substituting @c T for @c Tag2, the requirements of
-     *      @c Concept2 must be a superset of of the requirements of
+     *      @c Concept2 must be a superset of the requirements of
      *      @c Concept.
      *
      * \throws std::bad_alloc
@@ -1940,7 +1940,7 @@ public:
      *
      * \pre @c Concept must not refer to any non-deduced placeholder besides @c T.
      * \pre After substituting @c T for @c Tag2, the requirements of
-     *      @c Concept2 must be a superset of of the requirements of
+     *      @c Concept2 must be a superset of the requirements of
      *      @c Concept.
      *
      * \throws std::bad_alloc
@@ -1976,7 +1976,7 @@ public:
      *      placeholders used by @c Concept and values for the corresponding
      *      placeholders in @c Concept2.
      * \pre After substituting placeholders according to @c Map, the
-     *      requirements of @c Concept2 must be a superset of of the
+     *      requirements of @c Concept2 must be a superset of the
      *      requirements of @c Concept.
      *
      * \throws std::bad_alloc
@@ -2000,7 +2000,7 @@ public:
      *      placeholders used by @c Concept and values for the corresponding
      *      placeholders in @c Concept2.
      * \pre After substituting placeholders according to @c Map, the
-     *      requirements of @c Concept2 must be a superset of of the
+     *      requirements of @c Concept2 must be a superset of the
      *      requirements of @c Concept.
      *
      * \throws std::bad_alloc

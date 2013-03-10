@@ -99,7 +99,7 @@ void multi2() {
 
         We can also use __tuple to avoid having to
         write out the map out explicitly.  __tuple is
-        just a convienience class that combines the
+        just a convenience class that combines the
         placeholder bindings it gets from all its arguments.
      */
     tuple<requirements, _a, _b> t(&array[0], 2);
