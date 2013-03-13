@@ -183,8 +183,70 @@ struct are_elements_contiguous
    static const bool value = false;
 };
 
+/////////////////////////
+//    raw pointers
+/////////////////////////
+
 template<class T>
 struct are_elements_contiguous<T*>
+{
+   static const bool value = true;
+};
+
+/////////////////////////
+//    predeclarations
+/////////////////////////
+
+#ifndef BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
+
+template<class Pointer>
+class vector_iterator;
+
+template<class Pointer>
+class vector_const_iterator;
+
+#endif   //BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
+
+}  //namespace container_detail {
+}  //namespace container {
+
+namespace interprocess {
+
+template <class PointedType, class DifferenceType, class OffsetType, std::size_t OffsetAlignment>
+class offset_ptr;
+
+}  //namespace interprocess {
+
+namespace container {
+
+namespace container_detail {
+
+/////////////////////////
+//vector_[const_]iterator
+/////////////////////////
+
+#ifndef BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
+
+template<class Pointer>
+struct are_elements_contiguous<boost::container::container_detail::vector_iterator<Pointer> >
+{
+   static const bool value = true;
+};
+
+template<class Pointer>
+struct are_elements_contiguous<boost::container::container_detail::vector_const_iterator<Pointer> >
+{
+   static const bool value = true;
+};
+
+#endif   //BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
+
+/////////////////////////
+//    offset_ptr
+/////////////////////////
+
+template <class PointedType, class DifferenceType, class OffsetType, std::size_t OffsetAlignment>
+struct are_elements_contiguous< ::boost::interprocess::offset_ptr<PointedType, DifferenceType, OffsetType, OffsetAlignment> >
 {
    static const bool value = true;
 };

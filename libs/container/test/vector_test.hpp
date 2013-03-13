@@ -83,6 +83,11 @@ bool vector_copyable_only(V1 *boostvector, V2 *stdvector, boost::container::cont
    {
       V1 *pv1 = new V1(*boostvector);
       V2 *pv2 = new V2(*stdvector);
+      boostvector->clear();
+      stdvector->clear();
+      boostvector->assign(pv1->begin(), pv1->end());
+      stdvector->assign(pv2->begin(), pv2->end());
+      if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
       delete pv1;
       delete pv2;
    }
