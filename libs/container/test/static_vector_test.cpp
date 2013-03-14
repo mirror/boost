@@ -11,53 +11,19 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 
-namespace boost  {
-namespace container {
-namespace test {
-
-//lightweight_test.hpp does not offer support to check if an operation throws
-//so write our own macro
-inline void throw_failed_impl(char const * excep, char const * file, int line, char const * function)
-{
-   BOOST_LIGHTWEIGHT_TEST_OSTREAM
-    << file << "(" << line << "): Exception '" << excep << "' not thrown in function '"
-    << function << "'" << std::endl;
-   ++boost::detail::test_errors();
-}
-
-}  //namespace detail {
-}  //namespace container {
-}  //namespace boost  {
-
-#define BOOST_TEST_THROW( S, E )                          \
-   try {                                                  \
-    S;                                                    \
-    ::boost::container::test::throw_failed_impl           \
-      (#E, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);  \
-   }                                                      \
-   catch(E const&) {                                      \
-   }                                                      \
-   catch(...) {                                           \
-    ::boost::container::test::throw_failed_impl           \
-      (#E, __FILE__, __LINE__, BOOST_CURRENT_FUNCTION);  \
-   }                                                      \
-//
-
 // TODO: Disable parts of the unit test that should not run when BOOST_NO_EXCEPTIONS
 // if exceptions are enabled there must be a user defined throw_exception function
 #ifdef BOOST_NO_EXCEPTIONS
 namespace boost {
-   void throw_exception(std::exception const & e){}; // user defined
+   void throw_exception(std::exception const &){}; // user defined
 } // namespace boost
 #endif // BOOST_NO_EXCEPTIONS
 
 #include <vector>
 #include <list>
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #include <boost/container/vector.hpp>
 #include <boost/container/stable_vector.hpp>
-#endif
 
 #include "static_vector_test.hpp"
 
@@ -76,9 +42,7 @@ void test_ctor_ndc()
    static_vector<T, N> s;
    BOOST_TEST_EQ(s.size() , 0u);
    BOOST_TEST(s.capacity() == N);
-#ifndef BOOST_NO_EXCEPTIONS
-   BOOST_TEST_THROW( s.at(0u), std::out_of_range );
-#endif // BOOST_NO_EXCEPTIONS
+   BOOST_TEST_THROWS( s.at(0u), std::out_of_range );
 }
 
 template <typename T, size_t N>
@@ -87,9 +51,7 @@ void test_ctor_nc(size_t n)
    static_vector<T, N> s(n);
    BOOST_TEST(s.size() == n);
    BOOST_TEST(s.capacity() == N);
-#ifndef BOOST_NO_EXCEPTIONS
-   BOOST_TEST_THROW( s.at(n), std::out_of_range );
-#endif // BOOST_NO_EXCEPTIONS
+   BOOST_TEST_THROWS( s.at(n), std::out_of_range );
    if ( 1 < n )
    {
       T val10(10);
@@ -109,9 +71,7 @@ void test_ctor_nd(size_t n, T const& v)
    static_vector<T, N> s(n, v);
    BOOST_TEST(s.size() == n);
    BOOST_TEST(s.capacity() == N);
-#ifndef BOOST_NO_EXCEPTIONS
-   BOOST_TEST_THROW( s.at(n), std::out_of_range );
-#endif // BOOST_NO_EXCEPTIONS
+   BOOST_TEST_THROWS( s.at(n), std::out_of_range );
    if ( 1 < n )
    {
       BOOST_TEST(v == s[0]);
@@ -135,9 +95,7 @@ void test_resize_nc(size_t n)
    s.resize(n);
    BOOST_TEST(s.size() == n);
    BOOST_TEST(s.capacity() == N);
-#ifndef BOOST_NO_EXCEPTIONS
-   BOOST_TEST_THROW( s.at(n), std::out_of_range );
-#endif // BOOST_NO_EXCEPTIONS
+   BOOST_TEST_THROWS( s.at(n), std::out_of_range );
    if ( 1 < n )
    {
       T val10(10);
@@ -159,9 +117,7 @@ void test_resize_nd(size_t n, T const& v)
    s.resize(n, v);
    BOOST_TEST(s.size() == n);
    BOOST_TEST(s.capacity() == N);
-#ifndef BOOST_NO_EXCEPTIONS
-   BOOST_TEST_THROW( s.at(n), std::out_of_range );
-#endif // BOOST_NO_EXCEPTIONS
+   BOOST_TEST_THROWS( s.at(n), std::out_of_range );
    if ( 1 < n )
    {
       BOOST_TEST(v == s[0]);
@@ -183,18 +139,14 @@ void test_push_back_nd()
    static_vector<T, N> s;
 
    BOOST_TEST(s.size() == 0);
-#ifndef BOOST_NO_EXCEPTIONS
-   BOOST_TEST_THROW( s.at(0), std::out_of_range );
-#endif // BOOST_NO_EXCEPTIONS
+   BOOST_TEST_THROWS( s.at(0), std::out_of_range );
 
    for ( size_t i = 0 ; i < N ; ++i )
    {
       T t(i);
       s.push_back(t);
       BOOST_TEST(s.size() == i + 1);
-#ifndef BOOST_NO_EXCEPTIONS
-      BOOST_TEST_THROW( s.at(i + 1), std::out_of_range );
-#endif // BOOST_NO_EXCEPTIONS
+      BOOST_TEST_THROWS( s.at(i + 1), std::out_of_range );
       BOOST_TEST(T(i) == s.at(i));
       BOOST_TEST(T(i) == s[i]);
       BOOST_TEST(T(i) == s.back());
@@ -218,9 +170,7 @@ void test_pop_back_nd()
    {
       s.pop_back();
       BOOST_TEST(s.size() == i - 1);
-#ifndef BOOST_NO_EXCEPTIONS
-      BOOST_TEST_THROW( s.at(i - 1), std::out_of_range );
-#endif // BOOST_NO_EXCEPTIONS
+      BOOST_TEST_THROWS( s.at(i - 1), std::out_of_range );
       BOOST_TEST(T(i - 2) == s.at(i - 2));
       BOOST_TEST(T(i - 2) == s[i - 2]);
       BOOST_TEST(T(i - 2) == s.back());
@@ -296,12 +246,10 @@ void test_copy_and_assign_nd(T const& val)
       test_compare_ranges(a.begin(), a.end(), s1.begin(), s1.end());
    }
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    stable_vector<T> bsv(s.begin(), s.end());
    vector<T> bv(s.begin(), s.end());
    test_copy_and_assign<T, N>(bsv);
    test_copy_and_assign<T, N>(bv);
-#endif
 }
 
 template <typename T, size_t N>
@@ -448,12 +396,10 @@ void test_insert_nd(T const& val)
    test_insert<T, N>(s, v);
    test_insert<T, N>(s, l);
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
    stable_vector<T> bsv(ss.begin(), ss.end());
    vector<T> bv(ss.begin(), ss.end());
    test_insert<T, N>(s, bv);
    test_insert<T, N>(s, bsv);
-#endif
 }
 
 template <typename T>
@@ -464,24 +410,18 @@ void test_capacity_0_nd()
    static_vector<T, 0 > s;
    BOOST_TEST(s.size() == 0);
    BOOST_TEST(s.capacity() == 0);
-#ifndef BOOST_NO_EXCEPTIONS
-   BOOST_TEST_THROW(s.at(0), std::out_of_range);
-   BOOST_TEST_THROW(s.resize(5u, T(0)), std::bad_alloc);
-   BOOST_TEST_THROW(s.push_back(T(0)), std::bad_alloc);
-   BOOST_TEST_THROW(s.insert(s.end(), T(0)), std::bad_alloc);
-   BOOST_TEST_THROW(s.insert(s.end(), 5u, T(0)), std::bad_alloc);
-   BOOST_TEST_THROW(s.insert(s.end(), v.begin(), v.end()), std::bad_alloc);
-   BOOST_TEST_THROW(s.assign(v.begin(), v.end()), std::bad_alloc);
-   BOOST_TEST_THROW(s.assign(5u, T(0)), std::bad_alloc);
-   try{
-      static_vector<T, 0> s2(v.begin(), v.end());
-      BOOST_TEST(false);
-   }catch(std::bad_alloc &){}
-   try{
-      static_vector<T, 0> s1(5u, T(0));
-      BOOST_TEST(false);
-   }catch(std::bad_alloc &){}
-#endif // BOOST_NO_EXCEPTIONS
+   BOOST_TEST_THROWS(s.at(0), std::out_of_range);
+   BOOST_TEST_THROWS(s.resize(5u, T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.push_back(T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.insert(s.end(), T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.insert(s.end(), 5u, T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.insert(s.end(), v.begin(), v.end()), std::bad_alloc);
+   BOOST_TEST_THROWS(s.assign(v.begin(), v.end()), std::bad_alloc);
+   BOOST_TEST_THROWS(s.assign(5u, T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.assign(5u, T(0)), std::bad_alloc);
+   typedef static_vector<T, 0> static_vector_0_t;
+   BOOST_TEST_THROWS(static_vector_0_t s2(v.begin(), v.end()), std::bad_alloc);
+   BOOST_TEST_THROWS(static_vector_0_t s1(5u, T(0)), std::bad_alloc);
 }
 
 template <typename T, size_t N>
@@ -490,23 +430,16 @@ void test_exceptions_nd()
    static_vector<T, N> v(N, T(0));
    static_vector<T, N/2> s(N/2, T(0));
 
-#ifndef BOOST_NO_EXCEPTIONS
-   BOOST_TEST_THROW(s.resize(N, T(0)), std::bad_alloc);
-   BOOST_TEST_THROW(s.push_back(T(0)), std::bad_alloc);
-   BOOST_TEST_THROW(s.insert(s.end(), T(0)), std::bad_alloc);
-   BOOST_TEST_THROW(s.insert(s.end(), N, T(0)), std::bad_alloc);
-   BOOST_TEST_THROW(s.insert(s.end(), v.begin(), v.end()), std::bad_alloc);
-   BOOST_TEST_THROW(s.assign(v.begin(), v.end()), std::bad_alloc);
-   BOOST_TEST_THROW(s.assign(N, T(0)), std::bad_alloc);
-   try{
-      static_vector<T, N/2> s2(v.begin(), v.end());
-      BOOST_TEST(false);
-   }catch(std::bad_alloc &){}
-   try{
-      static_vector<T, N/2> s1(N, T(0));
-      BOOST_TEST(false);
-   }catch(std::bad_alloc &){}
-#endif // BOOST_NO_EXCEPTIONS
+   BOOST_TEST_THROWS(s.resize(N, T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.push_back(T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.insert(s.end(), T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.insert(s.end(), N, T(0)), std::bad_alloc);
+   BOOST_TEST_THROWS(s.insert(s.end(), v.begin(), v.end()), std::bad_alloc);
+   BOOST_TEST_THROWS(s.assign(v.begin(), v.end()), std::bad_alloc);
+   BOOST_TEST_THROWS(s.assign(N, T(0)), std::bad_alloc);
+   typedef static_vector<T, N/2> static_vector_n_half_t;
+   BOOST_TEST_THROWS(static_vector_n_half_t s2(v.begin(), v.end()), std::bad_alloc);
+   BOOST_TEST_THROWS(static_vector_n_half_t s1(N, T(0)), std::bad_alloc);
 }
 
 template <typename T, size_t N>
@@ -600,13 +533,11 @@ void test_swap_and_move_nd()
       typedef static_vector<T, N/2> small_vector_t;
       static_vector<T, N> v(N, T(0));
       small_vector_t s(N/2, T(1));
-#ifndef BOOST_NO_EXCEPTIONS
-      BOOST_TEST_THROW(s.swap(v), std::bad_alloc);
+      BOOST_TEST_THROWS(s.swap(v), std::bad_alloc);
       v.resize(N, T(0));
-      BOOST_TEST_THROW(s = boost::move(v), std::bad_alloc);
+      BOOST_TEST_THROWS(s = boost::move(v), std::bad_alloc);
       v.resize(N, T(0));
-      BOOST_TEST_THROW(small_vector_t s2(boost::move(v)), std::bad_alloc);
-#endif // BOOST_NO_EXCEPTIONS
+      BOOST_TEST_THROWS(small_vector_t s2(boost::move(v)), std::bad_alloc);
    }
 }
 
@@ -620,9 +551,7 @@ void test_emplace_0p()
       for (int i = 0 ; i < int(N) ; ++i )
           v.emplace_back();
       BOOST_TEST(v.size() == N);
-#ifndef BOOST_NO_EXCEPTIONS
-      BOOST_TEST_THROW(v.emplace_back(), std::bad_alloc);
-#endif
+      BOOST_TEST_THROWS(v.emplace_back(), std::bad_alloc);
    }
 }
 
@@ -636,9 +565,7 @@ void test_emplace_2p()
       for (int i = 0 ; i < int(N) ; ++i )
           v.emplace_back(i, 100 + i);
       BOOST_TEST(v.size() == N);
-#ifndef BOOST_NO_EXCEPTIONS
-      BOOST_TEST_THROW(v.emplace_back(N, 100 + N), std::bad_alloc);
-#endif
+      BOOST_TEST_THROWS(v.emplace_back(N, 100 + N), std::bad_alloc);
       BOOST_TEST(v.size() == N);
       for (int i = 0 ; i < int(N) ; ++i )
           BOOST_TEST(v[i] == T(i, 100 + i));
