@@ -28,7 +28,7 @@
 
 #undef BOOST_ASSERT
 
-#if defined(BOOST_DISABLE_ASSERTS)
+#if defined(BOOST_DISABLE_ASSERTS) || defined(NDEBUG)
 
 # define BOOST_ASSERT(expr) ((void)0)
 
@@ -89,9 +89,9 @@ namespace boost
     #endif
 
     namespace boost
-    { 
-      namespace assertion 
-      { 
+    {
+      namespace assertion
+      {
         namespace detail
         {
           inline void assertion_failed_msg(char const * expr, char const * msg, char const * function,
