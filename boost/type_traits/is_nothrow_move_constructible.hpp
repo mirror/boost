@@ -19,6 +19,7 @@
 #include <boost/type_traits/detail/ice_or.hpp>
 #include <boost/type_traits/detail/ice_and.hpp>
 #include <boost/utility/declval.hpp>
+#include <boost/utility/enable_if.hpp>
 
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
