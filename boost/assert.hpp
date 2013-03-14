@@ -28,7 +28,7 @@
 
 #undef BOOST_ASSERT
 
-#if defined(BOOST_DISABLE_ASSERTS) || defined(NDEBUG)
+#if defined(BOOST_DISABLE_ASSERTS)
 
 # define BOOST_ASSERT(expr) ((void)0)
 
