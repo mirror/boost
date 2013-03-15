@@ -845,6 +845,8 @@ void test_with_builtin_types()
 struct VBase : virtual X
 {
     VBase(int v) : X(v) {}
+    // MSVC 8.0 doesn't generate this correctly...
+    VBase(const VBase& other) : X(static_cast<const X&>(other)) {}
 };
 
 void test_with_class_type()
