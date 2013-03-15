@@ -124,17 +124,28 @@ template<int x> struct static_assert_test{};
    typedef ::boost::static_assert_test<\
       sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >)\
       > boost_static_assert_typedef_
-#elif defined(BOOST_MSVC)
+#elif defined(BOOST_MSVC) && defined(BOOST_NO_CXX11_VARIADIC_MACROS)
 #define BOOST_STATIC_ASSERT( B ) \
    typedef ::boost::static_assert_test<\
       sizeof(::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST ( B ) >)>\
          BOOST_JOIN(boost_static_assert_typedef_, __COUNTER__)
-#elif defined(BOOST_INTEL_CXX_VERSION) || defined(BOOST_SA_GCC_WORKAROUND)
+#elif defined(BOOST_MSVC)
+#define BOOST_STATIC_ASSERT(...) \
+   typedef ::boost::static_assert_test<\
+      sizeof(::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST (__VA_ARGS__) >)>\
+         BOOST_JOIN(boost_static_assert_typedef_, __COUNTER__)
+#elif (defined(BOOST_INTEL_CXX_VERSION) || defined(BOOST_SA_GCC_WORKAROUND))  && defined(BOOST_NO_CXX11_VARIADIC_MACROS)
 // agurt 15/sep/02: a special care is needed to force Intel C++ issue an error 
 // instead of warning in case of failure
 # define BOOST_STATIC_ASSERT( B ) \
     typedef char BOOST_JOIN(boost_static_assert_typedef_, __LINE__) \
         [ ::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST( B ) >::value ]
+#elif (defined(BOOST_INTEL_CXX_VERSION) || defined(BOOST_SA_GCC_WORKAROUND))  && !defined(BOOST_NO_CXX11_VARIADIC_MACROS)
+// agurt 15/sep/02: a special care is needed to force Intel C++ issue an error 
+// instead of warning in case of failure
+# define BOOST_STATIC_ASSERT(...) \
+    typedef char BOOST_JOIN(boost_static_assert_typedef_, __LINE__) \
+        [ ::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST( __VA_ARGS__ ) >::value ]
 #elif defined(__sgi)
 // special version for SGI MIPSpro compiler
 #define BOOST_STATIC_ASSERT( B ) \
