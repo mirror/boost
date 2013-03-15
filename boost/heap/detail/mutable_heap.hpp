@@ -91,6 +91,16 @@ public:
             iterator(rhs.iterator)
         {}
 
+        bool operator==(handle_type const & rhs) const
+        {
+            return iterator == rhs.iterator;
+        }
+
+        bool operator!=(handle_type const & rhs) const
+        {
+            return iterator != rhs.iterator;
+        }
+
     private:
         explicit handle_type(list_iterator const & it):
             iterator(it)

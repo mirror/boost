@@ -490,6 +490,16 @@ struct node_handle
         return extractor::get_value(node_->value);
     }
 
+    bool operator==(node_handle const & rhs) const
+    {
+        return node_ == rhs.node_;
+    }
+
+    bool operator!=(node_handle const & rhs) const
+    {
+        return node_ != rhs.node_;
+    }
+
     node_pointer node_;
 };
 
