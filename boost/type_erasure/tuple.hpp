@@ -541,7 +541,7 @@ typename detail::get_impl<
 #define BOOST_TYPE_ERASURE_CONSTRUCT(z, n, data)\
     BOOST_PP_CAT(t, n)(BOOST_PP_CAT(u, n), table)
 
-#define BOOST_TYPE_ERASURE_MEMBER(z, n, data)\
+#define BOOST_TYPE_ERASURE_TUPLE_MEMBER(z, n, data)\
     ::boost::type_erasure::any<Concept, BOOST_PP_CAT(T, n)> BOOST_PP_CAT(t, n);
 
 #if N == 1
@@ -568,7 +568,7 @@ struct tuple_storage
     template<class Table>
     explicit tuple_storage(const Table&) {}
 #endif
-    BOOST_PP_REPEAT(N, BOOST_TYPE_ERASURE_MEMBER, `)
+    BOOST_PP_REPEAT(N, BOOST_TYPE_ERASURE_TUPLE_MEMBER, `)
 };
 
 #if N != BOOST_TYPE_ERASURE_MAX_TUPLE_SIZE
@@ -650,7 +650,7 @@ private:
 };
 
 #undef BOOST_TYPE_ERASURE_EXPLICIT
-#undef BOOST_TYPE_ERASURE_MEMBER
+#undef BOOST_TYPE_ERASURE_TUPLE_MEMBER
 #undef BOOST_TYPE_ERASURE_CONSTRUCT
 #undef BOOST_TYPE_ERASURE_PAIR
 #undef BOOST_TYPE_ERASURE_TAG_TYPEDEF
