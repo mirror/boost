@@ -20,6 +20,10 @@
 #include <windows.h> // more things to test
 #endif
 
+#if defined(BOOST_MSVC) && (_MSC_VER >= 1700)
+#pragma warning(disable:4250)
+#endif
+
 // this test was added to check for bug reported on 21 May 2003:
 struct poly_bug { virtual int foo() = 0; };
 
