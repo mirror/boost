@@ -172,38 +172,38 @@ int vector_test()
 
             IntType aux_vect[50];
             for(int i = 0; i < 50; ++i){
-               IntType new_int(-2);
+               IntType new_int(-i);
                aux_vect[i] = boost::move(new_int);
             }
             int aux_vect2[50];
             for(int i = 0; i < 50; ++i){
-               aux_vect2[i] = -2;
+               aux_vect2[i] = -i;
             }
             typename MyBoostVector::size_type old_size = boostvector->size();
             typename MyBoostVector::iterator insert_it =
-               boostvector->insert(boostvector->begin() + old_size
+               boostvector->insert(boostvector->begin() + old_size/2
                               ,boost::make_move_iterator(&aux_vect[0])
                               ,boost::make_move_iterator(aux_vect + 50));
-            if(boostvector->begin() + old_size != insert_it) return 1;
-            stdvector->insert(stdvector->begin() + old_size, aux_vect2, aux_vect2 + 50);
+            if(boostvector->begin() + old_size/2 != insert_it) return 1;
+            stdvector->insert(stdvector->begin() + old_size/2, aux_vect2, aux_vect2 + 50);
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
 
             for(int i = 0; i < 50; ++i){
-               IntType new_int(-3);
+               IntType new_int(-i);
                aux_vect[i] = boost::move(new_int);
             }
 
             for(int i = 0; i < 50; ++i){
-               aux_vect2[i] = -3;
+               aux_vect2[i] = -i;
             }
             old_size = boostvector->size();
             //Now try with input iterators instead
-            insert_it = boostvector->insert(boostvector->begin() + old_size
+            insert_it = boostvector->insert(boostvector->begin() + old_size/2
                               ,boost::make_move_iterator(make_input_from_forward_iterator(&aux_vect[0]))
                               ,boost::make_move_iterator(make_input_from_forward_iterator(aux_vect + 50))
                            );
-            if(boostvector->begin() + old_size != insert_it) return 1;
-            stdvector->insert(stdvector->begin() + old_size, aux_vect2, aux_vect2 + 50);
+            if(boostvector->begin() + old_size/2 != insert_it) return 1;
+            stdvector->insert(stdvector->begin() + old_size/2, aux_vect2, aux_vect2 + 50);
             if(!test::CheckEqualContainers(boostvector, stdvector)) return 1;
          }
 /*       //deque has no reserve

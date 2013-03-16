@@ -1721,11 +1721,11 @@ class deque : protected deque_base<T, Allocator>
             this->members_.m_finish = new_finish;
          }
          else{
-            pos = this->members_.m_finish - elemsafter;
+            pos = old_finish - elemsafter;
             if (elemsafter >= n) {
-               iterator finish_n = this->members_.m_finish - difference_type(n);
+               iterator finish_n = old_finish - difference_type(n);
                ::boost::container::uninitialized_move_alloc
-                  (this->alloc(), finish_n, this->members_.m_finish, this->members_.m_finish);
+                  (this->alloc(), finish_n, old_finish, old_finish);
                this->members_.m_finish = new_finish;
                boost::move_backward(pos, finish_n, old_finish);
                interf.copy_n_and_update(pos, n);
@@ -1733,25 +1733,17 @@ class deque : protected deque_base<T, Allocator>
             else {
                const size_type raw_gap = n - elemsafter;
                ::boost::container::uninitialized_move_alloc
-                  (this->alloc(), pos, old_finish, this->members_.m_finish + raw_gap);
+                  (this->alloc(), pos, old_finish, old_finish + raw_gap);
                BOOST_TRY{
+                  interf.copy_n_and_update(pos, elemsafter);
                   interf.uninitialized_copy_n_and_update(old_finish, raw_gap);
                }
                BOOST_CATCH(...){
-                  this->priv_destroy_range(this->members_.m_finish, this->members_.m_finish + (old_finish - pos));
+                  this->priv_destroy_range(old_finish, old_finish + elemsafter);
                   BOOST_RETHROW
                }
                BOOST_CATCH_END
                this->members_.m_finish = new_finish;
-               interf.copy_n_and_update(pos, elemsafter);
-   /*
-               interf.uninitialized_copy_some_and_update(old_finish, elemsafter, false);
-               this->members_.m_finish += n-elemsafter;
-               ::boost::container::uninitialized_move_alloc
-                  (this->alloc(), pos, old_finish, this->members_.m_finish);
-               this->members_.m_finish = new_finish;
-               interf.copy_remaining_to(pos);
-   */
             }
          }
       }

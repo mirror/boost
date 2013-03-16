@@ -207,6 +207,20 @@ bool do_test()
          stddeque->insert(stddeque->end(), aux_vect2, aux_vect2 + 50);
          if(!test::CheckEqualContainers(cntdeque, stddeque)) return false;
 
+         for(int i = 0; i < 50; ++i){
+            IntType move_me (i);
+            aux_vect[i] = boost::move(move_me);
+         }
+         for(int i = 0; i < 50; ++i){
+            aux_vect2[i] = i;
+         }
+
+         cntdeque->insert(cntdeque->begin()+cntdeque->size()
+                           ,boost::make_move_iterator(&aux_vect[0])
+                           ,boost::make_move_iterator(aux_vect + 50));
+         stddeque->insert(stddeque->begin()+stddeque->size(), aux_vect2, aux_vect2 + 50);
+         if(!test::CheckEqualContainers(cntdeque, stddeque)) return false;
+
          for(int i = 0, j = static_cast<int>(cntdeque->size()); i < j; ++i){
             cntdeque->erase(cntdeque->begin());
             stddeque->erase(stddeque->begin());
