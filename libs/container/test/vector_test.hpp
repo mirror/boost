@@ -31,6 +31,7 @@
 #include <boost/move/utility.hpp>
 #include <boost/move/iterator.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
+#include "insert_test.hpp"
 
 namespace boost{
 namespace container {
@@ -101,6 +102,10 @@ int vector_test()
    typedef std::vector<int>                     MyStdVector;
    typedef typename MyBoostVector::value_type     IntType;
    const int max = 100;
+
+   if(!test_range_insertion<MyBoostVector>()){
+      return 1;
+   }
 
    {
       BOOST_TRY{
@@ -317,6 +322,7 @@ int vector_test()
       }
       BOOST_CATCH_END
    }
+
    std::cout << std::endl << "Test OK!" << std::endl;
    return 0;
 }
@@ -328,4 +334,3 @@ int vector_test()
 #include <boost/container/detail/config_end.hpp>
 
 #endif //BOOST_CONTAINER_TEST_VECTOR_TEST_HEADER
-
