@@ -28,7 +28,14 @@ namespace boost { namespace fusion
             template <typename Sequence>
             struct apply
             {
-                typedef typename detail::as_map<result_of::size<Sequence>::value> gen;
+                typedef typename
+                    detail::as_map<
+                        result_of::size<Sequence>::value
+                      , is_base_of<
+                            associative_tag
+                          , typename traits::category_of<Sequence>::type>::value
+                    >
+                gen;
                 typedef typename gen::
                     template apply<typename result_of::begin<Sequence>::type>::type
                 type;

@@ -18,12 +18,13 @@
 
 namespace boost { namespace fusion { namespace detail
 {
-    template <typename First, typename Last
-      , bool is_empty = result_of::equal_to<First, Last>::value>
+    template <typename First, typename Last, bool is_assoc
+      , bool is_empty = result_of::equal_to<First, Last>::value
+    >
     struct build_map;
 
-    template <typename First, typename Last>
-    struct build_map<First, Last, true>
+    template <typename First, typename Last, bool is_assoc>
+    struct build_map<First, Last, is_assoc, true>
     {
         typedef map<> type;
         static type
@@ -48,15 +49,15 @@ namespace boost { namespace fusion { namespace detail
         }
     };
 
-    template <typename First, typename Last>
-    struct build_map<First, Last, false>
+    template <typename First, typename Last, bool is_assoc>
+    struct build_map<First, Last, is_assoc, false>
     {
         typedef
-            build_map<typename result_of::next<First>::type, Last>
+            build_map<typename result_of::next<First>::type, Last, is_assoc>
         next_build_map;
 
         typedef push_front_map<
-            typename result_of::value_of<First>::type
+            typename pair_from<First, is_assoc>::type
           , typename next_build_map::type>
         push_front;
 
@@ -65,9 +66,9 @@ namespace boost { namespace fusion { namespace detail
         static type
         call(First const& f, Last const& l)
         {
-            typename result_of::value_of<First>::type v = *f;
             return push_front::call(
-                v, next_build_map::call(fusion::next(f), l));
+                pair_from<First, is_assoc>::call(f)
+              , next_build_map::call(fusion::next(f), l));
         }
     };
 }}}

@@ -9,6 +9,33 @@
 
 #include <boost/fusion/container/map/map.hpp>
 
+namespace boost { namespace fusion { namespace detail
+{
+    template <typename It, bool is_assoc>
+    struct pair_from
+    {
+        typedef typename result_of::value_of<It>::type type;
+
+        static inline type call(It const& it)
+        {
+            return *it;
+        }
+    };
+
+    template <typename It>
+    struct pair_from<It, true>
+    {
+        typedef typename result_of::key_of<It>::type key_type;
+        typedef typename result_of::value_of_data<It>::type data_type;
+        typedef typename fusion::pair<key_type, data_type> type;
+
+        static inline type call(It const& it)
+        {
+            return type(deref_data(it));
+        }
+    };
+}}}
+
 ///////////////////////////////////////////////////////////////////////////////
 // Without variadics, we will use the PP version
 ///////////////////////////////////////////////////////////////////////////////
@@ -30,6 +57,9 @@ namespace boost { namespace fusion
             detail::build_map<
                 typename result_of::begin<Sequence>::type
               , typename result_of::end<Sequence>::type
+              , is_base_of<
+                    associative_tag
+                  , typename traits::category_of<Sequence>::type>::value
             >
         {
         };
