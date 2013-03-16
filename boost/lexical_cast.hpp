@@ -2446,16 +2446,58 @@ namespace boost {
         return caster_type::lexical_cast_impl(arg);
     }
 
-    template <typename Target, typename CharType>
-    inline Target lexical_cast(const CharType* chars, std::size_t count)
-    {
-        BOOST_STATIC_ASSERT_MSG(boost::detail::is_char_or_wchar<CharType>::value, 
-            "CharType must be a character or wide character type");
-
-        return boost::lexical_cast<Target>(
-            boost::iterator_range<const CharType*>(chars, chars + count)
+    template <typename Target>
+    inline Target lexical_cast(const char* chars, std::size_t count)
+     {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const char*>(chars, chars + count)
         );
     }
+
+
+    template <typename Target>
+    inline Target lexical_cast(const unsigned char* chars, std::size_t count)
+    {
+         return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const unsigned char*>(chars, chars + count)
+         );
+     }
+
+    template <typename Target>
+    inline Target lexical_cast(const signed char* chars, std::size_t count)
+    {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const signed char*>(chars, chars + count)
+        );
+    }
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+    template <typename Target>
+    inline Target lexical_cast(const wchar_t* chars, std::size_t count)
+    {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const wchar_t*>(chars, chars + count)
+        );
+    }
+#endif
+#ifndef BOOST_NO_CHAR16_T
+    template <typename Target>
+    inline Target lexical_cast(const char16_t* chars, std::size_t count)
+    {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const char16_t*>(chars, chars + count)
+        );
+    }
+#endif
+#ifndef BOOST_NO_CHAR32_T
+    template <typename Target>
+    inline Target lexical_cast(const char32_t* chars, std::size_t count)
+    {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const char32_t*>(chars, chars + count)
+        );
+    }
+#endif
 
 } // namespace boost
 
