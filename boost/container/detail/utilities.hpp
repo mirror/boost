@@ -13,6 +13,7 @@
 
 #include "config_begin.hpp"
 #include <cstdio>
+#include <cstring> //for ::memcpy
 #include <boost/type_traits/is_fundamental.hpp>
 #include <boost/type_traits/is_pointer.hpp>
 #include <boost/type_traits/is_enum.hpp>
