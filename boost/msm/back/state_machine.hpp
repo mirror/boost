@@ -332,7 +332,9 @@ private:
         }
         void set_forward_fct(::boost::function<execute_return (Event const&)> fct)
         {
-            m_forward = fct;
+            // if we already have a forward, we never overwrite it
+            if (!m_forward.empty())
+                m_forward = fct;
         }    
         exit_pt():m_forward(){}
         // by assignments, we keep our forwarding functor unchanged as our containing SM did not change
