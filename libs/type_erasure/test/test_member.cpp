@@ -98,6 +98,23 @@ BOOST_AUTO_TEST_CASE(test_global_has_f1_overload_const) {
     BOOST_CHECK_EQUAL(x.f1(5), 15);
 }
 
+struct model_overload_const_non_const {
+    int f1() { return 1; }
+    int f1() const { return 2; }
+};
+
+BOOST_AUTO_TEST_CASE(test_global_has_f1_overload_const_non_const) {
+    typedef ::boost::mpl::vector<
+        global_has_f1_0<int(), _self>,
+        global_has_f1_0<int(), const _self>,
+        copy_constructible<> > concept_type;
+    model_overload_const_non_const m;
+    any<concept_type> x1(m);
+    BOOST_CHECK_EQUAL(x1.f1(), 1);
+    const any<concept_type> x2(m);
+    BOOST_CHECK_EQUAL(x2.f1(), 2);
+}
+
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 BOOST_AUTO_TEST_CASE(test_global_has_f1_rv) {
