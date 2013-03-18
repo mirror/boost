@@ -23,7 +23,7 @@ void ends_with ( const char *arg ) {
     string_ref sr2 ( arg );
     const char *p = arg;
 
-    while ( !*p ) {
+    while ( *p ) {
         BOOST_CHECK ( sr.ends_with ( p ));
         ++p;
         }
