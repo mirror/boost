@@ -21,7 +21,6 @@
 #include <boost/range/end.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
-#include <boost/tr1/tr1/tuple>      // for tie
 
 namespace boost { namespace algorithm {
 
@@ -61,7 +60,6 @@ bool is_permutation ( ForwardIterator1 first1, ForwardIterator1 last1,
                       ForwardIterator2 first2, BinaryPredicate p )
 {
 //  Skip the common prefix (if any)
-//  std::tie (first1, first2) = std::mismatch (first1, last1, first2, p);
     std::pair<ForwardIterator1, ForwardIterator2> eq = std::mismatch (first1, last1, first2, p);
     first1 = eq.first;
     first2 = eq.second;
