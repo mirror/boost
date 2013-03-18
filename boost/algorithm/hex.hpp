@@ -65,8 +65,8 @@ namespace detail {
 
     template <typename T>
     unsigned char hex_char_to_int ( T val ) {
-    	char c = static_cast<char> ( val );
-    	unsigned retval = 0;
+        char c = static_cast<char> ( val );
+        unsigned retval = 0;
         if      ( c >= '0' && c <= '9' ) retval = c - '0';
         else if ( c >= 'A' && c <= 'F' ) retval = c - 'A' + 10;
         else if ( c >= 'a' && c <= 'f' ) retval = c - 'a' + 10;
