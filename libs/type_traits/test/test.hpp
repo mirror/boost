@@ -276,6 +276,18 @@ struct nothrow_assign_UDT
    { return true; }
 };
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+struct nothrow_move_UDT
+{
+   nothrow_move_UDT();
+   nothrow_move_UDT(nothrow_move_UDT&&) throw();
+   nothrow_move_UDT& operator=(nothrow_move_UDT&&) throw();
+   bool operator==(const nothrow_move_UDT&)const
+   { return true; }
+};
+#endif
+
+
 struct nothrow_construct_UDT
 {
    nothrow_construct_UDT()throw();
