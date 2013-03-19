@@ -218,11 +218,11 @@ A bracket expression may contain any combination of the following:
 
 [h5 Single characters]
 
-For example =[abc]=, will match any of the characters 'a', 'b', or 'c'.
+For example [^\[abc\]], will match any of the characters 'a', 'b', or 'c'.
 
 [h5 Character ranges]
 
-For example =[a-c]= will match any single character in the range 'a' to 'c'.  
+For example [^\[a-c\]] will match any single character in the range 'a' to 'c'.  
 By default, for Perl regular expressions, a character x is within the 
 range y to z, if the code point of the character lies within the codepoints of
 the endpoints of the range.  Alternatively, if you set the 
@@ -232,7 +232,7 @@ when constructing the regular expression, then ranges are locale sensitive.
 [h5 Negation]
 
 If the bracket-expression begins with the ^ character, then it matches the 
-complement of the characters it contains, for example =[^a-c]= matches 
+complement of the characters it contains, for example [^\[^a-c\]] matches 
 any character that is not in the range =a-c=.
 
 [h5 Character classes]

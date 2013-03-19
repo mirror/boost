@@ -1107,7 +1107,7 @@ bool basic_regex_parser<charT, traits>::parse_repeat_range(bool isbasic)
       }
       // get the value if any:
       v = this->m_traits.toi(m_position, m_end, 10);
-      max = (v >= 0) ? v : (std::numeric_limits<std::size_t>::max)();
+      max = (v >= 0) ? (std::size_t)v : (std::numeric_limits<std::size_t>::max)();
    }
    else
    {
