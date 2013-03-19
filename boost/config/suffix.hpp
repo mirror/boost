@@ -671,7 +671,7 @@ namespace std{ using ::type_info; }
 #endif
 
 //  Use BOOST_NO_CXX11_HDR_ARRAY instead of BOOST_NO_0X_HDR_ARRAY
-#if defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_BOOST_NO_0X_HDR_ARRAY)
+#if defined(BOOST_NO_CXX11_HDR_ARRAY) && !defined(BOOST_NO_0X_HDR_ARRAY)
 #  define BOOST_NO_0X_HDR_ARRAY
 #endif
 //  Use BOOST_NO_CXX11_HDR_CHRONO instead of BOOST_NO_0X_HDR_CHRONO
