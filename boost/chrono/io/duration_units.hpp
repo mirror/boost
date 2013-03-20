@@ -978,6 +978,17 @@ namespace boost
                 duration_units_default_holder<CharT>::initialized_ = true;
               }
           }
+        ~duration_units_default_initializer_t()
+          {
+            if (duration_units_default_holder<CharT>::initialized_)
+            {
+              delete[] duration_units_default_holder<CharT>::n_d_valid_units_;
+              duration_units_default_holder<CharT>::n_d_valid_units_ = 0;
+              delete[] duration_units_default_holder<CharT>::valid_units_;
+              duration_units_default_holder<CharT>::valid_units_ = 0;
+              duration_units_default_holder<CharT>::initialized_ = false;
+            }
+        }
       };
       namespace /**/
       {
