@@ -145,6 +145,10 @@ struct AnotherType
   static const int CIntValue = 10;
   
   };
+  
+struct MarkerType
+  {
+  };
 
 short AType::DSMember(5622);
 AType::AStructType AnotherType::AnStat;

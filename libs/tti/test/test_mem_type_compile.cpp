@@ -6,19 +6,18 @@
 
 #include "test_mem_type.hpp"
 #include <boost/mpl/assert.hpp>
-#include <boost/tti/mf/mf_member_type.hpp>
 
 int main()
   {
   
-  BOOST_MPL_ASSERT((boost::tti::mf_valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(AnIntType)<AType> >));
-  BOOST_MPL_ASSERT((boost::tti::mf_valid_member_type<NameStruct<AType> >));
-  BOOST_MPL_ASSERT((boost::tti::mf_valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(AnIntTypeReference)<AType> >));
-  BOOST_MPL_ASSERT((boost::tti::mf_valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType> >));
-  BOOST_MPL_ASSERT((boost::tti::mf_valid_member_type<TheInteger<AType::BType> >));
-  BOOST_MPL_ASSERT((boost::tti::mf_valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(CType)<AType::BType> >));
-  BOOST_MPL_ASSERT((boost::tti::mf_valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(AnotherIntegerType)<AType::BType::CType> >));
-  BOOST_MPL_ASSERT((boost::tti::mf_valid_member_type<SomethingElse<AnotherType> >));
+  BOOST_MPL_ASSERT((boost::tti::valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(AnIntType)<AType>::type>));
+  BOOST_MPL_ASSERT((boost::tti::valid_member_type<NameStruct<AType>::type>));
+  BOOST_MPL_ASSERT((boost::tti::valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(AnIntTypeReference)<AType>::type>));
+  BOOST_MPL_ASSERT((boost::tti::valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(BType)<AType>::type>));
+  BOOST_MPL_ASSERT((boost::tti::valid_member_type<TheInteger<AType::BType>::type>));
+  BOOST_MPL_ASSERT((boost::tti::valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(CType)<AType::BType>::type>));
+  BOOST_MPL_ASSERT((boost::tti::valid_member_type<BOOST_TTI_MEMBER_TYPE_GEN(AnotherIntegerType)<AType::BType::CType>::type>));
+  BOOST_MPL_ASSERT((boost::tti::valid_member_type<SomethingElse<AnotherType>::type>));
   
   return 0;
 

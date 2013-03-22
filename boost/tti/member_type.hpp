@@ -58,13 +58,13 @@
 #define BOOST_TTI_TRAIT_MEMBER_TYPE(trait,name) \
     BOOST_TTI_DETAIL_TRAIT_HAS_TYPE_MEMBER_TYPE(trait,name) \
     BOOST_TTI_DETAIL_TRAIT_MEMBER_TYPE(trait,name) \
-    template<class TTI_T> \
+    template<class TTI_T,class TTI_MARKER_TYPE = BOOST_TTI_NAMESPACE::detail::notype> \
     struct trait : \
       boost::mpl::eval_if \
         < \
         BOOST_PP_CAT(trait,_detail)<TTI_T>, \
         BOOST_PP_CAT(trait,_detail_member_type)<TTI_T>, \
-        boost::mpl::identity<BOOST_TTI_NAMESPACE::detail::notype> \
+        boost::mpl::identity<TTI_MARKER_TYPE> \
         > \
       { \
       }; \
@@ -126,22 +126,14 @@ namespace boost
           returns = 'value' is true if the type is valid, otherwise 'value' is false.
                           
     */
-    template
-      <
-      class TTI_T
-      >
+    template<class TTI_T,class TTI_MARKER_TYPE = BOOST_TTI_NAMESPACE::detail::notype>
     struct valid_member_type :
       boost::mpl::not_
         <
-        boost::is_same
-          <
-          TTI_T,
-          BOOST_TTI_NAMESPACE::detail::notype
-          >
+        boost::is_same<TTI_T,TTI_MARKER_TYPE>
         >
       {
       };
-      
     }
   }
   
