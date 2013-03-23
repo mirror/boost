@@ -100,6 +100,17 @@ void test_base_operators(T value1, T value2, T value3)
     }
 }
 
+// T requires an int constructor
+template <typename T>
+void test_constexpr_ctor()
+{
+#ifndef BOOST_NO_CXX11_CONSTEXPR
+    const T value(0);
+    const boost::atomic<T> tester(value);
+    BOOST_CHECK( tester == value );
+#endif
+}
+
 template<typename T, typename D>
 void test_additive_operators(T value, D delta)
 {

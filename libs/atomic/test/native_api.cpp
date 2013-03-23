@@ -34,6 +34,12 @@ int test_main(int, char *[])
     test_integral_api<long long>();
     test_integral_api<unsigned long long>();
 
+    test_constexpr_ctor<char>();
+    test_constexpr_ctor<short>();
+    test_constexpr_ctor<int>();
+    test_constexpr_ctor<long>();
+    test_constexpr_ctor<int*>();
+
     test_pointer_api<int>();
 
     test_enum_api();
