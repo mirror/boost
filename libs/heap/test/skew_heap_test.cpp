@@ -97,6 +97,8 @@ BOOST_AUTO_TEST_CASE( skew_heap_test )
     run_skew_heap_test<false, true, false>();
     run_skew_heap_test<true, false, false>();
     run_skew_heap_test<true, true, false>();
+
+    RUN_EMPLACE_TEST(skew_heap);
 }
 
 BOOST_AUTO_TEST_CASE( skew_heap_mutable_test )

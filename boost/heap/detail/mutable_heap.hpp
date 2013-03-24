@@ -16,7 +16,6 @@
 #include <list>
 #include <utility>
 
-#include <boost/noncopyable.hpp>
 #include <boost/iterator/iterator_adaptor.hpp>
 #include <boost/heap/detail/ordered_adaptor_iterator.hpp>
 
@@ -91,6 +90,16 @@ public:
         handle_type(handle_type const & rhs):
             iterator(rhs.iterator)
         {}
+
+        bool operator==(handle_type const & rhs) const
+        {
+            return iterator == rhs.iterator;
+        }
+
+        bool operator!=(handle_type const & rhs) const
+        {
+            return iterator != rhs.iterator;
+        }
 
     private:
         explicit handle_type(list_iterator const & it):
