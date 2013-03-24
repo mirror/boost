@@ -173,6 +173,7 @@ namespace boost
 #include <boost/math/special_functions/fpclassify.hpp>
 #include <boost/range/iterator_range_core.hpp>
 #include <boost/container/container_fwd.hpp>
+#include <boost/integer.hpp>
 #ifndef BOOST_NO_CWCHAR
 #   include <cwchar>
 #endif
@@ -1414,23 +1415,97 @@ namespace boost {
 #endif 
     }
 
-    namespace detail // stl_buf_unlocker
+    namespace detail // parser_buf
     {
-        template< class BufferType, class CharT >
-        class stl_buf_unlocker: public BufferType{
+        //
+        // class parser_buf:
+        // acts as a stream buffer which wraps around a pair of pointers
+        //
+        // This class is copied (and slightly changed) from
+        // boost/regex/v4/cpp_regex_traits.hpp
+        // Thanks John Maddock for it! (previous version had some
+        // problems with libc++ and some other STL implementations)
+        template <class BufferType, class charT>
+        class parser_buf : public BufferType {
+           typedef BufferType base_type;
+           typedef typename base_type::int_type int_type;
+           typedef typename base_type::char_type char_type;
+           typedef typename base_type::pos_type pos_type;
+           typedef ::std::streamsize streamsize;
+           typedef typename base_type::off_type off_type;
+
         public:
-            typedef BufferType base_class;
+           parser_buf() : base_type() { setbuf(0, 0); }
+           const charT* getnext() { return this->gptr(); }
 #ifndef BOOST_NO_USING_TEMPLATE
-            using base_class::pptr;
-            using base_class::pbase;
-            using base_class::setg;
-            using base_class::setp;
+            using base_type::pptr;
+            using base_type::pbase;
 #else
-            CharT* pptr() const { return base_class::pptr(); }
-            CharT* pbase() const { return base_class::pbase(); }
-            void setg(CharT* gbeg, CharT* gnext, CharT* gend){ return base_class::setg(gbeg, gnext, gend); }
-            void setp(CharT* pbeg, CharT* pend) { return setp(pbeg, pend); }
+            charT* pptr() const { return base_type::pptr(); }
+            charT* pbase() const { return base_type::pbase(); }
 #endif
+           base_type* setbuf(char_type* s, streamsize n) {
+               this->setg(s, s, s + n);
+               return this;
+           }
+
+           pos_type seekpos(pos_type sp, ::std::ios_base::openmode which) {
+               if(which & ::std::ios_base::out)
+                  return pos_type(off_type(-1));
+               off_type size = static_cast<off_type>(this->egptr() - this->eback());
+               charT* g = this->eback();
+               if(off_type(sp) <= size)
+               {
+                  this->setg(g, g + off_type(sp), g + size);
+               }
+               return pos_type(off_type(-1));
+            }
+
+           pos_type seekoff(off_type off, ::std::ios_base::seekdir way, ::std::ios_base::openmode which) {
+               typedef typename boost::int_t<sizeof(way) * CHAR_BIT>::least cast_type;
+
+               if(which & ::std::ios_base::out)
+                  return pos_type(off_type(-1));
+               std::ptrdiff_t size = this->egptr() - this->eback();
+               std::ptrdiff_t pos = this->gptr() - this->eback();
+               charT* g = this->eback();
+               switch(static_cast<cast_type>(way))
+               {
+               case ::std::ios_base::beg:
+                  if((off < 0) || (off > size))
+                     return pos_type(off_type(-1));
+                  else
+                     this->setg(g, g + off, g + size);
+                  break;
+               case ::std::ios_base::end:
+                  if((off < 0) || (off > size))
+                     return pos_type(off_type(-1));
+                  else
+                     this->setg(g, g + size - off, g + size);
+                  break;
+               case ::std::ios_base::cur:
+               {
+                  std::ptrdiff_t newpos = static_cast<std::ptrdiff_t>(pos + off);
+                  if((newpos < 0) || (newpos > size))
+                     return pos_type(off_type(-1));
+                  else
+                     this->setg(g, g + newpos, g + size);
+                  break;
+               }
+               default: ;
+               }
+#ifdef BOOST_MSVC
+#pragma warning(push)
+#pragma warning(disable:4244)
+#endif
+               return static_cast<pos_type>(this->gptr() - this->eback());
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
+            }
+        private:
+           parser_buf& operator=(const parser_buf&);
+           parser_buf(const parser_buf&);
         };
     }
 
@@ -1451,13 +1526,13 @@ namespace boost {
 
 #if defined(BOOST_NO_STRINGSTREAM)
             typedef std::ostrstream                         out_stream_t;
-            typedef stl_buf_unlocker<std::strstreambuf, char>  unlocked_but_t;
+            typedef parser_buf<std::strstreambuf, char>     unlocked_but_t;
 #elif defined(BOOST_NO_STD_LOCALE)
             typedef std::ostringstream                      out_stream_t;
-            typedef stl_buf_unlocker<std::stringbuf, char>  unlocked_but_t;
+            typedef parser_buf<std::stringbuf, char>        unlocked_but_t;
 #else
-            typedef std::basic_ostringstream<CharT, Traits>       out_stream_t;
-            typedef stl_buf_unlocker<std::basic_stringbuf<CharT, Traits>, CharT> unlocked_but_t;
+            typedef std::basic_ostringstream<CharT, Traits>                 out_stream_t;
+            typedef parser_buf<std::basic_stringbuf<CharT, Traits>, CharT>  unlocked_but_t;
 #endif
             typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
                 RequiresStringbuffer,
@@ -1471,7 +1546,7 @@ namespace boost {
             deduced_out_stream_t out_stream;
 
         public:
-            lexical_stream_limited_src(CharT* sta, CharT* fin)
+            lexical_stream_limited_src(CharT* sta, CharT* fin) BOOST_NOEXCEPT
               : start(sta)
               , finish(fin)
             {}
@@ -1915,7 +1990,7 @@ namespace boost {
                 std::basic_istringstream<CharT, Traits> stream;
 #endif
                 static_cast<unlocked_but_t*>(stream.rdbuf())
-                        ->setg(start, start, finish);
+                        ->setbuf(start, finish - start);
 
                 stream.unsetf(std::ios::skipws);
                 lcast_set_precision(stream, static_cast<InputStreamable*>(0));
