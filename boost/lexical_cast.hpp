@@ -1172,15 +1172,19 @@ namespace boost {
         struct mantissa_holder_type<float>
         {
             typedef unsigned int type;
+            typedef double       wide_result_t;
         };
 
         template <>
         struct mantissa_holder_type<double>
         {
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
+            typedef long double  wide_result_t;
 #if defined(BOOST_HAS_LONG_LONG)
             typedef boost::ulong_long_type type;
 #elif defined(BOOST_HAS_MS_INT64)
             typedef unsigned __int64 type;
+#endif
 #endif
         };
 
@@ -1218,6 +1222,7 @@ namespace boost {
 
             typedef typename Traits::int_type int_type;
             typedef BOOST_DEDUCED_TYPENAME mantissa_holder_type<T>::type mantissa_type;
+            typedef BOOST_DEDUCED_TYPENAME mantissa_holder_type<T>::wide_result_t wide_result_t;
             int_type const zero = Traits::to_int_type(czero);
             if (begin == end) return false;
 
@@ -1396,7 +1401,7 @@ namespace boost {
             /* We need a more accurate algorithm... We can not use current algorithm
              * with long doubles (and with doubles if sizeof(double)==sizeof(long double)).
              */
-            long double result = std::pow(10.0L, pow_of_10) * mantissa;
+            const wide_result_t result = std::pow(static_cast<wide_result_t>(10.0), pow_of_10) * mantissa;
             value = static_cast<T>( has_minus ? (boost::math::changesign)(result) : result);
 
             if ( (boost::math::isinf)(value) || (boost::math::isnan)(value) ) return false;
@@ -2121,10 +2126,10 @@ namespace boost {
                  * double, because it will give a big precision loss.
                  * */
                 boost::mpl::if_c<
-#if defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)
+#if (defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)) && !defined(BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS)
                     boost::type_traits::ice_eq< sizeof(double), sizeof(long double) >::value,
 #else
-                     0
+                     1,
 #endif
                     int,
                     char
@@ -2441,16 +2446,58 @@ namespace boost {
         return caster_type::lexical_cast_impl(arg);
     }
 
-    template <typename Target, typename CharType>
-    inline Target lexical_cast(const CharType* chars, std::size_t count)
-    {
-        BOOST_STATIC_ASSERT_MSG(boost::detail::is_char_or_wchar<CharType>::value, 
-            "CharType must be a character or wide character type");
-
-        return boost::lexical_cast<Target>(
-            boost::iterator_range<const CharType*>(chars, chars + count)
+    template <typename Target>
+    inline Target lexical_cast(const char* chars, std::size_t count)
+     {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const char*>(chars, chars + count)
         );
     }
+
+
+    template <typename Target>
+    inline Target lexical_cast(const unsigned char* chars, std::size_t count)
+    {
+         return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const unsigned char*>(chars, chars + count)
+         );
+     }
+
+    template <typename Target>
+    inline Target lexical_cast(const signed char* chars, std::size_t count)
+    {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const signed char*>(chars, chars + count)
+        );
+    }
+
+#ifndef BOOST_LCAST_NO_WCHAR_T
+    template <typename Target>
+    inline Target lexical_cast(const wchar_t* chars, std::size_t count)
+    {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const wchar_t*>(chars, chars + count)
+        );
+    }
+#endif
+#ifndef BOOST_NO_CHAR16_T
+    template <typename Target>
+    inline Target lexical_cast(const char16_t* chars, std::size_t count)
+    {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const char16_t*>(chars, chars + count)
+        );
+    }
+#endif
+#ifndef BOOST_NO_CHAR32_T
+    template <typename Target>
+    inline Target lexical_cast(const char32_t* chars, std::size_t count)
+    {
+        return ::boost::lexical_cast<Target>(
+            ::boost::iterator_range<const char32_t*>(chars, chars + count)
+        );
+    }
+#endif
 
 } // namespace boost
 

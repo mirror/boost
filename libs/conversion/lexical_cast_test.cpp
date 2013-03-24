@@ -36,6 +36,7 @@
 #include <boost/type_traits/integral_promotion.hpp>
 #include <string>
 #include <vector>
+#include <algorithm> // std::transform
 #include <memory>
 
 #if (defined(BOOST_HAS_LONG_LONG) || defined(BOOST_HAS_MS_INT64)) \
@@ -622,6 +623,10 @@ void test_getting_pointer_to_function()
     typedef std::string(*f3)(const int&);
     f3 p3 = &boost::lexical_cast<std::string, int>;
     BOOST_CHECK(p3);
+
+    std::vector<int> values;
+    std::vector<std::string> ret;
+    std::transform(values.begin(), values.end(), ret.begin(), boost::lexical_cast<std::string, int>);
 }
 
 

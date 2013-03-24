@@ -63,8 +63,10 @@ void do_test_iterator_range_impl(const RngT& rng)
     BOOST_CHECK_EQUAL(lexical_cast<float>(rng.begin(), rng.size()), 1.0f);
     BOOST_CHECK_EQUAL(lexical_cast<double>(rng), 1.0);
     BOOST_CHECK_EQUAL(lexical_cast<double>(rng.begin(), rng.size()), 1.0);
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     BOOST_CHECK_EQUAL(lexical_cast<long double>(rng), 1.0L);
     BOOST_CHECK_EQUAL(lexical_cast<long double>(rng.begin(), rng.size()), 1.0L);
+#endif
     BOOST_CHECK_EQUAL(lexical_cast<class_with_user_defined_sream_operators>(rng), 1);
 #endif
 #if defined(BOOST_HAS_LONG_LONG)
@@ -119,12 +121,16 @@ void test_it_range_using_char(CharT* one, CharT* eleven)
 
     BOOST_CHECK_EQUAL(lexical_cast<float>(rng1), 1.0f);
     BOOST_CHECK_EQUAL(lexical_cast<double>(rng1), 1.0);
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     BOOST_CHECK_EQUAL(lexical_cast<long double>(rng1), 1.0L);
+#endif
     BOOST_CHECK_EQUAL(lexical_cast<class_with_user_defined_sream_operators>(rng1), 1);
 
     BOOST_CHECK_EQUAL(lexical_cast<float>(crng2), 1.0f);
     BOOST_CHECK_EQUAL(lexical_cast<double>(crng2), 1.0);
+#ifndef BOOST_MATH_NO_LONG_DOUBLE_MATH_FUNCTIONS
     BOOST_CHECK_EQUAL(lexical_cast<long double>(crng2), 1.0L);
+#endif
     BOOST_CHECK_EQUAL(lexical_cast<class_with_user_defined_sream_operators>(crng2), 1);
 
 #ifndef BOOST_LCAST_NO_WCHAR_T
