@@ -112,7 +112,7 @@ struct test_class
     {}
 
     test_class(test_class &)
-      : args(make_vector(const_lvalue | id_copy))
+      : args(make_vector(lvalue | id_copy))
     {}
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
