@@ -55,5 +55,6 @@ test-suite conversion
     [ run lexical_cast_integral_types_test.cpp ]
     [ run lexical_cast_stream_detection_test.cpp ]
     [ run lexical_cast_stream_traits_test.cpp ]
+    [ compile-fail lexical_cast_to_pointer_test.cpp ]
   ;
 

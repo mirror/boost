@@ -1968,35 +1968,36 @@ namespace boost {
             template<typename InputStreamable>
             bool shr_using_base_class(InputStreamable& output)
             {
-#if (defined _MSC_VER)
-# pragma warning( push )
-  // conditional expression is constant
-# pragma warning( disable : 4127 )
-#endif
-                if(is_pointer<InputStreamable>::value)
-                    return false;
+                BOOST_STATIC_ASSERT_MSG(
+                    (!boost::is_pointer<InputStreamable>::value),
+                    "boost::lexical_cast can not convert to pointers"
+                );
 
 #if defined(BOOST_NO_STRINGSTREAM) || defined(BOOST_NO_STD_LOCALE)
-                // If you have compilation error at this point, than your STL library
-                // unsupports such conversions. Try updating it.
-                BOOST_STATIC_ASSERT((boost::is_same<char, CharT>::value));
+                BOOST_STATIC_ASSERT_MSG((boost::is_same<char, CharT>::value),
+                    "boost::lexical_cast can not convert, because your STL library does not "
+                    "support such conversions. Try updating it."
+                );
 #endif
 
 #if defined(BOOST_NO_STRINGSTREAM)
                 std::istrstream stream(start, finish - start);
-#elif defined(BOOST_NO_STD_LOCALE)
+#else
+
+#if defined(BOOST_NO_STD_LOCALE)
                 std::istringstream stream;
 #else
                 std::basic_istringstream<CharT, Traits> stream;
-#endif
-                static_cast<unlocked_but_t*>(stream.rdbuf())
-                        ->setbuf(start, finish - start);
+#endif // BOOST_NO_STD_LOCALE
+
+                unlocked_but_t buf;
+                buf.setbuf(start, finish - start);
+                dynamic_cast<std::basic_ios<CharT, Traits>&>(stream).rdbuf(&buf);
+#endif // BOOST_NO_STRINGSTREAM
 
                 stream.unsetf(std::ios::skipws);
                 lcast_set_precision(stream, static_cast<InputStreamable*>(0));
-#if (defined _MSC_VER)
-# pragma warning( pop )
-#endif
+
                 return stream >> output &&
                     stream.get() ==
 #if defined(__GNUC__) && (__GNUC__<3) && defined(BOOST_NO_STD_WSTRING)

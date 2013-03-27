@@ -278,7 +278,9 @@ limitation of compiler options that you use.
 
 * [*boost 1.54.0 :]
 
-    * Added code to convert boost::int128_type and boost::uint128_type (requires GCC 4.7 or higher).
+    * Added code to convert `boost::int128_type` and `boost::uint128_type` types (requires GCC 4.7 or higher).
+    * Conversions to pointers will now fail to compile, instead of throwing at runtime.
+    * Restored ability to get pointers to `lexical_cast` function (was broken in 1.53.0).
 
 * [*boost 1.53.0 :]
 
