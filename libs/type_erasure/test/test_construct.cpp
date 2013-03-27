@@ -252,11 +252,37 @@ struct make_arg_impl<T&>
     }
 };
 
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
+template<class T>
+struct make_arg_impl<T&&>
+{
+    static T&& apply()
+    {
+        static T result = make_arg_impl<T>::apply();
+        return std::move(result);
+    }
+};
+
+#endif
+
+#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
+
 template<class T>
 T make_arg()
 {
     return make_arg_impl<T>::apply();
 }
+
+#else
+
+template<class T>
+T&& make_arg()
+{
+    return make_arg_impl<T&&>::apply();
+}
+
+#endif
 
 int get_value(int i) { return i; }
 template<class T>
