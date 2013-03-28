@@ -28,15 +28,18 @@ project
         <toolset>gcc:<cxxflags>-Wextra
         <toolset>gcc:<cxxflags>-pedantic
         <toolset>gcc:<cxxflags>-Wno-long-long
+        <toolset>gcc:<cxxflags>-Wno-variadic-macros
         <toolset>darwin:<cxxflags>-Wextra
         <toolset>darwin:<cxxflags>-pedantic
         <toolset>darwin:<cxxflags>-Wno-long-long
+        <toolset>darwin:<cxxflags>-Wno-variadic-macros
         #<toolset>pathscale:<cxxflags>-Wextra
         <toolset>pathscale:<cxxflags>-Wno-long-long
         <toolset>pathscale:<cxxflags>-pedantic
         <toolset>clang:<cxxflags>-Wextra
         <toolset>clang:<cxxflags>-pedantic
         <toolset>clang:<cxxflags>-Wno-long-long
+        <toolset>clang:<cxxflags>-Wno-variadic-macros
         <toolset>gcc-mingw-4.5.0:<cxxflags>-Wno-missing-field-initializers
         <toolset>gcc-mingw-4.5.0:<cxxflags>-fdiagnostics-show-option
         <toolset>msvc:<cxxflags>/wd4127
@@ -222,7 +225,7 @@ rule chrono-run-mt ( sources )
         :   $(sources[1]:B)_h ]
     ;
 }
-rule chrono-run2-mt ( sources : name )
+rule chrono-run2-mt ( sources * : name )
 {
     return
     [ run $(sources) ../build//boost_chrono
@@ -451,6 +454,7 @@ rule chrono-compile2 ( sources : name )
     test-suite "clock"
         :
         [ chrono-run2-mt clock/clock_pass.cpp  : clock_clock_p ]
+        [ chrono-run2-mt one_obj.cpp another_obj.cpp   : two_obj_p ]
         ;
 
     test-suite "io_ex"

@@ -3330,7 +3330,7 @@ A type `TC` meets the `TrivialClock` requirements if:
 [note This means, in particular, that operations on these types will not throw exceptions.]
 
 * lvalues of the types `TC::rep`, `TC::duration`, and `TC::time_point` are swappable,
-* the function `TC::now()` does not throw exceptions, and
+* the function `TC::now()` does not throw exceptions and it is thread-safe, and
 * the type `TC::time_point::clock` meets the `TrivialClock` requirements, recursively.
 
 Models of __TrivialClock:
@@ -3350,7 +3350,8 @@ Models of __TrivialClock:
 A type `EcC` meets the `EcClock` requirements if
 
 * `TC` satisfies the `TrivialClock ` requirements, and
-* it add `now()` interfaces allowing to recover internal error codes as described in the following table.
+* it adds `now()` interfaces allowing to recover internal error codes as described in the following table.
+* the added now() function is thread-safe.
 
 In this table `C1` denotes a `EcClock` type and `ec` is an instance of a `boost::system::error_code`.
 
