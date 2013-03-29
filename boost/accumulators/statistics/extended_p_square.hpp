@@ -18,7 +18,7 @@
 #include <boost/iterator/permutation_iterator.hpp>
 #include <boost/parameter/keyword.hpp>
 #include <boost/mpl/placeholders.hpp>
-#include <boost/accumulators/framework/accumulator_base.hpp>
+#include <boost/accumulators/accumulators_fwd.hpp>
 #include <boost/accumulators/framework/extractor.hpp>
 #include <boost/accumulators/numeric/functional.hpp>
 #include <boost/accumulators/framework/parameters/sample.hpp>
@@ -33,6 +33,8 @@ namespace boost { namespace accumulators
 // probabilities named parameter
 //
 BOOST_PARAMETER_NESTED_KEYWORD(tag, extended_p_square_probabilities, probabilities)
+
+BOOST_ACCUMULATORS_IGNORE_GLOBAL(extended_p_square_probabilities)
 
 namespace impl
 {
