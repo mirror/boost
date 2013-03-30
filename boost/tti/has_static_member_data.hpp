@@ -58,7 +58,7 @@
 
     name  = the name of the inner member.
 
-    generates a metafunction called "has_static_member_name" where 'name' is the macro parameter.
+    generates a metafunction called "has_static_member_data_name" where 'name' is the macro parameter.
     
               The metafunction types and return:
     

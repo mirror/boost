@@ -7,6 +7,8 @@
 #if !defined(BOOST_TTI_INTROSPECTION_HPP)
 #define BOOST_TTI_INTROSPECTION_HPP
 
+#include "has_data.hpp"
+#include "has_function.hpp"
 #include "has_member_data.hpp"
 #include "has_member_function.hpp"
 #include "has_static_member_data.hpp"
