@@ -44,7 +44,7 @@
     
                 TTI_T   = the enclosing type in which to look for our 'name'
                                             OR
-                          a pointer to member function as a single type.                  
+                          a pointer to member function as a single type.
                 
                 TTI_R   = (optional) the return type of the member function
                           if the first parameter is the enclosing type.

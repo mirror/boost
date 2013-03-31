@@ -45,10 +45,10 @@
                 TTI_R   = the return type of the function
                 
                 TTI_FS  = (optional) the parameters of the function as a boost::mpl forward sequence
-                          if the second parameter is a return type and the function parameters exist.
+                          if function parameters are not empty.
                 
                 TTI_TAG = (optional) a boost::function_types tag to apply to the function
-                          if the second parameter is a return type and the need for a tag exists.
+                          if the need for a tag exists.
                 
                 returns = 'value' is true if the 'name' exists, 
                           with the appropriate static member function type,
@@ -85,10 +85,10 @@
                 TTI_R   = the return type of the function
                 
                 TTI_FS  = (optional) the parameters of the function as a boost::mpl forward sequence
-                          if the second parameter is a return type and the function parameters exist.
+                          if function parameters are not empty.
                 
                 TTI_TAG = (optional) a boost::function_types tag to apply to the function
-                          if the second parameter is a return type and the need for a tag exists.
+                          if the need for a tag exists.
                 
                 returns = 'value' is true if the 'name' exists, 
                           with the appropriate function type,

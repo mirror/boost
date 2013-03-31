@@ -33,6 +33,7 @@ alias ttimfsig
         [ compile test_has_member_compile.cpp ]
         [ compile-fail test_has_member_fail.cpp ]
         [ compile-fail test_has_member_fail2.cpp ]
+        [ compile-fail test_has_member_fail3.cpp ]
     ;
 
 #
@@ -46,6 +47,7 @@ alias ttimfsigcv
         [ compile-fail test_has_member_cv_fail2.cpp ]
         [ compile-fail test_has_member_cv_fail3.cpp ]
         [ compile-fail test_has_member_cv_fail4.cpp ]
+        [ compile-fail test_has_member_cv_fail5.cpp ]
     ;
 
 #
@@ -70,6 +72,7 @@ alias ttimfn
         [ compile test_has_mem_fun_compile.cpp ]
         [ compile-fail test_has_mem_fun_fail.cpp ]
         [ compile-fail test_has_mem_fun_fail2.cpp ]
+        [ compile-fail test_has_mem_fun_fail3.cpp ]
     ;
 
 #
@@ -83,6 +86,8 @@ alias ttimfncv
         [ compile-fail test_has_mem_fun_cv_fail2.cpp ]
         [ compile-fail test_has_mem_fun_cv_fail3.cpp ]
         [ compile-fail test_has_mem_fun_cv_fail4.cpp ]
+        [ compile-fail test_has_mem_fun_cv_fail5.cpp ]
+        [ compile-fail test_has_mem_fun_cv_fail6.cpp ]
     ;
 
 #
@@ -145,6 +150,7 @@ alias ttifun
         [ compile-fail test_has_fun_fail2.cpp ]
         [ compile-fail test_has_fun_fail3.cpp ]
         [ compile-fail test_has_fun_fail4.cpp ]
+        [ compile-fail test_has_fun_fail5.cpp ]
     ;
 
 #

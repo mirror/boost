@@ -51,11 +51,11 @@ struct AType
   // Const function
   
   double AConstFunction(long, char) const { return 2.57; }
-  void WFunction(float, double) const { }
+  void WFunction(float, double = 4.3) const { }
   
   // Volatile function
   
-  double AVolatileFunction(long, char) volatile { return 2.58; }
+  double AVolatileFunction(long, char = 'c') volatile { return 2.58; }
   void VolFunction(float, double) volatile { }
   
   // Const Volatile function
@@ -105,10 +105,10 @@ struct AnotherType
   
   // Function
   
-  AType aFunction(int) { return AType(); }
+  AType aFunction(int = 7) { return AType(); }
   int anotherFunction(AType) { return 0; }
-  AType::AnIntType sFunction(int,long,double) { return 0; }
-  double IntFunction(int) { return 0; }
+  AType::AnIntType sFunction(int,long = 88,double = 1.0) { return 0; }
+  double IntFunction(int = 9922) { return 0; }
   
   // Const function
   
@@ -123,7 +123,7 @@ struct AnotherType
   // Const Volatile function
   
   int AnotherConstVolatileFunction(AType *, short) const volatile { return 0; }
-  short StillCV(int) const volatile { return 32; }
+  short StillCV(int = 3) const volatile { return 32; }
   
   // Function Templates
   
@@ -131,7 +131,7 @@ struct AnotherType
   
   // Static Function
   
-  static AType TIntFunction(long,double) { return AType(); }
+  static AType TIntFunction(long,double = 3.0) { return AType(); }
   static AType::AStructType TSFunction(AType::AnIntType,double) { return AType::AStructType(); }
   
   // Static Data

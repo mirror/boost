@@ -4,7 +4,7 @@
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
 
-#include "test_has_static_member.hpp"
+#include "test_has_static_mem_fun.hpp"
 
 int main()
   {
