@@ -67,7 +67,6 @@ void test_conversion_to_bool();
 void test_conversion_with_nonconst_char();
 void test_conversion_to_string();
 void test_conversion_from_to_wchar_t_alias();
-void test_conversion_to_pointer();
 void test_conversion_from_wchar_t();
 void test_conversion_to_wchar_t();
 void test_conversion_from_wstring();
@@ -100,7 +99,6 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(test_conversion_to_double));
     suite->add(BOOST_TEST_CASE(test_conversion_to_bool));
     suite->add(BOOST_TEST_CASE(test_conversion_from_to_wchar_t_alias));
-    suite->add(BOOST_TEST_CASE(test_conversion_to_pointer));
     suite->add(BOOST_TEST_CASE(test_conversion_to_string));
     suite->add(BOOST_TEST_CASE(test_conversion_with_nonconst_char));
 #ifndef BOOST_LCAST_NO_WCHAR_T
@@ -310,14 +308,6 @@ void test_conversion_from_to_wchar_t_alias()
         lexical_cast<std::string>(static_cast<unsigned short>(123)));
     BOOST_CHECK_EQUAL(std::string("123"), lexical_cast<std::string>(123u));
     BOOST_CHECK_EQUAL(std::string("123"), lexical_cast<std::string>(123ul));
-}
-
-void test_conversion_to_pointer()
-{
-    BOOST_CHECK_THROW(lexical_cast<char *>("Test"), bad_lexical_cast);
-#ifndef BOOST_LCAST_NO_WCHAR_T
-    BOOST_CHECK_THROW(lexical_cast<wchar_t *>("Test"), bad_lexical_cast);
-#endif
 }
 
 void test_conversion_from_wchar_t()
