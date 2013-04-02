@@ -22,6 +22,14 @@ void testing_std_array_input_conversion();
 
 using namespace boost;
 
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && !defined(_LIBCPP_VERSION)
+#define BOOST_LC_RUNU16
+#endif
+
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && !defined(_LIBCPP_VERSION)
+#define BOOST_LC_RUNU32
+#endif
+
 boost::unit_test::test_suite *init_unit_test_suite(int, char *[])
 {
     unit_test::test_suite *suite =
@@ -91,7 +99,7 @@ static void testing_template_array_output_on_spec_value(T val)
 
 #endif
 
-#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
+#ifdef BOOST_LC_RUNU16
     typedef ArrayT<char16_t, 300> u16arr_type;
     typedef ArrayT<char16_t, 3> u16short_arr_type;
     std::u16string u16ethalon(u"100");
@@ -109,7 +117,7 @@ static void testing_template_array_output_on_spec_value(T val)
     BOOST_CHECK_THROW(lexical_cast<u16short_arr_type>(val), boost::bad_lexical_cast);
 #endif
 
-#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
+#ifdef BOOST_LC_RUNU32
     typedef ArrayT<char32_t, 300> u32arr_type;
     typedef ArrayT<char32_t, 3> u32short_arr_type;
     std::u32string u32ethalon(U"100");
@@ -190,7 +198,7 @@ static void testing_template_array_output_on_char_value()
 
 #endif
 
-#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
+#ifdef BOOST_LC_RUNU16
     typedef ArrayT<char16_t, 300> u16arr_type;
     typedef ArrayT<char16_t, 3> u16short_arr_type;
     std::u16string u16ethalon(u"100");
@@ -217,7 +225,7 @@ static void testing_template_array_output_on_char_value()
     BOOST_CHECK_THROW(lexical_cast<u16short_arr_type>(val), boost::bad_lexical_cast);
 #endif
 
-#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
+#ifdef BOOST_LC_RUNU32
     typedef ArrayT<char32_t, 300> u32arr_type;
     typedef ArrayT<char32_t, 3> u32short_arr_type;
     std::u32string u32ethalon(U"100");
@@ -328,7 +336,7 @@ static void testing_generic_array_input_conversion()
     }
 #endif
 
-#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
+#ifdef BOOST_LC_RUNU16
     {
         const ArrayT<const char16_t, 4> var_zero_terminated_const_var_const_char = {{ u'1', u'0', u'0', u'\0'}}; 
         BOOST_CHECK(lexical_cast<std::u16string>(var_zero_terminated_const_var_const_char) == u"100");
@@ -339,7 +347,7 @@ static void testing_generic_array_input_conversion()
     }
 #endif
 
-#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
+#ifdef BOOST_LC_RUNU32
     {
         const ArrayT<const char32_t, 4> var_zero_terminated_const_var_const_char = {{ U'1', U'0', U'0', U'\0'}}; 
         BOOST_CHECK(lexical_cast<std::u32string>(var_zero_terminated_const_var_const_char) == U"100");
