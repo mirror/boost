@@ -1973,7 +1973,7 @@ private:
                 ret_handled = handled;
             }
 
-            // process completion transitions BEFORE any other event in the pool (UML Standard 2.3 §15.3.14)
+            // process completion transitions BEFORE any other event in the pool (UML Standard 2.3 15.3.14)
             handle_eventless_transitions_helper<library_sm> eventless_helper(this,(handled == HANDLED_TRUE));
             eventless_helper.process_completion_event();
 
