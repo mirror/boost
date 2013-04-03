@@ -65,7 +65,7 @@ namespace multi_array_types {
 // object creation in small-memory environments.  Thus, the objects
 // can be left undefined by defining BOOST_MULTI_ARRAY_NO_GENERATORS 
 // before loading multi_array.hpp.
-#if !BOOST_MULTI_ARRAY_NO_GENERATORS
+#ifndef BOOST_MULTI_ARRAY_NO_GENERATORS
 namespace {
   multi_array_types::extent_gen extents;
   multi_array_types::index_gen indices;
