@@ -1502,6 +1502,10 @@ struct event2
                     <para>
                         <programlisting>if (p.is_flag_active&lt;CDLoaded,player::Flag_AND>()) ...</programlisting>
                     </para>
+                    <para> Note. Due to arcane C++ rules, when called inside an action, the correct
+                        call is:
+                        <programlisting>if (p.<emphasis role="bold">template</emphasis> is_flag_active&lt;CDLoaded>()) ...</programlisting>
+                    </para>
                     <para>The following diagram displays the flag situation in the tutorial.</para>
                     <para><inlinemediaobject>
                             <imageobject>
@@ -1698,7 +1702,7 @@ Row  &lt; Paused  , open_close ,  Open     , stop_and_open             , none   
     void operator()(Evt const&amp;, Fsm&amp; fsm, SourceState&amp;,TargetState&amp; ) 
     {
         cout &lt;&lt; "player::store_cd_info" &lt;&lt; endl;
-                            fsm.process_event(play());
+        fsm.process_event(play());
     } 
 }; </programlisting>
                     <para>The advantage of functors compared to functions are that functors are
@@ -3221,7 +3225,7 @@ BOOST_MSM_BACK_GENERATE_PROCESS_EVENT(mysubmachine)</programlisting>
                     <para>Independently, transition conflicts resolution will also be much
                         faster.</para>
                     <para>This policy uses boost.any behind the hood, which means that we will lose
-                        one feature which MSM offers with the default policy, <link
+                        a feature which MSM offers with the default policy, <link
                             xlink:href="#event-hierarchy">event hierarchy</link>. The following
                         example takes our iPod example and speeds up compile-time by using this
                         technique. We have:<itemizedlist>
@@ -4027,6 +4031,23 @@ typename ::boost::enable_if&lt;
         </chapter>
         <chapter>
             <title>Version history</title>
+            <sect1>
+                <title>From V2.24 to V2.25 (Boost 1.54)</title>
+                <para>
+                    <itemizedlist>
+                        <listitem>
+                            <para>Bugfix: Exit points broken for the favor_compile_time
+                                policy.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfix: copy breaks exit points of subsubmachines.</para>
+                        </listitem>
+                        <listitem>
+                            <para>Bugfix: Trac 8046.</para>
+                        </listitem>
+                    </itemizedlist>
+                </para>
+            </sect1>
             <sect1>
                 <title>From V2.23 to V2.24 (Boost 1.51)</title>
                 <para>
@@ -6003,6 +6024,14 @@ for (unsigned int i=0;i&lt;some_fsm::nr_regions::value;++i)
                         <para>This type is made for the same search as in the previous example,
                             using a mpl::for_each to iterate on states. After the iteration, the
                             state name reference has been set.</para>
+                        <programlisting>// we need a fsm's table
+typedef player::stt Stt;
+typedef msm::back::generate_state_set&lt;Stt>::type all_states; //all states
+std::string name_of_open; // id of Open is 1
+// fill name_of_open for state of id 1
+boost::mpl::for_each&lt;all_states,boost::msm::wrap&lt;mpl::placeholders::_1> > 
+          (msm::back::get_state_name&lt;Stt>(name_of_open,1));
+std::cout &lt;&lt; "typeid-generated name Open is: " &lt;&lt;  name_of_open &lt;&lt; std::endl;</programlisting>
                     </refsect3>
                 </refsect2>
                 <refsect2>
