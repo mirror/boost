@@ -403,12 +403,12 @@ void test_conversion_from_to_integral_minimal()
     test_conversion_from_integral_to_char<T>(wzero);
     test_conversion_from_char_to_integral<T>(wzero);
 #endif
-#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && !defined(_LIBCPP_VERSION)
     char16_t const u16zero = u'0';
     test_conversion_from_integral_to_char<T>(u16zero);
     test_conversion_from_char_to_integral<T>(u16zero);
 #endif
-#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS)
+#if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && !defined(_LIBCPP_VERSION)
     char32_t const u32zero = u'0';
     test_conversion_from_integral_to_char<T>(u32zero);
     test_conversion_from_char_to_integral<T>(u32zero);
