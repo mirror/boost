@@ -32,7 +32,7 @@ for local v in NO_COMPRESSION
 
 if $(NO_COMPRESSION) != 1 && $(NO_ZLIB) != 1
 {
-    using zlib : : <build-name>boost_zlib <tag>@tag ;
+    using zlib : : <build-name>boost_zlib <tag>@tag : : true ;
 }
 else
 {
