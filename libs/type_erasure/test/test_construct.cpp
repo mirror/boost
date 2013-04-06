@@ -447,10 +447,10 @@ BOOST_AUTO_TEST_CASE(test_construct1)
 #ifndef BOOST_NO_FUNCTION_REFERENCE_QUALIFIERS
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    TEST_CONSTRUCT(_a(_b&&), (any<C, _b>), (rvalue | id_copy));
-    TEST_CONSTRUCT(_a(_b&&), (binding<C>, any<C, _b>), (rvalue | id_copy));
-    TEST_CONSTRUCT(_a(_b&&), (binding<C>&, any<C, _b>), (rvalue | id_copy));
-    TEST_CONSTRUCT(_a(_b&&), (const binding<C>&, any<C, _b>), (rvalue | id_copy));
+    TEST_CONSTRUCT(_a(_b&&), (any<C, _b>), (rvalue | id_int));
+    TEST_CONSTRUCT(_a(_b&&), (binding<C>, any<C, _b>), (rvalue | id_int));
+    TEST_CONSTRUCT(_a(_b&&), (binding<C>&, any<C, _b>), (rvalue | id_int));
+    TEST_CONSTRUCT(_a(_b&&), (const binding<C>&, any<C, _b>), (rvalue | id_int));
 #endif
 
 #endif
