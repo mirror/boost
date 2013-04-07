@@ -1127,7 +1127,10 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Constant.
    reference operator[](size_type n) BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<node_reference>(*this->index[n]).value;  }
+   {
+      BOOST_ASSERT(n < this->size());
+      return static_cast<node_reference>(*this->index[n]).value;
+   }
 
    //! <b>Requires</b>: size() > n.
    //!
@@ -1138,7 +1141,10 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Constant.
    const_reference operator[](size_type n) const BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<const_node_reference>(*this->index[n]).value;   }
+   {
+      BOOST_ASSERT(n < this->size());
+      return static_cast<const_node_reference>(*this->index[n]).value;
+   }
 
    //! <b>Requires</b>: size() > n.
    //!
