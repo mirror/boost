@@ -3804,7 +3804,7 @@ This file contains the standard clock classes. The types defined in this section
 
 [section:system_clock Class `system_clock`]
 
-The __system_clock class provides a means of obtaining the current wall-clock time from the system-wide real-time clock. The current time can be obtained by calling `system_clock::now()`. Instances of `system_clock::time_point`  can be converted to and from time_t  with the `system_clock::to_time_t()`  and `system_clock::to_time_point()`  functions. If system clock is not steady, a subsequent call to `system_clock::now()`  may return an earlier time than a previous call (e.g. if the operating system clock is manually adjusted, or synchronized with an external clock).
+The __system_clock class provides a means of obtaining the current wall-clock time from the system-wide real-time clock. The current time can be obtained by calling `system_clock::now()`. Instances of `system_clock::time_point`  can be converted to and from time_t  with the `system_clock::to_time_t()`  and `system_clock::from_time_t()`  functions. If system clock is not steady, a subsequent call to `system_clock::now()`  may return an earlier time than a previous call (e.g. if the operating system clock is manually adjusted, or synchronized with an external clock).
 
 The current implementation of __system_clock is related an epoch (midnight UTC of January 1, 1970), but this is not in the contract. You need to use the static function static
 
@@ -7322,6 +7322,17 @@ All the units are given using the suffix "s" following the System International 
 [/==================================]
 [section:history Appendix: History]
 [/==================================]
+
+[//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
+[section [*Version 2.0.2, April 1, 2013 - 1.54] ]
+
+[*Fixes:]
+
+* [@http://svn.boost.org/trac/boost/ticket/8079 #8079] Chrono memory leak
+* [@http://svn.boost.org/trac/boost/ticket/8318 #8318] BOOST_FORCEINLINE constructors of time_point and duration
+* [@http://svn.boost.org/trac/boost/ticket/8370 #8370] typo in chrono reference
+
+[endsect] [/section [*Version 2.0.2] ]
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
 [section [*Version 2.0.1, January 18, 2013 - 1.53] ]
