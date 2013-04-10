@@ -204,7 +204,7 @@ bool has_parameters = false;
 
     // get rid of trailing T_EOF
     if (!macrodefinition.empty() && token_id(macrodefinition.back()) == T_EOF)
-        macrodefinition.resize(macrodefinition.size()-1);
+        macrodefinition.pop_back();
 
 //  If no macrodefinition is given, and the macro string does not end with a
 //  '=', then the macro should be defined with the value '1'
