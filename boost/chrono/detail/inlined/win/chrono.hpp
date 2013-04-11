@@ -132,13 +132,6 @@ namespace chrono_detail
   std::time_t system_clock::to_time_t(const system_clock::time_point& t) BOOST_NOEXCEPT
   {
       __int64 temp = t.time_since_epoch().count();
-
-  #   if (!defined( BOOST_MSVC )) || (BOOST_MSVC > 1300) // > VC++ 7.0
-      //temp -= 116444736000000000LL;  // delta from epoch in microseconds
-  #   else
-      //temp -= 116444736000000000LL;
-  #   endif
-
       temp /= 10000000;
       return static_cast<std::time_t>( temp );
   }
@@ -148,13 +141,6 @@ namespace chrono_detail
   {
       __int64 temp = t;
       temp *= 10000000;
-
-  #   if (!defined( BOOST_MSVC )) || (BOOST_MSVC > 1300) // > VC++ 7.0
-      //temp += 116444736000000000LL;
-  #   else
-      //temp += 116444736000000000LL;
-  #   endif
-
       return time_point(duration(temp));
   }
 
