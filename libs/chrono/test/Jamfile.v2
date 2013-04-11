@@ -110,7 +110,7 @@ rule chrono-v1-v2-run ( sources )
         :   <define>BOOST_CHRONO_HEADER_ONLY
             <define>BOOST_ERROR_CODE_HEADER_ONLY
            #<define>BOOST_CHRONO_DONT_PROVIDE_HYBRID_ERROR_HANDLING
-            <define>BOOST_CHRONO_VERSION=2
+           #<define>BOOST_CHRONO_VERSION=1
         :   v1_$(sources[1]:B)_h ]
     ;
 }
