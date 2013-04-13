@@ -84,8 +84,10 @@ const std::list&lt;T&gt;::iterator next = boost::next(prev, 2);</pre>
 			will prevent the otherwise implicitly-generated functions (which don't have the 
 			proper semantics) from becoming a trap for other programmers.</p>
 		<p>The traditional way to deal with these is to declare a private copy constructor 
-			and copy assignment, and then document why this is done.&nbsp; But deriving 
-			from <b>noncopyable</b> is simpler and clearer, and doesn't require additional 
+        and copy assignment, and then document why this is done.&nbsp; A new alternative  
+        was introduced in C++2011, declaring a copy constructor and a copy assignment  
+        operator, but marking both as <code>delete</code>d.&nbsp; Deriving
+        from <b>noncopyable</b> is simpler and clearer, and doesn't require additional 
 			documentation.</p>
 		<p>The program <a href="noncopyable_test.cpp">noncopyable_test.cpp</a> can be used 
 			to verify class <b>noncopyable</b> works as expected. It has have been run 
@@ -106,7 +108,9 @@ class ResourceLadenFileSystem : boost::noncopyable {
 			about the effect on compiler optimization of adding (even trivial inline) 
 			destructor declarations. He says &quot;Probably this concern is misplaced, 
 			because noncopyable will be used mostly for classes which own resources and 
-			thus have non-trivial destruction semantics.&quot;</p>
+        thus have non-trivial destruction semantics.&quot;&nbsp; With C++2011, using an  
+        optimized and trivial constructor and similar destructor can be enforced by  
+        declaring both and marking them <code>default</code>.</p> 
 		<h2><a name="addressof">Function template addressof()</a></h2>
 		<p>Function <strong>addressof()</strong> returns the address of an object.</p>
 		<blockquote>
