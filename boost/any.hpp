@@ -3,12 +3,16 @@
 #ifndef BOOST_ANY_INCLUDED
 #define BOOST_ANY_INCLUDED
 
+#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+# pragma once
+#endif
+
 // what:  variant type boost::any
 // who:   contributed by Kevlin Henney,
 //        with features contributed and bugs found by
-//        Ed Brey, Mark Rodgers, Peter Dimov, and James Curran
-// when:  July 2001
-// where: tested with BCC 5.5, MSVC 6.0, and g++ 2.95
+//        Antony Polukhin, Ed Brey, Mark Rodgers, 
+//        Peter Dimov, and James Curran
+// when:  July 2001, Aplril 2013
 
 #include <algorithm>
 #include <typeinfo>
@@ -18,6 +22,7 @@
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/static_assert.hpp>
+#include <boost/move/move.hpp>
 
 // See boost/python/type_id.hpp
 // TODO: add BOOST_TYPEID_COMPARE_BY_NAME to config.hpp
@@ -30,14 +35,54 @@
 #include <cstring>
 # endif 
 
+#ifdef BOOST_MSVC
+#pragma warning (push)
+#pragma warning (disable : 4521 ) // multiple copy constructors specified
+#pragma warning (disable : 4522 ) // multiple assignment operators specified
+#endif
+
 namespace boost
 {
     class any
     {
+    private:
+        // Mark this class copyable and movable
+        BOOST_COPYABLE_AND_MOVABLE(any)
     public: // structors
 
-        any()
+        any() BOOST_NOEXCEPT
           : content(0)
+        {
+        }
+        
+        any(const any & other)
+          : content(other.content ? other.content->clone() : 0)
+        {
+        }
+
+        //Move constructor
+        any(BOOST_RV_REF(any) other) BOOST_NOEXCEPT
+          : content(other.content)
+        {
+            other.content = 0;
+        }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        any(any & other)
+          : content(other.content ? other.content->clone() : 0)
+        {
+        }
+
+        template<typename ValueType>
+        any(ValueType&& value)
+          : content(new holder< BOOST_DEDUCED_TYPENAME remove_reference<ValueType>::type >(
+                ::boost::forward<ValueType>(value)
+          ))
+        {
+        }
+#else
+        any(const ::boost::rv<any>& other)
+          : content(other.content ? other.content->clone() : 0)
         {
         }
 
@@ -45,12 +90,25 @@ namespace boost
         any(const ValueType & value)
           : content(new holder<ValueType>(value))
         {
+            BOOST_STATIC_ASSERT_MSG(!boost::move_detail::is_rv<ValueType>::value,
+                "You compiler can not deal with emulated move semantics."
+                "Please remove moves of non boost::any types to boost::any container."
+            );
         }
-
-        any(const any & other)
-          : content(other.content ? other.content->clone() : 0)
+#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+        template<typename ValueType>
+        any(const ::boost::rv<ValueType> & value)
+          : content(new holder<ValueType>(value))
         {
         }
+
+        template<typename ValueType>
+        any(::boost::rv<ValueType> & value)
+          : content(new holder<ValueType>(value))
+        {
+        }
+#endif
+#endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
         ~any()
         {
@@ -59,12 +117,40 @@ namespace boost
 
     public: // modifiers
 
-        any & swap(any & rhs)
+        any & swap(any & rhs) BOOST_NOEXCEPT
         {
             std::swap(content, rhs.content);
             return *this;
         }
+        
+        any & operator=(BOOST_COPY_ASSIGN_REF(any) rhs)
+        {
+            any(rhs).swap(*this);
+            return *this;
+        }
 
+        any & operator=(BOOST_RV_REF(any) rhs) BOOST_NOEXCEPT
+        {
+            rhs.swap(*this); // noexcept
+            any().swap(rhs); // noexcept
+            return *this;
+        }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+        any & operator=(any& rhs)
+        {
+            any(rhs).swap(*this);
+            return *this;
+        }
+
+        template<typename ValueType>
+        any & operator=(ValueType&& rhs)
+        {
+            any( ::boost::forward<ValueType>(rhs) )
+                .swap(*this);
+            return *this;
+        }
+#else 
         template<typename ValueType>
         any & operator=(const ValueType & rhs)
         {
@@ -72,15 +158,17 @@ namespace boost
             return *this;
         }
 
-        any & operator=(any rhs)
+        template<typename ValueType>
+        any & operator=(ValueType & rhs)
         {
-            rhs.swap(*this);
+            any(rhs).swap(*this);
             return *this;
         }
+#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
     public: // queries
 
-        bool empty() const
+        bool empty() const BOOST_NOEXCEPT
         {
             return !content;
         }
@@ -122,6 +210,10 @@ namespace boost
             {
             }
 
+            holder(BOOST_RV_REF(ValueType) value)
+              : held( boost::move(value) )
+            {
+            }
         public: // queries
 
             virtual const std::type_info & type() const
@@ -147,7 +239,7 @@ namespace boost
     private: // representation
 
         template<typename ValueType>
-        friend ValueType * any_cast(any *);
+        friend ValueType * any_cast(any *) BOOST_NOEXCEPT;
 
         template<typename ValueType>
         friend ValueType * unsafe_any_cast(any *);
@@ -162,7 +254,7 @@ namespace boost
 
     };
 
-    inline void swap(any & lhs, any & rhs)
+    inline void swap(any & lhs, any & rhs) BOOST_NOEXCEPT
     {
         lhs.swap(rhs);
     }
@@ -178,7 +270,7 @@ namespace boost
     };
 
     template<typename ValueType>
-    ValueType * any_cast(any * operand)
+    ValueType * any_cast(any * operand) BOOST_NOEXCEPT
     {
         return operand && 
 #ifdef BOOST_AUX_ANY_TYPE_ID_NAME
@@ -191,7 +283,7 @@ namespace boost
     }
 
     template<typename ValueType>
-    inline const ValueType * any_cast(const any * operand)
+    inline const ValueType * any_cast(const any * operand) BOOST_NOEXCEPT
     {
         return any_cast<ValueType>(const_cast<any *>(operand));
     }
@@ -247,7 +339,11 @@ namespace boost
     {
         return unsafe_any_cast<ValueType>(const_cast<any *>(operand));
     }
-}
+} // namespace boost
+
+#ifdef BOOST_MSVC
+#pragma warning (pop)
+#endif
 
 // Copyright Kevlin Henney, 2000, 2001, 2002. All rights reserved.
 //
