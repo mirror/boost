@@ -14,6 +14,16 @@
 
 #include "boost/any.hpp"
 #include "../test.hpp"
+#include <boost/move/move.hpp>
+
+#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
+
+int main() 
+{
+    return EXIT_SUCCESS;
+}
+
+#else 
 
 namespace any_tests
 {
@@ -62,17 +72,16 @@ namespace any_tests // test suite
 
     
     class move_copy_conting_class {
-        BOOST_COPYABLE_AND_MOVABLE(move_copy_conting_class)
     public:
         static unsigned int moves_count;
         static unsigned int copy_count;
 
         move_copy_conting_class(){}
-        move_copy_conting_class(BOOST_RV_REF(move_copy_conting_class) /*param*/) {
+        move_copy_conting_class(move_copy_conting_class&& /*param*/) {
             ++ moves_count;
         }
 
-        move_copy_conting_class& operator=(BOOST_RV_REF(move_copy_conting_class) /*param*/) {
+        move_copy_conting_class& operator=(move_copy_conting_class&& /*param*/) {
             ++ moves_count;
             return *this;
         }
@@ -80,7 +89,7 @@ namespace any_tests // test suite
         move_copy_conting_class(const move_copy_conting_class&) {
             ++ copy_count;
         }
-        move_copy_conting_class& operator=(BOOST_COPY_ASSIGN_REF(move_copy_conting_class) /*param*/) {
+        move_copy_conting_class& operator=(const move_copy_conting_class& /*param*/) {
             ++ copy_count;
             return *this;
         }
@@ -264,3 +273,6 @@ namespace any_tests // test definitions
             "checking move counts");
     }
 }
+
+#endif
+
