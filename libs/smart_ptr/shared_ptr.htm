@@ -61,8 +61,8 @@ shared_ptr&lt;void&gt; p2( new int(5) );
 			the template parameter. There is almost no difference between using an unsized array, <code>T[]</code>,
 			and a sized array, <code>T[N]</code>; the latter just enables <code>operator[]</code> to perform a range check
 			on the index.</p>
-		<blockquote><em>Example:</em><br /><pre>shared_ptr&lt;double[1024]&gt; p1( new double(1024) );
-shared_ptr&lt;double[]&gt; p2( new double(n) );
+		<blockquote><em>Example:</em><br /><pre>shared_ptr&lt;double[1024]&gt; p1( new double[1024] );
+shared_ptr&lt;double[]&gt; p2( new double[n] );
 </pre></blockquote>
 
 		<h2 id="BestPractices">Best Practices</h2>
