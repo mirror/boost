@@ -3384,6 +3384,54 @@
 <tr>
 <td>
                 <p>
+                  <code class="computeroutput"><span class="identifier">BOOST_FALLTHROUGH</span></code>
+                </p>
+              </td>
+<td>
+                <p>
+                  The BOOST_FALLTHROUGH macro can be used to annotate implicit fall-through
+                  between switch labels:
+</p>
+<pre xmlns:rev="http://www.cs.rpi.edu/~gregod/boost/tools/doc/revision" class="table-programlisting"><span class="keyword">switch</span> <span class="special">(</span><span class="identifier">x</span><span class="special">)</span> <span class="special">{</span>
+<span class="keyword">case</span> <span class="number">40</span><span class="special">:</span>
+<span class="keyword">case</span> <span class="number">41</span><span class="special">:</span>
+   <span class="keyword">if</span> <span class="special">(</span><span class="identifier">truth_is_out_there</span><span class="special">)</span> <span class="special">{</span>
+      <span class="special">++</span><span class="identifier">x</span><span class="special">;</span>
+      <span class="identifier">BOOST_FALLTHROUGH</span><span class="special">;</span>  <span class="comment">// Use instead of/along with annotations in </span>
+      <span class="comment">// comments. </span>
+   <span class="special">}</span> <span class="keyword">else</span> <span class="special">{</span>
+     <span class="keyword">return</span> <span class="identifier">x</span><span class="special">;</span>
+   <span class="special">}</span>
+   <span class="keyword">case</span> <span class="number">42</span><span class="special">:</span>
+      <span class="special">...</span>
+</pre>
+<p>
+                  As shown in the example above, the BOOST_FALLTHROUGH macro should
+                  be followed by a semicolon. It is designed to mimic control-flow
+                  statements like 'break;', so it can be placed in most places where
+                  'break;' can, but only if there are no statements on the execution
+                  path between it and the next switch label.
+                </p>
+                <p>
+                  When compiled with Clang &gt;3.2 in C++11 mode, the BOOST_FALLTHROUGH
+                  macro is expanded to <code class="computeroutput"><span class="special">[[</span><span class="identifier">clang</span><span class="special">::</span><span class="identifier">fallthrough</span><span class="special">]]</span></code>
+                  attribute, which is analysed when performing switch labels fall-through
+                  diagnostic ('-Wimplicit-fallthrough'). See clang <a href="http://clang.llvm.org/docs/LanguageExtensions.html#clang__fallthrough" target="_top">documentation
+                  on language extensions for details.</a>
+                </p>
+                <p>
+                  When used with unsupported compilers, the BOOST_FALLTHROUGH macro
+                  has no effect on diagnostics.
+                </p>
+                <p>
+                  In either case this macro has no effect on runtime behavior and
+                  performance of code.
+                </p>
+              </td>
+</tr>
+<tr>
+<td>
+                <p>
                   <code class="computeroutput"><span class="identifier">BOOST_EXPLICIT_TEMPLATE_TYPE</span><span class="special">(</span><span class="identifier">t</span><span class="special">)</span></code> <code class="computeroutput"><span class="identifier">BOOST_EXPLICIT_TEMPLATE_NON_TYPE</span><span class="special">(</span><span class="identifier">t</span><span class="special">,</span><span class="identifier">v</span><span class="special">)</span></code> <code class="computeroutput"><span class="identifier">BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE</span><span class="special">(</span><span class="identifier">t</span><span class="special">)</span></code> <code class="computeroutput"><span class="identifier">BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE</span><span class="special">(</span><span class="identifier">t</span><span class="special">,</span><span class="identifier">v</span><span class="special">)</span></code>
                 </p>
               </td>

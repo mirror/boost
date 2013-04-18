@@ -65,4 +65,5 @@ test-suite config
     ]
     [ compile-fail threads/test_thread_fail1.cpp ]
     [ compile-fail threads/test_thread_fail2.cpp ]
+    [ compile boost_fallthrough_test.cpp : <toolset>clang:<cxxflags>"-std=c++11 -Wimplicit-fallthrough" <warnings-as-errors>on <warnings>all ]
   ;

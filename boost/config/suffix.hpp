@@ -883,6 +883,16 @@ namespace std{ using ::type_info; }
 #  define BOOST_NOEXCEPT_IF(Predicate) noexcept((Predicate))
 #  define BOOST_NOEXCEPT_EXPR(Expression) noexcept((Expression))
 #endif
+//
+// Helper macro BOOST_FALLTHROUGH 
+// Fallback definition of BOOST_FALLTHROUGH macro used to mark intended 
+// fall-through between case labels in a switch statement. We use a definition 
+// that requires a semicolon after it to avoid at least one type of misuse even 
+// on unsupported compilers. 
+// 
+#ifndef BOOST_FALLTHROUGH 
+#  define BOOST_FALLTHROUGH ((void)0) 
+#endif 
 
 //
 // constexpr workarounds

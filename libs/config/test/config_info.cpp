@@ -1100,27 +1100,6 @@ void print_boost_macros()
    PRINT_MACRO(BOOST_NO_USING_TEMPLATE);
    PRINT_MACRO(BOOST_NO_VOID_RETURNS);
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
    // END GENERATED BLOCK
 
    PRINT_MACRO(BOOST_INTEL);
@@ -1132,6 +1111,7 @@ void print_boost_macros()
    PRINT_MACRO(BOOST_STATIC_CONSTEXPR);
    PRINT_MACRO(BOOST_NOEXCEPT);
    PRINT_MACRO(BOOST_FORCEINLINE);
+   PRINT_MACRO(BOOST_FALLTHROUGH);
 }
 
 void print_separator()

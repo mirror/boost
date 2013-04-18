@@ -862,6 +862,41 @@ struct foo{
 Normally evaluates to nothing, but evaluates to return x; if the compiler
 requires a return, even when it can never be reached.
 ]]
+[[`BOOST_FALLTHROUGH`][ 
+The BOOST_FALLTHROUGH macro can be used to annotate implicit fall-through 
+between switch labels: 
+`` 
+ switch (x) { 
+ case 40: 
+ case 41: 
+    if (truth_is_out_there) { 
+       ++x; 
+       BOOST_FALLTHROUGH;  // Use instead of/along with annotations in 
+       // comments. 
+    } else { 
+      return x; 
+    } 
+    case 42: 
+       ... 
+`` 
+As shown in the example above, the BOOST_FALLTHROUGH macro should be 
+followed by a semicolon. It is designed to mimic control-flow statements 
+like 'break;', so it can be placed in most places where 'break;' can, but 
+only if there are no statements on the execution path between it and the 
+next switch label. 
+
+When compiled with Clang >3.2 in C++11 mode, the BOOST_FALLTHROUGH macro is 
+expanded to `[[clang::fallthrough]]` attribute, which is analysed when 
+performing switch labels fall-through diagnostic ('-Wimplicit-fallthrough'). 
+See clang [@http://clang.llvm.org/docs/LanguageExtensions.html#clang__fallthrough 
+documentation on language extensions for details.] 
+
+When used with unsupported compilers, the BOOST_FALLTHROUGH macro has no 
+effect on diagnostics. 
+
+In either case this macro has no effect on runtime behavior and performance 
+of code. 
+]] 
 [[`BOOST_EXPLICIT_TEMPLATE_TYPE(t)`
   `BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t,v)`
   `BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)`
