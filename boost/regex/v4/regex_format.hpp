@@ -1064,7 +1064,7 @@ struct format_functor_c_string
    template <class OutputIter>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits& t = Traits())
    {
-      typedef typename Match::char_type char_type;
+      //typedef typename Match::char_type char_type;
       const charT* end = func;
       while(*end) ++end;
       return regex_format_imp(i, m, func, end, f, t);
@@ -1083,7 +1083,7 @@ struct format_functor_container
    template <class OutputIter>
    OutputIter operator()(const Match& m, OutputIter i, boost::regex_constants::match_flag_type f, const Traits& t = Traits())
    {
-      typedef typename Match::char_type char_type;
+      //typedef typename Match::char_type char_type;
       return re_detail::regex_format_imp(i, m, func.begin(), func.end(), f, t);
    }
 private:

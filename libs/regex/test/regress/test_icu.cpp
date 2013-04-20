@@ -73,7 +73,7 @@ void compare_result(const MR1& w1, const MR2& w2, boost::mpl::int_<2> const*)
    typedef typename MR2::value_type MR2_value_type;
    typedef typename MR2_value_type::const_iterator MR2_iterator_type;
    typedef boost::u16_to_u32_iterator<MR2_iterator_type> iterator_type;
-   typedef typename MR1::size_type size_type;
+   //typedef typename MR1::size_type size_type;
    if(w1.size() != w2.size())
    {
       BOOST_REGEX_TEST_ERROR("Size mismatch in match_results class", UChar32);
@@ -103,7 +103,7 @@ void compare_result(const MR1& w1, const MR2& w2, boost::mpl::int_<1> const*)
    typedef typename MR2::value_type MR2_value_type;
    typedef typename MR2_value_type::const_iterator MR2_iterator_type;
    typedef boost::u8_to_u32_iterator<MR2_iterator_type> iterator_type;
-   typedef typename MR1::size_type size_type;
+   //typedef typename MR1::size_type size_type;
    if(w1.size() != w2.size())
    {
       BOOST_REGEX_TEST_ERROR("Size mismatch in match_results class", UChar32);
@@ -358,7 +358,7 @@ void test_icu(const wchar_t&, const test_regex_search_tag& )
 
 void test_icu(const wchar_t&, const test_invalid_regex_tag&)
 {
-   typedef boost::u16_to_u32_iterator<std::wstring::const_iterator, ::UChar32> conv_iterator;
+   //typedef boost::u16_to_u32_iterator<std::wstring::const_iterator, ::UChar32> conv_iterator;
    std::vector< ::UChar32> expression;
 #ifndef BOOST_NO_TEMPLATED_ITERATOR_CONSTRUCTORS
    expression.assign(test_info<wchar_t>::expression().begin(), test_info<wchar_t>::expression().end());

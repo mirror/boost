@@ -422,7 +422,7 @@ private:
 template<class charT, class traits>
 void test_regex_grep(boost::basic_regex<charT, traits>& r)
 {
-   typedef typename std::basic_string<charT>::const_iterator const_iterator;
+   //typedef typename std::basic_string<charT>::const_iterator const_iterator;
    const std::basic_string<charT>& search_text = test_info<charT>::search_text();
    boost::regex_constants::match_flag_type opts = test_info<charT>::match_options();
    const int* answer_table = test_info<charT>::answer_table();
