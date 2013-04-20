@@ -530,7 +530,7 @@ struct vector_alloc_holder<Allocator, container_detail::integral_constant<unsign
       this->priv_swap_members_impl(x);
    }
 
-   void move_from_empty(vector_alloc_holder &x)
+   void move_from_empty(vector_alloc_holder &)
    {  //Containers with version 0 allocators can't be moved without move elements one by one
       throw_bad_alloc();
    }
