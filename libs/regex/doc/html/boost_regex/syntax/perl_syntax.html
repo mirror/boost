@@ -393,7 +393,7 @@
       </h5>
 <p>
         A character set is a bracket-expression starting with <code class="literal">[</code>
-        and ending with <code class="literal">]</code>, it defines a set of characters, and
+        and ending with <code class="literal"></code>], it defines a set of characters, and
         matches any single character that is a member of that set.
       </p>
 <p>
@@ -568,12 +568,12 @@
 <tr>
 <td>
                 <p>
-                  <code class="literal">\n</code>
+                  <code class="literal"><br> </code>
                 </p>
               </td>
 <td>
                 <p>
-                  <code class="literal">\n</code>
+                  <code class="literal"><br> </code>
                 </p>
               </td>
 </tr>
@@ -1012,10 +1012,10 @@
         The following escape sequences match the boundaries of words:
       </p>
 <p>
-        <code class="literal">\&lt;</code> Matches the start of a word.
+        <code class="literal">&lt;</code> Matches the start of a word.
       </p>
 <p>
-        <code class="literal">\&gt;</code> Matches the end of a word.
+        <code class="literal">&gt;</code> Matches the end of a word.
       </p>
 <p>
         <code class="literal">\b</code> Matches a word boundary (the start or end of a word).
@@ -1040,10 +1040,10 @@
         \' Matches at the end of a buffer only.
       </p>
 <p>
-        \A Matches at the start of a buffer only (the same as =\`=).
+        \A Matches at the start of a buffer only (the same as <code class="literal">\`</code>).
       </p>
 <p>
-        \z Matches at the end of a buffer only (the same as <code class="literal">\\'</code>).
+        \z Matches at the end of a buffer only (the same as <code class="literal">\'</code>).
       </p>
 <p>
         \Z Matches a zero-width assertion consisting of an optional sequence of newlines
@@ -1071,7 +1071,7 @@
 <p>
         The escape sequence <code class="literal">\Q</code> begins a "quoted sequence":
         all the subsequent characters are treated as literals, until either the end
-        of the regular expression or \E is found. For example the expression: <code class="literal">\Q\*+\Ea+</code>
+        of the regular expression or \E is found. For example the expression: <code class="literal">\Q*+\Ea+</code>
         would match either of:
       </p>
 <pre class="programlisting"><span class="special">\*+</span><span class="identifier">a</span>
@@ -1317,19 +1317,19 @@
             <span class="emphasis"><em>no-pattern</em></span>.
           </li>
 <li class="listitem">
-            =(?(<span class="emphasis"><em>N</em></span>)yes-pattern|no-pattern)= Executes <span class="emphasis"><em>yes-pattern</em></span>
-            if subexpression <span class="emphasis"><em>N</em></span> has been matched, otherwise executes
-            <span class="emphasis"><em>no-pattern</em></span>.
-          </li>
-<li class="listitem">
-            =(?(&lt;<span class="emphasis"><em>name</em></span>&gt;)yes-pattern|no-pattern)= Executes
-            <span class="emphasis"><em>yes-pattern</em></span> if named subexpression <span class="emphasis"><em>name</em></span>
+            <code class="literal">(?(<span class="emphasis"><em>N</em></span>)yes-pattern|no-pattern)</code>
+            Executes <span class="emphasis"><em>yes-pattern</em></span> if subexpression <span class="emphasis"><em>N</em></span>
             has been matched, otherwise executes <span class="emphasis"><em>no-pattern</em></span>.
           </li>
 <li class="listitem">
-            =(?('<span class="emphasis"><em>name</em></span>')yes-pattern|no-pattern)= Executes <span class="emphasis"><em>yes-pattern</em></span>
-            if named subexpression <span class="emphasis"><em>name</em></span> has been matched, otherwise
-            executes <span class="emphasis"><em>no-pattern</em></span>.
+            <code class="literal">(?(&lt;<span class="emphasis"><em>name</em></span>&gt;)yes-pattern|no-pattern)</code>
+            Executes <span class="emphasis"><em>yes-pattern</em></span> if named subexpression <span class="emphasis"><em>name</em></span>
+            has been matched, otherwise executes <span class="emphasis"><em>no-pattern</em></span>.
+          </li>
+<li class="listitem">
+            <code class="literal">(?('<span class="emphasis"><em>name</em></span>')yes-pattern|no-pattern)</code>
+            Executes <span class="emphasis"><em>yes-pattern</em></span> if named subexpression <span class="emphasis"><em>name</em></span>
+            has been matched, otherwise executes <span class="emphasis"><em>no-pattern</em></span>.
           </li>
 <li class="listitem">
             <code class="literal">(?(R)yes-pattern|no-pattern)</code> Executes <span class="emphasis"><em>yes-pattern</em></span>
@@ -1368,7 +1368,7 @@
             <span class="special">[::]</span> <span class="special">[..]</span></code>
           </li>
 <li class="listitem">
-            Escaped characters <code class="literal">\</code>
+            Escaped characters [^]
           </li>
 <li class="listitem">
             Character set (bracket expression) <code class="computeroutput"><span class="special">[]</span></code>
