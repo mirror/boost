@@ -10,7 +10,7 @@
 // what:  variant type boost::any
 // who:   contributed by Kevlin Henney,
 //        with features contributed and bugs found by
-//        Antony polukhin, Ed Brey, Mark Rodgers, 
+//        Antony Polukhin, Ed Brey, Mark Rodgers, 
 //        Peter Dimov, and James Curran
 // when:  July 2001, Aplril 2013
 
@@ -74,7 +74,7 @@ namespace boost
         }
 #endif
 
-        ~any()
+        ~any() BOOST_NOEXCEPT
         {
             delete content;
         }

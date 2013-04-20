@@ -237,7 +237,8 @@ public:
 
       <itemizedlist spacing="compact">
         <listitem><simpara>A <emphasis>ValueType</emphasis> is
-          <emphasis>CopyConstructible</emphasis> [20.1.3].</simpara>
+          <emphasis>CopyConstructible</emphasis> [20.1.3] or 
+          <emphasis>MoveConstructible</emphasis> in C++11.</simpara>
         </listitem>
         
         <listitem><simpara>The destructor for a
@@ -290,6 +291,19 @@ public:
           </constructor>
 
           <constructor>
+            <parameter name="other">
+              <paramtype><classname>any</classname> &amp;&amp;</paramtype>
+            </parameter>
+
+            <effects><simpara> Move constructor that moves content of
+            <code>other</code> into new instance and leaves <code>other</code>
+            empty. </simpara></effects>
+            <precondition>C++11 compatible compiler.</precondition>
+            <postconditions><simpara><code>other-&gt;<methodname>empty</methodname>()</code></simpara></postconditions>
+            <throws><simpara>Nothing.</simpara></throws>
+          </constructor>
+          
+          <constructor>
             <template>
               <template-type-parameter name="ValueType"/>
             </template>
@@ -303,6 +317,26 @@ public:
             in both type and value to
             <code>value</code>.</simpara></effects>
 
+            <throws><simpara><code><classname>std::bad_alloc</classname></code>
+            or any exceptions arising from the copy constructor of the
+            contained type.</simpara></throws>
+          </constructor>
+          
+          <constructor>
+            <template>
+              <template-type-parameter name="ValueType"/>
+            </template>
+
+            <parameter name="value">
+              <paramtype>ValueType &amp;&amp;</paramtype>
+            </parameter>
+
+            <effects><simpara>Forwards <code>value</code>, so
+            that the initial content of the new instance is equivalent
+            in both type and value to
+            <code>value</code> before the forward.</simpara></effects>
+
+            <precondition>C++11 compatible compiler.</precondition>
             <throws><simpara><code><classname>std::bad_alloc</classname></code>
             or any exceptions arising from the copy constructor of the
             contained type.</simpara></throws>
@@ -332,6 +366,24 @@ public:
             contained type. Assignment satisfies the strong guarantee
             of exception safety.</simpara></throws>
           </copy-assignment>
+          
+          <copy-assignment>
+            <type><classname>any</classname> &amp;</type>
+
+            <parameter name="rhs">
+              <paramtype><classname>any</classname> &amp;&amp;</paramtype>
+            </parameter>
+
+            <effects><simpara>Moves content of <code>rhs</code> into
+            current instance, discarding previous content, so that the
+            new content is equivalent in both type and value to the
+            content of <code>rhs</code> before move, or empty if
+            <code>rhs.<methodname>empty</methodname>()</code>.</simpara></effects>
+
+            <precondition>C++11 compatible compiler.</precondition>
+            <postconditions><simpara><code>rhs-&gt;<methodname>empty</methodname>()</code></simpara></postconditions>
+            <throws><simpara>Nothing.</simpara></throws>
+          </copy-assignment>
 
           <copy-assignment>
              <template>
@@ -355,6 +407,29 @@ public:
             of exception safety.</simpara></throws>
           </copy-assignment>
 
+          <copy-assignment>
+             <template>
+              <template-type-parameter name="ValueType"/>
+            </template>
+
+            <type><classname>any</classname> &amp;</type>
+
+            <parameter name="rhs">
+              <paramtype>ValueType &amp;&amp;</paramtype>
+            </parameter>
+
+            <effects><simpara>Forwards <code>rhs</code>,
+            discarding previous content, so that the new content of is
+            equivalent in both type and value to
+            <code>rhs</code> before forward.</simpara></effects>
+
+            <precondition>C++11 compatible compiler.</precondition>
+            <throws><simpara><code><classname>std::bad_alloc</classname></code>
+            or any exceptions arising from the move or copy constructor of the
+            contained type. Assignment satisfies the strong guarantee
+            of exception safety.</simpara></throws>
+          </copy-assignment>
+          
           <method-group name="modifiers">
             <method name="swap">
               <type><classname>any</classname> &amp;</type>
@@ -380,7 +455,7 @@ public:
               <returns><simpara><code>true</code> if instance is
               empty, otherwise <code>false</code>.</simpara></returns>
               
-              <throws><simpara>Will not throw.</simpara></throws>
+              <throws><simpara>Nothing.</simpara></throws>
             </method>
 
             <method name="type" cv="const">
