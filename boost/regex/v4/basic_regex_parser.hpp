@@ -370,6 +370,7 @@ bool basic_regex_parser<charT, traits>::parse_extended()
          return true;
       }
       // Otherwise fall through:
+      BOOST_FALLTHROUGH;
    default:
       result = parse_literal();
       break;
@@ -624,6 +625,7 @@ bool basic_regex_parser<charT, traits>::parse_basic_escape()
          case 'w':
             negate = false;
             // fall through:
+            BOOST_FALLTHROUGH;
          case 'W':
             {
             basic_char_set<charT, traits> char_set;
@@ -641,6 +643,7 @@ bool basic_regex_parser<charT, traits>::parse_basic_escape()
          case 's':
             negate = false;
             // fall through:
+            BOOST_FALLTHROUGH;
          case 'S':
             return add_emacs_code(negate);
          case 'c':
@@ -673,6 +676,7 @@ bool basic_regex_parser<charT, traits>::parse_extended_escape()
    case regex_constants::escape_type_not_class:
       negate = true;
       // fall through:
+      BOOST_FALLTHROUGH;
    case regex_constants::escape_type_class:
       {
 escape_type_class_jump:
@@ -743,6 +747,7 @@ escape_type_class_jump:
    case regex_constants::escape_type_not_property:
       negate = true;
       // fall through:
+      BOOST_FALLTHROUGH;
    case regex_constants::escape_type_property:
       {
          ++m_position;
@@ -1960,6 +1965,7 @@ bool basic_regex_parser<charT, traits>::parse_perl_extension()
    case regex_constants::syntax_or:
       m_mark_reset = m_mark_count;
       // fall through:
+      BOOST_FALLTHROUGH;
    case regex_constants::syntax_colon:
       //
       // a non-capturing mark:

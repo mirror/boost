@@ -739,13 +739,16 @@ void basic_regex_creator<charT, traits>::fixup_pointers(re_syntax_base* state)
          // set the state_id of this repeat:
          static_cast<re_repeat*>(state)->state_id = m_repeater_id++;
          // fall through:
+         BOOST_FALLTHROUGH;
       case syntax_element_alt:
          std::memset(static_cast<re_alt*>(state)->_map, 0, sizeof(static_cast<re_alt*>(state)->_map));
          static_cast<re_alt*>(state)->can_be_null = 0;
          // fall through:
+         BOOST_FALLTHROUGH;
       case syntax_element_jump:
          static_cast<re_jump*>(state)->alt.p = getaddress(static_cast<re_jump*>(state)->alt.i, state);
          // fall through again:
+         BOOST_FALLTHROUGH;
       default:
          if(state->next.i)
             state->next.p = getaddress(state->next.i, state);
@@ -942,6 +945,7 @@ void basic_regex_creator<charT, traits>::create_startmaps(re_syntax_base* state)
             }
          }
          // fall through:
+         BOOST_FALLTHROUGH;
       default:
          state = state->next.p;
       }
@@ -1154,12 +1158,14 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base* state, 
             }
             m_recursion_checks[recursion_sub] = true;
             // fall through, can't handle nested recursion here...
+            BOOST_FALLTHROUGH;
          }
       case syntax_element_backref:
          // can be null, and any character can match:
          if(pnull)
             *pnull |= mask;
          // fall through:
+         BOOST_FALLTHROUGH;
       case syntax_element_wild:
       {
          // can't be null, any character can match:
@@ -1360,6 +1366,7 @@ void basic_regex_creator<charT, traits>::create_startmap(re_syntax_base* state, 
             break;
          }
          // otherwise fall through:
+         BOOST_FALLTHROUGH;
       default:
          state = state->next.p;
       }
@@ -1538,6 +1545,7 @@ void basic_regex_creator<charT, traits>::probe_leading_repeat(re_syntax_base* st
          if(this->m_has_backrefs == 0)
             static_cast<re_repeat*>(state)->leading = true;
          // fall through:
+         BOOST_FALLTHROUGH;
       default:
          return;
       }
