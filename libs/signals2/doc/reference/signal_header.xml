@@ -415,21 +415,20 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
         <free-function-group name="specialized algorithms">
           <function name="swap">
             <template>
+              <template-type-parameter name="Signature"/>
               <template-type-parameter name="Combiner"/>
               <template-type-parameter name="Group"/>
               <template-type-parameter name="GroupCompare"/>
               <template-type-parameter name="SlotFunction"/>
               <template-type-parameter name="ExtendedSlotFunction"/>
               <template-type-parameter name="Mutex"/>
-              <template-type-parameter name="R"/>
-              <template-type-parameter name="Args..."/>
             </template>
             <type>void</type>
             <parameter name="x">
-              <paramtype><classname alt="signals2::signal">signal</classname>&lt;R (Args...), Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex&gt;&amp;</paramtype>
+              <paramtype><classname alt="signals2::signal">signal</classname>&lt;Signature, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex&gt;&amp;</paramtype>
             </parameter>
             <parameter name="y">
-              <paramtype><classname alt="signals2::signal">signal</classname>&lt;R (Args...), Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex&gt;&amp;</paramtype>
+              <paramtype><classname alt="signals2::signal">signal</classname>&lt;Signature, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex&gt;&amp;</paramtype>
             </parameter>
 
             <effects><para><computeroutput>x.swap(y)</computeroutput></para></effects>

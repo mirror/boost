@@ -729,14 +729,16 @@ namespace boost
         _pimpl;
     };
 
-    // free swap function, findable by ADL
-    template<BOOST_SIGNALS2_SIGNAL_TEMPLATE_SPECIALIZATION_DECL(BOOST_SIGNALS2_NUM_ARGS)>
+#ifdef BOOST_NO_CXX11_VARIADIC_TEMPLATES
+    // free swap function for signalN classes, findable by ADL
+    template<BOOST_SIGNALS2_SIGNAL_TEMPLATE_DECL(BOOST_SIGNALS2_NUM_ARGS)>
       void swap(
         BOOST_SIGNALS2_SIGNAL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS) <BOOST_SIGNALS2_SIGNAL_TEMPLATE_INSTANTIATION> &sig1,
         BOOST_SIGNALS2_SIGNAL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS) <BOOST_SIGNALS2_SIGNAL_TEMPLATE_INSTANTIATION> &sig2 )
     {
       sig1.swap(sig2);
     };
+#endif
 
     namespace detail
     {
