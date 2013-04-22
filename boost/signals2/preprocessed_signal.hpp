@@ -49,6 +49,21 @@ namespace boost
         base_type(combiner_arg, group_compare)
       {}
     };
+    
+    // free swap function, findable by ADL
+    template<typename Signature,
+      typename Combiner,
+      typename Group,
+      typename GroupCompare,
+      typename SlotFunction,
+      typename ExtendedSlotFunction,
+      typename Mutex>
+      void swap(
+        signal<Signature, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex> &sig1,
+        signal<Signature, Combiner, Group, GroupCompare, SlotFunction, ExtendedSlotFunction, Mutex> &sig2)
+    {
+      sig1.swap(sig2);
+    };
   }
 }
 

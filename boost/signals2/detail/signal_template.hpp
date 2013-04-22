@@ -714,6 +714,11 @@ namespace boost
       {
         return (*_pimpl).set_combiner(combiner_arg);
       }
+      void swap(BOOST_SIGNALS2_SIGNAL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS) & other)
+      {
+        using std::swap;
+        swap(_pimpl, other._pimpl);
+      }
     protected:
       virtual shared_ptr<void> lock_pimpl() const
       {
@@ -722,6 +727,15 @@ namespace boost
     private:
       shared_ptr<impl_class>
         _pimpl;
+    };
+
+    // free swap function, findable by ADL
+    template<BOOST_SIGNALS2_SIGNAL_TEMPLATE_SPECIALIZATION_DECL(BOOST_SIGNALS2_NUM_ARGS)>
+      void swap(
+        BOOST_SIGNALS2_SIGNAL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS) <BOOST_SIGNALS2_SIGNAL_TEMPLATE_INSTANTIATION> &sig1,
+        BOOST_SIGNALS2_SIGNAL_CLASS_NAME(BOOST_SIGNALS2_NUM_ARGS) <BOOST_SIGNALS2_SIGNAL_TEMPLATE_INSTANTIATION> &sig2 )
+    {
+      sig1.swap(sig2);
     };
 
     namespace detail
