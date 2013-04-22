@@ -658,7 +658,7 @@ public:
                     case T_EXTSTRINGLIT:
                     case T_EXTRAWSTRINGLIT:
                         id = token_id(id & ~AltTokenType);
-                        // fall through
+                        BOOST_FALLTHROUGH;
 
                     case T_CHARLIT:
                     case T_STRINGLIT:
