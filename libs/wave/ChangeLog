@@ -20,6 +20,10 @@ TODO (known issues):
 
 CHANGELOG
 
+Boost V1.54:
+ - Fixed #8478: Make Boost.wave compatible with Clang's -Wimplicit-fallthrough 
+   diagnostic.
+
 Boost V1.53:
  - Fixed a problem with context<>::add_macro_definition which sometimes 
    appended a superfluous T_EOF to the macro replacement list.
