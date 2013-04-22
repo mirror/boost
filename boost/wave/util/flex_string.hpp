@@ -146,7 +146,7 @@ namespace flex_string_details
         case 4: *b = c; ++b; BOOST_FALLTHROUGH;
         case 3: *b = c; ++b; BOOST_FALLTHROUGH;
         case 2: *b = c; ++b; BOOST_FALLTHROUGH;
-        case 1: *b = c; ++b; BOOST_FALLTHROUGH;
+        case 1: *b = c; ++b;
             }
         }
     }
