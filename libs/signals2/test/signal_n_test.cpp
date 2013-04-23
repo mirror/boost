@@ -286,6 +286,52 @@ template<typename ResultType>
     BOOST_CHECK(sig.num_slots() == 0);
   }
 }
+class dummy_combiner
+{
+public:
+  typedef int result_type;
+
+  dummy_combiner(result_type return_value): _return_value(return_value)
+  {}
+  template<typename SlotIterator>
+  result_type operator()(SlotIterator, SlotIterator)
+  {
+    return _return_value;
+  }
+private:
+  result_type _return_value;
+};
+
+static void
+test_set_combiner()
+{
+  typedef boost::signals2::signal0<int, dummy_combiner> signal_type;
+  signal_type sig(dummy_combiner(0));
+  BOOST_CHECK(sig() == 0);
+  BOOST_CHECK(sig.combiner()(0,0) == 0);
+  sig.set_combiner(dummy_combiner(1));
+  BOOST_CHECK(sig() == 1);
+  BOOST_CHECK(sig.combiner()(0,0) == 1);
+}
+
+static void
+test_swap()
+{
+  typedef boost::signals2::signal0<int, dummy_combiner> signal_type;
+  signal_type sig1(dummy_combiner(1));
+  BOOST_CHECK(sig1() == 1);
+  signal_type sig2(dummy_combiner(2));
+  BOOST_CHECK(sig2() == 2);
+
+  sig1.swap(sig2);
+  BOOST_CHECK(sig1() == 2);
+  BOOST_CHECK(sig2() == 1);
+
+  using std::swap;
+  swap(sig1, sig2);
+  BOOST_CHECK(sig1() == 1);
+  BOOST_CHECK(sig2() == 2);
+}
 
 int
 test_main(int, char* [])
@@ -297,6 +343,8 @@ test_main(int, char* [])
   test_default_combiner();
   test_extended_slot<void>();
   test_extended_slot<int>();
+  test_set_combiner();
+  test_swap();
   return 0;
 }
 

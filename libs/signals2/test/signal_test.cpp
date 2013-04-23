@@ -293,6 +293,25 @@ test_set_combiner()
   BOOST_CHECK(sig.combiner()(0,0) == 1);
 }
 
+static void
+test_swap()
+{
+  typedef boost::signals2::signal<int (), dummy_combiner> signal_type;
+  signal_type sig1(dummy_combiner(1));
+  BOOST_CHECK(sig1() == 1);
+  signal_type sig2(dummy_combiner(2));
+  BOOST_CHECK(sig2() == 2);
+
+  sig1.swap(sig2);
+  BOOST_CHECK(sig1() == 2);
+  BOOST_CHECK(sig2() == 1);
+
+  using std::swap;
+  swap(sig1, sig2);
+  BOOST_CHECK(sig1() == 1);
+  BOOST_CHECK(sig2() == 2);
+}
+
 int
 test_main(int, char* [])
 {
@@ -304,5 +323,6 @@ test_main(int, char* [])
   test_reference_args();
   test_typedefs_etc();
   test_set_combiner();
+  test_swap();
   return 0;
 }
