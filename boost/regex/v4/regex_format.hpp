@@ -283,7 +283,7 @@ void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format
             format_perl();
             break;
          }
-         // fall through, not a special character:
+         // not a special character:
          BOOST_FALLTHROUGH;
       default:
          put(*m_position);
@@ -355,7 +355,6 @@ void basic_regex_formatter<OutputIterator, Results, traits, ForwardIter>::format
    case '{':
       have_brace = true;
       ++m_position;
-      // fall through....
       BOOST_FALLTHROUGH;
    default:
       // see if we have a number:
