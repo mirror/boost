@@ -214,7 +214,7 @@ struct allocator_traits
    //!
    //! <b>Throws</b>: Nothing
    static void deallocate(Alloc &a, pointer p, size_type n)
-   {  return a.deallocate(p, n);  }
+   {  a.deallocate(p, n);  }
 
    //! <b>Effects</b>: calls `a.allocate(n, p)` if that call is well-formed;
    //! otherwise, invokes `a.allocate(n)`
