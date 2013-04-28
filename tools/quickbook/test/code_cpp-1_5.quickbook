@@ -2,6 +2,9 @@
 [quickbook 1.5]
 ]
 
+    #include <some_header>
+        #include "another_header.hpp"
+    #   define A_MACRO value
     // No escape
     /* No escape */
     /* No escape
@@ -12,6 +15,7 @@
     /* Multiple escapes: ``/italic/``
      * ``_underline_````*bold*``
      */
+    /* Token pasting: */ a##b
 
 A badly formed comment:
 

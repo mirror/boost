@@ -359,7 +359,8 @@ namespace quickbook
                     ;   // make sure we recognize whole words only
 
                 special
-                    =   +cl::chset_p("~!%^&*()+={[}]:;,<.>?/|\\-")
+                    =   +cl::chset_p("~!%^&*()+={[}]:;,<.>?/|\\-") |
+                        "##"
                     ;
 
                 string_char = ('\\' >> u8_codepoint_p) | (cl::anychar_p - '\\');
