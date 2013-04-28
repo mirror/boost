@@ -13,8 +13,8 @@
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
-namespace std{
-    using ::size_t;
+namespace std{ 
+    using ::size_t; 
 } // namespace std
 #endif
 
@@ -30,7 +30,7 @@ namespace std{
 #include <boost/archive/iterators/binary_from_base64.hpp>
 #include <boost/archive/iterators/transform_width.hpp>
 
-namespace boost {
+namespace boost { 
 namespace archive {
 
 namespace {

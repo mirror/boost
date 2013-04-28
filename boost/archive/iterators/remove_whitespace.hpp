@@ -143,6 +143,7 @@ class remove_whitespace :
     public filter_iterator<
         remove_whitespace_predicate<
             BOOST_DEDUCED_TYPENAME boost::iterator_value<Base>::type
+            //BOOST_DEDUCED_TYPENAME Base::value_type
         >,
         Base
     >
@@ -151,6 +152,7 @@ class remove_whitespace :
     typedef filter_iterator<
         remove_whitespace_predicate<
             BOOST_DEDUCED_TYPENAME boost::iterator_value<Base>::type
+            //BOOST_DEDUCED_TYPENAME Base::value_type
         >,
         Base
     > super_t;

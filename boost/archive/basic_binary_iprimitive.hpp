@@ -155,18 +155,18 @@ basic_binary_iprimitive<Archive, Elem, Tr>::load_binary(
         static_cast<std::streamsize>(count / sizeof(Elem)) 
         <= boost::integer_traits<std::streamsize>::const_max
     );
-    std::size_t s = count / sizeof(Elem);
+    std::streamsize s = static_cast<std::streamsize>(count / sizeof(Elem));
     std::streamsize scount = m_sb.sgetn(
         static_cast<Elem *>(address), 
         s
     );
-    if(scount != static_cast<std::streamsize>(s))
+    if(scount != s)
         boost::serialization::throw_exception(
             archive_exception(archive_exception::input_stream_error)
         );
     // note: an optimizer should eliminate the following for char files
     BOOST_ASSERT(count % sizeof(Elem) <= boost::integer_traits<std::streamsize>::const_max);
-    s = count % sizeof(Elem);
+    s = static_cast<std::streamsize>(count % sizeof(Elem));
     if(0 < s){
 //        if(is.fail())
 //            boost::serialization::throw_exception(
