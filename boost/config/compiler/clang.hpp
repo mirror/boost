@@ -142,6 +142,10 @@
 #  define BOOST_NO_CXX11_VARIADIC_TEMPLATES
 #endif
 
+#if !__has_feature(cxx_user_literals)
+#  define BOOST_NO_CXX11_USER_DEFINED_LITERALS
+#endif
+
 // Clang always supports variadic macros
 // Clang always supports extern templates
 

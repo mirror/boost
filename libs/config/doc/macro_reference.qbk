@@ -675,6 +675,8 @@ Unicode (`u8`, `u`, `U`) literals.
 [[`BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX`][The compiler does not support
 the [@http://en.wikipedia.org/wiki/C%2B%2B0x#Uniform_initialization C++11 Unified Initialization Syntax].
 ]]
+[[`BOOST_NO_CXX11_USER_DEFINED_LITERALS`][The compiler does not support user defined literals. 
+]]                      
 [[`BOOST_NO_CXX11_VARIADIC_TEMPLATES`][The compiler does not support
 variadic templates. 
 ]]
