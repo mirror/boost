@@ -241,8 +241,10 @@ if you're totally sure that you will need it.
 so that they aren't wrapped in paragraph tags. The main use is
 for escaped docbook block tags, such as:
 
-    [template chapter[title] [block'''<chapter><title>'''[title]'''</title>''']]
-    [template chapterend [block'''</chapter>''']]
+    [template chapter[title]
+        [block'''<chapter><title>'''[title]'''</title>''']]
+    [template chapterend
+        [block'''</chapter>''']]
 
     [chapter An example chapter]
 
@@ -252,6 +254,9 @@ for escaped docbook block tags, such as:
 
 Without the `block` element, the `chapter` and `chapterend` templates
 would be wrapped in paragraph tags.
+
+[note In this example, the template body has to start with a newline so that
+the template will be interpreted in block mode.]
 
 [endsect]
 
