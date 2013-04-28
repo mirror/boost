@@ -251,7 +251,7 @@ namespace smart_cast_impl {
         // cast on a system which doesn't support partial template 
         // specialization
         template<class U>
-        static T cast(U){
+        static T cast(U u){
             BOOST_STATIC_ASSERT(sizeof(T)==0);
             return * static_cast<T *>(NULL);
         }
