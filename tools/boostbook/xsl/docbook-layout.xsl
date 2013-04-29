@@ -211,7 +211,8 @@
   
   
   <!--  Adds the section ID as a class to the section DIV so that we
-        can style sections individually. -->
+        can style sections individually. Also add the role as a class
+        so we style by kind of section. -->
   <xsl:template match="section" mode="class.value">
     <xsl:param name="class" select="local-name(.)"/>
     <xsl:param name="node" select="."/>
@@ -220,7 +221,33 @@
         <xsl:with-param name="object" select="$node"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:value-of select="concat($class,' ',translate($id, '.', '_'))"/>
+    <xsl:value-of select="concat($class,' ',@role,' ',translate($id, '.', '_'))"/>
+  </xsl:template>
+  
+  <!-- Adds role class for simplesect element resulting div. So that
+       we can style them in the resulting HTML. -->
+  <xsl:template match="simplesect" mode="class.value">
+    <xsl:param name="class" select="local-name(.)"/>
+    <xsl:param name="node" select="."/>
+    <xsl:value-of select="concat($class,' ',@role)"/>
+  </xsl:template>
+  
+  <!-- Allow for specifying that a section should not include the parents
+       labeling. This allows us to start clean numering of a sub-section. -->
+  <xsl:template match="section[@label-style='no-parent']" mode="label.markup">
+	  <xsl:choose>
+	    <xsl:when test="@label">
+	      <xsl:value-of select="@label"/>
+	    </xsl:when>
+	    <xsl:when test="$label != 0">
+	      <xsl:variable name="format">
+	        <xsl:call-template name="autolabel.format">
+	          <xsl:with-param name="format" select="$section.autolabel"/>
+	        </xsl:call-template>
+	      </xsl:variable>
+	      <xsl:number format="{$format}" count="section"/>
+	    </xsl:when>
+	  </xsl:choose>
   </xsl:template>
   
 </xsl:stylesheet>
