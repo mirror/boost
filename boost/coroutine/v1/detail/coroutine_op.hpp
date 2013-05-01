@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_COROUTINES_DETAIL_COROUTINE_OP_H
-#define BOOST_COROUTINES_DETAIL_COROUTINE_OP_H
+#ifndef BOOST_COROUTINES_V1_DETAIL_COROUTINE_OP_H
+#define BOOST_COROUTINES_V1_DETAIL_COROUTINE_OP_H
 
 #include <iterator>
 
@@ -21,8 +21,8 @@
 #include <boost/type_traits/function_traits.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 
-#include <boost/coroutine/detail/arg.hpp>
 #include <boost/coroutine/detail/config.hpp>
+#include <boost/coroutine/v1/detail/arg.hpp>
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
@@ -323,4 +323,4 @@ BOOST_PP_REPEAT_FROM_TO(2,11,BOOST_COROUTINE_OP,~)
 #  include BOOST_ABI_SUFFIX
 #endif
 
-#endif // BOOST_COROUTINES_DETAIL_COROUTINE_OP_H
+#endif // BOOST_COROUTINES_V1_DETAIL_COROUTINE_OP_H

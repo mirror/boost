@@ -7,23 +7,22 @@
 template<
     typename Signature,
     typename Fn, typename StackAllocator, typename Allocator,
-    typename Caller,
-    typename Result
+    typename Caller
 >
-class coroutine_object< Signature, Fn, StackAllocator, Allocator, Caller, Result, 1 > :
+class coroutine_object< Signature, Fn, StackAllocator, Allocator, Caller, void, 1 > :
     private stack_tuple< StackAllocator >,
     public coroutine_base< Signature >
 {
 public:
     typedef typename Allocator::template rebind<
         coroutine_object<
-            Signature, Fn, StackAllocator, Allocator, Caller, Result, 1
+            Signature, Fn, StackAllocator, Allocator, Caller, void, 1
         >
     >::other                                            allocator_t;
     typedef typename arg< Signature >::type             arg_type;
 
 private:
-    typedef stack_tuple< StackAllocator >               pbase_type;
+    typedef stack_tuple< StackAllocator >                pbase_type;
     typedef coroutine_base< Signature >                 base_type;
 
     Fn                      fn_;
@@ -40,14 +39,13 @@ private:
 
     void enter_()
     {
-        holder< Result > * hldr_from(
-            reinterpret_cast< holder< Result > * >(
+        holder< void > * hldr_from(
+            reinterpret_cast< holder< void > * >(
                 this->caller_.jump(
                     this->callee_,
                     reinterpret_cast< intptr_t >( this),
                     this->preserve_fpu() ) ) );
         this->callee_ = * hldr_from->ctx;
-        this->result_ = hldr_from->data;
         if ( this->except_) rethrow_exception( this->except_);
     }
 
@@ -56,46 +54,14 @@ private:
         tuple< coroutine_object *,
             typename detail::param< arg_type >::type
         > tpl( this, arg);
-        holder< Result > * hldr_from(
-            reinterpret_cast< holder< Result > * >(
+        holder< void > * hldr_from(
+            reinterpret_cast< holder< void > * >(
                 this->caller_.jump(
                     this->callee_,
                     reinterpret_cast< intptr_t >( & tpl),
                     this->preserve_fpu() ) ) );
         this->callee_ = * hldr_from->ctx;
-        this->result_ = hldr_from->data;
         if ( this->except_) rethrow_exception( this->except_);
-    }
-
-    void run_( Caller & c)
-    {
-        coroutine_context callee;
-        coroutine_context caller;
-        try
-        {
-            fn_( c);
-            this->flags_ |= flag_complete;
-            callee = c.impl_->callee_;
-            holder< Result > hldr_to( & caller);
-            caller.jump(
-                callee,
-                reinterpret_cast< intptr_t >( & hldr_to),
-                this->preserve_fpu() );
-            BOOST_ASSERT_MSG( false, "coroutine is complete");
-        }
-        catch ( forced_unwind const&)
-        {}
-        catch (...)
-        { this->except_ = current_exception(); }
-
-        this->flags_ |= flag_complete;
-        callee = c.impl_->callee_;
-        holder< Result > hldr_to( & caller);
-        caller.jump(
-            callee,
-            reinterpret_cast< intptr_t >( & hldr_to),
-            this->preserve_fpu() );
-        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void unwind_stack_() BOOST_NOEXCEPT
@@ -202,15 +168,53 @@ public:
 
     void run()
     {
-        Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
-        run_( c);
+        coroutine_context callee;
+        coroutine_context caller;
+
+        {
+            Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
+            try
+            { fn_( c); }
+            catch ( forced_unwind const&)
+            {}
+            catch (...)
+            { this->except_ = current_exception(); }
+            callee = c.impl_->callee_;
+        }
+
+        this->flags_ |= flag_complete;
+        holder< void > hldr_to( & caller);
+        caller.jump(
+            callee,
+            reinterpret_cast< intptr_t >( & hldr_to),
+            this->preserve_fpu() );
+        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void run( typename detail::param< arg_type >::type arg)
     {
-        Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
-        c.impl_->result_ = arg;
-        run_( c);
+        coroutine_context callee;
+        coroutine_context caller;
+
+        {
+            Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
+            c.impl_->result_ = arg;
+            try
+            { fn_( c); }
+            catch ( forced_unwind const&)
+            {}
+            catch (...)
+            { this->except_ = current_exception(); }
+            callee = c.impl_->callee_;
+        }
+
+        this->flags_ |= flag_complete;
+        holder< void > hldr_to( & caller);
+        caller.jump(
+            callee,
+            reinterpret_cast< intptr_t >( & hldr_to),
+            this->preserve_fpu() );
+        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void deallocate_object()
@@ -220,17 +224,16 @@ public:
 template<
     typename Signature,
     typename Fn, typename StackAllocator, typename Allocator,
-    typename Caller,
-    typename Result
+    typename Caller
 >
-class coroutine_object< Signature, reference_wrapper< Fn >, StackAllocator, Allocator, Caller, Result, 1 > :
+class coroutine_object< Signature, reference_wrapper< Fn >, StackAllocator, Allocator, Caller, void, 1 > :
     private stack_tuple< StackAllocator >,
     public coroutine_base< Signature >
 {
 public:
     typedef typename Allocator::template rebind<
         coroutine_object<
-            Signature, Fn, StackAllocator, Allocator, Caller, Result, 1
+            Signature, Fn, StackAllocator, Allocator, Caller, void, 1
         >
     >::other                                            allocator_t;
     typedef typename arg< Signature >::type             arg_type;
@@ -253,14 +256,13 @@ private:
 
     void enter_()
     {
-        holder< Result > * hldr_from(
-            reinterpret_cast< holder< Result > * >(
+        holder< void > * hldr_from(
+            reinterpret_cast< holder< void > * >(
                 this->caller_.jump(
                     this->callee_,
                     reinterpret_cast< intptr_t >( this),
                     this->preserve_fpu() ) ) );
         this->callee_ = * hldr_from->ctx;
-        this->result_ = hldr_from->data;
         if ( this->except_) rethrow_exception( this->except_);
     }
 
@@ -269,46 +271,14 @@ private:
         tuple< coroutine_object *,
             typename detail::param< arg_type >::type
         > tpl( this, arg);
-        holder< Result > * hldr_from(
-            reinterpret_cast< holder< Result > * >(
+        holder< void > * hldr_from(
+            reinterpret_cast< holder< void > * >(
                 this->caller_.jump(
                     this->callee_,
                     reinterpret_cast< intptr_t >( & tpl),
                     this->preserve_fpu() ) ) );
         this->callee_ = * hldr_from->ctx;
-        this->result_ = hldr_from->data;
         if ( this->except_) rethrow_exception( this->except_);
-    }
-
-    void run_( Caller & c)
-    {
-        coroutine_context callee;
-        coroutine_context caller;
-        try
-        {
-            fn_( c);
-            this->flags_ |= flag_complete;
-            callee = c.impl_->callee_;
-            holder< Result > hldr_to( & caller);
-            caller.jump(
-                callee,
-                reinterpret_cast< intptr_t >( & hldr_to),
-                this->preserve_fpu() );
-            BOOST_ASSERT_MSG( false, "coroutine is complete");
-        }
-        catch ( forced_unwind const&)
-        {}
-        catch (...)
-        { this->except_ = current_exception(); }
-
-        this->flags_ |= flag_complete;
-        callee = c.impl_->callee_;
-        holder< Result > hldr_to( & caller);
-        caller.jump(
-            callee,
-            reinterpret_cast< intptr_t >( & hldr_to),
-            this->preserve_fpu() );
-        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void unwind_stack_() BOOST_NOEXCEPT
@@ -340,7 +310,8 @@ public:
         alloc_( alloc)
     { enter_(); }
 
-    coroutine_object( reference_wrapper< Fn > fn, typename detail::param< arg_type >::type arg, attributes const& attr,
+    coroutine_object( reference_wrapper< Fn > fn,
+                      typename detail::param< arg_type >::type arg, attributes const& attr,
                       StackAllocator const& stack_alloc,
                       allocator_t const& alloc) :
         pbase_type( stack_alloc, attr.size),
@@ -361,15 +332,53 @@ public:
 
     void run()
     {
-        Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
-        run_( c);
+        coroutine_context callee;
+        coroutine_context caller;
+
+        {
+            Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
+            try
+            { fn_( c); }
+            catch ( forced_unwind const&)
+            {}
+            catch (...)
+            { this->except_ = current_exception(); }
+            callee = c.impl_->callee_;
+        }
+
+        this->flags_ |= flag_complete;
+        holder< void > hldr_to( & caller);
+        caller.jump(
+            callee,
+            reinterpret_cast< intptr_t >( & hldr_to),
+            this->preserve_fpu() );
+        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void run( typename detail::param< arg_type >::type arg)
     {
-        Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
-        c.impl_->result_ = arg;
-        run_( c);
+        coroutine_context callee;
+        coroutine_context caller;
+
+        {
+            Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
+            c.impl_->result_ = arg;
+            try
+            { fn_( c); }
+            catch ( forced_unwind const&)
+            {}
+            catch (...)
+            { this->except_ = current_exception(); }
+            callee = c.impl_->callee_;
+        }
+
+        this->flags_ |= flag_complete;
+        holder< void > hldr_to( & caller);
+        caller.jump(
+            callee,
+            reinterpret_cast< intptr_t >( & hldr_to),
+            this->preserve_fpu() );
+        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void deallocate_object()
@@ -379,17 +388,16 @@ public:
 template<
     typename Signature,
     typename Fn, typename StackAllocator, typename Allocator,
-    typename Caller,
-    typename Result
+    typename Caller
 >
-class coroutine_object< Signature, const reference_wrapper< Fn >, StackAllocator, Allocator, Caller, Result, 1 > :
+class coroutine_object< Signature, const reference_wrapper< Fn >, StackAllocator, Allocator, Caller, void, 1 > :
     private stack_tuple< StackAllocator >,
     public coroutine_base< Signature >
 {
 public:
     typedef typename Allocator::template rebind<
         coroutine_object<
-            Signature, Fn, StackAllocator, Allocator, Caller, Result, 1
+            Signature, Fn, StackAllocator, Allocator, Caller, void, 1
         >
     >::other                                            allocator_t;
     typedef typename arg< Signature >::type             arg_type;
@@ -412,14 +420,13 @@ private:
 
     void enter_()
     {
-        holder< Result > * hldr_from(
-            reinterpret_cast< holder< Result > * >(
+        holder< void > * hldr_from(
+            reinterpret_cast< holder< void > * >(
                 this->caller_.jump(
                     this->callee_,
                     reinterpret_cast< intptr_t >( this),
                     this->preserve_fpu() ) ) );
         this->callee_ = * hldr_from->ctx;
-        this->result_ = hldr_from->data;
         if ( this->except_) rethrow_exception( this->except_);
     }
 
@@ -428,46 +435,14 @@ private:
         tuple< coroutine_object *,
             typename detail::param< arg_type >::type
         > tpl( this, arg);
-        holder< Result > * hldr_from(
-            reinterpret_cast< holder< Result > * >(
+        holder< void > * hldr_from(
+            reinterpret_cast< holder< void > * >(
                 this->caller_.jump(
                     this->callee_,
                     reinterpret_cast< intptr_t >( & tpl),
                     this->preserve_fpu() ) ) );
         this->callee_ = * hldr_from->ctx;
-        this->result_ = hldr_from->data;
         if ( this->except_) rethrow_exception( this->except_);
-    }
-
-    void run_( Caller & c)
-    {
-        coroutine_context callee;
-        coroutine_context caller;
-        try
-        {
-            fn_( c);
-            this->flags_ |= flag_complete;
-            callee = c.impl_->callee_;
-            holder< Result > hldr_to( & caller);
-            caller.jump(
-                callee,
-                reinterpret_cast< intptr_t >( & hldr_to),
-                this->preserve_fpu() );
-            BOOST_ASSERT_MSG( false, "coroutine is complete");
-        }
-        catch ( forced_unwind const&)
-        {}
-        catch (...)
-        { this->except_ = current_exception(); }
-
-        this->flags_ |= flag_complete;
-        callee = c.impl_->callee_;
-        holder< Result > hldr_to( & caller);
-        caller.jump(
-            callee,
-            reinterpret_cast< intptr_t >( & hldr_to),
-            this->preserve_fpu() );
-        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void unwind_stack_() BOOST_NOEXCEPT
@@ -499,7 +474,8 @@ public:
         alloc_( alloc)
     { enter_(); }
 
-    coroutine_object( const reference_wrapper< Fn > fn, typename detail::param< arg_type >::type arg, attributes const& attr,
+    coroutine_object( const reference_wrapper< Fn > fn,
+                      typename detail::param< arg_type >::type arg, attributes const& attr,
                       StackAllocator const& stack_alloc,
                       allocator_t const& alloc) :
         pbase_type( stack_alloc, attr.size),
@@ -520,15 +496,53 @@ public:
 
     void run()
     {
-        Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
-        run_( c);
+        coroutine_context callee;
+        coroutine_context caller;
+
+        {
+            Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
+            try
+            { fn_( c); }
+            catch ( forced_unwind const&)
+            {}
+            catch (...)
+            { this->except_ = current_exception(); }
+            callee = c.impl_->callee_;
+        }
+
+        this->flags_ |= flag_complete;
+        holder< void > hldr_to( & caller);
+        caller.jump(
+            callee,
+            reinterpret_cast< intptr_t >( & hldr_to),
+            this->preserve_fpu() );
+        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void run( typename detail::param< arg_type >::type arg)
     {
-        Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
-        c.impl_->result_ = arg;
-        run_( c);
+        coroutine_context callee;
+        coroutine_context caller;
+
+        {
+            Caller c( this->caller_, false, this->preserve_fpu(), alloc_);
+            c.impl_->result_ = arg;
+            try
+            { fn_( c); }
+            catch ( forced_unwind const&)
+            {}
+            catch (...)
+            { this->except_ = current_exception(); }
+            callee = c.impl_->callee_;
+        }
+
+        this->flags_ |= flag_complete;
+        holder< void > hldr_to( & caller);
+        caller.jump(
+            callee,
+            reinterpret_cast< intptr_t >( & hldr_to),
+            this->preserve_fpu() );
+        BOOST_ASSERT_MSG( false, "coroutine is complete");
     }
 
     void deallocate_object()

@@ -3,8 +3,9 @@
 // Distributed under the Boost Software License, Version 1.0.
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
-#ifndef BOOST_COROUTINES_DETAIL_ARG_H
-#define BOOST_COROUTINES_DETAIL_ARG_H
+
+#ifndef BOOST_COROUTINES_V1_DETAIL_ARG_H
+#define BOOST_COROUTINES_V1_DETAIL_ARG_H
 
 #include <boost/config.hpp>
 #include <boost/preprocessor/arithmetic/add.hpp>
@@ -58,4 +59,4 @@ BOOST_PP_REPEAT_FROM_TO(2,11,BOOST_CONTEXT_TUPLE,~)
 #  include BOOST_ABI_SUFFIX
 #endif
 
-#endif // BOOST_COROUTINES_DETAIL_ARG_H
+#endif // BOOST_COROUTINES_V1_DETAIL_ARG_H

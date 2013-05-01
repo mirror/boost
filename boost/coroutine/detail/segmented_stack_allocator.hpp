@@ -36,7 +36,7 @@ public:
 
     static std::size_t maximum_stacksize();
 
-    void allocate( stack_context &, std::size_t size);
+    void allocate( stack_context &, std::size_t = minimum_stacksize() );
 
     void deallocate( stack_context &);
 };
