@@ -222,6 +222,10 @@ public:
 
   </para>
 
+  <para><emphasis role="bold">Performance</emphasis>: <classname>boost::recursive_wrapper</classname>
+    has no empty state, which makes its move constructor not very optimal. Consider using <code>std::unique_ptr</code> 
+    or some other safe pointer for better performance on C++11 compatible compilers.</para>
+
 </section>
 
 <section id="variant.tutorial.recursive.recursive-variant">
