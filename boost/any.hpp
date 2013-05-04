@@ -19,6 +19,7 @@
 
 #include "boost/config.hpp"
 #include <boost/type_traits/remove_reference.hpp>
+#include <boost/type_traits/decay.hpp>
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/static_assert.hpp>
@@ -49,7 +50,7 @@ namespace boost
 
         template<typename ValueType>
         any(const ValueType & value)
-          : content(new holder<ValueType>(value))
+          : content(new holder<BOOST_DEDUCED_TYPENAME decay<const ValueType>::type>(value))
         {
         }
 
@@ -69,7 +70,7 @@ namespace boost
         // Perfect forwarding of ValueType
         template<typename ValueType>
         any(ValueType&& value, typename boost::disable_if<boost::is_same<any&, ValueType> >::type* = 0)
-          : content(new holder< typename remove_reference<ValueType>::type >(static_cast<ValueType&&>(value)))
+          : content(new holder< typename decay<ValueType>::type >(static_cast<ValueType&&>(value)))
         {
         }
 #endif
@@ -224,7 +225,7 @@ namespace boost
     class bad_any_cast : public std::bad_cast
     {
     public:
-        virtual const char * what() const throw()
+        virtual const char * what() const BOOST_NOEXCEPT_OR_NOTHROW
         {
             return "boost::bad_any_cast: "
                    "failed conversion using boost::any_cast";
@@ -268,7 +269,7 @@ namespace boost
         nonref * result = any_cast<nonref>(&operand);
         if(!result)
             boost::throw_exception(bad_any_cast());
-        return *result;
+        return static_cast<ValueType>(*result);
     }
 
     template<typename ValueType>
