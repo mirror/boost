@@ -63,16 +63,15 @@ namespace quickbook
         "\\f",   "\\r",   "\\016", "\\017"
     };
 
-    static std::string escaped_path(fs::path const& path)
+    static std::string escaped_path(std::string const& generic)
     {
-        std::string generic = detail::path_to_generic(path);
         std::string result;
         result.reserve(generic.size());
 
         BOOST_FOREACH(char c, generic)
         {
-            if (c < 16) {
-                result += control_escapes[c];
+            if (c >= 0 && c < 16) {
+                result += control_escapes[(unsigned int) c];
             }
             else if (c == '\\') {
                 result += "\\\\";
@@ -88,28 +87,38 @@ namespace quickbook
         return result;
     }
 
+    static std::string get_path(fs::path const& path,
+            dependency_tracker::flags f)
+    {
+        std::string generic = detail::path_to_generic(path);
+
+        if (f & dependency_tracker::escaped) {
+            generic = escaped_path(generic);
+        }
+
+        return generic;
+    }
+
     bool dependency_tracker::add_dependency(fs::path const& f) {
         bool found = fs::exists(fs::status(f));
         dependencies[normalize_path(f)] |= found;
         return found;
     }
 
-    void dependency_tracker::write_dependencies(std::ostream& out)
+    void dependency_tracker::write_dependencies(std::ostream& out,
+            flags f)
     {
         BOOST_FOREACH(dependency_list::value_type const& d, dependencies)
         {
-            if (d.second) {
-                out << escaped_path(d.first) << std::endl;
+            if (f & checked) {
+                out << (d.second ? "+ " : "- ")
+                    << get_path(d.first, f) << std::endl;
             }
-        }
-    }
-
-    void dependency_tracker::write_checked_locations(std::ostream& out)
-    {
-        BOOST_FOREACH(dependency_list::value_type const& d, dependencies)
-        {
-            out << (d.second ? "+ " : "- ")
-                << escaped_path(d.first) << std::endl;
+            else {
+                if (d.second) {
+                    out << get_path(d.first, f) << std::endl;
+                }
+            }
         }
     }
 }

@@ -25,12 +25,17 @@ namespace quickbook
 
     public:
 
+        enum flags {
+            default_ = 0,
+            checked = 1,
+            escaped = 2
+        };
+
         // Call this before loading any file so that it will be included in the
         // list of dependencies. Returns true if file exists.
         bool add_dependency(fs::path const&);
 
-        void write_dependencies(std::ostream&);
-        void write_checked_locations(std::ostream&);
+        void write_dependencies(std::ostream&, flags = default_);
     };
 }
 

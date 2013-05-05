@@ -24,6 +24,8 @@
 #include <boost/ref.hpp>
 #include <boost/version.hpp>
 #include <boost/foreach.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 #include <stdexcept>
 #include <vector>
@@ -116,13 +118,15 @@ namespace quickbook
         parse_document_options() :
             indent(-1),
             linewidth(-1),
-            pretty_print(true)
+            pretty_print(true),
+            deps_out_flags(quickbook::dependency_tracker::default_)
         {}
 
         int indent;
         int linewidth;
         bool pretty_print;
         fs::path deps_out;
+        quickbook::dependency_tracker::flags deps_out_flags;
         fs::path locations_out;
         fs::path xinclude_base;
     };
@@ -159,13 +163,15 @@ namespace quickbook
             if (!options_.deps_out.empty())
             {
                 fs::ofstream out(options_.deps_out);
-                state.dependencies.write_dependencies(out);
+                state.dependencies.write_dependencies(out,
+                        options_.deps_out_flags);
             }
 
             if (!options_.locations_out.empty())
             {
                 fs::ofstream out(options_.locations_out);
-                state.dependencies.write_checked_locations(out);
+                state.dependencies.write_dependencies(out,
+                        dependency_tracker::checked);
             }
         }
         catch (load_error& e) {
@@ -291,10 +297,15 @@ main(int argc, char* argv[])
             ("xinclude-base", PO_VALUE<input_string>(),
                 "Generate xincludes as if generating for this target "
                 "directory.")
+            ("output-deps-format", PO_VALUE<input_string>(),
+             "Comma separated list of formatting options for output-deps, "
+             "options are: escaped, checked")
             ("output-checked-locations", PO_VALUE<input_string>(),
              "Writes a file listing all the file locations that were "
              "checked, starting with '+' if they were found, or '-' "
-             "if they weren't.")
+             "if they weren't.\n"
+             "This is deprecated, use 'output-deps-format=checked' to "
+             "write the deps file in this format.")
         ;
 
         all.add(desc).add(hidden);
@@ -435,6 +446,40 @@ main(int argc, char* argv[])
                     quickbook::detail::input_to_path(
                         vm["output-deps"].as<input_string>());
                 default_output = false;
+            }
+
+            if (vm.count("output-deps-format"))
+            {
+                std::string format_flags =
+                    quickbook::detail::input_to_utf8(
+                        vm["output-deps-format"].as<input_string>());
+
+                std::vector<std::string> flag_names;
+                boost::algorithm::split(flag_names, format_flags,
+                        boost::algorithm::is_any_of(", "),
+                        boost::algorithm::token_compress_on);
+
+                unsigned flags = 0;
+
+                BOOST_FOREACH(std::string const& flag, flag_names) {
+                    if (flag == "checked") {
+                        flags |= quickbook::dependency_tracker::checked;
+                    }
+                    else if (flag == "escaped") {
+                        flags |= quickbook::dependency_tracker::escaped;
+                    }
+                    else if (!flag.empty()) {
+                        quickbook::detail::outerr()
+                            << "Unknown dependency format flag: "
+                            << flag
+                            <<std::endl;
+
+                        ++error_count;
+                    }
+                }
+
+                parse_document_options.deps_out_flags =
+                    quickbook::dependency_tracker::flags(flags);
             }
 
             if (vm.count("output-checked-locations"))
