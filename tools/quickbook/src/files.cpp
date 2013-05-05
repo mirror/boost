@@ -195,15 +195,13 @@ namespace quickbook
         std::string::size_type original_pos;
         std::string::size_type our_pos;
         section_types section_type;
-        int indentation;
 
         mapped_file_section(
                 std::string::size_type original_pos,
                 std::string::size_type our_pos,
-                section_types section_type = normal,
-                int indentation = 0) :
+                section_types section_type = normal) :
             original_pos(original_pos), our_pos(our_pos),
-            section_type(section_type), indentation(indentation) {}
+            section_type(section_type) {}
     };
 
     struct mapped_section_original_cmp
@@ -278,12 +276,11 @@ namespace quickbook
                 pos - original->source().begin(), source().size()));
         }
 
-        void add_indented_mapped_file_section(boost::string_ref::const_iterator pos,
-                int indentation)
+        void add_indented_mapped_file_section(boost::string_ref::const_iterator pos)
         {
             mapped_sections.push_back(mapped_file_section(
                 pos - original->source().begin(), source().size(),
-                mapped_file_section::indented, indentation));
+                mapped_file_section::indented));
         }
 
         std::string::size_type to_original_pos(
@@ -329,15 +326,18 @@ namespace quickbook
                         ++original_line;
                     }
 
-                    // Skip over indentation
-                    for(unsigned i = section->indentation; i > 0; --i) {
-                        if (original->source()[original_line] == '\n' ||
-                            original->source()[original_line] == '\0') break;
-                        assert(original->source()[original_line] == ' ' ||
-                            original->source()[original_line] == '\t');
-                        ++original_line;
-                    }
-                    
+                    // The start of line content (i.e. after indentation).
+                    our_line = skip_indentation(source(), our_line);
+
+                    // The position is in the middle of indentation, so
+                    // just return the start of the whitespace, which should
+                    // be good enough.
+                    if (our_line > pos) return original_line;
+
+                    original_line =
+                        skip_indentation(original->source(), original_line);
+
+                    // Confirm that we are actually in the same position.
                     assert(original->source()[original_line] ==
                         source()[our_line]);
 
@@ -364,6 +364,16 @@ namespace quickbook
         }
 
         virtual file_position position_of(boost::string_ref::const_iterator) const;
+
+    private:
+
+        static std::string::size_type skip_indentation(
+                boost::string_ref src, std::string::size_type i)
+        {
+            while (i != src.size() && (src[i] == ' ' || src[i] == '\t')) ++i;
+            return i;
+        }
+
     };
 
     namespace {
@@ -447,14 +457,14 @@ namespace quickbook
     
             data->new_file->mapped_sections.push_back(mapped_file_section(
                     x.data->new_file->to_original_pos(start, begin),
-                    size, start->section_type, start->indentation));
+                    size, start->section_type));
     
             for (++start; start != x.data->new_file->mapped_sections.end() &&
                     start->our_pos < end; ++start)
             {
                 data->new_file->mapped_sections.push_back(mapped_file_section(
                     start->original_pos, start->our_pos - begin + size,
-                    start->section_type, start->indentation));
+                    start->section_type));
             }
     
             data->new_file->source_.append(
@@ -523,7 +533,7 @@ namespace quickbook
             program.erase(pos, (std::min)(indent, next-pos));
         }
 
-        data->new_file->add_indented_mapped_file_section(x.begin() + indent, indent);
+        data->new_file->add_indented_mapped_file_section(x.begin() + indent);
         data->new_file->source_.append(program);
     }
 
