@@ -468,68 +468,143 @@ namespace quickbook
         }
     }
 
+    boost::string_ref::size_type indentation_count(boost::string_ref x)
+    {
+        unsigned count = 0;
+
+        for(boost::string_ref::const_iterator begin = x.begin(), end = x.end();
+            begin != end; ++begin)
+        {
+            switch(*begin)
+            {
+            case ' ':
+                ++count;
+                break;
+            case '\t':
+                // hardcoded tab to 4 for now
+                count = count - (count % 4) + 4;
+                break;
+            default:
+                assert(false);
+            }
+        }
+
+        return count;
+    }
+
     void mapped_file_builder::unindent_and_add(boost::string_ref x)
     {
-        std::string program(x.begin(), x.end());
+        // I wanted to do everything using a string_ref, but unfortunately
+        // they don't have all the overloads used in here. So...
+        std::string const program(x.begin(), x.end());
 
         // Erase leading blank lines and newlines:
         std::string::size_type start = program.find_first_not_of(" \t\r\n");
         if (start == std::string::npos) return;
 
         start = program.find_last_of("\r\n", start);
-        if (start != std::string::npos)
-        {
-            ++start;
-            program.erase(0, start);
-        }
+        start = start == std::string::npos ? 0 : start + 1;
 
-        assert(program.size() != 0);
+        assert(start < program.size());
 
-        // Get the first line indent
-        std::string::size_type indent = program.find_first_not_of(" \t");
-        std::string::size_type pos = 0;
-        if (std::string::npos == indent)
-        {
-            // Nothing left to do here. The code is empty (just spaces).
-            // We clear the program to signal the caller that it is empty
-            // and return early.
-            program.clear();
-            return;
-        }
+        // Get the first line indentation
+        std::string::size_type indent = program.find_first_not_of(" \t", start) - start;
+        boost::string_ref::size_type full_indent = indentation_count(
+            boost::string_ref(&program[start], indent));
+
+        std::string::size_type pos = start;
 
         // Calculate the minimum indent from the rest of the lines
-        do
-        {
-            pos = program.find_first_not_of("\r\n", pos);
-            if (std::string::npos == pos)
-                break;
-
-            std::string::size_type n = program.find_first_not_of(" \t", pos);
-            if (n != std::string::npos)
-            {
-                char ch = program[n];
-                if (ch != '\r' && ch != '\n') // ignore empty lines
-                    indent = (std::min)(indent, n-pos);
-            }
-        }
-        while (std::string::npos != (pos = program.find_first_of("\r\n", pos)));
-
-        // Trim white spaces from column 0..indent
-        pos = 0;
-        program.erase(0, indent);
+        // Detecting a mix of spaces and tabs.
         while (std::string::npos != (pos = program.find_first_of("\r\n", pos)))
         {
-            if (std::string::npos == (pos = program.find_first_not_of("\r\n", pos)))
-            {
-                break;
-            }
+            pos = program.find_first_not_of("\r\n", pos);
+            if (std::string::npos == pos) break;
 
-            std::string::size_type next = program.find_first_of("\r\n", pos);
-            program.erase(pos, (std::min)(indent, next-pos));
+            std::string::size_type n = program.find_first_not_of(" \t", pos);
+            if (n == std::string::npos) break;
+
+            char ch = program[n];
+            if (ch == '\r' || ch == '\n') continue; // ignore empty lines
+
+            indent = (std::min)(indent, n-pos);
+            full_indent = (std::min)(full_indent, indentation_count(
+                boost::string_ref(&program[pos], n-pos)));
         }
 
+        // Detect if indentation is mixed.
+        bool mixed_indentation = false;
+        boost::string_ref first_indent(&program[start], indent);
+        pos = start;
+
+        while (std::string::npos != (pos = program.find_first_of("\r\n", pos)))
+        {
+            pos = program.find_first_not_of("\r\n", pos);
+            if (std::string::npos == pos) break;
+
+            std::string::size_type n = program.find_first_not_of(" \t", pos);
+            if (n == std::string::npos || n-pos < indent) continue;
+
+            if (boost::string_ref(&program[pos], indent) != first_indent) {
+                mixed_indentation = true;
+                break;
+            }
+        }
+
+        std::string unindented_program;
+        std::string::size_type copied = start;
+
+        if (mixed_indentation)
+        {
+            pos = start;
+
+            do {
+                if (std::string::npos == (pos = program.find_first_not_of("\r\n", pos)))
+                    break;
+
+                unindented_program.append(program.begin() + copied, program.begin() + pos);
+                copied = pos;
+
+                std::string::size_type next = program.find_first_not_of(" \t", pos);
+
+                unsigned length = indentation_count(boost::string_ref(
+                    &program[pos], next - pos));
+
+                if (length > full_indent) {
+                    std::string new_indentation(length - full_indent, ' ');
+                    unindented_program.append(new_indentation);
+                }
+
+                copied = next;
+            } while (std::string::npos !=
+                (pos = program.find_first_of("\r\n", pos)));
+        }
+        else
+        {
+            // Trim white spaces from column 0..indent
+            pos = start + indent;
+            copied = pos;
+
+            while (std::string::npos != (pos = program.find_first_of("\r\n", pos)))
+            {
+                if (std::string::npos == (pos = program.find_first_not_of("\r\n", pos)))
+                {
+                    break;
+                }
+
+                unindented_program.append(program.begin() + copied, program.begin() + pos);
+                copied = pos;
+
+                std::string::size_type next = program.find_first_of("\r\n", pos);
+                copied = pos + (std::min)(indent, next-pos);
+            }
+        }
+
+        unindented_program.append(program.begin() + copied, program.end());
+        copied = program.size();
+
         data->new_file->add_indented_mapped_file_section(x.begin());
-        data->new_file->source_.append(program);
+        data->new_file->source_.append(unindented_program);
     }
 
     file_position mapped_file::position_of(boost::string_ref::const_iterator pos) const
