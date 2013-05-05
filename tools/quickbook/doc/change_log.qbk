@@ -291,6 +291,7 @@ Boost 1.46.1:
 * 1.6 changes:
   * Better template argument parsing, so that it understands things
     like escaped markup.
+  * Support for using macros in the doc info block.
 * Internal changes:
   * Convert to use `boost::string_ref`.
   * Clean up the source map implementation (used to get the correct

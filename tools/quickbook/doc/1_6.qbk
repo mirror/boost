@@ -70,6 +70,19 @@ before.
 
 [endsect] [/docinfo]
 
+[section:doc-info-macros Macros in docinfo block]
+
+You can now expand macros in text fields in the docinfo block. In the top
+docinfo block only the predefined macros are available, but in nested documents
+macros defined in the parent document are also available.
+
+There's a small bug here - this leaks into older versions for the `license`
+and `purpose` fields, but since only the predefined macros are available, it's
+unlikely to break any existing documents. So I'd rather not complicate the code
+further by fixing that.
+
+[endsect]
+
 [section:scope Scoping templates and macros]
 
 A long standing quickbook bug is that macros are scoped by file, but templates
