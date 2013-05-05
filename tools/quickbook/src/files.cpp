@@ -311,11 +311,6 @@ namespace quickbook
                         }
                     }
 
-                    // Simple case for the first line, as we already know the
-                    // corresponding position for the start of line.
-                    if (newline_count == 0)
-                        return pos - section->our_pos + section->original_pos;
-
                     // The start of the line in the original source.
                     boost::string_ref::size_type original_line =
                         section->original_pos;
@@ -533,7 +528,7 @@ namespace quickbook
             program.erase(pos, (std::min)(indent, next-pos));
         }
 
-        data->new_file->add_indented_mapped_file_section(x.begin() + indent);
+        data->new_file->add_indented_mapped_file_section(x.begin());
         data->new_file->source_.append(program);
     }
 
