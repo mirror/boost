@@ -293,10 +293,16 @@ namespace quickbook
             switch (section->section_type) {
                 case mapped_file_section::normal:
                     return pos - section->our_pos + section->original_pos;
+
                 case mapped_file_section::empty:
                     return section->original_pos;
+
                 case mapped_file_section::indented: {
+                    // Will contain the start of the current line.
                     boost::string_ref::size_type our_line = section->our_pos;
+
+                    // Will contain the number of lines in the block before
+                    // the current line.
                     unsigned newline_count = 0;
 
                     for(boost::string_ref::size_type i = section->our_pos;
@@ -307,10 +313,13 @@ namespace quickbook
                             ++newline_count;
                         }
                     }
-                    
+
+                    // Simple case for the first line, as we already know the
+                    // corresponding position for the start of line.
                     if (newline_count == 0)
                         return pos - section->our_pos + section->original_pos;
 
+                    // The start of the line in the original source.
                     boost::string_ref::size_type original_line =
                         section->original_pos;
                     
@@ -319,7 +328,8 @@ namespace quickbook
                             --newline_count;
                         ++original_line;
                     }
-                    
+
+                    // Skip over indentation
                     for(unsigned i = section->indentation; i > 0; --i) {
                         if (original->source()[original_line] == '\n' ||
                             original->source()[original_line] == '\0') break;
@@ -331,6 +341,7 @@ namespace quickbook
                     assert(original->source()[original_line] ==
                         source()[our_line]);
 
+                    // Calculate the position
                     return original_line + (pos - our_line);
                 }
                 default:
