@@ -5,6 +5,7 @@
     #include <some_header>
         #include "another_header.hpp"
     #   define A_MACRO value
+    #define stringize(hello) #hello
     // No escape
     /* No escape */
     /* No escape

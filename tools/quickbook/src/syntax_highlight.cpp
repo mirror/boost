@@ -270,12 +270,21 @@ namespace quickbook
                     do_macro(self.actions, &syntax_highlight_actions::do_macro);
                 error_action error(self.actions.state);
 
-                program
-                    =
-                    *(  (+cl::space_p)                  [plain_char]
+                program =
+                    *(  (*cl::space_p)                  [plain_char]
+                    >>  (line_start | rest_of_line)
+                    >>  *rest_of_line
+                    )
+                    ;
+
+                line_start =
+                        preprocessor                    [span("preprocessor")]
+                    ;
+                
+                rest_of_line = 
+                        (+cl::blank_p)                  [plain_char]
                     |   macro
                     |   escape
-                    |   preprocessor                    [span("preprocessor")]
                     |   cl::eps_p(ph::var(self.actions.support_callouts))
                     >>  (   line_callout                [callout]
                         |   inline_callout              [callout]
@@ -287,8 +296,8 @@ namespace quickbook
                     |   string_                         [span("string")]
                     |   char_                           [span("char")]
                     |   number                          [span("number")]
-                    |   u8_codepoint_p                  [unexpected_char]
-                    )
+                    |   ~cl::eps_p(cl::eol_p)
+                    >>  u8_codepoint_p                  [unexpected_char]
                     ;
 
                 macro =
@@ -359,8 +368,7 @@ namespace quickbook
                     ;   // make sure we recognize whole words only
 
                 special
-                    =   +cl::chset_p("~!%^&*()+={[}]:;,<.>?/|\\-") |
-                        "##"
+                    =   +cl::chset_p("~!%^&*()+={[}]:;,<.>?/|\\#-")
                     ;
 
                 string_char = ('\\' >> u8_codepoint_p) | (cl::anychar_p - '\\');
@@ -388,7 +396,7 @@ namespace quickbook
             }
 
             cl::rule<Scanner>
-                            program, macro, preprocessor,
+                            program, line_start, rest_of_line, macro, preprocessor,
                             inline_callout, line_callout, comment,
                             special, string_, 
                             char_, number, identifier, keyword, escape,

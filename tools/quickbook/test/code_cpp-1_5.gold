@@ -6,6 +6,7 @@
 <programlisting><phrase role="preprocessor">#include</phrase> <phrase role="special">&lt;</phrase><phrase role="identifier">some_header</phrase><phrase role="special">&gt;</phrase>
     <phrase role="preprocessor">#include</phrase> <phrase role="string">&quot;another_header.hpp&quot;</phrase>
 <phrase role="preprocessor">#   define</phrase> <phrase role="identifier">A_MACRO</phrase> <phrase role="identifier">value</phrase>
+<phrase role="preprocessor">#define</phrase> <phrase role="identifier">stringize</phrase><phrase role="special">(</phrase><phrase role="identifier">hello</phrase><phrase role="special">)</phrase> <phrase role="special">#</phrase><phrase role="identifier">hello</phrase>
 <phrase role="comment">// No escape</phrase>
 <phrase role="comment">/* No escape */</phrase>
 <phrase role="comment">/* No escape

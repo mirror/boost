@@ -279,8 +279,11 @@ Boost 1.46.1:
 
 * When code blocks are indented using a mixture of tabs and spaces,
   convert indentation to spaces.
-* Support the token pasting operator (`##`) in C++ code blocks
-  ([@https://svn.boost.org/trac/boost/ticket/8510 #8510]).
+* In the C++ systax highlighter, fix syntax highlighting for `#`, so that it's
+  used for preprocessor statements at the start of a line, and as a 'special'
+  character elsewhere
+  ([@https://svn.boost.org/trac/boost/ticket/8510 #8510],
+  [@https://svn.boost.org/trac/boost/ticket/8511 #8511]).
 * Hidden options for formatting of `--output-deps`. Not really for public use
 * yet.
 * 1.6 changes:
