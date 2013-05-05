@@ -205,20 +205,23 @@ namespace quickbook
         keywords_holder()
         {
             cpp
-                    =   "and_eq", "and", "asm", "auto", "bitand", "bitor",
-                        "bool", "break", "case", "catch", "char", "class",
-                        "compl", "const_cast", "const", "continue", "default",
-                        "delete", "do", "double", "dynamic_cast",  "else",
-                        "enum", "explicit", "export", "extern", "false",
-                        "float", "for", "friend", "goto", "if", "inline",
-                        "int", "long", "mutable", "namespace", "new", "not_eq",
-                        "not", "operator", "or_eq", "or", "private",
-                        "protected", "public", "register", "reinterpret_cast",
-                        "return", "short", "signed", "sizeof", "static",
+                    =   "alignas", "alignof", "and_eq", "and", "asm", "auto",
+                        "bitand", "bitor", "bool", "break", "case", "catch",
+                        "char", "char16_t", "char32_t", "class", "compl",
+                        "const", "const_cast", "constexpr", "continue",
+                        "decltype", "default", "delete", "do", "double",
+                        "dynamic_cast",  "else", "enum", "explicit", "export",
+                        "extern", "false", "float", "for", "friend", "goto",
+                        "if", "inline", "int", "long", "mutable", "namespace",
+                        "new", "noexcept", "not_eq", "not", "nullptr",
+                        "operator", "or_eq", "or", "private", "protected",
+                        "public", "register", "reinterpret_cast", "return",
+                        "short", "signed", "sizeof", "static", "static_assert",
                         "static_cast", "struct", "switch", "template", "this",
-                        "throw", "true", "try", "typedef", "typeid",
-                        "typename", "union", "unsigned", "using", "virtual",
-                        "void", "volatile", "wchar_t", "while", "xor_eq", "xor"
+                        "thread_local", "throw", "true", "try", "typedef",
+                        "typeid", "typename", "union", "unsigned", "using",
+                        "virtual", "void", "volatile", "wchar_t", "while",
+                        "xor_eq", "xor"
                     ;
 
             python

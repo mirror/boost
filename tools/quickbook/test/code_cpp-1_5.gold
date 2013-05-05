@@ -29,4 +29,12 @@
   </para>
 <programlisting><phrase role="comment">/* Oh dear <emphasis role="bold">bold</emphasis>
 </phrase></programlisting>
+  <para>
+    Just some code:
+  </para>
+<programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{</phrase>
+    <phrase role="keyword">constexpr</phrase> <phrase role="keyword">char32_t</phrase> <phrase role="identifier">x</phrase> <phrase role="special">=</phrase> <phrase role="char">'a'</phrase><phrase role="special">;</phrase>
+    <phrase role="keyword">const</phrase> <phrase role="keyword">auto</phrase> <phrase role="identifier">y</phrase> <phrase role="special">=</phrase> <phrase role="identifier">x</phrase> <phrase role="special">-</phrase> <phrase role="char">' '</phrase><phrase role="special">;</phrase>
+<phrase role="special">}</phrase>
+</programlisting>
 </article>
