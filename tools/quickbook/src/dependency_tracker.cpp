@@ -56,6 +56,38 @@ namespace quickbook
         return fs::canonical(p) / extra;
     }
 
+    static char const* control_escapes[16] = {
+        "\\000", "\\001", "\\002", "\\003",
+        "\\004", "\\005", "\\006", "\\a",
+        "\\b",   "\\t",   "\\n",   "\\v",
+        "\\f",   "\\r",   "\\016", "\\017"
+    };
+
+    static std::string escaped_path(fs::path const& path)
+    {
+        std::string generic = detail::path_to_generic(path);
+        std::string result;
+        result.reserve(generic.size());
+
+        BOOST_FOREACH(char c, generic)
+        {
+            if (c < 16) {
+                result += control_escapes[c];
+            }
+            else if (c == '\\') {
+                result += "\\\\";
+            }
+            else if (c == 127) {
+                result += "\\177";
+            }
+            else {
+                result += c;
+            }
+        }
+
+        return result;
+    }
+
     bool dependency_tracker::add_dependency(fs::path const& f) {
         bool found = fs::exists(fs::status(f));
         dependencies[normalize_path(f)] |= found;
@@ -67,7 +99,7 @@ namespace quickbook
         BOOST_FOREACH(dependency_list::value_type const& d, dependencies)
         {
             if (d.second) {
-                out << detail::path_to_generic(d.first) << std::endl;
+                out << escaped_path(d.first) << std::endl;
             }
         }
     }
@@ -77,7 +109,7 @@ namespace quickbook
         BOOST_FOREACH(dependency_list::value_type const& d, dependencies)
         {
             out << (d.second ? "+ " : "- ")
-                << detail::path_to_generic(d.first) << std::endl;
+                << escaped_path(d.first) << std::endl;
         }
     }
 }
