@@ -209,7 +209,7 @@ alias ttimemty
 #
 # All of tti, non-variadic macros
 #
-alias tti : ttimfsig ttimfsigcv ttimd ttimfn ttimfncv ttismfsig ttismd ttismfn ttidata ttifun ttitmp ttitmpcp ttity ttimemty ;
+alias ttinovm : ttimfsig ttimfsigcv ttimd ttimfn ttimfncv ttismfsig ttismd ttismfn ttidata ttifun ttitmp ttitmpcp ttity ttimemty ;
 
 alias ttitmpv : : 
         <toolset>gcc
@@ -522,3 +522,8 @@ alias ttivm : ttitmpv ttitmpcpv ttitmpcpvm ;
 # All templates
 #
 alias ttitemplate_all : ttitemplate ttivm ;
+
+#
+# All tests
+#
+alias tti : ttinovm ttivm;
