@@ -255,9 +255,12 @@ so that they aren't wrapped in paragraph tags. The main use is
 for escaped docbook block tags, such as:
 
     [template chapter[title]
-        [block'''<chapter><title>'''[title]'''</title>''']]
+    [block'''<chapter><title>'''[title]'''</title>''']
+    ]
+
     [template chapterend
-        [block'''</chapter>''']]
+    [block'''</chapter>''']
+    ]
 
     [chapter An example chapter]
 
