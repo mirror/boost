@@ -105,7 +105,7 @@
 <SPAN CLASS="keyword">public</SPAN>:
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> Container::value_type  char_type;
     <SPAN CLASS="keyword">typedef</SPAN> seekable_device_tag             category;
-    container_device(Container& container) 
+    container_device(Container&amp; container)
         : container_(container), pos_(<SPAN CLASS='numeric_literal'>0</SPAN>)
         { }
 
@@ -165,10 +165,10 @@
         <SPAN CLASS="keyword">return</SPAN> pos_;
     }
 
-    Container& container() { <SPAN CLASS="keyword">return</SPAN> container_; }
+    Container&amp; container() { <SPAN CLASS="keyword">return</SPAN> container_; }
 <SPAN CLASS="keyword">private</SPAN>:
     <SPAN CLASS="keyword">typedef</SPAN> <SPAN CLASS="keyword">typename</SPAN> Container::size_type   size_type;
-    Container&  container_;
+    Container&amp;  container_;
     size_type   pos_;
 };
 

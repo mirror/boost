@@ -78,27 +78,27 @@
     <A CLASS="documented" HREF="#default_ctor">filtering_streambuf</A>();
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;
-    <A CLASS="documented" HREF="#policy_ctor">filtering_streambuf</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
+    <A CLASS="documented" HREF="#policy_ctor">filtering_streambuf</A>( <SPAN CLASS="keyword">const</SPAN> T&amp; t,
                          std::streamsize buffer_size = <SPAN CLASS="omitted">default value</SPAN>,
                          std::streamsize pback_size = <SPAN CLASS="omitted">default value</SPAN> );
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> StreamOrStreambuf&gt;
-    <A CLASS="documented" HREF="#stream_ctor">filtering_streambuf</A>( StreamOrStreambuf& t,
+    <A CLASS="documented" HREF="#stream_ctor">filtering_streambuf</A>( StreamOrStreambuf&amp; t,
                          std::streamsize buffer_size = <SPAN CLASS="omitted">default value</SPAN>,
                          std::streamsize pback_size = <SPAN CLASS="omitted">default value</SPAN> );
 
-    <SPAN CLASS='keyword'>const</SPAN> std::type_info& <A CLASS='documented' HREF='#component_type'>component_type</A>(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
+    <SPAN CLASS='keyword'>const</SPAN> std::type_info&amp; <A CLASS='documented' HREF='#component_type'>component_type</A>(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
 
     <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>typename</SPAN> T&gt;
     T* <A CLASS='documented' HREF='#component'>component</A>(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#policy_push">push</A>( <SPAN CLASS="keyword">const</SPAN> T& t,
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#policy_push">push</A>( <SPAN CLASS="keyword">const</SPAN> T&amp; t,
                std::streamsize buffer_size = <SPAN CLASS="omitted">default value</SPAN>,
                std::streamsize pback_size = <SPAN CLASS="omitted">default value</SPAN> );
 
     <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> StreamOrStreambuf&gt;
-    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_push">push</A>( StreamOrStreambuf& t,
+    <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#stream_push">push</A>( StreamOrStreambuf&amp; t,
                std::streamsize buffer_size = <SPAN CLASS="omitted">default value</SPAN>,
                std::streamsize pback_size = <SPAN CLASS="omitted">default value</SPAN> );
     <SPAN CLASS="keyword">void</SPAN> <A CLASS="documented" HREF="#pop">pop</A>();
@@ -114,7 +114,7 @@
         <SPAN CLASS='comment'>// Deprecated members</SPAN>
 
     <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N&gt;
-    <SPAN CLASS='keyword'>const</SPAN> std::type_info& <A CLASS='documented' HREF='#component_type'>component_type</A>() <SPAN CLASS='keyword'>const</SPAN>;
+    <SPAN CLASS='keyword'>const</SPAN> std::type_info&amp; <A CLASS='documented' HREF='#component_type'>component_type</A>() <SPAN CLASS='keyword'>const</SPAN>;
 
     <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N, <SPAN CLASS='keyword'>typename</SPAN> T&gt;
     T* <A CLASS='documented' HREF='#component'>component</A>() <SPAN CLASS='keyword'>const</SPAN>;
@@ -164,7 +164,7 @@
 <A NAME="policy_ctor"></A>
 <H4><CODE>filtering_streambuf::push</CODE></H4>
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;
-    filtering_streambuf( <SPAN CLASS="keyword">const</SPAN> T& t,
+    filtering_streambuf( <SPAN CLASS="keyword">const</SPAN> T&amp; t,
                          std::streamsize buffer_size,
                          std::streamsize pback_size );</PRE>
 <P>
@@ -204,7 +204,7 @@
 
 <A NAME="stream_ctor"></A>
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> StreamOrStreambuffer&gt;
-    filtering_streambuf( StreamOrStreambuffer& t,
+    filtering_streambuf( StreamOrStreambuffer&amp; t,
                          std::streamsize buffer_size,
                          std::streamsize pback_size );</PRE>
 
@@ -235,7 +235,7 @@
 <A NAME="component_type"></A>
 <H4><CODE>filtering_streambuf::component_type</CODE></H4>
 
-<PRE CLASS="broken_ie">    <SPAN CLASS='keyword'>const</SPAN> std::type_info& component_type(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
+<PRE CLASS="broken_ie">    <SPAN CLASS='keyword'>const</SPAN> std::type_info&amp; component_type(<SPAN CLASS="keyword">int</SPAN> n) <SPAN CLASS='keyword'>const</SPAN>;
 </PRE>
 
 <P>
@@ -244,7 +244,7 @@
 
 <PRE CLASS="broken_ie">    <SPAN CLASS='comment'>// Deprecated</SPAN>
     <SPAN CLASS='keyword'>template</SPAN>&lt;<SPAN CLASS='keyword'>int</SPAN> N&gt;
-    <SPAN CLASS='keyword'>const</SPAN> std::type_info& component_type() <SPAN CLASS='keyword'>const</SPAN>;
+    <SPAN CLASS='keyword'>const</SPAN> std::type_info&amp; component_type() <SPAN CLASS='keyword'>const</SPAN>;
 </PRE>
 
 <P>
@@ -284,7 +284,7 @@
 <A NAME="policy_push"></A>
 <H4><CODE>filtering_streambuf::push</CODE></H4>
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;
-    void push( <SPAN CLASS="keyword">const</SPAN> T& t,
+    void push( <SPAN CLASS="keyword">const</SPAN> T&amp; t,
                std::streamsize buffer_size,
                std::streamsize pback_size );</PRE>
 <P>
@@ -324,7 +324,7 @@
 
 <A NAME="stream_push"></A>
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> StreamOrStreambuffer&gt;
-    void push( StreamOrStreambuffer& t,
+    void push( StreamOrStreambuffer&amp; t,
                std::streamsize buffer_size,
                std::streamsize pback_size );</PRE>
 
