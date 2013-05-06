@@ -129,7 +129,6 @@
 <H4>Template parameters</H4>
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2>
-<TR>
     <TR>
         <TD VALIGN="top"><I>Mode</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A <A HREF="../guide/modes.html#mode_tags">mode tag</A>.</TD>
@@ -148,7 +147,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>Access</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>One of <CODE>public_</CODE> or <CODE>protected_</CODE>, indicating the level of access of the chain interface. Used to hide the chain interface when defining a derived class of <CODE>filtering_streambuf</CODE></TD>
+        <TD>One of <CODE>public_</CODE> or <CODE>protected_</CODE>, indicating the level of access of the chain interface. Used to hide the chain interface when defining a derived class of <CODE>filtering_streambuf</CODE></A></TD>
     </TR>
 </TABLE>
 
@@ -162,7 +161,7 @@
 </P>
 
 <A NAME="policy_ctor"></A>
-<H4><CODE>filtering_streambuf::push</CODE></H4>
+<H4><CODE>filtering_streambuf::filtering_streambuf</CODE></H4>
 <PRE CLASS="broken_ie">    <SPAN CLASS="keyword">template</SPAN>&lt;<SPAN CLASS="keyword">typename</SPAN> T&gt;
     filtering_streambuf( <SPAN CLASS="keyword">const</SPAN> T&amp; t,
                          std::streamsize buffer_size,
@@ -172,7 +171,6 @@
 </P>
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2 ID="Table1">
-<TR>
     <TR>
         <TD VALIGN="top"><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A <A HREF="../../../../doc/html/CopyConstructible.html" TARGET="_top">CopyConstructible</A> model of one of the <A HREF="../guide/concepts.html#filter_concepts">Filter</A> or <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
@@ -187,7 +185,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>pback_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="../guide/modes.html#input"><CODE>input</CODE></TD>
+        <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="../guide/modes.html#input"><CODE>input</CODE></A></TD>
     </TR>
 </TABLE>
 
@@ -213,7 +211,6 @@
 </P>
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2 ID="Table2">
-<TR>
     <TR>
         <TD VALIGN="top"><I>StreamOrStreambuffer</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A standard stream or stream buffer type whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
@@ -224,7 +221,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>pback_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="../guide/modes.html#input"><CODE>input</CODE></TD>
+        <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="../guide/modes.html#input"><CODE>input</CODE></A></TD>
     </TR>
 </TABLE>
 
@@ -292,7 +289,6 @@
 </P>
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2 ID="Table3">
-<TR>
     <TR>
         <TD VALIGN="top"><I>T</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A <A HREF="../../../../doc/html/CopyConstructible.html" TARGET="_top">CopyConstructible</A> model of one of the <A HREF="../guide/concepts.html#filter_concepts">Filter</A> or <A HREF="../guide/concepts.html#device_concepts">Device</A> concepts whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
@@ -307,7 +303,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>pback_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="../guide/modes.html#input"><CODE>input</CODE></TD>
+        <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="../guide/modes.html#input"><CODE>input</CODE></A></TD>
     </TR>
 </TABLE>
 
@@ -333,7 +329,6 @@
 </P>
 
 <TABLE STYLE="margin-left:2em" BORDER=0 CELLPADDING=2 ID="Table4">
-<TR>
     <TR>
         <TD VALIGN="top"><I>StreamOrStreambuffer</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
         <TD>A standard stream or stream buffer type whose <A HREF="../guide/traits.html#char_type">character type</A> is <A HREF="#template_params"><CODE>Ch</CODE></A> and whose <A HREF="../guide/modes.html">mode</A> refines <A HREF="#template_params"><CODE>Mode</CODE></A></TD>
@@ -344,7 +339,7 @@
     </TR>
     <TR>
         <TD VALIGN="top"><I>pback_size</I></TD><TD WIDTH="2em" VALIGN="top">-</TD>
-        <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="../guide/modes.html#input"><CODE>input</CODE></TD>
+        <TD>The size of the putback buffer, relevant only if <CODE>Mode</CODE> is a refinement of <A HREF="../guide/modes.html#input"><CODE>input</CODE></A></TD>
     </TR>
 </TABLE>
 

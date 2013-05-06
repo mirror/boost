@@ -47,7 +47,7 @@
         <SPAN CLASS="keyword">int</SPAN> get(Source&amp; src)
         {
             <SPAN CLASS="keyword">int</SPAN> c;
-            <SPAN CLASS="keyword">return</SPAN> (c == boost::iostreams::get(src)) != <SPAN CLASS='numeric_literal'>EOF</SPAN> &amp;&amp; 
+            <SPAN CLASS="keyword">return</SPAN> (c = boost::iostreams::get(src)) != <SPAN CLASS='numeric_literal'>EOF</SPAN> &amp;&amp;
                     c != WOULD_BLOCK 
                         ?
                 tolower((<SPAN CLASS="keyword">unsigned</SPAN> <SPAN CLASS="keyword">char</SPAN>) c) :
