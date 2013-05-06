@@ -246,7 +246,7 @@ void test_std_io()
         temp_file          dest1;
         temp_file          dest2;
         filtering_ostream  out;
-        std::ofstream      stream1(dest1.name(), out_mode);
+        std::ofstream      stream1(dest1.name().c_str(), out_mode);
         out.push(tee(stream1));
         out.push(file_sink(dest2.name(), out_mode));
         write_data_in_chunks(out);
@@ -259,7 +259,7 @@ void test_std_io()
         temp_file          dest1;
         temp_file          dest2;
         filtering_ostream  out;
-        std::ofstream      stream1(dest1.name(), out_mode);
+        std::ofstream      stream1(dest1.name().c_str(), out_mode);
         out.push( tee ( stream1,
                         file_sink(dest2.name(), out_mode) ) );
         write_data_in_chunks(out);
@@ -272,7 +272,7 @@ void test_std_io()
         temp_file          dest1;
         temp_file          dest2;
         filtering_ostream  out;
-        std::ofstream      stream2(dest2.name(), out_mode);
+        std::ofstream      stream2(dest2.name().c_str(), out_mode);
         out.push( tee ( file_sink(dest1.name(), out_mode),
                         stream2 ) );
         write_data_in_chunks(out);
@@ -285,8 +285,8 @@ void test_std_io()
         temp_file          dest1;
         temp_file          dest2;
         filtering_ostream  out;
-        std::ofstream      stream1(dest1.name(), out_mode);
-        std::ofstream      stream2(dest2.name(), out_mode);
+        std::ofstream      stream1(dest1.name().c_str(), out_mode);
+        std::ofstream      stream2(dest2.name().c_str(), out_mode);
         out.push(tee(stream1, stream2));
         write_data_in_chunks(out);
         BOOST_CHECK_MESSAGE(
