@@ -303,6 +303,44 @@ void indented_map_leading_blanks_test()
         BOOST_TEST_EQ(f1->source(),
             boost::string_ref("Code line1\n\nCode line2"));
     }
+}
+
+void indented_map_trailing_blanks_test()
+{
+    quickbook::mapped_file_builder builder;
+
+    {
+        boost::string_ref source("\n\n   Code line1\n  ");
+        quickbook::file_ptr fake_file = new quickbook::file(
+            "(fake file)", source, 105u);
+        builder.start(fake_file);
+        builder.unindent_and_add(fake_file->source());
+        quickbook::file_ptr f1 = builder.release();
+        BOOST_TEST_EQ(f1->source(),
+            boost::string_ref("Code line1\n"));
+    }
+
+    {
+        boost::string_ref source("    \n  \n   Code line1\n    ");
+        quickbook::file_ptr fake_file = new quickbook::file(
+            "(fake file)", source, 105u);
+        builder.start(fake_file);
+        builder.unindent_and_add(fake_file->source());
+        quickbook::file_ptr f1 = builder.release();
+        BOOST_TEST_EQ(f1->source(),
+            boost::string_ref("Code line1\n "));
+    }
+
+    {
+        boost::string_ref source("   Code line1\n \n   Code line2\n  ");
+        quickbook::file_ptr fake_file = new quickbook::file(
+            "(fake file)", source, 105u);
+        builder.start(fake_file);
+        builder.unindent_and_add(fake_file->source());
+        quickbook::file_ptr f1 = builder.release();
+        BOOST_TEST_EQ(f1->source(),
+            boost::string_ref("Code line1\n\nCode line2\n"));
+    }
 
 }
 
@@ -351,6 +389,7 @@ int main()
     indented_map_tests();
     indented_map_tests2();
     indented_map_leading_blanks_test();
+    indented_map_trailing_blanks_test();
     indented_map_mixed_test();
     return boost::report_errors();
 }

@@ -566,6 +566,7 @@ namespace quickbook
                 copied = pos;
 
                 std::string::size_type next = program.find_first_not_of(" \t", pos);
+                if (next == std::string::npos) next = program.size();
 
                 unsigned length = indentation_count(boost::string_ref(
                     &program[pos], next - pos));
@@ -596,6 +597,7 @@ namespace quickbook
                 copied = pos;
 
                 std::string::size_type next = program.find_first_of("\r\n", pos);
+                if (next == std::string::npos) next = program.size();
                 copied = pos + (std::min)(indent, next-pos);
             }
         }
