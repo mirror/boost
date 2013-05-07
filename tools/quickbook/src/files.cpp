@@ -551,23 +551,24 @@ namespace quickbook
             }
         }
 
+        // Trim white spaces from column 0..indent
         std::string unindented_program;
-        std::string::size_type copied = start;
+        std::string::size_type copy_start = start;
+        pos = start;
 
-        if (mixed_indentation)
-        {
-            pos = start;
+        do {
+            if (std::string::npos == (pos = program.find_first_not_of("\r\n", pos)))
+                break;
 
-            do {
-                if (std::string::npos == (pos = program.find_first_not_of("\r\n", pos)))
-                    break;
+            unindented_program.append(program.begin() + copy_start, program.begin() + pos);
+            copy_start = pos;
 
-                unindented_program.append(program.begin() + copied, program.begin() + pos);
-                copied = pos;
+            // Find the end of the indentation.
+            std::string::size_type next = program.find_first_not_of(" \t", pos);
+            if (next == std::string::npos) next = program.size();
 
-                std::string::size_type next = program.find_first_not_of(" \t", pos);
-                if (next == std::string::npos) next = program.size();
-
+            if (mixed_indentation)
+            {
                 unsigned length = indentation_count(boost::string_ref(
                     &program[pos], next - pos));
 
@@ -576,34 +577,18 @@ namespace quickbook
                     unindented_program.append(new_indentation);
                 }
 
-                copied = next;
-            } while (std::string::npos !=
-                (pos = program.find_first_of("\r\n", pos)));
-        }
-        else
-        {
-            // Trim white spaces from column 0..indent
-            pos = start + indent;
-            copied = pos;
-
-            while (std::string::npos != (pos = program.find_first_of("\r\n", pos)))
-            {
-                if (std::string::npos == (pos = program.find_first_not_of("\r\n", pos)))
-                {
-                    break;
-                }
-
-                unindented_program.append(program.begin() + copied, program.begin() + pos);
-                copied = pos;
-
-                std::string::size_type next = program.find_first_of("\r\n", pos);
-                if (next == std::string::npos) next = program.size();
-                copied = pos + (std::min)(indent, next-pos);
+                copy_start = next;
             }
-        }
+            else
+            {
+                copy_start = (std::min)(pos + indent, next);
+            }
 
-        unindented_program.append(program.begin() + copied, program.end());
-        copied = program.size();
+            pos = next;
+        } while (std::string::npos !=
+            (pos = program.find_first_of("\r\n", pos)));
+
+        unindented_program.append(program.begin() + copy_start, program.end());
 
         data->new_file->add_indented_mapped_file_section(x.begin());
         data->new_file->source_.append(unindented_program);
