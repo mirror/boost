@@ -264,8 +264,11 @@ void test_converion_to_float_types()
     BOOST_CHECK_THROW(lexical_cast<test_t>("."), bad_lexical_cast);
 
     BOOST_CHECK_THROW(lexical_cast<test_t>("-B"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<test_t>("0xB"), bad_lexical_cast);
-    BOOST_CHECK_THROW(lexical_cast<test_t>("0x0"), bad_lexical_cast);
+
+    // Following two tests are not valid for C++11 compilers    
+    //BOOST_CHECK_THROW(lexical_cast<test_t>("0xB"), bad_lexical_cast);
+    //BOOST_CHECK_THROW(lexical_cast<test_t>("0x0"), bad_lexical_cast);
+
     BOOST_CHECK_THROW(lexical_cast<test_t>("--1.0"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>("1.0e--1"), bad_lexical_cast);
     BOOST_CHECK_THROW(lexical_cast<test_t>("1.0.0"), bad_lexical_cast);
