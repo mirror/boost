@@ -12,7 +12,7 @@
 //        with features contributed and bugs found by
 //        Antony Polukhin, Ed Brey, Mark Rodgers, 
 //        Peter Dimov, and James Curran
-// when:  July 2001, Aplril 2013
+// when:  July 2001, April 2013 - May 2013
 
 #include <algorithm>
 #include <typeinfo>
@@ -36,6 +36,11 @@
 #  define BOOST_AUX_ANY_TYPE_ID_NAME
 #include <cstring>
 # endif 
+
+#if defined(_MSC_VER) 
+#pragma warning(push)
+#pragma warning(disable: 4172) // Mistakenly warns: returning address of local variable or temporary
+#endif
 
 namespace boost
 {
@@ -134,7 +139,12 @@ namespace boost
             return !content;
         }
 
-        const std::type_info & type() const
+        void clear() BOOST_NOEXCEPT
+        {
+            any().swap(*this);
+        }
+
+        const std::type_info & type() const BOOST_NOEXCEPT
         {
             return content ? content->type() : typeid(void);
         }
@@ -155,7 +165,7 @@ namespace boost
 
         public: // queries
 
-            virtual const std::type_info & type() const = 0;
+            virtual const std::type_info & type() const BOOST_NOEXCEPT = 0;
 
             virtual placeholder * clone() const = 0;
 
@@ -179,7 +189,7 @@ namespace boost
 #endif
         public: // queries
 
-            virtual const std::type_info & type() const
+            virtual const std::type_info & type() const BOOST_NOEXCEPT
             {
                 return typeid(ValueType);
             }
@@ -269,7 +279,18 @@ namespace boost
         nonref * result = any_cast<nonref>(&operand);
         if(!result)
             boost::throw_exception(bad_any_cast());
-        return static_cast<ValueType>(*result);
+
+        // Attempt to avoid construction of a temporary object in cases when 
+        // `ValueType` is not a reference. Example:
+        // `static_cast<std::string>(*result);` 
+        // which is equal to `std::string(*result);`
+        typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
+            boost::is_reference<ValueType>,
+            ValueType,
+            ValueType&
+        >::type ref_type;
+
+        return static_cast<ref_type>(*result);
     }
 
     template<typename ValueType>
@@ -309,5 +330,9 @@ namespace boost
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 #endif
