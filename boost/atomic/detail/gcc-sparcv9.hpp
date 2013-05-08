@@ -792,6 +792,7 @@ template<bool Sign>
 class base_atomic<void *, void *, 4, Sign>
 {
     typedef base_atomic this_type;
+    typedef ptrdiff_t difference_type;
     typedef void * value_type;
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
@@ -857,7 +858,24 @@ public:
         return true;
     }
 
-    BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+    value_type
+    fetch_add(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        value_type tmp = load(memory_order_relaxed);
+        do {} while(!compare_exchange_weak(tmp, (char*)tmp + v, order, memory_order_relaxed));
+        return tmp;
+    }
+
+    value_type
+    fetch_sub(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        value_type tmp = load(memory_order_relaxed);
+        do {} while(!compare_exchange_weak(tmp, (char*)tmp - v, order, memory_order_relaxed));
+        return tmp;
+    }
+
+    BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS
+
 private:
     base_atomic(const base_atomic &) /* = delete */ ;
     void operator=(const base_atomic &) /* = delete */ ;
