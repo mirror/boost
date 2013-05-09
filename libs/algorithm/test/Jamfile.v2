@@ -47,6 +47,10 @@ alias unit_test_framework
      [ run is_partitioned_test1.cpp unit_test_framework         : : : : is_partitioned_test1 ]
      [ run partition_copy_test1.cpp unit_test_framework         : : : : partition_copy_test1 ]
 
+# Cxx14 tests
+     [ run equal_test.cpp unit_test_framework         : : : : equal_test ]
+     [ run mismatch_test.cpp unit_test_framework      : : : : mismatch_test ]
+
 # Hex tests
      [ run hex_test1.cpp unit_test_framework         : : : : hex_test1 ]
      [ run hex_test2.cpp unit_test_framework         : : : : hex_test2 ]
