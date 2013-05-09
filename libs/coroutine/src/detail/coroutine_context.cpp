@@ -8,6 +8,11 @@
 
 #include "boost/coroutine/detail/coroutine_context.hpp"
 
+#ifdef BOOST_MSVC
+ #pragma warning (push)
+ #pragma warning (disable: 4355) // using 'this' in initializer list
+#endif
+
 #if defined(BOOST_USE_SEGMENTED_STACKS)
 extern "C" {
 
@@ -84,4 +89,8 @@ coroutine_context::jump( coroutine_context & other, intptr_t param, bool preserv
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
+#endif
+
+#ifdef BOOST_MSVC
+ #pragma warning (pop)
 #endif

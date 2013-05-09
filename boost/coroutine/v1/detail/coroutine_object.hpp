@@ -30,6 +30,11 @@
 #include <boost/coroutine/v1/detail/arg.hpp>
 #include <boost/coroutine/v1/detail/coroutine_base.hpp>
 
+#ifdef BOOST_MSVC
+ #pragma warning (push)
+ #pragma warning (disable: 4355) // using 'this' in initializer list
+#endif
+
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
 #endif
@@ -97,6 +102,10 @@ class coroutine_object;
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
+#endif
+
+#ifdef BOOST_MSVC
+ #pragma warning (pop)
 #endif
 
 #endif // BOOST_COROUTINES_V1_DETAIL_COROUTINE_OBJECT_H
