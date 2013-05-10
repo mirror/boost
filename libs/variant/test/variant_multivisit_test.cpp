@@ -112,5 +112,13 @@ int test_main(int , char* [])
         arithmetics_t(true)
     );
 
+    /* Delayed multi visitation is not implemented
+    if_visitor if_vis;
+    BOOST_CHECK(
+        boost::apply_visitor(if_vis)(v0, v1, v2)
+        ==
+        arithmetics_t(true)
+    );
+    */
     return boost::exit_success;
 }

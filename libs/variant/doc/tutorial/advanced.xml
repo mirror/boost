@@ -355,4 +355,57 @@ assert( std::equal(
 
 </section>
 
+<section id="variant.tutorial.multi-visitation">
+  <title>Multi visitation</title>
+
+  <para>Multi visitation extends the power and flexibility of visitation by allowing simultaneous
+    visitation of the content of three and more different <code>variant</code>
+    objects. Note that header for multi visitors shall be included separately.</para>
+
+  <para>Notably this feature requires that multi visitors are incompatible
+    with the visitor objects discussed in the tutorial above, as they must
+    operate on same amout of arguments that was passed to <code>apply_visitor</code>. 
+    The following demonstrates the implementation of a multi visitor for three parameters:
+
+<programlisting>
+#include &lt;boost/variant/multivisitors.hpp&gt;
+
+typedef <classname>boost::variant</classname>&lt;int, double, bool&gt; bool_like_t;
+typedef <classname>boost::variant</classname>&lt;int, double&gt; arithmetics_t;
+
+struct if_visitor: public <classname>boost::static_visitor</classname>&lt;arithmetics_t&gt; {
+    template &lt;class T1, class T2&gt;
+    arithmetics_t operator()(bool b, T1 v1, T2 v2) const {
+        if (b) {
+            return v1;
+        } else {
+            return v2;
+        }
+    }
+};
+</programlisting>
+  </para>
+
+  <para>As expected, the visitor is applied to three <code>variant</code>
+    arguments by means of <code>apply_visitor</code>:
+
+<programlisting>
+bool_like_t v0(1), v1(true), v2(1.0);
+
+assert(
+    <functionname>boost::apply_visitor</functionname>(if_visitor(), v0, v1, v2)
+    ==
+    arithmetics_t(true)
+);
+</programlisting>
+  </para>
+
+  <para>Finally, we must note that multi visitation does not support 
+    &quot;delayed&quot; form of
+    <code><functionname>apply_visitor</functionname></code>.
+  </para>
+
+</section>
+
+
 </section>
