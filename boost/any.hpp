@@ -21,6 +21,7 @@
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/decay.hpp>
 #include <boost/type_traits/is_reference.hpp>
+#include <boost/type_traits/is_const.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -306,6 +307,20 @@ namespace boost
 
         return any_cast<const nonref &>(const_cast<any &>(operand));
     }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    template<typename ValueType>
+    inline ValueType&& any_cast(any&& operand)
+    {
+        BOOST_STATIC_ASSERT_MSG(
+            boost::is_rvalue_reference<ValueType&&>::value 
+            || boost::is_const< typename boost::remove_reference<ValueType>::type >::value,
+            "boost::any_cast shall not be used for getting nonconst references to temporary objects" 
+        );
+        return any_cast<ValueType&&>(operand);
+    }
+#endif
+
 
     // Note: The "unsafe" versions of any_cast are not part of the
     // public interface and may be removed at any time. They are
