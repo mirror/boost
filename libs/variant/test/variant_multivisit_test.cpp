@@ -64,6 +64,21 @@ struct test_visitor: boost::static_visitor<> {
     }
 };
 
+typedef boost::variant<int, double, bool> bool_like_t;
+typedef boost::variant<int, double> arithmetics_t;
+
+struct if_visitor: public boost::static_visitor<arithmetics_t> {
+    template <class T1, class T2>
+    arithmetics_t operator()(bool b, T1 v1, T2 v2) const {
+        if (b) {
+            return v1;
+        } else {
+            return v2;
+        }
+    }
+};
+
+
 int test_main(int , char* [])
 {
     test_visitor v;
@@ -88,6 +103,14 @@ int test_main(int , char* [])
     boost::apply_visitor(v, v_array6[0], v_array6[1], v_array6[2], v_array6[3], v_array6[4]);
     boost::apply_visitor(test_visitor(), v_array6[0], v_array6[1], v_array6[2], v_array6[3], v_array6[4]);
 #endif
+
+    bool_like_t v0(1), v1(true), v2(1.0);
+
+    BOOST_CHECK(
+        boost::apply_visitor(if_visitor(), v0, v1, v2)
+        ==
+        arithmetics_t(true)
+    );
 
     return boost::exit_success;
 }
