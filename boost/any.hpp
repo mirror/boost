@@ -20,6 +20,7 @@
 #include "boost/config.hpp"
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/type_traits/decay.hpp>
+#include <boost/type_traits/add_reference.hpp>
 #include <boost/type_traits/is_reference.hpp>
 #include <boost/type_traits/is_const.hpp>
 #include <boost/throw_exception.hpp>
@@ -288,7 +289,7 @@ namespace boost
         typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_<
             boost::is_reference<ValueType>,
             ValueType,
-            ValueType&
+            BOOST_DEDUCED_TYPENAME boost::add_reference<ValueType>::type
         >::type ref_type;
 
         return static_cast<ref_type>(*result);
