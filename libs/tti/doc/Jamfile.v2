@@ -104,18 +104,9 @@ boostbook standalone
   # better use SVG's instead:
   <format>pdf:<xsl:param>admon.graphics.extension=".svg"
   <format>pdf:<xsl:param>admon.graphics.path=$(boost-images)/
-        
-  <dependency>css
-  <dependency>images
   ;
 
-install css : [ glob $(BOOST_ROOT)/doc/src/*.css ]
-    : <location>html ;
-install images : [ glob $(BOOST_ROOT)/doc/src/images/*.png ]
-    : <location>html/images ;
 install pdfinstall
     : standalone
     : <location>$(here) <install-type>PDF <name>TypeTraitsIntrospection.pdf
     ;
-explicit css ;
-explicit images ;

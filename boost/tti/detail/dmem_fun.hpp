@@ -34,12 +34,12 @@
     struct helper; \
     \
     template<class BOOST_TTI_DETAIL_TP_EC> \
-    static ::boost::type_traits::yes_type check(helper<&BOOST_TTI_DETAIL_TP_EC::name> *); \
+    static ::boost::type_traits::yes_type chkt(helper<&BOOST_TTI_DETAIL_TP_EC::name> *); \
     \
     template<class BOOST_TTI_DETAIL_TP_EC> \
-    static ::boost::type_traits::no_type check(...); \
+    static ::boost::type_traits::no_type chkt(...); \
     \
-    BOOST_STATIC_CONSTANT(bool,value=sizeof(check<BOOST_TTI_DETAIL_TP_C>(BOOST_TTI_DETAIL_NULLPTR))==sizeof(::boost::type_traits::yes_type)); \
+    BOOST_STATIC_CONSTANT(bool,value=sizeof(chkt<BOOST_TTI_DETAIL_TP_C>(BOOST_TTI_DETAIL_NULLPTR))==sizeof(::boost::type_traits::yes_type)); \
     \
     typedef boost::mpl::bool_<value> type; \
     }; \

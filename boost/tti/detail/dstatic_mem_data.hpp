@@ -70,12 +70,12 @@
     struct helper; \
     \
     template<class U> \
-    static ::boost::type_traits::yes_type check(helper<&U::name> *); \
+    static ::boost::type_traits::yes_type chkt(helper<&U::name> *); \
     \
     template<class U> \
-    static ::boost::type_traits::no_type check(...); \
+    static ::boost::type_traits::no_type chkt(...); \
     \
-    BOOST_STATIC_CONSTANT(bool,value=(!boost::function_types::is_function<Type>::value) && (sizeof(check<T>(BOOST_TTI_DETAIL_NULLPTR))==sizeof(::boost::type_traits::yes_type))); \
+    BOOST_STATIC_CONSTANT(bool,value=(!boost::function_types::is_function<Type>::value) && (sizeof(chkt<T>(BOOST_TTI_DETAIL_NULLPTR))==sizeof(::boost::type_traits::yes_type))); \
     \
     typedef boost::mpl::bool_<value> type; \
     }; \

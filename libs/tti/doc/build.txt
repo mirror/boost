@@ -1,3 +1,8 @@
+(C) Copyright Edward Diener 2011-2013
+Distributed under the Boost Software License, Version 1.0.
+(See accompanying file LICENSE_1_0.txt or copy at
+http://www.boost.org/LICENSE_1_0.txt).
+
 The library comes with full documentation with an index, 
 in both HTML and PDF format. The HTML documentation is at 
 tti\libs\tti\doc\html\index.html and the PDF documentation 
@@ -14,46 +19,15 @@ You can use the jamfile in the test directory to
 run the tests for this library.
 
 When running the tests you can use either of 
-two targets if you like. The 'tti' target runs all 
-the tests except for those involving variadic macro 
-support in the library. The 'ttivm' target runs 
-the tests involving variadic macro support in the 
-library. If you do not specify a target all tests 
-are run.
+three main targets if you like. Executing the jamfile without a 
+target, or specifying the target 'tti', will run tests for both 
+basic TTI and for the variadic macro portion of TTI. You can run 
+tests for only the basic TTI, which is the vast majority of TTI 
+functionality, by specifying only the 'ttinovm' target when 
+executing the jamfile. If you just want to run the tests for the 
+variadic macro portion of TTI, specify the target as 'ttivm'.
 
-For variadic macro support in the library 
-you will need to download the variadic_macro_data 
-library from the sandbox. You do not need this 
-library if you do not use the variadic macro 
-functionality of the library, which is a very small 
-part of the library, and you run the tests using 
-just the 'tti' target.
-
-You can execute these jamfiles while keeping this  
-library in its own separate directory from a 
-Boost distribution by:
-
-1) Having a valid boost-build.jam in a directory 
-   somewhere above the separate directory. This 
-   is always the case if you have checked out 
-   this library from the sandbox into a local 
-   directory beneath the main sandbox directory 
-   and have checked out the files from the          
-   top-level sandbox directory.
-
-       or
-
-   Setting the BOOST_BUILD_PATH environment 
-   variable to point to a Boost build directory.
-
-2) Using the --boost=/path/to/boost/installation 
-   bjam command-line parameter to point to a 
-   Boost installation and placing the library 
-   below the sandbox top-level directory with 
-   its top-level sandbox files.
-
-If you move this library under a Boost installation 
-you need only execute 'bjam' in the jamfile directories 
+You need only execute 'bjam' in the jamfile directories 
 to regenerate the docs or run the test.
 
 If you want to contact me directly, my name is 
