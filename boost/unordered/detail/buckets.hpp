@@ -15,6 +15,8 @@
 #include <boost/unordered/detail/allocate.hpp>
 #include <boost/type_traits/aligned_storage.hpp>
 #include <boost/type_traits/alignment_of.hpp>
+#include <boost/type_traits/is_nothrow_move_constructible.hpp>
+#include <boost/type_traits/is_nothrow_move_assignable.hpp>
 #include <boost/swap.hpp>
 #include <boost/assert.hpp>
 #include <boost/limits.hpp>
@@ -670,12 +672,16 @@ namespace boost { namespace unordered { namespace detail {
     // atomically assigns the new function objects in a strongly
     // exception safe manner.
 
-    template <class H, class P> class set_hash_functions;
+    template <class H, class P, bool NoThrowMoveAssign>
+    class set_hash_functions;
 
     template <class H, class P>
     class functions
     {
-        friend class boost::unordered::detail::set_hash_functions<H, P>;
+        friend class boost::unordered::detail::set_hash_functions<H, P,
+               boost::is_nothrow_move_assignable<H>::value &&
+               boost::is_nothrow_move_assignable<P>::value
+           >;
         functions& operator=(functions const&);
 
         typedef compressed<H, P> function_pair;
@@ -690,6 +696,11 @@ namespace boost { namespace unordered { namespace detail {
         function_pair const& current() const {
             return *static_cast<function_pair const*>(
                 static_cast<void const*>(&funcs_[current_]));
+        }
+
+        function_pair& current() {
+            return *static_cast<function_pair*>(
+                static_cast<void*>(&funcs_[current_]));
         }
 
         void construct(bool which, H const& hf, P const& eq)
@@ -708,6 +719,11 @@ namespace boost { namespace unordered { namespace detail {
         }
         
     public:
+
+        typedef boost::unordered::detail::set_hash_functions<H, P,
+                boost::is_nothrow_move_assignable<H>::value &&
+                boost::is_nothrow_move_assignable<P>::value
+            > set_hash_functions;
 
         functions(H const& hf, P const& eq)
             : current_(false)
@@ -733,26 +749,28 @@ namespace boost { namespace unordered { namespace detail {
             return current().second();
         }
     };
-    
+
     template <class H, class P>
-    class set_hash_functions
+    class set_hash_functions<H, P, false>
     {
         set_hash_functions(set_hash_functions const&);
         set_hash_functions& operator=(set_hash_functions const&);
+
+        typedef functions<H, P> functions_type;
     
-        functions<H,P>& functions_;
+        functions_type& functions_;
         bool tmp_functions_;
 
     public:
 
-        set_hash_functions(functions<H,P>& f, H const& h, P const& p)
+        set_hash_functions(functions_type& f, H const& h, P const& p)
           : functions_(f),
             tmp_functions_(!f.current_)
         {
             f.construct(tmp_functions_, h, p);
         }
 
-        set_hash_functions(functions<H,P>& f, functions<H,P> const& other)
+        set_hash_functions(functions_type& f, functions_type const& other)
           : functions_(f),
             tmp_functions_(!f.current_)
         {
@@ -771,6 +789,37 @@ namespace boost { namespace unordered { namespace detail {
         }
     };
 
+    template <class H, class P>
+    class set_hash_functions<H, P, true>
+    {
+        set_hash_functions(set_hash_functions const&);
+        set_hash_functions& operator=(set_hash_functions const&);
+
+        typedef functions<H, P> functions_type;
+
+        functions_type& functions_;
+        H hash_;
+        P pred_;
+    
+    public:
+
+        set_hash_functions(functions_type& f, H const& h, P const& p) :
+            functions_(f),
+            hash_(h),
+            pred_(p) {}
+
+        set_hash_functions(functions_type& f, functions_type const& other) :
+            functions_(f),
+            hash_(other.hash_function()),
+            pred_(other.key_eq()) {}
+
+        void commit()
+        {
+            functions_.current().first() = boost::move(hash_);
+            functions_.current().second() = boost::move(pred_);
+        }
+    };
+    
     ////////////////////////////////////////////////////////////////////////////
     // rvalue parameters when type can't be a BOOST_RV_REF(T) parameter
     // e.g. for int
