@@ -267,9 +267,6 @@ namespace any_tests // test definitions
         
         check_non_null(any_cast<const char*>(&value1), "any_cast<const char*>");
         check_non_null(any_cast<const char*>(&value2), "any_cast<const char*>");
-        
-        check_null(any_cast<const char[1]>(&value1), "any_cast<const char[1]>");
-        check_null(any_cast<const char[1]>(&value2), "any_cast<const char[1]>");
     }
 
     const std::string& returning_string1() 
