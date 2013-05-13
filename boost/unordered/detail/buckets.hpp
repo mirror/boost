@@ -678,10 +678,17 @@ namespace boost { namespace unordered { namespace detail {
     template <class H, class P>
     class functions
     {
+    public:
+        static const bool nothrow_move_assignable =
+                boost::is_nothrow_move_assignable<H>::value &&
+                boost::is_nothrow_move_assignable<P>::value;
+        static const bool nothrow_move_constructible =
+                boost::is_nothrow_move_constructible<H>::value &&
+                boost::is_nothrow_move_constructible<P>::value;
+
+    private:
         friend class boost::unordered::detail::set_hash_functions<H, P,
-               boost::is_nothrow_move_assignable<H>::value &&
-               boost::is_nothrow_move_assignable<P>::value
-           >;
+               nothrow_move_assignable>;
         functions& operator=(functions const&);
 
         typedef compressed<H, P> function_pair;
@@ -713,6 +720,12 @@ namespace boost { namespace unordered { namespace detail {
             new((void*) &funcs_[which]) function_pair(f);
         }
         
+        void construct(bool which, function_pair& f,
+                boost::unordered::detail::move_tag m)
+        {
+            new((void*) &funcs_[which]) function_pair(f, m);
+        }
+
         void destroy(bool which)
         {
             boost::unordered::detail::destroy((function_pair*)(&funcs_[which]));
@@ -721,9 +734,7 @@ namespace boost { namespace unordered { namespace detail {
     public:
 
         typedef boost::unordered::detail::set_hash_functions<H, P,
-                boost::is_nothrow_move_assignable<H>::value &&
-                boost::is_nothrow_move_assignable<P>::value
-            > set_hash_functions;
+                nothrow_move_assignable> set_hash_functions;
 
         functions(H const& hf, P const& eq)
             : current_(false)
@@ -735,6 +746,17 @@ namespace boost { namespace unordered { namespace detail {
             : current_(false)
         {
             construct(current_, bf.current());
+        }
+
+        functions(functions& bf, boost::unordered::detail::move_tag m)
+            : current_(false)
+        {
+            if (nothrow_move_constructible) {
+                construct(current_, bf.current(), m);
+            }
+            else {
+                construct(current_, bf.current());
+            }
         }
 
         ~functions() {

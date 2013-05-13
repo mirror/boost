@@ -364,7 +364,7 @@ namespace boost { namespace unordered { namespace detail {
         {}
 
         table(table& x, boost::unordered::detail::move_tag m) :
-            functions(x),
+            functions(x, m),
             allocators_(x.allocators_, m),
             bucket_count_(x.bucket_count_),
             size_(x.size_),
@@ -378,8 +378,8 @@ namespace boost { namespace unordered { namespace detail {
         }
 
         table(table& x, node_allocator const& a,
-                boost::unordered::detail::move_tag) :
-            functions(x),
+                boost::unordered::detail::move_tag m) :
+            functions(x, m),
             allocators_(a, a),
             bucket_count_(x.bucket_count_),
             size_(0),
