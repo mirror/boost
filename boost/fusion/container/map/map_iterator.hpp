@@ -54,9 +54,8 @@ namespace boost { namespace fusion
         {
             typedef typename Iterator::sequence sequence;
             typedef typename Iterator::index index;
-            typedef
-                decltype(std::declval<sequence>().get_key(index()))
-            type;
+            typedef decltype(std::declval<sequence>().get_key(index())) key_identity_type;
+            typedef typename key_identity_type::type type;
         };
 
         template<typename Iterator>

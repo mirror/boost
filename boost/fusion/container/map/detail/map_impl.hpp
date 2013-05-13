@@ -113,8 +113,8 @@ namespace boost { namespace fusion { namespace detail
         value_type get_val(mpl::identity<key_type>) const;
         pair_type get_val(mpl::int_<index>) const;
 
-        key_type get_key(mpl::int_<index>);
-        key_type get_key(mpl::int_<index>) const;
+        mpl::identity<key_type> get_key(mpl::int_<index>);
+        mpl::identity<key_type> get_key(mpl::int_<index>) const;
 
         typename cref_result<value_type>::type
         get(mpl::identity<key_type>) const
