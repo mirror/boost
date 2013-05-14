@@ -148,6 +148,60 @@
 
       <signature>
         <template>
+          <template-type-parameter name="MultiVisitor"/>
+          <template-type-parameter name="Variant1"/>
+          <template-type-parameter name="Variant2"/>
+          <template-type-parameter name="Variant3"/>
+        </template>
+
+        <type>typename MultiVisitor::result_type</type>
+
+        <parameter name="visitor">
+          <paramtype>MultiVisitor &amp;</paramtype>
+        </parameter>
+        <parameter name="operand1">
+          <paramtype>Variant1 &amp;</paramtype>
+        </parameter>
+        <parameter name="operand2">
+          <paramtype>Variant2 &amp;</paramtype>
+        </parameter>
+        <parameter name="operand3">
+          <paramtype>Variant3 &amp;</paramtype>
+        </parameter>
+        <parameter name="other_operands">
+          <paramtype>...</paramtype>
+        </parameter>
+      </signature>
+
+      <signature>
+        <template>
+          <template-type-parameter name="MultiVisitor"/>
+          <template-type-parameter name="Variant1"/>
+          <template-type-parameter name="Variant2"/>
+          <template-type-parameter name="Variant3"/>
+        </template>
+
+        <type>typename MultiVisitor::result_type</type>
+
+        <parameter name="visitor">
+          <paramtype>const MultiVisitor &amp;</paramtype>
+        </parameter>
+        <parameter name="operand1">
+          <paramtype>Variant1 &amp;</paramtype>
+        </parameter>
+        <parameter name="operand2">
+          <paramtype>Variant2 &amp;</paramtype>
+        </parameter>
+        <parameter name="operand3">
+          <paramtype>Variant3 &amp;</paramtype>
+        </parameter>
+        <parameter name="other_operands">
+          <paramtype>...</paramtype>
+        </parameter>
+      </signature>
+
+      <signature>
+        <template>
           <template-type-parameter name="Visitor"/>
         </template>
 
@@ -178,6 +232,13 @@
               function call operator of the given visitor on the content of
               the given <code><classname>variant</classname></code>
               operands.</listitem>
+
+            <listitem>Overloads accepting three or more operands invoke the
+              function call operator of the given visitor on the content of
+              the given <code><classname>variant</classname></code>
+              operands. Maximum amount of parameters controlled by 
+              <code><emphasis role="bold"><macroname>BOOST_VARAINT_MAX_MULTIVIZITOR_PARAMS</macroname></emphasis></code>
+              macro. Those functions are actually defined in <xref linkend="header.boost.variant.multivisitors_hpp"/>.</listitem>
 
             <listitem>The overload accepting only a visitor returns a
               <classname alt="boost::apply_visitor_delayed_t">generic function object</classname>
