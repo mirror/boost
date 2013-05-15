@@ -31,6 +31,7 @@ namespace posix_time {
   }
 
   //! Function that converts a ptime into a time_t
+  inline
   std::time_t to_time_t(ptime pt) {
 	time_duration dur = pt - ptime(gregorian::date(1970,1,1));
     return std::time_t(dur.total_seconds ());
