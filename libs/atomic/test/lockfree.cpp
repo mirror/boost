@@ -43,7 +43,11 @@ verify_lock_free(const char * type_name, int lock_free_macro_val, int lock_free_
 #define EXPECT_SHORT_LOCK_FREE 2
 #define EXPECT_INT_LOCK_FREE 2
 #define EXPECT_LONG_LOCK_FREE 2
-#define EXPECT_LLONG_LOCK_FREE 1
+#if defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B)
+#define EXPECT_LLONG_LOCK_FREE 2
+#else
+#define EXPECT_LLONG_LOCK_FREE 0
+#endif
 #define EXPECT_POINTER_LOCK_FREE 2
 #define EXPECT_BOOL_LOCK_FREE 2
 

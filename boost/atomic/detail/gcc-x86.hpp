@@ -28,6 +28,15 @@ namespace detail {
 
 #define BOOST_ATOMIC_X86_PAUSE() __asm__ __volatile__ ("pause\n")
 
+#if defined(__i386__) &&\
+    (\
+        defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8) ||\
+        defined(__i586__) || defined(__i686__) || defined(__pentium4__) || defined(__nocona__) || defined(__core2__) || defined(__corei7__) ||\
+        defined(__k6__) || defined(__athlon__) || defined(__k8__) || defined(__amdfam10__) || defined(__bdver1__) || defined(__bdver2__) || defined(__bdver3__) || defined(__btver1__) || defined(__btver2__)\
+    )
+#define BOOST_ATOMIC_X86_HAS_CMPXCHG8B 1
+#endif
+
 inline void
 platform_fence_before(memory_order order)
 {
@@ -198,10 +207,10 @@ public:
 #define BOOST_ATOMIC_INT_LOCK_FREE 2
 #define BOOST_ATOMIC_LONG_LOCK_FREE 2
 
-#if defined(__x86_64__)
+#if defined(__x86_64__) || defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B)
 #define BOOST_ATOMIC_LLONG_LOCK_FREE 2
 #else
-#define BOOST_ATOMIC_LLONG_LOCK_FREE 1
+#define BOOST_ATOMIC_LLONG_LOCK_FREE 0
 #endif
 
 #define BOOST_ATOMIC_POINTER_LOCK_FREE 2
@@ -1618,11 +1627,11 @@ private:
 };
 #endif
 
-#if !defined(__x86_64__) && (defined(__i686__) || defined (__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8))
+#if !defined(__x86_64__) && defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B)
 
 template<typename T>
 inline bool
-platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr)
+platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr) BOOST_NOEXCEPT
 {
 #ifdef __GCC_HAVE_SYNC_COMPARE_AND_SWAP_8
     const T oldval = __sync_val_compare_and_swap(ptr, expected, desired);
@@ -1630,7 +1639,7 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr)
     expected = oldval;
     return result;
 #else
-    int scratch;
+    uint32_t scratch;
     T prev = expected;
     /* Make sure ebx is saved and restored properly in case
     this object is compiled as "position independent". Since
@@ -1652,7 +1661,7 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr)
         "lock; cmpxchg8b 0(%4)\n"
         "movl %1, %%ebx\n"
         : "=A" (prev), "=m" (scratch)
-        : "D" ((int)desired), "c" ((int)(desired >> 32)), "S" (ptr), "0" (prev)
+        : "D" ((uint32_t)desired), "c" ((uint32_t)(desired >> 32)), "S" (ptr), "0" (prev)
         : "memory");
     bool success = (prev == expected);
     expected = prev;
@@ -1660,14 +1669,47 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr)
 #endif
 }
 
+// Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 3A, 8.1.1. Guaranteed Atomic Operations:
+//
+// The Pentium processor (and newer processors since) guarantees that the following additional memory operations will always be carried out atomically:
+// * Reading or writing a quadword aligned on a 64-bit boundary
+//
+// Luckily, the memory is almost always 8-byte aligned in our case because atomic<> uses 64 bit native types for storage and dynamic memory allocations
+// have at least 8 byte alignment. The only unfortunate case is when atomic is placeod on the stack and it is not 8-byte aligned (like on 32 bit Windows).
+
 template<typename T>
 inline void
-platform_store64(T value, volatile T * ptr)
+platform_store64(T value, volatile T * ptr) BOOST_NOEXCEPT
 {
-    T expected = *ptr;
-    for (; !platform_cmpxchg64_strong(expected, value, ptr);)
+    if (((uint32_t)ptr & 0x00000007) == 0)
     {
-        BOOST_ATOMIC_X86_PAUSE();
+#if defined(__SSE2__)
+        __asm__ __volatile__
+        (
+            "movq %1, %%xmm0\n\t"
+            "movq %%xmm0, %0\n\t"
+            : "=m" (*ptr)
+            : "m" (value)
+            : "memory", "xmm0"
+        );
+#else
+        __asm__ __volatile__
+        (
+            "fildll %1\n\t"
+            "fistpll %0\n\t"
+            : "=m" (*ptr)
+            : "m" (value)
+            : "memory"
+        );
+#endif
+    }
+    else
+    {
+        T expected = *ptr;
+        while (!platform_cmpxchg64_strong(expected, value, ptr))
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
     }
 }
 
@@ -1675,12 +1717,37 @@ template<typename T>
 inline T
 platform_load64(const volatile T * ptr) BOOST_NOEXCEPT
 {
-    T expected = *ptr;
-    for (; !platform_cmpxchg64_strong(expected, expected, const_cast<volatile T*>(ptr));)
+    T value = T();
+
+    if (((uint32_t)ptr & 0x00000007) == 0)
     {
-        BOOST_ATOMIC_X86_PAUSE();
+#if defined(__SSE2__)
+        __asm__ __volatile__
+        (
+            "movq %1, %%xmm0\n\t"
+            "movq %%xmm0, %0\n\t"
+            : "=m" (value)
+            : "m" (*ptr)
+            : "memory", "xmm0"
+        );
+#else
+        __asm__ __volatile__
+        (
+            "fildll %1\n\t"
+            "fistpll %0\n\t"
+            : "=m" (value)
+            : "m" (*ptr)
+            : "memory"
+        );
+#endif
     }
-    return expected;
+    else
+    {
+        // We don't care for comparison result here; the previous value will be stored into value anyway.
+        platform_cmpxchg64_strong(value, value, const_cast<volatile T*>(ptr));
+    }
+
+    return value;
 }
 
 #endif
@@ -1690,7 +1757,7 @@ platform_load64(const volatile T * ptr) BOOST_NOEXCEPT
 }
 
 /* pull in 64-bit atomic type using cmpxchg8b above */
-#if !defined(__x86_64__) && (defined(__i686__) || defined (__GCC_HAVE_SYNC_COMPARE_AND_SWAP_8))
+#if !defined(__x86_64__) && defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B)
 #include <boost/atomic/detail/cas64strong.hpp>
 #endif
 
