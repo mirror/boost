@@ -641,6 +641,7 @@ namespace std{ using ::type_info; }
 #  if defined(_MSC_VER)
 #    define BOOST_FORCEINLINE __forceinline
 #  elif defined(__GNUC__) && __GNUC__ > 3
+     // Clang also defines __GNUC__ (as 4)
 #    define BOOST_FORCEINLINE inline __attribute__ ((__always_inline__))
 #  else
 #    define BOOST_FORCEINLINE inline
