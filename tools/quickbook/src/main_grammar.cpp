@@ -128,17 +128,19 @@ namespace quickbook
                         top_level, indent_check,
                         paragraph_separator,
                         code, code_line, blank_line, hr,
-                        inline_code,
+                        inline_code, skip_inline_code,
                         template_,
-                        code_block, macro,
+                        code_block, skip_code_block, macro,
                         template_args,
                         template_args_1_4, template_arg_1_4,
                         template_inner_arg_1_4, brackets_1_4,
                         template_args_1_5, template_arg_1_5, template_arg_1_5_content,
                         template_inner_arg_1_5, brackets_1_5,
+                        template_args_1_6, template_arg_1_6, template_arg_1_6_content,
                         break_,
                         command_line_macro_identifier,
-                        dummy_block, line_dummy_block, square_brackets
+                        dummy_block, line_dummy_block, square_brackets,
+                        skip_escape
                         ;
 
         struct simple_markup_closure
@@ -540,6 +542,17 @@ namespace quickbook
             |   cl::anychar_p               [plain_char]
             ;
 
+        skip_entity =
+                '['
+            >>  *(~cl::eps_p(']') >> skip_entity)
+            >>  !cl::ch_p(']')
+            |   local.skip_code_block
+            |   local.skip_inline_code
+            |   local.skip_escape
+            |   comment
+            |   (cl::anychar_p - '[' - ']')
+            ;
+
         local.square_brackets =
             (   cl::ch_p('[')           [plain_char]
             >>  paragraph_phrase
@@ -580,7 +593,8 @@ namespace quickbook
             ;
 
         local.template_args =
-                qbk_ver(105u) >> local.template_args_1_5
+                qbk_ver(106u) >> local.template_args_1_6
+            |   qbk_ver(105u, 106u) >> local.template_args_1_5
             |   qbk_ver(0, 105u) >> local.template_args_1_4
             ;
 
@@ -622,6 +636,19 @@ namespace quickbook
             '[' >> local.template_inner_arg_1_5 >> ']'
             ;
 
+        local.template_args_1_6 = local.template_arg_1_6 >> *(".." >> local.template_arg_1_6);
+
+        local.template_arg_1_6 =
+            (   cl::eps_p(*cl::blank_p >> cl::eol_p)
+            >>  local.template_arg_1_6_content  [state.values.entry(ph::arg1, ph::arg2, template_tags::block)]
+            |   local.template_arg_1_6_content  [state.values.entry(ph::arg1, ph::arg2, template_tags::phrase)]
+            )
+            ;
+
+        local.template_arg_1_6_content =
+            + ( ~cl::eps_p("..") >> skip_entity )
+            ;
+
         local.break_
             =   (   '['
                 >>  space
@@ -643,6 +670,48 @@ namespace quickbook
             )                                   [state.values.entry(ph::arg1, ph::arg2)]
             >>  '`'
             ]                                   [element]
+            ;
+
+        local.skip_inline_code =
+                '`'
+            >>  *(cl::anychar_p -
+                    (   '`'
+                    |   (cl::eol_p >> *cl::blank_p >> cl::eol_p)
+                                                // Make sure that we don't go
+                    )                           // past a single block
+                )
+            >>  !cl::ch_p('`')
+            ;
+
+        local.skip_code_block =
+                "```"
+            >>  ~cl::eps_p("`")
+            >>  (   !(  *(*cl::blank_p >> cl::eol_p)
+                    >>  (   *(  "````" >> *cl::ch_p('`')
+                            |   (   cl::anychar_p
+                                -   (*cl::space_p >> "```" >> ~cl::eps_p("`"))
+                                )
+                            )
+                            >>  !(*cl::blank_p >> cl::eol_p)
+                        )
+                    >>  (*cl::space_p >> "```")
+                    )
+                |   *cl::anychar_p
+                )
+            |   "``"
+            >>  ~cl::eps_p("`")
+            >>  (   (   *(*cl::blank_p >> cl::eol_p)
+                    >>  (   *(  "```" >> *cl::ch_p('`')
+                            |   (   cl::anychar_p
+                                -   (*cl::space_p >> "``" >> ~cl::eps_p("`"))
+                                )
+                            )
+                            >>  !(*cl::blank_p >> cl::eol_p)
+                        )
+                    >>  (*cl::space_p >> "``")
+                    )
+                |   *cl::anychar_p
+                )
             ;
 
         local.code_block =
@@ -744,6 +813,19 @@ namespace quickbook
                     |   cl::eps_p               [error("Unclosed boostbook escape.")]
                     )                           [element]
                 ]
+            ;
+
+        local.skip_escape =
+                cl::str_p("\\n")
+            |   cl::str_p("\\ ")
+            |   '\\' >> cl::punct_p
+            |   "\\u" >> cl::repeat_p(4) [cl::chset<>("0-9a-fA-F")]
+            |   "\\U" >> cl::repeat_p(8) [cl::chset<>("0-9a-fA-F")]
+            |   ("'''" >> !eol)
+            >>  (*(cl::anychar_p - "'''"))
+            >>  (   cl::str_p("'''")
+                |   cl::eps_p
+                )
             ;
 
         raw_escape =

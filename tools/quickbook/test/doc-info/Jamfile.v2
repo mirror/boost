@@ -20,6 +20,8 @@ test-suite quickbook.test :
     [ quickbook-test escaped_attributes2-1_7 ]
     [ quickbook-test duplicates-1.1 ]
     [ quickbook-test duplicates-1.5 ]
+    [ quickbook-test macros1-1_5 ]
+    [ quickbook-test macros1-1_6 ]
     [ quickbook-test source-mode-1.4 ]
     [ quickbook-test source-mode-1.5 ]
     [ quickbook-test source-mode-1.6 ]

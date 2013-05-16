@@ -75,7 +75,7 @@ namespace quickbook
                         doc_authors, doc_author,
                         doc_copyright, doc_copyright_holder,
                         doc_source_mode, doc_biblioid, doc_compatibility_mode,
-                        quickbook_version, char_;
+                        quickbook_version, macro, char_;
         cl::uint_parser<int, 10, 4, 4> doc_copyright_year;
         cl::symbols<> doc_types;
         cl::symbols<value::tag_type> doc_info_attributes;
@@ -119,6 +119,7 @@ namespace quickbook
         // Actions
         error_action error(state);
         plain_char_action plain_char(state.phrase, state);
+        do_macro_action do_macro(state.phrase, state);
         scoped_parser<to_value_scoped_action> to_value(state);
         
         doc_info_details =
@@ -302,6 +303,21 @@ namespace quickbook
 
         local.attribute_rules[doc_info_attributes::biblioid] = &local.doc_biblioid;
 
-        local.char_ = escape | cl::anychar_p[plain_char];
+        local.char_ =
+                escape
+            |   local.macro
+            |   cl::anychar_p[plain_char];
+            ;
+
+        local.macro =
+            cl::eps_p
+            (   (   state.macro
+                >>  ~cl::eps_p(cl::alpha_p | '_')
+                                                // must not be followed by alpha or underscore
+                )
+                &   macro_identifier            // must be a valid macro for the current version
+            )
+            >>  state.macro                     [do_macro]
+            ;
     }
 }

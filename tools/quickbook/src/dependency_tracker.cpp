@@ -56,28 +56,69 @@ namespace quickbook
         return fs::canonical(p) / extra;
     }
 
+    static char const* control_escapes[16] = {
+        "\\000", "\\001", "\\002", "\\003",
+        "\\004", "\\005", "\\006", "\\a",
+        "\\b",   "\\t",   "\\n",   "\\v",
+        "\\f",   "\\r",   "\\016", "\\017"
+    };
+
+    static std::string escaped_path(std::string const& generic)
+    {
+        std::string result;
+        result.reserve(generic.size());
+
+        BOOST_FOREACH(char c, generic)
+        {
+            if (c >= 0 && c < 16) {
+                result += control_escapes[(unsigned int) c];
+            }
+            else if (c == '\\') {
+                result += "\\\\";
+            }
+            else if (c == 127) {
+                result += "\\177";
+            }
+            else {
+                result += c;
+            }
+        }
+
+        return result;
+    }
+
+    static std::string get_path(fs::path const& path,
+            dependency_tracker::flags f)
+    {
+        std::string generic = detail::path_to_generic(path);
+
+        if (f & dependency_tracker::escaped) {
+            generic = escaped_path(generic);
+        }
+
+        return generic;
+    }
+
     bool dependency_tracker::add_dependency(fs::path const& f) {
         bool found = fs::exists(fs::status(f));
         dependencies[normalize_path(f)] |= found;
         return found;
     }
 
-    void dependency_tracker::write_dependencies(std::ostream& out)
+    void dependency_tracker::write_dependencies(std::ostream& out,
+            flags f)
     {
         BOOST_FOREACH(dependency_list::value_type const& d, dependencies)
         {
-            if (d.second) {
-                out << detail::path_to_generic(d.first) << std::endl;
+            if (f & checked) {
+                out << (d.second ? "+ " : "- ")
+                    << get_path(d.first, f) << std::endl;
             }
-        }
-    }
-
-    void dependency_tracker::write_checked_locations(std::ostream& out)
-    {
-        BOOST_FOREACH(dependency_list::value_type const& d, dependencies)
-        {
-            out << (d.second ? "+ " : "- ")
-                << detail::path_to_generic(d.first) << std::endl;
+            else {
+                if (d.second) {
+                    out << get_path(d.first, f) << std::endl;
+                }
+            }
         }
     }
 }

@@ -24,6 +24,8 @@
 #include <boost/ref.hpp>
 #include <boost/version.hpp>
 #include <boost/foreach.hpp>
+#include <boost/algorithm/string/split.hpp>
+#include <boost/algorithm/string/classification.hpp>
 
 #include <stdexcept>
 #include <vector>
@@ -111,16 +113,29 @@ namespace quickbook
         }
     }
 
+    struct parse_document_options
+    {
+        parse_document_options() :
+            indent(-1),
+            linewidth(-1),
+            pretty_print(true),
+            deps_out_flags(quickbook::dependency_tracker::default_)
+        {}
+
+        int indent;
+        int linewidth;
+        bool pretty_print;
+        fs::path deps_out;
+        quickbook::dependency_tracker::flags deps_out_flags;
+        fs::path locations_out;
+        fs::path xinclude_base;
+    };
+
     static int
     parse_document(
         fs::path const& filein_
       , fs::path const& fileout_
-      , fs::path const& deps_out_
-      , fs::path const& locations_out_
-      , fs::path const& xinclude_base_
-      , int indent
-      , int linewidth
-      , bool pretty_print)
+      , parse_document_options const& options_)
     {
         string_stream buffer;
         id_manager ids;
@@ -128,7 +143,7 @@ namespace quickbook
         int result = 0;
 
         try {
-            quickbook::state state(filein_, xinclude_base_, buffer, ids);
+            quickbook::state state(filein_, options_.xinclude_base, buffer, ids);
             set_macros(state);
 
             if (state.error_count == 0) {
@@ -145,16 +160,18 @@ namespace quickbook
 
             result = state.error_count ? 1 : 0;
 
-            if (!deps_out_.empty())
+            if (!options_.deps_out.empty())
             {
-                fs::ofstream out(deps_out_);
-                state.dependencies.write_dependencies(out);
+                fs::ofstream out(options_.deps_out);
+                state.dependencies.write_dependencies(out,
+                        options_.deps_out_flags);
             }
 
-            if (!locations_out_.empty())
+            if (!options_.locations_out.empty())
             {
-                fs::ofstream out(locations_out_);
-                state.dependencies.write_checked_locations(out);
+                fs::ofstream out(options_.locations_out);
+                state.dependencies.write_dependencies(out,
+                        dependency_tracker::checked);
             }
         }
         catch (load_error& e) {
@@ -177,11 +194,12 @@ namespace quickbook
                 return 1;
             }
 
-            if (pretty_print)
+            if (options_.pretty_print)
             {
                 try
                 {
-                    fileout << post_process(stage2, indent, linewidth);
+                    fileout << post_process(stage2, options_.indent,
+                        options_.linewidth);
                 }
                 catch (quickbook::post_process_failure&)
                 {
@@ -243,6 +261,8 @@ main(int argc, char* argv[])
         quickbook::detail::initialise_output();
         quickbook::detail::initialise_markups();
 
+        // Declare the program options
+
         options_description desc("Allowed options");
         options_description hidden("Hidden options");
         options_description all("All options");
@@ -277,10 +297,15 @@ main(int argc, char* argv[])
             ("xinclude-base", PO_VALUE<input_string>(),
                 "Generate xincludes as if generating for this target "
                 "directory.")
+            ("output-deps-format", PO_VALUE<input_string>(),
+             "Comma separated list of formatting options for output-deps, "
+             "options are: escaped, checked")
             ("output-checked-locations", PO_VALUE<input_string>(),
              "Writes a file listing all the file locations that were "
              "checked, starting with '+' if they were found, or '-' "
-             "if they weren't.")
+             "if they weren't.\n"
+             "This is deprecated, use 'output-deps-format=checked' to "
+             "write the deps file in this format.")
         ;
 
         all.add(desc).add(hidden);
@@ -288,10 +313,9 @@ main(int argc, char* argv[])
         positional_options_description p;
         p.add("input-file", -1);
 
+        // Read option from the command line
+
         variables_map vm;
-        int indent = -1;
-        int linewidth = -1;
-        bool pretty_print = true;
 
 #if QUICKBOOK_WIDE_PATHS
         quickbook::ignore_variable(&argc);
@@ -321,6 +345,9 @@ main(int argc, char* argv[])
 
         notify(vm);
 
+        // Process the command line options
+
+        quickbook::parse_document_options parse_document_options;
         bool expect_errors = vm.count("expect-errors");
         int error_count = 0;
 
@@ -352,15 +379,15 @@ main(int argc, char* argv[])
             quickbook::ms_errors = true;
 
         if (vm.count("no-pretty-print"))
-            pretty_print = false;
+            parse_document_options.pretty_print = false;
 
         quickbook::self_linked_headers = !vm.count("no-self-link-headers");
 
         if (vm.count("indent"))
-            indent = vm["indent"].as<int>();
+            parse_document_options.indent = vm["indent"].as<int>();
 
         if (vm.count("linewidth"))
-            linewidth = vm["linewidth"].as<int>();
+            parse_document_options.linewidth = vm["linewidth"].as<int>();
 
         if (vm.count("debug"))
         {
@@ -410,22 +437,56 @@ main(int argc, char* argv[])
             fs::path filein = quickbook::detail::input_to_path(
                 vm["input-file"].as<input_string>());
             fs::path fileout;
-            fs::path deps_out;
-            fs::path locations_out;
 
             bool default_output = true;
 
             if (vm.count("output-deps"))
             {
-                deps_out = quickbook::detail::input_to_path(
-                    vm["output-deps"].as<input_string>());
+                parse_document_options.deps_out =
+                    quickbook::detail::input_to_path(
+                        vm["output-deps"].as<input_string>());
                 default_output = false;
+            }
+
+            if (vm.count("output-deps-format"))
+            {
+                std::string format_flags =
+                    quickbook::detail::input_to_utf8(
+                        vm["output-deps-format"].as<input_string>());
+
+                std::vector<std::string> flag_names;
+                boost::algorithm::split(flag_names, format_flags,
+                        boost::algorithm::is_any_of(", "),
+                        boost::algorithm::token_compress_on);
+
+                unsigned flags = 0;
+
+                BOOST_FOREACH(std::string const& flag, flag_names) {
+                    if (flag == "checked") {
+                        flags |= quickbook::dependency_tracker::checked;
+                    }
+                    else if (flag == "escaped") {
+                        flags |= quickbook::dependency_tracker::escaped;
+                    }
+                    else if (!flag.empty()) {
+                        quickbook::detail::outerr()
+                            << "Unknown dependency format flag: "
+                            << flag
+                            <<std::endl;
+
+                        ++error_count;
+                    }
+                }
+
+                parse_document_options.deps_out_flags =
+                    quickbook::dependency_tracker::flags(flags);
             }
 
             if (vm.count("output-checked-locations"))
             {
-                locations_out = quickbook::detail::input_to_path(
-                    vm["output-checked-locations"].as<input_string>());
+                parse_document_options.locations_out =
+                    quickbook::detail::input_to_path(
+                        vm["output-checked-locations"].as<input_string>());
                 default_output = false;
             }
 
@@ -440,20 +501,20 @@ main(int argc, char* argv[])
                 fileout.replace_extension(".xml");
             }
 
-            fs::path xinclude_base;
             if (vm.count("xinclude-base"))
             {
-                xinclude_base = quickbook::detail::input_to_path(
-                    vm["xinclude-base"].as<input_string>());
+                parse_document_options.xinclude_base =
+                    quickbook::detail::input_to_path(
+                        vm["xinclude-base"].as<input_string>());
             }
             else
             {
-                xinclude_base = fileout.parent_path();
-                if (xinclude_base.empty())
-                    xinclude_base = ".";
+                parse_document_options.xinclude_base = fileout.parent_path();
+                if (parse_document_options.xinclude_base.empty())
+                    parse_document_options.xinclude_base = ".";
             }
 
-            if (!fs::is_directory(xinclude_base))
+            if (!fs::is_directory(parse_document_options.xinclude_base))
             {
                 quickbook::detail::outerr()
                     << (vm.count("xinclude-base") ?
@@ -480,8 +541,7 @@ main(int argc, char* argv[])
 
             if (!error_count)
                 error_count += quickbook::parse_document(
-                        filein, fileout, deps_out, locations_out,
-                        xinclude_base, indent, linewidth, pretty_print);
+                        filein, fileout, parse_document_options);
 
             if (expect_errors)
             {

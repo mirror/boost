@@ -205,20 +205,23 @@ namespace quickbook
         keywords_holder()
         {
             cpp
-                    =   "and_eq", "and", "asm", "auto", "bitand", "bitor",
-                        "bool", "break", "case", "catch", "char", "class",
-                        "compl", "const_cast", "const", "continue", "default",
-                        "delete", "do", "double", "dynamic_cast",  "else",
-                        "enum", "explicit", "export", "extern", "false",
-                        "float", "for", "friend", "goto", "if", "inline",
-                        "int", "long", "mutable", "namespace", "new", "not_eq",
-                        "not", "operator", "or_eq", "or", "private",
-                        "protected", "public", "register", "reinterpret_cast",
-                        "return", "short", "signed", "sizeof", "static",
+                    =   "alignas", "alignof", "and_eq", "and", "asm", "auto",
+                        "bitand", "bitor", "bool", "break", "case", "catch",
+                        "char", "char16_t", "char32_t", "class", "compl",
+                        "const", "const_cast", "constexpr", "continue",
+                        "decltype", "default", "delete", "do", "double",
+                        "dynamic_cast",  "else", "enum", "explicit", "export",
+                        "extern", "false", "float", "for", "friend", "goto",
+                        "if", "inline", "int", "long", "mutable", "namespace",
+                        "new", "noexcept", "not_eq", "not", "nullptr",
+                        "operator", "or_eq", "or", "private", "protected",
+                        "public", "register", "reinterpret_cast", "return",
+                        "short", "signed", "sizeof", "static", "static_assert",
                         "static_cast", "struct", "switch", "template", "this",
-                        "throw", "true", "try", "typedef", "typeid",
-                        "typename", "union", "unsigned", "using", "virtual",
-                        "void", "volatile", "wchar_t", "while", "xor_eq", "xor"
+                        "thread_local", "throw", "true", "try", "typedef",
+                        "typeid", "typename", "union", "unsigned", "using",
+                        "virtual", "void", "volatile", "wchar_t", "while",
+                        "xor_eq", "xor"
                     ;
 
             python
@@ -270,12 +273,21 @@ namespace quickbook
                     do_macro(self.actions, &syntax_highlight_actions::do_macro);
                 error_action error(self.actions.state);
 
-                program
-                    =
-                    *(  (+cl::space_p)                  [plain_char]
+                program =
+                    *(  (*cl::space_p)                  [plain_char]
+                    >>  (line_start | rest_of_line)
+                    >>  *rest_of_line
+                    )
+                    ;
+
+                line_start =
+                        preprocessor                    [span("preprocessor")]
+                    ;
+                
+                rest_of_line = 
+                        (+cl::blank_p)                  [plain_char]
                     |   macro
                     |   escape
-                    |   preprocessor                    [span("preprocessor")]
                     |   cl::eps_p(ph::var(self.actions.support_callouts))
                     >>  (   line_callout                [callout]
                         |   inline_callout              [callout]
@@ -287,8 +299,8 @@ namespace quickbook
                     |   string_                         [span("string")]
                     |   char_                           [span("char")]
                     |   number                          [span("number")]
-                    |   u8_codepoint_p                  [unexpected_char]
-                    )
+                    |   ~cl::eps_p(cl::eol_p)
+                    >>  u8_codepoint_p                  [unexpected_char]
                     ;
 
                 macro =
@@ -359,7 +371,7 @@ namespace quickbook
                     ;   // make sure we recognize whole words only
 
                 special
-                    =   +cl::chset_p("~!%^&*()+={[}]:;,<.>?/|\\-")
+                    =   +cl::chset_p("~!%^&*()+={[}]:;,<.>?/|\\#-")
                     ;
 
                 string_char = ('\\' >> u8_codepoint_p) | (cl::anychar_p - '\\');
@@ -387,7 +399,7 @@ namespace quickbook
             }
 
             cl::rule<Scanner>
-                            program, macro, preprocessor,
+                            program, line_start, rest_of_line, macro, preprocessor,
                             inline_callout, line_callout, comment,
                             special, string_, 
                             char_, number, identifier, keyword, escape,
