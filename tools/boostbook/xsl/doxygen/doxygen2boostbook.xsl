@@ -51,6 +51,19 @@
   <xsl:key name="compounds-by-id" match="compounddef" use="@id"/>
   <xsl:key name="members-by-id" match="memberdef" use="@id" />
 
+  <!-- Add trailing slash to formuladir if missing -->
+
+  <xsl:variable name="boost.doxygen.formuladir.fixed">
+    <xsl:choose>
+      <xsl:when test="substring(boost.doxygen.formuladir, string-length(boost.doxygen.formuladir) - 1) = '/'">
+        <xsl:value-of select="$boost.doxygen.formuladir" />
+      </xsl:when>
+      <xsl:otherwise>
+        <xsl:value-of select="concat($boost.doxygen.formuladir, '/')" />
+      </xsl:otherwise>
+    </xsl:choose>
+  </xsl:variable>
+
   <xsl:strip-space elements="briefdescription detaileddescription inbodydescription"/>
 
   <xsl:template name="kind-error-message">
@@ -1657,7 +1670,7 @@
             <imageobject role="html">
               <imagedata format="PNG" align="center">
                 <xsl:attribute name="fileref">
-                  <xsl:value-of select="concat(concat(concat($boost.doxygen.formuladir, 'form_'), @id), '.png')"/>
+                  <xsl:value-of select="concat(concat(concat($boost.doxygen.formuladir.fixed, 'form_'), @id), '.png')"/>
                 </xsl:attribute>
               </imagedata>
             </imageobject>
@@ -1678,7 +1691,7 @@
             <imageobject role="html">
               <imagedata format="PNG">
                 <xsl:attribute name="fileref">
-                  <xsl:value-of select="concat(concat(concat($boost.doxygen.formuladir, 'form_'), @id), '.png')"/>
+                  <xsl:value-of select="concat(concat(concat($boost.doxygen.formuladir.fixed, 'form_'), @id), '.png')"/>
                 </xsl:attribute>
               </imagedata>
             </imageobject>
