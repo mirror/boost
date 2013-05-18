@@ -24,6 +24,7 @@ rule test_all
       :  # additional args
       :  # test-files
       :  # requirements
+        <host-os>windows,<toolset>clang:<linkflags>"-lole32 -loleaut32 -lpsapi -ladvapi32"
       ] ;
    }
 
