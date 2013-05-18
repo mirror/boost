@@ -666,7 +666,9 @@ use [*Boost.Container]? There are several reasons for that:
 *  Fixed bugs [@https://svn.boost.org/trac/boost/ticket/7921 #7921],
               [@https://svn.boost.org/trac/boost/ticket/7969 #7969],
               [@https://svn.boost.org/trac/boost/ticket/8118 #8118],
-              [@https://svn.boost.org/trac/boost/ticket/8294 #8294].
+              [@https://svn.boost.org/trac/boost/ticket/8294 #8294],
+              [@https://svn.boost.org/trac/boost/ticket/8553 #8553].
+*  Added experimental `static_vector` class.
 
 [endsect]
 

@@ -9,6 +9,7 @@
 //////////////////////////////////////////////////////////////////////////////
 #include <boost/container/detail/config_begin.hpp>
 #include <boost/container/scoped_allocator_fwd.hpp>
+#include <boost/container/detail/utilities.hpp>
 #include <cstddef>
 #include <boost/container/detail/mpl.hpp>
 #include <boost/move/utility.hpp>
@@ -459,6 +460,19 @@ int main()
       BOOST_STATIC_ASSERT((  Scoped2InnerTFT::propagate_on_container_swap::value ));
       BOOST_STATIC_ASSERT((  Scoped2InnerTTF::propagate_on_container_swap::value ));
       BOOST_STATIC_ASSERT((  Scoped2InnerTTT::propagate_on_container_swap::value ));
+   }
+
+   //Default constructor
+   {
+      Scoped0Inner s0i;
+      Scoped1Inner s1i;
+      //Swap
+      {
+         Scoped0Inner s0i2;
+         Scoped1Inner s1i2;
+         boost::container::swap_dispatch(s0i, s0i2);
+         boost::container::swap_dispatch(s1i, s1i2);
+      }
    }
 
    //Default constructor
