@@ -96,6 +96,155 @@
 	</References>
 	<Files>
 		<Filter
+			Name="container"
+			Filter="">
+			<File
+				RelativePath="..\..\..\..\boost\container\allocator_traits.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\container_exceptions.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\container_fwd.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\deque.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\flat_map.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\flat_set.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\list.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\map.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\scoped_allocator.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\scoped_allocator_fwd.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\set.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\slist.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\stable_vector.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\static_vector.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\string.hpp">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\throw_exception.hpp">
+			</File>
+			<File
+				RelativePath="..\to-do.txt">
+			</File>
+			<File
+				RelativePath="..\..\..\..\boost\container\vector.hpp">
+			</File>
+			<Filter
+				Name="detail"
+				Filter="">
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\adaptive_node_pool_impl.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\advanced_insert_int.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\algorithms.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\allocation_type.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\allocator_version_traits.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\config_begin.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\config_end.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\destroyers.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\flat_tree.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\function_detector.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\hash_table.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\iterators.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\math_functions.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\memory_util.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\mpl.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\multiallocation_chain.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\node_alloc_holder.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\node_pool_impl.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\pair.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\pool_common.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\preprocessor.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\transform_iterator.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\tree.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\type_traits.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\utilities.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\value_init.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\variadic_templates_tools.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\version_type.hpp">
+				</File>
+				<File
+					RelativePath="..\..\..\..\boost\container\detail\workaround.hpp">
+				</File>
+			</Filter>
+		</Filter>
+		<Filter
 			Name="doc"
 			Filter="">
 			<File
@@ -152,6 +301,9 @@
 				RelativePath="..\..\test\heap_allocator_v1.hpp">
 			</File>
 			<File
+				RelativePath="..\..\test\insert_test.hpp">
+			</File>
+			<File
 				RelativePath="..\..\test\Jamfile.v2">
 			</File>
 			<File
@@ -173,6 +325,9 @@
 				RelativePath="..\..\test\set_test.hpp">
 			</File>
 			<File
+				RelativePath="..\..\test\static_vector_test.hpp">
+			</File>
+			<File
 				RelativePath="..\..\test\util.hpp">
 			</File>
 			<File
@@ -180,139 +335,22 @@
 			</File>
 		</Filter>
 		<Filter
-			Name="container"
+			Name="bench"
 			Filter="">
 			<File
-				RelativePath="..\..\..\..\boost\container\allocator_traits.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\container_fwd.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\deque.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\flat_map.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\flat_set.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\list.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\map.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\scoped_allocator.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\scoped_allocator_fwd.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\set.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\slist.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\stable_vector.hpp">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\string.hpp">
-			</File>
-			<File
-				RelativePath="..\to-do.txt">
-			</File>
-			<File
-				RelativePath="..\..\..\..\boost\container\vector.hpp">
+				RelativePath="..\..\bench\varray.hpp">
 			</File>
 			<Filter
 				Name="detail"
 				Filter="">
 				<File
-					RelativePath="..\..\..\..\boost\container\detail\adaptive_node_pool_impl.hpp">
+					RelativePath="..\..\bench\detail\varray.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\boost\container\detail\advanced_insert_int.hpp">
+					RelativePath="..\..\bench\detail\varray_concept.hpp">
 				</File>
 				<File
-					RelativePath="..\..\..\..\boost\container\detail\algorithms.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\allocation_type.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\allocator_version_traits.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\config_begin.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\config_end.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\destroyers.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\flat_tree.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\function_detector.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\iterators.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\math_functions.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\memory_util.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\mpl.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\multiallocation_chain.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\node_alloc_holder.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\node_pool_impl.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\pair.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\pool_common.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\preprocessor.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\transform_iterator.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\tree.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\type_traits.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\utilities.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\value_init.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\variadic_templates_tools.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\version_type.hpp">
-				</File>
-				<File
-					RelativePath="..\..\..\..\boost\container\detail\workaround.hpp">
+					RelativePath="..\..\bench\detail\varray_util.hpp">
 				</File>
 			</Filter>
 		</Filter>

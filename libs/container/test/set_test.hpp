@@ -143,20 +143,20 @@ int set_test ()
       return 1;
    }
 
-   typename MyBoostSet::iterator it;
+   typename MyBoostSet::iterator it = boostset->begin();
    typename MyBoostSet::const_iterator cit = it;
    (void)cit;
 
-   boostset->erase(boostset->begin()++);
-   stdset->erase(stdset->begin()++);
-   boostmultiset->erase(boostmultiset->begin()++);
-   stdmultiset->erase(stdmultiset->begin()++);
+   boostset->erase(boostset->begin());
+   stdset->erase(stdset->begin());
+   boostmultiset->erase(boostmultiset->begin());
+   stdmultiset->erase(stdmultiset->begin());
    if(!CheckEqualContainers(boostset, stdset)){
-      std::cout << "Error in boostset->erase(boostset->begin()++)" << std::endl;
+      std::cout << "Error in boostset->erase(boostset->begin())" << std::endl;
       return 1;
    }
    if(!CheckEqualContainers(boostmultiset, stdmultiset)){
-      std::cout << "Error in boostmultiset->erase(boostmultiset->begin()++)" << std::endl;
+      std::cout << "Error in boostmultiset->erase(boostmultiset->begin())" << std::endl;
       return 1;
    }
 
@@ -443,7 +443,7 @@ int set_test_copyable ()
    typedef typename MyBoostSet::value_type IntType;
    const int max = 100;
 
-   try{
+   BOOST_TRY{
       //Shared memory allocator must be always be initialized
       //since it has no default constructor
       MyBoostSet *boostset = new MyBoostSet;
@@ -492,9 +492,10 @@ int set_test_copyable ()
       delete boostset;
       delete boostmultiset;
    }
-   catch(...){
-      throw;
+   BOOST_CATCH(...){
+      BOOST_RETHROW;
    }
+   BOOST_CATCH_END
    return 0;
 }
 

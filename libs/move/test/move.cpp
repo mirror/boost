@@ -108,7 +108,6 @@ int main()
       movable m2(boost::move(m));
       movable m3(move_return_function2());
 	}
-   //limitations_test();
 
    return 0;
 }

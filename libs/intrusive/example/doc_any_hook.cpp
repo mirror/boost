@@ -50,8 +50,8 @@ int main()
       base_slist.push_front(*it), member_list.push_back(*it);
 
    //Now test lists
-   BaseSList::iterator bit(base_slist.begin()), bitend(base_slist.end());
-   MemberList::reverse_iterator mrit(member_list.rbegin()), mritend(member_list.rend());
+   BaseSList::iterator bit(base_slist.begin());
+   MemberList::reverse_iterator mrit(member_list.rbegin());
    std::vector<MyClass>::reverse_iterator rit(values.rbegin()), ritend(values.rend());
 
    //Test the objects inserted in the base hook list

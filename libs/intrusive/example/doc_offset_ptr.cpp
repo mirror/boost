@@ -10,6 +10,18 @@
 //
 /////////////////////////////////////////////////////////////////////////////
 
+#include <boost/config.hpp>
+
+#ifdef BOOST_NO_EXCEPTIONS
+
+//Interprocess does not support BOOST_NO_EXCEPTIONS so nothing to test here
+int main()
+{
+   return 0;
+}
+
+#else //!BOOST_NO_EXCEPTIONS
+
 //This is needed to allow concurrent test execution in
 //several platforms. The shared memory must be unique
 //for each process...
@@ -100,3 +112,6 @@ int main()
    return 0;
 }
 //]
+
+#endif //BOOST_NO_EXCEPTIONS
+

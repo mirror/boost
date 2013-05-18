@@ -39,6 +39,13 @@ template class stable_vector<test::movable_and_copyable_int,
 template class stable_vector<test::movable_and_copyable_int,
    std::allocator<test::movable_and_copyable_int> >;
 
+namespace stable_vector_detail{
+
+template class iterator< int, int &, int *>;
+template class iterator< int, const int &, const int *>;
+
+}
+
 }}
 
 class recursive_vector

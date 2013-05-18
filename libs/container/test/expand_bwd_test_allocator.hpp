@@ -19,6 +19,7 @@
 #include <boost/container/detail/workaround.hpp>
 
 #include <boost/container/container_fwd.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/container/detail/allocation_type.hpp>
 #include <boost/assert.hpp>
 #include <boost/container/detail/utilities.hpp>
@@ -26,7 +27,6 @@
 #include <memory>
 #include <algorithm>
 #include <cstddef>
-#include <stdexcept>
 #include <cassert>
 
 //!\file
@@ -112,9 +112,9 @@ class expand_bwd_test_allocator
 
    friend void swap(self_t &alloc1, self_t &alloc2)
    { 
-      container_detail::do_swap(alloc1.mp_buffer, alloc2.mp_buffer);
-      container_detail::do_swap(alloc1.m_size,    alloc2.m_size);
-      container_detail::do_swap(alloc1.m_offset,  alloc2.m_offset);
+      boost::container::swap_dispatch(alloc1.mp_buffer, alloc2.mp_buffer);
+      boost::container::swap_dispatch(alloc1.m_size,    alloc2.m_size);
+      boost::container::swap_dispatch(alloc1.m_offset,  alloc2.m_offset);
    }
 
    //Experimental version 2 expand_bwd_test_allocator functions
@@ -146,8 +146,8 @@ class expand_bwd_test_allocator
          return std::pair<pointer, bool>(mp_buffer, true);
       }
       else{
-         assert(0);
-         throw std::bad_alloc();
+         throw_bad_alloc();
+         return std::pair<pointer, bool>(mp_buffer, true);
       }
    }
 

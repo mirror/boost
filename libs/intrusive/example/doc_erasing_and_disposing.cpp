@@ -9,6 +9,7 @@
 // See http://www.boost.org/libs/intrusive for documentation.
 //
 /////////////////////////////////////////////////////////////////////////////
+#include <boost/detail/no_exceptions_support.hpp>
 //[doc_erasing_and_disposing
 #include <boost/intrusive/list.hpp>
 
@@ -50,18 +51,45 @@ int main()
    //Fill all the nodes and insert them in the list
    my_class_list list;
 
+   //<-
+   #if 1
+   BOOST_TRY{
+   #else
+   //->
    try{
+   //<-
+   #endif
+   //->
       //Insert new objects in the container
       for(int i = 0; i < MaxElem; ++i) list.push_back(*new my_class(i));
 
       //Now use remove_and_dispose_if to erase and delete the objects
       list.remove_and_dispose_if(is_even(), delete_disposer());
    }
+   //<-
+   #if 1
+   BOOST_CATCH(...){
+   #else
+   //->
    catch(...){
+   //<-
+   #endif
+   //->
       //If something throws, make sure that all the memory is freed
       list.clear_and_dispose(delete_disposer());
+      //<-
+      #if 1
+      BOOST_RETHROW
+      #else
+      //->
       throw;
+      //<-
+      #endif
+      //->
    }
+   //<-
+   BOOST_CATCH_END
+   //->
 
    //Dispose remaining elements
    list.erase_and_dispose(list.begin(), list.end(), delete_disposer());
