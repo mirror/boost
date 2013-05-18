@@ -1,4 +1,4 @@
-
+//////////////////////////////////////////////////////////////////////////////
 //
 // (C) Copyright Ion Gaztanaga 2008-2012. Distributed under the Boost
 // Software License, Version 1.0. (See accompanying file
@@ -29,18 +29,21 @@
 #include <boost/mpl/bool.hpp>
 #include <boost/mpl/not.hpp>
 #include <boost/assert.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/container/detail/allocator_version_traits.hpp>
 #include <boost/container/detail/utilities.hpp>
 #include <boost/container/detail/iterators.hpp>
 #include <boost/container/detail/algorithms.hpp>
 #include <boost/container/allocator_traits.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/intrusive/pointer_traits.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 #include <boost/aligned_storage.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/move/iterator.hpp>
 #include <boost/move/detail/move_helpers.hpp>
 #include <algorithm> //max
-#include <stdexcept>
+
 #include <memory>
 #include <new> //placement new
 
@@ -330,7 +333,8 @@ struct index_traits
    static void readjust_end_node(index_type &index, node_base_type &end_node)
    {
       if(!index.empty()){
-         node_base_ptr &end_node_idx_ref = *(--index_traits::get_fix_up_end(index));
+         index_iterator end_node_it(index_traits::get_fix_up_end(index));
+         node_base_ptr &end_node_idx_ref = *(--end_node_it);
          end_node_idx_ref = node_base_ptr_traits::pointer_to(end_node);
          end_node.up      = node_base_ptr_ptr_traits::pointer_to(end_node_idx_ref);
       }
@@ -942,7 +946,7 @@ class stable_vector
    size_type size() const BOOST_CONTAINER_NOEXCEPT
    {
       const size_type index_size = this->index.size();
-      return index_size ? (index_size - ExtraPointers) : 0;
+      return (index_size - ExtraPointers) & (std::size_t(0u) -std::size_t(index_size != 0));
    }
 
    //! <b>Effects</b>: Returns the largest possible size of the stable_vector.
@@ -998,7 +1002,9 @@ class stable_vector
       const size_type node_extra_capacity   = this->internal_data.pool_size;
       const size_type extra_capacity        = (bucket_extra_capacity < node_extra_capacity)
          ? bucket_extra_capacity : node_extra_capacity;
-      return (index_size ? (index_size - ExtraPointers + extra_capacity) : index_size);
+      const size_type index_offset =
+         (ExtraPointers + extra_capacity) & (size_type(0u) - size_type(index_size != 0));
+      return index_size - index_offset;
    }
 
    //! <b>Effects</b>: If n is less than or equal to capacity(), this call has no
@@ -1010,8 +1016,9 @@ class stable_vector
    void reserve(size_type n)
    {
       STABLE_VECTOR_CHECK_INVARIANT;
-      if(n > this->max_size())
-         throw std::bad_alloc();
+      if(n > this->max_size()){
+         throw_length_error("stable_vector::reserve max_size() exceeded");
+      }
 
       size_type sz         = this->size();  
       size_type old_capacity = this->capacity();
@@ -1098,7 +1105,7 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Constant.
    reference back() BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<node_reference>(*this->index[this->size() - ExtraPointers]).value;  }
+   {  return static_cast<node_reference>(*this->index[this->size()-1u]).value;  }
 
    //! <b>Requires</b>: !empty()
    //!
@@ -1109,7 +1116,7 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Constant.
    const_reference back() const BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<const_node_reference>(*this->index[this->size() - ExtraPointers]).value;  }
+   {  return static_cast<const_node_reference>(*this->index[this->size()-1u]).value;  }
 
    //! <b>Requires</b>: size() > n.
    //!
@@ -1120,7 +1127,10 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Constant.
    reference operator[](size_type n) BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<node_reference>(*this->index[n]).value;  }
+   {
+      BOOST_ASSERT(n < this->size());
+      return static_cast<node_reference>(*this->index[n]).value;
+   }
 
    //! <b>Requires</b>: size() > n.
    //!
@@ -1131,7 +1141,10 @@ class stable_vector
    //!
    //! <b>Complexity</b>: Constant.
    const_reference operator[](size_type n) const BOOST_CONTAINER_NOEXCEPT
-   {  return static_cast<const_node_reference>(*this->index[n]).value;   }
+   {
+      BOOST_ASSERT(n < this->size());
+      return static_cast<const_node_reference>(*this->index[n]).value;
+   }
 
    //! <b>Requires</b>: size() > n.
    //!
@@ -1143,8 +1156,9 @@ class stable_vector
    //! <b>Complexity</b>: Constant.
    reference at(size_type n)
    {
-      if(n>=this->size())
-         throw std::out_of_range("invalid subscript at stable_vector::at");
+      if(n >= this->size()){
+         throw_out_of_range("vector::at invalid subscript");
+      }
       return operator[](n);
    }
 
@@ -1158,8 +1172,9 @@ class stable_vector
    //! <b>Complexity</b>: Constant.
    const_reference at(size_type n)const
    {
-      if(n>=this->size())
-         throw std::out_of_range("invalid subscript at stable_vector::at");
+      if(n >= this->size()){
+         throw_out_of_range("vector::at invalid subscript");
+      }
       return operator[](n);
    }
 
@@ -1705,7 +1720,7 @@ class stable_vector
 
    void priv_swap_members(stable_vector &x)
    {
-      container_detail::do_swap(this->internal_data.pool_size, x.internal_data.pool_size);
+      boost::container::swap_dispatch(this->internal_data.pool_size, x.internal_data.pool_size);
       index_traits_type::readjust_end_node(this->index, this->internal_data.end_node);
       index_traits_type::readjust_end_node(x.index, x.internal_data.end_node);
    }

@@ -19,6 +19,7 @@
 #include <boost/container/detail/workaround.hpp>
 
 #include <boost/container/container_fwd.hpp>
+#include <boost/container/throw_exception.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/move/detail/move_helpers.hpp>
 #include <boost/intrusive/pointer_traits.hpp>
@@ -37,7 +38,6 @@
 #include <boost/container/detail/preprocessor.hpp>
 #endif
 
-#include <stdexcept>
 #include <iterator>
 #include <utility>
 #include <memory>
@@ -169,7 +169,7 @@ class slist_iterator
    {  return  this->m_it->m_data;  }
 
    pointer   operator->() const
-   { return ::boost::intrusive::pointer_traits<pointer>::to_pointer(this->m_it->m_data); }
+   { return ::boost::intrusive::pointer_traits<pointer>::pointer_to(this->m_it->m_data); }
 
    //Increment / Decrement
    slist_iterator& operator++() 

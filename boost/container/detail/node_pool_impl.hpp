@@ -208,8 +208,6 @@ class private_node_pool_impl
       BOOST_ASSERT(m_allocated==0);
       size_type blocksize = get_rounded_size
          (m_real_node_size*m_nodes_per_block, (size_type)alignment_of<node_t>::value);
-      typename blockslist_t::iterator
-         it(m_blocklist.begin()), itend(m_blocklist.end()), aux;
 
       //We iterate though the NodeBlock list to free the memory
       while(!m_blocklist.empty()){
