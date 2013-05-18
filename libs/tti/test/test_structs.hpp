@@ -92,7 +92,7 @@ struct AnotherType
   // Template
   
   template <class,class,class,class,class,class> struct SomeMemberTemplate { };
-  template <class,class,int,class,template <class> class,class,long> struct ManyParameters { };
+  template <class,class,int,class,template <class> class AnotherInnerTemplate,class,long> struct ManyParameters { };
   template <class,class,class,class> struct SimpleTMP { };
   
   // Data

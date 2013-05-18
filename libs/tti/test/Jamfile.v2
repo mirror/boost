@@ -223,6 +223,11 @@ alias ttitmpv : :
         <toolset-gcc:version>3.4.5
     ;
     
+alias ttitmpv : : 
+        <toolset>gcc
+        <toolset-gcc:version>4.2.1
+    ;
+    
 #
 # Templates, variadic macro
 #
@@ -282,6 +287,11 @@ alias ttitmpcpv : :
         <toolset-gcc:version>3.4.5
     ;
     
+alias ttitmpcpv : : 
+        <toolset>gcc
+        <toolset-gcc:version>4.2.1
+    ;
+    
 #
 # Templates, variadic macro, check params, non-variadic syntax
 #
@@ -339,6 +349,11 @@ alias ttitmpcpvm : :
 alias ttitmpcpvm : : 
         <toolset>gcc
         <toolset-gcc:version>3.4.5
+    ;
+    
+alias ttitmpcpvm : : 
+        <toolset>gcc
+        <toolset-gcc:version>4.2.1
     ;
     
 #
