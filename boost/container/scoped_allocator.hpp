@@ -664,6 +664,12 @@ class scoped_allocator_adaptor_base
       return *this;
    }
 
+   void swap(scoped_allocator_adaptor_base &r)
+   {
+      boost::container::swap_dispatch(this->outer_allocator(), r.outer_allocator());
+      boost::container::swap_dispatch(this->m_inner, r.inner_allocator());
+   }
+
    inner_allocator_type&       inner_allocator()
       { return m_inner; }
 
@@ -812,6 +818,12 @@ class scoped_allocator_adaptor_base<OuterAlloc, true                            
       return *this;                                                                             \
    }                                                                                            \
                                                                                                 \
+   void swap(scoped_allocator_adaptor_base &r)                                                  \
+   {                                                                                            \
+      boost::container::swap_dispatch(this->outer_allocator(), r.outer_allocator());            \
+      boost::container::swap_dispatch(this->m_inner, r.inner_allocator());                      \
+   }                                                                                            \
+                                                                                                \
    inner_allocator_type&       inner_allocator()                                                \
       { return m_inner; }                                                                       \
                                                                                                 \
@@ -929,6 +941,11 @@ class scoped_allocator_adaptor_base
    {
       outer_allocator_type::operator=(boost::move(other.outer_allocator()));
       return *this;
+   }
+
+   void swap(scoped_allocator_adaptor_base &r)
+   {
+      boost::container::swap_dispatch(this->outer_allocator(), r.outer_allocator());
    }
 
    inner_allocator_type&       inner_allocator()
@@ -1157,6 +1174,18 @@ class scoped_allocator_adaptor
       base_type::operator=(boost::move(static_cast<scoped_allocator_adaptor&>(other)));
       return *this;
    }
+
+   //! <b>Effects</b>: swaps *this with r.
+   //!
+   void swap(scoped_allocator_adaptor &r)
+   {
+      base_type::swap(r);
+   }
+
+   //! <b>Effects</b>: swaps *this with r.
+   //!
+   friend void swap(scoped_allocator_adaptor &l, scoped_allocator_adaptor &r)
+   {  l.swap(r);  }
 
    //! <b>Returns</b>:
    //!   `static_cast<OuterAlloc&>(*this)`.

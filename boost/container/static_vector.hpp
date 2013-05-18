@@ -21,34 +21,6 @@
 
 namespace boost { namespace container {
 
-/**
- * @defgroup static_vector_non_member static_vector non-member functions
- */
-
-/**
- * @brief A variable-size array container with fixed capacity.
- *
- * static_vector is a sequence container like boost::container::vector with contiguous storage that can
- * change in size, along with the static allocation, low overhead, and fixed capacity of boost::array.
- *
- * A static_vector is a sequence that supports random access to elements, constant time insertion and
- * removal of elements at the end, and linear time insertion and removal of elements at the beginning or 
- * in the middle. The number of elements in a static_vector may vary dynamically up to a fixed capacity
- * because elements are stored within the object itself similarly to an array. However, objects are 
- * initialized as they are inserted into static_vector unlike C arrays or std::array which must construct
- * all elements on instantiation. The behavior of static_vector enables the use of statically allocated
- * elements in cases with complex object lifetime requirements that would otherwise not be trivially 
- * possible.
- *
- * @par Error Handling
- *  Insertion beyond the capacity and out of bounds errors results in calling throw_bad_alloc().
- *  The reason for this is because unlike vectors, static_vector does not perform allocation.
- *
- * @tparam Value    The type of element that will be stored.
- * @tparam Capacity The maximum number of elements static_vector can store, fixed at compile time.
- */
-
-
 namespace container_detail {
 
 template<class T, std::size_t N>
@@ -89,7 +61,32 @@ class static_storage_allocator
 
 }  //namespace container_detail {
 
+/**
+ * @defgroup static_vector_non_member static_vector non-member functions
+ */
 
+/**
+ * @brief A variable-size array container with fixed capacity.
+ *
+ * static_vector is a sequence container like boost::container::vector with contiguous storage that can
+ * change in size, along with the static allocation, low overhead, and fixed capacity of boost::array.
+ *
+ * A static_vector is a sequence that supports random access to elements, constant time insertion and
+ * removal of elements at the end, and linear time insertion and removal of elements at the beginning or 
+ * in the middle. The number of elements in a static_vector may vary dynamically up to a fixed capacity
+ * because elements are stored within the object itself similarly to an array. However, objects are 
+ * initialized as they are inserted into static_vector unlike C arrays or std::array which must construct
+ * all elements on instantiation. The behavior of static_vector enables the use of statically allocated
+ * elements in cases with complex object lifetime requirements that would otherwise not be trivially 
+ * possible.
+ *
+ * @par Error Handling
+ *  Insertion beyond the capacity and out of bounds errors results in calling throw_bad_alloc().
+ *  The reason for this is because unlike vectors, static_vector does not perform allocation.
+ *
+ * @tparam Value    The type of element that will be stored.
+ * @tparam Capacity The maximum number of elements static_vector can store, fixed at compile time.
+ */
 template <typename Value, std::size_t Capacity>
 class static_vector
     : public vector<Value, container_detail::static_storage_allocator<Value, Capacity> >
