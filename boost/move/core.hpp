@@ -314,7 +314,7 @@
    //
 
    #define BOOST_COPY_ASSIGN_REF_3_TEMPL_ARGS(TYPE, ARG1, ARG2, ARG3)\
-      TYPE<ARG1, ARG2, ARG3>& \
+      const TYPE<ARG1, ARG2, ARG3>& \
    //
 
    #define BOOST_CATCH_CONST_RLVALUE(TYPE)\
