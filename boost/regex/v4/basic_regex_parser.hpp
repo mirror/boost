@@ -1070,26 +1070,46 @@ bool basic_regex_parser<charT, traits>::parse_repeat_range(bool isbasic)
    // skip whitespace:
    while((m_position != m_end) && this->m_traits.isctype(*m_position, this->m_mask_space))
       ++m_position;
-   // fail if at end:
    if(this->m_position == this->m_end)
    {
-      fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-      return false;
+      if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
+      {
+         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
+         return false;
+      }
+      // Treat the opening '{' as a literal character, rewind to start of error:
+      --m_position;
+      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
+      return parse_literal();
    }
    // get min:
    v = this->m_traits.toi(m_position, m_end, 10);
    // skip whitespace:
-   while((m_position != m_end) && this->m_traits.isctype(*m_position, this->m_mask_space))
-      ++m_position;
    if(v < 0)
    {
-      fail(regex_constants::error_badbrace, this->m_position - this->m_base);
-      return false;
+      if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
+      {
+         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
+         return false;
+      }
+      // Treat the opening '{' as a literal character, rewind to start of error:
+      --m_position;
+      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
+      return parse_literal();
    }
-   else if(this->m_position == this->m_end)
+   while((m_position != m_end) && this->m_traits.isctype(*m_position, this->m_mask_space))
+      ++m_position;
+   if(this->m_position == this->m_end)
    {
-      fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-      return false;
+      if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
+      {
+         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
+         return false;
+      }
+      // Treat the opening '{' as a literal character, rewind to start of error:
+      --m_position;
+      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
+      return parse_literal();
    }
    min = v;
    // see if we have a comma:
@@ -1102,8 +1122,15 @@ bool basic_regex_parser<charT, traits>::parse_repeat_range(bool isbasic)
          ++m_position;
       if(this->m_position == this->m_end)
       {
-         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-         return false;
+         if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
+         {
+            fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
+            return false;
+         }
+         // Treat the opening '{' as a literal character, rewind to start of error:
+         --m_position;
+         while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
+         return parse_literal();
       }
       // get the value if any:
       v = this->m_traits.toi(m_position, m_end, 10);
@@ -1120,8 +1147,15 @@ bool basic_regex_parser<charT, traits>::parse_repeat_range(bool isbasic)
    // OK now check trailing }:
    if(this->m_position == this->m_end)
    {
-      fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-      return false;
+      if(this->flags() & (regbase::main_option_type | regbase::no_perl_ex))
+      {
+         fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
+         return false;
+      }
+      // Treat the opening '{' as a literal character, rewind to start of error:
+      --m_position;
+      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
+      return parse_literal();
    }
    if(isbasic)
    {
@@ -1144,8 +1178,10 @@ bool basic_regex_parser<charT, traits>::parse_repeat_range(bool isbasic)
       ++m_position;
    else
    {
-      fail(regex_constants::error_brace, this->m_position - this->m_base, incomplete_message);
-      return false;
+      // Treat the opening '{' as a literal character, rewind to start of error:
+      --m_position;
+      while(this->m_traits.syntax_type(*m_position) != regex_constants::syntax_open_brace) --m_position;
+      return parse_literal();
    }
    //
    // finally go and add the repeat, unless error:
