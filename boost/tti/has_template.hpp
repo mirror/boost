@@ -32,7 +32,7 @@
 /**
 
     trait = the name of the metafunction.
-    ...   = variadic paramaters.
+    ...   = variadic parameters.
     
             The first variadic parameter is the inner class template name.
             
@@ -124,7 +124,7 @@
 /// Expands to a metafunction which tests whether an inner class template with a particular name exists.
 /**
 
-    ...   = variadic paramaters.
+    ...   = variadic parameters.
     
             The first variadic parameter is the inner class template name.
             

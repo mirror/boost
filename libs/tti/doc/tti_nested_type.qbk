@@ -169,7 +169,7 @@ These two metafunctions are 'boost::tti::valid_member_type' and 'boost::tti::val
     
     class T = a metafunction type
     
-    returns = true if the return 'type' of the meatfunction exists, 
+    returns = true if the return 'type' of the metafunction exists, 
               false if it does not.'Existence' is determined by whether 
               the return 'type' does not equal the marker type of 
               BOOST_TTI_MEMBER_TYPE.

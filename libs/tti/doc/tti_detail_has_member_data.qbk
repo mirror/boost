@@ -44,7 +44,7 @@ generates a metafunction called 'has_member_data_AMemberData' in the current sco
 [heading Invoking the metafunction]
 
 You invoke the metafunction by instantiating the template with an enclosing 
-type to introspect and the type of the member data, or by instantating the
+type to introspect and the type of the member data, or by instantiating the
 template with a pointer to member data type. The return value called 'value' 
 is a compile time bool constant telling you whether or not the member data .
 exists.
