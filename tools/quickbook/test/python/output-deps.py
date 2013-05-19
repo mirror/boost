@@ -1,5 +1,9 @@
 #!/usr/bin/env python
 
+# Copyright 2012-2013 Daniel James
+# Distributed under the Boost Software License, Version 1.0.
+# (See accompanying file LICENSE_1_0.txt or http://www.boost.org/LICENSE_1_0.txt)
+
 import sys, os, subprocess, tempfile, re
 
 def main(args, directory):
@@ -110,6 +114,7 @@ def load_dependencies(filename, adjust_paths = False):
     dependencies = set()
     f = open(filename, 'r')
     for path in f:
+        if path[0] == '#': continue
         if adjust_paths:
             path = os.path.realpath(path)
         if path in dependencies:
@@ -122,6 +127,7 @@ def load_locations(filename, adjust_paths = False):
     dependencies = {}
     f = open(filename, 'r')
     for line in f:
+        if line[0] == '#': continue
         m = line_matcher.match(line)
         if not m:
             raise Exception("Invalid dependency file: %1s" % filename)
