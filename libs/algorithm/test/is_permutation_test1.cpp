@@ -19,10 +19,95 @@
 #include <vector>
 #include <list>
 
+#include "iterator_test.hpp"
+
+template <typename T>
+bool eq ( const T& a, const T& b ) { return a == b; }
+
+template <typename T>
+bool never_eq ( const T&, const T& ) { return false; }
+
 namespace ba = boost::algorithm;
-// namespace ba = boost;
 
 void test_sequence1 () {
+    int num[] = { 1, 1, 2, 3, 5 };
+    const int sz = sizeof (num)/sizeof(num[0]);
+
+//  Empty sequences
+    BOOST_CHECK (
+        ba::is_permutation (
+            forward_iterator<int *>(num),     forward_iterator<int *>(num), 
+            forward_iterator<int *>(num)));
+    BOOST_CHECK (
+        ba::is_permutation (
+            forward_iterator<int *>(num),     forward_iterator<int *>(num), 
+            forward_iterator<int *>(num),     forward_iterator<int *>(num)));
+    BOOST_CHECK (
+        ba::is_permutation (
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num), 
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num)));
+    BOOST_CHECK (
+        ba::is_permutation (
+            forward_iterator<int *>(num),     forward_iterator<int *>(num), 
+            forward_iterator<int *>(num), 
+            never_eq<int> ));       // Since the sequences are empty, the pred is never called
+            
+//  Empty vs. non-empty
+    BOOST_CHECK ( !
+        ba::is_permutation (
+            forward_iterator<int *>(num),     forward_iterator<int *>(num), 
+            forward_iterator<int *>(num),     forward_iterator<int *>(num + 1)));
+
+    BOOST_CHECK ( !
+        ba::is_permutation ( 
+            forward_iterator<int *>(num + 1), forward_iterator<int *>(num + 2), 
+            forward_iterator<int *>(num),     forward_iterator<int *>(num)));
+                    
+    BOOST_CHECK ( !
+        ba::is_permutation (
+            random_access_iterator<int *>(num + 1), random_access_iterator<int *>(num + 2), 
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num)));
+
+    BOOST_CHECK ( !
+        ba::is_permutation (
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num), 
+            random_access_iterator<int *>(num + 1), random_access_iterator<int *>(num + 2)));
+
+//  Something should be a permutation of itself
+    BOOST_CHECK (
+        ba::is_permutation (
+            forward_iterator<int *>(num),     forward_iterator<int *>(num + sz), 
+            forward_iterator<int *>(num)));
+    BOOST_CHECK (
+        ba::is_permutation (
+            forward_iterator<int *>(num),     forward_iterator<int *>(num + sz), 
+            forward_iterator<int *>(num), eq<int> ));
+    BOOST_CHECK (
+        ba::is_permutation (
+            forward_iterator<int *>(num),     forward_iterator<int *>(num + sz), 
+            forward_iterator<int *>(num),     forward_iterator<int *>(num + sz )));
+    BOOST_CHECK (
+        ba::is_permutation (
+            forward_iterator<int *>(num),     forward_iterator<int *>(num + sz), 
+            forward_iterator<int *>(num),     forward_iterator<int *>(num + sz ),
+            eq<int> ));
+            
+    BOOST_CHECK (
+        ba::is_permutation (
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num + sz), 
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num + sz)));
+    BOOST_CHECK (
+        ba::is_permutation (
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num + sz), 
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num + sz),
+            eq<int> ));
+    BOOST_CHECK (
+        ba::is_permutation (
+            random_access_iterator<int *>(num),     random_access_iterator<int *>(num + sz), 
+            forward_iterator<int *>(num),           forward_iterator<int *>(num + sz),
+            eq<int> ));
+    
+
     std::vector<int> v, v1;
     
     v.clear ();
