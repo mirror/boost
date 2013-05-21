@@ -292,12 +292,14 @@ namespace any_tests // test definitions
         s = any_cast<const std::string&>(returning_string2());
         //s = any_cast<std::string&>(returning_string2());
 
+#if !defined(_MSC_VER) || _MSC_VER != 1600
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
         //s = static_cast<std::string&&>(any_cast<std::string&>(returning_string1()));
         s = any_cast<std::string&&>(returning_string1());
 
         //s = static_cast<std::string&&>(any_cast<std::string&>(returning_string2()));
         s = any_cast<std::string&&>(returning_string2());
+#endif
 #endif
     }
 
