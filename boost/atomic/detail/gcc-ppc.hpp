@@ -1525,6 +1525,7 @@ template<bool Sign>
 class base_atomic<void *, void *, 4, Sign>
 {
     typedef base_atomic this_type;
+    typedef ptrdiff_t difference_type;
     typedef void * value_type;
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
@@ -1643,7 +1644,43 @@ public:
         return true;
     }
 
-    BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+    value_type
+    fetch_add(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        value_type original, tmp;
+        ppc_fence_before(order);
+        __asm__ (
+            "1:\n"
+            "lwarx %0,%y2\n"
+            "add %1,%0,%3\n"
+            "stwcx. %1,%y2\n"
+            "bne- 1b\n"
+            : "=&b" (original), "=&b" (tmp), "+Z"(v_)
+            : "b" (v)
+            : "cc");
+        ppc_fence_after(order);
+        return original;
+    }
+
+    value_type
+    fetch_sub(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        value_type original, tmp;
+        ppc_fence_before(order);
+        __asm__ (
+            "1:\n"
+            "lwarx %0,%y2\n"
+            "sub %1,%0,%3\n"
+            "stwcx. %1,%y2\n"
+            "bne- 1b\n"
+            : "=&b" (original), "=&b" (tmp), "+Z"(v_)
+            : "b" (v)
+            : "cc");
+        ppc_fence_after(order);
+        return original;
+    }
+
+    BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS
 private:
     base_atomic(const base_atomic &) /* = delete */ ;
     void operator=(const base_atomic &) /* = delete */ ;
@@ -1824,6 +1861,7 @@ template<bool Sign>
 class base_atomic<void *, void *, 8, Sign>
 {
     typedef base_atomic this_type;
+    typedef ptrdiff_t difference_type;
     typedef void * value_type;
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
@@ -1942,7 +1980,43 @@ public:
         return true;
     }
 
-    BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+    value_type
+    fetch_add(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        value_type original, tmp;
+        ppc_fence_before(order);
+        __asm__ (
+            "1:\n"
+            "ldarx %0,%y2\n"
+            "add %1,%0,%3\n"
+            "stdcx. %1,%y2\n"
+            "bne- 1b\n"
+            : "=&b" (original), "=&b" (tmp), "+Z"(v_)
+            : "b" (v)
+            : "cc");
+        ppc_fence_after(order);
+        return original;
+    }
+
+    value_type
+    fetch_sub(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        value_type original, tmp;
+        ppc_fence_before(order);
+        __asm__ (
+            "1:\n"
+            "ldarx %0,%y2\n"
+            "sub %1,%0,%3\n"
+            "stdcx. %1,%y2\n"
+            "bne- 1b\n"
+            : "=&b" (original), "=&b" (tmp), "+Z"(v_)
+            : "b" (v)
+            : "cc");
+        ppc_fence_after(order);
+        return original;
+    }
+
+    BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS
 private:
     base_atomic(const base_atomic &) /* = delete */ ;
     void operator=(const base_atomic &) /* = delete */ ;

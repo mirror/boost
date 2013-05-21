@@ -479,7 +479,7 @@ public:
     {
         value_type original = load(memory_order_relaxed);
         do {
-        } while (!compare_exchange_weak(original, original + v, order, memory_order_relaxed));
+        } while (!compare_exchange_weak(original, (char*)original + v, order, memory_order_relaxed));
         return original;
     }
 
@@ -488,7 +488,7 @@ public:
     {
         value_type original = load(memory_order_relaxed);
         do {
-        } while (!compare_exchange_weak(original, original - v, order, memory_order_relaxed));
+        } while (!compare_exchange_weak(original, (char*)original - v, order, memory_order_relaxed));
         return original;
     }
 
@@ -498,7 +498,7 @@ public:
         return true;
     }
 
-    BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+    BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS
 private:
     base_atomic(const base_atomic &) /* = delete */ ;
     void operator=(const base_atomic &) /* = delete */ ;

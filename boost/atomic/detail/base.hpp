@@ -79,6 +79,43 @@
         return fetch_sub(v) - v; \
     } \
 
+#define BOOST_ATOMIC_DECLARE_VOID_POINTER_ADDITIVE_OPERATORS \
+    value_type \
+    operator++(int) volatile BOOST_NOEXCEPT \
+    { \
+        return fetch_add(1); \
+    } \
+     \
+    value_type \
+    operator++(void) volatile BOOST_NOEXCEPT \
+    { \
+        return (char*)fetch_add(1) + 1;         \
+    } \
+     \
+    value_type \
+    operator--(int) volatile BOOST_NOEXCEPT \
+    { \
+        return fetch_sub(1); \
+    } \
+     \
+    value_type \
+    operator--(void) volatile BOOST_NOEXCEPT \
+    { \
+        return (char*)fetch_sub(1) - 1;         \
+    } \
+     \
+    value_type \
+    operator+=(difference_type v) volatile BOOST_NOEXCEPT \
+    { \
+        return (char*)fetch_add(v) + v; \
+    } \
+     \
+    value_type \
+    operator-=(difference_type v) volatile BOOST_NOEXCEPT \
+    { \
+        return (char*)fetch_sub(v) - v; \
+    } \
+
 #define BOOST_ATOMIC_DECLARE_BIT_OPERATORS \
     value_type \
     operator&=(difference_type v) volatile BOOST_NOEXCEPT \
@@ -101,6 +138,10 @@
 #define BOOST_ATOMIC_DECLARE_POINTER_OPERATORS \
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS \
     BOOST_ATOMIC_DECLARE_ADDITIVE_OPERATORS \
+
+#define BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS \
+    BOOST_ATOMIC_DECLARE_BASE_OPERATORS \
+    BOOST_ATOMIC_DECLARE_VOID_POINTER_ADDITIVE_OPERATORS \
 
 #define BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS \
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS \
@@ -444,6 +485,7 @@ class base_atomic<void *, void *, Size, Sign>
 {
 private:
     typedef base_atomic this_type;
+    typedef ptrdiff_t difference_type;
     typedef void * value_type;
     typedef lockpool::scoped_lock guard_type;
 public:
@@ -506,7 +548,30 @@ public:
         return false;
     }
 
-    BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+    value_type fetch_add(difference_type v, memory_order /*order*/ = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        guard_type guard(const_cast<value_type *>(&v_));
+
+        value_type old = v_;
+        char * cv = reinterpret_cast<char*>(old);
+        cv += v;
+        v_ = cv;
+        return old;
+    }
+
+    value_type fetch_sub(difference_type v, memory_order /*order*/ = memory_order_seq_cst) volatile
+    {
+        guard_type guard(const_cast<value_type *>(&v_));
+
+        value_type old = v_;
+        char * cv = reinterpret_cast<char*>(old);
+        cv -= v;
+        v_ = cv;
+        return old;
+    }
+
+    BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS
+
 private:
     base_atomic(const base_atomic &) /* = delete */ ;
     void operator=(const base_atomic &) /* = delete */ ;
