@@ -663,7 +663,7 @@ namespace detail
     template <class LhsDuration, class RhsDuration>
     struct duration_eq
     {
-      BOOST_CONSTEXPR bool operator()(const LhsDuration& lhs, const RhsDuration& rhs)
+      BOOST_CONSTEXPR bool operator()(const LhsDuration& lhs, const RhsDuration& rhs) const
         {
             typedef typename common_type<LhsDuration, RhsDuration>::type CD;
             return CD(lhs).count() == CD(rhs).count();
@@ -673,7 +673,7 @@ namespace detail
     template <class LhsDuration>
     struct duration_eq<LhsDuration, LhsDuration>
     {
-      BOOST_CONSTEXPR bool operator()(const LhsDuration& lhs, const LhsDuration& rhs)
+      BOOST_CONSTEXPR bool operator()(const LhsDuration& lhs, const LhsDuration& rhs) const
         {
             return lhs.count() == rhs.count();
         }
@@ -682,7 +682,7 @@ namespace detail
     template <class LhsDuration, class RhsDuration>
     struct duration_lt
     {
-      BOOST_CONSTEXPR bool operator()(const LhsDuration& lhs, const RhsDuration& rhs)
+      BOOST_CONSTEXPR bool operator()(const LhsDuration& lhs, const RhsDuration& rhs) const
         {
             typedef typename common_type<LhsDuration, RhsDuration>::type CD;
             return CD(lhs).count() < CD(rhs).count();
@@ -692,7 +692,7 @@ namespace detail
     template <class LhsDuration>
     struct duration_lt<LhsDuration, LhsDuration>
     {
-      BOOST_CONSTEXPR bool operator()(const LhsDuration& lhs, const LhsDuration& rhs)
+      BOOST_CONSTEXPR bool operator()(const LhsDuration& lhs, const LhsDuration& rhs) const
         {
             return lhs.count() < rhs.count();
         }
