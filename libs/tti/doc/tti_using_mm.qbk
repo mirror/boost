@@ -34,8 +34,8 @@ a class or function template where 'T' is a type passed to the template.
    
    template <class> struct AMemberTemplate { };
    template <class,class,class> struct AnotherMemberTemplate { };
-   template <class,class,int,class,template <class> class InnerTemplate,class,long> struct ManyParameters { };
-   template <class,class,int,short,class,template <class,int> class InnerTemplate,class> struct MoreParameters { };
+   template <class,class,int,class,template <class> class,class,long> struct ManyParameters { };
+   template <class,class,int,short,class,template <class,int> class,class> struct MoreParameters { };
    
    // Data
    

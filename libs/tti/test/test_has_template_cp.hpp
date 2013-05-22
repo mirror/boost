@@ -18,7 +18,7 @@ BOOST_TTI_HAS_TEMPLATE(SomeMemberTemplate,(6,(class,class,class,class,class,clas
 BOOST_TTI_TRAIT_HAS_TEMPLATE(ATemplateWithParms,ManyParameters,(7,(class,class,int,class,template <class> class,class,long)))
 BOOST_TTI_HAS_TEMPLATE(SimpleTMP,(4,(class,class,class,class)))
 BOOST_TTI_HAS_TEMPLATE(TemplateNotExist,(3,(int,class,template <class> class ATemplate)))
-BOOST_TTI_TRAIT_HAS_TEMPLATE(WrongParametersForMP,ManyParameters,(8,(class,class,int,class,template <class,class> class InnerTemplate,class,long)))
-BOOST_TTI_TRAIT_HAS_TEMPLATE(WrongParameters2ForMP,ManyParameters,(7,(class,long,int,class,template <class> class InnerTemplate,class,long)))
+BOOST_TTI_TRAIT_HAS_TEMPLATE(WrongParametersForMP,ManyParameters,(8,(class,class,int,class,template <class,class> class,class,long)))
+BOOST_TTI_TRAIT_HAS_TEMPLATE(WrongParameters2ForMP,ManyParameters,(7,(class,long,int,class,template <class> class,class,long)))
 
 #endif // TEST_HAS_TEMPLATE_CHECK_PARAMS_HPP
