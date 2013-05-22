@@ -10,8 +10,6 @@
 #include <boost/coroutine/all.hpp>
 #include <boost/thread.hpp>
 
-typedef boost::coroutines::coroutine< void() >   coro_t;
-
 int count = 20;
 
 void access( char *buf) __attribute__ ((noinline));
@@ -19,6 +17,7 @@ void access( char *buf)
 {
   buf[0] = '\0';
 }
+
 void bar( int i)
 {
     char buf[4 * 1024];
@@ -31,6 +30,23 @@ void bar( int i)
     }
 }
 
+#ifdef BOOST_COROUTINES_V2
+void foo( boost::coroutines::pull_coroutine< void > & c)
+{
+    bar( count);
+    c();
+}
+
+void thread_fn()
+{
+    {
+        boost::coroutines::push_coroutine< void > c( foo);
+        c();
+    }
+}
+#else
+typedef boost::coroutines::coroutine< void() >   coro_t;
+
 void foo( coro_t & c)
 {
     bar( count);
@@ -42,9 +58,9 @@ void thread_fn()
     {
         coro_t c( foo);
         c();
-        int i = 7;
     }
 }
+#endif
 
 int main( int argc, char * argv[])
 {

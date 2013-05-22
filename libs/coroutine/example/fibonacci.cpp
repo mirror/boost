@@ -10,7 +10,8 @@
 #include <boost/range.hpp>
 #include <boost/coroutine/all.hpp>
 
-void fibonacci( boost::coroutines::coroutine< void( int) > & c)
+#ifdef BOOST_COROUTINES_V2
+void fibonacci( boost::coroutines::push_coroutine< int > & c)
 {
     int first = 1, second = 1;
     while ( true)
@@ -24,9 +25,9 @@ void fibonacci( boost::coroutines::coroutine< void( int) > & c)
 
 int main()
 {
-    boost::coroutines::coroutine< int() > c( fibonacci);
+    boost::coroutines::pull_coroutine< int > c( fibonacci);
     boost::range_iterator<
-       boost::coroutines::coroutine< int() >
+       boost::coroutines::pull_coroutine< int >
     >::type   it( boost::begin( c) );
     for ( int i = 0; i < 10; ++i)
     {
@@ -38,27 +39,25 @@ int main()
 
     return EXIT_SUCCESS;
 }
+#else
+void fibonacci( boost::coroutines::coroutine< void( int) > & c)
+{
+    int first = 1, second = 1;
+    while ( true)
+    {
+        int third = first + second;
+        first = second;
+        second = third;
+        c( third);
+    }
+}
 
-// C++11
-#if 0
 int main()
 {
-    boost::coroutines::coroutine< int() > c(
-        [&]( boost::coroutines::coroutine< void( int) > & c) {
-            int first = 1, second = 1;
-            while ( true)
-            {
-                int third = first + second;
-                first = second;
-                second = third;
-                c( third);
-            }
-        });
-
+    boost::coroutines::coroutine< int() > c( fibonacci);
     boost::range_iterator<
        boost::coroutines::coroutine< int() >
     >::type   it( boost::begin( c) );
-
     for ( int i = 0; i < 10; ++i)
     {
         std::cout << * it <<  " ";

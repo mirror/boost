@@ -91,6 +91,33 @@ inline
 bool operator!=( leaf const& l, leaf  const& r)
 { return l.value != r.value; }
 
+#ifdef BOOST_COROUTINES_V2
+class tree_visitor : public visitor
+{
+private:
+    boost::coroutines::push_coroutine< leaf & >  &   c_;
+
+public:
+    tree_visitor( boost::coroutines::push_coroutine< leaf & > & c) :
+        c_( c)
+    {}
+
+    void visit( branch & b)
+    {
+        if ( b.left) b.left->accept( * this);
+        if ( b.right) b.right->accept( * this);
+    }
+
+    void visit( leaf & l)
+    { c_( l); }
+};
+
+void enumerate_leafs( boost::coroutines::push_coroutine< leaf & > & c, node::ptr_t root)
+{
+    tree_visitor v( c);
+    root->accept( v);
+}
+#else
 typedef boost::coroutines::coroutine< leaf&() > coro_t;
 
 class tree_visitor : public visitor
@@ -118,6 +145,7 @@ void enumerate_leafs( coro_t::caller_type & c, node::ptr_t root)
     tree_visitor v( c);
     root->accept( v);
 }
+#endif
 
 # if defined(BOOST_MSVC)
 # pragma warning(pop)

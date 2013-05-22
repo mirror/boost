@@ -69,18 +69,18 @@ exe same_fringe
     : same_fringe.cpp
     ;
 
-exe asio/stream_client
-    : asio/stream_client.cpp
-    ;
+#exe asio/stream_client
+#    : asio/stream_client.cpp
+#    ;
+#
+#exe asio/stream_server
+#    : asio/stream_server.cpp
+#    ;
 
-exe asio/stream_server
-    : asio/stream_server.cpp
-    ;
-
-#exe same_fringe
+#exe same_fringe11
 #    : c++11/same_fringe.cpp
 #    ;
 #
-#exe fibonacci
+#exe fibonacci11
 #    : c++11/fibonacci.cpp
 #    ;

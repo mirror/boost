@@ -15,15 +15,6 @@
 
 #include "tree.h"
 
-bool match_trees( coro_t & c1, coro_t & c2)
-{
-    typedef boost::range_iterator< coro_t >::type iterator_t;
-    iterator_t i1( boost::begin( c1) );
-    iterator_t e1( boost::end( c1) );
-    iterator_t i2( boost::begin( c2) );
-    return std::equal( i1, e1, i2);
-}
-
 std::pair< node::ptr_t, node::ptr_t > create_eq_trees()
 {
     branch::ptr_t tree1 = branch::create(
@@ -58,6 +49,48 @@ std::pair< node::ptr_t, node::ptr_t > create_diff_trees()
     return std::make_pair( tree1, tree2);
 }
 
+#ifdef BOOST_COROUTINES_V2
+bool match_trees( boost::coroutines::pull_coroutine< leaf & > & c1,
+                  boost::coroutines::pull_coroutine< leaf & > & c2)
+{
+    typedef boost::range_iterator< boost::coroutines::pull_coroutine< leaf & > >::type iterator_t;
+    iterator_t i1( boost::begin( c1) );
+    iterator_t e1( boost::end( c1) );
+    iterator_t i2( boost::begin( c2) );
+    return std::equal( i1, e1, i2);
+}
+
+int main()
+{
+    {
+        std::pair< node::ptr_t, node::ptr_t > pt = create_eq_trees();
+        boost::coroutines::pull_coroutine< leaf & > te1( boost::bind( enumerate_leafs, _1, pt.first) );
+        boost::coroutines::pull_coroutine< leaf & > te2( boost::bind( enumerate_leafs, _1, pt.second) );
+        bool result = match_trees( te1, te2);
+        std::cout << std::boolalpha << "eq. trees matched == " << result << std::endl;
+    }
+    {
+        std::pair< node::ptr_t, node::ptr_t > pt = create_diff_trees();
+        boost::coroutines::pull_coroutine< leaf & > te1( boost::bind( enumerate_leafs, _1, pt.first) );
+        boost::coroutines::pull_coroutine< leaf & > te2( boost::bind( enumerate_leafs, _1, pt.second) );
+        bool result = match_trees( te1, te2);
+        std::cout << std::boolalpha << "diff. trees matched == " << result << std::endl;
+    }
+
+    std::cout << "Done" << std::endl;
+
+    return EXIT_SUCCESS;
+}
+#else
+bool match_trees( coro_t & c1, coro_t & c2)
+{
+    typedef boost::range_iterator< coro_t >::type iterator_t;
+    iterator_t i1( boost::begin( c1) );
+    iterator_t e1( boost::end( c1) );
+    iterator_t i2( boost::begin( c2) );
+    return std::equal( i1, e1, i2);
+}
+
 int main()
 {
     {
@@ -79,3 +112,4 @@ int main()
 
     return EXIT_SUCCESS;
 }
+#endif

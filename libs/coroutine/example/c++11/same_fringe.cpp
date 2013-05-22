@@ -10,6 +10,71 @@
 
 #include "tree.h"
 
+node::ptr_t create_tree1()
+{
+    return branch::create(
+        leaf::create( "A"),
+        branch::create(
+            leaf::create( "B"),
+            leaf::create( "C") ) );
+}
+
+node::ptr_t create_tree2()
+{
+    return branch::create(
+        branch::create(
+            leaf::create( "A"),
+            leaf::create( "B") ),
+        leaf::create( "C") );
+}
+
+#ifdef BOOST_COROUTINES_V2
+class coro_visitor : public visitor
+{
+private:
+    boost::coroutines::push_coroutine< leaf& >   &   c_;
+
+public:
+    coro_visitor( boost::coroutines::push_coroutine< leaf& > & c) :
+        c_( c)
+    {}
+
+    void visit( branch & b)
+    {
+        if ( b.left) b.left->accept( * this);
+        if ( b.right) b.right->accept( * this);
+    }
+
+    void visit( leaf & l)
+    { c_( l); }
+};
+
+int main()
+{
+    node::ptr_t t1 = create_tree1();
+    boost::coroutines::pull_coroutine< leaf& > c1(
+        [&]( boost::coroutines::push_coroutine< leaf & > & c) {
+            coro_visitor v( c);
+            t1->accept( v);
+        });
+
+    node::ptr_t t2 = create_tree2();
+    boost::coroutines::pull_coroutine< leaf& > c2(
+        [&]( boost::coroutines::push_coroutine< leaf & > & c) {
+            coro_visitor v( c);
+            t2->accept( v);
+        });
+
+    bool result = std::equal(
+            boost::begin( c1),
+            boost::end( c1),
+            boost::begin( c2) );
+
+    std::cout << std::boolalpha << "same fringe == " << result << "\nDone" << std::endl;
+
+    return EXIT_SUCCESS;
+}
+#else
 class coro_visitor : public visitor
 {
 private:
@@ -29,24 +94,6 @@ public:
     void visit( leaf & l)
     { c_( l); }
 };
-
-node::ptr_t create_tree1()
-{
-    return branch::create(
-        leaf::create( "A"),
-        branch::create(
-            leaf::create( "B"),
-            leaf::create( "C") ) );
-}
-
-node::ptr_t create_tree2()
-{
-    return branch::create(
-        branch::create(
-            leaf::create( "A"),
-            leaf::create( "B") ),
-        leaf::create( "C") );
-}
 
 int main()
 {
@@ -73,3 +120,4 @@ int main()
 
     return EXIT_SUCCESS;
 }
+#endif
