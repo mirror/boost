@@ -61,7 +61,13 @@ const char* boost_no_inspect = "boost-" "no-inspect";
 
 #include "cvs_iterator.hpp"
 
+#if !defined(INSPECT_USE_BOOST_TEST)
+#define INSPECT_USE_BOOST_TEST 0
+#endif
+
+#if INSPECT_USE_BOOST_TEST
 #include "boost/test/included/prg_exec_monitor.hpp"
+#endif
 
 namespace fs = boost::filesystem;
 
@@ -183,12 +189,15 @@ namespace
 
   string info( const fs::path & inspect_root )
   {
+    svn_check check(inspect_root);
+
+#if !INSPECT_USE_BOOST_TEST
+    check();
+#else
+
     try {
       boost::execution_monitor e;
-      svn_check check(inspect_root);
-
       e.execute(nullary_function_ref<svn_check, int>(check));
-      return check.result;
     }
     catch(boost::execution_exception const& e) {
       if (e.code() == boost::execution_exception::system_error) {
@@ -200,6 +209,10 @@ namespace
         throw;
       }
     }
+
+#endif
+
+    return check.result;
   }
 
 //  visit_predicate (determines which directories are visited)  --------------//
@@ -781,7 +794,11 @@ namespace boost
 
 //  cpp_main()  --------------------------------------------------------------//
 
+#if !INSPECT_USE_BOOST_TEST
+int main( int argc_param, char * argv_param[] )
+#else
 int cpp_main( int argc_param, char * argv_param[] )
+#endif
 {
   // <hack> for the moment, let's be on the safe side
   // and ensure we don't modify anything being pointed to;
