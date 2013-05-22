@@ -62,8 +62,6 @@ segmented_stack_allocator::maximum_stacksize()
 void
 segmented_stack_allocator::allocate( stack_context & ctx, std::size_t size)
 {
-    BOOST_ASSERT( default_stacksize() <= size);
-
     void * limit = __splitstack_makecontext( size, ctx.segments_ctx, & ctx.size);
     BOOST_ASSERT( limit);
     ctx.sp = static_cast< char * >( limit) + ctx.size;

@@ -14,7 +14,7 @@ The execution of routines form a parent-child relationship and the child
 terminates always before the parent.
 Coroutines are a generalization of routines.
 The principal difference between coroutines and routines is that a coroutine
-enables explicit suspend and resume their progress via additional operations by
+enables explicit suspend and resume of their progress via additional operations by
 preserving local state, e.g. a coroutine is a kind of continuation.
 A continuation is a object representing a suspended execution (registers,
 stack). Each coroutine has its own stack and local variables, sub-routine calls

@@ -153,6 +153,7 @@ void f11( coro_tuple::caller_type & self)
 {
     boost::tuple<int&,int&> tpl( self.get().get< 0 >(), self.get().get< 1 >() );
     self( tpl);
+    //self( 7, 11); //TODO: does not work
 }
 
 void f12( coro_int::caller_type & self)
