@@ -519,7 +519,7 @@ public:
             ), other)
         )
     {}
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     any(any<Concept, T&>&& other)
       : table(::boost::type_erasure::detail::access::table(other)),
         data(::boost::type_erasure::call(
@@ -545,7 +545,7 @@ public:
             ), other)
         )
     {}
-#ifndef BOOST_NO_RVALUE_REFERENCES
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     any(any<Concept, const T&>&& other)
       : table(::boost::type_erasure::detail::access::table(other)),
         data(::boost::type_erasure::call(
