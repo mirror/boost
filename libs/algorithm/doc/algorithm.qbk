@@ -56,6 +56,11 @@ Thanks to all the people who have reviewed this library and made suggestions for
 [include partition_point.qbk]
 [endsect]
 
+[section:CXX14 C++14 Algorithms]
+[include equal.qbk]
+[include mismatch.qbk]
+[endsect]
+
 [section:Misc Other Algorithms]
 [include clamp-hpp.qbk]
 [include gather.qbk]
