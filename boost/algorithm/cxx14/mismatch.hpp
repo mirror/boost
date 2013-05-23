@@ -17,8 +17,6 @@
 
 namespace boost { namespace algorithm {
 
-template <class InputIterator1, class InputIterator2, class BinaryPredicate>
-
 /// \fn mismatch ( InputIterator1 first1, InputIterator1 last1, 
 ///                InputIterator2 first2, InputIterator2 last2,
 ///                BinaryPredicate pred )
@@ -29,6 +27,7 @@ template <class InputIterator1, class InputIterator2, class BinaryPredicate>
 /// \param first2    The start of the second range.
 /// \param last2     One past the end of the second range.
 /// \param pred      A predicate for comparing the elements of the ranges
+template <class InputIterator1, class InputIterator2, class BinaryPredicate>
 std::pair<InputIterator1, InputIterator2> mismatch (
 					InputIterator1 first1, InputIterator1 last1,
 					InputIterator2 first2, InputIterator2 last2,
