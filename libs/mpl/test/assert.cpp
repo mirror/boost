@@ -71,6 +71,17 @@ struct her
     }
 };
 
+template<class T>
+struct nested : boost::mpl::true_ {
+    BOOST_MPL_ASSERT(( boost::is_pointer<T*> ));
+    BOOST_MPL_ASSERT_NOT(( boost::is_same<void,T> ));
+    BOOST_MPL_ASSERT_RELATION( sizeof(T*), >, 1 );
+    BOOST_MPL_ASSERT_MSG( true, GLOBAL_SCOPE_ERROR, (int,long) );
+};
+
+BOOST_MPL_ASSERT(( nested<int> ));
+BOOST_MPL_ASSERT_NOT(( boost::mpl::not_<nested<unsigned> > ));
+
 int main()
 {
     her<void> h;
