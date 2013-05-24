@@ -179,21 +179,20 @@ void test_simple_repeats2()
 {
    using namespace boost::regex_constants;
 
-   TEST_INVALID_REGEX("a{}", perl);
-   TEST_INVALID_REGEX("a{", perl);
-   TEST_INVALID_REGEX("a{1", perl);
-   TEST_INVALID_REGEX("a{1,", perl);
-   TEST_INVALID_REGEX("a{1,2", perl);
-   TEST_INVALID_REGEX("a{ 1 , 2 ", perl);
-   TEST_INVALID_REGEX("a{ }", perl);
-   TEST_INVALID_REGEX("a}", perl);
+   TEST_REGEX_SEARCH("a{}", basic, "a{}", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("a{", basic, "a{", match_default, make_array(0, 2, -2, -2));
+   TEST_REGEX_SEARCH("a{1", basic, "a{1", match_default, make_array(0, 3, -2, -2));
+   TEST_REGEX_SEARCH("a{1,", basic, "a{1,", match_default, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("a{1,2", basic, "a{1,2", match_default, make_array(0, 5, -2, -2));
+   TEST_REGEX_SEARCH("a{ 1 , 2", basic, "a{ 1 , 2", match_default, make_array(0, 8, -2, -2));
+   TEST_REGEX_SEARCH("a{ }", basic, "a{ }", match_default, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("a}", basic, "a}", match_default, make_array(0, 2, -2, -2));
    TEST_INVALID_REGEX("{1}", perl);
-   TEST_INVALID_REGEX("a{b}", perl);
-   TEST_INVALID_REGEX("a{1b}", perl);
-   TEST_INVALID_REGEX("a{1,b}", perl);
-   TEST_INVALID_REGEX("a{1,2v}", perl);
+   TEST_REGEX_SEARCH("a{b}", basic, "a{b}", match_default, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("a{1b", basic, "a{1b", match_default, make_array(0, 4, -2, -2));
+   TEST_REGEX_SEARCH("a{1,b}", basic, "a{1,b}", match_default, make_array(0, 6, -2, -2));
+   TEST_REGEX_SEARCH("a{1,2v}", basic, "a{1,2v}", match_default, make_array(0, 7, -2, -2));
    TEST_INVALID_REGEX("a{2,1}", perl);
-
    // now try operator \\{\\} for POSIX basic regexes
    TEST_REGEX_SEARCH("a\\{2\\}", basic, "a", match_default, make_array(-2, -2));
    TEST_REGEX_SEARCH("a\\{2\\}", basic|no_intervals, "a{2}", match_default, make_array(0, 4, -2, -2));

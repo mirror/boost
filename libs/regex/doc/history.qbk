@@ -15,6 +15,10 @@ Currently open issues can be viewed [@https://svn.boost.org/trac/boost/query?sta
 
 All issues including closed ones can be viewed [@https://svn.boost.org/trac/boost/query?status=assigned&status=closed&status=new&status=reopened&component=regex&order=priority&col=id&col=summary&col=status&col=type&col=milestone&col=component here].
 
+[h4 Boost-1.54]
+
+Fixed issue [@https://svn.boost.org/trac/boost/ticket/8569 #8569].
+
 [h4 Boost-1.53]
 
 Fixed Issues:
@@ -159,5 +163,6 @@ and
 * Changed the match flags so that they are a distinct type (not an integer), if you try to pass the match flags as an integer rather than match_flag_type to the regex algorithms then you will now get a compiler error.
     
 [endsect]
+
 
 
