@@ -228,4 +228,11 @@ C++11 support has resulted in some breaking changes:
 * More internal implementation changes, including a much simpler
   implementation of `erase`.
 
+[h2 Boost 1.54.0]
+
+* Mark methods specified in standard as `noexpect`. More to come in the next
+  release.
+* If the hash function and equality predicate are known to both have nothrow
+  move assignment or construction then use them.
+
 [endsect]
