@@ -682,7 +682,7 @@ private:
     friend class detail::pull_coroutine_object;
 
     typedef detail::push_coroutine_base< void >  base_t;
-    typedef typename base_t::ptr_t              ptr_t;
+    typedef base_t::ptr_t                        ptr_t;
 
     struct dummy
     { void nonnull() {} };
@@ -1289,7 +1289,7 @@ private:
     friend class detail::push_coroutine_object;
 
     typedef detail::pull_coroutine_base< void > base_t;
-    typedef typename base_t::ptr_t              ptr_t;
+    typedef base_t::ptr_t                       ptr_t;
 
     struct dummy
     { void nonnull() {} };
