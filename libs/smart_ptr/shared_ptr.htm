@@ -262,8 +262,12 @@ shared_ptr(std::nullptr_t); // never throws</pre>
 			    the pointer <code>p</code>.
 			    Otherwise, constructs  a <code>shared_ptr</code> that <em>owns</em>
 			    <code>p</code> and a deleter of an unspecified type that calls <code>delete[] p</code>.</p>
-			<p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.</p>
-			<p><b>Throws:</b> <code>std::bad_alloc</code>, or an implementation-defined
+            <p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.
+                If <code>T</code> is not an array type and <code>p</code> is unambiguously convertible to <code>
+                <a href="enable_shared_from_this.html">enable_shared_from_this</a>&lt;V&gt;*</code>
+                for some <code>V</code>, <code>p-&gt;shared_from_this()</code> returns a copy of
+                <code>*this</code>.</p>
+            <p><b>Throws:</b> <code>std::bad_alloc</code>, or an implementation-defined
 				exception when a resource other than memory could not be obtained.</p>
 			<p><b>Exception safety:</b> If an exception is thrown, the constructor calls
 			    <code>delete[] p</code>, when <code>T</code> is an array type,
@@ -296,7 +300,11 @@ template&lt;class D, class A&gt; shared_ptr(std::nullptr_t p, D d, A a);</pre>
 			<p><b>Effects:</b> Constructs a <code>shared_ptr</code> that <em>owns</em> the pointer <code>
 					p</code> and the deleter <code>d</code>. The constructors taking an allocator <code>a</code>
 					allocate memory using a copy of <code>a</code>.</p>
-			<p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.</p>
+            <p><b>Postconditions:</b> <code>use_count() == 1 &amp;&amp; get() == p</code>.
+                If <code>T</code> is not an array type and <code>p</code> is unambiguously convertible to <code>
+                <a href="enable_shared_from_this.html">enable_shared_from_this</a>&lt;V&gt;*</code>
+                for some <code>V</code>, <code>p-&gt;shared_from_this()</code> returns a copy of
+                <code>*this</code>.</p>
 			<p><b>Throws:</b> <code>std::bad_alloc</code>, or an implementation-defined
 				exception when a resource other than memory could not be obtained.</p>
 			<p><b>Exception safety:</b> If an exception is thrown, <code>d(p)</code> is called.</p>
