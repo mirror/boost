@@ -25,6 +25,7 @@
 #include <algorithm>
 #include <iterator>
 #include <string>
+#include <iosfwd>
 
 namespace boost {
 
@@ -135,10 +136,7 @@ namespace boost {
 
 
         // basic_string_ref string operations
-        BOOST_CONSTEXPR
         basic_string_ref substr(size_type pos, size_type n=npos) const {
-            // Looks like msvc 8 and 9 have a codegen bug when one branch of
-            // a conditional operator is a throw expression. -EAN 2012/12/04
             if ( pos > size())
                 BOOST_THROW_EXCEPTION( std::out_of_range ( "string_ref::substr" ) );
             if ( n == npos || pos + n > size())
