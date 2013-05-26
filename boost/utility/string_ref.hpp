@@ -408,8 +408,7 @@ namespace boost {
     template<class charT, class traits>
     inline std::basic_ostream<charT, traits>&
     operator<<(std::basic_ostream<charT, traits>& os, const basic_string_ref<charT,traits>& str) {
-        typename std::basic_ostream<charT, traits>::sentry guard(os);
-        if (guard) {
+        if (os.good()) {
             const std::size_t size = str.size();
             const std::size_t w = static_cast< std::size_t >(os.width());
             os.width(0);
