@@ -38,6 +38,16 @@
 #  define BOOST_SYMBOL_VISIBLE __attribute__((__visibility__("default")))
 #endif
 
+// 
+// The BOOST_FALLTHROUGH macro can be used to annotate implicit fall-through 
+// between switch labels. 
+// 
+#if __cplusplus >= 201103L && defined(__has_warning) 
+#  if __has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough") 
+#    define BOOST_FALLTHROUGH [[clang::fallthrough]] 
+#  endif 
+#endif 
+
 #if !__has_feature(cxx_auto_type)
 #  define BOOST_NO_CXX11_AUTO_DECLARATIONS
 #  define BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS
@@ -130,6 +140,10 @@
 
 #if !__has_feature(cxx_variadic_templates)
 #  define BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#endif
+
+#if !__has_feature(cxx_user_literals)
+#  define BOOST_NO_CXX11_USER_DEFINED_LITERALS
 #endif
 
 // Clang always supports variadic macros

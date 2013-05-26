@@ -21,9 +21,90 @@
 //  of executables differ largely in the available functionality of
 //  the C-library, STL, and so on. A DKM uses a library similar to those
 //  of vxWorks 5.X - with all its limitations and incompatibilities
-//  in respect to ANSI C++ and STL. So probably there might be problems
+//  with respect to ANSI C++ and STL. So probably there might be problems
 //  with the usage of boost from DKMs. WRS or any voluteers are free to
 //  prove the opposite!
+
+// ====================================================================
+//
+// Some important information regarding the usage of POSIX semaphores:
+// -------------------------------------------------------------------
+//
+// VxWorks as a real time operating system handles threads somewhat
+// different from what "normal" OSes do, regarding their scheduling!
+// This could lead to a scenario called "priority inversion" when using
+// semaphores, see http://en.wikipedia.org/wiki/Priority_inversion.
+//
+// Now, VxWorks POSIX-semaphores for DKM's default to the usage of
+// priority inverting semaphores, which is fine. On the other hand,
+// for RTP's it defaults to using non priority inverting semaphores,
+// which could easily pose a serious problem for a real time process,
+// i.e. deadlocks! To overcome this two possibilities do exist:
+//
+// a) Patch every piece of boost that uses semaphores to instanciate
+//    the proper type of semaphores. This is non-intrusive with respect
+//    to the OS and could relatively easy been done by giving all
+//    semaphores attributes deviating from the default (for in-depth
+//    information see the POSIX functions pthread_mutexattr_init()
+//    and pthread_mutexattr_setprotocol()). However this breaks all
+//    too easily, as with every new version some boost library could
+//    all in a sudden start using semaphores, resurrecting the very
+//    same, hard to locate problem over and over again!
+//
+// b) We could change the default properties for POSIX-semaphores
+//    that VxWorks uses for RTP's and this is being suggested here,
+//    as it will more or less seamlessly integrate with boost. I got
+//    the following information from WRS how to do this, compare
+//    Wind River TSR# 1209768:
+//
+// Instructions for changing the default properties of POSIX-
+// semaphores for RTP's in VxWorks 6.9:
+// - Edit the file /vxworks-6.9/target/usr/src/posix/pthreadLib.c
+//   in the root of your Workbench-installation.
+// - Around line 917 there should be the definition of the default
+//   mutex attributes:
+//
+//   LOCAL pthread_mutexattr_t defaultMutexAttr =
+//       {
+//       PTHREAD_INITIALIZED_OBJ, PTHREAD_PRIO_NONE, 0,
+//       PTHREAD_MUTEX_DEFAULT
+//       };
+//
+//   Here, replace PTHREAD_PRIO_NONE by PTHREAD_PRIO_INHERIT.
+// - Around line 1236 there should be a definition for the function
+//   pthread_mutexattr_init(). A couple of lines below you should
+//   find a block of code like this:
+//
+//   pAttr->mutexAttrStatus      = PTHREAD_INITIALIZED_OBJ;
+//   pAttr->mutexAttrProtocol    = PTHREAD_PRIO_NONE;
+//   pAttr->mutexAttrPrioceiling = 0;
+//   pAttr->mutexAttrType        = PTHREAD_MUTEX_DEFAULT;
+//
+//   Here again, replace PTHREAD_PRIO_NONE by PTHREAD_PRIO_INHERIT.
+// - Finally, rebuild your VSB. This will create a new VxWorks kernel
+//   with the changed properties. That's it! Now, using boost should
+//   no longer cause any problems with task deadlocks!
+//
+// And here's another useful piece of information concerning VxWorks'
+// POSIX-functionality in general:
+// VxWorks is not a genuine POSIX-OS in itself, rather it is using a
+// kind of compatibility layer (sort of a wrapper) to emulate the
+// POSIX-functionality by using its own resources and functions.
+// At the time a task (thread) calls it's first POSIX-function during
+// runtime it is being transformed by the OS into a POSIX-thread.
+// This transformation does include a call to malloc() to allocate the
+// memory required for the housekeeping of POSIX-threads. In a high
+// priority RTP this malloc() call may be highly undesirable, as its
+// timing is more or less unpredictable (depending on what your actual
+// heap looks like). You can circumvent this problem by calling the
+// function thread_self() at a well defined point in the code of the
+// task, e.g. shortly after the task spawns up. Thereby you are able
+// to define the time when the task-transformation will take place and
+// you could shift it to an uncritical point where a malloc() call is
+// tolerable. So, if this could pose a problem for your code, remember
+// to call thread_self() from the affected task at an early stage.
+//
+// ====================================================================
 
 // Block out all versions before vxWorks 6.x, as these don't work:
 // Include header with the vxWorks version information and query them
