@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2011,2012
+//  (C) Copyright Edward Diener 2011,2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -38,9 +38,9 @@
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE(trait,name,params) \
   BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(BOOST_PP_CAT(trait,_detail_mpl), name, false) \
-  template<class TTI_T> \
+  template<class BOOST_TTI_DETAIL_TP_T> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail_mpl)<TTI_T> \
+    BOOST_PP_CAT(trait,_detail_mpl)<BOOST_TTI_DETAIL_TP_T> \
     { \
     }; \
 /**/

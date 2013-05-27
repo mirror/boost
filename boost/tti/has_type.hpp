@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2011,2012
+//  (C) Copyright Edward Diener 2011,2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -36,7 +36,7 @@
 
     generates a metafunction called "trait" where 'trait' is the macro parameter.
     
-              template<class TTI_T,class TTI_U>
+              template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_U>
               struct trait
                 {
                 static const value = unspecified;
@@ -45,25 +45,25 @@
 
               The metafunction types and return:
     
-                TTI_T = the enclosing type in which to look for our 'name'.
+                BOOST_TTI_TP_T = the enclosing type in which to look for our 'name'.
                 
-                TTI_U = (optional) An optional template parameter, defaulting to a marker type.
+                BOOST_TTI_TP_U = (optional) An optional template parameter, defaulting to a marker type.
                                    If specified it is an MPL lambda expression which is invoked 
                                    with the inner type found and must return a constant boolean 
                                    value.
                                    
-                returns = 'value' depends on whether or not the optional TTI_U is specified.
+                returns = 'value' depends on whether or not the optional BOOST_TTI_TP_U is specified.
                 
-                          If TTI_U is not specified, then 'value' is true if the 'name' type 
-                          exists within the enclosing type TTI_T; otherwise 'value' is false.
+                          If BOOST_TTI_TP_U is not specified, then 'value' is true if the 'name' type 
+                          exists within the enclosing type BOOST_TTI_TP_T; otherwise 'value' is false.
                           
-                          If TTI_U is specified , then 'value' is true if the 'name' type exists 
-                          within the enclosing type TTI_T and the lambda expression as specified 
-                          by TTI_U, invoked by passing the actual inner type of 'name', returns 
+                          If BOOST_TTI_TP_U is specified , then 'value' is true if the 'name' type exists 
+                          within the enclosing type BOOST_TTI_TP_T and the lambda expression as specified 
+                          by BOOST_TTI_TP_U, invoked by passing the actual inner type of 'name', returns 
                           a 'value' of true; otherwise 'value' is false.
                              
-                          The action taken with TTI_U occurs only when the 'name' type exists 
-                          within the enclosing type TTI_T.
+                          The action taken with BOOST_TTI_TP_U occurs only when the 'name' type exists 
+                          within the enclosing type BOOST_TTI_TP_T.
                              
   Example usage:
   
@@ -86,15 +86,15 @@
   BOOST_TTI_DETAIL_TRAIT_HAS_TYPE(trait,name) \
   template \
     < \
-    class TTI_T, \
-    class TTI_U = BOOST_TTI_NAMESPACE::detail::deftype \
+    class BOOST_TTI_TP_T, \
+    class BOOST_TTI_TP_U = BOOST_TTI_NAMESPACE::detail::deftype \
     > \
   struct trait : \
     BOOST_PP_CAT(trait,_detail_type) \
       < \
-      TTI_T, \
-      TTI_U, \
-      typename BOOST_PP_CAT(trait,_detail_type_mpl)<TTI_T>::type \
+      BOOST_TTI_TP_T, \
+      BOOST_TTI_TP_U, \
+      typename BOOST_PP_CAT(trait,_detail_type_mpl)<BOOST_TTI_TP_T>::type \
       > \
     { \
     }; \
@@ -111,7 +111,7 @@
 
     generates a metafunction called "has_type_'name'" where 'name' is the macro parameter.
     
-              template<class TTI_T,class TTI_U>
+              template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_U>
               struct has_type_'name'
                 {
                 static const value = unspecified;
@@ -120,25 +120,25 @@
 
               The metafunction types and return:
     
-                TTI_T = the enclosing type in which to look for our 'name'.
+                BOOST_TTI_TP_T = the enclosing type in which to look for our 'name'.
                 
-                TTI_U = (optional) An optional template parameter, defaulting to a marker type.
+                BOOST_TTI_TP_U = (optional) An optional template parameter, defaulting to a marker type.
                                    If specified it is an MPL lambda expression which is invoked 
                                    with the inner type found and must return a constant boolean 
                                    value.
                                    
-                returns = 'value' depends on whether or not the optional TTI_U is specified.
+                returns = 'value' depends on whether or not the optional BOOST_TTI_TP_U is specified.
                 
-                          If TTI_U is not specified, then 'value' is true if the 'name' type 
-                          exists within the enclosing type TTI_T; otherwise 'value' is false.
+                          If BOOST_TTI_TP_U is not specified, then 'value' is true if the 'name' type 
+                          exists within the enclosing type BOOST_TTI_TP_T; otherwise 'value' is false.
                           
-                          If TTI_U is specified , then 'value' is true if the 'name' type exists 
-                          within the enclosing type TTI_T and the lambda expression as specified 
-                          by TTI_U, invoked by passing the actual inner type of 'name', returns 
+                          If BOOST_TTI_TP_U is specified , then 'value' is true if the 'name' type exists 
+                          within the enclosing type BOOST_TTI_TP_T and the lambda expression as specified 
+                          by BOOST_TTI_TP_U, invoked by passing the actual inner type of 'name', returns 
                           a 'value' of true; otherwise 'value' is false.
                              
-                          The action taken with TTI_U occurs only when the 'name' type exists 
-                          within the enclosing type TTI_T.
+                          The action taken with BOOST_TTI_TP_U occurs only when the 'name' type exists 
+                          within the enclosing type BOOST_TTI_TP_T.
                              
   Example usage:
   

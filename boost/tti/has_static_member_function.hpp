@@ -31,7 +31,7 @@
 
     generates a metafunction called "trait" where 'trait' is the macro parameter.
     
-              template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG>
+              template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_R,class BOOST_TTI_TP_FS,class BOOST_TTI_TP_TAG>
               struct trait
                 {
                 static const value = unspecified;
@@ -40,16 +40,16 @@
 
               The metafunction types and return:
     
-                TTI_T   = the enclosing type in which to look for our 'name'.
+                BOOST_TTI_TP_T   = the enclosing type in which to look for our 'name'.
                 
-                TTI_R   = the return type of the static member function
+                BOOST_TTI_TP_R   = the return type of the static member function
                                        OR
                           the signature of a function in the form of Return_Type ( Parameter_Types )
                 
-                TTI_FS  = (optional) the parameters of the static member function as a boost::mpl forward sequence
+                BOOST_TTI_TP_FS  = (optional) the parameters of the static member function as a boost::mpl forward sequence
                           if the second parameter is a return type and the function parameters exist.
                 
-                TTI_TAG = (optional) a boost::function_types tag to apply to the static member function
+                BOOST_TTI_TP_TAG = (optional) a boost::function_types tag to apply to the static member function
                           if the second parameter is a return type and the need for a tag exists.
                 
                 returns = 'value' is true if the 'name' exists, 
@@ -59,9 +59,9 @@
 */
 #define BOOST_TTI_TRAIT_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
-  template<class TTI_T,class TTI_R,class TTI_FS = boost::mpl::vector<>,class TTI_TAG = boost::function_types::null_tag> \
+  template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_R,class BOOST_TTI_TP_FS = boost::mpl::vector<>,class BOOST_TTI_TP_TAG = boost::function_types::null_tag> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail_hsmf)<TTI_T,TTI_R,TTI_FS,TTI_TAG> \
+    BOOST_PP_CAT(trait,_detail_hsmf)<BOOST_TTI_TP_T,BOOST_TTI_TP_R,BOOST_TTI_TP_FS,BOOST_TTI_TP_TAG> \
     { \
     }; \
 /**/
@@ -73,7 +73,7 @@
 
     generates a metafunction called "has_static_member_function_name" where 'name' is the macro parameter.
     
-              template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG>
+              template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_R,class BOOST_TTI_TP_FS,class BOOST_TTI_TP_TAG>
               struct trait
                 {
                 static const value = unspecified;
@@ -82,16 +82,16 @@
 
               The metafunction types and return:
     
-                TTI_T   = the enclosing type in which to look for our 'name'.
+                BOOST_TTI_TP_T   = the enclosing type in which to look for our 'name'.
                 
-                TTI_R   = the return type of the static member function
+                BOOST_TTI_TP_R   = the return type of the static member function
                                        OR
                           the signature of a function in the form of Return_Type ( Parameter_Types )
                 
-                TTI_FS  = (optional) the parameters of the static member function as a boost::mpl forward sequence
+                BOOST_TTI_TP_FS  = (optional) the parameters of the static member function as a boost::mpl forward sequence
                           if the second parameter is a return type and the function parameters exist.
                 
-                TTI_TAG = (optional) a boost::function_types tag to apply to the static member function
+                BOOST_TTI_TP_TAG = (optional) a boost::function_types tag to apply to the static member function
                           if the second parameter is a return type and the need for a tag exists.
                 
                 returns = 'value' is true if the 'name' exists, 

@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2011,2012
+//  (C) Copyright Edward Diener 2011,2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -33,7 +33,7 @@
 
     generates a metafunction called "trait" where 'trait' is the macro parameter.<br />
     
-              template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG>
+              template<class BOOST_TTI_TP_T,class BOOST_TTI_R,class BOOST_TTI_FS,class BOOST_TTI_TAG>
               struct trait
                 {
                 static const value = unspecified;
@@ -42,18 +42,18 @@
 
               The metafunction types and return:
     
-                TTI_T   = the enclosing type in which to look for our 'name'
+                BOOST_TTI_TP_T   = the enclosing type in which to look for our 'name'
                                             OR
                           a pointer to member function as a single type.
                 
-                TTI_R   = (optional) the return type of the member function
+                BOOST_TTI_TP_R   = (optional) the return type of the member function
                           if the first parameter is the enclosing type.
                 
-                TTI_FS  = (optional) the parameters of the member function as a boost::mpl forward sequence
+                BOOST_TTI_TP_FS  = (optional) the parameters of the member function as a boost::mpl forward sequence
                           if the first parameter is the enclosing type and the member function parameters
                           are not empty.
                 
-                TTI_TAG = (optional) a boost::function_types tag to apply to the member function
+                BOOST_TTI_TP_TAG = (optional) a boost::function_types tag to apply to the member function
                           if the first parameter is the enclosing type and a tag is needed.
                 
                 returns = 'value' is true if the 'name' exists, 
@@ -63,9 +63,9 @@
 */
 #define BOOST_TTI_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_FUNCTION(trait,name) \
-  template<class TTI_T,class TTI_R = BOOST_TTI_NAMESPACE::detail::deftype,class TTI_FS = boost::mpl::vector<>,class TTI_TAG = boost::function_types::null_tag> \
+  template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_R = BOOST_TTI_NAMESPACE::detail::deftype,class BOOST_TTI_TP_FS = boost::mpl::vector<>,class BOOST_TTI_TP_TAG = boost::function_types::null_tag> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail_hmf)<TTI_T,TTI_R,TTI_FS,TTI_TAG> \
+    BOOST_PP_CAT(trait,_detail_hmf)<BOOST_TTI_TP_T,BOOST_TTI_TP_R,BOOST_TTI_TP_FS,BOOST_TTI_TP_TAG> \
     { \
     }; \
 /**/
@@ -77,7 +77,7 @@
 
     generates a metafunction called "has_member_function_name" where 'name' is the macro parameter.
     
-              template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG>
+              template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_R,class BOOST_TTI_TP_FS,class BOOST_TTI_TP_TAG>
               struct has_member_function_name
                 {
                 static const value = unspecified;
@@ -86,18 +86,18 @@
 
               The metafunction types and return:
     
-                TTI_T   = the enclosing type in which to look for our 'name'
+                BOOST_TTI_TP_T   = the enclosing type in which to look for our 'name'
                                             OR
                           a pointer to member function as a single type.
                 
-                TTI_R   = (optional) the return type of the member function
+                BOOST_TTI_TP_R   = (optional) the return type of the member function
                           if the first parameter is the enclosing type.
                 
-                TTI_FS  = (optional) the parameters of the member function as a boost::mpl forward sequence
+                BOOST_TTI_TP_FS  = (optional) the parameters of the member function as a boost::mpl forward sequence
                           if the first parameter is the enclosing type and the member function parameters
                           are not empty.
                 
-                TTI_TAG = (optional) a boost::function_types tag to apply to the member function
+                BOOST_TTI_TP_TAG = (optional) a boost::function_types tag to apply to the member function
                           if the first parameter is the enclosing type and a tag is needed.
                 
                 returns = 'value' is true if the 'name' exists, 

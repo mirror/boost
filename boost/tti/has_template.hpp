@@ -61,7 +61,7 @@
     
     generates a metafunction called "trait" where 'trait' is the first macro parameter.
     
-              template<class TTI_T>
+              template<class BOOST_TTI_TP_T>
               struct trait
                 {
                 static const value = unspecified;
@@ -70,7 +70,7 @@
 
               The metafunction types and return:
     
-                TTI_T = the enclosing type in which to look for our 'name'.
+                BOOST_TTI_TP_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' template exists within the enclosing type,
                           otherwise 'value' is false.
@@ -153,7 +153,7 @@
     
     generates a metafunction called "has_template_'name'" where 'name' is the first variadic parameter.
     
-              template<class TTI_T>
+              template<class BOOST_TTI_TP_T>
               struct has_template_'name'
                 {
                 static const value = unspecified;
@@ -162,7 +162,7 @@
 
               The metafunction types and return:
     
-                TTI_T = the enclosing type in which to look for our 'name'.
+                BOOST_TTI_TP_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' template exists within the enclosing type,
                           otherwise 'value' is false.
@@ -233,7 +233,7 @@
     
     generates a metafunction called "trait" where 'trait' is the first macro parameter.
     
-              template<class TTI_T>
+              template<class BOOST_TTI_TP_T>
               struct trait
                 {
                 static const value = unspecified;
@@ -242,7 +242,7 @@
 
               The metafunction types and return:
     
-                TTI_T = the enclosing type in which to look for our 'name'.
+                BOOST_TTI_TP_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' template exists within the enclosing type,
                           otherwise 'value' is false.
@@ -298,7 +298,7 @@
     
     generates a metafunction called "has_template_'name'" where 'name' is the first macro parameter.
     
-              template<class TTI_T>
+              template<class BOOST_TTI_TP_T>
               struct trait
                 {
                 static const value = unspecified;
@@ -307,7 +307,7 @@
 
               The metafunction types and return:
     
-                TTI_T = the enclosing type in which to look for our 'name'.
+                BOOST_TTI_TP_T = the enclosing type in which to look for our 'name'.
                 
                 returns = 'value' is true if the 'name' template exists within the enclosing type,
                           otherwise 'value' is false.

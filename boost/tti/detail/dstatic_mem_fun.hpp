@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2011,2012
+//  (C) Copyright Edward Diener 2011,2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -23,19 +23,19 @@
 #include <boost/type_traits/is_same.hpp>
 
 #define BOOST_TTI_DETAIL_TRAIT_IMPL_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
-  template<class T,class Type> \
+  template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_TYPE> \
   struct BOOST_PP_CAT(trait,_detail_ihsmf) \
     { \
-    template<Type *> \
+    template<BOOST_TTI_DETAIL_TP_TYPE *> \
     struct helper; \
     \
-    template<class U> \
-    static ::boost::type_traits::yes_type chkt(helper<&U::name> *); \
+    template<class BOOST_TTI_DETAIL_TP_U> \
+    static ::boost::type_traits::yes_type chkt(helper<&BOOST_TTI_DETAIL_TP_U::name> *); \
     \
-    template<class U> \
+    template<class BOOST_TTI_DETAIL_TP_U> \
     static ::boost::type_traits::no_type chkt(...); \
     \
-    BOOST_STATIC_CONSTANT(bool,value=sizeof(chkt<T>(BOOST_TTI_DETAIL_NULLPTR))==sizeof(::boost::type_traits::yes_type)); \
+    BOOST_STATIC_CONSTANT(bool,value=sizeof(chkt<BOOST_TTI_DETAIL_TP_T>(BOOST_TTI_DETAIL_NULLPTR))==sizeof(::boost::type_traits::yes_type)); \
     \
     typedef boost::mpl::bool_<value> type; \
     }; \
@@ -43,22 +43,22 @@
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_IMPL_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
-  template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG> \
+  template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \
   struct BOOST_PP_CAT(trait,_detail_hsmf) : \
     BOOST_PP_CAT(trait,_detail_ihsmf) \
       < \
-      TTI_T, \
+      BOOST_TTI_DETAIL_TP_T, \
       typename \
       boost::mpl::eval_if \
         < \
         boost::mpl::and_ \
           < \
-          boost::function_types::is_function<TTI_R>, \
-          boost::is_same<TTI_FS,boost::mpl::vector<> >, \
-          boost::is_same<TTI_TAG,boost::function_types::null_tag> \
+          boost::function_types::is_function<BOOST_TTI_DETAIL_TP_R>, \
+          boost::is_same<BOOST_TTI_DETAIL_TP_FS,boost::mpl::vector<> >, \
+          boost::is_same<BOOST_TTI_DETAIL_TP_TAG,boost::function_types::null_tag> \
           >, \
-        boost::mpl::identity<TTI_R>, \
-        BOOST_TTI_NAMESPACE::detail::tfunction_seq<TTI_R,TTI_FS,TTI_TAG> \
+        boost::mpl::identity<BOOST_TTI_DETAIL_TP_R>, \
+        BOOST_TTI_NAMESPACE::detail::tfunction_seq<BOOST_TTI_DETAIL_TP_R,BOOST_TTI_DETAIL_TP_FS,BOOST_TTI_DETAIL_TP_TAG> \
         >::type \
       > \
     { \

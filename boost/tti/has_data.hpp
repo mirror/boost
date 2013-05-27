@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2012
+//  (C) Copyright Edward Diener 2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -30,7 +30,7 @@
 
     generates a metafunction called "trait" where 'trait' is the macro parameter.
     
-              template<class TTI_T,class TTI_Type>
+              template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_TYPE>
               struct trait
                 {
                 static const value = unspecified;
@@ -39,9 +39,9 @@
 
               The metafunction types and return:
     
-                TTI_T    = the enclosing type in which to look for our 'name'
+                BOOST_TTI_TP_T    = the enclosing type in which to look for our 'name'
                 
-                TTI_Type = The type of the member data or static member.
+                BOOST_TTI_TP_TYPE = The type of the member data or static member.
                 
                 returns  = 'value' is true if the 'name' exists, with the correct data type,
                            otherwise 'value' is false.
@@ -49,12 +49,12 @@
 */
 #define BOOST_TTI_TRAIT_HAS_DATA(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_DATA(trait,name) \
-  template<class TTI_T,class TTI_Type> \
+  template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_TYPE> \
   struct trait : \
     BOOST_PP_CAT(trait,_detail_hd) \
       < \
-      typename boost::remove_const<TTI_T>::type, \
-      TTI_Type \
+      typename boost::remove_const<BOOST_TTI_TP_T>::type, \
+      BOOST_TTI_TP_TYPE \
       > \
     { \
     }; \
@@ -67,7 +67,7 @@
 
     generates a metafunction called "has_data_name" where 'name' is the macro parameter.
     
-              template<class TTI_T,class TTI_Type>
+              template<class BOOST_TTI_TP_T,class BOOST_TTI_TP_TYPE>
               struct has_data_name
                 {
                 static const value = unspecified;
@@ -76,9 +76,9 @@
 
               The metafunction types and return:
     
-                TTI_T    = the enclosing type in which to look for our 'name'
+                BOOST_TTI_TP_T    = the enclosing type in which to look for our 'name'
                 
-                TTI_Type = The type of the member data or static member.
+                BOOST_TTI_TP_TYPE = The type of the member data or static member.
                 
                 returns  = 'value' is true if the 'name' exists, with the correct data type,
                            otherwise 'value' is false.
