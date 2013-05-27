@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2011,2012
+//  (C) Copyright Edward Diener 2011,2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -134,10 +134,10 @@
 
 #define BOOST_TTI_DETAIL_VM_CALL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,...) \
   BOOST_TTI_DETAIL_VM_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(BOOST_PP_CAT(trait,_detail),name,__VA_ARGS__) \
-  template<class TTI_T> \
+  template<class BOOST_TTI_DETAIL_TP_T> \
   struct trait \
     { \
-    typedef typename BOOST_PP_CAT(trait,_detail)<TTI_T>::type type; \
+    typedef typename BOOST_PP_CAT(trait,_detail)<BOOST_TTI_DETAIL_TP_T>::type type; \
     \
     BOOST_STATIC_CONSTANT(bool,value=type::value); \
     }; \

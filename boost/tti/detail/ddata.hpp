@@ -17,19 +17,19 @@
 #define BOOST_TTI_DETAIL_TRAIT_HAS_DATA(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_MEMBER_DATA(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_STATIC_MEMBER_DATA(trait,name) \
-  template<class ET,class DT> \
+  template<class BOOST_TTI_DETAIL_TP_ET,class BOOST_TTI_DETAIL_TP_DT> \
   struct BOOST_PP_CAT(trait,_detail_hd) \
     { \
     \
     typedef typename \
     BOOST_PP_CAT(trait,_detail_hmd) \
       < \
-      typename BOOST_TTI_NAMESPACE::detail::ptmd<ET,DT>::type, \
-      typename boost::remove_const<ET>::type \
+      typename BOOST_TTI_NAMESPACE::detail::ptmd<BOOST_TTI_DETAIL_TP_ET,BOOST_TTI_DETAIL_TP_DT>::type, \
+      typename boost::remove_const<BOOST_TTI_DETAIL_TP_ET>::type \
       >::type hmdtype; \
     \
     typedef typename \
-    BOOST_PP_CAT(trait,_detail_hsd)<ET,DT>::type hsdtype; \
+    BOOST_PP_CAT(trait,_detail_hsd)<BOOST_TTI_DETAIL_TP_ET,BOOST_TTI_DETAIL_TP_DT>::type hsdtype; \
     \
     BOOST_STATIC_CONSTANT \
       ( \

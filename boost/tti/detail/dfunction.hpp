@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2012
+//  (C) Copyright Edward Diener 2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -16,18 +16,18 @@
 #define BOOST_TTI_DETAIL_TRAIT_HAS_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_HAS_CALL_TYPES_MEMBER_FUNCTION(trait,name) \
   BOOST_TTI_DETAIL_TRAIT_IMPL_HAS_STATIC_MEMBER_FUNCTION(trait,name) \
-  template<class TTI_T,class TTI_R,class TTI_FS,class TTI_TAG> \
+  template<class BOOST_TTI_DETAIL_TP_T,class BOOST_TTI_DETAIL_TP_R,class BOOST_TTI_DETAIL_TP_FS,class BOOST_TTI_DETAIL_TP_TAG> \
   struct BOOST_PP_CAT(trait,_detail_hf) \
     { \
     \
     typedef typename \
-    BOOST_PP_CAT(trait,_detail_call_types)<TTI_T,TTI_R,TTI_FS,TTI_TAG>::type hmftype; \
+    BOOST_PP_CAT(trait,_detail_call_types)<BOOST_TTI_DETAIL_TP_T,BOOST_TTI_DETAIL_TP_R,BOOST_TTI_DETAIL_TP_FS,BOOST_TTI_DETAIL_TP_TAG>::type hmftype; \
     \
     typedef typename \
     BOOST_PP_CAT(trait,_detail_ihsmf) \
       < \
-      TTI_T, \
-      typename BOOST_TTI_NAMESPACE::detail::tfunction_seq<TTI_R,TTI_FS,TTI_TAG>::type \
+      BOOST_TTI_DETAIL_TP_T, \
+      typename BOOST_TTI_NAMESPACE::detail::tfunction_seq<BOOST_TTI_DETAIL_TP_R,BOOST_TTI_DETAIL_TP_FS,BOOST_TTI_DETAIL_TP_TAG>::type \
       >::type hsmftype; \
     \
     BOOST_STATIC_CONSTANT \

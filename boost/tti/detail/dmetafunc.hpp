@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2012
+//  (C) Copyright Edward Diener 2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -17,9 +17,9 @@ namespace boost
     namespace detail
       {
       BOOST_MPL_HAS_XXX_TEMPLATE_NAMED_DEF(is_metafunction_class_apply, apply, false)
-      template <class TTI_T>
+      template <class BOOST_TTI_DETAIL_TP_T>
       struct is_metafunction_class :
-        BOOST_TTI_NAMESPACE::detail::is_metafunction_class_apply<TTI_T>
+        BOOST_TTI_NAMESPACE::detail::is_metafunction_class_apply<BOOST_TTI_DETAIL_TP_T>
         {
         };
       }

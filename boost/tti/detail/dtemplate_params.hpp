@@ -1,5 +1,5 @@
 
-//  (C) Copyright Edward Diener 2011,2012
+//  (C) Copyright Edward Diener 2011,2012,2013
 //  Use, modification and distribution are subject to the Boost Software License,
 //  Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt).
@@ -29,8 +29,8 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 #define BOOST_TTI_DETAIL_HAS_MEMBER_IMPLEMENTATION(args,introspect_macro) \
    template \
      < \
-     typename T, \
-     typename fallback_ \
+     typename BOOST_TTI_DETAIL_TP_T, \
+     typename BOOST_TTI_DETAIL_TP_FALLBACK_ \
        = boost::mpl::bool_< BOOST_PP_ARRAY_ELEM(3, args) > \
      > \
    class BOOST_PP_ARRAY_ELEM(0, args) \
@@ -38,10 +38,10 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
      introspect_macro(args) \
      public: \
        static const bool value \
-         = BOOST_MPL_HAS_MEMBER_INTROSPECTION_NAME(args)< T >::value; \
+         = BOOST_MPL_HAS_MEMBER_INTROSPECTION_NAME(args)< BOOST_TTI_DETAIL_TP_T >::value; \
        typedef typename BOOST_MPL_HAS_MEMBER_INTROSPECTION_NAME(args) \
          < \
-         T \
+         BOOST_TTI_DETAIL_TP_T \
          >::type type; \
      }; \
 /**/
@@ -64,7 +64,7 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
         args \
         ) \
       > \
-    class V \
+    class BOOST_TTI_DETAIL_TM_V \
     > \
   struct BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME(args, n) \
     { \
@@ -121,7 +121,7 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
         args \
         ) \
       > \
-    class U \
+    class BOOST_TTI_DETAIL_TM_U \
     > \
   struct BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME_WITH_TEMPLATE_SFINAE \
     ( \
@@ -149,9 +149,9 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 #define BOOST_TTI_DETAIL_HAS_MEMBER_INTROSPECT_WITH_TEMPLATE_SFINAE(args) \
   BOOST_MPL_HAS_MEMBER_REJECT_WITH_TEMPLATE_SFINAE(args,BOOST_PP_NIL) \
   BOOST_MPL_HAS_MEMBER_ACCEPT_WITH_TEMPLATE_SFINAE(args,BOOST_PP_NIL) \
-  template< typename U > \
+  template< typename BOOST_TTI_DETAIL_TP_U > \
   struct BOOST_MPL_HAS_MEMBER_INTROSPECTION_NAME(args) \
-      : BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)< U > { \
+      : BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)< BOOST_TTI_DETAIL_TP_U > { \
   }; \
 /**/
 
@@ -188,9 +188,9 @@ BOOST_PP_ARRAY_ELEM(BOOST_PP_ADD(4,n),args) \
 
 #define BOOST_TTI_DETAIL_TRAIT_HAS_TEMPLATE_CHECK_PARAMS(trait,name,tpArray) \
   BOOST_TTI_DETAIL_TRAIT_CALL_HAS_TEMPLATE_CHECK_PARAMS(BOOST_PP_CAT(trait,_detail),name,tpArray) \
-  template<class TTI_T> \
+  template<class BOOST_TTI_DETAIL_TP_T> \
   struct trait : \
-    BOOST_PP_CAT(trait,_detail)<TTI_T> \
+    BOOST_PP_CAT(trait,_detail)<BOOST_TTI_DETAIL_TP_T> \
     { \
     }; \
 /**/
