@@ -11,8 +11,9 @@
 #include <boost/thread.hpp>
 
 int count = 20;
-
+#if defined(BOOST_USE_SEGMENTED_STACKS)
 void access( char *buf) __attribute__ ((noinline));
+#endif
 void access( char *buf)
 {
   buf[0] = '\0';
