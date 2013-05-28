@@ -53,6 +53,7 @@ Thanks to all the people who have reviewed this library and made suggestions for
 [include one_of.qbk]
 [include ordered-hpp.qbk]
 [include is_partitioned.qbk]
+[include is_permutation.qbk]
 [include partition_point.qbk]
 [endsect]
 
