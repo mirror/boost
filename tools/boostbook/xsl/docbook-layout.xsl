@@ -10,10 +10,15 @@
 <xsl:stylesheet version = "1.0"
    xmlns:xsl = "http://www.w3.org/1999/XSL/Transform"
 >
+
   <!-- needed for calsTable template -->
   
   <xsl:import
     href="http://docbook.sourceforge.net/release/xsl/current/html/formal.xsl"/>
+
+  <!-- Optionally add the section id to each section's class.
+       This is useful if you want to style individual sections differently. -->
+  <xsl:param name="boost.section.class.add.id" select="0"/>
 
   <!--
      Override the behaviour of some DocBook elements for better
@@ -210,16 +215,19 @@
   </xsl:template>
   
   
-  <!--  Adds the section ID as a class to the section DIV so that we
-        can style sections individually. Also add the role as a class
-        so we style by kind of section. -->
+  <!-- Adds role class for section element resulting div. So that
+       we can style them in the resulting HTML.
+       Also, add the section id, if boost.section.class.add.id = 1.
+       This can be used to style individual sections differently. -->
   <xsl:template match="section" mode="class.value">
     <xsl:param name="class" select="local-name(.)"/>
     <xsl:param name="node" select="."/>
     <xsl:variable name="id">
-      <xsl:call-template name="object.id">
-        <xsl:with-param name="object" select="$node"/>
-      </xsl:call-template>
+      <xsl:if test="$boost.section.class.add.id">
+        <xsl:call-template name="object.id">
+          <xsl:with-param name="object" select="$node"/>
+        </xsl:call-template>
+      </xsl:if>
     </xsl:variable>
     <xsl:value-of select="normalize-space(concat($class, ' ',
         @role, ' ', translate($id, '.', '_')))"/>
