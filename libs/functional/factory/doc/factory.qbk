@@ -131,18 +131,18 @@ but the approach remains inflexible:
 * finally we might want to use customized memory management.
 
 Experience has shown that using function objects and generic Boost components
-for their composition, Design Patterns that describe callback mechasisms
+for their composition, Design Patterns that describe callback mechanisms
 (typically requiring a high percentage of boilerplate code with pure Object
 Oriented methodology) become implementable with just few code lines and without
 extra classes. 
 
 Factories are callback mechanisms for constructors, so we provide two class
-templates, __boost__value_factory__ and __boost__factory__, that encasulate
+templates, __boost__value_factory__ and __boost__factory__, that encapsulate
 object construction via direct application of the constructor and the `new`
 operator, respectively. 
 
 We let the function objects forward their arguments to the construction
-expressions they encapsulate. Overthis __boost__factory__ optionally allows 
+expressions they encapsulate. Over this __boost__factory__ optionally allows
 the use of smart pointers and __std_allocators__.
 
 Compile-time polymorphism can be used where appropriate,
@@ -158,7 +158,7 @@ Compile-time polymorphism can be used where appropriate,
         // [...]
     }
 
-Now, to allow inhomogenous signaturs for the constructors of the types passed 
+Now, to allow inhomogeneous signatures for the constructors of the types passed
 in for `T` we can use __value_factory__ and __boost__bind__ to normalize between
 them. 
 
@@ -301,7 +301,7 @@ constructor, such as __boost__shared_ptr__).
 If a third template argument is `factory_passes_alloc_to_smart_pointer`,
 the allocator itself is used for the third constructor argument of `Pointer`
 (__boost__shared_ptr__ then uses the allocator to manage the memory of its
-seperately allocated reference counter).
+separately allocated reference counter).
 
 [heading Header]
     #include <boost/functional/factory.hpp>
