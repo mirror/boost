@@ -221,7 +221,8 @@
         <xsl:with-param name="object" select="$node"/>
       </xsl:call-template>
     </xsl:variable>
-    <xsl:value-of select="concat($class,' ',@role,' ',translate($id, '.', '_'))"/>
+    <xsl:value-of select="normalize-space(concat($class, ' ',
+        @role, ' ', translate($id, '.', '_')))"/>
   </xsl:template>
   
   <!-- Adds role class for simplesect element resulting div. So that
@@ -229,7 +230,7 @@
   <xsl:template match="simplesect" mode="class.value">
     <xsl:param name="class" select="local-name(.)"/>
     <xsl:param name="node" select="."/>
-    <xsl:value-of select="concat($class,' ',@role)"/>
+    <xsl:value-of select="normalize-space(concat($class,' ',@role))"/>
   </xsl:template>
   
   <!-- Allow for specifying that a section should not include the parents
