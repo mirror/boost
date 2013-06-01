@@ -458,15 +458,6 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(segment_site_test6, T, test_types) {
   segments.push_back(segment_data<T>(point2, point3));
   points.push_back(point1);
   construct_voronoi(points.begin(), points.end(), segments.begin(), segments.end(), &test_output);
-  using boost::polygon::detail::int32;
-  using boost::polygon::detail::int64;
-  using boost::polygon::detail::fpt64;
-  BOOST_CHECK_EQUAL(sizeof(detail::fpt64), 8U);
-  BOOST_CHECK_EQUAL(sizeof(detail::int32), 4U);
-  BOOST_CHECK_EQUAL(sizeof(detail::int64), 8U);
-  vd_type::vertex_type v = test_output.vertices()[0];
-  BOOST_CHECK_EQUAL(v.x(), -0.25);
-  BOOST_CHECK_EQUAL(v.y(), 0.0);
   CHECK_OUTPUT_SIZE(test_output, 4, 2, 10);
   VERIFY_NO_HALF_EDGE_INTERSECTIONS(test_output);
 }
