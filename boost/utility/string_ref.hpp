@@ -406,11 +406,11 @@ namespace boost {
 
         template<class charT, class traits>
         inline void insert_fill_chars(std::basic_ostream<charT, traits>& os, std::size_t n) {
-            charT fill_chars[8];
-            std::fill_n(fill_chars, 8, os.fill());
-            for (std::size_t m = n / 8u; m > 0 && os.good(); --m)
-                os.write(fill_chars, 8);
-            n &= 7u;
+            enum { chunk_size = 8 };
+            charT fill_chars[chunk_size];
+            std::fill_n(fill_chars, static_cast< std::size_t >(chunk_size), os.fill());
+            for (; n >= chunk_size && os.good(); n -= chunk_size)
+                os.write(fill_chars, static_cast< std::streamsize >(chunk_size));
             if (n > 0 && os.good())
                 os.write(fill_chars, static_cast< std::streamsize >(n));
             }
@@ -427,7 +427,8 @@ namespace boost {
                 }
             else {
                 os.write(str.data(), static_cast< std::streamsize >(size));
-                detail::insert_fill_chars(os, alignment_size);
+                if (os.good())
+                    detail::insert_fill_chars(os, alignment_size);
                 }
             }
 
