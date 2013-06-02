@@ -107,6 +107,17 @@ BOOST_AUTO_TEST_CASE_TEMPLATE(padding, CharT, char_types)
         BOOST_CHECK(strm_ref.str() == strm_correct.str());
     }
 
+    // Test for long padding
+    {
+        ostream_type strm_ref;
+        strm_ref << ctx.begin << std::setw(100) << string_ref_type(ctx.abcd) << ctx.end;
+
+        ostream_type strm_correct;
+        strm_correct << ctx.begin << std::setw(100) << ctx.abcd << ctx.end;
+
+        BOOST_CHECK(strm_ref.str() == strm_correct.str());
+    }
+
     // Test that short width does not truncate the string
     {
         ostream_type strm_ref;
