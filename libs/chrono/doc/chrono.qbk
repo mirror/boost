@@ -2864,7 +2864,7 @@ A __duration measures time between two points in time (__time_point). A __durati
             duration& __duration__op_plus_eq(const duration& d);
             duration& __duration__op_minus_eq(const duration& d);
 
-            duration& __duration__op_mult_eq=(const rep& rhs);
+            duration& __duration__op_mult_eq(const rep& rhs);
             duration& __duration__op_div_eq(const rep& rhs);
             duration& __duration__op_mod_eq(const rep& rhs);
             duration& __duration__op_mod_eq2(const duration& rhs);
