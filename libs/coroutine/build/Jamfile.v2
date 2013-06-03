@@ -40,7 +40,7 @@ alias allocator_sources
     : detail/standard_stack_allocator_posix.cpp
     ;
 
-explicit yield_sources ;
+explicit allocator_sources ;
 
 lib boost_coroutine
     : allocator_sources
