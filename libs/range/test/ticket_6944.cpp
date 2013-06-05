@@ -20,12 +20,13 @@
 
 namespace boost
 {
+    typedef std::vector<int>::iterator iter_base;
+    struct iter : boost::iterator_adaptor<iter, iter_base, int, boost::use_default, int> {}; // will be deduced as random-access traversal but input category
+    typedef boost::iterator_range<iter> iter_range;
+    
     namespace
     {
         // Ticket 6944 - Some Range concepts use the incorrect Iterator concept
-        typedef std::vector<int>::iterator iter_base;
-        struct iter : boost::iterator_adaptor<iter, iter_base, int, boost::use_default, int> {}; // will be deduced as random-access traversal but input category
-        typedef boost::iterator_range<iter> iter_range;
         void test_ticket_6944()
         {
             BOOST_CONCEPT_ASSERT(( boost::RandomAccessRangeConcept<iter_range> ));
