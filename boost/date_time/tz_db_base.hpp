@@ -308,7 +308,6 @@ namespace boost {
               << std::distance ( tokens.begin(), tokens.end ()) 
               << " fields in line: " << rule;
           boost::throw_exception(bad_field_count(msg.str()));
-          BOOST_DATE_TIME_UNREACHABLE_EXPRESSION(return false); // should never reach
         }
 
         tokenizer_iterator tok_iter = tokens.begin(); 
