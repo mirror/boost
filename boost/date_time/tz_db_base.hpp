@@ -301,7 +301,16 @@ namespace boost {
         const char_type sep_char[] = { ';', '\0'};
         char_separator_type sep(sep_char);
         tokenizer tokens(rule, sep); // 3 fields
-        
+
+        if ( std::distance ( tokens.begin(), tokens.end ()) != 3 ) {
+          std::ostringstream msg;
+          msg << "Expecting 3 fields, got " 
+              << std::distance ( tokens.begin(), tokens.end ()) 
+              << " fields in line: " << rule;
+          boost::throw_exception(bad_field_count(msg.str()));
+          BOOST_DATE_TIME_UNREACHABLE_EXPRESSION(return false); // should never reach
+        }
+
         tokenizer_iterator tok_iter = tokens.begin(); 
         nth = std::atoi(tok_iter->c_str()); ++tok_iter;
         d   = std::atoi(tok_iter->c_str()); ++tok_iter;
