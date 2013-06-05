@@ -14,7 +14,7 @@
  */
 
 #include <iterator>
-#include <istream>
+#include <iosfwd>
 #include <boost/config.hpp>
 #include <boost/range/iterator_range.hpp>
 
