@@ -37,7 +37,7 @@ int& value7 = value1;
 int value8 = 0;
 int value9 = 0;
 
-#ifdef BOOST_COROUTINES_V2
+#ifdef BOOST_COROUTINES_UNIDIRECT
 struct X : private boost::noncopyable
 {
     X() { value1 = 7; }
@@ -1036,7 +1036,7 @@ boost::unit_test::test_suite * init_unit_test_suite( int, char* [])
     test->add( BOOST_TEST_CASE( & test_fp) );
     test->add( BOOST_TEST_CASE( & test_ptr) );
     test->add( BOOST_TEST_CASE( & test_const_ptr) );
-#ifndef BOOST_COROUTINES_V2
+#ifndef BOOST_COROUTINES_UNIDIRECT
     test->add( BOOST_TEST_CASE( & test_pre) );
     test->add( BOOST_TEST_CASE( & test_post) );
 #endif

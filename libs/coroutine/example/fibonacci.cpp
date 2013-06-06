@@ -10,7 +10,7 @@
 #include <boost/range.hpp>
 #include <boost/coroutine/all.hpp>
 
-#ifdef BOOST_COROUTINES_V2
+#ifdef BOOST_COROUTINES_UNIDIRECT
 void fibonacci( boost::coroutines::push_coroutine< int > & c)
 {
     int first = 1, second = 1;

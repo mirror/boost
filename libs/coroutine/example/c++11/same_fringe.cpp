@@ -28,7 +28,7 @@ node::ptr_t create_tree2()
         leaf::create( "C") );
 }
 
-#ifdef BOOST_COROUTINES_V2
+#ifdef BOOST_COROUTINES_UNIDIRECT
 class coro_visitor : public visitor
 {
 private:

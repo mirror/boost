@@ -10,7 +10,7 @@
 #include <boost/bind.hpp>
 #include <boost/coroutine/all.hpp>
 
-#ifdef BOOST_COROUTINES_V2
+#ifdef BOOST_COROUTINES_UNIDIRECT
 typedef boost::coroutines::pull_coroutine< void > pull_coro_t;
 typedef boost::coroutines::push_coroutine< void > push_coro_t;
 

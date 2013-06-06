@@ -49,7 +49,7 @@ std::pair< node::ptr_t, node::ptr_t > create_diff_trees()
     return std::make_pair( tree1, tree2);
 }
 
-#ifdef BOOST_COROUTINES_V2
+#ifdef BOOST_COROUTINES_UNIDIRECT
 bool match_trees( boost::coroutines::pull_coroutine< leaf & > & c1,
                   boost::coroutines::pull_coroutine< leaf & > & c2)
 {

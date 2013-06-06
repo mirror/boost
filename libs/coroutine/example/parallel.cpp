@@ -10,7 +10,7 @@
 #include <boost/bind.hpp>
 #include <boost/coroutine/all.hpp>
 
-#ifdef BOOST_COROUTINES_V2
+#ifdef BOOST_COROUTINES_UNIDIRECT
 void first( boost::coroutines::push_coroutine< void > & c)
 {
     std::cout << "started first! ";

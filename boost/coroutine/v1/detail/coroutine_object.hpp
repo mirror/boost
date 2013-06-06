@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_COROUTINES_V1_DETAIL_COROUTINE_OBJECT_H
-#define BOOST_COROUTINES_V1_DETAIL_COROUTINE_OBJECT_H
+#ifndef BOOST_COROUTINES_OLD_DETAIL_COROUTINE_OBJECT_H
+#define BOOST_COROUTINES_OLD_DETAIL_COROUTINE_OBJECT_H
 
 #include <cstddef>
 
@@ -71,4 +71,4 @@ class coroutine_object;
  #pragma warning (pop)
 #endif
 
-#endif // BOOST_COROUTINES_V1_DETAIL_COROUTINE_OBJECT_H
+#endif // BOOST_COROUTINES_OLD_DETAIL_COROUTINE_OBJECT_H

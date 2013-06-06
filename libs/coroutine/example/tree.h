@@ -91,7 +91,7 @@ inline
 bool operator!=( leaf const& l, leaf  const& r)
 { return l.value != r.value; }
 
-#ifdef BOOST_COROUTINES_V2
+#ifdef BOOST_COROUTINES_UNIDIRECT
 class tree_visitor : public visitor
 {
 private:

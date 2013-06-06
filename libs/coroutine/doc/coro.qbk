@@ -39,6 +39,8 @@
 
 [def __ctx__ ['context]]
 [def __coro__ ['coroutine]]
+[def __push_coro__ ['push_coroutine]]
+[def __pull_coro__ ['pull_coroutine]]
 [def __coro_fn__ ['coroutine-function]]
 [def __coros__ ['coroutines]]
 [def __not_a_coro__ ['not-a-coroutine]]
@@ -66,6 +68,9 @@
 [def __getline__ ['std::getline()]]
 [def __handle_read__ ['session::handle_read()]]
 [def __io_service__ ['boost::asio::io_sevice]]
+[def __pull_coro_get__ ['boost::coroutines::pull_coroutine<>::get()]]
+[def __pull_coro_op__ ['boost::coroutines::push_coroutine<>::operator()]]
+[def __push_coro_op__ ['boost::coroutines::push_coroutine<>::operator()]]
 [def __server__ ['server]]
 [def __session__ ['session]]
 [def __stack_context__ ['boost::coroutines::stack_context]]
