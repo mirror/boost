@@ -1,6 +1,7 @@
 // Comparison of bounded buffers based on different containers.
 
 // Copyright (c) 2003-2008 Jan Gaspar
+// Copyright 2013 Paul A. Bristow.  Added some Quickbook snippet markers.
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -291,3 +292,27 @@ int main(int /*argc*/, char* /*argv*/[]) {
 
     return 0;
 }
+/*
+
+//[bounded_buffer_comparison_output
+
+  Description: Autorun "J:\Cpp\Misc\Debug\bounded_buffer_comparison.exe" 
+  bounded_buffer<int> 5.15 s
+  
+  bounded_buffer_space_optimized<int> 5.71 s
+  
+  bounded_buffer_deque_based<int> 15.57 s
+  
+  bounded_buffer_list_based<int> 17.33 s
+  
+  bounded_buffer<std::string> 24.49 s
+  
+  bounded_buffer_space_optimized<std::string> 28.33 s
+  
+  bounded_buffer_deque_based<std::string> 29.45 s
+  
+  bounded_buffer_list_based<std::string> 31.29 s
+  
+  //] //[bounded_buffer_comparison_output]
+
+*/
