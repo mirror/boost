@@ -1,0 +1,69 @@
+
+...patience...
+...found 1209 targets...
+...updating 44 targets...
+compile-c-c++ ..\..\..\bin.v2\libs\circular_buffer\example\bounded_buffer_comparison.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\bounded_buffer_comparison.obj
+bounded_buffer_comparison.cpp
+compile-c-c++ ..\..\..\bin.v2\libs\system\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\error_code.obj
+error_code.cpp
+msvc.link.dll ..\..\..\bin.v2\libs\system\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_system-vc100-mt-gd-1_54.dll
+   Creating library ..\..\..\bin.v2\libs\system\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_system-vc100-mt-gd-1_54.lib and object ..\..\..\bin.v2\libs\system\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_system-vc100-mt-gd-1_54.exp
+msvc.manifest.dll ..\..\..\bin.v2\libs\system\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_system-vc100-mt-gd-1_54.dll
+compile-c-c++ ..\..\..\bin.v2\libs\thread\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\win32\thread.obj
+thread.cpp
+compile-c-c++ ..\..\..\bin.v2\libs\thread\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\win32\tss_dll.obj
+tss_dll.cpp
+compile-c-c++ ..\..\..\bin.v2\libs\thread\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\win32\tss_pe.obj
+tss_pe.cpp
+compile-c-c++ ..\..\..\bin.v2\libs\thread\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\future.obj
+future.cpp
+msvc.link.dll ..\..\..\bin.v2\libs\thread\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_thread-vc100-mt-gd-1_54.dll
+   Creating library ..\..\..\bin.v2\libs\thread\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_thread-vc100-mt-gd-1_54.lib and object ..\..\..\bin.v2\libs\thread\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_thread-vc100-mt-gd-1_54.exp
+msvc.manifest.dll ..\..\..\bin.v2\libs\thread\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_thread-vc100-mt-gd-1_54.dll
+compile-c-c++ ..\..\..\bin.v2\libs\chrono\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\chrono.obj
+chrono.cpp
+compile-c-c++ ..\..\..\bin.v2\libs\chrono\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\thread_clock.obj
+thread_clock.cpp
+compile-c-c++ ..\..\..\bin.v2\libs\chrono\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\process_cpu_clocks.obj
+process_cpu_clocks.cpp
+msvc.link.dll ..\..\..\bin.v2\libs\chrono\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_chrono-vc100-mt-gd-1_54.dll
+   Creating library ..\..\..\bin.v2\libs\chrono\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_chrono-vc100-mt-gd-1_54.lib and object ..\..\..\bin.v2\libs\chrono\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_chrono-vc100-mt-gd-1_54.exp
+msvc.manifest.dll ..\..\..\bin.v2\libs\chrono\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_chrono-vc100-mt-gd-1_54.dll
+msvc.link ..\..\..\bin.v2\libs\circular_buffer\example\bounded_buffer_comparison.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\bounded_buffer_comparison.exe
+   Creating library ..\..\..\bin.v2\libs\circular_buffer\example\bounded_buffer_comparison.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\bounded_buffer_comparison.lib and object ..\..\..\bin.v2\libs\circular_buffer\example\bounded_buffer_comparison.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\bounded_buffer_comparison.exp
+msvc.manifest ..\..\..\bin.v2\libs\circular_buffer\example\bounded_buffer_comparison.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\bounded_buffer_comparison.exe
+testing.capture-output ..\..\..\bin.v2\libs\circular_buffer\example\bounded_buffer_comparison.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\bounded_buffer_comparison.run
+        1 file(s) copied.
+**passed** ..\..\..\bin.v2\libs\circular_buffer\example\bounded_buffer_comparison.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\bounded_buffer_comparison.test
+compile-c-c++ ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_iter_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_iter_example.obj
+circular_buffer_iter_example.cpp
+msvc.link ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_iter_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_iter_example.exe
+msvc.manifest ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_iter_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_iter_example.exe
+testing.capture-output ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_iter_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_iter_example.run
+        1 file(s) copied.
+**passed** ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_iter_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_iter_example.test
+compile-c-c++ ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_sum_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_sum_example.obj
+circular_buffer_sum_example.cpp
+msvc.link ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_sum_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_sum_example.exe
+msvc.manifest ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_sum_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_sum_example.exe
+testing.capture-output ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_sum_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_sum_example.run
+        1 file(s) copied.
+**passed** ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_sum_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_sum_example.test
+compile-c-c++ ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_bound_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_bound_example.obj
+circular_buffer_bound_example.cpp
+common.mkdir ..\..\..\bin.v2\libs\timer\build\msvc-10.0\debug\asynch-exceptions-on
+common.mkdir ..\..\..\bin.v2\libs\timer\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi
+compile-c-c++ ..\..\..\bin.v2\libs\timer\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\auto_timers_construction.obj
+auto_timers_construction.cpp
+compile-c-c++ ..\..\..\bin.v2\libs\timer\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\cpu_timer.obj
+cpu_timer.cpp
+msvc.link.dll ..\..\..\bin.v2\libs\timer\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_timer-vc100-mt-gd-1_54.dll
+   Creating library ..\..\..\bin.v2\libs\timer\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_timer-vc100-mt-gd-1_54.lib and object ..\..\..\bin.v2\libs\timer\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_timer-vc100-mt-gd-1_54.exp
+msvc.manifest.dll ..\..\..\bin.v2\libs\timer\build\msvc-10.0\debug\asynch-exceptions-on\threading-multi\boost_timer-vc100-mt-gd-1_54.dll
+msvc.link ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_bound_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_bound_example.exe
+   Creating library ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_bound_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_bound_example.lib and object ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_bound_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_bound_example.exp
+msvc.manifest ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_bound_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_bound_example.exe
+testing.capture-output ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_bound_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_bound_example.run
+        1 file(s) copied.
+**passed** ..\..\..\bin.v2\libs\circular_buffer\example\circular_buffer_bound_example.test\msvc-10.0\debug\asynch-exceptions-on\threading-multi\circular_buffer_bound_example.test
+...updated 44 targets...
