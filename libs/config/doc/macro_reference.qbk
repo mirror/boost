@@ -1003,6 +1003,34 @@ Note that use of this macro can lead to cryptic error messages with some compile
 Consider defining it to `inline` before including the Boost.Config header in order to be
 able to debug errors more easily.
 ]]
+[[`BOOST_NOINLINE`][
+This macro can be used in place of the `inline` keyword to instruct the compiler
+that a function should never be inlined. One should typically use this macro
+to mark functions that are unlikely to be called, such as error handling routines.
+
+Usage example:
+``
+  BOOST_NOINLINE void handle_error(const char* descr)
+  {
+      // ...
+  }
+``
+]]
+[[`BOOST_LIKELY(X)`
+  `BOOST_UNLIKELY(X)`][
+These macros communicate to the compiler that the conditional expression `X` is likely
+or unlikely to yield a positive result. The expression should result in a boolean value.
+The result of the macro is an integer or boolean value equivalent to the result of `X`.
+
+The macros are intended to be used in branching statements. The additional hint they provide
+can be used by the compiler to arrange the compiled code of the branches more effectively.
+
+Usage example:
+``
+  if (BOOST_UNLIKELY(ptr == NULL))
+    handle_error("ptr is NULL");
+``
+]]
 ]
 
 [endsect]

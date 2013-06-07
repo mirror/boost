@@ -632,7 +632,7 @@ namespace std{ using ::type_info; }
 // Set some default values GPU support
 //
 #  ifndef BOOST_GPU_ENABLED
-#  define BOOST_GPU_ENABLED 
+#  define BOOST_GPU_ENABLED
 #  endif
 
 // BOOST_FORCEINLINE ---------------------------------------------//
@@ -646,6 +646,34 @@ namespace std{ using ::type_info; }
 #  else
 #    define BOOST_FORCEINLINE inline
 #  endif
+#endif
+
+// BOOST_NOINLINE ---------------------------------------------//
+// Macro to use in place of 'inline' to prevent a function to be inlined
+#if !defined(BOOST_NOINLINE)
+#  if defined(_MSC_VER)
+#    define BOOST_NOINLINE __declspec(noinline)
+#  elif defined(__GNUC__) && __GNUC__ > 3
+     // Clang also defines __GNUC__ (as 4)
+#    define BOOST_NOINLINE __attribute__ ((__noinline__))
+#  else
+#    define BOOST_NOINLINE
+#  endif
+#endif
+
+// Branch prediction hints
+// These macros are intended to wrap conditional expressions that yield true or false
+//
+//  if (BOOST_LIKELY(var == 10))
+//  {
+//     // the most probable code here
+//  }
+//
+#if !defined(BOOST_LIKELY)
+#  define BOOST_LIKELY(x) x
+#endif
+#if !defined(BOOST_UNLIKELY)
+#  define BOOST_UNLIKELY(x) x
 #endif
 
 //

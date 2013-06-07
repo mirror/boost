@@ -154,6 +154,14 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  define BOOST_HAS_NRVO
 #endif
 
+// Branch prediction hints
+// I'm not sure 8.0 was the first version to support these builtins,
+// update the condition if the version is not accurate. (Andrey Semashev)
+#if defined(__GNUC__) && BOOST_INTEL_CXX_VERSION >= 800
+#define BOOST_LIKELY(x) __builtin_expect(x, 1)
+#define BOOST_UNLIKELY(x) __builtin_expect(x, 0)
+#endif
+
 //
 // versions check:
 // we don't support Intel prior to version 5.0:

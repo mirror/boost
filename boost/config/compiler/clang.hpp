@@ -26,6 +26,14 @@
 
 #define BOOST_HAS_NRVO
 
+// Branch prediction hints
+#if defined(__has_builtin)
+#if __has_builtin(__builtin_expect)
+#define BOOST_LIKELY(x) __builtin_expect(x, 1)
+#define BOOST_UNLIKELY(x) __builtin_expect(x, 0)
+#endif
+#endif
+
 // Clang supports "long long" in all compilation modes.
 #define BOOST_HAS_LONG_LONG
 

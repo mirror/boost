@@ -118,6 +118,10 @@
 #define BOOST_HAS_NRVO
 #endif
 
+// Branch prediction hints
+#define BOOST_LIKELY(x) __builtin_expect(x, 1)
+#define BOOST_UNLIKELY(x) __builtin_expect(x, 0)
+
 //
 // Dynamic shared object (DSO) and dynamic-link library (DLL) support
 //
@@ -135,7 +139,7 @@
 #  endif
 #  define BOOST_SYMBOL_VISIBLE __attribute__((visibility("default")))
 #else
-// config/platform/win32.hpp will define BOOST_SYMBOL_EXPORT, etc., unless already defined  
+// config/platform/win32.hpp will define BOOST_SYMBOL_EXPORT, etc., unless already defined
 #  define BOOST_SYMBOL_EXPORT
 #endif
 
@@ -158,7 +162,7 @@
 //
 // We disable this if the compiler is really nvcc as it
 // doesn't actually support __int128 as of CUDA_VERSION=5000
-// even though it defines __SIZEOF_INT128__.  
+// even though it defines __SIZEOF_INT128__.
 // See https://svn.boost.org/trac/boost/ticket/8048
 // Only re-enable this for nvcc if you're absolutely sure
 // of the circumstances under which it's supported:
