@@ -236,7 +236,7 @@ a throw callback declared in `<boost/container/throw_exception.hpp>`:
 
 [section:stable_vector ['stable_vector]]
 
-This useful, fully STL-compliant stable container [@http://bannalia.blogspot.com/2008/09/introducing-stablevector.html designed by by Joaqu\u00EDn M. L\u00F3pez Mu\u00F1oz]
+This useful, fully STL-compliant stable container [@http://bannalia.blogspot.com/2008/09/introducing-stablevector.html designed by Joaqu\u00EDn M. L\u00F3pez Mu\u00F1oz]
 is an hybrid between `vector` and `list`, providing most of
 the features of `vector` except [@http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#69 element contiguity].
 
@@ -429,6 +429,32 @@ constant-time `size()` for those that don't care about linear-time `splice_after
 `size()` and offers an additional `splice_after(iterator, slist &, iterator, iterator, size_type)` method that
 can speed up `slist` merging when the programmer already knows the size. `slist` and `forward_list` are therefore
 complementary.
+
+[endsect]
+
+[section:static_vector ['static_vector]]
+
+`static_vector` is an hybrid between `vector` and `array`: like `vector`, it's a sequence container 
+with contiguous storage that can change in size, along with the static allocation, low overhead,
+and fixed capacity of `array`. `static_vector` is based on Adam Wulkiewicz and Andrew Hundt's
+high-performance [@https://svn.boost.org/svn/boost/sandbox/varray/doc/html/index.html varray]
+class.
+
+The number of elements in a `static_vector` may vary dynamically up to a fixed capacity 
+because elements are stored within the object itself similarly to an array. However, objects are 
+initialized as they are inserted into `static_vector` unlike C arrays or `std::array` which must construct 
+all elements on instantiation. The behavior of `static_vector` enables the use of statically allocated 
+elements in cases with complex object lifetime requirements that would otherwise not be trivially 
+possible. Some other properties:
+
+* Random access to elements
+* Constant time insertion and removal of elements at the end
+* Linear time insertion and removal of elements at the beginning or in the middle.
+ 
+`static_vector` is well suited for use in a buffer, the internal implementation of other 
+classes, or use cases where there is a fixed limit to the number of elements that must be stored.
+Embedded and realtime applications where allocation either may not be available or acceptable 
+are a particular case where `static_vector` can be beneficial. 
 
 [endsect]
 
