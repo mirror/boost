@@ -33,6 +33,10 @@ extern "C" void _mm_pause(void);
 #define BOOST_ATOMIC_X86_PAUSE()
 #endif
 
+#if defined(_M_IX86) && _M_IX86 >= 500
+#define BOOST_ATOMIC_X86_HAS_CMPXCHG8B 1
+#endif
+
 // Define hardware barriers
 #if defined(_MSC_VER) && (defined(_M_AMD64) || (defined(_M_IX86) && defined(_M_IX86_FP) && _M_IX86_FP >= 2))
 extern "C" void _mm_mfence(void);
@@ -179,7 +183,7 @@ public:
 #define BOOST_ATOMIC_SHORT_LOCK_FREE 2
 #define BOOST_ATOMIC_INT_LOCK_FREE 2
 #define BOOST_ATOMIC_LONG_LOCK_FREE 2
-#if (defined(_M_IX86) && _M_IX86 >= 500) || defined(_M_AMD64) || defined(_M_IA64)
+#if defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B) || defined(_M_AMD64) || defined(_M_IA64)
 #define BOOST_ATOMIC_LLONG_LOCK_FREE 2
 #else
 #define BOOST_ATOMIC_LLONG_LOCK_FREE 0
@@ -1465,7 +1469,7 @@ private:
     storage_type v_;
 };
 
-#elif defined(_M_IX86) && _M_IX86 >= 500
+#elif defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B)
 
 template<typename T>
 inline bool
@@ -1489,15 +1493,7 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * p) BOOST_NOEXCEP
         lock cmpxchg8b qword ptr [edi]
         mov dword ptr [esi], eax
         mov dword ptr [esi + 4], edx
-#if _M_IX86 >= 600
         sete result
-#else
-        mov al, 0
-        jne not_equal_label
-        mov al, 1
-not_equal_label:
-        mov result, al
-#endif
     };
     return result;
 #endif
@@ -1600,7 +1596,7 @@ platform_load64(const volatile T * p) BOOST_NOEXCEPT
 } // namespace boost
 
 /* pull in 64-bit atomic type using cmpxchg8b above */
-#if defined(_M_IX86) && _M_IX86 >= 500
+#if defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B)
 #include <boost/atomic/detail/cas64strong.hpp>
 #endif
 
