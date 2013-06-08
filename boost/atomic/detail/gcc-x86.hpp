@@ -1655,14 +1655,16 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr) BOOST_NOEXC
 
     In theory, could push/pop ebx onto/off the stack, but movs
     to a prepared stack slot turn out to be faster. */
-    __asm__ __volatile__ (
+    __asm__ __volatile__
+    (
         "movl %%ebx, %1\n"
         "movl %2, %%ebx\n"
         "lock; cmpxchg8b 0(%4)\n"
         "movl %1, %%ebx\n"
         : "=A" (prev), "=m" (scratch)
         : "D" ((uint32_t)desired), "c" ((uint32_t)(desired >> 32)), "S" (ptr), "0" (prev)
-        : "memory");
+        : "memory"
+    );
     bool success = (prev == expected);
     expected = prev;
     return success;
@@ -1686,11 +1688,11 @@ platform_store64(T value, volatile T * ptr) BOOST_NOEXCEPT
 #if defined(__SSE2__)
         __asm__ __volatile__
         (
-            "movq %1, %%xmm0\n\t"
-            "movq %%xmm0, %0\n\t"
+            "movq %1, %%xmm4\n\t"
+            "movq %%xmm4, %0\n\t"
             : "=m" (*ptr)
             : "m" (value)
-            : "memory", "xmm0"
+            : "memory", "xmm4"
         );
 #else
         __asm__ __volatile__
@@ -1717,18 +1719,18 @@ template<typename T>
 inline T
 platform_load64(const volatile T * ptr) BOOST_NOEXCEPT
 {
-    T value = T();
+    T value;
 
     if (((uint32_t)ptr & 0x00000007) == 0)
     {
 #if defined(__SSE2__)
         __asm__ __volatile__
         (
-            "movq %1, %%xmm0\n\t"
-            "movq %%xmm0, %0\n\t"
+            "movq %1, %%xmm4\n\t"
+            "movq %%xmm4, %0\n\t"
             : "=m" (value)
             : "m" (*ptr)
-            : "memory", "xmm0"
+            : "memory", "xmm4"
         );
 #else
         __asm__ __volatile__
@@ -1743,6 +1745,7 @@ platform_load64(const volatile T * ptr) BOOST_NOEXCEPT
     }
     else
     {
+        value = T();
         // We don't care for comparison result here; the previous value will be stored into value anyway.
         platform_cmpxchg64_strong(value, value, const_cast<volatile T*>(ptr));
     }

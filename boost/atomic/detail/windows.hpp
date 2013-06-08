@@ -179,7 +179,7 @@ public:
 #define BOOST_ATOMIC_SHORT_LOCK_FREE 2
 #define BOOST_ATOMIC_INT_LOCK_FREE 2
 #define BOOST_ATOMIC_LONG_LOCK_FREE 2
-#if defined(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64)
+#if (defined(_M_IX86) && _M_IX86 >= 500) || defined(_M_AMD64) || defined(_M_IA64)
 #define BOOST_ATOMIC_LLONG_LOCK_FREE 2
 #else
 #define BOOST_ATOMIC_LLONG_LOCK_FREE 0
@@ -716,161 +716,6 @@ private:
     storage_type v_;
 };
 
-#if defined(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64)
-
-template<typename T, bool Sign>
-class base_atomic<T, int, 8, Sign>
-{
-    typedef base_atomic this_type;
-    typedef T value_type;
-    typedef value_type storage_type;
-    typedef T difference_type;
-public:
-    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
-    base_atomic(void) {}
-
-    void
-    store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-        if (order != memory_order_seq_cst) {
-            platform_fence_before(order);
-            v_ = static_cast< storage_type >(v);
-        } else {
-            exchange(v, order);
-        }
-    }
-
-    value_type
-    load(memory_order order = memory_order_seq_cst)const volatile BOOST_NOEXCEPT
-    {
-        value_type v = static_cast< value_type >(v_);
-        platform_fence_after_load(order);
-        return v;
-    }
-
-    value_type
-    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-        platform_fence_before(order);
-        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64(&v_, v));
-        platform_fence_after(order);
-        return v;
-    }
-
-    value_type
-    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-        typedef typename make_signed< value_type >::type signed_value_type;
-        return fetch_add(static_cast< value_type >(-static_cast< signed_value_type >(v)), order);
-    }
-
-    value_type
-    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-        platform_fence_before(order);
-        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE64(&v_, v));
-        platform_fence_after(order);
-        return v;
-    }
-
-    bool
-    compare_exchange_strong(
-        value_type & expected,
-        value_type desired,
-        memory_order success_order,
-        memory_order failure_order) volatile BOOST_NOEXCEPT
-    {
-        value_type previous = expected;
-        platform_fence_before(success_order);
-        value_type oldval = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64(&v_, desired, previous));
-        bool success = (previous == oldval);
-        if (success)
-            platform_fence_after(success_order);
-        else
-            platform_fence_after(failure_order);
-        expected = oldval;
-        return success;
-    }
-
-    bool
-    compare_exchange_weak(
-        value_type & expected,
-        value_type desired,
-        memory_order success_order,
-        memory_order failure_order) volatile BOOST_NOEXCEPT
-    {
-        return compare_exchange_strong(expected, desired, success_order, failure_order);
-    }
-
-    value_type
-    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-#if defined(BOOST_ATOMIC_INTERLOCKED_AND64)
-        platform_fence_before(order);
-        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_AND64(&v_, v));
-        platform_fence_after(order);
-        return v;
-#else
-        value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
-        {
-            BOOST_ATOMIC_X86_PAUSE();
-        }
-        return tmp;
-#endif
-    }
-
-    value_type
-    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-#if defined(BOOST_ATOMIC_INTERLOCKED_OR64)
-        platform_fence_before(order);
-        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_OR64(&v_, v));
-        platform_fence_after(order);
-        return v;
-#else
-        value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
-        {
-            BOOST_ATOMIC_X86_PAUSE();
-        }
-        return tmp;
-#endif
-    }
-
-    value_type
-    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
-    {
-#if defined(BOOST_ATOMIC_INTERLOCKED_XOR64)
-        platform_fence_before(order);
-        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_XOR64(&v_, v));
-        platform_fence_after(order);
-        return v;
-#else
-        value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
-        {
-            BOOST_ATOMIC_X86_PAUSE();
-        }
-        return tmp;
-#endif
-    }
-
-    bool
-    is_lock_free(void)const volatile BOOST_NOEXCEPT
-    {
-        return true;
-    }
-
-    BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
-private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
-    storage_type v_;
-};
-
-#endif // defined(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64)
-
 // MSVC 2012 fails to recognize sizeof(T) as a constant expression in template specializations
 enum msvc_sizeof_pointer_workaround { sizeof_pointer = sizeof(void*) };
 
@@ -1362,7 +1207,7 @@ public:
     }
 
     bool
-    is_lock_free(void)const volatile BOOST_NOEXCEPT
+    is_lock_free(void) const volatile BOOST_NOEXCEPT
     {
         return true;
     }
@@ -1374,7 +1219,158 @@ private:
     storage_type v_;
 };
 
-#if defined(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64)
+#if defined(_M_AMD64) || defined(_M_IA64)
+
+template<typename T, bool Sign>
+class base_atomic<T, int, 8, Sign>
+{
+    typedef base_atomic this_type;
+    typedef T value_type;
+    typedef value_type storage_type;
+    typedef T difference_type;
+public:
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT: v_(v) {}
+    base_atomic(void) {}
+
+    void
+    store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        if (order != memory_order_seq_cst) {
+            platform_fence_before(order);
+            v_ = static_cast< storage_type >(v);
+        } else {
+            exchange(v, order);
+        }
+    }
+
+    value_type
+    load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
+    {
+        value_type v = static_cast< value_type >(v_);
+        platform_fence_after_load(order);
+        return v;
+    }
+
+    value_type
+    fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        platform_fence_before(order);
+        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64(&v_, v));
+        platform_fence_after(order);
+        return v;
+    }
+
+    value_type
+    fetch_sub(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        typedef typename make_signed< value_type >::type signed_value_type;
+        return fetch_add(static_cast< value_type >(-static_cast< signed_value_type >(v)), order);
+    }
+
+    value_type
+    exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+        platform_fence_before(order);
+        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE64(&v_, v));
+        platform_fence_after(order);
+        return v;
+    }
+
+    bool
+    compare_exchange_strong(
+        value_type & expected,
+        value_type desired,
+        memory_order success_order,
+        memory_order failure_order) volatile BOOST_NOEXCEPT
+    {
+        value_type previous = expected;
+        platform_fence_before(success_order);
+        value_type oldval = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64(&v_, desired, previous));
+        bool success = (previous == oldval);
+        if (success)
+            platform_fence_after(success_order);
+        else
+            platform_fence_after(failure_order);
+        expected = oldval;
+        return success;
+    }
+
+    bool
+    compare_exchange_weak(
+        value_type & expected,
+        value_type desired,
+        memory_order success_order,
+        memory_order failure_order) volatile BOOST_NOEXCEPT
+    {
+        return compare_exchange_strong(expected, desired, success_order, failure_order);
+    }
+
+    value_type
+    fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+#if defined(BOOST_ATOMIC_INTERLOCKED_AND64)
+        platform_fence_before(order);
+        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_AND64(&v_, v));
+        platform_fence_after(order);
+        return v;
+#else
+        value_type tmp = load(memory_order_relaxed);
+        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
+        return tmp;
+#endif
+    }
+
+    value_type
+    fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+#if defined(BOOST_ATOMIC_INTERLOCKED_OR64)
+        platform_fence_before(order);
+        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_OR64(&v_, v));
+        platform_fence_after(order);
+        return v;
+#else
+        value_type tmp = load(memory_order_relaxed);
+        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
+        return tmp;
+#endif
+    }
+
+    value_type
+    fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
+    {
+#if defined(BOOST_ATOMIC_INTERLOCKED_XOR64)
+        platform_fence_before(order);
+        v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_XOR64(&v_, v));
+        platform_fence_after(order);
+        return v;
+#else
+        value_type tmp = load(memory_order_relaxed);
+        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
+        return tmp;
+#endif
+    }
+
+    bool
+    is_lock_free(void)const volatile BOOST_NOEXCEPT
+    {
+        return true;
+    }
+
+    BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
+private:
+    base_atomic(const base_atomic &) /* = delete */ ;
+    void operator=(const base_atomic &) /* = delete */ ;
+    storage_type v_;
+};
 
 template<typename T, bool Sign>
 class base_atomic<T, void, 8, Sign>
@@ -1469,11 +1465,144 @@ private:
     storage_type v_;
 };
 
-#endif // defined(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64)
+#elif defined(_M_IX86) && _M_IX86 >= 500
+
+template<typename T>
+inline bool
+platform_cmpxchg64_strong(T & expected, T desired, volatile T * p) BOOST_NOEXCEPT
+{
+#if defined(BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64)
+    const T oldval = BOOST_ATOMIC_INTERLOCKED_COMPARE_EXCHANGE64(p, desired, expected);
+    const bool result = (oldval == expected);
+    expected = oldval;
+    return result;
+#else
+    bool result;
+    __asm
+    {
+        mov edi, p
+        mov esi, expected
+        mov ebx, dword ptr [desired]
+        mov ecx, dword ptr [desired + 4]
+        mov eax, dword ptr [esi]
+        mov edx, dword ptr [esi + 4]
+        lock cmpxchg8b qword ptr [edi]
+        mov dword ptr [esi], eax
+        mov dword ptr [esi + 4], edx
+#if _M_IX86 >= 600
+        sete result
+#else
+        mov al, 0
+        jne not_equal_label
+        mov al, 1
+not_equal_label:
+        mov result, al
+#endif
+    };
+    return result;
+#endif
+}
+
+// Intel 64 and IA-32 Architectures Software Developer's Manual, Volume 3A, 8.1.1. Guaranteed Atomic Operations:
+//
+// The Pentium processor (and newer processors since) guarantees that the following additional memory operations will always be carried out atomically:
+// * Reading or writing a quadword aligned on a 64-bit boundary
+//
+// Luckily, the memory is almost always 8-byte aligned in our case because atomic<> uses 64 bit native types for storage and dynamic memory allocations
+// have at least 8 byte alignment. The only unfortunate case is when atomic is placeod on the stack and it is not 8-byte aligned (like on 32 bit Windows).
+
+template<typename T>
+inline void
+platform_store64(T value, volatile T * p) BOOST_NOEXCEPT
+{
+    if (((uint32_t)p & 0x00000007) == 0)
+    {
+#if defined(_M_IX86_FP) && _M_IX86_FP >= 2
+        __asm
+        {
+            mov edx, p
+            movq xmm4, value
+            movq qword ptr [edx], xmm4
+        };
+#else
+        __asm
+        {
+            mov edx, p
+            fild value
+            fistp qword ptr [edx]
+        };
+#endif
+    }
+    else
+    {
+        __asm
+        {
+            mov edi, p
+            mov ebx, dword ptr [value]
+            mov ecx, dword ptr [value + 4]
+            mov eax, dword ptr [edi]
+            mov edx, dword ptr [edi + 4]
+            align 16
+again:
+            lock cmpxchg8b qword ptr [edi]
+            jne again
+        };
+    }
+}
+
+template<typename T>
+inline T
+platform_load64(const volatile T * p) BOOST_NOEXCEPT
+{
+    T value;
+
+    if (((uint32_t)p & 0x00000007) == 0)
+    {
+#if defined(_M_IX86_FP) && _M_IX86_FP >= 2
+        __asm
+        {
+            mov edx, p
+            movq xmm4, qword ptr [edx]
+            movq value, xmm4
+        };
+#else
+        __asm
+        {
+            mov edx, p
+            fild qword ptr [edx]
+            fistp value
+        };
+#endif
+    }
+    else
+    {
+        // We don't care for comparison result here; the previous value will be stored into value anyway.
+        __asm
+        {
+            mov edi, p
+            xor ebx, ebx
+            xor ecx, ecx
+            xor eax, eax
+            xor edx, edx
+            lock cmpxchg8b qword ptr [edi]
+            mov dword ptr [value], eax
+            mov dword ptr [value + 4], edx
+        };
+    }
+
+    return value;
+}
+
+#endif
 
 } // namespace detail
 } // namespace atomics
 } // namespace boost
+
+/* pull in 64-bit atomic type using cmpxchg8b above */
+#if defined(_M_IX86) && _M_IX86 >= 500
+#include <boost/atomic/detail/cas64strong.hpp>
+#endif
 
 #endif /* !defined(BOOST_ATOMIC_FORCE_FALLBACK) */
 
