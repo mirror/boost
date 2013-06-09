@@ -46,7 +46,15 @@
 # define BOOST_COROUTINES_SEGMENTS 10
 #endif
 
-#ifndef BOOST_COROUTINES_OLD
+#if defined(BOOST_COROUTINES_V2)
+# define BOOST_COROUTINES_UNIDIRECT
+#endif
+
+#if defined(BOOST_COROUTINES_V1)
+# define BOOST_COROUTINES_OLD
+#endif
+
+#if ! defined(BOOST_COROUTINES_OLD)
 # define BOOST_COROUTINES_UNIDIRECT
 #endif
 
