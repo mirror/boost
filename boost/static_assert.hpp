@@ -183,6 +183,7 @@ template<int x> struct static_assert_test{};
          enum { BOOST_JOIN(boost_static_assert_enum_, __LINE__) \
             = sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( __VA_ARGS__ ) >) }
 #  else
+#    define BOOST_STATIC_ASSERT(B) \
          enum { BOOST_JOIN(boost_static_assert_enum_, __LINE__) \
             = sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >) }
 #  endif
