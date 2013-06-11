@@ -22,6 +22,7 @@
 #include <boost/archive/detail/auto_link_archive.hpp>
 #include <boost/archive/detail/common_iarchive.hpp>
 #include <boost/archive/shared_ptr_helper.hpp>
+#include <boost/archive/basic_archive.hpp>
 #include <boost/mpi/detail/packed_iprimitive.hpp>
 #include <boost/mpi/detail/binary_buffer_iprimitive.hpp>
 #include <boost/serialization/string.hpp>
@@ -119,6 +120,16 @@ public:
 
   // input archives need to ignore  the optional information 
   void load_override(archive::class_id_optional_type & /*t*/, int){}
+
+  void load_override(archive::class_id_type & t, int version){
+    int_least16_t x=0;
+    * this->This() >> x;
+    t = boost::archive::class_id_type(x);
+  }
+
+  void load_override(archive::class_id_reference_type & t, int version){
+    load_override(static_cast<archive::class_id_type &>(t), version);
+  }
 
   void load_override(archive::class_name_type & t, int)
   {

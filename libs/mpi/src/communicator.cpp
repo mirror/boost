@@ -63,7 +63,8 @@ communicator::communicator(const communicator& comm,
   MPI_Comm newcomm;
   BOOST_MPI_CHECK_RESULT(MPI_Comm_create, 
                          ((MPI_Comm)comm, (MPI_Group)subgroup, &newcomm));
-  comm_ptr.reset(new MPI_Comm(newcomm), comm_free());
+  if(newcomm != MPI_COMM_NULL)
+    comm_ptr.reset(new MPI_Comm(newcomm), comm_free());
 }
 
 int communicator::size() const
