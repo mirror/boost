@@ -36,6 +36,9 @@
       </p>
 <p>
         This template will detect non-public base classes, and ambiguous base classes.
+        It also detects indirect base classes - which is to say <a class="link" href="is_base_of.html" title="is_base_of">is_base_of</a>&lt;B,
+        D&gt; inherits from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>
+        if B is located anywhere in the inheritance tree of D.
       </p>
 <p>
         Note that <code class="computeroutput"><span class="identifier">is_base_of</span><span class="special">&lt;</span><span class="identifier">X</span><span class="special">,</span><span class="identifier">X</span><span class="special">&gt;</span></code> will inherit from <a class="link" href="integral_constant.html" title="integral_constant">true_type</a>
