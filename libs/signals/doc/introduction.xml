@@ -2,7 +2,16 @@
 <!DOCTYPE section PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN"
   "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
 <section last-revision="$Date$">
-  <title>Introduction</title>
+
+<title>Introduction</title>
+
+<para><emphasis role="bold">Boost.Signals is no longer being actively maintained.</emphasis>
+Do not use Boost.Signals for new development (use 
+<ulink url="http://www.boost.org/doc/html/signals2.html">Boost.Signals2</ulink>
+instead). If you have existing Boost.Signals-based code, it will
+continue to work, but consider moving to Boost.Signals2. There is
+<ulink url="http://www.boost.org/doc/html/signals2/api_changes.html#signals2.porting">
+a porting guide</ulink> in the Signals2 documentation.</para>
 
 <para>The Boost.Signals library is an implementation of a managed
 signals and slots system. Signals represent callbacks with multiple
