@@ -8,11 +8,11 @@
 <note>
 <para><emphasis role="bold">Boost.Signals is no longer being actively maintained.</emphasis>
 Do not use Boost.Signals for new development (use 
-<link linkend="signals2">Boost.Signals2</ulink>
+<link linkend="signals2">Boost.Signals2</link>
 instead). If you have existing Boost.Signals-based code, it will
 continue to work, but consider moving to Boost.Signals2. There is
-<ulink url="signals2.porting">
-a porting guide</ulink> in the Signals2 documentation.</para>
+<link linkend="signals2.porting">
+a porting guide</link> in the Signals2 documentation.</para>
 </note>
 
 <para>The Boost.Signals library is an implementation of a managed
