@@ -9,13 +9,13 @@
 
 [library Boost.Chrono
     [quickbook 1.5]
-    [version 2.0.0]
+    [version 2.0.2]
     [authors [Hinnant, Howard]]
     [authors [Dawes, Beman]]
     [authors [Botet Escriba, Vicente J.]]
     [copyright 2008 Howard Hinnant]
     [copyright 2006, 2008 Beman Dawes]
-    [copyright 2009-2012 Vicente J. Botet Escriba]
+    [copyright 2009-2013 Vicente J. Botet Escriba]
     [category utilities system]
     [id chrono]
     [dirname chrono]
@@ -7324,7 +7324,7 @@ All the units are given using the suffix "s" following the System International 
 [/==================================]
 
 [//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////]
-[section [*Version 2.0.2, April 1, 2013 - 1.54] ]
+[section [*Version 2.0.2, June 15, 2013 - 1.54] ]
 
 [*Fixes:]
 
@@ -7333,6 +7333,8 @@ All the units are given using the suffix "s" following the System International 
 * [@http://svn.boost.org/trac/boost/ticket/8367 #8367] chrono does not compile with clang from XCode 4.5.2 with -std=c++11 -stdlib=libc++ and -arch armv7
 * [@http://svn.boost.org/trac/boost/ticket/8370 #8370] typo in chrono reference
 * [@http://svn.boost.org/trac/boost/ticket/8435 #8435] Can't compile Chrono on HP-UX due to no CLOCK_REALTIME macro.
+* [@http://svn.boost.org/trac/boost/ticket/8690 #8690] duration_units_default - lost return types constness in overridden methods.
+* [@http://svn.boost.org/trac/boost/ticket/8691 #8691] iostate is not checked after scan_keyword call.
 
 [endsect] [/section [*Version 2.0.2] ]
 
