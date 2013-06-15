@@ -102,6 +102,11 @@ namespace boost_no_cwchar = empty_boost;
 #else
 namespace boost_no_cwctype = empty_boost;
 #endif
+#ifndef BOOST_NO_CXX11_ALIGNAS
+#include "boost_no_cxx11_alignas.ipp"
+#else
+namespace boost_no_cxx11_alignas = empty_boost;
+#endif
 #ifndef BOOST_NO_CXX11_ALLOCATOR
 #include "boost_no_cxx11_allocator.ipp"
 #else
@@ -1229,6 +1234,11 @@ int main( int, char *[] )
    if(0 != boost_no_cwctype::test())
    {
       std::cerr << "Failed test for BOOST_NO_CWCTYPE at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cxx11_alignas::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CXX11_ALIGNAS at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_cxx11_allocator::test())

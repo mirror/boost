@@ -576,6 +576,7 @@ that are not yet supported by a particular compiler or library.
 [table
 [[Macro     ][Description     ]]
 
+[[`BOOST_NO_CXX11_ALIGNAS`][The compiler does not support the `alignas` keyword.]]
 [[`BOOST_NO_CXX11_ALLOCATOR`][The standard library does not provide a C++11 version of `std::allocator` in <memory>.]]
 [[`BOOST_NO_CXX11_ATOMIC_SP`][The standard library <memory> does not support atomic smart pointer operations.]]
 [[`BOOST_NO_CXX11_HDR_ARRAY`][The standard library does not provide header <array>.]]
@@ -601,36 +602,36 @@ that are not yet supported by a particular compiler or library.
 
 [[`BOOST_NO_CXX11_AUTO_DECLARATIONS`][The compiler does not support
 type deduction for variables declared with the `auto` keyword (`auto var = ...;`).
-]]                       
+]]
 [[`BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS`][The compiler does not support
 type deduction for multiple variables declared with the `auto` keyword (`auto var = ..., *ptr = ...;`).
-]]                       
+]]
 [[`BOOST_NO_CXX11_CHAR16_T`][The compiler does not support
 type `char16_t`. 
-]]                       
+]]
 [[`BOOST_NO_CXX11_CHAR32_T`][The compiler does not support 
 type `char32_t`. 
-]]                       
+]]
 [[`BOOST_NO_CXX11_TEMPLATE_ALIASES`][The compiler does not support template aliases. 
-]]                      
+]]
 [[`BOOST_NO_CXX11_CONSTEXPR`][The compiler does not support 
 `constexpr`. 
-]]                      
+]]
 [[`BOOST_NO_CXX11_DECLTYPE`][The compiler does not support 
 `decltype`. 
-]]                       
+]]
 [[`BOOST_NO_CXX11_DECLTYPE_N3276`][The compiler does not support the extension to
 `decltype` described in [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2011/n3276.pdf N3276],
 accepted in Madrid, March 2011.
-]]                       
+]]
 [[`BOOST_NO_CXX11_DEFAULTED_FUNCTIONS`][The compiler does not support 
-defaulted (`= default`) functions.  
-]]            
+defaulted (`= default`) functions.
+]]
 [[`BOOST_NO_CXX11_DELETED_FUNCTIONS`][The compiler does not support 
-deleted (`= delete`) functions.              
-]]              
+deleted (`= delete`) functions.
+]]
 [[`BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS`][The compiler does not support 
-explicit conversion operators (`explicit operator T()`).              
+explicit conversion operators (`explicit operator T()`).
 ]] 
 [[`BOOST_NO_CXX11_EXTERN_TEMPLATE`][The compiler does not support 
 explicit instantiation forward declarations for templates (`extern template ...`).
@@ -639,49 +640,49 @@ explicit instantiation forward declarations for templates (`extern template ...`
 default template arguments for function templates.
 ]]
 [[`BOOST_NO_CXX11_LAMBDAS`][The compiler does not support Lambdas. 
-]]                      
+]]
 [[`BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS`][The compiler does not allow to
 pass local classes as template parameters (this macro intentionally does not
 control passing of unnamed types as template parameters, see also
 [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2008/n2657.htm N2657]).
 ]]
 [[`BOOST_NO_LONG_LONG`][The compiler does not support `long long`.
-]]                
+]]
 [[`BOOST_NO_CXX11_NOEXCEPT`][The compiler does not support `noexcept`. 
-]]                      
+]]
 [[`BOOST_NO_CXX11_NULLPTR`][The compiler does not support `nullptr`. 
-]]                      
+]]
 [[`BOOST_NO_CXX11_RANGE_BASED_FOR`][The compiler does not support
 range-based for statements. 
-]]                   
+]]
 [[`BOOST_NO_CXX11_RAW_LITERALS`][The compiler does not support
 raw string literals. 
-]]                   
+]]
 [[`BOOST_NO_CXX11_RVALUE_REFERENCES`][The compiler does not support
 r-value references. 
-]]              
+]]
 [[`BOOST_NO_CXX11_SCOPED_ENUMS`][The compiler does not support
 scoped enumerations (`enum class`). 
-]]                   
+]]
 [[`BOOST_NO_CXX11_STATIC_ASSERT`][The compiler does not support
 `static_assert`. 
-]]                  
+]]
 [[`BOOST_NO_CXX11_STD_UNORDERED`][The standard library does not support
 <unordered_map> and <unordered_set>. 
-]]                  
+]]
 [[`BOOST_NO_CXX11_UNICODE_LITERALS`][The compiler does not support
 Unicode (`u8`, `u`, `U`) literals. 
-]] 
+]]
 [[`BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX`][The compiler does not support
 the [@http://en.wikipedia.org/wiki/C%2B%2B0x#Uniform_initialization C++11 Unified Initialization Syntax].
 ]]
 [[`BOOST_NO_CXX11_USER_DEFINED_LITERALS`][The compiler does not support user defined literals. 
-]]                      
+]]
 [[`BOOST_NO_CXX11_VARIADIC_TEMPLATES`][The compiler does not support
-variadic templates. 
+variadic templates.
 ]]
 [[`BOOST_NO_CXX11_VARIADIC_MACROS`][The compiler does not support
-variadic macros. 
+variadic macros.
 ]]
 ]
 
@@ -697,6 +698,21 @@ provide compliant C++11 support.
 [table
 [[Macro        ][ Description          ]]
 
+[[`BOOST_ALIGNMENT(X)`, `BOOST_NO_ALIGNMENT`][
+Some compilers don't support the `alignas` keyword but provide other means to specify alignment
+(usually, through compiler-specific attributes). The macro `BOOST_ALIGNMENT(X)` will expand to the `alignas(X)`
+keyword if the compiler supports it or to some compiler-specific attribute to achieve the specified alignment.
+If no such compiler-specific attribute is known then `BOOST_ALIGNMENT(X)` will expand to nothing and
+`BOOST_NO_ALIGNMENT` will be defined. Unlike native `alignas`, `X` must always be a compile-time integer constant.
+The macro can be used to specify alignment of types and data:
+``
+  struct BOOST_ALIGNMENT(16) my_data
+  {
+      char c[16];
+  };
+  BOOST_ALIGNMENT(8) int arr[32];
+``
+]]
 [[`BOOST_CONSTEXPR`][
 Some compilers don't support the use of `constexpr`. This macro expands to nothing on those compilers, and `constexpr`
 elsewhere. For example, when defining a constexpr function or constructor replace:

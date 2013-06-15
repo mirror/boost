@@ -1,7 +1,7 @@
 // (C) Copyright Douglas Gregor 2010
 //
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  See http://www.boost.org for most recent version.
@@ -46,15 +46,15 @@
 #  define BOOST_SYMBOL_VISIBLE __attribute__((__visibility__("default")))
 #endif
 
-// 
-// The BOOST_FALLTHROUGH macro can be used to annotate implicit fall-through 
-// between switch labels. 
-// 
-#if __cplusplus >= 201103L && defined(__has_warning) 
-#  if __has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough") 
-#    define BOOST_FALLTHROUGH [[clang::fallthrough]] 
-#  endif 
-#endif 
+//
+// The BOOST_FALLTHROUGH macro can be used to annotate implicit fall-through
+// between switch labels.
+//
+#if __cplusplus >= 201103L && defined(__has_warning)
+#  if __has_feature(cxx_attributes) && __has_warning("-Wimplicit-fallthrough")
+#    define BOOST_FALLTHROUGH [[clang::fallthrough]]
+#  endif
+#endif
 
 #if !__has_feature(cxx_auto_type)
 #  define BOOST_NO_CXX11_AUTO_DECLARATIONS
@@ -152,6 +152,10 @@
 
 #if !__has_feature(cxx_user_literals)
 #  define BOOST_NO_CXX11_USER_DEFINED_LITERALS
+#endif
+
+#if !(__has_feature(cxx_alignas) || __has_extension(cxx_alignas))
+#  define BOOST_NO_CXX11_ALIGNAS
 #endif
 
 // Clang always supports variadic macros

@@ -1,8 +1,8 @@
 //  Copyright (C) Christof Meerwald 2003
 //  Copyright (C) Dan Watkins 2003
 //
-//  Use, modification and distribution are subject to the 
-//  Boost Software License, Version 1.0. (See accompanying file 
+//  Use, modification and distribution are subject to the
+//  Boost Software License, Version 1.0. (See accompanying file
 //  LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 //  Digital Mars C++ compiler setup:
@@ -87,6 +87,7 @@
 #define BOOST_NO_CXX11_VARIADIC_TEMPLATES
 #define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
 #define BOOST_NO_CXX11_USER_DEFINED_LITERALS
+#define BOOST_NO_CXX11_ALIGNAS
 
 #if (__DMC__ < 0x812)
 #define BOOST_NO_CXX11_VARIADIC_MACROS
