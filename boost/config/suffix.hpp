@@ -689,6 +689,36 @@ namespace std{ using ::type_info; }
 #  define BOOST_ALIGNMENT(x)
 #endif
 
+// Defaulted and deleted function declaration helpers
+// These macros are intended to be inside a class definition.
+// BOOST_DEFAULTED_FUNCTION accepts the function declaration and its
+// body, which will be used if the compiler doesn't support defaulted functions.
+// BOOST_DELETED_FUNCTION only accepts the function declaration. It
+// will expand to a private function declaration, if the compiler doesn't support
+// deleted functions. Because of this it is recommended to use BOOST_DELETED_FUNCTION
+// in the end of the class definition.
+//
+//  class my_class
+//  {
+//  public:
+//      // Default-constructible
+//      BOOST_DEFAULTED_FUNCTION(my_class(), {})
+//      // Copying prohibited
+//      BOOST_DELETED_FUNCTION(my_class(my_class const&))
+//      BOOST_DELETED_FUNCTION(my_class& operator= (my_class const&))
+//  };
+//
+#if !(defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS) || defined(BOOST_NO_CXX11_NON_PUBLIC_DEFAULTED_FUNCTIONS))
+#   define BOOST_DEFAULTED_FUNCTION(fun, body) fun = default;
+#else
+#   define BOOST_DEFAULTED_FUNCTION(fun, body) fun body
+#endif
+
+#if !defined(BOOST_NO_CXX11_DELETED_FUNCTIONS)
+#   define BOOST_DELETED_FUNCTION(fun) fun = delete;
+#else
+#   define BOOST_DELETED_FUNCTION(fun) private: fun;
+#endif
 
 //
 // Set BOOST_NO_DECLTYPE_N3276 when BOOST_NO_DECLTYPE is defined

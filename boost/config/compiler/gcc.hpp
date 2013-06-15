@@ -217,6 +217,11 @@
 #  define BOOST_NO_SFINAE_EXPR
 #endif
 
+// GCC 4.5 forbids declaration of defaulted functions in private or protected sections
+#if !defined(BOOST_NO_CXX11_DEFAULTED_FUNCTIONS) && (__GNUC__ == 4 && __GNUC_MINOR__ <= 5)
+#  define BOOST_NO_CXX11_NON_PUBLIC_DEFAULTED_FUNCTIONS
+#endif
+
 // C++0x features in 4.5.0 and later
 //
 #if __GNUC__ < 4 || (__GNUC__ == 4 && __GNUC_MINOR__ < 5) || !defined(__GXX_EXPERIMENTAL_CXX0X__)

@@ -751,6 +751,61 @@ with:
   BOOST_STATIC_CONSTEXPR UIntType xor_mask = a;
 ``
 ]]
+[[`BOOST_DEFAULTED_FUNCTION(fun, body)`][
+This macro is intended to be used within a class definition in order to declare a default implementation of function `fun`.
+For the compilers that do not support C++11 defaulted functions the macro will expand into an inline function definition
+with the `body` implementation. For example:
+``
+  struct my_struct
+  {
+      BOOST_DEFAULTED_FUNCTION(my_struct(), {})
+  };
+``
+is equivalent to:
+``
+  struct my_struct
+  {
+      my_struct() = default;
+  };
+``
+or:
+``
+  struct my_struct
+  {
+      my_struct() {}
+  };
+``
+]]
+[[`BOOST_DELETED_FUNCTION(fun)`][
+This macro is intended to be used within a class definition in order to declare a deleted function `fun`.
+For the compilers that do not support C++11 deleted functions the macro will expand into a private function
+declaration with no definition. Since the macro may change the access mode, it is recommended to use this macro
+at the end of the class definition. For example:
+``
+  struct noncopyable
+  {
+      BOOST_DELETED_FUNCTION(noncopyable(noncopyable const&))
+      BOOST_DELETED_FUNCTION(noncopyable& operator= (noncopyable const&))
+  };
+``
+is equivalent to:
+``
+  struct noncopyable
+  {
+      noncopyable(noncopyable const&) = delete;
+      noncopyable& operator= (noncopyable const&) = delete;
+  };
+``
+or:
+``
+  struct noncopyable
+  {
+  private:
+      noncopyable(noncopyable const&);
+      noncopyable& operator= (noncopyable const&);
+  };
+``
+]]
 [[
 ``
   BOOST_NOEXCEPT
