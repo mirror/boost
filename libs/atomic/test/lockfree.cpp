@@ -172,14 +172,14 @@ int test_main(int, char *[])
     verify_lock_free<bool>("bool", BOOST_ATOMIC_BOOL_LOCK_FREE, EXPECT_BOOL_LOCK_FREE);
 
     bool any_lock_free =
-        BOOST_ATOMIC_CHAR_LOCK_FREE ||
-        BOOST_ATOMIC_SHORT_LOCK_FREE ||
-        BOOST_ATOMIC_INT_LOCK_FREE ||
-        BOOST_ATOMIC_LONG_LOCK_FREE ||
-        BOOST_ATOMIC_LLONG_LOCK_FREE ||
-        BOOST_ATOMIC_BOOL_LOCK_FREE;
+        BOOST_ATOMIC_CHAR_LOCK_FREE > 0 ||
+        BOOST_ATOMIC_SHORT_LOCK_FREE > 0 ||
+        BOOST_ATOMIC_INT_LOCK_FREE > 0 ||
+        BOOST_ATOMIC_LONG_LOCK_FREE > 0 ||
+        BOOST_ATOMIC_LLONG_LOCK_FREE > 0 ||
+        BOOST_ATOMIC_BOOL_LOCK_FREE > 0;
 
-    BOOST_CHECK(!any_lock_free || BOOST_ATOMIC_THREAD_FENCE);
+    BOOST_CHECK(!any_lock_free || BOOST_ATOMIC_THREAD_FENCE > 0);
 
     return 0;
 }

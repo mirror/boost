@@ -9,11 +9,7 @@
 
 #include <boost/config.hpp>
 
-#if (defined(_MSC_VER) && (_MSC_VER >= 1020)) || defined(__GNUC__) || defined(BOOST_CLANG) || defined(BOOST_INTEL) || defined(__COMO__) || defined(__DMC__)
-#define BOOST_ATOMIC_HAS_PRAGMA_ONCE
-#endif
-
-#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 

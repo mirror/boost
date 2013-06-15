@@ -12,7 +12,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/atomic/detail/config.hpp>
 
-#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -35,6 +35,10 @@ namespace detail {
         defined(__k6__) || defined(__athlon__) || defined(__k8__) || defined(__amdfam10__) || defined(__bdver1__) || defined(__bdver2__) || defined(__bdver3__) || defined(__btver1__) || defined(__btver2__)\
     )
 #define BOOST_ATOMIC_X86_HAS_CMPXCHG8B 1
+#endif
+
+#if defined(__x86_64__) && defined(__GCC_HAVE_SYNC_COMPARE_AND_SWAP_16)
+#define BOOST_ATOMIC_X86_HAS_CMPXCHG16B 1
 #endif
 
 inline void
@@ -257,9 +261,14 @@ namespace detail {
 template<typename T, bool Sign>
 class base_atomic<T, int, 1, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -395,9 +404,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, int, 2, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -533,9 +547,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, int, 4, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -672,9 +691,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, int, 8, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -811,14 +835,20 @@ private:
 
 /* pointers */
 
-#if !defined(__x86_64__)
+// NOTE: x32 target is still regarded to as x86_64 and can only be detected by the size of pointers
+#if !defined(__x86_64__) || (defined(__SIZEOF_POINTER__) && __SIZEOF_POINTER__ == 4)
 
 template<bool Sign>
 class base_atomic<void *, void *, 4, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef ptrdiff_t difference_type;
     typedef void * value_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -913,9 +943,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T *, void *, 4, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -1021,9 +1056,14 @@ private:
 template<bool Sign>
 class base_atomic<void *, void *, 8, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef ptrdiff_t difference_type;
     typedef void * value_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -1118,9 +1158,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T *, void *, 8, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -1226,9 +1271,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, void, 1, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint8_t storage_type;
+
+protected:
+    typedef value_type const& value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT :
         v_(reinterpret_cast<storage_type const&>(v))
@@ -1326,9 +1376,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, void, 2, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint16_t storage_type;
+
+protected:
+    typedef value_type const& value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT :
         v_(reinterpret_cast<storage_type const&>(v))
@@ -1426,9 +1481,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, void, 4, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
+
+protected:
+    typedef value_type const& value_arg_type;
+
 public:
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
@@ -1528,9 +1588,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, void, 8, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint64_t storage_type;
+
+protected:
+    typedef value_type const& value_arg_type;
+
 public:
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {

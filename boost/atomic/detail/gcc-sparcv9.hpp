@@ -12,7 +12,7 @@
 #include <boost/cstdint.hpp>
 #include <boost/atomic/detail/config.hpp>
 
-#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -177,10 +177,15 @@ namespace detail {
 template<typename T>
 class base_atomic<T, int, 1, true>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef int32_t storage_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -300,10 +305,15 @@ private:
 template<typename T>
 class base_atomic<T, int, 1, false>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef uint32_t storage_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -423,10 +433,15 @@ private:
 template<typename T>
 class base_atomic<T, int, 2, true>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef int32_t storage_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -546,10 +561,15 @@ private:
 template<typename T>
 class base_atomic<T, int, 2, false>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
     typedef uint32_t storage_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -669,9 +689,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, int, 4, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef T difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -791,9 +816,14 @@ private:
 template<bool Sign>
 class base_atomic<void *, void *, 4, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef ptrdiff_t difference_type;
     typedef void * value_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -885,9 +915,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T *, void *, 4, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -983,9 +1018,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, void, 1, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
+
+protected:
+    typedef value_type const& value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
@@ -1073,9 +1113,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, void, 2, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
+
+protected:
+    typedef value_type const& value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
@@ -1163,9 +1208,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T, void, 4, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T value_type;
     typedef uint32_t storage_type;
+
+protected:
+    typedef value_type const& value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {

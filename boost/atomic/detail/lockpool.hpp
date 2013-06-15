@@ -12,7 +12,7 @@
 #include <boost/thread/mutex.hpp>
 #endif
 
-#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -31,9 +31,6 @@ public:
     private:
         lock_type& mtx_;
 
-        scoped_lock(scoped_lock const&) /* = delete */;
-        scoped_lock& operator=(scoped_lock const&) /* = delete */;
-
     public:
         explicit
         scoped_lock(const volatile void * addr) : mtx_(get_lock_for(addr))
@@ -44,6 +41,9 @@ public:
         {
             mtx_.unlock();
         }
+
+        BOOST_DELETED_FUNCTION(scoped_lock(scoped_lock const&))
+        BOOST_DELETED_FUNCTION(scoped_lock& operator=(scoped_lock const&))
     };
 
 private:
@@ -61,10 +61,6 @@ public:
     {
     private:
         atomic_flag& flag_;
-        uint8_t padding[128 - sizeof(atomic_flag)];
-
-        scoped_lock(const scoped_lock &) /* = delete */;
-        scoped_lock& operator=(const scoped_lock &) /* = delete */;
 
     public:
         explicit
@@ -82,6 +78,9 @@ public:
         {
             flag_.clear(memory_order_release);
         }
+
+        BOOST_DELETED_FUNCTION(scoped_lock(const scoped_lock &))
+        BOOST_DELETED_FUNCTION(scoped_lock& operator=(const scoped_lock &))
     };
 
 private:

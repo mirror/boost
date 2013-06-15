@@ -11,11 +11,15 @@
 
 #include <boost/atomic/detail/config.hpp>
 
-#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
-#if defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
+#if (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 407)) || (defined(BOOST_CLANG) && ((__clang_major__ * 100 + __clang_minor__) >= 302))
+
+    #include <boost/atomic/detail/gcc-atomic.hpp>
+
+#elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
 
     #include <boost/atomic/detail/gcc-x86.hpp>
 

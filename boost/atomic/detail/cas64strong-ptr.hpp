@@ -23,7 +23,7 @@
 #include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/base.hpp>
 
-#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -36,9 +36,14 @@ namespace detail {
 template<bool Sign>
 class base_atomic<void *, void *, 8, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef void * value_type;
     typedef ptrdiff_t difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}
@@ -132,9 +137,14 @@ private:
 template<typename T, bool Sign>
 class base_atomic<T *, void *, 8, Sign>
 {
+private:
     typedef base_atomic this_type;
     typedef T * value_type;
     typedef ptrdiff_t difference_type;
+
+protected:
+    typedef value_type value_arg_type;
+
 public:
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     base_atomic(void) {}

@@ -22,7 +22,7 @@
 #include <boost/mpl/and.hpp>
 #endif
 
-#ifdef BOOST_ATOMIC_HAS_PRAGMA_ONCE
+#ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
@@ -112,11 +112,18 @@ private:
         mpl::and_< boost::is_integral<T>, boost::is_signed<T> >::value
 #endif
     > super;
-public:
-    atomic(void) BOOST_NOEXCEPT : super() {}
-    BOOST_CONSTEXPR atomic(value_type v) BOOST_NOEXCEPT : super(v) {}
+    typedef typename super::value_arg_type value_arg_type;
 
-    value_type operator=(value_type v) volatile BOOST_NOEXCEPT
+public:
+    BOOST_DEFAULTED_FUNCTION(atomic(void), BOOST_NOEXCEPT {})
+
+    // NOTE: The constructor is made explicit because gcc 4.7 complains that
+    //       operator=(value_arg_type) is considered ambiguous with operator=(atomic const&)
+    //       in assignment expressions, even though conversion to atomic<> is less preferred
+    //       than conversion to value_arg_type.
+    explicit BOOST_CONSTEXPR atomic(value_arg_type v) BOOST_NOEXCEPT : super(v) {}
+
+    value_type operator=(value_arg_type v) volatile BOOST_NOEXCEPT
     {
         this->store(v);
         return v;
@@ -127,14 +134,9 @@ public:
         return this->load();
     }
 
-#ifdef BOOST_NO_CXX11_DELETED_FUNCTIONS
-private:
-    atomic(const atomic &) /* =delete */ ;
-    atomic & operator=(const atomic &) volatile /* =delete */ ;
-#else
-    atomic(const atomic &) = delete;
-    atomic & operator=(const atomic &) volatile = delete;
-#endif
+    BOOST_DELETED_FUNCTION(atomic(atomic const&))
+    BOOST_DELETED_FUNCTION(atomic& operator=(atomic const&))
+    BOOST_DELETED_FUNCTION(atomic& operator=(atomic const&) volatile)
 };
 
 typedef atomic<char> atomic_char;
@@ -229,9 +231,11 @@ public:
     {
         v_.store(false, order);
     }
+
+    BOOST_DELETED_FUNCTION(atomic_flag(atomic_flag const&))
+    BOOST_DELETED_FUNCTION(atomic_flag& operator=(atomic_flag const&))
+
 private:
-    atomic_flag(const atomic_flag &) /* = delete */ ;
-    atomic_flag & operator=(const atomic_flag &) /* = delete */ ;
     atomic<bool> v_;
 };
 #endif
