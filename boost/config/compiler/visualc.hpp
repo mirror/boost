@@ -34,6 +34,10 @@
 // Attempt to suppress VC6 warnings about the length of decorated names (obsolete):
 #pragma warning( disable : 4503 ) // warning: decorated name length exceeded
 
+#if _MSC_VER >= 1020
+#  define BOOST_HAS_PRAGMA_ONCE
+#endif
+
 //
 // versions check:
 // we don't support Visual C++ prior to version 6:

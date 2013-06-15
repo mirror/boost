@@ -72,6 +72,12 @@
 #  endif
 
 #endif
+
+// Reportedly, #pragma once is supported since C++ Builder 2010
+#if (__CODEGEARC__ >= 0x620)
+#  define BOOST_HAS_PRAGMA_ONCE
+#endif
+
 //
 // C++0x macros:
 //

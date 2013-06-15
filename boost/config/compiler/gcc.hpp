@@ -80,6 +80,11 @@
 #  endif
 #endif
 
+// GCC prior to 3.4 had #pragma once too but it didn't work well with filesystem links
+#if __GNUC__ > 3 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)
+#define BOOST_HAS_PRAGMA_ONCE
+#endif
+
 #if __GNUC__ < 4 || ( __GNUC__ == 4 && __GNUC_MINOR__ < 4 )
 // Previous versions of GCC did not completely implement value-initialization:
 // GCC Bug 30111, "Value-initialization of POD base class doesn't initialize

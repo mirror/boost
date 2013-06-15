@@ -397,6 +397,12 @@ See [@../../../../boost/operators.hpp `<boost/operators.hpp>`] for example.
 The standard library has a partially conforming `std::allocator` class, but
 without any of the member templates.
 ]]
+[[`BOOST_HAS_PRAGMA_ONCE`][Compiler][
+The compiler recognizes the `#pragma once` directive which tells that the
+containing header should be included only once while preprocessing the
+current translation unit. The pragma may improve compile times of large projects
+with some compilers.
+]]
 [[`BOOST_HAS_PTHREAD_DELAY_NP`][Platform][
 The platform has the POSIX API `pthread_delay_np`.
 ]]

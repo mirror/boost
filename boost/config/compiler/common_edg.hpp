@@ -54,6 +54,11 @@
 #     define BOOST_NO_LONG_LONG
 # endif
 
+// Not sure what version was the first to support #pragma once, but
+// different EDG-based compilers (e.g. Intel) supported it for ages.
+// Add a proper version check if it causes problems.
+#define BOOST_HAS_PRAGMA_ONCE
+
 //
 // C++0x features
 //
