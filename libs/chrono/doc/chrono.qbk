@@ -7335,6 +7335,7 @@ All the units are given using the suffix "s" following the System International 
 * [@http://svn.boost.org/trac/boost/ticket/8435 #8435] Can't compile Chrono on HP-UX due to no CLOCK_REALTIME macro.
 * [@http://svn.boost.org/trac/boost/ticket/8690 #8690] duration_units_default - lost return types constness in overridden methods.
 * [@http://svn.boost.org/trac/boost/ticket/8691 #8691] iostate is not checked after scan_keyword call.
+* [@http://svn.boost.org/trac/boost/ticket/8696 #8696] chrono compilation error on Solaris/gcc.
 
 [endsect] [/section [*Version 2.0.2] ]
 
