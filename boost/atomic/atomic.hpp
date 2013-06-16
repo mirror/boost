@@ -196,25 +196,9 @@ typedef atomic<uintmax_t> atomic_uintmax_t;
 typedef atomic<std::size_t> atomic_size_t;
 typedef atomic<std::ptrdiff_t> atomic_ptrdiff_t;
 
-// PGI seems to not support intptr_t/uintptr_t properly. BOOST_HAS_STDINT_H is not defined for this compiler by Boost.Config.
-#if !defined(__PGIC__)
-
-#if (defined(BOOST_WINDOWS) && !defined(_WIN32_WCE)) \
-    || (defined(_XOPEN_UNIX) && (_XOPEN_UNIX+0 > 0) && !defined(__UCLIBC__)) \
-    || defined(__CYGWIN__) \
-    || defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__) \
-    || defined(__FreeBSD__) || defined(__NetBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+#if defined(BOOST_HAS_INTPTR_T)
 typedef atomic<intptr_t> atomic_intptr_t;
 typedef atomic<uintptr_t> atomic_uintptr_t;
-#elif defined(__GNUC__) || defined(__clang__)
-#if defined(__INTPTR_TYPE__)
-typedef atomic< __INTPTR_TYPE__ > atomic_intptr_t;
-#endif
-#if defined(__UINTPTR_TYPE__)
-typedef atomic< __UINTPTR_TYPE__ > atomic_uintptr_t;
-#endif
-#endif
-
 #endif
 
 #ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
