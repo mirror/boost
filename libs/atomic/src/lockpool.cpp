@@ -14,7 +14,8 @@ namespace detail {
 namespace {
 
 // This seems to be the maximum across all modern CPUs
-enum { cache_line_size = 64 };
+// NOTE: This constant is made as a macro because some compilers (gcc 4.4 for one) don't allow enums or regular constants in alignment attributes
+#define BOOST_ATOMIC_CACHE_LINE_SIZE 64
 
 template< unsigned int N >
 struct padding
@@ -26,11 +27,13 @@ struct padding< 0 >
 {
 };
 
-struct BOOST_ALIGNMENT(cache_line_size) padded_lock
+struct BOOST_ALIGNMENT(BOOST_ATOMIC_CACHE_LINE_SIZE) padded_lock
 {
     lockpool::lock_type lock;
     // The additional padding is needed to avoid false sharing between locks
-    enum { padding_size = (sizeof(lockpool::lock_type) <= cache_line_size ? (cache_line_size - sizeof(lockpool::lock_type)) : (cache_line_size - sizeof(lockpool::lock_type) % cache_line_size)) };
+    enum { padding_size = (sizeof(lockpool::lock_type) <= BOOST_ATOMIC_CACHE_LINE_SIZE ?
+        (BOOST_ATOMIC_CACHE_LINE_SIZE - sizeof(lockpool::lock_type)) :
+        (BOOST_ATOMIC_CACHE_LINE_SIZE - sizeof(lockpool::lock_type) % BOOST_ATOMIC_CACHE_LINE_SIZE)) };
     padding< padding_size > pad;
 };
 

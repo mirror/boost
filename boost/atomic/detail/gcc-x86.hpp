@@ -213,8 +213,10 @@ public:
 
 #if defined(__x86_64__) || defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B)
 #define BOOST_ATOMIC_LLONG_LOCK_FREE 2
-#else
-#define BOOST_ATOMIC_LLONG_LOCK_FREE 0
+#endif
+
+#if defined(BOOST_ATOMIC_X86_HAS_CMPXCHG16B) && (defined(BOOST_HAS_INT128) || !defined(BOOST_NO_ALIGNMENT))
+#define BOOST_ATOMIC_INT128_LOCK_FREE 2
 #endif
 
 #define BOOST_ATOMIC_POINTER_LOCK_FREE 2
@@ -270,8 +272,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -296,9 +298,12 @@ public:
     fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "lock ; xaddb %0, %1"
             : "+q" (v), "+m" (v_)
+            :
+            : "cc"
         );
         platform_fence_after(order);
         return v;
@@ -314,7 +319,8 @@ public:
     exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgb %0, %1"
             : "+q" (v), "+m" (v_)
         );
@@ -331,12 +337,15 @@ public:
     {
         value_type previous = expected;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgb %2, %1"
-            : "+a" (previous), "+m" (v_)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgb %3, %1\n\t"
+            "sete %2"
+            : "+a" (previous), "+m" (v_), "=q" (success)
             : "q" (desired)
+            : "cc"
         );
-        bool success = (previous == expected);
         if (success)
             platform_fence_after(success_order);
         else
@@ -359,7 +368,7 @@ public:
     fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for(; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -370,7 +379,7 @@ public:
     fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -381,7 +390,7 @@ public:
     fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -395,9 +404,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -413,8 +424,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -439,9 +450,12 @@ public:
     fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "lock ; xaddw %0, %1"
             : "+q" (v), "+m" (v_)
+            :
+            : "cc"
         );
         platform_fence_after(order);
         return v;
@@ -457,7 +471,8 @@ public:
     exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgw %0, %1"
             : "+q" (v), "+m" (v_)
         );
@@ -474,12 +489,15 @@ public:
     {
         value_type previous = expected;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgw %2, %1"
-            : "+a" (previous), "+m" (v_)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgw %3, %1\n\t"
+            "sete %2"
+            : "+a" (previous), "+m" (v_), "=q" (success)
             : "q" (desired)
+            : "cc"
         );
-        bool success = (previous == expected);
         if (success)
             platform_fence_after(success_order);
         else
@@ -502,7 +520,7 @@ public:
     fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -513,7 +531,7 @@ public:
     fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -524,7 +542,7 @@ public:
     fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -538,9 +556,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -556,8 +576,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -582,9 +602,12 @@ public:
     fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "lock ; xaddl %0, %1"
             : "+r" (v), "+m" (v_)
+            :
+            : "cc"
         );
         platform_fence_after(order);
         return v;
@@ -600,7 +623,8 @@ public:
     exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgl %0, %1"
             : "+r" (v), "+m" (v_)
         );
@@ -617,12 +641,15 @@ public:
     {
         value_type previous = expected;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgl %2, %1"
-            : "+a" (previous), "+m" (v_)
-            : "r" (desired)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgl %3, %1\n\t"
+            "sete %2"
+            : "+a,a" (previous), "+m,m" (v_), "=q,m" (success)
+            : "r,r" (desired)
+            : "cc"
         );
-        bool success = (previous == expected);
         if (success)
             platform_fence_after(success_order);
         else
@@ -645,7 +672,7 @@ public:
     fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -656,7 +683,7 @@ public:
     fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -667,7 +694,7 @@ public:
     fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -681,9 +708,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -700,8 +729,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -726,9 +755,12 @@ public:
     fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "lock ; xaddq %0, %1"
             : "+r" (v), "+m" (v_)
+            :
+            : "cc"
         );
         platform_fence_after(order);
         return v;
@@ -744,7 +776,8 @@ public:
     exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgq %0, %1"
             : "+r" (v), "+m" (v_)
         );
@@ -761,12 +794,15 @@ public:
     {
         value_type previous = expected;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgq %2, %1"
-            : "+a" (previous), "+m" (v_)
-            : "r" (desired)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgq %3, %1\n\t"
+            "sete %2"
+            : "+a,a" (previous), "+m,m" (v_), "=q,m" (success)
+            : "r,r" (desired)
+            : "cc"
         );
-        bool success = (previous == expected);
         if (success)
             platform_fence_after(success_order);
         else
@@ -789,7 +825,7 @@ public:
     fetch_and(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp & v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -800,7 +836,7 @@ public:
     fetch_or(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp | v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -811,7 +847,7 @@ public:
     fetch_xor(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         value_type tmp = load(memory_order_relaxed);
-        for (; !compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed);)
+        while (!compare_exchange_weak(tmp, tmp ^ v, order, memory_order_relaxed))
         {
             BOOST_ATOMIC_X86_PAUSE();
         }
@@ -825,9 +861,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -850,8 +888,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -874,7 +912,8 @@ public:
     value_type exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgl %0, %1"
             : "+r" (v), "+m" (v_)
         );
@@ -888,12 +927,15 @@ public:
     {
         value_type previous = expected;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgl %2, %1"
-            : "+a" (previous), "+m" (v_)
-            : "r" (desired)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgl %3, %1\n\t"
+            "sete %2"
+            : "+a,a" (previous), "+m,m" (v_), "=q,m" (success)
+            : "r,r" (desired)
+            : "cc"
         );
-        bool success = (previous == expected);
         if (success)
             platform_fence_after(success_order);
         else
@@ -919,10 +961,13 @@ public:
     fetch_add(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
-        "lock ; xaddl %0, %1"
-        : "+r" (v), "+m" (v_)
-                );
+        __asm__ __volatile__
+        (
+            "lock ; xaddl %0, %1"
+            : "+r" (v), "+m" (v_)
+            :
+            : "cc"
+        );
         platform_fence_after(order);
         return reinterpret_cast<value_type>(v);
     }
@@ -934,9 +979,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -952,8 +999,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -978,7 +1025,8 @@ public:
     exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgl %0, %1"
             : "+r" (v), "+m" (v_)
         );
@@ -995,12 +1043,15 @@ public:
     {
         value_type previous = expected;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgl %2, %1"
-            : "+a" (previous), "+m" (v_)
-            : "r" (desired)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgl %3, %1\n\t"
+            "sete %2"
+            : "+a,a" (previous), "+m,m" (v_), "=q,m" (success)
+            : "r,r" (desired)
+            : "cc"
         );
-        bool success = (previous == expected);
         if (success)
             platform_fence_after(success_order);
         else
@@ -1024,9 +1075,12 @@ public:
     {
         v = v * sizeof(*v_);
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "lock ; xaddl %0, %1"
             : "+r" (v), "+m" (v_)
+            :
+            : "cc"
         );
         platform_fence_after(order);
         return reinterpret_cast<value_type>(v);
@@ -1045,9 +1099,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_POINTER_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -1065,8 +1121,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -1089,7 +1145,8 @@ public:
     value_type exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgq %0, %1"
             : "+r" (v), "+m" (v_)
         );
@@ -1103,12 +1160,15 @@ public:
     {
         value_type previous = expected;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgq %2, %1"
-            : "+a" (previous), "+m" (v_)
-            : "r" (desired)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgq %3, %1\n\t"
+            "sete %2"
+            : "+a,a" (previous), "+m,m" (v_), "=q,m" (success)
+            : "r,r" (desired)
+            : "cc"
         );
-        bool success = (previous == expected);
         if (success)
             platform_fence_after(success_order);
         else
@@ -1134,9 +1194,12 @@ public:
     fetch_add(difference_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "lock ; xaddq %0, %1"
             : "+r" (v), "+m" (v_)
+            :
+            : "cc"
         );
         platform_fence_after(order);
         return reinterpret_cast<value_type>(v);
@@ -1149,9 +1212,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -1167,8 +1232,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -1193,7 +1258,8 @@ public:
     exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgq %0, %1"
             : "+r" (v), "+m" (v_)
         );
@@ -1210,12 +1276,15 @@ public:
     {
         value_type previous = expected;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgq %2, %1"
-            : "+a" (previous), "+m" (v_)
-            : "r" (desired)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgq %3, %1\n\t"
+            "sete %2"
+            : "+a,a" (previous), "+m,m" (v_), "=q,m" (success)
+            : "r,r" (desired)
+            : "cc"
         );
-        bool success = (previous == expected);
         if (success)
             platform_fence_after(success_order);
         else
@@ -1239,9 +1308,12 @@ public:
     {
         v = v * sizeof(*v_);
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "lock ; xaddq %0, %1"
             : "+r" (v), "+m" (v_)
+            :
+            : "cc"
         );
         platform_fence_after(order);
         return reinterpret_cast<value_type>(v);
@@ -1260,9 +1332,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_POINTER_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -1280,10 +1354,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT :
         v_(reinterpret_cast<storage_type const&>(v))
-    {}
-    base_atomic(void) {}
+    {
+    }
 
     void
     store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -1314,7 +1389,8 @@ public:
         storage_type tmp;
         memcpy(&tmp, &v, sizeof(value_type));
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgb %0, %1"
             : "+q" (tmp), "+m" (v_)
         );
@@ -1336,12 +1412,15 @@ public:
         memcpy(&desired_s, &desired, sizeof(value_type));
         storage_type previous_s = expected_s;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgb %2, %1"
-            : "+a" (previous_s), "+m" (v_)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgb %3, %1\n\t"
+            "sete %2"
+            : "+a" (previous_s), "+m" (v_), "=q" (success)
             : "q" (desired_s)
+            : "cc"
         );
-        bool success = (previous_s == expected_s);
         if (success)
             platform_fence_after(success_order);
         else
@@ -1367,9 +1446,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 
@@ -1385,10 +1466,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT :
         v_(reinterpret_cast<storage_type const&>(v))
-    {}
-    base_atomic(void) {}
+    {
+    }
 
     void
     store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -1419,7 +1501,8 @@ public:
         storage_type tmp;
         memcpy(&tmp, &v, sizeof(value_type));
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgw %0, %1"
             : "+q" (tmp), "+m" (v_)
         );
@@ -1441,12 +1524,15 @@ public:
         memcpy(&desired_s, &desired, sizeof(value_type));
         storage_type previous_s = expected_s;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgw %2, %1"
-            : "+a" (previous_s), "+m" (v_)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgw %3, %1\n\t"
+            "sete %2"
+            : "+a" (previous_s), "+m" (v_), "=q" (success)
             : "q" (desired_s)
+            : "cc"
         );
-        bool success = (previous_s == expected_s);
         if (success)
             platform_fence_after(success_order);
         else
@@ -1472,9 +1558,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 
@@ -1490,11 +1578,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-    base_atomic(void) {}
 
     void
     store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -1525,7 +1613,8 @@ public:
         storage_type tmp = 0;
         memcpy(&tmp, &v, sizeof(value_type));
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgl %0, %1"
             : "+q" (tmp), "+m" (v_)
         );
@@ -1547,12 +1636,15 @@ public:
         memcpy(&desired_s, &desired, sizeof(value_type));
         storage_type previous_s = expected_s;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgl %2, %1"
-            : "+a" (previous_s), "+m" (v_)
-            : "q" (desired_s)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgl %3, %1\n\t"
+            "sete %2"
+            : "+a,a" (previous_s), "+m,m" (v_), "=q,m" (success)
+            : "q,q" (desired_s)
+            : "cc"
         );
-        bool success = (previous_s == expected_s);
         if (success)
             platform_fence_after(success_order);
         else
@@ -1578,9 +1670,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 
@@ -1597,11 +1691,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-    base_atomic(void) {}
 
     void
     store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -1632,7 +1726,8 @@ public:
         storage_type tmp = 0;
         memcpy(&tmp, &v, sizeof(value_type));
         platform_fence_before(order);
-        __asm__ (
+        __asm__ __volatile__
+        (
             "xchgq %0, %1"
             : "+q" (tmp), "+m" (v_)
         );
@@ -1654,12 +1749,15 @@ public:
         memcpy(&desired_s, &desired, sizeof(value_type));
         storage_type previous_s = expected_s;
         platform_fence_before(success_order);
-        __asm__ (
-            "lock ; cmpxchgq %2, %1"
-            : "+a" (previous_s), "+m" (v_)
-            : "q" (desired_s)
+        bool success;
+        __asm__ __volatile__
+        (
+            "lock ; cmpxchgq %3, %1\n\t"
+            "sete %2"
+            : "+a,a" (previous_s), "+m,m" (v_), "=q,m" (success)
+            : "q,q" (desired_s)
+            : "cc"
         );
-        bool success = (previous_s == expected_s);
         if (success)
             platform_fence_after(success_order);
         else
@@ -1685,9 +1783,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 #endif
@@ -1720,17 +1820,18 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr) BOOST_NOEXC
 
     In theory, could push/pop ebx onto/off the stack, but movs
     to a prepared stack slot turn out to be faster. */
+    bool success;
     __asm__ __volatile__
     (
-        "movl %%ebx, %1\n"
-        "movl %2, %%ebx\n"
-        "lock; cmpxchg8b 0(%4)\n"
-        "movl %1, %%ebx\n"
-        : "=A" (prev), "=m" (scratch)
-        : "D" ((uint32_t)desired), "c" ((uint32_t)(desired >> 32)), "S" (ptr), "0" (prev)
-        : "memory"
+        "movl %%ebx, %[scratch]\n\t"
+        "movl %[desired_lo], %%ebx\n\t"
+        "lock; cmpxchg8b 0(%[dest])\n\t"
+        "movl %[scratch], %%ebx\n\t"
+        "sete %[success]"
+        : "+A,A,A,A,A,A,A,A" (prev), [scratch] "=m,m,m,m,m,m,m,m" (scratch), [success] "=q,m,q,m,q,m,q,m" (success)
+        : [desired_lo] "S,S,D,D,m,m,m,m" ((uint32_t)desired), "c,c,c,c,c,c,c,c" ((uint32_t)(desired >> 32)), [dest] "D,D,S,S,D,D,S,S" (ptr)
+        : "memory", "cc"
     );
-    bool success = (prev == expected);
     expected = prev;
     return success;
 #endif
@@ -1772,11 +1873,21 @@ platform_store64(T value, volatile T * ptr) BOOST_NOEXCEPT
     }
     else
     {
-        T expected = *ptr;
-        while (!platform_cmpxchg64_strong(expected, value, ptr))
-        {
-            BOOST_ATOMIC_X86_PAUSE();
-        }
+        uint32_t scratch;
+        __asm__ __volatile__
+        (
+            "movl %%ebx, %[scratch]\n\t"
+            "movl %[value_lo], %%ebx\n\t"
+            "movl 0(%[dest]), %%eax\n\t"
+            "movl 4(%[dest]), %%edx\n\t"
+            ".align 16\n\t"
+            "1: lock; cmpxchg8b 0(%[dest])\n\t"
+            "jne 1b\n\t"
+            "movl %[scratch], %%ebx"
+            : [scratch] "=m,m" (scratch)
+            : [value_lo] "S,D" ((uint32_t)value), "c,c" ((uint32_t)(value >> 32)), [dest] "D,S" (ptr)
+            : "memory", "cc", "eax", "edx"
+        );
     }
 }
 
@@ -1810,15 +1921,88 @@ platform_load64(const volatile T * ptr) BOOST_NOEXCEPT
     }
     else
     {
-        value = T();
         // We don't care for comparison result here; the previous value will be stored into value anyway.
-        platform_cmpxchg64_strong(value, value, const_cast<volatile T*>(ptr));
+        uint32_t scratch;
+        __asm__ __volatile__
+        (
+            "movl %%ebx, %[scratch]\n\t"
+            "xorl %%eax, %%eax\n\t"
+            "xorl %%ebx, %%ebx\n\t"
+            "xorl %%ecx, %%ecx\n\t"
+            "xorl %%edx, %%edx\n\t"
+            "lock; cmpxchg8b 0(%[dest])\n\t"
+            "movl %[scratch], %%ebx"
+            : "=A,A" (value), [scratch] "=m,m" (scratch)
+            : [dest] "D,S" (ptr)
+            : "cc", "ecx"
+        );
     }
 
     return value;
 }
 
 #endif
+
+#if defined(BOOST_ATOMIC_INT128_LOCK_FREE) && BOOST_ATOMIC_INT128_LOCK_FREE > 0
+
+template<typename T>
+inline bool
+platform_cmpxchg128_strong(T& expected, T desired, volatile T* ptr) BOOST_NOEXCEPT
+{
+    uint64_t const* p_desired = (uint64_t const*)&desired;
+    bool success;
+    __asm__ __volatile__
+    (
+        "lock; cmpxchg16b 0(%[dest])\n\t"
+        "sete %[success]"
+        : "+A,A,A,A" (expected), [success] "=q,m,q,m" (success)
+        : "b,b,b,b" (p_desired[0]), "c,c,c,c" (p_desired[1]), [dest] "D,D,S,S" (ptr)
+        : "memory", "cc"
+    );
+    return success;
+}
+
+template<typename T>
+inline void
+platform_store128(T value, volatile T* ptr) BOOST_NOEXCEPT
+{
+    uint64_t const* p_value = (uint64_t const*)&value;
+    __asm__ __volatile__
+    (
+        "movq 0(%[dest]), %%rax\n\t"
+        "movq 8(%[dest]), %%rdx\n\t"
+        ".align 16\n\t"
+        "1: lock; cmpxchg16b 0(%[dest])\n\t"
+        "jne 1b\n\t"
+        :
+        : "b" (p_value[0]), "c" (p_value[1]), [dest] "D,S" (ptr)
+        : "memory", "cc", "rax", "rdx"
+    );
+}
+
+template<typename T>
+inline T
+platform_load128(const volatile T* ptr) BOOST_NOEXCEPT
+{
+    T value;
+
+    // We don't care for comparison result here; the previous value will be stored into value anyway.
+    __asm__ __volatile__
+    (
+        "xorq %%rax, %%rax\n\t"
+        "xorq %%rbx, %%rbx\n\t"
+        "xorq %%rcx, %%rcx\n\t"
+        "xorq %%rdx, %%rdx\n\t"
+        "lock; cmpxchg16b 0(%[dest])\n\t"
+        : "=A,A" (value)
+        : [dest] "D,S" (ptr)
+        : "cc", "rbx", "rcx"
+    );
+
+    return value;
+}
+
+#endif // defined(BOOST_ATOMIC_INT128_LOCK_FREE) && BOOST_ATOMIC_INT128_LOCK_FREE > 0
 
 }
 }
@@ -1827,6 +2011,11 @@ platform_load64(const volatile T * ptr) BOOST_NOEXCEPT
 /* pull in 64-bit atomic type using cmpxchg8b above */
 #if !defined(__x86_64__) && defined(BOOST_ATOMIC_X86_HAS_CMPXCHG8B)
 #include <boost/atomic/detail/cas64strong.hpp>
+#endif
+
+/* pull in 128-bit atomic type using cmpxchg16b above */
+#if defined(BOOST_ATOMIC_INT128_LOCK_FREE) && BOOST_ATOMIC_INT128_LOCK_FREE > 0
+#include <boost/atomic/detail/cas128strong.hpp>
 #endif
 
 #endif /* !defined(BOOST_ATOMIC_FORCE_FALLBACK) */

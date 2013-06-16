@@ -25,16 +25,17 @@ namespace boost {
 inline void
 atomic_thread_fence(memory_order order)
 {
-    switch(order) {
-        case memory_order_relaxed:
-            break;
-        case memory_order_release:
-        case memory_order_consume:
-        case memory_order_acquire:
-        case memory_order_acq_rel:
-        case memory_order_seq_cst:
-            __sync_synchronize();
-            break;
+    switch(order)
+    {
+    case memory_order_relaxed:
+        break;
+    case memory_order_release:
+    case memory_order_consume:
+    case memory_order_acquire:
+    case memory_order_acq_rel:
+    case memory_order_seq_cst:
+        __sync_synchronize();
+        break;
     }
 }
 
@@ -56,16 +57,17 @@ platform_fence_after(memory_order)
 inline void
 platform_fence_before_store(memory_order order)
 {
-    switch(order) {
-        case memory_order_relaxed:
-        case memory_order_acquire:
-        case memory_order_consume:
-            break;
-        case memory_order_release:
-        case memory_order_acq_rel:
-        case memory_order_seq_cst:
-            __sync_synchronize();
-            break;
+    switch(order)
+    {
+    case memory_order_relaxed:
+    case memory_order_acquire:
+    case memory_order_consume:
+        break;
+    case memory_order_release:
+    case memory_order_acq_rel:
+    case memory_order_seq_cst:
+        __sync_synchronize();
+        break;
     }
 }
 
@@ -79,16 +81,17 @@ platform_fence_after_store(memory_order order)
 inline void
 platform_fence_after_load(memory_order order)
 {
-    switch(order) {
-        case memory_order_relaxed:
-        case memory_order_release:
-            break;
-        case memory_order_consume:
-        case memory_order_acquire:
-        case memory_order_acq_rel:
-        case memory_order_seq_cst:
-            __sync_synchronize();
-            break;
+    switch(order)
+    {
+    case memory_order_relaxed:
+    case memory_order_release:
+        break;
+    case memory_order_consume:
+    case memory_order_acquire:
+    case memory_order_acq_rel:
+    case memory_order_seq_cst:
+        __sync_synchronize();
+        break;
     }
 }
 
@@ -132,6 +135,7 @@ public:
         return expected;
     }
 };
+
 #define BOOST_ATOMIC_FLAG_LOCK_FREE 2
 
 }

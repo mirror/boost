@@ -163,6 +163,7 @@ public:
         return expected;
     }
 };
+
 #define BOOST_ATOMIC_FLAG_LOCK_FREE 2
 
 }

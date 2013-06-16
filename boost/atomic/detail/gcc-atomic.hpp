@@ -98,6 +98,9 @@ public:
 #if __GCC_ATOMIC_LLONG_LOCK_FREE == 2
 #define BOOST_ATOMIC_LLONG_LOCK_FREE 2
 #endif
+#if defined(BOOST_ATOMIC_X86_HAS_CMPXCHG16B) && (defined(BOOST_HAS_INT128) || !defined(BOOST_NO_ALIGNMENT))
+#define BOOST_ATOMIC_INT128_LOCK_FREE 2
+#endif
 #if __GCC_ATOMIC_POINTER_LOCK_FREE == 2
 #define BOOST_ATOMIC_POINTER_LOCK_FREE 2
 #endif
@@ -136,8 +139,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
-    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
 
     void store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -227,10 +230,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT :
         v_(reinterpret_cast<storage_type const&>(v))
-    {}
-    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    {
+    }
 
     void store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -303,8 +307,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
-    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
 
     void store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -394,10 +398,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type const& v) BOOST_NOEXCEPT :
         v_(reinterpret_cast<storage_type const&>(v))
-    {}
-    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    {
+    }
 
     void store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -470,8 +475,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
-    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
 
     void store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -561,11 +566,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
 
     void store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -654,8 +659,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
-    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
 
     void store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -745,11 +750,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
 
     void store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -824,7 +829,7 @@ private:
 
 #endif // defined(BOOST_ATOMIC_LLONG_LOCK_FREE) && BOOST_ATOMIC_LLONG_LOCK_FREE > 0
 
-#if defined(BOOST_ATOMIC_X86_HAS_CMPXCHG16B) && defined(BOOST_HAS_INT128)
+#if defined(BOOST_ATOMIC_INT128_LOCK_FREE) && BOOST_ATOMIC_INT128_LOCK_FREE > 0
 
 template<typename T, bool Sign>
 class base_atomic<T, int, 16, Sign>
@@ -838,8 +843,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
-    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
 
     void store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -917,23 +922,45 @@ private:
     value_type v_;
 };
 
+#if defined(BOOST_HAS_INT128)
+
+typedef boost::uint128_type storage128_type;
+
+#else // defined(BOOST_HAS_INT128)
+
+struct BOOST_ALIGNMENT(16) storage128_type
+{
+    uint64_t data[2];
+};
+
+inline bool operator== (storage128_type const& left, storage128_type const& right)
+{
+    return left.data[0] == right.data[0] && left.data[1] == right.data[1];
+}
+inline bool operator!= (storage128_type const& left, storage128_type const& right)
+{
+    return !(left == right);
+}
+
+#endif // defined(BOOST_HAS_INT128)
+
 template<typename T, bool Sign>
 class base_atomic<T, void, 16, Sign>
 {
 private:
     typedef base_atomic this_type;
     typedef T value_type;
-    typedef uint128_type storage_type;
+    typedef storage128_type storage_type;
 
 protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
 
     void store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -1006,7 +1033,7 @@ private:
     storage_type v_;
 };
 
-#endif // defined(BOOST_ATOMIC_X86_HAS_CMPXCHG16B) && defined(BOOST_HAS_INT128)
+#endif // defined(BOOST_ATOMIC_INT128_LOCK_FREE) && BOOST_ATOMIC_INT128_LOCK_FREE > 0
 
 
 /* pointers */
@@ -1025,8 +1052,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
-    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
 
     void store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
@@ -1101,8 +1128,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
-    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
     BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
+    BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
 
     void store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {

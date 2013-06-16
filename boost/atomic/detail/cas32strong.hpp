@@ -41,8 +41,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -155,9 +155,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 
@@ -174,8 +176,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -288,9 +290,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 
@@ -306,8 +310,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -416,9 +420,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_INTEGRAL_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -436,8 +442,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -519,9 +525,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_VOID_POINTER_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -537,8 +545,8 @@ protected:
     typedef value_type value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     BOOST_CONSTEXPR explicit base_atomic(value_type v) BOOST_NOEXCEPT : v_(v) {}
-    base_atomic(void) {}
 
     void
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -620,9 +628,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_POINTER_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     value_type v_;
 };
 
@@ -640,12 +650,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-
-    base_atomic(void) {}
 
     void
     store(value_type const& v, memory_order order = memory_order_seq_cst) ) volatile BOOST_NOEXCEPT
@@ -718,9 +727,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 
@@ -736,12 +747,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-
-    base_atomic(void) {}
 
     void
     store(value_type const& v, memory_order order = memory_order_seq_cst) ) volatile BOOST_NOEXCEPT
@@ -815,9 +825,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 
@@ -833,12 +845,11 @@ protected:
     typedef value_type const& value_arg_type;
 
 public:
+    BOOST_DEFAULTED_FUNCTION(base_atomic(void), {})
     explicit base_atomic(value_type const& v) BOOST_NOEXCEPT : v_(0)
     {
         memcpy(&v_, &v, sizeof(value_type));
     }
-
-    base_atomic(void) {}
 
     void
     store(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
@@ -912,9 +923,11 @@ public:
     }
 
     BOOST_ATOMIC_DECLARE_BASE_OPERATORS
+
+    BOOST_DELETED_FUNCTION(base_atomic(base_atomic const&))
+    BOOST_DELETED_FUNCTION(base_atomic& operator=(base_atomic const&))
+
 private:
-    base_atomic(const base_atomic &) /* = delete */ ;
-    void operator=(const base_atomic &) /* = delete */ ;
     storage_type v_;
 };
 
