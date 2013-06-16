@@ -139,7 +139,6 @@ public:
     }
 
     BOOST_DELETED_FUNCTION(atomic(atomic const&))
-    BOOST_DELETED_FUNCTION(atomic& operator=(atomic const&))
     BOOST_DELETED_FUNCTION(atomic& operator=(atomic const&) volatile)
 };
 
