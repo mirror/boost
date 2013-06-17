@@ -1805,7 +1805,6 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr) BOOST_NOEXC
     return result;
 #else
     uint32_t scratch;
-    T prev = expected;
     /* Make sure ebx is saved and restored properly in case
     this object is compiled as "position independent". Since
     programmers on x86 tend to forget specifying -DPIC or
@@ -1825,14 +1824,13 @@ platform_cmpxchg64_strong(T & expected, T desired, volatile T * ptr) BOOST_NOEXC
     (
         "movl %%ebx, %[scratch]\n\t"
         "movl %[desired_lo], %%ebx\n\t"
-        "lock; cmpxchg8b 0(%[dest])\n\t"
+        "lock; cmpxchg8b %[dest]\n\t"
         "movl %[scratch], %%ebx\n\t"
         "sete %[success]"
-        : "+A,A,A,A,A,A,A,A" (prev), [scratch] "=m,m,m,m,m,m,m,m" (scratch), [success] "=q,m,q,m,q,m,q,m" (success)
-        : [desired_lo] "S,S,D,D,m,m,m,m" ((uint32_t)desired), "c,c,c,c,c,c,c,c" ((uint32_t)(desired >> 32)), [dest] "D,D,S,S,D,D,S,S" (ptr)
+        : "+A,A,A,A,A,A" (expected), [dest] "+m,m,m,m,m,m" (*ptr), [scratch] "=m,m,m,m,m,m" (scratch), [success] "=q,m,q,m,q,m" (success)
+        : [desired_lo] "S,S,D,D,m,m" ((uint32_t)desired), "c,c,c,c,c,c" ((uint32_t)(desired >> 32))
         : "memory", "cc"
     );
-    expected = prev;
     return success;
 #endif
 }
@@ -1885,8 +1883,8 @@ platform_store64(T value, volatile T * ptr) BOOST_NOEXCEPT
             "jne 1b\n\t"
             "movl %[scratch], %%ebx"
             : [scratch] "=m,m" (scratch)
-            : [value_lo] "S,D" ((uint32_t)value), "c,c" ((uint32_t)(value >> 32)), [dest] "D,S" (ptr)
-            : "memory", "cc", "eax", "edx"
+            : [value_lo] "a,a" ((uint32_t)value), "c,c" ((uint32_t)(value >> 32)), [dest] "D,S" (ptr)
+            : "memory", "cc", "edx"
         );
     }
 }
@@ -1922,19 +1920,15 @@ platform_load64(const volatile T * ptr) BOOST_NOEXCEPT
     else
     {
         // We don't care for comparison result here; the previous value will be stored into value anyway.
-        uint32_t scratch;
+        // Also we don't care for ebx and ecx values, they just have to be equal to eax and edx before cmpxchg8b.
         __asm__ __volatile__
         (
-            "movl %%ebx, %[scratch]\n\t"
-            "xorl %%eax, %%eax\n\t"
-            "xorl %%ebx, %%ebx\n\t"
-            "xorl %%ecx, %%ecx\n\t"
-            "xorl %%edx, %%edx\n\t"
-            "lock; cmpxchg8b 0(%[dest])\n\t"
-            "movl %[scratch], %%ebx"
-            : "=A,A" (value), [scratch] "=m,m" (scratch)
-            : [dest] "D,S" (ptr)
-            : "cc", "ecx"
+            "movl %%ebx, %%eax\n\t"
+            "movl %%ecx, %%edx\n\t"
+            "lock; cmpxchg8b %[dest]"
+            : "=&A" (value)
+            : [dest] "m" (*ptr)
+            : "cc"
         );
     }
 
@@ -1953,10 +1947,10 @@ platform_cmpxchg128_strong(T& expected, T desired, volatile T* ptr) BOOST_NOEXCE
     bool success;
     __asm__ __volatile__
     (
-        "lock; cmpxchg16b 0(%[dest])\n\t"
+        "lock; cmpxchg16b %[dest]\n\t"
         "sete %[success]"
-        : "+A,A,A,A" (expected), [success] "=q,m,q,m" (success)
-        : "b,b,b,b" (p_desired[0]), "c,c,c,c" (p_desired[1]), [dest] "D,D,S,S" (ptr)
+        : "+A,A" (expected), [dest] "+m,m" (*ptr), [success] "=q,m" (success)
+        : "b,b" (p_desired[0]), "c,c" (p_desired[1])
         : "memory", "cc"
     );
     return success;
@@ -1973,9 +1967,9 @@ platform_store128(T value, volatile T* ptr) BOOST_NOEXCEPT
         "movq 8(%[dest]), %%rdx\n\t"
         ".align 16\n\t"
         "1: lock; cmpxchg16b 0(%[dest])\n\t"
-        "jne 1b\n\t"
+        "jne 1b"
         :
-        : "b" (p_value[0]), "c" (p_value[1]), [dest] "D,S" (ptr)
+        : "b" (p_value[0]), "c" (p_value[1]), [dest] "r" (ptr)
         : "memory", "cc", "rax", "rdx"
     );
 }
@@ -1987,16 +1981,15 @@ platform_load128(const volatile T* ptr) BOOST_NOEXCEPT
     T value;
 
     // We don't care for comparison result here; the previous value will be stored into value anyway.
+    // Also we don't care for rbx and rcx values, they just have to be equal to rax and rdx before cmpxchg16b.
     __asm__ __volatile__
     (
-        "xorq %%rax, %%rax\n\t"
-        "xorq %%rbx, %%rbx\n\t"
-        "xorq %%rcx, %%rcx\n\t"
-        "xorq %%rdx, %%rdx\n\t"
-        "lock; cmpxchg16b 0(%[dest])\n\t"
-        : "=A,A" (value)
-        : [dest] "D,S" (ptr)
-        : "cc", "rbx", "rcx"
+        "movq %%rbx, %%rax\n\t"
+        "movq %%rcx, %%rdx\n\t"
+        "lock; cmpxchg16b %[dest]"
+        : "=&A" (value)
+        : [dest] "m" (*ptr)
+        : "cc"
     );
 
     return value;

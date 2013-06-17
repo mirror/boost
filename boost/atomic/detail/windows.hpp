@@ -1644,13 +1644,12 @@ platform_load64(const volatile T * p) BOOST_NOEXCEPT
     else
     {
         // We don't care for comparison result here; the previous value will be stored into value anyway.
+        // Also we don't care for ebx and ecx values, they just have to be equal to eax and edx before cmpxchg8b.
         __asm
         {
             mov edi, p
-            xor ebx, ebx
-            xor ecx, ecx
-            xor eax, eax
-            xor edx, edx
+            mov eax, ebx
+            mov edx, ecx
             lock cmpxchg8b qword ptr [edi]
             mov dword ptr [value], eax
             mov dword ptr [value + 4], edx
