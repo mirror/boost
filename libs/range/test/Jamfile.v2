@@ -161,5 +161,6 @@ test-suite range :
 	[ range-test ticket_5544_terminate_irange ]
 	[ range-test ticket_5547 ]
 	[ range-test ticket_5556_is_sorted_namespace ]
+	[ range-test ticket_6944 ]
     ;
 

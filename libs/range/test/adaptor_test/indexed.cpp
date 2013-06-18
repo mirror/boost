@@ -15,10 +15,13 @@
 
 #include <boost/assign.hpp>
 #include <boost/range/algorithm_ext.hpp>
+#include <boost/range/concepts.hpp>
 
 #include <algorithm>
 #include <list>
 #include <vector>
+
+#include "../test_utils.hpp"
 
 namespace boost
 {
@@ -83,6 +86,9 @@ namespace boost
         {
             indexed_test_impl< std::vector< int > >();
             indexed_test_impl< std::list< int > >();
+            
+            check_random_access_range_concept(std::vector<int>() | boost::adaptors::indexed(0));
+            check_bidirectional_range_concept(std::list<int>() | boost::adaptors::indexed(0));
         }
     }
 }
