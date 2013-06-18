@@ -27,7 +27,7 @@ void test_sequence1 () {
     typedef input_iterator<std::vector<int>::iterator> II;    
 
 //  This should fail to compile, since gather doesn't work with input iterators
-    (void) ba::gather ( II( v.begin ()), II( v.end ()), II( v.begin ()), is_even );
+    (void) ba::gather ( II( v.begin ()), II( v.end ()), II( v.begin ()), is_ten );
     }
 
 
