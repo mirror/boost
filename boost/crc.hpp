@@ -438,7 +438,7 @@ namespace detail
           the reflected value of <var>i</var>.
      */
     boost::array< unsigned char, (UINTMAX_C( 1 ) << CHAR_BIT) >
-    make_byte_reflection_table()
+    inline make_byte_reflection_table()
     {
         boost::array<unsigned char, ( UINTMAX_C(1) << CHAR_BIT )>  result;
         unsigned char                                              i = 0u;
@@ -464,7 +464,7 @@ namespace detail
           number of states is relatively small, the implementation pre-computes
           and uses a table of all the results.
      */
-    unsigned char  reflect_byte( unsigned char x )
+    inline unsigned char  reflect_byte( unsigned char x )
     {
         static  boost::array<unsigned char, ( UINTMAX_C(1) << CHAR_BIT )> const
           table = make_byte_reflection_table();
