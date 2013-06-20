@@ -7,6 +7,17 @@
   <qandaset>
     <qandaentry>
       <question>
+        <para>Is Boost.Signals being actively maintained?</para>
+      </question>
+      <answer>
+        <para>No. Please migrate to <ulink url="http://www.boost.org/doc/html/signals2.html">Boost.Signals2</ulink>.
+        There is a 
+        <ulink url="http://www.boost.org/doc/html/signals2/api_changes.html#signals2.porting">porting guide</ulink>
+        in the Signals2 documentation.</para>
+      </answer>
+    </qandaentry>
+    <qandaentry>
+      <question>
         <para>Don't noncopyable signal semantics mean that a class
         with a signal member will be noncopyable as well?</para>
       </question>
