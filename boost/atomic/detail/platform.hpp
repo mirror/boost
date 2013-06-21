@@ -15,7 +15,9 @@
 #pragma once
 #endif
 
-#if (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 407)) || (defined(BOOST_CLANG) && ((__clang_major__ * 100 + __clang_minor__) >= 302))
+// Intel compiler does not support __atomic* intrinsics properly, although defines them
+#if (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 407) && !defined(BOOST_INTEL_CXX_VERSION))\
+    || (defined(BOOST_CLANG) && ((__clang_major__ * 100 + __clang_minor__) >= 302))
 
     #include <boost/atomic/detail/gcc-atomic.hpp>
 
