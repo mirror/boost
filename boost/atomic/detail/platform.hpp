@@ -15,7 +15,7 @@
 #pragma once
 #endif
 
-// Intel compiler does not support __atomic* intrinsics properly, although defines them
+// Intel compiler does not support __atomic* intrinsics properly, although defines them (tested with 13.0.1 and 13.1.1 on Linux)
 #if (defined(__GNUC__) && ((__GNUC__ * 100 + __GNUC_MINOR__) >= 407) && !defined(BOOST_INTEL_CXX_VERSION))\
     || (defined(BOOST_CLANG) && ((__clang_major__ * 100 + __clang_minor__) >= 302))
 
