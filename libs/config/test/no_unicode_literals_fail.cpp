@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_unicode_literals::test();
+   return boost_no_cxx11_unicode_literals::test();
 }
 

@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 #include "boost_no_rvalue_references.ipp"
 #else
-namespace boost_no_rvalue_references = empty_boost;
+namespace boost_no_cxx11_rvalue_references = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_rvalue_references::test();
+   return boost_no_cxx11_rvalue_references::test();
 }
 

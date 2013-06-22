@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
 #include "boost_no_function_template_default_args.ipp"
 #else
-namespace boost_no_function_template_default_args = empty_boost;
+namespace boost_no_cxx11_function_template_default_args = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_function_template_default_args::test();
+   return boost_no_cxx11_function_template_default_args::test();
 }
 

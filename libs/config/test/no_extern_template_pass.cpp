@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_EXTERN_TEMPLATE
 #include "boost_no_extern_template.ipp"
 #else
-namespace boost_no_extern_template = empty_boost;
+namespace boost_no_cxx11_extern_template = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_extern_template::test();
+   return boost_no_cxx11_extern_template::test();
 }
 

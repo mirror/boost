@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_TEMPLATE_ALIASES
 #include "boost_no_template_aliases.ipp"
 #else
-namespace boost_no_template_aliases = empty_boost;
+namespace boost_no_cxx11_template_aliases = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_template_aliases::test();
+   return boost_no_cxx11_template_aliases::test();
 }
 

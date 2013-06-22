@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_auto_multideclarations::test();
+   return boost_no_cxx11_auto_multideclarations::test();
 }
 

@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Mar 21 13:05:19 2012
+//  This file was automatically generated on Sun Apr 28 18:36:48 2013
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -10,10 +10,10 @@
 //
 
 
-// Test file for macro BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
-// This file should compile, if it does not then
-// BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS should be defined.
-// See file boost_no_tem_local_classes.ipp for details
+// Test file for macro BOOST_NO_CXX11_INLINE_NAMESPACES
+// This file should not compile, if it does then
+// BOOST_NO_CXX11_INLINE_NAMESPACES should not be defined.
+// See file boost_no_cxx11_inline_namespaces.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
-#include "boost_no_tem_local_classes.ipp"
+#ifdef BOOST_NO_CXX11_INLINE_NAMESPACES
+#include "boost_no_cxx11_inline_namespaces.ipp"
 #else
-namespace boost_no_cxx11_local_class_template_parameters = empty_boost;
+#error "this file should not compile"
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_cxx11_local_class_template_parameters::test();
+   return boost_no_cxx11_inline_namespaces::test();
 }
 

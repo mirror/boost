@@ -292,12 +292,18 @@ test-suite "BOOST_NO_CXX11_HDR_UNORDERED_MAP" :
 test-suite "BOOST_NO_CXX11_HDR_UNORDERED_SET" : 
 [ run ../no_cxx11_hdr_unordered_set_pass.cpp ]
 [ compile-fail ../no_cxx11_hdr_unordered_set_fail.cpp ] ;
+test-suite "BOOST_NO_CXX11_INLINE_NAMESPACES" :
+[ run ../no_cxx11_inline_namespaces_pass.cpp ]
+[ compile-fail ../no_cxx11_inline_namespaces_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_NUMERIC_LIMITS" : 
 [ run ../no_cxx11_numeric_limits_pass.cpp ]
 [ compile-fail ../no_cxx11_numeric_limits_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_SMART_PTR" : 
 [ run ../no_cxx11_smart_ptr_pass.cpp ]
 [ compile-fail ../no_cxx11_smart_ptr_fail.cpp ] ;
+test-suite "BOOST_NO_CXX11_TRAILING_RESULT_TYPES" :
+[ run ../no_cxx11_trailing_result_types_pass.cpp ]
+[ compile-fail ../no_cxx11_trailing_result_types_fail.cpp ] ;
 test-suite "BOOST_NO_CXX11_USER_DEFINED_LITERALS" : 
 [ run ../no_cxx11_user_lit_pass.cpp ]
 [ compile-fail ../no_cxx11_user_lit_fail.cpp ] ;

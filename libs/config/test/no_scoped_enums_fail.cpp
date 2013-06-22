@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_scoped_enums::test();
+   return boost_no_cxx11_scoped_enums::test();
 }
 

@@ -207,6 +207,16 @@ namespace boost_no_cxx11_hdr_unordered_map = empty_boost;
 #else
 namespace boost_no_cxx11_hdr_unordered_set = empty_boost;
 #endif
+#ifndef BOOST_NO_CXX11_INLINE_NAMESPACES
+#include "boost_no_cxx11_inline_namespaces.ipp"
+#else
+namespace boost_no_cxx11_inline_namespaces = empty_boost;
+#endif
+#ifndef BOOST_NO_CXX11_TRAILING_RESULT_TYPES
+#include "boost_no_cxx11_trailing_result_types.ipp"
+#else
+namespace boost_no_cxx11_trailing_result_types = empty_boost;
+#endif
 #ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
 #include "boost_no_cxx11_numeric_limits.ipp"
 #else
@@ -1341,6 +1351,11 @@ int main( int, char *[] )
       std::cerr << "Failed test for BOOST_NO_CXX11_HDR_UNORDERED_SET at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
+   if(0 != boost_no_cxx11_inline_namespaces::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CXX11_INLINE_NAMESPACES at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
    if(0 != boost_no_cxx11_numeric_limits::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_NUMERIC_LIMITS at: " << __FILE__ << ":" << __LINE__ << std::endl;
@@ -1349,6 +1364,11 @@ int main( int, char *[] )
    if(0 != boost_no_cxx11_smart_ptr::test())
    {
       std::cerr << "Failed test for BOOST_NO_CXX11_SMART_PTR at: " << __FILE__ << ":" << __LINE__ << std::endl;
+      ++error_count;
+   }
+   if(0 != boost_no_cxx11_trailing_result_types::test())
+   {
+      std::cerr << "Failed test for BOOST_NO_CXX11_TRAILING_RESULT_TYPES at: " << __FILE__ << ":" << __LINE__ << std::endl;
       ++error_count;
    }
    if(0 != boost_no_cxx11_user_defined_literals::test())

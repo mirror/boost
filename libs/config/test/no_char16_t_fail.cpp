@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_char16_t::test();
+   return boost_no_cxx11_char16_t::test();
 }
 

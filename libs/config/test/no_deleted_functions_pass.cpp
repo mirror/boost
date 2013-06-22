@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_DELETED_FUNCTIONS
 #include "boost_no_deleted_functions.ipp"
 #else
-namespace boost_no_deleted_functions = empty_boost;
+namespace boost_no_cxx11_deleted_functions = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_deleted_functions::test();
+   return boost_no_cxx11_deleted_functions::test();
 }
 

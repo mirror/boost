@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_nullptr::test();
+   return boost_no_cxx11_nullptr::test();
 }
 

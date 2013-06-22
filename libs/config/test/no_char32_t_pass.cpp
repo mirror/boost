@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_CHAR32_T
 #include "boost_no_char32_t.ipp"
 #else
-namespace boost_no_char32_t = empty_boost;
+namespace boost_no_cxx11_char32_t = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_char32_t::test();
+   return boost_no_cxx11_char32_t::test();
 }
 

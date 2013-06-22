@@ -160,6 +160,14 @@
 #  define BOOST_NO_CXX11_ALIGNAS
 #endif
 
+#if !__has_feature(cxx_trailing_return)
+#  define BOOST_NO_CXX11_TRAILING_RESULT_TYPES
+#endif
+
+#if !__has_feature(cxx_inline_namespaces)
+#  define BOOST_NO_CXX11_INLINE_NAMESPACES
+#endif
+
 // Clang always supports variadic macros
 // Clang always supports extern templates
 

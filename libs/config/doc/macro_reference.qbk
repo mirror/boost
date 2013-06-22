@@ -604,6 +604,7 @@ that are not yet supported by a particular compiler or library.
 [[`BOOST_NO_CXX11_HDR_TYPE_TRAITS`][The standard library does not provide header <type_traits>.]]
 [[`BOOST_NO_CXX11_HDR_UNORDERED_MAP`][The standard library does not provide header <unordered_map>.]]
 [[`BOOST_NO_CXX11_HDR_UNORDERED_SET`][The standard library does not provide header <unordered_set>.]]
+[[`BOOST_NO_CXX11_INLINE_NAMESPACES`][The compiler does not support inline namespaces.]]
 [[`BOOST_NO_CXX11_SMART_PTR`][The standard library header <memory> has no shared_ptr and unique_ptr.]]
 
 [[`BOOST_NO_CXX11_AUTO_DECLARATIONS`][The compiler does not support
@@ -676,6 +677,8 @@ scoped enumerations (`enum class`).
 [[`BOOST_NO_CXX11_STD_UNORDERED`][The standard library does not support
 <unordered_map> and <unordered_set>. 
 ]]
+[[`BOOST_NO_CXX11_TRAILING_RESULT_TYPES`][The compiler does not support the new function result type
+specification syntax (e.g. `auto foo(T) -> T;`).]]
 [[`BOOST_NO_CXX11_UNICODE_LITERALS`][The compiler does not support
 Unicode (`u8`, `u`, `U`) literals. 
 ]]

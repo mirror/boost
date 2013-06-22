@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_VARIADIC_TEMPLATES
 #include "boost_no_variadic_templates.ipp"
 #else
-namespace boost_no_variadic_templates = empty_boost;
+namespace boost_no_cxx11_variadic_templates = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_variadic_templates::test();
+   return boost_no_cxx11_variadic_templates::test();
 }
 

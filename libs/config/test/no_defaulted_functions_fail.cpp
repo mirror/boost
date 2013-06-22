@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_defaulted_functions::test();
+   return boost_no_cxx11_defaulted_functions::test();
 }
 
