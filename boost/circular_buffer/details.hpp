@@ -137,18 +137,19 @@ private:
 template <class Size>
 class capacity_control {
 
-    //! The capacity of the space optimized circular buffer.
+    //! The capacity of the space-optimized circular buffer.
     Size m_capacity;
 
-    //! The lowest guaranteed capacity of the adapted circular buffer.
+    //! The lowest guaranteed or minimum capacity of the adapted space-optimized circular buffer.
     Size m_min_capacity;
 
 public:
 
     //! Constructor.
     capacity_control(Size buffer_capacity, Size min_buffer_capacity = 0)
-    : m_capacity(buffer_capacity), m_min_capacity(min_buffer_capacity) {
-        BOOST_CB_ASSERT(buffer_capacity >= min_buffer_capacity); // check for capacity lower than min_capacity
+    : m_capacity(buffer_capacity), m_min_capacity(min_buffer_capacity)
+    { // Check for capacity lower than min_capacity.
+        BOOST_CB_ASSERT(buffer_capacity >= min_buffer_capacity);
     }
 
     // Default copy constructor.

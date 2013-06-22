@@ -1,6 +1,7 @@
 // Implementation of the circular buffer adaptor.
 
 // Copyright (c) 2003-2008 Jan Gaspar
+// Copyright (c) 2013  Paul A. Bristow // Doxygen comments changed for new version of documentation.
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -21,9 +22,6 @@ namespace boost {
 /*!
     \class circular_buffer_space_optimized
     \brief Space optimized circular buffer container adaptor.
-
-    For detailed documentation of the space_optimized_circular_buffer visit:
-    http://www.boost.org/libs/circular_buffer/doc/space_optimized.html
 */
 template <class T, class Alloc>
 class circular_buffer_space_optimized :
@@ -53,27 +51,50 @@ public:
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
     typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
 
-    //! Capacity controller of the space optimized circular buffer.
-    /*!
-        <p><pre>
-class capacity_control {
-   size_type m_capacity;
-   size_type m_min_capacity;
-public:
-   capacity_control(size_type capacity, size_type min_capacity = 0) : m_capacity(capacity), m_min_capacity(min_capacity) {};
-   size_type %capacity() const { return m_capacity; }
-   size_type min_capacity() const { return m_min_capacity; }
-   operator size_type() const { return m_capacity; }
-};</pre></p>
-        \pre <code>capacity >= min_capacity</code>
-        <p>The <code>capacity()</code> represents the capacity of the <code>circular_buffer_space_optimized</code> and
-        the <code>min_capacity()</code> determines the minimal allocated size of its internal buffer.</p>
-        <p>The converting constructor of the <code>capacity_control</code> allows implicit conversion from
-        <code>size_type</code>-like types which ensures compatibility of creating an instance of the
-        <code>circular_buffer_space_optimized</code> with other STL containers. On the other hand the operator
-        <code>%size_type()</code> provides implicit conversion to the <code>size_type</code> which allows to treat the
-        capacity of the <code>circular_buffer_space_optimized</code> the same way as in the
-        <code><a href="circular_buffer.html">circular_buffer</a></code>.</p>
+/* <pre> is not passed through to html or pdf. So <br> is used in code section below.  Ugly :-(
+Ideally want a link to capacity_control, but this would require include details
+and this would expose all the functions in details.
+There must be a better way of doing this.
+*/
+
+    /*! Capacity controller of the space optimized circular buffer.
+
+    \see capacity_control in details.hpp.
+<p>
+<code>
+class capacity_control<br>
+{<br>
+   size_type m_capacity;  // Available capacity.<br>
+   size_type m_min_capacity; // Minimum capacity.<br>
+public:<br>
+   capacity_control(size_type capacity, size_type min_capacity = 0)<br>
+   : m_capacity(capacity), m_min_capacity(min_capacity)<br>
+     {};<br>
+   size_type %capacity() const { return m_capacity; }<br>
+   size_type min_capacity() const { return m_min_capacity; }<br>
+   operator size_type() const { return m_capacity; }<br>
+};<br>
+</code>
+</p>
+
+
+  <p>Always
+    <code>capacity >= min_capacity</code>.
+  </p>
+  <p>
+    The <code>capacity()</code> represents the capacity
+    of the <code>circular_buffer_space_optimized</code> and
+    the <code>min_capacity()</code> determines the minimal allocated size of its internal buffer.
+ </p>
+ <p>The converting constructor of the <code>capacity_control</code> allows implicit conversion from
+  <code>size_type</code>-like types which ensures compatibility of creating an instance of the
+  <code>circular_buffer_space_optimized</code> with other STL containers.
+
+  On the other hand the operator <code>%size_type()</code>
+  provides implicit conversion to the <code>size_type</code> which allows to treat the
+  capacity of the <code>circular_buffer_space_optimized</code> the same way as in the
+  <code>circular_buffer</a></code>.
+</p>
     */
     typedef cb_details::capacity_control<size_type> capacity_type;
 
@@ -178,7 +199,7 @@ public:
               than the new capacity then the amount of allocated memory in the internal buffer may be accommodated as
               necessary but it will never drop below <code>capacity_ctrl.min_capacity()</code>.
         \param capacity_ctrl The new capacity controller.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+        \throws "An allocation error" if memory is exhausted, (<code>std::bad_alloc</code> if the standard allocator is
                 used).
         \throws Whatever <code>T::T(const T&)</code> throws.
         \par Exception Safety
@@ -692,7 +713,7 @@ public:
        circular_buffer<T, Alloc>::assign(capacity_ctrl, first, last);
     }
 
-    //! Swap the contents of two space optimized circular buffers.
+    //! Swap the contents of two space-optimized circular-buffers.
     /*!
         \post <code>this</code> contains elements of <code>cb</code> and vice versa; the capacity and the amount of
               allocated memory in the internal buffer of <code>this</code> equal to the capacity and the amount of
@@ -704,13 +725,17 @@ public:
         \par Iterator Invalidation
              Invalidates all iterators of both <code>circular_buffer_space_optimized</code> containers. (On the other
              hand the iterators still point to the same elements but within another container. If you want to rely on
-             this feature you have to turn the <a href="circular_buffer.html#debug">Debug Support</a> off otherwise an
-             assertion will report an error if such invalidated iterator is used.)
+             this feature you have to turn the __debug_support off by defining macro BOOST_CB_DISABLE_DEBUG,
+             otherwise an assertion will report an error if such invalidated iterator is used.)
         \par Complexity
              Constant (in the size of the <code>circular_buffer_space_optimized</code>).
         \sa <code>\link swap(circular_buffer<T, Alloc>&, circular_buffer<T, Alloc>&)
             swap(circular_buffer_space_optimized<T, Alloc>&, circular_buffer_space_optimized<T, Alloc>&)\endlink</code>
+
+
     */
+    // Note link does not work right.  Asked on Doxygen forum for advice 23 May 2103.
+
     void swap(circular_buffer_space_optimized<T, Alloc>& cb) {
         std::swap(m_capacity_ctrl, cb.m_capacity_ctrl);
         circular_buffer<T, Alloc>::swap(cb);
@@ -876,7 +901,7 @@ public:
              Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
              internal buffer may look like the one below.<br><br>
              <code>|1|2|3|4| | |</code><br>
-             <code>p ---^</code><br><br>After inserting 5 elements at the position <code>p</code>:<br><br>
+             <code>p ___^</code><br><br>After inserting 5 elements at the position <code>p</code>:<br><br>
              <code>insert(p, (size_t)5, 0);</code><br><br>actually only 4 elements get inserted and elements
              <code>1</code> and <code>2</code> are overwritten. This is due to the fact the insert operation preserves
              the capacity. After insertion the internal buffer looks like this:<br><br><code>|0|0|0|0|3|4|</code><br>
@@ -927,7 +952,7 @@ public:
              Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
              internal buffer may look like the one below.<br><br>
              <code>|1|2|3|4| | |</code><br>
-             <code>p ---^</code><br><br>After inserting a range of elements at the position <code>p</code>:<br><br>
+             <code>p ___^</code><br><br>After inserting a range of elements at the position <code>p</code>:<br><br>
              <code>int array[] = { 5, 6, 7, 8, 9 };</code><br><code>insert(p, array, array + 5);</code><br><br>
              actually only elements <code>6</code>, <code>7</code>, <code>8</code> and <code>9</code> from the
              specified range get inserted and elements <code>1</code> and <code>2</code> are overwritten. This is due
@@ -1012,7 +1037,7 @@ public:
              Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
              internal buffer may look like the one below.<br><br>
              <code>|1|2|3|4| | |</code><br>
-             <code>p ---^</code><br><br>After inserting 5 elements before the position <code>p</code>:<br><br>
+             <code>p ___^</code><br><br>After inserting 5 elements before the position <code>p</code>:<br><br>
              <code>rinsert(p, (size_t)5, 0);</code><br><br>actually only 4 elements get inserted and elements
              <code>3</code> and <code>4</code> are overwritten. This is due to the fact the rinsert operation preserves
              the capacity. After insertion the internal buffer looks like this:<br><br><code>|1|2|0|0|0|0|</code><br>
@@ -1064,7 +1089,7 @@ public:
              Consider a <code>circular_buffer_space_optimized</code> with the capacity of 6 and the size of 4. Its
              internal buffer may look like the one below.<br><br>
              <code>|1|2|3|4| | |</code><br>
-             <code>p ---^</code><br><br>After inserting a range of elements before the position <code>p</code>:<br><br>
+             <code>p ___^</code><br><br>After inserting a range of elements before the position <code>p</code>:<br><br>
              <code>int array[] = { 5, 6, 7, 8, 9 };</code><br><code>insert(p, array, array + 5);</code><br><br>
              actually only elements <code>5</code>, <code>6</code>, <code>7</code> and <code>8</code> from the
              specified range get inserted and elements <code>3</code> and <code>4</code> are overwritten. This is due
@@ -1162,7 +1187,7 @@ public:
         \par Complexity
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
         \note Basically there is no difference between <code>erase(iterator)</code> and this method. It is implemented
-              only for consistency with the base <code><a href="circular_buffer.html">circular_buffer</a></code>.
+              only for consistency with the base <code>circular_buffer</code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>,
             <code>rerase(iterator, iterator)</code>, <code>clear()</code>
     */
@@ -1195,7 +1220,7 @@ public:
              Linear (in the size of the <code>circular_buffer_space_optimized</code>).
         \note Basically there is no difference between <code>erase(iterator, iterator)</code> and this method. It is
               implemented only for consistency with the base
-              <code><a href="circular_buffer.html">circular_buffer</a></code>.
+              <code><circular_buffer</code>.
         \sa <code>erase(iterator)</code>, <code>erase(iterator, iterator)</code>, <code>rerase(iterator)</code>,
             <code>clear()</code>
     */

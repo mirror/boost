@@ -1,6 +1,8 @@
 // Implementation of the base circular buffer.
 
 // Copyright (c) 2003-2008 Jan Gaspar
+// Copyright (c) 2013 Paul A. Bristow  // Doxygen comments changed.
+
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -45,19 +47,19 @@ namespace boost {
 /*!
     \class circular_buffer
     \brief Circular buffer - a STL compliant container.
-    \param T The type of the elements stored in the <code>circular_buffer</code>.
+    \tparam T The type of the elements stored in the <code>circular_buffer</code>.
     \par Type Requirements T
          The <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/Assignable.html">
-         SGIAssignable</a> (SGI STL defined combination of <a href="../../utility/Assignable.html">
-         Assignable</a> and <a href="../../utility/CopyConstructible.html">CopyConstructible</a>).
+         SGIAssignable</a> (SGI STL defined combination of <a href="../../../utility/Assignable.html">
+         Assignable</a> and <a href="../../../utility/CopyConstructible.html">CopyConstructible</a>).
          Moreover <code>T</code> has to be <a href="http://www.sgi.com/tech/stl/DefaultConstructible.html">
          DefaultConstructible</a> if supplied as a default parameter when invoking some of the
          <code>circular_buffer</code>'s methods e.g.
          <code>insert(iterator pos, const value_type& item = %value_type())</code>. And
          <a href="http://www.sgi.com/tech/stl/EqualityComparable.html">EqualityComparable</a> and/or
-         <a href="../../utility/LessThanComparable.html">LessThanComparable</a> if the <code>circular_buffer</code>
+         <a href="../../../utility/LessThanComparable.html">LessThanComparable</a> if the <code>circular_buffer</code>
          will be compared with another container.
-    \param Alloc The allocator type used for all internal memory management.
+    \tparam Alloc The allocator type used for all internal memory management.
     \par Type Requirements Alloc
          The <code>Alloc</code> has to meet the allocator requirements imposed by STL.
     \par Default Alloc
@@ -75,8 +77,17 @@ class circular_buffer
 /*! \endcond */
 {
 
-// Requirements
+  // Requirements
     BOOST_CLASS_REQUIRE(T, boost, SGIAssignableConcept);
+
+
+    //BOOST_CONCEPT_ASSERT((Assignable<T>));
+    //BOOST_CONCEPT_ASSERT((CopyConstructible<T>));
+    //BOOST_CONCEPT_ASSERT((DefaultConstructible<T>));
+
+    // Required if the circular_buffer will be compared with anther container.
+    //BOOST_CONCEPT_ASSERT((EqualityComparable<T>));
+    //BOOST_CONCEPT_ASSERT((LessThanComparable<T>));
 
 public:
 // Basic types
@@ -145,9 +156,11 @@ public:
 
     //! The capacity type.
     /*!
-        (Same as <code>size_type</code> - defined for consistency with the
-        <a href="space_optimized.html"><code>circular_buffer_space_optimized</code></a>.)
+        (Same as <code>size_type</code> - defined for consistency with the  __cbso class.
+
     */
+    // <a href="space_optimized.html"><code>circular_buffer_space_optimized</code></a>.)
+
     typedef size_type capacity_type;
 
 // Helper types
@@ -508,8 +521,9 @@ public:
         The internal representation is often not linear and the state of the internal buffer may look like this:<br>
         <br><code>
         |e|f|g| | | |a|b|c|d|<br>
-        end ---^<br>
-        begin -------^</code><br><br>
+        end ___^<br>
+        begin _______^</code><br><br>
+
         where <code>|a|b|c|d|</code> represents the "array one", <code>|e|f|g|</code> represents the "array two" and
         <code>| | | |</code> is a free space.<br>
         Now consider a typical C style function for writing data into a file:<br><br>
@@ -840,7 +854,7 @@ public:
               new capacity then number of <code>[size() - new_capacity]</code> <b>last</b> elements will be removed and
               the new size will be equal to <code>new_capacity</code>.
         \param new_capacity The new capacity.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+        \throws "An allocation error" if memory is exhausted, (<code>std::bad_alloc</code> if the standard allocator is
                 used).
         \throws Whatever <code>T::T(const T&)</code> throws.
         \par Exception Safety
@@ -1556,7 +1570,7 @@ public:
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
              <code>|1|2|3|4| | |</code><br>
-             <code>p ---^</code><br><br>After inserting 5 elements at the position <code>p</code>:<br><br>
+             <code>p ___^</code><br><br>After inserting 5 elements at the position <code>p</code>:<br><br>
              <code>insert(p, (size_t)5, 0);</code><br><br>actually only 4 elements get inserted and elements
              <code>1</code> and <code>2</code> are overwritten. This is due to the fact the insert operation preserves
              the capacity. After insertion the internal buffer looks like this:<br><br><code>|0|0|0|0|3|4|</code><br>
@@ -1611,7 +1625,7 @@ public:
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
              <code>|1|2|3|4| | |</code><br>
-             <code>p ---^</code><br><br>After inserting a range of elements at the position <code>p</code>:<br><br>
+             <code>p ___^</code><br><br>After inserting a range of elements at the position <code>p</code>:<br><br>
              <code>int array[] = { 5, 6, 7, 8, 9 };</code><br><code>insert(p, array, array + 5);</code><br><br>
              actually only elements <code>6</code>, <code>7</code>, <code>8</code> and <code>9</code> from the
              specified range get inserted and elements <code>1</code> and <code>2</code> are overwritten. This is due
@@ -1728,7 +1742,7 @@ public:
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
              <code>|1|2|3|4| | |</code><br>
-             <code>p ---^</code><br><br>After inserting 5 elements before the position <code>p</code>:<br><br>
+             <code>p ___^</code><br><br>After inserting 5 elements before the position <code>p</code>:<br><br>
              <code>rinsert(p, (size_t)5, 0);</code><br><br>actually only 4 elements get inserted and elements
              <code>3</code> and <code>4</code> are overwritten. This is due to the fact the rinsert operation preserves
              the capacity. After insertion the internal buffer looks like this:<br><br><code>|1|2|0|0|0|0|</code><br>
@@ -1775,7 +1789,7 @@ public:
              Consider a <code>circular_buffer</code> with the capacity of 6 and the size of 4. Its internal buffer may
              look like the one below.<br><br>
              <code>|1|2|3|4| | |</code><br>
-             <code>p ---^</code><br><br>After inserting a range of elements before the position <code>p</code>:<br><br>
+             <code>p ___^</code><br><br>After inserting a range of elements before the position <code>p</code>:<br><br>
              <code>int array[] = { 5, 6, 7, 8, 9 };</code><br><code>insert(p, array, array + 5);</code><br><br>
              actually only elements <code>5</code>, <code>6</code>, <code>7</code> and <code>8</code> from the
              specified range get inserted and elements <code>3</code> and <code>4</code> are overwritten. This is due
