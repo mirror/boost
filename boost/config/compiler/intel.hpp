@@ -256,6 +256,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  define  BOOST_NO_CXX11_DELETED_FUNCTIONS
 #  define  BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
 #  define  BOOST_NO_CXX11_TEMPLATE_ALIASES
+#  define  BOOST_NO_CXX11_TRAILING_RESULT_TYPES
 #endif
 
 #if (BOOST_INTEL_CXX_VERSION < 1200)
