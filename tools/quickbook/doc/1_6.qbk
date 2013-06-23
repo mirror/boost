@@ -70,7 +70,7 @@ before.
 
 [endsect] [/docinfo]
 
-[section:doc-info-macros Macros in docinfo block]
+[section:doc_info_macros Macros in docinfo block]
 
 You can now expand macros in text fields in the docinfo block. In the top
 docinfo block only the predefined macros are available, but in nested documents
