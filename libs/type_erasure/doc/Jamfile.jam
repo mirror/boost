@@ -12,7 +12,7 @@ using quickbook ;
 using doxygen ;
 
 path-constant here : . ;
-path-constant boost-root : ../../../../../trunk ;
+path-constant boost-root : ../../.. ;
 
 # Figure out where the root of the boost tree is relative
 # to the html directory.
