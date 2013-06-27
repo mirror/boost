@@ -152,7 +152,7 @@ namespace boost {
        BFSVisitor vis,
        const bgl_named_params<P, T, R>& params,
        BOOST_GRAPH_ENABLE_IF_MODELS(DistributedGraph, distributed_graph_tag,
-                                    void)*)
+                                    void)* = 0)
         {
             parallel_bfs_helper
         (g, s, color, vis, get_param(params, buffer_param_t()),
