@@ -90,37 +90,6 @@ namespace quickbook
                 string_iterator last);
         void clear_stack();
 
-        struct in_list_impl {
-            main_grammar_local& l;
-
-            in_list_impl(main_grammar_local& l) :
-                l(l) {}
-
-            bool operator()() const {
-                return !l.list_stack.top().root;
-            }
-        };
-
-        struct set_no_eols_scoped : scoped_action_base
-        {
-            set_no_eols_scoped(main_grammar_local& l)
-                : l(l) {}
-
-            bool start() {
-                saved_no_eols = l.no_eols;
-                l.no_eols = false;
-
-                return true;
-            }
-
-            void cleanup() {
-                l.no_eols = saved_no_eols;
-            }
-
-            main_grammar_local& l;
-            bool saved_no_eols;
-        };
-
         ////////////////////////////////////////////////////////////////////////
         // Local members
 
