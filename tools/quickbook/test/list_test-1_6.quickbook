@@ -73,6 +73,18 @@ Markup in list:
 *   [*Bold]
 *   ["Quoted]
 *   [footnote Footnote]
+*   [table [[Heading]][[Cell]]]
+    Some text.
+*   [section Doesn't expand]
+    Blah, blah.
+    [endsect]
+
+* Paragraph cheat 1.
+  [block]
+  Paragraph cheat 2.
+* Paragraph cheat 3.
+  [block]
+  Paragraph cheat 4.
 
 Don't end list with comment 1:
 

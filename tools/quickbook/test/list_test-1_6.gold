@@ -309,6 +309,54 @@
         </footnote>
       </simpara>
     </listitem>
+    <listitem>
+      <simpara>
+        <informaltable frame="all">
+          <tgroup cols="1">
+            <thead>
+              <row>
+                <entry>
+                  <para>
+                    Heading
+                  </para>
+                </entry>
+              </row>
+            </thead>
+            <tbody>
+              <row>
+                <entry>
+                  <para>
+                    Cell
+                  </para>
+                </entry>
+              </row>
+            </tbody>
+          </tgroup>
+        </informaltable>
+        Some text.
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        [section Doesn't expand] Blah, blah. [endsect]
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        <para>
+          Paragraph cheat 1.
+        </para>
+        Paragraph cheat 2.
+      </simpara>
+    </listitem>
+    <listitem>
+      <simpara>
+        <para>
+          Paragraph cheat 3.
+        </para>
+        Paragraph cheat 4.
+      </simpara>
+    </listitem>
   </itemizedlist>
   <para>
     Don't end list with comment 1:

@@ -418,7 +418,7 @@ namespace quickbook
 
         local.list_item =
                 local.element(local.list_item.context)
-            >>  !eol                            [local.list.still_in_block = false]
+            >>  !(qbk_ver(0, 106u) >> eol)      [local.list.still_in_block = false]
             |   local.paragraph_separator       [local.list.still_in_block = false]
             |   local.common(element_info::in_phrase)
             ;
