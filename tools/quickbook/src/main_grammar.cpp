@@ -470,7 +470,6 @@ namespace quickbook
         inside_paragraph =
             state.values.save()
             [   *(  local.paragraph_separator   [paragraph]
-                >>  *eol
                 |   ~cl::eps_p(']')
                 >>  local.common(element_info::in_nested_block)
                 )
