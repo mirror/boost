@@ -438,8 +438,8 @@ namespace quickbook
             >>  (cl::ch_p('*') | '#')
             >>  (*cl::blank_p)                  [local.list.still_in_block = true]
             >>  *(  cl::eps_p(local.list.still_in_block)
-                >>  (   qbk_ver(106u) >> local.list_item(element_info::only_block)
-                    |   qbk_ver(0, 106u) >> local.list_item(element_info::only_list_block)
+                >>  (   qbk_ver(107u) >> local.list_item(element_info::only_block)
+                    |   qbk_ver(0, 107u) >> local.list_item(element_info::only_list_block)
                     )
                 )
                 // TODO: This is sometimes called in the wrong place. Currently
@@ -1052,6 +1052,14 @@ namespace quickbook
                 }
 
                 block_type = block_types::paragraph;
+            }
+
+            if (qbk_version_n == 106u && !list_stack.top().root) {
+                detail::outerr(state_.current_file, first)
+                    << "Nested blocks in lists won't be supported in "
+                    << "quickbook 1.6"
+                    << std::endl;
+                ++state_.error_count;
             }
         }
         else {

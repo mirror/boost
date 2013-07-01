@@ -8,7 +8,7 @@
 ]
 
 [chapter Language Versions
-    [quickbook 1.6]
+    [quickbook 1.7]
     [compatibility-mode 1.5]
     [id quickbook.versions]
     [source-mode teletype]
@@ -313,40 +313,6 @@ And then you can use css to style this however you wish.
 
 [endsect]
 
-[section:listparagraphs Pargraphs in lists]
-
-I'm still refining this, but paragraphs and block elements can now be used
-in lists:
-
-[pre
-* Para 1
-
-  Para 2
-  * Nested Para 1
-
-    Nested Para 2
-
-        Code block
-  Para 3
-]
-
-generates:
-
-* Para 1
-
-  Para 2
-  * Nested Para 1
-
-    Nested Para 2
-
-        Code block
-  Para 3
-
-The docbook markup that this generates is pretty bad, but seems to create okay
-html.
-
-[endsect]
-
 [endsect] [/ Quickbok 1.6]
 
 [section:1_7 Quickbook 1.7]
@@ -413,6 +379,40 @@ of quickbook and docbook attributes for the same information will not work
 well.
 
 [endsect] [/escaped_docinfo_attributes]
+
+[section:listparagraphs Pargraphs in lists]
+
+I'm still refining this, but paragraphs and block elements can now be used
+in lists:
+
+[pre
+* Para 1
+
+  Para 2
+  * Nested Para 1
+
+    Nested Para 2
+
+        Code block
+  Para 3
+]
+
+generates:
+
+* Para 1
+
+  Para 2
+  * Nested Para 1
+
+    Nested Para 2
+
+        Code block
+  Para 3
+
+The docbook markup that this generates is pretty bad, but seems to create okay
+html.
+
+[endsect]
 
 [section:templates_in_link_values Templates in link values]
 

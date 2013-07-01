@@ -70,6 +70,8 @@ test-suite quickbook.test :
     [ quickbook-test link-1_7 ]
     [ quickbook-test list_test-1_5 ]
     [ quickbook-test list_test-1_6 ]
+    [ quickbook-error-test list_test-1_6-fail ]
+    [ quickbook-test list_test-1_7 ]
     [ quickbook-test macro-1_5 ]
     [ quickbook-test macro-1_6 ]
     [ quickbook-error-test mismatched_brackets-1_1-fail ]
