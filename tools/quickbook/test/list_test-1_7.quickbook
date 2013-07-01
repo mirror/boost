@@ -96,20 +96,6 @@ Don't end list with comment 2:
   * B2
   * B3
 
-[section List immediately following markup]
-* One
-* Two
-* Three
-
-[endsect]
-
-[section List immediately following markup 2]
-* One
-[section Nested section]
-* Two
-[endsect]
-[endsect]
-
 [section Paragraphs in list items]
 
 * A1
@@ -144,4 +130,5 @@ Don't end list with comment 2:
 
     E
 * F
+
 [endsect]

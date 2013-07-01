@@ -399,49 +399,6 @@
       </simpara>
     </listitem>
   </itemizedlist>
-  <section id="list_test.list_immediately_following_marku">
-    <title><link linkend="list_test.list_immediately_following_marku">List immediately
-    following markup</link></title>
-    <itemizedlist>
-      <listitem>
-        <simpara>
-          One
-        </simpara>
-      </listitem>
-      <listitem>
-        <simpara>
-          Two
-        </simpara>
-      </listitem>
-      <listitem>
-        <simpara>
-          Three
-        </simpara>
-      </listitem>
-    </itemizedlist>
-  </section>
-  <section id="list_test.list_immediately_following_mark0">
-    <title><link linkend="list_test.list_immediately_following_mark0">List immediately
-    following markup 2</link></title>
-    <itemizedlist>
-      <listitem>
-        <simpara>
-          One
-        </simpara>
-      </listitem>
-    </itemizedlist>
-    <section id="list_test.list_immediately_following_mark0.nested_section">
-      <title><link linkend="list_test.list_immediately_following_mark0.nested_section">Nested
-      section</link></title>
-      <itemizedlist>
-        <listitem>
-          <simpara>
-            Two
-          </simpara>
-        </listitem>
-      </itemizedlist>
-    </section>
-  </section>
   <section id="list_test.paragraphs_in_list_items">
     <title><link linkend="list_test.paragraphs_in_list_items">Paragraphs in list
     items</link></title>
