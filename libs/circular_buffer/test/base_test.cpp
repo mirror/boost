@@ -738,6 +738,38 @@ void exception_safety_test() {
 #endif // #if !defined(BOOST_NO_EXCEPTIONS)
 }
 
+void move_container_on_cpp11() {
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    circular_buffer<MyInteger> cb1(10);
+    cb1.push_back(1);
+    cb1.push_back(2);
+    cb1.push_back(3);
+    cb1.push_back(4);
+    cb1.push_back(5);
+    cb1.push_back(6);
+    
+    // Checking move constructor
+    circular_buffer<MyInteger> cb2(static_cast<circular_buffer<MyInteger>&& >(cb1));
+    circular_buffer<MyInteger>::iterator it2 = cb2.begin() + 1;
+
+    BOOST_CHECK(cb1.empty());
+    BOOST_CHECK(!cb2.empty());
+    BOOST_CHECK(it2[0] == 2);
+    BOOST_CHECK(it2[-1] == 1);
+    BOOST_CHECK(it2[2] == 4);
+
+    // Checking move assignment
+    cb1 = static_cast<circular_buffer<MyInteger>&& >(cb2);
+    circular_buffer<MyInteger>::iterator it1 = cb1.begin() + 1;
+
+    BOOST_CHECK(!cb1.empty());
+    BOOST_CHECK(cb2.empty());
+    BOOST_CHECK(it1[0] == 2);
+    BOOST_CHECK(it1[-1] == 1);
+    BOOST_CHECK(it1[2] == 4);
+#endif
+}
+
 // test main
 test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
 
@@ -755,6 +787,7 @@ test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
     tests->add(BOOST_TEST_CASE(&iterator_comparison_test));
     tests->add(BOOST_TEST_CASE(&iterator_invalidation_test));
     tests->add(BOOST_TEST_CASE(&exception_safety_test));
+    tests->add(BOOST_TEST_CASE(&move_container_on_cpp11));
 
     return tests;
 }
