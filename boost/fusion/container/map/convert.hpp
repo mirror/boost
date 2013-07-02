@@ -80,6 +80,30 @@ namespace boost { namespace fusion
         typedef result_of::as_map<Sequence const> gen;
         return gen::call(fusion::begin(seq), fusion::end(seq));
     }
+
+    namespace extension
+    {
+        template <typename T>
+        struct convert_impl;
+
+        template <>
+        struct convert_impl<map_tag>
+        {
+            template <typename Sequence>
+            struct apply
+            {
+                typedef typename
+                    result_of::as_map<Sequence>::type
+                type;
+
+                static type call(Sequence& seq)
+                {
+                    typedef result_of::as_map<Sequence> gen;
+                    return gen::call(fusion::begin(seq), fusion::end(seq));
+                }
+            };
+        };
+    }
 }}
 
 #endif
