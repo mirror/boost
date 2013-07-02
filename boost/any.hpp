@@ -234,7 +234,7 @@ namespace boost
         lhs.swap(rhs);
     }
 
-    class bad_any_cast : public std::bad_cast
+    class BOOST_SYMBOL_VISIBLE bad_any_cast : public std::bad_cast
     {
     public:
         virtual const char * what() const BOOST_NOEXCEPT_OR_NOTHROW
