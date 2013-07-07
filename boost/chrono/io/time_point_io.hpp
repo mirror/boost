@@ -255,9 +255,9 @@ namespace boost
 //                b = that_.get(b, e, iob, err, tm, fm, fm + sizeof(fm)/sizeof(fm[0]));
 //                }
 //                break;
-//            case 'S':
-//              that_.get_second(tm->tm_sec, b, e, err, ct);
-//                break;
+            case 'S':
+              get_second(tm->tm_sec, b, e, err, ct);
+                break;
 //            case 'T':
 //                {
 //                const char_type fm[] = {'%', 'H', ':', '%', 'M', ':', '%', 'S'};

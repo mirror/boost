@@ -507,6 +507,7 @@ rule chrono-compile2 ( sources : name )
         [ chrono-v1-v2-run-header io/duration_output.cpp  ]
         [ chrono-v1-v2-run-header io/time_point_input.cpp  ]
         [ chrono-v1-v2-run-header io/time_point_output.cpp  ]
+        [ chrono-run test_7868.cpp  ]
         ;
 
     test-suite "win32"
@@ -517,6 +518,6 @@ rule chrono-compile2 ( sources : name )
     explicit ts_ ;
     test-suite ts_
         :
-        #[ chrono-run test_xx.cpp  ]
+        #[ chrono-run test_7868.cpp  ]
         ;
 
