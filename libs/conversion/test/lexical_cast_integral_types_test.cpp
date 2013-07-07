@@ -48,7 +48,7 @@
 #define BOOST_LCAST_NO_WCHAR_T
 #endif
 
-#if (defined(BOOST_LCAST_HAS_INT128) && !defined(__GNUC__)) || GCC_VERSION > 40700
+#if defined(BOOST_HAS_INT128) && (!defined(__GNUC__) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 6))
 #define BOOST_LCAST_HAS_INT128
 #endif
 
@@ -444,8 +444,8 @@ void test_conversion_from_to_integral_minimal()
     // test_conversion_from_to_integral_for_locale
 
     // Overflow test case from David W. Birdsall
-    std::string must_owerflow_str = "160000000000000000000";
-    std::string must_owerflow_negative_str = "-160000000000000000000";
+    std::string must_owerflow_str =             (sizeof(T) < 16 ?  "160000000000000000000" :  "1600000000000000000000000000000000000000");
+    std::string must_owerflow_negative_str =    (sizeof(T) < 16 ? "-160000000000000000000" : "-1600000000000000000000000000000000000000");
     for (int i = 0; i < 15; ++i) {
         BOOST_CHECK_THROW(lexical_cast<T>(must_owerflow_str), bad_lexical_cast);
         BOOST_CHECK_THROW(lexical_cast<T>(must_owerflow_negative_str), bad_lexical_cast);

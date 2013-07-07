@@ -69,10 +69,10 @@
     throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)))
 #endif
 
-#if (defined(BOOST_LCAST_HAS_INT128) && !defined(__GNUC__)) || GCC_VERSION > 40700
+// GCC 4.6 has some issues with int128 and uint128. Issues were fixed in GCC 4.7
+#if defined(BOOST_HAS_INT128) && (!defined(__GNUC__) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 6))
 #define BOOST_LCAST_HAS_INT128
 #endif
-
 
 namespace boost
 {
