@@ -49,7 +49,7 @@ public:
     typedef typename circular_buffer<T, Alloc>::array_range array_range;
     typedef typename circular_buffer<T, Alloc>::const_array_range const_array_range;
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
-    typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
+    //typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
 
 /* <pre> is not passed through to html or pdf. So <br> is used in code section below.  Ugly :-(
 Ideally want a link to capacity_control, but this would require include details
@@ -119,7 +119,7 @@ public:<br>
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     reference operator [] (size_type n) { return circular_buffer<T, Alloc>::operator[](n); }
-    return_value_type operator [] (size_type n) const { return circular_buffer<T, Alloc>::operator[](n); }
+    const_reference operator [] (size_type n) const { return circular_buffer<T, Alloc>::operator[](n); }
 #else
     using circular_buffer<T, Alloc>::operator[];
 #endif

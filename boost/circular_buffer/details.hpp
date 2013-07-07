@@ -18,6 +18,14 @@
 #include <boost/detail/no_exceptions_support.hpp>
 #include <iterator>
 
+// Silence MS /W4 warnings like C4913:
+// "user defined binary operator ',' exists but no overload could convert all operands, default built-in binary operator ',' used"
+// This might happen when previously including some boost headers that overload the coma operator.
+#if defined(_MSC_VER)
+#  pragma warning(push)
+#  pragma warning(disable:4913)
+#endif
+
 namespace boost {
 
 namespace cb_details {
@@ -467,5 +475,9 @@ inline void uninitialized_fill_n_with_alloc(ForwardIterator first, Diff n, const
 } // namespace cb_details
 
 } // namespace boost
+
+#if defined(_MSC_VER)
+#  pragma warning(pop)
+#endif
 
 #endif // #if !defined(BOOST_CIRCULAR_BUFFER_DETAILS_HPP)

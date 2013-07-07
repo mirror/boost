@@ -27,9 +27,7 @@
 #include <algorithm>
 #include <utility>
 #include <deque>
-#if !defined(BOOST_NO_EXCEPTIONS)
-    #include <stdexcept>
-#endif
+#include <stdexcept>
 #if BOOST_CB_ENABLE_DEBUG
     #include <cstring>
 #endif
@@ -170,7 +168,7 @@ public:
     typedef typename call_traits<value_type>::param_type param_value_type;
 
     // A type representing the "best" way to return the value_type from a const method.
-    typedef typename call_traits<value_type>::param_type return_value_type;
+    //typedef typename call_traits<value_type>::param_type return_value_type;
 
 private:
 // Member variables
@@ -397,7 +395,7 @@ public:
              Constant (in the size of the <code>circular_buffer</code>).
         \sa <code>\link at(size_type)const at() const \endlink</code>
     */
-    return_value_type operator [] (size_type index) const {
+    const_reference operator [] (size_type index) const {
         BOOST_CB_ASSERT(index < size()); // check for invalid index
         return *add(m_first, index);
     }
@@ -435,7 +433,7 @@ public:
              Constant (in the size of the <code>circular_buffer</code>).
         \sa <code>\link operator[](size_type)const operator[] const \endlink</code>
     */
-    return_value_type at(size_type index) const {
+    const_reference at(size_type index) const {
         check_position(index);
         return (*this)[index];
     }
@@ -489,7 +487,7 @@ public:
              Constant (in the size of the <code>circular_buffer</code>).
         \sa <code>back() const</code>
     */
-    return_value_type front() const {
+    const_reference front() const {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (front element not available)
         return *m_first;
     }
@@ -507,7 +505,7 @@ public:
              Constant (in the size of the <code>circular_buffer</code>).
         \sa <code>front() const</code>
     */
-    return_value_type back() const {
+    const_reference back() const {
         BOOST_CB_ASSERT(!empty()); // check for empty buffer (back element not available)
         return *((m_last == m_buff ? m_end : m_last) - 1);
     }
