@@ -740,7 +740,7 @@ void exception_safety_test() {
 
 void move_container_on_cpp11() {
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    circular_buffer<MyInteger> cb1(10);
+    CB_CONTAINER<MyInteger> cb1(10);
     cb1.push_back(1);
     cb1.push_back(2);
     cb1.push_back(3);
@@ -749,8 +749,8 @@ void move_container_on_cpp11() {
     cb1.push_back(6);
     
     // Checking move constructor
-    circular_buffer<MyInteger> cb2(static_cast<circular_buffer<MyInteger>&& >(cb1));
-    circular_buffer<MyInteger>::iterator it2 = cb2.begin() + 1;
+    CB_CONTAINER<MyInteger> cb2(static_cast<CB_CONTAINER<MyInteger>&& >(cb1));
+    CB_CONTAINER<MyInteger>::iterator it2 = cb2.begin() + 1;
 
     BOOST_CHECK(cb1.empty());
     BOOST_CHECK(!cb2.empty());
@@ -759,8 +759,8 @@ void move_container_on_cpp11() {
     BOOST_CHECK(it2[2] == 4);
 
     // Checking move assignment
-    cb1 = static_cast<circular_buffer<MyInteger>&& >(cb2);
-    circular_buffer<MyInteger>::iterator it1 = cb1.begin() + 1;
+    cb1 = static_cast<CB_CONTAINER<MyInteger>&& >(cb2);
+    CB_CONTAINER<MyInteger>::iterator it1 = cb1.begin() + 1;
 
     BOOST_CHECK(!cb1.empty());
     BOOST_CHECK(cb2.empty());
@@ -768,6 +768,158 @@ void move_container_on_cpp11() {
     BOOST_CHECK(it1[-1] == 1);
     BOOST_CHECK(it1[2] == 4);
 #endif
+}
+
+
+struct noncopyable_movable_test_t {
+private:
+    BOOST_MOVABLE_BUT_NOT_COPYABLE(noncopyable_movable_test_t)
+    bool is_moved_;
+public:
+    explicit noncopyable_movable_test_t()
+        : is_moved_(false)
+    {}
+
+    noncopyable_movable_test_t(BOOST_RV_REF(noncopyable_movable_test_t) x) BOOST_NOEXCEPT {
+        is_moved_ = x.is_moved_;
+        x.is_moved_ = true;
+    }
+
+    noncopyable_movable_test_t& operator=(BOOST_RV_REF(noncopyable_movable_test_t) x) BOOST_NOEXCEPT {
+        is_moved_ = x.is_moved_;
+        x.is_moved_ = true;
+        return *this;
+    }
+
+    bool is_moved() const {
+        return is_moved_;
+    }
+
+    void reinit() { is_moved_ = false; }
+};
+
+// Required for C++03 compilers 
+namespace boost {
+    template <>
+    struct is_nothrow_move_constructible<noncopyable_movable_test_t> {
+        BOOST_STATIC_CONSTANT(bool, value = true);
+    };
+} // namespace boost
+
+void move_container_values() {
+    CB_CONTAINER<noncopyable_movable_test_t> cb1(40);
+    noncopyable_movable_test_t var;
+    cb1.push_back(boost::move(var));
+    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(var.is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+
+    var.reinit();
+    cb1.push_front(boost::move(var));
+    BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(var.is_moved());
+    BOOST_CHECK(cb1.size() == 2);
+
+    cb1.push_back();
+    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(cb1.size() == 3);
+
+    cb1.push_front();
+    BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.size() == 4);
+
+    cb1.insert(cb1.begin());
+    BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.size() == 5);
+
+    var.reinit();
+    cb1.insert(cb1.begin(), boost::move(var));
+    BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.size() == 6);
+
+    cb1.rinsert(cb1.begin());
+    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(cb1.size() == 7);
+
+    var.reinit();
+    cb1.rinsert(cb1.begin(), boost::move(var));
+    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(cb1.size() == 8);
+}
+
+void move_container_values_resetting() {
+    CB_CONTAINER<noncopyable_movable_test_t> cb1(1);
+    noncopyable_movable_test_t var;
+    cb1.push_back();
+
+    cb1.push_back(boost::move(var));
+    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(var.is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+
+    cb1.push_front(boost::move(var));
+    BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(var.is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+
+    cb1.push_back();
+    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+
+    cb1.push_front();
+    BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+
+
+    cb1.insert(cb1.begin());
+    // If the circular_buffer is full and the pos points to begin(), 
+    // then the item will not be inserted.
+    BOOST_CHECK(cb1.front().is_moved()); 
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+
+    cb1.insert(cb1.begin(), boost::move(var));
+    // If the circular_buffer is full and the pos points to begin(), 
+    // then the item will not be inserted.
+    BOOST_CHECK(cb1.front().is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+
+    cb1.rinsert(cb1.begin());
+    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+
+    var.reinit();
+    cb1.rinsert(cb1.begin(), boost::move(var));
+    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+    
+    cb1.rinsert(cb1.end());
+    BOOST_CHECK(cb1.back().is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
+
+    var.reinit();
+    cb1.rinsert(cb1.end(), boost::move(var));
+    BOOST_CHECK(cb1.back().is_moved());
+    BOOST_CHECK(cb1.size() == 1);
+    var = boost::move(cb1.back());
+    BOOST_CHECK(cb1.back().is_moved());
 }
 
 // test main
@@ -788,6 +940,8 @@ test_suite* init_unit_test_suite(int /*argc*/, char* /*argv*/[]) {
     tests->add(BOOST_TEST_CASE(&iterator_invalidation_test));
     tests->add(BOOST_TEST_CASE(&exception_safety_test));
     tests->add(BOOST_TEST_CASE(&move_container_on_cpp11));
+    tests->add(BOOST_TEST_CASE(&move_container_values));
+    tests->add(BOOST_TEST_CASE(&move_container_values_resetting));
 
     return tests;
 }

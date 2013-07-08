@@ -24,6 +24,9 @@
 #include <boost/type_traits/is_stateless.hpp>
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_scalar.hpp>
+#include <boost/type_traits/is_nothrow_move_constructible.hpp>
+#include <boost/type_traits/conditional.hpp>
+#include <boost/move/move.hpp>
 #include <algorithm>
 #include <utility>
 #include <deque>
@@ -40,6 +43,8 @@ namespace std {
     using ::memset;
 }
 #endif
+
+
 
 namespace boost {
 
@@ -77,7 +82,7 @@ class circular_buffer
 {
 
   // Requirements
-    BOOST_CLASS_REQUIRE(T, boost, SGIAssignableConcept);
+    //BOOST_CLASS_REQUIRE(T, boost, SGIAssignableConcept);
 
 
     //BOOST_CONCEPT_ASSERT((Assignable<T>));
@@ -90,6 +95,9 @@ class circular_buffer
 
 public:
 // Basic types
+    
+    //! The type of this <code>circular_buffer</code>.
+    typedef circular_buffer<T, Alloc> this_type;
 
     //! The type of elements stored in the <code>circular_buffer</code>.
     typedef typename Alloc::value_type value_type;
@@ -165,12 +173,32 @@ public:
 // Helper types
 
     // A type representing the "best" way to pass the value_type to a method.
-    typedef typename call_traits<value_type>::param_type param_value_type;
+    //typedef typename call_traits<value_type>::param_type param_value_type;
+    typedef const value_type& param_value_type;
 
     // A type representing the "best" way to return the value_type from a const method.
     //typedef typename call_traits<value_type>::param_type return_value_type;
 
+    // A type representing rvalue from param type.
+    typedef BOOST_RV_REF(value_type) rvalue_type;
+
 private:
+
+    // TODO: move to Boost.Move
+    // TODO: Improve!
+    template <class ValT> 
+    static inline typename boost::conditional<
+        (boost::is_nothrow_move_constructible<ValT>::value /* || !boost::has_copy_constructor<T>::value*/) 
+#ifdef BOOST_NO_CXX11_DELETED_FUNCTIONS
+            && has_move_emulation_enabled<T>::value
+#endif
+        ,
+        rvalue_type,
+        param_value_type
+    >::type move_if_noexcept(ValT& value) BOOST_NOEXCEPT {
+        return boost::move(value);
+    }
+
 // Member variables
 
     //! The internal buffer used for storing elements in the circular buffer.
@@ -662,12 +690,12 @@ public:
                         break;
                     }
                     if (is_uninitialized(dest)) {
-                        m_alloc.construct(dest, *src);
+                        new (dest) value_type(*src);
                         ++constructed;
                     } else {
-                        value_type tmp = *src;
-                        replace(src, *dest);
-                        replace(dest, tmp);
+                        value_type tmp = this_type::move_if_noexcept(*src); 
+                        replace(src, this_type::move_if_noexcept(*dest));
+                        replace(dest, boost::move(tmp));
                     }
                 }
             }
@@ -742,12 +770,12 @@ public:
             difference_type n = new_begin - begin();
             if (m < n) {
                 for (; m > 0; --m) {
-                    push_front(back());
+                    push_front(this_type::move_if_noexcept(back()));
                     pop_back();
                 }
             } else {
                 for (; n > 0; --n) {
-                    push_back(front());
+                    push_back(this_type::move_if_noexcept(front()));
                     pop_front();
                 }
             }
@@ -1426,7 +1454,44 @@ public:
     }
 
 // push and pop
+private:
+    template <class ValT>
+    void push_back_impl(ValT item) {
+        if (full()) {
+            if (empty())
+                return;
+            replace(m_last, static_cast<ValT>(item));
+            increment(m_last);
+            m_first = m_last;
+        } else {
+            new (m_last) value_type(static_cast<ValT>(item));
+            increment(m_last);
+            ++m_size;
+        }        
+    }
 
+    template <class ValT>
+    void push_front_impl(ValT item) {
+        BOOST_TRY {
+            if (full()) {
+                if (empty())
+                    return;
+                decrement(m_first);
+                replace(m_first, static_cast<ValT>(item));
+                m_last = m_first;
+            } else {
+                decrement(m_first);
+                new (m_first) value_type(static_cast<ValT>(item));
+                ++m_size;
+            }
+        } BOOST_CATCH(...) {
+            increment(m_first);
+            BOOST_RETHROW
+        }
+        BOOST_CATCH_END
+    }
+
+public:
     //! Insert a new element at the end of the <code>circular_buffer</code>.
     /*!
         \post if <code>capacity() > 0</code> then <code>back() == item</code><br>
@@ -1444,18 +1509,51 @@ public:
         \sa <code>\link push_front() push_front(const_reference)\endlink</code>,
             <code>pop_back()</code>, <code>pop_front()</code>
     */
-    void push_back(param_value_type item = value_type()) {
-        if (full()) {
-            if (empty())
-                return;
-            replace(m_last, item);
-            increment(m_last);
-            m_first = m_last;
-        } else {
-            m_alloc.construct(m_last, item);
-            increment(m_last);
-            ++m_size;
-        }
+    void push_back(param_value_type item) {
+        push_back_impl<param_value_type>(item);
+    }
+
+    //! Insert a new element at the end of the <code>circular_buffer</code> using rvalue references or rvalues references emulation.
+    /*!
+        \post if <code>capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer</code> is full, the first element will be removed. If the capacity is
+              <code>0</code>, nothing will be inserted.
+        \param item The element to be inserted.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>,
+            <code>pop_back()</code>, <code>pop_front()</code>
+    */
+    void push_back(rvalue_type item) {
+        push_back_impl<rvalue_type>(boost::move(item));
+    }
+
+    //! Insert a new default-constructed element at the end of the <code>circular_buffer</code>.
+    /*!
+        \post if <code>capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer</code> is full, the first element will be removed. If the capacity is
+              <code>0</code>, nothing will be inserted.
+        \throws Whatever <code>T::T()</code> throws.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>,
+            <code>pop_back()</code>, <code>pop_front()</code>
+    */
+    void push_back() {
+        value_type temp;
+        push_back(boost::move(temp));
     }
 
     //! Insert a new element at the beginning of the <code>circular_buffer</code>.
@@ -1475,24 +1573,51 @@ public:
         \sa <code>\link push_back() push_back(const_reference)\endlink</code>,
             <code>pop_back()</code>, <code>pop_front()</code>
     */
-    void push_front(param_value_type item = value_type()) {
-        BOOST_TRY {
-            if (full()) {
-                if (empty())
-                    return;
-                decrement(m_first);
-                replace(m_first, item);
-                m_last = m_first;
-            } else {
-                decrement(m_first);
-                m_alloc.construct(m_first, item);
-                ++m_size;
-            }
-        } BOOST_CATCH(...) {
-            increment(m_first);
-            BOOST_RETHROW
-        }
-        BOOST_CATCH_END
+    void push_front(param_value_type item) {
+        push_front_impl<param_value_type>(item);
+    }
+
+    //! Insert a new element at the beginning of the <code>circular_buffer</code> using rvalue references or rvalues references emulation.
+    /*!
+        \post if <code>capacity() > 0</code> then <code>front() == item</code><br>
+              If the <code>circular_buffer</code> is full, the last element will be removed. If the capacity is
+              <code>0</code>, nothing will be inserted.
+        \param item The element to be inserted.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>pop_back()</code>, <code>pop_front()</code>
+    */
+    void push_front(rvalue_type item) {
+        push_front_impl<rvalue_type>(boost::move(item));
+    }
+
+    //! Insert a new default-constructed element at the beginning of the <code>circular_buffer</code>.
+    /*!
+        \post if <code>capacity() > 0</code> then <code>front() == item</code><br>
+              If the <code>circular_buffer</code> is full, the last element will be removed. If the capacity is
+              <code>0</code>, nothing will be inserted.
+        \throws Whatever <code>T::T()</code> throws.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Does not invalidate any iterators with the exception of iterators pointing to the overwritten element.
+        \par Complexity
+             Constant (in the size of the <code>circular_buffer</code>).
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>,
+            <code>pop_back()</code>, <code>pop_front()</code>
+    */
+    void push_front() {
+        value_type temp;
+        push_front(boost::move(temp));
     }
 
     //! Remove the last element from the <code>circular_buffer</code>.
@@ -1536,6 +1661,15 @@ public:
         increment(m_first);
         --m_size;
     }
+private:
+    template <class ValT>
+    iterator insert_impl(iterator pos, ValT item) {
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
+        iterator b = begin();
+        if (full() && pos == b)
+            return b;
+        return insert_item<ValT>(pos, static_cast<ValT>(item));
+    }
 
 public:
 // Insert
@@ -1569,12 +1703,76 @@ public:
             rinsert(iterator, size_type, value_type)\endlink</code>,
             <code>rinsert(iterator, InputIterator, InputIterator)</code>
     */
-    iterator insert(iterator pos, param_value_type item = value_type()) {
-        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
-        iterator b = begin();
-        if (full() && pos == b)
-            return b;
-        return insert_item(pos, item);
+    iterator insert(iterator pos, param_value_type item) {
+        return insert_impl<param_value_type>(pos, item);
+    }
+
+    //! Insert an element at the specified position.
+    /*!
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
+        \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
+              If the <code>circular_buffer</code> is full, the first element will be overwritten. If the
+              <code>circular_buffer</code> is full and the <code>pos</code> points to <code>begin()</code>, then the
+              <code>item</code> will not be inserted. If the capacity is <code>0</code>, nothing will be inserted.
+        \param pos An iterator specifying the position where the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
+             iterators behind the insertion point (towards the end; except iterators equal to <code>end()</code>). It
+             also invalidates iterators pointing to the overwritten element.
+        \par Complexity
+             Linear (in <code>std::distance(pos, end())</code>).
+        \sa <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>
+    */
+    iterator insert(iterator pos, rvalue_type item) {
+        return insert_impl<rvalue_type>(pos, boost::move(item));
+    }
+
+    //! Insert a default-constructed element at the specified position.
+    /*!
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
+        \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
+              If the <code>circular_buffer</code> is full, the first element will be overwritten. If the
+              <code>circular_buffer</code> is full and the <code>pos</code> points to <code>begin()</code>, then the
+              <code>item</code> will not be inserted. If the capacity is <code>0</code>, nothing will be inserted.
+        \param pos An iterator specifying the position where the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws Whatever <code>T::T()</code> throws.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements at the insertion point (including <code>pos</code>) and
+             iterators behind the insertion point (towards the end; except iterators equal to <code>end()</code>). It
+             also invalidates iterators pointing to the overwritten element.
+        \par Complexity
+             Linear (in <code>std::distance(pos, end())</code>).
+        \sa <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>
+    */
+    iterator insert(iterator pos) {
+        value_type temp;
+        return insert(pos, boost::move(temp));
     }
 
     //! Insert <code>n</code> copies of the <code>item</code> at the specified position.
@@ -1676,6 +1874,56 @@ public:
         insert(pos, first, last, is_integral<InputIterator>());
     }
 
+private:
+    template <class ValT>
+    iterator rinsert_impl(iterator pos, ValT item) {
+        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
+        if (full() && pos.m_it == 0)
+            return end();
+        if (pos == begin()) {
+            BOOST_TRY {
+                decrement(m_first);
+                construct_or_replace(!full(), m_first, static_cast<ValT>(item));
+            } BOOST_CATCH(...) {
+                increment(m_first);
+                BOOST_RETHROW
+            }
+            BOOST_CATCH_END
+            pos.m_it = m_first;
+        } else {
+            pointer src = m_first;
+            pointer dest = m_first;
+            decrement(dest);
+            pos.m_it = map_pointer(pos.m_it);
+            bool construct = !full();
+            BOOST_TRY {
+                while (src != pos.m_it) {
+                    construct_or_replace(construct, dest, this_type::move_if_noexcept(*src));
+                    increment(src);
+                    increment(dest);
+                    construct = false;
+                }
+                decrement(pos.m_it);
+                replace(pos.m_it, static_cast<ValT>(item));
+            } BOOST_CATCH(...) {
+                if (!construct && !full()) {
+                    decrement(m_first);
+                    ++m_size;
+                }
+                BOOST_RETHROW
+            }
+            BOOST_CATCH_END
+            decrement(m_first);
+        }
+        if (full())
+            m_last = m_first;
+        else
+            ++m_size;
+        return iterator(this, pos.m_it);
+    }
+
+public:
+   
     //! Insert an element before the specified position.
     /*!
         \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
@@ -1704,50 +1952,74 @@ public:
             insert(iterator, size_type, value_type)\endlink</code>,
             <code>insert(iterator, InputIterator, InputIterator)</code>
     */
-    iterator rinsert(iterator pos, param_value_type item = value_type()) {
-        BOOST_CB_ASSERT(pos.is_valid(this)); // check for uninitialized or invalidated iterator
-        if (full() && pos.m_it == 0)
-            return end();
-        if (pos == begin()) {
-            BOOST_TRY {
-                decrement(m_first);
-                construct_or_replace(!full(), m_first, item);
-            } BOOST_CATCH(...) {
-                increment(m_first);
-                BOOST_RETHROW
-            }
-            BOOST_CATCH_END
-            pos.m_it = m_first;
-        } else {
-            pointer src = m_first;
-            pointer dest = m_first;
-            decrement(dest);
-            pos.m_it = map_pointer(pos.m_it);
-            bool construct = !full();
-            BOOST_TRY {
-                while (src != pos.m_it) {
-                    construct_or_replace(construct, dest, *src);
-                    increment(src);
-                    increment(dest);
-                    construct = false;
-                }
-                decrement(pos.m_it);
-                replace(pos.m_it, item);
-            } BOOST_CATCH(...) {
-                if (!construct && !full()) {
-                    decrement(m_first);
-                    ++m_size;
-                }
-                BOOST_RETHROW
-            }
-            BOOST_CATCH_END
-            decrement(m_first);
-        }
-        if (full())
-            m_last = m_first;
-        else
-            ++m_size;
-        return iterator(this, pos.m_it);
+    iterator rinsert(iterator pos, param_value_type item) {
+        return rinsert_impl<param_value_type>(pos, item);
+    }
+
+    //! Insert an element before the specified position.
+    /*!
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
+        \post The <code>item</code> will be inserted before the position <code>pos</code>.<br>
+              If the <code>circular_buffer</code> is full, the last element will be overwritten. If the
+              <code>circular_buffer</code> is full and the <code>pos</code> points to <code>end()</code>, then the
+              <code>item</code> will not be inserted. If the capacity is <code>0</code>, nothing will be inserted.
+        \param pos An iterator specifying the position before which the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+             excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten element.
+        \par Complexity
+             Linear (in <code>std::distance(begin(), pos)</code>).
+        \sa <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>
+    */
+    iterator rinsert(iterator pos, rvalue_type item) {
+        return rinsert_impl<rvalue_type>(pos, boost::move(item));
+    }
+
+    //! Insert an element before the specified position.
+    /*!
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer</code> or its end.
+        \post The <code>item</code> will be inserted before the position <code>pos</code>.<br>
+              If the <code>circular_buffer</code> is full, the last element will be overwritten. If the
+              <code>circular_buffer</code> is full and the <code>pos</code> points to <code>end()</code>, then the
+              <code>item</code> will not be inserted. If the capacity is <code>0</code>, nothing will be inserted.
+        \param pos An iterator specifying the position before which the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws Whatever <code>T::T()</code> throws.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
+        \par Iterator Invalidation
+             Invalidates iterators pointing to the elements before the insertion point (towards the beginning and
+             excluding <code>pos</code>). It also invalidates iterators pointing to the overwritten element.
+        \par Complexity
+             Linear (in <code>std::distance(begin(), pos)</code>).
+        \sa <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>
+    */
+    iterator rinsert(iterator pos) {
+        value_type temp;
+        return rinsert(pos, boost::move(temp));
     }
 
     //! Insert <code>n</code> copies of the <code>item</code> before the specified position.
@@ -2146,13 +2418,21 @@ private:
     }
 
     //! Does the pointer point to the uninitialized memory?
-    bool is_uninitialized(const_pointer p) const {
+    bool is_uninitialized(const_pointer p) const BOOST_NOEXCEPT {
         return p >= m_last && (m_first < m_last || p < m_first);
     }
 
     //! Replace an element.
     void replace(pointer pos, param_value_type item) {
         *pos = item;
+#if BOOST_CB_ENABLE_DEBUG
+        invalidate_iterators(iterator(this, pos));
+#endif
+    }
+
+    //! Replace an element.
+    void replace(pointer pos, rvalue_type item) {
+        *pos = boost::move(item);
 #if BOOST_CB_ENABLE_DEBUG
         invalidate_iterators(iterator(this, pos));
 #endif
@@ -2165,9 +2445,21 @@ private:
     */
     void construct_or_replace(bool construct, pointer pos, param_value_type item) {
         if (construct)
-            m_alloc.construct(pos, item);
+            new (pos) value_type(item);
         else
             replace(pos, item);
+    }
+
+    //! Construct or replace an element.
+    /*!
+        <code>construct</code> has to be set to <code>true</code> if and only if
+        <code>pos</code> points to an uninitialized memory.
+    */
+    void construct_or_replace(bool construct, pointer pos, rvalue_type item) {
+        if (construct)
+            new (pos) value_type(boost::move(item));
+        else
+            replace(pos, boost::move(item));
     }
 
     //! Destroy an item.
@@ -2261,7 +2553,7 @@ private:
                                                         // for containers
         std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
         size_type distance = tmp.size();
-        initialize(distance, tmp.begin(), tmp.end(), distance);
+        initialize(distance, boost::make_move_iterator(tmp.begin()), boost::make_move_iterator(tmp.end()), distance);
     }
 
     //! Specialized initialize method.
@@ -2305,7 +2597,7 @@ private:
         if (buffer_capacity == 0)
             return;
         while (first != last && !full()) {
-            m_alloc.construct(m_last, *first++);
+            new (m_last) value_type(*first++);
             increment(m_last);
             ++m_size;
         }
@@ -2486,10 +2778,11 @@ private:
     }
 
     //! Helper insert method.
-    iterator insert_item(const iterator& pos, param_value_type item) {
+    template <class ValT>
+    iterator insert_item(const iterator& pos, ValT item) {
         pointer p = pos.m_it;
         if (p == 0) {
-            construct_or_replace(!full(), m_last, item);
+            construct_or_replace(!full(), m_last, static_cast<ValT>(item));
             p = m_last;
         } else {
             pointer src = m_last;
@@ -2498,11 +2791,11 @@ private:
             BOOST_TRY {
                 while (src != p) {
                     decrement(src);
-                    construct_or_replace(construct, dest, *src);
+                    construct_or_replace(construct, dest, this_type::move_if_noexcept(*src));
                     decrement(dest);
                     construct = false;
                 }
-                replace(p, item);
+                replace(p, static_cast<ValT>(item));
             } BOOST_CATCH(...) {
                 if (!construct && !full()) {
                     increment(m_last);
@@ -2542,7 +2835,7 @@ private:
     void insert(iterator pos, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
         if (!full() || pos != begin()) {
             for (;first != last; ++pos)
-                pos = insert_item(pos, *first++);
+                pos = insert_item<param_value_type>(pos, *first++); // TODO: optimize for cases when InputIterator is move iterator
         }
     }
 
@@ -2574,7 +2867,7 @@ private:
             pointer p = m_last;
             BOOST_TRY {
                 for (; ii < construct; ++ii, increment(p))
-                    m_alloc.construct(p, *wrapper());
+                    new (p) value_type(*wrapper());
                 for (;ii < n; ++ii, increment(p))
                     replace(p, *wrapper());
             } BOOST_CATCH(...) {
@@ -2668,7 +2961,7 @@ private:
                 for (;ii > construct; --ii, increment(p))
                     replace(p, *wrapper());
                 for (; ii > 0; --ii, increment(p))
-                    m_alloc.construct(p, *wrapper());
+                    new (p) value_type(*wrapper());
             } BOOST_CATCH(...) {
                 size_type constructed = ii < construct ? construct - ii : 0;
                 m_last = add(m_last, constructed);
