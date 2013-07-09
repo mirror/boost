@@ -771,22 +771,30 @@ void move_container_on_cpp11() {
 }
 
 
-struct noncopyable_movable_test_t {
+struct noncopyable_movable_test_t
+    : private boost::noncopyable // required, until there will be no support for is_copy_constructible added to Boost.Move
+{
 private:
     BOOST_MOVABLE_BUT_NOT_COPYABLE(noncopyable_movable_test_t)
     bool is_moved_;
+    int value_;
 public:
+    static int next_value;
+
     explicit noncopyable_movable_test_t()
         : is_moved_(false)
+        , value_(next_value ++)
     {}
 
     noncopyable_movable_test_t(BOOST_RV_REF(noncopyable_movable_test_t) x) BOOST_NOEXCEPT {
         is_moved_ = x.is_moved_;
+        value_ = x.value_;
         x.is_moved_ = true;
     }
 
     noncopyable_movable_test_t& operator=(BOOST_RV_REF(noncopyable_movable_test_t) x) BOOST_NOEXCEPT {
         is_moved_ = x.is_moved_;
+        value_ = x.value_;
         x.is_moved_ = true;
         return *this;
     }
@@ -795,56 +803,103 @@ public:
         return is_moved_;
     }
 
-    void reinit() { is_moved_ = false; }
+    int value() const {
+        return value_;
+    }
+
+    void reinit() { is_moved_ = false; value_ = next_value ++; }
 };
 
-// Required for C++03 compilers 
-namespace boost {
-    template <>
-    struct is_nothrow_move_constructible<noncopyable_movable_test_t> {
-        BOOST_STATIC_CONSTANT(bool, value = true);
-    };
-} // namespace boost
+int noncopyable_movable_test_t::next_value = 1;
 
 void move_container_values() {
+    noncopyable_movable_test_t::next_value = 1;
+
     CB_CONTAINER<noncopyable_movable_test_t> cb1(40);
     noncopyable_movable_test_t var;
     cb1.push_back(boost::move(var));
     BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(cb1.back().value() == 1);
     BOOST_CHECK(var.is_moved());
     BOOST_CHECK(cb1.size() == 1);
 
     var.reinit();
     cb1.push_front(boost::move(var));
     BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.front().value() == 2);
     BOOST_CHECK(var.is_moved());
     BOOST_CHECK(cb1.size() == 2);
 
     cb1.push_back();
     BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(cb1.back().value() == 3);
     BOOST_CHECK(cb1.size() == 3);
 
     cb1.push_front();
     BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.front().value() == 4);
     BOOST_CHECK(cb1.size() == 4);
 
     cb1.insert(cb1.begin());
     BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.front().value() == 5);
     BOOST_CHECK(cb1.size() == 5);
 
     var.reinit();
     cb1.insert(cb1.begin(), boost::move(var));
     BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.front().value() == 6);
     BOOST_CHECK(cb1.size() == 6);
 
     cb1.rinsert(cb1.begin());
-    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.front().value() == 7);
     BOOST_CHECK(cb1.size() == 7);
 
     var.reinit();
     cb1.rinsert(cb1.begin(), boost::move(var));
-    BOOST_CHECK(!cb1.back().is_moved());
+    BOOST_CHECK(!cb1.front().is_moved());
+    BOOST_CHECK(cb1.front().value() == 8);
     BOOST_CHECK(cb1.size() == 8);
+
+    
+    BOOST_CHECK(cb1[0].value() == 8);
+    BOOST_CHECK(cb1[1].value() == 7);
+    BOOST_CHECK(cb1[2].value() == 6);
+    BOOST_CHECK(cb1[3].value() == 5);
+    BOOST_CHECK(cb1[4].value() == 4);
+    BOOST_CHECK(cb1[5].value() == 2);
+    BOOST_CHECK(cb1[6].value() == 1);
+    BOOST_CHECK(cb1[7].value() == 3);    
+    cb1.rotate(cb1.begin() + 2);
+    BOOST_CHECK(cb1[0].value() == 6);
+    BOOST_CHECK(cb1[1].value() == 5);
+    BOOST_CHECK(cb1[2].value() == 4);
+    BOOST_CHECK(cb1[3].value() == 2);
+    BOOST_CHECK(cb1[4].value() == 1);
+    BOOST_CHECK(cb1[5].value() == 3);
+    BOOST_CHECK(cb1[6].value() == 8);
+    BOOST_CHECK(cb1[7].value() == 7);
+
+    BOOST_CHECK(!cb1[0].is_moved());
+    BOOST_CHECK(!cb1[1].is_moved());
+    BOOST_CHECK(!cb1[2].is_moved());
+    BOOST_CHECK(!cb1[3].is_moved());
+    BOOST_CHECK(!cb1[4].is_moved());
+    BOOST_CHECK(!cb1[5].is_moved());
+    BOOST_CHECK(!cb1[6].is_moved());
+    BOOST_CHECK(!cb1[7].is_moved());
+    
+
+    cb1.linearize();
+    BOOST_CHECK(!cb1[0].is_moved());
+    BOOST_CHECK(!cb1[1].is_moved());
+    BOOST_CHECK(!cb1[2].is_moved());
+    BOOST_CHECK(!cb1[3].is_moved());
+    BOOST_CHECK(!cb1[4].is_moved());
+    BOOST_CHECK(!cb1[5].is_moved());
+    BOOST_CHECK(!cb1[6].is_moved());
+    BOOST_CHECK(!cb1[7].is_moved());
 }
 
 void move_container_values_resetting() {
@@ -920,6 +975,17 @@ void move_container_values_resetting() {
     BOOST_CHECK(cb1.size() == 1);
     var = boost::move(cb1.back());
     BOOST_CHECK(cb1.back().is_moved());
+    cb1.push_back();
+    BOOST_CHECK(!cb1[0].is_moved());
+
+    const int val = cb1[0].value();
+    cb1.linearize();
+    BOOST_CHECK(!cb1[0].is_moved());
+    BOOST_CHECK(cb1[0].value() == val);
+
+    cb1.rotate(cb1.begin());
+    BOOST_CHECK(!cb1[0].is_moved());
+    BOOST_CHECK(cb1[0].value() == val);
 }
 
 // test main

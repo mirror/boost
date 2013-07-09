@@ -2,6 +2,7 @@
 
 // Copyright (c) 2003-2008 Jan Gaspar
 // Copyright (c) 2013 Paul A. Bristow  // Doxygen comments changed.
+// Copyright (c) 2013 Antony Polukhin  // Move semantics implementation.
 
 
 // Use, modification, and distribution is subject to the Boost Software
@@ -25,6 +26,7 @@
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_scalar.hpp>
 #include <boost/type_traits/is_nothrow_move_constructible.hpp>
+#include <boost/type_traits/is_copy_constructible.hpp>
 #include <boost/type_traits/conditional.hpp>
 #include <boost/move/move.hpp>
 #include <algorithm>
@@ -185,12 +187,11 @@ public:
 private:
 
     // TODO: move to Boost.Move
-    // TODO: Improve!
     template <class ValT> 
     static inline typename boost::conditional<
-        (boost::is_nothrow_move_constructible<ValT>::value /* || !boost::has_copy_constructor<T>::value*/) 
+        (boost::is_nothrow_move_constructible<ValT>::value || !boost::is_copy_constructible<ValT>::value)
 #ifdef BOOST_NO_CXX11_DELETED_FUNCTIONS
-            && has_move_emulation_enabled<T>::value
+            && has_move_emulation_enabled<ValT>::value
 #endif
         ,
         rvalue_type,
@@ -690,7 +691,7 @@ public:
                         break;
                     }
                     if (is_uninitialized(dest)) {
-                        new (dest) value_type(*src);
+                        new (dest) value_type(this_type::move_if_noexcept(*src));
                         ++constructed;
                     } else {
                         value_type tmp = this_type::move_if_noexcept(*src); 
