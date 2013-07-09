@@ -900,6 +900,54 @@ void move_container_values() {
     BOOST_CHECK(!cb1[5].is_moved());
     BOOST_CHECK(!cb1[6].is_moved());
     BOOST_CHECK(!cb1[7].is_moved());
+
+#ifndef BOOST_NO_CXX11_NOEXCEPT
+    cb1.set_capacity(100);
+    BOOST_CHECK(!cb1[0].is_moved());
+    BOOST_CHECK(!cb1[1].is_moved());
+    BOOST_CHECK(!cb1[2].is_moved());
+    BOOST_CHECK(!cb1[3].is_moved());
+    BOOST_CHECK(!cb1[4].is_moved());
+    BOOST_CHECK(!cb1[5].is_moved());
+    BOOST_CHECK(!cb1[6].is_moved());
+    BOOST_CHECK(!cb1[7].is_moved());
+    BOOST_CHECK(cb1[0].value() == 6);
+    BOOST_CHECK(cb1[1].value() == 5);
+    BOOST_CHECK(cb1[2].value() == 4);
+    BOOST_CHECK(cb1[3].value() == 2);
+    BOOST_CHECK(cb1[4].value() == 1);
+    BOOST_CHECK(cb1[5].value() == 3);
+    BOOST_CHECK(cb1[6].value() == 8);
+    BOOST_CHECK(cb1[7].value() == 7);
+
+    cb1.rset_capacity(101);
+    BOOST_CHECK(!cb1[0].is_moved());
+    BOOST_CHECK(!cb1[1].is_moved());
+    BOOST_CHECK(!cb1[2].is_moved());
+    BOOST_CHECK(!cb1[3].is_moved());
+    BOOST_CHECK(!cb1[4].is_moved());
+    BOOST_CHECK(!cb1[5].is_moved());
+    BOOST_CHECK(!cb1[6].is_moved());
+    BOOST_CHECK(!cb1[7].is_moved());
+    BOOST_CHECK(cb1[0].value() == 6);
+    BOOST_CHECK(cb1[1].value() == 5);
+    BOOST_CHECK(cb1[2].value() == 4);
+    BOOST_CHECK(cb1[3].value() == 2);
+    BOOST_CHECK(cb1[4].value() == 1);
+    BOOST_CHECK(cb1[5].value() == 3);
+    BOOST_CHECK(cb1[6].value() == 8);
+    BOOST_CHECK(cb1[7].value() == 7);
+
+    cb1.set_capacity(2);
+    BOOST_CHECK(!cb1[0].is_moved());
+    BOOST_CHECK(!cb1[1].is_moved());
+    BOOST_CHECK(cb1[0].value() == 6);
+    BOOST_CHECK(cb1[1].value() == 5);
+
+    cb1.rset_capacity(1);
+    BOOST_CHECK(!cb1[0].is_moved());
+    BOOST_CHECK(cb1[0].value() == 5);
+#endif
 }
 
 void move_container_values_resetting() {

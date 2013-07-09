@@ -691,7 +691,7 @@ public:
                         break;
                     }
                     if (is_uninitialized(dest)) {
-                        new (dest) value_type(this_type::move_if_noexcept(*src));
+                        ::new (dest) value_type(this_type::move_if_noexcept(*src));
                         ++constructed;
                     } else {
                         value_type tmp = this_type::move_if_noexcept(*src); 
@@ -876,7 +876,9 @@ public:
     capacity_type capacity() const BOOST_NOEXCEPT { return m_end - m_buff; }
 
     //! Change the capacity of the <code>circular_buffer</code>.
-    /*!
+    /*! 
+        \pre If <code>T</code> is a move only type, then compiler shall support <code>noexcept</code> modifiers
+                and move constructor of <code>T</code> must be marked with it (must not throw exceptions).
         \post <code>capacity() == new_capacity \&\& size() \<= new_capacity</code><br><br>
               If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
               new capacity then number of <code>[size() - new_capacity]</code> <b>last</b> elements will be removed and
@@ -902,7 +904,7 @@ public:
         iterator b = begin();
         BOOST_TRY {
             reset(buff,
-                cb_details::uninitialized_copy_with_alloc(b, b + (std::min)(new_capacity, size()), buff, m_alloc),
+                cb_details::uninitialized_move_if_noexcept<value_type>(b, b + (std::min)(new_capacity, size()), buff),
                 new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
@@ -950,7 +952,9 @@ public:
     }
 
     //! Change the capacity of the <code>circular_buffer</code>.
-    /*!
+    /*! 
+        \pre If <code>T</code> is a move only type, then compiler shall support <code>noexcept</code> modifiers
+                and move constructor of <code>T</code> must be marked with it (must not throw exceptions).
         \post <code>capacity() == new_capacity \&\& size() \<= new_capacity</code><br><br>
               If the current number of elements stored in the <code>circular_buffer</code> is greater than the desired
               new capacity then number of <code>[size() - new_capacity]</code> <b>first</b> elements will be removed
@@ -975,8 +979,8 @@ public:
         pointer buff = allocate(new_capacity);
         iterator e = end();
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy_with_alloc(e - (std::min)(new_capacity, size()),
-                e, buff, m_alloc), new_capacity);
+            reset(buff, cb_details::uninitialized_move_if_noexcept<value_type>(e - (std::min)(new_capacity, size()),
+                e, buff), new_capacity);
         } BOOST_CATCH(...) {
             deallocate(buff, new_capacity);
             BOOST_RETHROW
@@ -1124,7 +1128,7 @@ public:
         initialize_buffer(cb.capacity());
         m_first = m_buff;
         BOOST_TRY {
-            m_last = cb_details::uninitialized_copy_with_alloc(cb.begin(), cb.end(), m_buff, m_alloc);
+            m_last = cb_details::uninitialized_copy<value_type>(cb.begin(), cb.end(), m_buff);
         } BOOST_CATCH(...) {
             deallocate(m_buff, cb.capacity());
             BOOST_RETHROW
@@ -1269,7 +1273,7 @@ public:
             return *this;
         pointer buff = allocate(cb.capacity());
         BOOST_TRY {
-            reset(buff, cb_details::uninitialized_copy_with_alloc(cb.begin(), cb.end(), buff, m_alloc), cb.capacity());
+            reset(buff, cb_details::uninitialized_copy<value_type>(cb.begin(), cb.end(), buff), cb.capacity());
         } BOOST_CATCH(...) {
             deallocate(buff, cb.capacity());
             BOOST_RETHROW
@@ -1465,7 +1469,7 @@ private:
             increment(m_last);
             m_first = m_last;
         } else {
-            new (m_last) value_type(static_cast<ValT>(item));
+            ::new (m_last) value_type(static_cast<ValT>(item));
             increment(m_last);
             ++m_size;
         }        
@@ -1482,7 +1486,7 @@ private:
                 m_last = m_first;
             } else {
                 decrement(m_first);
-                new (m_first) value_type(static_cast<ValT>(item));
+                ::new (m_first) value_type(static_cast<ValT>(item));
                 ++m_size;
             }
         } BOOST_CATCH(...) {
@@ -2446,7 +2450,7 @@ private:
     */
     void construct_or_replace(bool construct, pointer pos, param_value_type item) {
         if (construct)
-            new (pos) value_type(item);
+            ::new (pos) value_type(item);
         else
             replace(pos, item);
     }
@@ -2458,7 +2462,7 @@ private:
     */
     void construct_or_replace(bool construct, pointer pos, rvalue_type item) {
         if (construct)
-            new (pos) value_type(boost::move(item));
+            ::new (pos) value_type(boost::move(item));
         else
             replace(pos, boost::move(item));
     }
@@ -2598,7 +2602,7 @@ private:
         if (buffer_capacity == 0)
             return;
         while (first != last && !full()) {
-            new (m_last) value_type(*first++);
+            ::new (m_last) value_type(*first++);
             increment(m_last);
             ++m_size;
         }
@@ -2634,7 +2638,7 @@ private:
             m_size = distance;
         }
         BOOST_TRY {
-            m_last = cb_details::uninitialized_copy_with_alloc(first, last, m_buff, m_alloc);
+            m_last = cb_details::uninitialized_copy<value_type>(first, last, m_buff);
         } BOOST_CATCH(...) {
             deallocate(m_buff, buffer_capacity);
             BOOST_RETHROW
@@ -2688,8 +2692,8 @@ private:
         std::deque<value_type, allocator_type> tmp(first, last, m_alloc);
         size_type distance = tmp.size();
         assign_n(distance, distance,
-            cb_details::assign_range<BOOST_DEDUCED_TYPENAME std::deque<value_type, allocator_type>::iterator,
-                allocator_type>(tmp.begin(), tmp.end(), m_alloc));
+            cb_details::make_assign_range<value_type>
+                (boost::make_move_iterator(tmp.begin()), boost::make_move_iterator(tmp.end())));
     }
 
     //! Specialized assign method.
@@ -2697,7 +2701,7 @@ private:
     void assign(ForwardIterator first, ForwardIterator last, const std::forward_iterator_tag&) {
         BOOST_CB_ASSERT(std::distance(first, last) >= 0); // check for wrong range
         size_type distance = std::distance(first, last);
-        assign_n(distance, distance, cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
+        assign_n(distance, distance, cb_details::make_assign_range<value_type>(first, last));
     }
 
     //! Specialized assign method.
@@ -2745,7 +2749,7 @@ private:
             distance = new_capacity;
         }
         assign_n(new_capacity, distance,
-            cb_details::assign_range<ForwardIterator, allocator_type>(first, last, m_alloc));
+            cb_details::make_assign_range<value_type>(first, last));
     }
 
     //! Helper assign method.
@@ -2836,7 +2840,7 @@ private:
     void insert(iterator pos, InputIterator first, InputIterator last, const std::input_iterator_tag&) {
         if (!full() || pos != begin()) {
             for (;first != last; ++pos)
-                pos = insert_item<param_value_type>(pos, *first++); // TODO: optimize for cases when InputIterator is move iterator
+                pos = insert(pos, *first++);
         }
     }
 
@@ -2868,7 +2872,7 @@ private:
             pointer p = m_last;
             BOOST_TRY {
                 for (; ii < construct; ++ii, increment(p))
-                    new (p) value_type(*wrapper());
+                    ::new (p) value_type(*wrapper());
                 for (;ii < n; ++ii, increment(p))
                     replace(p, *wrapper());
             } BOOST_CATCH(...) {
@@ -2962,7 +2966,7 @@ private:
                 for (;ii > construct; --ii, increment(p))
                     replace(p, *wrapper());
                 for (; ii > 0; --ii, increment(p))
-                    new (p) value_type(*wrapper());
+                    ::new (p) value_type(*wrapper());
             } BOOST_CATCH(...) {
                 size_type constructed = ii < construct ? construct - ii : 0;
                 m_last = add(m_last, constructed);
