@@ -49,7 +49,7 @@
 
 [def __debug_support  [link circular_buffer.implmentation.debug_support debug support]]
 
-[include ../../../boost-trunk/tools/auto_index/include/auto_index_helpers.qbk]
+[include ../../../tools/auto_index/include/auto_index_helpers.qbk]
 [/ Must be first included file!]
 
 [note A printer-friendly PDF version of this manual is also available.]
@@ -559,11 +559,9 @@ Last edit to Quickbook file __FILENAME__ was at __TIME__ on __DATE__.
 [/ The position of this in the Quickbook determines the location of the Doxygen references section.]
 [/ Index(es) should be invoked in the main module, not within a section.]
 
-[? enable_index
 '''
   <index/>
 '''
-]
 
 [/ circular_buffer.qbk
   Copyright 2013 Paul A. Bristow.
@@ -573,3 +571,5 @@ Last edit to Quickbook file __FILENAME__ was at __TIME__ on __DATE__.
   (See accompanying file LICENSE_1_0.txt or copy at
   http://www.boost.org/LICENSE_1_0.txt).
 ]
+
+

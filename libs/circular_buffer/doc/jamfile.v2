@@ -18,45 +18,10 @@ echo "nav_images = " $(nav_images) ; # "nav_images = I:\boost-trunk\libs\circula
 echo "images_location = " $(images_location) ; # images_location = I:\boost-trunk\libs\circular_buffer\doc\html\images
 echo "pdf_images_location = " $(pdf_images_location) # 
 import modules ;
-
-if --enable-index in  [ modules.peek : ARGV ]
-{
-   ECHO "Building the  docs with automatic index generation enabled." ;
-   using auto-index ;
-   project : requirements
-   
-        <auto-index>on # Turns on index (or off).
-        # Turns on (or off) index-verbose for diagnostic info (using /bin auto-index-verbose folders).
-        <auto-index-verbose>on 
-        
-        # Choose indexing method (separately for html and pdf):
-        <format>html:<auto-index-internal>on  # on (or off) to use internally generated indexes.
-        # <format>html:<xsl:param>generate.index=0 # Don't let the XSL stylesheets generate indexes.
-        
-        <format>pdf:<auto-index-internal>off # on (or off) to use internally generated indexes.
-        # <auto-index-type>index  # Use <index>...</index> as the XML wrapper.
-        
-        <format>html:<xsl:param>index.on.type=1 # = 1 For the native stylesheets to generate multiple different indexes.
-        
-        # PDF native index support is probably better for PDFs as then you actually get page numbers.
-
-        <auto-index-script>circular_buffer.idx # Specifies the name of the script to load for circular_buffer. 
-        <auto-index-prefix>../../.. # Will get you back up to /circular_buffer, so !scan-path "boost/circular_buffer/" is where *.hpp will be,
-        # and /libs/circular_buffer for other files.
-        # Without this would need !scan-path "../../../boost/circular_buffer"
-        
-        <quickbook-define>enable_index ;
-        # Used by Quickbook to invoke indexing.
-}
-else
-{
-   ECHO "Building the my_library docs with automatic index generation disabled. To get an auto-index, try building with --enable-index." ;
-}
-
 using auto-index ;
-
 using doxygen ;  # Required if you want to use Doxygen.
 using quickbook ;
+
 
 doxygen autodoc
    :
@@ -138,26 +103,7 @@ boostbook standalone
    
    # General settings
    # =================
-    # Path for links to Boost. 
-		<xsl:param>boost.root=../../../..
-		# Path for libraries index, for example: http://www.boost.org/doc/libs/1_53_0/libs/libraries.htm:
-    <xsl:param>boost.libraries=../../../../../boost-trunk/libs/libraries.htm
 		
-		# Use the main Boost stylesheet:
-		#<xsl:param>html.stylesheet=../../doc/html/boostbook.css
-		# Use local stylsheet
-		<xsl:param>html.stylesheet=boostbook.css
-		# <xsl:param>html.stylesheet=./boostbook.css
-		#<xsl:param>img.src.path=../images/ # graphics (diagrams) for html.
-		<xsl:param>nav.layout=horizontal # to get a horizontal navigation bar (you probably DO want this).
-
-		# Path for links to Boost logo.
-		#<xsl:param>boost.root=.. # already defined
-		<xsl:param>boost.image=Boost # options are: none (no logo), Boost (for boost.png), or your own logo, for example, inspired_by_boost.png
-		<xsl:param>boost.image.src=../images/draft_for_boost.png #
-		<xsl:param>boost.image.w=180 # Width of logo in pixels. (JM has W = 162, h = 46)
-    <xsl:param>boost.image.h=90 # Height of logo in pixels.
-  
   	# Options for html and pdf
   	# ========================
 		# No indent on body text:
@@ -189,31 +135,25 @@ boostbook standalone
 		<format>html:<xsl:param>html.cellpadding=5 # pixels
 		#  Not sure if these are right way round?	
 		
+        <auto-index>on # Turns on index (or off).
+        # Turns on (or off) index-verbose for diagnostic info (using /bin auto-index-verbose folders).
+        <auto-index-verbose>on 
+        
+        <format>pdf:<auto-index-internal>off # on (or off) to use internally generated indexes.
+        
+        <format>html:<xsl:param>index.on.type=1 # = 1 For the native stylesheets to generate multiple different indexes.
+        
+        <auto-index-script>circular_buffer.idx # Specifies the name of the script to load for circular_buffer. 
+        <auto-index-prefix>../../.. # Will get you back up to /circular_buffer, so !scan-path "boost/circular_buffer/" is where *.hpp will be,
+        # and /libs/circular_buffer for other files.
+        # Without this would need !scan-path "../../../boost/circular_buffer"
+        
+        # Used by Quickbook to invoke indexing.
 		# Required by boost-trunk/doc/ see jamfile.v2 to use auto-index.
     # Choose indexing method for html:
     <format>html:<auto-index-internal>on
     <format>docbook:<auto-index-internal>on
     
-		# Set the name of the script file to use (library_name.idx is good):
-		<auto-index-script>$(here)/circular_buffer.idx
-		# Commands in the script file should all use RELATIVE PATHS
-		# otherwise the script will not be portable to other machines.
-		# Relative paths are normally taken as relative to the location
-		# of the script file, but we can add a prefix to all
-		# those relative paths using the <auto-index-prefix> feature.
-		# The path specified by <auto-index-prefix> may be either relative or
-		# absolute, for example the following will get us up to the boost root
-		# directory for most Boost libraries:
-		<auto-index-prefix>"$(here)/../../.."
-		
-		<format>html:<xsl:param>boost.root=../../../..
-		<format>html:<xsl:param>boost.libraries=../../../../libs/libraries.htm
-
-# Finally, in boost.xml we xi:include circular_buffer.auto_index.docbook which is the final
-# post-index generation docbook, rather than circular_buffer.xml 
-#  which is the pre-indexed boostbook.
-
-		
 		# PDF Options:
 		# ============
 		# TOC Generation: this is needed for FOP-0.9 and later:
@@ -240,32 +180,17 @@ boostbook standalone
 		<format>pdf:<xsl:param>admon.graphics.path=$(nav_images)/ # next, prev, note, tip ... for pdf.
 		<format>pdf:<xsl:param>use.role.for.mediaobject=1 
 		<format>pdf:<xsl:param>preferred.mediaobject.role=print
-	  <format>pdf:<xsl:param>img.src.path=$(pdf_images_location)/ # graphics (diagrams) for pdf.
+        <format>pdf:<xsl:param>img.src.path=$(pdf_images_location)/ # graphics (diagrams) for pdf.
 		<format>pdf:<xsl:param>draft.mode="no"
-		#<format>pdf:<xsl:param>boost.url.prefix=I:/boost-trunk/boost/circular_buffer/libs/circular_buffer/doc/html
-		#<format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/circular_buffer/doc/html
-		#<format>pdf:<xsl:param>boost.url.prefix=http://www.boost.org/doc/libs/release/libs/math/doc/html
 		
 		<dependency>autodoc # 
-		<dependency>css-install
-		<dependency>png-install
-		#<dependency>svg-install
+		<dependency>png_install
    ;
-
-# Install (copy) the 'master' copy of boostbook Cascading Style sheet from your current Boost-root.
-path-constant boost-root : [ modules.peek : BOOST ] ;
-
-echo "BOOST ROOT" $(boost-root) ;
-
-#install css-install : $(boost-root)/doc/src/boostbook.css : <location>html ;
-install css-install : ./boostbook.css : <location>html ;  # copy a local version of boostbook.css to /html
-#install images-install : /images/circular_buffer.png : <location>html ;  # copy a local version of /images to /html
 
 # Install (copy) the 'master' copies of all icon images (both PNG and SVG)
 # and the Boost logo from your current Boost-root
 # to the local /doc/html/images folder so that html is complete and standalone. 
- install png-install : [ glob ./images/*.png ] : <location>html/images ;
-# install svg-install : [ glob $(boost-root)/doc/images/*.svg ] : <location>html/images ;
+install png_install : [ glob $(here)/*.png ] : <location>$(here)/../../../doc/html/images ;
 
 # install pdf-install : standalone : <install-type>PDF <location>. ;
 # Effectively copies the file from \bin folder to the \doc folder,
@@ -275,5 +200,5 @@ install css-install : ./boostbook.css : <location>html ;  # copy a local version
 
 install pdf-install : standalone : <install-type>PDF <location>. <name>circular_buffer.pdf ;
 
-install html-install : standalone : <location>. ;
+
 
