@@ -14,16 +14,12 @@
 # undef BOOST_COROUTINES_DECL
 #endif
 
-#if defined(BOOST_HAS_DECLSPEC)
-# if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_COROUTINES_DYN_LINK)
-#  if ! defined(BOOST_DYN_LINK)
-#   define BOOST_DYN_LINK
-#  endif
-#  if defined(BOOST_COROUTINES_SOURCE)
-#   define BOOST_COROUTINES_DECL BOOST_SYMBOL_EXPORT
-#  else 
-#   define BOOST_COROUTINES_DECL BOOST_SYMBOL_IMPORT
-#  endif
+#if (defined(BOOST_ALL_DYN_LINK) || defined(BOOST_COROUTINES_DYN_LINK) ) && ! defined(BOOST_COROUTINES_STATIC_LINK)
+# if defined(BOOST_COROUTINES_SOURCE)
+#  define BOOST_COROUTINES_DECL BOOST_SYMBOL_EXPORT
+#  define BOOST_COROUTINES_BUILD_DLL
+# else
+#  define BOOST_COROUTINES_DECL BOOST_SYMBOL_IMPORT
 # endif
 #endif
 
@@ -32,7 +28,7 @@
 #endif
 
 #if ! defined(BOOST_COROUTINES_SOURCE) && ! defined(BOOST_ALL_NO_LIB) && ! defined(BOOST_COROUTINES_NO_LIB)
-# define BOOST_LIB_NAME boost_context
+# define BOOST_LIB_NAME boost_coroutine
 # if defined(BOOST_ALL_DYN_LINK) || defined(BOOST_COROUTINES_DYN_LINK)
 #  define BOOST_DYN_LINK
 # endif
@@ -51,6 +47,10 @@
 #endif
 
 #if defined(BOOST_COROUTINES_V1)
+# define BOOST_COROUTINES_OLD
+#endif
+
+#if defined(BOOST_COROUTINES_BIDIRECT)
 # define BOOST_COROUTINES_OLD
 #endif
 
