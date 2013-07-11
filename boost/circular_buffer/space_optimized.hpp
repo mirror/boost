@@ -2,6 +2,7 @@
 
 // Copyright (c) 2003-2008 Jan Gaspar
 // Copyright (c) 2013  Paul A. Bristow // Doxygen comments changed for new version of documentation.
+// Copyright (c) 2013  Antony Polukhin // Move semantics implementation.
 
 // Use, modification, and distribution is subject to the Boost Software
 // License, Version 1.0. (See accompanying file LICENSE_1_0.txt or copy at
@@ -49,6 +50,7 @@ public:
     typedef typename circular_buffer<T, Alloc>::array_range array_range;
     typedef typename circular_buffer<T, Alloc>::const_array_range const_array_range;
     typedef typename circular_buffer<T, Alloc>::param_value_type param_value_type;
+    typedef typename circular_buffer<T, Alloc>::rvalue_type rvalue_type;
     //typedef typename circular_buffer<T, Alloc>::return_value_type return_value_type;
 
 /* <pre> is not passed through to html or pdf. So <br> is used in code section below.  Ugly :-(
@@ -146,7 +148,7 @@ public:
              Constant (in the size of the <code>circular_buffer_space_optimized</code>).
         \sa <code>empty()</code>
     */
-    bool full() const { return m_capacity_ctrl == size(); }
+    bool full() const BOOST_NOEXCEPT { return m_capacity_ctrl == size(); }
 
     /*! \brief Get the maximum number of elements which can be inserted into the
                <code>circular_buffer_space_optimized</code> without overwriting any of already stored elements.
@@ -160,7 +162,7 @@ public:
              Constant (in the size of the <code>circular_buffer_space_optimized</code>).
         \sa <code>capacity()</code>, <code>size()</code>, <code>max_size()</code>
     */
-    size_type reserve() const { return m_capacity_ctrl - size(); }
+    size_type reserve() const BOOST_NOEXCEPT { return m_capacity_ctrl - size(); }
 
     //! Get the capacity of the <code>circular_buffer_space_optimized</code>.
     /*!
@@ -176,7 +178,7 @@ public:
         \sa <code>reserve()</code>, <code>size()</code>, <code>max_size()</code>,
             <code>set_capacity(const capacity_type&)</code>
     */
-    const capacity_type& capacity() const { return m_capacity_ctrl; }
+    const capacity_type& capacity() const BOOST_NOEXCEPT { return m_capacity_ctrl; }
 
 #if defined(BOOST_CB_TEST)
 
@@ -185,7 +187,7 @@ public:
        \note This method is not intended to be used directly by the user.
              It is defined only for testing purposes.
     */
-    size_type internal_capacity() const { return circular_buffer<T, Alloc>::capacity(); }
+    size_type internal_capacity() const BOOST_NOEXCEPT { return circular_buffer<T, Alloc>::capacity(); }
 
 #endif // #if defined(BOOST_CB_TEST)
 
@@ -345,7 +347,7 @@ public:
         \warning Since Boost version 1.36 the behaviour of this constructor has changed. Now it creates a space
                  optimized circular buffer with zero capacity.
     */
-    explicit circular_buffer_space_optimized(const allocator_type& alloc = allocator_type())
+    explicit circular_buffer_space_optimized(const allocator_type& alloc = allocator_type()) BOOST_NOEXCEPT
     : circular_buffer<T, Alloc>(0, alloc)
     , m_capacity_ctrl(0) {}
 
@@ -452,6 +454,23 @@ public:
     circular_buffer_space_optimized(const circular_buffer_space_optimized<T, Alloc>& cb)
     : circular_buffer<T, Alloc>(cb.begin(), cb.end(), cb.get_allocator())
     , m_capacity_ctrl(cb.m_capacity_ctrl) {}
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    //! The move constructor.
+    /*! \brief Move constructs a <code>circular_buffer_space_optimized</code> from <code>cb</code>, 
+                leaving <code>cb</code> empty.
+        \pre C++ compiler with rvalue references support.
+        \post <code>cb.empty()</code>
+        \param cb <code>circular_buffer</code> to 'steal' value from.
+        \throws Nothing.
+        \par Constant.
+    */
+    circular_buffer_space_optimized(circular_buffer_space_optimized<T, Alloc>&& cb) BOOST_NOEXCEPT
+    : circular_buffer<T, Alloc>()
+    , m_capacity_ctrl(0) {
+        cb.swap(*this);
+    }
+#endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
     //! Create a full space optimized circular buffer filled with a copy of the range.
     /*!
@@ -572,6 +591,24 @@ public:
         m_capacity_ctrl = cb.m_capacity_ctrl;
         return *this;
     }
+
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    /*! \brief Move assigns content of <code>cb</code> to <code>*this</code>, leaving <code>cb</code> empty.
+        \pre C++ compiler with rvalue references support.
+        \post <code>cb.empty()</code>
+        \param cb <code>circular_buffer</code> to 'steal' value from.
+        \throws Nothing.
+        \par Complexity
+             Constant.
+    */
+    circular_buffer_space_optimized<T, Alloc>& operator = (circular_buffer_space_optimized<T, Alloc>&& cb) BOOST_NOEXCEPT {
+        cb.swap(*this); // now `this` holds `cb`
+        circular_buffer<T, Alloc>(get_allocator()) // temprary that holds initial `cb` allocator
+            .swap(cb); // makes `cb` empty
+        return *this;
+    }
+#endif // BOOST_NO_CXX11_RVALUE_REFERENCES
+
 
     //! Assign <code>n</code> items into the space optimized circular buffer.
     /*!
@@ -736,7 +773,7 @@ public:
     */
     // Note link does not work right.  Asked on Doxygen forum for advice 23 May 2103.
 
-    void swap(circular_buffer_space_optimized<T, Alloc>& cb) {
+    void swap(circular_buffer_space_optimized<T, Alloc>& cb) BOOST_NOEXCEPT {
         std::swap(m_capacity_ctrl, cb.m_capacity_ctrl);
         circular_buffer<T, Alloc>::swap(cb);
     }
@@ -761,9 +798,59 @@ public:
         \sa <code>\link push_front() push_front(const_reference)\endlink</code>, <code>pop_back()</code>,
             <code>pop_front()</code>
     */
-    void push_back(param_value_type item = value_type()) {
+    void push_back(param_value_type item) {
         check_low_capacity();
         circular_buffer<T, Alloc>::push_back(item);
+    }
+
+    //! Insert a new element at the end of the space optimized circular buffer.
+    /*!
+        \post if <code>capacity().%capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer_space_optimized</code> is full, the first element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param item The element to be inserted.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
+    */
+    void push_back(rvalue_type item) {
+        check_low_capacity();
+        circular_buffer<T, Alloc>::push_back(boost::move(item));
+    }
+
+    //! Insert a new element at the end of the space optimized circular buffer.
+    /*!
+        \post if <code>capacity().%capacity() > 0</code> then <code>back() == item</code><br>
+              If the <code>circular_buffer_space_optimized</code> is full, the first element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T()</code> throws.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link push_front() push_front(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
+    */
+    void push_back() {
+        check_low_capacity();
+        circular_buffer<T, Alloc>::push_back();
     }
 
     //! Insert a new element at the beginning of the space optimized circular buffer.
@@ -786,9 +873,60 @@ public:
         \sa <code>\link push_back() push_back(const_reference)\endlink</code>, <code>pop_back()</code>,
             <code>pop_front()</code>
     */
-    void push_front(param_value_type item = value_type()) {
+    void push_front(param_value_type item) {
         check_low_capacity();
         circular_buffer<T, Alloc>::push_front(item);
+    }
+
+    //! Insert a new element at the beginning of the space optimized circular buffer.
+    /*!
+        \post if <code>capacity().%capacity() > 0</code> then <code>front() == item</code><br>
+              If the <code>circular_buffer_space_optimized</code> is full, the last element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param item The element to be inserted.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
+    */
+    void push_front(rvalue_type item) {
+        check_low_capacity();
+        circular_buffer<T, Alloc>::push_front(boost::move(item));
+    }
+
+    //! Insert a new element at the beginning of the space optimized circular buffer.
+    /*!
+        \post if <code>capacity().%capacity() > 0</code> then <code>front() == item</code><br>
+              If the <code>circular_buffer_space_optimized</code> is full, the last element will be removed. If the
+              capacity is <code>0</code>, nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param item The element to be inserted.
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T()</code> throws.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link push_back() push_back(const_reference)\endlink</code>, <code>pop_back()</code>,
+            <code>pop_front()</code>
+    */
+    void push_front() {
+        check_low_capacity();
+        circular_buffer<T, Alloc>::push_front();
     }
 
     //! Remove the last element from the space optimized circular buffer.
@@ -868,10 +1006,88 @@ public:
             rinsert(iterator, size_type, value_type)\endlink</code>,
             <code>rinsert(iterator, InputIterator, InputIterator)</code>
     */
-    iterator insert(iterator pos, param_value_type item = value_type()) {
+    iterator insert(iterator pos, param_value_type item) {
         size_type index = pos - begin();
         check_low_capacity();
         return circular_buffer<T, Alloc>::insert(begin() + index, item);
+    }
+
+    //! Insert an element at the specified position.
+    /*!
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
+             end.
+        \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
+              If the <code>circular_buffer_space_optimized</code> is full, the first element will be overwritten. If
+              the <code>circular_buffer_space_optimized</code> is full and the <code>pos</code> points to
+              <code>begin()</code>, then the <code>item</code> will not be inserted. If the capacity is <code>0</code>,
+              nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param pos An iterator specifying the position where the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>
+    */
+    iterator insert(iterator pos, rvalue_type item) {
+        size_type index = pos - begin();
+        check_low_capacity();
+        return circular_buffer<T, Alloc>::insert(begin() + index, boost::move(item));
+    }
+
+    //! Insert an element at the specified position.
+    /*!
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
+             end.
+        \post The <code>item</code> will be inserted at the position <code>pos</code>.<br>
+              If the <code>circular_buffer_space_optimized</code> is full, the first element will be overwritten. If
+              the <code>circular_buffer_space_optimized</code> is full and the <code>pos</code> points to
+              <code>begin()</code>, then the <code>item</code> will not be inserted. If the capacity is <code>0</code>,
+              nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param pos An iterator specifying the position where the <code>item</code> will be inserted.
+        \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T()</code> throws.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link rinsert(iterator, param_value_type) rinsert(iterator, value_type)\endlink</code>,
+            <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>
+    */
+    iterator insert(iterator pos) {
+        size_type index = pos - begin();
+        check_low_capacity();
+        return circular_buffer<T, Alloc>::insert(begin() + index);
     }
 
     //! Insert <code>n</code> copies of the <code>item</code> at the specified position.
@@ -1004,10 +1220,88 @@ public:
             insert(iterator, size_type, value_type)\endlink</code>,
             <code>insert(iterator, InputIterator, InputIterator)</code>
     */
-    iterator rinsert(iterator pos, param_value_type item = value_type()) {
+    iterator rinsert(iterator pos, param_value_type item) {
         size_type index = pos - begin();
         check_low_capacity();
         return circular_buffer<T, Alloc>::rinsert(begin() + index, item);
+    }
+
+    //! Insert an element before the specified position.
+    /*!
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
+             end.
+        \post The <code>item</code> will be inserted before the position <code>pos</code>.<br>
+              If the <code>circular_buffer_space_optimized</code> is full, the last element will be overwritten. If the
+              <code>circular_buffer_space_optimized</code> is full and the <code>pos</code> points to
+              <code>end()</code>, then the <code>item</code> will not be inserted. If the capacity is <code>0</code>,
+              nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param pos An iterator specifying the position before which the <code>item</code> will be inserted.
+        \param item The element to be inserted.
+        \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>
+    */
+    iterator rinsert(iterator pos, rvalue_type item) {
+        size_type index = pos - begin();
+        check_low_capacity();
+        return circular_buffer<T, Alloc>::rinsert(begin() + index, boost::move(item));
+    }
+
+    //! Insert an element before the specified position.
+    /*!
+        \pre <code>pos</code> is a valid iterator pointing to the <code>circular_buffer_space_optimized</code> or its
+             end.
+        \post The <code>item</code> will be inserted before the position <code>pos</code>.<br>
+              If the <code>circular_buffer_space_optimized</code> is full, the last element will be overwritten. If the
+              <code>circular_buffer_space_optimized</code> is full and the <code>pos</code> points to
+              <code>end()</code>, then the <code>item</code> will not be inserted. If the capacity is <code>0</code>,
+              nothing will be inserted.<br><br>
+              The amount of allocated memory in the internal buffer may be predictively increased.
+        \param pos An iterator specifying the position before which the <code>item</code> will be inserted.
+        \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
+                the <i>Effect</i>.)
+        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
+                used).
+        \throws Whatever <code>T::T()</code> throws.
+        \throws Whatever <code>T::T(T&&)</code> throws.
+        \throws Whatever <code>T::operator = (T&&)</code> throws.
+        \par Exception Safety
+             Basic.
+        \par Iterator Invalidation
+             Invalidates all iterators pointing to the <code>circular_buffer_space_optimized</code> (except iterators
+             equal to <code>end()</code>).
+        \par Complexity
+             Linear (in the size of the <code>circular_buffer_space_optimized</code>).
+        \sa <code>\link rinsert(iterator, size_type, param_value_type)
+            rinsert(iterator, size_type, value_type)\endlink</code>,
+            <code>rinsert(iterator, InputIterator, InputIterator)</code>,
+            <code>\link insert(iterator, param_value_type) insert(iterator, value_type)\endlink</code>,
+            <code>\link insert(iterator, size_type, param_value_type)
+            insert(iterator, size_type, value_type)\endlink</code>,
+            <code>insert(iterator, InputIterator, InputIterator)</code>
+    */
+    iterator rinsert(iterator pos) {
+        size_type index = pos - begin();
+        check_low_capacity();
+        return circular_buffer<T, Alloc>::rinsert(begin() + index);
     }
 
     //! Insert <code>n</code> copies of the <code>item</code> before the specified position.
@@ -1439,7 +1733,7 @@ inline bool operator >= (const circular_buffer_space_optimized<T, Alloc>& lhs,
 //! Swap the contents of two space optimized circular buffers.
 template <class T, class Alloc>
 inline void swap(circular_buffer_space_optimized<T, Alloc>& lhs,
-    circular_buffer_space_optimized<T, Alloc>& rhs) {
+    circular_buffer_space_optimized<T, Alloc>& rhs) BOOST_NOEXCEPT {
     lhs.swap(rhs);
 }
 

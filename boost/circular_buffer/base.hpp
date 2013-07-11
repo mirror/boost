@@ -1031,8 +1031,7 @@ public:
     /*!
         \post <code>capacity() == 0 \&\& size() == 0</code>
         \param alloc The allocator.
-        \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
-                used).
+        \throws Nothing.
         \par Complexity
              Constant.
         \warning Since Boost version 1.36 the behaviour of this constructor has changed. Now the constructor does not
@@ -1046,7 +1045,7 @@ public:
         \sa <code>circular_buffer(capacity_type, const allocator_type& alloc)</code>,
             <code>set_capacity(capacity_type)</code>
     */
-    explicit circular_buffer(const allocator_type& alloc = allocator_type())
+    explicit circular_buffer(const allocator_type& alloc = allocator_type()) BOOST_NOEXCEPT
     : m_buff(0), m_end(0), m_first(0), m_last(0), m_size(0), m_alloc(alloc) {}
 
     //! Create an empty <code>circular_buffer</code> with the specified capacity.
@@ -1283,15 +1282,16 @@ public:
     }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    /*! \brief Move constructs a <code>circular_buffer</code> from <code>cb</code>, leaving <code>cb</code> empty.
+    /*! \brief Move assigns content of <code>cb</code> to <code>*this</code>, leaving <code>cb</code> empty.
         \pre C++ compiler with rvalue references support.
         \post <code>cb.empty()</code>
         \param cb <code>circular_buffer</code> to 'steal' value from.
         \throws Nothing.
-        \par Constant.
+        \par Complexity
+             Constant.
     */
     circular_buffer<T, Alloc>& operator = (circular_buffer<T, Alloc>&& cb) BOOST_NOEXCEPT {
-        swap(cb); // now `this` holds `cb`
+        cb.swap(*this); // now `this` holds `cb`
         circular_buffer<T, Alloc>(get_allocator()) // temprary that holds initial `cb` allocator
             .swap(cb); // makes `cb` empty
         return *this;
@@ -2145,7 +2145,7 @@ public:
         pointer next = pos.m_it;
         increment(next);
         for (pointer p = pos.m_it; next != m_last; p = next, increment(next))
-            replace(p, *next);
+            replace(p, this_type::move_if_noexcept(*next));
         decrement(m_last);
         destroy_item(m_last);
         --m_size;
@@ -2184,7 +2184,7 @@ public:
             return first;
         pointer p = first.m_it;
         while (last.m_it != 0)
-            replace((first++).m_it, *last++);
+            replace((first++).m_it, this_type::move_if_noexcept(*last++));
         do {
             decrement(m_last);
             destroy_item(m_last);
@@ -2222,7 +2222,7 @@ public:
         pointer prev = pos.m_it;
         pointer p = prev;
         for (decrement(prev); p != m_first; p = prev, decrement(prev))
-            replace(p, *prev);
+            replace(p, this_type::move_if_noexcept(*prev));
         destroy_item(m_first);
         increment(m_first);
         --m_size;
@@ -2267,7 +2267,7 @@ public:
         while (first.m_it != m_first) {
             decrement(first.m_it);
             decrement(p);
-            replace(p, *first.m_it);
+            replace(p, this_type::move_if_noexcept(*first.m_it));
         }
         do {
             destroy_item(m_first);
