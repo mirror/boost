@@ -34,7 +34,37 @@ struct is_copy_constructible_impl2 {
     static boost::type_traits::yes_type test(...);
 #endif
 
-
+    // If you see errors like this:
+    //
+    //      `'T::T(const T&)' is private`
+    //      `boost/type_traits/is_copy_constructible.hpp:68:5: error: within this context`
+    //
+    // then you are trying to call that macro for a structure defined like that:
+    //
+    //      struct T {
+    //          ...
+    //      private:
+    //          T(const T &);
+    //          ...
+    //      };
+    //
+    // To fix that you must modify your structure:
+    //
+    //      // C++03 and C++11 version
+    //      struct T: private boost::noncopyable {
+    //          ...
+    //      private:
+    //          T(const T &);
+    //          ...
+    //      };
+    //
+    //      // C++11 version
+    //      struct T {
+    //          ...
+    //      private:
+    //          T(const T &) = delete;
+    //          ...
+    //      };
     BOOST_STATIC_CONSTANT(bool,
         value = (sizeof(test(boost::declval<T&>())) == sizeof(boost::type_traits::yes_type))
     );
