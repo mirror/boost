@@ -206,14 +206,14 @@ BOOST_MULTI_INDEX_VARTEMPL_TO_PLACEMENT_NEW(vartempl_placement_new)
 
 #define BOOST_MULTI_INDEX_TEMPLATE_PARAM_PACK typename... Args
 #define BOOST_MULTI_INDEX_FUNCTION_PARAM_PACK Args&&... args
-#define BOOST_MULTI_INDEX_FORWARD_PARAM_PACK  std::forward(Args)...
+#define BOOST_MULTI_INDEX_FORWARD_PARAM_PACK  std::forward<Args>(args)...
 #define BOOST_MULTI_INDEX_NULL_PARAM_PACK
 
 #define BOOST_MULTI_INDEX_OVERLOADS_TO_VARTEMPL(                     \
   ret,name_from,name_to)                                             \
 template<typename... Args> ret name_from(Args&&... args)             \
 {                                                                    \
-  return name_to(std::forward(Args)...);                             \
+  return name_to(std::forward<Args>(args)...);                       \
 }
 
 #define BOOST_MULTI_INDEX_OVERLOADS_TO_VARTEMPL_EXTRA_ARG(           \
@@ -221,7 +221,7 @@ template<typename... Args> ret name_from(Args&&... args)             \
 template<typename... Args> ret name_from(                            \
   extra_arg_type extra_arg_name,Args&&... args)                      \
 {                                                                    \
-  return name_to(extra_arg_name,std::forward(Args)...);              \
+  return name_to(extra_arg_name,std::forward<Args>(args)...);        \
 }
 
 namespace boost{
