@@ -19,6 +19,12 @@
 #include <boost/atomic/detail/config.hpp>
 #include <boost/atomic/detail/lockpool.hpp>
 
+
+#ifdef __QNX__
+#include <stddef.h>
+#endif
+
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
