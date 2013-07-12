@@ -19,9 +19,19 @@ struct has {
     has(const has&){}
 };
 
+// MSVC can not generate neither default constructor, nor assignment operator, 
+// nor copy constructor for `has2` type. Supressing those warnings is essential, 
+// because we treat warnings as errors in those tests
+#if (defined _MSC_VER)
+# pragma warning( push )
+# pragma warning( disable : 4510 4512 4610)
+#endif
 struct has2 {
     const int& i;
 };
+#if (defined _MSC_VER)
+# pragma warning( pop )
+#endif
 
 struct has3 {
     has3(has3&){}
