@@ -156,39 +156,39 @@ void test_copy_assignment()
   BOOST_TEST(i5==get<5>(es2));
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
-  employee_set es8({{0,"Rose",40,4512)},{1,"Mary",38,3345},{2,"Jo",25,7102}});
+  employee_set es8({{0,"Rose",40,4512},{1,"Mary",38,3345},{2,"Jo",25,7102}});
   employee_set es9;
-  es9={{0,"Rose",40,4512)},{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512)}};
+  es9={{0,"Rose",40,4512},{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512}};
 
   BOOST_TEST(es8.size()==3);
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<0>(es9)={{0,"Rose",40,4512)},{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512)}}
+  get<0>(es9)={{0,"Rose",40,4512},{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512}}
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<0>(es9)={{0,"Rose",40,4512)},{2,"Jo",25,7102},{1,"Mary",38,3345}};
+  get<0>(es9)={{0,"Rose",40,4512},{2,"Jo",25,7102},{1,"Mary",38,3345}};
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<1>(es9)={{1,"Mary",38,3345},{0,"Rose",40,4512)},{2,"Jo",25,7102},{0,"Rose",40,4512)}};
+  get<1>(es9)={{1,"Mary",38,3345},{0,"Rose",40,4512},{2,"Jo",25,7102},{0,"Rose",40,4512}};
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<2>(es9)={{2,"Jo",25,7102},{0,"Rose",40,4512)},{1,"Mary",38,3345}};
+  get<2>(es9)={{2,"Jo",25,7102},{0,"Rose",40,4512},{1,"Mary",38,3345}};
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<3>(es9)={{0,"Rose",40,4512)},{1,"Mary",38,3345},{1,"Mary",38,3345},{2,"Jo",25,7102}};
+  get<3>(es9)={{0,"Rose",40,4512},{1,"Mary",38,3345},{1,"Mary",38,3345},{2,"Jo",25,7102}};
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<4>(es9)={{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512)}};
+  get<4>(es9)={{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512}};
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<5>(es9)={{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512)},{2,"Jo",25,7102}};
+  get<5>(es9)={{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512},{2,"Jo",25,7102}};
   BOOST_TEST(es9==es8);
 #endif
 
@@ -209,16 +209,16 @@ void test_copy_assignment()
   l.push_back(employee(2,"Agatha",40,1520));
 
 #if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  employee_set es8;
-  es8.insert(l.begin(),l.end());
+  employee_set es13;
+  es13.insert(l.begin(),l.end());
 #else
-  employee_set es8(l.begin(),l.end());
+  employee_set es13(l.begin(),l.end());
 #endif
 
   l.sort();
 
-  BOOST_TEST(es8.size()==l.size()&&
-              std::equal(es8.begin(),es8.end(),l.begin()));
+  BOOST_TEST(es13.size()==l.size()&&
+              std::equal(es13.begin(),es13.end(),l.begin()));
 
   /* MSVC++ 6.0 chokes on test_assign without this explicit instantiation */
   multi_index_container<int,indexed_by<sequenced<> > > s1;
