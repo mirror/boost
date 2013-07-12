@@ -96,8 +96,6 @@ protected:
     const index_base<Value,IndexSpecifierList,Allocator>&,const copy_map_type&)
   {}
 
-  void move_(index_base<Value,IndexSpecifierList,Allocator>&){}
-
   node_type* insert_(const value_type& v,node_type* x,lvalue_tag)
   {
     boost::detail::allocator::construct(&x->value(),v);
