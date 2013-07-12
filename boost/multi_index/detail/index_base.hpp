@@ -128,8 +128,7 @@ protected:
 
   node_type* insert_(const value_type& v,node_type*,node_type* x,rvalue_tag)
   {
-    boost::detail::allocator::construct(
-      &x->value(),boost::move(const_cast<value_type&>(v)));
+    new (&x->value()) value_type(boost::move(const_cast<value_type&>(v)));
     return x;
   }
 
