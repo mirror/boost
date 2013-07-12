@@ -38,9 +38,22 @@ struct employee
     id(id_),name(name_),age(age_),ssn(ssn_)
   {}
 
+  employee(const employee& x):
+    id(x.id),name(x.name),age(x.age),ssn(x.ssn)
+  {}
+
   employee(BOOST_RV_REF(employee) x):
     id(x.id),name(boost::move(x.name)),age(x.age),ssn(x.ssn)
   {}
+
+  employee& operator=(BOOST_COPY_ASSIGN_REF(employee) x)
+  {
+    id=x.id;
+    name=x.name;
+    age=x.age;
+    ssn=x.ssn;
+    return *this;
+  };
 
   employee& operator=(BOOST_RV_REF(employee) x)
   {
@@ -77,6 +90,9 @@ struct employee
     os<<e.id<<" "<<e.name<<" "<<e.age<<std::endl;
     return os;
   }
+
+private:
+  BOOST_COPYABLE_AND_MOVABLE(employee)
 };
 
 struct name{};
