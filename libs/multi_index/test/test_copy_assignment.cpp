@@ -158,13 +158,15 @@ void test_copy_assignment()
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
   employee_set es8({{0,"Rose",40,4512},{1,"Mary",38,3345},{2,"Jo",25,7102}});
   employee_set es9;
-  es9={{0,"Rose",40,4512},{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512}};
+  es9={{0,"Rose",40,4512},{1,"Mary",38,3345},{2,"Jo",25,7102},
+       {0,"Rose",40,4512}};
 
   BOOST_TEST(es8.size()==3);
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<0>(es9)={{0,"Rose",40,4512},{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512}}
+  get<0>(es9)={{0,"Rose",40,4512},{1,"Mary",38,3345},{2,"Jo",25,7102},
+               {0,"Rose",40,4512}};
   BOOST_TEST(es9==es8);
 
   es9.clear();
@@ -172,7 +174,8 @@ void test_copy_assignment()
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<1>(es9)={{1,"Mary",38,3345},{0,"Rose",40,4512},{2,"Jo",25,7102},{0,"Rose",40,4512}};
+  get<1>(es9)={{1,"Mary",38,3345},{0,"Rose",40,4512},{2,"Jo",25,7102},
+               {0,"Rose",40,4512}};
   BOOST_TEST(es9==es8);
 
   es9.clear();
@@ -180,7 +183,8 @@ void test_copy_assignment()
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<3>(es9)={{0,"Rose",40,4512},{1,"Mary",38,3345},{1,"Mary",38,3345},{2,"Jo",25,7102}};
+  get<3>(es9)={{0,"Rose",40,4512},{1,"Mary",38,3345},{1,"Mary",38,3345},
+               {2,"Jo",25,7102}};
   BOOST_TEST(es9==es8);
 
   es9.clear();
@@ -188,7 +192,8 @@ void test_copy_assignment()
   BOOST_TEST(es9==es8);
 
   es9.clear();
-  get<5>(es9)={{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512},{2,"Jo",25,7102}};
+  get<5>(es9)={{1,"Mary",38,3345},{2,"Jo",25,7102},{0,"Rose",40,4512},
+               {2,"Jo",25,7102}};
   BOOST_TEST(es9==es8);
 #endif
 
