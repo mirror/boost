@@ -14,9 +14,9 @@ path-constant images_location : html/images ; # location of my SVG and PNG image
 path-constant pdf_images_location : html ; # location of SVG and PNG images referenced by pdf.
 path-constant here : . ; # location of /doc folder.
 
-echo "nav_images = " $(nav_images) ; # "nav_images = I:\boost-trunk\libs\circular_buffer\doc\html\images
-echo "images_location = " $(images_location) ; # images_location = I:\boost-trunk\libs\circular_buffer\doc\html\images
-echo "pdf_images_location = " $(pdf_images_location) # 
+# echo "nav_images = " $(nav_images) ; # "nav_images = I:\boost-trunk\libs\circular_buffer\doc\html\images
+# echo "images_location = " $(images_location) ; # images_location = I:\boost-trunk\libs\circular_buffer\doc\html\images
+# echo "pdf_images_location = " $(pdf_images_location) # 
 import modules ;
 using auto-index ;
 using doxygen ;  # Required if you want to use Doxygen.
