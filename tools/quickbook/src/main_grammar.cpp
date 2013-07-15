@@ -90,37 +90,6 @@ namespace quickbook
                 string_iterator last);
         void clear_stack();
 
-        struct in_list_impl {
-            main_grammar_local& l;
-
-            in_list_impl(main_grammar_local& l) :
-                l(l) {}
-
-            bool operator()() const {
-                return !l.list_stack.top().root;
-            }
-        };
-
-        struct set_no_eols_scoped : scoped_action_base
-        {
-            set_no_eols_scoped(main_grammar_local& l)
-                : l(l) {}
-
-            bool start() {
-                saved_no_eols = l.no_eols;
-                l.no_eols = false;
-
-                return true;
-            }
-
-            void cleanup() {
-                l.no_eols = saved_no_eols;
-            }
-
-            main_grammar_local& l;
-            bool saved_no_eols;
-        };
-
         ////////////////////////////////////////////////////////////////////////
         // Local members
 
@@ -438,8 +407,8 @@ namespace quickbook
             >>  (cl::ch_p('*') | '#')
             >>  (*cl::blank_p)                  [local.list.still_in_block = true]
             >>  *(  cl::eps_p(local.list.still_in_block)
-                >>  (   qbk_ver(106u) >> local.list_item(element_info::only_block)
-                    |   qbk_ver(0, 106u) >> local.list_item(element_info::only_list_block)
+                >>  (   qbk_ver(107u) >> local.list_item(element_info::only_block)
+                    |   qbk_ver(0, 107u) >> local.list_item(element_info::only_list_block)
                     )
                 )
                 // TODO: This is sometimes called in the wrong place. Currently
@@ -449,7 +418,7 @@ namespace quickbook
 
         local.list_item =
                 local.element(local.list_item.context)
-            >>  !eol                            [local.list.still_in_block = false]
+            >>  !(qbk_ver(0, 106u) >> eol)      [local.list.still_in_block = false]
             |   local.paragraph_separator       [local.list.still_in_block = false]
             |   local.common(element_info::in_phrase)
             ;
@@ -470,7 +439,6 @@ namespace quickbook
         inside_paragraph =
             state.values.save()
             [   *(  local.paragraph_separator   [paragraph]
-                >>  *eol
                 |   ~cl::eps_p(']')
                 >>  local.common(element_info::in_nested_block)
                 )
@@ -1053,6 +1021,14 @@ namespace quickbook
                 }
 
                 block_type = block_types::paragraph;
+            }
+
+            if (qbk_version_n == 106u && !list_stack.top().root) {
+                detail::outerr(state_.current_file, first)
+                    << "Nested blocks in lists won't be supported in "
+                    << "quickbook 1.6"
+                    << std::endl;
+                ++state_.error_count;
             }
         }
         else {

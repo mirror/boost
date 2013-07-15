@@ -40,7 +40,7 @@
 #pragma warning(disable:4355)
 #endif
 
-#define QUICKBOOK_VERSION "Quickbook Version 1.5.9"
+#define QUICKBOOK_VERSION "Quickbook Version 1.6.0 alpha (dev)"
 
 namespace quickbook
 {
@@ -162,20 +162,23 @@ namespace quickbook
 
             if (!options_.deps_out.empty())
             {
-                fs::ofstream out(options_.deps_out);
-                state.dependencies.write_dependencies(out,
+                state.dependencies.write_dependencies(options_.deps_out,
                         options_.deps_out_flags);
             }
 
             if (!options_.locations_out.empty())
             {
                 fs::ofstream out(options_.locations_out);
-                state.dependencies.write_dependencies(out,
+                state.dependencies.write_dependencies(options_.locations_out,
                         dependency_tracker::checked);
             }
         }
         catch (load_error& e) {
             detail::outerr(filein_) << e.what() << std::endl;
+            result = 1;
+        }
+        catch (std::runtime_error& e) {
+            detail::outerr() << e.what() << std::endl;
             result = 1;
         }
 
