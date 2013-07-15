@@ -73,9 +73,9 @@ namespace boost { namespace unordered { namespace iterator_detail {
 
         typedef typename Node::value_type value_type;
 
-        l_iterator() : ptr_() {}
+        l_iterator() BOOST_NOEXCEPT : ptr_() {}
 
-        l_iterator(iterator x, std::size_t b, std::size_t c)
+        l_iterator(iterator x, std::size_t b, std::size_t c) BOOST_NOEXCEPT
             : ptr_(x.node_), bucket_(b), bucket_count_(c) {}
 
         value_type& operator*() const {
@@ -100,11 +100,11 @@ namespace boost { namespace unordered { namespace iterator_detail {
             return tmp;
         }
 
-        bool operator==(l_iterator x) const {
+        bool operator==(l_iterator x) const BOOST_NOEXCEPT {
             return ptr_ == x.ptr_;
         }
 
-        bool operator!=(l_iterator x) const {
+        bool operator!=(l_iterator x) const BOOST_NOEXCEPT {
             return ptr_ != x.ptr_;
         }
     };
@@ -132,13 +132,13 @@ namespace boost { namespace unordered { namespace iterator_detail {
 
         typedef typename Node::value_type value_type;
 
-        cl_iterator() : ptr_() {}
+        cl_iterator() BOOST_NOEXCEPT : ptr_() {}
 
-        cl_iterator(iterator x, std::size_t b, std::size_t c) :
+        cl_iterator(iterator x, std::size_t b, std::size_t c) BOOST_NOEXCEPT :
             ptr_(x.node_), bucket_(b), bucket_count_(c) {}
 
         cl_iterator(boost::unordered::iterator_detail::l_iterator<
-                Node, Policy> const& x) :
+                Node, Policy> const& x) BOOST_NOEXCEPT :
             ptr_(x.ptr_), bucket_(x.bucket_), bucket_count_(x.bucket_count_)
         {}
 
@@ -164,11 +164,15 @@ namespace boost { namespace unordered { namespace iterator_detail {
             return tmp;
         }
 
-        friend bool operator==(cl_iterator const& x, cl_iterator const& y) {
+        friend bool operator==(cl_iterator const& x, cl_iterator const& y)
+            BOOST_NOEXCEPT
+        {
             return x.ptr_ == y.ptr_;
         }
 
-        friend bool operator!=(cl_iterator const& x, cl_iterator const& y) {
+        friend bool operator!=(cl_iterator const& x, cl_iterator const& y)
+            BOOST_NOEXCEPT
+        {
             return x.ptr_ != y.ptr_;
         }
     };
@@ -204,9 +208,9 @@ namespace boost { namespace unordered { namespace iterator_detail {
 
         typedef typename Node::value_type value_type;
 
-        iterator() : node_() {}
+        iterator() BOOST_NOEXCEPT : node_() {}
 
-        explicit iterator(typename Node::link_pointer x) :
+        explicit iterator(typename Node::link_pointer x) BOOST_NOEXCEPT :
             node_(static_cast<node_pointer>(x)) {}
 
         value_type& operator*() const {
@@ -228,11 +232,11 @@ namespace boost { namespace unordered { namespace iterator_detail {
             return tmp;
         }
 
-        bool operator==(iterator const& x) const {
+        bool operator==(iterator const& x) const BOOST_NOEXCEPT {
             return node_ == x.node_;
         }
 
-        bool operator!=(iterator const& x) const {
+        bool operator!=(iterator const& x) const BOOST_NOEXCEPT {
             return node_ != x.node_;
         }
     };
@@ -266,12 +270,12 @@ namespace boost { namespace unordered { namespace iterator_detail {
 
         typedef typename Node::value_type value_type;
 
-        c_iterator() : node_() {}
+        c_iterator() BOOST_NOEXCEPT : node_() {}
 
-        explicit c_iterator(typename Node::link_pointer x) :
+        explicit c_iterator(typename Node::link_pointer x) BOOST_NOEXCEPT :
             node_(static_cast<node_pointer>(x)) {}
 
-        c_iterator(iterator const& x) : node_(x.node_) {}
+        c_iterator(iterator const& x) BOOST_NOEXCEPT : node_(x.node_) {}
 
         value_type const& operator*() const {
             return node_->value();
@@ -292,11 +296,15 @@ namespace boost { namespace unordered { namespace iterator_detail {
             return tmp;
         }
 
-        friend bool operator==(c_iterator const& x, c_iterator const& y) {
+        friend bool operator==(c_iterator const& x, c_iterator const& y)
+            BOOST_NOEXCEPT
+        {
             return x.node_ == y.node_;
         }
 
-        friend bool operator!=(c_iterator const& x, c_iterator const& y) {
+        friend bool operator!=(c_iterator const& x, c_iterator const& y)
+            BOOST_NOEXCEPT
+        {
             return x.node_ != y.node_;
         }
     };
