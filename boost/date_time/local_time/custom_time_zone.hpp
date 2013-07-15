@@ -64,7 +64,7 @@ namespace local_time {
     //! True if zone uses daylight savings adjustments
     virtual bool has_dst() const
     {
-      return (dst_calc_rules_); //if calc_rule is set the tz has dst
+      return (bool) dst_calc_rules_; //if calc_rule is set the tz has dst
     }
     //! Local time that DST starts -- NADT if has_dst is false
     virtual posix_time::ptime dst_local_start_time(gregorian::greg_year y) const
