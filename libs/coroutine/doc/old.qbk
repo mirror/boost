@@ -5,7 +5,7 @@
           http://www.boost.org/LICENSE_1_0.txt
 ]
 
-[section:old Bidirectional coroutine (version 1)]
+[section:old Bidirectional coroutine (['deprecated])]
 
 [note This interface is deprecated but can be used by compiling the code with
 macro BOOST_COROUTINES_OLD.]
@@ -542,7 +542,7 @@ After unwinding, a __coro__ is complete.
             {
                 coro_t c( fn,
                           boost::coroutines::attributes(
-                            boost::ctx::default_stacksize(),
+                            boost::context::default_stacksize(),
                             boost::coroutines::stack_unwind) );
 
                 c();

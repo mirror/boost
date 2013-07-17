@@ -13,7 +13,7 @@
 #include <boost/coroutine/all.hpp>
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-void power( boost::coroutines::push_coroutine< int > & c, int number, int exponent)
+void power( boost::coroutines::coroutine< int >::push_type & c, int number, int exponent)
 {
     int counter = 0;
     int result = 1;
@@ -28,16 +28,16 @@ int main()
 {
     {
         std::cout << "using range functions" << std::endl;
-        boost::coroutines::pull_coroutine< int > c( boost::bind( power, _1, 2, 8) );
-        boost::coroutines::pull_coroutine< int >::iterator e( boost::end( c) );
-        for ( boost::coroutines::pull_coroutine< int >::iterator i( boost::begin( c) );
+        boost::coroutines::coroutine< int >::pull_type c( boost::bind( power, _1, 2, 8) );
+        boost::coroutines::coroutine< int >::pull_type::iterator e( boost::end( c) );
+        for ( boost::coroutines::coroutine< int >::pull_type::iterator i( boost::begin( c) );
               i != e; ++i)
             std::cout << * i <<  " ";
     }
 
     {
         std::cout << "\nusing BOOST_FOREACH" << std::endl;
-        boost::coroutines::pull_coroutine< int > c( boost::bind( power, _1, 2, 8) );
+        boost::coroutines::coroutine< int >::pull_type c( boost::bind( power, _1, 2, 8) );
         BOOST_FOREACH( int i, c)
         { std::cout << i <<  " "; }
     }

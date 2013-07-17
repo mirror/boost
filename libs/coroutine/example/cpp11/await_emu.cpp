@@ -71,8 +71,8 @@ void reschedule()
 // ___________________________________________________________ //
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-typedef coroutines::pull_coroutine<void>            coro_pull;
-typedef coroutines::push_coroutine<void>            coro_push;
+typedef coroutines::coroutine<void>::pull_type      coro_pull;
+typedef coroutines::coroutine<void>::push_type      coro_push;
 #else
 typedef coroutines::coroutine<void()>               coro_pull;
 typedef coroutines::coroutine<void()>::caller_type  coro_push;

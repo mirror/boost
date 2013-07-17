@@ -17,7 +17,7 @@ struct X : private boost::noncopyable
     ~X() { std::cout << "~X()" << std::endl; }
 };
 
-void fn( boost::coroutines::push_coroutine< void > & c)
+void fn( boost::coroutines::coroutine< void >::push_type & c)
 {
     X x;
     int i = 0;
@@ -31,7 +31,7 @@ void fn( boost::coroutines::push_coroutine< void > & c)
 int main( int argc, char * argv[])
 {
     {
-        boost::coroutines::pull_coroutine< void > c( fn);
+        boost::coroutines::coroutine< void >::pull_type c( fn);
         for ( int k = 0; k < 3; ++k)
         {
             c();

@@ -8,6 +8,8 @@
 #include <cstdlib>
 #include <iostream>
 
+#include <boost/coroutine/all.hpp>
+
 #include "tree.h"
 
 node::ptr_t create_tree1()
@@ -32,10 +34,10 @@ node::ptr_t create_tree2()
 class coro_visitor : public visitor
 {
 private:
-    boost::coroutines::push_coroutine< leaf& >   &   c_;
+    boost::coroutines::coroutine< leaf& >::push_type   &   c_;
 
 public:
-    coro_visitor( boost::coroutines::push_coroutine< leaf& > & c) :
+    coro_visitor( boost::coroutines::coroutine< leaf& >::push_type & c) :
         c_( c)
     {}
 
@@ -52,15 +54,15 @@ public:
 int main()
 {
     node::ptr_t t1 = create_tree1();
-    boost::coroutines::pull_coroutine< leaf& > c1(
-        [&]( boost::coroutines::push_coroutine< leaf & > & c) {
+    boost::coroutines::coroutine< leaf& >::pull_type c1(
+        [&]( boost::coroutines::coroutine< leaf & >::push_type & c) {
             coro_visitor v( c);
             t1->accept( v);
         });
 
     node::ptr_t t2 = create_tree2();
-    boost::coroutines::pull_coroutine< leaf& > c2(
-        [&]( boost::coroutines::push_coroutine< leaf & > & c) {
+    boost::coroutines::coroutine< leaf& >::pull_type c2(
+        [&]( boost::coroutines::coroutine< leaf & >::push_type & c) {
             coro_visitor v( c);
             t2->accept( v);
         });

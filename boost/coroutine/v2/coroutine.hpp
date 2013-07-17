@@ -2908,6 +2908,14 @@ typename push_coroutine< Arg >::const_iterator
 end( push_coroutine< Arg > const& c)
 { return boost::const_end( c); }
 
+
+template< typename T >
+struct coroutine
+{
+    typedef push_coroutine< T > push_type;
+    typedef pull_coroutine< T > pull_type;
+};
+
 }
 
 template< typename Arg >

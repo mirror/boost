@@ -32,7 +32,7 @@ void bar( int i)
 }
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-void foo( boost::coroutines::pull_coroutine< void > & c)
+void foo( boost::coroutines::coroutine< void >::pull_type & c)
 {
     bar( count);
     c();
@@ -41,7 +41,7 @@ void foo( boost::coroutines::pull_coroutine< void > & c)
 void thread_fn()
 {
     {
-        boost::coroutines::push_coroutine< void > c( foo);
+        boost::coroutines::coroutine< void >::push_type c( foo);
         c();
     }
 }

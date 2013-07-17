@@ -33,17 +33,17 @@ namespace coro = boost::coroutines;
     c();
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-void fn( boost::coroutines::push_coroutine< void > & c)
+void fn( boost::coroutines::coroutine< void >::push_type & c)
 { while ( true) c(); }
 
 # ifdef BOOST_CONTEXT_CYCLE
 cycle_t test_cycles( cycle_t ov, coro::flag_fpu_t preserve_fpu)
 {
 #  if defined(BOOST_USE_SEGMENTED_STACKS)
-    boost::coroutines::pull_coroutine< void > c( fn, coro::attributes( preserve_fpu) );
+    boost::coroutines::coroutine< void >::pull_type c( fn, coro::attributes( preserve_fpu) );
 #  else
     coro::simple_stack_allocator< 8 * 1024 * 1024, 64 * 1024, 8 * 1024 > alloc;
-    boost::coroutines::pull_coroutine< void > c( fn, coro::attributes( preserve_fpu), alloc);
+    boost::coroutines::coroutine< void >::pull_type c( fn, coro::attributes( preserve_fpu), alloc);
 #  endif
 
     // cache warum-up
@@ -66,10 +66,10 @@ BOOST_PP_REPEAT_FROM_TO( 0, COUNTER, CALL_COROUTINE, ~)
 zeit_t test_zeit( zeit_t ov, coro::flag_fpu_t preserve_fpu)
 {
 #  if defined(BOOST_USE_SEGMENTED_STACKS)
-    boost::coroutines::pull_coroutine< void > c( fn, coro::attributes( preserve_fpu) );
+    boost::coroutines::coroutine< void >::pull_type c( fn, coro::attributes( preserve_fpu) );
 #  else
     coro::simple_stack_allocator< 8 * 1024 * 1024, 64 * 1024, 8 * 1024 > alloc;
-    boost::coroutines::pull_coroutine< void > c( fn, coro::attributes( preserve_fpu), alloc);
+    boost::coroutines::coroutine< void >::pull_type c( fn, coro::attributes( preserve_fpu), alloc);
 #  endif
 
     // cache warum-up

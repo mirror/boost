@@ -25,19 +25,19 @@ void echoSSE( int i)
     std::cout << v32[3]; 
 }
 
-void echo( boost::coroutines::push_coroutine< void > & c, int i)
+void echo( boost::coroutines::coroutine< void >::push_type & c, int i)
 {
     std::cout << i << ":"; 
     echoSSE(i);
     c();
 }
 
-void runit( boost::coroutines::push_coroutine< void > & ca)
+void runit( boost::coroutines::coroutine< void >::push_type & ca)
 {
     std::cout << "started! ";
     for ( int i = 0; i < 10; ++i)
     {
-        boost::coroutines::pull_coroutine< void > c( boost::bind( echo, _1, i) );
+        boost::coroutines::coroutine< void >::pull_type c( boost::bind( echo, _1, i) );
         while ( c)
             c();
         ca();
@@ -47,7 +47,7 @@ void runit( boost::coroutines::push_coroutine< void > & ca)
 int main( int argc, char * argv[])
 {
     {
-        boost::coroutines::pull_coroutine< void > c( runit);
+        boost::coroutines::coroutine< void >::pull_type c( runit);
         while ( c) {
             std::cout << "-";
             c();

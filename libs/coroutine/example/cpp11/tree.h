@@ -12,7 +12,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
-#include <boost/coroutine/all.hpp>
 #include <boost/intrusive_ptr.hpp>
 
 # if defined(BOOST_MSVC)

@@ -11,8 +11,8 @@
 #include <boost/coroutine/all.hpp>
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-typedef boost::coroutines::pull_coroutine< void > pull_coro_t;
-typedef boost::coroutines::push_coroutine< void > push_coro_t;
+typedef boost::coroutines::coroutine< void >::pull_type pull_coro_t;
+typedef boost::coroutines::coroutine< void >::push_type push_coro_t;
 
 void echo( pull_coro_t & c, int i)
 {

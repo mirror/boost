@@ -11,7 +11,7 @@
 #include <boost/coroutine/all.hpp>
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-void first( boost::coroutines::push_coroutine< void > & c)
+void first( boost::coroutines::coroutine< void >::push_type & c)
 {
     std::cout << "started first! ";
     for ( int i = 0; i < 10; ++i)
@@ -21,7 +21,7 @@ void first( boost::coroutines::push_coroutine< void > & c)
     }
 }
 
-void second( boost::coroutines::push_coroutine< void > & c)
+void second( boost::coroutines::coroutine< void >::push_type & c)
 {
     std::cout << "started second! ";
     for ( int i = 0; i < 10; ++i)
@@ -34,8 +34,8 @@ void second( boost::coroutines::push_coroutine< void > & c)
 int main( int argc, char * argv[])
 {
     {
-        boost::coroutines::pull_coroutine< void > c1( boost::bind( first, _1) );
-        boost::coroutines::pull_coroutine< void > c2( boost::bind( second, _1) );
+        boost::coroutines::coroutine< void >::pull_type c1( boost::bind( first, _1) );
+        boost::coroutines::coroutine< void >::pull_type c2( boost::bind( second, _1) );
         while ( c1 && c2) {
             c1();
             std::cout << " ";

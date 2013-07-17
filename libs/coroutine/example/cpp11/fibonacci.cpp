@@ -12,10 +12,12 @@
 #ifdef BOOST_COROUTINES_UNIDIRECT
 int main()
 {
-    boost::coroutines::pull_coroutine< int > c(
-        [&]( boost::coroutines::push_coroutine< int > & c) {
+    boost::coroutines::coroutine< int >::pull_type c(
+        [&]( boost::coroutines::coroutine< int >::push_type & c) {
             int first = 1, second = 1;
-            for ( int i = 0; i < 10; ++i)
+            c( first);
+            c( second);
+            for ( int i = 0; i < 8; ++i)
             {
                 int third = first + second;
                 first = second;
@@ -37,7 +39,9 @@ int main()
     boost::coroutines::coroutine< int() > c(
         [&]( boost::coroutines::coroutine< void( int) > & c) {
             int first = 1, second = 1;
-            for ( int i = 0; i < 10; ++i)
+            c( first);
+            c( second);
+            for ( int i = 0; i < 8; ++i)
             {
                 int third = first + second;
                 first = second;
