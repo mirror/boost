@@ -11,7 +11,7 @@
 
 #include <boost/circular_buffer.hpp>
 #include <boost/thread/mutex.hpp>
-#include <boost/thread/condition.hpp>
+#include <boost/thread/condition_variable.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/call_traits.hpp>
 #include <boost/progress.hpp>
@@ -62,8 +62,8 @@ private:
     size_type m_unread;
     container_type m_container;
     boost::mutex m_mutex;
-    boost::condition m_not_empty;
-    boost::condition m_not_full;
+    boost::condition_variable m_not_empty;
+    boost::condition_variable m_not_full;
 };
 
 template <class T>
@@ -104,8 +104,8 @@ private:
 
     container_type m_container;
     boost::mutex m_mutex;
-    boost::condition m_not_empty;
-    boost::condition m_not_full;
+    boost::condition_variable m_not_empty;
+    boost::condition_variable m_not_full;
 };
 
 template <class T>
@@ -147,8 +147,8 @@ private:
     const size_type m_capacity;
     container_type m_container;
     boost::mutex m_mutex;
-    boost::condition m_not_empty;
-    boost::condition m_not_full;
+    boost::condition_variable m_not_empty;
+    boost::condition_variable m_not_full;
 };
 
 template <class T>
@@ -190,8 +190,8 @@ private:
     const size_type m_capacity;
     container_type m_container;
     boost::mutex m_mutex;
-    boost::condition m_not_empty;
-    boost::condition m_not_full;
+    boost::condition_variable m_not_empty;
+    boost::condition_variable m_not_full;
 };
 
 template<class Buffer>

@@ -2292,7 +2292,13 @@ void move_container_values_noexcept() {
 
 void check_containers_exception_specifications() {
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+
+#ifndef BOOST_CLANG
+    // Clang has an error in __has_nothrow_constructor implementation:
+    // http://llvm.org/bugs/show_bug.cgi?id=16627 
     BOOST_CHECK(boost::is_nothrow_move_constructible<CB_CONTAINER<int> >::value);
+#endif
+
     BOOST_CHECK(boost::is_nothrow_move_assignable<CB_CONTAINER<int> >::value);
     BOOST_CHECK(boost::has_nothrow_constructor<CB_CONTAINER<int> >::value);
 #endif
