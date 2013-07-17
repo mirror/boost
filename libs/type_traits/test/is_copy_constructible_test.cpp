@@ -259,7 +259,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<enum_UDT>::value, true
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int&>::value, true);
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int&&>::value, true);
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int&&>::value, false);
 #endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<const int&>::value, true);
 

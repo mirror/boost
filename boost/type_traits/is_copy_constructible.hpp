@@ -12,6 +12,7 @@
 #include <boost/config.hpp>
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
+#include <boost/type_traits/add_reference.hpp>
 #include <boost/utility/declval.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -65,9 +66,11 @@ struct is_copy_constructible_impl2 {
     //          T(const T &) = delete;
     //          ...
     //      };
-    BOOST_STATIC_CONSTANT(bool,
-        value = (sizeof(test(boost::declval<T&>())) == sizeof(boost::type_traits::yes_type))
-    );
+    BOOST_STATIC_CONSTANT(bool, value = (
+        sizeof(test(
+            boost::declval<BOOST_DEDUCED_TYPENAME boost::add_reference<T>::type>()
+        )) == sizeof(boost::type_traits::yes_type)
+    ));
 };
 
 template <class T>
@@ -81,7 +84,8 @@ struct is_copy_constructible_impl {
     BOOST_STATIC_CONSTANT(bool, value = (
         boost::detail::is_copy_constructible_impl2<
             boost::is_base_and_derived<boost::noncopyable, T>::value,
-        T>::value
+            T
+        >::value
     ));
 };
 
