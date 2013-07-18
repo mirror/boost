@@ -69,11 +69,6 @@
     throw_exception(bad_lexical_cast(typeid(Source), typeid(Target)))
 #endif
 
-// GCC 4.6 has some issues with int128 and uint128. Issues were fixed in GCC 4.7
-#if defined(BOOST_HAS_INT128) && (!defined(__GNUC__) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 6))
-#define BOOST_LCAST_HAS_INT128
-#endif
-
 namespace boost
 {
     // exception used to indicate runtime lexical_cast failure
@@ -316,7 +311,7 @@ namespace boost {
         > {};
 #endif
 
-#ifdef BOOST_LCAST_HAS_INT128
+#ifdef BOOST_HAS_INT128
         template <> struct stream_char_common< boost::int128_type >: public boost::mpl::identity< char > {};
         template <> struct stream_char_common< boost::uint128_type >: public boost::mpl::identity< char > {};
 #endif
@@ -613,7 +608,7 @@ namespace boost {
         BOOST_LCAST_DEF(unsigned __int64)
         BOOST_LCAST_DEF(         __int64)
 #endif
-#ifdef BOOST_LCAST_HAS_INT128
+#ifdef BOOST_HAS_INT128
         BOOST_LCAST_DEF(boost::int128_type)
         BOOST_LCAST_DEF(boost::uint128_type)
 #endif
@@ -1836,7 +1831,7 @@ namespace boost {
             bool operator<<(         __int64 n)         { return shl_signed(n); }
 #endif
 
-#ifdef BOOST_LCAST_HAS_INT128
+#ifdef BOOST_HAS_INT128
         bool operator<<(const boost::uint128_type& n)   { start = lcast_put_unsigned<Traits>(n, finish); return true; }
         bool operator<<(const boost::int128_type& n)    { return shl_signed(n); }
 #endif
@@ -2048,7 +2043,7 @@ namespace boost {
             bool operator>>(__int64& output)                    { return shr_signed(output); }
 #endif
 
-#ifdef BOOST_LCAST_HAS_INT128
+#ifdef BOOST_HAS_INT128
             bool operator>>(boost::uint128_type& output)        { return shr_unsigned(output); }
             bool operator>>(boost::int128_type& output)         { return shr_signed(output); }
 #endif
@@ -2728,7 +2723,6 @@ namespace boost {
 
 #undef BOOST_LCAST_THROW_BAD_CAST
 #undef BOOST_LCAST_NO_WCHAR_T
-#undef BOOST_LCAST_HAS_INT128
 
 #endif // BOOST_LEXICAL_CAST_INCLUDED
 

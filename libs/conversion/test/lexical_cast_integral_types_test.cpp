@@ -48,10 +48,6 @@
 #define BOOST_LCAST_NO_WCHAR_T
 #endif
 
-#if defined(BOOST_HAS_INT128) && (!defined(__GNUC__) || __GNUC__ > 4 || (__GNUC__ == 4 && __GNUC_MINOR__ > 6))
-#define BOOST_LCAST_HAS_INT128
-#endif
-
 // Test all 65536 values if true:
 bool const lcast_test_small_integral_types_completely = false;
 
@@ -75,7 +71,7 @@ void test_conversion_from_to_uintmax_t();
 void test_conversion_from_to_longlong();
 void test_conversion_from_to_ulonglong();
 #endif
-#ifdef BOOST_LCAST_HAS_INT128
+#ifdef BOOST_HAS_INT128
 void test_conversion_from_to_int128();
 void test_conversion_from_to_uint128();
 #endif
@@ -99,7 +95,7 @@ unit_test::test_suite *init_unit_test_suite(int, char *[])
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_longlong));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_ulonglong));
 #endif
-#ifdef BOOST_LCAST_HAS_INT128
+#ifdef BOOST_HAS_INT128
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_int128));
     suite->add(BOOST_TEST_CASE(&test_conversion_from_to_uint128));
 #endif
@@ -557,7 +553,7 @@ void test_conversion_from_to_ulonglong()
 #endif
 
 
-#ifdef BOOST_LCAST_HAS_INT128
+#ifdef BOOST_HAS_INT128
 
 template <bool Specialized, class T>
 struct test_if_specialized {
@@ -621,7 +617,7 @@ void test_integral_conversions_on_min_max()
     test_integral_conversions_on_min_max_impl<__int64>();
 #endif
 
-#ifdef BOOST_LCAST_HAS_INT128
+#ifdef BOOST_HAS_INT128
     test_integral_conversions_on_min_max_impl<boost::int128_type>();
 #endif
 #endif
