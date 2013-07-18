@@ -558,14 +558,33 @@ void test_conversion_from_to_ulonglong()
 
 
 #ifdef BOOST_LCAST_HAS_INT128
+
+template <bool Specialized, class T>
+struct test_if_specialized {
+    static void test() {}
+};
+
+template <class T>
+struct test_if_specialized<true, T> {
+    static void test() {
+        test_conversion_from_to_integral_minimal<T>();
+    }
+};
+
 void test_conversion_from_to_int128()
 {
-    test_conversion_from_to_integral_minimal<boost::int128_type>();
+    test_if_specialized<
+        std::numeric_limits<boost::int128_type>::is_specialized, 
+        boost::int128_type
+    >::test();
 }
 
 void test_conversion_from_to_uint128()
 {
-    test_conversion_from_to_integral_minimal<boost::uint128_type>();
+    test_if_specialized<
+        std::numeric_limits<boost::int128_type>::is_specialized, 
+        boost::uint128_type
+    >::test();
 }
 #endif
 
