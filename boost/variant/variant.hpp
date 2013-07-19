@@ -226,6 +226,25 @@ struct find_fallback_type<int>
 
 #endif // BOOST_MPL_CFG_MSVC_60_ETI_BUG workaround
 
+#ifndef BOOST_NO_CXX11_NOEXCEPT
+///////////////////////////////////////////////////////////////////////////////
+// (detail) metafunction is_variant_move_noexcept
+//
+// Returns true_type if all the types are nothrow move constructible.
+//
+template <class Types>
+struct is_variant_move_noexcept {
+    typedef typename boost::mpl::find_if<
+        Types, mpl::not_<boost::is_nothrow_move_constructible<boost::mpl::_1> >
+    >::type iterator_t;
+
+    typedef typename boost::mpl::end<Types>::type end_t;
+    typedef typename boost::is_same<
+        iterator_t, end_t
+    >::type type;
+};
+#endif // BOOST_NO_CXX11_NOEXCEPT
+
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction make_storage
 //
@@ -1289,6 +1308,12 @@ private: // helpers, for representation (below)
           internal_types, never_uses_backup_flag
         >::type storage_t;
 
+#ifndef BOOST_NO_CXX11_NOEXCEPT
+    typedef typename detail::variant::is_variant_move_noexcept<
+        internal_types
+    > variant_move_noexcept;
+#endif
+
 private: // helpers, for representation (below)
 
     // which_ on:
@@ -1375,7 +1400,7 @@ private: // helpers, for structors (below)
 
 public: // structors
 
-    ~variant()
+    ~variant() BOOST_NOEXCEPT
     {
         destroy_content();
     }
@@ -1766,7 +1791,7 @@ public: // structors, cont.
     }
     
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    variant(variant&& operand)
+    variant(variant&& operand) BOOST_NOEXCEPT_IF(variant_move_noexcept::type::value)
     {
         // Move the value of operand into *this...
         detail::variant::move_into visitor( storage_.address() );
@@ -2177,7 +2202,7 @@ public: // modifiers
     }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    variant& operator=(variant&& rhs)
+    variant& operator=(variant&& rhs) BOOST_NOEXCEPT_IF(variant_move_noexcept::type::value)
     {
         variant_assign( detail::variant::move(rhs) );
         return *this;

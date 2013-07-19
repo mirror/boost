@@ -3,8 +3,7 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2012
-// Antony Polukhin
+// Copyright (c) 2012-2013 Antony Polukhin
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -14,6 +13,7 @@
 
 #include "boost/test/minimal.hpp"
 #include "boost/variant.hpp"
+#include "boost/type_traits/is_nothrow_move_assignable.hpp"
 
 // This test requires rvalue references support
 
@@ -30,6 +30,11 @@ void run1()
 }
 
 void run_move_only()
+{
+    BOOST_CHECK(true);
+}
+
+void run_moves_are_noexcept()
 {
     BOOST_CHECK(true);
 }
@@ -177,6 +182,18 @@ void run_move_only()
     BOOST_CHECK(vi.which() == 1);
 }
 
+void run_moves_are_noexcept() {
+#ifndef BOOST_NO_CXX11_NOEXCEPT
+    typedef boost::variant<int, short, double> variant_noexcept_t;
+    BOOST_CHECK(boost::is_nothrow_move_assignable<variant_noexcept_t>::value);
+    BOOST_CHECK(boost::is_nothrow_move_constructible<variant_noexcept_t>::value);
+
+    typedef boost::variant<int, short, double, move_only_structure> variant_except_t;
+    BOOST_CHECK(!boost::is_nothrow_move_assignable<variant_except_t>::value);
+    BOOST_CHECK(!boost::is_nothrow_move_constructible<variant_except_t>::value);
+#endif
+}
+
 #endif
 
 
@@ -185,5 +202,6 @@ int test_main(int , char* [])
    run();
    run1();
    run_move_only();
+   run_moves_are_noexcept();
    return 0;
 }
