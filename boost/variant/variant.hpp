@@ -3,12 +3,14 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2002-2003
-// Eric Friedman, Itay Maman
+// Copyright (c) 2002-2003 Eric Friedman, Itay Maman
+// Copyright (c) 2012-2013 Antony Polukhin
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
+
+// Thanks to Adam Romanek for providing patches for exception-disabled env.
 
 #ifndef BOOST_VARIANT_VARIANT_HPP
 #define BOOST_VARIANT_VARIANT_HPP
@@ -37,6 +39,7 @@
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/variant/detail/move.hpp"
 
+#include "boost/detail/no_exceptions_support.hpp"
 #include "boost/detail/reference_content.hpp"
 #include "boost/aligned_storage.hpp"
 #include "boost/blank.hpp"
@@ -789,12 +792,12 @@ private: // helpers, for visitor interface (below)
         // ...destroy lhs content...
         lhs_content.~LhsT(); // nothrow
 
-        try
+        BOOST_TRY
         {
             // ...and attempt to copy rhs content into lhs storage:
             copy_rhs_content_(lhs_.storage_.address(), rhs_content_);
         }
-        catch (...)
+        BOOST_CATCH (...)
         {
             // In case of failure, restore backup content to lhs storage...
             new(lhs_.storage_.address())
@@ -803,8 +806,9 @@ private: // helpers, for visitor interface (below)
                     ); // nothrow
 
             // ...and rethrow:
-            throw;
+            BOOST_RETHROW;
         }
+        BOOST_CATCH_END
 
         // In case of success, indicate new content type:
         lhs_.indicate_which(rhs_which_); // nothrow
@@ -822,12 +826,12 @@ private: // helpers, for visitor interface (below)
         // ...destroy lhs content...
         lhs_content.~LhsT(); // nothrow
 
-        try
+        BOOST_TRY
         {
             // ...and attempt to copy rhs content into lhs storage:
             copy_rhs_content_(lhs_.storage_.address(), rhs_content_);
         }
-        catch (...)
+        BOOST_CATCH (...)
         {
             // In case of failure, copy backup pointer to lhs storage...
             new(lhs_.storage_.address())
@@ -837,8 +841,9 @@ private: // helpers, for visitor interface (below)
             lhs_.indicate_backup_which( lhs_.which() ); // nothrow
 
             // ...and rethrow:
-            throw;
+            BOOST_RETHROW;
         }
+        BOOST_CATCH_END
 
         // In case of success, indicate new content type...
         lhs_.indicate_which(rhs_which_); // nothrow
@@ -1885,13 +1890,13 @@ private: // helpers, for modifiers (below)
             // Destroy lhs's content...
             lhs_.destroy_content(); // nothrow
 
-            try
+            BOOST_TRY
             {
                 // ...and attempt to copy rhs's content into lhs's storage:
                 new(lhs_.storage_.address())
                     RhsT( rhs_content );
             }
-            catch (...)
+            BOOST_CATCH (...)
             {
                 // In case of failure, default-construct fallback type in lhs's storage...
                 new (lhs_.storage_.address())
@@ -1903,8 +1908,9 @@ private: // helpers, for modifiers (below)
                     ); // nothrow
 
                 // ...and rethrow:
-                throw;
+                BOOST_RETHROW;
             }
+            BOOST_CATCH_END
 
             // In the event of success, indicate new content type:
             lhs_.indicate_which(rhs_which_); // nothrow
@@ -2029,13 +2035,13 @@ private: // helpers, for modifiers (below)
             // Destroy lhs's content...
             lhs_.destroy_content(); // nothrow
 
-            try
+            BOOST_TRY
             {
                 // ...and attempt to copy rhs's content into lhs's storage:
                 new(lhs_.storage_.address())
                     RhsT( detail::variant::move(rhs_content) );
             }
-            catch (...)
+            BOOST_CATCH (...)
             {
                 // In case of failure, default-construct fallback type in lhs's storage...
                 new (lhs_.storage_.address())
@@ -2047,8 +2053,9 @@ private: // helpers, for modifiers (below)
                     ); // nothrow
 
                 // ...and rethrow:
-                throw;
+                BOOST_RETHROW;
             }
+            BOOST_CATCH_END
 
             // In the event of success, indicate new content type:
             lhs_.indicate_which(rhs_which_); // nothrow
