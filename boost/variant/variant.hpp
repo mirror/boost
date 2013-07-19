@@ -1980,7 +1980,7 @@ private: // helpers, for modifiers (below)
 
     private: // helpers, for internal visitor interface (below)
 
-        template <typename RhsT, typename B1, typename B2>
+        template <typename RhsT, typename B2>
         void assign_impl(
               RhsT& rhs_content
             , mpl::true_ // has_nothrow_copy

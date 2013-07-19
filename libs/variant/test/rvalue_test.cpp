@@ -196,6 +196,21 @@ void run_moves_are_noexcept() {
 
 #endif
 
+struct nothrow_copyable_throw_movable {
+    nothrow_copyable_throw_movable(){}
+    nothrow_copyable_throw_movable(const nothrow_copyable_throw_movable&) BOOST_NOEXCEPT {}
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    nothrow_copyable_throw_movable(nothrow_copyable_throw_movable&&) BOOST_NOEXCEPT_IF(false) {}
+#endif
+};
+
+// This test is created to cover the following situation:
+// https://svn.boost.org/trac/boost/ticket/8772
+void run_tricky_compilation_test()
+{
+    boost::variant<int, nothrow_copyable_throw_movable> v;
+    v = nothrow_copyable_throw_movable();
+}
 
 int test_main(int , char* [])
 {
@@ -203,5 +218,6 @@ int test_main(int , char* [])
    run1();
    run_move_only();
    run_moves_are_noexcept();
+   run_tricky_compilation_test();
    return 0;
 }
