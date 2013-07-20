@@ -1,16 +1,16 @@
-#ifndef BOOST_ATOMIC_DETAIL_CAS64STRONG_HPP
-#define BOOST_ATOMIC_DETAIL_CAS64STRONG_HPP
+#ifndef BOOST_ATOMIC_DETAIL_CAS128STRONG_HPP
+#define BOOST_ATOMIC_DETAIL_CAS128STRONG_HPP
 
 //  Distributed under the Boost Software License, Version 1.0.
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 //
 //  Copyright (c) 2011 Helge Bahmann
-//  Copyright (c) 2013 Tim Blechmann
+//  Copyright (c) 2013 Tim Blechmann, Andrey Semashev
 
-// Build 64-bit atomic operation on integers/UDTs from platform_cmpxchg64_strong
-// primitive. It is assumed that 64-bit loads/stores are not
-// atomic, so they are implemented through platform_load64/platform_store64.
+// Build 128-bit atomic operation on integers/UDTs from platform_cmpxchg128_strong
+// primitive. It is assumed that 128-bit loads/stores are not
+// atomic, so they are implemented through platform_load128/platform_store128.
 
 #include <string.h>
 #include <cstddef>
@@ -30,7 +30,7 @@ namespace detail {
 /* integral types */
 
 template<typename T, bool Sign>
-class base_atomic<T, int, 8, Sign>
+class base_atomic<T, int, 16, Sign>
 {
 private:
     typedef base_atomic this_type;
@@ -48,14 +48,14 @@ public:
     store(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
         platform_fence_before_store(order);
-        platform_store64(v, &v_);
+        platform_store128(v, &v_);
         platform_fence_after_store(order);
     }
 
     value_type
     load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
-        value_type v = platform_load64(&v_);
+        value_type v = platform_load128(&v_);
         platform_fence_after_load(order);
         return v;
     }
@@ -88,7 +88,7 @@ public:
     {
         platform_fence_before(success_order);
 
-        bool success = platform_cmpxchg64_strong(expected, desired, &v_);
+        bool success = platform_cmpxchg128_strong(expected, desired, &v_);
 
         if (success) {
             platform_fence_after(success_order);
@@ -161,13 +161,35 @@ private:
 
 /* generic types */
 
+#if defined(BOOST_HAS_INT128)
+
+typedef boost::uint128_type storage128_type;
+
+#else // defined(BOOST_HAS_INT128)
+
+struct BOOST_ALIGNMENT(16) storage128_type
+{
+    uint64_t data[2];
+};
+
+inline bool operator== (storage128_type const& left, storage128_type const& right)
+{
+    return left.data[0] == right.data[0] && left.data[1] == right.data[1];
+}
+inline bool operator!= (storage128_type const& left, storage128_type const& right)
+{
+    return !(left == right);
+}
+
+#endif // defined(BOOST_HAS_INT128)
+
 template<typename T, bool Sign>
-class base_atomic<T, void, 8, Sign>
+class base_atomic<T, void, 16, Sign>
 {
 private:
     typedef base_atomic this_type;
     typedef T value_type;
-    typedef uint64_t storage_type;
+    typedef storage128_type storage_type;
 
 protected:
     typedef value_type const& value_arg_type;
@@ -185,14 +207,14 @@ public:
         storage_type value_s = 0;
         memcpy(&value_s, &value, sizeof(value_type));
         platform_fence_before_store(order);
-        platform_store64(value_s, &v_);
+        platform_store128(value_s, &v_);
         platform_fence_after_store(order);
     }
 
     value_type
     load(memory_order order = memory_order_seq_cst) const volatile BOOST_NOEXCEPT
     {
-        storage_type value_s = platform_load64(&v_);
+        storage_type value_s = platform_load128(&v_);
         platform_fence_after_load(order);
         value_type value;
         memcpy(&value, &value_s, sizeof(value_type));
@@ -230,7 +252,7 @@ public:
         memcpy(&desired_s, &desired, sizeof(value_type));
 
         platform_fence_before(success_order);
-        bool success = platform_cmpxchg64_strong(expected_s, desired_s, &v_);
+        bool success = platform_cmpxchg128_strong(expected_s, desired_s, &v_);
 
         if (success) {
             platform_fence_after(success_order);
