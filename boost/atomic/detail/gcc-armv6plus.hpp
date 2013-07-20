@@ -10,7 +10,6 @@
 //  Copyright (c) 2013 Tim Blechmann
 //  ARM Code by Phil Endecott, based on other architectures.
 
-#include <cstddef>
 #include <boost/cstdint.hpp>
 #include <boost/atomic/detail/config.hpp>
 

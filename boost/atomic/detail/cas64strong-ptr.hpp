@@ -17,6 +17,7 @@
 // On these platforms there is no need for 64-bit pointer specializations,
 // since they will never be used.
 
+#include <string.h>
 #include <cstddef>
 #include <boost/cstdint.hpp>
 #include <boost/memory_order.hpp>
@@ -39,7 +40,7 @@ class base_atomic<void *, void *, 8, Sign>
 private:
     typedef base_atomic this_type;
     typedef void * value_type;
-    typedef ptrdiff_t difference_type;
+    typedef std::ptrdiff_t difference_type;
 
 protected:
     typedef value_type value_arg_type;
@@ -142,7 +143,7 @@ class base_atomic<T *, void *, 8, Sign>
 private:
     typedef base_atomic this_type;
     typedef T * value_type;
-    typedef ptrdiff_t difference_type;
+    typedef std::ptrdiff_t difference_type;
 
 protected:
     typedef value_type value_arg_type;

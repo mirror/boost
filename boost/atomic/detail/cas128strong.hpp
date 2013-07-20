@@ -12,6 +12,7 @@
 // primitive. It is assumed that 128-bit loads/stores are not
 // atomic, so they are implemented through platform_load128/platform_store128.
 
+#include <string.h>
 #include <cstddef>
 #include <boost/cstdint.hpp>
 #include <boost/memory_order.hpp>

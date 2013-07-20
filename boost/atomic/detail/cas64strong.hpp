@@ -12,6 +12,7 @@
 // primitive. It is assumed that 64-bit loads/stores are not
 // atomic, so they are implemented through platform_load64/platform_store64.
 
+#include <string.h>
 #include <cstddef>
 #include <boost/cstdint.hpp>
 #include <boost/memory_order.hpp>

@@ -8,6 +8,7 @@
 //  See accompanying file LICENSE_1_0.txt or copy at
 //  http://www.boost.org/LICENSE_1_0.txt)
 
+#include <string.h>
 #include <cstddef>
 #include <boost/cstdint.hpp>
 #include <boost/atomic/detail/config.hpp>
@@ -881,7 +882,7 @@ class base_atomic<void *, void *, 4, Sign>
 {
 private:
     typedef base_atomic this_type;
-    typedef ptrdiff_t difference_type;
+    typedef std::ptrdiff_t difference_type;
     typedef void * value_type;
 
 protected:
@@ -993,7 +994,7 @@ class base_atomic<T *, void *, 4, Sign>
 private:
     typedef base_atomic this_type;
     typedef T * value_type;
-    typedef ptrdiff_t difference_type;
+    typedef std::ptrdiff_t difference_type;
 
 protected:
     typedef value_type value_arg_type;
@@ -1114,7 +1115,7 @@ class base_atomic<void *, void *, 8, Sign>
 {
 private:
     typedef base_atomic this_type;
-    typedef ptrdiff_t difference_type;
+    typedef std::ptrdiff_t difference_type;
     typedef void * value_type;
 
 protected:
@@ -1226,7 +1227,7 @@ class base_atomic<T *, void *, 8, Sign>
 private:
     typedef base_atomic this_type;
     typedef T * value_type;
-    typedef ptrdiff_t difference_type;
+    typedef std::ptrdiff_t difference_type;
 
 protected:
     typedef value_type value_arg_type;

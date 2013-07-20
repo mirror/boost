@@ -11,7 +11,6 @@
 #ifndef BOOST_ATOMIC_DETAIL_GENERIC_CAS_HPP
 #define BOOST_ATOMIC_DETAIL_GENERIC_CAS_HPP
 
-#include <cstddef>
 #include <boost/cstdint.hpp>
 #include <boost/atomic/detail/config.hpp>
 
