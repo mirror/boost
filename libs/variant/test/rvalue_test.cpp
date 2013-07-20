@@ -199,8 +199,10 @@ void run_moves_are_noexcept() {
 struct nothrow_copyable_throw_movable {
     nothrow_copyable_throw_movable(){}
     nothrow_copyable_throw_movable(const nothrow_copyable_throw_movable&) BOOST_NOEXCEPT {}
+    nothrow_copyable_throw_movable& operator=(const nothrow_copyable_throw_movable&) BOOST_NOEXCEPT { return *this; }
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     nothrow_copyable_throw_movable(nothrow_copyable_throw_movable&&) BOOST_NOEXCEPT_IF(false) {}
+    nothrow_copyable_throw_movable& operator=(nothrow_copyable_throw_movable&&) BOOST_NOEXCEPT_IF(false) { return *this; }
 #endif
 };
 
