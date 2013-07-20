@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_STATIC_ASSERT
 #include "boost_no_static_assert.ipp"
 #else
-namespace boost_no_static_assert = empty_boost;
+namespace boost_no_cxx11_static_assert = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_static_assert::test();
+   return boost_no_cxx11_static_assert::test();
 }
 

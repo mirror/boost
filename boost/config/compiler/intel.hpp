@@ -27,7 +27,7 @@
 #endif
 
 // Flags determined by comparing output of 'icpc -dM -E' with and without '-std=c++0x'
-#if (!(defined(_WIN32) || defined(_WIN64)) && defined(__STDC_HOSTED__) && (__STDC_HOSTED__ && (BOOST_INTEL_CXX_VERSION <= 1200))) || defined(__GXX_EXPERIMENTAL_CPP0X__)
+#if (!(defined(_WIN32) || defined(_WIN64)) && defined(__STDC_HOSTED__) && (__STDC_HOSTED__ && (BOOST_INTEL_CXX_VERSION <= 1200))) || defined(__GXX_EXPERIMENTAL_CPP0X__) || defined(__GXX_EXPERIMENTAL_CXX0X__)
 #  define BOOST_INTEL_STDCXX0X
 #endif
 #if defined(_MSC_VER) && (_MSC_VER >= 1600)
@@ -154,6 +154,14 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  define BOOST_HAS_NRVO
 #endif
 
+// Branch prediction hints
+// I'm not sure 8.0 was the first version to support these builtins,
+// update the condition if the version is not accurate. (Andrey Semashev)
+#if defined(__GNUC__) && BOOST_INTEL_CXX_VERSION >= 800
+#define BOOST_LIKELY(x) __builtin_expect(x, 1)
+#define BOOST_UNLIKELY(x) __builtin_expect(x, 0)
+#endif
+
 //
 // versions check:
 // we don't support Intel prior to version 5.0:
@@ -173,10 +181,10 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 
 //
 // An attempt to value-initialize a pointer-to-member may trigger an
-// internal error on Intel <= 11.1 (last checked version), as was 
+// internal error on Intel <= 11.1 (last checked version), as was
 // reported by John Maddock, Intel support issue 589832, May 2010.
 // Moreover, according to test results from Huang-Vista-x86_32_intel,
-// intel-vc9-win-11.1 may leave a non-POD array uninitialized, in some 
+// intel-vc9-win-11.1 may leave a non-POD array uninitialized, in some
 // cases when it should be value-initialized.
 // (Niels Dekker, LKEB, May 2010)
 // Apparently Intel 12.1 (compiler version number 9999 !!) has the same issue (compiler regression).
@@ -221,10 +229,11 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  undef  BOOST_NO_CXX11_DECLTYPE
 #  undef  BOOST_NO_CXX11_AUTO_DECLARATIONS
 #  undef  BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS
+#  undef  BOOST_NO_CXX11_TRAILING_RESULT_TYPES
 #endif
 
 // icl Version 12.1.0.233 Build 20110811 and possibly some other builds
-// had an incorrect __INTEL_COMPILER value of 9999. Intel say this has been fixed. 
+// had an incorrect __INTEL_COMPILER value of 9999. Intel say this has been fixed.
 #if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION > 1200)
 #  undef  BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
 #  undef  BOOST_NO_CXX11_NULLPTR
@@ -234,8 +243,8 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  undef  BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
 // http://software.intel.com/en-us/articles/c0x-features-supported-by-intel-c-compiler/
-// continues to list scoped enum support as "Partial" 
-//#  undef  BOOST_NO_CXX11_SCOPED_ENUMS 
+// continues to list scoped enum support as "Partial"
+//#  undef  BOOST_NO_CXX11_SCOPED_ENUMS
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1700)
@@ -247,6 +256,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  define  BOOST_NO_CXX11_DELETED_FUNCTIONS
 #  define  BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
 #  define  BOOST_NO_CXX11_TEMPLATE_ALIASES
+#  define  BOOST_NO_CXX11_TRAILING_RESULT_TYPES
 #endif
 
 #if (BOOST_INTEL_CXX_VERSION < 1200)

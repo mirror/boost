@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_CONSTEXPR
 #include "boost_no_constexpr.ipp"
 #else
-namespace boost_no_constexpr = empty_boost;
+namespace boost_no_cxx11_constexpr = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_constexpr::test();
+   return boost_no_cxx11_constexpr::test();
 }
 

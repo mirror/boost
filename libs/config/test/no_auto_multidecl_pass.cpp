@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS
 #include "boost_no_auto_multidecl.ipp"
 #else
-namespace boost_no_auto_multideclarations = empty_boost;
+namespace boost_no_cxx11_auto_multideclarations = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_auto_multideclarations::test();
+   return boost_no_cxx11_auto_multideclarations::test();
 }
 

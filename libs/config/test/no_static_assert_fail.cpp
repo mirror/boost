@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_static_assert::test();
+   return boost_no_cxx11_static_assert::test();
 }
 

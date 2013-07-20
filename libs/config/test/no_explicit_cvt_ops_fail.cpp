@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_explicit_conversion_operators::test();
+   return boost_no_cxx11_explicit_conversion_operators::test();
 }
 

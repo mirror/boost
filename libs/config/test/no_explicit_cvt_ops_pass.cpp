@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
 #include "boost_no_explicit_cvt_ops.ipp"
 #else
-namespace boost_no_explicit_conversion_operators = empty_boost;
+namespace boost_no_cxx11_explicit_conversion_operators = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_explicit_conversion_operators::test();
+   return boost_no_cxx11_explicit_conversion_operators::test();
 }
 

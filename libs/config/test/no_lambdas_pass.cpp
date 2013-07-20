@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_LAMBDAS
 #include "boost_no_lambdas.ipp"
 #else
-namespace boost_no_lambdas = empty_boost;
+namespace boost_no_cxx11_lambdas = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_lambdas::test();
+   return boost_no_cxx11_lambdas::test();
 }
 

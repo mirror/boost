@@ -1,4 +1,4 @@
-//  This file was automatically generated on Wed Mar 21 13:05:19 2012
+//  This file was automatically generated on Sun Apr 28 18:36:48 2013
 //  by libs/config/tools/generate.cpp
 //  Copyright John Maddock 2002-4.
 //  Use, modification and distribution are subject to the 
@@ -10,10 +10,10 @@
 //
 
 
-// Test file for macro BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
+// Test file for macro BOOST_NO_CXX11_TRAILING_RESULT_TYPES
 // This file should compile, if it does not then
-// BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS should be defined.
-// See file boost_no_tem_local_classes.ipp for details
+// BOOST_NO_CXX11_TRAILING_RESULT_TYPES should be defined.
+// See file boost_no_cxx11_trailing_result_types.ipp for details
 
 // Must not have BOOST_ASSERT_CONFIG set; it defeats
 // the objective of this file:
@@ -24,14 +24,14 @@
 #include <boost/config.hpp>
 #include "test.hpp"
 
-#ifndef BOOST_NO_CXX11_LOCAL_CLASS_TEMPLATE_PARAMETERS
-#include "boost_no_tem_local_classes.ipp"
+#ifndef BOOST_NO_CXX11_TRAILING_RESULT_TYPES
+#include "boost_no_cxx11_trailing_result_types.ipp"
 #else
-namespace boost_no_cxx11_local_class_template_parameters = empty_boost;
+namespace boost_no_cxx11_trailing_result_types = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_cxx11_local_class_template_parameters::test();
+   return boost_no_cxx11_trailing_result_types::test();
 }
 

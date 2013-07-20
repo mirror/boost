@@ -27,11 +27,11 @@
 #ifndef BOOST_NO_CXX11_SCOPED_ENUMS
 #include "boost_no_scoped_enums.ipp"
 #else
-namespace boost_no_scoped_enums = empty_boost;
+namespace boost_no_cxx11_scoped_enums = empty_boost;
 #endif
 
 int main( int, char *[] )
 {
-   return boost_no_scoped_enums::test();
+   return boost_no_cxx11_scoped_enums::test();
 }
 

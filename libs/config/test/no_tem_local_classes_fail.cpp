@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_local_class_template_parameters::test();
+   return boost_no_cxx11_local_class_template_parameters::test();
 }
 

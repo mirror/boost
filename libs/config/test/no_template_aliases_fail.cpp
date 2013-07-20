@@ -32,6 +32,6 @@
 
 int main( int, char *[] )
 {
-   return boost_no_template_aliases::test();
+   return boost_no_cxx11_template_aliases::test();
 }
 
