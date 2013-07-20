@@ -1,3 +1,4 @@
+#include <cstddef>
 #include <boost/config.hpp>
 #include <boost/atomic.hpp>
 
