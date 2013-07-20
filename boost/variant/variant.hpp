@@ -2209,7 +2209,7 @@ public: // modifiers
     }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    variant& operator=(variant&& rhs) BOOST_NOEXCEPT_IF(variant_move_noexcept::type::value)
+    variant& operator=(variant&& rhs) // BOOST_NOEXCEPT_IF(variant_move_noexcept::type::value && all move assign operators are noexcept)
     {
         variant_assign( detail::variant::move(rhs) );
         return *this;

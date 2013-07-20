@@ -185,11 +185,11 @@ void run_move_only()
 void run_moves_are_noexcept() {
 #ifndef BOOST_NO_CXX11_NOEXCEPT
     typedef boost::variant<int, short, double> variant_noexcept_t;
-    BOOST_CHECK(boost::is_nothrow_move_assignable<variant_noexcept_t>::value);
+    //BOOST_CHECK(boost::is_nothrow_move_assignable<variant_noexcept_t>::value);
     BOOST_CHECK(boost::is_nothrow_move_constructible<variant_noexcept_t>::value);
 
     typedef boost::variant<int, short, double, move_only_structure> variant_except_t;
-    BOOST_CHECK(!boost::is_nothrow_move_assignable<variant_except_t>::value);
+    //BOOST_CHECK(!boost::is_nothrow_move_assignable<variant_except_t>::value);
     BOOST_CHECK(!boost::is_nothrow_move_constructible<variant_except_t>::value);
 #endif
 }
