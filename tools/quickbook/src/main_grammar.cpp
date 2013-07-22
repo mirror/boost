@@ -112,23 +112,19 @@ namespace quickbook
                         skip_escape
                         ;
 
-        struct context_closure : cl::closure<context_closure, element_info::context>
-        {
-            member1 context;
-        };
-
         cl::rule<scanner> simple_markup, simple_markup_end;
 
         cl::rule<scanner> paragraph;
         cl::rule<scanner> list;
-        cl::rule<scanner, context_closure::context_t> syntactic_block_item;
-        cl::rule<scanner, context_closure::context_t> common;
-        cl::rule<scanner, context_closure::context_t> element;
+        cl::rule<scanner> syntactic_block_item;
+        cl::rule<scanner> common;
+        cl::rule<scanner> element;
 
         // state
         std::stack<list_stack_item> list_stack;
         unsigned int list_indent;
         bool no_eols;
+        element_info::context context;
         char mark; // Simple markup's deliminator
         bool still_in_block; // Inside a syntatic block
 
@@ -147,6 +143,7 @@ namespace quickbook
             : list_stack()
             , list_indent(0)
             , no_eols(true)
+            , context(element_info::in_block)
             , mark('\0')
             , state_(state)
             {}
@@ -158,7 +155,7 @@ namespace quickbook
 
         bool start()
         {
-            if (!(l.info.type & l.element.context()) ||
+            if (!(l.info.type & l.context) ||
                     qbk_version_n < l.info.qbk_version)
                 return false;
 
@@ -294,6 +291,8 @@ namespace quickbook
 
         set_scoped_value<main_grammar_local, bool> scoped_no_eols(
                 local, &main_grammar_local::no_eols);
+        set_scoped_value<main_grammar_local, element_info::context> scoped_context(
+                local, &main_grammar_local::context);
         set_scoped_value<main_grammar_local, bool> scoped_still_in_block(
                 local, &main_grammar_local::still_in_block);
 
@@ -317,9 +316,9 @@ namespace quickbook
         // brackets.
         nested_phrase =
             state.values.save()
-            [   *( ~cl::eps_p(']')
-                >>  local.common(element_info::in_phrase)
-                )
+            [
+                scoped_context(element_info::in_phrase)
+                [*(~cl::eps_p(']') >> local.common)]
             ]
             ;
 
@@ -327,9 +326,9 @@ namespace quickbook
         // by a paragraph end.
         paragraph_phrase =
             state.values.save()
-            [   *( ~cl::eps_p(phrase_end)
-                >>  local.common(element_info::in_phrase)
-                )
+            [
+                scoped_context(element_info::in_phrase)
+                [*(~cl::eps_p(phrase_end) >> local.common)]
             ]
             ;
 
@@ -337,9 +336,9 @@ namespace quickbook
         // elements.
         extended_phrase =
             state.values.save()
-            [   *( ~cl::eps_p(phrase_end)
-                >>  local.common(element_info::in_conditional)
-                )
+            [
+                scoped_context(element_info::in_conditional)
+                [*(~cl::eps_p(phrase_end) >> local.common)]
             ]
             ;
 
@@ -349,15 +348,20 @@ namespace quickbook
         // is part of the paragraph that contains it.
         inline_phrase =
             state.values.save()
-            [   *local.common(element_info::in_phrase)
+            [
+                scoped_context(element_info::in_phrase)
+                [*local.common]
             ]
             ;
 
         table_title_phrase =
             state.values.save()
-            [   *( ~cl::eps_p(space >> (']' | '[' >> space >> '['))
-                >>  local.common(element_info::in_phrase)
-                )
+            [
+                scoped_context(element_info::in_phrase)
+                [   *( ~cl::eps_p(space >> (']' | '[' >> space >> '['))
+                    >>  local.common
+                    )
+                ]
             ]
             ;
 
@@ -396,10 +400,13 @@ namespace quickbook
 
         local.paragraph =
             scoped_still_in_block(true)
-            [   local.syntactic_block_item(element_info::only_contextual_block)
-            >>  *(  cl::eps_p(ph::var(local.still_in_block))
-                >>  local.syntactic_block_item(element_info::only_block)
-                )
+            [
+                scoped_context(element_info::only_contextual_block)
+                [   local.syntactic_block_item  [ph::var(local.context) = element_info::only_block]
+                >>  *(  cl::eps_p(ph::var(local.still_in_block))
+                    >>  local.syntactic_block_item
+                    )
+                ]
             ]                                   [paragraph]
             ;
 
@@ -408,25 +415,30 @@ namespace quickbook
             >>  (cl::ch_p('*') | '#')
             >>  (*cl::blank_p)
             >>  scoped_still_in_block(true)
-                [   *(  cl::eps_p(ph::var(local.still_in_block))
-                    >>  (   qbk_ver(107u) >> local.syntactic_block_item(element_info::only_block)
-                        |   qbk_ver(0, 107u) >> local.syntactic_block_item(element_info::only_list_block)
+                [   qbk_ver(107u) >> scoped_context(element_info::only_block)
+                    [   *(  cl::eps_p(ph::var(local.still_in_block))
+                        >>  local.syntactic_block_item
                         )
-                    )
+                    ]
+                |   qbk_ver(0, 107u) >> scoped_context(element_info::only_list_block)
+                    [   *(  cl::eps_p(ph::var(local.still_in_block))
+                        >>  local.syntactic_block_item
+                        )
+                    ]
                 ]                                   [list_item]
                 // TODO: `list_item` is sometimes called in the wrong place.
                 // Currently harmless.
             ;
 
         local.syntactic_block_item =
-                local.element(local.syntactic_block_item.context)
+                local.element
                 // Note that we don't do this for lists in 1.6 to avoid messing
                 // up on nested block elements.
             >>  !(  cl::eps_p(in_list) >> eol
                 |   qbk_ver(0, 106u)   >> eol
                 )                               [ph::var(local.still_in_block) = false]
             |   local.paragraph_separator       [ph::var(local.still_in_block) = false]
-            |   local.common(element_info::in_phrase)
+            |   scoped_context(element_info::in_phrase) [ local.common ]
             ;
 
         local.paragraph_separator =
@@ -444,11 +456,14 @@ namespace quickbook
         // Blocks contains within an element, e.g. a table cell or a footnote.
         inside_paragraph =
             state.values.save()
-            [   *(  local.paragraph_separator   [paragraph]
-                |   ~cl::eps_p(']')
-                >>  local.common(element_info::in_nested_block)
-                )
-            ]                                   [paragraph]
+            [
+                scoped_context(element_info::in_nested_block)
+                [   *(  local.paragraph_separator   [paragraph]
+                    |   ~cl::eps_p(']')
+                    >>  local.common
+                    )
+                ]
+            ]                                       [paragraph]
             ;
 
         local.hr =
@@ -503,7 +518,7 @@ namespace quickbook
 
         local.common =
                 local.macro
-            |   local.element(local.common.context)
+            |   local.element
             |   local.template_
             |   local.break_
             |   local.code_block
