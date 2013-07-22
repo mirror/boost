@@ -112,11 +112,17 @@ namespace quickbook
                         skip_escape
                         ;
 
+        struct block_context_closure : cl::closure<block_context_closure,
+            element_info::context>
+        {
+            member1 is_block;
+        };
+
         cl::rule<scanner> simple_markup, simple_markup_end;
 
         cl::rule<scanner> paragraph;
         cl::rule<scanner> list;
-        cl::rule<scanner> syntactic_block_item;
+        cl::rule<scanner, block_context_closure::context_t> syntactic_block_item;
         cl::rule<scanner> common;
         cl::rule<scanner> element;
 
@@ -402,10 +408,10 @@ namespace quickbook
         local.paragraph =
             scoped_still_in_block(true)
             [
-                scoped_context(element_info::only_contextual_block)
-                [   local.syntactic_block_item  [ph::var(local.context) = element_info::only_block]
+                scoped_context(element_info::in_top_level)
+                [   local.syntactic_block_item(element_info::is_contextual_block)
                 >>  *(  cl::eps_p(ph::var(local.still_in_block))
-                    >>  local.syntactic_block_item
+                    >>  local.syntactic_block_item(element_info::is_block)
                     )
                 ]
             ]                                   [paragraph_action]
@@ -416,30 +422,37 @@ namespace quickbook
             >>  (cl::ch_p('*') | '#')
             >>  (*cl::blank_p)
             >>  scoped_still_in_block(true)
-                [   qbk_ver(107u) >> scoped_context(element_info::only_block)
+                [   qbk_ver(107u) >> scoped_context(element_info::in_top_level)
                     [   *(  cl::eps_p(ph::var(local.still_in_block))
-                        >>  local.syntactic_block_item
+                        >>  local.syntactic_block_item(element_info::is_block)
                         )
                     ]
-                |   qbk_ver(0, 107u) >> scoped_context(element_info::only_list_block)
+                |   qbk_ver(0, 107u) >> scoped_context(element_info::in_list_block)
                     [   *(  cl::eps_p(ph::var(local.still_in_block))
-                        >>  local.syntactic_block_item
+                        >>  local.syntactic_block_item(element_info::is_block)
                         )
                     ]
-                ]                                   [list_item_action]
+                ]                               [list_item_action]
                 // TODO: `list_item_action` is sometimes called in the wrong
                 // place. Currently harmless.
             ;
 
         local.syntactic_block_item =
-                local.element
+                local.paragraph_separator       [ph::var(local.still_in_block) = false]
+            |   cl::eps_p                       [ph::var(local.element_type) = element_info::nothing]
+            >>  local.common
+                // If the element is a block, then a newline will end the
+                // current syntactic block.
                 // Note that we don't do this for lists in 1.6 to avoid messing
                 // up on nested block elements.
-            >>  !(  cl::eps_p(in_list) >> eol
-                |   qbk_ver(0, 106u)   >> eol
-                )                               [ph::var(local.still_in_block) = false]
-            |   local.paragraph_separator       [ph::var(local.still_in_block) = false]
-            |   scoped_context(element_info::in_phrase) [ local.common ]
+            >>  !(  cl::eps_p(in_list) >> qbk_ver(106u)
+                |   cl::eps_p
+                    (
+                        ph::static_cast_<int>(local.syntactic_block_item.is_block) &
+                        ph::static_cast_<int>(ph::var(local.element_type))
+                    )
+                >>  eol                         [ph::var(local.still_in_block) = false]
+                )
             ;
 
         local.paragraph_separator =
