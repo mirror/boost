@@ -45,6 +45,7 @@
     defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
 
 #include <boost/move/core.hpp>
+#include <boost/move/utility.hpp>
 #include <boost/preprocessor/arithmetic/add.hpp>
 #include <boost/preprocessor/arithmetic/sub.hpp>
 #include <boost/preprocessor/cat.hpp>
