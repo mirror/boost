@@ -13,6 +13,7 @@
 #include <boost/type_traits/remove_const.hpp>
 #include <boost/type_traits/remove_reference.hpp>
 #include <boost/proto/proto_fwd.hpp>
+#include <boost/proto/detail/poly_function.hpp>
 
 namespace boost { namespace proto { namespace functional
 {
@@ -52,41 +53,39 @@ namespace boost { namespace proto { namespace functional
     /// A PolymorphicFunctionObject type that returns
     /// the first element of a std::pair..
     struct first
+      : proto::detail::poly_function<first>
     {
         BOOST_PROTO_CALLABLE()
 
-        template<typename Sig>
-        struct result;
-
-        template<typename This, typename Pair>
-        struct result<This(Pair)>
+        template<typename Pair>
+        struct impl
         {
-            typedef typename Pair::first_type type;
-        };
-
-        template<typename This, typename Pair>
-        struct result<This(Pair &)>
-        {
-            typedef typename Pair::first_type &type;
-        };
-
-        template<typename This, typename Pair>
-        struct result<This(Pair const &)>
-        {
-            typedef typename Pair::first_type const &type;
+            typedef typename Pair::first_type result_type;
+            result_type operator()(Pair const &pair) const
+            {
+                return pair.first;
+            }
         };
 
         template<typename Pair>
-        typename Pair::first_type &operator()(Pair &pair) const
+        struct impl<Pair &>
         {
-            return pair.first;
-        }
+            typedef typename Pair::first_type &result_type;
+            result_type operator()(Pair &pair) const
+            {
+                return pair.first;
+            }
+        };
 
         template<typename Pair>
-        typename Pair::first_type const &operator()(Pair const &pair) const
+        struct impl<Pair const &>
         {
-            return pair.first;
-        }
+            typedef typename Pair::first_type const &result_type;
+            result_type operator()(Pair const &pair) const
+            {
+                return pair.first;
+            }
+        };
     };
 
     /// \brief A PolymorphicFunctionObject type that returns
@@ -95,41 +94,39 @@ namespace boost { namespace proto { namespace functional
     /// A PolymorphicFunctionObject type that returns
     /// the second element of a std::pair..
     struct second
+      : proto::detail::poly_function<second>
     {
         BOOST_PROTO_CALLABLE()
 
-        template<typename Sig>
-        struct result;
-
-        template<typename This, typename Pair>
-        struct result<This(Pair)>
+        template<typename Pair>
+        struct impl
         {
-            typedef typename Pair::second_type type;
-        };
-
-        template<typename This, typename Pair>
-        struct result<This(Pair &)>
-        {
-            typedef typename Pair::second_type &type;
-        };
-
-        template<typename This, typename Pair>
-        struct result<This(Pair const &)>
-        {
-            typedef typename Pair::second_type const &type;
+            typedef typename Pair::second_type result_type;
+            result_type operator()(Pair const &pair) const
+            {
+                return pair.second;
+            }
         };
 
         template<typename Pair>
-        typename Pair::second_type &operator()(Pair &pair) const
+        struct impl<Pair &>
         {
-            return pair.second;
-        }
+            typedef typename Pair::second_type &result_type;
+            result_type operator()(Pair &pair) const
+            {
+                return pair.second;
+            }
+        };
 
         template<typename Pair>
-        typename Pair::second_type const &operator()(Pair const &pair) const
+        struct impl<Pair const &>
         {
-            return pair.second;
-        }
+            typedef typename Pair::second_type const &result_type;
+            result_type operator()(Pair const &pair) const
+            {
+                return pair.second;
+            }
+        };
     };
 
 }}}
