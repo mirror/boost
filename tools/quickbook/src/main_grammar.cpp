@@ -112,11 +112,6 @@ namespace quickbook
                         skip_escape
                         ;
 
-        struct block_item_closure : cl::closure<block_item_closure, bool>
-        {
-            member1 still_in_block;
-        };
-
         struct context_closure : cl::closure<context_closure, element_info::context>
         {
             member1 context;
@@ -124,10 +119,9 @@ namespace quickbook
 
         cl::rule<scanner> simple_markup, simple_markup_end;
 
-        cl::rule<scanner, block_item_closure::context_t> paragraph;
-        cl::rule<scanner, context_closure::context_t> paragraph_item;
-        cl::rule<scanner, block_item_closure::context_t> list;
-        cl::rule<scanner, context_closure::context_t> list_item;
+        cl::rule<scanner> paragraph;
+        cl::rule<scanner> list;
+        cl::rule<scanner, context_closure::context_t> syntactic_block_item;
         cl::rule<scanner, context_closure::context_t> common;
         cl::rule<scanner, context_closure::context_t> element;
 
@@ -135,7 +129,8 @@ namespace quickbook
         std::stack<list_stack_item> list_stack;
         unsigned int list_indent;
         bool no_eols;
-        char mark;
+        char mark; // Simple markup's deliminator
+        bool still_in_block; // Inside a syntatic block
 
         // transitory state
         block_types::values block_type;
@@ -299,6 +294,8 @@ namespace quickbook
 
         set_scoped_value<main_grammar_local, bool> scoped_no_eols(
                 local, &main_grammar_local::no_eols);
+        set_scoped_value<main_grammar_local, bool> scoped_still_in_block(
+                local, &main_grammar_local::still_in_block);
 
         member_action<main_grammar_local> check_indentation(local,
             &main_grammar_local::check_indentation_impl);
@@ -398,39 +395,37 @@ namespace quickbook
             ;
 
         local.paragraph =
-                cl::eps_p                       [local.paragraph.still_in_block = true]
-            >>  local.paragraph_item(element_info::only_contextual_block)
-            >>  *(  cl::eps_p(local.paragraph.still_in_block)
-                >>  local.paragraph_item(element_info::only_block)
+            scoped_still_in_block(true)
+            [   local.syntactic_block_item(element_info::only_contextual_block)
+            >>  *(  cl::eps_p(ph::var(local.still_in_block))
+                >>  local.syntactic_block_item(element_info::only_block)
                 )
-            >>  cl::eps_p                       [paragraph]
-            ;
-
-        local.paragraph_item =
-                local.element(local.paragraph_item.context)
-            >>  !eol                            [local.paragraph.still_in_block = false]
-            |   local.paragraph_separator       [local.paragraph.still_in_block = false]
-            |   local.common(element_info::in_phrase)
+            ]                                   [paragraph]
             ;
 
         local.list =
                 *cl::blank_p
             >>  (cl::ch_p('*') | '#')
-            >>  (*cl::blank_p)                  [local.list.still_in_block = true]
-            >>  *(  cl::eps_p(local.list.still_in_block)
-                >>  (   qbk_ver(107u) >> local.list_item(element_info::only_block)
-                    |   qbk_ver(0, 107u) >> local.list_item(element_info::only_list_block)
+            >>  (*cl::blank_p)
+            >>  scoped_still_in_block(true)
+                [   *(  cl::eps_p(ph::var(local.still_in_block))
+                    >>  (   qbk_ver(107u) >> local.syntactic_block_item(element_info::only_block)
+                        |   qbk_ver(0, 107u) >> local.syntactic_block_item(element_info::only_list_block)
+                        )
                     )
-                )
-                // TODO: This is sometimes called in the wrong place. Currently
-                // harmless.
-            >>  cl::eps_p                       [list_item]
+                ]                                   [list_item]
+                // TODO: `list_item` is sometimes called in the wrong place.
+                // Currently harmless.
             ;
 
-        local.list_item =
-                local.element(local.list_item.context)
-            >>  !(qbk_ver(0, 106u) >> eol)      [local.list.still_in_block = false]
-            |   local.paragraph_separator       [local.list.still_in_block = false]
+        local.syntactic_block_item =
+                local.element(local.syntactic_block_item.context)
+                // Note that we don't do this for lists in 1.6 to avoid messing
+                // up on nested block elements.
+            >>  !(  cl::eps_p(in_list) >> eol
+                |   qbk_ver(0, 106u)   >> eol
+                )                               [ph::var(local.still_in_block) = false]
+            |   local.paragraph_separator       [ph::var(local.still_in_block) = false]
             |   local.common(element_info::in_phrase)
             ;
 
