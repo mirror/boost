@@ -317,6 +317,14 @@ And then you can use css to style this however you wish.
 
 [section:1_7 Quickbook 1.7]
 
+[section:context_error Error for elements used in incorrect context]
+
+Previously if you used an element in the wrong context it would just be
+unprocessed, which was surprising. People often didn't realise that their
+element hadn't been processed. So now it's an error.
+
+[endsect]
+
 [section:source_mode Source mode for single entities]
 
 1.7 introduces a new `!` element type for setting the source mode of a single
@@ -347,7 +355,7 @@ and lists. I'm not sure if it would be a good idea.
 
 [endsect]
 
-[section:callouts Callouts in code block]
+[section:callouts Callouts in code blocks]
 
 Currently callouts can only be used in code snippets. 1.7 add
 support in normal code blocks. The same syntax is used as in

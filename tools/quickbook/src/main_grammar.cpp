@@ -157,26 +157,28 @@ namespace quickbook
 
     struct process_element_impl : scoped_action_base {
         process_element_impl(main_grammar_local& l)
-            : l(l) {}
+            : l(l), element_context_error_(false) {}
 
         bool start()
         {
-            if (!(l.info.type & l.context) ||
-                    qbk_version_n < l.info.qbk_version)
+            // This element doesn't exist in the current language version.
+            if (qbk_version_n < l.info.qbk_version)
                 return false;
+
+            // The element is not allowed in this context.
+            if (!(l.info.type & l.context))
+            {
+                if (qbk_version_n < 107u) {
+                    return false;
+                }
+                else {
+                    element_context_error_ = true;
+                }
+            }
 
             info_ = l.info;
 
-            if (!l.list_stack.empty() && !l.list_stack.top().root &&
-                    info_.type == element_info::section_block)
-            {
-                // If in a list and the element is a section block, end the
-                // list.
-                list_item_action list_item(l.state_);
-                list_item();
-                l.clear_stack();
-            }
-            else if (info_.type != element_info::phrase &&
+            if (info_.type != element_info::phrase &&
                     info_.type != element_info::maybe_block)
             {
                 paragraph_action para(l.state_);
@@ -199,12 +201,21 @@ namespace quickbook
         template <typename ResultT, typename ScannerT>
         bool result(ResultT result, ScannerT const& scan)
         {
-            if (result || info_.type & element_info::in_phrase)
+            if (element_context_error_) {
+                error_message_action error(l.state_,
+                        "Element not allowed in this context.");
+                error(scan.first, scan.first);
+                return true;
+            }
+            else if (result || info_.type & element_info::in_phrase) {
                 return result;
-
-            error_action error(l.state_);
-            error(scan.first, scan.first);
-            return true;
+            }
+            else {
+                // Parse error in body.
+                error_action error(l.state_);
+                error(scan.first, scan.first);
+                return true;
+            }
         }
 
         void success(parse_iterator, parse_iterator) { l.element_type = info_.type; }
@@ -218,6 +229,7 @@ namespace quickbook
         main_grammar_local& l;
         element_info info_;
         std::string saved_source_mode_;
+        bool element_context_error_;
     };
 
     struct in_list_impl {
@@ -406,9 +418,8 @@ namespace quickbook
             ;
 
         local.paragraph =
-            scoped_still_in_block(true)
-            [
-                scoped_context(element_info::in_top_level)
+            scoped_context(element_info::in_top_level)
+            [   scoped_still_in_block(true)
                 [   local.syntactic_block_item(element_info::is_contextual_block)
                 >>  *(  cl::eps_p(ph::var(local.still_in_block))
                     >>  local.syntactic_block_item(element_info::is_block)
@@ -421,13 +432,8 @@ namespace quickbook
                 *cl::blank_p
             >>  (cl::ch_p('*') | '#')
             >>  (*cl::blank_p)
-            >>  scoped_still_in_block(true)
-                [   qbk_ver(107u) >> scoped_context(element_info::in_top_level)
-                    [   *(  cl::eps_p(ph::var(local.still_in_block))
-                        >>  local.syntactic_block_item(element_info::is_block)
-                        )
-                    ]
-                |   qbk_ver(0, 107u) >> scoped_context(element_info::in_list_block)
+            >>  scoped_context(element_info::in_list_block)
+                [   scoped_still_in_block(true)
                     [   *(  cl::eps_p(ph::var(local.still_in_block))
                         >>  local.syntactic_block_item(element_info::is_block)
                         )
