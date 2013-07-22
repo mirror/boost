@@ -76,6 +76,11 @@ namespace boost{
 
 namespace multi_index{
 
+#if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1500))
+#pragma warning(push)
+#pragma warning(disable:4522) /* spurious warning on multiple operator=()'s */
+#endif
+
 template<typename Value,typename IndexSpecifierList,typename Allocator>
 class multi_index_container:
   private ::boost::base_from_member<
@@ -1030,6 +1035,10 @@ private:
 #pragma parse_mfunc_templ reset
 #endif
 };
+
+#if BOOST_WORKAROUND(BOOST_MSVC,BOOST_TESTED_AT(1500))
+#pragma warning(pop) /* C4522 */
+#endif
 
 /* retrieval of indices by number */
 
