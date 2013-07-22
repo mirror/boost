@@ -99,7 +99,7 @@ namespace quickbook
             parse_iterator pos = info.stop;
             std::string doc_type = pre(state, pos, include_doc_id, nested_file);
 
-            info = cl::parse(info.hit ? info.stop : first, last, state.grammar().block);
+            info = cl::parse(info.hit ? info.stop : first, last, state.grammar().block_start);
 
             post(state, doc_type);
 

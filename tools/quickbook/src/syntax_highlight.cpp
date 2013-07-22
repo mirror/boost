@@ -318,7 +318,7 @@ namespace quickbook
                         (
                             (
                                 (+(cl::anychar_p - "``") >> cl::eps_p("``"))
-                                & g.phrase
+                                & g.phrase_start
                             )
                             >>  cl::str_p("``")
                         )
@@ -473,7 +473,7 @@ namespace quickbook
                         (
                             (
                                 (+(cl::anychar_p - "``") >> cl::eps_p("``"))
-                                & g.phrase
+                                & g.phrase_start
                             )
                             >>  cl::str_p("``")
                         )
@@ -595,7 +595,7 @@ namespace quickbook
                         (
                             (
                                 (+(cl::anychar_p - "``") >> cl::eps_p("``"))
-                                & g.phrase
+                                & g.phrase_start
                             )
                             >>  cl::str_p("``")
                         )

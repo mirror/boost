@@ -24,7 +24,7 @@ namespace quickbook
     {
         enum type_enum {
             nothing = 0,
-            block = 1,
+            section_block = 1,
             conditional_or_block = 2,
             nested_block = 4,
             phrase = 8,
@@ -32,14 +32,21 @@ namespace quickbook
         };
 
         enum context {
-            in_phrase = phrase | maybe_block,
-            in_nested_block = phrase | maybe_block | nested_block,
+            // At the top level we allow everything.
+            in_top_level = phrase | maybe_block | nested_block | conditional_or_block | section_block,
+            // In conditional phrases we everything but section elements.
             in_conditional = phrase | maybe_block | nested_block | conditional_or_block,
-            in_block = phrase | maybe_block | nested_block | conditional_or_block | block,
-            only_nested_block = nested_block,
-            only_block = nested_block | conditional_or_block | block,
-            only_list_block = nested_block | conditional_or_block,
-            only_contextual_block = maybe_block | nested_block | conditional_or_block | block
+            // In nested blocks we allow a much more limited range of elements.
+            in_nested_block = phrase | maybe_block | nested_block,
+            // In a phrase we only allow phrase elements, ('maybe_block'
+            // elements are treated as phrase elements in this context)
+            in_phrase = phrase | maybe_block,
+            // At the start of a block these are all block elements.
+            only_contextual_block = maybe_block | nested_block | conditional_or_block | section_block,
+            // These are all block elements in all other contexts.
+            only_block = nested_block | conditional_or_block | section_block,
+            // Block elements that are allowed in a list item
+            only_list_block = nested_block | conditional_or_block
         };
 
         element_info()

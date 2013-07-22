@@ -66,8 +66,8 @@ namespace quickbook
                 !(qbk_ver(106u) >> local.element_id);
 
         elements.add
-            ("section", element_info(element_info::block, &local.begin_section, block_tags::begin_section))
-            ("endsect", element_info(element_info::block, &local.end_section, block_tags::end_section))
+            ("section", element_info(element_info::section_block, &local.begin_section, block_tags::begin_section))
+            ("endsect", element_info(element_info::section_block, &local.end_section, block_tags::end_section))
             ;
 
         local.begin_section =

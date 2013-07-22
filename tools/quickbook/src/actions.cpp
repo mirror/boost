@@ -1217,7 +1217,7 @@ namespace quickbook
             bool r = cl::parse(first, last,
                     content.get_tag() == template_tags::phrase ?
                         state.grammar().inline_phrase :
-                        state.grammar().block
+                        state.grammar().block_start
                 ).full;
 
             boost::swap(state.current_file, saved_current_file);

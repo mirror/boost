@@ -143,7 +143,7 @@ namespace quickbook
             : list_stack()
             , list_indent(0)
             , no_eols(true)
-            , context(element_info::in_block)
+            , context(element_info::in_top_level)
             , mark('\0')
             , state_(state)
             {}
@@ -162,9 +162,10 @@ namespace quickbook
             info_ = l.info;
 
             if (!l.list_stack.empty() && !l.list_stack.top().root &&
-                    info_.type == element_info::block)
+                    info_.type == element_info::section_block)
             {
-                // If in a list and the element is a block, end the list.
+                // If in a list and the element is a section block, end the
+                // list.
                 list_item_action list_item(l.state_);
                 list_item();
                 l.clear_stack();
