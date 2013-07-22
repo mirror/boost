@@ -207,8 +207,14 @@ namespace quickbook
                 error(scan.first, scan.first);
                 return true;
             }
-            else if (result || info_.type & element_info::in_phrase) {
-                return result;
+            else if (result) {
+                return true;
+            }
+            else if (qbk_version_n < 107u &&
+                    info_.type & element_info::in_phrase) {
+                // Old versions of quickbook had a soft fail
+                // for unparsed phrase elements.
+                return false;
             }
             else {
                 // Parse error in body.

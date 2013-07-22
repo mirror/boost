@@ -325,6 +325,13 @@ element hadn't been processed. So now it's an error.
 
 [endsect]
 
+[section:phrase_parse_error Error for invalid phrase elements]
+
+If the body of a phrase element didn't parse, it would be just used
+unprocessed. Now change it to be a hard error.
+
+[endsect]
+
 [section:source_mode Source mode for single entities]
 
 1.7 introduces a new `!` element type for setting the source mode of a single

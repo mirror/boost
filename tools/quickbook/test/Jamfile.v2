@@ -85,6 +85,8 @@ test-suite quickbook.test :
     [ quickbook-test preformatted-1_1 ]
     [ quickbook-test preformatted-1_6 ]
     [ quickbook-test role-1_6 ]
+    [ quickbook-test role-1_7 ]
+    [ quickbook-error-test role-1_7-fail ]
     [ quickbook-test section-1_4 ]
     [ quickbook-test section-1_5-unclosed ]
     [ quickbook-test section-1_5 ]
