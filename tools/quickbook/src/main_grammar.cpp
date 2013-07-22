@@ -112,12 +112,6 @@ namespace quickbook
                         skip_escape
                         ;
 
-        struct simple_markup_closure
-            : cl::closure<simple_markup_closure, char>
-        {
-            member1 mark;
-        };
-
         struct block_item_closure : cl::closure<block_item_closure, bool>
         {
             member1 still_in_block;
@@ -128,8 +122,7 @@ namespace quickbook
             member1 context;
         };
 
-        cl::rule<scanner, simple_markup_closure::context_t> simple_markup;
-        cl::rule<scanner> simple_markup_end;
+        cl::rule<scanner> simple_markup, simple_markup_end;
 
         cl::rule<scanner, block_item_closure::context_t> paragraph;
         cl::rule<scanner, context_closure::context_t> paragraph_item;
@@ -142,6 +135,7 @@ namespace quickbook
         std::stack<list_stack_item> list_stack;
         unsigned int list_indent;
         bool no_eols;
+        char mark;
 
         // transitory state
         block_types::values block_type;
@@ -158,6 +152,7 @@ namespace quickbook
             : list_stack()
             , list_indent(0)
             , no_eols(true)
+            , mark('\0')
             , state_(state)
             {}
     };
@@ -734,11 +729,11 @@ namespace quickbook
             ;
 
         local.simple_markup =
-                cl::chset<>("*/_=")             [local.simple_markup.mark = ph::arg1]
+                cl::chset<>("*/_=")             [ph::var(local.mark) = ph::arg1]
             >>  cl::eps_p(cl::graph_p)          // graph_p must follow first mark
             >>  lookback
                 [   cl::anychar_p               // skip back over the markup
-                >>  ~cl::eps_p(cl::f_ch_p(local.simple_markup.mark))
+                >>  ~cl::eps_p(cl::ch_p(boost::ref(local.mark)))
                                                 // first mark not be preceeded by
                                                 // the same character.
                 >>  (cl::space_p | cl::punct_p | cl::end_p)
@@ -752,15 +747,15 @@ namespace quickbook
                     [
                         cl::eps_p((state.macro & macro_identifier) >> local.simple_markup_end)
                     >>  state.macro       [do_macro]
-                    |   ~cl::eps_p(cl::f_ch_p(local.simple_markup.mark))
+                    |   ~cl::eps_p(cl::ch_p(boost::ref(local.mark)))
                     >>  +(  ~cl::eps_p
-                            (   lookback [~cl::f_ch_p(local.simple_markup.mark)]
+                            (   lookback [~cl::ch_p(boost::ref(local.mark))]
                             >>  local.simple_markup_end
                             )
                         >>  cl::anychar_p   [plain_char]
                         )
                     ]
-                >>  cl::f_ch_p(local.simple_markup.mark)
+                >>  cl::ch_p(boost::ref(local.mark))
                                                 [simple_markup]
                 ]
             ;
@@ -768,8 +763,8 @@ namespace quickbook
         local.simple_markup_end
             =   (   lookback[cl::graph_p]       // final mark must be preceeded by
                                                 // graph_p
-                >>  cl::f_ch_p(local.simple_markup.mark)
-                >>  ~cl::eps_p(cl::f_ch_p(local.simple_markup.mark))
+                >>  cl::ch_p(boost::ref(local.mark))
+                >>  ~cl::eps_p(cl::ch_p(boost::ref(local.mark)))
                                                 // final mark not be followed by
                                                 // the same character.
                 >>  (cl::space_p | cl::punct_p | cl::end_p)
