@@ -190,7 +190,7 @@ private:
     template <class ValT> 
     static inline typename boost::conditional<
         (boost::is_nothrow_move_constructible<ValT>::value || !boost::is_copy_constructible<ValT>::value)
-#ifdef BOOST_NO_CXX11_DELETED_FUNCTIONS
+#if defined(BOOST_NO_CXX11_DELETED_FUNCTIONS) && defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
             && has_move_emulation_enabled<ValT>::value
 #endif
         ,
