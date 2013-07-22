@@ -259,11 +259,27 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<enum_UDT>::value, true
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int&>::value, true);
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int&&>::value, false);
+// Code like `int&& a = 10;` or 
+//      struct nonc {
+//          nonc() = default;
+//          nonc(const nonc&) = delete;
+//          nonc(nonc&&) = delete;
+//          nonc& operator=(const nonc&) = delete;
+//          nonc& operator=(nonc&&) = delete;
+//      };
+//
+//      nonc && a = nonc();
+// is legal in C++11. so this trait MUST return true.
+BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int&&>::value, true);
 #endif
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<const int&>::value, true);
 
-// Following three tests may give different results because of copiler and C++03/C++11
+
+// Following three tests may give different results because of compiler and C++03/C++11.
+// On C++11 compiler following code:
+//      int c[2][4][5][6][3];
+//      int b[2][4][5][6][3] = std::move(c);
+// does not compile, so we expect `false` to be the result of those three tests.
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int[2]>::value, false, true);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int[3][2]>::value, false, true);
 BOOST_CHECK_SOFT_INTEGRAL_CONSTANT(::tt::is_copy_constructible<int[2][4][5][6][3]>::value, false, true);

@@ -13,6 +13,7 @@
 #include <boost/type_traits/detail/yes_no_type.hpp>
 #include <boost/type_traits/is_base_and_derived.hpp>
 #include <boost/type_traits/add_reference.hpp>
+#include <boost/type_traits/is_rvalue_reference.hpp>
 #include <boost/utility/declval.hpp>
 #include <boost/noncopyable.hpp>
 
@@ -67,9 +68,11 @@ struct is_copy_constructible_impl2 {
     //          ...
     //      };
     BOOST_STATIC_CONSTANT(bool, value = (
-        sizeof(test(
-            boost::declval<BOOST_DEDUCED_TYPENAME boost::add_reference<T>::type>()
-        )) == sizeof(boost::type_traits::yes_type)
+            sizeof(test(
+                boost::declval<BOOST_DEDUCED_TYPENAME boost::add_reference<T>::type>()
+            )) == sizeof(boost::type_traits::yes_type)
+        ||
+            boost::is_rvalue_reference<T>::value
     ));
 };
 
