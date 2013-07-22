@@ -226,26 +226,6 @@ namespace quickbook
         std::string saved_source_mode_;
     };
 
-    struct set_no_eols_scoped : scoped_action_base
-    {
-        set_no_eols_scoped(main_grammar_local& l)
-            : l(l) {}
-
-        bool start() {
-            saved_no_eols = l.no_eols;
-            l.no_eols = false;
-
-            return true;
-        }
-
-        void cleanup() {
-            l.no_eols = saved_no_eols;
-        }
-
-        main_grammar_local& l;
-        bool saved_no_eols;
-    };
-
     struct in_list_impl {
         main_grammar_local& l;
 
@@ -255,6 +235,39 @@ namespace quickbook
         bool operator()() const {
             return !l.list_stack.top().root;
         }
+    };
+
+    template <typename T, typename M>
+    struct set_scoped_value_impl : scoped_action_base
+    {
+        typedef M T::*member_ptr;
+
+        set_scoped_value_impl(T& l, member_ptr ptr)
+            : l(l), ptr(ptr), saved_value() {}
+
+        bool start(M const& value) {
+            saved_value = l.*ptr;
+            l.*ptr = value;
+
+            return true;
+        }
+
+        void cleanup() {
+            l.*ptr = saved_value;
+        }
+
+        T& l;
+        member_ptr ptr;
+        M saved_value;
+    };
+
+    template <typename T, typename M>
+    struct set_scoped_value : scoped_parser<set_scoped_value_impl<T, M> >
+    {
+        typedef set_scoped_value_impl<T, M> impl;
+
+        set_scoped_value(T& l, typename impl::member_ptr ptr) :
+            scoped_parser<impl>(impl(l, ptr)) {}
     };
 
     ////////////////////////////////////////////////////////////////////////////
@@ -287,8 +300,11 @@ namespace quickbook
 
         // Local Actions
         scoped_parser<process_element_impl> process_element(local);
-        scoped_parser<set_no_eols_scoped> scoped_no_eols(local);
         in_list_impl in_list(local);
+
+        set_scoped_value<main_grammar_local, bool> scoped_no_eols(
+                local, &main_grammar_local::no_eols);
+
         member_action<main_grammar_local> check_indentation(local,
             &main_grammar_local::check_indentation_impl);
         member_action<main_grammar_local> check_code_block(local,
@@ -354,7 +370,7 @@ namespace quickbook
             ;
 
         inside_preformatted =
-            scoped_no_eols()
+            scoped_no_eols(false)
             [   paragraph_phrase
             ]
             ;
