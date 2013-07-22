@@ -68,3 +68,11 @@ exe unwind
 exe same_fringe
     : same_fringe.cpp
     ;
+
+exe layout
+    : layout.cpp
+    ;
+
+exe chaining
+    : chaining.cpp
+    ;

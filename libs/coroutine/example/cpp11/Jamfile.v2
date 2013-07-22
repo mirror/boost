@@ -52,3 +52,7 @@ exe fibonacci
 exe await_emu
     : await_emu.cpp
     ;
+
+exe layout
+    : layout.cpp
+    ;

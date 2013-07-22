@@ -192,6 +192,6 @@ void async_user_handler()
     for(auto i=0; i!=5; ++i)
         fs.push_back( asynchronous([i]{ return foo(i+1); }) );
 
-    BOOST_FOREACH(auto &&f, fs)
+    for(auto &&f : fs)
         cout << await f << ":\tafter end" << endl;
 }
