@@ -96,6 +96,7 @@ test-suite quickbook.test :
     [ quickbook-test table-1_3 ]
     [ quickbook-test table-1_5 ]
     [ quickbook-test table-1_6 ]
+    [ quickbook-test table-1_7 ]
     [ quickbook-error-test template_arguments1-1_1-fail ]
     [ quickbook-error-test template_arguments2-1_1-fail ]
     [ quickbook-error-test template_arguments3-1_1-fail ]

@@ -33,8 +33,14 @@ namespace quickbook
     namespace cl = boost::spirit::classic;
 
     struct list_stack_item {
-        bool root; // Is this the root of the context
-                   // (e.g. top, template, table cell etc.)
+        // Is this the root of the context
+        // (e.g. top, template, table cell etc.)
+        enum root_type {
+            not_root = 0,
+            top_root = 1,
+            nested_root = 2
+        } root;
+
         unsigned int indent;  // Indent of list marker
                               // (or paragraph if not in a list)
         unsigned int indent2; // Indent of paragraph
@@ -46,11 +52,11 @@ namespace quickbook
         //   * List item
         //     |indent2 
 
-        list_stack_item() :
-            root(true), indent(0), indent2(0), mark('\0') {}
+        list_stack_item(root_type r) :
+            root(r), indent(0), indent2(0), mark('\0') {}
 
         list_stack_item(char mark, unsigned int indent, unsigned int indent2) :
-            root(false), indent(indent), indent2(indent2), mark(mark)
+            root(not_root), indent(indent), indent2(indent2), mark(mark)
         {}
 
     };
@@ -82,6 +88,7 @@ namespace quickbook
         // Local actions
 
         void start_blocks_impl(parse_iterator first, parse_iterator last);
+        void start_nested_blocks_impl(parse_iterator first, parse_iterator last);
         void end_blocks_impl(parse_iterator first, parse_iterator last);
         void check_indentation_impl(parse_iterator first, parse_iterator last);
         void check_code_block_impl(parse_iterator first, parse_iterator last);
@@ -95,7 +102,7 @@ namespace quickbook
 
         cl::rule<scanner>
                         top_level, indent_check,
-                        paragraph_separator,
+                        paragraph_separator, inside_paragraph,
                         code, code_line, blank_line, hr,
                         inline_code, skip_inline_code,
                         template_,
@@ -327,6 +334,8 @@ namespace quickbook
             &main_grammar_local::check_code_block_impl);
         member_action<main_grammar_local> start_blocks(local,
             &main_grammar_local::start_blocks_impl);
+        member_action<main_grammar_local> start_nested_blocks(local,
+            &main_grammar_local::start_nested_blocks_impl);
         member_action<main_grammar_local> end_blocks(local,
             &main_grammar_local::end_blocks_impl);
 
@@ -398,8 +407,24 @@ namespace quickbook
 
         // Top level blocks
         block_start =
-                (*eol)                          [start_blocks]
-            >>  (*local.top_level)              [end_blocks]
+                (*eol)                  [start_blocks]
+            >>  (   *(  local.top_level
+                    >>  !(  cl::ch_p(']')
+                        >>  cl::eps_p   [error("Mismatched close bracket")]
+                        )
+                    )
+                )                       [end_blocks]
+            ;
+
+        // Blocks contains within an element, e.g. a table cell or a footnote.
+        inside_paragraph =
+            state.values.save()
+            [   qbk_ver(107u)
+            >>  (*eol)                  [start_nested_blocks]
+            >>  (*local.top_level)      [end_blocks]
+            |   qbk_ver(0, 107u)
+            >>  local.inside_paragraph
+            ]
             ;
 
         local.top_level =
@@ -451,7 +476,8 @@ namespace quickbook
 
         local.syntactic_block_item =
                 local.paragraph_separator       [ph::var(local.still_in_block) = false]
-            |   cl::eps_p                       [ph::var(local.element_type) = element_info::nothing]
+            |   (cl::eps_p(~cl::ch_p(']')) | qbk_ver(0, 107u))
+                                                [ph::var(local.element_type) = element_info::nothing]
             >>  local.common
                 // If the element is a block, then a newline will end the
                 // current syntactic block.
@@ -480,16 +506,12 @@ namespace quickbook
             ;
 
         // Blocks contains within an element, e.g. a table cell or a footnote.
-        inside_paragraph =
-            state.values.save()
-            [
-                scoped_context(element_info::in_nested_block)
-                [   *(  local.paragraph_separator
-                                                [paragraph_action]
-                    |   ~cl::eps_p(']')
-                    >>  local.common
-                    )
-                ]
+        local.inside_paragraph =
+            scoped_context(element_info::in_nested_block)
+            [   *(  local.paragraph_separator   [paragraph_action]
+                |   ~cl::eps_p(']')
+                >>  local.common
+                )
             ]                                   [paragraph_action]
             ;
 
@@ -981,7 +1003,12 @@ namespace quickbook
 
     void main_grammar_local::start_blocks_impl(parse_iterator, parse_iterator)
     {
-        list_stack.push(list_stack_item());
+        list_stack.push(list_stack_item(list_stack_item::top_root));
+    }
+
+    void main_grammar_local::start_nested_blocks_impl(parse_iterator, parse_iterator)
+    {
+        list_stack.push(list_stack_item(list_stack_item::nested_root));
     }
 
     void main_grammar_local::end_blocks_impl(parse_iterator, parse_iterator)
@@ -1020,7 +1047,12 @@ namespace quickbook
             unsigned int new_indent = indent_length(first, last);
 
             if (new_indent > list_stack.top().indent2) {
-                block_type = block_types::code;
+                if (list_stack.top().root != list_stack_item::nested_root) {
+                    block_type = block_types::code;
+                }
+                else {
+                    block_type = block_types::paragraph;
+                }
             }
             else {
                 while (!list_stack.top().root && new_indent < list_stack.top().indent)
@@ -1082,10 +1114,11 @@ namespace quickbook
         else {
             clear_stack();
 
-            if (last == first)
-                block_type = block_types::paragraph;
-            else
+            if (list_stack.top().root != list_stack_item::nested_root &&
+                    last != first)
                 block_type = block_types::code;
+            else
+                block_type = block_types::paragraph;
         }
     }
 
@@ -1096,7 +1129,8 @@ namespace quickbook
         unsigned int new_indent2 = indent_length(first, last);
         char mark = *mark_pos;
 
-        if (list_stack.top().root && new_indent > 0) {
+        if (list_stack.top().root == list_stack_item::top_root &&
+                new_indent > 0) {
             block_type = block_types::code;
             return;
         }

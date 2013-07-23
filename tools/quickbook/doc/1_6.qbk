@@ -444,4 +444,15 @@ more work needs to be done, including:
 
 [endsect] [/templates_in_link_values]
 
+[section:list_markup_in_tables List Markup in Nested Blocks]
+
+Can now place list markup in nested blocks, e.g in tables, variables lists etc.
+Unfortunately indented code blocks are more tricky, because the contents of
+these blocks are often indented already. It seemed easier to just not support
+indented code blocks in this context than to try to work out sensible actions
+for the edges cases. If you want to use code blocks in this context, you should
+still be able to use explicit markup.
+
+[endsect]
+
 [endsect] [/ Quickbok 1.7]
