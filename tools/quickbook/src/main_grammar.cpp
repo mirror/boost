@@ -101,7 +101,7 @@ namespace quickbook
         // Local members
 
         cl::rule<scanner>
-                        top_level, indent_check,
+                        phrase_into_blocks, top_level, indent_check,
                         paragraph_separator, inside_paragraph,
                         code, code_line, blank_line, hr,
                         inline_code, skip_inline_code,
@@ -382,8 +382,10 @@ namespace quickbook
         // is part of the paragraph that contains it.
         inline_phrase =
             state.values.save()
-            [
-                scoped_context(element_info::in_phrase)
+            [   qbk_ver(107u)
+            >>  local.phrase_into_blocks
+            |   qbk_ver(0, 107u)
+            >>  scoped_context(element_info::in_phrase)
                 [*local.common]
             ]
             ;
@@ -403,6 +405,20 @@ namespace quickbook
             scoped_no_eols(false)
             [   paragraph_phrase
             ]
+            ;
+
+        // Phrase content, that might turn out to be block content.
+        local.phrase_into_blocks =
+                scoped_context(element_info::in_top_level)
+                [   scoped_still_in_block(true)
+                    [   *(  cl::eps_p(ph::var(local.still_in_block))
+                        >>  local.syntactic_block_item(element_info::is_block)
+                        )
+                    >>  !cl::eps_p(!ph::var(local.still_in_block))
+                                        [paragraph_action]
+                    ]
+                ]
+            >>  block_start
             ;
 
         // Top level blocks

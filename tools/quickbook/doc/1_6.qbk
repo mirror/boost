@@ -455,4 +455,26 @@ still be able to use explicit markup.
 
 [endsect]
 
+[section:phrase_block_templates Allow block markup in phrase templates]
+
+Basically, if you use block markup in a phrase template, it automatically
+becomes a block template. So this:
+
+    [template foo This table: [table]]
+
+Is rougly equivalent to:
+
+    [template foo
+
+    This table:
+
+    [table]
+    ]
+
+This might be a little surprising, since if used inline it will cause 'This
+table' to appear in its own paragraph. That might be something worth fixing
+before the final 1.7.
+
+[endsect]
+
 [endsect] [/ Quickbok 1.7]
