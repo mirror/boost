@@ -123,7 +123,7 @@ of the framework follows the following pattern:
   primitives which fit within the framework.
 * Users push data into the _accumulator_set_ object one sample at a time.
 * The _accumulator_set_ computes the requested quantities in the most efficient method
-  possible, resolving dependencies between requested calculations, possibly cacheing
+  possible, resolving dependencies between requested calculations, possibly caching
   intermediate results.
 
 The Accumulators Framework defines the utilities needed for defining primitive
@@ -155,7 +155,7 @@ The following terms are used in the rest of the documentation.
                         a sample type and a list of features. The accumulator set uses this
                         information to generate an ordered set of accumulators depending on
                         the feature dependency graph. An accumulator set accepts samples one
-                        datum at a time, propogating them to each accumulator in order. At any
+                        datum at a time, propagating them to each accumulator in order. At any
                         point, results can be extracted from the accumulator set.]]
     [[Extractor]       [A function or function object that can be used to extract a result
                         from an _accumulator_set_.]]
@@ -602,7 +602,7 @@ the following accumulator:
     accumulator_set< double, features< tag::sum, droppable<tag::mean> > > acc;
 
 `mean` depends on `sum` and `count`. Since `mean` is droppable, so too is `count`.
-However, we have explictitly requested that `sum` be not droppable, so it isn't. Had
+However, we have explicitly requested that `sum` be not droppable, so it isn't. Had
 we left `tag::sum` out of the above declaration, the `sum` accumulator would have
 been implicitly droppable.
 
@@ -735,7 +735,7 @@ you could always define `impl` explicitly:
 Here, `impl` is a binary [@../../libs/mpl/doc/refmanual/metafunction-class.html
 MPL Metafunction Class], which is a kind of _mpl_lambda_expression_. The nested
 `apply<>` template is part of the metafunction class protocol and tells MPL how
-to to build the accumulator type given the sample and weight types.
+to build the accumulator type given the sample and weight types.
 
 All features must also provide a nested `is_weight_accumulator` typedef. It must
 be either `mpl::true_` or `mpl::false_`. _depends_on_ provides a default of 
@@ -940,7 +940,7 @@ select the proper implementation for the given operands. It works as follows:
         struct average;
     }}}
     
-If you have some user-defined type `MyDouble` for which you would like to customimze the behavior
+If you have some user-defined type `MyDouble` for which you would like to customize the behavior
 of `numeric::average()`, you would specialize `numeric::functional::average<>` by
 first defining a tag type, as shown below:
 
@@ -1004,11 +1004,11 @@ In the following table, `Acc` is the type of an accumulator, `acc` and `acc2` ar
 
 In the following table, `F` is the type of a feature and `S` is some scalar type.
 
-[table Featue Requirements
+[table Feature Requirements
     [[[*Expression]]                 [[*Return type]]       [[*Assertion / Note /
                                                                Pre- / Post-condition]]]
     [[`F::dependencies`]             [['unspecified]]       [An MPL sequence of other features on
-                                                             which which `F` depends.]]
+                                                             which `F` depends.]]
     [[`F::is_weight_accumulator`]    [`mpl::true_` or
                                       `mpl::false_`]        [`mpl::true_` if the accumulator for
                                                              this feature should be made external
@@ -1027,7 +1027,7 @@ In the following table, `F` is the type of a feature and `S` is some scalar type
 
 [section The Statistical Accumulators Library]
 
-The Statistical Accumulators Library defines accumulators for incremental statistial
+The Statistical Accumulators Library defines accumulators for incremental statistical
 computations. It is built on top of [link accumulators.user_s_guide.the_accumulators_framework
 The Accumulator Framework].
 
@@ -1865,7 +1865,7 @@ the fit parameters `u_bar`, `beta_bar` and `xi_hat`.
                     >
                     ``]]
     [[Depends On] [`count` \n
-                   In addtion, `tag::peaks_over_threshold_prob<>` depends on `tail<_left_or_right_>`]]
+                   In addition, `tag::peaks_over_threshold_prob<>` depends on `tail<_left_or_right_>`]]
     [[Variants] [`peaks_over_threshold_prob<_left_or_right_>`]]
     [[Initialization Parameters] [ `tag::peaks_over_threshold::threshold_value` \n
                                    `tag::peaks_over_threshold_prob::threshold_probability` \n
@@ -1990,7 +1990,7 @@ Both `tag::pot_quantile<_left_or_right_>` and `tag::pot_quantile_prob<_left_or_r
 [section:pot_tail_mean pot_tail_mean]
 
 Estimation of the (coherent) tail mean based on the peaks over threshold method (for both left and right tails).
-For inplementation details, see [classref boost::accumulators::impl::pot_tail_mean_impl [^pot_tail_mean_impl]].
+For implementation details, see [classref boost::accumulators::impl::pot_tail_mean_impl [^pot_tail_mean_impl]].
 
 Both `tag::pot_tail_mean<_left_or_right_>` and `tag::pot_tail_mean_prob<_left_or_right_>` satisfy the
 `tag::tail_mean` feature and can be extracted using the `tail_mean()` extractor.
@@ -2173,7 +2173,7 @@ the rolling sum by the rolling count.
 [section:skewness skewness]
 
 The skewness of a sample distribution is defined as the ratio of the 3rd central moment and the [^3/2]-th power 
-of the 2nd central moment (the variance) of the sampless 3. For implementation details, see
+of the 2nd central moment (the variance) of the samples 3. For implementation details, see
 [classref boost::accumulators::impl::skewness_impl [^skewness_impl]].
 
 [variablelist
@@ -2341,7 +2341,7 @@ See the Example for [link accumulators.user_s_guide.the_statistical_accumulators
 [section:coherent_tail_mean coherent_tail_mean]
 
 Estimation of the coherent tail mean based on order statistics (for both left and right tails).
-The left coherent tail mean feature is `tag::coherent_tail_mean<left>`, and the right choherent
+The left coherent tail mean feature is `tag::coherent_tail_mean<left>`, and the right coherent
 tail mean feature is `tag::coherent_tail_mean<right>`. They both share the `tag::tail_mean` feature
 and can be extracted with the `tail_mean()` extractor. For more implementation details, see
 [classref boost::accumulators::impl::coherent_tail_mean_impl [^coherent_tail_mean_impl]]
@@ -3362,7 +3362,7 @@ For more implementation details, see
     histogram_type histogram_upper = weighted_p_square_cumulative_distribution(acc_upper);
     histogram_type histogram_lower = weighted_p_square_cumulative_distribution(acc_lower);
     
-    // Note that applaying importance sampling results in a region of the distribution 
+    // Note that applying importance sampling results in a region of the distribution 
     // to be estimated more accurately and another region to be estimated less accurately
     // than without importance sampling, i.e., with unweighted samples
     
@@ -3536,7 +3536,7 @@ Both `tag::weighted_peaks_over_threshold<_left_or_right_>` and
 [section:weighted_skewness weighted_skewness]
 
 The skewness of a sample distribution is defined as the ratio of the 3rd central moment and the [^3/2]-th power 
-of the 2nd central moment (the variance) of the sampless 3. The skewness estimator for weighted samples 
+of the 2nd central moment (the variance) of the samples 3. The skewness estimator for weighted samples 
 is formally identical to the estimator for unweighted samples, except that the weighted counterparts of
 all measures it depends on are to be taken.
 
