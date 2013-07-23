@@ -70,7 +70,7 @@ namespace quickbook
         return *grammar_;
     }
 
-    file_state::file_state(quickbook::state& state, scope_flags scope)
+    state_save::state_save(quickbook::state& state, scope_flags scope)
         : state(state)
         , scope(scope)
         , qbk_version(qbk_version_n)
@@ -80,6 +80,8 @@ namespace quickbook
         , xinclude_base(state.xinclude_base)
         , source_mode(state.source_mode)
         , macro()
+        , template_depth(state.template_depth)
+        , min_section_level(state.min_section_level)
     {
         if (scope & scope_macros) macro = state.macro;
         if (scope & scope_templates) state.templates.push();
@@ -90,7 +92,7 @@ namespace quickbook
         state.values.builder.save();
     }
 
-    file_state::~file_state()
+    state_save::~state_save()
     {
         state.values.builder.restore();
         boost::swap(qbk_version_n, qbk_version);
@@ -105,17 +107,6 @@ namespace quickbook
         }
         if (scope & scope_templates) state.templates.pop();
         if (scope & scope_macros) state.macro = macro;
-    }
-
-    template_state::template_state(quickbook::state& state)
-        : file_state(state, file_state::scope_all)
-        , template_depth(state.template_depth)
-        , min_section_level(state.min_section_level)
-    {
-    }
-
-    template_state::~template_state()
-    {
         boost::swap(state.template_depth, template_depth);
         boost::swap(state.min_section_level, min_section_level);
     }

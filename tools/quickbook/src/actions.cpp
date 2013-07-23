@@ -593,7 +593,7 @@ namespace quickbook
             std::string callout_value;
 
             {
-                template_state state(*this);
+                state_save save(*this, state_save::scope_all);
                 ++template_depth;
 
                 bool r = parse_template(callout_body, *this);
@@ -1263,7 +1263,7 @@ namespace quickbook
         std::string phrase;
 
         {
-            template_state save(state);
+            state_save save(state, state_save::scope_all);
             state.templates.start_template(symbol);
 
             qbk_version_n = symbol->content.get_file()->version();
@@ -1933,10 +1933,10 @@ namespace quickbook
             //
             // For old versions of quickbook, templates aren't scoped by the
             // file.
-            file_state save(state,
-                load_type == block_tags::import ? file_state::scope_output :
-                qbk_version_n >= 106u ? file_state::scope_callables :
-                file_state::scope_macros);
+            state_save save(state,
+                load_type == block_tags::import ? state_save::scope_output :
+                qbk_version_n >= 106u ? state_save::scope_callables :
+                state_save::scope_macros);
 
             state.current_file = load(paths.filename); // Throws load_error
             state.filename_relative = paths.filename_relative;
