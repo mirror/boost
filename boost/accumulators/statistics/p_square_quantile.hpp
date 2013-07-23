@@ -69,7 +69,7 @@ namespace impl
         {
             for(std::size_t i = 0; i < 5; ++i)
             {
-                this->actual_positions[i] = i + 1;
+                this->actual_positions[i] = i + 1.;
             }
 
             this->desired_positions[0] = 1.;
