@@ -281,12 +281,12 @@ A <emphasis>paragraph</emphasis>.
 [/ Blocks in phrase templates ]
 
 [template phrase_block1[] [table]]
-[template phrase_block2[] [table] Text2 afterwards]
-[template phrase_block3[] Text3 before [table]]
-[template phrase_block4[] Text4 before [table] Text4 afterwards]
-[template phrase_block5[] [table] * Not a list]
+[template phrase_block2[] [table] Text2 afterwards.]
+[template phrase_block3[] Text3 before. [table]]
+[template phrase_block4[] Text4 before. [table] Text4 afterwards.]
+[template phrase_block5[] [table] * Not a list.]
 [template phrase_block6[] [table]
-* Not a list]
+* Not a list.]
 
 [phrase_block1][phrase_block2][phrase_block3][phrase_block4]
 [phrase_block5][phrase_block6]

@@ -1232,23 +1232,17 @@ namespace quickbook
             string_iterator first)
     {
         bool is_block = symbol->content.get_tag() != template_tags::phrase;
+        quickbook::paragraph_action paragraph_action(state);
+
+        // Finish off any existing paragraphs.
+        if (is_block) paragraph_action();
 
         // If this template contains already encoded text, then just
         // write it out, without going through any of the rigamarole.
 
         if (symbol->content.is_encoded())
         {
-            if (is_block)
-            {
-                paragraph_action para(state);
-                para();
-                state.out << symbol->content.get_encoded();
-            }
-            else
-            {
-                state.phrase << symbol->content.get_encoded();
-            }
-
+            (is_block ? state.out : state.phrase) << symbol->content.get_encoded();
             return;
         }
 
@@ -1259,11 +1253,11 @@ namespace quickbook
         // arguments are expanded.
         template_scope const& call_scope = state.templates.top_scope();
 
-        std::string block;
-        std::string phrase;
-
         {
-            state_save save(state, state_save::scope_all);
+            state_save save(state, state_save::scope_callables);
+            std::string save_block;
+            std::string save_phrase;
+
             state.templates.start_template(symbol);
 
             qbk_version_n = symbol->content.get_file()->version();
@@ -1296,6 +1290,11 @@ namespace quickbook
             ///////////////////////////////////
             // parse the template body:
 
+            if (symbol->content.get_file()->version() < 107u) {
+                state.out.swap(save_block);
+                state.phrase.swap(save_phrase);
+            }
+
             if (!parse_template(symbol->content, state))
             {
                 detail::outerr(state.current_file, first)
@@ -1321,19 +1320,24 @@ namespace quickbook
                 return;
             }
 
-            state.out.swap(block);
-            state.phrase.swap(phrase);
-        }
+            if (symbol->content.get_file()->version() < 107u) {
+                state.out.swap(save_block);
+                state.phrase.swap(save_phrase);
 
-        if(is_block || !block.empty()) {
-            paragraph_action para(state);
-            para(); // For paragraphs before the template call.
-            state.out << block;
-            state.phrase << phrase;
-            para();
-        }
-        else {
-            state.phrase << phrase;
+                if(is_block || !save_block.empty()) {
+                    paragraph_action();
+                    state.out << save_block;
+                    state.phrase << save_phrase;
+                    paragraph_action();
+                }
+                else {
+                    state.phrase << save_phrase;
+                }
+            }
+            else
+            {
+                if (is_block) paragraph_action();
+            }
         }
     }
 

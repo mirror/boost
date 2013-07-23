@@ -103,10 +103,7 @@
       Post
     </para>
     <para>
-      Pre
-    </para>
-    <para>
-      Start phrase template.
+      Pre Start phrase template.
     </para>
     <para>
       Start block template.
@@ -118,10 +115,7 @@
       End block template.
     </para>
     <para>
-      End phrase template.
-    </para>
-    <para>
-      Post
+      End phrase template. Post
     </para>
     <para>
       Pre Start phrase template. Start phrase template. Hello! End phrase template.
@@ -247,10 +241,7 @@
       </tgroup>
     </informaltable>
     <para>
-      Text2 afterwards
-    </para>
-    <para>
-      Text3 before
+      Text2 afterwards. Text3 before.
     </para>
     <informaltable frame="all">
       <tgroup cols="0">
@@ -259,7 +250,7 @@
       </tgroup>
     </informaltable>
     <para>
-      Text4 before
+      Text4 before.
     </para>
     <informaltable frame="all">
       <tgroup cols="0">
@@ -268,7 +259,7 @@
       </tgroup>
     </informaltable>
     <para>
-      Text4 afterwards
+      Text4 afterwards.
     </para>
     <informaltable frame="all">
       <tgroup cols="0">
@@ -277,7 +268,7 @@
       </tgroup>
     </informaltable>
     <para>
-      * Not a list
+      * Not a list.
     </para>
     <informaltable frame="all">
       <tgroup cols="0">
@@ -286,7 +277,7 @@
       </tgroup>
     </informaltable>
     <para>
-      * Not a list
+      * Not a list.
     </para>
   </section>
 </article>

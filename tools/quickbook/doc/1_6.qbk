@@ -455,25 +455,28 @@ still be able to use explicit markup.
 
 [endsect]
 
-[section:phrase_block_templates Allow block markup in phrase templates]
+[section:phrase_block_templates Allow block lements in phrase templates]
 
-Basically, if you use block markup in a phrase template, it automatically
-becomes a block template. So this:
+Block elements can now be used in phrase templates, but paragraphs breaks aren't
+allowed, so this is an error:
 
-    [template foo This table: [table]]
+    [template paras[] Something or other.
 
-Is rougly equivalent to:
+    Second paragraph.]
 
-    [template foo
+If a phrase template only contains block elements, then it's practically
+indistinguishable from a block template. So you'll get the same output from:
 
-    This table:
+    [template foo[] [blurb Blah, blah, blah]]
 
-    [table]
+as:
+
+    [template foo[]
+    [blurb Blah, blah, blah]
     ]
 
-This might be a little surprising, since if used inline it will cause 'This
-table' to appear in its own paragraph. That might be something worth fixing
-before the final 1.7.
+If a phrase template has phrase content mixed with block elements, it'll generate
+output as if it was expanded inline.
 
 [endsect]
 
