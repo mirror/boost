@@ -198,7 +198,7 @@ inline void parse_charset
     using namespace regex_constants;
     typedef typename RegexTraits::char_type char_type;
     typedef typename RegexTraits::char_class_type char_class_type;
-    BOOST_ASSERT(begin != end);
+    BOOST_XPR_ENSURE_(begin != end, error_brack, "unexpected end of pattern found");
     RegexTraits const &rxtraits = tr.traits();
     bool const icase = (0 != (regex_constants::icase_ & tr.flags()));
     FwdIter iprev = FwdIter();
