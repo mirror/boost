@@ -13,6 +13,7 @@
 # pragma once
 #endif
 
+#include <boost/config.hpp>
 #include <boost/integer.hpp>
 #include <boost/mpl/bool.hpp>
 #include <boost/throw_exception.hpp>
@@ -246,6 +247,7 @@ inline void parse_charset
             case token_charset_hyphen:
             case token_charset_invert:
                 begin = iprev2; // un-get these tokens and fall through
+                BOOST_FALLTHROUGH;
             case token_literal:
                 ch_next = *begin++;
                 BOOST_XPR_ENSURE_(ch_prev <= ch_next, error_range, "invalid charset range");
@@ -264,7 +266,8 @@ inline void parse_charset
                     chset.set_range(ch_prev, esc.ch_, rxtraits, icase);
                     continue;
                 }
-            case token_charset_end: // fall through
+                BOOST_FALLTHROUGH;
+            case token_charset_end:
             default:                // not a range.
                 begin = iprev;      // backup to hyphen token
                 chset.set_char(ch_prev, rxtraits, icase);
