@@ -119,8 +119,6 @@ optional<status> communicator::iprobe(int source, int tag) const
 
 status communicator::probe(int source, int tag) const
 {
-  typedef optional<status> result_type;
-
   status stat;
   BOOST_MPI_CHECK_RESULT(MPI_Probe,
                          (source, tag, MPI_Comm(*this), &stat.m_status));
