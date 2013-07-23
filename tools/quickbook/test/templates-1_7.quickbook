@@ -286,7 +286,7 @@ A <emphasis>paragraph</emphasis>.
 [template phrase_block4[] Text4 before [table] Text4 afterwards]
 [template phrase_block5[] [table] * Not a list]
 [template phrase_block6[] [table]
-* A list]
+* Not a list]
 
 [phrase_block1][phrase_block2][phrase_block3][phrase_block4]
 [phrase_block5][phrase_block6]

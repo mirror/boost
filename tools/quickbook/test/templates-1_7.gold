@@ -285,12 +285,8 @@
         </tbody>
       </tgroup>
     </informaltable>
-    <itemizedlist>
-      <listitem>
-        <simpara>
-          A list
-        </simpara>
-      </listitem>
-    </itemizedlist>
+    <para>
+      * Not a list
+    </para>
   </section>
 </article>

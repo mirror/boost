@@ -101,7 +101,7 @@ namespace quickbook
         // Local members
 
         cl::rule<scanner>
-                        phrase_into_blocks, top_level, indent_check,
+                        template_phrase, top_level, indent_check,
                         paragraph_separator, inside_paragraph,
                         code, code_line, blank_line, hr,
                         inline_code, skip_inline_code,
@@ -383,7 +383,7 @@ namespace quickbook
         inline_phrase =
             state.values.save()
             [   qbk_ver(107u)
-            >>  local.phrase_into_blocks
+            >>  local.template_phrase
             |   qbk_ver(0, 107u)
             >>  scoped_context(element_info::in_phrase)
                 [*local.common]
@@ -407,18 +407,15 @@ namespace quickbook
             ]
             ;
 
-        // Phrase content, that might turn out to be block content.
-        local.phrase_into_blocks =
+        // Phrase templates can contain block tags, but can't contain
+        // syntatic blocks.
+        local.template_phrase =
                 scoped_context(element_info::in_top_level)
-                [   scoped_still_in_block(true)
-                    [   *(  cl::eps_p(ph::var(local.still_in_block))
-                        >>  local.syntactic_block_item(element_info::is_block)
-                        )
-                    >>  !cl::eps_p(!ph::var(local.still_in_block))
-                                        [paragraph_action]
-                    ]
+                [   *(  (local.paragraph_separator >> space >> cl::anychar_p)
+                                        [error("Paragraph in phrase template.")]
+                    |   local.common
+                    )
                 ]
-            >>  block_start
             ;
 
         // Top level blocks
