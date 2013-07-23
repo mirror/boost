@@ -45,6 +45,7 @@ explicit allocator_sources ;
 lib boost_coroutine
     : allocator_sources
       detail/coroutine_context.cpp
+      exceptions.cpp
     : <link>shared:<library>../../context/build//boost_context
     ;
 

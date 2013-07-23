@@ -22,7 +22,7 @@
 
 #include <boost/coroutine/detail/config.hpp>
 #include <boost/coroutine/detail/coroutine_context.hpp>
-#include <boost/coroutine/detail/exceptions.hpp>
+#include <boost/coroutine/exceptions.hpp>
 #include <boost/coroutine/detail/holder.hpp>
 #include <boost/coroutine/v1/detail/arg.hpp>
 

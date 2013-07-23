@@ -13,14 +13,14 @@
 #include <boost/coroutine/all.hpp>
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-void power( boost::coroutines::coroutine< int >::push_type & c, int number, int exponent)
+void power( boost::coroutines::coroutine< int >::push_type & sink, int number, int exponent)
 {
     int counter = 0;
     int result = 1;
     while ( counter++ < exponent)
     {
             result = result * number;
-            c( result);
+            sink( result);
     }
 }
 
@@ -28,17 +28,17 @@ int main()
 {
     {
         std::cout << "using range functions" << std::endl;
-        boost::coroutines::coroutine< int >::pull_type c( boost::bind( power, _1, 2, 8) );
-        boost::coroutines::coroutine< int >::pull_type::iterator e( boost::end( c) );
-        for ( boost::coroutines::coroutine< int >::pull_type::iterator i( boost::begin( c) );
+        boost::coroutines::coroutine< int >::pull_type source( boost::bind( power, _1, 2, 8) );
+        boost::coroutines::coroutine< int >::pull_type::iterator e( boost::end( source) );
+        for ( boost::coroutines::coroutine< int >::pull_type::iterator i( boost::begin( source) );
               i != e; ++i)
             std::cout << * i <<  " ";
     }
 
     {
         std::cout << "\nusing BOOST_FOREACH" << std::endl;
-        boost::coroutines::coroutine< int >::pull_type c( boost::bind( power, _1, 2, 8) );
-        BOOST_FOREACH( int i, c)
+        boost::coroutines::coroutine< int >::pull_type source( boost::bind( power, _1, 2, 8) );
+        BOOST_FOREACH( int i, source)
         { std::cout << i <<  " "; }
     }
 

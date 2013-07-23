@@ -21,7 +21,7 @@
 
 #include <boost/coroutine/attributes.hpp>
 #include <boost/coroutine/detail/config.hpp>
-#include <boost/coroutine/detail/exceptions.hpp>
+#include <boost/coroutine/exceptions.hpp>
 #include <boost/coroutine/detail/flags.hpp>
 #include <boost/coroutine/detail/holder.hpp>
 #include <boost/coroutine/detail/param.hpp>

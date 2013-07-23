@@ -32,17 +32,17 @@ void bar( int i)
 }
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-void foo( boost::coroutines::coroutine< void >::pull_type & c)
+void foo( boost::coroutines::coroutine< void >::pull_type & source)
 {
     bar( count);
-    c();
+    source();
 }
 
 void thread_fn()
 {
     {
-        boost::coroutines::coroutine< void >::push_type c( foo);
-        c();
+        boost::coroutines::coroutine< void >::push_type sink( foo);
+        sink();
     }
 }
 #else

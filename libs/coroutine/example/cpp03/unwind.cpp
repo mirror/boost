@@ -17,24 +17,24 @@ struct X : private boost::noncopyable
     ~X() { std::cout << "~X()" << std::endl; }
 };
 
-void fn( boost::coroutines::coroutine< void >::push_type & c)
+void fn( boost::coroutines::coroutine< void >::push_type & sink)
 {
     X x;
     int i = 0;
     while ( true)
     {
         std::cout << "fn() : " << ++i << std::endl;
-        c();
+        sink();
     }
 }
 
 int main( int argc, char * argv[])
 {
     {
-        boost::coroutines::coroutine< void >::pull_type c( fn);
+        boost::coroutines::coroutine< void >::pull_type source( fn);
         for ( int k = 0; k < 3; ++k)
         {
-            c();
+            source();
         }
         std::cout << "destroying coroutine and unwinding stack" << std::endl;
     }

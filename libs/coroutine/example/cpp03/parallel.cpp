@@ -11,22 +11,22 @@
 #include <boost/coroutine/all.hpp>
 
 #ifdef BOOST_COROUTINES_UNIDIRECT
-void first( boost::coroutines::coroutine< void >::push_type & c)
+void first( boost::coroutines::coroutine< void >::push_type & sink)
 {
     std::cout << "started first! ";
     for ( int i = 0; i < 10; ++i)
     {
-        c();
+        sink();
         std::cout << "a" << i;
     }
 }
 
-void second( boost::coroutines::coroutine< void >::push_type & c)
+void second( boost::coroutines::coroutine< void >::push_type & sink)
 {
     std::cout << "started second! ";
     for ( int i = 0; i < 10; ++i)
     {
-        c();
+        sink();
         std::cout << "b" << i;
     }
 }
@@ -34,12 +34,12 @@ void second( boost::coroutines::coroutine< void >::push_type & c)
 int main( int argc, char * argv[])
 {
     {
-        boost::coroutines::coroutine< void >::pull_type c1( boost::bind( first, _1) );
-        boost::coroutines::coroutine< void >::pull_type c2( boost::bind( second, _1) );
-        while ( c1 && c2) {
-            c1();
+        boost::coroutines::coroutine< void >::pull_type source1( boost::bind( first, _1) );
+        boost::coroutines::coroutine< void >::pull_type source2( boost::bind( second, _1) );
+        while ( source1 && source2) {
+            source1();
             std::cout << " ";
-            c2();
+            source2();
             std::cout << " ";
         }
     }

@@ -12,21 +12,21 @@
 #ifdef BOOST_COROUTINES_UNIDIRECT
 int main()
 {
-    boost::coroutines::coroutine< int >::pull_type c(
-        [&]( boost::coroutines::coroutine< int >::push_type & c) {
+    boost::coroutines::coroutine< int >::pull_type source(
+        [&]( boost::coroutines::coroutine< int >::push_type & sink) {
             int first = 1, second = 1;
-            c( first);
-            c( second);
+            sink( first);
+            sink( second);
             for ( int i = 0; i < 8; ++i)
             {
                 int third = first + second;
                 first = second;
                 second = third;
-                c( third);
+                sink( third);
             }
         });
 
-    for ( auto i : c)
+    for ( auto i : source)
         std::cout << i <<  " ";
 
     std::cout << "\nDone" << std::endl;

@@ -14,6 +14,7 @@
 #include <boost/intrusive_ptr.hpp>
 #include <boost/optional.hpp>
 #include <boost/type_traits/function_traits.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/utility.hpp>
 
 #include <boost/coroutine/detail/config.hpp>
@@ -21,7 +22,7 @@
 #include <boost/coroutine/detail/flags.hpp>
 #include <boost/coroutine/detail/holder.hpp>
 #include <boost/coroutine/detail/param.hpp>
-#include <boost/coroutine/detail/exceptions.hpp>
+#include <boost/coroutine/exceptions.hpp>
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
@@ -130,8 +131,9 @@ public:
 
     R get() const
     {
-        BOOST_ASSERT( has_result() );
-   
+        if ( ! has_result() )
+            boost::throw_exception(
+                invalid_result() );
         return result_.get(); 
     }
 };
@@ -232,8 +234,9 @@ public:
 
     R & get() const
     {
-        BOOST_ASSERT( has_result() );
-
+        if ( ! has_result() )
+            boost::throw_exception(
+                invalid_result() );
         return * result_.get();
     }
 };

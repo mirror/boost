@@ -14,31 +14,31 @@
 typedef boost::coroutines::coroutine< void >::pull_type pull_coro_t;
 typedef boost::coroutines::coroutine< void >::push_type push_coro_t;
 
-void echo( pull_coro_t & c, int i)
+void echo( pull_coro_t & source, int i)
 {
     std::cout << i;
-    c();
+    source();
 }
 
-void runit( push_coro_t & ca)
+void runit( push_coro_t & sink1)
 {
     std::cout << "started! ";
     for ( int i = 0; i < 10; ++i)
     {
-        push_coro_t c( boost::bind( echo, _1, i) );
-        while ( c)
-            c();
-        ca();
+        push_coro_t sink2( boost::bind( echo, _1, i) );
+        while ( sink2)
+            sink2();
+        sink1();
     }
 }
 
 int main( int argc, char * argv[])
 {
     {
-        pull_coro_t c( runit);
-        while ( c) {
+        pull_coro_t source( runit);
+        while ( source) {
             std::cout << "-";
-            c();
+            source();
         }
     }
 

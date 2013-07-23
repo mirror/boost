@@ -197,6 +197,9 @@ void f19( coro::coroutine< const int* >::push_type & c, std::vector< const int *
     { c( ptr); }
 }
 
+void f20( coro::coroutine< int >::push_type &)
+{}
+
 void test_move()
 {
     {
@@ -509,6 +512,24 @@ void test_input_iterator()
     BOOST_CHECK_EQUAL( ( int)2, vec[1] );
     BOOST_CHECK_EQUAL( ( int)3, vec[2] );
     BOOST_CHECK_EQUAL( ( int)4, vec[3] );
+}
+
+void test_invalid_result()
+{
+    bool catched = false;
+    coro::coroutine< int >::pull_type coro( f20);
+    BOOST_CHECK( ! coro);
+    try
+    {
+        int i = coro.get();
+    }
+    catch ( coro::invalid_result const& e)
+    {
+        boost::system::error_code ec = e.code();
+        BOOST_CHECK_EQUAL( coro::coroutine_errc::no_data, ec.value()); 
+        catched = true; 
+    }
+    BOOST_CHECK( catched);
 }
 #else
 typedef coro::coroutine< void() > coro_void_void;
@@ -1039,6 +1060,8 @@ boost::unit_test::test_suite * init_unit_test_suite( int, char* [])
 #ifndef BOOST_COROUTINES_UNIDIRECT
     test->add( BOOST_TEST_CASE( & test_pre) );
     test->add( BOOST_TEST_CASE( & test_post) );
+#else
+    test->add( BOOST_TEST_CASE( & test_invalid_result) );
 #endif
     test->add( BOOST_TEST_CASE( & test_ref) );
     test->add( BOOST_TEST_CASE( & test_const_ref) );

@@ -16,6 +16,7 @@
 #include <boost/move/move.hpp>
 #include <boost/optional.hpp>
 #include <boost/range.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/type_traits/decay.hpp>
 #include <boost/type_traits/function_traits.hpp>
 #include <boost/type_traits/is_convertible.hpp>
@@ -26,6 +27,7 @@
 #include <boost/coroutine/detail/config.hpp>
 #include <boost/coroutine/detail/coroutine_context.hpp>
 #include <boost/coroutine/detail/param.hpp>
+#include <boost/coroutine/exceptions.hpp>
 #include <boost/coroutine/stack_allocator.hpp>
 #include <boost/coroutine/v2/detail/pull_coroutine_base.hpp>
 #include <boost/coroutine/v2/detail/pull_coroutine_caller.hpp>
@@ -1079,7 +1081,7 @@ public:
 
     R get() const
     {
-        BOOST_ASSERT( has_result() );
+        BOOST_ASSERT( ! empty() );
 
         return impl_->get();
     }
@@ -1156,17 +1158,27 @@ public:
         }
 
         reference_t operator*() const
-        { return const_cast< optional< R > & >( val_).get(); }
+        {
+            if ( ! val_)
+                boost::throw_exception(
+                    invalid_result() );
+            return const_cast< optional< R > & >( val_).get();
+        }
 
         pointer_t operator->() const
-        { return const_cast< optional< R > & >( val_).get_ptr(); }
+        {
+            if ( ! val_)
+                boost::throw_exception(
+                    invalid_result() );
+            return const_cast< optional< R > & >( val_).get_ptr();
+        }
     };
 
     class const_iterator : public std::iterator< std::input_iterator_tag, const typename remove_reference< R >::type >
     {
     private:
         pull_coroutine< R > *   c_;
-        optional< R >      val_;
+        optional< R >           val_;
 
         void fetch_()
         {
@@ -1234,10 +1246,20 @@ public:
         }
 
         reference_t operator*() const
-        { return val_.get(); }
+        {
+            if ( ! val_)
+                boost::throw_exception(
+                    invalid_result() );
+            return val_.get();
+        }
 
         pointer_t operator->() const
-        { return val_.get_ptr(); }
+        {
+            if ( ! val_)
+                boost::throw_exception(
+                    invalid_result() );
+            return val_.get_ptr();
+        }
     };
 };
 
@@ -1579,11 +1601,7 @@ public:
     }
 
     R & get() const
-    {
-        BOOST_ASSERT( has_result() );
-
-        return impl_->get();
-    }
+    { return impl_->get(); }
 
     class iterator : public std::iterator< std::input_iterator_tag, R >
     {
@@ -1657,10 +1675,20 @@ public:
         }
 
         reference_t operator*() const
-        { return const_cast< optional< R & > & >( val_).get(); }
+        {
+            if ( ! val_)
+                boost::throw_exception(
+                    invalid_result() );
+            return const_cast< optional< R & > & >( val_).get();
+        }
 
         pointer_t operator->() const
-        { return const_cast< optional< R & > & >( val_).get_ptr(); }
+        {
+            if ( ! val_)
+                boost::throw_exception(
+                    invalid_result() );
+            return const_cast< optional< R & > & >( val_).get_ptr();
+        }
     };
 
     class const_iterator : public std::iterator< std::input_iterator_tag, R >
@@ -1735,10 +1763,20 @@ public:
         }
 
         reference_t operator*() const
-        { return val_.get(); }
+        {
+            if ( ! val_)
+                boost::throw_exception(
+                    invalid_result() );
+            return val_.get();
+        }
 
         pointer_t operator->() const
-        { return val_.get_ptr(); }
+        {
+            if ( ! val_)
+                boost::throw_exception(
+                    invalid_result() );
+            return val_.get_ptr();
+        }
     };
 };
 
