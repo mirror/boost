@@ -2557,7 +2557,7 @@ namespace boost {
         );
     }
 #endif
-#ifndef BOOST_NO_CHAR16_T
+#ifndef BOOST_NO_CXX11_CHAR16_T
     template <typename Target>
     inline Target lexical_cast(const char16_t* chars, std::size_t count)
     {
@@ -2566,7 +2566,7 @@ namespace boost {
         );
     }
 #endif
-#ifndef BOOST_NO_CHAR32_T
+#ifndef BOOST_NO_CXX11_CHAR32_T
     template <typename Target>
     inline Target lexical_cast(const char32_t* chars, std::size_t count)
     {
