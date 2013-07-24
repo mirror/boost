@@ -8,7 +8,7 @@
 [section:old Bidirectional coroutine (['deprecated])]
 
 [note This interface is deprecated but can be used by compiling the code with
-macro BOOST_COROUTINES_OLD.]
+compiler flag BOOST_COROUTINES_OLD.]
 
 Each instance of __coro__ has its own context of execution (CPU registers and
 stack space) or represents __not_a_coro__ (similar to __thread__).

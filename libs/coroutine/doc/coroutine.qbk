@@ -8,7 +8,7 @@
 [section:coroutine Coroutine]
 
 __boost_coroutine__ provides two interfaces - one with uni- and one with bidirectional
-data transfer.
+data transfer (deprecated).
 
 [include unidirect.qbk]
 [include old.qbk]

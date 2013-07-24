@@ -94,4 +94,14 @@ With a stackless coroutine, only the top-level routine may be suspended. Any
 routine called by that top-level routine may not itself suspend. This prohibits
 providing suspend/resume operations in routines within a general-purpose library.
 
+[heading first-class continuation]
+A first-class continuation can be passed as an argument, returned by a
+function and stored in a data structure to be used later.
+In some implementations (for instance C# ['yield]) the continuation can
+not be directly accessed or directly manipulated.
+
+Without stackfulness and first-class semantics some useful execution control
+flows cannot be supported (for instance cooperative multitasking or
+checkpointing).
+
 [endsect]

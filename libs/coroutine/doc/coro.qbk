@@ -70,6 +70,7 @@
 [def __handle_read__ ['session::handle_read()]]
 [def __io_service__ ['boost::asio::io_sevice]]
 [def __pull_coro_get__ ['boost::coroutines::coroutine<>::pull_type::get()]]
+[def __pull_coro_it__ ['boost::coroutines::coroutine<>::pull_type::iterator]]
 [def __pull_coro_op__ ['boost::coroutines::coroutine<>::pull_type::operator()]]
 [def __push_coro_op__ ['boost::coroutines::coroutine<>::push_type::operator()]]
 [def __server__ ['server]]
