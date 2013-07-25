@@ -525,8 +525,6 @@ void test_invalid_result()
     }
     catch ( coro::invalid_result const& e)
     {
-        boost::system::error_code ec = e.code();
-        BOOST_CHECK_EQUAL( coro::coroutine_errc::no_data, ec.value()); 
         catched = true; 
     }
     BOOST_CHECK( catched);
