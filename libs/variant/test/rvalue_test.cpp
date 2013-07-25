@@ -15,13 +15,56 @@
 #include "boost/variant.hpp"
 #include "boost/type_traits/is_nothrow_move_assignable.hpp"
 
-// This test requires rvalue references support
+// Most part of tests from this file require rvalue references support
+
+
+class move_copy_conting_class {
+public:
+    static unsigned int moves_count;
+    static unsigned int copy_count;
+
+    move_copy_conting_class(){}
+    move_copy_conting_class(BOOST_RV_REF(move_copy_conting_class) ) {
+        ++ moves_count;
+    }
+
+    move_copy_conting_class& operator=(BOOST_RV_REF(move_copy_conting_class) ) {
+        ++ moves_count;
+        return *this;
+    }
+
+    move_copy_conting_class(const move_copy_conting_class&) {
+        ++ copy_count;
+    }
+    move_copy_conting_class& operator=(BOOST_COPY_ASSIGN_REF(move_copy_conting_class) ) {
+        ++ copy_count;
+        return *this;
+    }
+};
+
+unsigned int move_copy_conting_class::moves_count = 0;
+unsigned int move_copy_conting_class::copy_count = 0;
 
 #ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
 
 void run()
 {
-    BOOST_CHECK(true);
+    // Making sure that internals of Boost.Move do not interfere with
+    // internals of Boost.Variant and in case of C++03 or C++98 compilation 
+    // is still possible.
+    typedef boost::variant<int, move_copy_conting_class> variant_I_type;
+    variant_I_type v1, v2;
+    v1 = move_copy_conting_class();
+    v2 = v1; 
+    v2 = boost::move(v1);
+    v1.swap(v2);
+
+    move_copy_conting_class val;
+    v2 = boost::move(val);
+    v2 = 10;
+
+    variant_I_type v3(boost::move(val));
+    variant_I_type v4(boost::move(v1));
 }
 
 void run1()
@@ -41,32 +84,6 @@ void run_moves_are_noexcept()
 
 #else 
 
-class move_copy_conting_class {
-public:
-    static unsigned int moves_count;
-    static unsigned int copy_count;
-
-    move_copy_conting_class(){}
-    move_copy_conting_class(move_copy_conting_class&&) {
-        ++ moves_count;
-    }
-
-    move_copy_conting_class& operator=(move_copy_conting_class&&) {
-        ++ moves_count;
-        return *this;
-    }
-
-    move_copy_conting_class(const move_copy_conting_class&) {
-        ++ copy_count;
-    }
-    move_copy_conting_class& operator=(const move_copy_conting_class&) {
-        ++ copy_count;
-        return *this;
-    }
-};
-
-unsigned int move_copy_conting_class::moves_count = 0;
-unsigned int move_copy_conting_class::copy_count = 0;
 
 void run()
 {
@@ -92,7 +109,7 @@ void run()
 
     move_copy_conting_class::moves_count = 0;
     move_copy_conting_class::copy_count = 0;
-    v2 = static_cast<variant_I_type&&>(v1);
+    v2 = boost::move(v1);
     // Assuring that `move_copy_conting_class` in v1 was moved at least once and was not copied
     BOOST_CHECK(move_copy_conting_class::moves_count != 0);
     BOOST_CHECK(move_copy_conting_class::copy_count == 0);
@@ -100,7 +117,7 @@ void run()
     v1 = move_copy_conting_class();
     move_copy_conting_class::moves_count = 0;
     move_copy_conting_class::copy_count = 0;
-    v2 = static_cast<variant_I_type&&>(v1);
+    v2 = boost::move(v1);
     // Assuring that `move_copy_conting_class` in v1 was moved at least once and was not copied
     BOOST_CHECK(move_copy_conting_class::moves_count != 0);
     BOOST_CHECK(move_copy_conting_class::copy_count == 0);
@@ -116,19 +133,19 @@ void run()
     variant_II_type v3;
     move_copy_conting_class::moves_count = 0;
     move_copy_conting_class::copy_count = 0;
-    v1 = static_cast<variant_II_type&&>(v3);
+    v1 = boost::move(v3);
     // Assuring that `move_copy_conting_class` in v3 was moved at least once (v1 and v3 have different types)
     BOOST_CHECK(move_copy_conting_class::moves_count != 0);
 
     move_copy_conting_class::moves_count = 0;
     move_copy_conting_class::copy_count = 0;
-    v2 = static_cast<variant_I_type&&>(v1);
+    v2 = boost::move(v1);
     // Assuring that `move_copy_conting_class` in v1 was moved at least once (v1 and v3 have different types)
     BOOST_CHECK(move_copy_conting_class::moves_count != 0);
 
     move_copy_conting_class::moves_count = 0;
     move_copy_conting_class::copy_count = 0;
-    variant_I_type v5(static_cast<variant_I_type&&>(v1));
+    variant_I_type v5(boost::move(v1));
     // Assuring that `move_copy_conting_class` in v1 was moved at least once and was not copied
     BOOST_CHECK(move_copy_conting_class::moves_count != 0);
     BOOST_CHECK(move_copy_conting_class::copy_count == 0);
@@ -148,7 +165,7 @@ void run1()
 
     move_copy_conting_class c1;
     typedef boost::variant<int, move_copy_conting_class> variant_I_type;
-    variant_I_type v1(static_cast<move_copy_conting_class&&>(c1));
+    variant_I_type v1(boost::move(c1));
     
     // Assuring that `move_copy_conting_class` was not copyied
     BOOST_CHECK(move_copy_conting_class::copy_count == 0);
