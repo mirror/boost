@@ -3,8 +3,7 @@
 // See http://www.boost.org for updates, documentation, and revision history.
 //-----------------------------------------------------------------------------
 //
-// Copyright (c) 2012
-// Antony Polukhin
+// Copyright (c) 2012-2013 Antony Polukhin
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -14,6 +13,7 @@
 
 #include "boost/test/minimal.hpp"
 #include "boost/variant.hpp"
+#include "boost/type_traits/is_nothrow_move_assignable.hpp"
 
 // This test requires rvalue references support
 
@@ -30,6 +30,11 @@ void run1()
 }
 
 void run_move_only()
+{
+    BOOST_CHECK(true);
+}
+
+void run_moves_are_noexcept()
 {
     BOOST_CHECK(true);
 }
@@ -177,13 +182,44 @@ void run_move_only()
     BOOST_CHECK(vi.which() == 1);
 }
 
+void run_moves_are_noexcept() {
+#ifndef BOOST_NO_CXX11_NOEXCEPT
+    typedef boost::variant<int, short, double> variant_noexcept_t;
+    //BOOST_CHECK(boost::is_nothrow_move_assignable<variant_noexcept_t>::value);
+    BOOST_CHECK(boost::is_nothrow_move_constructible<variant_noexcept_t>::value);
+
+    typedef boost::variant<int, short, double, move_only_structure> variant_except_t;
+    //BOOST_CHECK(!boost::is_nothrow_move_assignable<variant_except_t>::value);
+    BOOST_CHECK(!boost::is_nothrow_move_constructible<variant_except_t>::value);
+#endif
+}
+
 #endif
 
+struct nothrow_copyable_throw_movable {
+    nothrow_copyable_throw_movable(){}
+    nothrow_copyable_throw_movable(const nothrow_copyable_throw_movable&) BOOST_NOEXCEPT {}
+    nothrow_copyable_throw_movable& operator=(const nothrow_copyable_throw_movable&) BOOST_NOEXCEPT { return *this; }
+#ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
+    nothrow_copyable_throw_movable(nothrow_copyable_throw_movable&&) BOOST_NOEXCEPT_IF(false) {}
+    nothrow_copyable_throw_movable& operator=(nothrow_copyable_throw_movable&&) BOOST_NOEXCEPT_IF(false) { return *this; }
+#endif
+};
+
+// This test is created to cover the following situation:
+// https://svn.boost.org/trac/boost/ticket/8772
+void run_tricky_compilation_test()
+{
+    boost::variant<int, nothrow_copyable_throw_movable> v;
+    v = nothrow_copyable_throw_movable();
+}
 
 int test_main(int , char* [])
 {
    run();
    run1();
    run_move_only();
+   run_moves_are_noexcept();
+   run_tricky_compilation_test();
    return 0;
 }
