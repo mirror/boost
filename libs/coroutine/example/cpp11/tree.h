@@ -12,7 +12,6 @@
 
 #include <boost/assert.hpp>
 #include <boost/config.hpp>
-#include <boost/coroutine/all.hpp>
 #include <boost/intrusive_ptr.hpp>
 
 # if defined(BOOST_MSVC)
@@ -91,37 +90,8 @@ inline
 bool operator!=( leaf const& l, leaf  const& r)
 { return l.value != r.value; }
 
-typedef boost::coroutines::coroutine< leaf&() > coro_t;
-
-class tree_visitor : public visitor
-{
-private:
-    coro_t::caller_type  &   c_;
-
-public:
-    tree_visitor( coro_t::caller_type & c) :
-        c_( c)
-    {}
-
-    void visit( branch & b)
-    {
-        if ( b.left) b.left->accept( * this);
-        if ( b.right) b.right->accept( * this);
-    }
-
-    void visit( leaf & l)
-    { c_( l); }
-};
-
-void enumerate_leafs( coro_t::caller_type & c, node::ptr_t root)
-{
-    tree_visitor v( c);
-    root->accept( v);
-}
-
 # if defined(BOOST_MSVC)
 # pragma warning(pop)
 # endif
-
 
 #endif // TREE_H

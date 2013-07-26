@@ -10,15 +10,15 @@
 #include <boost/coroutine/all.hpp>
 #include <boost/thread.hpp>
 
-typedef boost::coroutines::coroutine< void() >   coro_t;
-
 int count = 20;
-
+#if defined(BOOST_USE_SEGMENTED_STACKS)
 void access( char *buf) __attribute__ ((noinline));
+#endif
 void access( char *buf)
 {
   buf[0] = '\0';
 }
+
 void bar( int i)
 {
     char buf[4 * 1024];
@@ -31,6 +31,23 @@ void bar( int i)
     }
 }
 
+#ifdef BOOST_COROUTINES_UNIDIRECT
+void foo( boost::coroutines::coroutine< void >::pull_type & source)
+{
+    bar( count);
+    source();
+}
+
+void thread_fn()
+{
+    {
+        boost::coroutines::coroutine< void >::push_type sink( foo);
+        sink();
+    }
+}
+#else
+typedef boost::coroutines::coroutine< void() >   coro_t;
+
 void foo( coro_t & c)
 {
     bar( count);
@@ -42,9 +59,9 @@ void thread_fn()
     {
         coro_t c( foo);
         c();
-        int i = 7;
     }
 }
+#endif
 
 int main( int argc, char * argv[])
 {
