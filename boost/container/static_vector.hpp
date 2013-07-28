@@ -81,8 +81,11 @@ class static_storage_allocator
  * possible.
  *
  * @par Error Handling
- *  Insertion beyond the capacity and out of bounds errors results in calling throw_bad_alloc().
- *  The reason for this is because unlike vectors, static_vector does not perform allocation.
+ *  Insertion beyond the capacity result in throwing std::bad_alloc() if exceptions are enabled or
+ *  calling throw_bad_alloc() if not enabled.
+ *
+ *  std::out_of_range is thrown if out of bound access is performed in `at()` if exceptions are
+ *  enabled, throw_out_of_range() if not enabled.
  *
  * @tparam Value    The type of element that will be stored.
  * @tparam Capacity The maximum number of elements static_vector can store, fixed at compile time.
