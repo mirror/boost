@@ -121,6 +121,13 @@ class flat_set
       : m_flat_tree(comp, a)
    {}
 
+   //! <b>Effects</b>: Constructs an empty flat_set using the specified allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit flat_set(const allocator_type& a)
+      : m_flat_tree(a)
+   {}
+
    //! <b>Effects</b>: Constructs an empty set using the specified comparison object and
    //! allocator, and inserts elements from the range [first ,last ).
    //!
@@ -810,9 +817,21 @@ class flat_multiset
       : m_flat_tree()
    {}
 
+   //! <b>Effects</b>: Constructs an empty flat_multiset using the specified
+   //! comparison object and allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
    explicit flat_multiset(const Compare& comp,
                           const allocator_type& a = allocator_type())
-      : m_flat_tree(comp, a) {}
+      : m_flat_tree(comp, a)
+   {}
+
+   //! <b>Effects</b>: Constructs an empty flat_multiset using the specified allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit flat_multiset(const allocator_type& a)
+      : m_flat_tree(a)
+   {}
 
    template <class InputIterator>
    flat_multiset(InputIterator first, InputIterator last,

@@ -138,6 +138,16 @@ class map
       BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename Allocator::value_type>::value));
    }
 
+   //! <b>Effects</b>: Constructs an empty map using the specified allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit map(const allocator_type& a)
+      : m_tree(a)
+   {
+      //Allocator type must be std::pair<CONST Key, T>
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename Allocator::value_type>::value));
+   }
+
    //! <b>Effects</b>: Constructs an empty map using the specified comparison object and
    //! allocator, and inserts elements from the range [first ,last ).
    //!
@@ -918,12 +928,22 @@ class multimap
       BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename Allocator::value_type>::value));
    }
 
-   //! <b>Effects</b>: Constructs an empty multimap using the specified comparison
-   //!   object and allocator.
+   //! <b>Effects</b>: Constructs an empty multimap using the specified allocator.
    //!
    //! <b>Complexity</b>: Constant.
    explicit multimap(const Compare& comp, const allocator_type& a = allocator_type())
       : m_tree(comp, a)
+   {
+      //Allocator type must be std::pair<CONST Key, T>
+      BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename Allocator::value_type>::value));
+   }
+
+   //! <b>Effects</b>: Constructs an empty multimap using the specified comparison
+   //!   object and allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit multimap(const allocator_type& a)
+      : m_tree(a)
    {
       //Allocator type must be std::pair<CONST Key, T>
       BOOST_STATIC_ASSERT((container_detail::is_same<std::pair<const Key, T>, typename Allocator::value_type>::value));

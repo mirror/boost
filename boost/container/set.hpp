@@ -113,6 +113,13 @@ class set
       : m_tree(comp, a)
    {}
 
+   //! <b>Effects</b>: Constructs an empty set using the specified allocator object.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit set(const allocator_type& a)
+      : m_tree(a)
+   {}
+
    //! <b>Effects</b>: Constructs an empty set using the specified comparison object and
    //! allocator, and inserts elements from the range [first ,last ).
    //!
@@ -735,6 +742,13 @@ class multiset
    explicit multiset(const Compare& comp,
                      const allocator_type& a = allocator_type())
       : m_tree(comp, a)
+   {}
+
+   //! <b>Effects</b>: Constructs an empty multiset using the specified allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit multiset(const allocator_type& a)
+      : m_tree(a)
    {}
 
    //! <b>Effects</b>: Constructs an empty multiset using the specified comparison object

@@ -50,8 +50,12 @@ struct tree_value_compare
    typedef KeyOfValue   key_of_value;
    typedef Key          key_type;
 
-   tree_value_compare(const key_compare &kcomp)
-      :  key_compare(kcomp)
+   explicit tree_value_compare(const key_compare &kcomp)
+      :  KeyCompare(kcomp)
+   {}
+
+   tree_value_compare()
+      :  KeyCompare()
    {}
 
    const key_compare &key_comp() const
@@ -212,15 +216,15 @@ class rbtree
       , typename container_detail::intrusive_rbtree_type
          <A, tree_value_compare<Key, Value, KeyCompare, KeyOfValue> 
          >::type
-      , KeyCompare
+      , tree_value_compare<Key, Value, KeyCompare, KeyOfValue> 
       >
 {
+   typedef tree_value_compare
+            <Key, Value, KeyCompare, KeyOfValue>            ValComp;
    typedef typename container_detail::intrusive_rbtree_type
-         < A, tree_value_compare
-            <Key, Value, KeyCompare, KeyOfValue>
-         >::type                                            Icont;
+         < A, ValComp>::type                                Icont;
    typedef container_detail::node_alloc_holder 
-      <A, Icont, KeyCompare>                                AllocHolder;
+      <A, Icont, ValComp>                                   AllocHolder;
    typedef typename AllocHolder::NodePtr                    NodePtr;
    typedef rbtree < Key, Value, KeyOfValue
                   , KeyCompare, A>                          ThisType;
@@ -318,8 +322,7 @@ class rbtree
    typedef Value                                      value_type;
    typedef A                                          allocator_type;
    typedef KeyCompare                                 key_compare;
-   typedef tree_value_compare< Key, Value
-                        , KeyCompare, KeyOfValue>     value_compare;
+   typedef ValComp                                    value_compare;
    typedef typename boost::container::
       allocator_traits<A>::pointer                    pointer;
    typedef typename boost::container::
@@ -471,11 +474,15 @@ class rbtree
    typedef std::reverse_iterator<const_iterator>  const_reverse_iterator;
 
    rbtree()
-      : AllocHolder(key_compare())
+      : AllocHolder(ValComp(key_compare()))
    {}
 
-   rbtree(const key_compare& comp, const allocator_type& a = allocator_type())
-      : AllocHolder(a, comp)
+   explicit rbtree(const key_compare& comp, const allocator_type& a = allocator_type())
+      : AllocHolder(a, ValComp(comp))
+   {}
+
+   explicit rbtree(const allocator_type& a)
+      : AllocHolder(a)
    {}
 
    template <class InputIterator>
@@ -488,7 +495,7 @@ class rbtree
          >::type * = 0
       #endif
          )
-      : AllocHolder(a, comp)
+      : AllocHolder(a, value_compare(comp))
    {
       if(unique_insertion){
          this->insert_unique(first, last);
@@ -508,7 +515,7 @@ class rbtree
          >::type * = 0
       #endif
          )
-      : AllocHolder(a, comp)
+      : AllocHolder(a, value_compare(comp))
    {
       if(unique_insertion){
          this->insert_unique(first, last);
@@ -530,7 +537,7 @@ class rbtree
             >::type * = 0
          #endif
          )
-      : AllocHolder(a, comp)
+      : AllocHolder(a, value_compare(comp))
    {
       this->insert_equal(first, last);
    }
@@ -545,7 +552,7 @@ class rbtree
             >::type * = 0
          #endif
          )
-      : AllocHolder(a, comp)
+      : AllocHolder(a, value_compare(comp))
    {
       //Optimized allocation and construction
       this->allocate_many_and_construct
@@ -553,25 +560,25 @@ class rbtree
    }
 
    rbtree(const rbtree& x)
-      :  AllocHolder(x, x.key_comp())
+      :  AllocHolder(x, x.value_comp())
    {
       this->icont().clone_from
          (x.icont(), typename AllocHolder::cloner(*this), Destroyer(this->node_alloc()));
    }
 
    rbtree(BOOST_RV_REF(rbtree) x)
-      :  AllocHolder(::boost::move(static_cast<AllocHolder&>(x)), x.key_comp())
+      :  AllocHolder(::boost::move(static_cast<AllocHolder&>(x)), x.value_comp())
    {}
 
    rbtree(const rbtree& x, const allocator_type &a)
-      :  AllocHolder(a, x.key_comp())
+      :  AllocHolder(a, x.value_comp())
    {
       this->icont().clone_from
          (x.icont(), typename AllocHolder::cloner(*this), Destroyer(this->node_alloc()));
    }
 
    rbtree(BOOST_RV_REF(rbtree) x, const allocator_type &a)
-      :  AllocHolder(a, x.key_comp())
+      :  AllocHolder(a, x.value_comp())
    {
       if(this->node_alloc() == x.node_alloc()){
          this->icont().swap(x.icont());

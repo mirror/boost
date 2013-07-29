@@ -173,7 +173,15 @@ class flat_map
    //!
    //! <b>Complexity</b>: Constant.
    explicit flat_map(const Compare& comp, const allocator_type& a = allocator_type())
-      : m_flat_tree(comp, container_detail::force<impl_allocator_type>(a)) {}
+      : m_flat_tree(comp, container_detail::force<impl_allocator_type>(a))
+   {}
+
+   //! <b>Effects</b>: Constructs an empty flat_map using the specified allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit flat_map(const allocator_type& a)
+      : m_flat_tree(container_detail::force<impl_allocator_type>(a))
+   {}
 
    //! <b>Effects</b>: Constructs an empty flat_map using the specified comparison object and
    //! allocator, and inserts elements from the range [first ,last ).
@@ -1024,7 +1032,15 @@ class flat_multimap
    //! <b>Complexity</b>: Constant.
    explicit flat_multimap(const Compare& comp,
                           const allocator_type& a = allocator_type())
-      : m_flat_tree(comp, container_detail::force<impl_allocator_type>(a)) { }
+      : m_flat_tree(comp, container_detail::force<impl_allocator_type>(a))
+   {}
+
+   //! <b>Effects</b>: Constructs an empty flat_multimap using the specified allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit flat_multimap(const allocator_type& a)
+      : m_flat_tree(container_detail::force<impl_allocator_type>(a))
+   {}
 
    //! <b>Effects</b>: Constructs an empty flat_multimap using the specified comparison object
    //!   and allocator, and inserts elements from the range [first ,last ).
