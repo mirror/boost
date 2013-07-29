@@ -70,7 +70,7 @@ class sgtree_algorithms
    /// @cond
    private:
 
-   typedef bstree_algorithms<NodeTraits>  bstree_algorithms;
+   typedef bstree_algorithms<NodeTraits>  bstree_algo;
 
    /// @endcond
 
@@ -78,7 +78,7 @@ class sgtree_algorithms
    //! This type is the information that will be
    //! filled by insert_unique_check
    struct insert_commit_data
-      : bstree_algorithms::insert_commit_data
+      : bstree_algo::insert_commit_data
    {
       std::size_t depth;
    };
@@ -137,12 +137,12 @@ class sgtree_algorithms
    template<class AlphaByMaxSize>
    static node_ptr erase(const node_ptr & header, const node_ptr & z, std::size_t tree_size, std::size_t &max_tree_size, AlphaByMaxSize alpha_by_maxsize)
    {
-      //typename bstree_algorithms::data_for_rebalance info;
-      bstree_algorithms::erase(header, z);
+      //typename bstree_algo::data_for_rebalance info;
+      bstree_algo::erase(header, z);
       --tree_size;
       if (tree_size > 0 &&
           tree_size < alpha_by_maxsize(max_tree_size)){
-         bstree_algorithms::rebalance(header);
+         bstree_algo::rebalance(header);
          max_tree_size = tree_size;
       }
       return z;
@@ -196,7 +196,7 @@ class sgtree_algorithms
       ,std::size_t tree_size, H_Alpha h_alpha, std::size_t &max_tree_size)
    {
       std::size_t depth;
-      bstree_algorithms::insert_equal_upper_bound(h, new_node, comp, &depth);
+      bstree_algo::insert_equal_upper_bound(h, new_node, comp, &depth);
       rebalance_after_insertion(new_node, depth, tree_size+1, h_alpha, max_tree_size);
       return new_node;
    }
@@ -208,7 +208,7 @@ class sgtree_algorithms
       ,std::size_t tree_size, H_Alpha h_alpha, std::size_t &max_tree_size)
    {
       std::size_t depth;
-      bstree_algorithms::insert_equal_lower_bound(h, new_node, comp, &depth);
+      bstree_algo::insert_equal_lower_bound(h, new_node, comp, &depth);
       rebalance_after_insertion(new_node, depth, tree_size+1, h_alpha, max_tree_size);
       return new_node;
    }
@@ -220,7 +220,7 @@ class sgtree_algorithms
       ,std::size_t tree_size, H_Alpha h_alpha, std::size_t &max_tree_size)
    {
       std::size_t depth;
-      bstree_algorithms::insert_equal(header, hint, new_node, comp, &depth);
+      bstree_algo::insert_equal(header, hint, new_node, comp, &depth);
       rebalance_after_insertion(new_node, depth, tree_size+1, h_alpha, max_tree_size);
       return new_node;
    }
@@ -232,7 +232,7 @@ class sgtree_algorithms
       ,std::size_t tree_size, H_Alpha h_alpha, std::size_t &max_tree_size)
    {
       std::size_t depth;
-      bstree_algorithms::insert_before(header, pos, new_node, &depth);
+      bstree_algo::insert_before(header, pos, new_node, &depth);
       rebalance_after_insertion(new_node, depth, tree_size+1, h_alpha, max_tree_size);
       return new_node;
    }
@@ -243,7 +243,7 @@ class sgtree_algorithms
          ,std::size_t tree_size, H_Alpha h_alpha, std::size_t &max_tree_size)
    {
       std::size_t depth;
-      bstree_algorithms::push_back(header, new_node, &depth);
+      bstree_algo::push_back(header, new_node, &depth);
       rebalance_after_insertion(new_node, depth, tree_size+1, h_alpha, max_tree_size);
    }
 
@@ -253,7 +253,7 @@ class sgtree_algorithms
          ,std::size_t tree_size, H_Alpha h_alpha, std::size_t &max_tree_size)
    {
       std::size_t depth;
-      bstree_algorithms::push_front(header, new_node, &depth);
+      bstree_algo::push_front(header, new_node, &depth);
       rebalance_after_insertion(new_node, depth, tree_size+1, h_alpha, max_tree_size);
    }
 
@@ -265,7 +265,7 @@ class sgtree_algorithms
    {
       std::size_t depth;
       std::pair<node_ptr, bool> ret =
-         bstree_algorithms::insert_unique_check(header, key, comp, commit_data, &depth);
+         bstree_algo::insert_unique_check(header, key, comp, commit_data, &depth);
       commit_data.depth = depth;
       return ret;
    }
@@ -278,7 +278,7 @@ class sgtree_algorithms
    {
       std::size_t depth;
       std::pair<node_ptr, bool> ret =
-         bstree_algorithms::insert_unique_check
+         bstree_algo::insert_unique_check
             (header, hint, key, comp, commit_data, &depth);
       commit_data.depth = depth;
       return ret;
@@ -290,7 +290,7 @@ class sgtree_algorithms
       (const node_ptr & header, const node_ptr & new_value, const insert_commit_data &commit_data
       ,std::size_t tree_size, H_Alpha h_alpha, std::size_t &max_tree_size)
    {
-      bstree_algorithms::insert_unique_commit(header, new_value, commit_data);
+      bstree_algo::insert_unique_commit(header, new_value, commit_data);
       rebalance_after_insertion(new_value, commit_data.depth, tree_size+1, h_alpha, max_tree_size);
    }
 
@@ -333,7 +333,7 @@ class sgtree_algorithms
          for(std::size_t ancestor = 1; true; ++ancestor){
             if(ancestor == depth){ //Check if whole tree must be rebuilt
                max_tree_size = tree_size;
-               bstree_algorithms::rebalance_subtree(NodeTraits::get_parent(s));
+               bstree_algo::rebalance_subtree(NodeTraits::get_parent(s));
                break;
             }
             else{ //Go to the next scapegoat candidate
@@ -341,10 +341,10 @@ class sgtree_algorithms
                const node_ptr s_parent_left = NodeTraits::get_left(s_parent);
                //Obtain parent's size (previous size + parent + sibling tree)
                const node_ptr s_sibling = s_parent_left == s ? NodeTraits::get_right(s_parent) : s_parent_left;
-               size += 1 + bstree_algorithms::subtree_size(s_sibling);
+               size += 1 + bstree_algo::subtree_size(s_sibling);
                s = s_parent;
                if(ancestor > h_alpha(size)){ //is 's' scapegoat?
-                  bstree_algorithms::rebalance_subtree(s);
+                  bstree_algo::rebalance_subtree(s);
                   break;
                }
             }

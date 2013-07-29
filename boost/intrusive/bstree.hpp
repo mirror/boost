@@ -63,8 +63,8 @@ struct bstbase3
    typedef typename node_traits::node_ptr                            node_ptr;
    typedef typename node_traits::const_node_ptr                      const_node_ptr;
 
-   bstbase3(const ValueTraits &val_traits)
-      : ValueTraits(val_traits)
+   bstbase3(const ValueTraits &vtraits)
+      : ValueTraits(vtraits)
    {}
 
    static const bool external_value_traits =
@@ -212,8 +212,8 @@ struct bstbase2
    typedef typename treeheader_t::node_ptr                           node_ptr;
    typedef typename treeheader_t::const_node_ptr                     const_node_ptr;
 
-   bstbase2(const value_compare &comp, const ValueTraits &val_traits)
-      : treeheader_t(val_traits), detail::ebo_functor_holder<value_compare>(comp)
+   bstbase2(const value_compare &comp, const ValueTraits &vtraits)
+      : treeheader_t(vtraits), detail::ebo_functor_holder<value_compare>(comp)
    {}
 
    const value_compare &comp() const
@@ -378,10 +378,10 @@ struct bstbase2
       (const KeyType &key, KeyValueCompare key_value_comp, insert_commit_data &commit_data)
    {
       detail::key_nodeptr_comp<KeyValueCompare, real_value_traits>
-         comp(key_value_comp, &this->get_real_value_traits());
+         ocomp(key_value_comp, &this->get_real_value_traits());
       std::pair<node_ptr, bool> ret =
          (node_algorithms::insert_unique_check
-            (this->header_ptr(), key, comp, commit_data));
+            (this->header_ptr(), key, ocomp, commit_data));
       return std::pair<iterator, bool>(iterator(ret.first, this->real_value_traits_ptr()), ret.second);
    }
 
@@ -391,10 +391,10 @@ struct bstbase2
       ,KeyValueCompare key_value_comp, insert_commit_data &commit_data)
    {
       detail::key_nodeptr_comp<KeyValueCompare, real_value_traits>
-         comp(key_value_comp, &this->get_real_value_traits());
+         ocomp(key_value_comp, &this->get_real_value_traits());
       std::pair<node_ptr, bool> ret =
          (node_algorithms::insert_unique_check
-            (this->header_ptr(), hint.pointed_node(), key, comp, commit_data));
+            (this->header_ptr(), hint.pointed_node(), key, ocomp, commit_data));
       return std::pair<iterator, bool>(iterator(ret.first, this->real_value_traits_ptr()), ret.second);
    }
 };
@@ -417,8 +417,8 @@ struct bstbase
       <AlgoType, node_traits>::type                algo_type;
    typedef SizeType                                size_type;
 
-   bstbase(const value_compare & comp, const ValueTraits &val_traits)
-      : base_type(comp, val_traits)
+   bstbase(const value_compare & comp, const ValueTraits &vtraits)
+      : base_type(comp, vtraits)
    {}
 
    public:

@@ -118,7 +118,7 @@ class splaytree_algorithms
 {
    /// @cond
    private:
-   typedef bstree_algorithms<NodeTraits> bstree_algorithms;
+   typedef bstree_algorithms<NodeTraits> bstree_algo;
    /// @endcond
 
    public:
@@ -129,7 +129,7 @@ class splaytree_algorithms
 
    //! This type is the information that will be
    //! filled by insert_unique_check
-   typedef typename bstree_algorithms::insert_commit_data insert_commit_data;
+   typedef typename bstree_algo::insert_commit_data insert_commit_data;
 
    public:
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
@@ -190,7 +190,7 @@ class splaytree_algorithms
    {
       //posibility 1
       if(splay && NodeTraits::get_left(z)){
-         splay_up(bstree_algorithms::prev_node(z), header);
+         splay_up(bstree_algo::prev_node(z), header);
       }
       /*
       //possibility 2
@@ -199,7 +199,7 @@ class splaytree_algorithms
          splay_up(l, header);
       }*//*
       if(splay && NodeTraits::get_left(z)){
-         node_ptr l = bstree_algorithms::prev_node(z);
+         node_ptr l = bstree_algo::prev_node(z);
          splay_up_impl(l, z);
       }*/
       /*
@@ -210,7 +210,7 @@ class splaytree_algorithms
 
       //if(splay)
          //splay_up(z, header);
-      bstree_algorithms::erase(header, z);
+      bstree_algo::erase(header, z);
    }
 
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
@@ -244,7 +244,7 @@ class splaytree_algorithms
    template<class KeyType, class KeyNodePtrCompare>
    static std::size_t count
       (const const_node_ptr & header, const KeyType &key, KeyNodePtrCompare comp)
-   {  return bstree_algorithms::count(header, key, comp);  }
+   {  return bstree_algo::count(header, key, comp);  }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::lower_bound(const const_node_ptr&,const KeyType&,KeyNodePtrCompare)
    //! Additional notes: the first node of the range is splayed. The "splay" parameter which indicated if splaying
@@ -254,7 +254,7 @@ class splaytree_algorithms
       (const node_ptr & header, const KeyType &key, KeyNodePtrCompare comp, bool splay = true)
    {
       //splay_down(detail::uncast(header), key, comp);
-      node_ptr y = bstree_algorithms::lower_bound(header, key, comp);
+      node_ptr y = bstree_algo::lower_bound(header, key, comp);
       if(splay) splay_up(y, detail::uncast(header));
       return y;
    }
@@ -264,7 +264,7 @@ class splaytree_algorithms
    template<class KeyType, class KeyNodePtrCompare>
    static node_ptr lower_bound
       (const const_node_ptr & header, const KeyType &key, KeyNodePtrCompare comp)
-   {  return bstree_algorithms::lower_bound(header, key, comp);  }
+   {  return bstree_algo::lower_bound(header, key, comp);  }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::upper_bound(const const_node_ptr&,const KeyType&,KeyNodePtrCompare)
    //! Additional notes: the first node of the range is splayed. The "splay" parameter which indicated if splaying
@@ -274,7 +274,7 @@ class splaytree_algorithms
       (const node_ptr & header, const KeyType &key, KeyNodePtrCompare comp, bool splay = true)
    {
       //splay_down(detail::uncast(header), key, comp);
-      node_ptr y = bstree_algorithms::upper_bound(header, key, comp);
+      node_ptr y = bstree_algo::upper_bound(header, key, comp);
       if(splay) splay_up(y, detail::uncast(header));
       return y;
    }
@@ -284,7 +284,7 @@ class splaytree_algorithms
    template<class KeyType, class KeyNodePtrCompare>
    static node_ptr upper_bound
       (const const_node_ptr & header, const KeyType &key, KeyNodePtrCompare comp)
-   {  return bstree_algorithms::upper_bound(header, key, comp);  }
+   {  return bstree_algo::upper_bound(header, key, comp);  }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::find(const const_node_ptr&, const KeyType&,KeyNodePtrCompare)
    //! Additional notes: the found node of the lower bound is splayed. The "splay" parameter which indicated if splaying
@@ -295,7 +295,7 @@ class splaytree_algorithms
    {
       if(splay) splay_down(detail::uncast(header), key, comp);
       node_ptr end = detail::uncast(header);
-      node_ptr y = bstree_algorithms::lower_bound(header, key, comp);
+      node_ptr y = bstree_algo::lower_bound(header, key, comp);
       node_ptr r = (y == end || comp(key, y)) ? end : y;
       return r;
    }
@@ -305,7 +305,7 @@ class splaytree_algorithms
    template<class KeyType, class KeyNodePtrCompare>
    static node_ptr find
       (const const_node_ptr & header, const KeyType &key, KeyNodePtrCompare comp)
-   {  return bstree_algorithms::find(header, key, comp);  }
+   {  return bstree_algo::find(header, key, comp);  }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::equal_range(const const_node_ptr&,const KeyType&,KeyNodePtrCompare)
    //! Additional notes: the first node of the range is splayed. The "splay" parameter which indicated if splaying
@@ -315,7 +315,7 @@ class splaytree_algorithms
       (const node_ptr & header, const KeyType &key, KeyNodePtrCompare comp, bool splay = true)
    {
       //splay_down(detail::uncast(header), key, comp);
-      std::pair<node_ptr, node_ptr> ret = bstree_algorithms::equal_range(header, key, comp);
+      std::pair<node_ptr, node_ptr> ret = bstree_algo::equal_range(header, key, comp);
       if(splay) splay_up(ret.first, detail::uncast(header));
       return ret;
    }
@@ -325,7 +325,7 @@ class splaytree_algorithms
    template<class KeyType, class KeyNodePtrCompare>
    static std::pair<node_ptr, node_ptr> equal_range
       (const const_node_ptr & header, const KeyType &key, KeyNodePtrCompare comp)
-   {  return bstree_algorithms::equal_range(header, key, comp);  }
+   {  return bstree_algo::equal_range(header, key, comp);  }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::bounded_range(const const_node_ptr&,const KeyType&,const KeyType&,KeyNodePtrCompare,bool,bool)
    //! Additional notes: the first node of the range is splayed. The "splay" parameter which indicated if splaying
@@ -336,7 +336,7 @@ class splaytree_algorithms
       , bool left_closed, bool right_closed, bool splay = true)
    {
       std::pair<node_ptr, node_ptr> ret =
-         bstree_algorithms::bounded_range(header, lower_key, upper_key, comp, left_closed, right_closed);
+         bstree_algo::bounded_range(header, lower_key, upper_key, comp, left_closed, right_closed);
       if(splay) splay_up(ret.first, detail::uncast(header));
       return ret;
    }
@@ -347,7 +347,7 @@ class splaytree_algorithms
    static std::pair<node_ptr, node_ptr> bounded_range
       (const const_node_ptr & header, const KeyType &lower_key, const KeyType &upper_key, KeyNodePtrCompare comp
       , bool left_closed, bool right_closed)
-   {  return bstree_algorithms::bounded_range(header, lower_key, upper_key, comp, left_closed, right_closed);  }
+   {  return bstree_algo::bounded_range(header, lower_key, upper_key, comp, left_closed, right_closed);  }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::insert_equal_upper_bound(const node_ptr&,const node_ptr&,NodePtrCompare)
    //! Additional note: the inserted node is splayed
@@ -356,7 +356,7 @@ class splaytree_algorithms
       (const node_ptr & header, const node_ptr & new_node, NodePtrCompare comp)
    {
       splay_down(header, new_node, comp);
-      return bstree_algorithms::insert_equal_upper_bound(header, new_node, comp);
+      return bstree_algo::insert_equal_upper_bound(header, new_node, comp);
    }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::insert_equal_lower_bound(const node_ptr&,const node_ptr&,NodePtrCompare)
@@ -366,7 +366,7 @@ class splaytree_algorithms
       (const node_ptr & header, const node_ptr & new_node, NodePtrCompare comp)
    {
       splay_down(header, new_node, comp);
-      return bstree_algorithms::insert_equal_lower_bound(header, new_node, comp);
+      return bstree_algo::insert_equal_lower_bound(header, new_node, comp);
    }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::insert_equal(const node_ptr&,const node_ptr&,const node_ptr&,NodePtrCompare)
@@ -376,7 +376,7 @@ class splaytree_algorithms
       (const node_ptr & header, const node_ptr & hint, const node_ptr & new_node, NodePtrCompare comp)
    {
       splay_down(header, new_node, comp);
-      return bstree_algorithms::insert_equal(header, hint, new_node, comp);
+      return bstree_algo::insert_equal(header, hint, new_node, comp);
    }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::insert_before(const node_ptr&,const node_ptr&,const node_ptr&)
@@ -384,7 +384,7 @@ class splaytree_algorithms
    static node_ptr insert_before
       (const node_ptr & header, const node_ptr & pos, const node_ptr & new_node)
    {
-      bstree_algorithms::insert_before(header, pos, new_node);
+      bstree_algo::insert_before(header, pos, new_node);
       splay_up(new_node, header);
       return new_node;
    }
@@ -393,7 +393,7 @@ class splaytree_algorithms
    //! Additional note: the inserted node is splayed
    static void push_back(const node_ptr & header, const node_ptr & new_node)
    {
-      bstree_algorithms::push_back(header, new_node);
+      bstree_algo::push_back(header, new_node);
       splay_up(new_node, header);
    }
 
@@ -401,7 +401,7 @@ class splaytree_algorithms
    //! Additional note: the inserted node is splayed
    static void push_front(const node_ptr & header, const node_ptr & new_node)
    {
-      bstree_algorithms::push_front(header, new_node);
+      bstree_algo::push_front(header, new_node);
       splay_up(new_node, header);
    }
 
@@ -413,7 +413,7 @@ class splaytree_algorithms
       ,KeyNodePtrCompare comp, insert_commit_data &commit_data)
    {
       splay_down(header, key, comp);
-      return bstree_algorithms::insert_unique_check(header, key, comp, commit_data);
+      return bstree_algo::insert_unique_check(header, key, comp, commit_data);
    }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::insert_unique_check(const const_node_ptr&,const node_ptr&,const KeyType&,KeyNodePtrCompare,insert_commit_data&)
@@ -424,7 +424,7 @@ class splaytree_algorithms
       ,KeyNodePtrCompare comp, insert_commit_data &commit_data)
    {
       splay_down(header, key, comp);
-      return bstree_algorithms::insert_unique_check(header, hint, key, comp, commit_data);
+      return bstree_algo::insert_unique_check(header, hint, key, comp, commit_data);
    }
 
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
@@ -513,7 +513,7 @@ class splaytree_algorithms
                if(NodeTraits::get_left(t) == node_ptr() )
                   break;
                if(comp(key, NodeTraits::get_left(t))){
-                  t = bstree_algorithms::rotate_right(t);
+                  t = bstree_algo::rotate_right(t);
 
                   if(NodeTraits::get_left(t) == node_ptr())
                      break;
@@ -535,7 +535,7 @@ class splaytree_algorithms
                   break;
 
                if(comp(NodeTraits::get_right(t), key)){
-                     t = bstree_algorithms::rotate_left( t );
+                     t = bstree_algo::rotate_left( t );
 
                      if(NodeTraits::get_right(t) == node_ptr() )
                         break;
@@ -628,7 +628,7 @@ class splaytree_algorithms
       node_ptr g = NodeTraits::get_parent(p);
       //Test if g is header before breaking tree
       //invariants that would make is_header invalid
-      bool g_is_header = bstree_algorithms::is_header(g);
+      bool g_is_header = bstree_algo::is_header(g);
 
       if(NodeTraits::get_left(p) == n){
          NodeTraits::set_left(p, NodeTraits::get_right(n));

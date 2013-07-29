@@ -81,6 +81,8 @@ class treap_algorithms
    /// @cond
    private:
 
+   typedef bstree_algorithms<NodeTraits>  bstree_algo;
+
    class rerotate_on_destroy
    {
       rerotate_on_destroy& operator=(const rerotate_on_destroy&);
@@ -113,15 +115,13 @@ class treap_algorithms
          ; p_parent = NodeTraits::get_parent(p)){
          //Check if left child
          if(p == NodeTraits::get_left(p_parent)){
-            bstree_algorithms::rotate_right(p_parent, header);
+            bstree_algo::rotate_right(p_parent, header);
          }
          else{ //Right child
-            bstree_algorithms::rotate_left(p_parent, header);
+            bstree_algo::rotate_left(p_parent, header);
          }
       }
    }
-
-   typedef bstree_algorithms<NodeTraits>  bstree_algorithms;
 
    /// @endcond
 
@@ -130,7 +130,7 @@ class treap_algorithms
    //! filled by insert_unique_check
    struct insert_commit_data
       /// @cond
-      :  public bstree_algorithms::insert_commit_data
+      :  public bstree_algo::insert_commit_data
       /// @endcond
    {
       /// @cond
@@ -171,7 +171,7 @@ class treap_algorithms
    {
       node_ptr x = NodeTraits::get_parent(node);
       if(x){
-         while(!bstree_algorithms::is_header(x))
+         while(!bstree_algo::is_header(x))
             x = NodeTraits::get_parent(x);
          erase(x, node, pcomp);
       }
@@ -205,7 +205,7 @@ class treap_algorithms
    static node_ptr erase(const node_ptr & header, const node_ptr & z, NodePtrPriorityCompare pcomp)
    {
       rebalance_for_erasure(header, z, pcomp);
-      bstree_algorithms::erase(header, z);
+      bstree_algo::erase(header, z);
       return z;
    }
 
@@ -270,7 +270,7 @@ class treap_algorithms
       (const node_ptr & h, const node_ptr & new_node, NodePtrCompare comp, NodePtrPriorityCompare pcomp)
    {
       insert_commit_data commit_data;
-      bstree_algorithms::insert_equal_upper_bound_check(h, new_node, comp, commit_data);
+      bstree_algo::insert_equal_upper_bound_check(h, new_node, comp, commit_data);
       rebalance_check_and_commit(h, new_node, pcomp, commit_data);
       return new_node;
    }
@@ -295,7 +295,7 @@ class treap_algorithms
       (const node_ptr & h, const node_ptr & new_node, NodePtrCompare comp, NodePtrPriorityCompare pcomp)
    {
       insert_commit_data commit_data;
-      bstree_algorithms::insert_equal_lower_bound_check(h, new_node, comp, commit_data);
+      bstree_algo::insert_equal_lower_bound_check(h, new_node, comp, commit_data);
       rebalance_check_and_commit(h, new_node, pcomp, commit_data);
       return new_node;
    }
@@ -323,7 +323,7 @@ class treap_algorithms
       (const node_ptr & h, const node_ptr & hint, const node_ptr & new_node, NodePtrCompare comp, NodePtrPriorityCompare pcomp)
    {
       insert_commit_data commit_data;
-      bstree_algorithms::insert_equal_check(h, hint, new_node, comp, commit_data);
+      bstree_algo::insert_equal_check(h, hint, new_node, comp, commit_data);
       rebalance_check_and_commit(h, new_node, pcomp, commit_data);
       return new_node;
    }
@@ -351,7 +351,7 @@ class treap_algorithms
       (const node_ptr & header, const node_ptr & pos, const node_ptr & new_node, NodePtrPriorityCompare pcomp)
    {
       insert_commit_data commit_data;
-      bstree_algorithms::insert_before_check(header, pos, commit_data);
+      bstree_algo::insert_before_check(header, pos, commit_data);
       rebalance_check_and_commit(header, new_node, pcomp, commit_data);
       return new_node;
    }
@@ -377,7 +377,7 @@ class treap_algorithms
    static void push_back(const node_ptr & header, const node_ptr & new_node, NodePtrPriorityCompare pcomp)
    {
       insert_commit_data commit_data;
-      bstree_algorithms::push_back_check(header, commit_data);
+      bstree_algo::push_back_check(header, commit_data);
       rebalance_check_and_commit(header, new_node, pcomp, commit_data);
    }
 
@@ -402,7 +402,7 @@ class treap_algorithms
    static void push_front(const node_ptr & header, const node_ptr & new_node, NodePtrPriorityCompare pcomp)
    {
       insert_commit_data commit_data;
-      bstree_algorithms::push_front_check(header, commit_data);
+      bstree_algo::push_front_check(header, commit_data);
       rebalance_check_and_commit(header, new_node, pcomp, commit_data);
    }
 
@@ -447,7 +447,7 @@ class treap_algorithms
       ,insert_commit_data &commit_data)
    {
       std::pair<node_ptr, bool> ret =
-         bstree_algorithms::insert_unique_check(header, key, comp, commit_data);
+         bstree_algo::insert_unique_check(header, key, comp, commit_data);
       if(ret.second)
          rebalance_after_insertion_check(header, commit_data.node, key, pcomp, commit_data.rotations);
       return ret;
@@ -498,7 +498,7 @@ class treap_algorithms
       ,KeyNodePtrCompare comp, KeyNodePtrPrioCompare pcomp, insert_commit_data &commit_data)
    {
       std::pair<node_ptr, bool> ret =
-         bstree_algorithms::insert_unique_check(header, hint, key, comp, commit_data);
+         bstree_algo::insert_unique_check(header, hint, key, comp, commit_data);
       if(ret.second)
          rebalance_after_insertion_check(header, commit_data.node, key, pcomp, commit_data.rotations);
       return ret;
@@ -524,7 +524,7 @@ class treap_algorithms
    static void insert_unique_commit
       (const node_ptr & header, const node_ptr & new_node, const insert_commit_data &commit_data)
    {
-      bstree_algorithms::insert_unique_commit(header, new_node, commit_data);
+      bstree_algo::insert_unique_commit(header, new_node, commit_data);
       rebalance_after_insertion_commit(header, new_node, commit_data.rotations);
    }
 
@@ -547,10 +547,10 @@ class treap_algorithms
       node_ptr z_right = NodeTraits::get_right(z);
       while(z_left || z_right){
          if(!z_right || (z_left && pcomp(z_left, z_right))){
-            bstree_algorithms::rotate_right(z, header);
+            bstree_algo::rotate_right(z, header);
          }
          else{
-            bstree_algorithms::rotate_left(z, header);
+            bstree_algo::rotate_left(z, header);
          }
          ++n;
          z_left  = NodeTraits::get_left(z);
@@ -565,7 +565,7 @@ class treap_algorithms
    {
       rebalance_after_insertion_check(h, commit_data.node, new_node, pcomp, commit_data.rotations);
       //No-throw
-      bstree_algorithms::insert_unique_commit(h, new_node, commit_data);
+      bstree_algo::insert_unique_commit(h, new_node, commit_data);
       rebalance_after_insertion_commit(h, new_node, commit_data.rotations);
    }
 
@@ -594,10 +594,10 @@ class treap_algorithms
          ; p_parent = NodeTraits::get_parent(p)){
          //Check if left child
          if(p == NodeTraits::get_left(p_parent)){
-            bstree_algorithms::rotate_right(p_parent, header);
+            bstree_algo::rotate_right(p_parent, header);
          }
          else{ //Right child
-            bstree_algorithms::rotate_left(p_parent, header);
+            bstree_algo::rotate_left(p_parent, header);
          }
       }
    }

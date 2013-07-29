@@ -542,12 +542,12 @@ class treap_impl
       , KeyValuePrioCompare key_value_pcomp, insert_commit_data &commit_data)
    {
       detail::key_nodeptr_comp<KeyValueCompare, real_value_traits>
-         comp(key_value_comp, &this->get_real_value_traits());
+         ocomp(key_value_comp, &this->get_real_value_traits());
       detail::key_nodeptr_comp<KeyValuePrioCompare, real_value_traits>
          pcomp(key_value_pcomp, &this->get_real_value_traits());
       std::pair<node_ptr, bool> ret =
          (node_algorithms::insert_unique_check
-            (this->tree_type::header_ptr(), key, comp, pcomp, commit_data));
+            (this->tree_type::header_ptr(), key, ocomp, pcomp, commit_data));
       return std::pair<iterator, bool>(iterator(ret.first, this->real_value_traits_ptr()), ret.second);
    }
 
@@ -594,12 +594,12 @@ class treap_impl
       , insert_commit_data &commit_data)
    {
       detail::key_nodeptr_comp<KeyValueCompare, real_value_traits>
-         comp(key_value_comp, &this->get_real_value_traits());
+         ocomp(key_value_comp, &this->get_real_value_traits());
       detail::key_nodeptr_comp<KeyValuePrioCompare, real_value_traits>
          pcomp(key_value_pcomp, &this->get_real_value_traits());
       std::pair<node_ptr, bool> ret =
          (node_algorithms::insert_unique_check
-            (this->tree_type::header_ptr(), hint.pointed_node(), key, comp, pcomp, commit_data));
+            (this->tree_type::header_ptr(), hint.pointed_node(), key, ocomp, pcomp, commit_data));
       return std::pair<iterator, bool>(iterator(ret.first, this->real_value_traits_ptr()), ret.second);
    }
 

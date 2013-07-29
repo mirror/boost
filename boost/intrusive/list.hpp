@@ -174,7 +174,7 @@ class list_impl
    real_value_traits &get_real_value_traits()
    {  return this->get_real_value_traits(detail::bool_<external_value_traits>());  }
 
-   typedef typename pointer_traits<node_ptr>::template rebind_pointer<const real_value_traits>::type const_real_value_traits_ptr;
+   typedef typename pointer_traits<node_ptr>::template rebind_pointer<real_value_traits const>::type const_real_value_traits_ptr;
 
    const_real_value_traits_ptr real_value_traits_ptr() const
    {  return pointer_traits<const_real_value_traits_ptr>::pointer_to(this->get_real_value_traits());  }

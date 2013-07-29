@@ -45,6 +45,10 @@ template <typename T> struct unvoid { typedef T type; };
 template <> struct unvoid<void> { struct type { }; };
 template <> struct unvoid<const void> { struct type { }; };
 
+template <typename T> struct unvoid_ref { typedef T &type; };
+template <> struct unvoid_ref<void> { struct type_impl { }; typedef type_impl & type; };
+template <> struct unvoid_ref<const void> { struct type_impl { }; typedef type_impl & type; };
+
 template <typename T>
 struct LowPriorityConversion
 {

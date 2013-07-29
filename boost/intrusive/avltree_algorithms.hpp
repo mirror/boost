@@ -112,14 +112,14 @@ class avltree_algorithms
 
    /// @cond
    private:
-   typedef bstree_algorithms<NodeTraits>  bstree_algorithms;
+   typedef bstree_algorithms<NodeTraits>  bstree_algo;
 
    /// @endcond
 
    public:
    //! This type is the information that will be
    //! filled by insert_unique_check
-   typedef typename bstree_algorithms::insert_commit_data insert_commit_data;
+   typedef typename bstree_algo::insert_commit_data insert_commit_data;
 
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 
@@ -143,7 +143,7 @@ class avltree_algorithms
       if(node1 == node2)
          return;
 
-      node_ptr header1(bstree_algorithms::get_header(node1)), header2(bstree_algorithms::get_header(node2));
+      node_ptr header1(bstree_algo::get_header(node1)), header2(bstree_algo::get_header(node2));
       swap_nodes(node1, header1, node2, header2);
    }
 
@@ -152,7 +152,7 @@ class avltree_algorithms
    {
       if(node1 == node2)   return;
 
-      bstree_algorithms::swap_nodes(node1, header1, node2, header2);
+      bstree_algo::swap_nodes(node1, header1, node2, header2);
       //Swap balance
       balance c = NodeTraits::get_balance(node1);
       NodeTraits::set_balance(node1, NodeTraits::get_balance(node2));
@@ -164,13 +164,13 @@ class avltree_algorithms
    {
       if(node_to_be_replaced == new_node)
          return;
-      replace_node(node_to_be_replaced, bstree_algorithms::get_header(node_to_be_replaced), new_node);
+      replace_node(node_to_be_replaced, bstree_algo::get_header(node_to_be_replaced), new_node);
    }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::replace_node(const node_ptr&,const node_ptr&,const node_ptr&)
    static void replace_node(const node_ptr & node_to_be_replaced, const node_ptr & header, const node_ptr & new_node)
    {
-      bstree_algorithms::replace_node(node_to_be_replaced, header, new_node);
+      bstree_algo::replace_node(node_to_be_replaced, header, new_node);
       NodeTraits::set_balance(new_node, NodeTraits::get_balance(node_to_be_replaced));
    }
 
@@ -217,15 +217,15 @@ class avltree_algorithms
    //! <b>Nodes</b>: If node is inserted in a tree, this function corrupts the tree.
    static void init_header(const node_ptr & header)
    {
-      bstree_algorithms::init_header(header);
+      bstree_algo::init_header(header);
       NodeTraits::set_balance(header, NodeTraits::zero());
    }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::erase(const node_ptr&,const node_ptr&)
    static node_ptr erase(const node_ptr & header, const node_ptr & z)
    {
-      typename bstree_algorithms::data_for_rebalance info;
-      bstree_algorithms::erase(header, z, avltree_erase_fixup<NodeTraits>(), info);
+      typename bstree_algo::data_for_rebalance info;
+      bstree_algo::erase(header, z, avltree_erase_fixup<NodeTraits>(), info);
       //Rebalance avltree
       rebalance_after_erasure(header, info.x, info.x_parent);
       return z;
@@ -237,7 +237,7 @@ class avltree_algorithms
       (const const_node_ptr & source_header, const node_ptr & target_header, Cloner cloner, Disposer disposer)
    {
       avltree_node_cloner<NodeTraits, Cloner> new_cloner(cloner);
-      bstree_algorithms::clone(source_header, target_header, new_cloner, disposer);
+      bstree_algo::clone(source_header, target_header, new_cloner, disposer);
    }
 
    #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
@@ -281,7 +281,7 @@ class avltree_algorithms
    static node_ptr insert_equal_upper_bound
       (const node_ptr & h, const node_ptr & new_node, NodePtrCompare comp)
    {
-      bstree_algorithms::insert_equal_upper_bound(h, new_node, comp);
+      bstree_algo::insert_equal_upper_bound(h, new_node, comp);
       rebalance_after_insertion(h, new_node);
       return new_node;
    }
@@ -291,7 +291,7 @@ class avltree_algorithms
    static node_ptr insert_equal_lower_bound
       (const node_ptr & h, const node_ptr & new_node, NodePtrCompare comp)
    {
-      bstree_algorithms::insert_equal_lower_bound(h, new_node, comp);
+      bstree_algo::insert_equal_lower_bound(h, new_node, comp);
       rebalance_after_insertion(h, new_node);
       return new_node;
    }
@@ -301,7 +301,7 @@ class avltree_algorithms
    static node_ptr insert_equal
       (const node_ptr & header, const node_ptr & hint, const node_ptr & new_node, NodePtrCompare comp)
    {
-      bstree_algorithms::insert_equal(header, hint, new_node, comp);
+      bstree_algo::insert_equal(header, hint, new_node, comp);
       rebalance_after_insertion(header, new_node);
       return new_node;
    }
@@ -310,7 +310,7 @@ class avltree_algorithms
    static node_ptr insert_before
       (const node_ptr & header, const node_ptr & pos, const node_ptr & new_node)
    {
-      bstree_algorithms::insert_before(header, pos, new_node);
+      bstree_algo::insert_before(header, pos, new_node);
       rebalance_after_insertion(header, new_node);
       return new_node;
    }
@@ -318,14 +318,14 @@ class avltree_algorithms
    //! @copydoc ::boost::intrusive::bstree_algorithms::push_back(const node_ptr&,const node_ptr&)
    static void push_back(const node_ptr & header, const node_ptr & new_node)
    {
-      bstree_algorithms::push_back(header, new_node);
+      bstree_algo::push_back(header, new_node);
       rebalance_after_insertion(header, new_node);
    }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::push_front(const node_ptr&,const node_ptr&)
    static void push_front(const node_ptr & header, const node_ptr & new_node)
    {
-      bstree_algorithms::push_front(header, new_node);
+      bstree_algo::push_front(header, new_node);
       rebalance_after_insertion(header, new_node);
    }
 
@@ -347,13 +347,13 @@ class avltree_algorithms
    static void insert_unique_commit
       (const node_ptr & header, const node_ptr & new_value, const insert_commit_data &commit_data)
    {
-      bstree_algorithms::insert_unique_commit(header, new_value, commit_data);
+      bstree_algo::insert_unique_commit(header, new_value, commit_data);
       rebalance_after_insertion(header, new_value);
    }
 
    //! @copydoc ::boost::intrusive::bstree_algorithms::is_header
    static bool is_header(const const_node_ptr & p)
-   {  return NodeTraits::get_balance(p) == NodeTraits::zero() && bstree_algorithms::is_header(p);  }
+   {  return NodeTraits::get_balance(p) == NodeTraits::zero() && bstree_algo::is_header(p);  }
 
 
    /// @cond
@@ -516,8 +516,8 @@ class avltree_algorithms
       //           / \                                         //
       //          e   f                                        //
       node_ptr b = NodeTraits::get_left(a), c = NodeTraits::get_right(b);
-      bstree_algorithms::rotate_left(b, hdr);
-      bstree_algorithms::rotate_right(a, hdr);
+      bstree_algo::rotate_left(b, hdr);
+      bstree_algo::rotate_right(a, hdr);
       left_right_balancing(a, b, c);
    }
 
@@ -533,15 +533,15 @@ class avltree_algorithms
       //             / \                                          //
       //            e   f                                         //
       node_ptr b = NodeTraits::get_right(a), c = NodeTraits::get_left(b);
-      bstree_algorithms::rotate_right(b, hdr);
-      bstree_algorithms::rotate_left(a, hdr);
+      bstree_algo::rotate_right(b, hdr);
+      bstree_algo::rotate_left(a, hdr);
       left_right_balancing(b, a, c);
    }
 
    static void rotate_left(const node_ptr x, const node_ptr & hdr)
    {
       const node_ptr y = NodeTraits::get_right(x);
-      bstree_algorithms::rotate_left(x, hdr);
+      bstree_algo::rotate_left(x, hdr);
 
       // reset the balancing factor
       if (NodeTraits::get_balance(y) == NodeTraits::positive()) {
@@ -557,7 +557,7 @@ class avltree_algorithms
    static void rotate_right(const node_ptr x, const node_ptr & hdr)
    {
       const node_ptr y = NodeTraits::get_left(x);
-      bstree_algorithms::rotate_right(x, hdr);
+      bstree_algo::rotate_right(x, hdr);
 
       // reset the balancing factor
       if (NodeTraits::get_balance(y) == NodeTraits::negative()) {

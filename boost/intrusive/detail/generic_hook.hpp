@@ -81,7 +81,7 @@ template
    , link_mode_type LinkMode
    , base_hook_type BaseHookType
    >
-struct hooktags
+struct hooktags_impl
 {
    static const link_mode_type link_mode = LinkMode;
    typedef Tag tag;
@@ -129,7 +129,7 @@ class generic_hook
 
    public:
 
-   typedef hooktags
+   typedef hooktags_impl
       < typename GetNodeAlgorithms::type::node_traits
       , Tag, LinkMode, BaseHookType>                  hooktags;
 
