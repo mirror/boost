@@ -802,7 +802,8 @@ Many thanks to all boosters that have tested, reviewed and improved the library.
 
 
 *  Fixed bugs [@https://svn.boost.org/trac/boost/ticket/7969 #7969],
-              [@https://svn.boost.org/trac/boost/ticket/8231 #8231].
+              [@https://svn.boost.org/trac/boost/ticket/8231 #8231],
+              [@https://svn.boost.org/trac/boost/ticket/8765 #8765].
 
 [endsect]
 
