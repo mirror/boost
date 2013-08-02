@@ -92,6 +92,8 @@
 #  elif defined(__GNUC__) && __GNUC__ >= 3
 #    if defined(BOOST_TR1_GCC_INCLUDE_PATH)
 #      define BOOST_TR1_STD_HEADER(name) <../BOOST_TR1_GCC_INCLUDE_PATH/name>
+#    elif (defined(__FreeBSD__))
+#      define BOOST_TR1_STD_HEADER(name) <../__GNUC__.__GNUC_MINOR__/name>
 #    elif ( (__GNUC__ == 3 ) && ((__GNUC_MINOR__ == 0) || ((__GNUC_MINOR__ < 3) && defined(__APPLE_CC__))))
 #      define BOOST_TR1_STD_HEADER(name) <../g++-v3/name>
 #    else
@@ -114,7 +116,7 @@
 #    endif
 
 #      if !defined(BOOST_TR1_DISABLE_INCLUDE_NEXT) && !defined(__ICC) \
-            && (defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__))
+            && (defined(__FreeBSD__) || defined(linux) || defined(__linux) || defined(__linux__) || defined(__GNU__) || defined(__GLIBC__))
          // Disable use of #include_next on Linux as typically we are installed in a directory that is searched
          // *after* the std lib include path:
 #        define BOOST_TR1_DISABLE_INCLUDE_NEXT
