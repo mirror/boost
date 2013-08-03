@@ -90,9 +90,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has_not3>::value, fals
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has_not4>::value, false);
 
 // Requires some basic support from Boost.Move in C++03
-#ifndef BOOST_NO_CXX11_DELETED_FUNCTIONS // TODO: remove when Boost.Move will be patched
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has_not5>::value, false);
-#endif
 
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<bool>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<bool const>::value, true);
