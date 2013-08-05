@@ -279,3 +279,14 @@ A <emphasis>paragraph</emphasis>.
 [named_index things Things]
 
 [endsect]
+
+[/-------------------------------- Skipping template body ]
+
+[section:template_body Skipping the template body correctly]
+
+[template args1[x] [`x]]
+
+[args1 <emphasis>Argument</emphasis>]
+
+
+[endsect]

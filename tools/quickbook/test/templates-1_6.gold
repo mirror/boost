@@ -235,4 +235,11 @@
       <index type="things"><title>Things</title></index>
     </para>
   </section>
+  <section id="template_1_6.template_body">
+    <title><link linkend="template_1_6.template_body">Skipping the template body
+    correctly</link></title>
+    <para>
+      <emphasis>Argument</emphasis>
+    </para>
+  </section>
 </article>
