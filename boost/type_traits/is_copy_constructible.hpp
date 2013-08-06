@@ -27,8 +27,15 @@ namespace detail{
 template <bool DerivedFromNoncopyable, class T>
 struct is_copy_constructible_impl2 {
 #ifndef BOOST_NO_CXX11_DELETED_FUNCTIONS
+
+#ifdef BOOST_NO_CXX11_DECLTYPE
     template <class T1>
     static boost::type_traits::yes_type test(T1&, boost::mpl::int_<sizeof(T1(boost::declval<T1&>()))>* = 0);
+#else
+    template <class T1>
+    static boost::type_traits::yes_type test(T1&, decltype(T1(boost::declval<T1&>()))* = 0);
+#endif
+
     static boost::type_traits::no_type test(...);
 #else
     template <class T1>
