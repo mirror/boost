@@ -8,7 +8,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 #ifndef BOOST_PREDEF_DETAIL_ENDIAN_COMPAT_H
 #define BOOST_PREDEF_DETAIL_ENDIAN_COMPAT_H
 
-#include <boost/predef/endian.h>
+#include <boost/predef/other/endian.h>
 
 #if BOOST_ENDIAN_BIG_BYTE
 #   define BOOST_BIG_ENDIAN
