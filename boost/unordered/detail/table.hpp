@@ -456,6 +456,8 @@ namespace boost { namespace unordered { namespace detail {
 
         void swap_allocators(table& other, false_type)
         {
+            boost::unordered::detail::ignore_unused_variable_warning(other);
+
             // According to 23.2.1.8, if propagate_on_container_swap is
             // false the behaviour is undefined unless the allocators
             // are equal.
