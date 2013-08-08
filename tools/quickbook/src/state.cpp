@@ -39,6 +39,8 @@ namespace quickbook
         , ids(ids)
         , callouts()
         , callout_depth(0)
+        , dependencies()
+        , in_list(false)
 
         , imported(false)
         , macro()

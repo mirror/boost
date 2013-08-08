@@ -310,29 +310,29 @@
       </simpara>
     </listitem>
     <listitem>
+      <informaltable frame="all">
+        <tgroup cols="1">
+          <thead>
+            <row>
+              <entry>
+                <simpara>
+                  Heading
+                </simpara>
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>
+                <simpara>
+                  Cell
+                </simpara>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
       <simpara>
-        <informaltable frame="all">
-          <tgroup cols="1">
-            <thead>
-              <row>
-                <entry>
-                  <para>
-                    Heading
-                  </para>
-                </entry>
-              </row>
-            </thead>
-            <tbody>
-              <row>
-                <entry>
-                  <para>
-                    Cell
-                  </para>
-                </entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
         Some text.
       </simpara>
     </listitem>
@@ -343,17 +343,17 @@
     </listitem>
     <listitem>
       <simpara>
-        <para>
-          Paragraph cheat 1.
-        </para>
+        Paragraph cheat 1.
+      </simpara>
+      <simpara>
         Paragraph cheat 2.
       </simpara>
     </listitem>
     <listitem>
       <simpara>
-        <para>
-          Paragraph cheat 3.
-        </para>
+        Paragraph cheat 3.
+      </simpara>
+      <simpara>
         Paragraph cheat 4.
       </simpara>
     </listitem>

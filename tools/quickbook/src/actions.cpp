@@ -322,27 +322,13 @@ namespace quickbook
         while(pos != end && cl::space_p.test(*pos)) ++pos;
 
         if(pos != end) {
-            detail::markup markup = detail::get_markup(block_tags::paragraph);
+            detail::markup markup = state.in_list ?
+                detail::get_markup(block_tags::paragraph_in_list) :
+                detail::get_markup(block_tags::paragraph);
             state.out << markup.pre << str;
             write_anchors(state, state.out);
             state.out << markup.post;
         }
-    }
-
-    void list_item_action::operator()() const
-    {
-        // Be careful as this is sometimes called in the wrong place
-        // for markup such as:
-        //
-        // * A
-        // [endsect]
-        //
-        // This action is called before [endsect] (to end the list item)
-        // and then also after it due to the way the parser works.
-        std::string str;
-        state.phrase.swap(str);
-        state.out << str;
-        write_anchors(state, state.out);
     }
 
     void phrase_end_action::operator()() const
@@ -522,8 +508,10 @@ namespace quickbook
 
     void state::start_list(char mark)
     {
-        write_anchors(*this, out);
+        write_anchors(*this, (in_list ? phrase : out));
         assert(mark == '*' || mark == '#');
+        phrase.push();
+        out.push();
         out << ((mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
     }
 
@@ -532,18 +520,28 @@ namespace quickbook
         write_anchors(*this, out);
         assert(mark == '*' || mark == '#');
         out << ((mark == '#') ? "\n</orderedlist>" : "\n</itemizedlist>");
+
+        std::string list_output;
+        out.swap(list_output);
+
+        out.pop();
+        phrase.pop();
+
+        (in_list ? phrase : out) << list_output;
     }
 
     void state::start_list_item()
     {
-        out << "<listitem><simpara>";
-        write_anchors(*this, out);
+        out << "<listitem>";
+        write_anchors(*this, phrase);
     }
 
     void state::end_list_item()
     {
-        write_anchors(*this, out);
-        out << "</simpara></listitem>";
+        write_anchors(*this, phrase);
+        paragraph_action para(*this);
+        para();
+        out << "</listitem>";
     }
 
     namespace

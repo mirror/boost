@@ -160,6 +160,16 @@ namespace quickbook
             , mark('\0')
             , state_(state)
             {}
+
+        void push_list_item(list_stack_item const& item) {
+            list_stack.push(item);
+            state_.in_list = !list_stack.top().root;
+        }
+
+        void pop_list_item() {
+            list_stack.pop();
+            state_.in_list = !list_stack.empty() && !list_stack.top().root;
+        }
     };
 
     struct process_element_impl : scoped_action_base {
@@ -252,7 +262,8 @@ namespace quickbook
             l(l) {}
 
         bool operator()() const {
-            return !l.list_stack.top().root;
+            //return !l.list_stack.top().root;
+            return l.state_.in_list;
         }
     };
 
@@ -300,7 +311,6 @@ namespace quickbook
         // Global Actions
         quickbook::element_action element_action(state);
         quickbook::paragraph_action paragraph_action(state);
-        quickbook::list_item_action list_item_action(state);
 
         phrase_end_action end_phrase(state);
         raw_char_action raw_char(state.phrase);
@@ -462,7 +472,10 @@ namespace quickbook
             ;
 
         local.paragraph =
-            scoped_context(element_info::in_top_level)
+                                                // Usually superfluous call
+                                                // for paragraphs in lists.
+            cl::eps_p                           [paragraph_action]
+        >>  scoped_context(element_info::in_top_level)
             [   scoped_still_in_block(true)
                 [   local.syntactic_block_item(element_info::is_contextual_block)
                 >>  *(  cl::eps_p(ph::var(local.still_in_block))
@@ -482,9 +495,7 @@ namespace quickbook
                         >>  local.syntactic_block_item(element_info::is_block)
                         )
                     ]
-                ]                               [list_item_action]
-                // TODO: `list_item_action` is sometimes called in the wrong
-                // place. Currently harmless.
+                ]
             ;
 
         local.syntactic_block_item =
@@ -1017,18 +1028,18 @@ namespace quickbook
 
     void main_grammar_local::start_blocks_impl(parse_iterator, parse_iterator)
     {
-        list_stack.push(list_stack_item(list_stack_item::top_root));
+        push_list_item(list_stack_item(list_stack_item::top_root));
     }
 
     void main_grammar_local::start_nested_blocks_impl(parse_iterator, parse_iterator)
     {
-        list_stack.push(list_stack_item(list_stack_item::nested_root));
+        push_list_item(list_stack_item(list_stack_item::nested_root));
     }
 
     void main_grammar_local::end_blocks_impl(parse_iterator, parse_iterator)
     {
         clear_stack();
-        list_stack.pop();
+        pop_list_item();
     }
 
     void main_grammar_local::check_indentation_impl(parse_iterator first_, parse_iterator last_)
@@ -1071,9 +1082,11 @@ namespace quickbook
             else {
                 while (!list_stack.top().root && new_indent < list_stack.top().indent)
                 {
+                    char mark = list_stack.top().mark;
+
                     state_.end_list_item();
-                    state_.end_list(list_stack.top().mark);
-                    list_stack.pop();
+                    pop_list_item();
+                    state_.end_list(mark);
                     list_indent = list_stack.top().indent;
                 }
 
@@ -1098,19 +1111,21 @@ namespace quickbook
                     //   Back to Level 1
                 
                     list_stack_item save = list_stack.top();
-                    list_stack.pop();
+                    pop_list_item();
 
                     assert(list_stack.top().root ?
                         new_indent >= list_stack.top().indent :
                         new_indent > list_stack.top().indent);
 
                     if (new_indent <= list_stack.top().indent2) {
+                        push_list_item(save);
                         state_.end_list_item();
+                        pop_list_item();
                         state_.end_list(save.mark);
                         list_indent = list_stack.top().indent;
                     }
                     else {
-                        list_stack.push(save);
+                        push_list_item(save);
                     }
                 }
 
@@ -1150,8 +1165,8 @@ namespace quickbook
         }
 
         if (list_stack.top().root || new_indent > list_indent) {
-            list_stack.push(list_stack_item(mark, new_indent, new_indent2));
             state_.start_list(mark);
+            push_list_item(list_stack_item(mark, new_indent, new_indent2));
         }
         else if (new_indent == list_indent) {
             state_.end_list_item();
@@ -1161,9 +1176,11 @@ namespace quickbook
             // has indentation 0.
             while(!list_stack.top().root && new_indent < list_stack.top().indent)
             {
+                char mark = list_stack.top().mark;
+
                 state_.end_list_item();
-                state_.end_list(list_stack.top().mark);
-                list_stack.pop();
+                pop_list_item();
+                state_.end_list(mark);
             }
 
             state_.end_list_item();
@@ -1187,9 +1204,11 @@ namespace quickbook
     void main_grammar_local::clear_stack()
     {
         while (!list_stack.top().root) {
+            char mark = list_stack.top().mark;
+
             state_.end_list_item();
-            state_.end_list(list_stack.top().mark);
-            list_stack.pop();
+            pop_list_item();
+            state_.end_list(mark);
         }
     }
 }
