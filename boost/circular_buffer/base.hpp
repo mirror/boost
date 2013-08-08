@@ -174,19 +174,17 @@ public:
 
 // Helper types
 
-    // A type representing the "best" way to pass the value_type to a method.
-    //typedef typename call_traits<value_type>::param_type param_value_type;
+    //! A type representing the "best" way to pass the value_type to a method.
     typedef const value_type& param_value_type;
 
-    // A type representing the "best" way to return the value_type from a const method.
-    //typedef typename call_traits<value_type>::param_type return_value_type;
-
-    // A type representing rvalue from param type.
+    //! A type representing rvalue from param type.
+    //! On compilers without rvalue references support this type is the Boost.Moves type used for emulation.
     typedef BOOST_RV_REF(value_type) rvalue_type;
 
 private:
 
     // TODO: move to Boost.Move
+    /*! \cond */
     template <class ValT> 
     static inline typename boost::conditional<
         (boost::is_nothrow_move_constructible<ValT>::value || !boost::is_copy_constructible<ValT>::value)
@@ -199,6 +197,7 @@ private:
     >::type move_if_noexcept(ValT& value) BOOST_NOEXCEPT {
         return boost::move(value);
     }
+    /*! \endcond */
 
 // Member variables
 
@@ -654,8 +653,7 @@ public:
         This method can be useful when passing the stored data into a legacy C API as an array.
         \post <code>\&(*this)[0] \< \&(*this)[1] \< ... \< \&(*this)[size() - 1]</code>
         \return A pointer to the beginning of the array or <code>0</code> if empty.
-        \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \throws <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
@@ -747,8 +745,7 @@ public:
               <code>val_0 == (*this)[0] \&\& val_1 == (*this)[1] \&\& ... \&\& val_m == (*this)[m - 1] \&\& val_r1 ==
               (*this)[m + n - 1] \&\& val_r2 == (*this)[m + n - 2] \&\& ... \&\& val_rn == (*this)[m]</code>
         \param new_begin The new beginning.
-        \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \throws See <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the <code>circular_buffer</code> is full or <code>new_begin</code> points to
              <code>begin()</code> or if the operations in the <i>Throws</i> section do not throw anything.
@@ -886,7 +883,7 @@ public:
         \param new_capacity The new capacity.
         \throws "An allocation error" if memory is exhausted, (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws or nothing if <code>T::T(T&&)</code> is noexcept.
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
@@ -927,7 +924,7 @@ public:
                     size. (See the <i>Effect</i>.)
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws or nothing if <code>T::T(T&&)</code> is noexcept.
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
@@ -962,7 +959,7 @@ public:
         \param new_capacity The new capacity.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws or nothing if <code>T::T(T&&)</code> is noexcept.
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
@@ -1002,7 +999,7 @@ public:
                     size. (See the <i>Effect</i>.)
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws or nothing if <code>T::T(T&&)</code> is noexcept.
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
@@ -1073,7 +1070,7 @@ public:
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>n</code>).
     */
@@ -1094,7 +1091,7 @@ public:
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>n</code>).
     */
@@ -1114,7 +1111,7 @@ public:
         \param cb The <code>circular_buffer</code> to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the size of <code>cb</code>).
     */
@@ -1183,7 +1180,7 @@ public:
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in the <code>std::distance(first, last)</code>).
     */
@@ -1210,7 +1207,7 @@ public:
         \param alloc The allocator.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Complexity
              Linear (in <code>std::distance(first, last)</code>; in
              <code>min[capacity, std::distance(first, last)]</code> if the <code>InputIterator</code> is a
@@ -1253,7 +1250,7 @@ public:
         \param cb The <code>circular_buffer</code> to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Exception Safety
              Strong.
         \par Iterator Invalidation
@@ -1308,7 +1305,7 @@ public:
         \param item The element the <code>circular_buffer</code> will be filled with.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
@@ -1338,7 +1335,7 @@ public:
         \param item The element the <code>circular_buffer</code> will be filled with.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
@@ -1370,7 +1367,7 @@ public:
         \param last The end of the range to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
@@ -1407,7 +1404,7 @@ public:
         \param last The end of the range to be copied.
         \throws "An allocation error" if memory is exhausted (<code>std::bad_alloc</code> if the standard allocator is
                 used).
-        \throws Whatever <code>T::T(const T&)</code> throws.
+                Whatever <code>T::T(const T&)</code> throws.
         \par Exception Safety
              Basic.
         \par Iterator Invalidation
@@ -1504,7 +1501,7 @@ public:
               <code>0</code>, nothing will be inserted.
         \param item The element to be inserted.
         \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+                Whatever <code>T::operator = (const T&)</code> throws.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1525,7 +1522,7 @@ public:
               <code>0</code>, nothing will be inserted.
         \param item The element to be inserted.
         \throws Whatever <code>T::T(T&&)</code> throws.
-        \throws Whatever <code>T::operator = (T&&)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1545,8 +1542,8 @@ public:
               If the <code>circular_buffer</code> is full, the first element will be removed. If the capacity is
               <code>0</code>, nothing will be inserted.
         \throws Whatever <code>T::T()</code> throws.
-        \throws Whatever <code>T::T(T&&)</code> throws.
-        \throws Whatever <code>T::operator = (T&&)</code> throws.
+                Whatever <code>T::T(T&&)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1568,7 +1565,7 @@ public:
               <code>0</code>, nothing will be inserted.
         \param item The element to be inserted.
         \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+                Whatever <code>T::operator = (const T&)</code> throws.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1589,7 +1586,7 @@ public:
               <code>0</code>, nothing will be inserted.
         \param item The element to be inserted.
         \throws Whatever <code>T::T(T&&)</code> throws.
-        \throws Whatever <code>T::operator = (T&&)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1609,8 +1606,8 @@ public:
               If the <code>circular_buffer</code> is full, the last element will be removed. If the capacity is
               <code>0</code>, nothing will be inserted.
         \throws Whatever <code>T::T()</code> throws.
-        \throws Whatever <code>T::T(T&&)</code> throws.
-        \throws Whatever <code>T::operator = (T&&)</code> throws.
+                Whatever <code>T::T(T&&)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1691,7 +1688,9 @@ public:
         \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
                 the <i>Effect</i>.)
         \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+                Whatever <code>T::operator = (const T&)</code> throws.
+                <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
+         
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1724,7 +1723,8 @@ public:
         \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
                 the <i>Effect</i>.)
         \throws Whatever <code>T::T(T&&)</code> throws.
-        \throws Whatever <code>T::operator = (T&&)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
+                <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1753,12 +1753,12 @@ public:
               <code>circular_buffer</code> is full and the <code>pos</code> points to <code>begin()</code>, then the
               <code>item</code> will not be inserted. If the capacity is <code>0</code>, nothing will be inserted.
         \param pos An iterator specifying the position where the <code>item</code> will be inserted.
-        \param item The element to be inserted.
         \return Iterator to the inserted element or <code>begin()</code> if the <code>item</code> is not inserted. (See
                 the <i>Effect</i>.)
         \throws Whatever <code>T::T()</code> throws.
-        \throws Whatever <code>T::T(T&&)</code> throws.
-        \throws Whatever <code>T::operator = (T&&)</code> throws.
+                Whatever <code>T::T(T&&)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
+                <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -1791,7 +1791,8 @@ public:
         \param n The number of <code>item</code>s the to be inserted.
         \param item The element whose copies will be inserted.
         \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+                Whatever <code>T::operator = (const T&)</code> throws.
+                <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
@@ -1842,8 +1843,10 @@ public:
         \param pos An iterator specifying the position where the range will be inserted.
         \param first The beginning of the range to be inserted.
         \param last The end of the range to be inserted.
-        \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \throws Whatever <code>T::T(const T&)</code> throws if the <code>InputIterator</code> is not a move iterator.
+                Whatever <code>T::operator = (const T&)</code> throws if the <code>InputIterator</code> is not a move iterator.
+                Whatever <code>T::T(T&&)</code> throws if the <code>InputIterator</code> is a move iterator.
+                Whatever <code>T::operator = (T&&)</code> throws if the <code>InputIterator</code> is a move iterator.
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
@@ -1941,7 +1944,8 @@ public:
         \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
                 the <i>Effect</i>.)
         \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+                Whatever <code>T::operator = (const T&)</code> throws.
+                <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
@@ -1973,7 +1977,8 @@ public:
         \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
                 the <i>Effect</i>.)
         \throws Whatever <code>T::T(T&&)</code> throws.
-        \throws Whatever <code>T::operator = (T&&)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
+                <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
@@ -2001,12 +2006,12 @@ public:
               <code>circular_buffer</code> is full and the <code>pos</code> points to <code>end()</code>, then the
               <code>item</code> will not be inserted. If the capacity is <code>0</code>, nothing will be inserted.
         \param pos An iterator specifying the position before which the <code>item</code> will be inserted.
-        \param item The element to be inserted.
         \return Iterator to the inserted element or <code>end()</code> if the <code>item</code> is not inserted. (See
                 the <i>Effect</i>.)
         \throws Whatever <code>T::T()</code> throws.
-        \throws Whatever <code>T::T(T&&)</code> throws.
-        \throws Whatever <code>T::operator = (T&&)</code> throws.
+                Whatever <code>T::T(T&&)</code> throws.
+                Whatever <code>T::operator = (T&&)</code> throws.
+                <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
@@ -2038,7 +2043,8 @@ public:
         \param n The number of <code>item</code>s the to be inserted.
         \param item The element whose copies will be inserted.
         \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+                Whatever <code>T::operator = (const T&)</code> throws.
+                <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
@@ -2081,8 +2087,10 @@ public:
         \param pos An iterator specifying the position where the range will be inserted.
         \param first The beginning of the range to be inserted.
         \param last The end of the range to be inserted.
-        \throws Whatever <code>T::T(const T&)</code> throws.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \throws Whatever <code>T::T(const T&)</code> throws if the <code>InputIterator</code> is not a move iterator.
+                Whatever <code>T::operator = (const T&)</code> throws if the <code>InputIterator</code> is not a move iterator.
+                Whatever <code>T::T(T&&)</code> throws if the <code>InputIterator</code> is a move iterator.
+                Whatever <code>T::operator = (T&&)</code> throws if the <code>InputIterator</code> is a move iterator.
         \par Exception Safety
              Basic; no-throw if the operations in the <i>Throws</i> section do not throw anything.
         \par Iterator Invalidation
@@ -2127,7 +2135,7 @@ public:
         \param pos An iterator pointing at the element to be removed.
         \return Iterator to the first element remaining beyond the removed element or <code>end()</code> if no such
                 element exists.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \throws <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -2165,7 +2173,7 @@ public:
         \param last The end of the range to be removed.
         \return Iterator to the first element remaining beyond the removed elements or <code>end()</code> if no such
                 element exists.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \throws <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -2201,7 +2209,7 @@ public:
         \param pos An iterator pointing at the element to be removed.
         \return Iterator to the first element remaining in front of the removed element or <code>begin()</code> if no
                 such element exists.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \throws <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -2242,7 +2250,7 @@ public:
         \param last The end of the range to be removed.
         \return Iterator to the first element remaining in front of the removed elements or <code>begin()</code> if no
                 such element exists.
-        \throws Whatever <code>T::operator = (const T&)</code> throws.
+        \throws <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything.
         \par Iterator Invalidation
@@ -2285,7 +2293,7 @@ public:
         \pre <code>n \<= size()</code>
         \post The <code>n</code> elements at the beginning of the <code>circular_buffer</code> will be removed.
         \param n The number of elements to be removed.
-        \throws Whatever <code>T::operator = (const T&)</code> throws. (Does not throw anything in case of scalars.)
+        \throws <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything. (I.e. no throw in
              case of scalars.)
@@ -2317,7 +2325,7 @@ public:
         \pre <code>n \<= size()</code>
         \post The <code>n</code> elements at the end of the <code>circular_buffer</code> will be removed.
         \param n The number of elements to be removed.
-        \throws Whatever <code>T::operator = (const T&)</code> throws. (Does not throw anything in case of scalars.)
+        \throws <a href="circular_buffer/implementation.html#circular_buffer.implementation.exceptions_of_move_if_noexcept_t">Exceptions of move_if_noexcept(T&)</a>.
         \par Exception Safety
              Basic; no-throw if the operation in the <i>Throws</i> section does not throw anything. (I.e. no throw in
              case of scalars.)
