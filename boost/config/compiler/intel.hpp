@@ -111,7 +111,7 @@
 #     define BOOST_FUNCTION_SCOPE_USING_DECLARATION_BREAKS_ADL
 #  endif
 #endif
-#if (defined(__GNUC__) && (__GNUC__ < 4)) || defined(_WIN32) || (BOOST_INTEL_CXX_VERSION <= 1200)
+#if (defined(__GNUC__) && (__GNUC__ < 4)) || (defined(_WIN32) && (BOOST_INTEL_CXX_VERSION <= 1200)) || (BOOST_INTEL_CXX_VERSION <= 1200)
 // GCC or VC emulation:
 #define BOOST_NO_TWO_PHASE_NAME_LOOKUP
 #endif
@@ -256,7 +256,9 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  define  BOOST_NO_CXX11_DELETED_FUNCTIONS
 #  define  BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
 #  define  BOOST_NO_CXX11_TEMPLATE_ALIASES
-#  define  BOOST_NO_CXX11_TRAILING_RESULT_TYPES
+#  if(BOOST_INTEL_CXX_VERSION < 1310)
+#     define  BOOST_NO_CXX11_TRAILING_RESULT_TYPES
+#  endif
 #endif
 
 #if (BOOST_INTEL_CXX_VERSION < 1200)
@@ -265,6 +267,11 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 //
 #  define BOOST_NO_FENV_H
 #endif
+
+#if defined(_MSC_VER) && (_MSC_VER >= 1600)
+#  define BOOST_HAS_STDINT_H
+#endif
+
 
 //
 // last known and checked version:
