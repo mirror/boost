@@ -246,6 +246,23 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 // continues to list scoped enum support as "Partial"
 //#  undef  BOOST_NO_CXX11_SCOPED_ENUMS
 #endif
+#if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION >= 1310)
+#  undef BOOST_NO_CXX11_INLINE_NAMESPACES
+#  undef BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
+#  undef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+#  undef BOOST_NO_CXX11_NOEXCEPT
+#  undef BOOST_NO_CXX11_RANGE_BASED_FOR
+#  undef BOOST_NO_CXX11_SCOPED_ENUMS
+#  undef BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
+#endif
+#if (BOOST_INTEL_CXX_VERSION >= 1310)
+#  undef  BOOST_NO_SFINAE_EXPR
+#endif
+
+#if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION <= 1310)
+#  define BOOST_NO_CXX11_HDR_FUTURE
+#  define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#endif
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1700)
 //
@@ -272,10 +289,13 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  define BOOST_HAS_STDINT_H
 #endif
 
+#if defined(__LP64__) && defined(__GNUC__) && (BOOST_INTEL_CXX_VERSION >= 1310)
+#  define BOOST_HAS_INT128
+#endif
 
 //
 // last known and checked version:
-#if (BOOST_INTEL_CXX_VERSION > 1200)
+#if (BOOST_INTEL_CXX_VERSION > 1310)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  elif defined(_MSC_VER)
