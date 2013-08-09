@@ -246,10 +246,11 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 // continues to list scoped enum support as "Partial"
 //#  undef  BOOST_NO_CXX11_SCOPED_ENUMS
 #endif
-#if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION >= 1310)
+#if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION >= 1310) && !defined(_MSC_VER)
 #  undef BOOST_NO_CXX11_INLINE_NAMESPACES
 #  undef BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
-#  undef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
+// This one generates internal compiler errors in multiprecision, disabled for now:
+//#  undef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS  
 #  undef BOOST_NO_CXX11_NOEXCEPT
 #  undef BOOST_NO_CXX11_RANGE_BASED_FOR
 #  undef BOOST_NO_CXX11_SCOPED_ENUMS
