@@ -87,6 +87,7 @@
 [include structure.qbk]
 [include phrase.qbk]
 [include block.qbk]
+[include language_versions.qbk]
 [include 1_6.qbk]
 [include install.qbk]
 [include editors.qbk]
