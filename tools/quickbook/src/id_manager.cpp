@@ -104,6 +104,9 @@ namespace quickbook
 
         id_placeholder* get_placeholder(boost::string_ref);
 
+        id_placeholder* get_id_placeholder(
+                boost::shared_ptr<section_info> const& section) const;
+
         // Events
 
         id_placeholder* start_file(
@@ -134,11 +137,6 @@ namespace quickbook
         id_placeholder* create_new_section(
                 boost::string_ref id,
                 id_category category);
-
-        void switch_section(id_placeholder*);
-        void reswitch_sections(boost::shared_ptr<section_info> const&,
-            boost::shared_ptr<section_info> const&);
-        void restore_section();
     };
 
     struct file_info
@@ -148,8 +146,9 @@ namespace quickbook
 
         bool document_root; // !parent || document != parent->document
         unsigned compatibility_version;
-        boost::shared_ptr<section_info> switched_section;
-        id_placeholder* original_placeholder;
+        unsigned depth;
+        unsigned override_depth;
+        id_placeholder* override_id;
 
         // The 1.1-1.5 document id would actually change per file due to
         // explicit ids in includes and a bug which would sometimes use the
@@ -160,7 +159,9 @@ namespace quickbook
                 unsigned compatibility_version) :
             parent(parent), document(parent->document), document_root(false),
             compatibility_version(compatibility_version),
-            switched_section(), original_placeholder()
+            depth(parent->depth + 1),
+            override_depth(parent->override_depth),
+            override_id(parent->override_id)
         {}
 
         file_info(boost::shared_ptr<file_info> const& parent,
@@ -168,7 +169,7 @@ namespace quickbook
                 unsigned compatibility_version) :
             parent(parent), document(document), document_root(true),
             compatibility_version(compatibility_version),
-            switched_section(), original_placeholder()
+            depth(0), override_depth(0), override_id(0)
         {}
     };
 
@@ -187,13 +188,16 @@ namespace quickbook
     {
         boost::shared_ptr<section_info> parent;
         unsigned compatibility_version;
+        unsigned file_depth;
         unsigned level;
         std::string id_1_1;
         id_placeholder* placeholder_1_6;
 
         section_info(boost::shared_ptr<section_info> const& parent,
-                unsigned compatibility_version, boost::string_ref id) :
-            parent(parent), compatibility_version(compatibility_version),
+                file_info const* current_file, boost::string_ref id) :
+            parent(parent),
+            compatibility_version(current_file->compatibility_version),
+            file_depth(current_file->depth),
             level(parent ? parent->level + 1 : 1),
             id_1_1(), placeholder_1_6(0)
         {
@@ -366,46 +370,12 @@ namespace quickbook
         return &placeholders.at(index);
     }
 
-    void id_state::switch_section(id_placeholder* p)
+    id_placeholder* id_state::get_id_placeholder(
+            boost::shared_ptr<section_info> const& section) const
     {
-        assert(!current_file->original_placeholder);
-        current_file->switched_section = current_file->document->current_section;
-        current_file->original_placeholder = current_file->switched_section->placeholder_1_6;
-        current_file->switched_section->placeholder_1_6 = p;
-    }
-
-    void id_state::reswitch_sections(
-        boost::shared_ptr<section_info> const& popped_section,
-        boost::shared_ptr<section_info> const& parent_section)
-    {
-        boost::shared_ptr<file_info> file = current_file;
-        boost::shared_ptr<file_info> first_switched_file;
-
-        for (;;) {
-            if (file->switched_section == popped_section)
-            {
-                first_switched_file = file;
-                file->switched_section = parent_section;
-            }
-            
-            if (file->document_root) break;
-            file = file->parent;
-        }
-        
-        if (first_switched_file) {
-            first_switched_file->original_placeholder =
-                parent_section->placeholder_1_6;
-            parent_section->placeholder_1_6 =
-                popped_section->placeholder_1_6;
-        }
-    }
-
-    void id_state::restore_section()
-    {
-        if (current_file->original_placeholder) {
-            current_file->switched_section->placeholder_1_6 =
-                current_file->original_placeholder;        
-        }
+        return !section ? 0 :
+            section->file_depth < current_file->override_depth ?
+                current_file->override_id : section->placeholder_1_6;
     }
 
     id_placeholder* id_state::start_file(
@@ -437,7 +407,8 @@ namespace quickbook
 
         if (document_root ||
             compatibility_version >= 106u ||
-            (parent && parent->compatibility_version >= 106u)) {
+            (parent && parent->compatibility_version >= 106u))
+        {
             initial_doc_id = !include_doc_id.empty() ? include_doc_id : id;
         }
         else {
@@ -479,15 +450,15 @@ namespace quickbook
             }
         }
         else {
-            // If an id was set for the file, then switch the current section
-            // with a new section with this id. This will be maintained in
-            // 'end_section' if the current section ends, and then the original
-            // section restored in 'end_file'
+            // If an id was set for the file, then the file overrides the
+            // current section's id with this id.
 
             if (compatibility_version >= 106u && !initial_doc_id.empty()) {
-                switch_section(add_id_to_section(initial_doc_id,
-                    id_category::explicit_section_id,
-                    boost::shared_ptr<section_info>()));
+                boost::shared_ptr<section_info> null_section;
+
+                current_file->override_depth = current_file->depth;
+                current_file->override_id = add_id_to_section(initial_doc_id,
+                    id_category::explicit_section_id, null_section);
             }
 
             return 0;
@@ -496,7 +467,6 @@ namespace quickbook
 
     void id_state::end_file()
     {
-        restore_section();
         current_file = current_file->parent;
     }
 
@@ -523,23 +493,23 @@ namespace quickbook
             id_part = normalize_id(id);
         }
 
+        id_placeholder* placeholder_1_6 = get_id_placeholder(section);
+
         if(!section || section->compatibility_version >= 106u) {
-            return add_placeholder(id_part, category,
-                section ? section->placeholder_1_6 : 0);
+            return add_placeholder(id_part, category, placeholder_1_6);
         }
         else {
             std::string const& qualified_id = section->id_1_1;
 
             std::string new_id;
-            if (!section->placeholder_1_6)
+            if (!placeholder_1_6)
                 new_id = current_file->doc_id_1_1;
             if (!new_id.empty() && !qualified_id.empty()) new_id += '.';
             new_id += qualified_id;
             if (!new_id.empty() && !id_part.empty()) new_id += '.';
             new_id += id_part;
 
-            return add_placeholder(new_id, category,
-                section->placeholder_1_6);
+            return add_placeholder(new_id, category, placeholder_1_6);
         }
     }
 
@@ -570,7 +540,7 @@ namespace quickbook
 
         boost::shared_ptr<section_info> new_section =
             boost::make_shared<section_info>(parent,
-                current_file->compatibility_version, id);
+                current_file.get(), id);
 
         id_placeholder* p;
 
@@ -579,8 +549,7 @@ namespace quickbook
             new_section->placeholder_1_6 = p;
         }
         else if (new_section->compatibility_version >= 103u) {
-            if (parent)
-                new_section->placeholder_1_6 = parent->placeholder_1_6;
+            new_section->placeholder_1_6 = get_id_placeholder(parent);
 
             std::string new_id;
             if (!new_section->placeholder_1_6) {
@@ -593,8 +562,7 @@ namespace quickbook
                 new_section->placeholder_1_6);
         }
         else {
-            if (parent)
-                new_section->placeholder_1_6 = parent->placeholder_1_6;
+            new_section->placeholder_1_6 = get_id_placeholder(parent);
 
             std::string new_id;
             if (parent && !new_section->placeholder_1_6)
@@ -616,8 +584,6 @@ namespace quickbook
         boost::shared_ptr<section_info> popped_section =
             current_file->document->current_section;
         current_file->document->current_section = popped_section->parent;
-
-        reswitch_sections(popped_section, popped_section->parent);
     }
 
     //
