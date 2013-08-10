@@ -142,73 +142,74 @@ namespace quickbook
 
     struct file_info
     {
-        boost::shared_ptr<file_info> parent;
-        boost::shared_ptr<doc_info> document;
+        boost::shared_ptr<file_info> const parent;
+        boost::shared_ptr<doc_info> const document;
 
-        bool document_root; // !parent || document != parent->document
-        unsigned compatibility_version;
-        unsigned depth;
-        unsigned override_depth;
-        id_placeholder const* override_id;
+        bool const document_root; // !parent || document != parent->document
+        unsigned const compatibility_version;
+        unsigned const depth;
+        unsigned const override_depth;
+        id_placeholder const* const override_id;
 
         // The 1.1-1.5 document id would actually change per file due to
         // explicit ids in includes and a bug which would sometimes use the
         // document title instead of the id.
-        std::string doc_id_1_1;
+        std::string const doc_id_1_1;
 
+        // Constructor for files that aren't the root of a document.
         file_info(boost::shared_ptr<file_info> const& parent,
-                unsigned compatibility_version) :
+                unsigned compatibility_version,
+                boost::string_ref doc_id_1_1,
+                id_placeholder const* override_id) :
             parent(parent), document(parent->document), document_root(false),
             compatibility_version(compatibility_version),
             depth(parent->depth + 1),
-            override_depth(parent->override_depth),
-            override_id(parent->override_id)
+            override_depth(override_id ? depth : parent->override_depth),
+            override_id(override_id ? override_id : parent->override_id),
+            doc_id_1_1(detail::to_s(doc_id_1_1))
         {}
 
+        // Constructor for files that are the root of a document.
         file_info(boost::shared_ptr<file_info> const& parent,
                 boost::shared_ptr<doc_info> const& document,
-                unsigned compatibility_version) :
+                unsigned compatibility_version,
+                boost::string_ref doc_id_1_1) :
             parent(parent), document(document), document_root(true),
             compatibility_version(compatibility_version),
-            depth(0), override_depth(0), override_id(0)
+            depth(0), override_depth(0), override_id(0),
+            doc_id_1_1(detail::to_s(doc_id_1_1))
         {}
     };
 
     struct doc_info
     {
         boost::shared_ptr<section_info> current_section;
+
+        // Note: these are mutable to remain bug compatible with old versions
+        // of quickbook. They would set these values at the start of new files
+        // and sections and then not restore them at the end.
         std::string last_title_1_1;
         std::string section_id_1_1;
-
-        doc_info() :
-            current_section(), last_title_1_1(), section_id_1_1()
-        {}
     };
 
     struct section_info
     {
-        boost::shared_ptr<section_info> parent;
-        unsigned compatibility_version;
-        unsigned file_depth;
-        unsigned level;
-        std::string id_1_1;
-        id_placeholder const* placeholder_1_6;
+        boost::shared_ptr<section_info> const parent;
+        unsigned const compatibility_version;
+        unsigned const file_depth;
+        unsigned const level;
+        std::string const id_1_1;
+        id_placeholder const* const placeholder_1_6;
 
         section_info(boost::shared_ptr<section_info> const& parent,
-                file_info const* current_file, boost::string_ref id) :
+                file_info const* current_file, boost::string_ref id,
+                boost::string_ref id_1_1, id_placeholder const* placeholder_1_6) :
             parent(parent),
             compatibility_version(current_file->compatibility_version),
             file_depth(current_file->depth),
             level(parent ? parent->level + 1 : 1),
-            id_1_1(), placeholder_1_6(0)
-        {
-            if (parent && compatibility_version < 106u) {
-                id_1_1 = parent->id_1_1;
-                if (!id_1_1.empty() && !id.empty())
-                    id_1_1 += ".";
-                id_1_1.append(id.begin(), id.end());
-            }
-        }
+            id_1_1(detail::to_s(id_1_1)),
+            placeholder_1_6(placeholder_1_6) {}
     };
 
     //
@@ -386,19 +387,11 @@ namespace quickbook
             boost::string_ref id,
             value const& title)
     {
-        // Create new file
-
         boost::shared_ptr<file_info> parent = current_file;
+        assert(parent || document_root);
 
-        if (document_root) {
-            current_file = boost::make_shared<file_info>(parent,
-                    boost::make_shared<doc_info>(),
-                    compatibility_version);
-        }
-        else {
-            current_file =
-                boost::make_shared<file_info>(parent, compatibility_version);
-        }
+        boost::shared_ptr<doc_info> document =
+            document_root ? boost::make_shared<doc_info>() : parent->document;
 
         // Choose specified id to use. Prefer 'include_doc_id' (the id
         // specified in an 'include' element) unless backwards compatibility
@@ -416,25 +409,31 @@ namespace quickbook
             initial_doc_id = !id.empty() ? id : include_doc_id;
         }
 
-        // Set variables used for backwards compatible id generation.
-        // They're a bit odd because of old bugs.
+        // Work out this file's doc_id for older versions of quickbook.
+        // A bug meant that this need to be done per file, not per
+        // document.
+
+        std::string doc_id_1_1;
 
         if (document_root || compatibility_version < 106u) {
-            // Note: this is done for older versions even if docinfo is
-            // otherwise ignored.
-
             if (title.check())
-                current_file->document->last_title_1_1 =
-                    detail::to_s(title.get_quickbook());
+                document->last_title_1_1 = detail::to_s(title.get_quickbook());
 
-            current_file->doc_id_1_1 = !initial_doc_id.empty() ? detail::to_s(initial_doc_id) :
-                detail::make_identifier(current_file->document->last_title_1_1);
+            doc_id_1_1 = !initial_doc_id.empty() ? detail::to_s(initial_doc_id) :
+                detail::make_identifier(document->last_title_1_1);
         }
         else if (parent) {
-            current_file->doc_id_1_1 = parent->doc_id_1_1;
+            doc_id_1_1 = parent->doc_id_1_1;
         }
 
         if (document_root) {
+            // Create new file
+
+            current_file = boost::make_shared<file_info>(parent,
+                    document, compatibility_version, doc_id_1_1);
+
+            // Create a section for the new document.
+
             if (!initial_doc_id.empty()) {
                 return create_new_section(id, id_category::explicit_section_id);
             }
@@ -453,14 +452,28 @@ namespace quickbook
         else {
             // If an id was set for the file, then the file overrides the
             // current section's id with this id.
+            //
+            // Don't do this for document_root as it will create a section
+            // for the document.
+            //
+            // Don't do this for older versions, as they use a different
+            // backwards compatible mechanism to handle file ids.
 
-            if (compatibility_version >= 106u && !initial_doc_id.empty()) {
+            id_placeholder const* override_id = 0;
+
+            if (!initial_doc_id.empty() && compatibility_version >= 106u)
+            {
                 boost::shared_ptr<section_info> null_section;
 
-                current_file->override_depth = current_file->depth;
-                current_file->override_id = add_id_to_section(initial_doc_id,
+                override_id = add_id_to_section(initial_doc_id,
                     id_category::explicit_section_id, null_section);
             }
+
+            // Create new file
+
+            current_file =
+                boost::make_shared<file_info>(parent, compatibility_version,
+                        doc_id_1_1, override_id);
 
             return 0;
         }
@@ -539,52 +552,56 @@ namespace quickbook
         boost::shared_ptr<section_info> parent =
             current_file->document->current_section;
 
-        boost::shared_ptr<section_info> new_section =
-            boost::make_shared<section_info>(parent,
-                current_file.get(), id);
+        id_placeholder const* p = 0;
+        id_placeholder const* placeholder_1_6 = 0;
 
-        id_placeholder const* p;
+        std::string id_1_1;
 
-        if (new_section->compatibility_version >= 106u) {
-            p = add_id_to_section(id, category, parent);
-            new_section->placeholder_1_6 = p;
+        if (parent && current_file->compatibility_version < 106u) {
+            id_1_1 = parent->id_1_1;
+            if (!id_1_1.empty() && !id.empty())
+                id_1_1 += ".";
+            id_1_1.append(id.begin(), id.end());
         }
-        else if (new_section->compatibility_version >= 103u) {
-            new_section->placeholder_1_6 = get_id_placeholder(parent);
+
+        if (current_file->compatibility_version >= 106u) {
+            p = placeholder_1_6 = add_id_to_section(id, category, parent);
+        }
+        else if (current_file->compatibility_version >= 103u) {
+            placeholder_1_6 = get_id_placeholder(parent);
 
             std::string new_id;
-            if (!new_section->placeholder_1_6) {
+            if (!placeholder_1_6) {
                 new_id = current_file->doc_id_1_1;
-                if (!new_section->id_1_1.empty()) new_id += '.';
+                if (!id_1_1.empty()) new_id += '.';
             }
-            new_id += new_section->id_1_1;
+            new_id += id_1_1;
 
-            p = add_placeholder(new_id, category,
-                new_section->placeholder_1_6);
+            p = add_placeholder(new_id, category, placeholder_1_6);
         }
         else {
-            new_section->placeholder_1_6 = get_id_placeholder(parent);
+            placeholder_1_6 = get_id_placeholder(parent);
 
             std::string new_id;
-            if (parent && !new_section->placeholder_1_6)
+            if (parent && !placeholder_1_6)
                 new_id = current_file->doc_id_1_1 + '.';
 
             new_id += detail::to_s(id);
 
-            p = add_placeholder(new_id, category,
-                new_section->placeholder_1_6);
+            p = add_placeholder(new_id, category, placeholder_1_6);
         }
 
-        current_file->document->current_section = new_section;
+        current_file->document->current_section =
+            boost::make_shared<section_info>(parent,
+                current_file.get(), id, id_1_1, placeholder_1_6);
         
         return p;
     }
 
     void id_state::end_section()
     {
-        boost::shared_ptr<section_info> popped_section =
-            current_file->document->current_section;
-        current_file->document->current_section = popped_section->parent;
+        current_file->document->current_section =
+            current_file->document->current_section->parent;
     }
 
     //
