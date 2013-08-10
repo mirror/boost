@@ -246,6 +246,30 @@ if you're totally sure that you will need it.
 
 [endsect] [/xmlbase]
 
+[section:template_parser Improved template parser]
+
+There's a new parser for template declarations and parameters which does
+a better job of understanding escaped and bracketed text. Unfortunately
+it does not understand element names so there are some cases where it
+could go wrong. For example:
+
+    [template doesnt_work[]
+    [ordered_list
+        [`code phrase`]
+    ]
+    ]
+
+In this case it will think the `[\`` is a template call and give a parse
+error. To work around this put an escaped space before the code phrase:
+
+    [template works[]
+    [ordered_list
+        [\ `code phrase`]
+    ]
+    ]
+
+[endsect]
+
 [section:elements New Elements]
 
 [section:block `block`]
@@ -455,7 +479,7 @@ still be able to use explicit markup.
 
 [endsect]
 
-[section:phrase_block_templates Allow block lements in phrase templates]
+[section:phrase_block_templates Allow block elements in phrase templates]
 
 Block elements can now be used in phrase templates, but paragraphs breaks aren't
 allowed, so this is an error:
