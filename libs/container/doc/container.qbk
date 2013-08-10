@@ -375,7 +375,8 @@ and erasure times considerably. Flat associative containers have the following
 attributes:
 
 * Faster lookup than standard associative containers
-* Much faster iteration than standard associative containers
+* Much faster iteration than standard associative containers.
+   Random-access iterators instead of bidirectional iterators.
 * Less memory consumption for small objects (and for big objects if `shrink_to_fit` is used)
 * Improved cache performance (data is stored in contiguous memory)
 * Non-stable iterators (iterators are invalidated when inserting and erasing elements)

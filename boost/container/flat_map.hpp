@@ -84,8 +84,10 @@ static D force_copy(S s)
 //! This means that inserting a new element into a flat_map invalidates
 //! previous iterators and references
 //!
-//! Erasing an element of a flat_map invalidates iterators and references
+//! Erasing an element invalidates iterators and references
 //! pointing to elements that come after (their keys are bigger) the erased element.
+//!
+//! This container provides random-access iterators.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 template <class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator< std::pair< Key, T> > >
 #else
@@ -947,6 +949,15 @@ inline bool operator<(const flat_multimap<Key,T,Compare,Allocator>& x,
 //!
 //! Allocator is the allocator to allocate the value_types
 //! (e.g. <i>allocator< std::pair<Key, T> ></i>).
+//!
+//! flat_multimap is similar to std::multimap but it's implemented like an ordered vector.
+//! This means that inserting a new element into a flat_map invalidates
+//! previous iterators and references
+//!
+//! Erasing an element invalidates iterators and references
+//! pointing to elements that come after (their keys are bigger) the erased element.
+//!
+//! This container provides random-access iterators.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 template <class Key, class T, class Compare = std::less<Key>, class Allocator = std::allocator< std::pair< Key, T> > >
 #else
