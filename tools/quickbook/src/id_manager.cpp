@@ -71,12 +71,6 @@ namespace quickbook
                                 // Normally equal to the section level
                                 // but not when an explicit id contains
                                 // dots.
-        unsigned order;         // Order of the placeholders in the generated
-                                // xml. Stored because it can be slightly
-                                // different to the order they're generated
-                                // in. e.g. for nested tables the cells
-                                // are processed before the title id.
-                                // This is set when processing ids.
         id_data* data;          // Data shared by placeholders with the same
                                 // ids.
                                 // Only valid when generation_state == resolved
@@ -96,7 +90,6 @@ namespace quickbook
             category(category),
             num_dots(boost::range::count(id, '.') +
                 (parent_ ? parent_->num_dots + 1 : 0)),
-            order(0),
             data(0)
         {
         }
@@ -948,6 +941,10 @@ private:
 
     struct placeholder_compare
     {
+        std::vector<unsigned>& order;
+
+        placeholder_compare(std::vector<unsigned>& order) : order(order) {}
+
         bool operator()(id_placeholder* x, id_placeholder* y) const
         {
             bool x_explicit = x->category.c >= id_category::explicit_id;
@@ -958,31 +955,33 @@ private:
                 x->num_dots > y->num_dots ? false :
                 x_explicit > y_explicit ? true :
                 x_explicit < y_explicit ? false :
-                x->order < y->order;
+                order[x->index] < order[y->index];
         }
     };
 
-    struct number_placeholders_callback : xml_processor::callback
+    struct get_placeholder_order_callback : xml_processor::callback
     {
         id_state& state;
+        std::vector<unsigned>& order;
         unsigned count;
 
-        number_placeholders_callback(id_state& state)
+        get_placeholder_order_callback(id_state& state,
+                std::vector<unsigned>& order)
           : state(state),
+            order(order),
             count(0)
         {}
 
         void id_value(boost::string_ref value)
         {
-            id_placeholder* p = state.get_placeholder(value);
-            number(p);
+            set_placeholder_order(state.get_placeholder(value));
         }
 
-        void number(id_placeholder* p)
+        void set_placeholder_order(id_placeholder const* p)
         {
-            if (p && !p->order) {
-                number(p->parent);
-                p->order = ++count;
+            if (p && !order[p->index]) {
+                set_placeholder_order(p->parent);
+                order[p->index] = ++count;
             }
         }
     };
@@ -991,15 +990,18 @@ private:
             id_state& state,
             boost::string_ref xml)
     {
+        // The order that the placeholder appear in the xml source.
+        std::vector<unsigned> order(state.placeholders.size());
+
         xml_processor processor;
-        number_placeholders_callback callback(state);
+        get_placeholder_order_callback callback(state, order);
         processor.parse(xml, callback);
 
         placeholder_index sorted_placeholders;
         sorted_placeholders.reserve(state.placeholders.size());
         BOOST_FOREACH(id_placeholder& p, state.placeholders)
-            if (p.order) sorted_placeholders.push_back(&p);
-        boost::sort(sorted_placeholders, placeholder_compare());
+            if (order[p.index]) sorted_placeholders.push_back(&p);
+        boost::sort(sorted_placeholders, placeholder_compare(order));
 
         return sorted_placeholders;
     }
