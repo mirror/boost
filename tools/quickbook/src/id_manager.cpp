@@ -30,8 +30,8 @@ namespace quickbook
     struct id_placeholder;
     struct id_data;
     std::string replace_ids(id_state& state, boost::string_ref xml,
-            bool use_generated_ids = true);
-    void generate_ids(id_state&, boost::string_ref);
+            std::vector<std::string> const* = 0);
+    std::vector<std::string> generate_ids(id_state&, boost::string_ref);
 
     static const std::size_t max_size = 32;
 
@@ -44,25 +44,15 @@ namespace quickbook
 
     struct id_placeholder
     {
-        enum state_enum {
-            initial,            // The initial value of the id.
-            generated           // The final id which has been altered to avoid
-                                // duplicates.
-        };
-
         unsigned index;         // The index in id_state::placeholders.
                                 // Use for the dollar identifiers in
                                 // intermediate xml.
-        state_enum generation_state;
-                                // The stage in the generation process.
         std::string unresolved_id;
                                 // The id that would be generated
                                 // without any duplicate handling.
                                 // Used for generating old style header anchors.
-        std::string id;         // The id so far.
+        std::string id;         // The node id.
         id_placeholder* parent; // Placeholder of the parent id.
-                                // Set to 0 if there isn't a parent, or the
-                                // parent has been included in the id.
         id_category category;
         unsigned num_dots;      // Number of dots in the id.
                                 // Normally equal to the section level
@@ -75,7 +65,6 @@ namespace quickbook
                 id_category category,
                 id_placeholder* parent_ = 0)
           : index(index),
-            generation_state(initial),
             unresolved_id(parent_ ?
                 parent_->unresolved_id + '.' + detail::to_s(id) :
                 detail::to_s(id)),
@@ -90,16 +79,6 @@ namespace quickbook
         std::string to_string()
         {
             return '$' + boost::lexical_cast<std::string>(index);
-        }
-
-        bool check_state() const
-        {
-            return generation_state == initial || !parent;
-        }
-
-        bool check_state(state_enum s) const
-        {
-            return s == generation_state && check_state();
         }
     };
 
@@ -120,8 +99,8 @@ namespace quickbook
 
         // Placeholder methods
 
-        id_placeholder* add_placeholder(
-                boost::string_ref, id_category, id_placeholder* parent = 0);
+        id_placeholder* add_placeholder(boost::string_ref, id_category,
+            id_placeholder* parent = 0);
 
         id_placeholder* get_placeholder(boost::string_ref);
 
@@ -147,7 +126,7 @@ namespace quickbook
                 id_category category);
         void end_section();
 
-private:
+    private:
         id_placeholder* add_id_to_section(
                 boost::string_ref id,
                 id_category category,
@@ -296,14 +275,14 @@ private:
     std::string id_manager::replace_placeholders_with_unresolved_ids(
             boost::string_ref xml) const
     {
-        return replace_ids(*state, xml, false);
+        return replace_ids(*state, xml);
     }
 
     std::string id_manager::replace_placeholders(boost::string_ref xml) const
     {
         assert(!state->current_file);
-        generate_ids(*state, xml);
-        return replace_ids(*state, xml, true);
+        std::vector<std::string> ids = generate_ids(*state, xml);
+        return replace_ids(*state, xml, &ids);
     }
 
     unsigned id_manager::compatibility_version() const
@@ -890,11 +869,14 @@ private:
     typedef std::vector<id_placeholder*> placeholder_index;
 
     placeholder_index index_placeholders(id_state&, boost::string_ref xml);
-    void resolve_id(id_placeholder const&, allocated_ids&, placeholder_data& data);
-    void generate_id(id_placeholder&, allocated_ids&, placeholder_data& data);
+    void resolve_id(id_placeholder&, std::vector<std::string> const&,
+        allocated_ids&, placeholder_data& data);
+    std::string generate_id(id_placeholder&, allocated_ids&, placeholder_data& data);
 
-    void generate_ids(id_state& state, boost::string_ref xml)
+    std::vector<std::string> generate_ids(id_state& state, boost::string_ref xml)
     {
+        std::vector<std::string> generated_ids(state.placeholders.size());
+
         // Get a list of the placeholders in the order that we wish to
         // process them.
         placeholder_index placeholders = index_placeholders(state, xml);
@@ -922,15 +904,17 @@ private:
             // First resolve ids by adding them to their parent's ids
             // (which have been fully processed in a previous iteration).
             for (it = group_begin; it != group_end; ++it) {
-                resolve_id(**it, ids, data);
+                resolve_id(**it, generated_ids, ids, data);
             }
 
             // Generate the final ids, taking into account any duplicates
             // found when resolving.
             for (it = group_begin; it != group_end; ++it) {
-                generate_id(**it, ids, data);
+                generated_ids[(*it)->index] = generate_id(**it, ids, data);
             }
         }
+
+        return generated_ids;
     }
 
     //
@@ -1018,21 +1002,13 @@ private:
     // the child id.
     //
 
-    void resolve_id(id_placeholder const& p, allocated_ids& ids,
-            placeholder_data& data)
+    void resolve_id(id_placeholder& p, std::vector<std::string> const& generated_ids,
+            allocated_ids& ids, placeholder_data& data)
     {
-        assert(p.check_state(id_placeholder::initial));
+        assert(!data[p.index].data);
 
-        std::string id;
-
-        if (p.parent) {
-            assert(p.parent->check_state(id_placeholder::generated));
-
-            id = p.parent->id + "." + p.id;
-        }
-        else {
-            id = p.id;
-        }
+        std::string id = p.parent ?
+            generated_ids[p.parent->index] + "." + p.id : p.id;
 
         id_data& data_ = ids.emplace(id, id_data()).first->second;
         data_.update_category(p.category);
@@ -1050,7 +1026,7 @@ private:
     void register_generation_data(id_placeholder&, allocated_ids&,
             placeholder_data& data);
 
-    void generate_id(id_placeholder& p, allocated_ids& ids,
+    std::string generate_id(id_placeholder& p, allocated_ids& ids,
             placeholder_data& data)
     {
         assert(data[p.index].data);
@@ -1062,10 +1038,7 @@ private:
                 p.category.c != id_category::numbered)
         {
             data[p.index].data->used = true;
-            p.id = data[p.index].resolved_id;
-            p.generation_state = id_placeholder::generated;
-            p.parent = 0;
-            return;
+            return data[p.index].resolved_id;
         }
 
         if (!data[p.index].data->generation_data)
@@ -1091,12 +1064,7 @@ private:
             else {
                 std::string id = generation_data.id + postfix;
 
-                if (ids.find(id) == ids.end()) {
-                    p.id.swap(id);
-                    p.generation_state = id_placeholder::generated;
-                    p.parent = 0;
-                    return;
-                }
+                if (ids.find(id) == ids.end()) return id;
             }
         }
     }
@@ -1128,13 +1096,14 @@ private:
     struct replace_ids_callback : xml_processor::callback
     {
         id_state& state;
-        bool use_generated_ids;
+        std::vector<std::string> const* ids;
         boost::string_ref::const_iterator source_pos;
         std::string result;
 
-        replace_ids_callback(id_state& state, bool use_generated_ids)
+        replace_ids_callback(id_state& state,
+                std::vector<std::string> const* ids)
           : state(state),
-            use_generated_ids(use_generated_ids),
+            ids(ids),
             source_pos(),
             result()
         {}
@@ -1148,10 +1117,8 @@ private:
         {
             if (id_placeholder* p = state.get_placeholder(value))
             {
-                assert(!use_generated_ids ||
-                    p->check_state(id_placeholder::generated));
-                boost::string_ref id = use_generated_ids ?
-                    p->id : p->unresolved_id;
+                boost::string_ref id = ids ?
+                    (*ids)[p->index] : p->unresolved_id;
 
                 result.append(source_pos, value.begin());
                 result.append(id.begin(), id.end());
@@ -1167,10 +1134,10 @@ private:
     };
 
     std::string replace_ids(id_state& state, boost::string_ref xml,
-            bool use_generated_ids)
+            std::vector<std::string> const* ids)
     {
         xml_processor processor;
-        replace_ids_callback callback(state, use_generated_ids);
+        replace_ids_callback callback(state, ids);
         processor.parse(xml, callback);
         return callback.result;
     }
