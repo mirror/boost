@@ -46,10 +46,6 @@ namespace quickbook
     {
         enum state_enum {
             initial,            // The initial value of the id.
-            resolved,           // If it has a parent, the id has been appended
-                                // to the parent's fully generated id.
-                                // And has been added to the id generation data
-                                // structures.
             generated           // The final id which has been altered to avoid
                                 // duplicates.
         };
@@ -881,12 +877,20 @@ private:
                                 // same id prefix.
     };
 
+    struct placeholder_generation_data
+    {
+        placeholder_generation_data() : resolved_id(), data(0) {}
+
+        std::string resolved_id;
+        id_data* data;
+    };
+
     typedef boost::unordered_map<std::string, id_data> allocated_ids;
-    typedef std::vector<id_data*> placeholder_data;
+    typedef std::vector<placeholder_generation_data> placeholder_data;
     typedef std::vector<id_placeholder*> placeholder_index;
 
     placeholder_index index_placeholders(id_state&, boost::string_ref xml);
-    void resolve_id(id_placeholder&, allocated_ids&, placeholder_data& data);
+    void resolve_id(id_placeholder const&, allocated_ids&, placeholder_data& data);
     void generate_id(id_placeholder&, allocated_ids&, placeholder_data& data);
 
     void generate_ids(id_state& state, boost::string_ref xml)
@@ -1014,7 +1018,7 @@ private:
     // the child id.
     //
 
-    void resolve_id(id_placeholder& p, allocated_ids& ids,
+    void resolve_id(id_placeholder const& p, allocated_ids& ids,
             placeholder_data& data)
     {
         assert(p.check_state(id_placeholder::initial));
@@ -1033,10 +1037,8 @@ private:
         id_data& data_ = ids.emplace(id, id_data()).first->second;
         data_.update_category(p.category);
 
-        data[p.index] = &data_;
-        p.id = id;
-        p.parent = 0;
-        p.generation_state = id_placeholder::resolved;
+        data[p.index].data = &data_;
+        data[p.index].resolved_id = id;
     }
 
     //
@@ -1051,30 +1053,32 @@ private:
     void generate_id(id_placeholder& p, allocated_ids& ids,
             placeholder_data& data)
     {
-        assert(p.check_state(id_placeholder::resolved));
+        assert(data[p.index].data);
 
         // If the placeholder id is available, then update data
         // and return.
-        if (p.category == data[p.index]->category && !data[p.index]->used &&
-            p.category.c != id_category::numbered)
+        if (p.category == data[p.index].data->category &&
+                !data[p.index].data->used &&
+                p.category.c != id_category::numbered)
         {
-            data[p.index]->used = true;
+            data[p.index].data->used = true;
+            p.id = data[p.index].resolved_id;
             p.generation_state = id_placeholder::generated;
-            data[p.index] = 0;
+            p.parent = 0;
             return;
         }
 
-        if (!data[p.index]->generation_data)
+        if (!data[p.index].data->generation_data)
         {
-            data[p.index]->generation_data =
-                boost::make_shared<id_generation_data>(p.id);
+            data[p.index].data->generation_data =
+                boost::make_shared<id_generation_data>(data[p.index].resolved_id);
             register_generation_data(p, ids, data);
         }
 
         // Loop until an available id is found.
         for(;;)
         {
-            id_generation_data& generation_data = *data[p.index]->generation_data;
+            id_generation_data& generation_data = *data[p.index].data->generation_data;
 
             std::string postfix =
                 boost::lexical_cast<std::string>(generation_data.count++);
@@ -1090,7 +1094,7 @@ private:
                 if (ids.find(id) == ids.end()) {
                     p.id.swap(id);
                     p.generation_state = id_placeholder::generated;
-                    data[p.index] = 0;
+                    p.parent = 0;
                     return;
                 }
             }
@@ -1102,16 +1106,16 @@ private:
     void register_generation_data(id_placeholder& p, allocated_ids& ids,
             placeholder_data& data)
     {
-        std::string const& id = data[p.index]->generation_data->id;
+        std::string const& id = data[p.index].data->generation_data->id;
 
         id_data& new_data = ids.emplace(id, id_data()).first->second;
 
         // If there is already generation_data for the new id then use that.
         // Otherwise use the placeholder's existing generation_data.
         if (new_data.generation_data)
-            data[p.index]->generation_data = new_data.generation_data;
+            data[p.index].data->generation_data = new_data.generation_data;
         else
-            new_data.generation_data = data[p.index]->generation_data;
+            new_data.generation_data = data[p.index].data->generation_data;
     }
 
     //
