@@ -606,7 +606,8 @@ namespace quickbook
 
         skip_entity =
                 '['
-            >>  !cl::ch_p('`')
+                // For escaped templates:
+            >>  !(space >> cl::ch_p('`') >> (cl::alpha_p | '_'))
             >>  *(~cl::eps_p(']') >> skip_entity)
             >>  !cl::ch_p(']')
             |   local.skip_code_block

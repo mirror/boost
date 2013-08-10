@@ -233,6 +233,18 @@
     <para>
       <emphasis>Argument</emphasis>
     </para>
+    <orderedlist>
+      <listitem>
+<programlisting><phrase role="identifier">code</phrase></programlisting>
+      </listitem>
+    </orderedlist>
+    <orderedlist>
+      <listitem>
+        <para>
+          <code><phrase role="identifier">code</phrase></code>
+        </para>
+      </listitem>
+    </orderedlist>
   </section>
   <section id="template_1_6.escaped_templates">
     <title><link linkend="template_1_6.escaped_templates">Escaped templates</link></title>
