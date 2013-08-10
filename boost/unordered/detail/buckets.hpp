@@ -32,6 +32,10 @@ namespace boost { namespace unordered { namespace detail {
 
 }}}
 
+// The 'iterator_detail' namespace was a misguided attempt at avoiding ADL
+// in the detail namespace. It didn't work because the template parameters
+// were in detail. I'm not changing it at the moment to be safe. I might
+// do in the future if I change the iterator types.
 namespace boost { namespace unordered { namespace iterator_detail {
 
     ////////////////////////////////////////////////////////////////////////////
@@ -353,7 +357,7 @@ namespace boost { namespace unordered { namespace detail {
         void construct_with_value(BOOST_UNORDERED_EMPLACE_ARGS)
         {
             construct();
-            boost::unordered::detail::construct_value_impl(
+            boost::unordered::detail::func::construct_value_impl(
                 alloc_, node_->value_ptr(), BOOST_UNORDERED_EMPLACE_FORWARD);
             value_constructed_ = true;
         }
@@ -362,7 +366,7 @@ namespace boost { namespace unordered { namespace detail {
         void construct_with_value2(BOOST_FWD_REF(A0) a0)
         {
             construct();
-            boost::unordered::detail::construct_value_impl(
+            boost::unordered::detail::func::construct_value_impl(
                 alloc_, node_->value_ptr(),
                 BOOST_UNORDERED_EMPLACE_ARGS1(boost::forward<A0>(a0)));
             value_constructed_ = true;
@@ -392,7 +396,7 @@ namespace boost { namespace unordered { namespace detail {
     {
         if (node_) {
             if (value_constructed_) {
-                boost::unordered::detail::destroy_value_impl(alloc_,
+                boost::unordered::detail::func::destroy_value_impl(alloc_,
                     node_->value_ptr());
             }
 
@@ -424,7 +428,7 @@ namespace boost { namespace unordered { namespace detail {
 
             if (value_constructed_)
             {
-                boost::unordered::detail::destroy_value_impl(alloc_,
+                boost::unordered::detail::func::destroy_value_impl(alloc_,
                     node_->value_ptr());
                 value_constructed_ = false;
             }
@@ -541,7 +545,7 @@ namespace boost { namespace unordered { namespace detail {
             node_pointer p = nodes_;
             nodes_ = static_cast<node_pointer>(p->next_);
 
-            boost::unordered::detail::destroy_value_impl(this->alloc_,
+            boost::unordered::detail::func::destroy_value_impl(this->alloc_,
                 p->value_ptr());
             node_allocator_traits::destroy(this->alloc_, boost::addressof(*p));
             node_allocator_traits::deallocate(this->alloc_, p, 1);
@@ -736,7 +740,7 @@ namespace boost { namespace unordered { namespace detail {
 
         void destroy(bool which)
         {
-            boost::unordered::detail::destroy((function_pair*)(&funcs_[which]));
+            boost::unordered::detail::func::destroy((function_pair*)(&funcs_[which]));
         }
         
     public:
