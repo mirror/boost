@@ -20,7 +20,7 @@
 
 namespace quickbook
 {
-    // TODO: This should possibly try to make ids are generated:
+    // TODO: This should possibly try to always generate valid XML ids:
     // http://www.w3.org/TR/REC-xml/#NT-NameStartChar
 
     //
@@ -38,33 +38,49 @@ namespace quickbook
     //
     // id_placeholder
     //
+    // When generating the xml, quickbook can't allocate the identifiers until
+    // the end, so it stores in the intermedia xml a placeholder string,
+    // e.g. id="$1". This represents one of these placeholders.
+    //
 
     struct id_placeholder
     {
-        enum state_enum { child, unresolved, resolved, generated };
+        enum state_enum {
+            child,              // A child id before it's appended to the parent id.
+            unresolved,         // Id includes parent's fully generated id.
+            resolved,           // Id has been added to the data structures, might
+                                // still change if there are any duplicates.
+            generated           // The final id which has been altered to avoid
+                                // duplicates.
+        };
 
-        unsigned index;         // The poisition in the placeholder deque.
+        unsigned index;         // The index in id_state::placeholders.
+                                // Use for the dollar identifiers in
+                                // intermediate xml.
         state_enum generation_state;
-                                // Placeholder's position in generation
-                                // process.
+                                // The stage in the generation process.
         std::string unresolved_id;
-                                // The id that would be generated without any
-                                // duplicate handling.
+                                // The id that would be generated
+                                // without any duplicate handling.
+                                // Used for generating old style header anchors.
         std::string id;         // The id so far.
         id_placeholder* parent; // Placeholder of the parent id.
-                                // Only when generation_state == child
+                                // Set to 0 if there isn't a parent, or the
+                                // parent has been included in the id.
         id_category category;
         unsigned num_dots;      // Number of dots in the id.
-                                // Normally equal to the section level.
+                                // Normally equal to the section level
+                                // but not when an explicit id contains
+                                // dots.
         unsigned order;         // Order of the placeholders in the generated
                                 // xml. Stored because it can be slightly
                                 // different to the order they're generated
                                 // in. e.g. for nested tables the cells
                                 // are processed before the title id.
-                                // Only set when processing ids.
-        id_data* data;          // Assigned data shared by duplicate ids
-                                // used to detect them. Only when
-                                // generation_state == resolved
+                                // This is set when processing ids.
+        id_data* data;          // Data shared by placeholders with the same
+                                // ids.
+                                // Only valid when generation_state == resolved
 
         id_placeholder(
                 unsigned index,
@@ -106,6 +122,8 @@ namespace quickbook
 
     //
     // id_state
+    //
+    // Contains all the data tracked by the id_manager.
     //
 
     struct file_info;
