@@ -432,7 +432,8 @@ namespace quickbook
         block_start =
                 (*eol)                  [start_blocks]
             >>  (   *(  local.top_level
-                    >>  !(  cl::ch_p(']')
+                    >>  !(  qbk_ver(106u)
+                        >>  cl::ch_p(']')
                         >>  cl::eps_p   [error("Mismatched close bracket")]
                         )
                     )

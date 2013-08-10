@@ -79,6 +79,7 @@ test-suite quickbook.test :
     [ quickbook-error-test mismatched_brackets-1_1-fail ]
     [ quickbook-test mismatched_brackets1-1_1 ]
     [ quickbook-test mismatched_brackets2-1_1 ]
+    [ quickbook-test mismatched_brackets3-1_1 ]
     [ quickbook-test newline-1_1 ]
     [ quickbook-test para_test-1_5 ]
     [ quickbook-error-test post_process-fail ]
