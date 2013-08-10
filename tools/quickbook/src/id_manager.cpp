@@ -30,12 +30,11 @@ namespace quickbook
     struct id_placeholder;
     struct id_data;
     std::string replace_ids(id_state& state, boost::string_ref xml,
-            bool use_resolved_ids = true);
-    std::string process_ids(id_state&, boost::string_ref);
+            bool use_generated_ids = true);
+    void generate_ids(id_state&, boost::string_ref);
 
     static const std::size_t max_size = 32;
 
-    //
     // id_placeholder
     //
     // When generating the xml, quickbook can't allocate the identifiers until
@@ -319,7 +318,8 @@ private:
     std::string id_manager::replace_placeholders(boost::string_ref xml) const
     {
         assert(!state->current_file);
-        return process_ids(*state, xml);
+        generate_ids(*state, xml);
+        return replace_ids(*state, xml, true);
     }
 
     unsigned id_manager::compatibility_version() const
@@ -822,7 +822,7 @@ private:
     }
 
     //
-    // process_ids
+    // generate_ids
     //
 
     //
@@ -900,8 +900,10 @@ private:
     void resolve_id(id_placeholder&, allocated_ids&);
     void generate_id(id_placeholder&, allocated_ids&);
 
-    std::string process_ids(id_state& state, boost::string_ref xml)
+    void generate_ids(id_state& state, boost::string_ref xml)
     {
+        // Get a list of the placeholders in the order that we wish to
+        // process them.
         placeholder_index placeholders = index_placeholders(state, xml);
 
         typedef std::vector<id_placeholder*>::iterator iterator;
@@ -909,27 +911,32 @@ private:
         iterator it = placeholders.begin(),
             end = placeholders.end();
 
-        // Placeholder ids are processed in blocks of ids with
-        // an equal number of dots.
         while (it != end) {
-            unsigned num_dots = (*it)->num_dots;
+            // We process all the ids that have the same number of dots
+            // together. Note that ids with different parents can clash, e.g.
+            // because of old fashioned id generation or anchors containing
+            // multiple dots.
+            //
+            // So find the group of placeholders with the same number of dots.
+            iterator group_begin = it, group_end = it;
+            while (group_end != end && (*group_end)->num_dots == (*it)->num_dots)
+                ++group_end;
 
-            // ids can't clash with ids at a different num_dots, so
-            // this only needs to track the id generation data
-            // for a single num_dots at a time.
+            // Used to find duplicate ids, and store required data about them.
             allocated_ids ids;
 
-            iterator it2 = it;
-            do {
-                resolve_id(**it2++, ids);
-            } while(it2 != end && (*it2)->num_dots == num_dots);
+            // First resolve ids by adding them to their parent's ids
+            // (which have been fully processed in a previous iteration).
+            for (it = group_begin; it != group_end; ++it) {
+                resolve_id(**it, ids);
+            }
 
-            do {
-                generate_id(**it++, ids);
-            } while(it != it2);
+            // Generate the final ids, taking into account any duplicates
+            // found when resolving.
+            for (it = group_begin; it != group_end; ++it) {
+                generate_id(**it, ids);
+            }
         }
-
-        return replace_ids(state, xml);
     }
 
     //
@@ -1112,13 +1119,13 @@ private:
     struct replace_ids_callback : xml_processor::callback
     {
         id_state& state;
-        bool use_resolved_ids;
+        bool use_generated_ids;
         boost::string_ref::const_iterator source_pos;
         std::string result;
 
-        replace_ids_callback(id_state& state, bool resolved)
+        replace_ids_callback(id_state& state, bool use_generated_ids)
           : state(state),
-            use_resolved_ids(resolved),
+            use_generated_ids(use_generated_ids),
             source_pos(),
             result()
         {}
@@ -1132,9 +1139,9 @@ private:
         {
             if (id_placeholder* p = state.get_placeholder(value))
             {
-                assert(!use_resolved_ids ||
+                assert(!use_generated_ids ||
                     p->check_state(id_placeholder::generated));
-                boost::string_ref id = use_resolved_ids ?
+                boost::string_ref id = use_generated_ids ?
                     p->id : p->unresolved_id;
 
                 result.append(source_pos, value.begin());
@@ -1151,10 +1158,10 @@ private:
     };
 
     std::string replace_ids(id_state& state, boost::string_ref xml,
-            bool use_unresolved_ids)
+            bool use_generated_ids)
     {
         xml_processor processor;
-        replace_ids_callback callback(state, use_unresolved_ids);
+        replace_ids_callback callback(state, use_generated_ids);
         processor.parse(xml, callback);
         return callback.result;
     }
