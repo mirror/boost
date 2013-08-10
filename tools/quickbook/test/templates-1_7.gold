@@ -272,4 +272,11 @@
       * Not a list.
     </para>
   </section>
+  <section id="template_1_7.escaped_templates">
+    <title><link linkend="template_1_7.escaped_templates">Escaped templates</link></title>
+    <para>
+      <thingbob>Not real boostbook</thingbob> <thingbob>Also not real boostbook</thingbob>
+      <thingbob>More fake boostbook</thingbob> <thingbob>Final fake boostbook</thingbob>
+    </para>
+  </section>
 </article>

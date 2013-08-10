@@ -180,4 +180,11 @@
       </listitem>
     </itemizedlist>
   </section>
+  <section id="templates.escaped_templates">
+    <title><link linkend="templates.escaped_templates">Escaped templates</link></title>
+    <para>
+      <thingbob>Not real boostbook</thingbob> <thingbob>Also not real boostbook</thingbob>
+      <thingbob>More fake boostbook</thingbob> <thingbob>Final fake boostbook</thingbob>
+    </para>
+  </section>
 </article>
