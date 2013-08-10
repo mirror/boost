@@ -503,69 +503,8 @@ namespace boost{
 #endif
 
 // BOOST_[APPEND_]EXPLICIT_TEMPLATE_[NON_]TYPE macros --------------------------//
-//
-// Some compilers have problems with function templates whose template
-// parameters don't appear in the function parameter list (basically
-// they just link one instantiation of the template in the final
-// executable). These macros provide a uniform way to cope with the
-// problem with no effects on the calling syntax.
 
-// Example:
-//
-//  #include <iostream>
-//  #include <ostream>
-//  #include <typeinfo>
-//
-//  template <int n>
-//  void f() { std::cout << n << ' '; }
-//
-//  template <typename T>
-//  void g() { std::cout << typeid(T).name() << ' '; }
-//
-//  int main() {
-//    f<1>();
-//    f<2>();
-//
-//    g<int>();
-//    g<double>();
-//  }
-//
-// With VC++ 6.0 the output is:
-//
-//   2 2 double double
-//
-// To fix it, write
-//
-//   template <int n>
-//   void f(BOOST_EXPLICIT_TEMPLATE_NON_TYPE(int, n)) { ... }
-//
-//   template <typename T>
-//   void g(BOOST_EXPLICIT_TEMPLATE_TYPE(T)) { ... }
-//
-
-
-#if defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS) && defined(__cplusplus)
-
-#  include "boost/type.hpp"
-#  include "boost/non_type.hpp"
-
-#  define BOOST_EXPLICIT_TEMPLATE_TYPE(t)              boost::type<t>* = 0
-#  define BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(t)         boost::type<t>*
-#  define BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t, v)       boost::non_type<t, v>* = 0
-#  define BOOST_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)  boost::non_type<t, v>*
-
-#  define BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)        \
-             , BOOST_EXPLICIT_TEMPLATE_TYPE(t)
-#  define BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(t)   \
-             , BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
-#  define BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v) \
-             , BOOST_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
-#  define BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)    \
-             , BOOST_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
-
-#else
-
-// no workaround needed: expand to nothing
+// These macros are obsolete. Port away and remove.
 
 #  define BOOST_EXPLICIT_TEMPLATE_TYPE(t)
 #  define BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
@@ -576,9 +515,6 @@ namespace boost{
 #  define BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE_SPEC(t)
 #  define BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(t, v)
 #  define BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE_SPEC(t, v)
-
-
-#endif // defined BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
 
 // When BOOST_NO_STD_TYPEINFO is defined, we can just import
 // the global definition into std namespace:

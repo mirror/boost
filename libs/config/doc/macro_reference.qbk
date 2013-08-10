@@ -105,10 +105,6 @@ indeed doing so may be impossible in some cases. Those libraries that do
 honor this will typically abort if a critical error occurs - you have been
 warned!
 ]]
-[[`BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS`][Compiler][
-Can only use deduced template arguments when calling function template
-instantiations.
-]]
 [[`BOOST_NO_FUNCTION_TEMPLATE_ORDERING`][Compiler][
 The compiler does not perform function template ordering or its function
 template ordering is incorrect.
