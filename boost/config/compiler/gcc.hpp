@@ -242,8 +242,8 @@
 #endif
 
 // versions check:
-// we don't know gcc prior to version 2.90:
-#if (__GNUC__ < 3) || (__GNUC__ == 3 && (__GNUC_MINOR__ < 3)
+// we don't know gcc prior to version 3.30:
+#if (__GNUC__ < 3) || (__GNUC__ == 3 && (__GNUC_MINOR__ < 3))
 #  error "Compiler not configured - please reconfigure"
 #endif
 //
