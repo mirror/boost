@@ -29,9 +29,9 @@ namespace quickbook
 
     struct id_placeholder;
     struct id_data;
-    std::string replace_ids(id_state& state, boost::string_ref xml,
+    std::string replace_ids(id_state const& state, boost::string_ref xml,
             std::vector<std::string> const* = 0);
-    std::vector<std::string> generate_ids(id_state&, boost::string_ref);
+    std::vector<std::string> generate_ids(id_state const&, boost::string_ref);
 
     static const std::size_t max_size = 32;
 
@@ -52,7 +52,8 @@ namespace quickbook
                                 // without any duplicate handling.
                                 // Used for generating old style header anchors.
         std::string id;         // The node id.
-        id_placeholder* parent; // Placeholder of the parent id.
+        id_placeholder const* parent;
+                                // Placeholder of the parent id.
         id_category category;
         unsigned num_dots;      // Number of dots in the id.
                                 // Normally equal to the section level
@@ -63,7 +64,7 @@ namespace quickbook
                 unsigned index,
                 boost::string_ref id,
                 id_category category,
-                id_placeholder* parent_ = 0)
+                id_placeholder const* parent_ = 0)
           : index(index),
             unresolved_id(parent_ ?
                 parent_->unresolved_id + '.' + detail::to_s(id) :
@@ -76,7 +77,7 @@ namespace quickbook
         {
         }
 
-        std::string to_string()
+        std::string to_string() const
         {
             return '$' + boost::lexical_cast<std::string>(index);
         }
@@ -99,17 +100,17 @@ namespace quickbook
 
         // Placeholder methods
 
-        id_placeholder* add_placeholder(boost::string_ref, id_category,
-            id_placeholder* parent = 0);
+        id_placeholder const* add_placeholder(boost::string_ref, id_category,
+            id_placeholder const* parent = 0);
 
-        id_placeholder* get_placeholder(boost::string_ref);
+        id_placeholder const* get_placeholder(boost::string_ref) const;
 
-        id_placeholder* get_id_placeholder(
+        id_placeholder const* get_id_placeholder(
                 boost::shared_ptr<section_info> const& section) const;
 
         // Events
 
-        id_placeholder* start_file(
+        id_placeholder const* start_file(
                 unsigned compatibility_version,
                 bool document_root,
                 boost::string_ref include_doc_id,
@@ -118,23 +119,23 @@ namespace quickbook
 
         void end_file();
 
-        id_placeholder* add_id(
+        id_placeholder const* add_id(
                 boost::string_ref id,
                 id_category category);
-        id_placeholder* old_style_id(
+        id_placeholder const* old_style_id(
             boost::string_ref id,
             id_category category);
-        id_placeholder* begin_section(
+        id_placeholder const* begin_section(
                 boost::string_ref id,
                 id_category category);
         void end_section();
 
     private:
-        id_placeholder* add_id_to_section(
+        id_placeholder const* add_id_to_section(
                 boost::string_ref id,
                 id_category category,
                 boost::shared_ptr<section_info> const& section);
-        id_placeholder* create_new_section(
+        id_placeholder const* create_new_section(
                 boost::string_ref id,
                 id_category category);
     };
@@ -148,7 +149,7 @@ namespace quickbook
         unsigned compatibility_version;
         unsigned depth;
         unsigned override_depth;
-        id_placeholder* override_id;
+        id_placeholder const* override_id;
 
         // The 1.1-1.5 document id would actually change per file due to
         // explicit ids in includes and a bug which would sometimes use the
@@ -191,7 +192,7 @@ namespace quickbook
         unsigned file_depth;
         unsigned level;
         std::string id_1_1;
-        id_placeholder* placeholder_1_6;
+        id_placeholder const* placeholder_1_6;
 
         section_info(boost::shared_ptr<section_info> const& parent,
                 file_info const* current_file, boost::string_ref id) :
@@ -349,16 +350,16 @@ namespace quickbook
     // id_state
     //
 
-    id_placeholder* id_state::add_placeholder(
+    id_placeholder const* id_state::add_placeholder(
             boost::string_ref id, id_category category,
-            id_placeholder* parent)
+            id_placeholder const* parent)
     {
         placeholders.push_back(id_placeholder(
             placeholders.size(), id, category, parent));
         return &placeholders.back();
     }
 
-    id_placeholder* id_state::get_placeholder(boost::string_ref value)
+    id_placeholder const* id_state::get_placeholder(boost::string_ref value) const
     {
         // If this isn't a placeholder id.
         if (value.size() <= 1 || *value.begin() != '$')
@@ -370,7 +371,7 @@ namespace quickbook
         return &placeholders.at(index);
     }
 
-    id_placeholder* id_state::get_id_placeholder(
+    id_placeholder const* id_state::get_id_placeholder(
             boost::shared_ptr<section_info> const& section) const
     {
         return !section ? 0 :
@@ -378,7 +379,7 @@ namespace quickbook
                 current_file->override_id : section->placeholder_1_6;
     }
 
-    id_placeholder* id_state::start_file(
+    id_placeholder const* id_state::start_file(
             unsigned compatibility_version,
             bool document_root,
             boost::string_ref include_doc_id,
@@ -470,7 +471,7 @@ namespace quickbook
         current_file = current_file->parent;
     }
 
-    id_placeholder* id_state::add_id(
+    id_placeholder const* id_state::add_id(
             boost::string_ref id,
             id_category category)
     {
@@ -478,7 +479,7 @@ namespace quickbook
             current_file->document->current_section);
     }
 
-    id_placeholder* id_state::add_id_to_section(
+    id_placeholder const* id_state::add_id_to_section(
             boost::string_ref id,
             id_category category,
             boost::shared_ptr<section_info> const& section)
@@ -493,7 +494,7 @@ namespace quickbook
             id_part = normalize_id(id);
         }
 
-        id_placeholder* placeholder_1_6 = get_id_placeholder(section);
+        id_placeholder const* placeholder_1_6 = get_id_placeholder(section);
 
         if(!section || section->compatibility_version >= 106u) {
             return add_placeholder(id_part, category, placeholder_1_6);
@@ -513,7 +514,7 @@ namespace quickbook
         }
     }
 
-    id_placeholder* id_state::old_style_id(
+    id_placeholder const* id_state::old_style_id(
         boost::string_ref id,
         id_category category)
     {
@@ -523,7 +524,7 @@ namespace quickbook
                 add_id(id, category);
     }
 
-    id_placeholder* id_state::begin_section(
+    id_placeholder const* id_state::begin_section(
             boost::string_ref id,
             id_category category)
     {
@@ -531,7 +532,7 @@ namespace quickbook
         return create_new_section(id, category);
     }
 
-    id_placeholder* id_state::create_new_section(
+    id_placeholder const* id_state::create_new_section(
             boost::string_ref id,
             id_category category)
     {
@@ -542,7 +543,7 @@ namespace quickbook
             boost::make_shared<section_info>(parent,
                 current_file.get(), id);
 
-        id_placeholder* p;
+        id_placeholder const* p;
 
         if (new_section->compatibility_version >= 106u) {
             p = add_id_to_section(id, category, parent);
@@ -832,14 +833,14 @@ namespace quickbook
 
     typedef boost::unordered_map<std::string, id_data> allocated_ids;
     typedef std::vector<placeholder_generation_data> placeholder_data;
-    typedef std::vector<id_placeholder*> placeholder_index;
+    typedef std::vector<id_placeholder const*> placeholder_index;
 
-    placeholder_index index_placeholders(id_state&, boost::string_ref xml);
-    void resolve_id(id_placeholder&, std::vector<std::string> const&,
+    placeholder_index index_placeholders(id_state const&, boost::string_ref xml);
+    void resolve_id(id_placeholder const&, std::vector<std::string> const&,
         allocated_ids&, placeholder_data& data);
-    std::string generate_id(id_placeholder&, allocated_ids&, placeholder_data& data);
+    std::string generate_id(id_placeholder const&, allocated_ids&, placeholder_data& data);
 
-    std::vector<std::string> generate_ids(id_state& state, boost::string_ref xml)
+    std::vector<std::string> generate_ids(id_state const& state, boost::string_ref xml)
     {
         std::vector<std::string> generated_ids(state.placeholders.size());
 
@@ -847,7 +848,7 @@ namespace quickbook
         // process them.
         placeholder_index placeholders = index_placeholders(state, xml);
 
-        typedef std::vector<id_placeholder*>::iterator iterator;
+        typedef std::vector<id_placeholder const*>::iterator iterator;
 
         iterator it = placeholders.begin(),
             end = placeholders.end();
@@ -896,7 +897,7 @@ namespace quickbook
 
         placeholder_compare(std::vector<unsigned>& order) : order(order) {}
 
-        bool operator()(id_placeholder* x, id_placeholder* y) const
+        bool operator()(id_placeholder const* x, id_placeholder const* y) const
         {
             bool x_explicit = x->category.c >= id_category::explicit_id;
             bool y_explicit = y->category.c >= id_category::explicit_id;
@@ -912,11 +913,11 @@ namespace quickbook
 
     struct get_placeholder_order_callback : xml_processor::callback
     {
-        id_state& state;
+        id_state const& state;
         std::vector<unsigned>& order;
         unsigned count;
 
-        get_placeholder_order_callback(id_state& state,
+        get_placeholder_order_callback(id_state const& state,
                 std::vector<unsigned>& order)
           : state(state),
             order(order),
@@ -938,7 +939,7 @@ namespace quickbook
     };
 
     placeholder_index index_placeholders(
-            id_state& state,
+            id_state const& state,
             boost::string_ref xml)
     {
         // The order that the placeholder appear in the xml source.
@@ -950,7 +951,7 @@ namespace quickbook
 
         placeholder_index sorted_placeholders;
         sorted_placeholders.reserve(state.placeholders.size());
-        BOOST_FOREACH(id_placeholder& p, state.placeholders)
+        BOOST_FOREACH(id_placeholder const& p, state.placeholders)
             if (order[p.index]) sorted_placeholders.push_back(&p);
         boost::sort(sorted_placeholders, placeholder_compare(order));
 
@@ -968,7 +969,7 @@ namespace quickbook
     // the child id.
     //
 
-    void resolve_id(id_placeholder& p, std::vector<std::string> const& generated_ids,
+    void resolve_id(id_placeholder const& p, std::vector<std::string> const& generated_ids,
             allocated_ids& ids, placeholder_data& data)
     {
         assert(!data[p.index].data);
@@ -989,10 +990,10 @@ namespace quickbook
     // Finally generate the final id.
     //
 
-    void register_generation_data(id_placeholder&, allocated_ids&,
+    void register_generation_data(id_placeholder const&, allocated_ids&,
             placeholder_data& data);
 
-    std::string generate_id(id_placeholder& p, allocated_ids& ids,
+    std::string generate_id(id_placeholder const& p, allocated_ids& ids,
             placeholder_data& data)
     {
         assert(data[p.index].data);
@@ -1037,7 +1038,7 @@ namespace quickbook
 
     // Every time the generation id is changed, this is called to
     // check if that id is already in use.
-    void register_generation_data(id_placeholder& p, allocated_ids& ids,
+    void register_generation_data(id_placeholder const& p, allocated_ids& ids,
             placeholder_data& data)
     {
         std::string const& id = data[p.index].data->generation_data->id;
@@ -1061,12 +1062,12 @@ namespace quickbook
 
     struct replace_ids_callback : xml_processor::callback
     {
-        id_state& state;
+        id_state const& state;
         std::vector<std::string> const* ids;
         boost::string_ref::const_iterator source_pos;
         std::string result;
 
-        replace_ids_callback(id_state& state,
+        replace_ids_callback(id_state const& state,
                 std::vector<std::string> const* ids)
           : state(state),
             ids(ids),
@@ -1081,7 +1082,7 @@ namespace quickbook
 
         void id_value(boost::string_ref value)
         {
-            if (id_placeholder* p = state.get_placeholder(value))
+            if (id_placeholder const* p = state.get_placeholder(value))
             {
                 boost::string_ref id = ids ?
                     (*ids)[p->index] : p->unresolved_id;
@@ -1099,7 +1100,7 @@ namespace quickbook
         }
     };
 
-    std::string replace_ids(id_state& state, boost::string_ref xml,
+    std::string replace_ids(id_state const& state, boost::string_ref xml,
             std::vector<std::string> const* ids)
     {
         xml_processor processor;
