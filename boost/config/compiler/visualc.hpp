@@ -237,7 +237,14 @@
 #      endif
 #   endif
 # else
-#   if _MSC_VER < 1400
+#   if _MSC_VER < 1310
+      // Note: Versions up to 7.0 aren't supported.
+#     define BOOST_COMPILER_VERSION 5.0
+#   elif _MSC_VER < 1300
+#     define BOOST_COMPILER_VERSION 6.0
+#   elif _MSC_VER < 1310
+#     define BOOST_COMPILER_VERSION 7.0
+#   elif _MSC_VER < 1400
 #     define BOOST_COMPILER_VERSION 7.1
 #   elif _MSC_VER < 1500
 #     define BOOST_COMPILER_VERSION 8.0
