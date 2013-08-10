@@ -391,6 +391,8 @@ namespace quickbook
 
         if (!element_id.empty())
         {
+            // Use an explicit id.
+
             std::string anchor = state.ids.add_id(
                 element_id.get_quickbook(),
                 id_category::explicit_id);
@@ -398,34 +400,48 @@ namespace quickbook
             write_bridgehead(state, level,
                 content.get_encoded(), anchor, self_linked_headers);
         }
-        else if (!generic && state.ids.compatibility_version() < 103) // version 1.2 and below
+        else if (state.ids.compatibility_version() >= 106u)
         {
-            // This generates the old id style if both the interpreting
-            // version and the generation version are less then 103u.
+            // Generate ids for 1.6+
 
-            std::string anchor = state.ids.old_style_id(
-                detail::make_identifier(
-                    state.ids.replace_placeholders_with_unresolved_ids(
-                        content.get_encoded())),
-                id_category::generated_heading);
-
-            write_bridgehead(state, level,
-                content.get_encoded(), anchor, false);
-
-        }
-        else
-        {
             std::string anchor = state.ids.add_id(
-                detail::make_identifier(
-                    state.ids.compatibility_version() >= 106 ?
-                        content.get_quickbook() :
-                        state.ids.replace_placeholders_with_unresolved_ids(
-                            content.get_encoded())
-                ),
+                detail::make_identifier(content.get_quickbook()),
                 id_category::generated_heading);
 
             write_bridgehead(state, level,
                 content.get_encoded(), anchor, self_linked_headers);
+        }
+        else
+        {
+            // Generate ids that are compatible with older versions of quickbook.
+
+            // Older versions of quickbook used the generated boostbook, but
+            // we only have an intermediate version which can contain id
+            // placeholders. So to generate the ids they must be replaced
+            // by the ids that the older versions would have used - i.e. the
+            // unresolved ids.
+            //
+            // Note that this doesn't affect the actual boostbook generated for
+            // the content, it's just used to generate this id.
+
+            std::string id = detail::make_identifier(
+                    state.ids.replace_placeholders_with_unresolved_ids(
+                        content.get_encoded()));
+
+            if (generic || state.ids.compatibility_version() >= 103) {
+                std::string anchor =
+                    state.ids.add_id(id, id_category::generated_heading);
+
+                write_bridgehead(state, level,
+                    content.get_encoded(), anchor, self_linked_headers);
+            }
+            else {
+                std::string anchor =
+                    state.ids.old_style_id(id, id_category::generated_heading);
+
+                write_bridgehead(state, level,
+                    content.get_encoded(), anchor, false);
+            }
         }
     }
 
