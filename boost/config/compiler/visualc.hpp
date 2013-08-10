@@ -34,69 +34,17 @@
 // Attempt to suppress VC6 warnings about the length of decorated names (obsolete):
 #pragma warning( disable : 4503 ) // warning: decorated name length exceeded
 
-#if _MSC_VER >= 1020
-#  define BOOST_HAS_PRAGMA_ONCE
-#endif
+#define BOOST_HAS_PRAGMA_ONCE
 
 //
 // versions check:
-// we don't support Visual C++ prior to version 6:
-#if _MSC_VER < 1200
+// we don't support Visual C++ prior to version 7.1:
+#if _MSC_VER < 1310
 #  error "Compiler not supported or configured - please reconfigure"
-#endif
-
-#if _MSC_VER < 1300  // 1200 == VC++ 6.0, 1200-1202 == eVC++4
-#  pragma warning( disable : 4786 ) // ident trunc to '255' chars in debug info
-#  define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-#  define BOOST_NO_VOID_RETURNS
-#  define BOOST_NO_EXCEPTION_STD_NAMESPACE
-
-#  if _MSC_VER == 1202
-#    define BOOST_NO_STD_TYPEINFO
-#  endif
-
 #endif
 
 /// Visual Studio has no fenv.h
 #define BOOST_NO_FENV_H
-
-#if (_MSC_VER < 1310)  // 130X == VC++ 7.0
-
-#  if !defined(_MSC_EXTENSIONS) && !defined(BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS)      // VC7 bug with /Za
-#    define BOOST_NO_DEPENDENT_TYPES_IN_TEMPLATE_VALUE_PARAMETERS
-#  endif
-
-#  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
-#  define BOOST_NO_INCLASS_MEMBER_INITIALIZATION
-#  define BOOST_NO_PRIVATE_IN_AGGREGATE
-#  define BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP
-#  define BOOST_NO_INTEGRAL_INT64_T
-#  define BOOST_NO_DEDUCED_TYPENAME
-#  define BOOST_NO_USING_DECLARATION_OVERLOADS_FROM_TYPENAME_BASE
-
-//    VC++ 6/7 has member templates but they have numerous problems including
-//    cases of silent failure, so for safety we define:
-#  define BOOST_NO_MEMBER_TEMPLATES
-//    For VC++ experts wishing to attempt workarounds, we define:
-#  define BOOST_MSVC6_MEMBER_TEMPLATES
-
-#  define BOOST_NO_MEMBER_TEMPLATE_FRIENDS
-#  define BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#  define BOOST_NO_CV_VOID_SPECIALIZATIONS
-#  define BOOST_NO_FUNCTION_TEMPLATE_ORDERING
-#  define BOOST_NO_USING_TEMPLATE
-#  define BOOST_NO_SWPRINTF
-#  define BOOST_NO_TEMPLATE_TEMPLATES
-#  define BOOST_NO_SFINAE
-#  define BOOST_NO_POINTER_TO_MEMBER_TEMPLATE_PARAMETERS
-#  define BOOST_NO_IS_ABSTRACT
-#  define BOOST_NO_FUNCTION_TYPE_SPECIALIZATIONS
-// TODO: what version is meant here? Have there really been any fixes in cl 12.01 (as e.g. shipped with eVC4)?
-#  if (_MSC_VER >= 1300)
-#     define BOOST_NO_MEMBER_FUNCTION_SPECIALIZATIONS
-#  endif
-
-#endif
 
 #if _MSC_VER < 1400
 // although a conforming signature for swprint exists in VC7.1
@@ -161,10 +109,8 @@
 //
 // __int64 support:
 //
-#if (_MSC_VER >= 1200)
-#   define BOOST_HAS_MS_INT64
-#endif
-#if (_MSC_VER >= 1310) && (defined(_MSC_EXTENSIONS) || (_MSC_VER >= 1400))
+#define BOOST_HAS_MS_INT64
+#if defined(_MSC_EXTENSIONS) || (_MSC_VER >= 1400)
 #   define BOOST_HAS_LONG_LONG
 #else
 #   define BOOST_NO_LONG_LONG
@@ -268,11 +214,7 @@
 // were shipped with freely downloadable SDKs, others as crosscompilers in eVC.
 // IOW, you can't use these 'versions' in any sensible way. Sorry.
 # if defined(UNDER_CE)
-#   if _MSC_VER < 1200
-      // Note: these are so far off, they are not really supported
-#   elif _MSC_VER < 1300 // eVC++ 4 comes with 1200-1202
-#     define BOOST_COMPILER_VERSION evc4.0
-#   elif _MSC_VER < 1400
+#   if _MSC_VER < 1400
       // Note: I'm not aware of any CE compiler with version 13xx
 #      if defined(BOOST_ASSERT_CONFIG)
 #         error "Unknown EVC++ compiler version - please run the configure tests and report the results"
@@ -295,14 +237,7 @@
 #      endif
 #   endif
 # else
-#   if _MSC_VER < 1200
-      // Note: these are so far off, they are not really supported
-#     define BOOST_COMPILER_VERSION 5.0
-#   elif _MSC_VER < 1300
-#       define BOOST_COMPILER_VERSION 6.0
-#   elif _MSC_VER < 1310
-#     define BOOST_COMPILER_VERSION 7.0
-#   elif _MSC_VER < 1400
+#   if _MSC_VER < 1400
 #     define BOOST_COMPILER_VERSION 7.1
 #   elif _MSC_VER < 1500
 #     define BOOST_COMPILER_VERSION 8.0
