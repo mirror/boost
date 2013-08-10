@@ -727,15 +727,18 @@ namespace boost { namespace unordered { namespace detail {
             new((void*) &funcs_[which]) function_pair(hf, eq);
         }
 
-        void construct(bool which, function_pair const& f)
+        void construct(bool which, function_pair const& f,
+                boost::unordered::detail::false_type =
+                    boost::unordered::detail::false_type())
         {
             new((void*) &funcs_[which]) function_pair(f);
         }
         
         void construct(bool which, function_pair& f,
-                boost::unordered::detail::move_tag m)
+                boost::unordered::detail::true_type)
         {
-            new((void*) &funcs_[which]) function_pair(f, m);
+            new((void*) &funcs_[which]) function_pair(f,
+                boost::unordered::detail::move_tag());
         }
 
         void destroy(bool which)
@@ -760,15 +763,12 @@ namespace boost { namespace unordered { namespace detail {
             construct(current_, bf.current());
         }
 
-        functions(functions& bf, boost::unordered::detail::move_tag m)
+        functions(functions& bf, boost::unordered::detail::move_tag)
             : current_(false)
         {
-            if (nothrow_move_constructible) {
-                construct(current_, bf.current(), m);
-            }
-            else {
-                construct(current_, bf.current());
-            }
+            construct(current_, bf.current(),
+                boost::unordered::detail::integral_constant<bool,
+                    nothrow_move_constructible>());
         }
 
         ~functions() {
