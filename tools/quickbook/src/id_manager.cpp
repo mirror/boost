@@ -45,10 +45,11 @@ namespace quickbook
     struct id_placeholder
     {
         enum state_enum {
-            child,              // A child id before it's appended to the parent id.
-            unresolved,         // Id includes parent's fully generated id.
-            resolved,           // Id has been added to the data structures, might
-                                // still change if there are any duplicates.
+            initial,            // The initial value of the id.
+            resolved,           // If it has a parent, the id has been appended
+                                // to the parent's fully generated id.
+                                // And has been added to the id generation data
+                                // structures.
             generated           // The final id which has been altered to avoid
                                 // duplicates.
         };
@@ -78,7 +79,7 @@ namespace quickbook
                 id_category category,
                 id_placeholder* parent_ = 0)
           : index(index),
-            generation_state(parent_ ? child : unresolved),
+            generation_state(initial),
             unresolved_id(parent_ ?
                 parent_->unresolved_id + '.' + detail::to_s(id) :
                 detail::to_s(id)),
@@ -97,7 +98,7 @@ namespace quickbook
 
         bool check_state() const
         {
-            return (generation_state == child) == (bool) parent;
+            return generation_state == initial || !parent;
         }
 
         bool check_state(state_enum s) const
@@ -1016,23 +1017,25 @@ private:
     void resolve_id(id_placeholder& p, allocated_ids& ids,
             placeholder_data& data)
     {
-        if (p.generation_state == id_placeholder::child)
-        {
-            assert(p.check_state());
+        assert(p.check_state(id_placeholder::initial));
 
+        std::string id;
+
+        if (p.parent) {
             assert(p.parent->check_state(id_placeholder::generated));
 
-            p.id = p.parent->id + "." + p.id;
-            p.generation_state = id_placeholder::unresolved;
-            p.parent = 0;
+            id = p.parent->id + "." + p.id;
+        }
+        else {
+            id = p.id;
         }
 
-        assert(p.check_state(id_placeholder::unresolved));
-
-        id_data& data_ = ids.emplace(p.id, id_data()).first->second;
+        id_data& data_ = ids.emplace(id, id_data()).first->second;
         data_.update_category(p.category);
 
         data[p.index] = &data_;
+        p.id = id;
+        p.parent = 0;
         p.generation_state = id_placeholder::resolved;
     }
 
