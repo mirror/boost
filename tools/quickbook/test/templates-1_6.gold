@@ -237,8 +237,7 @@
   <section id="template_1_6.escaped_templates">
     <title><link linkend="template_1_6.escaped_templates">Escaped templates</link></title>
     <para>
-      <thingbob>Not real boostbook</thingbob> <thingbob>Also not real boostbook</thingbob>
-      <thingbob>More fake boostbook</thingbob> <thingbob>Final fake boostbook</thingbob>
+      <thingbob>Not real boostbook</thingbob> <thingbob>More fake boostbook</thingbob>
     </para>
   </section>
 </article>

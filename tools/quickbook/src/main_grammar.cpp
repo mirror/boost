@@ -642,10 +642,24 @@ namespace quickbook
             (   '['
             >>  space
             >>  state.values.list(template_tags::template_)
-                [   !cl::str_p("`")             [state.values.entry(ph::arg1, ph::arg2, template_tags::escape)]
-                >>  (   cl::eps_p(cl::punct_p)
-                    >>  state.templates.scope   [state.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
-                    |   state.templates.scope   [state.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
+                [   (   cl::str_p('`')
+                    >>  cl::eps_p(cl::punct_p)
+                    >>  state.templates.scope
+                            [state.values.entry(ph::arg1, ph::arg2, template_tags::escape)]
+                            [state.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
+                    >>  !qbk_ver(106u)
+                            [error("Templates with punctuation names can't be escaped in quickbook 1.6+")]
+                    |   cl::str_p('`')
+                    >>  state.templates.scope
+                            [state.values.entry(ph::arg1, ph::arg2, template_tags::escape)]
+                            [state.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
+
+                    |   cl::eps_p(cl::punct_p)
+                    >>  state.templates.scope
+                            [state.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
+
+                    |   state.templates.scope
+                            [state.values.entry(ph::arg1, ph::arg2, template_tags::identifier)]
                     >>  cl::eps_p(hard_space)
                     )
                 >>  space
