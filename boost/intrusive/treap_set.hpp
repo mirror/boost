@@ -471,9 +471,9 @@ class treap_set
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
 
-   treap_set( const value_compare &cmp    = value_compare()
-           , const priority_compare &pcmp = priority_compare()
-           , const value_traits &v_traits = value_traits())
+   explicit treap_set( const value_compare &cmp    = value_compare()
+                     , const priority_compare &pcmp = priority_compare()
+                     , const value_traits &v_traits = value_traits())
       :  Base(cmp, pcmp, v_traits)
    {}
 
@@ -937,9 +937,9 @@ class treap_multiset
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
 
-   treap_multiset( const value_compare &cmp    = value_compare()
-           , const priority_compare &pcmp = priority_compare()
-           , const value_traits &v_traits = value_traits())
+   explicit treap_multiset( const value_compare &cmp    = value_compare()
+                          , const priority_compare &pcmp = priority_compare()
+                          , const value_traits &v_traits = value_traits())
       :  Base(cmp, pcmp, v_traits)
    {}
 

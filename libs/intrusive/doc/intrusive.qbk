@@ -3368,10 +3368,10 @@ To analyze the thread safety, consider the following points:
 [section:scary_iterators Scary Iterators]
 
 The paper N2913, titled [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2913.pdf,
-SCARY Iterator Assignment and Initialization], proposed a requirement that a standard container’s
-iterator types have no dependency on any type argument apart from the container’s `value_type`,
+SCARY Iterator Assignment and Initialization], proposed a requirement that a standard container's
+iterator types have no dependency on any type argument apart from the container's `value_type`,
 `difference_type`, `pointer type`, and `const_pointer` type. In particular, according to the proposal,
-the types of a standard container’s iterators should not depend on the container’s `key_compare`,
+the types of a standard container's iterators should not depend on the container's `key_compare`,
 `hasher`, `key_equal`, or `allocator` types.
 
 That paper demonstrated that SCARY operations were crucial to the performant implementation of common

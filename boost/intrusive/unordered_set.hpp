@@ -161,6 +161,7 @@ class unordered_set_impl
    unordered_set_impl& operator=(BOOST_RV_REF(unordered_set_impl) x)
    {  return static_cast<unordered_set_impl&>(table_type::operator=(::boost::move(static_cast<table_type&>(x)))); }
 
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: Detaches all elements from this. The objects in the unordered_set
    //!   are not deleted (i.e. no destructors are called).
    //!
@@ -171,7 +172,6 @@ class unordered_set_impl
    ~unordered_set_impl()
    {}
 
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the unordered_set.
    //!
    //! <b>Complexity</b>: Constant time if `cache_begin<>` is true. Amortized
@@ -1089,10 +1089,10 @@ class unordered_set
    typedef typename Base::hasher             hasher;
    typedef typename Base::key_equal          key_equal;
 
-   unordered_set  ( const bucket_traits &b_traits
-                  , const hasher & hash_func = hasher()
-                  , const key_equal &equal_func = key_equal()
-                  , const value_traits &v_traits = value_traits())
+   explicit unordered_set  ( const bucket_traits &b_traits
+                           , const hasher & hash_func = hasher()
+                           , const key_equal &equal_func = key_equal()
+                           , const value_traits &v_traits = value_traits())
       :  Base(b_traits, hash_func, equal_func, v_traits)
    {}
 
@@ -1254,6 +1254,8 @@ class unordered_multiset_impl
    unordered_multiset_impl& operator=(BOOST_RV_REF(unordered_multiset_impl) x)
    {  return static_cast<unordered_multiset_impl&>(table_type::operator=(::boost::move(static_cast<table_type&>(x))));  }
 
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
+
    //! <b>Effects</b>: Detaches all elements from this. The objects in the unordered_multiset
    //!   are not deleted (i.e. no destructors are called).
    //!
@@ -1263,8 +1265,6 @@ class unordered_multiset_impl
    //! <b>Throws</b>: Nothing.
    ~unordered_multiset_impl()
    {}
-
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the unordered_multiset.
    //!
@@ -2125,10 +2125,10 @@ class unordered_multiset
    typedef typename Base::hasher             hasher;
    typedef typename Base::key_equal          key_equal;
 
-   unordered_multiset( const bucket_traits &b_traits
-                     , const hasher & hash_func = hasher()
-                     , const key_equal &equal_func = key_equal()
-                     , const value_traits &v_traits = value_traits())
+   explicit unordered_multiset( const bucket_traits &b_traits
+                              , const hasher & hash_func = hasher()
+                              , const key_equal &equal_func = key_equal()
+                              , const value_traits &v_traits = value_traits())
       :  Base(b_traits, hash_func, equal_func, v_traits)
    {}
 

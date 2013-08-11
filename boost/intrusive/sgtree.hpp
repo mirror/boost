@@ -34,7 +34,6 @@
 #include <boost/intrusive/detail/tree_node.hpp>
 #include <boost/intrusive/detail/ebo_functor_holder.hpp>
 #include <boost/intrusive/pointer_traits.hpp>
-#include <boost/intrusive/detail/clear_on_destructor_base.hpp>
 #include <boost/intrusive/detail/mpl.hpp>
 #include <boost/intrusive/detail/utilities.hpp>
 #include <boost/intrusive/options.hpp>
@@ -925,8 +924,8 @@ class sgtree
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename real_value_traits::value_type, T>::value));
 
-   sgtree( const value_compare &cmp = value_compare()
-         , const value_traits &v_traits = value_traits())
+   explicit sgtree( const value_compare &cmp = value_compare()
+                  , const value_traits &v_traits = value_traits())
       :  Base(cmp, v_traits)
    {}
 

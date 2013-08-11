@@ -63,9 +63,12 @@ template<class T, class ...Options>
 template <class ValueTraits, class SizeType, bool ConstantTimeSize>
 #endif
 class list_impl
-   :  private detail::clear_on_destructor_base< list_impl<ValueTraits, SizeType, ConstantTimeSize> >
+   :  private detail::clear_on_destructor_base
+         < list_impl<ValueTraits, SizeType, ConstantTimeSize>
+         , is_safe_autounlink<detail::get_real_value_traits<ValueTraits>::type::link_mode>::value
+         >
 {
-   template<class C> friend class detail::clear_on_destructor_base;
+   template<class C, bool> friend class detail::clear_on_destructor_base;
    //Public typedefs
    public:
    typedef ValueTraits value_traits;
@@ -123,7 +126,7 @@ class list_impl
    struct data_t : public value_traits
    {
       typedef typename list_impl::value_traits value_traits;
-      data_t(const value_traits &val_traits)
+      explicit data_t(const value_traits &val_traits)
          :  value_traits(val_traits)
       {}
 
@@ -224,6 +227,7 @@ class list_impl
    list_impl& operator=(BOOST_RV_REF(list_impl) x)
    {  this->swap(x); return *this;  }
 
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: If it's not a safe-mode or an auto-unlink value_type
    //!   the destructor does nothing
    //!   (ie. no code is generated). Otherwise it detaches all elements from this.
@@ -235,6 +239,7 @@ class list_impl
    //!   it's a safe-mode or auto-unlink value . Otherwise constant.
    ~list_impl()
    {}
+   #endif
 
    //! <b>Requires</b>: value must be an lvalue.
    //!
@@ -1473,7 +1478,7 @@ class list
    typedef typename Base::iterator              iterator;
    typedef typename Base::const_iterator        const_iterator;
 
-   list(const value_traits &v_traits = value_traits())
+   explicit list(const value_traits &v_traits = value_traits())
       :  Base(v_traits)
    {}
 

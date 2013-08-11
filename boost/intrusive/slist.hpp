@@ -99,9 +99,12 @@ template<class T, class ...Options>
 template<class ValueTraits, class SizeType, std::size_t BoolFlags>
 #endif
 class slist_impl
-   :  private detail::clear_on_destructor_base<slist_impl<ValueTraits, SizeType, BoolFlags> >
+   :  private detail::clear_on_destructor_base
+         < slist_impl<ValueTraits, SizeType, BoolFlags>
+         , is_safe_autounlink<detail::get_real_value_traits<ValueTraits>::type::link_mode>::value
+         >
 {
-   template<class C> friend class detail::clear_on_destructor_base;
+   template<class C, bool> friend class detail::clear_on_destructor_base;
    //Public typedefs
    public:
    typedef ValueTraits                                               value_traits;
@@ -214,7 +217,7 @@ class slist_impl
       :  public slist_impl::value_traits
    {
       typedef typename slist_impl::value_traits value_traits;
-      data_t(const value_traits &val_traits)
+      explicit data_t(const value_traits &val_traits)
          :  value_traits(val_traits)
       {}
 
@@ -349,6 +352,7 @@ class slist_impl
    slist_impl& operator=(BOOST_RV_REF(slist_impl) x)
    {  this->swap(x); return *this;  }
 
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: If it's a safe-mode
    //!   or auto-unlink value, the destructor does nothing
    //!   (ie. no code is generated). Otherwise it detaches all elements from this.
@@ -360,6 +364,7 @@ class slist_impl
    //!   it's a safe-mode or auto-unlink value. Otherwise constant.
    ~slist_impl()
    {}
+   #endif
 
    //! <b>Effects</b>: Erases all the elements of the container.
    //!

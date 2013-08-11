@@ -476,9 +476,12 @@ template<class ValueTraits, class VoidKeyComp, class SizeType, bool ConstantTime
 #endif
 class bstree_impl
    :  public bstbase<ValueTraits, VoidKeyComp, ConstantTimeSize, SizeType, AlgoType>
-   ,  private detail::clear_on_destructor_base<bstree_impl<ValueTraits, VoidKeyComp, SizeType, ConstantTimeSize, AlgoType> >
+   ,  private detail::clear_on_destructor_base
+         < bstree_impl<ValueTraits, VoidKeyComp, SizeType, ConstantTimeSize, AlgoType> 
+         , is_safe_autounlink<detail::get_real_value_traits<ValueTraits>::type::link_mode>::value
+         >
 {
-   template<class C> friend class detail::clear_on_destructor_base;
+   template<class C, bool> friend class detail::clear_on_destructor_base;
    public:
    typedef ValueTraits value_traits;
    /// @cond
@@ -592,6 +595,7 @@ class bstree_impl
    bstree_impl& operator=(BOOST_RV_REF(bstree_impl) x)
    {  this->swap(x); return *this;  }
 
+   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
    //! <b>Effects</b>: Detaches all elements from this. The objects in the set
    //!   are not deleted (i.e. no destructors are called), but the nodes according to
    //!   the value_traits template parameter are reinitialized and thus can be reused.
@@ -601,8 +605,6 @@ class bstree_impl
    //! <b>Throws</b>: Nothing.
    ~bstree_impl()
    {}
-
-   #ifdef BOOST_INTRUSIVE_DOXYGEN_INVOKED
 
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the container.
    //!

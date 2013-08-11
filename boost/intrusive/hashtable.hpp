@@ -1092,9 +1092,12 @@ class hashtable_impl
       < SizeType
       , BoolFlags & hashtable_data_bool_flags_mask
       , VoidOrKeyHash, VoidOrKeyEqual, ValueTraits, BucketTraits>
-   , private detail::clear_on_destructor_base<hashtable_impl<ValueTraits, VoidOrKeyHash, VoidOrKeyEqual, SizeType, BucketTraits, BoolFlags> >
+   ,  private detail::clear_on_destructor_base
+         < hashtable_impl<ValueTraits, VoidOrKeyHash, VoidOrKeyEqual, SizeType, BucketTraits, BoolFlags>
+         , is_safe_autounlink<detail::get_real_value_traits<ValueTraits>::type::link_mode>::value
+         >
 {
-   template<class C> friend class detail::clear_on_destructor_base;
+   template<class C, bool> friend class detail::clear_on_destructor_base;
    public:
    typedef ValueTraits  value_traits;
 
@@ -1284,6 +1287,7 @@ class hashtable_impl
    hashtable_impl& operator=(BOOST_RV_REF(hashtable_impl) x)
    {  this->swap(x); return *this;  }
 
+   #if defined(BOOST_INTRUSIVE_DOXYGEN_INVOKED)
    //! <b>Effects</b>: Detaches all elements from this. The objects in the unordered_set
    //!   are not deleted (i.e. no destructors are called).
    //!
@@ -1293,6 +1297,7 @@ class hashtable_impl
    //! <b>Throws</b>: Nothing.
    ~hashtable_impl()
    {}
+   #endif
 
    //! <b>Effects</b>: Returns an iterator pointing to the beginning of the unordered_set.
    //!
@@ -3114,7 +3119,7 @@ class hashtable
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename real_value_traits::value_type, T>::value));
 
-   hashtable ( const bucket_traits &b_traits
+   explicit hashtable ( const bucket_traits &b_traits
              , const hasher & hash_func = hasher()
              , const key_equal &equal_func = key_equal()
              , const value_traits &v_traits = value_traits())

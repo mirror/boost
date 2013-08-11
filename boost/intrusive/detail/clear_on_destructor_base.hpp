@@ -17,7 +17,7 @@ namespace boost {
 namespace intrusive {
 namespace detail {
 
-template<class Derived>
+template<class Derived, bool DoClear = true>
 class clear_on_destructor_base
 {
    protected:
@@ -26,6 +26,10 @@ class clear_on_destructor_base
       static_cast<Derived*>(this)->clear();
    }
 };
+
+template<class Derived>
+class clear_on_destructor_base<Derived, false>
+{};
 
 }  // namespace detail {
 }  // namespace intrusive {

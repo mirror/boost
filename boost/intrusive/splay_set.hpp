@@ -511,8 +511,8 @@ class splay_set
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
 
-   splay_set( const value_compare &cmp = value_compare()
-         , const value_traits &v_traits = value_traits())
+   explicit splay_set( const value_compare &cmp = value_compare()
+                     , const value_traits &v_traits = value_traits())
       :  Base(cmp, v_traits)
    {}
 
@@ -1018,8 +1018,8 @@ class splay_multiset
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
 
-   splay_multiset( const value_compare &cmp = value_compare()
-           , const value_traits &v_traits = value_traits())
+   explicit splay_multiset( const value_compare &cmp = value_compare()
+                          , const value_traits &v_traits = value_traits())
       :  Base(cmp, v_traits)
    {}
 

@@ -442,8 +442,8 @@ class bs_set
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
 
-   bs_set( const value_compare &cmp = value_compare()
-         , const value_traits &v_traits = value_traits())
+   explicit bs_set( const value_compare &cmp = value_compare()
+                  , const value_traits &v_traits = value_traits())
       :  Base(cmp, v_traits)
    {}
 
@@ -531,7 +531,7 @@ class bs_multiset_impl
    public:
    //! @copydoc ::boost::intrusive::bstree::bstree(const value_compare &,const value_traits &)
    explicit bs_multiset_impl( const value_compare &cmp = value_compare()
-                         , const value_traits &v_traits = value_traits())
+                            , const value_traits &v_traits = value_traits())
       :  tree_type(cmp, v_traits)
    {}
 
@@ -880,8 +880,8 @@ class bs_multiset
    //Assert if passed value traits are compatible with the type
    BOOST_STATIC_ASSERT((detail::is_same<typename value_traits::value_type, T>::value));
 
-   bs_multiset( const value_compare &cmp = value_compare()
-           , const value_traits &v_traits = value_traits())
+   explicit bs_multiset( const value_compare &cmp = value_compare()
+                       , const value_traits &v_traits = value_traits())
       :  Base(cmp, v_traits)
    {}
 
