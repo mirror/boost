@@ -49,6 +49,6 @@ Defines standard version numbers, with these properties:
     BOOST_VERSION_NUMBER_MIN
 
 #define BOOST_VERSION_NUMBER_NOT_AVAILABLE \
-	BOOST_VERSION_NUMBER_ZERO
+    BOOST_VERSION_NUMBER_ZERO
 
 #endif
