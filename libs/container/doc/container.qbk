@@ -1,5 +1,5 @@
 [/
- / Copyright (c) 2009-2012 Ion Gazta\u00F1aga
+ / Copyright (c) 2009-2013 Ion Gazta\u00F1aga
  /
  / Distributed under the Boost Software License, Version 1.0. (See accompanying
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
@@ -8,7 +8,7 @@
 [library Boost.Container
     [quickbook 1.5]
     [authors [Gaztanaga, Ion]]
-    [copyright 2009-2012 Ion Gaztanaga]
+    [copyright 2009-2013 Ion Gaztanaga]
     [id container]
     [dirname container]
     [purpose Containers library]
@@ -66,6 +66,8 @@ compiler include path.
 [endsect]
 
 [endsect]
+
+[section:main_features Main features]
 
 [section:move_emplace Efficient insertion]
 
@@ -184,6 +186,45 @@ And include it only in the implementation file of `MyClassHolder`
 Finally, we can just compile, link, and run!
 
 [doc_type_erasure_main_cpp]
+
+[endsect]
+
+[endsect]
+
+[section:scary_iterators SCARY iterators]
+
+The paper N2913, titled [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2009/n2913.pdf,
+SCARY Iterator Assignment and Initialization], proposed a requirement that a standard container's
+iterator types have no dependency on any type argument apart from the container's `value_type`,
+`difference_type`, `pointer type`, and `const_pointer` type. In particular, according to the proposal,
+the types of a standard container's iterators should not depend on the container's `key_compare`,
+`hasher`, `key_equal`, or `allocator` types.
+
+That paper demonstrated that SCARY operations were crucial to the performant implementation of common
+design patterns using STL components. It showed that implementations that support SCARY operations reduce
+object code bloat by eliminating redundant specializations of iterator and algorithm templates.
+
+[*Boost.Container] containers implement SCARY iterators so the iterator type of a container is only dependent
+on the `allocator_traits<allocator_type>::pointer` type (the pointer type of the `value_type` to be inserted
+in the container). Reference types and all other typedefs are deduced from the pointer type using the
+C++11 `pointer_traits` utility. This leads to lower code bloat in algorithms and classes templated on
+iterators.
+
+[endsect]
+
+[section:other_features Other features]
+
+* Default constructors don't allocate memory which improves performance and
+  usually implies a no-throw guarantee (if predicate's or allocator's default constructor doesn't throw).
+
+* Small string optimization for [classref boost::container::basic_string basic_string],
+  with an internal buffer of 11/23 bytes (32/64 bit systems)
+  [*without] increasing the usual `sizeof` of the string (3 words).
+
+* `[multi]set/map` containers are size optimized embedding the color bit of the red-black tree nodes
+   in the parent pointer.
+
+* `[multi]set/map` containers use no recursive functions so stack problems are avoided.
 
 [endsect]
 
@@ -525,7 +566,7 @@ elements' elements, and so on.
 [*Boost.Container] implements its own `scoped_allocator_adaptor` class and [*backports this feature also
 to C++03 compilers]. Due to C++03 limitations, in those compilers
 the allocator propagation implemented by `scoped_allocator_adaptor::construct` functions
-will be based on traits([classref boost::container::constructible_with_allocator_suffix constructible_with_allocator_suffix]
+will be based on traits ([classref boost::container::constructible_with_allocator_suffix constructible_with_allocator_suffix]
 and [classref boost::container::constructible_with_allocator_prefix constructible_with_allocator_prefix])
 proposed in [@http://www.open-std.org/jtc1/sc22/WG21/docs/papers/2008/n2554.pdf
 N2554: The Scoped Allocator Model (Rev 2) proposal]. In conforming C++11 compilers or compilers supporting SFINAE
@@ -579,22 +620,6 @@ If you need a memory optimized version of `boost::container::vector<bool>` funct
 [@http://www.boost.org/libs/dynamic_bitset/ Boost.DynamicBitset].
 
 [endsect]
-
-[endsect]
-
-[section:other_features Other features]
-
-* Default constructors don't allocate memory which improves performance and
-  usually implies a no-throw guarantee (if predicate's or allocator's default constructor doesn't throw).
-
-* Small string optimization for [classref boost::container::basic_string basic_string],
-  with an internal buffer of 11/23 bytes (32/64 bit systems)
-  [*without] increasing the usual `sizeof` of the string (3 words).
-
-* `[multi]set/map` containers are size optimized embedding the color bit of the red-black tree nodes
-   in the parent pointer.
-
-* `[multi]set/map` containers use no recursive functions so stack problems are avoided.
 
 [endsect]
 
@@ -691,8 +716,11 @@ use [*Boost.Container]? There are several reasons for that:
 
 [section:release_notes_boost_1_55_00 Boost 1.55 Release]
 
+*  Implemented [link container.main_features.scary_iterators SCARY iterators].
+
 *  Fixed bugs [@https://svn.boost.org/trac/boost/ticket/8892 #8892],
-              [@https://svn.boost.org/trac/boost/ticket/8473 #8473].
+              [@https://svn.boost.org/trac/boost/ticket/8473 #8473],
+              [@https://svn.boost.org/trac/boost/ticket/8269 #8269].
 
 [endsect]
 

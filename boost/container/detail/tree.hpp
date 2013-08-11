@@ -20,8 +20,8 @@
 #include <boost/type_traits/has_trivial_destructor.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/intrusive/rbtree.hpp>
-
 #include <boost/container/detail/utilities.hpp>
+#include <boost/container/detail/iterators.hpp>
 #include <boost/container/detail/algorithms.hpp>
 #include <boost/container/detail/node_alloc_holder.hpp>
 #include <boost/container/detail/destroyers.hpp>
@@ -376,100 +376,8 @@ class rbtree
    typedef key_node_compare<value_compare>  KeyNodeCompare;
 
    public:
-   //rbtree const_iterator
-   class const_iterator
-      : public std::iterator
-         < std::bidirectional_iterator_tag
-         , value_type            , rbtree_difference_type
-         , rbtree_const_pointer  , rbtree_const_reference>
-   {
-      protected:
-      typedef typename Icont::iterator  iiterator;
-      iiterator m_it;
-      explicit const_iterator(iiterator it)  : m_it(it){}
-      void prot_incr() { ++m_it; }
-      void prot_decr() { --m_it; }
-
-      private:
-      iiterator get()
-      {  return this->m_it;   }
-
-      public:
-      friend class rbtree <Key, Value, KeyOfValue, KeyCompare, A>;
-      typedef rbtree_difference_type        difference_type;
-
-      //Constructors
-      const_iterator()
-         :  m_it()
-      {}
-
-      //Pointer like operators
-      const_reference operator*()  const
-      { return  m_it->get_data();  }
-
-      const_pointer   operator->() const
-      { return  const_pointer(&m_it->get_data()); }
-
-      //Increment / Decrement
-      const_iterator& operator++()      
-      { prot_incr();  return *this; }
-
-      const_iterator operator++(int)     
-      { iiterator tmp = m_it; ++*this; return const_iterator(tmp);  }
-
-      const_iterator& operator--()
-      {   prot_decr(); return *this;   }
-
-      const_iterator operator--(int)
-      {  iiterator tmp = m_it; --*this; return const_iterator(tmp); }
-
-      //Comparison operators
-      bool operator==   (const const_iterator& r)  const
-      {  return m_it == r.m_it;  }
-
-      bool operator!=   (const const_iterator& r)  const
-      {  return m_it != r.m_it;  }
-   };
-
-   //rbtree iterator
-   class iterator : public const_iterator
-   {
-      private:
-      explicit iterator(iiterator it)
-         :  const_iterator(it)
-      {}
-  
-      iiterator get()
-      {  return this->m_it;   }
-
-      public:
-      friend class rbtree <Key, Value, KeyOfValue, KeyCompare, A>;
-      typedef rbtree_pointer       pointer;
-      typedef rbtree_reference     reference;
-
-      //Constructors
-      iterator(){}
-
-      //Pointer like operators
-      reference operator*()  const
-         {  return this->m_it->get_data();  }
-      pointer   operator->() const
-         {  return boost::intrusive::pointer_traits<pointer>::pointer_to(this->m_it->get_data());  }
-
-      //Increment / Decrement
-      iterator& operator++() 
-         { this->prot_incr(); return *this;  }
-
-      iterator operator++(int)
-         { iiterator tmp = this->m_it; ++*this; return iterator(tmp); }
-     
-      iterator& operator--()
-         {  this->prot_decr(); return *this;  }
-
-      iterator operator--(int)
-         {  iterator tmp = *this; --*this; return tmp; }
-   };
-
+   typedef container_detail::iterator<iiterator, false>  iterator;
+   typedef container_detail::iterator<iiterator, true >  const_iterator;
    typedef std::reverse_iterator<iterator>        reverse_iterator;
    typedef std::reverse_iterator<const_iterator>  const_reverse_iterator;
 
