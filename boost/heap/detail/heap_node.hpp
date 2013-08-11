@@ -195,8 +195,6 @@ public:
         children.clone_from(rhs.children, node_cloner<heap_node, node_base, Alloc>(allocator), nop_disposer());
     }
 
-    ~heap_node(){}
-
     size_type child_count(void) const
     {
         BOOST_STATIC_ASSERT(constant_time_child_size);
@@ -239,8 +237,6 @@ struct parent_pointing_heap_node:
         super_t(std::forward<Args>(args)...), parent(NULL)
     {}
 #endif
-
-    ~parent_pointing_heap_node() {}
 
     template <typename Alloc>
     struct node_cloner
@@ -314,8 +310,6 @@ struct marked_heap_node:
     marked_heap_node(value_type const & v):
         super_t(v), mark(false)
     {}
-
-    ~marked_heap_node() {}
 
 #if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES) && !defined(BOOST_NO_CXX11_VARIADIC_TEMPLATES)
     template <class... Args>
