@@ -206,7 +206,6 @@ void test_generic_multiset<ValueTraits, ContainerDefiner>::test_find(std::vector
       >::type multiset_type;
    multiset_type testset (values.begin(), values.end());
    typedef typename multiset_type::iterator        iterator;
-   typedef typename multiset_type::const_iterator  const_iterator;
 
    {
       value_type cmp_val;

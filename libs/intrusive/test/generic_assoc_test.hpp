@@ -184,7 +184,6 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_insert_erase_burst(
 template<class ValueTraits, template <class = void, class = void, class = void, class = void> class ContainerDefiner>
 void test_generic_assoc<ValueTraits, ContainerDefiner>::test_all(std::vector<typename ValueTraits::value_type>& values)
 {
-   typedef typename ValueTraits::value_type value_type;
    test_clone(values);
    test_container_from_end(values);
    test_splay_up(values);
@@ -356,7 +355,6 @@ void test_generic_assoc<ValueTraits, ContainerDefiner>::test_rebalance
       , constant_time_size<value_type::constant_time_size>
       >::type assoc_type;
    typedef std::vector<value_type> orig_set_t;
-   typedef typename orig_set_t::iterator iterator_t;
    orig_set_t original_testset;
    {
       assoc_type testset (values.begin(), values.end());

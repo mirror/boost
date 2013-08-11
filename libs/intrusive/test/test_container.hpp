@@ -27,8 +27,8 @@ struct is_unordered
    static const bool value = false;
 };
 
-template< class Container >
-void test_container( Container & c )
+template<class Container>
+struct test_container_typedefs
 {
    typedef typename Container::value_type       value_type;
    typedef typename Container::iterator         iterator;
@@ -39,10 +39,17 @@ void test_container( Container & c )
    typedef typename Container::const_pointer    const_pointer;
    typedef typename Container::difference_type  difference_type;
    typedef typename Container::size_type        size_type;
-   typedef typename Container::difference_type  difference_type;
-   typedef typename Container::size_type        size_type;
    typedef typename Container::value_traits     value_traits;
+};
 
+template< class Container >
+void test_container( Container & c )
+{
+   typedef typename Container::const_iterator   const_iterator;
+   typedef typename Container::iterator         iterator;
+   typedef typename Container::size_type        size_type;
+
+   {test_container_typedefs<Container> dummy;  (void)dummy;}
    const size_type num_elem = c.size();
    BOOST_TEST( c.empty() == (num_elem == 0) );
    {
@@ -56,7 +63,7 @@ void test_container( Container & c )
    }
 
    //Check iterator conversion
-   BOOST_TEST( const_iterator(c.begin()) == c.cbegin() );
+   BOOST_TEST(const_iterator(c.begin()) == c.cbegin() );
    {
       const_iterator it(c.cbegin()), itend(c.cend());
       size_type i;
@@ -313,7 +320,6 @@ void test_associative_container_invariants(Container & c, Data & d)
 template< class Container, class Data >
 void test_associative_container(Container & c, Data & d)
 {
-   typedef typename Container::const_iterator const_iterator;
    assert( d.size() > 2 );
 
    c.clear();

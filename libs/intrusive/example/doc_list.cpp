@@ -39,7 +39,6 @@ typedef list< MyClass
 int main()
 {
    typedef std::vector<MyClass>::iterator VectIt;
-   typedef std::vector<MyClass>::reverse_iterator VectRit;
 
    //Create several MyClass objects, each one with a different value
    std::vector<MyClass> values;

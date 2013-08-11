@@ -277,7 +277,6 @@ void test_generic_set<ValueTraits, ContainerDefiner>::test_find(std::vector<type
       >::type set_type;
    set_type testset (values.begin(), values.end());
    typedef typename set_type::iterator       iterator;
-   typedef typename set_type::const_iterator const_iterator;
 
    {
       value_type cmp_val;

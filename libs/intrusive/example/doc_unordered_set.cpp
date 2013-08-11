@@ -46,7 +46,6 @@ typedef unordered_multiset< MyClass, MemberOption>  MemberMultiSet;
 int main()
 {
    typedef std::vector<MyClass>::iterator VectIt;
-   typedef std::vector<MyClass>::reverse_iterator VectRit;
 
    //Create a vector with 100 different MyClass objects
    std::vector<MyClass> values;
