@@ -1094,7 +1094,8 @@ class hashtable_impl
       , VoidOrKeyHash, VoidOrKeyEqual, ValueTraits, BucketTraits>
    ,  private detail::clear_on_destructor_base
          < hashtable_impl<ValueTraits, VoidOrKeyHash, VoidOrKeyEqual, SizeType, BucketTraits, BoolFlags>
-         , is_safe_autounlink<detail::get_real_value_traits<ValueTraits>::type::link_mode>::value
+         , true   //To always clear the bucket array
+         //is_safe_autounlink<detail::get_real_value_traits<ValueTraits>::type::link_mode>::value
          >
 {
    template<class C, bool> friend class detail::clear_on_destructor_base;
