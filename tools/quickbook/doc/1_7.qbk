@@ -46,11 +46,12 @@ It can also be used to set the source mode for elements:
 ]
 ```
 
-When used a section, it's only set for the section element, not the
-whole section.
+When used before a section, it sets the source mode for the section element,
+not the whole section.
 
-Currently it does support other syntactic entities such as paragraphs
-and lists. I'm not sure if it would be a good idea.
+Currently it does not support other syntactic entities such as paragraphs
+and lists. It will currently be used to the next code block or element.
+This is a bit messy, but I'm not sure what would be a good idea.
 
 [endsect]
 
