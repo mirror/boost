@@ -82,6 +82,13 @@ void run_moves_are_noexcept()
     BOOST_CHECK(true);
 }
 
+
+void run_const_rvalues()
+{
+    BOOST_CHECK(true);
+}
+
+
 #else 
 
 
@@ -211,6 +218,24 @@ void run_moves_are_noexcept() {
 #endif
 }
 
+inline const std::string get_string() { return "test"; } 
+inline const boost::variant<int, std::string> get_variant() { return std::string("test"); } 
+inline const boost::variant<std::string, int> get_variant2() { return std::string("test"); } 
+
+void run_const_rvalues()
+{
+    typedef boost::variant<int, std::string> variant_t;
+    const variant_t v1(get_string());
+    const variant_t v2(get_variant());
+    const variant_t v3(get_variant2());
+    
+    variant_t v4, v5, v6, v7;
+    v4 = get_string();
+    v5 = get_variant();
+    v6 = get_variant2();
+    v7 = boost::move(v1);
+}
+
 #endif
 
 struct nothrow_copyable_throw_movable {
@@ -238,5 +263,6 @@ int test_main(int , char* [])
    run_move_only();
    run_moves_are_noexcept();
    run_tricky_compilation_test();
+   run_const_rvalues();
    return 0;
 }

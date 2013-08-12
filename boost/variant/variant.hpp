@@ -1776,7 +1776,8 @@ public: // structors, cont.
     
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     template <class T>
-    variant(T&& operand, typename boost::enable_if<boost::is_rvalue_reference<T&&> >::type* = 0)
+    variant(T&& operand, typename boost::enable_if<boost::is_rvalue_reference<T&&> >::type* = 0, 
+        typename boost::disable_if<boost::is_const<T> >::type* = 0)
     {
         convert_construct( detail::variant::move(operand), 1L);
     }
@@ -2187,7 +2188,8 @@ public: // modifiers
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     template <class T>
-    typename boost::enable_if<boost::is_rvalue_reference<T&&>, variant& >::type operator=(T&& rhs)
+    typename boost::enable_if_c<boost::is_rvalue_reference<T&&>::value && !boost::is_const<T>::value, variant& >::type 
+        operator=(T&& rhs)
     {
         move_assign( detail::variant::move(rhs) );
         return *this;
