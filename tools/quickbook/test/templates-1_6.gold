@@ -240,9 +240,9 @@
     </orderedlist>
     <orderedlist>
       <listitem>
-        <para>
+        <simpara>
           <code><phrase role="identifier">code</phrase></code>
-        </para>
+        </simpara>
       </listitem>
     </orderedlist>
   </section>

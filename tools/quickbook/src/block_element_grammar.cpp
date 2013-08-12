@@ -48,6 +48,7 @@ namespace quickbook
         error_action error(state);
         element_id_warning_action element_id_warning(state);
         raw_char_action raw_char(state.phrase);
+        explicit_list_action explicit_list(state);
         scoped_parser<to_value_scoped_action> to_value(state);
 
         local.element_id =
@@ -261,7 +262,11 @@ namespace quickbook
             ("itemized_list", element_info(element_info::nested_block, &local.list, block_tags::itemized_list, 106))
             ;
 
-        local.list = *local.cell;
+        local.list =
+            *(  cl::eps_p                       [explicit_list]
+            >>  local.cell
+            )
+            ;
 
         local.cell =
                 space

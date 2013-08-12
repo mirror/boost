@@ -331,6 +331,11 @@ namespace quickbook
         }
     }
 
+    void explicit_list_action::operator()() const
+    {
+        state.explicit_list = true;
+    }
+
     void phrase_end_action::operator()() const
     {
         write_anchors(state, state.phrase);

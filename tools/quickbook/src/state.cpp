@@ -40,6 +40,7 @@ namespace quickbook
         , callouts()
         , callout_depth(0)
         , dependencies()
+        , explicit_list(false)
         , in_list(false)
 
         , imported(false)

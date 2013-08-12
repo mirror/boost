@@ -315,18 +315,18 @@
           <thead>
             <row>
               <entry>
-                <simpara>
+                <para>
                   Heading
-                </simpara>
+                </para>
               </entry>
             </row>
           </thead>
           <tbody>
             <row>
               <entry>
-                <simpara>
+                <para>
                   Cell
-                </simpara>
+                </para>
               </entry>
             </row>
           </tbody>

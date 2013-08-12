@@ -52,6 +52,7 @@ namespace quickbook
         value_builder           callouts;           // callouts are global as
         int                     callout_depth;      // they don't nest.
         dependency_tracker      dependencies;
+        bool                    explicit_list;      // set when using a list
         bool                    in_list;
 
     // state saved for files and templates.
