@@ -973,9 +973,7 @@ into the current document, with the following exceptions:
 * Any macros defined in the included file are scoped to that file.
 
 The [^\[include\]] directive lets you specify a document id to use for the
-included file. When this id is not explicitly specified, the id defaults to
-the filename ("someother", in the example above). You can specify the id
-like this:
+included file. You can specify the id like this:
 
 ```
 [include:someid someother.qbk]
