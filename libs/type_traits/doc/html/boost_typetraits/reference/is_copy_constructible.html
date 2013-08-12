@@ -51,9 +51,9 @@
       </p>
 <p>
         If your compiler does not support C++11 deleted functions (<code class="computeroutput"><span class="special">=</span> <span class="keyword">delete</span></code>)
-        derive your classes from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">noncopyable</span></code>
-        or mark them with <code class="computeroutput"><span class="identifier">BOOST_MOVABLE_BUT_NOT_COPYABLE</span><span class="special">(</span><span class="identifier">T</span><span class="special">)</span></code>
-        to show that class is noncopyable.
+        or does not support SFINAE for the deleted constructors, then derive your
+        classes from <code class="computeroutput"><span class="identifier">boost</span><span class="special">::</span><span class="identifier">noncopyable</span></code> or mark them with <code class="computeroutput"><span class="identifier">BOOST_MOVABLE_BUT_NOT_COPYABLE</span><span class="special">(</span><span class="identifier">T</span><span class="special">)</span></code> to show
+        that class is noncopyable.
       </p>
 <p>
         Trait does not care about access modifiers, so if you see errors like this:

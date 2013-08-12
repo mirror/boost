@@ -26,7 +26,13 @@ namespace detail{
 
 template <bool DerivedFromNoncopyable, class T>
 struct is_copy_constructible_impl2 {
-#ifndef BOOST_NO_CXX11_DELETED_FUNCTIONS
+
+// Intel compiler has problems with SFINAE for copy constructors and deleted functions:
+//
+// error: function *function_name* cannot be referenced -- it is a deleted function
+// static boost::type_traits::yes_type test(T1&, decltype(T1(boost::declval<T1&>()))* = 0);
+//                                                        ^ 
+#if !defined(BOOST_NO_CXX11_DELETED_FUNCTIONS) && !defined(BOOST_INTEL_CXX_VERSION)
 
 #ifdef BOOST_NO_CXX11_DECLTYPE
     template <class T1>

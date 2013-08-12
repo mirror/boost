@@ -22,9 +22,9 @@ does not marked with `BOOST_MOVABLE_BUT_NOT_COPYABLE(T)`.
 __compat If the compiler does not support partial-specialization of class 
 templates, then this template can not be used.
 
-If your compiler does not support C++11 deleted functions (`= delete`) derive 
-your classes from `boost::noncopyable` or mark them with `BOOST_MOVABLE_BUT_NOT_COPYABLE(T)` 
-to show that class is noncopyable.
+If your compiler does not support C++11 deleted functions (`= delete`) or does not support  
+SFINAE for the deleted constructors, then derive your classes from `boost::noncopyable` or 
+mark them with `BOOST_MOVABLE_BUT_NOT_COPYABLE(T)` to show that class is noncopyable.
 
 Trait does not care about access modifiers, so if you see errors like this:
 
