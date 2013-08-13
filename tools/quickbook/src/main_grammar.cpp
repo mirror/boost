@@ -1052,8 +1052,6 @@ namespace quickbook
     void main_grammar_local::start_blocks_impl(parse_iterator, parse_iterator)
     {
         push_list_item(list_stack_item(list_stack_item::top_level));
-        state_.in_list = false; // TODO: Is this right? Should already be false, but
-                                // not for templates in lists?
     }
 
     void main_grammar_local::start_nested_blocks_impl(parse_iterator, parse_iterator)

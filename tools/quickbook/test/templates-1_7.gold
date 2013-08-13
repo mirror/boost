@@ -146,18 +146,20 @@
     </para>
     <itemizedlist>
       <listitem>
-        <itemizedlist>
-          <listitem>
-            <simpara>
-              a
-            </simpara>
-          </listitem>
-          <listitem>
-            <simpara>
-              b
-            </simpara>
-          </listitem>
-        </itemizedlist>
+        <simpara>
+          <itemizedlist>
+            <listitem>
+              <simpara>
+                a
+              </simpara>
+            </listitem>
+            <listitem>
+              <simpara>
+                b
+              </simpara>
+            </listitem>
+          </itemizedlist>
+        </simpara>
       </listitem>
       <listitem>
         <para/>
@@ -166,12 +168,12 @@
 <programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase></programlisting>
       </listitem>
       <listitem>
-        <para>
+        <simpara>
           Paragraphs 1
-        </para>
-        <para>
+        </simpara>
+        <simpara>
           Paragraphs 2
-        </para>
+        </simpara>
       </listitem>
     </itemizedlist>
   </section>
