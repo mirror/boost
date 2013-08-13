@@ -36,16 +36,10 @@ namespace quickbook
         // Is this the root of the context
         // (e.g. top, template, table cell etc.)
         enum list_item_type {
-            // flags
-            is_list             = 1,
-            indented_code       = 2,
-            block_root          = 4,
-
-            // item types
-            syntactic_list      = 3,
-            explicit_list       = 5,
-            top_level           = 6,
-            nested_level        = 4
+            syntactic_list,   // In a list marked up '*' or '#'
+            top_level,        // At the top level of a parse
+                              // (might be a template body)
+            nested_block      // Nested in a block element.
         } type;
 
         unsigned int indent;  // Indent of list marker
@@ -167,14 +161,6 @@ namespace quickbook
             , mark('\0')
             , state_(state)
             {}
-
-        void push_list_item(list_stack_item const& item) {
-            list_stack.push(item);
-        }
-
-        void pop_list_item() {
-            list_stack.pop();
-        }
     };
 
     struct process_element_impl : scoped_action_base {
@@ -1051,24 +1037,21 @@ namespace quickbook
 
     void main_grammar_local::start_blocks_impl(parse_iterator, parse_iterator)
     {
-        push_list_item(list_stack_item(list_stack_item::top_level));
+        list_stack.push(list_stack_item(list_stack_item::top_level));
     }
 
     void main_grammar_local::start_nested_blocks_impl(parse_iterator, parse_iterator)
     {
-        bool explicit_list = state_.explicit_list;
-        state_.in_list = explicit_list;
+        state_.in_list = state_.explicit_list;
         state_.explicit_list = false;
 
-        push_list_item(list_stack_item(explicit_list ?
-                    list_stack_item::explicit_list :
-                    list_stack_item::nested_level));
+        list_stack.push(list_stack_item(list_stack_item::nested_block));
     }
 
     void main_grammar_local::end_blocks_impl(parse_iterator, parse_iterator)
     {
         clear_stack();
-        pop_list_item();
+        list_stack.pop();
     }
 
     void main_grammar_local::check_indentation_impl(parse_iterator first_, parse_iterator last_)
@@ -1101,7 +1084,7 @@ namespace quickbook
             unsigned int new_indent = indent_length(first, last);
 
             if (new_indent > list_stack.top().indent2) {
-                if (list_stack.top().type & list_stack_item::indented_code) {
+                if (list_stack.top().type != list_stack_item::nested_block) {
                     block_type = block_types::code;
                 }
                 else {
@@ -1112,11 +1095,9 @@ namespace quickbook
                 while (list_stack.top().type == list_stack_item::syntactic_list
                         && new_indent < list_stack.top().indent)
                 {
-                    char mark = list_stack.top().mark;
-
                     state_.end_list_item();
-                    pop_list_item();
-                    state_.end_list(mark);
+                    state_.end_list(list_stack.top().mark);
+                    list_stack.pop();
                     list_indent = list_stack.top().indent;
                 }
 
@@ -1142,21 +1123,19 @@ namespace quickbook
                     //   Back to Level 1
                 
                     list_stack_item save = list_stack.top();
-                    pop_list_item();
+                    list_stack.pop();
 
                     assert(list_stack.top().type != list_stack_item::syntactic_list ?
                         new_indent >= list_stack.top().indent :
                         new_indent > list_stack.top().indent);
 
                     if (new_indent <= list_stack.top().indent2) {
-                        push_list_item(save);
                         state_.end_list_item();
-                        pop_list_item();
                         state_.end_list(save.mark);
                         list_indent = list_stack.top().indent;
                     }
                     else {
-                        push_list_item(save);
+                        list_stack.push(save);
                     }
                 }
 
@@ -1175,7 +1154,7 @@ namespace quickbook
         else {
             clear_stack();
 
-            if (list_stack.top().type & list_stack_item::indented_code &&
+            if (list_stack.top().type != list_stack_item::nested_block &&
                     last != first)
                 block_type = block_types::code;
             else
@@ -1198,8 +1177,8 @@ namespace quickbook
 
         if (list_stack.top().type != list_stack_item::syntactic_list ||
                 new_indent > list_indent) {
+            list_stack.push(list_stack_item(mark, new_indent, new_indent2));
             state_.start_list(mark);
-            push_list_item(list_stack_item(mark, new_indent, new_indent2));
         }
         else if (new_indent == list_indent) {
             state_.end_list_item();
@@ -1210,11 +1189,9 @@ namespace quickbook
             while(list_stack.top().type == list_stack_item::syntactic_list &&
                     new_indent < list_stack.top().indent)
             {
-                char mark = list_stack.top().mark;
-
                 state_.end_list_item();
-                pop_list_item();
-                state_.end_list(mark);
+                state_.end_list(list_stack.top().mark);
+                list_stack.pop();
             }
 
             state_.end_list_item();
@@ -1238,11 +1215,9 @@ namespace quickbook
     void main_grammar_local::clear_stack()
     {
         while (list_stack.top().type == list_stack_item::syntactic_list) {
-            char mark = list_stack.top().mark;
-
             state_.end_list_item();
-            pop_list_item();
-            state_.end_list(mark);
+            state_.end_list(list_stack.top().mark);
+            list_stack.pop();
         }
     }
 }
