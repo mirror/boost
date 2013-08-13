@@ -1616,6 +1616,11 @@ namespace boost {
                 // does not support such conversions. Try updating it.
                 BOOST_STATIC_ASSERT((boost::is_same<char, CharT>::value));
 #endif
+
+#ifndef BOOST_NO_EXCEPTIONS
+                out_stream.exceptions(std::ios::badbit);
+                try {
+#endif
                 bool const result = !(out_stream << input).fail();
                 const buffer_t* const p = static_cast<buffer_t*>(
                     static_cast<std::basic_streambuf<CharT, Traits>*>(out_stream.rdbuf())
@@ -1623,6 +1628,11 @@ namespace boost {
                 start = p->pbase();
                 finish = p->pptr();
                 return result;
+#ifndef BOOST_NO_EXCEPTIONS
+                } catch (const ::std::ios_base::failure& /*f*/) {
+                    return false;
+                }
+#endif
             }
 
             template <class T>
@@ -1996,6 +2006,10 @@ namespace boost {
 #endif // BOOST_NO_STD_LOCALE
 #endif // BOOST_NO_STRINGSTREAM
 
+#ifndef BOOST_NO_EXCEPTIONS
+                stream.exceptions(std::ios::badbit);
+                try {
+#endif
                 stream.unsetf(std::ios::skipws);
                 lcast_set_precision(stream, static_cast<InputStreamable*>(0));
 
@@ -2009,6 +2023,12 @@ namespace boost {
                     EOF;
 #else
                 Traits::eof();
+#endif
+
+#ifndef BOOST_NO_EXCEPTIONS
+                } catch (const ::std::ios_base::failure& /*f*/) {
+                    return false;
+                }
 #endif
             }
 
