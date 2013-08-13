@@ -268,7 +268,7 @@ namespace quickbook
 
         bool operator()() const {
             return !l.list_stack.empty() &&
-                l.list_stack.top().type & list_stack_item::is_list;
+                l.list_stack.top().type == list_stack_item::syntactic_list;
         }
     };
 

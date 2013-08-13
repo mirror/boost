@@ -27,6 +27,14 @@
       </simpara>
     </listitem>
   </itemizedlist>
+  <orderedlist>
+    <listitem>
+      <simpara>
+        Check that <emphasis role="bold">bold text</emphasis> isn't confused with
+        a list.
+      </simpara>
+    </listitem>
+  </orderedlist>
   <simplesect><title>A <emphasis role="bold">simplesect</emphasis>!</title></simplesect>
 
 </article>
