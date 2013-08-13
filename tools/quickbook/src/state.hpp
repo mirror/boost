@@ -53,7 +53,6 @@ namespace quickbook
         int                     callout_depth;      // they don't nest.
         dependency_tracker      dependencies;
         bool                    explicit_list;      // set when using a list
-        bool                    in_list;
 
     // state saved for files and templates.
         bool                    imported;
@@ -70,6 +69,9 @@ namespace quickbook
         int                     min_section_level;
 
     // output state - scoped by templates and grammar
+        bool                    in_list;        // generating a list
+        std::stack<bool>        in_list_save;   // save the in_list state
+                                                // TODO: Something better...
         collector               out;            // main output stream
         collector               phrase;         // phrase output stream
 

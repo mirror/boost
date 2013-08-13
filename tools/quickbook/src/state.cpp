@@ -41,7 +41,6 @@ namespace quickbook
         , callout_depth(0)
         , dependencies()
         , explicit_list(false)
-        , in_list(false)
 
         , imported(false)
         , macro()
@@ -53,8 +52,11 @@ namespace quickbook
         , template_depth(0)
         , min_section_level(1)
 
+        , in_list(false)
+        , in_list_save()
         , out(out_)
         , phrase()
+
         , values(&current_file)
     {
         // add the predefined macros
@@ -76,11 +78,14 @@ namespace quickbook
     void state::push_output() {
         out.push();
         phrase.push();
+        in_list_save.push(in_list);
     }
 
     void state::pop_output() {
         phrase.pop();
         out.pop();
+        in_list = in_list_save.top();
+        in_list_save.pop();
     }
 
     state_save::state_save(quickbook::state& state, scope_flags scope)

@@ -170,13 +170,10 @@ namespace quickbook
 
         void push_list_item(list_stack_item const& item) {
             list_stack.push(item);
-            state_.in_list = list_stack.top().type & list_stack_item::is_list;
         }
 
         void pop_list_item() {
             list_stack.pop();
-            state_.in_list = !list_stack.empty() &&
-                list_stack.top().type & list_stack_item::is_list;
         }
     };
 
@@ -270,7 +267,8 @@ namespace quickbook
             l(l) {}
 
         bool operator()() const {
-            return l.state_.in_list;
+            return !l.list_stack.empty() &&
+                l.list_stack.top().type & list_stack_item::is_list;
         }
     };
 
@@ -1054,11 +1052,14 @@ namespace quickbook
     void main_grammar_local::start_blocks_impl(parse_iterator, parse_iterator)
     {
         push_list_item(list_stack_item(list_stack_item::top_level));
+        state_.in_list = false; // TODO: Is this right? Should already be false, but
+                                // not for templates in lists?
     }
 
     void main_grammar_local::start_nested_blocks_impl(parse_iterator, parse_iterator)
     {
         bool explicit_list = state_.explicit_list;
+        state_.in_list = explicit_list;
         state_.explicit_list = false;
 
         push_list_item(list_stack_item(explicit_list ?

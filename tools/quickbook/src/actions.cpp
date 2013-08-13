@@ -531,6 +531,7 @@ namespace quickbook
         assert(mark == '*' || mark == '#');
         push_output();
         out << ((mark == '#') ? "<orderedlist>\n" : "<itemizedlist>\n");
+        in_list = true;
     }
 
     void state::end_list(char mark)
