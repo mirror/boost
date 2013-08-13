@@ -72,6 +72,8 @@ namespace quickbook
     // output state - scoped by templates and grammar
         collector               out;            // main output stream
         collector               phrase;         // phrase output stream
+
+    // values state - scoped by everything.
         value_parser            values;         // parsed values
 
         quickbook_grammar& grammar() const;
@@ -79,6 +81,9 @@ namespace quickbook
     ///////////////////////////////////////////////////////////////////////////
     // actions
     ///////////////////////////////////////////////////////////////////////////
+
+        void push_output();
+        void pop_output();
 
         void start_list(char mark);
         void end_list(char mark);

@@ -168,14 +168,14 @@ namespace quickbook
     void syntax_highlight_actions::pre_escape_back(parse_iterator,
             parse_iterator)
     {
-        state.phrase.push(); // save the stream
+        state.push_output(); // save the stream
     }
 
     void syntax_highlight_actions::post_escape_back(parse_iterator,
             parse_iterator)
     {
         out << state.phrase.str();
-        state.phrase.pop(); // restore the stream
+        state.pop_output(); // restore the stream
     }
 
     void syntax_highlight_actions::do_macro(std::string const& v)
