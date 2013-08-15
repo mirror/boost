@@ -83,7 +83,7 @@ BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has2>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has3>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has4>::value, true);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has_not>::value, false);
-#ifndef BOOST_NO_CXX11_DELETED_FUNCTIONS
+#if !defined(BOOST_NO_CXX11_DELETED_FUNCTIONS) && !defined(BOOST_INTEL_CXX_VERSION)
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has_not2>::value, false);
 BOOST_CHECK_INTEGRAL_CONSTANT(::tt::is_copy_constructible<has_not3>::value, false);
 #endif
