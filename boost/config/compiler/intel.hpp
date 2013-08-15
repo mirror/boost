@@ -246,7 +246,8 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #  undef BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
 // This one generates internal compiler errors in multiprecision, disabled for now:
 //#  undef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS  
-#  undef BOOST_NO_CXX11_NOEXCEPT
+// This one generates errors when used with conditional exception specifications, for example in multiprecision:
+//#  undef BOOST_NO_CXX11_NOEXCEPT
 #  undef BOOST_NO_CXX11_RANGE_BASED_FOR
 #  undef BOOST_NO_CXX11_SCOPED_ENUMS
 #  undef BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
