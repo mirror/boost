@@ -113,8 +113,7 @@ namespace quickbook
     std::vector<std::string> generate_ids(id_state const&, boost::string_ref);
 
     std::string normalize_id(boost::string_ref src_id);
-    std::string normalize_id(boost::string_ref src_id,
-            std::size_t, std::size_t);
+    std::string normalize_id(boost::string_ref src_id, std::size_t);
 
     //
     // Xml subset parser used for finding id values.

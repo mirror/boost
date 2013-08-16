@@ -25,90 +25,12 @@ namespace quickbook {
 
     static const std::size_t max_size = 32;
 
-    //
-    // Data used for generating placeholders that have duplicates.
-    //
-
-    struct id_generation_data
-    {
-        id_generation_data(boost::string_ref src_id)
-          : child_start(src_id.rfind('.') + 1),
-            id(normalize_id(src_id, child_start, max_size - 1)),
-                // 'max_size - 1' leaves a character to append
-                // a number.
-            count(0)
-        {
-            if (std::isdigit(id[id.length() - 1]))
-            {
-                if (child_length() < max_size - 1)
-                    id += '_';
-                else
-                    reduce_id();
-            }
-        }
-
-        void reduce_id()
-        {
-            assert(id.length() > child_start);
-            std::size_t length = id.length() - 1;
-            while(length > child_start && std::isdigit(id[length - 1])) --length;
-            id.erase(length);
-            count = 0;
-        }
-
-        std::size_t child_length() const
-        {
-            return id.length() - child_start;
-        }
-
-        std::size_t child_start;
-        std::string id;
-        int count;
-    };
-
-    // Created for all desired ids, either when resolving an id or due to
-    // generating a new id to avoid duplicates.
-    struct id_data
-    {
-        id_data()
-          : category(id_category::numbered),
-            used(false),
-            generation_data()
-        {}
-
-        void update_category(id_category c)
-        {
-            if (c.c > category.c) category = c;
-        }
-
-        id_category category;   // The highest priority category of the
-                                // placeholders that want to use this id.
-        bool used;              // Whether this id has been used.
-        boost::shared_ptr<id_generation_data> generation_data;
-                                // If a duplicates are found, this is
-                                // created to generate new ids.
-                                //
-                                // Many to one relationship, because truncation
-                                // can lead to different ids contending for the
-                                // same id prefix.
-    };
-
-    struct placeholder_generation_data
-    {
-        placeholder_generation_data() : resolved_id(), data(0) {}
-
-        std::string resolved_id;
-        id_data* data;
-    };
-
-    typedef boost::unordered_map<std::string, id_data> allocated_ids;
-    typedef std::vector<placeholder_generation_data> placeholder_data;
     typedef std::vector<id_placeholder const*> placeholder_index;
+    placeholder_index index_placeholders(id_state const&, boost::string_ref);
 
-    placeholder_index index_placeholders(id_state const&, boost::string_ref xml);
-    void resolve_id(id_placeholder const&, std::vector<std::string> const&,
-        allocated_ids&, placeholder_data& data);
-    std::string generate_id(id_placeholder const&, allocated_ids&, placeholder_data& data);
+    void generate_id_block(
+            placeholder_index::iterator, placeholder_index::iterator,
+            std::vector<std::string>& generated_ids);
 
     std::vector<std::string> generate_ids(id_state const& state, boost::string_ref xml)
     {
@@ -119,9 +41,7 @@ namespace quickbook {
         placeholder_index placeholders = index_placeholders(state, xml);
 
         typedef std::vector<id_placeholder const*>::iterator iterator;
-
-        iterator it = placeholders.begin(),
-            end = placeholders.end();
+        iterator it = placeholders.begin(), end = placeholders.end();
 
         while (it != end) {
             // We process all the ids that have the same number of dots
@@ -134,21 +54,8 @@ namespace quickbook {
             while (group_end != end && (*group_end)->num_dots == (*it)->num_dots)
                 ++group_end;
 
-            // Used to find duplicate ids, and store required data about them.
-            allocated_ids ids;
-            placeholder_data data(state.placeholders.size());
-
-            // First resolve ids by adding them to their parent's ids
-            // (which have been fully processed in a previous iteration).
-            for (it = group_begin; it != group_end; ++it) {
-                resolve_id(**it, generated_ids, ids, data);
-            }
-
-            // Generate the final ids, taking into account any duplicates
-            // found when resolving.
-            for (it = group_begin; it != group_end; ++it) {
-                generated_ids[(*it)->index] = generate_id(**it, ids, data);
-            }
+            generate_id_block(group_begin, group_end, generated_ids);
+            it = group_end;
         }
 
         return generated_ids;
@@ -228,99 +135,144 @@ namespace quickbook {
         return sorted_placeholders;
     }
 
-    //
-    // resolve_id
-    //
-    // Convert child ids to full ids, and add to the
-    // allocated ids (although not yet set in stone because
-    // there might be duplicates).
-    //
-    // Note that the parent ids has to be generated before resolving
-    // the child id.
-    //
+    // Resolve and generate ids.
 
-    void resolve_id(id_placeholder const& p, std::vector<std::string> const& generated_ids,
-            allocated_ids& ids, placeholder_data& data)
+    struct generate_id_block_type
     {
-        assert(!data[p.index].data);
+        // The ids which won't require duplicate handling.
+        typedef boost::unordered_map<std::string, id_placeholder const*>
+            chosen_id_map;
+        chosen_id_map chosen_ids;
+        std::vector<std::string>& generated_ids;
 
-        std::string id = p.parent ?
-            generated_ids[p.parent->index] + "." + p.id : p.id;
+        generate_id_block_type(std::vector<std::string>& generated_ids) :
+            generated_ids(generated_ids) {}
 
-        id_data& data_ = ids.emplace(id, id_data()).first->second;
-        data_.update_category(p.category);
+        void generate(placeholder_index::iterator begin,
+            placeholder_index::iterator end);
 
-        data[p.index].data = &data_;
-        data[p.index].resolved_id = id;
+        std::string resolve_id(id_placeholder const*);
+        std::string generate_id(id_placeholder const*, std::string const&);
+    };
+
+    void generate_id_block(placeholder_index::iterator begin,
+            placeholder_index::iterator end,
+            std::vector<std::string>& generated_ids)
+    {
+        generate_id_block_type impl(generated_ids);
+        impl.generate(begin, end);
     }
 
-    //
-    // generate_id
-    //
-    // Finally generate the final id.
-    //
-
-    void register_generation_data(id_placeholder const&, allocated_ids&,
-            placeholder_data& data);
-
-    std::string generate_id(id_placeholder const& p, allocated_ids& ids,
-            placeholder_data& data)
+    void generate_id_block_type::generate(placeholder_index::iterator begin,
+            placeholder_index::iterator end)
     {
-        assert(data[p.index].data);
+        std::vector<std::string> resolved_ids;
 
-        // If the placeholder id is available, then update data
-        // and return.
-        if (p.category == data[p.index].data->category &&
-                !data[p.index].data->used &&
-                p.category.c != id_category::numbered)
+        for (placeholder_index::iterator i = begin; i != end; ++i)
+            resolved_ids.push_back(resolve_id(*i));
+
+        unsigned index = 0;
+        for (placeholder_index::iterator i = begin; i != end; ++i, ++index)
         {
-            data[p.index].data->used = true;
-            return data[p.index].resolved_id;
+            generated_ids[(**i).index] =
+                generate_id(*i, resolved_ids[index]);
+        }
+    }
+
+    std::string generate_id_block_type::resolve_id(id_placeholder const* p)
+    {
+        std::string id = p->parent ?
+            generated_ids[p->parent->index] + "." + p->id :
+            p->id;
+
+        if (p->category.c > id_category::numbered) {
+            // Reserve the id if it isn't already reserved.
+            chosen_id_map::iterator pos = chosen_ids.emplace(id, p).first;
+
+            // If it was reserved by a placeholder with a lower category,
+            // then overwrite it.
+            if (p->category.c > pos->second->category.c)
+                pos->second = p;
         }
 
-        if (!data[p.index].data->generation_data)
+        return id;
+    }
+
+    std::string generate_id_block_type::generate_id(id_placeholder const* p,
+            std::string const& resolved_id)
+    {
+        if (p->category.c > id_category::numbered &&
+                chosen_ids.at(resolved_id) == p)
         {
-            data[p.index].data->generation_data =
-                boost::make_shared<id_generation_data>(data[p.index].resolved_id);
-            register_generation_data(p, ids, data);
+            return resolved_id;
         }
 
-        // Loop until an available id is found.
-        for(;;)
-        {
-            id_generation_data& generation_data = *data[p.index].data->generation_data;
+        // Split the id into its parent part and child part.
+        //
+        // Note: can't just use the placeholder's parent, as the
+        // placeholder id might contain dots.
+        unsigned child_start = resolved_id.rfind('.');
+        std::string parent_id, base_id;
 
-            std::string postfix =
-                boost::lexical_cast<std::string>(generation_data.count++);
+        if (child_start == std::string::npos) {
+            base_id = normalize_id(resolved_id, max_size - 1);
+        }
+        else {
+            parent_id = resolved_id.substr(0, child_start + 1);
+            base_id = normalize_id(resolved_id.substr(child_start + 1),
+                    max_size - 1);
+        }
 
-            if (generation_data.child_length() + postfix.length() > max_size) {
-                // The resulting id is too long, so move to a shorter id.
-                generation_data.reduce_id();
-                register_generation_data(p, ids, data);
+        // Since we're adding digits, don't want an id that ends in
+        // a digit.
+
+        unsigned int length = base_id.size();
+
+        if (length > 0 && std::isdigit(base_id[length - 1])) {
+            if (length < max_size - 1) {
+                base_id += '_';
+                ++length;
             }
             else {
-                std::string id = generation_data.id + postfix;
-
-                if (ids.find(id) == ids.end()) return id;
+                while (length > 0 && std::isdigit(base_id[length -1]))
+                    --length;
+                base_id.erase(length);
             }
         }
-    }
 
-    // Every time the generation id is changed, this is called to
-    // check if that id is already in use.
-    void register_generation_data(id_placeholder const& p, allocated_ids& ids,
-            placeholder_data& data)
-    {
-        std::string const& id = data[p.index].data->generation_data->id;
+        unsigned count = 0;
 
-        id_data& new_data = ids.emplace(id, id_data()).first->second;
+        while (true)
+        {
+            std::string postfix =
+                boost::lexical_cast<std::string>(count++);
 
-        // If there is already generation_data for the new id then use that.
-        // Otherwise use the placeholder's existing generation_data.
-        if (new_data.generation_data)
-            data[p.index].data->generation_data = new_data.generation_data;
-        else
-            new_data.generation_data = data[p.index].data->generation_data;
+            if ((base_id.size() + postfix.size()) > max_size) {
+                // The id is now too long, so reduce the length and
+                // start again.
+
+                // Would need a lot of ids to get this far....
+                if (length == 0) throw std::runtime_error("Too many ids");
+
+                // Trim a character.
+                --length;
+
+                // Trim any trailing digits.
+                while (length > 0 && std::isdigit(base_id[length -1]))
+                    --length;
+
+                base_id.erase(length);
+                count = 0;
+            }
+            else {
+                // Try to reserve this id.
+                std::string generated_id = parent_id + base_id + postfix;
+
+                if (chosen_ids.emplace(generated_id, p).second) {
+                    return generated_id;
+                }
+            }
+        }
     }
 
     //
@@ -387,47 +339,39 @@ namespace quickbook {
 
     std::string normalize_id(boost::string_ref src_id)
     {
-        return normalize_id(src_id, 0, max_size);
+        return normalize_id(src_id, max_size);
     }
 
-    std::string normalize_id(
-            boost::string_ref src_id,
-            std::size_t prefix = 0,
-            std::size_t size = max_size)
+    std::string normalize_id(boost::string_ref src_id, std::size_t size)
     {
         std::string id(src_id.begin(), src_id.end());
 
-        std::size_t src = prefix;
-        std::size_t dst = prefix;
-        size += prefix;
-
-        if (src >= id.length()) {
-            return id;
-        }
+        std::size_t src = 0;
+        std::size_t dst = 0;
 
         while (src < id.length() && id[src] == '_') {
             ++src;
         }
 
-        if (src >= id.length()) {
-            id += '_';
-            return id;
+        if (src == id.length()) {
+            id = "_";
         }
+        else {
+            while (src < id.length() && dst < size) {
+                if (id[src] == '_') {
+                    do {
+                        ++src;
+                    } while(src < id.length() && id[src] == '_');
 
-        while (src < id.length() && dst < size) {
-            if (id[src] == '_') {
-                do {
-                    ++src;
-                } while(src < id.length() && id[src] == '_');
+                    if (src < id.length()) id[dst++] = '_';
+                }
+                else {
+                    id[dst++] = id[src++];
+                }
+            }
 
-                if (src < id.length()) id[dst++] = '_';
-            }
-            else {
-                id[dst++] = id[src++];
-            }
+            id.erase(dst);
         }
-
-        id.erase(dst);
 
         return id;
     }
