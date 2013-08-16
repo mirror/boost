@@ -1042,6 +1042,12 @@ namespace quickbook
 
     void main_grammar_local::start_nested_blocks_impl(parse_iterator, parse_iterator)
     {
+        // If this nested block is part of a list, then tell the
+        // output state.
+        //
+        // TODO: This is a bit dodgy, it would be better if this
+        // was handled when the output state is pushed (currently
+        // in to_value_scoped_action).
         state_.in_list = state_.explicit_list;
         state_.explicit_list = false;
 
