@@ -47,7 +47,7 @@ namespace quickbook
         // Actions
         error_action error(state);
         element_id_warning_action element_id_warning(state);
-        raw_char_action raw_char(state.phrase);
+        raw_char_action raw_char(state);
         explicit_list_action explicit_list(state);
         scoped_parser<to_value_scoped_action> to_value(state);
 

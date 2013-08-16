@@ -198,7 +198,7 @@ namespace quickbook
 
     void break_action::operator()(parse_iterator first, parse_iterator) const
     {
-        write_anchors(state, phrase);
+        write_anchors(state, state.phrase);
 
         if(*first == '\\')
         {
@@ -216,7 +216,7 @@ namespace quickbook
             state.warned_about_breaks = true;
         }
             
-        phrase << detail::get_markup(phrase_tags::break_mark).pre;
+        state.phrase << detail::get_markup(phrase_tags::break_mark).pre;
     }
 
     void error_message_action::operator()(parse_iterator first, parse_iterator last) const
@@ -452,7 +452,7 @@ namespace quickbook
 
     void simple_phrase_action::operator()(char mark) const
     {
-        write_anchors(state, out);
+        write_anchors(state, state.phrase);
 
         int tag =
             mark == '*' ? phrase_tags::bold :
@@ -468,9 +468,9 @@ namespace quickbook
         value content = values.consume();
         values.finish();
 
-        out << markup.pre;
-        out << content.get_encoded();
-        out << markup.post;
+        state.phrase << markup.pre;
+        state.phrase << content.get_encoded();
+        state.phrase << markup.post;
     }
 
     bool cond_phrase_push::start()
@@ -670,35 +670,35 @@ namespace quickbook
 
     void do_macro_action::operator()(std::string const& str) const
     {
-        write_anchors(state, phrase);
+        write_anchors(state, state.phrase);
 
         if (str == quickbook_get_date)
         {
             char strdate[64];
             strftime(strdate, sizeof(strdate), "%Y-%b-%d", current_time);
-            phrase << strdate;
+            state.phrase << strdate;
         }
         else if (str == quickbook_get_time)
         {
             char strdate[64];
             strftime(strdate, sizeof(strdate), "%I:%M:%S %p", current_time);
-            phrase << strdate;
+            state.phrase << strdate;
         }
         else
         {
-            phrase << str;
+            state.phrase << str;
         }
     }
 
     void raw_char_action::operator()(char ch) const
     {
-        out << ch;
+        state.phrase << ch;
     }
 
     void raw_char_action::operator()(parse_iterator first, parse_iterator last) const
     {
         while (first != last)
-            out << *first++;
+            state.phrase << *first++;
     }
 
     void source_mode_action(quickbook::state& state, value source_mode)
@@ -758,52 +758,50 @@ namespace quickbook
             boost::swap(state.current_file, saved_file);
 
             // print the code with syntax coloring
-            std::string str = syntax_highlight(first_, last_, state,
-                source_mode, block);
+            //
+            // We must not place a \n after the <programlisting> tag
+            // otherwise PDF output starts code blocks with a blank line:
+            state.phrase << "<programlisting>";
+            syntax_highlight(first_, last_, state, source_mode, block);
+            state.phrase << "</programlisting>\n";
 
             boost::swap(state.current_file, saved_file);
 
-            collector& output = inline_code ? state.phrase : state.out;
+            if (qbk_version_n >= 107u) state.phrase << state.end_callouts();
 
-            // We must not place a \n after the <programlisting> tag
-            // otherwise PDF output starts code blocks with a blank line:
-            //
-            output << "<programlisting>";
-            output << str;
-            output << "</programlisting>\n";
-
-            if (qbk_version_n >= 107u) output << state.end_callouts();
+            if (!inline_code) {
+                state.out << state.phrase.str();
+                state.phrase.clear();
+            }
         }
         else {
             parse_iterator first_(code_value.begin());
             parse_iterator last_(code_value.end());
-            std::string str = syntax_highlight(first_, last_, state,
-                source_mode, block);
 
             state.phrase << "<code>";
-            state.phrase << str;
+            syntax_highlight(first_, last_, state, source_mode, block);
             state.phrase << "</code>";
         }
     }
 
     void plain_char_action::operator()(char ch) const
     {
-        write_anchors(state, phrase);
+        write_anchors(state, state.phrase);
 
-        detail::print_char(ch, phrase.get());
+        detail::print_char(ch, state.phrase.get());
     }
 
     void plain_char_action::operator()(parse_iterator first, parse_iterator last) const
     {
-        write_anchors(state, phrase);
+        write_anchors(state, state.phrase);
 
         while (first != last)
-            detail::print_char(*first++, phrase.get());
+            detail::print_char(*first++, state.phrase.get());
     }
 
     void escape_unicode_action::operator()(parse_iterator first, parse_iterator last) const
     {
-        write_anchors(state, phrase);
+        write_anchors(state, state.phrase);
 
         while(first != last && *first == '0') ++first;
 
@@ -815,10 +813,11 @@ namespace quickbook
         
         if(hex_digits.size() == 2 && *first > '0' && *first <= '7') {
             using namespace std;
-            detail::print_char(strtol(hex_digits.c_str(), 0, 16), phrase.get());
+            detail::print_char(strtol(hex_digits.c_str(), 0, 16),
+                    state.phrase.get());
         }
         else {
-            phrase << "&#x" << hex_digits << ";";
+            state.phrase << "&#x" << hex_digits << ";";
         }
     }
 

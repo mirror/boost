@@ -304,14 +304,14 @@ namespace quickbook
         quickbook::paragraph_action paragraph_action(state);
 
         phrase_end_action end_phrase(state);
-        raw_char_action raw_char(state.phrase);
-        plain_char_action plain_char(state.phrase, state);
-        escape_unicode_action escape_unicode(state.phrase, state);
+        raw_char_action raw_char(state);
+        plain_char_action plain_char(state);
+        escape_unicode_action escape_unicode(state);
 
-        simple_phrase_action simple_markup(state.phrase, state);
+        simple_phrase_action simple_markup(state);
 
-        break_action break_(state.phrase, state);
-        do_macro_action do_macro(state.phrase, state);
+        break_action break_(state);
+        do_macro_action do_macro(state);
 
         error_action error(state);
         element_id_warning_action element_id_warning(state);
