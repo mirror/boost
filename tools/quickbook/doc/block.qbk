@@ -965,12 +965,18 @@ You can include one QuickBook file from another. The syntax is simply:
 [include someother.qbk]
 ```
 
-The included file will be processed as if it had been cut and pasted
+If the included file has a [link quickbook.ref.docinfo docinfo block] then it
+will create a nested document. Otherwise the included file will be processed
+as if it had been cut and pasted
 into the current document, with the following exceptions:
 
 * The '''__FILENAME__''' predefined macro will reflect the name of the
   file currently being processed.
-* Any macros defined in the included file are scoped to that file.
+* Any macros or templates defined in the included file are scoped to that file.
+
+[note In quickbook 1.5 and earlier templates weren't scoped in included files.
+If you want to use templates or macros from a file in quickbook 1.6,
+use [link quickbook.ref.import import] instead.]
 
 The [^\[include\]] directive lets you specify a document id to use for the
 included file. You can specify the id like this:
@@ -983,6 +989,9 @@ All auto-generated anchors will use the document id as a unique prefix. So
 for instance, if there is a top section in someother.qbk named "Intro", the
 named anchor for that section will be "someid.intro", and you can link to
 it with [^\[link someid.intro The Intro\]].
+
+If the included file has a docinfo block, an id specified in an [^\[include\]]
+directive will overwrite it.
 
 [endsect] [/include]
 
