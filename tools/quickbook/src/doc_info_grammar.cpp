@@ -118,8 +118,8 @@ namespace quickbook
 
         // Actions
         error_action error(state);
-        plain_char_action plain_char(state.phrase, state);
-        do_macro_action do_macro(state.phrase, state);
+        plain_char_action plain_char(state);
+        do_macro_action do_macro(state);
         scoped_parser<to_value_scoped_action> to_value(state);
         
         doc_info_details =

@@ -310,40 +310,36 @@
       </simpara>
     </listitem>
     <listitem>
-      <simpara>
-        <informaltable frame="all">
-          <tgroup cols="1">
-            <thead>
-              <row>
-                <entry>
-                  <para>
-                    Heading
-                  </para>
-                </entry>
-              </row>
-            </thead>
-            <tbody>
-              <row>
-                <entry>
-                  <para>
-                    Cell
-                  </para>
-                </entry>
-              </row>
-            </tbody>
-          </tgroup>
-        </informaltable>
-      </simpara>
+      <informaltable frame="all">
+        <tgroup cols="1">
+          <thead>
+            <row>
+              <entry>
+                <para>
+                  Heading
+                </para>
+              </entry>
+            </row>
+          </thead>
+          <tbody>
+            <row>
+              <entry>
+                <para>
+                  Cell
+                </para>
+              </entry>
+            </row>
+          </tbody>
+        </tgroup>
+      </informaltable>
     </listitem>
     <listitem>
+      <bridgehead renderas="sect2" id="list_test.h0">
+        <phrase id="list_test.the_heading_for_a_list_item"/><link linkend="list_test.the_heading_for_a_list_item">The
+        heading for a list item</link>
+      </bridgehead>
       <simpara>
-        <bridgehead renderas="sect2" id="list_test.h0">
-          <phrase id="list_test.the_heading_for_a_list_item"/><link linkend="list_test.the_heading_for_a_list_item">The
-          heading for a list item</link>
-        </bridgehead>
-        <para>
-          The content of the list item.
-        </para>
+        The content of the list item.
       </simpara>
     </listitem>
   </itemizedlist>
@@ -406,9 +402,9 @@
       <listitem>
         <simpara>
           A1
-          <para>
-            A2
-          </para>
+        </simpara>
+        <simpara>
+          A2
         </simpara>
       </listitem>
       <listitem>
@@ -418,15 +414,15 @@
             <listitem>
               <simpara>
                 C1
-                <para>
-                  C2
-                </para>
+              </simpara>
+              <simpara>
+                C2
               </simpara>
             </listitem>
           </itemizedlist>
-          <para>
-            B2
-          </para>
+        </simpara>
+        <simpara>
+          B2
         </simpara>
       </listitem>
       <listitem>
@@ -436,18 +432,18 @@
             <listitem>
               <simpara>
                 E1
-                <para>
-                  E2
-                </para>
-                <para>
-                  E3
-                </para>
+              </simpara>
+              <simpara>
+                E2
+              </simpara>
+              <simpara>
+                E3
               </simpara>
             </listitem>
           </itemizedlist>
-          <para>
-            D2
-          </para>
+        </simpara>
+        <simpara>
+          D2
         </simpara>
       </listitem>
     </itemizedlist>
@@ -459,19 +455,19 @@
       <listitem>
         <simpara>
           A
+        </simpara>
 <programlisting><phrase role="identifier">B</phrase>
 </programlisting>
-          <para>
-            C
-          </para>
+        <simpara>
+          C
         </simpara>
       </listitem>
       <listitem>
         <simpara>
           D
+        </simpara>
 <programlisting><phrase role="identifier">E</phrase>
 </programlisting>
-        </simpara>
       </listitem>
       <listitem>
         <simpara>

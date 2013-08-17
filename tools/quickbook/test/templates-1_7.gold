@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE article PUBLIC "-//Boost//DTD BoostBook XML V1.0//EN" "http://www.boost.org/tools/boostbook/dtd/boostbook.dtd">
-<article id="template_1_5" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
+<article id="template_1_7" last-revision="DEBUG MODE Date: 2000/12/20 12:00:00 $"
  xmlns:xi="http://www.w3.org/2001/XInclude">
-  <title>Template 1.5</title>
-  <section id="template_1_5.templates">
-    <title><link linkend="template_1_5.templates">Templates</link></title>
+  <title>Template 1.7</title>
+  <section id="template_1_7.templates">
+    <title><link linkend="template_1_7.templates">Templates</link></title>
     <para>
       nullary_arg
     </para>
@@ -61,11 +61,11 @@
       [fool]
     </para>
   </section>
-  <section id="template_1_5.empty_templates">
-    <title><link linkend="template_1_5.empty_templates">Empty Templates</link></title>
+  <section id="template_1_7.empty_templates">
+    <title><link linkend="template_1_7.empty_templates">Empty Templates</link></title>
   </section>
-  <section id="template_1_5.nested_templates">
-    <title><link linkend="template_1_5.nested_templates">Nested Templates</link></title>
+  <section id="template_1_7.nested_templates">
+    <title><link linkend="template_1_7.nested_templates">Nested Templates</link></title>
     <para>
       Pre
     </para>
@@ -103,10 +103,7 @@
       Post
     </para>
     <para>
-      Pre
-    </para>
-    <para>
-      Start phrase template.
+      Pre Start phrase template.
     </para>
     <para>
       Start block template.
@@ -118,18 +115,15 @@
       End block template.
     </para>
     <para>
-      End phrase template.
-    </para>
-    <para>
-      Post
+      End phrase template. Post
     </para>
     <para>
       Pre Start phrase template. Start phrase template. Hello! End phrase template.
       End phrase template. Post
     </para>
   </section>
-  <section id="template_1_5.block_markup">
-    <title><link linkend="template_1_5.block_markup">Block Markup</link></title>
+  <section id="template_1_7.block_markup">
+    <title><link linkend="template_1_7.block_markup">Block Markup</link></title>
     <itemizedlist>
       <listitem>
         <simpara>
@@ -183,8 +177,8 @@
       </listitem>
     </itemizedlist>
   </section>
-  <section id="template_1_5.static_scoping">
-    <title><link linkend="template_1_5.static_scoping">Static Scoping</link></title>
+  <section id="template_1_7.static_scoping">
+    <title><link linkend="template_1_7.static_scoping">Static Scoping</link></title>
     <para>
       static scoping
     </para>
@@ -198,8 +192,8 @@
       foo foo
     </para>
   </section>
-  <section id="template_1_5.template_arguments">
-    <title><link linkend="template_1_5.template_arguments">Template Arguments</link></title>
+  <section id="template_1_7.template_arguments">
+    <title><link linkend="template_1_7.template_arguments">Template Arguments</link></title>
     <para>
       {1-2} {1-2} {1-2 3 4} {1 2-3 4} {1 2 3-4} {1..2-3} {1..2-3}
     </para>
@@ -213,8 +207,8 @@
       {1-2-3} {1-2-3}
     </para>
   </section>
-  <section id="template_1_5.block_and_phrase_templates">
-    <title><link linkend="template_1_5.block_and_phrase_templates">Block and phrase
+  <section id="template_1_7.block_and_phrase_templates">
+    <title><link linkend="template_1_7.block_and_phrase_templates">Block and phrase
     templates</link></title>
     <para>
       Some <emphasis role="bold">text</emphasis>
@@ -228,12 +222,81 @@
     <para>
       <index type="things"><title>Things</title></index>
     </para>
-  </section>
-  <section id="template_1_5.escaped_templates">
-    <title><link linkend="template_1_5.escaped_templates">Escaped templates</link></title>
+    <informaltable frame="all">
+      <tgroup cols="0">
+        <tbody>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <informaltable frame="all">
+      <tgroup cols="0">
+        <tbody>
+        </tbody>
+      </tgroup>
+    </informaltable>
     <para>
-      <thingbob>Not real boostbook</thingbob> <thingbob>Also not real boostbook</thingbob>
-      <thingbob>More fake boostbook</thingbob> <thingbob>Final fake boostbook</thingbob>
+      Text2 afterwards. Text3 before.
+    </para>
+    <informaltable frame="all">
+      <tgroup cols="0">
+        <tbody>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <para>
+      Text4 before.
+    </para>
+    <informaltable frame="all">
+      <tgroup cols="0">
+        <tbody>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <para>
+      Text4 afterwards.
+    </para>
+    <informaltable frame="all">
+      <tgroup cols="0">
+        <tbody>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <para>
+      * Not a list.
+    </para>
+    <informaltable frame="all">
+      <tgroup cols="0">
+        <tbody>
+        </tbody>
+      </tgroup>
+    </informaltable>
+    <para>
+      * Not a list.
+    </para>
+  </section>
+  <section id="template_1_7.template_body">
+    <title><link linkend="template_1_7.template_body">Skipping the template body
+    correctly</link></title>
+    <para>
+      <emphasis>Argument</emphasis>
+    </para>
+    <orderedlist>
+      <listitem>
+<programlisting><phrase role="identifier">code</phrase></programlisting>
+      </listitem>
+    </orderedlist>
+    <orderedlist>
+      <listitem>
+        <simpara>
+          <code><phrase role="identifier">code</phrase></code>
+        </simpara>
+      </listitem>
+    </orderedlist>
+  </section>
+  <section id="template_1_7.escaped_templates">
+    <title><link linkend="template_1_7.escaped_templates">Escaped templates</link></title>
+    <para>
+      <thingbob>Not real boostbook</thingbob> <thingbob>More fake boostbook</thingbob>
     </para>
   </section>
 </article>

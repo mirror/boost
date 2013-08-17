@@ -1,5 +1,5 @@
-[article Template 1.5
-    [quickbook 1.5]
+[article Template 1.7
+    [quickbook 1.7]
 ]
 
 [section Templates]
@@ -33,9 +33,9 @@ This is a complete paragraph. [bar] [bar] [bar] [bar] [bar]
 
 [/-------------------------------- unary arg, using punctuation ]
 
-[template ![bar] '''<hey>'''[bar]'''</hey>''']
+[template |[bar] '''<hey>'''[bar]'''</hey>''']
 
-[!baz]
+[|baz]
 
 [/-------------------------------- recursive templates ]
 
@@ -149,7 +149,7 @@ x[super 2]
 
 [section Nested Templates]
 
-[template block[content]
+[template block_foo[content]
 
 Start block template.
 
@@ -158,15 +158,15 @@ Start block template.
 End block template.
 ]
 
-[template phrase[content] Start phrase template. [content] End phrase template.]
+[template phrase_foo[content] Start phrase template. [content] End phrase template.]
 
-Pre [block [block Hello!]] Post
+Pre [block_foo [block_foo Hello!]] Post
 
-Pre [block [phrase Hello!]] Post
+Pre [block_foo [phrase_foo Hello!]] Post
 
-Pre [phrase [block Hello!]] Post
+Pre [phrase_foo [block_foo Hello!]] Post
 
-Pre [phrase [phrase Hello!]] Post
+Pre [phrase_foo [phrase_foo Hello!]] Post
 
 [endsect]
 
@@ -278,6 +278,35 @@ A <emphasis>paragraph</emphasis>.
 
 [named_index things Things]
 
+[/ Blocks in phrase templates ]
+
+[template phrase_block1[] [table]]
+[template phrase_block2[] [table] Text2 afterwards.]
+[template phrase_block3[] Text3 before. [table]]
+[template phrase_block4[] Text4 before. [table] Text4 afterwards.]
+[template phrase_block5[] [table] * Not a list.]
+[template phrase_block6[] [table]
+* Not a list.]
+
+[phrase_block1][phrase_block2][phrase_block3][phrase_block4]
+[phrase_block5][phrase_block6]
+
+[endsect]
+
+[/-------------------------------- Skipping template body ]
+
+[section:template_body Skipping the template body correctly]
+
+[template args1[x] [`x]]
+[template args2[] [ordered_list [``code``]]]
+[/ Due to a bug in the template parser need to stop the parser
+   thinking that the code is an escaped template. ]
+[template args3[] [ordered_list [\ `code`]]]
+
+[args1 <emphasis>Argument</emphasis>]
+[args2]
+[args3]
+
 [endsect]
 
 [/----------------------------------- Escaped templates ]
@@ -285,13 +314,9 @@ A <emphasis>paragraph</emphasis>.
 [section Escaped templates]
 
 [template raw_markup <thingbob>Not real boostbook</thingbob>]
-[template | <thingbob>Also not real boostbook</thingbob>]
-[template escaped1 [|] [`|]]
-[template escaped2 [x] [`x]]
+[template escaped1 [x] [`x]]
 
 [`raw_markup]
-[`|]
 [escaped1 <thingbob>More fake boostbook</thingbob>]
-[escaped2 <thingbob>Final fake boostbook</thingbob>]
 
 [endsect]
