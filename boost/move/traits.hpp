@@ -41,14 +41,14 @@ struct has_trivial_destructor_after_move
 {};
 
 //! By default this traits returns
-//! <pre>boost::is_nothrow_move_constructible<T>::value || boost::is_nothrow_move_assignable<T>::value </pre>.
+//! <pre>boost::is_nothrow_move_constructible<T>::value && boost::is_nothrow_move_assignable<T>::value </pre>.
 //! Classes with non-throwing move constructor
 //! and assignment can specialize this trait to obtain some performance improvements.
 template <class T>
 struct has_nothrow_move
    : public ::boost::move_detail::integral_constant
       < bool
-      , boost::is_nothrow_move_constructible<T>::value ||
+      , boost::is_nothrow_move_constructible<T>::value &&
         boost::is_nothrow_move_assignable<T>::value
       >
 {};
