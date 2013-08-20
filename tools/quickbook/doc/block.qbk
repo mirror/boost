@@ -222,6 +222,31 @@ will generate:
             * 2.b.2.b
 
 [endsect] [/mixed_lists]
+
+[#quickbook.ref.list_tags]
+[section:list_tags Explicit list tags]
+
+Sometimes the wiki-style list markup can be tricky to use, especially
+if you wish to include more complicated markup with the list. So in
+quickbook 1.6, an alternative way to mark up lists introduced:
+
+    [ordered_list [item1][item2]]
+
+is equivalent to:
+
+    # item1
+    # item2
+
+And:
+
+    [itemized_list [item1][item2]]
+
+is equivalent to:
+
+    * item1
+    * item2
+
+[endsect] [/list_tags]
 [endsect] [/lists]
 
 [#quickbook.ref.code]
@@ -1254,3 +1279,32 @@ See the actual code here:
 [@boost:/tools/quickbook/test/stub.cpp tools/quickbook/test/stub.cpp]
 
 [endsect] [/import]
+
+[#quickbook.ref.block]
+[section:block Plain blocks]
+
+`block` is a plain block element, that doesn't wrap its contents
+in any docbook or boostbook tags. This can be useful when using
+escaped docbook block tags, such as:
+
+    [template chapter[title]
+    [block'''<chapter><title>'''[title]'''</title>''']
+    ]
+
+    [template chapterend
+    [block'''</chapter>''']
+    ]
+
+    [chapter An example chapter]
+
+    Content
+
+    [chapterend]
+
+Without the `block` element, the `chapter` and `chapterend` templates
+would be wrapped in paragraph tags.
+
+[note In this example, the template body has to start with a newline so that
+the template will be interpreted in block mode.]
+
+[endsect] [/block]
