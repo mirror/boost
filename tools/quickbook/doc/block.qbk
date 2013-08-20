@@ -964,14 +964,18 @@ You can include one QuickBook file from another. The syntax is simply:
 [include someother.qbk]
 ```
 
-If the included file has a [link quickbook.ref.docinfo docinfo block] then it
-will create a nested document. Otherwise the included file will be processed
-as if it had been cut and pasted
+In quickbook 1.6 and later, if the included file has a
+[link quickbook.ref.docinfo docinfo block] then it will create a nested
+document. This will be processed as a standalone document, although any macros
+or templates from the enclosing file will still be defined.
+
+Otherwise the included file will be processed as if it had been cut and pasted
 into the current document, with the following exceptions:
 
 * The '''__FILENAME__''' predefined macro will reflect the name of the
   file currently being processed.
-* Any macros or templates defined in the included file are scoped to that file.
+* Any macros or templates defined in the included file are scoped to that file,
+  i.e. they are not added to the enclosing file.
 
 [note In quickbook 1.5 and earlier templates weren't scoped in included files.
 If you want to use templates or macros from a file in quickbook 1.6,
@@ -992,10 +996,66 @@ it with [^\[link someid.intro The Intro\]].
 If the included file has a docinfo block, an id specified in an [^\[include\]]
 directive will overwrite it.
 
+You can also include C, C++ and python source files. This will include any
+quickbook blocks in the file that aren't inside of named code snippets. See
+the [link quickbook.ref.import Import section] for syntax details. For example,
+say you included this file:
+
+    /**
+     * Hello world example
+     */
+
+    // In this comment, the backtick indicates that this is a
+    // quickbook source block that will be included.
+
+    /*`
+    First include the appropriate header: [hello_includes]
+    Then write your main function: [hello_main]
+    */
+
+    // This defines a code snippet, the syntax is
+    // described in the import section. It's available
+    // in the whole of this source file, not just after
+    // its definition.
+
+    //[hello_includes
+    #include <iostream>
+    //]
+
+    //[hello_main
+    int main() {
+        std::cout << "Hello, trivial example" << std::endl;
+    }
+    //]
+
+It will generate:
+
+    First include the appropriate header:
+
+        #include <iostream>
+
+    Then write your main function:
+
+        int main() {
+            std::cout << "Hello, trivial example" << std::endl;
+        }
+
 [endsect] [/include]
 
 [#quickbook.ref.import]
 [section:import Import]
+
+In quickbook 1.6 and later if you wish to use a template, macro or code
+snippet from a file, you need to import it. This will not include any
+of the content from that file, but will pull templates, macros and code
+snippets into the current file's scope.
+
+With quickbook files, this allows you to create template and macro
+libraries. For python (indicated by the `.py` extension), C or
+C++ files this allows you to include code snippets from source files,
+so that your code examples can be kept up to date and fully tested.
+
+[/ Old justification text, might move this into a new section:
 
 When documenting code, you'd surely need to present code from actual source
 files. While it is possible to copy some code and paste them in your QuickBook
@@ -1005,6 +1065,7 @@ always, is that once documentation is written, the tendency is for the docs to
 languish in the archives without maintenance.
 
 QuickBook's import facility provides a nice solution.
+]
 
 [heading Example]
 
@@ -1138,6 +1199,7 @@ Example:
 
 [class_]
 
-See the actual code here: [@boost:/tools/quickbook/test/stub.cpp]
+See the actual code here:
+[@boost:/tools/quickbook/test/stub.cpp tools/quickbook/test/stub.cpp]
 
 [endsect] [/import]
