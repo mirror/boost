@@ -356,7 +356,23 @@ to produce the desired effect.
 [h5 Heading 5]
 [h6 Heading 6]
 
-Headings will automatically have anchors with normalized names with
+You can specify an id for a heading:
+
+```
+[h1:heading_id A heading to link to]
+```
+
+To link to it, you'll need to include the enclosing section's id:
+
+```
+[link document_id.section_id.heading_id The link text]
+```
+
+Although you can preceed a heading by an [link quickbook.ref.anchors anchor]
+if you wish to use a location independent link.
+
+If a heading doesn't have an id, one will be automatically generated
+with a normalized name with
 [^name="document_id.section_id.normalized_header_text"] (i.e. valid
 characters are =a-z=, =A-Z=, =0-9= and =_=. All non-valid characters are
 converted to underscore and all upper-case are converted to lower-case.
@@ -368,6 +384,9 @@ For example: Heading 1 in section Section 2 will be normalized to
 ```
 
 to link to them. See __anchor_links__ and __section__ for more info.
+
+[note Specifying heading ids is a quickbook 1.6 feature, earlier
+      versions don't support them.]
 
 [endsect] [/headings]
 
@@ -392,7 +411,7 @@ however, headings in a particular section is just flat. Example:
 ```
 [section A]
 [h2 X]
-[h2 Y]
+[h2:link_id Y]
 [h2 Z]
 [endsect]
 ```
