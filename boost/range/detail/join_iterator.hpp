@@ -143,8 +143,12 @@ template<typename Iterator1
                                     typename iterator_reference<Iterator2>::type
                                 >::type
                             >::value,
-                            typename add_const<
-                                typename iterator_reference<Iterator2>::type
+                            typename add_reference<
+                                typename add_const<
+                                    typename remove_reference<
+                                        typename iterator_reference<Iterator2>::type
+                                    >::type
+                                >::type
                             >::type,
                             typename iterator_reference<Iterator1>::type
                         >::type

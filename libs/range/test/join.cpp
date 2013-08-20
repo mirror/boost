@@ -257,6 +257,18 @@ namespace boost
             test_join_impl< std::vector<int>, std::deque<int>  >();
             test_join_impl< std::deque<int>,  std::vector<int> >();
         }
+        
+        void test_join_iterator_reference_type_constness_ticket8483()
+        {
+            // Just test that this compiles.
+            // Before the fix for bug 8483, the reference type of the joined
+            // range's iterator was incorrect ('int&' instead of 'const int&'),
+            // causing compiler errors.
+            const std::vector<int> v1;
+            std::vector<int> v2;
+            std::vector<int> joined;
+            boost::push_back(joined, join(v1, v2));
+        }
 
     }
 }
@@ -268,6 +280,7 @@ init_unit_test_suite(int argc, char* argv[])
         = BOOST_TEST_SUITE( "RangeTestSuite.adaptor.joined" );
 
     test->add( BOOST_TEST_CASE( &boost::join_test ) );
+    test->add( BOOST_TEST_CASE( &boost::test_join_iterator_reference_type_constness_ticket8483 ) );
 
     return test;
 }
