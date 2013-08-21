@@ -24,7 +24,7 @@
 // 04 Nov 06  Resolve GCD issue with depreciation (Daryle Walker)
 // 02 Nov 06  Add testing for operator<(int_type) w/ unsigneds (Daryle Walker)
 // 31 Oct 06  Add testing for operator<(rational) overflow (Daryle Walker)
-// 18 Oct 06  Various fixes for old compilers (Joaquín M López Muñoz)
+// 18 Oct 06  Various fixes for old compilers (JoaquÃ­n M LÃ³pez MuÃ±oz)
 // 27 Dec 05  Add testing for Boolean conversion operator (Daryle Walker)
 // 24 Dec 05  Change code to use Boost.Test (Daryle Walker)
 // 04 Mar 01  Patches for Intel C++ and GCC (David Abrahams)
@@ -235,9 +235,12 @@ public:
      limits_type::min BOOST_PREVENT_MACRO_SUBSTITUTION (); }
     static MyInt max BOOST_PREVENT_MACRO_SUBSTITUTION () throw()  { return
      limits_type::max BOOST_PREVENT_MACRO_SUBSTITUTION (); }
+    static MyInt lowest() throw()  { return min BOOST_PREVENT_MACRO_SUBSTITUTION
+     (); }  // C++11
 
     static const int digits      = limits_type::digits;
     static const int digits10    = limits_type::digits10;
+    static const int max_digits10 = 0;  // C++11
     static const bool is_signed  = limits_type::is_signed;
     static const bool is_integer = limits_type::is_integer;
     static const bool is_exact   = limits_type::is_exact;
@@ -283,9 +286,12 @@ public:
       { return limits_type::min BOOST_PREVENT_MACRO_SUBSTITUTION (); }
     static MyOverflowingUnsigned max BOOST_PREVENT_MACRO_SUBSTITUTION () throw()
       { return limits_type::max BOOST_PREVENT_MACRO_SUBSTITUTION (); }
+    static MyOverflowingUnsigned lowest() throw()
+      { return min BOOST_PREVENT_MACRO_SUBSTITUTION (); }  // C++11
 
     static const int digits      = limits_type::digits;
     static const int digits10    = limits_type::digits10;
+    static const int max_digits10 = 0;  // C++11
     static const bool is_signed  = limits_type::is_signed;
     static const bool is_integer = limits_type::is_integer;
     static const bool is_exact   = limits_type::is_exact;
@@ -355,7 +361,7 @@ public:
              << sizeof( rational_type ) << "\n\n";
 
         cout << "Implementation has "
-             << ( 
+             << (
                   (sizeof( rational_type ) > 2u * sizeof( int_type ))
                   ? "included padding bytes"
                   : "minimal size"
@@ -799,7 +805,7 @@ BOOST_AUTO_TEST_SUITE( rational_extras_suite )
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_output_test, T, all_signed_test_types )
 {
     std::ostringstream  oss;
-    
+
     oss << boost::rational<T>( 44, 14 );
     BOOST_CHECK_EQUAL( oss.str(), "22/7" );
 }
