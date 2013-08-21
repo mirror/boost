@@ -979,4 +979,37 @@ BOOST_AUTO_TEST_CASE( patch_1438626_test )
 #endif
 }
 
+// The bug/patch numbers for the above 3 tests are from our SourceForge repo
+// before we moved to our own SVN & Trac server.  At the time this note is
+// written, it seems that SourceForge has reset their tracking numbers at least
+// once, so I don't know how to recover those old tickets.  The ticket numbers
+// for the following tests are from our SVN/Trac repo.
+
+//"narrowing conversion error with -std=c++0x in operator< with int_type != int"
+BOOST_AUTO_TEST_CASE( ticket_5855_test )
+{
+    // The internals of operator< currently store a structure of two int_type
+    // (where int_type is the component type of a boost::rational template
+    // class) and two computed types.  These computed types, results of
+    // arithmetic operations among int_type values, are either int_type
+    // themselves or a larger type that can implicitly convert to int_type.
+    // Those conversions aren't usually a problem.  But when an arithmetic
+    // operation involving two values of a built-in scalar type smaller than int
+    // are involved, the result is an int.  But the resulting int-to-shorter
+    // conversion is considered narrowing, resulting in a warning or error on
+    // some compilers.  Notably, C++11 compilers are supposed to consider it an
+    // error.
+    //
+    // The solution is to force an explicit conversion, although it's otherwise
+    // not needed.  (The compiler can rescind the narrowing warning if the
+    // results of the larger type still fit in the smaller one, and that proof
+    // can be generated at constexpr time.)
+    typedef short                           shorter_than_int_type;
+    typedef boost::rational<shorter_than_int_type>  rational_type;
+
+    bool const  dummy = rational_type() < rational_type();
+
+    BOOST_REQUIRE( not dummy );
+}
+
 BOOST_AUTO_TEST_SUITE_END()
