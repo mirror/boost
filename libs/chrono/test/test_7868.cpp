@@ -1,3 +1,8 @@
+//  Copyright 2013 Vicente J. Botet Escriba
+//  Distributed under the Boost Software License, Version 1.0.
+//  See http://www.boost.org/LICENSE_1_0.txt
+//  See http://www.boost.org/libs/chrono for documentation.
+
 #define BOOST_CHRONO_VERSION 2
 //#define BOOST_CHRONO_PROVIDES_DATE_IO_FOR_SYSTEM_CLOCK_TIME_POINT 1
 

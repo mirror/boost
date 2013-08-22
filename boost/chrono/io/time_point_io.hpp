@@ -218,32 +218,20 @@ namespace boost
             else
                 err |= std::ios_base::failbit;
         }
-#if 0
-        void
-        get_weekdayname(int& w,
-                                                            iter_type& b, iter_type e,
-                                                            std::ios_base::iostate& err,
-                                                            const std::ctype<char_type>& ct) const
-        {
-            // Note:  ignoring case comes from the POSIX strptime spec
-            const string_type* wk = weeks();
-            ptrdiff_t i = detail::scan_keyword(b, e, wk, wk+14, ct, err, false) - wk;
-            if (i < 14)
-                w = i % 7;
-        }
 
         void
-        get_monthname(int& m,
-                                                          iter_type& b, iter_type e,
-                                                          std::ios_base::iostate& err,
-                                                          const std::ctype<char_type>& ct) const
+        get_weekday(int& w,
+                                                        iter_type& b, iter_type e,
+                                                        std::ios_base::iostate& err,
+                                                        const std::ctype<char_type>& ct) const
         {
-            // Note:  ignoring case comes from the POSIX strptime spec
-            const string_type* month = months();
-            ptrdiff_t i = detail::scan_keyword(b, e, month, month+24, ct, err, false) - month;
-            if (i < 24)
-                m = i % 12;
+            int t = get_up_to_n_digits(b, e, err, ct, 1);
+            if (!(err & std::ios_base::failbit) && t <= 6)
+                w = t;
+            else
+                err |= std::ios_base::failbit;
         }
+#if 0
 
         void
         get_am_pm(int& h,
@@ -278,19 +266,27 @@ namespace boost
 
             switch (fmt)
             {
-//            case 'a':
-//            case 'A':
-//              get_weekdayname(tm->tm_wday, b, e, err, ct);
-//              break;
-//            case 'b':
-//            case 'B':
-//            case 'h':
-//              get_monthname(tm->tm_mon, b, e, err, ct);
-//              break;
+            case 'a':
+            case 'A':
+              {
+                std::tm tm2;
+                that_.get_weekday(b, e, iob, err, &tm2);
+                //tm->tm_wday = tm2.tm_wday;
+              }
+              break;
+            case 'b':
+            case 'B':
+            case 'h':
+              {
+                std::tm tm2;
+                that_.get_monthname(b, e, iob, err, &tm2);
+                //tm->tm_mon = tm2.tm_mon;
+              }
+              break;
 //            case 'c':
 //              {
 //                const string_type& fm = c();
-//                b = that_.get(b, e, iob, err, tm, fm.data(), fm.data() + fm.size());
+//                b = get(b, e, iob, err, tm, fm.data(), fm.data() + fm.size());
 //              }
 //              break;
             case 'd':
@@ -352,12 +348,15 @@ namespace boost
                 b = get(b, e, iob, err, tm, fm, fm + sizeof(fm)/sizeof(fm[0]));
               }
               break;
-//            case 'w':
-//              get_weekday(tm->tm_wday, b, e, err, ct);
-//              break;
-//            case 'x':
-//              return get_date(b, e, iob, err, tm);
+            case 'w':
+              {
+                get_weekday(tm->tm_wday, b, e, err, ct);
+              }
+              break;
+            case 'x':
+              return that_.get_date(b, e, iob, err, tm);
 //            case 'X':
+//              return that_.get_time(b, e, iob, err, tm);
 //              {
 //                const string_type& fm = X();
 //                b = that_.get(b, e, iob, err, tm, fm.data(), fm.data() + fm.size());

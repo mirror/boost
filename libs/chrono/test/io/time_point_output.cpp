@@ -78,7 +78,7 @@ void test_good_utc_fmt_system_clock(const char* str, const char* fmt, D d)
   BOOST_TEST(out.good());
   std::cout << "Expected= " << str << std::endl;
   std::cout << "Obtained= " << out.str() << std::endl;
-  BOOST_TEST( (out.str() == std::string(str) ));
+  BOOST_TEST_EQ( out.str() , std::string(str) );
 }
 
 template<typename Clock, typename D>
@@ -176,6 +176,8 @@ void check_all_system_clock()
 
   test_good_utc_fmt_system_clock ("1970-01-01 02:00:00", "%Y-%m-%d %T", hours(2));
   test_good_utc_fmt_system_clock ("1970-01-01 02:00", "%Y-%m-%d %R", hours(2));
+  test_good_utc_fmt_system_clock ("% 1970-01-01 02:00", "%% %Y-%m-%d %R", hours(2));
+  test_good_utc_fmt_system_clock ("1970-01-01 02:00 Thursday January", "%Y-%m-%d %R %A %B", hours(2));
 
 }
 

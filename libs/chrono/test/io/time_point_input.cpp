@@ -156,6 +156,8 @@ void check_all_system_clock()
   test_good_utc_fmt_system_clock ("1970-01-01 02", "%F %H", hours(2));
   test_good_utc_fmt_system_clock ("1970-01-01 02:00:00", "%Y-%m-%d %T", hours(2));
   test_good_utc_fmt_system_clock ("1970-01-01 02:00", "%Y-%m-%d %R", hours(2));
+  test_good_utc_fmt_system_clock ("% 1970-01-01 02:00", "%% %Y-%m-%d %R", hours(2));
+  //test_good_utc_fmt_system_clock ("1970-01-01 02:00 Thursday January", "%Y-%m-%d %R %A %B", hours(2));
 
 
 //  test_fail<Clock> ("3001 ms", seconds(3));
