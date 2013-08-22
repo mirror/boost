@@ -91,8 +91,7 @@ well.
 
 [section:listparagraphs Pargraphs in lists]
 
-I'm still refining this, but paragraphs and block elements can now be used
-in lists:
+Paragraphs and block elements can now be used in lists:
 
 [pre
 * Para 1
@@ -117,9 +116,6 @@ generates:
 
         Code block
   Para 3
-
-The docbook markup that this generates is pretty bad, but seems to create okay
-html.
 
 [endsect]
 
