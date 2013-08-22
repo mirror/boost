@@ -9,7 +9,33 @@
 
 [section:1_6 Quickbook 1.6]
 
-Everything described in here may change depending on the feedback received.
+Upgrading a document from an earlier version of quickbook shouldn't be too
+hard. The first thing to do is update the version in the docinfo block.
+For example, if you were updating the Xpressive documentation, the existing
+docinfo block looks like:
+
+    [library Boost.Xpressive
+        [quickbook 1.3]
+        ...
+    ]
+
+Change this to:
+
+    [library Boost.Xpressive
+        [quickbook 1.6]
+        [compatibility-mode 1.3]
+        ...
+    ]
+
+The =compatibility-mode= tag ensures that automatically generated links
+won't change. It might turn out that it isn't required, but in Xpressive's
+case if it isn't included it will break a lot of links.
+
+Then try building it. You might need to fix some stray square brackets. The
+new version has a stricter parser which will have an error for brackets
+which don't pair up. They might be there by mistake, in which case they
+should probably be deleted, or if they're intentional escaped. For example,
+to write out the half-open range \[a,b), use: `\[a,b)`.
 
 [section:docinfo Includes with docinfo]
 
