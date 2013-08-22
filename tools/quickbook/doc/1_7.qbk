@@ -57,7 +57,7 @@ This is a bit messy, but I'm not sure what would be a good idea.
 
 [section:callouts Callouts in code blocks]
 
-Currently callouts can only be used in code snippets. 1.7 add
+Currently callouts can only be used in code snippets. 1.7 adds
 support in normal code blocks. The same syntax is used as in
 code snippets, the callout descriptions appear immediately
 after the code block.
@@ -67,7 +67,7 @@ after the code block.
 [section:escaped_docinfo_attributes Escaped docbook in docinfo blocks]
 
 Quickbook docinfo attributes will probably never be as rich as docbook
-attributes so to allow more flexible markup, not supported by quickbook
+attributes. To allow more flexible markup that is not supported by quickbook,
 escaped docbook can be included in the docinfo block:
 
 ```
@@ -82,7 +82,8 @@ escaped docbook can be included in the docinfo block:
 ```
 
 The escaped docbook is always placed at the end of the docinfo block,
-so it shouldn't be assumed that it will interleave the markup. A mixture
+so it shouldn't be assumed that it will interleave with markup generated from
+quickbook. A mixture
 of quickbook and docbook attributes for the same information will not work
 well.
 
