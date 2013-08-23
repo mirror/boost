@@ -6,6 +6,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+#include <cctype>
 #include "id_manager_impl.hpp"
 #include <boost/make_shared.hpp>
 #include <boost/unordered_map.hpp>
