@@ -19,6 +19,9 @@
 // since he hasn't been in contact for years.)
 
 // Revision History
+// 23 Aug 13  Add bug-test of narrowing conversions during order comparison;
+//            spell logical-negation in it as "!" because MSVC won't accept
+//            "not" (Daryle Walker)
 // 05 Nov 06  Add testing of zero-valued denominators & divisors; casting with
 //            types that are not implicitly convertible (Daryle Walker)
 // 04 Nov 06  Resolve GCD issue with depreciation (Daryle Walker)
@@ -1009,7 +1012,7 @@ BOOST_AUTO_TEST_CASE( ticket_5855_test )
 
     bool const  dummy = rational_type() < rational_type();
 
-    BOOST_REQUIRE( not dummy );
+    BOOST_REQUIRE( !dummy );
 }
 
 BOOST_AUTO_TEST_SUITE_END()
