@@ -12,6 +12,7 @@
 #define BOOST_CONTAINER_DETAIL_UTILITIES_HPP
 
 #include "config_begin.hpp"
+#include "workaround.hpp"
 #include <cstdio>
 #include <cstring> //for ::memcpy
 #include <boost/type_traits/is_fundamental.hpp>
@@ -1055,18 +1056,21 @@ inline typename container_detail::enable_if_c
          ::memcpy(short_ptr, stora_ptr, sizeof_storage);
          large_ptr += sizeof_storage;
          short_ptr += sizeof_storage;
+         BOOST_CONTAINER_FALLTHOUGH
       case 3:
          ::memcpy(stora_ptr, large_ptr, sizeof_storage);
          ::memcpy(large_ptr, short_ptr, sizeof_storage);
          ::memcpy(short_ptr, stora_ptr, sizeof_storage);
          large_ptr += sizeof_storage;
          short_ptr += sizeof_storage;
+         BOOST_CONTAINER_FALLTHOUGH
       case 2:
          ::memcpy(stora_ptr, large_ptr, sizeof_storage);
          ::memcpy(large_ptr, short_ptr, sizeof_storage);
          ::memcpy(short_ptr, stora_ptr, sizeof_storage);
          large_ptr += sizeof_storage;
          short_ptr += sizeof_storage;
+         BOOST_CONTAINER_FALLTHOUGH
       case 1:
          ::memcpy(stora_ptr, large_ptr, sizeof_storage);
          ::memcpy(large_ptr, short_ptr, sizeof_storage);

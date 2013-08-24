@@ -23,6 +23,7 @@
 #include <boost/move/utility.hpp>
 #include <boost/container/allocator_traits.hpp>
 #include <boost/container/detail/type_traits.hpp>
+#include <boost/static_assert.hpp>
 
 #ifdef BOOST_CONTAINER_PERFECT_FORWARDING
 #include <boost/container/detail/variadic_templates_tools.hpp>
@@ -585,24 +586,112 @@ struct is_bidirectional_iterator<T, false>
    static const bool value = false;
 };
 
-template<class T, class IIterator>
+template<class IIterator>
 struct iiterator_types
 {
+   typedef typename IIterator::value_type                            it_value_type;
+   typedef typename it_value_type::value_type                        value_type;
    typedef typename std::iterator_traits<IIterator>::pointer         it_pointer;
    typedef typename std::iterator_traits<IIterator>::difference_type difference_type;
    typedef typename ::boost::intrusive::pointer_traits<it_pointer>::
-      template rebind_pointer<T>::type                               pointer;
+      template rebind_pointer<value_type>::type                      pointer;
    typedef typename ::boost::intrusive::pointer_traits<it_pointer>::
-      template rebind_pointer<const T>::type                         const_pointer;
+      template rebind_pointer<const value_type>::type                const_pointer;
    typedef typename ::boost::intrusive::
       pointer_traits<pointer>::reference                             reference;
    typedef typename ::boost::intrusive::
       pointer_traits<const_pointer>::reference                       const_reference;
+   typedef typename IIterator::iterator_category                     iterator_category;
 };
 
+template<class IIterator, bool IsConst>
+struct std_iterator
+{
+   typedef typename std::iterator
+      < typename iiterator_types<IIterator>::iterator_category
+      , typename iiterator_types<IIterator>::value_type
+      , typename iiterator_types<IIterator>::difference_type
+      , typename iiterator_types<IIterator>::const_pointer
+      , typename iiterator_types<IIterator>::const_reference> type;
+};
+
+template<class IIterator>
+struct std_iterator<IIterator, false>
+{
+   typedef typename std::iterator
+      < typename iiterator_types<IIterator>::iterator_category
+      , typename iiterator_types<IIterator>::value_type
+      , typename iiterator_types<IIterator>::difference_type
+      , typename iiterator_types<IIterator>::pointer
+      , typename iiterator_types<IIterator>::reference> type;
+};
+
+template<class IIterator, bool IsConst>
+class iterator
+   :  public std_iterator<IIterator, IsConst>::type
+{
+   typedef typename std_iterator<IIterator, IsConst>::type types_t;
+
+   public:
+   typedef typename types_t::value_type      value_type;
+   typedef typename types_t::pointer         pointer;
+   typedef typename types_t::reference       reference;
+
+   iterator()
+   {}
+
+   explicit iterator(IIterator iit) BOOST_CONTAINER_NOEXCEPT
+      : m_iit(iit)
+   {}
+
+   iterator(iterator<IIterator, false> const& other) BOOST_CONTAINER_NOEXCEPT
+      :  m_iit(other.get())
+   {}
+
+   iterator& operator++() BOOST_CONTAINER_NOEXCEPT
+   {  ++this->m_iit;   return *this;  }
+
+   iterator operator++(int) BOOST_CONTAINER_NOEXCEPT
+   {
+      iterator result (*this);
+      ++this->m_iit;
+      return result;
+   }
+
+   iterator& operator--() BOOST_CONTAINER_NOEXCEPT
+   {
+      //If the iterator is not a bidirectional iterator, operator-- should not exist
+      BOOST_STATIC_ASSERT((is_bidirectional_iterator<iterator>::value));
+      --this->m_iit;   return *this;
+   }
+
+   iterator operator--(int) BOOST_CONTAINER_NOEXCEPT
+   {
+      iterator result (*this);
+      --this->m_iit;
+      return result;
+   }
+
+   friend bool operator== (const iterator& l, const iterator& r) BOOST_CONTAINER_NOEXCEPT
+   {  return l.m_iit == r.m_iit;   }
+
+   friend bool operator!= (const iterator& l, const iterator& r) BOOST_CONTAINER_NOEXCEPT
+   {  return !(l == r); }
+
+   reference operator*()  const BOOST_CONTAINER_NOEXCEPT
+   {  return (*this->m_iit).get_data();  }
+
+   pointer   operator->() const BOOST_CONTAINER_NOEXCEPT
+   {  return ::boost::intrusive::pointer_traits<pointer>::pointer_to(this->operator*());  }
+
+   const IIterator &get() const BOOST_CONTAINER_NOEXCEPT
+   {  return this->m_iit;   }
+
+   private:
+   IIterator m_iit;
+};
 
 }  //namespace container_detail {
-
 }  //namespace container {
 }  //namespace boost {
 

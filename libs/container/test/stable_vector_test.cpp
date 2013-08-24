@@ -41,10 +41,10 @@ template class stable_vector<test::movable_and_copyable_int,
 
 namespace stable_vector_detail{
 
-template class iterator< int, int &, int *>;
-template class iterator< int, const int &, const int *>;
+template class iterator<int*, false>;
+template class iterator<int*, true >;
 
-}
+}  //namespace stable_vector_detail{
 
 }}
 

@@ -51,9 +51,7 @@ inline bool operator<(const flat_set<Key,Compare,Allocator>& x,
 /// @endcond
 
 //! flat_set is a Sorted Associative Container that stores objects of type Key.
-//! flat_set is a Simple Associative Container, meaning that its value type,
-//! as well as its key type, is Key. It is also a Unique Associative Container,
-//! meaning that no two elements are the same.
+//! It is also a Unique Associative Container, meaning that no two elements are the same.
 //!
 //! flat_set is similar to std::set but it's implemented like an ordered vector.
 //! This means that inserting a new element into a flat_set invalidates
@@ -61,6 +59,8 @@ inline bool operator<(const flat_set<Key,Compare,Allocator>& x,
 //!
 //! Erasing an element of a flat_set invalidates iterators and references
 //! pointing to elements that come after (their keys are bigger) the erased element.
+//!
+//! This container provides random-access iterators.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 template <class Key, class Compare = std::less<Key>, class Allocator = std::allocator<Key> >
 #else
@@ -119,6 +119,13 @@ class flat_set
    explicit flat_set(const Compare& comp,
                      const allocator_type& a = allocator_type())
       : m_flat_tree(comp, a)
+   {}
+
+   //! <b>Effects</b>: Constructs an empty flat_set using the specified allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit flat_set(const allocator_type& a)
+      : m_flat_tree(a)
    {}
 
    //! <b>Effects</b>: Constructs an empty set using the specified comparison object and
@@ -756,16 +763,17 @@ inline bool operator<(const flat_multiset<Key,Compare,Allocator>& x,
 /// @endcond
 
 //! flat_multiset is a Sorted Associative Container that stores objects of type Key.
-//! flat_multiset is a Simple Associative Container, meaning that its value type,
-//! as well as its key type, is Key.
-//! flat_Multiset can store multiple copies of the same key value.
+//!
+//! flat_multiset can store multiple copies of the same key value.
 //!
 //! flat_multiset is similar to std::multiset but it's implemented like an ordered vector.
 //! This means that inserting a new element into a flat_multiset invalidates
 //! previous iterators and references
 //!
-//! Erasing an element of a flat_multiset invalidates iterators and references
-//! pointing to elements that come after (their keys are equal or bigger) the erased element.
+//! Erasing an element invalidates iterators and references
+//! pointing to elements that come after (their keys are bigger) the erased element.
+//!
+//! This container provides random-access iterators.
 #ifdef BOOST_CONTAINER_DOXYGEN_INVOKED
 template <class Key, class Compare = std::less<Key>, class Allocator = std::allocator<Key> >
 #else
@@ -810,9 +818,21 @@ class flat_multiset
       : m_flat_tree()
    {}
 
+   //! <b>Effects</b>: Constructs an empty flat_multiset using the specified
+   //! comparison object and allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
    explicit flat_multiset(const Compare& comp,
                           const allocator_type& a = allocator_type())
-      : m_flat_tree(comp, a) {}
+      : m_flat_tree(comp, a)
+   {}
+
+   //! <b>Effects</b>: Constructs an empty flat_multiset using the specified allocator.
+   //!
+   //! <b>Complexity</b>: Constant.
+   explicit flat_multiset(const allocator_type& a)
+      : m_flat_tree(a)
+   {}
 
    template <class InputIterator>
    flat_multiset(InputIterator first, InputIterator last,

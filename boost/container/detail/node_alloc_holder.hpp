@@ -53,8 +53,12 @@ struct node_compare
    typedef typename ValueCompare::value_type   value_type;
    typedef typename ValueCompare::key_of_value key_of_value;
 
-   node_compare(const ValueCompare &pred)
+   explicit node_compare(const ValueCompare &pred)
       :  ValueCompare(pred)
+   {}
+
+   node_compare()
+      :  ValueCompare()
    {}
 
    ValueCompare &value_comp()
@@ -67,11 +71,10 @@ struct node_compare
    {  return ValueCompare::operator()(a.get_data(), b.get_data());  }
 };
 
-template<class A, class ICont, class Pred = container_detail::nat>
+template<class A, class ICont, class ValPred = container_detail::nat>
 struct node_alloc_holder
 {
    typedef allocator_traits<A>                                    allocator_traits_type;
-   typedef node_alloc_holder<A, ICont>                            self_t;
    typedef typename allocator_traits_type::value_type             value_type;
    typedef typename ICont::value_type                             Node;
    typedef typename allocator_traits_type::template
@@ -116,20 +119,20 @@ struct node_alloc_holder
    {  this->icont().swap(x.icont());  }
 
    //Constructors for associative containers
-   explicit node_alloc_holder(const ValAlloc &a, const Pred &c)
+   explicit node_alloc_holder(const ValAlloc &a, const ValPred &c)
       : members_(a, c)
    {}
 
-   explicit node_alloc_holder(const node_alloc_holder &x, const Pred &c)
+   explicit node_alloc_holder(const node_alloc_holder &x, const ValPred &c)
       : members_(NodeAllocTraits::select_on_container_copy_construction(x.node_alloc()), c)
    {}
 
-   explicit node_alloc_holder(const Pred &c)
+   explicit node_alloc_holder(const ValPred &c)
       : members_(c)
    {}
 
    //helpers for move assignments
-   explicit node_alloc_holder(BOOST_RV_REF(node_alloc_holder) x, const Pred &c)
+   explicit node_alloc_holder(BOOST_RV_REF(node_alloc_holder) x, const ValPred &c)
       : members_(boost::move(x.node_alloc()), c)
    {  this->icont().swap(x.icont());  }
 
@@ -345,12 +348,12 @@ struct node_alloc_holder
       {}
 
       template<class ConvertibleToAlloc>
-      members_holder(BOOST_FWD_REF(ConvertibleToAlloc) c2alloc, const Pred &c)
+      members_holder(BOOST_FWD_REF(ConvertibleToAlloc) c2alloc, const ValPred &c)
          :  NodeAlloc(boost::forward<ConvertibleToAlloc>(c2alloc))
          , m_icont(typename ICont::value_compare(c))
       {}
 
-      explicit members_holder(const Pred &c)
+      explicit members_holder(const ValPred &c)
          : NodeAlloc()
          , m_icont(typename ICont::value_compare(c))
       {}

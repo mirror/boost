@@ -43,8 +43,8 @@ namespace container_detail {
 
 #ifndef BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
 
-template class vector_const_iterator<int*>;
-template class vector_iterator<int*>;
+template class vec_iterator<int*, true >;
+template class vec_iterator<int*, false>;
 
 #endif   //BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
 

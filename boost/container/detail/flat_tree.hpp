@@ -85,9 +85,9 @@ struct get_flat_tree_iterators
          rebind_pointer<const iterator_element_type>::type  const_iterator;
    #else //BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
    typedef typename container_detail::
-      vector_iterator<Pointer>                        iterator;
+      vec_iterator<Pointer, false>                    iterator;
    typedef typename container_detail::
-      vector_const_iterator<Pointer>                  const_iterator;
+      vec_iterator<Pointer, true >                    const_iterator;
    #endif   //BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
    typedef std::reverse_iterator<iterator>            reverse_iterator;
    typedef std::reverse_iterator<const_iterator>      const_reverse_iterator;
@@ -115,7 +115,7 @@ class flat_tree
          : value_compare(), m_vect()
       {}
 
-      Data(const Data &d)
+      explicit Data(const Data &d)
          : value_compare(static_cast<const value_compare&>(d)), m_vect(d.m_vect)
       {}
 
@@ -131,13 +131,16 @@ class flat_tree
          : value_compare(boost::move(static_cast<value_compare&>(d))), m_vect(boost::move(d.m_vect), a)
       {}
 
-      Data(const Compare &comp)
+      explicit Data(const Compare &comp)
          : value_compare(comp), m_vect()
       {}
 
-      Data(const Compare &comp,
-           const allocator_t &alloc)
+      Data(const Compare &comp, const allocator_t &alloc)
          : value_compare(comp), m_vect(alloc)
+      {}
+
+      explicit Data(const allocator_t &alloc)
+         : value_compare(), m_vect(alloc)
       {}
 
       Data& operator=(BOOST_COPY_ASSIGN_REF(Data) d)
@@ -201,6 +204,10 @@ class flat_tree
 
    flat_tree(const Compare& comp, const allocator_type& a)
       : m_data(comp, a)
+   { }
+
+   explicit flat_tree(const allocator_type& a)
+      : m_data(a)
    { }
 
    flat_tree(const flat_tree& x)

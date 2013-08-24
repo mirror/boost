@@ -475,6 +475,13 @@ int main()
 {
    using namespace boost::container::test;
 
+   //Allocator argument container
+   {
+      flat_set<int> set_((std::allocator<int>()));
+      flat_multiset<int> multiset_((std::allocator<int>()));
+      flat_map<int, int> map_((std::allocator<std::pair<int, int> >()));
+      flat_multimap<int, int> multimap_((std::allocator<std::pair<int, int> >()));
+   }
    //Now test move semantics
    {
       test_move<flat_set<recursive_flat_set> >();
