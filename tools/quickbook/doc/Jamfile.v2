@@ -13,13 +13,18 @@ project quickbook/doc ;
 using boostbook ;
 using quickbook ;
 
+# Targets for building individual parts for combined documentation.
 xml quickbook : quickbook.qbk ;
+xml boost-doc-tools : boost-doc-tools/boost-doc-tools.qbk ;
+
+# Target for building the full documentation guide from quickbook.
+xml doc-guide : doc-guide.qbk ;
 
 path-constant images : ../../../doc/src ;
 
 boostbook standalone
     :
-        quickbook
+        doc-guide
     :
         <format>html:<xsl:param>boost.root=../../../..
         <format>html:<xsl:param>img.src.path=../../../../doc/html/
