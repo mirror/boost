@@ -281,14 +281,14 @@ but imperfect emulation. On such compilers:
 * The containers themselves are not movable.
 * Argument forwarding is not perfect.
 
-__cb will use rvalues and move emulations for value types only if move constructor of the value type does not throw
+__cb will use rvalues and move emulations for value types only if move constructor and move assignment operator of the value type do not throw;
 or if the value type has no copy constructor.
 
 Some methods won't use move constructor for the value type at all, if the constructor throws. This is 
 required for data consistency and avoidance of situations, when aftrer an exception __cb 
 contains moved away objects along with the good ones.
 
-See documentation for [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_copy_constructible.html `is_copy_constructible`] and [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_constructible.html `is_nothrow_move_constructible`] type triats. 
+See documentation for [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_copy_constructible.html `is_copy_constructible`], [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_assignable.html `is_nothrow_move_assignable`] and [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_constructible.html `is_nothrow_move_constructible`] type triats. 
 There you'll find information about how to make constructor of class noexcept and how to make a non-copyable 
 class in C++03 and C++98.
 
@@ -298,18 +298,16 @@ Performance of __cb will *greatly improve* if value type has noexcept move const
 
 Reference documentation of the __cb contains notes like "Throws: See Exceptions of `move_if_noexcept(T&)`".
 That note means the following: `move_if_noexcept(T& value)` does not throws exceptions at all, but it returns
-`value` as rvalue reference only if class `T` have noexcept move constructor or if it has no copy constructor. 
-Otherwise `move_if_noexcept(T& value)` returns `value` as const reference. 
+`value` as rvalue reference only if class `T` have noexcept move constructor and noexcept move assignment operator; 
+or if it has no copy constructor. Otherwise `move_if_noexcept(T& value)` returns `value` as const reference. 
 
 This leads us to the following situation:
 
-* If `value` has a noexcept move constructor, then no exceptions will be thrown at all.
-* If `value` has a throwing move constructor and some copy constructor, then method may throw exceptions 
-of copy constructor.
-* If `value` has a throwing move constructor and no copy constructor, then method may throw exceptions 
-of move constructor.
+* If `value` has a noexcept move constructor and noexcept move assignment operator, then no exceptions will be thrown at all.
+* If `value` has a throwing move constructor and some copy constructor, then method may throw exceptions of copy constructor.
+* If `value` has no copy constructor, then method may throw exceptions of move constructor.
 
-`move_if_noexcept(T&)` uses [@boost:libs/move/doc/html/move.html Boost.Move], [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_copy_constructible.html `is_copy_constructible`] and [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_constructible.html `is_nothrow_move_constructible`] type triats. 
+`move_if_noexcept(T&)` uses [@boost:libs/move/doc/html/move.html Boost.Move], [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_copy_constructible.html `is_copy_constructible`], [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_assignable.html `is_nothrow_move_assignable`] and [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_constructible.html `is_nothrow_move_constructible`] type triats. 
 
 
 [h3 Caveats]

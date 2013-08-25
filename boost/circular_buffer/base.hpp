@@ -26,6 +26,7 @@
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/type_traits/is_scalar.hpp>
 #include <boost/type_traits/is_nothrow_move_constructible.hpp>
+#include <boost/type_traits/is_nothrow_move_assignable.hpp>
 #include <boost/type_traits/is_copy_constructible.hpp>
 #include <boost/type_traits/conditional.hpp>
 #include <boost/move/move.hpp>
@@ -187,7 +188,7 @@ private:
     /*! \cond */
     template <class ValT> 
     static inline typename boost::conditional<
-        (boost::is_nothrow_move_constructible<ValT>::value || !boost::is_copy_constructible<ValT>::value)
+        ((boost::is_nothrow_move_constructible<ValT>::value && boost::is_nothrow_move_assignable<ValT>::value) || !boost::is_copy_constructible<ValT>::value)
 #if defined(BOOST_NO_CXX11_DELETED_FUNCTIONS) && defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
             && has_move_emulation_enabled<ValT>::value
 #endif
