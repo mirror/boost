@@ -21,6 +21,7 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  25 Aug 13  Add constexpr qualification wherever possible (Daryle Walker)
 //  05 May 12  Reduced use of implicit gcd (Mario Lang)
 //  05 Nov 06  Change rational_cast to not depend on division between different
 //             types (Daryle Walker)
@@ -62,7 +63,7 @@
 #include <boost/operators.hpp>   // for boost::addable etc
 #include <cstdlib>               // for std::abs
 #include <boost/call_traits.hpp> // for boost::call_traits
-#include <boost/config.hpp>      // for BOOST_NO_STDC_NAMESPACE, BOOST_MSVC
+#include <boost/config.hpp>      // for BOOST_NO_STDC_NAMESPACE, BOOST_MSVC, etc
 #include <boost/detail/workaround.hpp> // for BOOST_WORKAROUND
 #include <boost/assert.hpp>      // for BOOST_ASSERT
 #include <boost/math/common_factor_rt.hpp>  // for boost::math::gcd, lcm
@@ -134,8 +135,12 @@ class rational :
     typedef IntType (helper::* bool_type)[2];
 
 public:
+    // Component type
     typedef IntType int_type;
+
+    BOOST_CONSTEXPR
     rational() : num(0), den(1) {}
+    BOOST_CONSTEXPR
     rational(param_type n) : num(n), den(1) {}
     rational(param_type n, param_type d) : num(n), den(d) { normalize(); }
 
@@ -148,7 +153,9 @@ public:
     rational& assign(param_type n, param_type d);
 
     // Access to representation
+    BOOST_CONSTEXPR
     IntType numerator() const { return num; }
+    BOOST_CONSTEXPR
     IntType denominator() const { return den; }
 
     // Arithmetic assignment operators
@@ -167,6 +174,7 @@ public:
     const rational& operator--() { num -= den; return *this; }
 
     // Operator not
+    BOOST_CONSTEXPR
     bool operator!() const { return !num; }
 
     // Boolean conversion
@@ -178,6 +186,7 @@ public:
 #pragma parse_mfunc_templ off
 #endif
 
+    BOOST_CONSTEXPR
     operator bool_type() const { return operator !() ? 0 : &helper::parts; }
 
 #if BOOST_WORKAROUND(__MWERKS__,<=0x3003)
@@ -186,10 +195,12 @@ public:
 
     // Comparison operators
     bool operator< (const rational& r) const;
+    BOOST_CONSTEXPR
     bool operator== (const rational& r) const;
 
     bool operator< (param_type i) const;
     bool operator> (param_type i) const;
+    BOOST_CONSTEXPR
     bool operator== (param_type i) const;
 
 private:
@@ -218,6 +229,7 @@ inline rational<IntType>& rational<IntType>::assign(param_type n, param_type d)
 
 // Unary plus and minus
 template <typename IntType>
+BOOST_CONSTEXPR
 inline rational<IntType> operator+ (const rational<IntType>& r)
 {
     return r;
@@ -474,12 +486,14 @@ bool rational<IntType>::operator> (param_type i) const
 }
 
 template <typename IntType>
+BOOST_CONSTEXPR
 inline bool rational<IntType>::operator== (const rational<IntType>& r) const
 {
     return ((num == r.num) && (den == r.den));
 }
 
 template <typename IntType>
+BOOST_CONSTEXPR
 inline bool rational<IntType>::operator== (param_type i) const
 {
     return ((den == IntType(1)) && (num == i));
@@ -573,6 +587,7 @@ std::ostream& operator<< (std::ostream& os, const rational<IntType>& r)
 
 // Type conversion
 template <typename T, typename IntType>
+BOOST_CONSTEXPR
 inline T rational_cast(
     const rational<IntType>& src BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
 {
