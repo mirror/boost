@@ -6,3 +6,4 @@
 [include intro.qbk]
 [include install.qbk]
 [include pdfs.qbk]
+[include boost-build.qbk]
