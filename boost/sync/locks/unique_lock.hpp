@@ -8,21 +8,17 @@
  * (C) Copyright 2013 Andrey Semashev
  */
 /*!
- * \file   locks/lock_guard.hpp
+ * \file   locks/unique_lock.hpp
  *
  * \brief  This header defines an exclusive lock guard.
  */
 
-#ifndef BOOST_SYNC_LOCKS_LOCK_GUARD_HPP_INCLUDED_
-#define BOOST_SYNC_LOCKS_LOCK_GUARD_HPP_INCLUDED_
+#ifndef BOOST_SYNC_LOCKS_UNIQUE_LOCK_HPP_INCLUDED_
+#define BOOST_SYNC_LOCKS_UNIQUE_LOCK_HPP_INCLUDED_
 
 #include <cstddef>
 #include <boost/utility/enable_if.hpp>
 #include <boost/sync/detail/config.hpp>
-#if !defined(BOOST_SYNC_AUX_NO_CXX11_INITIALIZER_LISTS)
-#include <initializer_list>
-#include <boost/sync/detail/lockable_wrapper.hpp>
-#endif
 #include <boost/sync/locks/lock_options.hpp>
 
 #include <boost/sync/detail/header.hpp>
@@ -415,4 +411,4 @@ inline void swap(unique_lock< MutexT >& lhs, unique_lock< MutexT >& rhs) BOOST_N
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_LOCKS_LOCK_GUARD_HPP_INCLUDED_
+#endif // BOOST_SYNC_LOCKS_UNIQUE_LOCK_HPP_INCLUDED_
