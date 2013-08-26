@@ -51,6 +51,23 @@ void test_char_types_conversions_wchar_t()
 {
 #ifndef BOOST_LCAST_NO_WCHAR_T
     test_impl(L"Test array of chars");
+    wchar_t c = boost::detail::lcast_char_constants<wchar_t>::zero;
+    BOOST_CHECK_EQUAL(L'0', c);
+
+    c = boost::detail::lcast_char_constants<wchar_t>::minus;
+    BOOST_CHECK_EQUAL(L'-', c);
+
+    c = boost::detail::lcast_char_constants<wchar_t>::plus;
+    BOOST_CHECK_EQUAL(L'+', c);
+
+    c = boost::detail::lcast_char_constants<wchar_t>::lowercase_e;
+    BOOST_CHECK_EQUAL(L'e', c);
+
+    c = boost::detail::lcast_char_constants<wchar_t>::capital_e;
+    BOOST_CHECK_EQUAL(L'E', c);
+
+    c = boost::detail::lcast_char_constants<wchar_t>::c_decimal_separator;
+    BOOST_CHECK_EQUAL(L'.', c);
 #endif
 
     BOOST_CHECK(true);
@@ -60,6 +77,23 @@ void test_char_types_conversions_char16_t()
 {
 #if !defined(BOOST_NO_CXX11_CHAR16_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
     test_impl(u"Test array of chars");
+    char16_t c = boost::detail::lcast_char_constants<char16_t>::zero;
+    BOOST_CHECK_EQUAL(u'0', c);
+
+    c = boost::detail::lcast_char_constants<char16_t>::minus;
+    BOOST_CHECK_EQUAL(u'-', c);
+
+    c = boost::detail::lcast_char_constants<char16_t>::plus;
+    BOOST_CHECK_EQUAL(u'+', c);
+
+    c = boost::detail::lcast_char_constants<char16_t>::lowercase_e;
+    BOOST_CHECK_EQUAL(u'e', c);
+
+    c = boost::detail::lcast_char_constants<char16_t>::capital_e;
+    BOOST_CHECK_EQUAL(u'E', c);
+
+    c = boost::detail::lcast_char_constants<char16_t>::c_decimal_separator;
+    BOOST_CHECK_EQUAL(u'.', c);
 #endif
 
     BOOST_CHECK(true);
@@ -69,6 +103,23 @@ void test_char_types_conversions_char32_t()
 {
 #if !defined(BOOST_NO_CXX11_CHAR32_T) && !defined(BOOST_NO_CXX11_UNICODE_LITERALS) && defined(BOOST_STL_SUPPORTS_NEW_UNICODE_LOCALES)
     test_impl(U"Test array of chars");
+    char32_t c = boost::detail::lcast_char_constants<char32_t>::zero;
+    BOOST_CHECK_EQUAL(U'0', c);
+
+    c = boost::detail::lcast_char_constants<char32_t>::minus;
+    BOOST_CHECK_EQUAL(U'-', c);
+
+    c = boost::detail::lcast_char_constants<char32_t>::plus;
+    BOOST_CHECK_EQUAL(U'+', c);
+
+    c = boost::detail::lcast_char_constants<char32_t>::lowercase_e;
+    BOOST_CHECK_EQUAL(U'e', c);
+
+    c = boost::detail::lcast_char_constants<char32_t>::capital_e;
+    BOOST_CHECK_EQUAL(U'E', c);
+
+    c = boost::detail::lcast_char_constants<char32_t>::c_decimal_separator;
+    BOOST_CHECK_EQUAL(U'.', c);
 #endif
 
     BOOST_CHECK(true);
