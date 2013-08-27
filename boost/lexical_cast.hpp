@@ -584,9 +584,9 @@ namespace boost {
 
             typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
                 boost::detail::extract_char_traits<char_type, Target>::value,
-                BOOST_DEDUCED_TYPENAME boost::detail::extract_char_traits<char_type, Target>::trait_t,
-                BOOST_DEDUCED_TYPENAME boost::detail::extract_char_traits<char_type, no_cv_src>::trait_t
-            >::type traits;
+                BOOST_DEDUCED_TYPENAME boost::detail::extract_char_traits<char_type, Target>,
+                BOOST_DEDUCED_TYPENAME boost::detail::extract_char_traits<char_type, no_cv_src>
+            >::type::trait_t traits;
 
             typedef boost::type_traits::ice_and<
                 boost::is_same<char, src_char_t>::value,                                  // source is not a wide character based type
@@ -653,7 +653,7 @@ namespace boost {
             BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
 #endif
 
-            typedef typename Traits::int_type int_type;
+            typedef BOOST_DEDUCED_TYPENAME Traits::int_type int_type;
             CharT const czero = lcast_char_constants<CharT>::zero;
             int_type const zero = Traits::to_int_type(czero);
             BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
