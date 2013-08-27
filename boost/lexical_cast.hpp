@@ -725,35 +725,50 @@ namespace boost {
 
     namespace detail // lcast_ret_unsigned
     {
-        template<class Traits, class T, class CharT>
-        inline bool lcast_ret_unsigned(T& value, const CharT* const begin, const CharT* end)
-        {
+        template <class Traits, class T, class CharT>
+        class lcast_ret_unsigned {
+            bool m_multiplier_overflowed;
+            T m_multiplier;
+            T& m_value;
+            const CharT* const m_begin;
+            const CharT* m_end;
+    
+        public:
+            lcast_ret_unsigned(T& value, const CharT* const begin, const CharT* end) BOOST_NOEXCEPT
+                : m_multiplier_overflowed(false), m_multiplier(1), m_value(value), m_begin(begin), m_end(end)
+            {
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-            BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
+                BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
 
-            // GCC when used with flag -std=c++0x may not have std::numeric_limits
-            // specializations for __int128 and unsigned __int128 types.
-            // Try compilation with -std=gnu++0x or -std=gnu++11.
-            //
-            // http://gcc.gnu.org/bugzilla/show_bug.cgi?id=40856
-            BOOST_STATIC_ASSERT_MSG(std::numeric_limits<T>::is_specialized,
-                "std::numeric_limits are not specialized for integral type passed to boost::lexical_cast"
-            );
+                // GCC when used with flag -std=c++0x may not have std::numeric_limits
+                // specializations for __int128 and unsigned __int128 types.
+                // Try compilation with -std=gnu++0x or -std=gnu++11.
+                //
+                // http://gcc.gnu.org/bugzilla/show_bug.cgi?id=40856
+                BOOST_STATIC_ASSERT_MSG(std::numeric_limits<T>::is_specialized,
+                    "std::numeric_limits are not specialized for integral type passed to boost::lexical_cast"
+                );
 #endif
-            CharT const czero = lcast_char_constants<CharT>::zero;
-            --end;
-            value = 0;
+            }
 
-            if (begin > end || *end < czero || *end >= czero + 10)
-                return false;
-            value = static_cast<T>(*end - czero);
-            --end;
-            T multiplier = 1;
-            bool multiplier_overflowed = false;
+            inline bool convert() {
+                CharT const czero = lcast_char_constants<CharT>::zero;
+                --m_end;
+                m_value = static_cast<T>(0);
 
-#ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
-            std::locale loc;
-            if (loc != std::locale::classic()) {
+                if (m_begin > m_end || *m_end < czero || *m_end >= czero + 10)
+                    return false;
+                m_value = static_cast<T>(*m_end - czero);
+                --m_end;
+
+#ifdef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
+                return main_convert_loop();
+#else
+                std::locale loc;
+                if (loc == std::locale::classic()) {
+                    return main_convert_loop();
+                }
+
                 typedef std::numpunct<CharT> numpunct;
                 numpunct const& np = BOOST_USE_FACET(numpunct, loc);
                 std::string const& grouping = np.grouping();
@@ -762,85 +777,86 @@ namespace boost {
                 /* According to Programming languages - C++
                  * we MUST check for correct grouping
                  */
-                if (grouping_size && grouping[0] > 0)
+                if (!grouping_size || grouping[0] <= 0) {
+                    return main_convert_loop();
+                }
+
+                unsigned char current_grouping = 0;
+                CharT const thousands_sep = np.thousands_sep();
+                char remained = static_cast<char>(grouping[current_grouping] - 1);
+
+                for (;m_end >= m_begin; --m_end)
                 {
-                    unsigned char current_grouping = 0;
-                    CharT const thousands_sep = np.thousands_sep();
-                    char remained = static_cast<char>(grouping[current_grouping] - 1);
-                    bool shall_we_return = true;
-
-                    for(;end>=begin; --end)
-                    {
-                        if (remained) {
-                            T const multiplier_10 = static_cast<T>(multiplier * 10);
-                            if (multiplier_10 / 10 != multiplier) multiplier_overflowed = true;
-
-                            T const dig_value = static_cast<T>(*end - czero);
-                            T const new_sub_value = static_cast<T>(multiplier_10 * dig_value);
-
-                            if (*end < czero || *end >= czero + 10
-                                    /* detecting overflow */
-                                    || (dig_value && new_sub_value / dig_value != multiplier_10)
-                                    || static_cast<T>((std::numeric_limits<T>::max)()-new_sub_value) < value
-                                    || (multiplier_overflowed && dig_value)
-                                    )
-                                return false;
-
-                            value = static_cast<T>(value + new_sub_value);
-                            multiplier = static_cast<T>(multiplier * 10);
-                            --remained;
+                    if (remained) {
+                        if (!main_convert_itaration()) {
+                            return false;
+                        }
+                        --remained;
+                    } else {
+                        if ( !Traits::eq(*m_end, thousands_sep) ) //|| begin == end ) return false;
+                        {
+                            /*
+                             * According to Programming languages - C++
+                             * Digit grouping is checked. That is, the positions of discarded
+                             * separators is examined for consistency with
+                             * use_facet<numpunct<charT> >(loc ).grouping()
+                             *
+                             * BUT what if there is no separators at all and grouping()
+                             * is not empty? Well, we have no extraced separators, so we
+                             * won`t check them for consistency. This will allow us to
+                             * work with "C" locale from other locales
+                             */
+                            return main_convert_loop();
                         } else {
-                            if ( !Traits::eq(*end, thousands_sep) ) //|| begin == end ) return false;
-                            {
-                                /*
-                                 * According to Programming languages - C++
-                                 * Digit grouping is checked. That is, the positions of discarded
-                                 * separators is examined for consistency with
-                                 * use_facet<numpunct<charT> >(loc ).grouping()
-                                 *
-                                 * BUT what if there is no separators at all and grouping()
-                                 * is not empty? Well, we have no extraced separators, so we
-                                 * won`t check them for consistency. This will allow us to
-                                 * work with "C" locale from other locales
-                                 */
-                                shall_we_return = false;
-                                break;
-                            } else {
-                                if ( begin == end ) return false;
-                                if (current_grouping < grouping_size-1 ) ++current_grouping;
-                                remained = grouping[current_grouping];
-                            }
+                            if (m_begin == m_end) return false;
+                            if (current_grouping < grouping_size - 1) ++current_grouping;
+                            remained = grouping[current_grouping];
                         }
                     }
+                } /*for*/
 
-                    if (shall_we_return) return true;
-                }
-            }
+                return true;
 #endif
-            {
-                while ( begin <= end )
-                {
-                    T const multiplier_10 = static_cast<T>(multiplier * 10);
-                    if (multiplier_10 / 10 != multiplier) multiplier_overflowed = true;
-
-                    T const dig_value = static_cast<T>(*end - czero);
-                    T const new_sub_value = static_cast<T>(multiplier_10 * dig_value);
-
-                    if (*end < czero || *end >= czero + 10
-                            /* detecting overflow */
-                            || (dig_value && new_sub_value / dig_value != multiplier_10)
-                            || static_cast<T>((std::numeric_limits<T>::max)()-new_sub_value) < value
-                            || (multiplier_overflowed && dig_value)
-                            )
-                        return false;
-
-                    value = static_cast<T>(value + new_sub_value);
-                    multiplier = static_cast<T>(multiplier * 10);
-                    --end;
-                }
             }
-            return true;
-        }
+
+        private:
+            // Iteration that does not care about grouping/separators and assumes that all 
+            // input characters are digits
+            inline bool main_convert_itaration() BOOST_NOEXCEPT {
+                CharT const czero = lcast_char_constants<CharT>::zero;
+                T const maxv = (std::numeric_limits<T>::max)();
+
+                m_multiplier_overflowed = m_multiplier_overflowed || (maxv/10 < m_multiplier);
+                m_multiplier = static_cast<T>(m_multiplier * 10);
+
+                T const dig_value = static_cast<T>(*m_end - czero);
+                T const new_sub_value = static_cast<T>(m_multiplier * dig_value);
+
+                // We must correctly handle situations like `000000000000000000000000000001`.
+                // So we take care of overflow only if `dig_value` is not '0'.
+                if (*m_end < czero || *m_end >= czero + 10  // checking for correct digit
+                    || (dig_value && (                      // checking for overflow of ... 
+                        m_multiplier_overflowed                             // ... multiplier
+                        || static_cast<T>(maxv / dig_value) < m_multiplier  // ... subvalue
+                        || static_cast<T>(maxv - new_sub_value) < m_value   // ... whole expression
+                    ))
+                ) return false;
+
+                m_value = static_cast<T>(m_value + new_sub_value);
+                
+                return true;
+            }
+
+            bool main_convert_loop() BOOST_NOEXCEPT {
+                for ( ; m_end >= m_begin; --m_end) {
+                    if (!main_convert_itaration()) {
+                        return false;
+                    }
+                }
+            
+                return true;
+            }
+        };
     }
 
     namespace detail
@@ -1110,12 +1126,11 @@ namespace boost {
                 if (found_decimal) {
                     /* We allow no thousand_separators after decimal point */
 
-                    mantissa_type tmp_mantissa = mantissa * 10u;
+                    const mantissa_type tmp_sub_value = static_cast<mantissa_type>(*begin - zero);
                     if (Traits::eq(*begin, lowercase_e) || Traits::eq(*begin, capital_e)) break;
                     if ( *begin < czero || *begin >= czero + 10 ) return false;
                     if (    is_mantissa_full
-                            || tmp_mantissa / 10u != mantissa
-                            || (std::numeric_limits<mantissa_type>::max)()-(*begin - zero) < tmp_mantissa
+                            || ((std::numeric_limits<mantissa_type>::max)() - tmp_sub_value) / 10u  < mantissa
                             ) {
                         is_mantissa_full = true;
                         ++ begin;
@@ -1123,8 +1138,7 @@ namespace boost {
                     }
 
                     -- pow_of_10;
-                    mantissa = tmp_mantissa;
-                    mantissa += *begin - zero;
+                    mantissa = static_cast<mantissa_type>(mantissa * 10 + tmp_sub_value);
 
                     found_number_before_exp = true;
                 } else {
@@ -1134,14 +1148,12 @@ namespace boost {
                         /* Checking for mantissa overflow. If overflow will
                          * occur, them we only increase multiplyer
                          */
-                        mantissa_type tmp_mantissa = mantissa * 10u;
-                        if(     !is_mantissa_full
-                                && tmp_mantissa / 10u == mantissa
-                                && (std::numeric_limits<mantissa_type>::max)()-(*begin - zero) >= tmp_mantissa
+                        const mantissa_type tmp_sub_value = static_cast<mantissa_type>(*begin - zero);
+                        if(     !(is_mantissa_full
+                                || ((std::numeric_limits<mantissa_type>::max)() - tmp_sub_value) / 10u  < mantissa)
                             )
                         {
-                            mantissa = tmp_mantissa;
-                            mantissa += *begin - zero;
+                            mantissa = static_cast<mantissa_type>(mantissa * 10 + tmp_sub_value);
                         } else
                         {
                             is_mantissa_full = true;
@@ -1792,7 +1804,7 @@ namespace boost {
                     ++start;
                 }
 
-                bool const succeed = lcast_ret_unsigned<Traits>(output, start, finish);
+                bool const succeed = lcast_ret_unsigned<Traits, Type, CharT>(output, start, finish).convert();
 
                 if (has_minus) {
                     output = static_cast<Type>(0u - output);
@@ -1821,7 +1833,7 @@ namespace boost {
                     ++start;
                 }
 
-                bool succeed = lcast_ret_unsigned<Traits>(out_tmp, start, finish);
+                bool succeed = lcast_ret_unsigned<Traits, utype, CharT>(out_tmp, start, finish).convert();
                 if (has_minus) {
                     utype const comp_val = (static_cast<utype>(1) << std::numeric_limits<Type>::digits);
                     succeed = succeed && out_tmp<=comp_val;
@@ -2114,39 +2126,35 @@ namespace boost {
         template<typename Target, typename Source>
         struct is_arithmetic_and_not_xchars
         {
-            BOOST_STATIC_CONSTANT(bool, value =
-               (
-                   boost::type_traits::ice_and<
-                           boost::is_arithmetic<Source>::value,
-                           boost::is_arithmetic<Target>::value,
-                           boost::type_traits::ice_not<
-                                boost::detail::is_character<Target>::value
-                           >::value,
-                           boost::type_traits::ice_not<
-                                boost::detail::is_character<Source>::value
-                           >::value
-                   >::value
-               )
-            );
+            BOOST_STATIC_CONSTANT(bool, value = (
+                boost::type_traits::ice_and<
+                    boost::type_traits::ice_not<
+                        boost::detail::is_character<Target>::value
+                    >::value,
+                    boost::type_traits::ice_not<
+                        boost::detail::is_character<Source>::value
+                    >::value,
+                    boost::is_arithmetic<Source>::value,
+                    boost::is_arithmetic<Target>::value       
+                >::value
+            ));
         };
 
         /*
-         * is_xchar_to_xchar<Target, Source>::value is true, when
-         * Target and Souce are the same char types, or when
-         * Target and Souce are char types of the same size (signed char, unsigned char).
+         * is_xchar_to_xchar<Target, Source>::value is true, 
+         * Target and Souce are char types of the same size 1 (char, signed char, unsigned char).
          */
         template<typename Target, typename Source>
-        struct is_xchar_to_xchar
+        struct is_xchar_to_xchar 
         {
-            BOOST_STATIC_CONSTANT(bool, value =
-                (
-                    boost::type_traits::ice_and<
-                         boost::type_traits::ice_eq<sizeof(Source), sizeof(Target)>::value,
-                         boost::detail::is_character<Target>::value,
-                         boost::detail::is_character<Source>::value
-                    >::value
-                )
-            );
+            BOOST_STATIC_CONSTANT(bool, value = (
+                boost::type_traits::ice_and<
+                     boost::type_traits::ice_eq<sizeof(Source), sizeof(Target)>::value,
+                     boost::type_traits::ice_eq<sizeof(Source), sizeof(char)>::value,
+                     boost::detail::is_character<Target>::value,
+                     boost::detail::is_character<Source>::value
+                >::value
+            ));
         };
 
         template<typename Target, typename Source>
@@ -2346,6 +2354,10 @@ namespace boost {
             boost::type_traits::ice_and<
                  boost::is_same<Target, src >::value,
                  boost::detail::is_stdstring<Target >::value
+            >::value,
+            boost::type_traits::ice_and<
+                 boost::is_same<Target, src >::value,
+                 boost::detail::is_character<Target >::value
             >::value
         > shall_we_copy_t;
 
