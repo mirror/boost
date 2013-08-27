@@ -19,6 +19,7 @@
 // since he hasn't been in contact for years.)
 
 // Revision History
+// 27 Aug 13  Add test for cross-version constructor template (Daryle Walker)
 // 23 Aug 13  Add bug-test of narrowing conversions during order comparison;
 //            spell logical-negation in it as "!" because MSVC won't accept
 //            "not" (Daryle Walker)
@@ -429,6 +430,7 @@ typedef ::boost::mpl::list<short, int, long, MyInt>  all_signed_test_types;
 ::boost::rational<long>                  dummy3;
 ::boost::rational<MyInt>                 dummy4;
 ::boost::rational<MyOverflowingUnsigned> dummy5;
+::boost::rational<unsigned>              dummy6;
 
 // Should there be regular tests with unsigned integer types?
 
@@ -902,6 +904,44 @@ BOOST_AUTO_TEST_CASE( rational_cast_test )
     BOOST_CHECK_EQUAL( boost::rational_cast<MyOverflowingUnsigned>(threehalves),
      MyOverflowingUnsigned(1u) );
 }
+
+#ifndef BOOST_NO_MEMBER_TEMPLATES
+// Cross-conversion constructor test
+BOOST_AUTO_TEST_CASE( rational_cross_constructor_test )
+{
+    // This template will be repeated a lot.
+    using boost::rational;
+
+    // Create a bunch of explicit conversions.
+    rational<int> const                    half_i( 2, 4 );
+    rational<unsigned> const               half_u( half_i );
+    rational<MyInt> const                  half_mi( half_i );
+    rational<MyOverflowingUnsigned> const  half_mu1(half_u), half_mu2(half_mi);
+
+    BOOST_CHECK_EQUAL( half_u.numerator(), 1u );
+    BOOST_CHECK_EQUAL( half_u.denominator(), 2u );
+    BOOST_CHECK_EQUAL( half_mi.numerator(), MyInt(1) );
+    BOOST_CHECK_EQUAL( half_mi.denominator(), MyInt(2) );
+    BOOST_CHECK_EQUAL( half_mu1.numerator(), MyOverflowingUnsigned(1u) );
+    BOOST_CHECK_EQUAL( half_mu1.denominator(), MyOverflowingUnsigned(2u) );
+    BOOST_CHECK_EQUAL( half_mu2.numerator(), MyOverflowingUnsigned(1u) );
+    BOOST_CHECK_EQUAL( half_mu2.denominator(), MyOverflowingUnsigned(2u) );
+
+#if 0
+    // This will fail since it needs an implicit conversion.
+    // (Try it if your compiler supports C++11 lambdas.)
+    BOOST_CHECK( [](rational<unsigned> x){return !!x;}(half_i) );
+#endif
+
+    // Translation from a built-in unsigned type to a signed one is
+    // implementation-defined, so hopefully we won't get a trap value.
+    // (We're counting on static_cast<int>(UINT_MAX) being negative.)
+    rational<unsigned> const  too_small( 1u, UINT_MAX );
+    rational<int>             receiver;
+
+    BOOST_CHECK_THROW( receiver=rational<int>(too_small), boost::bad_rational );
+}
+#endif  // BOOST_NO_MEMBER_TEMPLATES
 
 // Dice tests (a non-main test)
 BOOST_AUTO_TEST_CASE_TEMPLATE( dice_roll_test, T, all_signed_test_types )

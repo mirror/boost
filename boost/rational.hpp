@@ -21,6 +21,9 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  27 Aug 13  Add cross-version constructor template, plus some private helper
+//             functions; add constructor to exception class to take custom
+//             messages (Daryle Walker)
 //  25 Aug 13  Add constexpr qualification wherever possible (Daryle Walker)
 //  05 May 12  Reduced use of implicit gcd (Mario Lang)
 //  05 Nov 06  Change rational_cast to not depend on division between different
@@ -97,6 +100,7 @@ class bad_rational : public std::domain_error
 {
 public:
     explicit bad_rational() : std::domain_error("bad rational: zero denominator") {}
+    explicit bad_rational( char const *what ) : std::domain_error( what ) {}
 };
 
 template <typename IntType>
@@ -143,6 +147,16 @@ public:
     BOOST_CONSTEXPR
     rational(param_type n) : num(n), den(1) {}
     rational(param_type n, param_type d) : num(n), den(d) { normalize(); }
+
+#ifndef BOOST_NO_MEMBER_TEMPLATES
+    template < typename NewType >
+    BOOST_CONSTEXPR explicit
+    rational( rational<NewType> const &r )
+        : num( r.numerator() ), den( is_normalized(int_type( r.numerator() ),
+          int_type( r.denominator() )) ? r.denominator() :
+          throw bad_rational("bad rational: denormalized conversion") )
+    {}
+#endif
 
     // Default copy constructor and assignment are fine
 
@@ -209,12 +223,29 @@ private:
     IntType num;
     IntType den;
 
+    // Helper functions
+    static BOOST_CONSTEXPR
+    int_type inner_gcd( param_type a, param_type b, int_type const &zero =
+     int_type(0) )
+    { return b == zero ? a : inner_gcd(b, a % b, zero); }
+
+    static BOOST_CONSTEXPR
+    int_type inner_abs( param_type x ) { return x < int_type(0) ? -x : +x; }
+
     // Representation note: Fractions are kept in normalized form at all
     // times. normalized form is defined as gcd(num,den) == 1 and den > 0.
     // In particular, note that the implementation of abs() below relies
     // on den always being positive.
     bool test_invariant() const;
     void normalize();
+
+    static BOOST_CONSTEXPR
+    bool is_normalized( param_type n, param_type d, int_type const &zero =
+     int_type(0), int_type const &one = int_type(1) )
+    {
+        return d > zero && ( n != zero || d == one ) && inner_abs( inner_gcd(n,
+         d, zero) ) == one;
+    }
 };
 
 // Assign in place
