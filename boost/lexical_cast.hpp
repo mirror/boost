@@ -2133,24 +2133,17 @@ namespace boost {
         /*
          * is_xchar_to_xchar<Target, Source>::value is true, when
          * Target and Souce are the same char types, or when
-         * Target and Souce are char types of the same size.
+         * Target and Souce are char types of the same size (signed char, unsigned char).
          */
         template<typename Target, typename Source>
         struct is_xchar_to_xchar
         {
             BOOST_STATIC_CONSTANT(bool, value =
                 (
-                    boost::type_traits::ice_or<
-                        boost::type_traits::ice_and<
-                             boost::is_same<Source,Target>::value,
-                             boost::detail::is_character<Target>::value
-                        >::value,
-                        boost::type_traits::ice_and<
-                             boost::type_traits::ice_eq< sizeof(char),sizeof(Target)>::value,
-                             boost::type_traits::ice_eq< sizeof(char),sizeof(Source)>::value,
-                             boost::detail::is_character<Target>::value,
-                             boost::detail::is_character<Source>::value
-                        >::value
+                    boost::type_traits::ice_and<
+                         boost::type_traits::ice_eq<sizeof(Source), sizeof(Target)>::value,
+                         boost::detail::is_character<Target>::value,
+                         boost::detail::is_character<Source>::value
                     >::value
                 )
             );
@@ -2321,6 +2314,7 @@ namespace boost {
             {
                 typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
                     boost::type_traits::ice_and<
+                        boost::is_unsigned<Target>::value,
                         boost::type_traits::ice_or<
                             boost::is_signed<Source>::value,
                             boost::is_float<Source>::value
@@ -2330,8 +2324,7 @@ namespace boost {
                         >::value,
                         boost::type_traits::ice_not<
                             boost::is_same<Target, bool>::value
-                        >::value,
-                        boost::is_unsigned<Target>::value
+                        >::value
                     >::value,
                     lexical_cast_dynamic_num_ignoring_minus<Target, Source>,
                     lexical_cast_dynamic_num_not_ignoring_minus<Target, Source>
@@ -2348,26 +2341,30 @@ namespace boost {
         typedef BOOST_DEDUCED_TYPENAME boost::detail::array_to_pointer_decay<Source>::type src;
 
         typedef BOOST_DEDUCED_TYPENAME boost::type_traits::ice_or<
-                boost::detail::is_xchar_to_xchar<Target, src >::value,
-                boost::detail::is_char_array_to_stdstring<Target, src >::value,
-                boost::type_traits::ice_and<
-                     boost::is_same<Target, src >::value,
-                     boost::detail::is_stdstring<Target >::value
-                >::value
+            boost::detail::is_xchar_to_xchar<Target, src >::value,
+            boost::detail::is_char_array_to_stdstring<Target, src >::value,
+            boost::type_traits::ice_and<
+                 boost::is_same<Target, src >::value,
+                 boost::detail::is_stdstring<Target >::value
+            >::value
         > shall_we_copy_t;
 
-        typedef BOOST_DEDUCED_TYPENAME
-                boost::detail::is_arithmetic_and_not_xchars<Target, src > shall_we_copy_with_dynamic_check_t;
+        typedef boost::detail::is_arithmetic_and_not_xchars<Target, src > 
+            shall_we_copy_with_dynamic_check_t;
 
+        // We do evaluate second `if_` lazily to avoid unnecessary instantiations
+        // of `shall_we_copy_with_dynamic_check_t` and improve compilation times.
         typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
             shall_we_copy_t::value,
-            boost::detail::lexical_cast_copy<src >,
-            BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
-                 shall_we_copy_with_dynamic_check_t::value,
+            boost::mpl::identity<boost::detail::lexical_cast_copy<src > >,
+            boost::mpl::if_<
+                 shall_we_copy_with_dynamic_check_t,
                  boost::detail::lexical_cast_dynamic_num<Target, src >,
                  boost::detail::lexical_cast_do_cast<Target, src >
-            >::type
-        >::type caster_type;
+            >
+        >::type caster_type_lazy;
+
+        typedef BOOST_DEDUCED_TYPENAME caster_type_lazy::type caster_type;
 
         return caster_type::lexical_cast_impl(arg);
     }
