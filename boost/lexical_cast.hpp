@@ -635,7 +635,7 @@ namespace boost {
     {
         template<class T>
         inline
-        BOOST_DEDUCED_TYPENAME make_unsigned<T>::type lcast_to_unsigned(T value) BOOST_NOEXCEPT
+        BOOST_DEDUCED_TYPENAME boost::make_unsigned<T>::type lcast_to_unsigned(const T value) BOOST_NOEXCEPT
         {
             typedef BOOST_DEDUCED_TYPENAME boost::make_unsigned<T>::type result_type;
             return static_cast<result_type>(
@@ -646,81 +646,89 @@ namespace boost {
 
     namespace detail // lcast_put_unsigned
     {
-        template<class Traits, class T, class CharT>
-        CharT* lcast_put_unsigned(const T n_param, CharT* finish)
-        {
-#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
-            BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
-#endif
-
+        template <class Traits, class T, class CharT>
+        class lcast_put_unsigned {
             typedef BOOST_DEDUCED_TYPENAME Traits::int_type int_type;
-            CharT const czero = lcast_char_constants<CharT>::zero;
-            int_type const zero = Traits::to_int_type(czero);
             BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
                     (sizeof(int_type) > sizeof(T))
                     , int_type
                     , T
-            >::type n = n_param;
+            >::type         m_value;
+            CharT*          m_finish;
+            CharT    const  m_czero;
+            int_type const  m_zero;
 
+        public:
+            lcast_put_unsigned(const T n_param, CharT* finish) BOOST_NOEXCEPT 
+                : m_value(n_param), m_finish(finish)
+                , m_czero(lcast_char_constants<CharT>::zero), m_zero(Traits::to_int_type(m_czero))
+            {
+#ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
+                BOOST_STATIC_ASSERT(!std::numeric_limits<T>::is_signed);
+#endif
+            }
+
+            CharT* convert() {
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
-            std::locale loc;
-            if (loc != std::locale::classic()) {
+                std::locale loc;
+                if (loc == std::locale::classic()) {
+                    return main_convert_loop();
+                }
+
                 typedef std::numpunct<CharT> numpunct;
                 numpunct const& np = BOOST_USE_FACET(numpunct, loc);
                 std::string const grouping = np.grouping();
                 std::string::size_type const grouping_size = grouping.size();
 
-                if ( grouping_size && grouping[0] > 0 )
-                {
+                if (!grouping_size || grouping[0] <= 0) {
+                    return main_convert_loop();
+                }
 
 #ifndef BOOST_NO_LIMITS_COMPILE_TIME_CONSTANTS
                 // Check that ulimited group is unreachable:
                 BOOST_STATIC_ASSERT(std::numeric_limits<T>::digits10 < CHAR_MAX);
 #endif
-                    CharT thousands_sep = np.thousands_sep();
-                    std::string::size_type group = 0; // current group number
-                    char last_grp_size = grouping[0];
-                    char left = last_grp_size;
+                CharT const thousands_sep = np.thousands_sep();
+                std::string::size_type group = 0; // current group number
+                char last_grp_size = grouping[0];
+                char left = last_grp_size;
 
-                    do
-                    {
-                        if(left == 0)
-                        {
-                            ++group;
-                            if(group < grouping_size)
-                            {
-                                char const grp_size = grouping[group];
-                                last_grp_size = grp_size <= 0 ? static_cast<char>(CHAR_MAX) : grp_size;
-                            }
-
-                            left = last_grp_size;
-                            --finish;
-                            Traits::assign(*finish, thousands_sep);
+                do {
+                    if (left == 0) {
+                        ++group;
+                        if (group < grouping_size) {
+                            char const grp_size = grouping[group];
+                            last_grp_size = (grp_size <= 0 ? static_cast<char>(CHAR_MAX) : grp_size);
                         }
 
-                        --left;
+                        left = last_grp_size;
+                        --m_finish;
+                        Traits::assign(*m_finish, thousands_sep);
+                    }
 
-                        --finish;
-                        int_type const digit = static_cast<int_type>(n % 10U);
-                        Traits::assign(*finish, Traits::to_char_type(zero + digit));
-                        n /= 10;
-                    } while(n);
-                    return finish;
-                }
-            }
+                    --left;
+                } while (main_convert_itaration());
+
+                return m_finish;
+#else
+                return main_convert_loop();
 #endif
-            {
-                do
-                {
-                    --finish;
-                    int_type const digit = static_cast<int_type>(n % 10U);
-                    Traits::assign(*finish, Traits::to_char_type(zero + digit));
-                    n /= 10;
-                } while(n);
             }
 
-            return finish;
-        }
+        private:
+            inline bool main_convert_itaration() BOOST_NOEXCEPT {
+                --m_finish;
+                int_type const digit = static_cast<int_type>(m_value % 10U);
+                Traits::assign(*m_finish, Traits::to_char_type(m_zero + digit));
+                m_value /= 10;
+                return !!m_value; // supressing warnings
+            }
+
+            inline CharT* main_convert_loop() BOOST_NOEXCEPT {
+                while (main_convert_itaration());
+                return m_finish;
+            }
+        };
     }
 
     namespace detail // lcast_ret_unsigned
@@ -1504,11 +1512,16 @@ namespace boost {
             }
 
             template <class T>
-            inline bool shl_signed(T n)
-            {
-                start = lcast_put_unsigned<Traits>(lcast_to_unsigned(n), finish);
-                if(n < 0)
-                {
+            inline bool shl_unsigned(const T n) {
+                start = lcast_put_unsigned<Traits, T, CharT>(n, finish).convert();
+                return true;
+            }
+
+            template <class T>
+            inline bool shl_signed(const T n) {
+                typedef BOOST_DEDUCED_TYPENAME boost::make_unsigned<T>::type utype;
+                start = lcast_put_unsigned<Traits, utype, CharT>(lcast_to_unsigned(n), finish).convert();
+                if (n < 0) {
                     --start;
                     CharT const minus = lcast_char_constants<CharT>::minus;
                     Traits::assign(*start, minus);
@@ -1697,20 +1710,20 @@ namespace boost {
             bool operator<<(short n)                    { return shl_signed(n); }
             bool operator<<(int n)                      { return shl_signed(n); }
             bool operator<<(long n)                     { return shl_signed(n); }
-            bool operator<<(unsigned short n)           { start = lcast_put_unsigned<Traits>(n, finish); return true; }
-            bool operator<<(unsigned int n)             { start = lcast_put_unsigned<Traits>(n, finish); return true; }
-            bool operator<<(unsigned long n)            { start = lcast_put_unsigned<Traits>(n, finish); return true; }
+            bool operator<<(unsigned short n)           { return shl_unsigned(n); }
+            bool operator<<(unsigned int n)             { return shl_unsigned(n); }
+            bool operator<<(unsigned long n)            { return shl_unsigned(n); }
 
 #if defined(BOOST_HAS_LONG_LONG)
-            bool operator<<(boost::ulong_long_type n)   { start = lcast_put_unsigned<Traits>(n, finish); return true; }
+            bool operator<<(boost::ulong_long_type n)   { return shl_unsigned(n); }
             bool operator<<(boost::long_long_type n)    { return shl_signed(n); }
 #elif defined(BOOST_HAS_MS_INT64)
-            bool operator<<(unsigned __int64 n)         { start = lcast_put_unsigned<Traits>(n, finish); return true; }
+            bool operator<<(unsigned __int64 n)         { return shl_unsigned(n); }
             bool operator<<(         __int64 n)         { return shl_signed(n); }
 #endif
 
 #ifdef BOOST_HAS_INT128
-        bool operator<<(const boost::uint128_type& n)   { start = lcast_put_unsigned<Traits>(n, finish); return true; }
+        bool operator<<(const boost::uint128_type& n)   { return shl_unsigned(n); }
         bool operator<<(const boost::int128_type& n)    { return shl_signed(n); }
 #endif
 
