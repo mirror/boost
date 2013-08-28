@@ -59,14 +59,17 @@
 #ifndef BOOST_RATIONAL_HPP
 #define BOOST_RATIONAL_HPP
 
-#include <iostream>              // for std::istream and std::ostream
+#include <boost/config.hpp>      // for BOOST_NO_STDC_NAMESPACE, BOOST_MSVC, etc
+#ifndef BOOST_NO_IOSTREAM
 #include <ios>                   // for std::noskipws
+#include <istream>               // for std::istream
+#include <ostream>               // for std::ostream
+#endif
 #include <stdexcept>             // for std::domain_error
 #include <string>                // for std::string implicit constructor
 #include <boost/operators.hpp>   // for boost::addable etc
 #include <cstdlib>               // for std::abs
 #include <boost/call_traits.hpp> // for boost::call_traits
-#include <boost/config.hpp>      // for BOOST_NO_STDC_NAMESPACE, BOOST_MSVC, etc
 #include <boost/detail/workaround.hpp> // for BOOST_WORKAROUND
 #include <boost/assert.hpp>      // for BOOST_ASSERT
 #include <boost/math/common_factor_rt.hpp>  // for boost::math::gcd, lcm
@@ -568,6 +571,7 @@ void rational<IntType>::normalize()
     BOOST_ASSERT( this->test_invariant() );
 }
 
+#ifndef BOOST_NO_IOSTREAM
 namespace detail {
 
     // A utility class to reset the format flags for an istream at end
@@ -615,6 +619,7 @@ std::ostream& operator<< (std::ostream& os, const rational<IntType>& r)
     os << r.numerator() << '/' << r.denominator();
     return os;
 }
+#endif  // BOOST_NO_IOSTREAM
 
 // Type conversion
 template <typename T, typename IntType>

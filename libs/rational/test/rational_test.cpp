@@ -806,6 +806,7 @@ BOOST_AUTO_TEST_SUITE_END()
 // The non-basic rational operations suite
 BOOST_AUTO_TEST_SUITE( rational_extras_suite )
 
+#ifndef BOOST_NO_IOSTREAM
 // Output test
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_output_test, T, all_signed_test_types )
 {
@@ -880,6 +881,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_passing_test, T,
     BOOST_CHECK( iss >> r );
     BOOST_CHECK_EQUAL( r, rational_type(1, 2) );
 }
+#endif  // BOOST_NO_IOSTREAM
 
 // Conversion test
 BOOST_AUTO_TEST_CASE( rational_cast_test )
