@@ -891,14 +891,11 @@ namespace boost {
             const CharT plus = lcast_char_constants<CharT>::plus;
             const int inifinity_size = 8;
 
-            bool has_minus = false;
             /* Parsing +/- */
-            if( *begin == minus)
-            {
+            bool const has_minus = (*begin == minus);
+            if (has_minus || *begin == plus) {
                 ++ begin;
-                has_minus = true;
             }
-            else if( *begin == plus ) ++begin;
 
             if( end-begin < 3 ) return false;
             if( lc_iequal(begin, lc_nan, lc_NAN, 3) )
@@ -1075,6 +1072,25 @@ namespace boost {
         template<class Traits, class T, class CharT>
         inline bool lcast_ret_float(T& value, const CharT* begin, const CharT* end)
         {
+            value = static_cast<T>(0);
+            if (begin == end) return false;
+            if (parse_inf_nan(begin, end, value)) return true;
+
+            CharT const czero = lcast_char_constants<CharT>::zero;
+            CharT const minus = lcast_char_constants<CharT>::minus;
+            CharT const plus = lcast_char_constants<CharT>::plus;
+            CharT const capital_e = lcast_char_constants<CharT>::capital_e;
+            CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
+
+            typedef BOOST_DEDUCED_TYPENAME Traits::int_type int_type;
+            int_type const zero = Traits::to_int_type(czero);
+            
+            /* Getting the plus/minus sign */
+            bool const has_minus = Traits::eq(*begin, minus);
+            if (has_minus || Traits::eq(*begin, plus)) {
+                ++ begin;
+                if (begin == end) return false;
+            }
 
 #ifndef BOOST_LEXICAL_CAST_ASSUME_C_LOCALE
             std::locale loc;
@@ -1094,43 +1110,17 @@ namespace boost {
             CharT const decimal_point = lcast_char_constants<CharT>::c_decimal_separator;
 #endif
 
-            CharT const czero = lcast_char_constants<CharT>::zero;
-            CharT const minus = lcast_char_constants<CharT>::minus;
-            CharT const plus = lcast_char_constants<CharT>::plus;
-            CharT const capital_e = lcast_char_constants<CharT>::capital_e;
-            CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
-
-            value = static_cast<T>(0);
-
-            if (parse_inf_nan(begin, end, value)) return true;
-
-            typedef typename Traits::int_type int_type;
-            typedef BOOST_DEDUCED_TYPENAME mantissa_holder_type<T>::type mantissa_type;
-            typedef BOOST_DEDUCED_TYPENAME mantissa_holder_type<T>::wide_result_t wide_result_t;
-            int_type const zero = Traits::to_int_type(czero);
-            if (begin == end) return false;
-
-            /* Getting the plus/minus sign */
-            bool has_minus = false;
-            if (Traits::eq(*begin, minus) ) {
-                ++ begin;
-                has_minus = true;
-                if (begin == end) return false;
-            } else if (Traits::eq(*begin, plus) ) {
-                ++begin;
-                if (begin == end) return false;
-            }
-
             bool found_decimal = false;
             bool found_number_before_exp = false;
-            int pow_of_10 = 0;
+            typedef int pow_of_10_t;
+            pow_of_10_t pow_of_10 = 0;
+
+            typedef BOOST_DEDUCED_TYPENAME mantissa_holder_type<T>::type mantissa_type;
             mantissa_type mantissa=0;
             bool is_mantissa_full = false;
-
             char length_since_last_delim = 0;
 
-            while ( begin != end )
-            {
+            while (begin != end) {
                 if (found_decimal) {
                     /* We allow no thousand_separators after decimal point */
 
@@ -1157,15 +1147,14 @@ namespace boost {
                          * occur, them we only increase multiplyer
                          */
                         const mantissa_type tmp_sub_value = static_cast<mantissa_type>(*begin - zero);
-                        if(     !(is_mantissa_full
-                                || ((std::numeric_limits<mantissa_type>::max)() - tmp_sub_value) / 10u  < mantissa)
+                        if(     is_mantissa_full
+                                || ((std::numeric_limits<mantissa_type>::max)() - tmp_sub_value) / 10u  < mantissa
                             )
-                        {
-                            mantissa = static_cast<mantissa_type>(mantissa * 10 + tmp_sub_value);
-                        } else
                         {
                             is_mantissa_full = true;
                             ++ pow_of_10;
+                        } else {
+                            mantissa = static_cast<mantissa_type>(mantissa * 10 + tmp_sub_value);
                         }
 
                         found_number_before_exp = true;
@@ -1188,12 +1177,12 @@ namespace boost {
                            ) return false;
 #endif
 
-                        if(Traits::eq(*begin, decimal_point)) {
+                        if (Traits::eq(*begin, decimal_point)) {
                             ++ begin;
                             found_decimal = true;
                             if (!found_number_before_exp && begin==end) return false;
                             continue;
-                        }else {
+                        } else {
                             if (!found_number_before_exp) return false;
                             break;
                         }
@@ -1245,48 +1234,44 @@ namespace boost {
                 ++ begin;
                 if ( begin == end ) return false;
 
-                bool exp_has_minus = false;
-                if(Traits::eq(*begin, minus)) {
-                    exp_has_minus = true;
+                bool const exp_has_minus = Traits::eq(*begin, minus);
+                if (exp_has_minus || Traits::eq(*begin, plus)) {
                     ++ begin;
-                    if ( begin == end ) return false;
-                } else if (Traits::eq(*begin, plus)) {
-                    ++ begin;
-                    if ( begin == end ) return false;
+                    if (begin == end) return false;
                 }
 
-                int exp_pow_of_10 = 0;
-                while ( begin != end )
-                {
-                    if ( *begin < czero
-                            || *begin >= czero + 10
-                            || exp_pow_of_10 * 10 < exp_pow_of_10) /* Overflows are checked lower more precisely*/
+                pow_of_10_t exp_pow_of_10 = 0;
+                while (begin != end) {
+                    pow_of_10_t const sub_value = *begin - zero;
+
+                    if ( *begin < czero || *begin >= czero + 10
+                         || ((std::numeric_limits<pow_of_10_t>::max)() - sub_value) / 10 < exp_pow_of_10)
                         return false;
 
                     exp_pow_of_10 *= 10;
-                    exp_pow_of_10 += *begin - zero;
+                    exp_pow_of_10 += sub_value;
                     ++ begin;
                 };
 
-                if ( exp_pow_of_10 ) {
-                    /* Overflows are checked lower */
-                    if ( exp_has_minus ) {
-                        pow_of_10 -= exp_pow_of_10;
-                    } else {
-                        pow_of_10 += exp_pow_of_10;
-                    }
+                if (exp_has_minus) {
+                    if ((std::numeric_limits<pow_of_10_t>::min)() + exp_pow_of_10 > pow_of_10)
+                        return false;   // failed overflow check
+                    pow_of_10 -= exp_pow_of_10;
+                } else {
+                    if ((std::numeric_limits<pow_of_10_t>::max)() - exp_pow_of_10 < pow_of_10)
+                        return false;   // failed overflow check
+                    pow_of_10 += exp_pow_of_10;
                 }
             }
 
             /* We need a more accurate algorithm... We can not use current algorithm
              * with long doubles (and with doubles if sizeof(double)==sizeof(long double)).
              */
+            typedef BOOST_DEDUCED_TYPENAME mantissa_holder_type<T>::wide_result_t wide_result_t;
             const wide_result_t result = std::pow(static_cast<wide_result_t>(10.0), pow_of_10) * mantissa;
             value = static_cast<T>( has_minus ? (boost::math::changesign)(result) : result);
 
-            if ( (boost::math::isinf)(value) || (boost::math::isnan)(value) ) return false;
-
-            return true;
+            return !((boost::math::isinf)(value) || (boost::math::isnan)(value));
         }
 // Unsilence buggy MS warnings like C4244: '+=' : conversion from 'int' to 'unsigned short', possible loss of data 
 #if defined(_MSC_VER) && (_MSC_VER == 1400) 
@@ -1805,15 +1790,10 @@ namespace boost {
                 if (start == finish) return false;
                 CharT const minus = lcast_char_constants<CharT>::minus;
                 CharT const plus = lcast_char_constants<CharT>::plus;
-                bool has_minus = false;
+                bool const has_minus = Traits::eq(minus, *start);
 
                 /* We won`t use `start' any more, so no need in decrementing it after */
-                if ( Traits::eq(minus,*start) )
-                {
-                    ++start;
-                    has_minus = true;
-                } else if ( Traits::eq( plus, *start ) )
-                {
+                if (has_minus || Traits::eq(plus, *start)) {
                     ++start;
                 }
 
@@ -1833,16 +1813,11 @@ namespace boost {
                 CharT const minus = lcast_char_constants<CharT>::minus;
                 CharT const plus = lcast_char_constants<CharT>::plus;
                 typedef BOOST_DEDUCED_TYPENAME make_unsigned<Type>::type utype;
-                utype out_tmp =0;
-                bool has_minus = false;
+                utype out_tmp = 0;
+                bool const has_minus = Traits::eq(minus, *start);
 
                 /* We won`t use `start' any more, so no need in decrementing it after */
-                if ( Traits::eq(minus,*start) )
-                {
-                    ++start;
-                    has_minus = true;
-                } else if ( Traits::eq(plus, *start) )
-                {
+                if (has_minus || Traits::eq(plus, *start)) {
                     ++start;
                 }
 
