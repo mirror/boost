@@ -345,11 +345,18 @@ external representation of an integer is defined by the undelying integer
 type.
 
 <h3><a name="In-place assignment">In-place assignment</a></h3>
-For any <tt>rational&lt;I&gt; r</tt>, <tt>r.assign(n, m)</tt> provides a
-fast equivalent of <tt>r = rational&lt;I&gt;(n, m);</tt>, without the
+For any <tt>rational&lt;I&gt; r</tt>, <tt>r.assign(n, m)</tt> provides an
+alternate to <tt>r = rational&lt;I&gt;(n, m);</tt>, without a user-specified
 construction of a temporary. While this is probably unnecessary for rationals
 based on machine integer types, it could offer a saving for rationals based on
 unlimited-precision integers, for example.
+
+<p>The function will throw if the given components cannot be formed into a valid
+rational number.  Otherwise, it could throw only if the component-level move
+assignment (in C++11; copy-assignment for earlier C++ versions) can throw.  The
+strong guarantee is kept if throwing happens in the first part, but there is a
+risk of neither the strong nor basic guarantees happening if an exception is
+thrown during the component assignments.
 
 <h3><a name="Conversions">Conversions</a></h3>
 <p>There is a conversion operator to an unspecified Boolean type (most likely a
@@ -499,15 +506,17 @@ Specifically, it is likely that performance will be severely sub-optimal.
 <h2><a name="Exceptions">Exceptions</a></h2>
 Rationals can never have a denominator of zero. (This library does not support
 representations for infinity or NaN). Should a rational result ever generate a
-denominator of zero, the exception <tt>boost::bad_rational</tt> (a subclass of
-<tt>std::domain_error</tt>) is thrown. This should only occur if the user
-attempts to explicitly construct a rational with a denominator of zero, or to
-divide a rational by a zero value.  The exception can also be thrown during a
-cross-instantiation conversion, when at least one of the components ends up not
-being value-preserved and the new combination is not considered normalized.
+denominator of zero, or otherwise fail during normalization, the exception
+<tt>boost::bad_rational</tt> (a subclass of <tt>std::domain_error</tt>) is
+thrown. This should only occur if the user attempts to explicitly construct a
+rational with a denominator of zero, to divide a rational by a zero value, or
+generate a negative denominator too large to be normalized.  The exception can
+be thrown during a cross-instantiation conversion, when at least one of the
+components ends up not being value-preserved and the new combination is not
+considered normalized.
 
 <p>In addition, if operations on the underlying integer type can generate
-exceptions, these will be propogated out of the operations on the rational
+exceptions, these will be propagated out of the operations on the rational
 class. No particular assumptions should be made - it is only safe to assume
 that any exceptions which can be thrown by the integer class could be thrown
 by any rational operation. In particular, the rational constructor may throw
@@ -515,6 +524,11 @@ exceptions from the underlying integer type as a result of the normalization
 step.  The only exception to this rule is that the rational destructor will
 only throw exceptions which can be thrown by the destructor of the underlying
 integer type (usually none).
+
+<p>If the component-level assignment operator(s) can throw, then a rational
+object's invariants may be violated if an exception happens during the second
+component's assignment.  (The <code>assign</code> member function counts here
+too.)  This violates both the strong and basic guarantees.
 
 <h2><a name="Internal representation">Internal representation</a></h2>
 <em>Note:</em> This information is for information only. Programs should not
@@ -569,6 +583,13 @@ next lower representable rational&lt;int&gt; is <tt>0x7FFFFFFE/1</tt>. Thus,
 at this end of the representable range, the granularity ia 1. This type of
 magnitude-dependent granularity is typical of floating point representations.
 However, it does not "feel" natural when using a rational number class.
+
+<p>Limited-precision integer types may raise issues with the range sizes of
+their allowable negative values and positive values.  If the negative range is
+larger, then the extremely-negative numbers will not have an additive inverse in
+the positive range, making them unusable as denominator values since they cannot
+be normalized to positive values (unless the user is lucky enough that the input
+components are not relatively prime pre-normalization).
 
 <p>It is up to the user of a rational type based on a limited-precision integer
 type to be aware of, and code in anticipation of, such issues.
@@ -704,7 +725,7 @@ on the boost list in January 2001.
 be used in the same Boolean contexts as the built-in numeric types, in December
 2005.  He added the cross-instantiation constructor template in August 2013.
 
-<p>Revised August 27, 2013</p>
+<p>Revised August 30, 2013</p>
 
 <p>&copy; Copyright Paul Moore 1999-2001; &copy; Daryle Walker 2005, 2013.
 Permission to copy, use, modify, sell and distribute this document is granted

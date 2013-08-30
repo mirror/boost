@@ -19,6 +19,8 @@
 // since he hasn't been in contact for years.)
 
 // Revision History
+// 30 Aug 13  Add bug-test of assignments holding the basic and/or strong
+//            guarantees (Daryle Walker)
 // 27 Aug 13  Add test for cross-version constructor template (Daryle Walker)
 // 23 Aug 13  Add bug-test of narrowing conversions during order comparison;
 //            spell logical-negation in it as "!" because MSVC won't accept
@@ -1082,6 +1084,45 @@ BOOST_AUTO_TEST_CASE( ticket_5855_test )
     bool const  dummy = rational_type() < rational_type();
 
     BOOST_REQUIRE( !dummy );
+}
+
+// "rational::assign" doesn't even have the basic guarantee
+BOOST_AUTO_TEST_CASE( ticket_9067_test )
+{
+    using boost::rational;
+    using boost::math::gcd;
+
+    rational<int>  a( 6, -8 );
+
+    // Normalize to maintain invariants
+    BOOST_CHECK_EQUAL( a.numerator(), -3 );
+    BOOST_CHECK_EQUAL( a.denominator(), 4 );
+    BOOST_CHECK( a.denominator() > 0 );
+    BOOST_CHECK_EQUAL( gcd(a.numerator(), a.denominator()), 1 );
+
+    // Do we maintain the basic guarantee after a failed component-assign?
+    BOOST_CHECK_THROW( a.assign(1, 0), boost::bad_rational );
+    BOOST_CHECK_NE( a.denominator(), 0 );
+    BOOST_CHECK( a.denominator() > 0 );
+    BOOST_CHECK_EQUAL( gcd(a.numerator(), a.denominator()), 1 );
+
+    // Do we get the strong guarantee?
+    BOOST_CHECK_EQUAL( a.numerator(), -3 );
+    BOOST_CHECK_EQUAL( a.denominator(), 4 );
+
+#if INT_MIN + INT_MAX < 0
+    // Try an example without a zero-denominator
+    a = rational<int>( -9, 12 );
+    BOOST_CHECK_EQUAL( a.numerator(), -3 );
+    BOOST_CHECK_EQUAL( a.denominator(), 4 );
+    BOOST_CHECK( a.denominator() > 0 );
+    BOOST_CHECK_EQUAL( gcd(a.numerator(), a.denominator()), 1 );
+    BOOST_CHECK_THROW( a.assign(-(INT_MIN + 1), INT_MIN), boost::bad_rational );
+    BOOST_CHECK( a.denominator() > 0 );
+    BOOST_CHECK_EQUAL( gcd(a.numerator(), a.denominator()), 1 );
+    BOOST_CHECK_EQUAL( a.numerator(), -3 );
+    BOOST_CHECK_EQUAL( a.denominator(), 4 );
+#endif
 }
 
 BOOST_AUTO_TEST_SUITE_END()

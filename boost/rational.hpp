@@ -21,6 +21,8 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  30 Aug 13  Improve exception safety of "assign"; start modernizing I/O code
+//             (Daryle Walker)
 //  27 Aug 13  Add cross-version constructor template, plus some private helper
 //             functions; add constructor to exception class to take custom
 //             messages (Daryle Walker)
@@ -258,10 +260,7 @@ private:
 template <typename IntType>
 inline rational<IntType>& rational<IntType>::assign(param_type n, param_type d)
 {
-    num = n;
-    den = d;
-    normalize();
-    return *this;
+    return *this = rational( n, d );
 }
 
 // Unary plus and minus
@@ -571,6 +570,13 @@ void rational<IntType>::normalize()
         den = -den;
     }
 
+    // ...But acknowledge that the previous step doesn't always work.
+    // (Nominally, this should be done before the mutating steps, but this
+    // member function is only called during the constructor, so we never have
+    // to worry about zombie objects.)
+    if (den < zero)
+        throw bad_rational( "bad rational: non-zero singular denominator" );
+
     BOOST_ASSERT( this->test_invariant() );
 }
 
@@ -623,7 +629,7 @@ std::ostream& operator<< (std::ostream& os, const rational<IntType>& r)
 {
     using namespace std;
 
-    // The slash directly preceeds the denominator, which has no prefixes.
+    // The slash directly precedes the denominator, which has no prefixes.
     ostringstream  ss;
 
     ss.copyfmt( os );
