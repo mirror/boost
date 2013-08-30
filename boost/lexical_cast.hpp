@@ -1285,28 +1285,38 @@ namespace boost {
     namespace detail
     {
         struct do_not_construct_out_stream_t{};
+        
+        template <class CharT, class Traits>
+        struct out_stream_helper_trait {
+#if defined(BOOST_NO_STRINGSTREAM)
+            typedef std::ostrstream                                 out_stream_t;
+            typedef void                                            buffer_t;
+#elif defined(BOOST_NO_STD_LOCALE)
+            typedef std::ostringstream                              out_stream_t;
+            typedef basic_unlockedbuf<std::streambuf, char>         buffer_t;
+#else
+            typedef std::basic_ostringstream<CharT, Traits> 
+                out_stream_t;
+            typedef basic_unlockedbuf<std::basic_streambuf<CharT, Traits>, CharT>  
+                buffer_t;
+#endif
+        };   
     }
 
-    namespace detail // optimized stream wrapper
+    namespace detail // optimized stream wrappers
     {
-        // String representation of Source has an upper limit.
         template< class CharT // a result of widest_char transformation
-                , class Traits // usually char_traits<CharT>
+                , class Traits
                 , bool RequiresStringbuffer
                 , std::size_t CharacterBufferSize
                 >
-        class lexical_stream_limited_src
-        {
+        class lexical_istream_limited_src {
+            typedef BOOST_DEDUCED_TYPENAME out_stream_helper_trait<CharT, Traits>::buffer_t
+                buffer_t;
 
-#if defined(BOOST_NO_STRINGSTREAM)
-            typedef std::ostrstream                         out_stream_t;
-#elif defined(BOOST_NO_STD_LOCALE)
-            typedef std::ostringstream                      out_stream_t;
-            typedef basic_unlockedbuf<std::streambuf, char>        buffer_t;
-#else
-            typedef std::basic_ostringstream<CharT, Traits>                 out_stream_t;
-            typedef basic_unlockedbuf<std::basic_streambuf<CharT, Traits>, CharT>  buffer_t;
-#endif
+            typedef BOOST_DEDUCED_TYPENAME out_stream_helper_trait<CharT, Traits>::out_stream_t
+                out_stream_t;
+    
             typedef BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
                 RequiresStringbuffer,
                 out_stream_t,
@@ -1323,15 +1333,23 @@ namespace boost {
             const CharT*  finish;
 
         public:
-            lexical_stream_limited_src() BOOST_NOEXCEPT
+            lexical_istream_limited_src() BOOST_NOEXCEPT
               : start(buffer)
               , finish(buffer + CharacterBufferSize)
             {}
+    
+            const CharT* cbegin() const BOOST_NOEXCEPT {
+                return start;
+            }
+
+            const CharT* cend() const BOOST_NOEXCEPT {
+                return finish;
+            }
 
         private:
             // Undefined:
-            lexical_stream_limited_src(lexical_stream_limited_src const&);
-            void operator=(lexical_stream_limited_src const&);
+            lexical_istream_limited_src(lexical_istream_limited_src const&);
+            void operator=(lexical_istream_limited_src const&);
 
 /************************************ HELPER FUNCTIONS FOR OPERATORS << ( ... ) ********************************/
             bool shl_char(CharT ch) BOOST_NOEXCEPT {
@@ -1656,6 +1674,20 @@ namespace boost {
             
             template <class InStreamable>
             bool operator<<(const InStreamable& input)  { return shl_input_streamable(input); }
+        };
+
+
+        template <class CharT, class Traits>
+        class lexical_ostream_limited_src {
+            //`[start, finish)` is the range to output by `operator >>` 
+            const CharT*        start;
+            const CharT* const  finish;
+
+        public:
+            lexical_ostream_limited_src(const CharT* begin, const CharT* end) BOOST_NOEXCEPT
+              : start(begin)
+              , finish(end)
+            {}
 
 /************************************ HELPER FUNCTIONS FOR OPERATORS >> ( ... ) ********************************/
         private:
@@ -1721,6 +1753,8 @@ namespace boost {
                     "support such conversions. Try updating it."
                 );
 #endif
+                typedef BOOST_DEDUCED_TYPENAME out_stream_helper_trait<CharT, Traits>::buffer_t
+                    buffer_t;
 
 #if defined(BOOST_NO_STRINGSTREAM)
                 std::istrstream stream(start, finish - start);
@@ -1846,7 +1880,7 @@ namespace boost {
                     (sizeof(boost::array<C, N>) == sizeof(boost::array<C, N>)),
                     "std::array<C, N> and boost::array<C, N> must have exactly the same layout."
                 );
-                return ((*this) >> reinterpret_cast<boost::array<C, N>& >(input));
+                return ((*this) >> reinterpret_cast<boost::array<C, N>& >(output));
             }
 #endif
 
@@ -2035,20 +2069,28 @@ namespace boost {
             {
                 typedef lexical_cast_stream_traits<Source, Target>  stream_trait;
                 
-                typedef detail::lexical_stream_limited_src<
+                typedef detail::lexical_istream_limited_src<
                     BOOST_DEDUCED_TYPENAME stream_trait::char_type, 
                     BOOST_DEDUCED_TYPENAME stream_trait::traits, 
                     stream_trait::requires_stringbuf,
                     stream_trait::len_t::value + 1
-                > interpreter_type;
+                > i_interpreter_type;
+
+                typedef detail::lexical_ostream_limited_src<
+                    BOOST_DEDUCED_TYPENAME stream_trait::char_type, 
+                    BOOST_DEDUCED_TYPENAME stream_trait::traits
+                > o_interpreter_type;
 
                 // Target type must be default constructible
                 Target result;
-                
-                interpreter_type interpreter;
 
+                i_interpreter_type i_interpreter;
+                if (! (i_interpreter.operator <<(arg)))
+                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+
+                o_interpreter_type out(i_interpreter.cbegin(), i_interpreter.cend());
                 // Disabling ADL, by directly specifying operators.
-                if(!(interpreter.operator <<(arg) && interpreter.operator >>(result)))
+                if(!(out.operator >>(result)))
                   BOOST_LCAST_THROW_BAD_CAST(Source, Target);
 
                 return result;
@@ -2227,7 +2269,7 @@ namespace boost {
 
     template <typename Target>
     inline Target lexical_cast(const char* chars, std::size_t count)
-     {
+    {
         return ::boost::lexical_cast<Target>(
             ::boost::iterator_range<const char*>(chars, chars + count)
         );
@@ -2240,7 +2282,7 @@ namespace boost {
          return ::boost::lexical_cast<Target>(
             ::boost::iterator_range<const unsigned char*>(chars, chars + count)
          );
-     }
+    }
 
     template <typename Target>
     inline Target lexical_cast(const signed char* chars, std::size_t count)
