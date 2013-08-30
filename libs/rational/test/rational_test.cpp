@@ -47,6 +47,8 @@
 #include <boost/test/unit_test.hpp>
 
 #include <climits>
+#include <iomanip>
+#include <ios>
 #include <iostream>
 #include <istream>
 #include <ostream>
@@ -810,10 +812,34 @@ BOOST_AUTO_TEST_SUITE( rational_extras_suite )
 // Output test
 BOOST_AUTO_TEST_CASE_TEMPLATE( rational_output_test, T, all_signed_test_types )
 {
-    std::ostringstream  oss;
+    using namespace std;
+    typedef boost::rational<T>  rational_type;
 
-    oss << boost::rational<T>( 44, 14 );
+    // Basic test
+    ostringstream  oss;
+
+    oss << rational_type( 44, 14 );
     BOOST_CHECK_EQUAL( oss.str(), "22/7" );
+
+    // Width
+    oss.clear(); oss.str( "" );
+    oss << setw( 5 ) << setfill('*') << rational_type( 1, 2 ) << 'r';
+    BOOST_CHECK_EQUAL( oss.str(), "**1/2r" );  // not "****1/2r"
+
+    // Positive-sign
+    oss.clear(); oss.str( "" );
+    oss << showpos << rational_type( 2, 3 ) << noshowpos;
+    BOOST_CHECK_EQUAL( oss.str(), "+2/3" );  // not "+2/+3"
+
+    // Internal padding
+    oss.clear(); oss.str( "" );
+    oss << setw( 8 ) << internal << rational_type( 36, -15 ) << right << 'r';
+    BOOST_CHECK_EQUAL( oss.str(), "-***12/5r" );  // not "-*****12/5r"
+
+    // Showbase prefix
+    oss.clear(); oss.str( "" );
+    oss << showbase << hex << rational_type( 34, 987 ) << noshowbase << dec;
+    BOOST_CHECK_EQUAL( oss.str(), "0x22/3db" );  // not "0x22/0x3db"
 }
 
 // Input test, failing
@@ -825,6 +851,7 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_failing_test, T,
 
     iss >> r;
     BOOST_CHECK( !iss );
+    BOOST_CHECK( !iss.bad() );
 
     iss.clear();
     iss.str( "42" );

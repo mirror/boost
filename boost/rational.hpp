@@ -61,10 +61,13 @@
 
 #include <boost/config.hpp>      // for BOOST_NO_STDC_NAMESPACE, BOOST_MSVC, etc
 #ifndef BOOST_NO_IOSTREAM
-#include <ios>                   // for std::noskipws
+#include <iomanip>               // for std::setw
+#include <ios>                   // for std::noskipws, streamsize
 #include <istream>               // for std::istream
 #include <ostream>               // for std::ostream
+#include <sstream>               // for std::ostringstream
 #endif
+#include <cstddef>               // for NULL
 #include <stdexcept>             // for std::domain_error
 #include <string>                // for std::string implicit constructor
 #include <boost/operators.hpp>   // for boost::addable etc
@@ -593,21 +596,23 @@ std::istream& operator>> (std::istream& is, rational<IntType>& r)
     char c = 0;
     detail::resetter sentry(is);
 
-    is >> n;
-    c = is.get();
-
-    if (c != '/')
-        is.clear(std::istream::badbit);  // old GNU c++ lib has no ios_base
-
-#if !defined(__GNUC__) || (defined(__GNUC__) && (__GNUC__ >= 3)) || defined __SGI_STL_PORT
-    is >> std::noskipws;
-#else
-    is.unsetf(ios::skipws); // compiles, but seems to have no effect.
-#endif
-    is >> d;
-
-    if (is)
-        r.assign(n, d);
+    if ( is >> n )
+    {
+        if ( is.get(c) )
+        {
+            if ( c == '/' )
+            {
+                if ( is >> std::noskipws >> d )
+                    // TODO: check if d is non-zero, fail if not.
+                    // ("assign" will normalize the value otherwise.)
+                    // Or: let it throw on normalization fail, but catch the
+                    // exception and translate it to IOStream error handling.
+                    r.assign( n, d );
+            }
+            else
+                is.setstate( std::ios::failbit );
+        }
+    }
 
     return is;
 }
@@ -616,8 +621,27 @@ std::istream& operator>> (std::istream& is, rational<IntType>& r)
 template <typename IntType>
 std::ostream& operator<< (std::ostream& os, const rational<IntType>& r)
 {
-    os << r.numerator() << '/' << r.denominator();
-    return os;
+    using namespace std;
+
+    // The slash directly preceeds the denominator, which has no prefixes.
+    ostringstream  ss;
+
+    ss.copyfmt( os );
+    ss.tie( NULL );
+    ss.exceptions( ios::goodbit );
+    ss.width( 0 );
+    ss << noshowpos << noshowbase << '/' << r.denominator();
+
+    // The numerator holds the showpos, internal, and showbase flags.
+    string const   tail = ss.str();
+    streamsize const  w = os.width() - static_cast<streamsize>( tail.size() );
+
+    ss.clear();
+    ss.str( "" );
+    ss.flags( os.flags() );
+    ss << setw( w < 0 || (os.flags() & ios::adjustfield) != ios::internal ? 0 :
+     w ) << r.numerator();
+    return os << ss.str() + tail;
 }
 #endif  // BOOST_NO_IOSTREAM
 
