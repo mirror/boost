@@ -2,7 +2,7 @@
     [authors [Gregor, Douglas], [Troyer, Matthias] ]
     [copyright 2005 2006 2007 Douglas Gregor, Matthias Troyer, Trustees of Indiana University]
     [purpose
-        An generic, user-friendly interface to MPI, the Message
+        A generic, user-friendly interface to MPI, the Message
         Passing Interface.
     ]
     [id mpi]
@@ -743,7 +743,7 @@ a sequence of values (one per process) and combines them via a
 function object. For instance, we can randomly generate values in each
 process and the compute the minimum value over all processes via a
 call to [funcref boost::mpi::reduce `reduce`]
-(`random_min.cpp`)::
+(`random_min.cpp`):
 
   #include <boost/mpi.hpp>
   #include <iostream>
@@ -861,6 +861,64 @@ variant called [funcref boost::mpi::all_reduce `all_reduce`]
 that performs the reduction operation and broadcasts the result to all
 processes. This variant is useful, for instance, in establishing
 global minimum or maximum values.
+
+The following code (`global_min.cpp`) shows a broadcasting version of 
+the `random_min.cpp` example:
+
+  #include <boost/mpi.hpp>
+  #include <iostream>
+  #include <cstdlib>
+  namespace mpi = boost::mpi;
+  
+  int main(int argc, char* argv[])
+  {
+    mpi::environment env(argc, argv);
+    mpi::communicator world;
+  
+    std::srand(world.rank());
+    int my_number = std::rand();
+    int minimum;
+  
+    all_reduce(world, my_number, minimum, mpi::minimum<int>());
+    
+    if (world.rank() == 0) {
+        std::cout << "The minimum value is " << minimum << std::endl;
+    }
+  
+    return 0;
+  }
+
+In that example we provide both input and output values, requiring
+twice as much space, which can be a problem depending on the size 
+of the transmitted data. 
+If there  is no need to preserve the input value, the ouput value 
+can be omitted. In that case the input value will be overriden with 
+the output value and Boost.MPI is able, in some situation, to implement
+the operation with a more space efficient solution (using the `MPI_IN_PLACE`
+flag of the MPI C mapping), as in the following example (`in_place_global_min.cpp`):
+
+  #include <boost/mpi.hpp>
+  #include <iostream>
+  #include <cstdlib>
+  namespace mpi = boost::mpi;
+  
+  int main(int argc, char* argv[])
+  {
+    mpi::environment env(argc, argv);
+    mpi::communicator world;
+  
+    std::srand(world.rank());
+    int my_number = std::rand();
+  
+    all_reduce(world, my_number, mpi::minimum<int>());
+    
+    if (world.rank() == 0) {
+        std::cout << "The minimum value is " << my_number << std::endl;
+    }
+  
+    return 0;
+  }
+
 
 [endsect]
 
@@ -1413,6 +1471,10 @@ boost::mpi::communicator::barrier `communicator::barrier`]]]
 
   [[[@http://www.mpi-forum.org/docs/mpi-11-html/node71.html#Node71
 `MPI_Scatterv`]] [most uses supported by [funcref boost::mpi::scatter `scatter`]]]
+
+  [[[@http://www.mpi-forum.org/docs/mpi-20-html/node145.htm#Node145
+`MPI_IN_PLACE`]] [supported implicitly by [funcref boost::mpi::all_reduce 
+`all_reduce` by omiting the ouput value]]]
 ]
 
 Boost.MPI uses function objects to specify how reductions should occur
