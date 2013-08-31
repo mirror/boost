@@ -736,7 +736,6 @@ class deque : protected deque_base<Allocator>
          }
          //If unequal allocators, then do a one by one move
          else{
-            typedef typename std::iterator_traits<iterator>::iterator_category ItCat;
             this->assign( boost::make_move_iterator(x.begin())
                         , boost::make_move_iterator(x.end()));
          }
