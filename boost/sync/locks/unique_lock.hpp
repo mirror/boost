@@ -18,6 +18,7 @@
 
 #include <cstddef>
 #include <boost/utility/enable_if.hpp>
+#include <boost/utility/explicit_operator_bool.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/locks/lock_options.hpp>
 
@@ -79,11 +80,11 @@ public:
     unique_lock(typename enable_if_c< aux::time_traits< TimeT >::is_supported, mutex_type& >::type m, TimeT const& t) :
         m_mutex(&m), m_is_locked(false)
     {
-        tined_lock(t);
+        timed_lock(t);
     }
 
     unique_lock(BOOST_THREAD_RV_REF(unique_lock) other) BOOST_NOEXCEPT :
-        m(BOOST_THREAD_RV(other).m),m_is_locked(BOOST_THREAD_RV(other).m_is_locked)
+        m_mutex(BOOST_THREAD_RV(other).m_mutex), m_is_locked(BOOST_THREAD_RV(other).m_is_locked)
     {
         BOOST_THREAD_RV(other).m_is_locked = false;
         BOOST_THREAD_RV(other).m_mutex = NULL;
@@ -92,7 +93,7 @@ public:
     BOOST_THREAD_EXPLICIT_LOCK_CONVERSION unique_lock(BOOST_THREAD_RV_REF_BEG upgrade_lock<Mutex> BOOST_THREAD_RV_REF_END other);
 
 #ifndef BOOST_THREAD_PROVIDES_EXPLICIT_LOCK_CONVERSION
-    //std-2104 unique_lock move-assignment should not be noexcept
+    //std-2014 unique_lock move-assignment should not be noexcept
     unique_lock& operator=(BOOST_THREAD_RV_REF_BEG upgrade_lock<Mutex> BOOST_THREAD_RV_REF_END other) //BOOST_NOEXCEPT
     {
         unique_lock temp(::boost::move(other));
@@ -101,7 +102,7 @@ public:
     }
 #endif
 
-    //std-2104 unique_lock move-assignment should not be noexcept
+    //std-2014 unique_lock move-assignment should not be noexcept
     unique_lock& operator=(BOOST_THREAD_RV_REF(unique_lock) other) //BOOST_NOEXCEPT
     {
         unique_lock temp(::boost::move(other));
@@ -363,39 +364,31 @@ public:
     m_is_locked = false;
   }
 
-#if defined(BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS)
-  typedef void (unique_lock::*bool_type)();
-  operator bool_type() const BOOST_NOEXCEPT
-  {
-    return m_is_locked?&unique_lock::lock:0;
-  }
-  bool operator!() const BOOST_NOEXCEPT
-  {
-    return !owns_lock();
-  }
-#else
-  explicit operator bool() const BOOST_NOEXCEPT
-  {
-    return owns_lock();
-  }
-#endif
-  bool owns_lock() const BOOST_NOEXCEPT
-  {
-    return m_is_locked;
-  }
 
-  Mutex* mutex() const BOOST_NOEXCEPT
-  {
-    return m;
-  }
+    BOOST_EXPLICIT_OPERATOR_BOOL()
 
-  Mutex* release() BOOST_NOEXCEPT
-  {
-    Mutex* const res=m;
-    m=0;
-    m_is_locked=false;
-    return res;
-  }
+    bool operator!() const BOOST_NOEXCEPT
+    {
+        return !owns_lock();
+    }
+
+    bool owns_lock() const BOOST_NOEXCEPT
+    {
+        return m_is_locked;
+    }
+
+    Mutex* mutex() const BOOST_NOEXCEPT
+    {
+        return m_mutex;
+    }
+
+    Mutex* release() BOOST_NOEXCEPT
+    {
+        Mutex* const res = m_mutex;
+        m_mutex = NULL;
+        m_is_locked = false;
+        return res;
+    }
 };
 
 template< typename MutexT >
