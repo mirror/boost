@@ -38,7 +38,7 @@
 namespace N1 {
 
 class my_class :
-    public boost::intrusive_ref_counter
+    public boost::intrusive_ref_counter< my_class >
 {
 public:
     static unsigned int destructor_count;
@@ -56,7 +56,7 @@ unsigned int my_class::destructor_count = 0;
 namespace N2 {
 
 class my_class :
-    public boost::basic_intrusive_ref_counter< boost::thread_unsafe_counter >
+    public boost::intrusive_ref_counter< my_class, boost::thread_unsafe_counter >
 {
 public:
     static unsigned int destructor_count;
@@ -73,17 +73,18 @@ unsigned int my_class::destructor_count = 0;
 
 namespace N3 {
 
-struct X :
-    public virtual boost::intrusive_ref_counter
+struct root :
+    public boost::intrusive_ref_counter< root >
 {
+    virtual ~root() {}
 };
 
 } // namespace N3
 
 namespace N4 {
 
-struct Y :
-    public virtual boost::intrusive_ref_counter
+struct X :
+    public virtual N3::root
 {
 };
 
@@ -91,9 +92,18 @@ struct Y :
 
 namespace N5 {
 
+struct Y :
+    public virtual N3::root
+{
+};
+
+} // namespace N5
+
+namespace N6 {
+
 struct Z :
-    public N3::X,
-    public N4::Y
+    public N4::X,
+    public N5::Y
 {
     static unsigned int destructor_count;
 
@@ -105,7 +115,7 @@ struct Z :
 
 unsigned int Z::destructor_count = 0;
 
-} // namespace N5
+} // namespace N6
 
 
 int main()
@@ -130,16 +140,16 @@ int main()
 
     // The test checks that destroying through the base class works
     {
-        boost::intrusive_ptr< N5::Z > p1 = new N5::Z();
+        boost::intrusive_ptr< N6::Z > p1 = new N6::Z();
         BOOST_TEST(p1->use_count() == 1);
-        BOOST_TEST(N5::Z::destructor_count == 0);
-        boost::intrusive_ptr< boost::intrusive_ref_counter > p2 = p1;
+        BOOST_TEST(N6::Z::destructor_count == 0);
+        boost::intrusive_ptr< N3::root > p2 = p1;
         BOOST_TEST(p1->use_count() == 2);
-        BOOST_TEST(N5::Z::destructor_count == 0);
+        BOOST_TEST(N6::Z::destructor_count == 0);
         p1 = NULL;
-        BOOST_TEST(N5::Z::destructor_count == 0);
+        BOOST_TEST(N6::Z::destructor_count == 0);
         p2 = NULL;
-        BOOST_TEST(N5::Z::destructor_count == 1);
+        BOOST_TEST(N6::Z::destructor_count == 1);
     }
 
     return boost::report_errors();

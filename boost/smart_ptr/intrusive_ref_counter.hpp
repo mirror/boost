@@ -27,9 +27,9 @@ namespace boost {
 namespace sp_adl_block {
 
 /*!
- * \brief Thread unsafe reference counter policy for \c basic_intrusive_ref_counter
+ * \brief Thread unsafe reference counter policy for \c intrusive_ref_counter
  *
- * The policy instructs the \c basic_intrusive_ref_counter base class to implement
+ * The policy instructs the \c intrusive_ref_counter base class to implement
  * a reference counter suitable for single threaded use only. Pointers to the same
  * object with this kind of reference counter must not be used by different threads.
  */
@@ -54,9 +54,9 @@ struct thread_unsafe_counter
 };
 
 /*!
- * \brief Thread safe reference counter policy for \c basic_intrusive_ref_counter
+ * \brief Thread safe reference counter policy for \c intrusive_ref_counter
  *
- * The policy instructs the \c basic_intrusive_ref_counter base class to implement
+ * The policy instructs the \c intrusive_ref_counter base class to implement
  * a thread-safe reference counter, if the target platform supports multithreading.
  */
 struct thread_safe_counter
@@ -79,26 +79,27 @@ struct thread_safe_counter
     }
 };
 
-template< typename CounterPolicyT >
-class basic_intrusive_ref_counter;
+template< typename DerivedT, typename CounterPolicyT = thread_safe_counter >
+class intrusive_ref_counter;
 
-template< typename CounterPolicyT >
-void intrusive_ptr_add_ref(const basic_intrusive_ref_counter< CounterPolicyT >* p) BOOST_NOEXCEPT;
-template< typename CounterPolicyT >
-void intrusive_ptr_release(const basic_intrusive_ref_counter< CounterPolicyT >* p) BOOST_NOEXCEPT;
+template< typename DerivedT, typename CounterPolicyT >
+void intrusive_ptr_add_ref(const intrusive_ref_counter< DerivedT, CounterPolicyT >* p) BOOST_NOEXCEPT;
+template< typename DerivedT, typename CounterPolicyT >
+void intrusive_ptr_release(const intrusive_ref_counter< DerivedT, CounterPolicyT >* p) BOOST_NOEXCEPT;
 
 /*!
  * \brief A reference counter base class
  *
  * This base class can be used with user-defined classes to add support
- * for \c intrusive_ptr. The class contains a reference counter defined by the \c CounterPolicyT
- * and a virtual destructor, which makes the derived class polymorphic.
+ * for \c intrusive_ptr. The class contains a reference counter defined by the \c CounterPolicyT.
  * Upon releasing the last \c intrusive_ptr referencing the object
- * derived from the \c basic_intrusive_ref_counter class, operator \c delete
+ * derived from the \c intrusive_ref_counter class, operator \c delete
  * is automatically called on the pointer to the object.
+ *
+ * The other template parameter, \c DerivedT, is the user's class that derives from \c intrusive_ref_counter.
  */
-template< typename CounterPolicyT >
-class basic_intrusive_ref_counter
+template< typename DerivedT, typename CounterPolicyT >
+class intrusive_ref_counter
 {
 private:
     //! Reference counter type
@@ -112,7 +113,7 @@ public:
      *
      * \post <tt>use_count() == 0</tt>
      */
-    basic_intrusive_ref_counter() : m_ref_counter(0)
+    intrusive_ref_counter() BOOST_NOEXCEPT : m_ref_counter(0)
     {
     }
 
@@ -121,21 +122,16 @@ public:
      *
      * \post <tt>use_count() == 0</tt>
      */
-    basic_intrusive_ref_counter(basic_intrusive_ref_counter const&) : m_ref_counter(0)
+    intrusive_ref_counter(intrusive_ref_counter const&) BOOST_NOEXCEPT : m_ref_counter(0)
     {
     }
-
-    /*!
-     * Virtual destructor
-     */
-    virtual ~basic_intrusive_ref_counter() {}
 
     /*!
      * Assignment
      *
      * \post The reference counter is not modified after assignment
      */
-    basic_intrusive_ref_counter& operator= (basic_intrusive_ref_counter const&) BOOST_NOEXCEPT { return *this; }
+    intrusive_ref_counter& operator= (intrusive_ref_counter const&) BOOST_NOEXCEPT { return *this; }
 
     /*!
      * \return The reference counter
@@ -145,31 +141,34 @@ public:
         return CounterPolicyT::load(m_ref_counter);
     }
 
-    friend void intrusive_ptr_add_ref< CounterPolicyT >(const basic_intrusive_ref_counter< CounterPolicyT >* p) BOOST_NOEXCEPT;
-    friend void intrusive_ptr_release< CounterPolicyT >(const basic_intrusive_ref_counter< CounterPolicyT >* p) BOOST_NOEXCEPT;
+protected:
+    /*!
+     * Destructor
+     */
+    BOOST_DEFAULTED_FUNCTION(~intrusive_ref_counter(), {})
+
+    friend void intrusive_ptr_add_ref< DerivedT, CounterPolicyT >(const intrusive_ref_counter< DerivedT, CounterPolicyT >* p) BOOST_NOEXCEPT;
+    friend void intrusive_ptr_release< DerivedT, CounterPolicyT >(const intrusive_ref_counter< DerivedT, CounterPolicyT >* p) BOOST_NOEXCEPT;
 };
 
-template< typename CounterPolicyT >
-inline void intrusive_ptr_add_ref(const basic_intrusive_ref_counter< CounterPolicyT >* p) BOOST_NOEXCEPT
+template< typename DerivedT, typename CounterPolicyT >
+inline void intrusive_ptr_add_ref(const intrusive_ref_counter< DerivedT, CounterPolicyT >* p) BOOST_NOEXCEPT
 {
     CounterPolicyT::increment(p->m_ref_counter);
 }
 
-template< typename CounterPolicyT >
-inline void intrusive_ptr_release(const basic_intrusive_ref_counter< CounterPolicyT >* p) BOOST_NOEXCEPT
+template< typename DerivedT, typename CounterPolicyT >
+inline void intrusive_ptr_release(const intrusive_ref_counter< DerivedT, CounterPolicyT >* p) BOOST_NOEXCEPT
 {
     if (CounterPolicyT::decrement(p->m_ref_counter) == 0)
-        delete p;
+        delete static_cast< const DerivedT* >(p);
 }
 
 } // namespace sp_adl_block
 
-using sp_adl_block::basic_intrusive_ref_counter;
+using sp_adl_block::intrusive_ref_counter;
 using sp_adl_block::thread_unsafe_counter;
 using sp_adl_block::thread_safe_counter;
-
-//! Convenience typedef for the default reference counter type
-typedef basic_intrusive_ref_counter< thread_safe_counter > intrusive_ref_counter;
 
 } // namespace boost
 
