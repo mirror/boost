@@ -884,6 +884,30 @@ BOOST_AUTO_TEST_CASE_TEMPLATE( rational_input_failing_test, T,
     iss.str( "1 /2" );
     iss >> r;
     BOOST_CHECK( !iss );
+
+    // Illegal value check(s)
+    typedef std::numeric_limits<T>  limits_type;
+
+    iss.clear();
+    iss.str( "3/0" );
+    iss >> r;
+    BOOST_CHECK( !iss );
+
+    if ( limits_type::is_signed && limits_type::is_bounded &&
+     limits_type::min BOOST_PREVENT_MACRO_SUBSTITUTION () +
+     limits_type::max BOOST_PREVENT_MACRO_SUBSTITUTION () < T(0) )
+    {
+        std::ostringstream  oss;
+
+        oss << 1 << '/' << limits_type::min BOOST_PREVENT_MACRO_SUBSTITUTION ();
+        iss.clear();
+        iss.str( oss.str() );
+        iss.exceptions( std::ios::failbit );
+        BOOST_CHECK( iss.good() );
+        BOOST_CHECK_THROW( iss >> r, boost::bad_rational );
+        BOOST_CHECK( iss.fail() && !iss.bad() );
+        iss.exceptions( std::ios::goodbit );
+    }
 }
 
 // Input test, passing

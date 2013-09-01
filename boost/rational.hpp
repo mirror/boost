@@ -598,6 +598,8 @@ namespace detail {
 template <typename IntType>
 std::istream& operator>> (std::istream& is, rational<IntType>& r)
 {
+    using std::ios;
+
     IntType n = IntType(0), d = IntType(1);
     char c = 0;
     detail::resetter sentry(is);
@@ -609,14 +611,18 @@ std::istream& operator>> (std::istream& is, rational<IntType>& r)
             if ( c == '/' )
             {
                 if ( is >> std::noskipws >> d )
-                    // TODO: check if d is non-zero, fail if not.
-                    // ("assign" will normalize the value otherwise.)
-                    // Or: let it throw on normalization fail, but catch the
-                    // exception and translate it to IOStream error handling.
-                    r.assign( n, d );
+                    try {
+                        r.assign( n, d );
+                    } catch ( bad_rational & ) {        // normalization fail
+                        try { is.setstate(ios::failbit); }
+                        catch ( ... ) {}  // don't throw ios_base::failure...
+                        if ( is.exceptions() & ios::failbit )
+                            throw;   // ...but the original exception instead
+                        // ELSE: suppress the exception, use just error flags
+                    }
             }
             else
-                is.setstate( std::ios::failbit );
+                is.setstate( ios::failbit );
         }
     }
 
