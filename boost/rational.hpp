@@ -21,6 +21,8 @@
 //    Nickolay Mladenov, for the implementation of operator+=
 
 //  Revision History
+//  02 Sep 13  Remove unneeded forward declarations; tweak private helper
+//             function (Daryle Walker)
 //  30 Aug 13  Improve exception safety of "assign"; start modernizing I/O code
 //             (Daryle Walker)
 //  27 Aug 13  Add cross-version constructor template, plus some private helper
@@ -110,12 +112,6 @@ public:
     explicit bad_rational() : std::domain_error("bad rational: zero denominator") {}
     explicit bad_rational( char const *what ) : std::domain_error( what ) {}
 };
-
-template <typename IntType>
-class rational;
-
-template <typename IntType>
-rational<IntType> abs(const rational<IntType>& r);
 
 template <typename IntType>
 class rational :
@@ -238,7 +234,8 @@ private:
     { return b == zero ? a : inner_gcd(b, a % b, zero); }
 
     static BOOST_CONSTEXPR
-    int_type inner_abs( param_type x ) { return x < int_type(0) ? -x : +x; }
+    int_type inner_abs( param_type x, int_type const &zero = int_type(0) )
+    { return x < zero ? -x : +x; }
 
     // Representation note: Fractions are kept in normalized form at all
     // times. normalized form is defined as gcd(num,den) == 1 and den > 0.
@@ -252,7 +249,7 @@ private:
      int_type(0), int_type const &one = int_type(1) )
     {
         return d > zero && ( n != zero || d == one ) && inner_abs( inner_gcd(n,
-         d, zero) ) == one;
+         d, zero), zero ) == one;
     }
 };
 
