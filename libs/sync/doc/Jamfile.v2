@@ -59,7 +59,7 @@ local doxygen_params =
                         BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(x)= \\
                         BOOST_DEFAULTED_FUNCTION(x,y)=\"x = default;\" \\
                         BOOST_DELETED_FUNCTION(x)=\"x = delete;\" \\
-                        BOOST_EXPLICIT_OPERATOR_BOOL()=\"explicit operator bool() const;\""
+                        BOOST_EXPLICIT_OPERATOR_BOOL()=\"explicit operator bool() const;\" "
         <xsl:param>boost.doxygen.detailns=detail
 #        <xsl:param>boost.doxygen.detail=implementation_
     ;
@@ -117,15 +117,15 @@ doxygen locks_reference
 
 notfile locks_refs : @gen-references : locks_reference.xml ;
 
-doxygen support_reference
-    :
-        $(support_includes)
-    :
-        $(doxygen_params)
-        <xsl:param>"boost.doxygen.reftitle=Other libraries support layer"
-    ;
+# doxygen support_reference
+#     :
+#         $(support_includes)
+#     :
+#         $(doxygen_params)
+#         <xsl:param>"boost.doxygen.reftitle=Other libraries support layer"
+#     ;
 
-notfile support_refs : @gen-references : support_reference.xml ;
+#notfile support_refs : @gen-references : support_reference.xml ;
 
 
 xml sync_doc
@@ -134,7 +134,7 @@ xml sync_doc
     :
         <dependency>top_level_refs
         <dependency>locks_refs
-        <dependency>support_refs
+#        <dependency>support_refs
     ;
 
 boostbook sync
