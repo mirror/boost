@@ -22,6 +22,14 @@
 #pragma once
 #endif
 
+#if defined(_MSC_VER)
+#pragma warning(push)
+// This is a bogus MSVC warning, which is flagged by friend declarations of intrusive_ptr_add_ref and intrusive_ptr_release in intrusive_ref_counter:
+// 'name' : the inline specifier cannot be used when a friend declaration refers to a specialization of a function template
+// Note that there is no inline specifier in the declarations.
+#pragma warning(disable: 4396)
+#endif
+
 namespace boost {
 
 namespace sp_adl_block {
@@ -171,5 +179,9 @@ using sp_adl_block::thread_unsafe_counter;
 using sp_adl_block::thread_safe_counter;
 
 } // namespace boost
+
+#if defined(_MSC_VER)
+#pragma warning(pop)
+#endif
 
 #endif // BOOST_SMART_PTR_INTRUSIVE_REF_COUNTER_HPP_INCLUDED_
