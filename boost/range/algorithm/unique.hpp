@@ -86,7 +86,7 @@ unique( const ForwardRange& rng )
 /// \overload
 template< class ForwardRange, class BinaryPredicate >
 inline BOOST_DEDUCED_TYPENAME range_return<ForwardRange, return_begin_found>::type
-unique( ForwardRange& rng, BinaryPredicate pred )
+unique( ForwardRange& rng, BinaryPredicate )
 {
     BOOST_RANGE_CONCEPT_ASSERT(( ForwardRangeConcept<ForwardRange> ));
     return ::boost::range::unique<return_begin_found>(rng);
