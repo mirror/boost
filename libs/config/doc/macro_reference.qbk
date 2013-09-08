@@ -1246,8 +1246,8 @@ They will be removed in a future version of boost.
 [[`BOOST_HAS_STATIC_ASSERT`][`BOOST_NO_CXX11_STATIC_ASSERT` (negated)][Boost 1.53][]]
 [[`BOOST_HAS_VARIADIC_TMPL`][`BOOST_NO_CXX11_VARIADIC_TEMPLATES` (negated)][Boost 1.53][]]
 [[`BOOST_HAS_RVALUE_REFS`][`BOOST_NO_CXX11_RVALUE_REFERENCES` (negated)][Boost 1.53][]]
-[[`BOOST_HAS_CHAR_16_T`][`BOOST_NO_CXX11_CHAR_16_T` (negated)][Boost 1.53][]]
-[[`BOOST_HAS_CHAR_32_T`][`BOOST_NO_CXX11_CHAR_32_T` (negated)][Boost 1.53][]]
+[[`BOOST_HAS_CHAR16_T`][`BOOST_NO_CXX11_CHAR16_T` (negated)][Boost 1.53][]]
+[[`BOOST_HAS_CHAR32_T`][`BOOST_NO_CXX11_CHAR32_T` (negated)][Boost 1.53][]]
 ]
 
 [endsect]
