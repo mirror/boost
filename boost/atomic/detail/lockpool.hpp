@@ -9,7 +9,7 @@
 
 #include <boost/atomic/detail/config.hpp>
 #ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
-#include <boost/thread/mutex.hpp>
+#include <boost/smart_ptr/detail/lightweight_mutex.hpp>
 #endif
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
@@ -25,21 +25,15 @@ namespace detail {
 class lockpool
 {
 public:
-    typedef mutex lock_type;
-    class scoped_lock
+    typedef boost::detail::lightweight_mutex lock_type;
+    class scoped_lock :
+        public lock_type::scoped_lock
     {
-    private:
-        lock_type& mtx_;
+        typedef lock_type::scoped_lock base_type;
 
     public:
-        explicit
-        scoped_lock(const volatile void * addr) : mtx_(get_lock_for(addr))
+        explicit scoped_lock(const volatile void * addr) : base_type(get_lock_for(addr))
         {
-            mtx_.lock();
-        }
-        ~scoped_lock()
-        {
-            mtx_.unlock();
         }
 
         BOOST_DELETED_FUNCTION(scoped_lock(scoped_lock const&))
