@@ -117,15 +117,15 @@ doxygen locks_reference
 
 notfile locks_refs : @gen-references : locks_reference.xml ;
 
-# doxygen support_reference
-#     :
-#         $(support_includes)
-#     :
-#         $(doxygen_params)
-#         <xsl:param>"boost.doxygen.reftitle=Other libraries support layer"
-#     ;
+doxygen support_reference
+    :
+        $(support_includes)
+    :
+        $(doxygen_params)
+        <xsl:param>"boost.doxygen.reftitle=Other libraries support layer"
+    ;
 
-#notfile support_refs : @gen-references : support_reference.xml ;
+notfile support_refs : @gen-references : support_reference.xml ;
 
 
 xml sync_doc
@@ -134,7 +134,7 @@ xml sync_doc
     :
         <dependency>top_level_refs
         <dependency>locks_refs
-#        <dependency>support_refs
+        <dependency>support_refs
     ;
 
 boostbook sync
