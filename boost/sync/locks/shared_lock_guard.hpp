@@ -22,6 +22,7 @@
 #endif
 
 #include <boost/sync/locks/lock_options.hpp>
+#include <boost/sync/locks/shared_lock_guard_fwd.hpp>
 
 #include <boost/sync/detail/header.hpp>
 
@@ -32,14 +33,14 @@ namespace sync {
 /*!
  * \brief A shared lock scope guard
  */
-template< typename MutexT >
+template< typename Mutex >
 class shared_lock_guard
 {
-private:
-    MutexT& m_mutex;
-
 public:
-    typedef MutexT mutex_type;
+    typedef Mutex mutex_type;
+
+private:
+    mutex_type& m_mutex;
 
 public:
     explicit shared_lock_guard(mutex_type& m) : m_mutex(m)

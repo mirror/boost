@@ -7,14 +7,14 @@
  * (C) Copyright 2013 Andrey Semashev
  */
 /*!
- * \file   lockable_wrapper.hpp
+ * \file   time_traits.hpp
  *
  * \brief  This header is the Boost.Sync library implementation, see the library documentation
  *         at http://www.boost.org/doc/libs/release/libs/sync/doc/html/index.html.
  */
 
-#ifndef BOOST_SYNC_DETAIL_LOCKABLE_WRAPPER_HPP_INCLUDED_
-#define BOOST_SYNC_DETAIL_LOCKABLE_WRAPPER_HPP_INCLUDED_
+#ifndef BOOST_SYNC_DETAIL_TIME_TRAITS_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_TIME_TRAITS_HPP_INCLUDED_
 
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/header.hpp>
@@ -29,17 +29,24 @@ namespace sync {
 
 namespace detail {
 
-template< typename Mutex, typename Option = void >
-struct lockable_wrapper
+struct time_point_tag {};
+struct time_duration_tag {};
+
+template< typename T, typename Void = void >
+struct time_traits
 {
-    typedef Mutex mutex_type;
-    typedef Option lock_option;
+    static BOOST_CONSTEXPR_OR_CONST bool is_specialized = false;
+};
 
-    mutex_type* m_mutex;
+template< typename T, typename Tag, typename R >
+struct enable_if_tag
+{
+};
 
-    explicit lockable_wrapper(mutex_type& m) : m_mutex(&m)
-    {
-    }
+template< typename T, typename R >
+struct enable_if_tag< T, typename time_traits< T >::tag, R >
+{
+    typedef R type;
 };
 
 } // namespace detail
@@ -50,4 +57,4 @@ struct lockable_wrapper
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_DETAIL_LOCKABLE_WRAPPER_HPP_INCLUDED_
+#endif // BOOST_SYNC_DETAIL_TIME_TRAITS_HPP_INCLUDED_

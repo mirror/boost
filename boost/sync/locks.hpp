@@ -22,5 +22,6 @@
 
 #include <boost/sync/locks/lock_guard.hpp>
 #include <boost/sync/locks/shared_lock_guard.hpp>
+#include <boost/sync/locks/unique_lock.hpp>
 
 #endif // BOOST_SYNC_LOCKS_HPP_INCLUDED_
