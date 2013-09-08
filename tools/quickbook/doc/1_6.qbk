@@ -37,6 +37,19 @@ which don't pair up. They might be there by mistake, in which case they
 should probably be deleted, or if they're intentional escaped. For example,
 to write out the half-open range \[a,b), use: `\[a,b)`.
 
+Next, you might need to reconsider how templates and macros are defined.
+If you `include` a file to use its templates, you'll now need to `import` it
+instead as templates are now scoped by included files. Also, if you define
+templates and macros in your main quickbook file, you might want to put them
+into a separate file and `import` that, which allows the main documentation
+files to concentrate on the structure and contents of the document, making them
+easier to read.
+
+Now that headings can have ids, it can be a good idea to add ids to existing
+headings. This means that the headings will have more predictable ids which
+don't change when the text of the heading changes. In order to preserve
+links you can use the existing generated id as the heading.
+
 [section:docinfo Includes with docinfo]
 
 In quickbook 1.5 if you include a file which starts with a docinfo block, it's
