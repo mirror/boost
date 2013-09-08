@@ -13,7 +13,6 @@
 #include <boost/spirit/include/classic_symbols.hpp>
 #include <boost/spirit/include/classic_loops.hpp>
 #include "grammar.hpp"
-#include "grammar_impl.hpp" // Just for context stuff. Should move?
 #include "state.hpp"
 #include "actions.hpp"
 #include "utils.hpp"
