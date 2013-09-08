@@ -323,21 +323,21 @@ class flat_tree
    // insert/erase
    std::pair<iterator,bool> insert_unique(const value_type& val)
    {
+      std::pair<iterator,bool> ret;
       insert_commit_data data;
-      std::pair<iterator,bool> ret = this->priv_insert_unique_prepare(val, data);
-      if(ret.second){
-         ret.first = this->priv_insert_commit(data, val);
-      }
+      ret.second = this->priv_insert_unique_prepare(val, data);
+      ret.first = ret.second ? this->priv_insert_commit(data, val)
+                             : iterator(vector_iterator_get_ptr(data.position));
       return ret;
    }
 
    std::pair<iterator,bool> insert_unique(BOOST_RV_REF(value_type) val)
    {
+      std::pair<iterator,bool> ret;
       insert_commit_data data;
-      std::pair<iterator,bool> ret = this->priv_insert_unique_prepare(val, data);
-      if(ret.second){
-         ret.first = this->priv_insert_commit(data, boost::move(val));
-      }
+      ret.second = this->priv_insert_unique_prepare(val, data);
+      ret.first = ret.second ? this->priv_insert_commit(data, boost::move(val))
+                             : iterator(vector_iterator_get_ptr(data.position));
       return ret;
    }
 
@@ -357,22 +357,20 @@ class flat_tree
 
    iterator insert_unique(const_iterator pos, const value_type& val)
    {
+      std::pair<iterator,bool> ret;
       insert_commit_data data;
-      std::pair<iterator,bool> ret = this->priv_insert_unique_prepare(pos, val, data);
-      if(ret.second){
-         ret.first = this->priv_insert_commit(data, val);
-      }
-      return ret.first;
+      return this->priv_insert_unique_prepare(pos, val, data)
+            ? this->priv_insert_commit(data, val)
+            : iterator(vector_iterator_get_ptr(data.position));
    }
 
-   iterator insert_unique(const_iterator pos, BOOST_RV_REF(value_type) mval)
+   iterator insert_unique(const_iterator pos, BOOST_RV_REF(value_type) val)
    {
+      std::pair<iterator,bool> ret;
       insert_commit_data data;
-      std::pair<iterator,bool> ret = this->priv_insert_unique_prepare(pos, mval, data);
-      if(ret.second){
-         ret.first = this->priv_insert_commit(data, boost::move(mval));
-      }
-      return ret.first;
+      return this->priv_insert_unique_prepare(pos, val, data)
+         ? this->priv_insert_commit(data, boost::move(val))
+         : iterator(vector_iterator_get_ptr(data.position));
    }
 
    iterator insert_equal(const_iterator pos, const value_type& val)
@@ -553,13 +551,7 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();
       stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
       value_destructor<stored_allocator_type> d(a, val);
-      insert_commit_data data;
-      std::pair<iterator,bool> ret =
-         this->priv_insert_unique_prepare(val, data);
-      if(ret.second){
-         ret.first = this->priv_insert_commit(data, boost::move(val));
-      }
-      return ret;
+      return this->insert_unique(::boost::move(val));
    }
 
    template <class... Args>
@@ -570,12 +562,7 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();
       stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
       value_destructor<stored_allocator_type> d(a, val);
-      insert_commit_data data;
-      std::pair<iterator,bool> ret = this->priv_insert_unique_prepare(hint, val, data);
-      if(ret.second){
-         ret.first = this->priv_insert_commit(data, boost::move(val));
-      }
-      return ret.first;
+      return this->insert_unique(hint, ::boost::move(val));
    }
 
    template <class... Args>
@@ -586,9 +573,7 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();
       stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
       value_destructor<stored_allocator_type> d(a, val);
-      iterator i = this->upper_bound(KeyOfValue()(val));
-      i = this->m_data.m_vect.insert(i, boost::move(val));
-      return i;
+      return this->insert_equal(::boost::move(val));
    }
 
    template <class... Args>
@@ -599,10 +584,7 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();
       stored_allocator_traits::construct(a, &val, ::boost::forward<Args>(args)... );
       value_destructor<stored_allocator_type> d(a, val);
-      insert_commit_data data;
-      this->priv_insert_equal_prepare(hint, val, data);
-      iterator i = this->priv_insert_commit(data, boost::move(val));
-      return i;
+      return this->insert_equal(hint, ::boost::move(val));
    }
 
    #else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
@@ -618,12 +600,7 @@ class flat_tree
       stored_allocator_traits::construct(a, &val                                          \
          BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
       value_destructor<stored_allocator_type> d(a, val);                                  \
-      insert_commit_data data;                                                            \
-      std::pair<iterator,bool> ret = this->priv_insert_unique_prepare(val, data);         \
-      if(ret.second){                                                                     \
-         ret.first = this->priv_insert_commit(data, boost::move(val));                    \
-      }                                                                                   \
-      return ret;                                                                         \
+      return this->insert_unique(::boost::move(val));                                     \
    }                                                                                      \
                                                                                           \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
@@ -635,13 +612,8 @@ class flat_tree
       stored_allocator_type &a = this->get_stored_allocator();                            \
       stored_allocator_traits::construct(a, &val                                          \
          BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
-      value_destructor<stored_allocator_type> d(a,  val);                                 \
-      insert_commit_data data;                                                            \
-      std::pair<iterator,bool> ret = this->priv_insert_unique_prepare(hint, val, data);   \
-      if(ret.second){                                                                     \
-         ret.first = this->priv_insert_commit(data, boost::move(val));                    \
-      }                                                                                   \
-      return ret.first;                                                                   \
+      value_destructor<stored_allocator_type> d(a, val);                                  \
+      return this->insert_unique(hint, ::boost::move(val));                               \
    }                                                                                      \
                                                                                           \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
@@ -653,9 +625,7 @@ class flat_tree
       stored_allocator_traits::construct(a, &val                                          \
          BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
       value_destructor<stored_allocator_type> d(a,  val);                                 \
-      iterator i = this->upper_bound(KeyOfValue()(val));                                  \
-      i = this->m_data.m_vect.insert(i, boost::move(val));                                \
-      return i;                                                                           \
+      return this->insert_equal(::boost::move(val));                                      \
    }                                                                                      \
                                                                                           \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >) \
@@ -668,12 +638,8 @@ class flat_tree
       stored_allocator_traits::construct(a, &val                                          \
          BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _) );                \
       value_destructor<stored_allocator_type> d(a,  val);                                 \
-      insert_commit_data data;                                                            \
-      this->priv_insert_equal_prepare(hint, val, data);                                   \
-      iterator i = this->priv_insert_commit(data, boost::move(val));                      \
-      return i;                                                                           \
+      return this->insert_equal(hint, ::boost::move(val));                                \
    }                                                                                      \
-
    //!
    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
    #include BOOST_PP_LOCAL_ITERATE()
@@ -798,21 +764,19 @@ class flat_tree
       }
    }
 
-   std::pair<iterator,bool> priv_insert_unique_prepare
+   bool priv_insert_unique_prepare
       (const_iterator b, const_iterator e, const value_type& val, insert_commit_data &commit_data)
    {
       const value_compare &value_comp  = this->m_data;
       commit_data.position = this->priv_lower_bound(b, e, KeyOfValue()(val));
-      return std::pair<iterator,bool>
-         ( iterator(vector_iterator_get_ptr(commit_data.position))
-         , commit_data.position == e || value_comp(val, *commit_data.position));
+      return commit_data.position == e || value_comp(val, *commit_data.position);
    }
 
-   std::pair<iterator,bool> priv_insert_unique_prepare
+   bool priv_insert_unique_prepare
       (const value_type& val, insert_commit_data &commit_data)
-   {  return this->priv_insert_unique_prepare(this->begin(), this->end(), val, commit_data);   }
+   {  return this->priv_insert_unique_prepare(this->cbegin(), this->cend(), val, commit_data);   }
 
-   std::pair<iterator,bool> priv_insert_unique_prepare
+   bool priv_insert_unique_prepare
       (const_iterator pos, const value_type& val, insert_commit_data &commit_data)
    {
       //N1780. Props to Howard Hinnant!
@@ -827,37 +791,33 @@ class flat_tree
       //else
       //   insert val before lower_bound(val)
       const value_compare &value_comp = this->m_data;
-
-      if(pos == this->cend() || value_comp(val, *pos)){
-         if(pos != this->cbegin() && !value_comp(val, pos[-1])){
-            if(value_comp(pos[-1], val)){
-               commit_data.position = pos;
-               return std::pair<iterator,bool>(iterator(vector_iterator_get_ptr(pos)), true);
-            }
-            else{
-               return std::pair<iterator,bool>(iterator(vector_iterator_get_ptr(pos)), false);
-            }
+      const const_iterator cend_it = this->cend();
+      if(pos == cend_it || value_comp(val, *pos)){ //Check if val should go before end
+         const const_iterator cbeg = this->cbegin();
+         commit_data.position = pos;
+         if(pos == cbeg){  //If container is empty then insert it in the beginning
+            return true;
          }
-         return this->priv_insert_unique_prepare(this->cbegin(), pos, val, commit_data);
+         const_iterator prev(pos);
+         --prev;
+         if(value_comp(*prev, val)){   //If previous element was less, then it should go between prev and pos
+            return true;
+         }
+         else if(!value_comp(val, *prev)){   //If previous was equal then insertion should fail
+            commit_data.position = prev;
+            return false;
+         }
+         else{ //Previous was bigger so insertion hint was pointless, dispatch to hintless insertion
+               //but reduce the search between beg and prev as prev is bigger than val
+            return this->priv_insert_unique_prepare(cbeg, prev, val, commit_data);
+         }
       }
-
-      // Works, but increases code complexity
-      //Next check
-      //else if (value_comp(*pos, val) && !value_comp(pos[1], val)){
-      //   if(value_comp(val, pos[1])){
-      //      commit_data.position = pos+1;
-      //      return std::pair<iterator,bool>(pos+1, true);
-      //   }
-      //   else{
-      //      return std::pair<iterator,bool>(pos+1, false);
-      //   }
-      //}
       else{
-         //[... pos ... val ... ]
          //The hint is before the insertion position, so insert it
-         //in the remaining range
-         return this->priv_insert_unique_prepare(pos, this->end(), val, commit_data);
+         //in the remaining range [pos, end)
+         return this->priv_insert_unique_prepare(pos, cend_it, val, commit_data);
       }
+      //return priv_insert_unique_prepare(val, commit_data);
    }
 
    template<class Convertible>
