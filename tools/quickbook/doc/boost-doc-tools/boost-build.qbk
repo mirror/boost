@@ -88,3 +88,54 @@ same, but instead of having a source file, the source is the boostbook
 xml generated from the quickbook file.
 
 [endsect] [/simple]
+
+[section:standalone Building documentation outside of the Boost tree]
+
+So far, the documentation has been built inside the boost tree, so it uses
+the boost css files and images directly from their original location.
+But when building in a separate repository the css and images files need to
+be copied into place. You can see an example of this at
+[@boost://tools/quickbook/examples/standalone-quickbook/
+ `tools/quickbook/examples/standalone-quickbook/`]. This is in the boost
+tree, but it has a `Jamroot.jam` file which makes Boost.Build treat it as
+its own build tree. Here the Jamfile is:
+
+    using boostbook ;
+    using quickbook ;
+
+    xml simple-boostbook : simple.qbk ;
+
+    boostbook simple : simple-boostbook :
+        <dependency>css
+        <dependency>images
+        ;
+
+    install css : [ glob $(BOOST_ROOT)/doc/src/*.css ]
+        : <location>html ;
+    install images : [ glob $(BOOST_ROOT)/doc/src/images/*.png ]
+        : <location>html/images ;
+    explicit css ;
+    explicit images ;
+
+This time the boostbook build target is a little different:
+
+    boostbook simple : simple-boostbook :
+        <dependency>css
+        <dependency>images
+        ;
+
+There's no reason to specify `boost.root` as the css and image files are
+copied into the documentation directory, but it does need to depend on the
+`css` and `images` targets which do the copying:
+
+    install css : [ glob $(BOOST_ROOT)/doc/src/*.css ]
+        : <location>html ;
+    install images : [ glob $(BOOST_ROOT)/doc/src/images/*.png ]
+        : <location>html/images ;
+    explicit css ;
+    explicit images ;
+
+The `BOOST_ROOT` variable needs is set in the `Jamroot.jam` file. `css` and
+`images` are marked `explicit`, so that they're only copied when required.
+
+[endsect] [/standalone]
