@@ -255,10 +255,27 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #if (BOOST_INTEL_CXX_VERSION >= 1310)
 #  undef  BOOST_NO_SFINAE_EXPR
 #endif
+#if (BOOST_INTEL_CXX_VERSION >= 1400)
+#  undef BOOST_NO_CXX11_UNICODE_LITERALS 
+#  undef BOOST_NO_CXX11_RAW_LITERALS 
+// This one generates errors when used with conditional exception specifications, for example in multiprecision:
+//#  undef BOOST_NO_CXX11_NOEXCEPT 
+// This breaks multiprecision:
+//#  undef BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS 
+#  undef BOOST_NO_CXX11_HDR_THREAD 
+#  undef BOOST_NO_CXX11_CHAR32_T 
+#  undef BOOST_NO_CXX11_CHAR16_T
+#endif
 
 #if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION <= 1310)
 #  define BOOST_NO_CXX11_HDR_FUTURE
 #  define BOOST_NO_CXX11_HDR_INITIALIZER_LIST
+#endif
+
+#if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION == 1400)
+// A regression in Intel's compiler means that <tuple> seems to be broken in this release as well as <future> :
+#  define BOOST_NO_CXX11_HDR_FUTURE
+#  define BOOST_NO_CXX11_HDR_TUPLE
 #endif
 
 #if defined(_MSC_VER) && (_MSC_VER <= 1700)
