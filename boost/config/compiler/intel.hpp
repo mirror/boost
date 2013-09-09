@@ -255,7 +255,7 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 #if (BOOST_INTEL_CXX_VERSION >= 1310)
 #  undef  BOOST_NO_SFINAE_EXPR
 #endif
-#if (BOOST_INTEL_CXX_VERSION >= 1400)
+#if defined(BOOST_INTEL_STDCXX0X) && (BOOST_INTEL_CXX_VERSION >= 1400) && !defined(_MSC_VER)
 #  undef BOOST_NO_CXX11_UNICODE_LITERALS 
 #  undef BOOST_NO_CXX11_RAW_LITERALS 
 // This one generates errors when used with conditional exception specifications, for example in multiprecision:
