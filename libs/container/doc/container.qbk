@@ -688,9 +688,8 @@ use [*Boost.Container]? There are several reasons for that:
 [section:acknowledgements_notes Acknowledgements, notes and links]
 
 *  Original standard container code comes from [@http://www.sgi.com/tech/stl/ SGI STL library],
-   which enhanced the original HP STL code. Most of this code was rewritten for
-   [*Boost.Interprocess] and moved to [*Boost.Intrusive]. `deque` and `string` containers still
-   have fragments of the original SGI code. Many thanks to Alexander Stepanov, Meng Lee, David Musser,
+   which enhanced the original HP STL code. Code was rewritten for
+   [*Boost.Interprocess] and moved to [*Boost.Intrusive]. Many thanks to Alexander Stepanov, Meng Lee, David Musser,
    Matt Austern... and all HP and SGI STL developers.
 
 *  `flat_[multi]_map/set` containers were originally based on [@http://en.wikipedia.org/wiki/Loki_%28C%2B%2B%29 Loki's]
