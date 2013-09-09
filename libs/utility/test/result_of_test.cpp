@@ -310,7 +310,7 @@ int main()
 #if defined(BOOST_RESULT_OF_USE_DECLTYPE) || defined(BOOST_RESULT_OF_USE_TR1_WITH_DECLTYPE_FALLBACK)
   int i = 123;
   sfinae_test(sfinae_test_f, i);
-#endif // defined(BOOST_RESULT_OF_USE_DECLTYPE)
+#endif // defined(BOOST_RESULT_OF_USE_DECLTYPE) || defined(BOOST_RESULT_OF_USE_TR1_WITH_DECLTYPE_FALLBACK)
 
   return 0;
 }
