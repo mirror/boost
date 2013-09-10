@@ -21,6 +21,7 @@
 #include <boost/exception/diagnostic_information.hpp>
 #include <boost/exception/detail/type_info.hpp>
 #include <boost/exception/detail/clone_current_exception.hpp>
+#include <boost/units/detail/utility.hpp>
 #include <boost/shared_ptr.hpp>
 #include <stdexcept>
 #include <new>
@@ -89,7 +90,7 @@ boost
     std::string
     to_string( original_exception_type const & x )
         {
-        return x.value()->name();
+        return units::detail::demangle(x.value()->name());
         }
 #endif
 
