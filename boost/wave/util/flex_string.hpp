@@ -344,7 +344,7 @@ private:
             // 11-17-2000: comment added: 
             //     No need to allocate (capacity + 1) to 
             //     accommodate the terminating 0, because Data already
-            //     has one one character in there
+            //     has one character in there
             pData_ = static_cast<Data*>(
                 malloc(sizeof(Data) + capacity * sizeof(E)));
             if (!pData_) boost::throw_exception(std::bad_alloc());
