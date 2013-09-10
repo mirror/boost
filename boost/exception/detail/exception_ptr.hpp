@@ -119,10 +119,12 @@ boost
             {
             Exception ba;
             exception_detail::clone_impl<Exception> c(ba);
+#ifndef BOOST_EXCEPTION_DISABLE
             c <<
                 throw_function(BOOST_CURRENT_FUNCTION) <<
                 throw_file(__FILE__) <<
                 throw_line(__LINE__);
+#endif
             static exception_ptr ep(shared_ptr<exception_detail::clone_base const>(new exception_detail::clone_impl<Exception>(c)));
             return ep;
             }
