@@ -22,6 +22,7 @@ CHANGELOG
 
 Boost V1.55:
  - Fixed #8848: Wave driver improperly processes 0xFFFFui64 token
+ - Fixed #9098: Wave driver option --c++0x invalid
 
 Boost V1.54:
  - Fixed #8478: Make Boost.wave compatible with Clang's -Wimplicit-fallthrough 
