@@ -1634,7 +1634,11 @@ class vector
       const size_type sz = m_holder.m_size;
       ::boost::container::uninitialized_move_alloc_n_source
          ( this->m_holder.alloc(), raw_beg, sz, container_detail::to_raw_pointer(p) );
+      if(this->m_holder.capacity()){
+         if(!value_traits::trivial_dctr_after_move)
       boost::container::destroy_alloc_n(this->m_holder.alloc(), raw_beg, sz);
+         this->m_holder.deallocate(this->m_holder.start(), this->m_holder.capacity());
+      }
       this->m_holder.start(p);
       this->m_holder.capacity(new_cap);
    }
@@ -1677,7 +1681,6 @@ class vector
          }
          //New buffer
          else{
-            //Backwards (and possibly forward) expansion
             #ifdef BOOST_CONTAINER_VECTOR_ALLOC_STATS
             ++this->num_alloc;
             #endif
@@ -1685,7 +1688,11 @@ class vector
             const size_type sz = m_holder.m_size;
             ::boost::container::uninitialized_move_alloc_n_source
                ( this->m_holder.alloc(), raw_beg, sz, container_detail::to_raw_pointer(ret.first) );
+            if(this->m_holder.capacity()){
+               if(!value_traits::trivial_dctr_after_move)
             boost::container::destroy_alloc_n(this->m_holder.alloc(), raw_beg, sz);
+               this->m_holder.deallocate(this->m_holder.start(), this->m_holder.capacity());
+            }
             this->m_holder.start(ret.first);
             this->m_holder.capacity(real_cap);
          }
