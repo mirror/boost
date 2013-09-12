@@ -512,7 +512,7 @@ class flat_set
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, value_type &&x);
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, value_type, iterator, this->priv_insert, const_iterator)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, value_type, iterator, this->priv_insert, const_iterator, const_iterator)
    #endif
 
    //! <b>Requires</b>: first, last are not iterators into *this.
@@ -1189,7 +1189,7 @@ class flat_multiset
    //! <b>Note</b>: If an element is inserted it might invalidate elements.
    iterator insert(const_iterator position, value_type &&x);
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, value_type, iterator, this->priv_insert, const_iterator)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, value_type, iterator, this->priv_insert, const_iterator, const_iterator)
    #endif
 
    //! <b>Requires</b>: first, last are not iterators into *this.

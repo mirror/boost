@@ -1306,7 +1306,7 @@ class stable_vector
    //!   Linear time otherwise.
    iterator insert(const_iterator position, T &&x);
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, T, iterator, priv_insert, const_iterator)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, T, iterator, priv_insert, const_iterator, const_iterator)
    #endif
 
    //! <b>Requires</b>: pos must be a valid iterator of *this.

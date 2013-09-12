@@ -1347,7 +1347,7 @@ class vector
    //!   Linear time otherwise.
    iterator insert(const_iterator position, T &&x);
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, T, iterator, priv_insert, const_iterator)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, T, iterator, priv_insert, const_iterator, const_iterator)
    #endif
 
    //! <b>Requires</b>: p must be a valid iterator of *this.
@@ -1636,7 +1636,7 @@ class vector
          ( this->m_holder.alloc(), raw_beg, sz, container_detail::to_raw_pointer(p) );
       if(this->m_holder.capacity()){
          if(!value_traits::trivial_dctr_after_move)
-      boost::container::destroy_alloc_n(this->m_holder.alloc(), raw_beg, sz);
+            boost::container::destroy_alloc_n(this->m_holder.alloc(), raw_beg, sz);
          this->m_holder.deallocate(this->m_holder.start(), this->m_holder.capacity());
       }
       this->m_holder.start(p);
@@ -1690,7 +1690,7 @@ class vector
                ( this->m_holder.alloc(), raw_beg, sz, container_detail::to_raw_pointer(ret.first) );
             if(this->m_holder.capacity()){
                if(!value_traits::trivial_dctr_after_move)
-            boost::container::destroy_alloc_n(this->m_holder.alloc(), raw_beg, sz);
+                  boost::container::destroy_alloc_n(this->m_holder.alloc(), raw_beg, sz);
                this->m_holder.deallocate(this->m_holder.start(), this->m_holder.capacity());
             }
             this->m_holder.start(ret.first);

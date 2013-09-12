@@ -720,6 +720,7 @@ use [*Boost.Container]? There are several reasons for that:
 *  Fixed bugs [@https://svn.boost.org/trac/boost/ticket/8269 #8269],
               [@https://svn.boost.org/trac/boost/ticket/8473 #8473],
               [@https://svn.boost.org/trac/boost/ticket/8892 #8892],
+              [@https://svn.boost.org/trac/boost/ticket/9009 #9009],
               [@https://svn.boost.org/trac/boost/ticket/9064 #9064],
               [@https://svn.boost.org/trac/boost/ticket/9092 #9092],
               [@https://svn.boost.org/trac/boost/ticket/9108 #9108].
