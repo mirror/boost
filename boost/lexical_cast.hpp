@@ -1446,7 +1446,7 @@ namespace boost {
             }
 
             template <class T, class SomeCharT>
-            bool shl_real_type(const T& val, SomeCharT* begin, SomeCharT*& end) {
+            bool shl_real_type(const T& val, SomeCharT* /*begin*/, SomeCharT*& /*end*/) {
                 lcast_set_precision(out_stream, &val);
                 return shl_input_streamable(val);
             }
