@@ -6,21 +6,29 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_SYNC_SEMAPHORE_SEMAPHORE_EMULATION_HPP
-#define BOOST_SYNC_SEMAPHORE_SEMAPHORE_EMULATION_HPP
+#ifndef BOOST_SYNC_DETAIL_GENERIC_SEMAPHORE_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_GENERIC_SEMAPHORE_HPP_INCLUDED_
 
 #include <boost/bind.hpp>
-#include <boost/noncopyable.hpp>
 
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
+
+#include <boost/sync/detail/config.hpp>
 
 #ifdef BOOST_SYNC_USES_CHRONO
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/chrono/ceil.hpp>
 #endif
 
+#include <boost/sync/detail/header.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
 namespace boost {
+
 namespace sync  {
 
 class semaphore
@@ -29,10 +37,9 @@ class semaphore
     BOOST_DELETED_FUNCTION(semaphore& operator=(semaphore const&))
 
 public:
-    semaphore(int i=0):
-      m_count(i)
+    explicit semaphore(unsigned int i = 0) :
+        m_count(i)
     {
-        BOOST_ASSERT_MSG(i >= 0, "boost::sync::semaphore constructor called with negative count");
     }
 
     void post(void)
@@ -87,7 +94,10 @@ private:
     boost::condition_variable m_cond;
 };
 
-}
-}
+} // namespace sync
 
-#endif // BOOST_SYNC_SEMAPHORE_SEMAPHORE_EMULATION_HPP
+} // namespace boost
+
+#include <boost/sync/detail/footer.hpp>
+
+#endif // BOOST_SYNC_DETAIL_GENERIC_SEMAPHORE_HPP_INCLUDED_

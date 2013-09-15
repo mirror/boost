@@ -18,6 +18,7 @@
 #define BOOST_SYNC_DETAIL_POSIX_MUTEXES_TIMED_MUTEX_HPP_INCLUDED_
 
 #include <time.h>
+#include <cstddef>
 #include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -110,14 +111,14 @@ public:
 #else // defined(PTHREAD_MUTEX_INITIALIZER)
     timed_mutex()
     {
-        int const res = pthread_mutex_init(&m_mutex, 0);
+        int const res = pthread_mutex_init(&m_mutex, NULL);
         if (res)
         {
             BOOST_THROW_EXCEPTION(resource_error(res, "boost:: timed_mutex constructor failed in pthread_mutex_init"));
         }
 
 #if !defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
-        int const res2 = pthread_cond_init(&m_cond, 0);
+        int const res2 = pthread_cond_init(&m_cond, NULL);
         if (res2)
         {
             BOOST_THROW_EXCEPTION(resource_error(res, "boost:: timed_mutex constructor failed in pthread_cond_init"));

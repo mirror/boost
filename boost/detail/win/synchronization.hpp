@@ -45,8 +45,9 @@ namespace win32
     using ::ResetEvent;
     using ::WaitForMultipleObjects;
     using ::WaitForSingleObject;
-            using ::QueueUserAPC;
+    using ::QueueUserAPC;
 
+    static const DWORD_ infinite       = INFINITE;
     static const DWORD_ wait_abandoned = WAIT_ABANDONED;
     static const DWORD_ wait_object_0  = WAIT_OBJECT_0;
     static const DWORD_ wait_timeout   = WAIT_TIMEOUT;
@@ -122,6 +123,7 @@ extern "C" {
     using ::SetEvent;
     using ::ResetEvent;
 
+    static const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
     static const DWORD_ wait_abandoned = 0x00000080L;
     static const DWORD_ wait_object_0  = 0x00000000L;
     static const DWORD_ wait_timeout   = 0x00000102L;

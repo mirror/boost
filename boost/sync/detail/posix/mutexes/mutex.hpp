@@ -17,6 +17,7 @@
 #ifndef BOOST_SYNC_DETAIL_POSIX_MUTEXES_MUTEX_HPP_INCLUDED_
 #define BOOST_SYNC_DETAIL_POSIX_MUTEXES_MUTEX_HPP_INCLUDED_
 
+#include <cstddef>
 #include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/sync/exceptions/lock_error.hpp>
@@ -62,7 +63,7 @@ public:
 #else // defined(PTHREAD_MUTEX_INITIALIZER)
     mutex()
     {
-        int const res = pthread_mutex_init(&m_mutex, 0);
+        int const res = pthread_mutex_init(&m_mutex, NULL);
         if (res)
         {
             BOOST_THROW_EXCEPTION(resource_error(res, "boost:: mutex constructor failed in pthread_mutex_init"));

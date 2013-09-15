@@ -6,8 +6,8 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_SYNC_SEMAPHORE_HPP
-#define BOOST_SYNC_SEMAPHORE_HPP
+#ifndef BOOST_SYNC_SEMAPHORE_HPP_INCLUDED_
+#define BOOST_SYNC_SEMAPHORE_HPP_INCLUDED_
 
 #ifdef BOOST_SYNC_DETAIL_DOXYGEN
 
@@ -23,7 +23,7 @@ public:
      * \b Throws: if an error occurs.
      *
      * */
-    semaphore(int initial_count = 0);
+    explicit semaphore(unsigned int initial_count = 0);
 
     /**
      * \b Precondition: No thread is waiting on the semaphore
@@ -74,10 +74,10 @@ public:
     bool try_wait_until(const TimePoint & timeout);
 };
 
+}
+}
 
-}}
-
-#else
+#else // BOOST_SYNC_DETAIL_DOXYGEN
 
 #include <boost/sync/detail/config.hpp>
 
@@ -85,26 +85,54 @@ public:
 #pragma once
 #endif
 
-#include <boost/sync/detail/header.hpp>
+#ifdef BOOST_HAS_UNISTD_H
+#include <unistd.h>
+
+#if (_POSIX_SEMAPHORES - 0) >= 200112L
+#define BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES
+#endif
+
+#endif // BOOST_HAS_UNISTD_H
+
+#if !defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES) && defined(__APPLE__)
+#include <Availability.h>
+
+// OSX
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
+#define BOOST_SYNC_DETAIL_USE_DISPATCH_SEMAPHORES
+#endif
+
+#endif // __MAC_OS_X_VERSION_MIN_REQUIRED
+
+// iOS
+#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
+
+// untested!
+#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0
+#define BOOST_SYNC_DETAIL_USE_DISPATCH_SEMAPHORES
+#endif
+
+#endif // __IPHONE_OS_VERSION_MIN_REQUIRED
+
+#endif // !defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES) && defined(__APPLE__)
 
 
-#if defined(BOOST_THREAD_PLATFORM_WIN32)
-#include <boost/sync/semaphore/semaphore_win32.hpp>
+#if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
+#include <boost/sync/detail/windows/semaphore.hpp>
 
-#elif defined(BOOST_THREAD_POSIX_SEMAPHORES)
-#include <boost/sync/semaphore/semaphore_posix.hpp>
+#elif defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES)
+#include <boost/sync/detail/posix/semaphore.hpp>
 
-#elif defined(BOOST_THREAD_DISPATCH_SEMAPHORES)
-#include <boost/sync/semaphore/semaphore_dispatch.hpp>
+#elif defined(BOOST_SYNC_DETAIL_USE_DISPATCH_SEMAPHORES)
+#include <boost/sync/detail/darwin/semaphore.hpp>
 
 #else
-
-#include <boost/sync/semaphore/semaphore_emulation.hpp>
-
-#endif
-
-#include <boost/sync/detail/footer.hpp>
+#include <boost/sync/detail/generic/semaphore.hpp>
 
 #endif
 
-#endif // BOOST_THREAD_SEMAPHORE_HPP
+#endif // BOOST_SYNC_DETAIL_DOXYGEN
+
+#endif // BOOST_SYNC_SEMAPHORE_HPP_INCLUDED_

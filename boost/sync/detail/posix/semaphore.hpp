@@ -7,21 +7,32 @@
 // http://www.boost.org/LICENSE_1_0.txt)
 
 
-#ifndef BOOST_SYNC_SEMAPHORE_SEMAPHORE_POSIX_HPP
-#define BOOST_SYNC_SEMAPHORE_SEMAPHORE_POSIX_HPP
+#ifndef BOOST_SYNC_DETAIL_POSIX_SEMAPHORE_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_POSIX_SEMAPHORE_HPP_INCLUDED_
 
 #include <semaphore.h>
 
 #include <boost/assert.hpp>
-#include <boost/thread/exceptions.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/sync/detail/config.hpp>
+#include <boost/sync/exceptions/resource_error.hpp>
 
 #ifdef BOOST_SYNC_USES_CHRONO
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/chrono/ceil.hpp>
 #endif
 
+#include <boost/sync/detail/header.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
 namespace boost {
+
 namespace sync  {
+
+BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
 class semaphore
 {
@@ -29,30 +40,26 @@ class semaphore
     BOOST_DELETED_FUNCTION(semaphore& operator=(semaphore const&))
 
 public:
-    semaphore(int i=0)
+    explicit semaphore(unsigned int i = 0)
     {
-        BOOST_ASSERT_MSG(i >= 0, "boost::sync::semaphore constructor called with negative count");
-
-        const int status = sem_init(&sem, 0, i);
+        const int status = sem_init(&m_sem, 0, i);
         if (status)
-            boost::throw_exception(thread_resource_error(status, "boost::sync::semaphore constructor failed in sem_init"));
+            BOOST_THROW_EXCEPTION(resource_error(status, "boost::sync::semaphore constructor failed in sem_init"));
     }
 
     ~semaphore()
     {
-        const int status = sem_destroy(&sem);
-        (void)status;
-        BOOST_ASSERT(!status);
+        BOOST_VERIFY(sem_destroy(&m_sem) == 0);
     }
 
     void post()
     {
-        const int status = sem_post(&sem);
+        const int status = sem_post(&m_sem);
 
         switch (status)
         {
         case EOVERFLOW:
-            boost::throw_exception(thread_resource_error(status, "boost::sync::semaphore post failed: Maximum allowable value would be exceeded"));
+            BOOST_THROW_EXCEPTION(resource_error(status, "boost::sync::semaphore post failed: Maximum allowable value would be exceeded"));
             break;
 
         case EINVAL:
@@ -67,7 +74,7 @@ public:
     {
         for (;;)
         {
-            const int status = sem_wait(&sem);
+            const int status = sem_wait(&m_sem);
             if (status == 0)
                 return;
 
@@ -87,7 +94,7 @@ public:
 
     bool try_wait(void)
     {
-        const int status = sem_trywait(&sem);
+        const int status = sem_trywait(&m_sem);
         if (status == 0)
             return true;
 
@@ -138,8 +145,9 @@ public:
 private:
     bool do_wait_lock_until(struct timespec const & timeout)
     {
-        for (;;) {
-            const int status = sem_timedwait(&sem, &timeout);
+        for (;;)
+        {
+            const int status = sem_timedwait(&m_sem, &timeout);
             if (status == 0)
                 return true;
 
@@ -163,10 +171,15 @@ private:
 #endif // BOOST_SYNC_USES_CHRONO
 
 private:
-    sem_t sem;
+    sem_t m_sem;
 };
 
-}
-}
+} // namespace posix
 
-#endif /* BOOST_SYNC_SEMAPHORE_SEMAPHORE_POSIX_HPP */
+} // namespace sync
+
+} // namespace boost
+
+#include <boost/sync/detail/footer.hpp>
+
+#endif // BOOST_SYNC_DETAIL_POSIX_SEMAPHORE_HPP_INCLUDED_

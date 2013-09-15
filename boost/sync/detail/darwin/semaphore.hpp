@@ -6,19 +6,30 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_SYNC_SEMAPHORE_SEMAPHORE_DISPATCH_HPP
-#define BOOST_SYNC_SEMAPHORE_SEMAPHORE_DISPATCH_HPP
+#ifndef BOOST_SYNC_DETAIL_DARWIN_SEMAPHORE_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_DARWIN_SEMAPHORE_HPP_INCLUDED_
 
+#include <cstddef>
 #include <dispatch/dispatch.h>
 
-#include <boost/thread/exceptions.hpp>
+#include <boost/throw_exception.hpp>
+#include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/system_error.hpp>
+#include <boost/sync/exceptions/resource_error.hpp>
 
 #ifdef BOOST_SYNC_USES_CHRONO
 #include <boost/chrono/system_clocks.hpp>
 #include <boost/chrono/ceil.hpp>
 #endif
 
+#include <boost/sync/detail/header.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
 namespace boost {
+
 namespace sync  {
 
 class semaphore
@@ -27,32 +38,31 @@ class semaphore
     BOOST_DELETED_FUNCTION(semaphore& operator=(semaphore const&))
 
 public:
-    semaphore(int i=0)
+    explicit semaphore(unsigned int i = 0)
     {
-        BOOST_ASSERT_MSG(i >= 0, "boost::sync::semaphore constructor called with negative count");
-        sem = dispatch_semaphore_create(i);
-        if (sem == NULL)
-            boost::throw_exception(thread_resource_error(system::errc::not_enough_memory, "boost::sync::semaphore constructor failed in dispatch_semaphore_create"));
+        m_sem = dispatch_semaphore_create(i);
+        if (m_sem == NULL)
+            BOOST_THROW_EXCEPTION(resource_error(sync::detail::system_namespace::errc::not_enough_memory, "boost::sync::semaphore constructor failed in dispatch_semaphore_create"));
     }
 
     ~semaphore()
     {
-        dispatch_release(sem);
+        dispatch_release(m_sem);
     }
 
     void post()
     {
-        dispatch_semaphore_signal(sem);
+        dispatch_semaphore_signal(m_sem);
     }
 
     void wait()
     {
-        dispatch_semaphore_wait(sem, DISPATCH_TIME_FOREVER);
+        dispatch_semaphore_wait(m_sem, DISPATCH_TIME_FOREVER);
     }
 
     bool try_wait(void)
     {
-        const long status = dispatch_semaphore_wait(sem, DISPATCH_TIME_NOW);
+        const long status = dispatch_semaphore_wait(m_sem, DISPATCH_TIME_NOW);
         return status == 0;
     }
 
@@ -90,17 +100,20 @@ public:
 private:
     bool do_wait_lock_until(const dispatch_time_t timeout)
     {
-        const long status = dispatch_semaphore_wait(sem, timeout);
+        const long status = dispatch_semaphore_wait(m_sem, timeout);
         return status == 0;
     }
 
 #endif // BOOST_SYNC_USES_CHRONO
 
 private:
-    dispatch_semaphore_t sem;
+    dispatch_semaphore_t m_sem;
 };
 
-}
-}
+} // namespace sync
 
-#endif // BOOST_SYNC_SEMAPHORE_SEMAPHORE_DISPATCH_HPP
+} // namespace boost
+
+#include <boost/sync/detail/footer.hpp>
+
+#endif // BOOST_SYNC_DETAIL_DARWIN_SEMAPHORE_HPP_INCLUDED_
