@@ -42,6 +42,7 @@ namespace date_time {
    * either (haven't tried) */
   {
   public:
+    typedef void _is_boost_date_time_duration;
     typedef T duration_type;  //the subclass
     typedef rep_type traits_type;
     typedef typename rep_type::day_type  day_type;
