@@ -16,6 +16,7 @@ namespace sync  {
 
 class semaphore
 {
+public:
     /**
      * \b Effects: Constructs a semaphore object. The semaphore is initialized to `initial_count`, which is expected to be non-negative.
      *
@@ -31,6 +32,9 @@ class semaphore
      *
      * */
     ~semaphore();
+
+    semaphore(semaphore const&) = delete;
+    semaphore& operator= (semaphore const&) = delete;
 
     /**
      * \b Effects: Increments the semaphore count. If a thread is waiting for this semaphore, it will be unblocked.
