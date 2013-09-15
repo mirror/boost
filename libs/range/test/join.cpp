@@ -135,7 +135,11 @@ namespace boost
         {
             Collection1 c1(rng1);
             Collection2 c2(rng2);
-            typedef typename boost::range_value<Collection1>::type value_t;
+            
+            typedef BOOST_DEDUCED_TYPENAME boost::range_value<
+                Collection1
+            >::type value_t BOOST_RANGE_UNUSED;
+            
             fill_with_ints(boost::join(c1,c2));
 
             // Ensure that the size of the written range has not been
