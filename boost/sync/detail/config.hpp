@@ -40,48 +40,11 @@
 #define BOOST_SYNC_DETAIL_PLATFORM_PTHREAD
 #endif
 
-
-#ifdef BOOST_HAS_UNISTD_H
-#include <unistd.h>
-
-#if (_POSIX_SEMAPHORES - 0) >= 200112L
-#define BOOST_SYNC_POSIX_SEMAPHORES
-#endif
-
-#endif // BOOST_HAS_UNISTD_H
-
-#if defined(__APPLE__)
-#include <Availability.h>
-
-// OSX
-#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
-
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
-#define BOOST_SYNC_DISPATCH_SEMAPHORES
-#endif
-
-#endif // __MAC_OS_X_VERSION_MIN_REQUIRED
-
-// iOS
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-
-// untested!
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0
-#define BOOST_SYNC_DISPATCH_SEMAPHORES
-#endif
-
-#endif // __IPHONE_OS_VERSION_MIN_REQUIRED
-
-#endif // __APPLE__
-
-
 #if ! defined BOOST_SYNC_DONT_USE_CHRONO \
   && ! defined BOOST_SYNC_USES_CHRONO
 #define BOOST_SYNC_USES_CHRONO
 #endif
 
 #define BOOST_SYNC_USES_CHRONO
-
-
 
 #endif // BOOST_SYNC_DETAIL_CONFIG_HPP_INCLUDED_
