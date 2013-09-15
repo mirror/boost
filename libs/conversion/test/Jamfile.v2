@@ -40,7 +40,7 @@ test-suite conversion
     [ run lexical_cast_wchars_test.cpp ]
     [ run lexical_cast_float_types_test.cpp ]
     [ run lexical_cast_inf_nan_test.cpp ]
-    [ run lexical_cast_containers_test.cpp ]
+    [ run lexical_cast_containers_test.cpp : : : <toolset>gcc:<cxxflags>-Wno-long-long <toolset>clang:<cxxflags>-Wno-long-long ]
     [ run lexical_cast_empty_input_test.cpp ]
     [ run lexical_cast_pointers_test.cpp ]
     [ compile lexical_cast_typedefed_wchar_test.cpp : <toolset>msvc:<nowchar>on ]
