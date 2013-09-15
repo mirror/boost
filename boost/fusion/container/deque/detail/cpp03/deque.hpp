@@ -12,11 +12,11 @@
 #error "C++03 only! This file should not have been included"
 #endif
 
-#include <boost/fusion/container/deque/limits.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/limits.hpp>
 #include <boost/fusion/container/deque/front_extended_deque.hpp>
 #include <boost/fusion/container/deque/back_extended_deque.hpp>
-#include <boost/fusion/container/deque/detail/pp_deque_keyed_values.hpp>
-#include <boost/fusion/container/deque/detail/deque_initial_size.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/deque_keyed_values.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/deque_initial_size.hpp>
 #include <boost/fusion/support/sequence_base.hpp>
 #include <boost/fusion/container/deque/detail/keyed_element.hpp>
 #include <boost/preprocessor/repetition/enum_params.hpp>
@@ -40,10 +40,10 @@
 #include <boost/utility/enable_if.hpp>
 
 #if !defined(BOOST_FUSION_DONT_USE_PREPROCESSED_FILES)
-#include <boost/fusion/container/deque/detail/preprocessed/deque.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/preprocessed/deque.hpp>
 #else
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)
-#pragma wave option(preserve: 2, line: 0, output: "detail/preprocessed/deque" FUSION_MAX_DEQUE_SIZE_STR ".hpp")
+#pragma wave option(preserve: 2, line: 0, output: "preprocessed/deque" FUSION_MAX_DEQUE_SIZE_STR ".hpp")
 #endif
 
 /*=============================================================================
@@ -78,7 +78,7 @@ namespace boost { namespace fusion {
             mpl::if_<mpl::equal_to<size, mpl::int_<0> >, mpl::int_<0>, mpl::int_<-1> >::type::value> next_down;
         typedef mpl::false_ is_view;
 
-#include <boost/fusion/container/deque/detail/deque_forward_ctor.hpp>
+#include <boost/fusion/container/deque/detail/cpp03/deque_forward_ctor.hpp>
 
         deque()
             {}
@@ -91,9 +91,12 @@ namespace boost { namespace fusion {
             : base(rhs)
             {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
-        explicit deque(T0&& t0)
-            : base(std::forward<T0>(t0), detail::nil_keyed_element())
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+        template <typename T0_>
+        explicit deque(T0_&& t0
+          , typename enable_if<is_convertible<T0_, T0> >::type* /*dummy*/ = 0
+         )
+            : base(std::forward<T0_>(t0), detail::nil_keyed_element())
             {}
 
         explicit deque(deque&& rhs)
@@ -106,7 +109,7 @@ namespace boost { namespace fusion {
             : base(seq)
             {}
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, typename U)>
         deque(deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)>&& seq)
             : base(std::forward<deque<BOOST_PP_ENUM_PARAMS(FUSION_MAX_DEQUE_SIZE, U)>>(seq))
@@ -134,7 +137,7 @@ namespace boost { namespace fusion {
             return *this;
         }
 
-#if !defined(BOOST_NO_RVALUE_REFERENCES)
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
         template <typename T>
         deque&
         operator=(T&& rhs)
@@ -145,6 +148,28 @@ namespace boost { namespace fusion {
 #endif
 
     };
+
+    template <>
+    struct deque<> : detail::nil_keyed_element
+    {
+        typedef deque_tag fusion_tag;
+        typedef bidirectional_traversal_tag category;
+        typedef mpl::int_<0> size;
+        typedef mpl::int_<0> next_up;
+        typedef mpl::int_<0> next_down;
+        typedef mpl::false_ is_view;
+
+        template <typename Sequence>
+        deque(Sequence const&,
+            typename enable_if<
+                mpl::and_<
+                    traits::is_sequence<Sequence>
+                  , result_of::empty<Sequence> > >::type* /*dummy*/ = 0)
+        {}
+
+        deque() {}
+    };
+
 }}
 
 #if defined(__WAVE__) && defined(BOOST_FUSION_CREATE_PREPROCESSED_FILES)

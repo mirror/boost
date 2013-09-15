@@ -19,10 +19,10 @@
 #include <boost/preprocessor/repetition/enum_binary_params.hpp>
 
 #define FUSION_DEQUE_KEYED_VALUES_FORWARD(z, n, _)    \
-   std::forward<BOOST_PP_CAT(T, n)>(BOOST_PP_CAT(t, n))
+   std::forward<BOOST_PP_CAT(T_, n)>(BOOST_PP_CAT(t, n))
 
 #define BOOST_PP_FILENAME_1 \
-    <boost/fusion/container/deque/detail/deque_keyed_values_call.hpp>
+    <boost/fusion/container/deque/detail/cpp03/deque_keyed_values_call.hpp>
 #define BOOST_PP_ITERATION_LIMITS (1, FUSION_MAX_DEQUE_SIZE)
 #include BOOST_PP_ITERATE()
 
@@ -40,19 +40,22 @@
         #if N > 1
                         , BOOST_PP_ENUM_SHIFTED_PARAMS(N, T)
         #endif
-                        >::call(BOOST_PP_ENUM_SHIFTED_PARAMS(N, t)));
+                        >::construct(BOOST_PP_ENUM_SHIFTED_PARAMS(N, t)));
         }
 
-        static type forward_(BOOST_PP_ENUM_BINARY_PARAMS(N, T, && t))
+#if !defined(BOOST_NO_CXX11_RVALUE_REFERENCES)
+        template <BOOST_PP_ENUM_PARAMS(N, typename T_)>
+        static type forward_(BOOST_PP_ENUM_BINARY_PARAMS(N, T_, && t))
         {
-            return type(std::forward<T0>(t0),
+            return type(std::forward<T_0>(t0),
                         deque_keyed_values_impl<
                         next_index
         #if N > 1
-                        , BOOST_PP_ENUM_SHIFTED_PARAMS(N, T)
+                        , BOOST_PP_ENUM_SHIFTED_PARAMS(N, T_)
         #endif
                         >::forward_(BOOST_PP_ENUM_SHIFTED(N, FUSION_DEQUE_KEYED_VALUES_FORWARD, _)));
         }
+#endif
 
 #undef N
 #endif
