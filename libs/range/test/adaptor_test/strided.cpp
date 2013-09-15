@@ -13,6 +13,7 @@
 //
 #include <boost/range/adaptor/strided.hpp>
 
+#include <boost/config.hpp>
 #include <boost/test/test_tools.hpp>
 #include <boost/test/unit_test.hpp>
 
@@ -42,9 +43,12 @@ namespace boost
             Container reference;
 
             {
-                typedef BOOST_DEDUCED_TYPENAME Container::const_iterator iterator_t;
-                typedef BOOST_DEDUCED_TYPENAME Container::difference_type diff_t;
-                typedef BOOST_DEDUCED_TYPENAME Container::size_type size_type;
+                typedef BOOST_DEDUCED_TYPENAME Container::const_iterator
+                            iterator_t BOOST_RANGE_UNUSED;
+                typedef BOOST_DEDUCED_TYPENAME Container::difference_type
+                            diff_t BOOST_RANGE_UNUSED;
+                typedef BOOST_DEDUCED_TYPENAME Container::size_type
+                            size_type BOOST_RANGE_UNUSED;
                 iterator_t it = c.begin();
 
                 iterator_t last = c.end();
