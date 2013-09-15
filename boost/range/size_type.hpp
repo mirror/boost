@@ -17,6 +17,7 @@
 
 #include <boost/range/config.hpp>
 #include <boost/range/difference_type.hpp>
+#include <boost/range/concepts.hpp>
 #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #include <boost/range/detail/size_type.hpp>
 #else
@@ -45,8 +46,8 @@ namespace boost
             template<typename C>
             static yes_type test(BOOST_DEDUCED_TYPENAME C::size_type x);
 
-            template<typename C, typename Arg>
-            static no_type test(Arg x);
+            template<typename C>
+            static no_type test(...);
 
         public:
             static const bool value = sizeof(test<T>(0)) == sizeof(yes_type);
@@ -74,12 +75,16 @@ namespace boost
     template< class T >
     struct range_size :
         detail::range_size<T>
-    { };
+    {
+        BOOST_RANGE_CONCEPT_ASSERT((boost::SinglePassRangeConcept<T>));
+    };
 
     template< class T >
     struct range_size<const T >
         : detail::range_size<T>
-    { };
+    {
+        BOOST_RANGE_CONCEPT_ASSERT((boost::SinglePassRangeConcept<T>));
+    };
 
 } // namespace boost
 
