@@ -94,7 +94,7 @@ public:
 
 #endif // BOOST_HAS_UNISTD_H
 
-#if !defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES) && defined(__APPLE__)
+#if !defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES) && (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
 #include <Availability.h>
 
 // OSX
