@@ -429,12 +429,16 @@ struct sqrt2_pow_max<SizeType, typename enable_if< numbits_eq<SizeType, 32> >::t
    static const std::size_t pow   = 31;
 };
 
+#ifndef BOOST_NO_INT64_T
+
 template <class SizeType>
 struct sqrt2_pow_max<SizeType, typename enable_if< numbits_eq<SizeType, 64> >::type>
 {
    static const boost::uint64_t value = 0xb504f333f9de6484ull;
    static const std::size_t pow   = 63;
 };
+
+#endif   //BOOST_NO_INT64_T
 
 // Returns floor(pow(sqrt(2), x * 2 + 1)).
 // Defined for X from 0 up to the number of bits in size_t minus 1.
