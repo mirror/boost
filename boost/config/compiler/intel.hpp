@@ -47,11 +47,6 @@
 #  define BOOST_INTEL_LINUX BOOST_INTEL
 #endif
 
-#if (BOOST_INTEL_CXX_VERSION <= 500) && defined(_MSC_VER)
-#  define BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
-#  define BOOST_NO_TEMPLATE_TEMPLATES
-#endif
-
 #if (BOOST_INTEL_CXX_VERSION <= 600)
 
 #  if defined(_MSC_VER) && (_MSC_VER <= 1300) // added check for <= VC 7 (Peter Dimov)
@@ -164,8 +159,8 @@ template<> struct assert_intrinsic_wchar_t<unsigned short> {};
 
 //
 // versions check:
-// we don't support Intel prior to version 5.0:
-#if BOOST_INTEL_CXX_VERSION < 500
+// we don't support Intel prior to version 6.0:
+#if BOOST_INTEL_CXX_VERSION < 600
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 
