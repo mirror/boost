@@ -76,14 +76,22 @@ namespace boost
     struct range_size :
         detail::range_size<T>
     {
+// Very strange things happen on some compilers that have the range concept
+// asserts disabled. This preprocessor condition is clearly redundant on a
+// working compiler but is vital for at least some compilers such as clang 4.2
+// but only on the Mac!
+#if BOOST_RANGE_ENABLE_CONCEPT_ASSERT == 1
         BOOST_RANGE_CONCEPT_ASSERT((boost::SinglePassRangeConcept<T>));
+#endif
     };
 
     template< class T >
     struct range_size<const T >
         : detail::range_size<T>
     {
+#if BOOST_RANGE_ENABLE_CONCEPT_ASSERT == 1        
         BOOST_RANGE_CONCEPT_ASSERT((boost::SinglePassRangeConcept<T>));
+#endif
     };
 
 } // namespace boost
