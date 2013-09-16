@@ -753,7 +753,7 @@ class slist
    //!   previous values.
    iterator insert_after(const_iterator prev_pos, T &&x);
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert_after, T, iterator, priv_insert_after, const_iterator)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert_after, T, iterator, priv_insert_after, const_iterator, const_iterator)
    #endif
 
    //! <b>Requires</b>: prev_pos must be a valid iterator of *this.
@@ -1266,7 +1266,7 @@ class slist
    //! <b>Complexity</b>: Linear to the elements before p.
    iterator insert(const_iterator prev_pos, T &&x);
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, T, iterator, priv_insert, const_iterator)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, T, iterator, priv_insert, const_iterator, const_iterator)
    #endif
 
    //! <b>Requires</b>: p must be a valid iterator of *this.

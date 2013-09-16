@@ -457,7 +457,7 @@ class set
    //! <b>Complexity</b>: Logarithmic.
    iterator insert(const_iterator position, value_type &&x);
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, value_type, iterator, this->priv_insert, const_iterator)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, value_type, iterator, this->priv_insert, const_iterator, const_iterator)
    #endif
 
    //! <b>Requires</b>: first, last are not iterators into *this.
@@ -1077,7 +1077,7 @@ class multiset
    //!   is inserted right before p.
    iterator insert(const_iterator position, value_type &&x);
    #else
-   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, value_type, iterator, this->priv_insert, const_iterator)
+   BOOST_MOVE_CONVERSION_AWARE_CATCH_1ARG(insert, value_type, iterator, this->priv_insert, const_iterator, const_iterator)
    #endif
 
    //! <b>Requires</b>: first, last are not iterators into *this.
