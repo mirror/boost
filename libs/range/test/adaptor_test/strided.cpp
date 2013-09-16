@@ -132,6 +132,7 @@ namespace boost
 
             typedef boost::strided_range<Container> strided_range_t;
             strided_range_t rng( boost::adaptors::stride(c, 0) );
+            boost::ignore_unused_variable_warning(rng);
             typedef BOOST_DEDUCED_TYPENAME boost::range_iterator<strided_range_t>::type iter_t;
 
             iter_t first(boost::begin(c), boost::begin(c), boost::end(c), 0);

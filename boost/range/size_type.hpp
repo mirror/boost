@@ -76,14 +76,14 @@ namespace boost
     struct range_size :
         detail::range_size<T>
     {
-        BOOST_RANGE_CONCEPT_ASSERT((boost::SinglePassRangeConcept<T>));
+        BOOST_RANGE_CONCEPT_ASSERT((boost::SinglePassRangeConcept<T>))
     };
 
     template< class T >
     struct range_size<const T >
         : detail::range_size<T>
     {
-        BOOST_RANGE_CONCEPT_ASSERT((boost::SinglePassRangeConcept<T>));
+        BOOST_RANGE_CONCEPT_ASSERT((boost::SinglePassRangeConcept<T>))
     };
 
 } // namespace boost

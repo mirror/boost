@@ -184,8 +184,8 @@ namespace boost_range_extension_size_test
 
 BOOST_STATIC_ASSERT((
     boost::is_same<
-        typename boost::make_unsigned<std::ptrdiff_t>::type,
-        typename boost::range_size<
+        boost::make_unsigned<std::ptrdiff_t>::type,
+        boost::range_size<
                     boost_range_extension_size_test::FooWithoutSize>::type
     >::value
 ));
