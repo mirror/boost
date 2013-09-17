@@ -43,8 +43,9 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 
-/// Visual Studio has no fenv.h
-#define BOOST_NO_FENV_H
+#if _MSC_VER < 1800
+#  define BOOST_NO_FENV_H
+#endif
 
 #if _MSC_VER < 1400
 // although a conforming signature for swprint exists in VC7.1
@@ -160,24 +161,25 @@
 #  define BOOST_HAS_STDINT_H
 #endif
 
-// C++ features supported by VC++ 11 (aka 2012)
+// C++11 features supported by VC++ 11 (aka 2012)
 //
 #if _MSC_VER < 1700
 #  define BOOST_NO_CXX11_RANGE_BASED_FOR
 #  define BOOST_NO_CXX11_SCOPED_ENUMS
 #endif // _MSC_VER < 1700
 
-// C++11 features supported by VC++ 11 (aka 2012) November 2012 CTP
-// Because the CTP is unsupported, unrelease, and only alpha quality,
-// it is only supported if BOOST_MSVC_ENABLE_2012_NOV_CTP is defined.
+// C++11 features supported by VC++ 12 (aka 2013).
 //
-#if _MSC_FULL_VER < 170051025 || !defined(BOOST_MSVC_ENABLE_2012_NOV_CTP)
+#if _MSC_VER < 1800
+#  define BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
+#  define BOOST_NO_CXX11_DELETED_FUNCTIONS
 #  define BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
 #  define BOOST_NO_CXX11_FUNCTION_TEMPLATE_DEFAULT_ARGS
 #  define BOOST_NO_CXX11_RAW_LITERALS
-#  define BOOST_NO_CXX11_VARIADIC_TEMPLATES
-#  define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
+#  define BOOST_NO_CXX11_TEMPLATE_ALIASES
 #  define BOOST_NO_CXX11_TRAILING_RESULT_TYPES
+#  define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
+#  define BOOST_NO_CXX11_VARIADIC_TEMPLATES
 #endif
 
 // C++11 features not supported by any versions
@@ -185,10 +187,7 @@
 #define BOOST_NO_CXX11_CHAR32_T
 #define BOOST_NO_CXX11_CONSTEXPR
 #define BOOST_NO_CXX11_DECLTYPE_N3276
-#define BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
-#define BOOST_NO_CXX11_DELETED_FUNCTIONS
 #define BOOST_NO_CXX11_NOEXCEPT
-#define BOOST_NO_CXX11_TEMPLATE_ALIASES
 #define BOOST_NO_CXX11_UNICODE_LITERALS
 #define BOOST_NO_SFINAE_EXPR
 #define BOOST_NO_TWO_PHASE_NAME_LOOKUP
@@ -265,8 +264,8 @@
 #endif
 
 //
-// last known and checked version is 1800.20617 (VC12 Preview, aka 2013 Preview):
-#if (_MSC_VER > 1800 && _MSC_FULL_VER > 180020617)
+// last known and checked version is 18.00.20827.3 (VC12 RC, aka 2013 RC):
+#if (_MSC_VER > 1800 && _MSC_FULL_VER > 180020827)
 #  if defined(BOOST_ASSERT_CONFIG)
 #     error "Unknown compiler version - please run the configure tests and report the results"
 #  else
