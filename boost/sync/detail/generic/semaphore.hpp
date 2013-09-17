@@ -27,8 +27,9 @@
 #pragma once
 #endif
 
-namespace boost {
+#define BOOST_SYNC_SEMAPHORE_EMULATED
 
+namespace boost {
 namespace sync  {
 
 class semaphore
