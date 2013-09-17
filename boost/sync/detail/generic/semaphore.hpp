@@ -30,7 +30,10 @@
 #define BOOST_SYNC_SEMAPHORE_EMULATED
 
 namespace boost {
+
 namespace sync  {
+
+BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
 class semaphore
 {
@@ -94,6 +97,8 @@ private:
     boost::mutex m_mutex;
     boost::condition_variable m_cond;
 };
+
+} // namespace
 
 } // namespace sync
 

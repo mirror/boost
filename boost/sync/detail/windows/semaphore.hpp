@@ -27,6 +27,8 @@ namespace boost {
 
 namespace sync {
 
+BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
+
 class semaphore
 {
     BOOST_DELETED_FUNCTION(semaphore(semaphore const&))
@@ -93,8 +95,7 @@ public:
     template <class Rep, class Period>
     bool try_wait_for(const chrono::duration<Rep, Period> & rel_time)
     {
-        BOOST_AUTO ( milliseconds, (DWORD_)chrono::duration_cast<chrono::milliseconds>( rel_time ) );
-        return do_try_wait_for( milliseconds.count() );
+        return do_try_wait_for(static_cast< DWORD_ >(chrono::duration_cast<chrono::milliseconds>( rel_time ).count()));
     }
 
     template <class Clock, class Duration>
@@ -132,6 +133,8 @@ private:
 
     HANDLE_ m_sem;
 };
+
+} // namespace winnt
 
 } // namespace sync
 

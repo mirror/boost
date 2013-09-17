@@ -9,16 +9,22 @@
 #ifndef BOOST_SYNC_EVENT_DETAIL_WINDOWS_EVENT_HPP
 #define BOOST_SYNC_EVENT_DETAIL_WINDOWS_EVENT_HPP
 
+#include <cstddef>
+#include <boost/assert.hpp>
+#include <boost/throw_exception.hpp>
 #include <boost/detail/win/GetLastError.hpp>
 #include <boost/detail/win/synchronization.hpp>
 #include <boost/detail/win/handles.hpp>
 
+#include <boost/sync/detail/config.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
-
-#include <boost/typeof/typeof.hpp>
+#include <boost/sync/detail/header.hpp>
 
 namespace boost {
+
 namespace sync {
+
+BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
 class event
 {
@@ -27,13 +33,17 @@ class event
 
     typedef boost::detail::win32::HANDLE_ HANDLE_;
     typedef boost::detail::win32::BOOL_   BOOL_;
+    typedef boost::detail::win32::DWORD_  DWORD_;
 
 public:
-    event(bool auto_reset = false)
+    explicit event(bool auto_reset = false)
     {
         handle_ = boost::detail::win32::CreateEventA(NULL, !auto_reset, 0, NULL);
         if (!handle_)
-            boost::throw_exception(thread_resource_error(boost::detail::win32::GetLastError(), "boost::sync::event constructor failed in CreateEvent"));
+        {
+            const DWORD_ err = boost::detail::win32::GetLastError();
+            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event constructor failed in CreateEvent"));
+        }
     }
 
     ~event()
@@ -45,14 +55,20 @@ public:
     {
         const BOOL_ status = boost::detail::win32::SetEvent(handle_);
         if (status == 0)
-            boost::throw_exception(thread_resource_error(boost::detail::win32::GetLastError(), "boost::sync::event::post failed in ReleaseEvent"));
+        {
+            const DWORD_ err = boost::detail::win32::GetLastError();
+            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::post failed in ReleaseEvent"));
+        }
     }
 
     void reset()
     {
         const BOOL_ status = boost::detail::win32::ResetEvent(handle_);
         if (status == 0)
-            boost::throw_exception(thread_resource_error(boost::detail::win32::GetLastError(), "boost::sync::event::reset failed in ResetEvent"));
+        {
+            const DWORD_ err = boost::detail::win32::GetLastError();
+            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::reset failed in ResetEvent"));
+        }
     }
 
     bool wait()
@@ -61,11 +77,14 @@ public:
 
         switch ( WaitForSingleObject(handle_, infinite) )
         {
-        case WAIT_OBJECT_0:
+        case wait_object_0:
             return true;
 
-        case WAIT_FAILED:
-            boost::throw_exception(thread_resource_error(boost::detail::win32::GetLastError(), "boost::sync::event::wait failed in WaitForSingleObject"));
+        case wait_failed:
+            {
+                const DWORD_ err = boost::detail::win32::GetLastError();
+                BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::wait failed in WaitForSingleObject"));
+            }
 
         default:
             BOOST_ASSERT(false);
@@ -75,14 +94,13 @@ public:
 
     bool try_wait()
     {
-        return do_try_wait_for( 0L );
+        return do_try_wait_for( 0 );
     }
 
     template <class Rep, class Period>
     bool try_wait_for(const chrono::duration<Rep, Period> & rel_time)
     {
-        BOOST_AUTO ( milliseconds, (DWORD_)chrono::duration_cast<chrono::milliseconds>( rel_time ) );
-        return do_try_wait_for( milliseconds.count() );
+        return do_try_wait_for(static_cast< DWORD_ >(chrono::duration_cast<chrono::milliseconds>( rel_time ).count()));
     }
 
     template <class Clock, class Duration>
@@ -93,20 +111,23 @@ public:
     }
 
 private:
-    bool do_try_wait_for( long milliseconds )
+    bool do_try_wait_for( DWORD_ milliseconds )
     {
         using namespace boost::detail::win32;
 
         switch ( WaitForSingleObject(handle_, milliseconds) )
         {
-        case WAIT_OBJECT_0:
+        case wait_object_0:
             return true;
 
-        case WAIT_TIMEOUT:
+        case wait_timeout:
             return false;
 
-        case WAIT_FAILED:
-            boost::throw_exception(thread_resource_error(boost::detail::win32::GetLastError(), "boost::sync::event::do_try_wait_for failed in WaitForSingleObject"));
+        case wait_failed:
+            {
+                const DWORD_ err = boost::detail::win32::GetLastError();
+                BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::do_try_wait_for failed in WaitForSingleObject"));
+            }
 
         default:
             BOOST_ASSERT(false);
@@ -119,5 +140,8 @@ private:
 
 }
 }
+}
+
+#include <boost/sync/detail/footer.hpp>
 
 #endif // BOOST_SYNC_EVENT_DETAIL_WINDOWS_EVENT_HPP

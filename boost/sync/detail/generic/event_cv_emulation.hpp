@@ -12,10 +12,14 @@
 #include <boost/thread/condition_variable.hpp>
 #include <boost/thread/mutex.hpp>
 
+#include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/header.hpp>
+
 #define BOOST_SYNC_EVENT_EMULATED
 
 namespace boost {
 namespace sync {
+BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
 class event
 {
@@ -23,7 +27,7 @@ class event
     BOOST_DELETED_FUNCTION(event& operator=(event const&));
 
 public:
-    event(bool auto_reset = false):
+    explicit event(bool auto_reset = false):
         auto_reset_(auto_reset), set_(false)
     {}
 
@@ -111,5 +115,8 @@ private:
 
 }
 }
+}
+
+#include <boost/sync/detail/footer.hpp>
 
 #endif // BOOST_SYNC_DETAIL_GENERIC_EVENT_CV_EMULATION_HPP

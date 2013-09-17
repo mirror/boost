@@ -32,6 +32,8 @@ namespace boost {
 
 namespace sync  {
 
+BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
+
 class semaphore
 {
     BOOST_DELETED_FUNCTION(semaphore(semaphore const&))
@@ -109,6 +111,8 @@ private:
 private:
     dispatch_semaphore_t m_sem;
 };
+
+} // namespace posix
 
 } // namespace sync
 

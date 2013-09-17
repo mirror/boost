@@ -35,32 +35,9 @@
 #endif
 #endif
 
-// ABI namespace name
-#define BOOST_SYNC_DETAIL_ABI_NAMESPACE posix
-
-#if !defined(BOOST_NO_CXX11_INLINE_NAMESPACES)
-#define BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE inline namespace BOOST_SYNC_DETAIL_ABI_NAMESPACE
-#else
-#define BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE namespace BOOST_SYNC_DETAIL_ABI_NAMESPACE
-#endif // !defined(BOOST_NO_CXX11_INLINE_NAMESPACES)
-
 namespace boost {
 
 namespace sync {
-
-#if defined(BOOST_NO_CXX11_INLINE_NAMESPACES)
-
-// Emulate inline namespace with a using directive
-
-BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {}
-
-using namespace BOOST_SYNC_DETAIL_ABI_NAMESPACE
-#if defined(__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
-__attribute__((__strong__))
-#endif
-;
-
-#endif // defined(BOOST_NO_CXX11_INLINE_NAMESPACES)
 
 namespace detail {
 

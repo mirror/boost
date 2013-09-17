@@ -20,7 +20,10 @@ public:
      *
      * \b Throws: if an error occurs.
      */
-    event(bool auto_reset = false);
+    explicit event(bool auto_reset = false);
+
+    event(event const&) = delete;
+    event& operator= (event const&) = delete;
 
     /**
      * \b Effects: Destroys the event object.
@@ -94,9 +97,6 @@ public:
 #pragma once
 #endif
 
-#include <boost/sync/detail/header.hpp>
-
-
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
 #include <boost/sync/detail/windows/event.hpp>
 
@@ -111,8 +111,6 @@ public:
 #include <boost/sync/detail/generic/event_cv_emulation.hpp>
 
 #endif
-
-#include <boost/sync/detail/footer.hpp>
 
 #endif // BOOST_SYNC_DETAIL_DOXYGEN
 
