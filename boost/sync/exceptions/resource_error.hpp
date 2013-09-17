@@ -28,7 +28,7 @@ namespace boost {
 
 namespace sync {
 
-class BOOST_VISIBLE_SYMBOL resource_error :
+class BOOST_SYMBOL_VISIBLE resource_error :
     public runtime_exception
 {
 public:

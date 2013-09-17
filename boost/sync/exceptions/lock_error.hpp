@@ -28,7 +28,7 @@ namespace boost {
 
 namespace sync {
 
-class BOOST_VISIBLE_SYMBOL lock_error :
+class BOOST_SYMBOL_VISIBLE lock_error :
     public runtime_exception
 {
 public:

@@ -27,7 +27,7 @@ namespace boost {
 
 namespace sync {
 
-class BOOST_VISIBLE_SYMBOL runtime_exception :
+class BOOST_SYMBOL_VISIBLE runtime_exception :
     public sync::detail::system_namespace::system_error
 {
 public:
