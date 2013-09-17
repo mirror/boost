@@ -41,6 +41,9 @@
 #define BOOST_HAS_THREADS
 #define BOOST_HAS_NRVO
 #define BOOST_HAS_LONG_LONG
+#if defined(linux) || defined(__linux) || defined(__linux__)
+#  define BOOST_HAS_STDINT_H
+#endif
 
 // options --enable-test wants undefined
 #undef BOOST_NO_STDC_NAMESPACE
