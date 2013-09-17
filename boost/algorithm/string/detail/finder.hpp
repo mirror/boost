@@ -15,7 +15,7 @@
 #include <boost/algorithm/string/constants.hpp>
 #include <boost/detail/iterator.hpp>
 
-#include <boost/range/iterator_range.hpp>
+#include <boost/range/iterator_range_core.hpp>
 #include <boost/range/begin.hpp>
 #include <boost/range/end.hpp>
 #include <boost/range/empty.hpp>
