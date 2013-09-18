@@ -47,11 +47,14 @@ namespace win32
     using ::WaitForSingleObject;
     using ::QueueUserAPC;
 
-    static const DWORD_ infinite       = INFINITE;
-    static const DWORD_ wait_abandoned = WAIT_ABANDONED;
-    static const DWORD_ wait_object_0  = WAIT_OBJECT_0;
-    static const DWORD_ wait_timeout   = WAIT_TIMEOUT;
-    static const DWORD_ wait_failed    = WAIT_FAILED;
+    enum
+    {
+        infinite       = INFINITE,
+        wait_abandoned = WAIT_ABANDONED,
+        wait_object_0  = WAIT_OBJECT_0,
+        wait_timeout   = WAIT_TIMEOUT,
+        wait_failed    = WAIT_FAILED
+    };
 
 #else
 extern "C" {
@@ -123,11 +126,14 @@ extern "C" {
     using ::SetEvent;
     using ::ResetEvent;
 
-    static const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
-    static const DWORD_ wait_abandoned = 0x00000080L;
-    static const DWORD_ wait_object_0  = 0x00000000L;
-    static const DWORD_ wait_timeout   = 0x00000102L;
-    static const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
+    enum
+    {
+        infinite       = (DWORD_)0xFFFFFFFF,
+        wait_abandoned = 0x00000080L,
+        wait_object_0  = 0x00000000L,
+        wait_timeout   = 0x00000102L,
+        wait_failed    = (DWORD_)0xFFFFFFFF
+    };
 
 # endif
 }
