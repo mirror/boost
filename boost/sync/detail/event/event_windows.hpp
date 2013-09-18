@@ -35,6 +35,13 @@ class event
     typedef boost::detail::win32::BOOL_   BOOL_;
     typedef boost::detail::win32::DWORD_  DWORD_;
 
+    static const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
+    static const DWORD_ wait_abandoned = 0x00000080L;
+    static const DWORD_ wait_object_0  = 0x00000000L;
+    static const DWORD_ wait_timeout   = 0x00000102L;
+    static const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
+
+
 public:
     explicit event(bool auto_reset = false)
     {

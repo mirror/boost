@@ -39,6 +39,13 @@ class semaphore
     typedef boost::detail::win32::LONG_   LONG_;
     typedef boost::detail::win32::BOOL_   BOOL_;
 
+    static const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
+    static const DWORD_ wait_abandoned = 0x00000080L;
+    static const DWORD_ wait_object_0  = 0x00000000L;
+    static const DWORD_ wait_timeout   = 0x00000102L;
+    static const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
+
+
 public:
     explicit semaphore(unsigned int i = 0)
     {
@@ -70,10 +77,10 @@ public:
     {
         switch (boost::detail::win32::WaitForSingleObject(m_sem, boost::detail::win32::infinite))
         {
-        case boost::detail::win32::wait_object_0:
+        case wait_object_0:
             return true;
 
-        case boost::detail::win32::wait_failed:
+        case wait_failed:
             {
                 const DWORD_ err = boost::detail::win32::GetLastError();
                 BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore::wait failed in WaitForSingleObject"));
@@ -112,13 +119,13 @@ private:
     {
         switch (boost::detail::win32::WaitForSingleObject(m_sem, milliseconds))
         {
-        case boost::detail::win32::wait_object_0:
+        case wait_object_0:
             return true;
 
-        case boost::detail::win32::wait_timeout:
+        case wait_timeout:
             return false;
 
-        case boost::detail::win32::wait_failed:
+        case wait_failed:
             {
                 const DWORD_ err = boost::detail::win32::GetLastError();
                 BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore::do_try_wait_for failed in WaitForSingleObject"));
