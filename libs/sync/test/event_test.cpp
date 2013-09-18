@@ -41,7 +41,7 @@ static void test_event_post_wait_autoreset()
     boost::sync::event ev(true);
 
     ev.post();
-    ev.wait();
+    BOOST_REQUIRE( ev.try_wait() == true );
     BOOST_REQUIRE( ev.try_wait() == false );
 }
 

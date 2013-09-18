@@ -97,14 +97,26 @@ public:
 #pragma once
 #endif
 
+#if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+#include <Availability.h>
+
+// OSX
+#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
+
+// Check: do other mach-based platforms support mach semaphores?
+
+#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_7
+#define BOOST_SYNC_DETAIL_PLATFORM_MACH
+#endif
+
+#endif // __MAC_OS_X_VERSION_MIN_REQUIRED
+#endif // apple stuff
+
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
 #include <boost/sync/detail/event/event_windows.hpp>
 
-//#elif defined(BOOST_SYNC_POSIX_SEMAPHORES)
-//#include <boost/sync/semaphore/semaphore_posix.hpp>
-
-//#elif defined(BOOST_SYNC_DISPATCH_SEMAPHORES)
-//#include <boost/sync/semaphore/semaphore_dispatch.hpp>
+#elif defined(BOOST_SYNC_DETAIL_PLATFORM_MACH)
+#include <boost/sync/detail/event/event_mach.hpp>
 
 #else
 

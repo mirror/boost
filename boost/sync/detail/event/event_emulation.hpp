@@ -32,16 +32,17 @@ class event
 public:
     explicit event(bool auto_reset = false) :
         m_auto_reset(auto_reset), m_is_set(false)
-    {
-    }
+    {}
 
     void post()
     {
         unique_lock<mutex> lock(m_mutex);
+        bool already_signaled = m_is_set;
         m_is_set = true;
-        if (m_auto_reset)
-            m_cond.notify_one();
-        else
+        if (m_auto_reset) {
+            if (!already_signaled)
+                m_cond.notify_one();
+        } else
             m_cond.notify_all();
     }
 
