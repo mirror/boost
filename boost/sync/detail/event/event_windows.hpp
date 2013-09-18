@@ -6,8 +6,8 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_SYNC_EVENT_DETAIL_WINDOWS_EVENT_HPP
-#define BOOST_SYNC_EVENT_DETAIL_WINDOWS_EVENT_HPP
+#ifndef BOOST_SYNC_DETAIL_EVENT_EVENT_WINDOWS_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_EVENT_EVENT_WINDOWS_HPP_INCLUDED_
 
 #include <cstddef>
 #include <boost/assert.hpp>
@@ -144,4 +144,4 @@ private:
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_EVENT_DETAIL_WINDOWS_EVENT_HPP
+#endif // BOOST_SYNC_DETAIL_EVENT_EVENT_WINDOWS_HPP_INCLUDED_

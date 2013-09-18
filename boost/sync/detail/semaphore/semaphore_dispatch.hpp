@@ -1,4 +1,4 @@
-// semaphore.hpp, posix implementation
+// semaphore.hpp, osx/ios dispatch semaphores
 //
 // Copyright (C) 2013 Tim Blechmann
 //
@@ -6,15 +6,15 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
+#ifndef BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_DISPATCH_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_DISPATCH_HPP_INCLUDED_
 
-#ifndef BOOST_SYNC_DETAIL_POSIX_SEMAPHORE_HPP_INCLUDED_
-#define BOOST_SYNC_DETAIL_POSIX_SEMAPHORE_HPP_INCLUDED_
+#include <cstddef>
+#include <dispatch/dispatch.h>
 
-#include <semaphore.h>
-
-#include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/system_error.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 
 #ifdef BOOST_SYNC_USES_CHRONO
@@ -42,73 +42,30 @@ class semaphore
 public:
     explicit semaphore(unsigned int i = 0)
     {
-        const int status = sem_init(&m_sem, 0, i);
-        if (status)
-            BOOST_THROW_EXCEPTION(resource_error(status, "boost::sync::semaphore constructor failed in sem_init"));
+        m_sem = dispatch_semaphore_create(i);
+        if (m_sem == NULL)
+            BOOST_THROW_EXCEPTION(resource_error(sync::detail::system_namespace::errc::not_enough_memory, "boost::sync::semaphore constructor failed in dispatch_semaphore_create"));
     }
 
     ~semaphore()
     {
-        BOOST_VERIFY(sem_destroy(&m_sem) == 0);
+        dispatch_release(m_sem);
     }
 
     void post()
     {
-        const int status = sem_post(&m_sem);
-
-        switch (status)
-        {
-        case EOVERFLOW:
-            BOOST_THROW_EXCEPTION(resource_error(status, "boost::sync::semaphore post failed: Maximum allowable value would be exceeded"));
-            break;
-
-        case EINVAL:
-            BOOST_ASSERT(false);
-
-        default:
-            break;
-        }
+        dispatch_semaphore_signal(m_sem);
     }
 
-    void wait(void)
+    void wait()
     {
-        for (;;)
-        {
-            const int status = sem_wait(&m_sem);
-            if (status == 0)
-                return;
-
-            switch (errno)
-            {
-            case EINTR: // interrupted by a signal handler
-                continue;
-
-            case EINVAL:
-            default:
-                // we should not reach here
-                BOOST_ASSERT(false);
-                return;
-            }
-        }
+        dispatch_semaphore_wait(m_sem, DISPATCH_TIME_FOREVER);
     }
 
     bool try_wait(void)
     {
-        const int status = sem_trywait(&m_sem);
-        if (status == 0)
-            return true;
-
-        switch (errno)
-        {
-        case EINVAL:
-            BOOST_ASSERT(false);
-
-        case EAGAIN:
-            return false;
-
-        default:
-            return false;
-        }
+        const long status = dispatch_semaphore_wait(m_sem, DISPATCH_TIME_NOW);
+        return status == 0;
     }
 
 #ifdef BOOST_SYNC_USES_CHRONO
@@ -139,39 +96,20 @@ public:
     {
         chrono::nanoseconds d = tp.time_since_epoch();
         timespec ts = boost::detail::to_timespec(d);
-        return do_wait_lock_until(ts);
+        return do_wait_lock_until(dispatch_walltime(&ts, 0));
     }
 
 private:
-    bool do_wait_lock_until(struct timespec const & timeout)
+    bool do_wait_lock_until(const dispatch_time_t timeout)
     {
-        for (;;)
-        {
-            const int status = sem_timedwait(&m_sem, &timeout);
-            if (status == 0)
-                return true;
-
-            switch (errno)
-            {
-            case ETIMEDOUT:
-                return false;
-
-            case EINTR: // interrupted by a signal handler
-                continue;
-
-            case EINVAL:
-            case EAGAIN:
-            default:
-                BOOST_ASSERT(false);
-                return false;
-            }
-        }
+        const long status = dispatch_semaphore_wait(m_sem, timeout);
+        return status == 0;
     }
 
 #endif // BOOST_SYNC_USES_CHRONO
 
 private:
-    sem_t m_sem;
+    dispatch_semaphore_t m_sem;
 };
 
 } // namespace posix
@@ -182,4 +120,4 @@ private:
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_DETAIL_POSIX_SEMAPHORE_HPP_INCLUDED_
+#endif // BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_DISPATCH_HPP_INCLUDED_

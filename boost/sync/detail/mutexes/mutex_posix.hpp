@@ -8,14 +8,14 @@
  * (C) Copyright 2013 Andrey Semashev
  */
 /*!
- * \file   detail/pthread/mutexes/mutex.hpp
+ * \file   detail/mutexes/mutex_posix.hpp
  *
  * \brief  This header is the Boost.Sync library implementation, see the library documentation
  *         at http://www.boost.org/doc/libs/release/libs/sync/doc/html/index.html.
  */
 
-#ifndef BOOST_SYNC_DETAIL_POSIX_MUTEXES_MUTEX_HPP_INCLUDED_
-#define BOOST_SYNC_DETAIL_POSIX_MUTEXES_MUTEX_HPP_INCLUDED_
+#ifndef BOOST_SYNC_DETAIL_MUTEXES_MUTEX_POSIX_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_MUTEXES_MUTEX_POSIX_HPP_INCLUDED_
 
 #include <cstddef>
 #include <boost/assert.hpp>
@@ -118,4 +118,4 @@ public:
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_DETAIL_POSIX_MUTEXES_MUTEX_HPP_INCLUDED_
+#endif // BOOST_SYNC_DETAIL_MUTEXES_MUTEX_POSIX_HPP_INCLUDED_

@@ -6,15 +6,16 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_SYNC_DETAIL_GENERIC_SEMAPHORE_HPP_INCLUDED_
-#define BOOST_SYNC_DETAIL_GENERIC_SEMAPHORE_HPP_INCLUDED_
+#ifndef BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_EMULATION_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_EMULATION_HPP_INCLUDED_
 
-#include <boost/bind.hpp>
-
+#include <boost/thread/locks.hpp>
 #include <boost/thread/mutex.hpp>
 #include <boost/thread/condition_variable.hpp>
 
 #include <boost/sync/detail/config.hpp>
+//#include <boost/sync/locks/lock_guard.hpp>
+//#include <boost/sync/locks/unique_lock.hpp>
 
 #ifdef BOOST_SYNC_USES_CHRONO
 #include <boost/chrono/system_clocks.hpp>
@@ -48,23 +49,24 @@ public:
 
     void post(void)
     {
-        mutex::scoped_lock lock(m_mutex);
+        lock_guard< mutex > lock(m_mutex);
         ++m_count;
         m_cond.notify_one();
     }
 
     void wait(void)
     {
-        mutex::scoped_lock lock(m_mutex);
-        m_cond.wait(lock, boost::bind(&semaphore::check_wakeup_condition, this));
+        unique_lock< mutex > lock(m_mutex);
+        while (m_count == 0)
+            m_cond.wait(lock);
 
         --m_count;
     }
 
     bool try_wait(void)
     {
-        mutex::scoped_lock lock(m_mutex);
-        if (!check_wakeup_condition())
+        lock_guard< mutex > lock(m_mutex);
+        if (m_count == 0)
             return false;
 
         --m_count;
@@ -75,27 +77,31 @@ public:
     template <class Rep, class Period>
     bool try_wait_for(const chrono::duration<Rep, Period> & rel_time)
     {
-        mutex::scoped_lock lock(m_mutex);
-        return m_cond.wait_for(lock, rel_time, boost::bind(&semaphore::check_wakeup_condition, this));
+        return try_wait_until(chrono::steady_clock::now() + rel_time);
     }
 
     template <class Clock, class Duration>
-    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout )
+    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout)
     {
-        mutex::scoped_lock lock(m_mutex);
-        return m_cond.wait_until(lock, timeout, boost::bind(&semaphore::check_wakeup_condition, this));
+        unique_lock< mutex > lock(m_mutex);
+        while (m_count == 0)
+        {
+            if (m_cond.wait_until(lock, timeout) == cv_status::timeout)
+            {
+                if (m_count == 0)
+                    return false;
+                break;
+            }
+        }
+        --m_count;
+        return true;
     }
 #endif // BOOST_SYNC_USES_CHRONO
 
 private:
-    bool check_wakeup_condition()
-    {
-        return m_count > 0;
-    }
-
+    mutex m_mutex;
+    condition_variable m_cond;
     unsigned int m_count;
-    boost::mutex m_mutex;
-    boost::condition_variable m_cond;
 };
 
 } // namespace
@@ -106,4 +112,4 @@ private:
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_DETAIL_GENERIC_SEMAPHORE_HPP_INCLUDED_
+#endif // BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_EMULATION_HPP_INCLUDED_

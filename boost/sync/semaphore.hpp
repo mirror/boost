@@ -94,7 +94,7 @@ public:
 
 #endif // BOOST_HAS_UNISTD_H
 
-#if !defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES) && (defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__))
+#if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
 #include <Availability.h>
 
 // OSX
@@ -120,16 +120,16 @@ public:
 
 
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-#include <boost/sync/detail/windows/semaphore.hpp>
-
-#elif defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES)
-#include <boost/sync/detail/posix/semaphore.hpp>
+#include <boost/sync/detail/semaphore/semaphore_windows.hpp>
 
 #elif defined(BOOST_SYNC_DETAIL_USE_DISPATCH_SEMAPHORES)
-#include <boost/sync/detail/darwin/semaphore.hpp>
+#include <boost/sync/detail/semaphore/semaphore_dispatch.hpp>
+
+#elif defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES)
+#include <boost/sync/detail/semaphore/semaphore_posix.hpp>
 
 #else
-#include <boost/sync/detail/generic/semaphore.hpp>
+#include <boost/sync/detail/semaphore/semaphore_emulation.hpp>
 
 #endif
 

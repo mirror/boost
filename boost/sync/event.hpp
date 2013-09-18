@@ -98,7 +98,7 @@ public:
 #endif
 
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-#include <boost/sync/detail/windows/event.hpp>
+#include <boost/sync/detail/event_windows.hpp>
 
 //#elif defined(BOOST_SYNC_POSIX_SEMAPHORES)
 //#include <boost/sync/semaphore/semaphore_posix.hpp>
@@ -108,7 +108,7 @@ public:
 
 #else
 
-#include <boost/sync/detail/generic/event_cv_emulation.hpp>
+#include <boost/sync/detail/event/event_emulation.hpp>
 
 #endif
 

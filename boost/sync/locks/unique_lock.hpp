@@ -61,6 +61,7 @@ private:
 public:
     BOOST_MOVABLE_BUT_NOT_COPYABLE(unique_lock)
 
+public:
     unique_lock() BOOST_NOEXCEPT :
         m_mutex(NULL), m_is_locked(false)
     {
@@ -99,8 +100,8 @@ public:
         that.m_is_locked = false;
     }
 
-    explicit unique_lock(BOOST_RV_REF(upgrade_lock< mutex_type >) that)
-        m_mutex(that.m_mutex), is_locked(that.m_is_locked)
+    explicit unique_lock(BOOST_RV_REF(upgrade_lock< mutex_type >) that) :
+        m_mutex(that.m_mutex), m_is_locked(that.m_is_locked)
     {
         if (m_is_locked)
         {
@@ -227,7 +228,7 @@ public:
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::resource_deadlock_would_occur, "boost unique_lock already owns the mutex"));
         }
 
-        m_is_locked = m->timed_lock(time);
+        m_is_locked = m_mutex->timed_lock(time);
 
         return m_is_locked;
     }
@@ -250,7 +251,7 @@ public:
     }
 
     template< typename TimePoint >
-    typename detail::enable_if_tag< Duration, detail::time_point_tag, bool >::type try_lock_until(TimePoint const& abs_time)
+    typename detail::enable_if_tag< TimePoint, detail::time_point_tag, bool >::type try_lock_until(TimePoint const& abs_time)
     {
         if (!m_mutex)
         {

@@ -24,6 +24,13 @@ class timed_mutex
 {
 public:
     /*!
+     * \brief A platform-specific type of the low level mutex implementation.
+     * \note This type is only available if \c BOOST_SYNC_DEFINES_TIMED_MUTEX_NATIVE_HANDLE macro is defined by the library.
+     */
+    typedef unspecified native_handle_type;
+
+public:
+    /*!
      * \brief Default constructor
      *
      * Creates a mutual exclusion primitive in the unlocked state.
@@ -106,9 +113,9 @@ public:
 #endif
 
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
-#include <boost/sync/detail/posix/mutexes/timed_mutex.hpp>
+#include <boost/sync/detail/mutexes/timed_mutex_posix.hpp>
 #elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-#include <boost/sync/detail/windows/mutexes/timed_mutex.hpp>
+#include <boost/sync/detail/mutexes/timed_mutex_windows.hpp>
 #else
 #error Boost.Sync: Unsupported threading API
 #endif
