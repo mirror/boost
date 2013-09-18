@@ -17,6 +17,8 @@
 #include <numeric>
 #include <utility>
 
+#include <boost/detail/no_exceptions_support.hpp>
+
 #include <boost/mpl/contains.hpp>
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/assert.hpp>
