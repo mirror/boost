@@ -14,7 +14,6 @@
 
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
-#include <boost/sync/detail/header.hpp>
 
 #include <mach/task.h>
 #include <mach/semaphore.h>
@@ -22,6 +21,8 @@
 #include <mach/mach_init.h>
 
 #include <boost/atomic.hpp>
+
+#include <boost/sync/detail/header.hpp>
 
 namespace boost {
 
@@ -72,14 +73,13 @@ public:
 
         try_again:
             kern_return_t result = semaphore_wait( m_sem );
+            BOOST_VERIFY (result == KERN_SUCCESS);
 
-            if (result == KERN_SUCCESS) {
-                bool isTrue = true;
-                bool firstWaiter = m_signaled.compare_exchange_strong(isTrue, false);
+            bool isTrue = true;
+            bool firstWaiter = m_signaled.compare_exchange_strong(isTrue, false);
 
-                if (firstWaiter) // only the first waiter succeeds
-                    return;
-            }
+            if (firstWaiter) // only the first waiter succeeds
+                return;
 
             goto try_again;
         } else {
