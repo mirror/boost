@@ -271,7 +271,7 @@ public:
         {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock has no mutex"));
         }
-        if (m_is_locked)
+        if (!m_is_locked)
         {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock doesn't own the mutex"));
         }
