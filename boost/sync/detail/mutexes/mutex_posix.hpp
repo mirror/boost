@@ -50,11 +50,11 @@ private:
 public:
 #if defined(PTHREAD_MUTEX_INITIALIZER)
 #if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
-    BOOST_CONSTEXPR mutex() BOOST_NOEXCEPT : m_mutex{ PTHREAD_MUTEX_INITIALIZER }
+    BOOST_CONSTEXPR mutex() BOOST_NOEXCEPT : m_mutex(PTHREAD_MUTEX_INITIALIZER)
     {
     }
 #else
-    BOOST_CONSTEXPR mutex() BOOST_NOEXCEPT
+    mutex() BOOST_NOEXCEPT
     {
         BOOST_CONSTEXPR_OR_CONST pthread_mutex_t temp = PTHREAD_MUTEX_INITIALIZER;
         m_mutex = temp;

@@ -88,15 +88,15 @@ public:
 #if defined(PTHREAD_MUTEX_INITIALIZER) && (defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK) || defined(PTHREAD_COND_INITIALIZER))
 #if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
     BOOST_CONSTEXPR timed_mutex() BOOST_NOEXCEPT :
-        m_mutex{ PTHREAD_MUTEX_INITIALIZER }
+        m_mutex(PTHREAD_MUTEX_INITIALIZER)
 #if !defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
-        , m_cond{ PTHREAD_COND_INITIALIZER },
+        , m_cond(PTHREAD_COND_INITIALIZER),
         m_is_locked(false)
 #endif
     {
     }
 #else
-    BOOST_CONSTEXPR timed_mutex() BOOST_NOEXCEPT
+    timed_mutex() BOOST_NOEXCEPT
     {
         BOOST_CONSTEXPR_OR_CONST pthread_mutex_t temp = PTHREAD_MUTEX_INITIALIZER;
         m_mutex = temp;

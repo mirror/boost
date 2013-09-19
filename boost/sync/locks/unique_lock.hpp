@@ -167,9 +167,7 @@ public:
     ~unique_lock()
     {
         if (m_is_locked)
-        {
             m_mutex->unlock();
-        }
     }
 
     unique_lock& operator= (BOOST_RV_REF(unique_lock) that) BOOST_NOEXCEPT
