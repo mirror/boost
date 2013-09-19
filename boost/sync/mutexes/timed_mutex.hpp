@@ -115,7 +115,7 @@ public:
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
 #include <boost/sync/detail/mutexes/timed_mutex_posix.hpp>
 #elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-#include <boost/sync/detail/mutexes/timed_mutex_windows.hpp>
+//#include <boost/sync/detail/mutexes/timed_mutex_windows.hpp>
 #else
 #error Boost.Sync: Unsupported threading API
 #endif

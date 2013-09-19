@@ -34,7 +34,7 @@ namespace detail {
 template< typename T >
 struct time_traits< T, typename T::_is_boost_date_time_duration >
 {
-    typedef duration_tag tag;
+    typedef time_duration_tag tag;
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 
@@ -79,6 +79,8 @@ struct time_traits< T, typename T::_is_boost_date_time_time_point >
 };
 
 } // namespace detail
+
+} // namespace sync
 
 } // namespace boost
 

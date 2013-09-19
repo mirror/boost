@@ -144,7 +144,7 @@ BOOST_FORCEINLINE bool interlocked_bit_test_and_reset(long* x, long bit) BOOST_N
 #undef BOOST_SYNC_DETAIL_BTS_DEFINED
 
 #if defined(__INTEL_COMPILER)
-#define BOOST_SYNC_COMPILER_BARRIER __memory_barrier();
+#define BOOST_SYNC_COMPILER_BARRIER() __memory_barrier()
 #elif defined(_MSC_VER) && _MSC_VER >= 1310 && !defined(_WIN32_WCE)
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
@@ -156,24 +156,24 @@ extern "C" void _ReadWriteBarrier(void);
 BOOST_FORCEINLINE long interlocked_read_acquire(long volatile* x) BOOST_NOEXCEPT
 {
     long const res = *x;
-    BOOST_SYNC_COMPILER_BARRIER;
+    BOOST_SYNC_COMPILER_BARRIER();
     return res;
 }
 BOOST_FORCEINLINE void* interlocked_read_acquire(void* volatile* x) BOOST_NOEXCEPT
 {
     void* const res = *x;
-    BOOST_SYNC_COMPILER_BARRIER;
+    BOOST_SYNC_COMPILER_BARRIER();
     return res;
 }
 
 BOOST_FORCEINLINE void interlocked_write_release(long volatile* x, long value) BOOST_NOEXCEPT
 {
-    BOOST_SYNC_COMPILER_BARRIER;
+    BOOST_SYNC_COMPILER_BARRIER();
     *x = value;
 }
 BOOST_FORCEINLINE void interlocked_write_release(void* volatile* x, void* value) BOOST_NOEXCEPT
 {
-    BOOST_SYNC_COMPILER_BARRIER;
+    BOOST_SYNC_COMPILER_BARRIER();
     *x = value;
 }
 
