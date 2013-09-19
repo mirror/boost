@@ -1,6 +1,7 @@
 // event.hpp, mach events
 //
 // Copyright (C) 2013 Tim Blechmann
+// Copyright (C) 2013 Andrey Semashev
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -11,6 +12,7 @@
 
 #include <cstddef>
 #include <boost/assert.hpp>
+#include <boost/cstdint.hpp>
 
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
@@ -37,7 +39,7 @@ class event
 
 public:
     explicit event(bool auto_reset = false):
-        m_auto_reset(auto_reset), m_signaled(0)
+        m_auto_reset(auto_reset), m_state(0)
     {
         kern_return_t result = semaphore_create(mach_task_self(), &m_sem, SYNC_POLICY_FIFO, 0);
         BOOST_VERIFY(result == KERN_SUCCESS);
@@ -52,38 +54,42 @@ public:
     void post()
     {
         if (m_auto_reset) {
-            bool already_signaled = m_signaled.exchange(true);
-            if (!already_signaled)
-                semaphore_signal( m_sem ); // wake one thread!
+            bool was_signalled;
+
+            uint32_t old_state = m_state.load( memory_order_acquire );
+            for(;;) {
+                was_signalled = ((old_state & 1u) != 0);
+                uint32_t new_state = ((old_state + 2u) | 1u) & std::numeric_limits<uint32_t>::max();
+                if ( m_state.compare_exchange_weak( old_state, new_state, memory_order_release, memory_order_acquire ) )
+                    break;
+                // backoff
+            }
+
+            if (!was_signalled)
+                semaphore_signal(m_sem); // wake one thread!
         } else {
-            m_signaled = true;
+            m_state.store( 1, memory_order_release );
             semaphore_signal_all( m_sem ); // wake all threads!& reset semaphore count
         }
     }
 
     void reset()
     {
-        m_signaled = false;
+        m_state = 0; // CHECK: do we need to increment the ABA tag?
     }
 
     void wait()
     {
         if (m_auto_reset) {
-            // the first waiter succeeds and resets the signalled state
-
-        try_again:
             kern_return_t result = semaphore_wait( m_sem );
             BOOST_VERIFY (result == KERN_SUCCESS);
 
-            bool isTrue = true;
-            bool firstWaiter = m_signaled.compare_exchange_strong(isTrue, false);
+            uint32_t old_state = m_state.load(memory_order_acquire);
+            if (!m_state.compare_exchange_strong( old_state, old_state & ~1u, memory_order_release, memory_order_acquire ) )
+                semaphore_signal(m_sem); // another post succeeded, wake up another thread
 
-            if (firstWaiter) // only the first waiter succeeds
-                return;
-
-            goto try_again;
         } else {
-            if (m_signaled.load() == true)
+            if (m_state.load(memory_order_acquire) == 1)
                 return;
 
             kern_return_t result = semaphore_wait( m_sem );
@@ -117,21 +123,17 @@ private:
     bool do_try_wait_until (const mach_timespec_t & timeout)
     {
         if (m_auto_reset) {
-            // the first waiter succeeds and resets the signaled state
-
             kern_return_t result = semaphore_timedwait( m_sem, timeout );
 
             if (result == KERN_SUCCESS) {
-                bool isTrue = true;
-                bool firstWaiter = m_signaled.compare_exchange_strong(isTrue, false);
-
-                if (firstWaiter) // only the first waiter succeeds
-                    return true;
-            }
-            return false;
-
+                uint32_t old_state = m_state.load(memory_order_acquire);
+                if (!m_state.compare_exchange_strong( old_state, old_state & ~1u, memory_order_release, memory_order_acquire ) )
+                    semaphore_signal(m_sem); // another post succeeded, wake up another thread
+                return true;
+            } else
+                return false;
         } else {
-            if (m_signaled.load() == true)
+            if (m_state.load( memory_order_acquire ) == 1)
                 return true;
 
             kern_return_t result = semaphore_timedwait( m_sem, timeout );
@@ -144,7 +146,7 @@ private:
 
     const bool m_auto_reset;
     semaphore_t m_sem;
-    atomic_bool m_signaled;
+    atomic<uint32_t> m_state;
 };
 
 }
