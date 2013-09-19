@@ -101,10 +101,10 @@ public:
     }
 
 private:
-    upgrade_mutex m_mutex;
-    condition_variable_any m_cond;
     const bool m_auto_reset;
     bool m_is_set;
+    upgrade_mutex m_mutex;
+    condition_variable_any m_cond;
 };
 
 }
