@@ -10,7 +10,7 @@
 
 #include <boost/typeof/typeof.hpp>
 
-static void test_event_post_wait()
+BOOST_AUTO_TEST_CASE(test_event_post_wait)
 {
     boost::sync::event ev;
 
@@ -25,7 +25,7 @@ static void test_event_post_wait()
 }
 
 
-static void test_event_post_try_wait()
+BOOST_AUTO_TEST_CASE(test_event_post_try_wait)
 {
     boost::sync::event ev;
 
@@ -36,7 +36,7 @@ static void test_event_post_try_wait()
     BOOST_REQUIRE( ev.try_wait() == true );
 }
 
-static void test_event_post_wait_autoreset()
+BOOST_AUTO_TEST_CASE(test_event_post_wait_autoreset)
 {
     boost::sync::event ev(true);
 
@@ -46,7 +46,7 @@ static void test_event_post_wait_autoreset()
 }
 
 
-static void test_event_reset()
+BOOST_AUTO_TEST_CASE(test_event_reset)
 {
     boost::sync::event ev(false);
 
@@ -71,17 +71,18 @@ struct event_wait_and_post_test
         ev_.post();
     }
 
-    static void run_test()
-    {
-        event_wait_and_post_test test;
-        test.run();
-    }
-
     boost::sync::event ev_;
     boost::thread thread_;
 };
 
-static void test_event_wait_for()
+BOOST_AUTO_TEST_CASE(event_wait_and_post)
+{
+    event_wait_and_post_test test;
+    test.run();
+}
+
+
+BOOST_AUTO_TEST_CASE(test_event_wait_for)
 {
     using namespace boost;
 
@@ -108,7 +109,7 @@ static void test_event_wait_for()
     BOOST_REQUIRE(ev.try_wait_for(chrono::milliseconds(500)));
 }
 
-static void test_event_wait_until()
+BOOST_AUTO_TEST_CASE(test_event_wait_until)
 {
     using namespace boost;
 
@@ -141,21 +142,3 @@ static void test_event_wait_until()
         BOOST_REQUIRE( (end - start) < chrono::milliseconds(100) );
     }
 }
-
-boost::unit_test::test_suite* init_unit_test_suite(int, char*[])
-{
-    boost::unit_test::test_suite* test = BOOST_TEST_SUITE("boost::sync::event test suite");
-
-    test->add(BOOST_TEST_CASE(test_event_post_wait));
-    test->add(BOOST_TEST_CASE(test_event_post_wait_autoreset));
-    test->add(BOOST_TEST_CASE(test_event_post_try_wait));
-    test->add(BOOST_TEST_CASE(test_event_reset));
-
-    test->add(BOOST_TEST_CASE(event_wait_and_post_test::run_test));
-
-    test->add(BOOST_TEST_CASE(test_event_wait_for));
-    test->add(BOOST_TEST_CASE(test_event_wait_until));
-
-    return test;
-}
-

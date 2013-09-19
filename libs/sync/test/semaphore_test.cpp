@@ -10,7 +10,7 @@
 
 #include <boost/typeof/typeof.hpp>
 
-static void test_semaphore_post_wait()
+BOOST_AUTO_TEST_CASE(test_semaphore_post_wait)
 {
     boost::sync::semaphore sem(0);
 
@@ -19,7 +19,7 @@ static void test_semaphore_post_wait()
 }
 
 
-static void test_semaphore_try_wait()
+BOOST_AUTO_TEST_CASE(test_semaphore_try_wait)
 {
     boost::sync::semaphore sem(0);
 
@@ -43,19 +43,19 @@ struct semaphore_wait_and_post_test
         sem_.post();
     }
 
-    static void run_test()
-    {
-        semaphore_wait_and_post_test test;
-        test.run();
-    }
-
     boost::sync::semaphore sem_;
     boost::thread thread_;
 };
 
+BOOST_AUTO_TEST_CASE(semaphore_wait_and_post)
+{
+    semaphore_wait_and_post_test test;
+    test.run();
+}
+
 #ifdef BOOST_SYNC_USES_CHRONO
 
-static void test_semaphore_wait_for()
+BOOST_AUTO_TEST_CASE(test_semaphore_wait_for)
 {
     using namespace boost;
 
@@ -77,7 +77,7 @@ static void test_semaphore_wait_for()
     BOOST_REQUIRE(sem.try_wait_for(chrono::milliseconds(500)));
 }
 
-static void test_semaphore_wait_until()
+BOOST_AUTO_TEST_CASE(test_semaphore_wait_until)
 {
     using namespace boost;
 
@@ -111,18 +111,3 @@ static void test_semaphore_wait_until()
     }
 }
 #endif
-
-boost::unit_test::test_suite* init_unit_test_suite(int, char*[])
-{
-    boost::unit_test::test_suite* test = BOOST_TEST_SUITE("Boost.Threads: semaphore test suite");
-
-    test->add(BOOST_TEST_CASE(test_semaphore_post_wait));
-    test->add(BOOST_TEST_CASE(test_semaphore_try_wait));
-    test->add(BOOST_TEST_CASE(semaphore_wait_and_post_test::run_test));
-
-#ifdef BOOST_SYNC_USES_CHRONO
-    test->add(BOOST_TEST_CASE(test_semaphore_wait_for));
-    test->add(BOOST_TEST_CASE(test_semaphore_wait_until));
-#endif
-    return test;
-}
