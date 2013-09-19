@@ -37,28 +37,28 @@ public:
     semaphore& operator= (semaphore const&) = delete;
 
     /**
-     * \b Effects: Increments the semaphore count. If a thread is waiting for this semaphore, it will be unblocked.
+     * \b Effects: Increments the semaphore count. If there are processes/threads blocked waiting for the semaphore, then one of these processes will return successfully from its wait function.
      *
      * \b Throws: if an error occurs.
      * */
     void post();
 
     /**
-     * \b Effects: If the semaphore count is positive, it atomically decrements it and returns. Otherwise blocks the current thread, until it can successfully decrement a positive semaphore count.
+     * \b Effects: Decrements the semaphore. If the semaphore value is not greater than zero, then the calling process/thread blocks until it can decrement the counter.
      *
      * \b Throws: if an error occurs.
      * */
     void wait();
 
     /**
-     * \b Effects: If the semaphore count is positive, it atomically decrements it and returns `true`. Otherwise `false`.
+     * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. If the value is not greater than zero returns false.
      *
      * \b Throws: if an error occurs.
      * */
     bool try_wait();
 
     /**
-     * \b Effects: If the semaphore count is positive, it atomically decrements it and returns `true`. Otherwise it waits for the semaphore for `duration`.
+     * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. Otherwise, waits for the semaphore to the posted or the timeout expires. If the timeout expires, the function returns false. If the semaphore is posted the function returns true.
      *
      * \b Throws: if an error occurs.
      * */
@@ -66,7 +66,7 @@ public:
     bool try_wait_for(const Duration & duration);
 
     /**
-     * \b Effects: If the semaphore count is positive, it atomically decrements it and returns `true`. Otherwise it waits for the semaphore until `timeout`.
+     * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. Otherwise, waits for the semaphore to the posted or the timeout expires. If the timeout expires, the function returns false. If the semaphore is posted the function returns true.
      *
      * \b Throws: if an error occurs.
      * */
