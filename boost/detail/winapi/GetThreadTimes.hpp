@@ -1,4 +1,4 @@
-//  GetProcessTimes.hpp  --------------------------------------------------------------//
+//  GetThreadTimes.hpp  --------------------------------------------------------------//
 
 //  Copyright 2010 Vicente J. Botet Escriba
 
@@ -6,30 +6,32 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 
-#ifndef BOOST_DETAIL_WIN_GETPROCESSTIMES_HPP
-#define BOOST_DETAIL_WIN_GETPROCESSTIMES_HPP
+#ifndef BOOST_DETAIL_WINAPI_GETTHREADTIMES_HPP
+#define BOOST_DETAIL_WINAPI_GETTHREADTIMES_HPP
 
-#include <boost/detail/win/time.hpp>
+#include <boost/detail/winapi/time.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost {
 namespace detail {
-namespace win32 {
-#if !defined(UNDER_CE)  // Windows CE does not define GetProcessTimes
+namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
-    using ::GetProcessTimes;
+    using ::GetThreadTimes;
 #else
     extern "C" __declspec(dllimport) BOOL_ WINAPI
-        GetProcessTimes(
-            HANDLE_ hProcess,
+        GetThreadTimes(
+            HANDLE_ hThread,
             LPFILETIME_ lpCreationTime,
             LPFILETIME_ lpExitTime,
             LPFILETIME_ lpKernelTime,
             LPFILETIME_ lpUserTime
         );
 #endif
-#endif
 }
 }
 }
 
-#endif // BOOST_DETAIL_WIN_GETPROCESSTIMES_HPP
+#endif // BOOST_DETAIL_WINAPI_GETTHREADTIMES_HPP

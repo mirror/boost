@@ -19,7 +19,7 @@
 #include <boost/sync/detail/config.hpp>
 
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-#include <boost/detail/win/time.hpp>
+#include <boost/detail/winapi/time.hpp>
 #endif
 
 #include <boost/sync/detail/header.hpp>
@@ -216,10 +216,10 @@ public:
         union
         {
             uint64_t as_uint64;
-            boost::detail::win32::FILETIME_ as_filetime;
+            boost::detail::winapi::FILETIME_ as_filetime;
         }
         caster;
-        boost::detail::win32::GetSystemTimeAsFileTime(&caster.as_filetime);
+        boost::detail::winapi::GetSystemTimeAsFileTime(&caster.as_filetime);
 
         // Compensate the difference between 1970-Jan-01 & 1601-Jan-01
         // in 100-nanosecond intervals

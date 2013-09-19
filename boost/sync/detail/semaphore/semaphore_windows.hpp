@@ -11,9 +11,9 @@
 
 #include <cstddef>
 #include <limits>
-#include <boost/detail/win/GetLastError.hpp>
-#include <boost/detail/win/synchronization.hpp>
-#include <boost/detail/win/handles.hpp>
+#include <boost/detail/winapi/GetLastError.hpp>
+#include <boost/detail/winapi/synchronization.hpp>
+#include <boost/detail/winapi/handles.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
@@ -34,41 +34,34 @@ class semaphore
     BOOST_DELETED_FUNCTION(semaphore(semaphore const&))
     BOOST_DELETED_FUNCTION(semaphore& operator=(semaphore const&))
 
-    typedef boost::detail::win32::HANDLE_ HANDLE_;
-    typedef boost::detail::win32::DWORD_  DWORD_;
-    typedef boost::detail::win32::LONG_   LONG_;
-    typedef boost::detail::win32::BOOL_   BOOL_;
-
-    static const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
-    static const DWORD_ wait_abandoned = 0x00000080L;
-    static const DWORD_ wait_object_0  = 0x00000000L;
-    static const DWORD_ wait_timeout   = 0x00000102L;
-    static const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
-
+    typedef boost::detail::winapi::HANDLE_ HANDLE_;
+    typedef boost::detail::winapi::DWORD_  DWORD_;
+    typedef boost::detail::winapi::LONG_   LONG_;
+    typedef boost::detail::winapi::BOOL_   BOOL_;
 
 public:
     explicit semaphore(unsigned int i = 0)
     {
-        m_sem = boost::detail::win32::CreateSemaphoreA(NULL, i, (std::numeric_limits<LONG_>::max)(), NULL);
+        m_sem = boost::detail::winapi::CreateSemaphoreA(NULL, i, (std::numeric_limits<LONG_>::max)(), NULL);
         if (!m_sem)
         {
-            const DWORD_ err = boost::detail::win32::GetLastError();
+            const DWORD_ err = boost::detail::winapi::GetLastError();
             BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore constructor failed in CreateSemaphore"));
         }
     }
 
     ~semaphore() BOOST_NOEXCEPT
     {
-        int status = boost::detail::win32::CloseHandle(m_sem);
+        int status = boost::detail::winapi::CloseHandle(m_sem);
         BOOST_VERIFY (status != 0);
     }
 
     void post()
     {
-        const BOOL_ status = boost::detail::win32::ReleaseSemaphore(m_sem, 1, NULL);
+        const BOOL_ status = boost::detail::winapi::ReleaseSemaphore(m_sem, 1, NULL);
         if (status == 0)
         {
-            const DWORD_ err = boost::detail::win32::GetLastError();
+            const DWORD_ err = boost::detail::winapi::GetLastError();
             BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore::post failed in ReleaseSemaphore"));
         }
     }
@@ -76,14 +69,14 @@ public:
 
     bool wait()
     {
-        switch (boost::detail::win32::WaitForSingleObject(m_sem, boost::detail::win32::infinite))
+        switch (boost::detail::winapi::WaitForSingleObject(m_sem, boost::detail::winapi::infinite))
         {
-        case wait_object_0:
+        case boost::detail::winapi::wait_object_0:
             return true;
 
-        case wait_failed:
+        case boost::detail::winapi::wait_failed:
             {
-                const DWORD_ err = boost::detail::win32::GetLastError();
+                const DWORD_ err = boost::detail::winapi::GetLastError();
                 BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore::wait failed in WaitForSingleObject"));
             }
 
@@ -118,17 +111,17 @@ private:
 #ifdef BOOST_SYNC_USES_CHRONO
     bool do_try_wait_for( long milliseconds )
     {
-        switch (boost::detail::win32::WaitForSingleObject(m_sem, milliseconds))
+        switch (boost::detail::winapi::WaitForSingleObject(m_sem, milliseconds))
         {
-        case wait_object_0:
+        case boost::detail::winapi::wait_object_0:
             return true;
 
-        case wait_timeout:
+        case boost::detail::winapi::wait_timeout:
             return false;
 
-        case wait_failed:
+        case boost::detail::winapi::wait_failed:
             {
-                const DWORD_ err = boost::detail::win32::GetLastError();
+                const DWORD_ err = boost::detail::winapi::GetLastError();
                 BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore::do_try_wait_for failed in WaitForSingleObject"));
             }
 

@@ -6,19 +6,21 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 
-#ifndef BOOST_DETAIL_WIN_SYSTEM_HPP
-#define BOOST_DETAIL_WIN_SYSTEM_HPP
-#include <boost/config.hpp>
-#include <cstdarg>
+#ifndef BOOST_DETAIL_WINAPI_SYSTEM_HPP
+#define BOOST_DETAIL_WINAPI_SYSTEM_HPP
 
-#include <boost/detail/win/basic_types.hpp>
-extern "C" __declspec(dllimport) void __stdcall GetSystemInfo (struct system_info *);
+#include <boost/detail/winapi/basic_types.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost {
 namespace detail {
-namespace win32 {
+namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
     typedef ::SYSTEM_INFO SYSTEM_INFO_;
+    extern "C" __declspec(dllimport) void __stdcall GetSystemInfo (struct system_info *);
 #else
 extern "C" {
     typedef struct _SYSTEM_INFO {
@@ -47,4 +49,4 @@ extern "C" {
 }
 }
 }
-#endif // BOOST_DETAIL_WIN_TIME_HPP
+#endif // BOOST_DETAIL_WINAPI_SYSTEM_HPP

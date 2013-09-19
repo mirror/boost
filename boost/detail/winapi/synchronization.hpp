@@ -6,17 +6,20 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 
-#ifndef BOOST_DETAIL_WIN_SYNCHRONIZATION_HPP
-#define BOOST_DETAIL_WIN_SYNCHRONIZATION_HPP
+#ifndef BOOST_DETAIL_WINAPI_SYNCHRONIZATION_HPP
+#define BOOST_DETAIL_WINAPI_SYNCHRONIZATION_HPP
 
-#include <boost/detail/win/basic_types.hpp>
+#include <boost/detail/winapi/basic_types.hpp>
 
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost
 {
 namespace detail
 {
-namespace win32
+namespace winapi
 {
 #if defined( BOOST_USE_WINDOWS_H )
     typedef ::CRITICAL_SECTION CRITICAL_SECTION_;
@@ -47,17 +50,16 @@ namespace win32
     using ::WaitForSingleObject;
     using ::QueueUserAPC;
 
-    enum
-    {
-        infinite       = INFINITE,
-        wait_abandoned = WAIT_ABANDONED,
-        wait_object_0  = WAIT_OBJECT_0,
-        wait_timeout   = WAIT_TIMEOUT,
-        wait_failed    = WAIT_FAILED
-    };
+    const DWORD_ infinite       = INFINITE;
+    const DWORD_ wait_abandoned = WAIT_ABANDONED;
+    const DWORD_ wait_object_0  = WAIT_OBJECT_0;
+    const DWORD_ wait_timeout   = WAIT_TIMEOUT;
+    const DWORD_ wait_failed    = WAIT_FAILED;
 
-#else
+#else // defined( BOOST_USE_WINDOWS_H )
+
 extern "C" {
+
     struct CRITICAL_SECTION_
     {
         struct critical_section_debug * DebugInfo;
@@ -114,9 +116,9 @@ extern "C" {
                 unsigned long dwMilliseconds);
     __declspec(dllimport) int __stdcall
         ReleaseSemaphore(void*,long,long*);
-    typedef void (__stdcall *PAPCFUNC8)(ulong_ptr);
+    typedef void (__stdcall *PAPCFUNC8)(ULONG_PTR_);
     __declspec(dllimport) unsigned long __stdcall
-        QueueUserAPC(PAPCFUNC8,void*,ulong_ptr);
+        QueueUserAPC(PAPCFUNC8,void*,ULONG_PTR_);
 # ifndef UNDER_CE
     __declspec(dllimport) int __stdcall
         SetEvent(void*);
@@ -125,21 +127,20 @@ extern "C" {
 # else
     using ::SetEvent;
     using ::ResetEvent;
-
-    enum
-    {
-        infinite       = (DWORD_)0xFFFFFFFF,
-        wait_abandoned = 0x00000080L,
-        wait_object_0  = 0x00000000L,
-        wait_timeout   = 0x00000102L,
-        wait_failed    = (DWORD_)0xFFFFFFFF
-    };
-
 # endif
-}
-#endif
+
+} // extern "C"
+
+    const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
+    const DWORD_ wait_abandoned = 0x00000080L;
+    const DWORD_ wait_object_0  = 0x00000000L;
+    const DWORD_ wait_timeout   = 0x00000102L;
+    const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
+
+#endif // defined( BOOST_USE_WINDOWS_H )
+
 }
 }
 }
 
-#endif // BOOST_DETAIL_WIN_SYNCHRONIZATION_HPP
+#endif // BOOST_DETAIL_WINAPI_SYNCHRONIZATION_HPP

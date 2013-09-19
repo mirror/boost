@@ -12,9 +12,9 @@
 #include <cstddef>
 #include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
-#include <boost/detail/win/GetLastError.hpp>
-#include <boost/detail/win/synchronization.hpp>
-#include <boost/detail/win/handles.hpp>
+#include <boost/detail/winapi/GetLastError.hpp>
+#include <boost/detail/winapi/synchronization.hpp>
+#include <boost/detail/winapi/handles.hpp>
 
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
@@ -31,56 +31,49 @@ class event
     BOOST_DELETED_FUNCTION(event(event const&))
     BOOST_DELETED_FUNCTION(event& operator=(event const&))
 
-    typedef boost::detail::win32::HANDLE_ HANDLE_;
-    typedef boost::detail::win32::BOOL_   BOOL_;
-    typedef boost::detail::win32::DWORD_  DWORD_;
-
-    static const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
-    static const DWORD_ wait_abandoned = 0x00000080L;
-    static const DWORD_ wait_object_0  = 0x00000000L;
-    static const DWORD_ wait_timeout   = 0x00000102L;
-    static const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
-
+    typedef boost::detail::winapi::HANDLE_ HANDLE_;
+    typedef boost::detail::winapi::BOOL_   BOOL_;
+    typedef boost::detail::winapi::DWORD_  DWORD_;
 
 public:
     explicit event(bool auto_reset = false)
     {
-        handle_ = boost::detail::win32::CreateEventA(NULL, !auto_reset, 0, NULL);
+        handle_ = boost::detail::winapi::CreateEventA(NULL, !auto_reset, 0, NULL);
         if (!handle_)
         {
-            const DWORD_ err = boost::detail::win32::GetLastError();
+            const DWORD_ err = boost::detail::winapi::GetLastError();
             BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event constructor failed in CreateEvent"));
         }
     }
 
     ~event() BOOST_NOEXCEPT
     {
-        BOOST_VERIFY( boost::detail::win32::CloseHandle(handle_) );
+        BOOST_VERIFY( boost::detail::winapi::CloseHandle(handle_) );
     }
 
     void post()
     {
-        const BOOL_ status = boost::detail::win32::SetEvent(handle_);
+        const BOOL_ status = boost::detail::winapi::SetEvent(handle_);
         if (status == 0)
         {
-            const DWORD_ err = boost::detail::win32::GetLastError();
+            const DWORD_ err = boost::detail::winapi::GetLastError();
             BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::post failed in ReleaseEvent"));
         }
     }
 
     void reset()
     {
-        const BOOL_ status = boost::detail::win32::ResetEvent(handle_);
+        const BOOL_ status = boost::detail::winapi::ResetEvent(handle_);
         if (status == 0)
         {
-            const DWORD_ err = boost::detail::win32::GetLastError();
+            const DWORD_ err = boost::detail::winapi::GetLastError();
             BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::reset failed in ResetEvent"));
         }
     }
 
     bool wait()
     {
-        using namespace boost::detail::win32;
+        using namespace boost::detail::winapi;
 
         switch ( WaitForSingleObject(handle_, infinite) )
         {
@@ -89,7 +82,7 @@ public:
 
         case wait_failed:
             {
-                const DWORD_ err = boost::detail::win32::GetLastError();
+                const DWORD_ err = boost::detail::winapi::GetLastError();
                 BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::wait failed in WaitForSingleObject"));
             }
 
@@ -120,7 +113,7 @@ public:
 private:
     bool do_try_wait_for( DWORD_ milliseconds )
     {
-        using namespace boost::detail::win32;
+        using namespace boost::detail::winapi;
 
         switch ( WaitForSingleObject(handle_, milliseconds) )
         {
@@ -132,7 +125,7 @@ private:
 
         case wait_failed:
             {
-                const DWORD_ err = boost::detail::win32::GetLastError();
+                const DWORD_ err = boost::detail::winapi::GetLastError();
                 BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::do_try_wait_for failed in WaitForSingleObject"));
             }
 

@@ -6,19 +6,22 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 
-#ifndef BOOST_DETAIL_WIN_MEMORY_HPP
-#define BOOST_DETAIL_WIN_MEMORY_HPP
+#ifndef BOOST_DETAIL_WINAPI_MEMORY_HPP
+#define BOOST_DETAIL_WINAPI_MEMORY_HPP
 
-#include <boost/detail/win/basic_types.hpp>
-#include <boost/detail/win/security.hpp>
-#include <boost/detail/win/LocalFree.hpp>
+#include <boost/detail/winapi/basic_types.hpp>
+#include <boost/detail/winapi/security.hpp>
+#include <boost/detail/winapi/LocalFree.hpp>
 
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost
 {
 namespace detail
 {
-namespace win32
+namespace winapi
 {
 #if defined( BOOST_USE_WINDOWS_H )
     using ::CreateFileMappingA;
@@ -30,9 +33,7 @@ namespace win32
     using ::OpenFileMappingA;
     using ::UnmapViewOfFile;
 #else
-# ifdef HeapAlloc
-# undef HeapAlloc
-# endif
+#undef HeapAlloc
 extern "C" {
     __declspec(dllimport) void * __stdcall 
         CreateFileMappingA (void *, SECURITY_ATTRIBUTES_*, unsigned long, unsigned long, unsigned long, const char *);
@@ -56,4 +57,4 @@ extern "C" {
 }
 }
 
-#endif // BOOST_DETAIL_WIN_SYNCHRONIZATION_HPP
+#endif // BOOST_DETAIL_WINAPI_MEMORY_HPP
