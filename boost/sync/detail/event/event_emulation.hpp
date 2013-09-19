@@ -10,7 +10,7 @@
 #define BOOST_SYNC_DETAIL_EVENT_EVENT_EMULATION_HPP_INCLUDED_
 
 #include <boost/thread/condition_variable.hpp>
-#include <boost/thread/mutex.hpp>
+#include <boost/thread/shared_mutex.hpp>
 #include <boost/thread/locks.hpp>
 
 #include <boost/sync/detail/config.hpp>
@@ -36,7 +36,7 @@ public:
 
     void post()
     {
-        unique_lock<mutex> lock(m_mutex);
+        unique_lock<upgrade_mutex> lock(m_mutex);
         bool already_signaled = m_is_set;
         m_is_set = true;
         if (m_auto_reset) {
@@ -48,24 +48,26 @@ public:
 
     void wait()
     {
-        unique_lock<mutex> lock(m_mutex);
+        upgrade_lock<upgrade_mutex> lock(m_mutex);
 
         while (!m_is_set)
             m_cond.wait(lock);
 
-        if (m_auto_reset)
+        if (m_auto_reset) {
+            upgrade_to_unique_lock<upgrade_mutex> unique_lock(lock);
             m_is_set = false;
+        }
     }
 
     void reset()
     {
-        lock_guard<mutex> lock(m_mutex);
+        lock_guard<upgrade_mutex> lock(m_mutex);
         m_is_set = false;
     }
 
     bool try_wait()
     {
-        lock_guard<mutex> lock(m_mutex);
+        lock_guard<upgrade_mutex> lock(m_mutex);
         const bool res = m_is_set;
         if (res && m_auto_reset)
             m_is_set = false;
@@ -81,27 +83,26 @@ public:
     template <class Clock, class Duration>
     bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout)
     {
-        unique_lock<mutex> lock(m_mutex);
+        upgrade_lock<upgrade_mutex> lock(m_mutex);
 
-        while (!m_is_set)
-        {
-            if (m_cond.wait_until(lock, timeout) == cv_status::timeout)
-            {
+        while (!m_is_set) {
+            if (m_cond.wait_until(lock, timeout) == cv_status::timeout) {
                 if (!m_is_set)
                     return false;
                 break;
             }
         }
 
-        if (m_auto_reset)
+        if (m_auto_reset) {
+            upgrade_to_unique_lock<upgrade_mutex> unique_lock(lock);
             m_is_set = false;
-
+        }
         return true;
     }
 
 private:
-    mutex m_mutex;
-    condition_variable m_cond;
+    upgrade_mutex m_mutex;
+    condition_variable_any m_cond;
     const bool m_auto_reset;
     bool m_is_set;
 };
