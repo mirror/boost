@@ -8,6 +8,7 @@
 //  http://www.boost.org/LICENSE_1_0.txt)
 
 #include <boost/atomic/detail/config.hpp>
+#include <boost/atomic/detail/link.hpp>
 #ifndef BOOST_ATOMIC_FLAG_LOCK_FREE
 #include <boost/smart_ptr/detail/lightweight_mutex.hpp>
 #endif

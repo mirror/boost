@@ -46,7 +46,7 @@ extern "C" void _mm_mfence(void);
 
 // Define compiler barriers
 #if defined(__INTEL_COMPILER)
-#define BOOST_ATOMIC_COMPILER_BARRIER __memory_barrier();
+#define BOOST_ATOMIC_COMPILER_BARRIER() __memory_barrier()
 #elif defined(_MSC_VER) && _MSC_VER >= 1310 && !defined(_WIN32_WCE)
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
@@ -71,17 +71,6 @@ BOOST_FORCEINLINE void hardware_full_fence(void)
     BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&tmp, 0);
 #endif
 }
-
-// Define compiler barriers
-#if defined(_MSC_VER) && _MSC_VER >= 1310 && !defined(_WIN32_WCE)
-extern "C" void _ReadWriteBarrier();
-#pragma intrinsic(_ReadWriteBarrier)
-#define BOOST_ATOMIC_COMPILER_BARRIER() _ReadWriteBarrier()
-#endif
-
-#ifndef BOOST_ATOMIC_COMPILER_BARRIER
-#define BOOST_ATOMIC_COMPILER_BARRIER()
-#endif
 
 BOOST_FORCEINLINE void
 platform_fence_before(memory_order)
