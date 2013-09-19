@@ -51,7 +51,7 @@ public:
         }
     }
 
-    ~semaphore()
+    ~semaphore() BOOST_NOEXCEPT
     {
         BOOST_VERIFY(sem_destroy(&m_sem) == 0);
     }
@@ -77,7 +77,7 @@ public:
         }
     }
 
-    void wait(void)
+    void wait(void) BOOST_NOEXCEPT
     {
         for (;;)
         {
@@ -99,7 +99,7 @@ public:
         }
     }
 
-    bool try_wait(void)
+    bool try_wait(void) BOOST_NOEXCEPT
     {
         const int status = sem_trywait(&m_sem);
         if (status == 0)
@@ -120,13 +120,13 @@ public:
 
 #ifdef BOOST_SYNC_USES_CHRONO
     template <class Rep, class Period>
-    bool try_wait_for(const chrono::duration<Rep, Period> & rel_time)
+    bool try_wait_for(const chrono::duration<Rep, Period> & duration) BOOST_NOEXCEPT
     {
-        return try_wait_until(chrono::steady_clock::now() + rel_time);
+        return try_wait_until(chrono::steady_clock::now() + duration);
     }
 
     template <class Clock, class Duration>
-    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout )
+    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout ) BOOST_NOEXCEPT
     {
         using namespace chrono;
         system_clock::time_point    s_now = system_clock::now();
@@ -135,14 +135,14 @@ public:
     }
 
     template <class Duration>
-    bool try_wait_until(const chrono::time_point<chrono::system_clock, Duration>& t)
+    bool try_wait_until(const chrono::time_point<chrono::system_clock, Duration>& t) BOOST_NOEXCEPT
     {
         using namespace chrono;
         typedef time_point<system_clock, nanoseconds> nano_sys_tmpt;
         return try_wait_until(nano_sys_tmpt(ceil<nanoseconds>(t.time_since_epoch())));
     }
 
-    bool try_wait_until(const chrono::time_point<chrono::system_clock, chrono::nanoseconds>& tp)
+    bool try_wait_until(const chrono::time_point<chrono::system_clock, chrono::nanoseconds>& tp) BOOST_NOEXCEPT
     {
         chrono::nanoseconds d = tp.time_since_epoch();
         timespec ts = boost::detail::to_timespec(d);
@@ -150,7 +150,7 @@ public:
     }
 
 private:
-    bool do_wait_lock_until(struct timespec const & timeout)
+    bool do_wait_lock_until(struct timespec const & timeout) BOOST_NOEXCEPT
     {
         for (;;)
         {

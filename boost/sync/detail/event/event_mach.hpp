@@ -38,20 +38,20 @@ class event
     BOOST_DELETED_FUNCTION(event& operator=(event const&));
 
 public:
-    explicit event(bool auto_reset = false):
+    explicit event(bool auto_reset = false) BOOST_NOEXCEPT:
         m_auto_reset(auto_reset), m_state(0)
     {
         kern_return_t result = semaphore_create(mach_task_self(), &m_sem, SYNC_POLICY_FIFO, 0);
         BOOST_VERIFY(result == KERN_SUCCESS);
     }
 
-    ~event()
+    ~event() BOOST_NOEXCEPT
     {
         kern_return_t result = semaphore_destroy(mach_task_self(), m_sem);
         BOOST_VERIFY(result == KERN_SUCCESS);
     }
 
-    void post()
+    void post() BOOST_NOEXCEPT
     {
         if (m_auto_reset) {
             bool was_signalled;
@@ -73,12 +73,12 @@ public:
         }
     }
 
-    void reset()
+    void reset() BOOST_NOEXCEPT
     {
         m_state = 0; // CHECK: do we need to increment the ABA tag?
     }
 
-    void wait()
+    void wait() BOOST_NOEXCEPT
     {
         if (m_auto_reset) {
             kern_return_t result = semaphore_wait( m_sem );
@@ -97,24 +97,24 @@ public:
         }
     }
 
-    bool try_wait()
+    bool try_wait() BOOST_NOEXCEPT
     {
         const mach_timespec_t immediate = {0, 0};
         return do_try_wait_until(immediate);
     }
 
     template <class Rep, class Period>
-    bool try_wait_for(const chrono::duration<Rep, Period> & duration)
+    bool try_wait_for(const chrono::duration<Rep, Period> & duration) BOOST_NOEXCEPT
     {
-        BOOST_AUTO ( seconds, chrono::duration_cast<chrono::seconds>(duration) );
-        BOOST_AUTO ( nanoseconds, chrono::duration_cast<chrono::nanoseconds>(duration) - seconds );
+        chrono::seconds seconds = chrono::duration_cast<chrono::seconds>(duration);
+        chrono::nanoseconds nanoseconds = chrono::duration_cast<chrono::nanoseconds>(duration) - seconds;
 
-        const mach_timespec_t mach_duration = { seconds.count(), nanoseconds.count() };
+        const mach_timespec_t mach_duration = { static_cast<unsigned int>(seconds.count()), static_cast<clock_res_t>(nanoseconds.count()) };
         return do_try_wait_until( mach_duration );
     }
 
     template <class Clock, class Duration>
-    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout )
+    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout ) BOOST_NOEXCEPT
     {
         return try_wait_for( timeout - Clock::now() );
     }

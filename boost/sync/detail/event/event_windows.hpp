@@ -53,7 +53,7 @@ public:
         }
     }
 
-    ~event()
+    ~event() BOOST_NOEXCEPT
     {
         BOOST_VERIFY( boost::detail::win32::CloseHandle(handle_) );
     }

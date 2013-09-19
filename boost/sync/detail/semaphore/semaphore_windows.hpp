@@ -50,9 +50,10 @@ public:
         }
     }
 
-    ~semaphore()
+    ~semaphore() BOOST_NOEXCEPT
     {
-        boost::detail::win32::CloseHandle(m_sem);
+        int status = boost::detail::win32::CloseHandle(m_sem);
+        BOOST_VERIFY (status != 0);
     }
 
     void post()

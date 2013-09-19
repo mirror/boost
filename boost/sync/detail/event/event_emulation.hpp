@@ -30,7 +30,7 @@ class event
     BOOST_DELETED_FUNCTION(event& operator=(event const&));
 
 public:
-    explicit event(bool auto_reset = false) :
+    explicit event(bool auto_reset = false) BOOST_NOEXCEPT :
         m_auto_reset(auto_reset), m_is_set(false)
     {}
 

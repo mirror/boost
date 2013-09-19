@@ -42,10 +42,9 @@ class semaphore
     BOOST_DELETED_FUNCTION(semaphore& operator=(semaphore const&))
 
 public:
-    explicit semaphore(unsigned int i = 0) :
+    explicit semaphore(unsigned int i = 0) BOOST_NOEXCEPT :
         m_count(i)
-    {
-    }
+    {}
 
     void post(void)
     {
