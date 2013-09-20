@@ -1962,8 +1962,7 @@ namespace quickbook
             state.imported = (load_type == block_tags::import);
 
             // update the __FILENAME__ macro
-            *boost::spirit::classic::find(state.macro, "__FILENAME__")
-                = detail::path_to_generic(state.filename_relative);
+            state.update_filename_macro();
         
             // parse the file
             quickbook::parse_file(state, include_doc_id, true);
@@ -1973,8 +1972,7 @@ namespace quickbook
         }
 
         // restore the __FILENAME__ macro
-        *boost::spirit::classic::find(state.macro, "__FILENAME__")
-            = detail::path_to_generic(state.filename_relative);
+        state.update_filename_macro();
     }
 
     void load_source_file(quickbook::state& state,

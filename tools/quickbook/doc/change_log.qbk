@@ -307,6 +307,7 @@ Boost 1.46.1:
 * Make escaping templates with a punctuation identifier illegal.
   Escaping templates with an alphanumeric identifier is still fine.
 * Fix detection of code blocks at the start of a file.
+* XML encode the contents of the `__FILENAME__` macro.
 * 1.7 changes:
   * Make it an error to use an element in the wrong context.
   * Error if the body of a phrase element doesn't parse.

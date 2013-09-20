@@ -84,6 +84,8 @@ namespace quickbook
     // actions
     ///////////////////////////////////////////////////////////////////////////
 
+        void update_filename_macro();
+
         void push_output();
         void pop_output();
 
