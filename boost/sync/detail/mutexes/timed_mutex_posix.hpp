@@ -196,7 +196,7 @@ public:
     template< typename Time >
     typename enable_if_c< sync::detail::time_traits< Time >::is_specialized, bool >::type timed_lock(Time const& t)
     {
-        return timed_lock(sync::detail::time_traits< Time >::to_sync_unit(t));
+        return priv_timed_lock(sync::detail::time_traits< Time >::to_sync_unit(t));
     }
 
     native_handle_type native_handle() BOOST_NOEXCEPT
@@ -208,12 +208,12 @@ public:
     BOOST_DELETED_FUNCTION(timed_mutex& operator= (timed_mutex const&))
 
 private:
-    bool timed_lock(sync::detail::duration dur)
+    bool priv_timed_lock(sync::detail::duration dur)
     {
-        return timed_lock(sync::detail::time_point::now() + dur);
+        return priv_timed_lock(sync::detail::time_point::now() + dur);
     }
 
-    bool timed_lock(sync::detail::time_point const& t)
+    bool priv_timed_lock(sync::detail::time_point const& t)
     {
 #if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
 
