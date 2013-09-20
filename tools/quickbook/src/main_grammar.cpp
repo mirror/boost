@@ -914,7 +914,7 @@ namespace quickbook
             >>  (*(cl::anychar_p - "'''"))
             >>  (   cl::str_p("'''")
                 |   cl::eps_p                   [error("Unclosed boostbook escape.")]
-                )                               [element_action]
+                )
             ;
 
         attribute_value_1_7 =
