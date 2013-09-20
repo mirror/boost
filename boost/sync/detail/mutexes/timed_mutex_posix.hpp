@@ -47,7 +47,7 @@ namespace detail {
 
 namespace BOOST_SYNC_DETAIL_ABI_NAMESPACE {
 
-#if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
+#if !defined(BOOST_SYNC_HAS_PTHREAD_EINTR_BUG)
 using ::pthread_mutex_timedlock;
 #else
 BOOST_FORCEINLINE int pthread_mutex_timedlock(pthread_mutex_t* m, const struct timespec* t)
