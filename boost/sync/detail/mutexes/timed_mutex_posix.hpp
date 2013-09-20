@@ -28,9 +28,7 @@
 #include <boost/sync/detail/pthread.hpp>
 #include <boost/sync/detail/time_traits.hpp>
 #include <boost/sync/detail/time_units.hpp>
-#if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
 #include <boost/sync/detail/pthread_mutex_locks.hpp>
-#endif
 #include <boost/sync/detail/header.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
@@ -236,7 +234,7 @@ private:
             if (cond_res == ETIMEDOUT)
                 return false;
             else if (cond_res != 0)
-                BOOST_THROW_EXCEPTION(lock_error(res, "boost: timed_mutex timedlock failed in pthread_cond_timedwait"));
+                BOOST_THROW_EXCEPTION(lock_error(cond_res, "boost: timed_mutex timedlock failed in pthread_cond_timedwait"));
         }
         m_is_locked = true;
         return true;

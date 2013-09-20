@@ -54,10 +54,6 @@ private:
     mutex_type* m_mutex;
     bool m_is_locked;
 
-private:
-    explicit unique_lock(upgrade_lock< mutex_type >&);
-    unique_lock& operator= (upgrade_lock< mutex_type >& other);
-
 public:
     BOOST_MOVABLE_BUT_NOT_COPYABLE(unique_lock)
 
@@ -104,9 +100,7 @@ public:
         m_mutex(that.m_mutex), m_is_locked(that.m_is_locked)
     {
         if (m_is_locked)
-        {
             m_mutex->unlock_upgrade_and_lock();
-        }
         that.release();
     }
 
@@ -186,13 +180,10 @@ public:
     void lock()
     {
         if (!m_mutex)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock has no mutex"));
-        }
+
         if (m_is_locked)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::resource_deadlock_would_occur, "boost unique_lock already owns the mutex"));
-        }
 
         m_mutex->lock();
         m_is_locked = true;
@@ -201,13 +192,10 @@ public:
     bool try_lock()
     {
         if (!m_mutex)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock has no mutex"));
-        }
+
         if (m_is_locked)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::resource_deadlock_would_occur, "boost unique_lock already owns the mutex"));
-        }
 
         m_is_locked = m_mutex->try_lock();
 
@@ -218,13 +206,10 @@ public:
     typename enable_if_c< detail::time_traits< Time >::is_specialized, bool >::type timed_lock(Time const& time)
     {
         if (!m_mutex)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock has no mutex"));
-        }
+
         if (m_is_locked)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::resource_deadlock_would_occur, "boost unique_lock already owns the mutex"));
-        }
 
         m_is_locked = m_mutex->timed_lock(time);
 
@@ -235,13 +220,10 @@ public:
     typename detail::enable_if_tag< Duration, detail::time_duration_tag, bool >::type try_lock_for(Duration const& rel_time)
     {
         if (!m_mutex)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock has no mutex"));
-        }
+
         if (m_is_locked)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::resource_deadlock_would_occur, "boost unique_lock already owns the mutex"));
-        }
 
         m_is_locked = m_mutex->try_lock_for(rel_time);
 
@@ -252,13 +234,10 @@ public:
     typename detail::enable_if_tag< TimePoint, detail::time_point_tag, bool >::type try_lock_until(TimePoint const& abs_time)
     {
         if (!m_mutex)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock has no mutex"));
-        }
+
         if (m_is_locked)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::resource_deadlock_would_occur, "boost unique_lock already owns the mutex"));
-        }
 
         m_is_locked = m_mutex->try_lock_until(abs_time);
 
@@ -268,13 +247,10 @@ public:
     void unlock()
     {
         if (!m_mutex)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock has no mutex"));
-        }
+
         if (!m_is_locked)
-        {
             BOOST_THROW_EXCEPTION(lock_error(detail::system_namespace::errc::operation_not_permitted, "boost unique_lock doesn't own the mutex"));
-        }
 
         m_mutex->unlock();
         m_is_locked = false;
