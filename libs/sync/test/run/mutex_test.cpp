@@ -179,7 +179,7 @@ template <typename M>
 struct test_timedlock
 {
     typedef M mutex_type;
-    typedef typename M::scoped_timed_lock timed_lock_type;
+    typedef boost::sync::unique_lock< mutex_type > lock_type;
 
     static bool fake_predicate()
     {

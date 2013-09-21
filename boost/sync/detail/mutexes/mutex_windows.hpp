@@ -39,8 +39,12 @@ namespace sync {
 
 BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
+class timed_mutex;
+
 class mutex
 {
+    friend class timed_mutex;
+
 private:
     enum
     {
@@ -102,7 +106,7 @@ public:
         }
     }
 
-    bool try_lock() BOOST_NOEXCEPT
+    bool try_lock()
     {
         return !sync::detail::windows::interlocked_bit_test_and_set(&m_active_count, lock_flag_bit);
     }
@@ -170,7 +174,7 @@ private:
     }
 };
 
-} // namespace posix
+} // namespace winnt
 
 } // namespace sync
 
@@ -178,4 +182,4 @@ private:
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_DETAIL_MUTEXES_MUTEX_POSIX_HPP_INCLUDED_
+#endif // BOOST_SYNC_DETAIL_MUTEXES_MUTEX_WINDOWS_HPP_INCLUDED_

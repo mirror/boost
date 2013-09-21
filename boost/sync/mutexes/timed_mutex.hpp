@@ -76,12 +76,46 @@ public:
      * which can be an absolute time point or a duration. If the operation completes successfully until the timeout expires, \c true is returned.
      * Otherwise, returns \c false.
      *
+     * \param time Relative or absolute timeout. If timeout is relative, the time is measured according to the system clock.
+     *
      * \b Throws: An exception in case if the operating system is unable to fulfill the request.
      *
      * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
      */
     template< typename Time >
     bool timed_lock(Time time);
+
+    /*!
+     * \brief Attempts to lock the mutex within the specified timeout
+     *
+     * If the mutex is not locked, the method locks it and returns \c true. Otherwise the method blocks for up to \a time timeout,
+     * which is a duration. If the operation completes successfully until the timeout expires, \c true is returned.
+     * Otherwise, returns \c false.
+     *
+     * \param rel_timeout Relative timeout. The time is measured according to the system clock.
+     *
+     * \b Throws: An exception in case if the operating system is unable to fulfill the request.
+     *
+     * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
+     */
+    template< typename Duration >
+    bool try_lock_for(Duration rel_timeout);
+
+    /*!
+     * \brief Attempts to lock the mutex within the specified timeout
+     *
+     * If the mutex is not locked, the method locks it and returns \c true. Otherwise the method blocks for up to \a time timeout,
+     * which is an absolute time point. If the operation completes successfully until the timeout expires, \c true is returned.
+     * Otherwise, returns \c false.
+     *
+     * \param abs_timeout Absolute timeout. If the time point clock is not compatible with system clock the operation may take considerably longer than the specified timeout.
+     *
+     * \b Throws: An exception in case if the operating system is unable to fulfill the request.
+     *
+     * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
+     */
+    template< typename TimePoint >
+    bool try_lock_until(TimePoint abs_timeout);
 
     /*!
      * \brief Unlocks the mutex
@@ -115,7 +149,7 @@ public:
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
 #include <boost/sync/detail/mutexes/timed_mutex_posix.hpp>
 #elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-//#include <boost/sync/detail/mutexes/timed_mutex_windows.hpp>
+#include <boost/sync/detail/mutexes/timed_mutex_windows.hpp>
 #else
 #error Boost.Sync: Unsupported threading API
 #endif

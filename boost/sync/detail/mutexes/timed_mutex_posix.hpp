@@ -199,6 +199,18 @@ public:
         return priv_timed_lock(sync::detail::time_traits< Time >::to_sync_unit(t));
     }
 
+    template< typename Duration >
+    typename detail::enable_if_tag< Duration, detail::time_duration_tag, bool >::type try_lock_for(Duration const& rel_time)
+    {
+        return priv_timed_lock(sync::detail::time_traits< Duration >::to_sync_unit(t));
+    }
+
+    template< typename TimePoint >
+    typename detail::enable_if_tag< TimePoint, detail::time_point_tag, bool >::type try_lock_until(TimePoint const& abs_time)
+    {
+        return priv_timed_lock(sync::detail::time_traits< TimePoint >::to_sync_unit(t));
+    }
+
     native_handle_type native_handle() BOOST_NOEXCEPT
     {
         return &m_mutex;
@@ -208,12 +220,12 @@ public:
     BOOST_DELETED_FUNCTION(timed_mutex& operator= (timed_mutex const&))
 
 private:
-    bool priv_timed_lock(sync::detail::duration dur)
+    bool priv_timed_lock(sync::detail::system_duration dur)
     {
-        return priv_timed_lock(sync::detail::time_point::now() + dur);
+        return priv_timed_lock(sync::detail::system_time_point::now() + dur);
     }
 
-    bool priv_timed_lock(sync::detail::time_point const& t)
+    bool priv_timed_lock(sync::detail::system_time_point const& t)
     {
 #if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
 
@@ -240,6 +252,25 @@ private:
         return true;
 
 #endif // defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
+    }
+
+    template< typename TimePoint >
+    bool priv_timed_lock(sync::detail::chrono_time_point< TimePoint > const& t)
+    {
+        if (m_mutex.try_lock())
+            return true;
+
+        typedef TimePoint time_point;
+        typedef typename time_point::clock clock;
+        typedef typename time_point::duration duration;
+        time_point now = clock::now();
+        while (now < t.get())
+        {
+            if (priv_timed_lock(sync::detail::time_traits< duration >::to_sync_unit(t.get() - now)))
+                return true;
+            now = clock::now();
+        }
+        return false;
     }
 };
 

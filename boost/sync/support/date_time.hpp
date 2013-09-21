@@ -38,16 +38,17 @@ struct time_traits< T, typename T::_is_boost_date_time_duration >
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 
-    static duration to_sync_unit(T const& dur)
+    static system_duration to_sync_unit(T const& dur)
     {
         typedef typename T::traits_type traits_type;
         enum
         {
-            conversion_ratio = traits_type::ticks_per_second >= duration::subsecond_fraction ?
-                traits_type::ticks_per_second / duration::subsecond_fraction :
-                duration::subsecond_fraction / traits_type::ticks_per_second
+            conversion_ratio = traits_type::ticks_per_second >= system_duration::subsecond_fraction ?
+                traits_type::ticks_per_second / system_duration::subsecond_fraction :
+                system_duration::subsecond_fraction / traits_type::ticks_per_second
         };
-        return duration(traits_type::ticks_per_second >= duration::subsecond_fraction ? dur.ticks() / conversion_ratio : dur.ticks() * conversion_ratio);
+        return system_duration(traits_type::ticks_per_second >= system_duration::subsecond_fraction ?
+            dur.ticks() / conversion_ratio : dur.ticks() * conversion_ratio);
     }
 };
 
@@ -58,7 +59,7 @@ struct time_traits< T, typename T::_is_boost_date_time_time_point >
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 
-    static time_point to_sync_unit(T const& point)
+    static system_time_point to_sync_unit(T const& point)
     {
         typedef typename T::date_type date_type;
         typedef typename T::time_duration_type time_duration_type;
@@ -70,11 +71,12 @@ struct time_traits< T, typename T::_is_boost_date_time_time_point >
         typedef typename time_duration_type::traits_type traits_type;
         enum
         {
-            conversion_ratio = traits_type::ticks_per_second >= time_point::subsecond_fraction ?
-                traits_type::ticks_per_second / time_point::subsecond_fraction :
-                time_point::subsecond_fraction / traits_type::ticks_per_second
+            conversion_ratio = traits_type::ticks_per_second >= system_time_point::subsecond_fraction ?
+                traits_type::ticks_per_second / system_time_point::subsecond_fraction :
+                system_time_point::subsecond_fraction / traits_type::ticks_per_second
         };
-        return time_point(seconds, traits_type::ticks_per_second >= time_point::subsecond_fraction ? fractional_seconds / conversion_ratio : fractional_seconds * conversion_ratio);
+        return system_time_point(seconds, traits_type::ticks_per_second >= time_point::subsecond_fraction ?
+            fractional_seconds / conversion_ratio : fractional_seconds * conversion_ratio);
     }
 };
 

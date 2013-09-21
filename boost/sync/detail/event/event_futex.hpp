@@ -9,19 +9,17 @@
 #ifndef BOOST_SYNC_DETAIL_EVENT_EVENT_FUTEX_HPP_INCLUDED
 #define BOOST_SYNC_DETAIL_EVENT_EVENT_FUTEX_HPP_INCLUDED
 
-#include <boost/thread/condition_variable.hpp>
-#include <boost/thread/shared_mutex.hpp>
-#include <boost/thread/locks.hpp>
+#include <errno.h>
+#include <unistd.h>
+#include <sys/time.h>
+#include <sys/syscall.h>
+#include <linux/futex.h>
 
+#include <limits>
+#include <boost/assert.hpp>
+#include <boost/atomic.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/header.hpp>
-
-#include <boost/atomic.hpp>
-
-#include <sys/time.h>
-#include <linux/futex.h>
-#include <unistd.h>
-#include <sys/syscall.h>
 
 namespace boost {
 namespace sync {
