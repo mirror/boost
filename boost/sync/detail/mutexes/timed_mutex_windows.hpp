@@ -23,10 +23,8 @@
 #include <boost/assert.hpp>
 #include <boost/throw_exception.hpp>
 #include <boost/utility/enable_if.hpp>
-#include <boost/detail/winapi/handles.hpp>
 #include <boost/detail/winapi/synchronization.hpp>
 #include <boost/sync/exceptions/lock_error.hpp>
-#include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/interlocked.hpp>
 #include <boost/sync/detail/time_traits.hpp>
@@ -104,44 +102,37 @@ private:
 
         long old_count = m_mutex.m_active_count;
         m_mutex.mark_waiting_and_try_lock(old_count);
+        if ((old_count & mutex::lock_flag_value) == 0)
+            return true;
 
-        if ((old_count & mutex::lock_flag_value) != 0)
+        const boost::detail::winapi::HANDLE_ evt = m_mutex.get_event();
+        sync::detail::system_duration::native_type time_left = t.get();
+        while (time_left > 0)
         {
-            bool lock_acquired = false;
-            boost::detail::winapi::HANDLE_ const evt = m_mutex.get_event();
-
-            uint64_t time_left = t.get();
-            do
+            const unsigned int dur = time_left > (std::numeric_limits< int >::max)() ?
+                static_cast< unsigned int >((std::numeric_limits< int >::max)()) : static_cast< unsigned int >(time_left);
+            const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForSingleObject(evt, dur);
+            switch (res)
             {
-                const unsigned int dur = time_left > (std::numeric_limits< int >::max)() ?
-                    static_cast< unsigned int >((std::numeric_limits< int >::max)()) : static_cast< unsigned int >(time_left);
-                const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForSingleObject(evt, dur);
-                switch (res)
-                {
-                case boost::detail::winapi::wait_object_0:
-                    m_mutex.clear_waiting_and_try_lock(old_count);
-                    lock_acquired = (old_count & mutex::lock_flag_value) == 0;
-                    break;
+            case boost::detail::winapi::wait_object_0:
+                m_mutex.clear_waiting_and_try_lock(old_count);
+                if ((old_count & mutex::lock_flag_value) == 0)
+                    return true;
+                break;
 
-                case boost::detail::winapi::wait_timeout:
-                    time_left -= dur;
-                    break;
+            case boost::detail::winapi::wait_timeout:
+                time_left -= dur;
+                break;
 
-                default:
-                    BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD(&m_mutex.m_active_count, -1);
-                    BOOST_THROW_EXCEPTION(lock_error(res, "boost: timed_mutex timedlock failed in WaitForSingleObject"));
-                }
-            }
-            while (!lock_acquired && time_left > 0);
-
-            if (!lock_acquired)
-            {
+            default:
                 BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD(&m_mutex.m_active_count, -1);
-                return false;
+                BOOST_THROW_EXCEPTION(lock_error(res, "boost: timed_mutex timedlock failed in WaitForSingleObject"));
             }
         }
 
-        return true;
+        BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD(&m_mutex.m_active_count, -1);
+
+        return false;
     }
 
     template< typename TimePoint >
