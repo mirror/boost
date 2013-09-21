@@ -115,6 +115,9 @@ public:
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
 #include <boost/sync/detail/event/event_windows.hpp>
 
+#elif defined(__linux__)
+#include <boost/sync/detail/event/event_futex.hpp>
+
 #elif defined(BOOST_SYNC_DETAIL_PLATFORM_MACH)
 #include <boost/sync/detail/event/event_mach.hpp>
 
