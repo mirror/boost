@@ -247,7 +247,7 @@ public:
     }
 
     template< typename T >
-    explicit chrono_time_point(T const& arg) : base_type(arg)
+    explicit chrono_time_point(T const& arg) : m_value(arg)
     {
     }
 

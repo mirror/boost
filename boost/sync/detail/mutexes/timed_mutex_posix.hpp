@@ -202,13 +202,13 @@ public:
     template< typename Duration >
     typename detail::enable_if_tag< Duration, detail::time_duration_tag, bool >::type try_lock_for(Duration const& rel_time)
     {
-        return priv_timed_lock(sync::detail::time_traits< Duration >::to_sync_unit(t));
+        return priv_timed_lock(sync::detail::time_traits< Duration >::to_sync_unit(rel_time));
     }
 
     template< typename TimePoint >
     typename detail::enable_if_tag< TimePoint, detail::time_point_tag, bool >::type try_lock_until(TimePoint const& abs_time)
     {
-        return priv_timed_lock(sync::detail::time_traits< TimePoint >::to_sync_unit(t));
+        return priv_timed_lock(sync::detail::time_traits< TimePoint >::to_sync_unit(abs_time));
     }
 
     native_handle_type native_handle() BOOST_NOEXCEPT
@@ -257,7 +257,7 @@ private:
     template< typename TimePoint >
     bool priv_timed_lock(sync::detail::chrono_time_point< TimePoint > const& t)
     {
-        if (m_mutex.try_lock())
+        if (try_lock())
             return true;
 
         typedef TimePoint time_point;

@@ -75,7 +75,7 @@ struct time_traits< T, typename T::_is_boost_date_time_time_point >
                 traits_type::ticks_per_second / system_time_point::subsecond_fraction :
                 system_time_point::subsecond_fraction / traits_type::ticks_per_second
         };
-        return system_time_point(seconds, traits_type::ticks_per_second >= time_point::subsecond_fraction ?
+        return system_time_point(seconds, traits_type::ticks_per_second >= system_time_point::subsecond_fraction ?
             fractional_seconds / conversion_ratio : fractional_seconds * conversion_ratio);
     }
 };
