@@ -1322,7 +1322,7 @@ are overloaded
 for arguments of type `std::complex<T>`.  
 These algorithms are entirely
 classical, and behave as specified in the C99 standard section 7.3.5.
-See the [@../../libs/math/doc/complex/html/complex_number_tr1_algorithms/inverse_complex.html 
+See the [@../../libs/math/doc/html/inverse_complex.html 
 Boost.Math documentation for more information].
    
    namespace std {
@@ -1482,7 +1482,7 @@ The TR adds 23 special functions (plus float and long double overloads)
 to header <cmath>.
 
 Refer to the 
-[@../../libs/math/doc/sf_and_dist/html/math_toolkit/main_overview/tr1.html Math Library docs] 
+[@../../libs/math/doc/html/math_toolkit/main_tr1.html Math Library docs] 
 for more information.  
 
    
