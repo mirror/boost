@@ -45,6 +45,9 @@ class mutex
 {
     friend class timed_mutex;
 
+public:
+    typedef void _is_condition_variable_compatible;
+
 private:
     enum
     {

@@ -34,6 +34,7 @@ template< typename Rep, typename Period >
 struct time_traits< std::chrono::duration< Rep, Period > >
 {
     typedef time_duration_tag tag;
+    typedef system_duration unit_type;
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 
@@ -48,12 +49,13 @@ template< typename Clock, typename Duration >
 struct time_traits< std::chrono::time_point< Clock, Duration > >
 {
     typedef time_point_tag tag;
+    typedef chrono_time_point< std::chrono::time_point< Clock, Duration > > unit_type;
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 
-    static chrono_time_point< std::chrono::time_point< Clock, Duration > > to_sync_unit(std::chrono::time_point< Clock, Duration > const& point) BOOST_NOEXCEPT
+    static unit_type to_sync_unit(std::chrono::time_point< Clock, Duration > const& point) BOOST_NOEXCEPT
     {
-        return chrono_time_point< std::chrono::time_point< Clock, Duration > >(point);
+        return unit_type(point);
     }
 };
 
@@ -61,6 +63,7 @@ template< typename Duration >
 struct time_traits< std::chrono::time_point< std::chrono::system_clock, Duration > >
 {
     typedef time_point_tag tag;
+    typedef system_time_point unit_type;
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 

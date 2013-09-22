@@ -18,6 +18,7 @@
 #ifndef BOOST_SYNC_DETAIL_PTHREAD_HPP_INCLUDED_
 #define BOOST_SYNC_DETAIL_PTHREAD_HPP_INCLUDED_
 
+#include <time.h>
 #include <errno.h>
 #include <pthread.h>
 #include <boost/sync/detail/config.hpp>
@@ -48,7 +49,12 @@ namespace posix {
 using ::pthread_mutex_destroy;
 using ::pthread_mutex_lock;
 using ::pthread_mutex_trylock;
+#if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
+using ::pthread_mutex_timedlock;
+#endif
 using ::pthread_mutex_unlock;
+using ::pthread_cond_wait;
+using ::pthread_cond_timedwait;
 
 #else // !defined(BOOST_SYNC_HAS_PTHREAD_EINTR_BUG)
 
@@ -87,12 +93,47 @@ BOOST_FORCEINLINE int pthread_mutex_trylock(pthread_mutex_t* m)
     return ret;
 }
 
+#if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
+BOOST_FORCEINLINE int pthread_mutex_timedlock(pthread_mutex_t* m, const struct ::timespec* t)
+{
+    int ret;
+    do
+    {
+        ret = ::pthread_mutex_timedlock(m, t);
+    }
+    while (ret == EINTR);
+    return ret;
+}
+#endif
+
 BOOST_FORCEINLINE int pthread_mutex_unlock(pthread_mutex_t* m)
 {
     int ret;
     do
     {
         ret = ::pthread_mutex_unlock(m);
+    }
+    while (ret == EINTR);
+    return ret;
+}
+
+BOOST_FORCEINLINE int pthread_cond_wait(pthread_cond_t* c, pthread_mutex_t* m)
+{
+    int ret;
+    do
+    {
+        ret = ::pthread_cond_wait(c, m);
+    }
+    while (ret == EINTR);
+    return ret;
+}
+
+BOOST_FORCEINLINE int pthread_cond_timedwait(pthread_cond_t* c, pthread_mutex_t* m, const struct ::timespec* t)
+{
+    int ret;
+    do
+    {
+        ret = ::pthread_cond_timedwait(c, m, t);
     }
     while (ret == EINTR);
     return ret;

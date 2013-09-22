@@ -59,6 +59,8 @@ local doxygen_params =
                         BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(x)= \\
                         BOOST_DEFAULTED_FUNCTION(x,y)=\"x = default;\" \\
                         BOOST_DELETED_FUNCTION(x)=\"x = delete;\" \\
+                        BOOST_SCOPED_ENUM_DECLARE_BEGIN(x)=\"enum class x\" \\
+                        BOOST_SCOPED_ENUM_DECLARE_END(x)=\";\" \\
                         BOOST_EXPLICIT_OPERATOR_BOOL()=\"explicit operator bool() const;\" "
         <xsl:param>boost.doxygen.detailns=detail
 #        <xsl:param>boost.doxygen.detail=implementation_

@@ -34,6 +34,7 @@ template< >
 struct time_traits< struct ::timespec >
 {
     typedef time_point_tag tag;
+    typedef system_time_point unit_type;
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 

@@ -45,6 +45,9 @@ BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
 class timed_mutex
 {
+public:
+    typedef void _is_condition_variable_compatible;
+
 private:
     mutex m_mutex;
 

@@ -42,6 +42,8 @@ BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 class mutex
 {
 public:
+    typedef void _is_condition_variable_compatible;
+
     typedef pthread_mutex_t* native_handle_type;
 
 private:

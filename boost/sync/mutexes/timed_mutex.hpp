@@ -83,7 +83,7 @@ public:
      * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
      */
     template< typename Time >
-    bool timed_lock(Time time);
+    bool timed_lock(Time const& time);
 
     /*!
      * \brief Attempts to lock the mutex within the specified timeout
@@ -99,7 +99,7 @@ public:
      * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
      */
     template< typename Duration >
-    bool try_lock_for(Duration rel_timeout);
+    bool try_lock_for(Duration const& rel_timeout);
 
     /*!
      * \brief Attempts to lock the mutex within the specified timeout
@@ -115,7 +115,7 @@ public:
      * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
      */
     template< typename TimePoint >
-    bool try_lock_until(TimePoint abs_timeout);
+    bool try_lock_until(TimePoint const& abs_timeout);
 
     /*!
      * \brief Unlocks the mutex

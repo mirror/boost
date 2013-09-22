@@ -34,6 +34,7 @@ template< typename T >
 struct time_traits< T, typename T::_is_boost_date_time_duration >
 {
     typedef time_duration_tag tag;
+    typedef system_duration unit_type;
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 
@@ -55,6 +56,7 @@ template< typename T >
 struct time_traits< T, typename T::_is_boost_date_time_time_point >
 {
     typedef time_point_tag tag;
+    typedef system_time_point unit_type;
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 
