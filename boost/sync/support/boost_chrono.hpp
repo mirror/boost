@@ -55,9 +55,9 @@ struct time_traits< boost::chrono::time_point< Clock, Duration > >
 
     static BOOST_CONSTEXPR_OR_CONST bool is_specialized = true;
 
-    static chrono_time_point< boost::chrono::time_point< Clock, Duration > > to_sync_unit(boost::chrono::time_point< Clock, Duration > const& point) BOOST_NOEXCEPT
+    static unit_type to_sync_unit(boost::chrono::time_point< Clock, Duration > const& point) BOOST_NOEXCEPT
     {
-        return chrono_time_point< boost::chrono::time_point< Clock, Duration > >(point);
+        return unit_type(point);
     }
 };
 
