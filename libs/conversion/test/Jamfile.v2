@@ -64,3 +64,10 @@ test-suite conversion
     [ run lexical_cast_filesystem_test.cpp ../../filesystem/build//boost_filesystem/<link>static ]
   ;
 
+# Assuring that examples compile and run. Adding sources from `example` directory to the `conversion` test suite. 
+for local p in [ glob ../example/*.cpp ]
+{
+    conversion += [ run $(p) ] ;
+}
+
+
