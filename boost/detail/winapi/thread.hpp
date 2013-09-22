@@ -6,17 +6,21 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 
-#ifndef BOOST_DETAIL_WIN_THREAD_HPP
-#define BOOST_DETAIL_WIN_THREAD_HPP
+#ifndef BOOST_DETAIL_WINAPI_THREAD_HPP
+#define BOOST_DETAIL_WINAPI_THREAD_HPP
 
-#include <boost/detail/win/basic_types.hpp>
-#include <boost/detail/win/GetCurrentThread.hpp>
+#include <boost/detail/winapi/basic_types.hpp>
+#include <boost/detail/winapi/GetCurrentThread.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost
 {
 namespace detail
 {
-namespace win32
+namespace winapi
 {
 #if defined( BOOST_USE_WINDOWS_H )
     using ::GetCurrentThreadId;
@@ -42,4 +46,4 @@ extern "C" {
 }
 }
 
-#endif // BOOST_DETAIL_WIN_THREAD_HPP
+#endif // BOOST_DETAIL_WINAPI_THREAD_HPP

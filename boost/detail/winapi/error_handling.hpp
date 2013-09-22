@@ -6,15 +6,20 @@
 //  See http://www.boost.org/LICENSE_1_0.txt
 
 
-#ifndef BOOST_DETAIL_WIN_ERROR_HANDLING_HPP
-#define BOOST_DETAIL_WIN_ERROR_HANDLING_HPP
+#ifndef BOOST_DETAIL_WINAPI_ERROR_HANDLING_HPP
+#define BOOST_DETAIL_WINAPI_ERROR_HANDLING_HPP
 
-#include <boost/detail/win/basic_types.hpp>
-#include <boost/detail/win/GetCurrentThread.hpp>
+#include <boost/detail/winapi/basic_types.hpp>
+#include <boost/detail/winapi/GetCurrentThread.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost {
 namespace detail {
-namespace win32 {
+namespace winapi {
+
 #if defined( BOOST_USE_WINDOWS_H )
     using ::FormatMessageA;
     using ::FormatMessageW;
@@ -85,4 +90,4 @@ extern "C" {
 }
 }
 }
-#endif // BOOST_DETAIL_WIN_ERROR_HANDLING_HPP
+#endif // BOOST_DETAIL_WINAPI_ERROR_HANDLING_HPP
