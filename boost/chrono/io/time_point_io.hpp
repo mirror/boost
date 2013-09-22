@@ -270,6 +270,7 @@ namespace boost
             case 'A':
               {
                 std::tm tm2;
+                std::memset(&tm2, 0, sizeof(std::tm));
                 that_.get_weekday(b, e, iob, err, &tm2);
                 //tm->tm_wday = tm2.tm_wday;
               }
@@ -279,6 +280,7 @@ namespace boost
             case 'h':
               {
                 std::tm tm2;
+                std::memset(&tm2, 0, sizeof(std::tm));
                 that_.get_monthname(b, e, iob, err, &tm2);
                 //tm->tm_mon = tm2.tm_mon;
               }
@@ -879,6 +881,7 @@ namespace boost
           std::locale loc = os.getloc();
           time_t t = system_clock::to_time_t(time_point_cast<system_clock::duration>(tp));
           std::tm tm;
+          std::memset(&tm, 0, sizeof(std::tm));
           if (tz == timezone::local)
           {
 #if defined BOOST_WINDOWS && ! defined(__CYGWIN__)
