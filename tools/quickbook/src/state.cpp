@@ -13,6 +13,7 @@
 #include "quickbook.hpp"
 #include "grammar.hpp"
 #include "input_path.hpp"
+#include "utils.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -63,8 +64,9 @@ namespace quickbook
         macro.add
             ("__DATE__", std::string(quickbook_get_date))
             ("__TIME__", std::string(quickbook_get_time))
-            ("__FILENAME__", detail::path_to_generic(filename_relative))
+            ("__FILENAME__", std::string())
         ;
+        update_filename_macro();
 
         boost::scoped_ptr<quickbook_grammar> g(
             new quickbook_grammar(*this));
@@ -73,6 +75,11 @@ namespace quickbook
 
     quickbook_grammar& state::grammar() const {
         return *grammar_;
+    }
+
+    void state::update_filename_macro() {
+        *boost::spirit::classic::find(macro, "__FILENAME__")
+            = detail::encode_string(detail::path_to_generic(filename_relative));
     }
     
     void state::push_output() {
