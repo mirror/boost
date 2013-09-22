@@ -1631,7 +1631,7 @@ The TR adds a number of special functions which were first introduced in the C99
 to header <cmath>.
 
 Refer to the 
-[@../../libs/math/doc/sf_and_dist/html/math_toolkit/main_overview/tr1.html Math Library docs] 
+[@../../libs/math/doc/html/math_toolkit/main_tr1.html Math Library docs]
 for more information.  
 
    
