@@ -51,32 +51,32 @@ private:
     native_type m_value;
 
 public:
-    system_duration() : m_value(0) {}
-    explicit system_duration(native_type value) : m_value(value) {}
+    BOOST_CONSTEXPR system_duration() BOOST_NOEXCEPT : m_value(0) {}
+    explicit system_duration(native_type value) BOOST_NOEXCEPT : m_value(value) {}
 
-    native_type get() const { return m_value; }
+    native_type get() const BOOST_NOEXCEPT { return m_value; }
 
-    system_duration& operator+= (system_duration const& that)
+    system_duration& operator+= (system_duration const& that) BOOST_NOEXCEPT
     {
         m_value += that.m_value;
         return *this;
     }
-    system_duration& operator-= (system_duration const& that)
+    system_duration& operator-= (system_duration const& that) BOOST_NOEXCEPT
     {
         m_value -= that.m_value;
         return *this;
     }
-    system_duration operator- () const
+    system_duration operator- () const BOOST_NOEXCEPT
     {
         return system_duration(-m_value);
     }
 
-    friend system_duration operator+ (system_duration left, system_duration const& right)
+    friend system_duration operator+ (system_duration left, system_duration const& right) BOOST_NOEXCEPT
     {
         left += right;
         return left;
     }
-    friend system_duration operator- (system_duration left, system_duration const& right)
+    friend system_duration operator- (system_duration left, system_duration const& right) BOOST_NOEXCEPT
     {
         left -= right;
         return left;
@@ -96,16 +96,21 @@ private:
     native_type m_value;
 
 public:
-    system_time_point() : m_value() {}
-    explicit system_time_point(time_t t, unsigned int subsecond = 0)
+    BOOST_CONSTEXPR system_time_point() BOOST_NOEXCEPT : m_value() {}
+    explicit system_time_point(time_t t, unsigned int subsecond = 0) BOOST_NOEXCEPT
     {
         m_value.tv_sec = t;
         m_value.tv_nsec = subsecond;
     }
+    explicit system_time_point(system_duration dur) BOOST_NOEXCEPT
+    {
+        m_value.tv_sec = dur.get() / subsecond_fraction;
+        m_value.tv_nsec = dur.get() % subsecond_fraction;
+    }
 
-    native_type const& get() const { return m_value; }
+    native_type const& get() const BOOST_NOEXCEPT { return m_value; }
 
-    static system_time_point now()
+    static system_time_point now() BOOST_NOEXCEPT
     {
 #if defined(BOOST_HAS_CLOCK_GETTIME)
         system_time_point t;
@@ -116,7 +121,7 @@ public:
 #endif
     }
 
-    system_time_point& operator+= (system_duration const& dur)
+    system_time_point& operator+= (system_duration const& dur) BOOST_NOEXCEPT
     {
         int64_t nsec = static_cast< int64_t >(m_value.tv_nsec) + dur.get();
         int64_t tv_nsec = nsec % system_duration::subsecond_fraction;
@@ -130,23 +135,23 @@ public:
 
         return *this;
     }
-    system_time_point& operator-= (system_duration const& dur)
+    system_time_point& operator-= (system_duration const& dur) BOOST_NOEXCEPT
     {
         return operator+= (-dur);
     }
 
-    friend system_time_point operator+ (system_time_point left, system_duration const& right)
+    friend system_time_point operator+ (system_time_point left, system_duration const& right) BOOST_NOEXCEPT
     {
         left += right;
         return left;
     }
-    friend system_time_point operator- (system_time_point left, system_duration const& right)
+    friend system_time_point operator- (system_time_point left, system_duration const& right) BOOST_NOEXCEPT
     {
         left -= right;
         return left;
     }
 
-    friend system_duration operator- (system_time_point const& left, system_time_point const& right)
+    friend system_duration operator- (system_time_point const& left, system_time_point const& right) BOOST_NOEXCEPT
     {
         int64_t seconds = static_cast< int64_t >(left.m_value.tv_sec) - static_cast< int64_t >(right.m_value.tv_sec);
         int64_t nseconds = static_cast< int64_t >(left.m_value.tv_nsec) - static_cast< int64_t >(right.m_value.tv_nsec);
@@ -167,14 +172,17 @@ private:
     native_type m_value;
 
 public:
-    system_time_point() : m_value(0) {}
-    explicit system_time_point(time_t t, unsigned int subsecond = 0) : m_value(static_cast< uint64_t >(t) * subsecond_fraction + subsecond)
+    BOOST_CONSTEXPR system_time_point() BOOST_NOEXCEPT : m_value(0) {}
+    explicit system_time_point(time_t t, unsigned int subsecond = 0) BOOST_NOEXCEPT : m_value(static_cast< uint64_t >(t) * subsecond_fraction + subsecond)
+    {
+    }
+    explicit system_time_point(system_duration dur) BOOST_NOEXCEPT : m_value(dur.get())
     {
     }
 
-    native_type const& get() const { return m_value; }
+    native_type const& get() const BOOST_NOEXCEPT { return m_value; }
 
-    static system_time_point now()
+    static system_time_point now() BOOST_NOEXCEPT
     {
         union
         {
@@ -191,34 +199,32 @@ public:
         // Convert to milliseconds
         caster.as_uint64 /= 10000u;
 
-        system_time_point res;
-        res.m_value = caster.as_uint64;
-        return res;
+        return system_time_point(system_duration(caster.as_uint64));
     }
 
-    system_time_point& operator+= (system_duration const& dur)
+    system_time_point& operator+= (system_duration const& dur) BOOST_NOEXCEPT
     {
         m_value += dur.get();
         return *this;
     }
-    system_time_point& operator-= (system_duration const& dur)
+    system_time_point& operator-= (system_duration const& dur) BOOST_NOEXCEPT
     {
         m_value -= dur.get();
         return *this;
     }
 
-    friend system_time_point operator+ (system_time_point left, system_duration const& right)
+    friend system_time_point operator+ (system_time_point left, system_duration const& right) BOOST_NOEXCEPT
     {
         left += right;
         return left;
     }
-    friend system_time_point operator- (system_time_point left, system_duration const& right)
+    friend system_time_point operator- (system_time_point left, system_duration const& right) BOOST_NOEXCEPT
     {
         left -= right;
         return left;
     }
 
-    friend system_duration operator- (system_time_point const& left, system_time_point const& right)
+    friend system_duration operator- (system_time_point const& left, system_time_point const& right) BOOST_NOEXCEPT
     {
         return system_duration(static_cast< system_duration::native_type >(left.m_value - right.m_value));
     }

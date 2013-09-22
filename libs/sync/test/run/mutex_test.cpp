@@ -8,7 +8,7 @@
 
 #include <boost/sync/mutexes.hpp>
 #include <boost/sync/locks.hpp>
-#include <boost/sync/support/date_time.hpp>
+#include <boost/sync/support/boost_date_time.hpp>
 //#include <boost/thread/recursive_mutex.hpp>
 //#include <boost/thread/thread_time.hpp>
 //#include <boost/thread/condition.hpp>
