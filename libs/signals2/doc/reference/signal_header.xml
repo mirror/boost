@@ -140,10 +140,6 @@ file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
           <postconditions><para><computeroutput>this-&gt;<methodname>empty</methodname>()</computeroutput></para></postconditions>
         </constructor>
 
-        <destructor>
-          <effects><para>Disconnects all slots connected to <computeroutput>*this</computeroutput>.</para></effects>
-        </destructor>
-
         <method-group name="connection management">
           <overloaded-method name="connect">
             <signature>
