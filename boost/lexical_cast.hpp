@@ -1524,7 +1524,7 @@ namespace boost {
                     return true;
                 }
 
-                bool const result = shl_real_type(val, buffer, tmp_finish);
+                bool const result = shl_real_type(val, static_cast<CharT*>(buffer), tmp_finish);
                 finish = tmp_finish;
                 return result;
             }
@@ -2085,12 +2085,14 @@ namespace boost {
                 Target result;
 
                 i_interpreter_type i_interpreter;
-                if (! (i_interpreter.operator <<(arg)))
-                    BOOST_LCAST_THROW_BAD_CAST(Source, Target);
+
+                // Disabling ADL, by directly specifying operators.
+                const bool input_ok = (i_interpreter.operator <<(arg));
 
                 o_interpreter_type out(i_interpreter.cbegin(), i_interpreter.cend());
+
                 // Disabling ADL, by directly specifying operators.
-                if(!(out.operator >>(result)))
+                if(!input_ok || !(out.operator >>(result)))
                   BOOST_LCAST_THROW_BAD_CAST(Source, Target);
 
                 return result;
