@@ -611,7 +611,7 @@ Finally, we can exercise what we've created, even using custom time durations (`
         return 0;
     }
 
-['See the source file [@../../example/si_physics.cpp example/si_physics.cpp]]
+['See the source file [@boost:libs/ratio/example/si_physics.cpp example/si_physics.cpp]]
 
 [endsect]
 
