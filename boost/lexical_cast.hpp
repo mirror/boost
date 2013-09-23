@@ -1446,74 +1446,74 @@ namespace boost {
             }
 
             template <class T, class SomeCharT>
-            bool shl_real_type(const T& val, SomeCharT* /*begin*/, SomeCharT*& /*end*/) {
+            bool shl_real_type(const T& val, SomeCharT* /*begin*/) {
                 lcast_set_precision(out_stream, &val);
                 return shl_input_streamable(val);
             }
 
-            static bool shl_real_type(float val, char* begin, char*& end) {   
+            bool shl_real_type(float val, char* begin) {
                 using namespace std;
                 const double val_as_double = val;
-                end = begin + 
+                finish = start +
 #if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
-                    sprintf_s(begin, end-begin,
+                    sprintf_s(begin, CharacterBufferSize,
 #else
                     sprintf(begin, 
 #endif
                     "%.*g", static_cast<int>(boost::detail::lcast_get_precision<float>()), val_as_double);
-                return end > begin;
+                return finish > start;
             }
 
-            static bool shl_real_type(double val, char* begin, char*& end) {
+            bool shl_real_type(double val, char* begin) {
                 using namespace std;
-                end = begin + 
+                finish = start +
 #if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
-                    sprintf_s(begin, end-begin,
+                    sprintf_s(begin, CharacterBufferSize,
 #else
                     sprintf(begin, 
 #endif
                     "%.*g", static_cast<int>(boost::detail::lcast_get_precision<double>()), val);
-                return end > begin;
+                return finish > start;
             }
 
 #ifndef __MINGW32__
-            static bool shl_real_type(long double val, char* begin, char*& end) {   
+            bool shl_real_type(long double val, char* begin) {
                 using namespace std;
-                end = begin + 
+                finish = start +
 #if defined(_MSC_VER) && (_MSC_VER >= 1400) && !defined(__SGI_STL_PORT) && !defined(_STLPORT_VERSION)
-                    sprintf_s(begin, end-begin,
+                    sprintf_s(begin, CharacterBufferSize,
 #else
                     sprintf(begin, 
 #endif
                     "%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double>()), val );
-                return end > begin;
+                return finish > start;
             }
 #endif
 
 
 #if !defined(BOOST_LCAST_NO_WCHAR_T) && !defined(BOOST_NO_SWPRINTF) && !defined(__MINGW32__)
-            static bool shl_real_type(float val, wchar_t* begin, wchar_t*& end) {
+            bool shl_real_type(float val, wchar_t* begin) {
                 using namespace std;
                 const double val_as_double = val;
-                end = begin + swprintf(begin, end-begin,
+                finish = start + swprintf(begin, CharacterBufferSize,
                                        L"%.*g",
                                        static_cast<int>(boost::detail::lcast_get_precision<float >()),
                                        val_as_double );
-                return end > begin;
+                return finish > start;
             }
 
-            static bool shl_real_type(double val, wchar_t* begin, wchar_t*& end) {
+            bool shl_real_type(double val, wchar_t* begin) {
                 using namespace std;
-                end = begin + swprintf(begin, end-begin,
+                finish = start + swprintf(begin, CharacterBufferSize,
                                           L"%.*g", static_cast<int>(boost::detail::lcast_get_precision<double >()), val );
-                return end > begin;
+                return finish > start;
             }
 
-            static bool shl_real_type(long double val, wchar_t* begin, wchar_t*& end) {
+            bool shl_real_type(long double val, wchar_t* begin) {
                 using namespace std;
-                end = begin + swprintf(begin, end-begin,
+                finish = start + swprintf(begin, CharacterBufferSize,
                                           L"%.*Lg", static_cast<int>(boost::detail::lcast_get_precision<long double >()), val );
-                return end > begin;
+                return finish > start;
             }
 #endif
             template <class T>
@@ -1524,9 +1524,7 @@ namespace boost {
                     return true;
                 }
 
-                bool const result = shl_real_type(val, static_cast<CharT*>(buffer), tmp_finish);
-                finish = tmp_finish;
-                return result;
+                return shl_real_type(val, static_cast<CharT*>(buffer));
             }
 
 /************************************ OPERATORS << ( ... ) ********************************/
