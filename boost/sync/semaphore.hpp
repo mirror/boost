@@ -39,12 +39,16 @@ public:
     /**
      * \b Effects: Increments the semaphore count. If there are processes/threads blocked waiting for the semaphore, then one of these processes will return successfully from its wait function.
      *
+     * \b Memory Ordering: release
+     *
      * \b Throws: if an error occurs.
      * */
     void post();
 
     /**
      * \b Effects: Decrements the semaphore. If the semaphore value is not greater than zero, then the calling process/thread blocks until it can decrement the counter.
+     *
+     * \b Memory Ordering: acquire
      *
      * \b Throws: if an error occurs.
      * */
@@ -53,12 +57,16 @@ public:
     /**
      * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. If the value is not greater than zero returns false.
      *
+     * \b Memory Ordering: acquire, if successful, relaxed otherwise
+     *
      * \b Throws: if an error occurs.
      * */
     bool try_wait();
 
     /**
      * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. Otherwise, waits for the semaphore to the posted or the timeout expires. If the timeout expires, the function returns false. If the semaphore is posted the function returns true.
+     *
+     * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
      * \b Throws: if an error occurs.
      * */
@@ -67,6 +75,8 @@ public:
 
     /**
      * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. Otherwise, waits for the semaphore to the posted or the timeout expires. If the timeout expires, the function returns false. If the semaphore is posted the function returns true.
+     *
+     * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
      * \b Throws: if an error occurs.
      * */

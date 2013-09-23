@@ -1,4 +1,3 @@
-
 // event.hpp, mach events
 //
 // Copyright (C) 2013 Tim Blechmann

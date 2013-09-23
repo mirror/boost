@@ -37,7 +37,7 @@ public:
     /**
      * \b Effects: Signals the event object: the event is set and waiting threads will be woken up.
      *
-     * \b Precondition: No thread waits on this event.
+     * \b Memory Ordering: release
      *
      * \b Throws: if an error occurs.
      */
@@ -46,7 +46,7 @@ public:
     /**
      * \b Effects: Waits for the event to be signaled. If the event is created as `auto_reset`, it will unset the `signaled` state
      *
-     * \b Precondition: No thread waits on this event.
+     * \b Memory Ordering: acquire
      *
      * \b Throws: if an error occurs.
      */
@@ -62,6 +62,8 @@ public:
     /**
      * \b Effects: Waits for the event to be signaled. If the event is created as `auto_reset`, it will unset the `signaled` state
      *
+     * \b Memory Ordering: acquire, if successful, relaxed otherwise
+     *
      * \b Returns: True if the event had been signaled, False, if the call would be blocking or the event has not been signaled.
      *
      * \b Throws: if an error occurs.
@@ -70,6 +72,8 @@ public:
 
     /**
      * \b Effects: Waits for the event to be signaled. If the event is created as `auto_reset`, it will unset the `signaled` state
+     *
+     * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
      * \b Returns: True if the event had been signaled, False, if the call would be blocking or the event has not been signaled.
      *
@@ -80,6 +84,8 @@ public:
 
     /**
      * \b Effects: Waits for the event to be signaled. If the event is created as `auto_reset`, it will unset the `signaled` state
+     *
+     * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
      * \b Returns: True if the event had been signaled, False, if the call would be blocking or the event has not been signaled.
      *
