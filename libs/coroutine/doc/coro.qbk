@@ -5,7 +5,7 @@
           http://www.boost.org/LICENSE_1_0.txt
 ]
 
-[article Coroutine
+[library Coroutine
     [quickbook 1.5]
     [authors [Kowalke, Oliver]]
     [copyright 2009 Oliver Kowalke]
@@ -69,6 +69,7 @@
 [def __getline__ ['std::getline()]]
 [def __handle_read__ ['session::handle_read()]]
 [def __io_service__ ['boost::asio::io_sevice]]
+[def __pull_coro_bool__ ['boost::coroutines::coroutine<>::pull_type::operator bool]]
 [def __pull_coro_get__ ['boost::coroutines::coroutine<>::pull_type::get()]]
 [def __pull_coro_it__ ['boost::coroutines::coroutine<>::pull_type::iterator]]
 [def __pull_coro_op__ ['boost::coroutines::coroutine<>::pull_type::operator()]]
