@@ -11,6 +11,6 @@ __boost_coroutine__ provides two interfaces - one with uni- and one with bidirec
 data transfer (deprecated).
 
 [include unidirect.qbk]
-[include old.qbk]
+[/[include old.qbk]]
 
 [endsect]
