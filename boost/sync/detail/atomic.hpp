@@ -19,6 +19,22 @@ namespace boost  {
 namespace sync   {
 namespace detail {
 
+#if BOOST_CLANG
+#if __has_include( <atomic> )
+#define BOOST_SYNC_USE_STD_ATOMIC
+#endif
+#endif
+
+#if defined(BOOST_MSVC) && (BOOST_MSVC >= 1700)
+#define BOOST_SYNC_USE_STD_ATOMIC
+#endif
+
+#if BOOST_GCC
+#if (BOOST_GCC >= 40800) && (__cplusplus >= 201103L)
+#define BOOST_SYNC_USE_STD_ATOMIC
+#endif
+#endif
+
 #ifdef BOOST_SYNC_USE_STD_ATOMIC
 
 using std::atomic;
@@ -54,5 +70,7 @@ using boost::atomic_thread_fence;
 }
 }
 }
+
+#undef BOOST_SYNC_USE_STD_ATOMIC
 
 #endif // BOOST_SYNC_DETAIL_ATOMIC_HPP
