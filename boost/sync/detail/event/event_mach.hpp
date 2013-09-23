@@ -1,3 +1,4 @@
+
 // event.hpp, mach events
 //
 // Copyright (C) 2013 Tim Blechmann
@@ -12,17 +13,17 @@
 
 #include <cstddef>
 #include <boost/assert.hpp>
+#include <boost/atomic.hpp>
 #include <boost/cstdint.hpp>
 
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/pause.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 
 #include <mach/task.h>
 #include <mach/semaphore.h>
 #include <mach/mach_traps.h>
 #include <mach/mach_init.h>
-
-#include <boost/atomic.hpp>
 
 #include <boost/sync/detail/header.hpp>
 
@@ -54,19 +55,22 @@ public:
     void post() BOOST_NOEXCEPT
     {
         if (m_auto_reset) {
-            bool was_signalled;
+            int32_t old_state = m_state.load(memory_order_acquire);
+            if (old_state >= 0) {
+                for (;;) {
+                    if (m_state.compare_exchange_weak( old_state, old_state - 1, memory_order_release, memory_order_acquire)) {
+                        semaphore_signal( m_sem );
+                        return; // avoid unnecessary fence
+                    }
 
-            uint32_t old_state = m_state.load( memory_order_acquire );
-            for(;;) {
-                was_signalled = ((old_state & 1u) != 0);
-                uint32_t new_state = ((old_state + 2u) | 1u) & std::numeric_limits<uint32_t>::max();
-                if ( m_state.compare_exchange_weak( old_state, new_state, memory_order_release, memory_order_acquire ) )
-                    break;
-                // backoff
+                    if (old_state < 0)
+                        break; // someone else has set the event with no waiters
+
+                    detail::pause();
+                }
             }
 
-            if (!was_signalled)
-                semaphore_signal(m_sem); // wake one thread!
+            atomic_thread_fence( memory_order_release );
         } else {
             m_state.store( 1, memory_order_release );
             semaphore_signal_all( m_sem ); // wake all threads!& reset semaphore count
@@ -75,19 +79,16 @@ public:
 
     void reset() BOOST_NOEXCEPT
     {
-        m_state = 0; // CHECK: do we need to increment the ABA tag?
+        m_state = 0;
     }
 
     void wait() BOOST_NOEXCEPT
     {
         if (m_auto_reset) {
+            m_state.fetch_add(1, memory_order_acquire);
+
             kern_return_t result = semaphore_wait( m_sem );
             BOOST_VERIFY (result == KERN_SUCCESS);
-
-            uint32_t old_state = m_state.load(memory_order_acquire);
-            if (!m_state.compare_exchange_strong( old_state, old_state & ~1u, memory_order_release, memory_order_acquire ) )
-                semaphore_signal(m_sem); // another post succeeded, wake up another thread
-
         } else {
             if (m_state.load(memory_order_acquire) == 1)
                 return;
@@ -123,15 +124,15 @@ private:
     bool do_try_wait_until (const mach_timespec_t & timeout)
     {
         if (m_auto_reset) {
-            kern_return_t result = semaphore_timedwait( m_sem, timeout );
+            m_state.fetch_add(1, memory_order_acquire);
 
-            if (result == KERN_SUCCESS) {
-                uint32_t old_state = m_state.load(memory_order_acquire);
-                if (!m_state.compare_exchange_strong( old_state, old_state & ~1u, memory_order_release, memory_order_acquire ) )
-                    semaphore_signal(m_sem); // another post succeeded, wake up another thread
+            kern_return_t result = semaphore_timedwait( m_sem, timeout );
+            if (result == KERN_SUCCESS)
                 return true;
-            } else
-                return false;
+
+            m_state.fetch_add(-1, memory_order_relaxed);
+            return false;
+
         } else {
             if (m_state.load( memory_order_acquire ) == 1)
                 return true;
@@ -146,7 +147,7 @@ private:
 
     const bool m_auto_reset;
     semaphore_t m_sem;
-    atomic<uint32_t> m_state;
+    atomic<int32_t> m_state;
 };
 
 }
