@@ -32,6 +32,8 @@ using std::memory_order_consume;
 using std::memory_order_relaxed;
 using std::memory_order_seq_cst;
 
+using std::atomic_thread_fence;
+
 #else
 
 using boost::atomic;
@@ -44,6 +46,8 @@ using boost::memory_order_acq_rel;
 using boost::memory_order_consume;
 using boost::memory_order_relaxed;
 using boost::memory_order_seq_cst;
+
+using boost::atomic_thread_fence;
 
 #endif
 

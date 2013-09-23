@@ -12,7 +12,6 @@
 
 #include <cstddef>
 #include <boost/assert.hpp>
-#include <boost/atomic.hpp>
 #include <boost/cstdint.hpp>
 
 #include <boost/sync/detail/config.hpp>
@@ -71,7 +70,7 @@ public:
                 }
             }
 
-            atomic_thread_fence( memory_order_release );
+            detail::atomic_thread_fence( memory_order_release );
         } else {
             m_state.store( 1, memory_order_release );
             semaphore_signal_all( m_sem ); // wake all threads!& reset semaphore count

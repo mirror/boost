@@ -17,7 +17,6 @@
 
 #include <limits>
 #include <boost/assert.hpp>
-#include <boost/atomic.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/atomic.hpp>
 #include <boost/sync/detail/pause.hpp>
