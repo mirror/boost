@@ -10,35 +10,37 @@
 #ifndef BOOST_SYNC_DETAIL_PAUSE_HPP_INCLUDED_
 #define BOOST_SYNC_DETAIL_PAUSE_HPP_INCLUDED_
 
+#include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/header.hpp>
 
-#include <boost/config.hpp>
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
-#ifdef __SSE2__
-#include <xmmintrin.h>
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
+extern "C" void _mm_pause(void);
+#pragma intrinsic(_mm_pause)
 #endif
 
 namespace boost  {
 namespace sync   {
 namespace detail {
 
-static BOOST_FORCEINLINE void pause()
+BOOST_FORCEINLINE void pause() BOOST_NOEXCEPT
 {
-#ifdef __SSE2__
+#if defined(_MSC_VER) && (defined(_M_AMD64) || defined(_M_IX86))
     _mm_pause();
 
 #elif defined(__GNUC__) && (defined(__i386__) || defined(__x86_64__))
     __asm__ __volatile__("pause;");
 
-#elif (defined(__INTEL_COMPILER) || defined(_M_IX86))
-    __asm { nop };
-
 #endif
 }
-
-
 
 } // namespace detail
 } // namespace sync
 } // namespace boost
+
+#include <boost/sync/detail/footer.hpp>
 
 #endif // BOOST_SYNC_DETAIL_PAUSE_HPP_INCLUDED_

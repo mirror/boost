@@ -9,15 +9,7 @@
 #ifndef BOOST_SYNC_DETAIL_ATOMIC_HPP
 #define BOOST_SYNC_DETAIL_ATOMIC_HPP
 
-#ifdef BOOST_SYNC_USE_STD_ATOMIC
-#include <atomic>
-#else
-#include <boost/atomic.hpp>
-#endif
-
-namespace boost  {
-namespace sync   {
-namespace detail {
+#if !defined(BOOST_SYNC_USE_STD_ATOMIC)
 
 #if BOOST_CLANG
 #if __has_include( <atomic> )
@@ -34,6 +26,25 @@ namespace detail {
 #define BOOST_SYNC_USE_STD_ATOMIC
 #endif
 #endif
+
+#endif // !defined(BOOST_SYNC_USE_STD_ATOMIC)
+
+#ifdef BOOST_SYNC_USE_STD_ATOMIC
+#include <atomic>
+#else
+#include <boost/atomic.hpp>
+#endif
+
+#include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/header.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
+namespace boost  {
+namespace sync   {
+namespace detail {
 
 #ifdef BOOST_SYNC_USE_STD_ATOMIC
 
@@ -72,5 +83,7 @@ using boost::atomic_thread_fence;
 }
 
 #undef BOOST_SYNC_USE_STD_ATOMIC
+
+#include <boost/sync/detail/footer.hpp>
 
 #endif // BOOST_SYNC_DETAIL_ATOMIC_HPP
