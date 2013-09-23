@@ -19,6 +19,9 @@
 #include <boost/assert.hpp>
 #include <boost/atomic.hpp>
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/atomic.hpp>
+#include <boost/sync/detail/pause.hpp>
+
 #include <boost/sync/detail/header.hpp>
 
 namespace boost {
@@ -37,12 +40,14 @@ public:
 
     void post() BOOST_NOEXCEPT
     {
+        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.load();
             if (old_state >= 0) {
                 for(;;) {
                     if (m_state.compare_exchange_weak(old_state, old_state - 1))
                         break;
+                    detail::pause();
                 }
                 futex(&m_state, FUTEX_WAKE_PRIVATE, std::numeric_limits<int>::max() ); // wake all threads
             }
@@ -56,6 +61,7 @@ public:
 
     void wait() BOOST_NOEXCEPT
     {
+        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.fetch_add(1) + 1;
 
@@ -101,6 +107,7 @@ public:
 
     bool try_wait()
     {
+        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.load();
 
@@ -145,6 +152,7 @@ public:
 private:
     bool do_wait_for(const struct timespec & timeout)
     {
+        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.fetch_add(1) + 1;
 
@@ -203,7 +211,7 @@ private:
 
     const bool m_auto_reset;
 
-    atomic<int32_t> m_state;
+    detail::atomic<int32_t> m_state;
 };
 
 }

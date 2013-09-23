@@ -17,6 +17,7 @@
 #include <boost/cstdint.hpp>
 
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/atomic.hpp>
 #include <boost/sync/detail/pause.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 
@@ -54,6 +55,7 @@ public:
 
     void post() BOOST_NOEXCEPT
     {
+        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.load(memory_order_acquire);
             if (old_state >= 0) {
@@ -84,6 +86,7 @@ public:
 
     void wait() BOOST_NOEXCEPT
     {
+        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             m_state.fetch_add(1, memory_order_acquire);
 
@@ -123,6 +126,7 @@ public:
 private:
     bool do_try_wait_until (const mach_timespec_t & timeout)
     {
+        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             m_state.fetch_add(1, memory_order_acquire);
 
@@ -147,7 +151,7 @@ private:
 
     const bool m_auto_reset;
     semaphore_t m_sem;
-    atomic<int32_t> m_state;
+    detail::atomic<int32_t> m_state;
 };
 
 }
