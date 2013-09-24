@@ -1,12 +1,6 @@
 #ifndef BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED
 #define BOOST_DETAIL_INTERLOCKED_HPP_INCLUDED
 
-// MS compatible compilers support #pragma once
-
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
-# pragma once
-#endif
-
 //
 //  boost/detail/interlocked.hpp
 //
@@ -18,6 +12,11 @@
 //
 
 #include <boost/config.hpp>
+
+// MS compatible compilers support #pragma once
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 #if defined( BOOST_USE_WINDOWS_H )
 
