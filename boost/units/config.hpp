@@ -67,10 +67,6 @@
         #error Boost.Units requires function template partial ordering
     #endif
 
-    #ifdef BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS
-        #error Boost.Units requires explicit function template arguments
-    #endif
-
     #ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         #error Boost.Units requires partial specialization
     #endif
