@@ -47,7 +47,7 @@ extern "C" void _mm_mfence(void);
 // Define compiler barriers
 #if defined(__INTEL_COMPILER)
 #define BOOST_ATOMIC_COMPILER_BARRIER() __memory_barrier()
-#elif defined(_MSC_VER) && _MSC_VER >= 1310 && !defined(_WIN32_WCE)
+#elif defined(_MSC_VER) && !defined(_WIN32_WCE)
 extern "C" void _ReadWriteBarrier(void);
 #pragma intrinsic(_ReadWriteBarrier)
 #define BOOST_ATOMIC_COMPILER_BARRIER() _ReadWriteBarrier()
