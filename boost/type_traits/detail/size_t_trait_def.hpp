@@ -18,16 +18,9 @@
 
 #include <cstddef>
 
-#if !defined(BOOST_MSVC) || BOOST_MSVC >= 1300
-#   define BOOST_TT_AUX_SIZE_T_BASE(C) public ::boost::integral_constant<std::size_t,C>
-#   define BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) /**/
-#else
-#   define BOOST_TT_AUX_SIZE_T_BASE(C) public ::boost::mpl::size_t<C>
-#   define BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) \
-    typedef ::boost::mpl::size_t<C> base_; \
-    using base_::value; \
-    /**/
-#endif
+#define BOOST_TT_AUX_SIZE_T_BASE(C) public ::boost::integral_constant<std::size_t,C>
+// Obsolete. Remove.
+#define BOOST_TT_AUX_SIZE_T_TRAIT_VALUE_DECL(C) /**/
 
 
 #define BOOST_TT_AUX_SIZE_T_TRAIT_DEF1(trait,T,C) \
