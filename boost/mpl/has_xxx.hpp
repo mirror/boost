@@ -295,10 +295,6 @@ struct trait \
 #     endif
 #   endif
 
-#   if !defined(BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION)
-#     define BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION 0
-#   endif
-
 #   if !defined(BOOST_MPL_HAS_XXX_NEEDS_TEMPLATE_SFINAE)
 #     if BOOST_WORKAROUND(BOOST_MSVC, <= 1400)
 #       define BOOST_MPL_HAS_XXX_NEEDS_TEMPLATE_SFINAE 1
@@ -343,18 +339,11 @@ struct trait \
       ) \
     /**/
 
-#   if !BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION
-#     define BOOST_MPL_HAS_MEMBER_REJECT(args, member_macro) \
-        template< typename V > \
-        static boost::mpl::aux::no_tag \
-        BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)(...); \
-      /**/
-#   else
-#     define BOOST_MPL_HAS_MEMBER_REJECT(args, member_macro) \
-        static boost::mpl::aux::no_tag \
-        BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)(...); \
-      /**/
-#   endif
+#   define BOOST_MPL_HAS_MEMBER_REJECT(args, member_macro) \
+      template< typename V > \
+      static boost::mpl::aux::no_tag \
+      BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)(...); \
+    /**/
 
 #   if !BOOST_MPL_HAS_XXX_NO_WRAPPED_TYPES
 #     define BOOST_MPL_HAS_MEMBER_MULTI_ACCEPT(z, n, args) \
@@ -385,30 +374,10 @@ struct trait \
       /**/
 #   endif
 
-#   if !BOOST_MPL_HAS_XXX_NO_EXPLICIT_TEST_FUNCTION
-#     define BOOST_MPL_HAS_MEMBER_TEST(args) \
-          sizeof(BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)< U >(0)) \
-              == sizeof(boost::mpl::aux::yes_tag) \
-      /**/
-#   else
-#     if !BOOST_MPL_HAS_XXX_NO_WRAPPED_TYPES
-#       define BOOST_MPL_HAS_MEMBER_TEST(args) \
-          sizeof( \
-              BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)( \
-                  static_cast< boost::mpl::aux::type_wrapper< U >* >(0) \
-              ) \
-          ) == sizeof(boost::mpl::aux::yes_tag) \
-        /**/
-#     else
-#       define BOOST_MPL_HAS_MEMBER_TEST(args) \
-          sizeof( \
-              BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)( \
-                  static_cast< U* >(0) \
-              ) \
-          ) == sizeof(boost::mpl::aux::yes_tag) \
-        /**/
-#     endif
-#   endif
+#   define BOOST_MPL_HAS_MEMBER_TEST(args) \
+        sizeof(BOOST_MPL_HAS_MEMBER_INTROSPECTION_TEST_NAME(args)< U >(0)) \
+            == sizeof(boost::mpl::aux::yes_tag) \
+    /**/
 
 #   define BOOST_MPL_HAS_MEMBER_INTROSPECT( \
                args, substitute_macro, member_macro \
