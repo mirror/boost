@@ -95,7 +95,6 @@ namespace boost { namespace mpl {
     (3,(0, BOOST_MPL_LIMIT_METAFUNCTION_ARITY, <boost/mpl/apply.hpp>))
 #include BOOST_PP_ITERATE()
 
-#   if !defined(BOOST_MPL_CFG_NO_APPLY_TEMPLATE)
 // real C++ version is already taken care of
 #   if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
@@ -119,7 +118,6 @@ struct apply
 };
 
 #   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#   endif // BOOST_MPL_CFG_NO_APPLY_TEMPLATE
 
 #   undef AUX778076_APPLY_N_SPEC_PARAMS
 #   undef AUX778076_APPLY_N_PARTIAL_SPEC_PARAMS
@@ -176,7 +174,6 @@ struct BOOST_PP_CAT(apply,i_)<AUX778076_APPLY_N_SPEC_PARAMS(i_, int)>
 };
 #endif
 
-#   if !defined(BOOST_MPL_CFG_NO_APPLY_TEMPLATE)
 #   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 #if i_ == BOOST_MPL_LIMIT_METAFUNCTION_ARITY
@@ -200,7 +197,6 @@ struct apply< F AUX778076_APPLY_N_PARTIAL_SPEC_PARAMS(i_, T, na) >
 
 #   else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-#if !defined(BOOST_MPL_CFG_NO_APPLY_TEMPLATE)
 namespace aux {
 
 template<>
@@ -218,10 +214,8 @@ struct apply_chooser<i_>
 };
 
 } // namespace aux
-#endif
 
 #   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#   endif // BOOST_MPL_CFG_NO_APPLY_TEMPLATE
 
 #   undef i_
 
