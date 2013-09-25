@@ -6,10 +6,6 @@
 # pragma once
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER <= 1020)
-#  pragma warning (disable : 4786) // too long name, harmless warning
-#endif
-
 /////////1/////////2/////////3/////////4/////////5/////////6/////////7/////////8
 // collections_load_imp.hpp: serialization for loading stl collections
 

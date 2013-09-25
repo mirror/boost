@@ -20,10 +20,6 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-// supress noise
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1200)
-# pragma warning (disable : 4786) // too long name, harmless warning
-#endif
 
 #include <boost/mpl/integral_c.hpp>
 #include <boost/mpl/integral_c_tag.hpp>

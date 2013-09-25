@@ -6,7 +6,7 @@
 # pragma once
 #endif
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1310)
+#if defined(_MSC_VER)
 #  pragma warning (disable : 4675) // suppress ADL warning
 #endif
 
