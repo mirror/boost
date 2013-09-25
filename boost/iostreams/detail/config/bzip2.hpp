@@ -19,7 +19,7 @@
 # if defined(BOOST_MSVC) || \
      defined(__BORLANDC__) || \
      (defined(__MWERKS__) && defined(_WIN32) && (__MWERKS__ >= 0x3000)) || \
-     (defined(__ICL) && defined(_MSC_EXTENSIONS) && (_MSC_VER >= 1200)) \
+     (defined(__ICL) && defined(_MSC_EXTENSIONS)) \
      /**/
 
 // Specify the name of the .lib file.
