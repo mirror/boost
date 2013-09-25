@@ -293,18 +293,7 @@ BOOST_MPL_AUX_ASSERT_CONSTANT( \
 
 // BOOST_MPL_ASSERT_NOT((pred<x,...>))
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-#   define BOOST_MPL_ASSERT_NOT(pred) \
-enum { \
-      BOOST_PP_CAT(mpl_assertion_in_line_,BOOST_MPL_AUX_PP_COUNTER()) = sizeof( \
-          boost::mpl::assertion<false>::failed( \
-              boost::mpl::assert_not_arg( (void (*) pred)0, 1 ) \
-            ) \
-        ) \
-}\
-/**/
-#else
-#   define BOOST_MPL_ASSERT_NOT(pred) \
+#define BOOST_MPL_ASSERT_NOT(pred) \
 BOOST_MPL_AUX_ASSERT_CONSTANT( \
       std::size_t \
     , BOOST_PP_CAT(mpl_assertion_in_line_,BOOST_MPL_AUX_PP_COUNTER()) = sizeof( \
@@ -314,7 +303,6 @@ BOOST_MPL_AUX_ASSERT_CONSTANT( \
         ) \
    ) \
 /**/
-#endif
 
 #endif
 
