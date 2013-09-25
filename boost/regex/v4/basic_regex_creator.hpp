@@ -47,9 +47,7 @@ struct digraph : public std::pair<charT, charT>
    digraph(charT c1) : std::pair<charT, charT>(c1, 0){}
    digraph(charT c1, charT c2) : std::pair<charT, charT>(c1, c2)
    {}
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
    digraph(const digraph<charT>& d) : std::pair<charT, charT>(d.first, d.second){}
-#endif
    template <class Seq>
    digraph(const Seq& s) : std::pair<charT, charT>()
    {
