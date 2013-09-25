@@ -425,14 +425,13 @@ public:
   };
 
   template<typename Tag>
-  typename index<Tag>::type& get(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag))
+  typename index<Tag>::type& get()
   {
     return *this;
   }
 
   template<typename Tag>
-  const typename index<Tag>::type& get(
-    BOOST_EXPLICIT_TEMPLATE_TYPE(Tag))const
+  const typename index<Tag>::type& get()const
   {
     return *this;
   }

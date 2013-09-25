@@ -337,7 +337,7 @@ class structured_pair :
     template< class Tag >
     const BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
         result_of::get<Tag,const structured_pair>::type
-    get(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag)) const
+    get() const
     {
         return ::boost::bimaps::relation::support::get<Tag>(*this);
     }
@@ -345,7 +345,7 @@ class structured_pair :
     template< class Tag >
     BOOST_DEDUCED_TYPENAME ::boost::bimaps::relation::support::
         result_of::get<Tag,structured_pair>::type
-    get(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag))
+    get()
     {
         return ::boost::bimaps::relation::support::get<Tag>(*this);
     }

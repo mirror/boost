@@ -369,16 +369,14 @@ class bimap
 
     template< class Tag >
     BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-    map_type_by<Tag,bimap>::type &
-        by(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag))
+    map_type_by<Tag,bimap>::type &by()
     {
         return ::boost::bimaps::support::map_by<Tag>(*this);
     }
 
     template< class Tag >
     const BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
-    map_type_by<Tag,bimap>::type &
-        by(BOOST_EXPLICIT_TEMPLATE_TYPE(Tag)) const
+    map_type_by<Tag,bimap>::type &by() const
     {
         return ::boost::bimaps::support::map_by<Tag>(*this);
     }

@@ -38,7 +38,7 @@ namespace detail { namespace variant {
 // "standard" implementation:
 
 template <typename T>
-inline T forced_return( BOOST_EXPLICIT_TEMPLATE_TYPE(T) )
+inline T forced_return()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
@@ -49,7 +49,7 @@ inline T forced_return( BOOST_EXPLICIT_TEMPLATE_TYPE(T) )
 }
 
 template <>
-inline void forced_return<void>( BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(void) )
+inline void forced_return<void>()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
@@ -66,7 +66,7 @@ inline void forced_return<void>( BOOST_EXPLICIT_TEMPLATE_TYPE_SPEC(void) )
 template <typename T>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
-forced_return( BOOST_EXPLICIT_TEMPLATE_TYPE(T) )
+forced_return()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
@@ -88,7 +88,7 @@ inline void forced_return_no_return() {};
 template <typename T>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(T)
-forced_return( BOOST_EXPLICIT_TEMPLATE_TYPE(T) )
+forced_return()
 {
     // logical error: should never be here! (see above)
     BOOST_ASSERT(false);
