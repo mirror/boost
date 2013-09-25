@@ -36,36 +36,24 @@ template< typename T >
 struct is_void_
     : false_
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using false_::value;
-#endif
 };
 
 template<>
 struct is_void_<void_>
     : true_
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using true_::value;
-#endif
 };
 
 template< typename T >
 struct is_not_void_
     : true_
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using true_::value;
-#endif
 };
 
 template<>
 struct is_not_void_<void_>
     : false_
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using false_::value;
-#endif
 };
 
 BOOST_MPL_AUX_NA_SPEC(1, is_void_)
