@@ -60,36 +60,6 @@
 #define BOOST_CRC_PARM_TYPE  unsigned long
 #endif
 
-// Some compilers [MS VC++ 6] cannot correctly set up several versions of a
-// function template unless every template argument can be unambiguously
-// deduced from the function arguments.  (The bug is hidden if only one version
-// is needed.)  Since all of the CRC function templates have this problem, the
-// workaround is to make up a dummy function argument that encodes the template
-// arguments.  Calls to such template functions need all their template
-// arguments explicitly specified.  At least one compiler that needs this
-// workaround also needs the default value for the dummy argument to be
-// specified in the definition.
-#if defined(__GNUC__) || !defined(BOOST_NO_EXPLICIT_FUNCTION_TEMPLATE_ARGUMENTS)
-#define BOOST_CRC_DUMMY_PARM_TYPE
-#define BOOST_CRC_DUMMY_INIT
-#define BOOST_ACRC_DUMMY_PARM_TYPE
-#define BOOST_ACRC_DUMMY_INIT
-#else
-namespace boost { namespace detail {
-    template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly,
-     BOOST_CRC_PARM_TYPE InitRem, BOOST_CRC_PARM_TYPE FinalXor,
-     bool ReflectIn, bool ReflectRem >
-    struct dummy_crc_argument  { };
-} }
-#define BOOST_CRC_DUMMY_PARM_TYPE   , detail::dummy_crc_argument<Bits, \
- TruncPoly, InitRem, FinalXor, ReflectIn, ReflectRem> *p_
-#define BOOST_CRC_DUMMY_INIT        BOOST_CRC_DUMMY_PARM_TYPE = 0
-#define BOOST_ACRC_DUMMY_PARM_TYPE  , detail::dummy_crc_argument<Bits, \
- TruncPoly, 0, 0, false, false> *p_
-#define BOOST_ACRC_DUMMY_INIT       BOOST_ACRC_DUMMY_PARM_TYPE = 0
-#endif
-
-
 namespace boost
 {
 
@@ -112,14 +82,13 @@ template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly,
            BOOST_CRC_PARM_TYPE InitRem, BOOST_CRC_PARM_TYPE FinalXor,
            bool ReflectIn, bool ReflectRem >
     typename uint_t<Bits>::fast  crc( void const *buffer,
-     std::size_t byte_count
-     BOOST_CRC_DUMMY_PARM_TYPE );
+     std::size_t byte_count);
 
 //! Compute the CRC of a memory block, with any augmentation provided by user
 template < std::size_t Bits, BOOST_CRC_PARM_TYPE TruncPoly >
     typename uint_t<Bits>::fast  augmented_crc( void const *buffer,
-     std::size_t byte_count, typename uint_t<Bits>::fast initial_remainder = 0u
-     BOOST_ACRC_DUMMY_PARM_TYPE );
+     std::size_t byte_count,
+     typename uint_t<Bits>::fast initial_remainder = 0u);
 
 //! Computation type for ARC|CRC-16|CRC-IBM|CRC-16/ARC|CRC-16/LHA standard
 typedef crc_optimal<16, 0x8005, 0, 0, true, true>         crc_16_type;
@@ -2254,7 +2223,6 @@ crc
 (
     void const *  buffer,
     std::size_t   byte_count
-    BOOST_CRC_DUMMY_INIT
 )
 {
     BOOST_CRC_OPTIMAL_NAME  computer;
@@ -2318,7 +2286,6 @@ augmented_crc
     void const *                 buffer,
     std::size_t                  byte_count,
     typename uint_t<Bits>::fast  initial_remainder  // = 0u
-    BOOST_ACRC_DUMMY_INIT
 )
 {
     return detail::low_bits_mask_c<Bits>::value &
@@ -2333,10 +2300,6 @@ augmented_crc
 
 // Undo header-private macros
 #undef BOOST_CRC_OPTIMAL_NAME
-#undef BOOST_ACRC_DUMMY_INIT
-#undef BOOST_ACRC_DUMMY_PARM_TYPE
-#undef BOOST_CRC_DUMMY_INIT
-#undef BOOST_CRC_DUMMY_PARM_TYPE
 #undef BOOST_CRC_PARM_TYPE
 
 
