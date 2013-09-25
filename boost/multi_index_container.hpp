@@ -391,15 +391,14 @@ public:
   };
 
   template<int N>
-  typename nth_index<N>::type& get(BOOST_EXPLICIT_TEMPLATE_NON_TYPE(int,N))
+  typename nth_index<N>::type& get()
   {
     BOOST_STATIC_ASSERT(N>=0&&N<mpl::size<index_type_list>::type::value);
     return *this;
   }
 
   template<int N>
-  const typename nth_index<N>::type& get(
-    BOOST_EXPLICIT_TEMPLATE_NON_TYPE(int,N))const
+  const typename nth_index<N>::type& get()const
   {
     BOOST_STATIC_ASSERT(N>=0&&N<mpl::size<index_type_list>::type::value);
     return *this;

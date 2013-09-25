@@ -399,7 +399,7 @@ struct cons<HT, null_type> {
   typename access_traits<
              typename element<N, self_type>::type
             >::non_const_type
-  get(BOOST_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) {
+  get() {
     return boost::tuples::get<N>(*this);
   }
 
@@ -407,7 +407,7 @@ struct cons<HT, null_type> {
   typename access_traits<
              typename element<N, self_type>::type
            >::const_type
-  get(BOOST_EXPLICIT_TEMPLATE_NON_TYPE(int, N)) const {
+  get() const {
     return boost::tuples::get<N>(*this);
   }
 
