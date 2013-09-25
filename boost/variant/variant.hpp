@@ -367,6 +367,10 @@ public: // visitor interface
         return operand;
     }
 
+#if defined BOOST_MSVC 
+# pragma warning( push ) 
+# pragma warning( disable : 4702 ) // unreachable code 
+#endif 
     template <typename U>
     T& operator()(U&) const
     {
@@ -374,6 +378,9 @@ public: // visitor interface
         BOOST_ASSERT(false);
         return ::boost::detail::variant::forced_return< T& >();
     }
+#if defined BOOST_MSVC 
+# pragma warning( pop ) 
+#endif
 
 #else // MSVC6
 
