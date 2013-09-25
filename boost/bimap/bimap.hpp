@@ -342,8 +342,7 @@ class bimap
     template< class Tag, class IteratorType >
     BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
     iterator_type_by<Tag,bimap>::type
-        project(IteratorType iter
-                BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
+        project(IteratorType iter)
     {
         return core.template project<Tag>(iter.base());
     }
@@ -351,8 +350,7 @@ class bimap
     template< class Tag, class IteratorType >
     BOOST_DEDUCED_TYPENAME ::boost::bimaps::support::
     const_iterator_type_by<Tag,bimap>::type
-        project(IteratorType iter
-                BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag)) const
+        project(IteratorType iter) const
     {
         return core.template project<Tag>(iter.base());
     }

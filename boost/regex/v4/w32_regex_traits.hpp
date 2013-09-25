@@ -552,7 +552,7 @@ typename w32_regex_traits_implementation<charT>::char_class_type
 
 
 template <class charT>
-boost::shared_ptr<const w32_regex_traits_implementation<charT> > create_w32_regex_traits(::boost::re_detail::lcid_type l BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(charT))
+boost::shared_ptr<const w32_regex_traits_implementation<charT> > create_w32_regex_traits(::boost::re_detail::lcid_type l)
 {
    // TODO: create a cache for previously constructed objects.
    return boost::object_cache< ::boost::re_detail::lcid_type, w32_regex_traits_implementation<charT> >::get(l, 5);

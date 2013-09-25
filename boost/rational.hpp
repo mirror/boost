@@ -657,8 +657,7 @@ std::ostream& operator<< (std::ostream& os, const rational<IntType>& r)
 // Type conversion
 template <typename T, typename IntType>
 BOOST_CONSTEXPR
-inline T rational_cast(
-    const rational<IntType>& src BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(T))
+inline T rational_cast(const rational<IntType>& src)
 {
     return static_cast<T>(src.numerator())/static_cast<T>(src.denominator());
 }

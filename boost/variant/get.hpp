@@ -129,8 +129,7 @@ public: // visitor interfaces
 }} // namespace detail::variant
 
 #if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551))
-#   define BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(t)  \
-    BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(t)
+#   define BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(t)
 #else
 #   define BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(t)  \
     , t* = 0

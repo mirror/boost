@@ -506,9 +506,7 @@ public:
   };
 
   template<typename Tag,typename IteratorType>
-  typename index_iterator<Tag>::type project(
-    IteratorType it
-    BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
+  typename index_iterator<Tag>::type project(IteratorType it)
   {
     typedef typename index<Tag>::type index;
 
@@ -524,9 +522,7 @@ public:
   }
 
   template<typename Tag,typename IteratorType>
-  typename index_const_iterator<Tag>::type project(
-    IteratorType it
-    BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))const
+  typename index_const_iterator<Tag>::type project(IteratorType it)const
   {
     typedef typename index<Tag>::type index;
 
@@ -1116,9 +1112,7 @@ template<
 >
 typename ::boost::multi_index::index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,Tag>::type&
-get(
-  multi_index_container<Value,IndexSpecifierList,Allocator>& m
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
+get(multi_index_container<Value,IndexSpecifierList,Allocator>& m)
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>         multi_index_type;
@@ -1136,9 +1130,7 @@ template<
 >
 const typename ::boost::multi_index::index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,Tag>::type&
-get(
-  const multi_index_container<Value,IndexSpecifierList,Allocator>& m
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
+get(const multi_index_container<Value,IndexSpecifierList,Allocator>& m)
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>         multi_index_type;
@@ -1266,8 +1258,7 @@ typename index_iterator<
   multi_index_container<Value,IndexSpecifierList,Allocator>,Tag>::type
 project(
   multi_index_container<Value,IndexSpecifierList,Allocator>& m,
-  IteratorType it
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
+  IteratorType it)
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>         multi_index_type;
@@ -1302,8 +1293,7 @@ typename index_const_iterator<
   multi_index_container<Value,IndexSpecifierList,Allocator>,Tag>::type
 project(
   const multi_index_container<Value,IndexSpecifierList,Allocator>& m,
-  IteratorType it
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Tag))
+  IteratorType it)
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>         multi_index_type;

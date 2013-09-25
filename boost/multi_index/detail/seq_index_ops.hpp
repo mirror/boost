@@ -79,8 +79,7 @@ template<typename Node,typename Compare>
 void sequenced_index_collate(
   BOOST_DEDUCED_TYPENAME Node::impl_type* x,
   BOOST_DEDUCED_TYPENAME Node::impl_type* y,
-  Compare comp
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Node))
+  Compare comp)
 {
   typedef typename Node::impl_type    impl_type;
   typedef typename Node::impl_pointer impl_pointer;

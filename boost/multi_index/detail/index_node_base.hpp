@@ -85,9 +85,7 @@ private:
 };
 
 template<typename Node,typename Value>
-Node* node_from_value(
-  const Value* p
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Node))
+Node* node_from_value(const Value* p)
 {
   typedef typename Node::allocator_type allocator_type;
   return static_cast<Node*>(

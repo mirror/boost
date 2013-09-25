@@ -30,8 +30,7 @@ namespace detail{
 
 template<typename Node,typename Allocator,typename Predicate>
 Node* random_access_index_remove(
-  random_access_index_ptr_array<Allocator>& ptrs,Predicate pred
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Node))
+  random_access_index_ptr_array<Allocator>& ptrs,Predicate pred)
 {
   typedef typename Node::value_type value_type;
   typedef typename Node::impl_ptr_pointer impl_ptr_pointer;
@@ -55,8 +54,7 @@ Node* random_access_index_remove(
 
 template<typename Node,typename Allocator,class BinaryPredicate>
 Node* random_access_index_unique(
-  random_access_index_ptr_array<Allocator>& ptrs,BinaryPredicate binary_pred
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Node))
+  random_access_index_ptr_array<Allocator>& ptrs,BinaryPredicate binary_pred)
 {
   typedef typename Node::value_type       value_type;
   typedef typename Node::impl_ptr_pointer impl_ptr_pointer;
@@ -86,8 +84,7 @@ template<typename Node,typename Allocator,typename Compare>
 void random_access_index_inplace_merge(
   const Allocator& al,
   random_access_index_ptr_array<Allocator>& ptrs,
-  BOOST_DEDUCED_TYPENAME Node::impl_ptr_pointer first1,Compare comp
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Node))
+  BOOST_DEDUCED_TYPENAME Node::impl_ptr_pointer first1,Compare comp)
 {
   typedef typename Node::value_type       value_type;
   typedef typename Node::impl_pointer     impl_pointer;
@@ -151,8 +148,7 @@ template<typename Node,typename Allocator,class Compare>
 void random_access_index_sort(
   const Allocator& al,
   random_access_index_ptr_array<Allocator>& ptrs,
-  Compare comp
-  BOOST_APPEND_EXPLICIT_TEMPLATE_TYPE(Node))
+  Compare comp)
 {
   /* The implementation is extremely simple: an auxiliary
    * array of pointers is sorted using stdlib facilities and
