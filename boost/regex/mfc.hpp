@@ -31,13 +31,9 @@ typedef match_results<TCHAR const*> tmatch;
 typedef regex_iterator<TCHAR const*> tregex_iterator;
 typedef regex_token_iterator<TCHAR const*> tregex_token_iterator;
 
-#if _MSC_VER >= 1310
+// Obsolete. Remove
 #define SIMPLE_STRING_PARAM class B, bool b
 #define SIMPLE_STRING_ARG_LIST B, b
-#else
-#define SIMPLE_STRING_PARAM class B
-#define SIMPLE_STRING_ARG_LIST B
-#endif
 
 //
 // define regex creation functions:
