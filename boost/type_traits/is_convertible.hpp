@@ -52,44 +52,7 @@ namespace boost {
 
 namespace detail {
 
-// MS specific version:
-
-#if defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)
-
-// This workaround is necessary to handle when From is void
-// which is normally taken care of by the partial specialization
-// of the is_convertible typename.
-using ::boost::type_traits::yes_type;
-using ::boost::type_traits::no_type;
-
-template< typename From >
-struct does_conversion_exist
-{
-    template< typename To > struct result_
-    {
-        static no_type BOOST_TT_DECL _m_check(...);
-        static yes_type BOOST_TT_DECL _m_check(To);
-        static typename add_lvalue_reference<From>::type  _m_from;
-        enum { value = sizeof( _m_check(_m_from) ) == sizeof(yes_type) };
-    };
-};
-
-template<>
-struct does_conversion_exist<void>
-{
-    template< typename To > struct result_
-    {
-        enum { value = ::boost::is_void<To>::value };
-    };
-};
-
-template <typename From, typename To>
-struct is_convertible_basic_impl
-    : public does_conversion_exist<From>::template result_<To>
-{
-};
-
-#elif defined(__BORLANDC__) && (__BORLANDC__ < 0x560)
+#if defined(__BORLANDC__) && (__BORLANDC__ < 0x560)
 //
 // special version for Borland compilers
 // this version breaks when used for some

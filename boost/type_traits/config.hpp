@@ -27,7 +27,6 @@
 #endif
 
 # if (BOOST_WORKAROUND(__MWERKS__, < 0x3000)                         \
-    || BOOST_WORKAROUND(BOOST_MSVC, <= 1301)                        \
     || !defined(__EDG_VERSION__) && BOOST_WORKAROUND(__GNUC__, < 3) \
     || BOOST_WORKAROUND(__IBMCPP__, < 600 )                         \
     || BOOST_WORKAROUND(__BORLANDC__, < 0x5A0)                      \

@@ -19,10 +19,6 @@
 
 #include <cstddef>
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<=1300)
-#include <boost/type_traits/msvc/remove_const.hpp>
-#endif
-
 // should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
 
@@ -77,7 +73,7 @@ BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_const,T 
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_const,T const volatile[N],T volatile type[N])
 #endif
 
-#elif !BOOST_WORKAROUND(BOOST_MSVC,<=1300)
+#else
 
 BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_const,T,typename boost::detail::remove_const_impl<T>::type)
 

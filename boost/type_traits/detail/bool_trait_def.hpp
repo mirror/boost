@@ -45,14 +45,6 @@
     enum { value = type::value }; \
     /**/
 #   define BOOST_TT_AUX_BOOL_C_BASE(C)
-
-#elif defined(BOOST_MSVC) && BOOST_MSVC < 1300
-
-#   define BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(C) \
-    typedef ::boost::integral_constant<bool,C> base_; \
-    using base_::value; \
-    /**/
-
 #endif
 
 #ifndef BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL

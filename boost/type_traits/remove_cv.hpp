@@ -18,10 +18,6 @@
 
 #include <cstddef>
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<=1300)
-#include <boost/type_traits/msvc/remove_cv.hpp>
-#endif
-
 // should be the last #include
 #include <boost/type_traits/detail/type_trait_def.hpp>
 
@@ -61,7 +57,7 @@ BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_cv,T vol
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_cv,T const volatile[N],T type[N])
 #endif
 
-#elif !BOOST_WORKAROUND(BOOST_MSVC,<=1300)
+#else
 
 namespace detail {
 template <typename T>
