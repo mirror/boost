@@ -19,7 +19,6 @@
 //     (defined(__BORLANDC__) && (__BORLANDC__ <= 0x0581) ) )   &&
  #if(  BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) ) \
     || BOOST_WORKAROUND( __GNUC__, < 3)                         \
-    || (BOOST_WORKAROUND( _MSC_VER, <= 1300) )                  \
     )                                                           \
     && !defined(USE_DATE_TIME_PRE_1_33_FACET_IO)
 # define USE_DATE_TIME_PRE_1_33_FACET_IO
@@ -80,8 +79,7 @@ namespace std {
 // Compilers affected are:
 // gcc295, msvc (neither with STLPort), any borland
 // 
-#if (((defined(__GNUC__) && (__GNUC__ < 3)) || \
-      (defined(_MSC_VER) && (_MSC_VER < 1300)) ) && \
+#if ((defined(__GNUC__) && (__GNUC__ < 3)) && \
       !defined(_STLP_OWN_IOSTREAMS) ) || \
       BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x581) )
 #define BOOST_DATE_TIME_INCLUDE_LIMITED_HEADERS

@@ -580,13 +580,7 @@ namespace date_time {
       ss.imbue(std::locale::classic()); // don't want any formatting
       ss << std::setw(width)
         << std::setfill(static_cast<char_type>('0'));
-#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
-      // JDG [7/6/02 VC++ compatibility]
-      char_type buff[34];
-      ss << _i64toa(static_cast<boost::int64_t>(val), buff, 10);
-#else
       ss << val;
-#endif
       return ss.str();
     }
 

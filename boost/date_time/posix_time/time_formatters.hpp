@@ -64,26 +64,12 @@ namespace posix_time {
       ss  << std::setw(2) << std::setfill(fill_char)
           << date_time::absolute_value(td.seconds());
       //TODO the following is totally non-generic, yelling FIXME
-#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
-      boost::int64_t frac_sec =
-        date_time::absolute_value(td.fractional_seconds());
-      // JDG [7/6/02 VC++ compatibility]
-      charT buff[32];
-      _i64toa(frac_sec, buff, 10);
-#else
       time_duration::fractional_seconds_type frac_sec =
         date_time::absolute_value(td.fractional_seconds());
-#endif
       if (frac_sec != 0) {
         ss  << "." << std::setw(time_duration::num_fractional_digits())
             << std::setfill(fill_char)
-
-          // JDG [7/6/02 VC++ compatibility]
-#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
-            << buff;
-#else
-        << frac_sec;
-#endif
+            << frac_sec;
       }
     }// else
     return ss.str();
@@ -133,26 +119,12 @@ namespace posix_time {
       ss  << std::setw(2) << std::setfill(fill_char)
           << date_time::absolute_value(td.seconds());
       //TODO the following is totally non-generic, yelling FIXME
-#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
-      boost::int64_t frac_sec =
-        date_time::absolute_value(td.fractional_seconds());
-      // JDG [7/6/02 VC++ compatibility]
-      charT buff[32];
-      _i64toa(frac_sec, buff, 10);
-#else
       time_duration::fractional_seconds_type frac_sec =
         date_time::absolute_value(td.fractional_seconds());
-#endif
       if (frac_sec != 0) {
         ss  << "." << std::setw(time_duration::num_fractional_digits())
             << std::setfill(fill_char)
-
-          // JDG [7/6/02 VC++ compatibility]
-#if (defined(BOOST_MSVC) && (_MSC_VER < 1300))
-            << buff;
-#else
-        << frac_sec;
-#endif
+            << frac_sec;
       }
     }// else
     return ss.str();
