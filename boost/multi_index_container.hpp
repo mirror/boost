@@ -452,9 +452,7 @@ public:
   };
 
   template<int N,typename IteratorType>
-  typename nth_index_iterator<N>::type project(
-    IteratorType it
-    BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int,N))
+  typename nth_index_iterator<N>::type project(IteratorType it)
   {
     typedef typename nth_index<N>::type index;
 
@@ -471,9 +469,7 @@ public:
   }
 
   template<int N,typename IteratorType>
-  typename nth_index_const_iterator<N>::type project(
-    IteratorType it
-    BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int,N))const
+  typename nth_index_const_iterator<N>::type project(IteratorType it)const
   {
     typedef typename nth_index<N>::type index;
 
@@ -1043,9 +1039,7 @@ struct nth_index
 template<int N,typename Value,typename IndexSpecifierList,typename Allocator>
 typename nth_index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,N>::type&
-get(
-  multi_index_container<Value,IndexSpecifierList,Allocator>& m
-  BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int,N))
+get(multi_index_container<Value,IndexSpecifierList,Allocator>& m)
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>    multi_index_type;
@@ -1067,9 +1061,7 @@ get(
 template<int N,typename Value,typename IndexSpecifierList,typename Allocator>
 const typename nth_index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,N>::type&
-get(
-  const multi_index_container<Value,IndexSpecifierList,Allocator>& m
-  BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int,N))
+get(const multi_index_container<Value,IndexSpecifierList,Allocator>& m)
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>    multi_index_type;
@@ -1169,8 +1161,7 @@ typename nth_index_iterator<
   multi_index_container<Value,IndexSpecifierList,Allocator>,N>::type
 project(
   multi_index_container<Value,IndexSpecifierList,Allocator>& m,
-  IteratorType it
-  BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int,N))
+  IteratorType it)
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>                multi_index_type;
@@ -1204,8 +1195,7 @@ typename nth_index_const_iterator<
   multi_index_container<Value,IndexSpecifierList,Allocator>,N>::type
 project(
   const multi_index_container<Value,IndexSpecifierList,Allocator>& m,
-  IteratorType it
-  BOOST_APPEND_EXPLICIT_TEMPLATE_NON_TYPE(int,N))
+  IteratorType it)
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>                multi_index_type;
