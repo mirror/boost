@@ -14,16 +14,10 @@
 
 #include <boost/config.hpp> // BOOST_MSVC
 #include <boost/detail/workaround.hpp>
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-# include <boost/range/detail/vc6/size.hpp>
-#else
-# include <boost/range/detail/implementation_help.hpp>
-# include <boost/range/detail/size_type.hpp>
-# include <boost/range/detail/common.hpp>
-# if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-#  include <boost/range/detail/remove_extent.hpp>
-# endif
-# include <iterator>
+#include <boost/range/detail/implementation_help.hpp>
+#include <boost/range/detail/size_type.hpp>
+#include <boost/range/detail/common.hpp>
+#include <iterator>
 
 namespace boost 
 {
@@ -68,19 +62,11 @@ namespace boost
         template<>
         struct range_size_<array_>
         {
-        #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-            template< typename T, std::size_t sz >
-            static std::size_t fun( T BOOST_RANGE_ARRAY_REF()[sz] )
-            {
-                return sz;
-            }
-        #else
             template<typename T>
             static std::size_t fun(T& t)
             {
                 return remove_extent<T>::size;
             }
-        #endif
         };
         
         template<>
@@ -155,5 +141,4 @@ namespace boost
     
 } // namespace 'boost'
 
-# endif
 #endif

@@ -207,14 +207,12 @@ namespace boost
                 m_Begin( impl::adl_begin( r ) ), m_End( impl::adl_end( r ) )
             {}
 
-            #if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
             this_type& operator=( const this_type& r )
             {
                 m_Begin  = r.begin();
                 m_End    = r.end();
                 return *this;
             }
-            #endif
 
             template< class Iterator >
             iterator_range& operator=( const iterator_range<Iterator>& r )
