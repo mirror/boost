@@ -23,7 +23,6 @@
 #endif // BOOST_NO_TYPEID
 
 #include "boost/variant/detail/config.hpp"
-#include "boost/mpl/aux_/config/eti.hpp"
 #include "boost/mpl/aux_/value_wknd.hpp"
 
 #include "boost/variant/variant_fwd.hpp"
@@ -219,16 +218,6 @@ public: // metafunction result
 
 };
 
-#if defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
-
-template<>
-struct find_fallback_type<int>
-{
-    typedef mpl::pair< no_fallback_type,no_fallback_type > type;
-};
-
-#endif // BOOST_MPL_CFG_MSVC_60_ETI_BUG workaround
-
 #ifndef BOOST_NO_CXX11_NOEXCEPT
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) metafunction is_variant_move_noexcept
@@ -309,16 +298,6 @@ public: // metafunction result
 #endif // MSVC workaround
 
 };
-
-#if defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
-
-template<>
-struct make_storage<int,int>
-{
-    typedef int type;
-};
-
-#endif // BOOST_MPL_CFG_MSVC_60_ETI_BUG workaround
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) class destroyer
