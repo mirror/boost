@@ -29,7 +29,6 @@
 #include "boost/mpl/eval_if.hpp"
 #include "boost/mpl/if.hpp"
 #include "boost/mpl/size_t.hpp"
-#include "boost/mpl/aux_/msvc_eti_base.hpp"
 #include "boost/iterator/reverse_iterator.hpp"
 #include "boost/static_assert.hpp"
 #include "boost/type.hpp"
@@ -210,43 +209,10 @@ struct value_accessor_generator {
   >::type type;
 };
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
-struct eti_value_accessor
-{
-  typedef int index;
-  typedef int size_type;
-  typedef int element;
-  typedef int index_range;
-  typedef int value_type;
-  typedef int reference;
-  typedef int const_reference;
-};
-    
-template <>
-struct value_accessor_generator<int,int>
-{
-  typedef eti_value_accessor type;
-};
-
-template <class T, class NumDims>
-struct associated_types
-  : mpl::aux::msvc_eti_base<
-        typename value_accessor_generator<T,NumDims>::type
-    >::type
-{};
-
-template <>
-struct associated_types<int,int> : eti_value_accessor {};
-
-#else
-
 template <class T, class NumDims>
 struct associated_types
   : value_accessor_generator<T,NumDims>::type
 {};
-
-#endif
 
 //
 // choose value accessor ends
@@ -272,13 +238,7 @@ struct mutable_iterator_tag
 template <typename T, std::size_t NumDims>
 class multi_array_impl_base
   :
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-      public mpl::aux::msvc_eti_base<
-          typename value_accessor_generator<T,mpl::size_t<NumDims> >::type
-       >::type
-#else
       public value_accessor_generator<T,mpl::size_t<NumDims> >::type
-#endif 
 {
   typedef associated_types<T,mpl::size_t<NumDims> > types;
 public:
