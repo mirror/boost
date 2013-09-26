@@ -540,7 +540,7 @@ class deque : protected deque_base<Allocator>
    {}
 
    //! <b>Effects</b>: Constructs a deque that will use a copy of allocator a
-   //!   and inserts n default contructed values.
+   //!   and inserts n value initialized values.
    //!
    //! <b>Throws</b>: If allocator_type's default constructor or copy constructor
    //!   throws or T's default or copy constructor throws.
@@ -549,7 +549,24 @@ class deque : protected deque_base<Allocator>
    explicit deque(size_type n)
       : Base(n, allocator_type())
    {
-      container_detail::insert_default_constructed_n_proxy<Allocator, iterator> proxy(this->alloc());
+      container_detail::insert_value_initialized_n_proxy<Allocator, iterator> proxy(this->alloc());
+      proxy.uninitialized_copy_n_and_update(this->begin(), n);
+      //deque_base will deallocate in case of exception...
+   }
+
+   //! <b>Effects</b>: Constructs a deque that will use a copy of allocator a
+   //!   and inserts n default initialized values.
+   //!
+   //! <b>Throws</b>: If allocator_type's default constructor or copy constructor
+   //!   throws or T's default or copy constructor throws.
+   //!
+   //! <b>Complexity</b>: Linear to n.
+   //!
+   //! <b>Note</b>: Non-standard extension
+   deque(size_type n, default_init_t)
+      : Base(n, allocator_type())
+   {
+      container_detail::insert_default_initialized_n_proxy<Allocator, iterator> proxy(this->alloc());
       proxy.uninitialized_copy_n_and_update(this->begin(), n);
       //deque_base will deallocate in case of exception...
    }
@@ -949,9 +966,9 @@ class deque : protected deque_base<Allocator>
       { return allocator_traits_type::max_size(this->alloc()); }
 
    //! <b>Effects</b>: Inserts or erases elements at the end such that
-   //!   the size becomes n. New elements are default constructed.
+   //!   the size becomes n. New elements are value initialized.
    //!
-   //! <b>Throws</b>: If memory allocation throws, or T's copy constructor throws.
+   //! <b>Throws</b>: If memory allocation throws, or T's constructor throws.
    //!
    //! <b>Complexity</b>: Linear to the difference between size() and new_size.
    void resize(size_type new_size)
@@ -961,7 +978,27 @@ class deque : protected deque_base<Allocator>
          this->priv_erase_last_n(len - new_size);
       else{
          const size_type n = new_size - this->size();
-         container_detail::insert_default_constructed_n_proxy<Allocator, iterator> proxy(this->alloc());
+         container_detail::insert_value_initialized_n_proxy<Allocator, iterator> proxy(this->alloc());
+         priv_insert_back_aux_impl(n, proxy);
+      }
+   }
+
+   //! <b>Effects</b>: Inserts or erases elements at the end such that
+   //!   the size becomes n. New elements are default initialized.
+   //!
+   //! <b>Throws</b>: If memory allocation throws, or T's constructor throws.
+   //!
+   //! <b>Complexity</b>: Linear to the difference between size() and new_size.
+   //!
+   //! <b>Note</b>: Non-standard extension
+   void resize(size_type new_size, default_init_t)
+   {
+      const size_type len = size();
+      if (new_size < len)
+         this->priv_erase_last_n(len - new_size);
+      else{
+         const size_type n = new_size - this->size();
+         container_detail::insert_default_initialized_n_proxy<Allocator, iterator> proxy(this->alloc());
          priv_insert_back_aux_impl(n, proxy);
       }
    }

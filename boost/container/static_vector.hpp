@@ -138,7 +138,7 @@ public:
 
     //! @pre <tt>count <= capacity()</tt>
     //!
-    //! @brief Constructs a static_vector containing count default constructed Values.
+    //! @brief Constructs a static_vector containing count value initialized values.
     //!
     //! @param count    The number of values which will be contained in the container.
     //!
@@ -149,6 +149,24 @@ public:
     //!   Linear O(N).
     explicit static_vector(size_type count)
         : base_t(count)
+    {}
+
+    //! @pre <tt>count <= capacity()</tt>
+    //!
+    //! @brief Constructs a static_vector containing count value initialized values.
+    //!
+    //! @param count    The number of values which will be contained in the container.
+    //!
+    //! @par Throws
+    //!   If Value's default constructor throws.
+    //!
+    //! @par Complexity
+    //!   Linear O(N).
+    //!
+    //! @par Note
+    //!   Non-standard extension
+    static_vector(size_type count, default_init_t)
+        : base_t(count, default_init_t())
     {}
 
     //! @pre <tt>count <= capacity()</tt>
@@ -358,7 +376,7 @@ public:
     //! @pre <tt>count <= capacity()</tt>
     //!
     //! @brief Inserts or erases elements at the end such that
-    //!   the size becomes count. New elements are default constructed.
+    //!   the size becomes count. New elements are value initialized.
     //!
     //! @param count    The number of elements which will be stored in the container.
     //!
@@ -368,6 +386,23 @@ public:
     //! @par Complexity
     //!   Linear O(N).
     void resize(size_type count);
+
+    //! @pre <tt>count <= capacity()</tt>
+    //!
+    //! @brief Inserts or erases elements at the end such that
+    //!   the size becomes count. New elements are default initialized.
+    //!
+    //! @param count    The number of elements which will be stored in the container.
+    //!
+    //! @par Throws
+    //!   If Value's default constructor throws.
+    //!
+    //! @par Complexity
+    //!   Linear O(N).
+    //!
+    //! @par Note
+    //!   Non-standard extension
+    void resize(size_type count, default_init_t);
 
     //! @pre <tt>count <= capacity()</tt>
     //!

@@ -293,18 +293,26 @@ struct vector_alloc_holder
    template<class AllocConvertible>
    explicit vector_alloc_holder(BOOST_FWD_REF(AllocConvertible) a, size_type initial_size)
       : Allocator(boost::forward<AllocConvertible>(a))
+      , m_start()
       , m_size(initial_size)  //Size is initialized here so vector should only call uninitialized_xxx after this
+      , m_capacity()
    {
-      m_start = this->allocation_command(allocate_new, initial_size, initial_size, m_capacity, m_start).first;
+      if(initial_size){
+         m_start = this->allocation_command(allocate_new, initial_size, initial_size, m_capacity, m_start).first;
+      }
    }
 
    //Constructor, does not throw
    explicit vector_alloc_holder(size_type initial_size)
       : Allocator()
+      , m_start()
       , m_size(initial_size)  //Size is initialized here so vector should only call uninitialized_xxx after this
+      , m_capacity()
    {
-      m_start = this->allocation_command
-            (allocate_new, initial_size, initial_size, m_capacity, m_start).first;
+      if(initial_size){
+         m_start = this->allocation_command
+               (allocate_new, initial_size, initial_size, m_capacity, m_start).first;
+      }
    }
 
    vector_alloc_holder(BOOST_RV_REF(vector_alloc_holder) holder) BOOST_CONTAINER_NOEXCEPT
@@ -319,8 +327,10 @@ struct vector_alloc_holder
 
    void first_allocation(size_type cap)
    {
-      m_start = this->allocation_command
-            (allocate_new, cap, cap, m_capacity, m_start).first;
+      if(cap){
+         m_start = this->allocation_command
+               (allocate_new, cap, cap, m_capacity, m_start).first;
+      }
    }
 
    void first_allocation_same_allocator_type(size_type cap)
@@ -417,16 +427,18 @@ struct vector_alloc_holder<Allocator, container_detail::integral_constant<unsign
    template<class AllocConvertible>
    explicit vector_alloc_holder(BOOST_FWD_REF(AllocConvertible) a, size_type initial_size)
       : Allocator(boost::forward<AllocConvertible>(a))
-      , m_size(initial_size)  //Size is initialized here so vector should only call uninitialized_xxx after this
+      , m_size(initial_size)  //Size is initialized here...
    {
+      //... and capacity here, so vector, must call uninitialized_xxx in the derived constructor
       this->first_allocation(initial_size);
    }
 
    //Constructor, does not throw
    explicit vector_alloc_holder(size_type initial_size)
       : Allocator()
-      , m_size(initial_size)  //Size is initialized here so vector should only call uninitialized_xxx after this
+      , m_size(initial_size)  //Size is initialized here...
    {
+      //... and capacity here, so vector, must call uninitialized_xxx in the derived constructor
       this->first_allocation(initial_size);
    }
 
@@ -611,7 +623,7 @@ class vector
    {}
 
    //! <b>Effects</b>: Constructs a vector that will use a copy of allocator a
-   //!   and inserts n default contructed values.
+   //!   and inserts n value initialized values.
    //!
    //! <b>Throws</b>: If allocator_type's default constructor or allocation
    //!   throws or T's default constructor throws.
@@ -620,7 +632,24 @@ class vector
    explicit vector(size_type n)
       :  m_holder(n)
    {
-      boost::container::uninitialized_default_alloc_n(this->m_holder.alloc(), n, container_detail::to_raw_pointer(this->m_holder.start()));
+      boost::container::uninitialized_value_init_alloc_n
+         (this->m_holder.alloc(), n, container_detail::to_raw_pointer(this->m_holder.start()));
+   }
+
+   //! <b>Effects</b>: Constructs a vector that will use a copy of allocator a
+   //!   and inserts n default initialized values.
+   //!
+   //! <b>Throws</b>: If allocator_type's default constructor or allocation
+   //!   throws or T's default constructor throws.
+   //!
+   //! <b>Complexity</b>: Linear to n.
+   //!
+   //! <b>Note</b>: Non-standard extension
+   explicit vector(size_type n, default_init_t)
+      :  m_holder(n)
+   {
+      boost::container::uninitialized_default_init_alloc_n
+         (this->m_holder.alloc(), n, container_detail::to_raw_pointer(this->m_holder.start()));
    }
 
    //! <b>Effects</b>: Constructs a vector
@@ -1030,9 +1059,9 @@ class vector
    { return allocator_traits_type::max_size(this->m_holder.alloc()); }
 
    //! <b>Effects</b>: Inserts or erases elements at the end such that
-   //!   the size becomes n. New elements are default constructed.
+   //!   the size becomes n. New elements are value initialized.
    //!
-   //! <b>Throws</b>: If memory allocation throws, or T's copy constructor throws.
+   //! <b>Throws</b>: If memory allocation throws, or T's constructor throws.
    //!
    //! <b>Complexity</b>: Linear to the difference between size() and new_size.
    void resize(size_type new_size)
@@ -1044,7 +1073,29 @@ class vector
       }
       else{
          const size_type n = new_size - this->size();
-         container_detail::insert_default_constructed_n_proxy<Allocator, T*> proxy(this->m_holder.alloc());
+         container_detail::insert_value_initialized_n_proxy<Allocator, T*> proxy(this->m_holder.alloc());
+         this->priv_forward_range_insert_at_end(n, proxy, alloc_version());
+      }
+   }
+
+   //! <b>Effects</b>: Inserts or erases elements at the end such that
+   //!   the size becomes n. New elements are value initialized.
+   //!
+   //! <b>Throws</b>: If memory allocation throws, or T's constructor throws.
+   //!
+   //! <b>Complexity</b>: Linear to the difference between size() and new_size.
+   //!
+   //! <b>Note</b>: Non-standard extension
+   void resize(size_type new_size, default_init_t)
+   {
+      const size_type sz = this->size();
+      if (new_size < sz){
+         //Destroy last elements
+         this->priv_destroy_last_n(sz - new_size);
+      }
+      else{
+         const size_type n = new_size - this->size();
+         container_detail::insert_default_initialized_n_proxy<Allocator, T*> proxy(this->m_holder.alloc());
          this->priv_forward_range_insert_at_end(n, proxy, alloc_version());
       }
    }

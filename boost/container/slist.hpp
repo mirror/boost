@@ -588,7 +588,7 @@ class slist
    {  return AllocHolder::max_size();  }
 
    //! <b>Effects</b>: Inserts or erases elements at the end such that
-   //!   the size becomes n. New elements are default constructed.
+   //!   the size becomes n. New elements are value initialized.
    //!
    //! <b>Throws</b>: If memory allocation throws, or T's copy constructor throws.
    //!
@@ -597,8 +597,8 @@ class slist
    {
       const_iterator last_pos;
       if(!priv_try_shrink(new_size, last_pos)){
-         typedef default_construct_iterator<value_type, difference_type> default_iterator;
-         this->insert_after(last_pos, default_iterator(new_size - this->size()), default_iterator());
+         typedef value_init_construct_iterator<value_type, difference_type> value_init_iterator;
+         this->insert_after(last_pos, value_init_iterator(new_size - this->size()), value_init_iterator());
       }
    }
 

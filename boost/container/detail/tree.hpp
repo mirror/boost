@@ -178,6 +178,34 @@ struct rbtree_node
    {  m_data = ::boost::move(v); }
 };
 
+template<class Node, class Icont>
+class insert_equal_end_hint_functor
+{
+   Icont &icont_;
+
+   public:
+   insert_equal_end_hint_functor(Icont &icont)
+      :  icont_(icont)
+   {}
+
+   void operator()(Node &n)
+   {  this->icont_.insert_equal(this->icont_.cend(), n); }
+};
+
+template<class Node, class Icont>
+class push_back_functor
+{
+   Icont &icont_;
+
+   public:
+   push_back_functor(Icont &icont)
+      :  icont_(icont)
+   {}
+
+   void operator()(Node &n)
+   {  this->icont_.push_back(n); }
+};
+
 }//namespace container_detail {
 
 namespace container_detail {
@@ -405,11 +433,19 @@ class rbtree
          )
       : AllocHolder(a, value_compare(comp))
    {
+      //Use cend() as hint to achieve linear time for
+      //ordered ranges as required by the standard
+      //for the constructor
+      const const_iterator end_it(this->cend());
       if(unique_insertion){
-         this->insert_unique(first, last);
+         for ( ; first != last; ++first){
+            this->insert_unique(end_it, *first);
+         }
       }
       else{
-         this->insert_equal(first, last);
+         for ( ; first != last; ++first){
+            this->insert_equal(end_it, *first);
+         }
       }
    }
 
@@ -426,12 +462,19 @@ class rbtree
       : AllocHolder(a, value_compare(comp))
    {
       if(unique_insertion){
-         this->insert_unique(first, last);
+         //Use cend() as hint to achieve linear time for
+         //ordered ranges as required by the standard
+         //for the constructor
+         const const_iterator end_it(this->cend());
+         for ( ; first != last; ++first){
+            this->insert_unique(end_it, *first);
+         }
       }
       else{
          //Optimized allocation and construction
          this->allocate_many_and_construct
-            (first, std::distance(first, last), insert_equal_end_hint_functor(this->icont()));
+            ( first, std::distance(first, last)
+            , insert_equal_end_hint_functor<Node, Icont>(this->icont()));
       }
    }
 
@@ -447,7 +490,9 @@ class rbtree
          )
       : AllocHolder(a, value_compare(comp))
    {
-      this->insert_equal(first, last);
+      for ( ; first != last; ++first){
+         this->push_back_impl(*first);
+      }
    }
 
    template <class InputIterator>
@@ -464,7 +509,8 @@ class rbtree
    {
       //Optimized allocation and construction
       this->allocate_many_and_construct
-         (first, std::distance(first, last), push_back_functor(this->icont()));
+         ( first, std::distance(first, last)
+         , container_detail::push_back_functor<Node, Icont>(this->icont()));
    }
 
    rbtree(const rbtree& x)
@@ -534,8 +580,8 @@ class rbtree
    rbtree& operator=(BOOST_RV_REF(rbtree) x)
    {
       if (&x != this){
-         NodeAlloc &this_alloc = this->node_alloc();
-         NodeAlloc &x_alloc    = x.node_alloc();
+         NodeAlloc &this_alloc = this->get_stored_allocator();
+         const NodeAlloc &x_alloc    = x.get_stored_allocator();
          //If allocators are equal we can just swap pointers
          if(this_alloc == x_alloc){
             //Destroy and swap pointers
@@ -678,8 +724,10 @@ class rbtree
    iterator insert_unique_commit(const value_type& v, insert_commit_data &data)
    {
       NodePtr tmp = AllocHolder::create_node(v);
-      iiterator it(this->icont().insert_unique_commit(*tmp, data));
-      return iterator(it);
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());
+      iterator ret(this->icont().insert_unique_commit(*tmp, data));
+      destroy_deallocator.release();
+      return ret;
    }
 
    template<class MovableConvertible>
@@ -687,8 +735,10 @@ class rbtree
       (BOOST_FWD_REF(MovableConvertible) mv, insert_commit_data &data)
    {
       NodePtr tmp = AllocHolder::create_node(boost::forward<MovableConvertible>(mv));
-      iiterator it(this->icont().insert_unique_commit(*tmp, data));
-      return iterator(it);
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());
+      iterator ret(this->icont().insert_unique_commit(*tmp, data));
+      destroy_deallocator.release();
+      return ret;
    }
 
    std::pair<iterator,bool> insert_unique(const value_type& v)
@@ -696,10 +746,10 @@ class rbtree
       insert_commit_data data;
       std::pair<iterator,bool> ret =
          this->insert_unique_check(KeyOfValue()(v), data);
-      if(!ret.second)
-         return ret;
-      return std::pair<iterator,bool>
-         (this->insert_unique_commit(v, data), true);
+      if(ret.second){
+         ret.first = this->insert_unique_commit(v, data);
+      }
+      return ret;
    }
 
    template<class MovableConvertible>
@@ -708,13 +758,22 @@ class rbtree
       insert_commit_data data;
       std::pair<iterator,bool> ret =
          this->insert_unique_check(KeyOfValue()(mv), data);
-      if(!ret.second)
-         return ret;
-      return std::pair<iterator,bool>
-         (this->insert_unique_commit(boost::forward<MovableConvertible>(mv), data), true);
+      if(ret.second){
+         ret.first = this->insert_unique_commit(boost::forward<MovableConvertible>(mv), data);
+      }
+      return ret;
    }
 
    private:
+
+   template<class MovableConvertible>
+   void push_back_impl(BOOST_FWD_REF(MovableConvertible) mv)
+   {
+      NodePtr tmp(AllocHolder::create_node(boost::forward<MovableConvertible>(mv)));
+      //push_back has no-throw guarantee so avoid any deallocator/destroyer
+      this->icont().push_back(*tmp);
+   }
+
    std::pair<iterator, bool> emplace_unique_impl(NodePtr p)
    {
       value_type &v = p->get_data();
@@ -760,15 +819,21 @@ class rbtree
    template <class... Args>
    iterator emplace_equal(Args&&... args)
    {
-      NodePtr p(AllocHolder::create_node(boost::forward<Args>(args)...));
-      return iterator(this->icont().insert_equal(this->icont().end(), *p));
+      NodePtr tmp(AllocHolder::create_node(boost::forward<Args>(args)...));
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());
+      iterator ret(this->icont().insert_equal(this->icont().end(), *tmp));
+      destroy_deallocator.release();
+      return ret;
    }
 
    template <class... Args>
    iterator emplace_hint_equal(const_iterator hint, Args&&... args)
    {
       NodePtr p(AllocHolder::create_node(boost::forward<Args>(args)...));
-      return iterator(this->icont().insert_equal(hint.get(), *p));
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());
+      iterator ret(this->icont().insert_equal(hint.get(), *tmp));
+      destroy_deallocator.release();
+      return ret;
    }
 
    #else //#ifdef BOOST_CONTAINER_PERFECT_FORWARDING
@@ -792,16 +857,22 @@ class rbtree
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)                   \
    iterator emplace_equal(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                               \
    {                                                                                                        \
-      NodePtr p(AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));           \
-      return iterator(this->icont().insert_equal(this->icont().end(), *p));                                 \
+      NodePtr tmp(AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));         \
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());                   \
+      iterator ret(this->icont().insert_equal(this->icont().end(), *tmp));                                  \
+      destroy_deallocator.release();                                                                        \
+      return ret;                                                                                           \
    }                                                                                                        \
                                                                                                             \
    BOOST_PP_EXPR_IF(n, template<) BOOST_PP_ENUM_PARAMS(n, class P) BOOST_PP_EXPR_IF(n, >)                   \
    iterator emplace_hint_equal(const_iterator hint                                                          \
                        BOOST_PP_ENUM_TRAILING(n, BOOST_CONTAINER_PP_PARAM_LIST, _))                         \
    {                                                                                                        \
-      NodePtr p(AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));           \
-      return iterator(this->icont().insert_equal(hint.get(), *p));                                          \
+      NodePtr tmp(AllocHolder::create_node(BOOST_PP_ENUM(n, BOOST_CONTAINER_PP_PARAM_FORWARD, _)));         \
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());                   \
+      iterator ret(this->icont().insert_equal(hint.get(), *tmp));                                           \
+      destroy_deallocator.release();                                                                        \
+      return ret;                                                                                           \
    }                                                                                                        \
    //!
    #define BOOST_PP_LOCAL_LIMITS (0, BOOST_CONTAINER_MAX_CONSTRUCTOR_PARAMETERS)
@@ -833,53 +904,53 @@ class rbtree
    template <class InputIterator>
    void insert_unique(InputIterator first, InputIterator last)
    {
-      if(this->empty()){
-         //Insert with end hint, to achieve linear
-         //complexity if [first, last) is ordered
-         const_iterator hint(this->cend());
-         for( ; first != last; ++first)
-            hint = this->insert_unique(hint, *first);
-      }
-      else{
-         for( ; first != last; ++first)
-            this->insert_unique(*first);
-      }
+      for( ; first != last; ++first)
+         this->insert_unique(*first);
    }
 
    iterator insert_equal(const value_type& v)
    {
-      NodePtr p(AllocHolder::create_node(v));
-      return iterator(this->icont().insert_equal(this->icont().end(), *p));
+      NodePtr tmp(AllocHolder::create_node(v));
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());
+      iterator ret(this->icont().insert_equal(this->icont().end(), *tmp));
+      destroy_deallocator.release();
+      return ret;
    }
 
    template<class MovableConvertible>
    iterator insert_equal(BOOST_FWD_REF(MovableConvertible) mv)
    {
-      NodePtr p(AllocHolder::create_node(boost::forward<MovableConvertible>(mv)));
-      return iterator(this->icont().insert_equal(this->icont().end(), *p));
+      NodePtr tmp(AllocHolder::create_node(boost::forward<MovableConvertible>(mv)));
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());
+      iterator ret(this->icont().insert_equal(this->icont().end(), *tmp));
+      destroy_deallocator.release();
+      return ret;
    }
 
    iterator insert_equal(const_iterator hint, const value_type& v)
    {
-      NodePtr p(AllocHolder::create_node(v));
-      return iterator(this->icont().insert_equal(hint.get(), *p));
+      NodePtr tmp(AllocHolder::create_node(v));
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());
+      iterator ret(this->icont().insert_equal(hint.get(), *tmp));
+      destroy_deallocator.release();
+      return ret;
    }
 
    template<class MovableConvertible>
    iterator insert_equal(const_iterator hint, BOOST_FWD_REF(MovableConvertible) mv)
    {
-      NodePtr p(AllocHolder::create_node(boost::forward<MovableConvertible>(mv)));
-      return iterator(this->icont().insert_equal(hint.get(), *p));
+      NodePtr tmp(AllocHolder::create_node(boost::forward<MovableConvertible>(mv)));
+      scoped_destroy_deallocator<NodeAlloc> destroy_deallocator(tmp, this->node_alloc());
+      iterator ret(this->icont().insert_equal(hint.get(), *tmp));
+      destroy_deallocator.release();
+      return ret;
    }
 
    template <class InputIterator>
    void insert_equal(InputIterator first, InputIterator last)
    {
-      //Insert with end hint, to achieve linear
-      //complexity if [first, last) is ordered
-      const_iterator hint(this->cend());
       for( ; first != last; ++first)
-         hint = this->insert_equal(hint, *first);
+         this->insert_equal(*first);
    }
 
    iterator erase(const_iterator position)
@@ -930,41 +1001,6 @@ class rbtree
       return std::pair<const_iterator,const_iterator>
          (const_iterator(ret.first), const_iterator(ret.second));
    }
-
-   private:
-
-   class insert_equal_end_hint_functor;
-   friend class insert_equal_end_hint_functor;
-
-   class insert_equal_end_hint_functor
-   {
-      Icont &icont_;
-      const iconst_iterator cend_;
-
-      public:
-      insert_equal_end_hint_functor(Icont &icont)
-         :  icont_(icont), cend_(this->icont_.cend())
-      {}
-
-      void operator()(Node &n)
-      {  this->icont_.insert_equal(cend_, n); }
-   };
-
-   class push_back_functor;
-   friend class push_back_functor;
-
-   class push_back_functor
-   {
-      Icont &icont_;
-
-      public:
-      push_back_functor(Icont &icont)
-         :  icont_(icont)
-      {}
-
-      void operator()(Node &n)
-      {  this->icont_.push_back(n); }
-   };
 };
 
 template <class Key, class Value, class KeyOfValue,

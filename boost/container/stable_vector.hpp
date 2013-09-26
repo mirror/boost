@@ -123,8 +123,8 @@ struct node
          rebind_pointer<void>::type
       >
 {
-   private:
-   node();
+//   private:
+//   node();
 
    public:
    typename ::boost::intrusive::pointer_traits<Pointer>::element_type value;
@@ -568,7 +568,7 @@ class stable_vector
    }
 
    //! <b>Effects</b>: Constructs a stable_vector that will use a copy of allocator a
-   //!   and inserts n default contructed values.
+   //!   and inserts n value initialized values.
    //!
    //! <b>Throws</b>: If allocator_type's default constructor or copy constructor
    //!   throws or T's default or copy constructor throws.
@@ -579,6 +579,24 @@ class stable_vector
    {
       stable_vector_detail::clear_on_destroy<stable_vector> cod(*this);
       this->resize(n);
+      STABLE_VECTOR_CHECK_INVARIANT;
+      cod.release();
+   }
+
+   //! <b>Effects</b>: Constructs a stable_vector that will use a copy of allocator a
+   //!   and inserts n default initialized values.
+   //!
+   //! <b>Throws</b>: If allocator_type's default constructor or copy constructor
+   //!   throws or T's default or copy constructor throws.
+   //!
+   //! <b>Complexity</b>: Linear to n.
+   //!
+   //! <b>Note</b>: Non-standard extension
+   stable_vector(size_type n, default_init_t)
+      : internal_data(), index()
+   {
+      stable_vector_detail::clear_on_destroy<stable_vector> cod(*this);
+      this->resize(n, default_init);
       STABLE_VECTOR_CHECK_INVARIANT;
       cod.release();
    }
@@ -960,17 +978,35 @@ class stable_vector
    {  return this->index.max_size() - ExtraPointers;  }
 
    //! <b>Effects</b>: Inserts or erases elements at the end such that
-   //!   the size becomes n. New elements are default constructed.
+   //!   the size becomes n. New elements are value initialized.
    //!
-   //! <b>Throws</b>: If memory allocation throws, or T's copy constructor throws.
+   //! <b>Throws</b>: If memory allocation throws, or T's default constructor throws.
    //!
    //! <b>Complexity</b>: Linear to the difference between size() and new_size.
    void resize(size_type n)
    {
-      typedef default_construct_iterator<value_type, difference_type> default_iterator;
+      typedef value_init_construct_iterator<value_type, difference_type> value_init_iterator;
       STABLE_VECTOR_CHECK_INVARIANT;
       if(n > this->size())
-         this->insert(this->cend(), default_iterator(n - this->size()), default_iterator());
+         this->insert(this->cend(), value_init_iterator(n - this->size()), value_init_iterator());
+      else if(n < this->size())
+         this->erase(this->cbegin() + n, this->cend());
+   }
+
+   //! <b>Effects</b>: Inserts or erases elements at the end such that
+   //!   the size becomes n. New elements are default initialized.
+   //!
+   //! <b>Throws</b>: If memory allocation throws, or T's default constructor throws.
+   //!
+   //! <b>Complexity</b>: Linear to the difference between size() and new_size.
+   //!
+   //! <b>Note</b>: Non-standard extension
+   void resize(size_type n, default_init_t)
+   {
+      typedef default_init_construct_iterator<value_type, difference_type> default_init_iterator;
+      STABLE_VECTOR_CHECK_INVARIANT;
+      if(n > this->size())
+         this->insert(this->cend(), default_init_iterator(n - this->size()), default_init_iterator());
       else if(n < this->size())
          this->erase(this->cbegin() + n, this->cend());
    }

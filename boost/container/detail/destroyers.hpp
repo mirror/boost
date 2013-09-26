@@ -68,6 +68,9 @@ struct scoped_deallocator
    pointer get() const
    {  return m_ptr;  }
 
+   void set(const pointer &p)
+   {  m_ptr = p;  }
+
    void release()
    {  m_ptr = 0; }
 };
@@ -87,6 +90,9 @@ struct null_scoped_deallocator
 
    pointer get() const
    {  return pointer();  }
+
+   void set(const pointer &)
+   {}
 };
 
 //!A deleter for scoped_ptr that deallocates the memory
@@ -248,6 +254,11 @@ class scoped_destructor
 
    void release()
    {  pv_ = 0; }
+
+
+   void set(value_type *ptr) { pv_ = ptr; }
+
+   value_type *get() const { return pv_; }
 
    private:
    value_type *pv_;

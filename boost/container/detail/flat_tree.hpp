@@ -240,16 +240,24 @@ class flat_tree
             , const allocator_type& a = allocator_type())
       : m_data(comp, a)
    {
+      //Use cend() as hint to achieve linear time for
+      //ordered ranges as required by the standard
+      //for the constructor
+      //Call end() every iteration as reallocation might have invalidated iterators
       if(unique_insertion){
-         this->insert_unique(first, last);
+         for ( ; first != last; ++first){
+            this->insert_unique(this->cend(), *first);
+         }
       }
       else{
-         this->insert_equal(first, last);
+         for ( ; first != last; ++first){
+            this->insert_equal(this->cend(), *first);
+         }
       }
    }
 
    ~flat_tree()
-   { }
+   {}
 
    flat_tree&  operator=(BOOST_COPY_ASSIGN_REF(flat_tree) x)
    {  m_data = x.m_data;   return *this;  }
@@ -389,7 +397,11 @@ class flat_tree
 
    template <class InIt>
    void insert_unique(InIt first, InIt last)
-   {  this->priv_insert_unique_loop(first, last); }
+   {
+      for ( ; first != last; ++first){
+         this->insert_unique(*first);
+      }
+   }
 
    template <class InIt>
    void insert_equal(InIt first, InIt last
@@ -487,7 +499,13 @@ class flat_tree
          >::type * = 0
       #endif
       )
-   {  this->priv_insert_unique_loop_hint(first, last);  }
+   {
+      const_iterator pos(this->cend());
+      for ( ; first != last; ++first){
+         pos = this->insert_unique(pos, *first);
+         ++pos;
+      }
+   }
 
    template <class BidirIt>
    void insert_unique(ordered_unique_range_t, BidirIt first, BidirIt last
@@ -677,22 +695,21 @@ class flat_tree
    // set operations:
    iterator find(const key_type& k)
    {
-      const Compare &key_cmp = this->m_data.get_comp();
       iterator i = this->lower_bound(k);
-
-      if (i != this->end() && key_cmp(k, KeyOfValue()(*i))){ 
-         i = this->end(); 
+      iterator end_it = this->end();
+      if (i != end_it && this->m_data.get_comp()(k, KeyOfValue()(*i))){ 
+         i = end_it; 
       }
       return i;
    }
 
    const_iterator find(const key_type& k) const
    {
-      const Compare &key_cmp = this->m_data.get_comp();
       const_iterator i = this->lower_bound(k);
 
-      if (i != this->end() && key_cmp(k, KeyOfValue()(*i))){ 
-         i = this->end(); 
+      const_iterator end_it = this->cend();
+      if (i != end_it && this->m_data.get_comp()(k, KeyOfValue()(*i))){ 
+         i = end_it;
       }
       return i;
    }
@@ -708,19 +725,19 @@ class flat_tree
    {  return this->priv_lower_bound(this->begin(), this->end(), k);  }
 
    const_iterator lower_bound(const key_type& k) const
-   {  return this->priv_lower_bound(this->begin(), this->end(), k);  }
+   {  return this->priv_lower_bound(this->cbegin(), this->cend(), k);  }
 
    iterator upper_bound(const key_type& k)
    {  return this->priv_upper_bound(this->begin(), this->end(), k);  }
 
    const_iterator upper_bound(const key_type& k) const
-   {  return this->priv_upper_bound(this->begin(), this->end(), k);  }
+   {  return this->priv_upper_bound(this->cbegin(), this->cend(), k);  }
 
    std::pair<iterator,iterator> equal_range(const key_type& k)
    {  return this->priv_equal_range(this->begin(), this->end(), k);  }
 
    std::pair<const_iterator, const_iterator> equal_range(const key_type& k) const
-   {  return this->priv_equal_range(this->begin(), this->end(), k);  }
+   {  return this->priv_equal_range(this->cbegin(), this->cend(), k);  }
 
    size_type capacity() const          
    { return this->m_data.m_vect.capacity(); }
@@ -817,7 +834,6 @@ class flat_tree
          //in the remaining range [pos, end)
          return this->priv_insert_unique_prepare(pos, cend_it, val, commit_data);
       }
-      //return priv_insert_unique_prepare(val, commit_data);
    }
 
    template<class Convertible>
@@ -835,11 +851,11 @@ class flat_tree
    {
       const Compare &key_cmp = this->m_data.get_comp();
       KeyOfValue key_extract;
-      difference_type len = last - first, half;
+      size_type len = static_cast<size_type>(last - first);
       RanIt middle;
 
-      while (len > 0) {
-         half = len >> 1;
+      while (len) {
+         size_type half = len >> 1;
          middle = first;
          middle += half;
 
@@ -854,17 +870,18 @@ class flat_tree
       return first;
    }
 
+
    template <class RanIt>
    RanIt priv_upper_bound(RanIt first, RanIt last,
                           const key_type & key) const
    {
       const Compare &key_cmp = this->m_data.get_comp();
       KeyOfValue key_extract;
-      difference_type len = last - first, half;
+      size_type len = static_cast<size_type>(last - first);
       RanIt middle;
 
-      while (len > 0) {
-         half = len >> 1;
+      while (len) {
+         size_type half = len >> 1;
          middle = first;
          middle += half;
 
@@ -885,11 +902,11 @@ class flat_tree
    {
       const Compare &key_cmp = this->m_data.get_comp();
       KeyOfValue key_extract;
-      difference_type len = last - first, half;
-      RanIt middle, left, right;
+      size_type len = static_cast<size_type>(last - first);
+      RanIt middle;
 
-      while (len > 0) {
-         half = len >> 1;
+      while (len) {
+         size_type half = len >> 1;
          middle = first;
          middle += half;
 
@@ -902,10 +919,11 @@ class flat_tree
             len = half;
          }
          else {
-            left = this->priv_lower_bound(first, middle, key);
-            first += len;
-            right = this->priv_upper_bound(++middle, first, key);
-            return std::pair<RanIt, RanIt>(left, right);
+            //Middle is equal to key
+            last = first;
+            last += len;
+            first = this->priv_lower_bound(first, middle, key);
+            return std::pair<RanIt, RanIt> (first, this->priv_upper_bound(++middle, last, key));
          }
       }
       return std::pair<RanIt, RanIt>(first, first);
@@ -924,24 +942,10 @@ class flat_tree
    {
       const_iterator pos(this->cend());
       for ( ; first != last; ++first){
+         //If ordered, then try hint version
+         //to achieve constant-time complexity per insertion
          pos = this->insert_equal(pos, *first);
-      }
-   }
-
-   template<class InIt>
-   void priv_insert_unique_loop(InIt first, InIt last)
-   {
-      for ( ; first != last; ++first){
-         this->insert_unique(*first);
-      }
-   }
-
-   template<class InIt>
-   void priv_insert_unique_loop_ordered(InIt first, InIt last)
-   {
-      const_iterator pos(this->cend());
-      for ( ; first != last; ++first){
-         pos = this->insert_unique(pos, *first);
+         ++pos;
       }
    }
 };
