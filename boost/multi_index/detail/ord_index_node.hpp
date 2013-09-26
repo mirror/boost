@@ -43,7 +43,6 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <cstddef>
 #include <boost/detail/allocator_utilities.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_COMPRESSED_ORDERED_INDEX_NODES)
 #include <boost/mpl/and.hpp>
@@ -70,19 +69,13 @@ struct ordered_index_node_impl; /* fwd decl. */
 template<typename Allocator>
 struct ordered_index_node_std_base
 {
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
+  typedef typename boost::detail::allocator::rebind_to<
       Allocator,
       ordered_index_node_impl<Allocator>
-    >::type
   >::type::pointer                                pointer;
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
+  typedef typename boost::detail::allocator::rebind_to<
       Allocator,
       ordered_index_node_impl<Allocator>
-    >::type
   >::type::const_pointer                          const_pointer;
   typedef ordered_index_color&                    color_ref;
   typedef pointer&                                parent_ref;
@@ -216,12 +209,9 @@ struct ordered_index_node_impl_base:
     !(has_uintptr_type::value)||
     (alignment_of<ordered_index_node_compressed_base<Allocator> >::value%2)||
     !(is_same<
-      typename prevent_eti<
-        Allocator,
-        typename boost::detail::allocator::rebind_to<
+      typename boost::detail::allocator::rebind_to<
           Allocator,
           ordered_index_node_impl<Allocator>
-        >::type
       >::type::pointer,
       ordered_index_node_impl<Allocator>*>::value),
     ordered_index_node_std_base<Allocator>,
@@ -557,25 +547,19 @@ public:
 
 template<typename Super>
 struct ordered_index_node_trampoline:
-  prevent_eti<
-    Super,
-    ordered_index_node_impl<
+  ordered_index_node_impl<
       typename boost::detail::allocator::rebind_to<
         typename Super::allocator_type,
         char
       >::type
     >
-  >::type
 {
-  typedef typename prevent_eti<
-    Super,
-    ordered_index_node_impl<
+  typedef ordered_index_node_impl<
       typename boost::detail::allocator::rebind_to<
         typename Super::allocator_type,
         char
       >::type
-    >
-  >::type impl_type;
+    > impl_type;
 };
 
 template<typename Super>

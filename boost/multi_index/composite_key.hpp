@@ -16,7 +16,6 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/functional/hash_fwd.hpp>
 #include <boost/multi_index/detail/access_specifier.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
@@ -114,14 +113,11 @@ template<typename CompositeKey,BOOST_MPL_AUX_NTTP_DECL(int, N)>
 struct nth_key_from_value
 {
   typedef typename CompositeKey::key_extractor_tuple key_extractor_tuple;
-  typedef typename prevent_eti<
-    tuples::element<N,key_extractor_tuple>,
-    typename mpl::eval_if_c<
+  typedef     typename mpl::eval_if_c<
       N<tuples::length<key_extractor_tuple>::value,
       tuples::element<N,key_extractor_tuple>,
       mpl::identity<tuples::null_type>
-    >::type
-  >::type                                            type;
+    >::type                                            type;
 };
 
 /* nth_composite_key_##name<CompositeKey,N>::type yields

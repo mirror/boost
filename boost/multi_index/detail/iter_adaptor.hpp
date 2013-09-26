@@ -15,7 +15,6 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/mpl/apply.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/operators.hpp>
 
 namespace boost{
@@ -295,11 +294,8 @@ struct iter_adaptor_base
 {
   typedef iter_adaptor_selector<
     typename Base::iterator_category>        selector;
-  typedef typename prevent_eti<
-    selector,
-    typename mpl::apply2<
-      selector,Derived,Base>::type
-  >::type                                    type;
+  typedef typename mpl::apply2<
+      selector,Derived,Base>::type           type;
 };
 
 template<class Derived,class Base>

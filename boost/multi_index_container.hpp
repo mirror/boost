@@ -37,7 +37,6 @@
 #include <boost/multi_index/detail/header_holder.hpp>
 #include <boost/multi_index/detail/has_tag.hpp>
 #include <boost/multi_index/detail/no_duplicate_tags.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/multi_index/detail/safe_mode.hpp>
 #include <boost/multi_index/detail/scope_guard.hpp>
 #include <boost/multi_index/detail/vartempl_support.hpp>
@@ -90,13 +89,10 @@ class multi_index_container:
         Value,IndexSpecifierList,Allocator>::type
     >::type>,
   BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS detail::header_holder<
-    typename detail::prevent_eti<
-      Allocator,
-      typename boost::detail::allocator::rebind_to<
+    typename boost::detail::allocator::rebind_to<
         Allocator,
         typename detail::multi_index_node_type<
           Value,IndexSpecifierList,Allocator>::type
-      >::type
     >::type::pointer,
     multi_index_container<Value,IndexSpecifierList,Allocator> >,
   public detail::multi_index_base_type<
@@ -131,10 +127,7 @@ private:
   typedef ::boost::base_from_member<
     node_allocator>                               bfm_allocator;
   typedef detail::header_holder<
-    typename detail::prevent_eti<
-      Allocator,
-      node_allocator
-    >::type::pointer,
+    typename node_allocator::pointer,
     multi_index_container>                        bfm_header;
 
 #if BOOST_WORKAROUND(BOOST_MSVC,<1300)
@@ -1140,18 +1133,13 @@ get(const multi_index_container<Value,IndexSpecifierList,Allocator>& m)
 template<typename MultiIndexContainer,int N>
 struct nth_index_iterator
 {
-  typedef typename detail::prevent_eti<
-    nth_index<MultiIndexContainer,N>,
-    typename nth_index<MultiIndexContainer,N>::type>::type::iterator type;
+  typedef typename nth_index<MultiIndexContainer,N>::type::iterator type;
 };
 
 template<typename MultiIndexContainer,int N>
 struct nth_index_const_iterator
 {
-  typedef typename detail::prevent_eti<
-    nth_index<MultiIndexContainer,N>,
-    typename nth_index<MultiIndexContainer,N>::type
-  >::type::const_iterator type;
+  typedef typename nth_index<MultiIndexContainer,N>::type::const_iterator type;
 };
 
 template<

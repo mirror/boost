@@ -15,7 +15,6 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/allocator_utilities.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <functional>
 
 namespace boost{
@@ -29,17 +28,11 @@ namespace detail{
 template<typename Allocator>
 struct hashed_index_node_impl
 {
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
+  typedef typename boost::detail::allocator::rebind_to<
       Allocator,hashed_index_node_impl
-    >::type
   >::type::pointer                                pointer;
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
+  typedef typename boost::detail::allocator::rebind_to<
       Allocator,hashed_index_node_impl
-    >::type
   >::type::const_pointer                          const_pointer;
 
   pointer& next(){return next_;}
@@ -91,25 +84,19 @@ private:
 
 template<typename Super>
 struct hashed_index_node_trampoline:
-  prevent_eti<
-    Super,
-    hashed_index_node_impl<
+  hashed_index_node_impl<
       typename boost::detail::allocator::rebind_to<
         typename Super::allocator_type,
         char
       >::type
     >
-  >::type
 {
-  typedef typename prevent_eti<
-    Super,
-    hashed_index_node_impl<
+  typedef hashed_index_node_impl<
       typename boost::detail::allocator::rebind_to<
         typename Super::allocator_type,
         char
       >::type
-    >
-  >::type impl_type;
+    > impl_type;
 };
 
 template<typename Super>

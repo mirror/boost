@@ -17,7 +17,6 @@
 #include <algorithm>
 #include <boost/multi_index/detail/auto_space.hpp>
 #include <boost/multi_index/detail/hash_index_node.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/noncopyable.hpp>
 #include <cstddef>
 #include <limits.h>
@@ -85,15 +84,12 @@ protected:
 template<typename Allocator>
 class bucket_array:public bucket_array_base
 {
-  typedef typename prevent_eti<
-    Allocator,
-    hashed_index_node_impl<
+  typedef hashed_index_node_impl<
       typename boost::detail::allocator::rebind_to<
         Allocator,
         char
       >::type
-    >
-  >::type                                           node_impl_type;
+    >                                           node_impl_type;
 
 public:
   typedef typename node_impl_type::pointer          pointer;

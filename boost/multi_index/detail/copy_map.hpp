@@ -17,7 +17,6 @@
 #include <algorithm>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/multi_index/detail/auto_space.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/noncopyable.hpp>
 #include <cstddef>
 #include <functional>
@@ -110,11 +109,8 @@ public:
   }
 
 private:
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
-      Allocator,Node>::type
-  >::type                                         allocator_type;
+  typedef typename boost::detail::allocator::rebind_to<
+      Allocator,Node>::type                       allocator_type;
   typedef typename allocator_type::pointer        allocator_pointer;
 
   allocator_type                                  al_;

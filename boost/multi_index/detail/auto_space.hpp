@@ -17,7 +17,6 @@
 #include <algorithm>
 #include <boost/detail/allocator_utilities.hpp>
 #include <boost/multi_index/detail/adl_swap.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <boost/noncopyable.hpp>
 #include <memory>
 
@@ -46,12 +45,9 @@ namespace detail{
 template<typename T,typename Allocator=std::allocator<T> >
 struct auto_space:private noncopyable
 {
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
+  typedef typename boost::detail::allocator::rebind_to<
       Allocator,T
-    >::type
-  >::type::pointer pointer;
+    >::type::pointer pointer;
 
   explicit auto_space(const Allocator& al=Allocator(),std::size_t n=1):
   al_(al),n_(n),data_(n_?al_.allocate(n_):pointer(0))

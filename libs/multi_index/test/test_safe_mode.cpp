@@ -330,10 +330,7 @@ template<typename MultiIndexContainer,int N>
 struct index_policy_base
 {
   typedef MultiIndexContainer                    container;
-  typedef typename 
-    boost::multi_index::detail::prevent_eti<
-      container,
-    typename nth_index<container,N>::type>::type index_type;
+  typedef typename nth_index<container,N>::type index_type;
 
   static index_type& index_from_container(container& c){return get<N>(c);}
 };

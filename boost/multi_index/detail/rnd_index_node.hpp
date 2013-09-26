@@ -17,7 +17,6 @@
 #include <algorithm>
 #include <boost/detail/allocator_utilities.hpp>
 #include <boost/math/common_factor_rt.hpp>
-#include <boost/multi_index/detail/prevent_eti.hpp>
 #include <cstddef>
 #include <functional>
 
@@ -30,23 +29,14 @@ namespace detail{
 template<typename Allocator>
 struct random_access_index_node_impl
 {
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
+  typedef typename boost::detail::allocator::rebind_to<
       Allocator,random_access_index_node_impl
-    >::type
   >::type::pointer                                pointer;
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
+  typedef typename boost::detail::allocator::rebind_to<
       Allocator,random_access_index_node_impl
-    >::type
   >::type::const_pointer                          const_pointer;
-  typedef typename prevent_eti<
-    Allocator,
-    typename boost::detail::allocator::rebind_to<
+  typedef typename boost::detail::allocator::rebind_to<
       Allocator,pointer
-    >::type
   >::type::pointer                                ptr_pointer;
 
   ptr_pointer& up(){return up_;}
@@ -181,25 +171,19 @@ private:
 
 template<typename Super>
 struct random_access_index_node_trampoline:
-  prevent_eti<
-    Super,
-    random_access_index_node_impl<
+  random_access_index_node_impl<
       typename boost::detail::allocator::rebind_to<
         typename Super::allocator_type,
         char
       >::type
     >
-  >::type
 {
-  typedef typename prevent_eti<
-    Super,
-    random_access_index_node_impl<
+  typedef random_access_index_node_impl<
       typename boost::detail::allocator::rebind_to<
         typename Super::allocator_type,
         char
       >::type
-    >
-  >::type impl_type;
+    > impl_type;
 };
 
 template<typename Super>
