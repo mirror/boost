@@ -1419,6 +1419,11 @@ public: // structors
 
     variant()
     {
+#ifdef _MSC_VER
+#pragma warning( push )
+// behavior change: an object of POD type constructed with an initializer of the form () will be default-initialized 
+#pragma warning( disable : 4345 ) 
+#endif
         // NOTE TO USER :
         // Compile error from here indicates that the first bound
         // type is not default-constructible, and so variant cannot
@@ -1426,6 +1431,9 @@ public: // structors
         //
         new( storage_.address() ) internal_T0();
         indicate_which(0); // zero is the index of the first bounded type
+#ifdef _MSC_VER
+#pragma warning( pop )
+#endif
     }
 
 private: // helpers, for structors, cont. (below)
