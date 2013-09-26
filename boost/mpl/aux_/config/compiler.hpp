@@ -23,13 +23,7 @@
 #   include <boost/mpl/aux_/config/gcc.hpp>
 #   include <boost/mpl/aux_/config/workaround.hpp>
 
-#   if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-#       define BOOST_MPL_CFG_COMPILER_DIR msvc60
-
-#   elif BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-#       define BOOST_MPL_CFG_COMPILER_DIR msvc70
-
-#   elif BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0304))
+#   if BOOST_WORKAROUND(BOOST_MPL_CFG_GCC, BOOST_TESTED_AT(0x0304))
 #       define BOOST_MPL_CFG_COMPILER_DIR gcc
 
 #   elif BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x610))
