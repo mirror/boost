@@ -85,26 +85,7 @@ namespace boost { namespace mpl {
 
 #   define i_ BOOST_PP_FRAME_ITERATION(1)
 
-#   if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-// MSVC version
-
-#define AUX778076_MSVC_DTW_NAME BOOST_PP_CAT(msvc_apply,i_)
-#define AUX778076_MSVC_DTW_ORIGINAL_NAME apply
-#define AUX778076_MSVC_DTW_ARITY i_
-#include <boost/mpl/aux_/msvc_dtw.hpp>
-
-template<
-      typename F BOOST_PP_COMMA_IF(i_) AUX778076_APPLY_WRAP_PARAMS(i_, typename T)
-    >
-struct BOOST_PP_CAT(apply_wrap,i_)
-{
-    // Metafunction forwarding confuses vc6
-    typedef typename BOOST_PP_CAT(msvc_apply,i_)<F>::template result_<
-          AUX778076_APPLY_WRAP_PARAMS(i_, T)
-        >::type type;
-};
-
-#   elif defined(BOOST_MPL_CFG_BROKEN_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
+#   if defined(BOOST_MPL_CFG_BROKEN_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
 // MWCW/Borland version
 
 template<
@@ -138,16 +119,8 @@ template<
 #endif
     >
 struct BOOST_PP_CAT(apply_wrap,i_)
-// metafunction forwarding confuses MSVC 7.0
-#if !BOOST_WORKAROUND(BOOST_MSVC, == 1300)
     : F::template apply< AUX778076_APPLY_WRAP_PARAMS(i_, T) >
 {
-#else
-{    
-    typedef typename F::template apply<
-         AUX778076_APPLY_WRAP_PARAMS(i_, T)
-        >::type type;
-#endif
 };
 
 #if i_ == 0 && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)

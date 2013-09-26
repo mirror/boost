@@ -143,19 +143,11 @@ template<
       typename F AUX778076_APPLY_N_COMMA_PARAMS(i_, typename T)
     >
 struct BOOST_PP_CAT(apply,i_)
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
     : BOOST_PP_CAT(apply_wrap,i_)< 
           typename lambda<F>::type
         AUX778076_APPLY_N_COMMA_PARAMS(i_, T)
         >
 {
-#else
-{
-    typedef typename BOOST_PP_CAT(apply_wrap,i_)< 
-          typename lambda<F>::type
-        AUX778076_APPLY_N_COMMA_PARAMS(i_, T)
-        >::type type;
-#endif
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           BOOST_PP_INC(i_)
         , BOOST_PP_CAT(apply,i_)
