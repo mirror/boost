@@ -502,6 +502,52 @@ are a particular case where `static_vector` can be beneficial.
 
 [endsect]
 
+[section:extended_functionality Extended functionality]
+
+[section:default_initialialization Default initialization for vector-like containers]
+
+STL and most other containers value initialize new elements in common operations like
+`vector::resize(size_type n)` or `explicit vector::vector(size_type n)`.
+
+In some performance-sensitive environments, where vectors are used as a replacement for
+variable-size buffers for file or network operations,
+[@http://en.cppreference.com/w/cpp/language/value_initialization value initialization]
+is a cost that is not negligible as elements are going to be overwritten by an external source
+shortly after new elements are added to the container.
+
+[*Boost.Container] offers two new members for `vector`, `static_vector` and `stable_vector`:
+`explicit container::container(size_type n, default_init_t)` and
+`explicit container::resize(size_type n, default_init_t)`, where new elements are constructed
+using [@http://en.cppreference.com/w/cpp/language/default_initialization default initialization].
+
+[endsect]
+
+[/
+/a__section:get_stored_allocator Obtain stored allocator__a
+/
+/STL containers offer a `get_allocator()` member to obtain a copy of the allocator that
+/the container is using to allocate and construct elements. For performance reasons, some
+/applications need o
+/
+/http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2007/n2271.html
+/
+/a__endsect__a
+/
+/a__section:ordered_range_insertion Ordered range insertion (a__'ordered_unique_range__a, a__'ordered_range__a) __a
+/
+/a__endsect__a
+/
+/a__section:constant_time_range_splice Constant-time range splice__a
+/
+/a__endsect__a
+/
+/a__section:previous_element_slist Slist previous element__a
+/
+/a__endsect__a
+/]
+
+[endsect]
+
 [section:Cpp11_conformance C++11 Conformance]
 
 [*Boost.Container] aims for full C++11 conformance except reasoned deviations,

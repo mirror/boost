@@ -11,7 +11,7 @@
 #ifndef BOOST_CONTAINER_FLAT_SET_HPP
 #define BOOST_CONTAINER_FLAT_SET_HPP
 
-#if (defined _MSC_VER) && (_MSC_VER >= 1200)
+#if defined(_MSC_VER)
 #  pragma once
 #endif
 
@@ -636,7 +636,7 @@ class flat_set
    //!
    //! <b>Complexity</b>: log(size())+count(k)
    size_type count(const key_type& x) const
-      {  return m_flat_tree.find(x) == m_flat_tree.end() ? 0 : 1;  }
+      {  return static_cast<size_type>(m_flat_tree.find(x) != m_flat_tree.end());  }
 
    //! <b>Returns</b>: An iterator pointing to the first element with key not less
    //!   than k, or a.end() if such an element is not found.

@@ -151,6 +151,10 @@ int main()
       return 1;
    if(test_expand_bwd())
       return 1;
+   if(!test::default_init_test< vector<int, test::default_init_allocator<int> > >()){
+      std::cerr << "Default init test failed" << std::endl;
+      return 1;
+   }
 
    MyEnumVector v;
    Test t;

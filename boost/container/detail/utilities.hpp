@@ -622,7 +622,7 @@ inline typename container_detail::enable_if_memcpy_copy_constructible<I, F, I>::
 
 //////////////////////////////////////////////////////////////////////////////
 //
-//                               uninitialized_default_alloc_n
+//                               uninitialized_value_init_alloc_n
 //
 //////////////////////////////////////////////////////////////////////////////
 
@@ -636,12 +636,47 @@ inline typename container_detail::enable_if_memcpy_copy_constructible<I, F, I>::
 template
    <typename A,
     typename F> // F models ForwardIterator
-inline F uninitialized_default_alloc_n(A &a, typename allocator_traits<A>::difference_type n, F r)
+inline F uninitialized_value_init_alloc_n(A &a, typename allocator_traits<A>::difference_type n, F r)
 {
    F back = r;
    BOOST_TRY{
       while (n--) {
          allocator_traits<A>::construct(a, container_detail::to_raw_pointer(&*r));
+         ++r;
+      }
+   }
+   BOOST_CATCH(...){
+	   for (; back != r; ++back){
+         allocator_traits<A>::destroy(a, container_detail::to_raw_pointer(&*back));
+      }
+	   BOOST_RETHROW;
+   }
+   BOOST_CATCH_END
+   return r;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//
+//                               uninitialized_default_init_alloc_n
+//
+//////////////////////////////////////////////////////////////////////////////
+
+//! <b>Effects</b>:
+//!   \code
+//!   for (; n--; ++r, ++f)
+//!      allocator_traits::construct(a, &*r);
+//!   \endcode
+//!
+//! <b>Returns</b>: r
+template
+   <typename A,
+    typename F> // F models ForwardIterator
+inline F uninitialized_default_init_alloc_n(A &a, typename allocator_traits<A>::difference_type n, F r)
+{
+   F back = r;
+   BOOST_TRY{
+      while (n--) {
+         allocator_traits<A>::construct(a, container_detail::to_raw_pointer(&*r), default_init);
          ++r;
       }
    }

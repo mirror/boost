@@ -17,7 +17,7 @@
 #ifndef BOOST_CONTAINER_ALLOCATOR_SCOPED_ALLOCATOR_HPP
 #define BOOST_CONTAINER_ALLOCATOR_SCOPED_ALLOCATOR_HPP
 
-#if (defined MSC_VER) && (_MSC_VER >= 1200)
+#if defined (_MSC_VER)
 #  pragma once
 #endif
 
