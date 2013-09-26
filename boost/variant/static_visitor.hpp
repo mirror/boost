@@ -19,10 +19,6 @@
 #include "boost/mpl/if.hpp"
 #include "boost/type_traits/is_base_and_derived.hpp"
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-#   include "boost/type_traits/is_same.hpp"
-#endif
-
 // should be the last #include
 #include "boost/type_traits/detail/bool_trait_def.hpp"
 

@@ -278,25 +278,10 @@ private: // helpers, for metafunction result (below)
 
 public: // metafunction result
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-
     typedef ::boost::aligned_storage<
           BOOST_MPL_AUX_VALUE_WKND(max_size)::value
         , BOOST_MPL_AUX_VALUE_WKND(max_alignment)::value
         > type;
-
-#else // MSVC7 and below
-
-    BOOST_STATIC_CONSTANT(std::size_t, msvc_max_size_c = max_size::value);
-    BOOST_STATIC_CONSTANT(std::size_t, msvc_max_alignment_c = max_alignment::value);
-
-    typedef ::boost::aligned_storage<
-          msvc_max_size_c
-        , msvc_max_alignment_c
-        > type;
-
-#endif // MSVC workaround
-
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -337,8 +322,6 @@ class known_get
     : public static_visitor<T&>
 {
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
 public: // visitor interface
 
     T& operator()(T& operand) const BOOST_NOEXCEPT
@@ -360,37 +343,6 @@ public: // visitor interface
 #if defined BOOST_MSVC 
 # pragma warning( pop ) 
 #endif
-
-#else // MSVC6
-
-private: // helpers, for visitor interface (below)
-
-    T& execute(T& operand, mpl::true_) const
-    {
-        return operand;
-    }
-
-    template <typename U>
-    T& execute(U& operand, mpl::false_) const
-    {
-        // logical error to be here: see precondition above
-        BOOST_ASSERT(false);
-        return ::boost::detail::variant::forced_return< T& >();
-    }
-
-public: // visitor interface
-
-    template <typename U>
-    T& operator()(U& operand) const
-    {
-        typedef typename is_same< U,T >::type
-            U_is_T;
-
-        return execute(operand, U_is_T());
-    }
-
-#endif // MSVC6 workaround
-
 };
 
 ///////////////////////////////////////////////////////////////////////////////
@@ -616,8 +568,6 @@ public: // structors
     {
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
 public: // visitor interface
 
     bool operator()(T& lhs)
@@ -631,33 +581,6 @@ public: // visitor interface
     {
         return false;
     }
-
-#else // MSVC6
-
-private: // helpers, for visitor interface (below)
-
-    bool execute(T& lhs, mpl::true_)
-    {
-        lhs = rhs_;
-        return true;
-    }
-
-    template <typename U>
-    bool execute(U&, mpl::false_)
-    {
-        return false;
-    }
-
-public: // visitor interface
-
-    template <typename U>
-    bool operator()(U& lhs)
-    {
-        typedef typename is_same<U,T>::type U_is_T;
-        return execute(lhs, U_is_T());
-    }
-
-#endif // MSVC6 workaround
 
 #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
 private:
@@ -688,8 +611,6 @@ public: // structors
     {
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
 public: // visitor interface
 
     bool operator()(T& lhs)
@@ -703,19 +624,6 @@ public: // visitor interface
     {
         return false;
     }
-
-#else // MSVC6
-
-public: // visitor interface
-
-    template <typename U>
-    bool operator()(U& lhs)
-    {
-        // MSVC6 can not use direct_mover class
-        return direct_assigner(rhs_)(lhs);
-    }
-
-#endif // MSVC6 workaround
 
 #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
 private:
@@ -2251,22 +2159,9 @@ public: // queries
 
 public: // prevent comparison with foreign types
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-
+// Obsolete. Remove.
 #   define BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE \
     void
-
-#else // MSVC7
-
-    //
-    // MSVC7 gives error about return types for above being different than
-    // the true comparison operator overloads:
-    //
-
-#   define BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE \
-    bool
-
-#endif // MSVC7 workaround
 
     template <typename U>
         BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE
@@ -2410,9 +2305,7 @@ struct make_variant_over
 {
 private: // precondition assertions
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     BOOST_STATIC_ASSERT(( ::boost::mpl::is_sequence<Types>::value ));
-#endif
 
 public: // metafunction result
 

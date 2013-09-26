@@ -156,8 +156,6 @@ apply_visitor(
 // const-visitor version:
 //
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-
 template <typename Visitor, typename Visitable1, typename Visitable2>
 inline
     BOOST_VARIANT_AUX_GENERIC_RESULT_TYPE(
@@ -174,8 +172,6 @@ apply_visitor(
 
     return boost::apply_visitor(unwrapper, visitable1);
 }
-
-#endif // MSVC7 and below exclusion
 
 } // namespace boost
 

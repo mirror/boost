@@ -24,12 +24,6 @@
 #include "boost/type_traits/add_reference.hpp"
 #include "boost/type_traits/add_pointer.hpp"
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-#   include "boost/mpl/bool.hpp"
-#   include "boost/mpl/or.hpp"
-#   include "boost/type_traits/is_same.hpp"
-#endif
-
 namespace boost {
 
 //////////////////////////////////////////////////////////////////////////
@@ -78,8 +72,6 @@ public: // visitor typedefs
 
 public: // visitor interfaces
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
     pointer operator()(reference operand) const
     {
         return boost::addressof(operand);
@@ -90,40 +82,6 @@ public: // visitor interfaces
     {
         return static_cast<pointer>(0);
     }
-
-#else // MSVC6
-
-private: // helpers, for visitor interfaces (below)
-
-    pointer execute_impl(reference operand, mpl::true_) const
-    {
-        return boost::addressof(operand);
-    }
-
-    template <typename U>
-    pointer execute_impl(const U& operand, mpl::false_) const
-    {
-        return static_cast<pointer>(0);
-    }
-
-public: // visitor interfaces
-
-    template <typename U>
-    pointer operator()(U& operand) const
-    {
-        // MSVC6 finds normal implementation (above) ambiguous,
-        // so we must explicitly disambiguate
-
-        typedef typename mpl::or_<
-              is_same<U, T>
-            , is_same<const U, T>
-            >::type U_is_T;
-
-        return execute_impl(operand, U_is_T());
-    }
-
-#endif // MSVC6 workaround
-
 };
 
 }} // namespace detail::variant
