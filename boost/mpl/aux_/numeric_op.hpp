@@ -26,7 +26,6 @@
 #   include <boost/mpl/aux_/na.hpp>
 #   include <boost/mpl/aux_/na_spec.hpp>
 #   include <boost/mpl/aux_/lambda_support.hpp>
-#   include <boost/mpl/aux_/msvc_eti_base.hpp>
 #   include <boost/mpl/aux_/value_wknd.hpp>
 #   include <boost/mpl/aux_/config/eti.hpp>
 #   include <boost/mpl/aux_/nttp_decl.hpp>
@@ -74,21 +73,12 @@ namespace boost { namespace mpl {
 template< 
       typename Tag1
     , typename Tag2
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag1_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag1)::value 
-    , BOOST_MPL_AUX_NTTP_DECL(int, tag2_) = BOOST_MPL_AUX_MSVC_VALUE_WKND(Tag2)::value 
-    >
-struct AUX778076_OP_IMPL_NAME
-    : if_c<
-          ( tag1_ > tag2_ )
-#else
     >
 struct AUX778076_OP_IMPL_NAME
     : if_c<
           ( BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag1)
               > BOOST_MPL_AUX_NESTED_VALUE_WKND(int, Tag2)
             )
-#endif
         , aux::cast2nd_impl< AUX778076_OP_IMPL_NAME<Tag1,Tag1>,Tag1,Tag2 >
         , aux::cast1st_impl< AUX778076_OP_IMPL_NAME<Tag2,Tag2>,Tag1,Tag2 >
         >::type
@@ -145,7 +135,7 @@ template<> struct AUX778076_OP_IMPL_NAME<integral_c_tag,na>
 
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-    && BOOST_WORKAROUND(BOOST_MSVC, >= 1300)
+    && defined(BOOST_MSVC)
 template< typename T > struct AUX778076_OP_TAG_NAME
     : tag<T,na>
 {
@@ -205,11 +195,7 @@ template<
     BOOST_MPL_PP_DEF_PARAMS_TAIL(2, typename N, na)
     >
 struct AUX778076_OP_NAME
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-    : aux::msvc_eti_base< typename if_<
-#else
     : if_<
-#endif
           is_na<N3>
         , BOOST_PP_CAT(AUX778076_OP_NAME,2)<N1,N2>
         , AUX778076_OP_NAME<
@@ -217,9 +203,6 @@ struct AUX778076_OP_NAME
             , BOOST_MPL_PP_EXT_PARAMS(3, BOOST_PP_INC(AUX778076_OP_ARITY), N)
             >
         >::type
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-    >
-#endif
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           AUX778076_OP_ARITY
