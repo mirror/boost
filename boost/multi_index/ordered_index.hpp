@@ -58,7 +58,6 @@
 #include <boost/multi_index/detail/modify_key_adaptor.hpp>
 #include <boost/multi_index/detail/ord_index_node.hpp>
 #include <boost/multi_index/detail/ord_index_ops.hpp>
-#include <boost/multi_index/detail/safe_ctr_proxy.hpp>
 #include <boost/multi_index/detail/safe_mode.hpp>
 #include <boost/multi_index/detail/scope_guard.hpp>
 #include <boost/multi_index/detail/unbounded.hpp>
@@ -117,15 +116,8 @@ class ordered_index:
   BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS SuperMeta::type
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  ,public safe_ctr_proxy_impl<
-    bidir_node_iterator<
-      ordered_index_node<typename SuperMeta::type::node_type> >,
-    ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category> >
-#else
   ,public safe_mode::safe_container<
     ordered_index<KeyFromValue,Compare,SuperMeta,TagList,Category> >
-#endif
 #endif
 
 { 
@@ -164,16 +156,9 @@ public:
   typedef typename allocator_type::const_reference   const_reference;
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  typedef safe_mode::safe_iterator<
-    bidir_node_iterator<node_type>,
-    safe_ctr_proxy<
-      bidir_node_iterator<node_type> > >             iterator;
-#else
   typedef safe_mode::safe_iterator<
     bidir_node_iterator<node_type>,
     ordered_index>                                   iterator;
-#endif
 #else
   typedef bidir_node_iterator<node_type>             iterator;
 #endif
@@ -213,13 +198,7 @@ protected:
 
 private:
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  typedef safe_ctr_proxy_impl<
-    bidir_node_iterator<node_type>,
-    ordered_index>                                   safe_super;
-#else
   typedef safe_mode::safe_container<ordered_index>   safe_super;
-#endif
 #endif
 
   typedef typename call_traits<

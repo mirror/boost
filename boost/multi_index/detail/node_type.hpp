@@ -22,7 +22,6 @@
 #include <boost/multi_index/detail/header_holder.hpp>
 #include <boost/multi_index/detail/index_node_base.hpp>
 #include <boost/multi_index/detail/is_index_list.hpp>
-#include <boost/multi_index/detail/msvc_index_specifier.hpp>
 #include <boost/static_assert.hpp>
 
 namespace boost{
@@ -35,17 +34,6 @@ namespace detail{
  * index list.
  */
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<1310)
-struct index_node_applier
-{
-  template<typename IndexSpecifierIterator,typename Super>
-  struct apply:
-    msvc_index_specifier< mpl::deref<IndexSpecifierIterator>::type >::
-      template result_node_class<Super>
-  {
-  }; 
-};
-#else
 struct index_node_applier
 {
   template<typename IndexSpecifierIterator,typename Super>
@@ -56,7 +44,6 @@ struct index_node_applier
       BOOST_NESTED_TEMPLATE node_class<Super>::type type;
   }; 
 };
-#endif
 
 template<typename Value,typename IndexSpecifierList,typename Allocator>
 struct multi_index_node_type

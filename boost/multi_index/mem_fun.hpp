@@ -187,23 +187,11 @@ struct mem_fun_explicit
  * [const_]mem_fun_explicit for MSVC++ 6.0 and to [const_]mem_fun otherwise.
  */
 
-#if defined(BOOST_MSVC)&&(BOOST_MSVC<1300)
-
-#define BOOST_MULTI_INDEX_CONST_MEM_FUN(Class,Type,MemberFunName) \
-::boost::multi_index::const_mem_fun_explicit<\
-  Class,Type,Type (Class::*)()const,&Class::MemberFunName >
-#define BOOST_MULTI_INDEX_MEM_FUN(Class,Type,MemberFunName) \
-::boost::multi_index::mem_fun_explicit<\
-  Class,Type,Type (Class::*)(),&Class::MemberFunName >
-
-#else
-
+// Obsolete. Remove.
 #define BOOST_MULTI_INDEX_CONST_MEM_FUN(Class,Type,MemberFunName) \
 ::boost::multi_index::const_mem_fun< Class,Type,&Class::MemberFunName >
 #define BOOST_MULTI_INDEX_MEM_FUN(Class,Type,MemberFunName) \
 ::boost::multi_index::mem_fun< Class,Type,&Class::MemberFunName >
-
-#endif
 
 } /* namespace multi_index */
 

@@ -16,40 +16,17 @@
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/workaround.hpp>
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-#include <boost/mpl/if.hpp>
-#include <boost/mpl/integral_c.hpp>
-#include <boost/mpl/aux_/msvc_never_true.hpp>
-#endif
-
 namespace boost{
 
 namespace multi_index{
 
 namespace detail{
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-/* See
- * http://www.crystalclearsoftware.com/cgi-bin/boost_wiki/wiki.pl?Effective_MPL
- * Item 5.6, Beware of the 'early template instantiation' trap.
- */
-
-template<typename Type,typename Construct>
-struct prevent_eti
-{
-  typedef typename mpl::if_<
-    mpl::aux::msvc_never_true<Type>,
-    mpl::integral_c<int,0>,
-    Construct
-  >::type type;
-};
-#else
 template<typename Type,typename Construct>
 struct prevent_eti
 {
   typedef Construct type;
 };
-#endif
 
 } /* namespace multi_index::detail */
 

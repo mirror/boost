@@ -59,11 +59,7 @@
  */
 
 #if !defined(BOOST_MULTI_INDEX_LIMIT_COMPOSITE_KEY_SIZE)
-#if defined(BOOST_MSVC)&&(BOOST_MSVC<1300)
-#define BOOST_MULTI_INDEX_LIMIT_COMPOSITE_KEY_SIZE 5
-#else
 #define BOOST_MULTI_INDEX_LIMIT_COMPOSITE_KEY_SIZE 10
-#endif
 #endif
 
 /* maximum number of key extractors in a composite key */

@@ -32,7 +32,6 @@
 #include <boost/multi_index/detail/rnd_index_node.hpp>
 #include <boost/multi_index/detail/rnd_index_ops.hpp>
 #include <boost/multi_index/detail/rnd_index_ptr_array.hpp>
-#include <boost/multi_index/detail/safe_ctr_proxy.hpp>
 #include <boost/multi_index/detail/safe_mode.hpp>
 #include <boost/multi_index/detail/scope_guard.hpp>
 #include <boost/multi_index/detail/vartempl_support.hpp>
@@ -81,15 +80,8 @@ class random_access_index:
   BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS SuperMeta::type
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  ,public safe_ctr_proxy_impl<
-    rnd_node_iterator<
-      random_access_index_node<typename SuperMeta::type::node_type> >,
-    random_access_index<SuperMeta,TagList> >
-#else
   ,public safe_mode::safe_container<
     random_access_index<SuperMeta,TagList> >
-#endif
 #endif
 
 { 
@@ -125,16 +117,9 @@ public:
   typedef typename allocator_type::const_reference const_reference;
 
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  typedef safe_mode::safe_iterator<
-    rnd_node_iterator<node_type>,
-    safe_ctr_proxy<
-      rnd_node_iterator<node_type> > >             iterator;
-#else
   typedef safe_mode::safe_iterator<
     rnd_node_iterator<node_type>,
     random_access_index>                           iterator;
-#endif
 #else
   typedef rnd_node_iterator<node_type>             iterator;
 #endif
@@ -174,14 +159,8 @@ protected:
 
 private:
 #if defined(BOOST_MULTI_INDEX_ENABLE_SAFE_MODE)
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  typedef safe_ctr_proxy_impl<
-    rnd_node_iterator<node_type>,
-    random_access_index>                      safe_super;
-#else
   typedef safe_mode::safe_container<
     random_access_index>                      safe_super;
-#endif
 #endif
 
   typedef typename call_traits<
