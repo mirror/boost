@@ -22,7 +22,6 @@
 #include <boost/mpl/aux_/yes_no.hpp>
 #include <boost/mpl/aux_/config/gcc.hpp>
 #include <boost/mpl/aux_/config/has_xxx.hpp>
-#include <boost/mpl/aux_/config/msvc_typename.hpp>
 #include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
@@ -128,7 +127,7 @@ struct trait \
         template< typename U > \
         static boost::mpl::aux::yes_tag test( \
               boost::mpl::aux::type_wrapper<U> const volatile* \
-            , boost::mpl::aux::type_wrapper<BOOST_MSVC_TYPENAME U::name>* = 0 \
+            , boost::mpl::aux::type_wrapper<typename U::name>* = 0 \
             ); \
     \
         static boost::mpl::aux::no_tag test(...); \
@@ -401,7 +400,7 @@ struct trait \
                 BOOST_MPL_HAS_MEMBER_INTROSPECTION_SUBSTITUTE_NAME_WITH_TEMPLATE_SFINAE( \
                     args, n \
                 )< \
-                    BOOST_MSVC_TYPENAME U::BOOST_PP_ARRAY_ELEM(1, args)< > \
+                    typename U::BOOST_PP_ARRAY_ELEM(1, args)< > \
                 >::type \
         > { \
             BOOST_STATIC_CONSTANT(bool, value = true); \
