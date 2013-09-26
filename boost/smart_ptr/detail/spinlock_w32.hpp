@@ -24,7 +24,7 @@
 
 #define BOOST_COMPILER_FENCE __memory_barrier();
 
-#elif defined( _MSC_VER ) && _MSC_VER >= 1310
+#elif defined( _MSC_VER )
 
 extern "C" void _ReadWriteBarrier();
 #pragma intrinsic( _ReadWriteBarrier )
