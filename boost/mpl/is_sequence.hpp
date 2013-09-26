@@ -26,7 +26,6 @@
 #include <boost/mpl/aux_/has_begin.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
-#include <boost/mpl/aux_/config/eti.hpp>
 #include <boost/mpl/aux_/config/msvc.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
@@ -98,12 +97,6 @@ struct is_sequence
 
 #endif // BOOST_MSVC
 
-#if defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
-template<> struct is_sequence<int>
-    : bool_<false>
-{
-};
-#endif
 
 BOOST_MPL_AUX_NA_SPEC_NO_ETI(1, is_sequence)
 

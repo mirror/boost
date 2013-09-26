@@ -28,7 +28,6 @@
 #include <boost/mpl/void.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
-#include <boost/mpl/aux_/msvc_eti_base.hpp>
 
 #include <boost/type_traits/is_same.hpp>
 
@@ -98,9 +97,7 @@ template<
     , typename Predicate = is_same<_,_>
     >
 struct equal
-    : aux::msvc_eti_base< 
-          typename aux::equal_impl<Sequence1,Sequence2,Predicate>::type
-        >::type
+    : aux::equal_impl<Sequence1,Sequence2,Predicate>::type
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2,equal,(Sequence1,Sequence2))
 };

@@ -28,7 +28,6 @@
 #include <boost/mpl/aux_/preprocessor/def_params_tail.hpp>
 #include <boost/mpl/aux_/lambda_arity_param.hpp>
 #include <boost/mpl/aux_/config/dtp.hpp>
-#include <boost/mpl/aux_/config/eti.hpp>
 #include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/mpl/aux_/config/ttp.hpp>
 #include <boost/mpl/aux_/config/lambda.hpp>
@@ -136,18 +135,8 @@ struct template_arity< \
 #   define BOOST_MPL_AUX_NA_SPEC_TEMPLATE_ARITY(i, j, name) /**/
 #endif
 
-#if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-#   define BOOST_MPL_AUX_NA_SPEC_ETI(i, name) \
-template<> \
-struct name< BOOST_MPL_PP_ENUM(i, int) > \
-{ \
-    typedef int type; \
-    enum { value = 0 }; \
-}; \
-/**/
-#else
+// Obsolete. Remove.
 #   define BOOST_MPL_AUX_NA_SPEC_ETI(i, name) /**/
-#endif
 
 #define BOOST_MPL_AUX_NA_PARAM(param) param = na
 

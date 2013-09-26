@@ -17,7 +17,6 @@
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/void.hpp>
 #include <boost/mpl/aux_/has_tag.hpp>
-#include <boost/mpl/aux_/config/eti.hpp>
 
 namespace boost { namespace mpl {
 
@@ -29,22 +28,12 @@ template< typename T > struct tag_impl
 }
 
 template< typename T, typename Default = void_ > struct tag
-#if !defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
     : if_< 
           aux::has_tag<T>
         , aux::tag_impl<T>
         , Default
         >::type
 {
-#else
-{
-    typedef typename eval_if< 
-          aux::has_tag<T>
-        , aux::tag_impl<T>
-        , Default
-        >::type type;
-
-#endif
 };
 
 }}

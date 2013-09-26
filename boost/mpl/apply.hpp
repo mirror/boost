@@ -45,7 +45,6 @@
 #   include <boost/mpl/aux_/config/lambda.hpp>
 #   include <boost/mpl/aux_/config/dtp.hpp>
 #   include <boost/mpl/aux_/nttp_decl.hpp>
-#   include <boost/mpl/aux_/config/eti.hpp>
 #   include <boost/mpl/aux_/config/msvc.hpp>
 #   include <boost/mpl/aux_/config/workaround.hpp>
 
@@ -165,14 +164,6 @@ struct BOOST_PP_CAT(apply,i_)
 };
 
 
-#if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-/// workaround for ETI bug
-template<>
-struct BOOST_PP_CAT(apply,i_)<AUX778076_APPLY_N_SPEC_PARAMS(i_, int)>
-{
-    typedef int type;
-};
-#endif
 
 #   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 

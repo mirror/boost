@@ -21,7 +21,6 @@
 #include <boost/mpl/aux_/has_begin.hpp>
 #include <boost/mpl/aux_/na.hpp>
 #include <boost/mpl/aux_/traits_lambda_spec.hpp>
-#include <boost/mpl/aux_/config/eti.hpp>
 
 namespace boost { namespace mpl {
 

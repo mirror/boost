@@ -129,7 +129,6 @@ struct template_arity
 #   endif // BOOST_MPL_CFG_EXTENDED_TEMPLATE_PARAMETERS_MATCHING
 #   else // BOOST_MPL_CFG_NO_FULL_LAMBDA_SUPPORT
 
-#   include <boost/mpl/aux_/config/eti.hpp>
 
 namespace boost { namespace mpl { namespace aux {
 
@@ -158,13 +157,6 @@ struct template_arity
 {
 };
 
-#if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-template<>
-struct template_arity<int>
-    : mpl::int_<-1>
-{
-};
-#endif
 
 }}}
 

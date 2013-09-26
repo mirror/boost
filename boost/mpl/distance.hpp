@@ -21,7 +21,6 @@
 #include <boost/mpl/next.hpp>
 #include <boost/mpl/tag.hpp>
 #include <boost/mpl/apply_wrap.hpp>
-#include <boost/mpl/aux_/msvc_eti_base.hpp>
 #include <boost/mpl/aux_/value_wknd.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/config/forwarding.hpp>
@@ -35,11 +34,11 @@ template< typename Tag > struct distance_impl
 {
     template< typename First, typename Last > struct apply
 #if !defined(BOOST_MPL_CFG_NO_NESTED_FORWARDING)
-        : aux::msvc_eti_base< typename iter_fold<
+        : iter_fold<
               iterator_range<First,Last>
             , mpl::long_<0>
             , next<>
-            >::type >
+            >::type
     {
 #else
     {

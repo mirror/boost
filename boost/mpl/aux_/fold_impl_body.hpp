@@ -20,7 +20,6 @@
 #   include <boost/mpl/aux_/config/workaround.hpp>
 #   include <boost/mpl/aux_/config/ctps.hpp>
 #   include <boost/mpl/aux_/nttp_decl.hpp>
-#   include <boost/mpl/aux_/config/eti.hpp>
 
 #   include <boost/preprocessor/iterate.hpp>
 #   include <boost/preprocessor/dec.hpp>
@@ -248,14 +247,6 @@ struct AUX778076_FOLD_CHUNK_NAME<-1>
         typedef typename res_::iterator iterator;
     };
 
-#if defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
-    /// ETI workaround
-    template<> struct result_<int,int,int,int>
-    {
-        typedef int state;
-        typedef int iterator;
-    };
-#endif
 };
 
 template<
@@ -348,14 +339,6 @@ template<> struct AUX778076_FOLD_CHUNK_NAME<n_>
         typedef BOOST_PP_CAT(iter,n_) iterator;
     };
 
-#if defined(BOOST_MPL_CFG_MSVC_60_ETI_BUG)
-    /// ETI workaround
-    template<> struct result_<int,int,int,int>
-    {
-        typedef int state;
-        typedef int iterator;
-    };
-#endif
 };
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION

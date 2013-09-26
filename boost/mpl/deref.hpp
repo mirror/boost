@@ -14,10 +14,8 @@
 // $Date$
 // $Revision$
 
-#include <boost/mpl/aux_/msvc_type.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
-#include <boost/mpl/aux_/config/eti.hpp>
 
 namespace boost { namespace mpl {
 
@@ -26,11 +24,7 @@ template<
     >
 struct deref
 {
-#if !defined(BOOST_MPL_CFG_MSVC_70_ETI_BUG)
     typedef typename Iterator::type type;
-#else
-    typedef typename aux::msvc_type<Iterator>::type type;
-#endif
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,deref,(Iterator))
 };
 

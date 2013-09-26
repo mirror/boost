@@ -42,7 +42,6 @@
 #   include <boost/mpl/aux_/config/bcc.hpp>
 #   include <boost/mpl/aux_/config/ctps.hpp>
 #   include <boost/mpl/aux_/config/dtp.hpp>
-#   include <boost/mpl/aux_/config/eti.hpp>
 #   include <boost/mpl/aux_/config/msvc.hpp>
 #   include <boost/mpl/aux_/config/workaround.hpp>
 
@@ -161,14 +160,6 @@ struct BOOST_PP_CAT(apply_wrap,i_)<F,true_>
 
 #   endif // workarounds
 
-#if defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-/// workaround for ETI bug
-template<>
-struct BOOST_PP_CAT(apply_wrap,i_)<AUX778076_APPLY_WRAP_SPEC_PARAMS(i_, int)>
-{
-    typedef int type;
-};
-#endif
 
 #   undef i_
 

@@ -27,7 +27,6 @@
 #   include <boost/mpl/aux_/na_spec.hpp>
 #   include <boost/mpl/aux_/lambda_support.hpp>
 #   include <boost/mpl/aux_/value_wknd.hpp>
-#   include <boost/mpl/aux_/config/eti.hpp>
 #   include <boost/mpl/aux_/nttp_decl.hpp>
 #endif
 
@@ -46,7 +45,6 @@
 #   include <boost/mpl/aux_/preprocessor/add.hpp>
 #   include <boost/mpl/aux_/preprocessor/sub.hpp>
 #   include <boost/mpl/aux_/config/ctps.hpp>
-#   include <boost/mpl/aux_/config/eti.hpp>
 #   include <boost/mpl/aux_/config/msvc.hpp>
 #   include <boost/mpl/aux_/config/workaround.hpp>
 
@@ -229,21 +227,10 @@ struct AUX778076_OP_NAME
 
 #endif
 
-#if !defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
     : AUX778076_OP_IMPL_NAME<
           typename AUX778076_OP_TAG_NAME<N1>::type
         , typename AUX778076_OP_TAG_NAME<N2>::type
         >::template apply<N1,N2>::type
-#else
-    : aux::msvc_eti_base< typename apply_wrap2<
-          AUX778076_OP_IMPL_NAME<
-              typename AUX778076_OP_TAG_NAME<N1>::type
-            , typename AUX778076_OP_TAG_NAME<N2>::type
-            >
-        , N1
-        , N2
-        >::type >::type
-#endif
 {
 #if AUX778076_OP_ARITY != 2
 

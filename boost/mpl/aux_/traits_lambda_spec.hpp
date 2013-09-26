@@ -23,17 +23,6 @@
 
 #   define BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC_IMPL(i, trait) /**/
 
-#elif !defined(BOOST_MPL_CFG_MSVC_ETI_BUG)
-
-#   define BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC_IMPL(i, trait) \
-template<> struct trait<void_> \
-{ \
-    template< BOOST_MPL_PP_PARAMS(i, typename T) > struct apply \
-    { \
-    }; \
-}; \
-/**/
-
 #else
 
 #   define BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC_IMPL(i, trait) \
@@ -41,13 +30,6 @@ template<> struct trait<void_> \
 { \
     template< BOOST_MPL_PP_PARAMS(i, typename T) > struct apply \
     { \
-    }; \
-}; \
-template<> struct trait<int> \
-{ \
-    template< BOOST_MPL_PP_PARAMS(i, typename T) > struct apply \
-    { \
-        typedef int type; \
     }; \
 }; \
 /**/

@@ -20,7 +20,6 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/eval_if.hpp>
 #include <boost/mpl/apply.hpp>
-#include <boost/mpl/aux_/msvc_eti_base.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
 #include <boost/mpl/aux_/config/forwarding.hpp>
@@ -63,11 +62,11 @@ template<
     , typename BOOST_MPL_AUX_NA_PARAM(Predicate)
     >
 struct count_if
-    : aux::msvc_eti_base< typename fold<
+    : fold<
           Sequence
         , integral_c<unsigned long,0>
         , protect< aux::next_if<Predicate> >
-        >::type >
+        >::type
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2,count_if,(Sequence,Predicate))
 };
