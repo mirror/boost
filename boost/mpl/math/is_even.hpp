@@ -22,27 +22,11 @@
 
 namespace boost { namespace mpl {
 
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-namespace aux
-{
-  template <class N>
-  struct is_even_base
-  {
-      enum { value = (N::value % 2) == 0 };
-      typedef bool_<value> type;
-  };
-}
-#endif 
-
 template<
       typename BOOST_MPL_AUX_NA_PARAM(N)
     >
 struct is_even
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-  : aux::is_even_base<N>::type
-#else
   : bool_<((N::value % 2) == 0)>
-#endif 
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(1,is_even,(N))
 };

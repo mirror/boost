@@ -22,7 +22,6 @@
 #   include <boost/mpl/aux_/arity.hpp>
 #   include <boost/mpl/aux_/has_apply.hpp>
 #   include <boost/mpl/aux_/na.hpp>
-#   include <boost/mpl/aux_/msvc_never_true.hpp>
 #endif
 
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>

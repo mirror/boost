@@ -34,18 +34,12 @@ template< typename T >
 struct is_empty_base
     : false_
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using false_::value;
-#endif
 };
 
 template<>
 struct is_empty_base<empty_base>
     : true_
 {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    using true_::value;
-#endif
 };
 
 }}

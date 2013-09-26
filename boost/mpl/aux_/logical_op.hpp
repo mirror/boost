@@ -103,14 +103,6 @@ template<> struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<AUX778076_OP_VALUE2>
             >::template result_< AUX778076_SHIFTED_PARAMS(T,1),BOOST_PP_CAT(AUX778076_OP_VALUE2,_) >
     {
     };
-
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-    template<> struct result_<AUX778076_SPEC_PARAMS(BOOST_PP_CAT(AUX778076_OP_VALUE2,_))>
-        : BOOST_PP_CAT(AUX778076_OP_VALUE2,_)
-    {
-    };
-};
-#else
 };
 
 template<>
@@ -119,7 +111,6 @@ struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<AUX778076_OP_VALUE2>
         : BOOST_PP_CAT(AUX778076_OP_VALUE2,_)
 {
 };
-#endif // BOOST_MSVC == 1300
 
 #endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 

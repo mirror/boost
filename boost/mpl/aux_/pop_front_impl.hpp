@@ -26,15 +26,7 @@ namespace boost { namespace mpl {
 template< typename Tag >
 struct pop_front_impl
 {
-    template< typename Sequence > struct apply
-    // conservatively placed, but maybe should go outside surrounding
-    // braces.
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) 
-    {
-        typedef int type;
-    }
-#endif
-    ;
+    template< typename Sequence > struct apply;
 };
 
 BOOST_MPL_ALGORITM_TRAITS_LAMBDA_SPEC(1, pop_front_impl)

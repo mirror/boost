@@ -19,7 +19,6 @@
 #include <boost/mpl/aux_/erase_key_impl.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
-#include <boost/mpl/aux_/config/msvc_typename.hpp>
 
 namespace boost { namespace mpl {
 
