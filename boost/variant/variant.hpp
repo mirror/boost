@@ -2164,15 +2164,13 @@ public: // prevent comparison with foreign types
     void
 
     template <typename U>
-        BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE
-    operator==(const U&) const
+    void operator==(const U&) const
     {
         BOOST_STATIC_ASSERT( false && sizeof(U) );
     }
 
     template <typename U>
-        BOOST_VARIANT_AUX_FAIL_COMPARISON_RETURN_TYPE
-    operator<(const U&) const
+    void operator<(const U&) const
     {
         BOOST_STATIC_ASSERT( false && sizeof(U) );
     }

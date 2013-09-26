@@ -167,13 +167,18 @@ public: // static functions
             >::param_type BOOST_PP_CAT(param_T,N); \
     /**/
 
-template < BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_PARAMS >
+template < BOOST_VARIANT_ENUM_PARAMS(typename recursive_enabled_T) >
 struct preprocessor_list_initializer
 {
 public: // static functions
 
     #define BOOST_VARIANT_AUX_PP_INITIALIZE_FUNCTION(z,N,_) \
-        BOOST_VARIANT_AUX_PP_INITIALIZER_DEFINE_PARAM_T(N) \
+        typedef typename unwrap_recursive< \
+              BOOST_PP_CAT(recursive_enabled_T,N) \
+            >::type BOOST_PP_CAT(public_T,N); \
+        typedef typename call_traits< \
+              BOOST_PP_CAT(public_T,N) \
+            >::param_type BOOST_PP_CAT(param_T,N); \
         static int initialize( \
               void* dest \
             , BOOST_PP_CAT(param_T,N) operand \
@@ -235,7 +240,7 @@ public: // static functions
 
 #define BOOST_VARIANT_AUX_INITIALIZER_T( mpl_seq, typename_base ) \
     ::boost::detail::variant::preprocessor_list_initializer< \
-          BOOST_VARIANT_AUX_PP_INITIALIZER_TEMPLATE_ARGS(typename_base) \
+          BOOST_VARIANT_ENUM_PARAMS(typename_base) \
         > \
     /**/
 
