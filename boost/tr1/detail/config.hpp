@@ -49,7 +49,7 @@
 #define BOOST_TR1_HEADER(name) <BOOST_TR1_PATH(name)>
 
 // Can't use BOOST_WORKAROUND here, it leads to recursive includes:
-#if (defined(__BORLANDC__) && (__BORLANDC__ <= 0x600)) || (defined(_MSC_VER) && (_MSC_VER < 1310))
+#if (defined(__BORLANDC__) && (__BORLANDC__ <= 0x600))
 #  define BOOST_TR1_USE_OLD_TUPLE
 #endif
 
