@@ -100,7 +100,7 @@
 #       define MSVC_TYPEOF_HACK
 #   endif
 #elif defined(_MSC_VER)
-#   elif (_MSC_VER >= 1310)  // 7.1 ->
+#   if (_MSC_VER >= 1310)  // 7.1 ->
 #       ifndef BOOST_TYPEOF_EMULATION
 #           ifndef BOOST_TYPEOF_NATIVE
 #               ifndef _MSC_EXTENSIONS
