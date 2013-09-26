@@ -61,7 +61,7 @@ struct advance
 
 template<
       typename Iterator
-    , BOOST_MPL_AUX_NTTP_DECL(long, N)
+    , long N
     >
 struct advance_c
     : advance_impl< typename tag<Iterator>::type >

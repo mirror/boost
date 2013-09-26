@@ -43,14 +43,14 @@
 namespace boost { namespace mpl { namespace aux {
 
 // forward declaration
-template< BOOST_MPL_AUX_NTTP_DECL(long, N) > struct advance_backward;
+template< long N > struct advance_backward;
 
 #   define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(0, BOOST_MPL_LIMIT_UNROLLING, <boost/mpl/aux_/advance_backward.hpp>))
 #   include BOOST_PP_ITERATE()
 
 // implementation for N that exceeds BOOST_MPL_LIMIT_UNROLLING
-template< BOOST_MPL_AUX_NTTP_DECL(long, N) >
+template< long N >
 struct advance_backward
 {
     template< typename Iterator > struct apply

@@ -37,7 +37,7 @@ struct protect : T
 
 #if defined(BOOST_MPL_CFG_BROKEN_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
 namespace aux { 
-template< BOOST_MPL_AUX_NTTP_DECL(int, N), typename T >
+template< int N, typename T >
 struct arity< protect<T>, N > 
     : arity<T,N>
 { 

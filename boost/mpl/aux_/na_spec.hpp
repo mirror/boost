@@ -41,7 +41,7 @@
 #if defined(BOOST_MPL_CFG_BROKEN_DEFAULT_PARAMETERS_IN_NESTED_TEMPLATES)
 #   define BOOST_MPL_AUX_NA_SPEC_ARITY(i, name) \
 namespace aux { \
-template< BOOST_MPL_AUX_NTTP_DECL(int, N) > \
+template< int N > \
 struct arity< \
           name< BOOST_MPL_AUX_NA_PARAMS(i) > \
         , N \

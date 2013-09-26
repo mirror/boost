@@ -63,7 +63,7 @@
 
 namespace boost { namespace mpl { namespace aux {
 
-template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct arity_tag
+template< int N > struct arity_tag
 {
     typedef char (&type)[N + 1];
 };
@@ -73,7 +73,7 @@ template< BOOST_MPL_AUX_NTTP_DECL(int, N) > struct arity_tag
 /**/
 
 template<
-      BOOST_MPL_PP_PARAMS(AUX778076_ARITY, BOOST_MPL_AUX_NTTP_DECL(int, C))
+      BOOST_MPL_PP_PARAMS(AUX778076_ARITY, int C)
     >
 struct max_arity
 {
@@ -94,7 +94,7 @@ arity_tag<0>::type arity_helper(...);
 #   define BOOST_PP_FILENAME_1 <boost/mpl/aux_/template_arity.hpp>
 #   include BOOST_PP_ITERATE()
 
-template< typename F, BOOST_MPL_AUX_NTTP_DECL(int, N) >
+template< typename F, int N >
 struct template_arity_impl
 {
     BOOST_STATIC_CONSTANT(int, value = 

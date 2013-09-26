@@ -36,7 +36,7 @@ template<> struct yes_no_tag<true>
 };
 
 
-template< BOOST_MPL_AUX_NTTP_DECL(long, n) > struct weighted_tag
+template< long n > struct weighted_tag
 {
     typedef char (&type)[n];
 };

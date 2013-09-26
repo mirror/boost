@@ -59,9 +59,9 @@ struct at_impl< aux::vector_tag >
 #   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
     && !defined(BOOST_MPL_CFG_NO_NONTYPE_TEMPLATE_PARTIAL_SPEC)
 
-template< typename Vector, BOOST_MPL_AUX_NTTP_DECL(long, n_) > struct v_at;
+template< typename Vector, long n_ > struct v_at;
 
-template< BOOST_MPL_AUX_NTTP_DECL(long, n_) >
+template< long n_ >
 struct at_impl< aux::vector_tag<n_> >
 {
     template< typename Vector, typename N > struct apply
@@ -85,7 +85,7 @@ struct at_impl< aux::vector_tag<n_> >
 
 namespace aux {
 
-template< BOOST_MPL_AUX_NTTP_DECL(long, n_) > struct v_at_impl
+template< long n_ > struct v_at_impl
 {
     template< typename V > struct result_;
 };
@@ -101,7 +101,7 @@ template<> struct v_at_impl<-1>
 
 } // namespace aux
 
-template< typename T, BOOST_MPL_AUX_NTTP_DECL(long, n_) >
+template< typename T, long n_ >
 struct v_at
     : aux::v_at_impl<n_>::template result_<T>
 {

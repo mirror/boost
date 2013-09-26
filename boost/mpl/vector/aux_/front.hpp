@@ -38,7 +38,7 @@ struct front_impl< aux::vector_tag >
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
-template< BOOST_MPL_AUX_NTTP_DECL(long, n_) >
+template< long n_ >
 struct front_impl< aux::vector_tag<n_> >
 {
     template< typename Vector > struct apply

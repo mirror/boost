@@ -68,7 +68,7 @@ namespace boost { namespace mpl { namespace aux {
 
 /// forward declaration
 template<
-      BOOST_MPL_AUX_NTTP_DECL(long, N)
+      long N
     , typename First
     , typename Last
     , typename State
@@ -86,7 +86,7 @@ struct AUX778076_FOLD_IMPL_NAME;
 
 // implementation for N that exceeds BOOST_MPL_LIMIT_UNROLLING
 template<
-      BOOST_MPL_AUX_NTTP_DECL(long, N)
+      long N
     , typename First
     , typename Last
     , typename State
@@ -167,7 +167,7 @@ struct AUX778076_FOLD_IMPL_NAME<-1,Last,Last,State,BackwardOp,ForwardOp>
 
 #else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
-template< BOOST_MPL_AUX_NTTP_DECL(long, N) >
+template< long N >
 struct AUX778076_FOLD_CHUNK_NAME;
 
 #   define BOOST_PP_ITERATION_PARAMS_1 \
@@ -175,7 +175,7 @@ struct AUX778076_FOLD_CHUNK_NAME;
 #   include BOOST_PP_ITERATE()
 
 // implementation for N that exceeds BOOST_MPL_LIMIT_UNROLLING
-template< BOOST_MPL_AUX_NTTP_DECL(long, N) > 
+template< long N > 
 struct AUX778076_FOLD_CHUNK_NAME
 {
     template<
@@ -289,7 +289,7 @@ struct BOOST_PP_CAT(AUX778076_FOLD_IMPL_NAME_PREFIX,_step)
 };
 
 template<
-      BOOST_MPL_AUX_NTTP_DECL(long, N)
+      long N
     , typename First
     , typename Last
     , typename State

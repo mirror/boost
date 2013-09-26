@@ -62,7 +62,7 @@ namespace aux {
 template< int size, typename F, typename Args >
 struct unpack_args_impl;
 #else
-template< BOOST_MPL_AUX_NTTP_DECL(int, size) > struct unpack_args_impl
+template< int size > struct unpack_args_impl
 {
     template< typename F, typename Args > struct apply;
 };

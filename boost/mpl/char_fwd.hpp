@@ -19,7 +19,7 @@
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_OPEN
 
-template< BOOST_MPL_AUX_NTTP_DECL(char, N) > struct char_;
+template< char N > struct char_;
 
 BOOST_MPL_AUX_ADL_BARRIER_NAMESPACE_CLOSE
 BOOST_MPL_AUX_ADL_BARRIER_DECL(char_)

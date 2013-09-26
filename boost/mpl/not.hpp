@@ -24,7 +24,7 @@ namespace boost { namespace mpl {
 
 namespace aux {
 
-template< BOOST_MPL_AUX_NTTP_DECL(long, C_) > // 'long' is intentional here
+template< long C_ > // 'long' is intentional here
 struct not_impl
     : bool_<!C_>
 {

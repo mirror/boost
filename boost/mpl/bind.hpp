@@ -153,7 +153,7 @@ struct replace_unnamed_arg< arg<-1>,Arg >
 #   endif // BOOST_MPL_CFG_NO_UNNAMED_PLACEHOLDER_SUPPORT
 
 template<
-      BOOST_MPL_AUX_NTTP_DECL(int, N), AUX778076_BIND_PARAMS(typename U)
+      int N, AUX778076_BIND_PARAMS(typename U)
     >
 struct resolve_bind_arg< arg<N>,AUX778076_BIND_PARAMS(U) >
 {
@@ -241,7 +241,7 @@ struct replace_unnamed_arg
 
 // agurt, 10/mar/02: the forward declaration has to appear before any of
 // 'is_bind_helper' overloads, otherwise MSVC6.5 issues an ICE on it
-template< BOOST_MPL_AUX_NTTP_DECL(int, arity_) > struct bind_chooser;
+template< int arity_ > struct bind_chooser;
 
 aux::no_tag is_bind_helper(...);
 template< typename T > aux::no_tag is_bind_helper(protect<T>*);
@@ -257,7 +257,7 @@ template<
 aux::yes_tag is_bind_helper(bind<F,AUX778076_BIND_PARAMS(T)>*);
 #endif
 
-template< BOOST_MPL_AUX_NTTP_DECL(int, N) >
+template< int N >
 aux::yes_tag is_bind_helper(arg<N>*);
 
 template< bool is_ref_ = true >

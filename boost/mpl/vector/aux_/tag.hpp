@@ -24,7 +24,7 @@ struct v_iter_tag;
 #if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
 struct vector_tag;
 #else
-template< BOOST_MPL_AUX_NTTP_DECL(long, N) > struct vector_tag;
+template< long N > struct vector_tag;
 #endif
 
 }}}

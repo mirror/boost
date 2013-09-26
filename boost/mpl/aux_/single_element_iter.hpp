@@ -30,7 +30,7 @@ namespace boost { namespace mpl {
 
 namespace aux {
 
-template< typename T, BOOST_MPL_AUX_NTTP_DECL(int, is_last_) >
+template< typename T, int is_last_ >
 struct sel_iter;
 
 template< typename T >
@@ -50,7 +50,7 @@ struct sel_iter<T,1>
 
 } // namespace aux
 
-template< typename T, BOOST_MPL_AUX_NTTP_DECL(int, is_last_), typename Distance >
+template< typename T, int is_last_, typename Distance >
 struct advance< aux::sel_iter<T,is_last_>,Distance>
 {
     typedef aux::sel_iter<
@@ -61,8 +61,8 @@ struct advance< aux::sel_iter<T,is_last_>,Distance>
 
 template< 
       typename T
-    , BOOST_MPL_AUX_NTTP_DECL(int, l1)
-    , BOOST_MPL_AUX_NTTP_DECL(int, l2) 
+    , int l1
+    , int l2 
     >
 struct distance< aux::sel_iter<T,l1>, aux::sel_iter<T,l2> >
     : int_<( l2 - l1 )>
@@ -75,7 +75,7 @@ namespace aux {
 
 struct sel_iter_tag;
 
-template< typename T, BOOST_MPL_AUX_NTTP_DECL(int, is_last_) >
+template< typename T, int is_last_ >
 struct sel_iter
 {
     enum { pos_ = is_last_ };

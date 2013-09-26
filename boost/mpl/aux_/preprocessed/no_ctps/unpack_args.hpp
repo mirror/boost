@@ -13,7 +13,7 @@ namespace boost { namespace mpl {
 
 namespace aux {
 
-template< BOOST_MPL_AUX_NTTP_DECL(int, size) > struct unpack_args_impl
+template< int size > struct unpack_args_impl
 {
     template< typename F, typename Args > struct apply;
 };

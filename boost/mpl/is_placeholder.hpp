@@ -32,7 +32,7 @@ struct is_placeholder
 {
 };
 
-template< BOOST_MPL_AUX_NTTP_DECL(int, N) >
+template< int N >
 struct is_placeholder< arg<N> >
     : bool_<true>
 {
@@ -44,7 +44,7 @@ namespace aux {
 
 aux::no_tag is_placeholder_helper(...);
 
-template< BOOST_MPL_AUX_NTTP_DECL(int, N) >
+template< int N >
 aux::yes_tag is_placeholder_helper(aux::type_wrapper< arg<N> >*);
 
 } // namespace aux

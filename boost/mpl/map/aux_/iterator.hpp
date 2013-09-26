@@ -88,15 +88,15 @@ struct next< m_iter<Map,max_order,max_order> >
 
 template< 
       typename Map
-    , BOOST_MPL_AUX_NTTP_DECL(long, order)
-    , BOOST_MPL_AUX_NTTP_DECL(long, max_order)
+    , long order
+    , long max_order
     >
 struct next_order;
 
 template< 
       typename Map
-    , BOOST_MPL_AUX_NTTP_DECL(long, order)
-    , BOOST_MPL_AUX_NTTP_DECL(long, max_order)
+    , long order
+    , long max_order
     >
 struct next_order_impl
     : if_< 
@@ -109,8 +109,8 @@ struct next_order_impl
 
 template< 
       typename Map
-    , BOOST_MPL_AUX_NTTP_DECL(long, order)
-    , BOOST_MPL_AUX_NTTP_DECL(long, max_order)
+    , long order
+    , long max_order
     >
 struct next_order
     : if_c<
@@ -124,8 +124,8 @@ struct next_order
 
 template<
       typename Map
-    , BOOST_MPL_AUX_NTTP_DECL(long, order)
-    , BOOST_MPL_AUX_NTTP_DECL(long, max_order)
+    , long order
+    , long max_order
     >
 struct m_iter;
 
@@ -133,8 +133,8 @@ struct m_iter_empty_base {};
 
 template< 
       typename Map
-    , BOOST_MPL_AUX_NTTP_DECL(long, order)
-    , BOOST_MPL_AUX_NTTP_DECL(long, max_order)
+    , long order
+    , long max_order
     >
 struct m_iter_base
 {
@@ -149,8 +149,8 @@ struct m_iter_base
 
 template<
       typename Map
-    , BOOST_MPL_AUX_NTTP_DECL(long, order)
-    , BOOST_MPL_AUX_NTTP_DECL(long, max_order)
+    , long order
+    , long max_order
     >
 struct m_iter
   : if_c<

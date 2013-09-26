@@ -93,7 +93,7 @@ namespace boost { namespace mpl {
 #else // AUX778076_SEQUENCE_INTEGRAL_WRAPPER
 
 #   define AUX778076_SEQUENCE_PARAM_NAME C
-#   define AUX778076_SEQUENCE_TEMPLATE_PARAM BOOST_MPL_AUX_NTTP_DECL(long, C)
+#   define AUX778076_SEQUENCE_TEMPLATE_PARAM long C
 #   define AUX778076_SEQUENCE_DEFAULT LONG_MAX
 
 #   define AUX778076_SEQUENCE_PARAMS() \
@@ -154,7 +154,7 @@ template<
 struct AUX778076_SEQUENCE_NAME;
 #else
 namespace aux {
-template< BOOST_MPL_AUX_NTTP_DECL(int, N) > 
+template< int N > 
 struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser);
 }
 #endif

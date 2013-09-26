@@ -37,7 +37,7 @@ struct at
 
 template<
       typename Sequence
-    , BOOST_MPL_AUX_NTTP_DECL(long, N)
+    , long N
     >
 struct at_c
     : at_impl< typename sequence_tag<Sequence>::type >
