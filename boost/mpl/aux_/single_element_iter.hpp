@@ -20,7 +20,6 @@
 #include <boost/mpl/next_prior.hpp>
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/int.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/mpl/aux_/value_wknd.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 

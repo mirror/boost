@@ -51,7 +51,6 @@
 #   include <boost/mpl/aux_/preprocessor/range.hpp>
 #   include <boost/mpl/aux_/preprocessor/repeat.hpp>
 #   include <boost/mpl/aux_/preprocessor/params.hpp>
-#   include <boost/mpl/aux_/nttp_decl.hpp>
 
 #   include <boost/preprocessor/seq/fold_left.hpp>
 #   include <boost/preprocessor/comma_if.hpp>

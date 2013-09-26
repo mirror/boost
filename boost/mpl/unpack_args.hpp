@@ -22,7 +22,6 @@
 #   include <boost/mpl/apply.hpp>
 #   include <boost/mpl/at.hpp>
 #   include <boost/mpl/size.hpp>
-#   include <boost/mpl/aux_/nttp_decl.hpp>
 #   include <boost/mpl/aux_/lambda_spec.hpp>
 #endif
 

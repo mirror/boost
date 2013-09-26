@@ -20,7 +20,6 @@
 #include <boost/mpl/sequence_tag.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 #include <boost/mpl/aux_/lambda_support.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 
 namespace boost { namespace mpl {
 

@@ -17,7 +17,6 @@
 
 #include <boost/mpl/aux_/arity.hpp>
 #include <boost/mpl/aux_/config/dtp.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
 
 namespace boost { namespace mpl {

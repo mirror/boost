@@ -44,7 +44,6 @@
 
 #else
 
-#   include <boost/mpl/aux_/nttp_decl.hpp>
 #   include <boost/mpl/limits/arity.hpp>
 #   include <boost/preprocessor/iterate.hpp>
 #   include <boost/preprocessor/cat.hpp>

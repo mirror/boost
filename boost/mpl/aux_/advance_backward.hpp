@@ -34,7 +34,6 @@
 #else
 
 #   include <boost/mpl/limits/unrolling.hpp>
-#   include <boost/mpl/aux_/nttp_decl.hpp>
 
 #   include <boost/preprocessor/iterate.hpp>
 #   include <boost/preprocessor/cat.hpp>

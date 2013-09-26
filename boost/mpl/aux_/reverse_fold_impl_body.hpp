@@ -18,7 +18,6 @@
 #   include <boost/mpl/limits/unrolling.hpp>
 #   include <boost/mpl/aux_/preprocessor/repeat.hpp>
 #   include <boost/mpl/aux_/config/ctps.hpp>
-#   include <boost/mpl/aux_/nttp_decl.hpp>
 
 #   include <boost/preprocessor/arithmetic/sub.hpp>
 #   include <boost/preprocessor/iterate.hpp>

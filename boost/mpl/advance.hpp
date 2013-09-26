@@ -25,7 +25,6 @@
 #include <boost/mpl/aux_/advance_backward.hpp>
 #include <boost/mpl/aux_/value_wknd.hpp>
 #include <boost/mpl/aux_/na_spec.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 
 namespace boost { namespace mpl {
 

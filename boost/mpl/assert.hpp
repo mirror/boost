@@ -21,7 +21,6 @@
 #include <boost/mpl/aux_/na.hpp>
 #include <boost/mpl/aux_/adl_barrier.hpp>
 
-#include <boost/mpl/aux_/config/nttp.hpp>
 #include <boost/mpl/aux_/config/dtp.hpp>
 #include <boost/mpl/aux_/config/gcc.hpp>
 #include <boost/mpl/aux_/config/msvc.hpp>

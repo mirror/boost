@@ -22,7 +22,6 @@
 #include <boost/mpl/distance_fwd.hpp>
 #include <boost/mpl/next.hpp>
 #include <boost/mpl/prior.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/mpl/aux_/value_wknd.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>

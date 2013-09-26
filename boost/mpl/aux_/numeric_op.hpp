@@ -27,7 +27,6 @@
 #   include <boost/mpl/aux_/na_spec.hpp>
 #   include <boost/mpl/aux_/lambda_support.hpp>
 #   include <boost/mpl/aux_/value_wknd.hpp>
-#   include <boost/mpl/aux_/nttp_decl.hpp>
 #endif
 
 #include <boost/mpl/aux_/config/static_constant.hpp>

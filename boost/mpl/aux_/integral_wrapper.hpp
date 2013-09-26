@@ -15,7 +15,6 @@
 
 #include <boost/mpl/integral_c_tag.hpp>
 #include <boost/mpl/aux_/static_cast.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/mpl/aux_/config/static_constant.hpp>
 #include <boost/mpl/aux_/config/workaround.hpp>
 

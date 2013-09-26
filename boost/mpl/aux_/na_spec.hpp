@@ -28,7 +28,6 @@
 #include <boost/mpl/aux_/preprocessor/def_params_tail.hpp>
 #include <boost/mpl/aux_/lambda_arity_param.hpp>
 #include <boost/mpl/aux_/config/dtp.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/mpl/aux_/config/ttp.hpp>
 #include <boost/mpl/aux_/config/lambda.hpp>
 #include <boost/mpl/aux_/config/overload_resolution.hpp>

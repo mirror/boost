@@ -24,7 +24,6 @@
 #include <boost/mpl/deref.hpp>
 #include <boost/mpl/long.hpp>
 #include <boost/mpl/void.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/mpl/aux_/config/ctps.hpp>
 
 namespace boost { namespace mpl {

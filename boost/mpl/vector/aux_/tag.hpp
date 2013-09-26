@@ -15,7 +15,6 @@
 // $Revision$
 
 #include <boost/mpl/aux_/config/typeof.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 
 namespace boost { namespace mpl { namespace aux {
 
