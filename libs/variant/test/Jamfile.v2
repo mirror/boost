@@ -53,6 +53,7 @@ test-suite variant
       <toolset>clang:<cxxflags>-fno-exceptions
       : variant_noexcept_test
     ]
+    [ run variant_swap_test.cpp ]
    ; 
 
 

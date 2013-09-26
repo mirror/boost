@@ -897,7 +897,7 @@ private: // representation
 
 public: // structors
 
-    explicit swap_with(Variant& toswap)
+    explicit swap_with(Variant& toswap) BOOST_NOEXCEPT
         : toswap_(toswap)
     {
     }
