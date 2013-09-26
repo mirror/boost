@@ -1,7 +1,7 @@
 #ifndef BOOST_TT_IS_ABSTRACT_CLASS_HPP
 #define BOOST_TT_IS_ABSTRACT_CLASS_HPP
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#if defined(_MSC_VER)
 # pragma once
 #endif
 

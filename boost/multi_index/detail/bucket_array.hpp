@@ -9,7 +9,7 @@
 #ifndef BOOST_MULTI_INDEX_DETAIL_BUCKET_ARRAY_HPP
 #define BOOST_MULTI_INDEX_DETAIL_BUCKET_ARRAY_HPP
 
-#if defined(_MSC_VER)&&(_MSC_VER>=1200)
+#if defined(_MSC_VER)
 #pragma once
 #endif
 

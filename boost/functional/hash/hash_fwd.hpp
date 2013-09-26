@@ -10,7 +10,7 @@
 #if !defined(BOOST_FUNCTIONAL_HASH_FWD_HPP)
 #define BOOST_FUNCTIONAL_HASH_FWD_HPP
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#if defined(_MSC_VER)
 # pragma once
 #endif
 

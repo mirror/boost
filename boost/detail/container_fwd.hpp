@@ -8,7 +8,7 @@
 #if !defined(BOOST_DETAIL_CONTAINER_FWD_HPP)
 #define BOOST_DETAIL_CONTAINER_FWD_HPP
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1020) && \
+#if defined(_MSC_VER) && \
     !defined(BOOST_DETAIL_TEST_CONFIG_ONLY)
 # pragma once
 #endif

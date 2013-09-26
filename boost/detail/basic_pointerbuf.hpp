@@ -14,7 +14,7 @@
 #define BOOST_DETAIL_BASIC_POINTERBUF_HPP
 
 // MS compatible compilers support #pragma once
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#if defined(_MSC_VER)
 # pragma once
 #endif
 

@@ -10,7 +10,7 @@
 #ifndef BOOST_SERIALIZATION_OPTIONAL_HPP_
 #define BOOST_SERIALIZATION_OPTIONAL_HPP_
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#if defined(_MSC_VER)
 # pragma once
 #endif
 

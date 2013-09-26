@@ -9,7 +9,7 @@
 #ifndef BOOST_UNORDERED_ALLOCATE_HPP
 #define BOOST_UNORDERED_ALLOCATE_HPP
 
-#if defined(_MSC_VER) && (_MSC_VER >= 1020)
+#if defined(_MSC_VER)
 # pragma once
 #endif
 

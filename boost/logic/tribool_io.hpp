@@ -11,7 +11,7 @@
 #include <boost/detail/workaround.hpp>
 #include <boost/noncopyable.hpp>
 
-#if BOOST_WORKAROUND(_MSC_VER, >= 1200)
+#if defined(_MSC_VER)
 #  pragma once
 #endif
 
