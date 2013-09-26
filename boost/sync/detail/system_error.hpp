@@ -35,9 +35,9 @@ namespace sync {
 namespace detail {
 
 #if defined(BOOST_SYNC_USE_STD_SYSTEM_ERROR)
-namespace system_namespace = std;
+namespace system_ns = std;
 #else
-namespace system_namespace = boost::system;
+namespace system_ns = boost::system;
 #endif
 
 } // namespace detail

@@ -44,7 +44,7 @@ public:
     {
         m_sem = dispatch_semaphore_create(i);
         if (m_sem == NULL)
-            BOOST_THROW_EXCEPTION(resource_error(sync::detail::system_namespace::errc::not_enough_memory, "boost::sync::semaphore constructor failed in dispatch_semaphore_create"));
+            BOOST_THROW_EXCEPTION(resource_error(sync::detail::system_ns::errc::not_enough_memory, "boost::sync::semaphore constructor failed in dispatch_semaphore_create"));
     }
 
     ~semaphore() BOOST_NOEXCEPT

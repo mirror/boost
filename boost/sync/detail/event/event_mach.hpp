@@ -53,12 +53,15 @@ public:
 
     void post() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail; // for memory_order
-        if (m_auto_reset) {
-            int32_t old_state = m_state.load(memory_order_acquire);
-            if (old_state >= 0) {
-                for (;;) {
-                    if (m_state.compare_exchange_weak( old_state, old_state - 1, memory_order_release, memory_order_acquire)) {
+        if (m_auto_reset)
+        {
+            int32_t old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+            if (old_state >= 0)
+            {
+                for (;;)
+                {
+                    if (m_state.compare_exchange_weak( old_state, old_state - 1, detail::atomic_ns::memory_order_release, detail::atomic_ns::memory_order_acquire))
+                    {
                         semaphore_signal( m_sem );
                         return; // avoid unnecessary fence
                     }
@@ -70,9 +73,11 @@ public:
                 }
             }
 
-            detail::atomic_thread_fence( memory_order_release );
-        } else {
-            m_state.store( 1, memory_order_release );
+            detail::atomic_ns::atomic_thread_fence( detail::atomic_ns::memory_order_release );
+        }
+        else
+        {
+            m_state.store( 1, detail::atomic_ns::memory_order_release );
             semaphore_signal_all( m_sem ); // wake all threads!& reset semaphore count
         }
     }
@@ -84,14 +89,13 @@ public:
 
     void wait() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
-            m_state.fetch_add(1, memory_order_acquire);
+            m_state.fetch_add(1, detail::atomic_ns::memory_order_acquire);
 
             kern_return_t result = semaphore_wait( m_sem );
             BOOST_VERIFY (result == KERN_SUCCESS);
         } else {
-            if (m_state.load(memory_order_acquire) == 1)
+            if (m_state.load(detail::atomic_ns::memory_order_acquire) == 1)
                 return;
 
             kern_return_t result = semaphore_wait( m_sem );
@@ -124,19 +128,18 @@ public:
 private:
     bool do_try_wait_until (const mach_timespec_t & timeout)
     {
-        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
-            m_state.fetch_add(1, memory_order_acquire);
+            m_state.fetch_add(1, detail::atomic_ns::memory_order_acquire);
 
             kern_return_t result = semaphore_timedwait( m_sem, timeout );
             if (result == KERN_SUCCESS)
                 return true;
 
-            m_state.fetch_add(-1, memory_order_relaxed);
+            m_state.fetch_add(-1, detail::atomic_ns::memory_order_relaxed);
             return false;
 
         } else {
-            if (m_state.load( memory_order_acquire ) == 1)
+            if (m_state.load( detail::atomic_ns::memory_order_acquire ) == 1)
                 return true;
 
             kern_return_t result = semaphore_timedwait( m_sem, timeout );
@@ -149,7 +152,7 @@ private:
 
     const bool m_auto_reset;
     semaphore_t m_sem;
-    detail::atomic<int32_t> m_state;
+    detail::atomic_ns::atomic<int32_t> m_state;
 };
 
 }

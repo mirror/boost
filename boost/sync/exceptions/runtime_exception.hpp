@@ -28,20 +28,20 @@ namespace boost {
 namespace sync {
 
 class BOOST_SYMBOL_VISIBLE runtime_exception :
-    public sync::detail::system_namespace::system_error
+    public sync::detail::system_ns::system_error
 {
 public:
-    explicit runtime_exception(int sys_err = 0) : sync::detail::system_namespace::system_error(sys_err, sync::detail::system_namespace::system_category())
+    explicit runtime_exception(int sys_err = 0) : sync::detail::system_ns::system_error(sys_err, sync::detail::system_ns::system_category())
     {
     }
 
     runtime_exception(int sys_err, const char* what) :
-        sync::detail::system_namespace::system_error(sync::detail::system_namespace::error_code(sys_err, sync::detail::system_namespace::system_category()), what)
+        sync::detail::system_ns::system_error(sync::detail::system_ns::error_code(sys_err, sync::detail::system_ns::system_category()), what)
     {
     }
 
     runtime_exception(int sys_err, std::string const& what) :
-        sync::detail::system_namespace::system_error(sync::detail::system_namespace::error_code(sys_err, sync::detail::system_namespace::system_category()), what)
+        sync::detail::system_ns::system_error(sync::detail::system_ns::error_code(sys_err, sync::detail::system_ns::system_category()), what)
     {
     }
 

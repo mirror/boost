@@ -9,22 +9,29 @@
 #ifndef BOOST_SYNC_DETAIL_ATOMIC_HPP
 #define BOOST_SYNC_DETAIL_ATOMIC_HPP
 
+#include <boost/sync/detail/config.hpp>
+
 #if !defined(BOOST_SYNC_USE_STD_ATOMIC)
 
-#if BOOST_CLANG
-#if __has_include( <atomic> )
-#define BOOST_SYNC_USE_STD_ATOMIC
-#endif
-#endif
+#if defined(BOOST_CLANG)
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC >= 1700)
+// Clang can be used with libstdc++, which only enables C++11 headers when explicitly enabled in the command line.
+#if (__cplusplus >= 201103L) && __has_include( <atomic> )
 #define BOOST_SYNC_USE_STD_ATOMIC
 #endif
 
-#if BOOST_GCC
+#elif defined(BOOST_MSVC)
+
+#if (BOOST_MSVC >= 1700)
+#define BOOST_SYNC_USE_STD_ATOMIC
+#endif
+
+#elif defined(BOOST_GCC)
+
 #if (BOOST_GCC >= 40800) && (__cplusplus >= 201103L)
 #define BOOST_SYNC_USE_STD_ATOMIC
 #endif
+
 #endif
 
 #endif // !defined(BOOST_SYNC_USE_STD_ATOMIC)
@@ -35,7 +42,6 @@
 #include <boost/atomic.hpp>
 #endif
 
-#include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/header.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
@@ -48,41 +54,17 @@ namespace detail {
 
 #ifdef BOOST_SYNC_USE_STD_ATOMIC
 
-using std::atomic;
-using std::atomic_int;
-using std::atomic_bool;
-
-using std::memory_order_acquire;
-using std::memory_order_acq_rel;
-using std::memory_order_release;
-using std::memory_order_consume;
-using std::memory_order_relaxed;
-using std::memory_order_seq_cst;
-
-using std::atomic_thread_fence;
+namespace atomic_ns = std;
 
 #else
 
-using boost::atomic;
-using boost::atomic_int;
-using boost::atomic_bool;
-
-using boost::memory_order_acquire;
-using boost::memory_order_release;
-using boost::memory_order_acq_rel;
-using boost::memory_order_consume;
-using boost::memory_order_relaxed;
-using boost::memory_order_seq_cst;
-
-using boost::atomic_thread_fence;
+namespace atomic_ns = boost;
 
 #endif
 
 }
 }
 }
-
-#undef BOOST_SYNC_USE_STD_ATOMIC
 
 #include <boost/sync/detail/footer.hpp>
 

@@ -39,7 +39,6 @@ public:
 
     void post() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.load();
             if (old_state >= 0) {
@@ -60,7 +59,6 @@ public:
 
     void wait() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.fetch_add(1) + 1;
 
@@ -84,7 +82,7 @@ public:
         } else {
         try_again:
 
-            if ( m_state.load(memory_order_acquire) == 1 )
+            if ( m_state.load(detail::atomic_ns::memory_order_acquire) == 1 )
                 return; // fast-path
 
             const long status = futex(&m_state, FUTEX_WAIT_PRIVATE, 0);
@@ -106,7 +104,6 @@ public:
 
     bool try_wait()
     {
-        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.load();
 
@@ -123,7 +120,7 @@ public:
             return false;
 
         } else {
-            if ( m_state.load(memory_order_acquire) == 1 )
+            if ( m_state.load(detail::atomic_ns::memory_order_acquire) == 1 )
                 return true; // fast-path
             else
                 return false;
@@ -151,7 +148,6 @@ public:
 private:
     bool do_wait_for(const struct timespec & timeout)
     {
-        using namespace boost::sync::detail; // for memory_order
         if (m_auto_reset) {
             int32_t old_state = m_state.fetch_add(1) + 1;
 
@@ -178,7 +174,7 @@ private:
         } else {
         try_again:
 
-            if ( m_state.load(memory_order_acquire) == 1 )
+            if ( m_state.load(detail::atomic_ns::memory_order_acquire) == 1 )
                 return true; // fast-path
 
             const long status = futex(&m_state, FUTEX_WAIT_PRIVATE, 0, &timeout);
@@ -210,7 +206,7 @@ private:
 
     const bool m_auto_reset;
 
-    detail::atomic<int32_t> m_state;
+    detail::atomic_ns::atomic<int32_t> m_state;
 };
 
 }

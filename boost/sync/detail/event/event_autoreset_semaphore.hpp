@@ -34,17 +34,19 @@ class event
     BOOST_DELETED_FUNCTION(event& operator=(event const&));
 
 public:
-    explicit event():
-        m_state(0)
-    {}
+    event() : m_state(0)
+    {
+    }
 
     void post() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail; // for memory_order
-        int32_t old_state = m_state.load(memory_order_acquire);
-        if (old_state >= 0) {
-            for (;;) {
-                if (m_state.compare_exchange_weak( old_state, old_state - 1, memory_order_release, memory_order_acquire)) {
+        int32_t old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+        if (old_state >= 0)
+        {
+            for (;;)
+            {
+                if (m_state.compare_exchange_weak( old_state, old_state - 1, detail::atomic_ns::memory_order_release, detail::atomic_ns::memory_order_acquire))
+                {
                     m_sem.post();
                     return; // avoid unnecessary fence
                 }
@@ -56,67 +58,61 @@ public:
             }
         }
 
-        atomic_thread_fence( memory_order_release );
+        detail::atomic_ns::atomic_thread_fence(detail::atomic_ns::memory_order_release);
     }
 
     void reset() BOOST_NOEXCEPT
     {
-        m_state = 0;
+        m_state.store(0, detail::atomic_ns::memory_order_relaxed);
     }
 
     void wait()
     {
-        m_state.fetch_add(1, memory_order_acquire);
+        m_state.fetch_add(1, detail::atomic_ns::memory_order_acquire);
         m_sem.wait();
     }
 
     bool try_wait()
     {
-        using namespace boost::sync::detail; // for memory_order
-
-        m_state.fetch_add(1, memory_order_acquire);
+        m_state.fetch_add(1, detail::atomic_ns::memory_order_acquire);
 
         const bool wait_successful = m_sem.try_wait();
         if (wait_successful)
             return true;
 
-        m_state.fetch_add(-1, memory_order_relaxed);
+        m_state.fetch_add(-1, detail::atomic_ns::memory_order_relaxed);
         return false;
     }
 
     template <typename Duration>
     bool try_wait_for(const chrono::duration<Rep, Period> & duration)
     {
-        using namespace boost::sync::detail; // for memory_order
-
-        m_state.fetch_add(1, memory_order_acquire);
+        m_state.fetch_add(1, detail::atomic_ns::memory_order_acquire);
 
         const bool wait_successful = m_sem.try_wait_for( duration );
         if (wait_successful)
             return true;
 
-        m_state.fetch_add(-1, memory_order_relaxed);
+        m_state.fetch_add(-1, detail::atomic_ns::memory_order_relaxed);
         return false;
     }
 
     template <typename Timepoint>
     bool try_wait_until(const Timepoint & timeout )
     {
-        using namespace boost::sync::detail; // for memory_order
-
-        m_state.fetch_add(1, memory_order_acquire);
+        m_state.fetch_add(1, detail::atomic_ns::memory_order_acquire);
 
         const bool wait_successful = m_sem.try_wait_until( timeout );
         if (wait_successful)
             return true;
 
-        m_state.fetch_add(-1, memory_order_relaxed);
+        m_state.fetch_add(-1, detail::atomic_ns::memory_order_relaxed);
         return false;
     }
 
 private:
     semaphore m_sem;
-    detail::atomic<int32_t> m_state;
+    detail::atomic_ns::atomic<int32_t> m_state;
 };
 
 }
