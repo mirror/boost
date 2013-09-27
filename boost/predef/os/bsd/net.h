@@ -32,8 +32,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_OS_BSD_NET BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
 #if defined(__NETBSD__) || defined(__NetBSD__)
-#   ifndef BOOST_OS_BSD
+#   ifndef BOOST_OS_BSD_AVAILABLE
 #       define BOOST_OS_BSD BOOST_VERSION_NUMBER_AVAILABLE
+#       define BOOST_OS_BSD_AVAILABLE
 #   endif
 #   undef BOOST_OS_BSD_NET
 #   if defined(__NETBSD__)

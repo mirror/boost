@@ -27,8 +27,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_OS_BSD_FREE BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
 #if defined(__FreeBSD__)
-#   ifndef BOOST_OS_BSD
+#   ifndef BOOST_OS_BSD_AVAILABLE
 #       define BOOST_OS_BSD BOOST_VERSION_NUMBER_AVAILABLE
+#       define BOOST_OS_BSD_AVAILABLE
 #   endif
 #   undef BOOST_OS_BSD_FREE
 #   if defined(__FreeBSD_version)

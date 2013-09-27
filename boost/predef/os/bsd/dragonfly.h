@@ -25,8 +25,9 @@ http://www.boost.org/LICENSE_1_0.txt)
 #define BOOST_OS_BSD_DRAGONFLY BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
 #if defined(__DragonFly__)
-#   ifndef BOOST_OS_BSD
+#   ifndef BOOST_OS_BSD_AVAILABLE
 #       define BOOST_OS_BSD BOOST_VERSION_NUMBER_AVAILABLE
+#       define BOOST_OS_BSD_AVAILABLE
 #   endif
 #   undef BOOST_OS_BSD_DRAGONFLY
 #   if defined(__DragonFly__)
