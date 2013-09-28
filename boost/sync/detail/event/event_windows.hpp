@@ -26,17 +26,17 @@ namespace sync {
 
 BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
-class event
+class win32_event_base
 {
-    BOOST_DELETED_FUNCTION(event(event const&))
-    BOOST_DELETED_FUNCTION(event& operator=(event const&))
+    BOOST_DELETED_FUNCTION(win32_event_base(win32_event_base const&))
+    BOOST_DELETED_FUNCTION(win32_event_base& operator=(win32_event_base const&))
 
     typedef boost::detail::winapi::HANDLE_ HANDLE_;
     typedef boost::detail::winapi::BOOL_   BOOL_;
     typedef boost::detail::winapi::DWORD_  DWORD_;
 
 public:
-    explicit event(bool auto_reset = false)
+    explicit win32_event_base(bool auto_reset)
     {
         handle_ = boost::detail::winapi::CreateEventA(NULL, !auto_reset, 0, NULL);
         if (!handle_)
@@ -46,7 +46,7 @@ public:
         }
     }
 
-    ~event() BOOST_NOEXCEPT
+    ~win32_event_base() BOOST_NOEXCEPT
     {
         BOOST_VERIFY( boost::detail::winapi::CloseHandle(handle_) );
     }
@@ -137,6 +137,40 @@ private:
 
     HANDLE_ handle_;
 };
+
+class auto_reset_event : win32_event_base
+{
+public:
+    auto_reset_event() : win32_event_base(true) {}
+    
+    void post()                                    { win32_event_base::post(); }
+    void wait()                                    { win32_event_base::wait(); }
+    bool try_wait()                                { return win32_event_base::try_wait(); }
+
+    template <typename Duration>
+    bool try_wait_for(const Duration & duration)   { return win32_event_base::try_wait_for( duration ); } 
+
+    template <typename TimePoint>
+    bool try_wait_until(const TimePoint & timeout) { return win32_event_base::try_wait_until( timeout ); } 
+};
+
+class manual_reset_event : win32_event_base
+{
+public:
+    manual_reset_event() : win32_event_base(false) {}
+    
+    void post()                                    { win32_event_base::post(); }
+    void wait()                                    { win32_event_base::wait(); }
+    bool try_wait()                                { return win32_event_base::try_wait(); }
+    void reset()                                   { win32_event_base::reset(); }
+
+    template <typename Duration>
+    bool try_wait_for(const Duration & duration)   { return win32_event_base::try_wait_for( duration ); } 
+
+    template <typename TimePoint>
+    bool try_wait_until(const TimePoint & timeout) { return win32_event_base::try_wait_until( timeout ); } 
+};
+
 
 }
 }

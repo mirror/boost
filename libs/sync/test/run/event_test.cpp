@@ -12,7 +12,7 @@
 
 BOOST_AUTO_TEST_CASE(test_event_post_wait)
 {
-    boost::sync::event ev;
+    boost::sync::manual_reset_event ev;
 
     ev.post();
     ev.wait();
@@ -27,7 +27,7 @@ BOOST_AUTO_TEST_CASE(test_event_post_wait)
 
 BOOST_AUTO_TEST_CASE(test_event_post_try_wait)
 {
-    boost::sync::event ev;
+    boost::sync::manual_reset_event ev;
 
     BOOST_REQUIRE( ev.try_wait() == false );
 
@@ -38,7 +38,7 @@ BOOST_AUTO_TEST_CASE(test_event_post_try_wait)
 
 BOOST_AUTO_TEST_CASE(test_event_post_wait_autoreset)
 {
-    boost::sync::event ev(true);
+    boost::sync::auto_reset_event ev;
 
     ev.post();
     BOOST_REQUIRE( ev.try_wait() == true );
@@ -48,7 +48,7 @@ BOOST_AUTO_TEST_CASE(test_event_post_wait_autoreset)
 
 BOOST_AUTO_TEST_CASE(test_event_reset)
 {
-    boost::sync::event ev(false);
+    boost::sync::manual_reset_event ev;
 
     BOOST_REQUIRE( ev.try_wait() == false );
     ev.post();
@@ -57,6 +57,7 @@ BOOST_AUTO_TEST_CASE(test_event_reset)
     BOOST_REQUIRE( ev.try_wait() == false );
 }
 
+template <typename EventType>
 struct event_wait_and_post_test
 {
     void run()
@@ -71,22 +72,27 @@ struct event_wait_and_post_test
         ev_.post();
     }
 
-    boost::sync::event ev_;
+    EventType ev_;
     boost::thread thread_;
 };
 
 BOOST_AUTO_TEST_CASE(event_wait_and_post)
 {
-    event_wait_and_post_test test;
+    event_wait_and_post_test<boost::sync::manual_reset_event> test;
     test.run();
 }
 
+BOOST_AUTO_TEST_CASE(event_wait_and_post_autoreset)
+{
+    event_wait_and_post_test<boost::sync::auto_reset_event> test;
+    test.run();
+}
 
 BOOST_AUTO_TEST_CASE(test_event_wait_for)
 {
     using namespace boost;
 
-    sync::event ev;
+    sync::manual_reset_event ev;
 
     BOOST_AUTO(start, chrono::system_clock::now());
 
@@ -113,7 +119,7 @@ BOOST_AUTO_TEST_CASE(test_event_wait_until)
 {
     using namespace boost;
 
-    sync::event ev(0);
+    sync::manual_reset_event ev;
     {
         BOOST_AUTO(now, chrono::system_clock::now());
         BOOST_AUTO(timeout, now + chrono::milliseconds(500));

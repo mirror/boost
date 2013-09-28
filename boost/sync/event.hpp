@@ -11,31 +11,30 @@
 
 #ifdef BOOST_SYNC_DETAIL_DOXYGEN
 
-class event
+class auto_reset_event
 {
-
 public:
     /**
-     * \b Effects: Constructs an event object. If `auto_reset` is true, waiting for an even will automatically reset it.
+     * \b Effects: Constructs an auto_reset_event object.
      *
      * \b Throws: if an error occurs.
      */
-    explicit event(bool auto_reset = false);
+    auto_reset_event();
 
-    event(event const&) = delete;
-    event& operator= (event const&) = delete;
+    auto_reset_event(auto_reset_event const&) = delete;
+    auto_reset_event& operator= (auto_reset_event const&) = delete;
 
     /**
-     * \b Effects: Destroys the event object.
+     * \b Effects: Destroys the auto_reset_event object.
      *
-     * \b Precondition: No thread waits on this event.
+     * \b Precondition: No thread waits on this auto_reset_event.
      *
-     * \b Throws: if an error occurs.
+    * \b Throws: nothing.
      */
-    ~event();
+    ~auto_reset_event() noexcept;
 
     /**
-     * \b Effects: Signals the event object: the event is set and waiting threads will be woken up.
+     * \b Effects: Signals the auto_reset_event: the object remains signalled until one thread has finished waiting for this object.
      *
      * \b Memory Ordering: release
      *
@@ -44,7 +43,8 @@ public:
     void post();
 
     /**
-     * \b Effects: Waits for the event to be signaled. If the event is created as `auto_reset`, it will unset the `signaled` state
+     * \b Effects: If the auto_reset_event is set, the call returns immediately, otherwise it will block until the thread will be woken up
+	 *             by. When a waiting thread is released, the state of the auto_reset_event is automatically reset to the unsignaled state.
      *
      * \b Memory Ordering: acquire
      *
@@ -53,14 +53,90 @@ public:
     void wait();
 
     /**
-     * \b Effects: Resets the event to the  unsignaled  state.
+     * \b Effects: Tries to wait for the auto_reset_event. If successful, the state of the auto_reset_event us automatically set to the unsignaled state.
+     *
+     * \b Memory Ordering: acquire, if successful, relaxed otherwise
+     *
+     * \b Returns: True if the auto_reset_event had been signaled, False, if the call would be blocking or the auto_reset_event has not been signaled.
+     *
+     * \b Throws: if an error occurs.
+     */
+    bool try_wait();
+
+   /**
+    * \b Effects: Tries to wait for the auto_reset_event until a timeout occurs. If successful, the state of the auto_reset_event us automatically set to the unsignaled state.
+    *
+    * \b Memory Ordering: acquire, if successful, relaxed otherwise
+    *
+    * \b Returns: True if the auto_reset_event had been signaled, False, if the call would be blocking or the auto_reset_event has not been signaled.
+    *
+    * \b Throws: if an error occurs.
+    */
+    template <typename Duration>
+    bool try_wait_for(const Duration & duration);
+
+   /**
+    * \b Effects: Tries to wait for the auto_reset_event for a certain duration. If successful, the state of the auto_reset_event us automatically set to the unsignaled state.
+    *
+    * \b Memory Ordering: acquire, if successful, relaxed otherwise
+    *
+    * \b Returns: True if the auto_reset_event had been signaled, False, if the call would be blocking or the auto_reset_event has not been signaled.
+    *
+    * \b Throws: if an error occurs.
+    */
+    template <typename TimePoint>
+    bool try_wait_until(const TimePoint & timeout);
+};
+
+class manual_reset_event
+{
+public:
+    /**
+     * \b Effects: Constructs a manual_reset_event object.
+     *
+     * \b Throws: if an error occurs.
+     */
+    auto_reset_event();
+
+    auto_reset_event(auto_reset_event const&) = delete;
+    auto_reset_event& operator= (auto_reset_event const&) = delete;
+
+   /**
+    * \b Effects: Destroys the manual_reset_event object.
+    *
+    * \b Precondition: No thread waits on this manual_reset_event.
+    *
+    * \b Throws: nothing.
+    */
+    ~auto_reset_event() noexcept;
+
+    /**
+     * \b Effects: Signals the event object: the event is set and waiting threads will be released.
+     *
+     * \b Memory Ordering: release
+     *
+     * \b Throws: if an error occurs.
+     */
+    void post();
+
+    /**
+     * \b Effects: Waits for the event to be signaled.
+     *
+     * \b Memory Ordering: acquire
+     *
+     * \b Throws: if an error occurs.
+     */
+    void wait();
+
+    /**
+     * \b Effects: Resets the event to the unsignaled state.
      *
      * \b Throws: if an error occurs.
      */
     void reset();
 
     /**
-     * \b Effects: Waits for the event to be signaled. If the event is created as `auto_reset`, it will unset the `signaled` state
+     * \b Effects: Tries to waits for the event to be signaled.
      *
      * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
@@ -71,7 +147,7 @@ public:
     bool try_wait();
 
     /**
-     * \b Effects: Waits for the event to be signaled. If the event is created as `auto_reset`, it will unset the `signaled` state
+     * \b Effects: Waits for the event to be signaled.
      *
      * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
@@ -83,7 +159,7 @@ public:
     bool try_wait_for(const Duration & duration);
 
     /**
-     * \b Effects: Waits for the event to be signaled. If the event is created as `auto_reset`, it will unset the `signaled` state
+     * \b Effects: Waits for the event to be signaled.
      *
      * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
@@ -94,6 +170,7 @@ public:
     template <typename TimePoint>
     bool try_wait_until(const TimePoint & timeout);
 };
+
 
 #else // BOOST_SYNC_DETAIL_DOXYGEN
 
