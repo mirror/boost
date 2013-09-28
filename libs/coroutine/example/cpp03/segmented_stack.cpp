@@ -7,11 +7,15 @@
 #include <iostream>
 
 #include <boost/assert.hpp>
+#include <boost/config.hpp>
 #include <boost/coroutine/all.hpp>
 #include <boost/thread.hpp>
 
-int count = 20;
-#if defined(BOOST_USE_SEGMENTED_STACKS)
+int count = 50;
+
+#ifdef BOOST_MSVC //MS VisualStudio
+__declspec(noinline) void access( char *buf);
+#else // GCC
 void access( char *buf) __attribute__ ((noinline));
 #endif
 void access( char *buf)
