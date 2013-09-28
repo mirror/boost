@@ -29,7 +29,7 @@ template< typename Mutex, typename Void = void >
 struct is_condition_variable_compatible : mpl::false_ {};
 
 template< typename Mutex >
-struct is_condition_variable_compatible< Mutex, typename Mutex::_is_condition_variable_compatible > : mpl::false_ {};
+struct is_condition_variable_compatible< Mutex, typename Mutex::_is_condition_variable_compatible > : mpl::true_ {};
 
 } // namespace sync
 
