@@ -522,6 +522,7 @@ void test_invalid_result()
     try
     {
         int i = coro.get();
+        (void)i;
     }
     catch ( coro::invalid_result const& e)
     {
