@@ -58,9 +58,10 @@ private:
     typedef detail::push_coroutine_base< Arg >  base_t;
     typedef typename base_t::ptr_t              ptr_t;
 
-    struct dummy;
+    struct dummy
+    { void nonnull() {} };
 
-    typedef void ( push_coroutine::*safe_bool)();
+    typedef void ( dummy::*safe_bool)();
 
     ptr_t  impl_;
 
@@ -81,8 +82,6 @@ private:
             ::new( a.allocate( 1) ) caller_t(
                 callee, unwind, preserve_fpu, a) );
     }
-
-    void nonnull_() {}
 
 public:
     push_coroutine() BOOST_NOEXCEPT :
@@ -228,7 +227,7 @@ public:
     { return ! impl_; }
 
     operator safe_bool() const BOOST_NOEXCEPT
-    { return ( empty() || impl_->is_complete() ) ? 0 : & push_coroutine::nonnull_; }
+    { return ( empty() || impl_->is_complete() ) ? 0 : & dummy::nonnull; }
 
     bool operator!() const BOOST_NOEXCEPT
     { return empty() || impl_->is_complete(); }
@@ -318,9 +317,10 @@ private:
     typedef detail::push_coroutine_base< Arg & >    base_t;
     typedef typename base_t::ptr_t                  ptr_t;
 
-    struct dummy;
+    struct dummy
+    { void nonnull() {} };
 
-    typedef void ( push_coroutine::*safe_bool)();
+    typedef void ( dummy::*safe_bool)();
 
     ptr_t  impl_;
 
@@ -341,8 +341,6 @@ private:
             ::new( a.allocate( 1) ) caller_t(
                 callee, unwind, preserve_fpu, a) );
     }
-
-    void nonnull_() {}
 
 public:
     push_coroutine() BOOST_NOEXCEPT :
@@ -488,7 +486,7 @@ public:
     { return ! impl_; }
 
     operator safe_bool() const BOOST_NOEXCEPT
-    { return ( empty() || impl_->is_complete() ) ? 0 : & push_coroutine::nonnull_; }
+    { return ( empty() || impl_->is_complete() ) ? 0 : & dummy::nonnull; }
 
     bool operator!() const BOOST_NOEXCEPT
     { return empty() || impl_->is_complete(); }
@@ -553,9 +551,10 @@ private:
     typedef detail::push_coroutine_base< void >  base_t;
     typedef base_t::ptr_t                        ptr_t;
 
-    struct dummy;
+    struct dummy
+    { void nonnull() {} };
 
-    typedef void ( push_coroutine::*safe_bool)();
+    typedef void ( dummy::*safe_bool)();
 
     ptr_t  impl_;
 
@@ -576,8 +575,6 @@ private:
             ::new( a.allocate( 1) ) caller_t(
                 callee, unwind, preserve_fpu, a) );
     }
-
-    void nonnull_() {}
 
 public:
     push_coroutine() BOOST_NOEXCEPT :
@@ -723,7 +720,7 @@ public:
     { return ! impl_; }
 
     operator safe_bool() const BOOST_NOEXCEPT
-    { return ( empty() || impl_->is_complete() ) ? 0 : & push_coroutine::nonnull_; }
+    { return ( empty() || impl_->is_complete() ) ? 0 : & dummy::nonnull; }
 
     bool operator!() const BOOST_NOEXCEPT
     { return empty() || impl_->is_complete(); }
@@ -757,9 +754,10 @@ private:
     typedef detail::pull_coroutine_base< R >    base_t;
     typedef typename base_t::ptr_t              ptr_t;
 
-    struct dummy;
+    struct dummy
+    { void nonnull() {} };
 
-    typedef void ( pull_coroutine::*safe_bool)();
+    typedef void ( dummy::*safe_bool)();
 
     ptr_t  impl_;
 
@@ -781,8 +779,6 @@ private:
             ::new( a.allocate( 1) ) caller_t(
                 callee, unwind, preserve_fpu, a, result) );
     }
-
-    void nonnull_() {}
 
 public:
     pull_coroutine() BOOST_NOEXCEPT :
@@ -1060,7 +1056,7 @@ public:
     { return ! impl_; }
 
     operator safe_bool() const BOOST_NOEXCEPT
-    { return ( empty() || impl_->is_complete() ) ? 0 : & pull_coroutine::nonnull_; }
+    { return ( empty() || impl_->is_complete() ) ? 0 : & dummy::nonnull; }
 
     bool operator!() const BOOST_NOEXCEPT
     { return empty() || impl_->is_complete(); }
@@ -1279,9 +1275,10 @@ private:
     typedef detail::pull_coroutine_base< R & >  base_t;
     typedef typename base_t::ptr_t              ptr_t;
 
-    struct dummy;
+    struct dummy
+    { void nonnull() {} };
 
-    typedef void ( pull_coroutine::*safe_bool)();
+    typedef void ( dummy::*safe_bool)();
 
     ptr_t  impl_;
 
@@ -1303,8 +1300,6 @@ private:
             ::new( a.allocate( 1) ) caller_t(
                 callee, unwind, preserve_fpu, a, result) );
     }
-
-    void nonnull_() {}
 
 public:
     pull_coroutine() BOOST_NOEXCEPT :
@@ -1582,7 +1577,7 @@ public:
     { return ! impl_; }
 
     operator safe_bool() const BOOST_NOEXCEPT
-    { return ( empty() || impl_->is_complete() ) ? 0 : & pull_coroutine::nonnull_; }
+    { return ( empty() || impl_->is_complete() ) ? 0 : & dummy::nonnull; }
 
     bool operator!() const BOOST_NOEXCEPT
     { return empty() || impl_->is_complete(); }
@@ -1797,9 +1792,10 @@ private:
     typedef detail::pull_coroutine_base< void > base_t;
     typedef base_t::ptr_t                       ptr_t;
 
-    struct dummy;
+    struct dummy
+    { void nonnull() {} };
 
-    typedef void ( pull_coroutine::*safe_bool)();
+    typedef void ( dummy::*safe_bool)();
 
     ptr_t  impl_;
 
@@ -1820,8 +1816,6 @@ private:
             ::new( a.allocate( 1) ) caller_t(
                 callee, unwind, preserve_fpu, a) );
     }
-
-    void nonnull_() {}
 
 public:
     pull_coroutine() BOOST_NOEXCEPT :
@@ -2099,7 +2093,7 @@ public:
     { return ! impl_; }
 
     operator safe_bool() const BOOST_NOEXCEPT
-    { return ( empty() || impl_->is_complete() ) ? 0 : & pull_coroutine::nonnull_; }
+    { return ( empty() || impl_->is_complete() ) ? 0 : & dummy::nonnull; }
 
     bool operator!() const BOOST_NOEXCEPT
     { return empty() || impl_->is_complete(); }
@@ -2246,6 +2240,7 @@ push_coroutine< Arg & >::push_coroutine( coroutine_fn fn, attributes const& attr
         ::new( a.allocate( 1) ) object_t( forward< coroutine_fn >( fn), attr, stack_alloc, a) );
 }
 
+inline
 push_coroutine< void >::push_coroutine( coroutine_fn fn, attributes const& attr,
            stack_allocator const& stack_alloc,
            std::allocator< push_coroutine > const& alloc,
