@@ -7,11 +7,15 @@
 #include <iostream>
 
 #include <boost/assert.hpp>
+#include <boost/config.hpp>
 #include <boost/coroutine/all.hpp>
 #include <boost/thread.hpp>
 
-int count = 20;
-#if defined(BOOST_USE_SEGMENTED_STACKS)
+int count = 384;
+
+#ifdef BOOST_MSVC //MS VisualStudio
+__declspec(noinline) void access( char *buf);
+#else // GCC
 void access( char *buf) __attribute__ ((noinline));
 #endif
 void access( char *buf)
@@ -66,11 +70,11 @@ void thread_fn()
 int main( int argc, char * argv[])
 {
 #if defined(BOOST_USE_SEGMENTED_STACKS)
-    std::cout << "using segmented stacks: allocates " << count << " * 4kB on stack, ";
+    std::cout << "using segmented stacks: allocates " << count << " * 4kB == " << 4 * count << "kB on stack, ";
     std::cout << "initial stack size = " << boost::coroutines::stack_allocator::default_stacksize() / 1024 << "kB" << std::endl;
     std::cout << "application should not fail" << std::endl;
 #else
-    std::cout << "using standard stacks: allocates " << count << " * 4kB on stack, ";
+    std::cout << "using standard stacks: allocates " << count << " * 4kB == " << 4 * count << "kB on stack, ";
     std::cout << "initial stack size = " << boost::coroutines::stack_allocator::default_stacksize() / 1024 << "kB" << std::endl;
     std::cout << "application might fail" << std::endl;
 #endif
