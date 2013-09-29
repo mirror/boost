@@ -1774,7 +1774,8 @@ namespace polygon_formation {
         //we now have a [begin, end] //
         bool found_solid_opening = false;
         bool erase_succ = true, erase_pred = true;
-        Unit solid_opening_begin, solid_opening_end;
+        Unit solid_opening_begin = 0;
+        Unit solid_opening_end = 0;
         size_t j = i+1;
         ActiveTail<Unit> *pfig = succ->second;
         ActiveTail<Unit> *ppfig = pred->second;
