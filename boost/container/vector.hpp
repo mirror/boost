@@ -224,6 +224,9 @@ namespace container_detail {
 
 #endif   //#ifndef BOOST_CONTAINER_VECTOR_ITERATOR_IS_POINTER
 
+struct uninitialized_size_t {};
+static const uninitialized_size_t uninitialized_size = uninitialized_size_t();
+
 template <class T, class Allocator>
 struct vector_value_traits
 {
@@ -291,7 +294,7 @@ struct vector_alloc_holder
 
    //Constructor, does not throw
    template<class AllocConvertible>
-   explicit vector_alloc_holder(BOOST_FWD_REF(AllocConvertible) a, size_type initial_size)
+   explicit vector_alloc_holder(uninitialized_size_t, BOOST_FWD_REF(AllocConvertible) a, size_type initial_size)
       : Allocator(boost::forward<AllocConvertible>(a))
       , m_start()
       , m_size(initial_size)  //Size is initialized here so vector should only call uninitialized_xxx after this
@@ -303,7 +306,7 @@ struct vector_alloc_holder
    }
 
    //Constructor, does not throw
-   explicit vector_alloc_holder(size_type initial_size)
+   explicit vector_alloc_holder(uninitialized_size_t, size_type initial_size)
       : Allocator()
       , m_start()
       , m_size(initial_size)  //Size is initialized here so vector should only call uninitialized_xxx after this
@@ -355,11 +358,8 @@ struct vector_alloc_holder
 
    size_type next_capacity(size_type additional_objects) const
    {
-      std::size_t num_objects   = this->m_size + additional_objects;
-      std::size_t next_cap = this->m_capacity + this->m_capacity/2;
-      return num_objects > next_cap ? num_objects : next_cap;/*
-      return get_next_capacity( allocator_traits_type::max_size(this->m_holder.alloc())
-                              , this->m_capacity, additional_objects);*/
+      return get_next_capacity( allocator_traits_type::max_size(this->alloc())
+                              , this->m_capacity, additional_objects);
    }
 
    pointer     m_start;
@@ -425,7 +425,7 @@ struct vector_alloc_holder<Allocator, container_detail::integral_constant<unsign
 
    //Constructor, does not throw
    template<class AllocConvertible>
-   explicit vector_alloc_holder(BOOST_FWD_REF(AllocConvertible) a, size_type initial_size)
+   vector_alloc_holder(uninitialized_size_t, BOOST_FWD_REF(AllocConvertible) a, size_type initial_size)
       : Allocator(boost::forward<AllocConvertible>(a))
       , m_size(initial_size)  //Size is initialized here...
    {
@@ -434,7 +434,7 @@ struct vector_alloc_holder<Allocator, container_detail::integral_constant<unsign
    }
 
    //Constructor, does not throw
-   explicit vector_alloc_holder(size_type initial_size)
+   vector_alloc_holder(uninitialized_size_t, size_type initial_size)
       : Allocator()
       , m_size(initial_size)  //Size is initialized here...
    {
@@ -630,7 +630,7 @@ class vector
    //!
    //! <b>Complexity</b>: Linear to n.
    explicit vector(size_type n)
-      :  m_holder(n)
+      :  m_holder(container_detail::uninitialized_size, n)
    {
       boost::container::uninitialized_value_init_alloc_n
          (this->m_holder.alloc(), n, container_detail::to_raw_pointer(this->m_holder.start()));
@@ -646,7 +646,7 @@ class vector
    //!
    //! <b>Note</b>: Non-standard extension
    explicit vector(size_type n, default_init_t)
-      :  m_holder(n)
+      :  m_holder(container_detail::uninitialized_size, n)
    {
       boost::container::uninitialized_default_init_alloc_n
          (this->m_holder.alloc(), n, container_detail::to_raw_pointer(this->m_holder.start()));
@@ -660,7 +660,7 @@ class vector
    //!
    //! <b>Complexity</b>: Linear to n.
    vector(size_type n, const T& value)
-      :  m_holder(n)
+      :  m_holder(container_detail::uninitialized_size, n)
    {
       boost::container::uninitialized_fill_alloc_n
          (this->m_holder.alloc(), value, n, container_detail::to_raw_pointer(this->m_holder.start()));
@@ -674,7 +674,7 @@ class vector
    //!
    //! <b>Complexity</b>: Linear to n.
    vector(size_type n, const T& value, const allocator_type& a)
-      :  m_holder(a, n)
+      :  m_holder(container_detail::uninitialized_size, a, n)
    {
       boost::container::uninitialized_fill_alloc_n
          (this->m_holder.alloc(), value, n, container_detail::to_raw_pointer(this->m_holder.start()));
@@ -713,7 +713,9 @@ class vector
    //!
    //! <b>Complexity</b>: Linear to the elements x contains.
    vector(const vector &x)
-      :  m_holder(allocator_traits_type::select_on_container_copy_construction(x.m_holder.alloc()), x.size())
+      :  m_holder( container_detail::uninitialized_size
+                 , allocator_traits_type::select_on_container_copy_construction(x.m_holder.alloc())
+                 , x.size())
    {
       ::boost::container::uninitialized_copy_alloc_n
          ( this->m_holder.alloc(), container_detail::to_raw_pointer(x.m_holder.start())
@@ -754,7 +756,7 @@ class vector
    //!
    //! <b>Complexity</b>: Linear to the elements x contains.
    vector(const vector &x, const allocator_type &a)
-      :  m_holder(a, x.size())
+      :  m_holder(container_detail::uninitialized_size, a, x.size())
    {
       ::boost::container::uninitialized_copy_alloc_n_source
          ( this->m_holder.alloc(), container_detail::to_raw_pointer(x.m_holder.start())

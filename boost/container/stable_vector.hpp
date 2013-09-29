@@ -123,8 +123,8 @@ struct node
          rebind_pointer<void>::type
       >
 {
-//   private:
-//   node();
+   private:
+   node();
 
    public:
    typename ::boost::intrusive::pointer_traits<Pointer>::element_type value;
