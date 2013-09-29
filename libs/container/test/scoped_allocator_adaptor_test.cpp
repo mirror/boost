@@ -68,7 +68,7 @@ class test_allocator
    }
 
    std::size_t max_size() const
-   {  return std::size_t(Id);  }
+   {  return std::size_t(-1);  }
 
    T* allocate(std::size_t n)
    {  return (T*)::new char[n*sizeof(T)];  }
