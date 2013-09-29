@@ -11,14 +11,6 @@
 #include <boost/detail/lightweight_test.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 
-// TODO: Disable parts of the unit test that should not run when BOOST_NO_EXCEPTIONS
-// if exceptions are enabled there must be a user defined throw_exception function
-#ifdef BOOST_NO_EXCEPTIONS
-namespace boost {
-   void throw_exception(std::exception const &){}; // user defined
-} // namespace boost
-#endif // BOOST_NO_EXCEPTIONS
-
 #include <vector>
 #include <list>
 

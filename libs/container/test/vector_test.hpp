@@ -78,9 +78,9 @@ class default_init_allocator
    T* allocate(std::size_t n)
    {
       //Initialize memory to a pattern
-      T *const p = ::new T[n];
-      unsigned char *puc_raw = reinterpret_cast<unsigned char*>(p);
-      std::size_t max = sizeof(T)*n;
+      const std::size_t max = sizeof(T)*n;
+      unsigned char *puc_raw = ::new unsigned char[max];
+
       if(base_t::s_ascending){
          for(std::size_t i = 0; i != max; ++i){
             puc_raw[i] = static_cast<unsigned char>(s_pattern++);
@@ -91,11 +91,11 @@ class default_init_allocator
             puc_raw[i] = static_cast<unsigned char>(s_pattern--);
          }
       }
-      return p;
+      return (T*)puc_raw;;
    }
 
    void deallocate(T *p, std::size_t)
-   {  delete[] p;  }
+   {  delete[] (unsigned char*)p;  }
 };
 
 template<class T>
