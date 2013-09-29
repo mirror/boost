@@ -62,6 +62,10 @@ private:
     boost::detail::winapi::HANDLE_ m_event;
 
 public:
+#if !defined(BOOST_NO_CXX11_CONSTEXPR)
+#define BOOST_SYNC_DEFINES_MUTEX_CONSTEXPR_CONSTRUCTOR
+#endif
+
     BOOST_CONSTEXPR mutex() BOOST_NOEXCEPT : m_event(NULL), m_active_count(0)
     {
     }

@@ -16,6 +16,7 @@
 #ifndef BOOST_SYNC_DETAIL_TIME_TRAITS_HPP_INCLUDED_
 #define BOOST_SYNC_DETAIL_TIME_TRAITS_HPP_INCLUDED_
 
+#include <boost/mpl/bool.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/header.hpp>
 
@@ -48,6 +49,12 @@ struct enable_if_tag< T, typename time_traits< T >::tag, R >
 {
     typedef R type;
 };
+
+template< typename T, typename TagT >
+struct is_time_tag_of : mpl::false_ {};
+
+template< typename T >
+struct is_time_tag_of< T, typename time_traits< T >::tag > : mpl::true_ {};
 
 } // namespace detail
 

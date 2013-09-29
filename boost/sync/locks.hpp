@@ -21,6 +21,7 @@
 #endif
 
 #include <boost/sync/locks/lock_guard.hpp>
+#include <boost/sync/locks/unlock_guard.hpp>
 #include <boost/sync/locks/shared_lock_guard.hpp>
 #include <boost/sync/locks/unique_lock.hpp>
 #include <boost/sync/locks/shared_lock.hpp>

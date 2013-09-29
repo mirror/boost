@@ -8,14 +8,14 @@
  * (C) Copyright 2013 Andrey Semashev
  */
 /*!
- * \file   detail/condition_variables/condition_variable_posix.hpp
+ * \file   detail/condition_variables/condition_variable_windows.hpp
  *
  * \brief  This header is the Boost.Sync library implementation, see the library documentation
  *         at http://www.boost.org/doc/libs/release/libs/sync/doc/html/index.html.
  */
 
-#ifndef BOOST_SYNC_DETAIL_CONDITION_VARIABLES_CONDITION_VARIABLE_POSIX_HPP_INCLUDED_
-#define BOOST_SYNC_DETAIL_CONDITION_VARIABLES_CONDITION_VARIABLE_POSIX_HPP_INCLUDED_
+#ifndef BOOST_SYNC_DETAIL_CONDITION_VARIABLES_CONDITION_VARIABLE_WINDOWS_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_CONDITION_VARIABLES_CONDITION_VARIABLE_WINDOWS_HPP_INCLUDED_
 
 #include <cstddef>
 #include <boost/assert.hpp>
@@ -27,7 +27,6 @@
 #include <boost/sync/exceptions/runtime_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/traits/is_condition_variable_compatible.hpp>
-#include <boost/sync/detail/pthread.hpp>
 #include <boost/sync/detail/time_traits.hpp>
 #include <boost/sync/detail/time_units.hpp>
 #include <boost/sync/condition_variables/cv_status.hpp>
@@ -37,8 +36,6 @@
 #pragma once
 #endif
 
-#define BOOST_SYNC_DEFINES_CONDITION_VARIABLE_NATIVE_HANDLE
-
 namespace boost {
 
 namespace sync {
@@ -47,9 +44,6 @@ BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
 class condition_variable
 {
-public:
-    typedef pthread_cond_t* native_handle_type;
-
 private:
     pthread_cond_t m_cond;
 
@@ -243,4 +237,4 @@ private:
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_DETAIL_CONDITION_VARIABLES_CONDITION_VARIABLE_POSIX_HPP_INCLUDED_
+#endif // BOOST_SYNC_DETAIL_CONDITION_VARIABLES_CONDITION_VARIABLE_WINDOWS_HPP_INCLUDED_

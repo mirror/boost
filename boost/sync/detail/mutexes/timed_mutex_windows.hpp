@@ -52,6 +52,10 @@ private:
     mutex m_mutex;
 
 public:
+#if !defined(BOOST_NO_CXX11_CONSTEXPR)
+#define BOOST_SYNC_DEFINES_TIMED_MUTEX_CONSTEXPR_CONSTRUCTOR
+#endif
+
     BOOST_CONSTEXPR timed_mutex() BOOST_NOEXCEPT : m_mutex()
     {
     }
