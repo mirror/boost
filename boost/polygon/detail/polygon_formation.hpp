@@ -728,7 +728,7 @@ namespace polygon_formation {
     void processEdges(iterator& beginOutput, iterator& endOutput, 
                       Unit currentX, std::vector<interval_data<Unit> >& leftEdges, 
                       std::vector<interval_data<Unit> >& rightEdges,
-                      size_t vertexThreshold=std::numeric_limits<size_t>::max() );
+                      size_t vertexThreshold=(std::numeric_limits<size_t>::max)() );
     
    /**********************************************************************
     *methods implementing new polygon formation code                                                                    
@@ -745,7 +745,7 @@ namespace polygon_formation {
     void maintainPartialSimplePolygonInvariant(iterator& ,iterator& ,Unit,
          const std::vector<interval_data<Unit> >&, 
          const std::vector<interval_data<Unit> >&, 
-         size_t vertexThreshold=std::numeric_limits<size_t>::max());
+         size_t vertexThreshold=(std::numeric_limits<size_t>::max)());
 
     void insertNewLeftEdgeIntoTailMap(Unit, Unit, Unit,
       typename std::map<Unit, ActiveTail<Unit>*>::iterator &);
@@ -2026,7 +2026,7 @@ namespace polygon_formation {
     ActiveTail<Unit>* currentTail = 0;
     const Unit UnitMax = (std::numeric_limits<Unit>::max)();
 
-    if(vertexThreshold < std::numeric_limits<size_t>::max()){
+    if(vertexThreshold < (std::numeric_limits<size_t>::max)()){
       maintainPartialSimplePolygonInvariant(beginOutput, endOutput, currentX,
          leftEdges, rightEdges, vertexThreshold);
       return;
@@ -2220,7 +2220,7 @@ namespace polygon_formation {
   unsigned int get_polygons(output_container& container, 
       iterator_type begin, iterator_type end, orientation_2d orient, 
       bool fracture_holes, concept_type, 
-      size_t sliceThreshold = std::numeric_limits<size_t>::max() ) {
+      size_t sliceThreshold = (std::numeric_limits<size_t>::max)() ) {
     typedef typename output_container::value_type polygon_type;
     typedef typename std::iterator_traits<iterator_type>::value_type::first_type coordinate_type;
     polygon_type poly;
