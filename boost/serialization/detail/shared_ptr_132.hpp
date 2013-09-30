@@ -353,17 +353,6 @@ template<class T, class U> inline bool operator!=(shared_ptr< T > const & a, sha
     return a.get() != b.get();
 }
 
-#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
-
-// Resolve the ambiguity between our op!= and the one in rel_ops
-
-template<class T> inline bool operator!=(shared_ptr< T > const & a, shared_ptr< T > const & b)
-{
-    return a.get() != b.get();
-}
-
-#endif
-
 template<class T, class U> inline bool operator<(shared_ptr< T > const & a, shared_ptr<U> const & b)
 {
     return a._internal_less(b);
