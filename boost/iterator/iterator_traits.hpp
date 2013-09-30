@@ -45,38 +45,6 @@ struct iterator_category
     typedef typename boost::detail::iterator_traits<Iterator>::iterator_category type;
 };
 
-# if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-template <>
-struct iterator_value<int>
-{
-    typedef void type;
-};
-  
-template <>
-struct iterator_reference<int>
-{
-    typedef void type;
-};
-
-template <>
-struct iterator_pointer<int>
-{
-    typedef void type;
-};
-  
-template <>
-struct iterator_difference<int>
-{
-    typedef void type;
-};
-  
-template <>
-struct iterator_category<int>
-{
-    typedef void type;
-};
-# endif
-
 } // namespace boost::iterator
 
 #endif // ITERATOR_TRAITS_DWA200347_HPP

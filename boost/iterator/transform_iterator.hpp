@@ -140,16 +140,9 @@ namespace boost
   // function pointer in the iterator be 0, leading to a runtime
   // crash.
   template <class UnaryFunc, class Iterator>
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-  typename mpl::if_<
-#else 
   typename iterators::enable_if<
-#endif 
       is_class<UnaryFunc>   // We should probably find a cheaper test than is_class<>
     , transform_iterator<UnaryFunc, Iterator>
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-    , int[3]
-#endif 
   >::type
   make_transform_iterator(Iterator it)
   {
