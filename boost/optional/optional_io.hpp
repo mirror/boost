@@ -33,15 +33,10 @@
 namespace boost
 {
 
-#if defined (BOOST_NO_TEMPLATED_STREAMS)
-template<class T>
-inline std::ostream& operator<<(std::ostream& out, optional<T> const& v)
-#else
 template<class CharType, class CharTrait, class T>
 inline
 std::basic_ostream<CharType, CharTrait>&
 operator<<(std::basic_ostream<CharType, CharTrait>& out, optional<T> const& v)
-#endif
 {
   if ( out.good() )
   {
@@ -53,15 +48,10 @@ operator<<(std::basic_ostream<CharType, CharTrait>& out, optional<T> const& v)
   return out;
 }
 
-#if defined (BOOST_NO_TEMPLATED_STREAMS)
-template<class T>
-inline std::istream& operator>>(std::istream& in, optional<T>& v)
-#else
 template<class CharType, class CharTrait, class T>
 inline
 std::basic_istream<CharType, CharTrait>&
 operator>>(std::basic_istream<CharType, CharTrait>& in, optional<T>& v)
-#endif
 {
   if (in.good())
   {
