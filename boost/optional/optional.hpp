@@ -39,31 +39,10 @@
 
 #include <boost/optional/optional_fwd.hpp>
 
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1200)
-// VC6.0 has the following bug:
-//   When a templated assignment operator exist, an implicit conversion
-//   constructing an optional<T> is used when assigment of the form:
-//     optional<T> opt ; opt = T(...);
-//   is compiled.
-//   However, optional's ctor is _explicit_ and the assignemt shouldn't compile.
-//   Therefore, for VC6.0 templated assignment is disabled.
-//
-#define BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
-#endif
-
-#if BOOST_WORKAROUND(BOOST_MSVC, == 1300)
-// VC7.0 has the following bug:
-//   When both a non-template and a template copy-ctor exist
-//   and the templated version is made 'explicit', the explicit is also
-//   given to the non-templated version, making the class non-implicitely-copyable.
-//
-#define BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
-#endif
-
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) || BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION,<=700)
-// AFAICT only VC7.1 correctly resolves the overload set
+#if BOOST_WORKAROUND(BOOST_INTEL_CXX_VERSION,<=700)
+// AFAICT only Intel 7 correctly resolves the overload set
 // that includes the in-place factory taking functions,
-// so for the other VC versions, in-place factory support
+// so for the other icc versions, in-place factory support
 // is disabled
 #define BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
 #endif
@@ -530,7 +509,6 @@ class optional : public optional_detail::optional_base<T>
     // Can throw if T::T(T const&) does
     optional ( bool cond, argument_type val ) : base(cond,val) {}
 
-#ifndef BOOST_OPTIONAL_NO_CONVERTING_COPY_CTOR
     // NOTE: MSVC needs templated versions first
 
     // Creates a deep copy of another convertible optional<U>
@@ -544,7 +522,6 @@ class optional : public optional_detail::optional_base<T>
       if ( rhs.is_initialized() )
         this->construct(rhs.get());
     }
-#endif
 
 #ifndef BOOST_OPTIONAL_NO_INPLACE_FACTORY_SUPPORT
     // Creates an optional<T> with an expression which can be either
@@ -578,8 +555,6 @@ class optional : public optional_detail::optional_base<T>
       }
 #endif
 
-
-#ifndef BOOST_OPTIONAL_NO_CONVERTING_ASSIGNMENT
     // Assigns from another convertible optional<U> (converts && deep-copies the rhs value)
     // Requires a valid conversion from U to T.
     // Basic Guarantee: If T::T( U const& ) throws, this is left UNINITIALIZED
@@ -589,7 +564,6 @@ class optional : public optional_detail::optional_base<T>
         this->assign(rhs);
         return *this ;
       }
-#endif
 
     // Assigns from another optional<T> (deep-copies the rhs value)
     // Basic Guarantee: If T::T( T const& ) throws, this is left UNINITIALIZED
