@@ -220,14 +220,31 @@ public: // metafunction result
 
 #ifndef BOOST_NO_CXX11_NOEXCEPT
 ///////////////////////////////////////////////////////////////////////////////
-// (detail) metafunction is_variant_move_noexcept
+// (detail) metafunction is_variant_move_noexcept_constructible
 //
 // Returns true_type if all the types are nothrow move constructible.
 //
 template <class Types>
-struct is_variant_move_noexcept {
+struct is_variant_move_noexcept_constructible {
     typedef typename boost::mpl::find_if<
         Types, mpl::not_<boost::is_nothrow_move_constructible<boost::mpl::_1> >
+    >::type iterator_t;
+
+    typedef typename boost::mpl::end<Types>::type end_t;
+    typedef typename boost::is_same<
+        iterator_t, end_t
+    >::type type;
+};
+
+///////////////////////////////////////////////////////////////////////////////
+// (detail) metafunction is_variant_move_noexcept_assignable
+//
+// Returns true_type if all the types are nothrow move constructible.
+//
+template <class Types>
+struct is_variant_move_noexcept_assignable {
+    typedef typename boost::mpl::find_if<
+        Types, mpl::not_<boost::is_nothrow_move_assignable<boost::mpl::_1> >
     >::type iterator_t;
 
     typedef typename boost::mpl::end<Types>::type end_t;
@@ -1208,9 +1225,14 @@ private: // helpers, for representation (below)
         >::type storage_t;
 
 #ifndef BOOST_NO_CXX11_NOEXCEPT
-    typedef typename detail::variant::is_variant_move_noexcept<
+    typedef typename detail::variant::is_variant_move_noexcept_constructible<
         internal_types
-    > variant_move_noexcept;
+    > variant_move_noexcept_constructible;
+
+    typedef typename detail::variant::is_variant_move_noexcept_assignable<
+        internal_types
+    > variant_move_noexcept_assignable;
+
 #endif
 
 private: // helpers, for representation (below)
@@ -1699,7 +1721,7 @@ public: // structors, cont.
     }
     
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    variant(variant&& operand) BOOST_NOEXCEPT_IF(variant_move_noexcept::type::value)
+    variant(variant&& operand) BOOST_NOEXCEPT_IF(variant_move_noexcept_constructible::type::value)
     {
         // Move the value of operand into *this...
         detail::variant::move_into visitor( storage_.address() );
@@ -2091,7 +2113,7 @@ public: // modifiers
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
     template <class T>
     typename boost::enable_if_c<boost::is_rvalue_reference<T&&>::value && !boost::is_const<T>::value, variant& >::type 
-        operator=(T&& rhs)
+        operator=(T&& rhs) 
     {
         move_assign( detail::variant::move(rhs) );
         return *this;
@@ -2113,7 +2135,10 @@ public: // modifiers
     }
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
-    variant& operator=(variant&& rhs) // BOOST_NOEXCEPT_IF(variant_move_noexcept::type::value && all move assign operators are noexcept)
+    variant& operator=(variant&& rhs) 
+#if !defined(__GNUC__) || (__GNUC__ != 4) || (__GNUC_MINOR__ > 6)
+        BOOST_NOEXCEPT_IF(variant_move_noexcept_constructible::type::value && variant_move_noexcept_assignable::type::value)
+#endif
     {
         variant_assign( detail::variant::move(rhs) );
         return *this;
