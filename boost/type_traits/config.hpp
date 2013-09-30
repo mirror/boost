@@ -45,14 +45,6 @@
 #endif
 
 //
-// Define BOOST_TT_NO_ELLIPSIS_IN_FUNC_TESTING 
-// when we can't test for function types with elipsis:
-//
-#if BOOST_WORKAROUND(__GNUC__, < 3)
-#  define BOOST_TT_NO_ELLIPSIS_IN_FUNC_TESTING
-#endif
-
-//
 // define BOOST_TT_TEST_MS_FUNC_SIGS
 // when we want to test __stdcall etc function types with is_function etc
 // (Note, does not work with Borland, even though it does support __stdcall etc):
