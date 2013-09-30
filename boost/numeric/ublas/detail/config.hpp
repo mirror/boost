@@ -32,11 +32,6 @@
 // Microsoft Visual C++
 #if defined (BOOST_MSVC) && ! defined (BOOST_STRICT_CONFIG)
 
-// Version 6.0 and 7.0
-#if BOOST_MSVC <= 1300
-#define BOOST_UBLAS_UNSUPPORTED_COMPILER 1
-#endif
-
 // Version 7.1
 #if BOOST_MSVC == 1310
 // One of these workarounds is needed for MSVC 7.1 AFAIK
