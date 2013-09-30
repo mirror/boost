@@ -28,11 +28,7 @@ namespace detail
 inline void current_function_helper()
 {
 
-#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__)
-
-# define BOOST_CURRENT_FUNCTION __PRETTY_FUNCTION__
-
-#elif defined(__DMC__) && (__DMC__ >= 0x810)
+#if defined(__GNUC__) || (defined(__MWERKS__) && (__MWERKS__ >= 0x3000)) || (defined(__ICC) && (__ICC >= 600)) || defined(__ghs__) || defined(__DMC__)
 
 # define BOOST_CURRENT_FUNCTION __PRETTY_FUNCTION__
 
