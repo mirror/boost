@@ -458,11 +458,7 @@ bool perl_matcher<BidiIterator, Allocator, traits>::match_word_boundary()
    if(position != last)
    {
       // prev and this character must be opposites:
-   #if defined(BOOST_REGEX_USE_C_LOCALE) && defined(__GNUC__) && (__GNUC__ == 2) && (__GNUC_MINOR__ < 95)
-      b = traits::isctype(*position, m_word_mask);
-   #else
       b = traits_inst.isctype(*position, m_word_mask);
-   #endif
    }
    else
    {
