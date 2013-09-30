@@ -35,10 +35,8 @@
 #include <boost/mpl/identity.hpp>      
 #include <boost/mpl/int.hpp>  
 #include <boost/mpl/or.hpp>                 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-# include <boost/range/iterator_range.hpp>
-# include <boost/range/value_type.hpp>
-#endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+#include <boost/range/iterator_range.hpp>
+#include <boost/range/value_type.hpp>
 #include <boost/ref.hpp>
 #include <boost/type_traits/is_convertible.hpp>
 
@@ -218,9 +216,7 @@ template<typename T>
 struct char_type_of {
     template<typename U>
     struct get_value_type {
-        #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-            typedef typename range_value<U>::type type;
-        #endif // #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
+        typedef typename range_value<U>::type type;
     };
     typedef typename 
             mpl::eval_if<

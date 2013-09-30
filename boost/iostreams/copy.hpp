@@ -202,8 +202,6 @@ copy( const Source& src, const Sink& snk,
                               buffer_size ); 
 }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //---------------------------------//
-
 // Overload of copy() for the case where the source, but not the sink, is
 // a standard stream or stream buffer
 template<typename Source, typename Sink>
@@ -244,8 +242,6 @@ copy( Source& src, Sink& snk,
 { 
     return detail::copy_impl(detail::wrap(src), detail::wrap(snk), buffer_size);
 }
-
-#endif // #if !BOOST_WORKAROUND(BOOST_MSVC, <= 1300) //-----------------------//
 
 } } // End namespaces iostreams, boost.
 

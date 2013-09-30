@@ -77,10 +77,6 @@ void close_all(T& t, Sink& snk)
 
 } } // End namespaces iostreams, boost.
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-----------------------------------//
-# include <boost/iostreams/detail/vc6/close.hpp>
-#else // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //--------------------------//
-
 namespace boost { namespace iostreams {
 
 namespace detail {
@@ -251,8 +247,6 @@ struct close_impl<two_sequence> {
 } // End namespace detail.
 
 } } // End namespaces iostreams, boost.
-
-#endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300) //-------------------------//
 
 #include <boost/iostreams/detail/config/enable_warnings.hpp>
 
