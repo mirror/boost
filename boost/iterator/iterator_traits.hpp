@@ -10,6 +10,7 @@
 
 namespace boost { 
 
+// Obsolete. Remove.
 #define BOOST_ITERATOR_CATEGORY iterator_category
 
 
@@ -39,7 +40,7 @@ struct iterator_difference
 };
 
 template <class Iterator>
-struct BOOST_ITERATOR_CATEGORY
+struct iterator_category
 {
     typedef typename boost::detail::iterator_traits<Iterator>::iterator_category type;
 };
@@ -70,7 +71,7 @@ struct iterator_difference<int>
 };
   
 template <>
-struct BOOST_ITERATOR_CATEGORY<int>
+struct iterator_category<int>
 {
     typedef void type;
 };

@@ -435,7 +435,7 @@ public:
         first, last)
     , m_capacity_ctrl(capacity_ctrl) {
         reduce_capacity(
-            is_same< BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type, std::input_iterator_tag >());
+            is_same< BOOST_DEDUCED_TYPENAME iterator_category<InputIterator>::type, std::input_iterator_tag >());
     }
     /*! \endcond */
 
@@ -534,7 +534,7 @@ public:
         first, last, alloc)
     , m_capacity_ctrl(capacity_ctrl) {
         reduce_capacity(
-            is_same< BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<InputIterator>::type, std::input_iterator_tag >());
+            is_same< BOOST_DEDUCED_TYPENAME iterator_category<InputIterator>::type, std::input_iterator_tag >());
     }
 
 #endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
@@ -1632,10 +1632,10 @@ private:
         const false_type&) {
         BOOST_CB_IS_CONVERTIBLE(Iterator, value_type); // check for invalid iterator type
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x581))
-        return init_capacity(capacity_ctrl, first, last, BOOST_ITERATOR_CATEGORY<Iterator>::type());
+        return init_capacity(capacity_ctrl, first, last, iterator_category<Iterator>::type());
 #else
         return init_capacity(
-            capacity_ctrl, first, last, BOOST_DEDUCED_TYPENAME BOOST_ITERATOR_CATEGORY<Iterator>::type());
+            capacity_ctrl, first, last, BOOST_DEDUCED_TYPENAME iterator_category<Iterator>::type());
 #endif
     }
 
