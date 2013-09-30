@@ -31,6 +31,7 @@ struct storage
     storage(storage& other) : data(other.data) {}
     storage(const storage& other) : data(other.data) {}
     storage(storage&& other) : data(other.data) {}
+    storage& operator=(const storage& other) { data = other.data; return *this; }
     template<class T>
     storage(T&& arg) : data(new typename remove_cv<
         typename remove_reference<T>::type>::type(std::forward<T>(arg))) {}
