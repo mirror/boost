@@ -132,33 +132,11 @@ public: // accessors
         return static_cast<type*>(this)->address();
     }
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
     const void* address() const
     {
         return static_cast<const type*>(this)->address();
     }
-
-#else // MSVC6
-
-    const void* address() const;
-
-#endif // MSVC6 workaround
-
 };
-
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
-// MSVC6 seems not to like inline functions with const void* returns, so we
-// declare the following here:
-
-template <std::size_t S, std::size_t A>
-const void* aligned_storage<S,A>::address() const
-{
-    return const_cast< aligned_storage<S,A>* >(this)->address();
-}
-
-#endif // MSVC6 workaround
 
 #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 //
