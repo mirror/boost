@@ -44,15 +44,7 @@ class basic_xml_iarchive :
     public detail::common_iarchive<Archive>
 {
 protected:
-#if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
-public:
-#elif defined(BOOST_MSVC)
-    // for some inexplicable reason insertion of "class" generates compile erro
-    // on msvc 7.1
-    friend detail::interface_oarchive<Archive>;
-#else
     friend class detail::interface_oarchive<Archive>;
-#endif
     unsigned int depth;
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_start(const char *name);

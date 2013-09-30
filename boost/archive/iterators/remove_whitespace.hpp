@@ -26,9 +26,6 @@
 #include <boost/iterator/filter_iterator.hpp>
 #include <boost/iterator/iterator_traits.hpp>
 
-//#include <boost/detail/workaround.hpp>
-//#if ! BOOST_WORKAROUND(BOOST_MSVC, <=1300)
-
 // here is the default standard implementation of the functor used
 // by the filter iterator to remove spaces.  Unfortunately usage
 // of this implementation in combination with spirit trips a bug
@@ -52,8 +49,6 @@ namespace std{ using ::isspace; }
 #undef isspace
 #undef iswspace
 #endif
-
-//#endif // BOOST_WORKAROUND
 
 namespace { // anonymous
 

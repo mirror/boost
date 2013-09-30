@@ -62,7 +62,6 @@ namespace std{
 #define DONT_USE_HAS_NEW_OPERATOR (                    \
     defined(__BORLANDC__)                              \
     || BOOST_WORKAROUND(__IBMCPP__, < 1210)            \
-    || defined(BOOST_MSVC) && (BOOST_MSVC <= 1300)     \
     || defined(__SUNPRO_CC) && (__SUNPRO_CC < 0x590)   \
 )
 
