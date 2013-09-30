@@ -54,8 +54,6 @@
   || defined(BOOST_NO_SFINAE)                                                                   \
   || BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1400))                                        \
   || BOOST_WORKAROUND(BOOST_INTEL_WIN, BOOST_TESTED_AT(1400))                                   \
-  || BOOST_WORKAROUND(__GNUC__, < 3)                                                            \
-  || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ <= 2))                                \
   || (BOOST_WORKAROUND(__GNUC__, == 3) && (__GNUC_MINOR__ <= 3) && defined(__APPLE_CC__))       \
   || BOOST_WORKAROUND(__IBMCPP__, BOOST_TESTED_AT(600))                                         \
   || BOOST_WORKAROUND(__MWERKS__, BOOST_TESTED_AT(0x3206))                                      \
