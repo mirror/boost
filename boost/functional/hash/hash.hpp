@@ -244,13 +244,8 @@ namespace boost
 #endif
 #endif
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-    template <class T>
-    inline void hash_combine(std::size_t& seed, T& v)
-#else
     template <class T>
     inline void hash_combine(std::size_t& seed, T const& v)
-#endif
     {
         boost::hash<T> hasher;
         seed ^= hasher(v) + 0x9e3779b9 + (seed<<6) + (seed>>2);
@@ -358,7 +353,6 @@ namespace boost
     //
     // These are undefined later.
 
-#if !BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 #define BOOST_HASH_SPECIALIZE(type) \
     template <> struct hash<type> \
          : public std::unary_function<type, std::size_t> \
@@ -378,45 +372,6 @@ namespace boost
             return boost::hash_value(v); \
         } \
     };
-#else
-#define BOOST_HASH_SPECIALIZE(type) \
-    template <> struct hash<type> \
-         : public std::unary_function<type, std::size_t> \
-    { \
-        std::size_t operator()(type v) const \
-        { \
-            return boost::hash_value(v); \
-        } \
-    }; \
-    \
-    template <> struct hash<const type> \
-         : public std::unary_function<const type, std::size_t> \
-    { \
-        std::size_t operator()(const type v) const \
-        { \
-            return boost::hash_value(v); \
-        } \
-    };
-
-#define BOOST_HASH_SPECIALIZE_REF(type) \
-    template <> struct hash<type> \
-         : public std::unary_function<type, std::size_t> \
-    { \
-        std::size_t operator()(type const& v) const \
-        { \
-            return boost::hash_value(v); \
-        } \
-    }; \
-    \
-    template <> struct hash<const type> \
-         : public std::unary_function<const type, std::size_t> \
-    { \
-        std::size_t operator()(type const& v) const \
-        { \
-            return boost::hash_value(v); \
-        } \
-    };
-#endif
 
     BOOST_HASH_SPECIALIZE(bool)
     BOOST_HASH_SPECIALIZE(char)
