@@ -416,31 +416,6 @@ public:
     : circular_buffer<T, Alloc>(init_capacity(capacity_ctrl, n), n, item, alloc)
     , m_capacity_ctrl(capacity_ctrl) {}
 
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
-    /*! \cond */
-    circular_buffer_space_optimized(const circular_buffer_space_optimized<T, Alloc>& cb)
-    : circular_buffer<T, Alloc>(cb.begin(), cb.end())
-    , m_capacity_ctrl(cb.m_capacity_ctrl) {}
-
-    template <class InputIterator>
-    circular_buffer_space_optimized(InputIterator first, InputIterator last)
-    : circular_buffer<T, Alloc>(first, last)
-    , m_capacity_ctrl(circular_buffer<T, Alloc>::capacity()) {}
-
-    template <class InputIterator>
-    circular_buffer_space_optimized(capacity_type capacity_ctrl, InputIterator first, InputIterator last)
-    : circular_buffer<T, Alloc>(
-        init_capacity(capacity_ctrl, first, last, is_integral<InputIterator>()),
-        first, last)
-    , m_capacity_ctrl(capacity_ctrl) {
-        reduce_capacity(
-            is_same< BOOST_DEDUCED_TYPENAME iterator_category<InputIterator>::type, std::input_iterator_tag >());
-    }
-    /*! \endcond */
-
-#else
-
     //! The copy constructor.
     /*!
         Creates a copy of the specified <code>circular_buffer_space_optimized</code>.
@@ -536,8 +511,6 @@ public:
         reduce_capacity(
             is_same< BOOST_DEDUCED_TYPENAME iterator_category<InputIterator>::type, std::input_iterator_tag >());
     }
-
-#endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
 #if defined(BOOST_CB_NEVER_DEFINED)
 // This section will never be compiled - the default destructor will be generated instead.

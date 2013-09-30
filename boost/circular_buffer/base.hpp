@@ -1150,25 +1150,6 @@ public:
     }
 #endif // BOOST_NO_CXX11_RVALUE_REFERENCES
 
-
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-
-    /*! \cond */
-    template <class InputIterator>
-    circular_buffer(InputIterator first, InputIterator last)
-    : m_alloc(allocator_type()) {
-        initialize(first, last, is_integral<InputIterator>());
-    }
-
-    template <class InputIterator>
-    circular_buffer(capacity_type capacity, InputIterator first, InputIterator last)
-    : m_alloc(allocator_type()) {
-        initialize(capacity, first, last, is_integral<InputIterator>());
-    }
-    /*! \endcond */
-
-#else
-
     //! Create a full <code>circular_buffer</code> filled with a copy of the range.
     /*!
         \pre Valid range <code>[first, last)</code>.<br>
@@ -1220,8 +1201,6 @@ public:
     : m_alloc(alloc) {
         initialize(buffer_capacity, first, last, is_integral<InputIterator>());
     }
-
-#endif // #if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
 
     //! The destructor.
     /*!
@@ -2737,12 +2716,7 @@ private:
             clear();
             insert(begin(), first, last);
         } else {
-#if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-            circular_buffer<value_type, allocator_type> tmp(new_capacity, m_alloc);
-            tmp.insert(begin(), first, last);
-#else
             circular_buffer<value_type, allocator_type> tmp(new_capacity, first, last, m_alloc);
-#endif
             tmp.swap(*this);
         }
     }
