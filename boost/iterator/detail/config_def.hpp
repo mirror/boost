@@ -88,8 +88,7 @@
 #  define BOOST_NO_IS_CONVERTIBLE // "is_convertible doesn't work for simple types"
 #endif
 
-#if BOOST_WORKAROUND(__GNUC__, == 2)                                                                            \
-    || BOOST_WORKAROUND(__GNUC__, == 3) && BOOST_WORKAROUND(__GNUC_MINOR__, < 4) && !defined(__EDG_VERSION__)   \
+#if BOOST_WORKAROUND(__GNUC__, == 3) && BOOST_WORKAROUND(__GNUC_MINOR__, < 4) && !defined(__EDG_VERSION__)   \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x551))
 #  define BOOST_NO_IS_CONVERTIBLE_TEMPLATE // The following program fails to compile:
 
@@ -122,10 +121,9 @@
 #  define BOOST_ARG_DEPENDENT_TYPENAME
 # endif
 
-# if BOOST_WORKAROUND(__GNUC__, == 2) && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(95)) \
-    || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
+# if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 
-// GCC-2.95 eagerly instantiates templated constructors and conversion
+// GCC-2.95 (obsolete) eagerly instantiates templated constructors and conversion
 // operators in convertibility checks, causing premature errors.
 //
 // Borland's problems are harder to diagnose due to lack of an

@@ -10,18 +10,7 @@
 
 namespace boost { 
 
-// Unfortunately, g++ 2.95.x chokes when we define a class template
-// iterator_category which has the same name as its
-// std::iterator_category() function, probably due in part to the
-// "std:: is visible globally" hack it uses.  Use
-// BOOST_ITERATOR_CATEGORY to write code that's portable to older
-// GCCs.
-
-# if BOOST_WORKAROUND(__GNUC__, <= 2)
-#  define BOOST_ITERATOR_CATEGORY iterator_category_
-# else
-#  define BOOST_ITERATOR_CATEGORY iterator_category
-# endif
+#define BOOST_ITERATOR_CATEGORY iterator_category
 
 
 template <class Iterator>
