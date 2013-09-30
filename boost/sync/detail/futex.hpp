@@ -37,7 +37,7 @@ namespace sync {
 
 namespace detail {
 
-namespace linux {
+namespace linux_ {
 
 //! Invokes an operation on the futex
 BOOST_FORCEINLINE int futex_invoke(int* addr1, int op, int val1, const struct ::timespec* timeout = NULL, int* addr2 = NULL, int val3 = 0) BOOST_NOEXCEPT
@@ -106,7 +106,7 @@ BOOST_FORCEINLINE int futex_signal(int* pval) BOOST_NOEXCEPT
     );
 }
 
-} // namespace linux
+} // namespace linux_
 
 } // namespace detail
 
