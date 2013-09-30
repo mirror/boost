@@ -1015,6 +1015,24 @@ BOOST_AUTO_TEST_CASE(test_rebind_and_convert_with_binding_from_cref)
 
 #ifndef BOOST_NO_CXX11_RVALUE_REFERENCES
 
+struct move_only
+{
+    explicit move_only(int i) : value(i) {}
+    move_only(move_only&& other) : value(other.value) { other.value = 0; }
+    int value;
+private:
+    move_only(const move_only&);
+};
+
+BOOST_AUTO_TEST_CASE(test_move_only)
+{
+    typedef ::boost::mpl::vector<destructible<>, typeid_<> > test_concept;
+    move_only source(2);
+    any<test_concept> x(std::move(source));
+    BOOST_CHECK_EQUAL(source.value, 0);
+    BOOST_CHECK_EQUAL(any_cast<move_only&>(x).value, 2);
+}
+
 BOOST_AUTO_TEST_CASE(test_copy_from_rref)
 {
     typedef ::boost::mpl::vector<common<> > test_concept;
