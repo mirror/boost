@@ -53,8 +53,7 @@ test-suite variant
       <toolset>clang:<cxxflags>-fno-exceptions
       : variant_noexcept_test
     ]
-    # Rene: Commented out because of missing file.
-    # [ run variant_swap_test.cpp ]
+    [ run variant_swap_test.cpp ]
    ; 
 
 
