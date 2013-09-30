@@ -85,7 +85,6 @@ struct empty_arg_list
 #endif
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
-    || (BOOST_WORKAROUND(__GNUC__, < 3)) \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 
     // The overload set technique doesn't work with these older
@@ -227,7 +226,7 @@ struct arg_list : Next
         };
     };
 
-#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564)) && !BOOST_WORKAROUND(__GNUC__, == 2)
+#if !BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
 # if BOOST_WORKAROUND(BOOST_MSVC, <= 1300)
     friend yes_tag operator*(arg_list, key_type*);
 #  define BOOST_PARAMETER_CALL_HAS_KEY(next, key) (*(next*)0 * (key*)0)
@@ -267,7 +266,6 @@ struct arg_list : Next
     }
 
 #if BOOST_WORKAROUND(BOOST_MSVC, <= 1300) \
-    || BOOST_WORKAROUND(__GNUC__, < 3) \
     || BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x564))
     // These older compilers don't support the overload set creation
     // idiom well, so we need to do all the return type calculation
