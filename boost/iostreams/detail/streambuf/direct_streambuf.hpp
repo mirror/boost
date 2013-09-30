@@ -67,9 +67,7 @@ public: // stream needs access.
     // Declared in linked_streambuf.
     T* component() { return storage_.get(); }
 protected:
-#if !BOOST_WORKAROUND(__GNUC__, == 2)
     BOOST_IOSTREAMS_USING_PROTECTED_STREAMBUF_MEMBERS(base_type)
-#endif
     direct_streambuf();
 
     //--------------Virtual functions-----------------------------------------//

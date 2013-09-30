@@ -46,7 +46,7 @@
 
 // Sometimes type_info objects must be compared by name. Borrowed from
 // Boost.Python and Boost.Function.
-#if (defined(__GNUC__) && __GNUC__ >= 3) || \
+#if defined(__GNUC__) || \
      defined(_AIX) || \
     (defined(__sgi) && defined(__host_mips)) || \
     (defined(linux) && defined(__INTEL_COMPILER) && defined(__ICC)) \

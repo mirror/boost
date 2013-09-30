@@ -292,13 +292,7 @@ private:
 
     void close_impl()
     {
-        #if BOOST_WORKAROUND(__GNUC__, == 2) && defined(__STL_CONFIG_H) || \
-            BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1) \
-            /**/
-            footer_.erase(0, std::string::npos);
-        #else
-            footer_.clear();
-        #endif
+        footer_.clear();
         offset_ = 0;
         flags_ = 0;
     }
