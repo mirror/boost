@@ -130,10 +130,6 @@ private:
     typename node_allocator::pointer,
     multi_index_container>                        bfm_header;
 
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  /* see definition of index_type_list below */
-  typedef typename super::index_type_list         super_index_type_list;
-#endif
 
 public:
   /* All types are inherited from super, a few are explicitly
@@ -143,27 +139,7 @@ public:
   typedef typename super::ctor_args_list          ctor_args_list;
   typedef IndexSpecifierList                      index_specifier_type_list;
  
-#if BOOST_WORKAROUND(BOOST_MSVC,<1300)
-  /* MSVC++ 6.0 chokes on moderately long index lists (around 6 indices
-   * or more), with errors ranging from corrupt exes to duplicate
-   * comdats. The following type hiding hack alleviates this condition;
-   * best results combined with type hiding of the indexed_by construct
-   * itself, as explained in the "Compiler specifics" section of
-   * the documentation.
-   */
-
-  struct index_type_list:super_index_type_list
-  {
-    typedef index_type_list                      type;
-    typedef typename super_index_type_list::back back;
-    typedef mpl::v_iter<type,0>                  begin;
-    typedef mpl::v_iter<
-      type,
-      mpl::size<super_index_type_list>::value>   end;
-  };
-#else
   typedef typename super::index_type_list          index_type_list;
-#endif
 
   typedef typename super::iterator_type_list       iterator_type_list;
   typedef typename super::const_iterator_type_list const_iterator_type_list;
