@@ -740,17 +740,6 @@ template<class T, class U> inline bool operator!=(shared_ptr<T> const & a, share
     return a.get() != b.get();
 }
 
-#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
-
-// Resolve the ambiguity between our op!= and the one in rel_ops
-
-template<class T> inline bool operator!=(shared_ptr<T> const & a, shared_ptr<T> const & b) BOOST_NOEXCEPT
-{
-    return a.get() != b.get();
-}
-
-#endif
-
 #if !defined( BOOST_NO_CXX11_NULLPTR )
 
 template<class T> inline bool operator==( shared_ptr<T> const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
@@ -836,16 +825,6 @@ template<class T> inline typename shared_ptr<T>::element_type * get_pointer(shar
 
 #if !defined(BOOST_NO_IOSTREAM)
 
-#if ( defined(__GNUC__) &&  (__GNUC__ < 3) )
-
-template<class Y> std::ostream & operator<< (std::ostream & os, shared_ptr<Y> const & p)
-{
-    os << p.get();
-    return os;
-}
-
-#else
-
 // in STLport's no-iostreams mode no iostream symbols can be used
 #ifndef _STLP_NO_IOSTREAMS
 
@@ -857,8 +836,6 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 
 #endif // _STLP_NO_IOSTREAMS
 
-#endif // __GNUC__ < 3
-
 #endif // !defined(BOOST_NO_IOSTREAM)
 
 // get_deleter
@@ -866,12 +843,10 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 namespace detail
 {
 
-#if ( defined(__GNUC__) && BOOST_WORKAROUND(__GNUC__, < 3) ) || \
-    ( defined(__EDG_VERSION__) && BOOST_WORKAROUND(__EDG_VERSION__, <= 238) ) || \
+#if ( defined(__EDG_VERSION__) && BOOST_WORKAROUND(__EDG_VERSION__, <= 238) ) || \
     ( defined(__HP_aCC) && BOOST_WORKAROUND(__HP_aCC, <= 33500) )
 
-// g++ 2.9x doesn't allow static_cast<X const *>(void *)
-// apparently EDG 2.38 and HP aCC A.03.35 also don't accept it
+// EDG 2.38 and HP aCC A.03.35 don't allow static_cast<X const *>(void *)
 
 template<class D, class T> D * basic_get_deleter(shared_ptr<T> const & p)
 {

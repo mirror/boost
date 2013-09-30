@@ -21,10 +21,6 @@
 # define BOOST_SP_NO_SP_CONVERTIBLE
 #endif
 
-#if !defined( BOOST_SP_NO_SP_CONVERTIBLE ) && defined( __GNUC__ ) && ( __GNUC__ * 100 + __GNUC_MINOR__ < 303 )
-# define BOOST_SP_NO_SP_CONVERTIBLE
-#endif
-
 #if !defined( BOOST_SP_NO_SP_CONVERTIBLE ) && defined( __BORLANDC__ ) && ( __BORLANDC__ < 0x630 )
 # define BOOST_SP_NO_SP_CONVERTIBLE
 #endif

@@ -208,17 +208,6 @@ template<class T, class U> inline bool operator!=(T * a, intrusive_ptr<U> const 
     return a != b.get();
 }
 
-#if __GNUC__ == 2 && __GNUC_MINOR__ <= 96
-
-// Resolve the ambiguity between our op!= and the one in rel_ops
-
-template<class T> inline bool operator!=(intrusive_ptr<T> const & a, intrusive_ptr<T> const & b)
-{
-    return a.get() != b.get();
-}
-
-#endif
-
 #if !defined( BOOST_NO_CXX11_NULLPTR )
 
 template<class T> inline bool operator==( intrusive_ptr<T> const & p, boost::detail::sp_nullptr_t ) BOOST_NOEXCEPT
@@ -279,16 +268,6 @@ template<class T, class U> intrusive_ptr<T> dynamic_pointer_cast(intrusive_ptr<U
 
 #if !defined(BOOST_NO_IOSTREAM)
 
-#if ( defined(__GNUC__) &&  (__GNUC__ < 3) )
-
-template<class Y> std::ostream & operator<< (std::ostream & os, intrusive_ptr<Y> const & p)
-{
-    os << p.get();
-    return os;
-}
-
-#else
-
 // in STLport's no-iostreams mode no iostream symbols can be used
 #ifndef _STLP_NO_IOSTREAMS
 
@@ -299,8 +278,6 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
 }
 
 #endif // _STLP_NO_IOSTREAMS
-
-#endif // __GNUC__ < 3
 
 #endif // !defined(BOOST_NO_IOSTREAM)
 
