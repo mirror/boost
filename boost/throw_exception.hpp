@@ -35,10 +35,6 @@
 # define BOOST_EXCEPTION_DISABLE
 #endif
 
-#if !defined( BOOST_EXCEPTION_DISABLE ) && defined( BOOST_MSVC ) && BOOST_WORKAROUND( BOOST_MSVC, < 1310 )
-# define BOOST_EXCEPTION_DISABLE
-#endif
-
 #if !defined( BOOST_EXCEPTION_DISABLE )
 # include <boost/exception/exception.hpp>
 #if !defined(BOOST_THROW_EXCEPTION_CURRENT_FUNCTION)
