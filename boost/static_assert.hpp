@@ -117,14 +117,7 @@ template<int x> struct static_assert_test{};
 //
 #if !defined(BOOST_BUGGY_INTEGRAL_CONSTANT_EXPRESSIONS)
 
-#if defined(BOOST_MSVC) && (BOOST_MSVC < 1300)
-// __LINE__ macro broken when -ZI is used see Q199057
-// fortunately MSVC ignores duplicate typedef's.
-#define BOOST_STATIC_ASSERT( B ) \
-   typedef ::boost::static_assert_test<\
-      sizeof(::boost::STATIC_ASSERTION_FAILURE< (bool)( B ) >)\
-      > boost_static_assert_typedef_
-#elif defined(BOOST_MSVC) && defined(BOOST_NO_CXX11_VARIADIC_MACROS)
+#if defined(BOOST_MSVC) && defined(BOOST_NO_CXX11_VARIADIC_MACROS)
 #define BOOST_STATIC_ASSERT( B ) \
    typedef ::boost::static_assert_test<\
       sizeof(::boost::STATIC_ASSERTION_FAILURE< BOOST_STATIC_ASSERT_BOOL_CAST ( B ) >)>\
