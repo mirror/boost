@@ -30,7 +30,7 @@
 
 // See boost/python/type_id.hpp
 // TODO: add BOOST_TYPEID_COMPARE_BY_NAME to config.hpp
-# if (defined(__GNUC__) && __GNUC__ >= 3) \
+# if defined(__GNUC__) \
  || defined(_AIX) \
  || (   defined(__sgi) && defined(__host_mips)) \
  || (defined(__hpux) && defined(__HP_aCC)) \
