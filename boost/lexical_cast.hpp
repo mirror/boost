@@ -2395,16 +2395,7 @@ namespace boost {
             {
                 return !is_pointer<InputStreamable>::value &&
                        stream >> output &&
-                       stream.get() ==
-#if defined(__GNUC__) && (__GNUC__<3) && defined(BOOST_NO_STD_WSTRING)
-// GCC 2.9x lacks std::char_traits<>::eof().
-// We use BOOST_NO_STD_WSTRING to filter out STLport and libstdc++-v3
-// configurations, which do provide std::char_traits<>::eof().
-
-                           EOF;
-#else
-                           traits_type::eof();
-#endif
+                       stream.get() == traits_type::eof();
             }
 
             bool operator>>(std::string &output)
