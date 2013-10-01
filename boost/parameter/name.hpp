@@ -75,19 +75,6 @@ struct lambda<
 #  define BOOST_PARAMETER_IS_BINARY(x) BOOST_PP_IS_BINARY(x)
 # endif
 
-# if BOOST_WORKAROUND(BOOST_MSVC, < 1300)
-#  define BOOST_PARAMETER_NAME_OBJECT(tag, name)                    \
-    static ::boost::parameter::keyword<tag> const& name             \
-       = ::boost::parameter::keyword<tag>::instance;
-# else
-#  define BOOST_PARAMETER_NAME_OBJECT(tag, name)                    \
-    namespace                                                       \
-    {                                                               \
-       ::boost::parameter::keyword<tag> const& name                 \
-       = ::boost::parameter::keyword<tag>::instance;                \
-    }
-# endif
-
 # define BOOST_PARAMETER_BASIC_NAME(tag_namespace, tag, name)       \
     namespace tag_namespace                                         \
     {                                                               \
@@ -107,7 +94,11 @@ struct lambda<
           > _1;                                                     \
       };                                                            \
     }                                                               \
-    BOOST_PARAMETER_NAME_OBJECT(tag_namespace::tag, name)
+    namespace                                                       \
+    {                                                               \
+       ::boost::parameter::keyword<tag_namespace::tag> const& name  \
+       = ::boost::parameter::keyword<tag_namespace::tag>::instance; \
+    }
 
 # define BOOST_PARAMETER_COMPLEX_NAME_TUPLE1(tag,namespace)         \
     (tag, namespace), ~
