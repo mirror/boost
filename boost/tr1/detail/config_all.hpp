@@ -89,15 +89,13 @@
 #  elif defined(_CRAYC)
 #     define BOOST_TR1_STD_HEADER(name) <../include/name>
 
-#  elif defined(__GNUC__) && __GNUC__ >= 3
+#  elif defined(__GNUC__)
 #    if defined(BOOST_TR1_GCC_INCLUDE_PATH)
 #      define BOOST_TR1_STD_HEADER(name) <../BOOST_TR1_GCC_INCLUDE_PATH/name>
 #    elif (defined(__FreeBSD__))
 #      define BOOST_TR1_STD_HEADER(name) <../__GNUC__.__GNUC_MINOR__/name>
-#    elif ( (__GNUC__ == 3 ) && ((__GNUC_MINOR__ == 0) || ((__GNUC_MINOR__ < 3) && defined(__APPLE_CC__))))
-#      define BOOST_TR1_STD_HEADER(name) <../g++-v3/name>
 #    else
-#      if ( ((__GNUC__ == 3 ) && (__GNUC_MINOR__ >= 3)) && (defined(__APPLE_CC__) || defined(__CYGWIN__)))
+#      if ( (__GNUC__ == 3) && (defined(__APPLE_CC__) || defined(__CYGWIN__)))
 #        define BOOST_TR1_STD_HEADER(name) <../c++/name>
 #      elif ((__GLIBCXX__ == 20050421) && defined(__APPLE_CC__))
          // Some Darwin tools fix libstdc++ at 4.0.0 irrespective of the actual
@@ -158,10 +156,6 @@
 #     define BOOST_TR1_NO_CONFIG_ALL_RECURSION
 #  endif
 #  include_next <utility>
-#  if (__GNUC__ < 3)
-#     include_next <algorithm>
-#     include_next <iterator>
-#  endif
 #  ifdef BOOST_TR1_NO_CONFIG_ALL_RECURSION
 #     undef BOOST_TR1_NO_CONFIG_ALL_RECURSION
 #     undef BOOST_TR1_NO_RECURSION
