@@ -29,7 +29,7 @@
     ///INTERNAL ONLY
     #define BOOST_UNITS_HAS_TYPEOF          1
 #else    
-    #if (__GNUC__ && __cplusplus && __GNUC__ >= 3)
+    #if (__GNUC__ && __cplusplus)
         ///INTERNAL ONLY
         #define BOOST_UNITS_HAS_TYPEOF          1
         ///INTERNAL ONLY
