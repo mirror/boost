@@ -406,16 +406,6 @@ template<class T> inline T * get_pointer(shared_ptr< T > const & p)
 
 // operator<<
 
-#if defined(__GNUC__) &&  (__GNUC__ < 3)
-
-template<class Y> std::ostream & operator<< (std::ostream & os, shared_ptr<Y> const & p)
-{
-    os << p.get();
-    return os;
-}
-
-#else
-
 
 template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::basic_ostream<E, T> & os, shared_ptr<Y> const & p)
 {
@@ -423,11 +413,9 @@ template<class E, class T, class Y> std::basic_ostream<E, T> & operator<< (std::
     return os;
 }
 
-#endif
-
 // get_deleter (experimental)
 
-#if (defined(__GNUC__) &&  (__GNUC__ < 3)) || (defined(__EDG_VERSION__) && (__EDG_VERSION__ <= 238))
+#if defined(__EDG_VERSION__) && (__EDG_VERSION__ <= 238)
 
 // g++ 2.9x doesn't allow static_cast<X const *>(void *)
 // apparently EDG 2.38 also doesn't accept it
