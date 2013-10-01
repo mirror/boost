@@ -56,7 +56,7 @@
 // need to use std::type_info::name to compare instead of operator==.
 #if defined( BOOST_NO_TYPEID )
 #  define BOOST_FUNCTION_COMPARE_TYPE_ID(X,Y) ((X)==(Y))
-#elif (defined(__GNUC__) && __GNUC__ >= 3) \
+#elif defined(__GNUC__) \
  || defined(_AIX) \
  || (   defined(__sgi) && defined(__host_mips))
 #  include <cstring>
