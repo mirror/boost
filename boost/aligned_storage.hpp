@@ -96,24 +96,10 @@ public: // constants
             )
         );
 
-#if defined(__GNUC__) &&\
-    (__GNUC__ >  3) ||\
-    (__GNUC__ == 3 && (__GNUC_MINOR__ >  2 ||\
-                      (__GNUC_MINOR__ == 2 && __GNUC_PATCHLEVEL__ >=3)))
-
 private: // noncopyable
 
     aligned_storage(const aligned_storage&);
     aligned_storage& operator=(const aligned_storage&);
-
-#else // gcc less than 3.2.3
-
-public: // _should_ be noncopyable, but GCC compiler emits error
-
-    aligned_storage(const aligned_storage&);
-    aligned_storage& operator=(const aligned_storage&);
-
-#endif // gcc < 3.2.3 workaround
 
 public: // structors
 
