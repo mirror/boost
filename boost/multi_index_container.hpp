@@ -1131,8 +1131,7 @@ project(
     Value,IndexSpecifierList,Allocator>                multi_index_type;
   typedef typename nth_index<multi_index_type,N>::type index;
 
-#if (!defined(BOOST_MSVC)||!(BOOST_MSVC<1310))&&  /* MSVC++ 6.0/7.0 fails */\
-    (!defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580)) /* as does Sun C++ 5.7  */
+#if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* Sun C++ 5.7 fails */
   BOOST_STATIC_ASSERT((
     mpl::contains<
       BOOST_DEDUCED_TYPENAME multi_index_type::iterator_type_list,
@@ -1165,8 +1164,7 @@ project(
     Value,IndexSpecifierList,Allocator>                multi_index_type;
   typedef typename nth_index<multi_index_type,N>::type index;
 
-#if (!defined(BOOST_MSVC)||!(BOOST_MSVC<1310))&&  /* MSVC++ 6.0/7.0 fails */\
-    (!defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580)) /* as does Sun C++ 5.7  */
+#if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* Sun C++ 5.7 fails */
   BOOST_STATIC_ASSERT((
     mpl::contains<
       BOOST_DEDUCED_TYPENAME multi_index_type::iterator_type_list,
@@ -1219,8 +1217,7 @@ project(
   typedef typename ::boost::multi_index::index<
     multi_index_type,Tag>::type                 index;
 
-#if (!defined(BOOST_MSVC)||!(BOOST_MSVC<1310))&&  /* MSVC++ 6.0/7.0 fails */\
-    (!defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580)) /* as does Sun C++ 5.7  */
+#if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* Sun C++ 5.7 fails */
   BOOST_STATIC_ASSERT((
     mpl::contains<
       BOOST_DEDUCED_TYPENAME multi_index_type::iterator_type_list,
@@ -1254,8 +1251,7 @@ project(
   typedef typename ::boost::multi_index::index<
     multi_index_type,Tag>::type                 index;
 
-#if (!defined(BOOST_MSVC)||!(BOOST_MSVC<1310))&&  /* MSVC++ 6.0/7.0 fails */\
-    (!defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580)) /* as does Sun C++ 5.7  */
+#if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* Sun C++ 5.7 fails */
   BOOST_STATIC_ASSERT((
     mpl::contains<
       BOOST_DEDUCED_TYPENAME multi_index_type::iterator_type_list,
