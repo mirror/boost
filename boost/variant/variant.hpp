@@ -1748,10 +1748,10 @@ private: // helpers, for modifiers (below)
     class assigner
         : public static_visitor<>
     {
-    private: // representation
+    protected: // representation
 
         variant& lhs_;
-        int rhs_which_;
+        const int rhs_which_;
 
     public: // structors
 
@@ -1761,7 +1761,7 @@ private: // helpers, for modifiers (below)
         {
         }
 
-    private: // helpers, for internal visitor interface (below)
+    protected: // helpers, for internal visitor interface (below)
 
         template <typename RhsT, typename B1, typename B2>
         void assign_impl(
@@ -1769,7 +1769,7 @@ private: // helpers, for modifiers (below)
             , mpl::true_ // has_nothrow_copy
             , B1 // is_nothrow_move_constructible
             , B2 // has_fallback_type
-            )
+            ) const
         {
             // Destroy lhs's content...
             lhs_.destroy_content(); // nothrow
@@ -1788,7 +1788,7 @@ private: // helpers, for modifiers (below)
             , mpl::false_ // has_nothrow_copy
             , mpl::true_ // is_nothrow_move_constructible
             , B // has_fallback_type
-            )
+            ) const
         {
             // Attempt to make a temporary copy (so as to move it below)...
             RhsT temp(rhs_content);
@@ -1804,13 +1804,24 @@ private: // helpers, for modifiers (below)
             lhs_.indicate_which(rhs_which_); // nothrow
         }
 
+        void construct_fallback() const BOOST_NOEXCEPT {
+            // In case of failure, default-construct fallback type in lhs's storage...
+            new (lhs_.storage_.address())
+                fallback_type_; // nothrow
+
+            // ...indicate construction of fallback type...
+            lhs_.indicate_which(
+                  BOOST_MPL_AUX_VALUE_WKND(fallback_type_index_)::value
+                ); // nothrow
+        }
+
         template <typename RhsT>
         void assign_impl(
               const RhsT& rhs_content
             , mpl::false_ // has_nothrow_copy
             , mpl::false_ // is_nothrow_move_constructible
             , mpl::true_ // has_fallback_type
-            )
+            ) const
         {
             // Destroy lhs's content...
             lhs_.destroy_content(); // nothrow
@@ -1823,14 +1834,7 @@ private: // helpers, for modifiers (below)
             }
             BOOST_CATCH (...)
             {
-                // In case of failure, default-construct fallback type in lhs's storage...
-                new (lhs_.storage_.address())
-                    fallback_type_; // nothrow
-
-                // ...indicate construction of fallback type...
-                lhs_.indicate_which(
-                      BOOST_MPL_AUX_VALUE_WKND(fallback_type_index_)::value
-                    ); // nothrow
+                construct_fallback();
 
                 // ...and rethrow:
                 BOOST_RETHROW;
@@ -1847,7 +1851,7 @@ private: // helpers, for modifiers (below)
             , mpl::false_ // has_nothrow_copy
             , mpl::false_ // is_nothrow_move_constructible
             , mpl::false_ // has_fallback_type
-            )
+            ) const
         {
             detail::variant::backup_assigner<wknd_self_t>
                 visitor(lhs_, rhs_which_, rhs_content);
@@ -1858,7 +1862,7 @@ private: // helpers, for modifiers (below)
 
         template <typename RhsT>
             BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-        internal_visit(const RhsT& rhs_content, int)
+        internal_visit(const RhsT& rhs_content, int) const
         {
             typedef typename has_nothrow_copy<RhsT>::type
                 nothrow_copy;
@@ -1894,59 +1898,45 @@ private: // helpers, for modifiers (below)
     //
 
     class move_assigner
-        : public static_visitor<>
+        : public assigner
     {
-    private: // representation
-
-        variant& lhs_;
-        int rhs_which_;
-
     public: // structors
 
         move_assigner(variant& lhs, int rhs_which) BOOST_NOEXCEPT
-            : lhs_(lhs)
-            , rhs_which_(rhs_which)
+            : assigner(lhs, rhs_which)
         {
         }
 
     private: // helpers, for internal visitor interface (below)
-
+        
         template <typename RhsT, typename B2>
         void assign_impl(
               RhsT& rhs_content
             , mpl::true_ // has_nothrow_copy
             , mpl::false_ // is_nothrow_move_constructible
             , B2 // has_fallback_type
-            )
+            ) const
         {
-            // Destroy lhs's content...
-            lhs_.destroy_content(); // nothrow
-
-            // ...copy rhs content into lhs's storage...
-            new(lhs_.storage_.address())
-                RhsT( rhs_content ); // nothrow
-
-            // ...and indicate new content type:
-            lhs_.indicate_which(rhs_which_); // nothrow
+            assigner::assign_impl(rhs_content, mpl::true_(), mpl::false_(), B2());
         }
 
-        template <typename RhsT, typename B>
+        template <typename RhsT, typename B, typename B2>
         void assign_impl(
               RhsT& rhs_content
-            , mpl::true_ // has_nothrow_copy
+            , B // has_nothrow_copy
             , mpl::true_ // is_nothrow_move_constructible
-            , B // has_fallback_type
-            )
+            , B2 // has_fallback_type
+            ) const
         {
             // ...destroy lhs's content...
-            lhs_.destroy_content(); // nothrow
+            assigner::lhs_.destroy_content(); // nothrow
 
             // ...move the rhs_content into lhs's storage...
-            new(lhs_.storage_.address())
+            new(assigner::lhs_.storage_.address())
                 RhsT( detail::variant::move(rhs_content) ); // nothrow
 
             // ...and indicate new content type:
-            lhs_.indicate_which(rhs_which_); // nothrow
+            assigner::lhs_.indicate_which(assigner::rhs_which_); // nothrow
         }
 
         template <typename RhsT>
@@ -1955,27 +1945,20 @@ private: // helpers, for modifiers (below)
             , mpl::false_ // has_nothrow_copy
             , mpl::false_ // is_nothrow_move_constructible
             , mpl::true_ // has_fallback_type
-            )
+            ) const
         {
             // Destroy lhs's content...
-            lhs_.destroy_content(); // nothrow
+            assigner::lhs_.destroy_content(); // nothrow
 
             BOOST_TRY
             {
                 // ...and attempt to copy rhs's content into lhs's storage:
-                new(lhs_.storage_.address())
+                new(assigner::lhs_.storage_.address())
                     RhsT( detail::variant::move(rhs_content) );
             }
             BOOST_CATCH (...)
             {
-                // In case of failure, default-construct fallback type in lhs's storage...
-                new (lhs_.storage_.address())
-                    fallback_type_; // nothrow
-
-                // ...indicate construction of fallback type...
-                lhs_.indicate_which(
-                      BOOST_MPL_AUX_VALUE_WKND(fallback_type_index_)::value
-                    ); // nothrow
+                assigner::construct_fallback();
 
                 // ...and rethrow:
                 BOOST_RETHROW;
@@ -1983,27 +1966,25 @@ private: // helpers, for modifiers (below)
             BOOST_CATCH_END
 
             // In the event of success, indicate new content type:
-            lhs_.indicate_which(rhs_which_); // nothrow
+            assigner::lhs_.indicate_which(assigner::rhs_which_); // nothrow
         }
-
+        
         template <typename RhsT>
         void assign_impl(
-              const RhsT& rhs_content
+              RhsT& rhs_content
             , mpl::false_ // has_nothrow_copy
             , mpl::false_ // is_nothrow_move_constructible
             , mpl::false_ // has_fallback_type
-            )
+            ) const
         {
-            detail::variant::backup_assigner<wknd_self_t>
-                visitor(lhs_, rhs_which_, rhs_content);
-            lhs_.internal_apply_visitor(visitor);
+            assigner::assign_impl(rhs_content, mpl::false_(), mpl::false_(), mpl::false_());
         }
 
     public: // internal visitor interfaces
 
         template <typename RhsT>
             BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-        internal_visit(RhsT& rhs_content, int)
+        internal_visit(RhsT& rhs_content, int) const
         {
             typedef typename is_nothrow_move_constructible<RhsT>::type
                 nothrow_move_constructor;
