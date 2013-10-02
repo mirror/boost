@@ -28,84 +28,60 @@ BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 class auto_reset_event
 {
     BOOST_DELETED_FUNCTION(auto_reset_event(auto_reset_event const&));
-    BOOST_DELETED_FUNCTION(auto_reset_event& operator=(auto_reset_event const&));
+    BOOST_DELETED_FUNCTION(auto_reset_event& operator= (auto_reset_event const&));
 
 public:
     auto_reset_event() BOOST_NOEXCEPT :
         m_state(0)
-    {}
+    {
+    }
 
     void post() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        int old_state = m_state.load();
-        if (old_state >= 0)
+        if (m_state.exchange(1, detail::atomic_ns::memory_order_release) == 0)
         {
-            for(;;)
-            {
-                if (m_state.compare_exchange_weak(old_state, old_state - 1))
-                    break;
-                detail::pause();
-            }
-            sync::detail::linux_::futex_broadcast(reinterpret_cast< int* >(&m_state)); // wake all threads
+            sync::detail::linux_::futex_signal(reinterpret_cast< int* >(&m_state));
         }
     }
 
     void wait() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        int old_state = m_state.fetch_add(1) + 1;
-
-        for (;;)
+        while (m_state.exchange(0, detail::atomic_ns::memory_order_acq_rel) == 0)
         {
-            const int status = sync::detail::linux_::futex_wait(reinterpret_cast< int* >(&m_state), old_state);
-            if (status == 0)
-                return;
-
-            switch (errno)
+        again:
+            const int status = sync::detail::linux_::futex_wait(reinterpret_cast< int* >(&m_state), 0);
+            if (status != 0)
             {
-            case EINTR: // signal received
-                continue;
+                const int err = errno;
+                switch (err)
+                {
+                case EINTR:       // signal received
+                    goto again;   // skip xchg
 
-            case EWOULDBLOCK: // another thread changed the state, reread and retry
-                old_state = m_state.load();
-                continue;
+                case EWOULDBLOCK: // another thread changed the state, retry
+                    continue;
 
-            default:
-                BOOST_ASSERT(false);
+                default:
+                    BOOST_ASSERT(false);
+                }
             }
         }
     }
 
-    bool try_wait()
+    bool try_wait() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        int old_state = m_state.load();
-
-        if (old_state < 0)
-        {
-            for(;;)
-            {
-                const bool cas_successful = m_state.compare_exchange_weak(old_state, old_state + 1);
-                if (cas_successful) // we succeeded and reset the wait count
-                    return true;
-                if (old_state >= 0) // another thread succeeded
-                    return false;
-                detail::pause();
-            }
-        }
-        return false;
+        return m_state.exchange(0, detail::atomic_ns::memory_order_acq_rel) != 0;
     }
 
     template <typename Duration>
     bool try_wait_for(const Duration & duration) BOOST_NOEXCEPT
     {
-        timespec ts = boost::detail::to_timespec( duration );
+        timespec ts = boost::detail::to_timespec(duration);
         return do_wait_for(ts);
     }
 
     template <class Clock, class Duration>
-    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout ) BOOST_NOEXCEPT
+    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout) BOOST_NOEXCEPT
     {
         return try_wait_for( timeout - Clock::now() );
     }
@@ -113,33 +89,31 @@ public:
 private:
     bool do_wait_for(const struct timespec & timeout)
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        int old_state = m_state.fetch_add(1) + 1;
-
-        for (;;)
+        while (m_state.exchange(0, detail::atomic_ns::memory_order_acq_rel) == 0)
         {
-            const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), old_state, &timeout);
-            if (status == 0)
-                return true;
-
-            switch (errno)
+        again:
+            const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), 0, &timeout);
+            if (status != 0)
             {
-            case ETIMEDOUT:
-                return false;
+                const int err = errno;
+                switch (err)
+                {
+                case ETIMEDOUT:
+                    return false;
 
-            case EINTR: // signal received
-                continue;
+                case EINTR: // signal received
+                    goto again; // skip xchg
 
-            case EWOULDBLOCK: // another thread changed the state, reread and retry
-                old_state = m_state.load();
-                continue;
+                case EWOULDBLOCK: // another thread changed the state, retry
+                    continue;
 
-            default:
-                BOOST_ASSERT(false);
+                default:
+                    BOOST_ASSERT(false);
+                }
             }
         }
-        BOOST_ASSERT(false);
-        return false;
+
+        return true;
     }
 
 private:
@@ -150,57 +124,49 @@ private:
 class manual_reset_event
 {
     BOOST_DELETED_FUNCTION(manual_reset_event(manual_reset_event const&));
-    BOOST_DELETED_FUNCTION(manual_reset_event& operator=(manual_reset_event const&));
+    BOOST_DELETED_FUNCTION(manual_reset_event& operator= (manual_reset_event const&));
 
 public:
     manual_reset_event() BOOST_NOEXCEPT :
         m_state(0)
-    {}
+    {
+    }
 
     void post() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        int old_state = m_state.exchange(1); // set state
+        int old_state = m_state.exchange(1, detail::atomic_ns::memory_order_release); // set state
         if (old_state == 0)
             sync::detail::linux_::futex_broadcast(reinterpret_cast< int* >(&m_state)); // wake all threads
     }
 
     void wait() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-    try_again:
-
-        if ( m_state.load(memory_order_acquire) == 1 )
-            return; // fast-path
-
-        const int status = sync::detail::linux_::futex_wait(reinterpret_cast< int* >(&m_state), 0);
-        if (status == 0)
-            return;
-
-        switch (errno)
+        while (m_state.load(detail::atomic_ns::memory_order_acquire) == 0)
         {
-        case EINTR:
-            // signal received
-            goto try_again;
+            const int status = sync::detail::linux_::futex_wait(reinterpret_cast< int* >(&m_state), 0);
+            if (status == 0)
+                break;
 
-        case EWOULDBLOCK:
-            // another thread has reset the event
-            goto try_again;
+            switch (errno)
+            {
+            case EINTR:       // signal received
+            case EWOULDBLOCK: // another thread has reset the event
+                continue;
+
+            default:
+                BOOST_ASSERT(false);
+            }
         }
     }
 
     bool try_wait()
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        if ( m_state.load(memory_order_acquire) == 1 )
-            return true; // fast-path
-        else
-            return false;
+        return m_state.load(detail::atomic_ns::memory_order_acquire) == 1;
     }
 
     void reset() BOOST_NOEXCEPT
     {
-        m_state.store( 0 );
+        m_state.store(0, detail::atomic_ns::memory_order_release);
     }
 
     template <typename Duration>
@@ -219,31 +185,27 @@ public:
 private:
     bool do_wait_for(const struct timespec & timeout)
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-
-    try_again:
-        if ( m_state.load(memory_order_acquire) == 1 )
-            return true; // fast-path
-
-        const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), 0, &timeout);
-        if (status == 0)
-            return true;
-
-        switch (errno)
+        while (m_state.load(detail::atomic_ns::memory_order_acquire) == 0)
         {
-        case ETIMEDOUT:
-            return false;
+            const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), 0, &timeout);
+            if (status == 0)
+                break;
 
-        case EINTR:
-            // signal received
-            goto try_again;
+            switch (errno)
+            {
+            case ETIMEDOUT:
+                return false;
 
-        case EWOULDBLOCK:
-            // another thread has reset the event
-            goto try_again;
+            case EINTR:       // signal received
+            case EWOULDBLOCK: // another thread has reset the event
+                continue;
+
+            default:
+                BOOST_ASSERT(false);
+            }
         }
-        BOOST_ASSERT(false);
-        return false;
+
+        return true;
     }
 
 private:

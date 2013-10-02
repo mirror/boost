@@ -43,7 +43,7 @@ class manual_reset_event
     BOOST_DELETED_FUNCTION(manual_reset_event& operator=(manual_reset_event const&));
 
 public:
-    manual_reset_event() BOOST_NOEXCEPT:
+    manual_reset_event() BOOST_NOEXCEPT :
         m_state(0)
     {
         kern_return_t result = semaphore_create(mach_task_self(), &m_sem, SYNC_POLICY_FIFO, 0);
@@ -58,8 +58,7 @@ public:
 
     void post() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        m_state.store( 1, memory_order_release );
+        m_state.store( 1, detail::atomic_ns::memory_order_release );
         semaphore_signal_all( m_sem ); // wake all threads!& reset semaphore count
     }
 
@@ -70,8 +69,7 @@ public:
 
     void wait() BOOST_NOEXCEPT
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        if (m_state.load(memory_order_acquire) == 1)
+        if (m_state.load(detail::atomic_ns::memory_order_acquire) == 1)
             return;
 
         kern_return_t result = semaphore_wait( m_sem );
@@ -103,8 +101,7 @@ public:
 private:
     bool do_try_wait_until (const mach_timespec_t & timeout)
     {
-        using namespace boost::sync::detail::atomic_ns; // for memory_order
-        if (m_state.load( memory_order_acquire ) == 1)
+        if (m_state.load( detail::atomic_ns::memory_order_acquire ) == 1)
             return true;
 
         kern_return_t result = semaphore_timedwait( m_sem, timeout );

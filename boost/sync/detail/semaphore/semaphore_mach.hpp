@@ -46,7 +46,7 @@ class semaphore
 public:
     explicit semaphore(unsigned int i = 0)
     {
-        kern_return_t result = semaphore_create(mach_task_self(), &m_sem, SYNC_POLICY_FIFO, 0);
+        kern_return_t result = semaphore_create(mach_task_self(), &m_sem, SYNC_POLICY_FIFO, i);
         if (result != KERN_SUCCESS)
             BOOST_THROW_EXCEPTION(resource_error(sync::detail::system_ns::errc::not_enough_memory, "boost::sync::semaphore constructor failed in semaphore_create"));
     }
