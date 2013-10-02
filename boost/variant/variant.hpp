@@ -1326,7 +1326,7 @@ public: // structors
         destroy_content();
     }
 
-    variant()
+    variant() BOOST_NOEXCEPT_IF(boost::has_nothrow_constructor<internal_T0>::value)
     {
 #ifdef _MSC_VER
 #pragma warning( push )
