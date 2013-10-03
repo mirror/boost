@@ -1310,10 +1310,19 @@ public:
     value_type
     fetch_add(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
+#if defined(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64)
         platform_fence_before(order);
         v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD64(&v_, v));
         platform_fence_after(order);
         return v;
+#else
+        value_type tmp = load(memory_order_relaxed);
+        for (; !compare_exchange_weak(tmp, tmp + v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
+        return tmp;
+#endif
     }
 
     value_type
@@ -1326,10 +1335,19 @@ public:
     value_type
     exchange(value_type v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
+#if defined(BOOST_ATOMIC_INTERLOCKED_EXCHANGE64)
         platform_fence_before(order);
         v = static_cast< value_type >(BOOST_ATOMIC_INTERLOCKED_EXCHANGE64(&v_, v));
         platform_fence_after(order);
         return v;
+#else
+        value_type tmp = load(memory_order_relaxed);
+        for (; !compare_exchange_weak(tmp, v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
+        return tmp;
+#endif
     }
 
     bool
@@ -1474,6 +1492,7 @@ public:
     value_type
     exchange(value_type const& v, memory_order order = memory_order_seq_cst) volatile BOOST_NOEXCEPT
     {
+#if defined(BOOST_ATOMIC_INTERLOCKED_EXCHANGE64)
         storage_type tmp = 0;
         memcpy(&tmp, &v, sizeof(value_type));
         platform_fence_before(order);
@@ -1482,6 +1501,14 @@ public:
         value_type res;
         memcpy(&res, &tmp, sizeof(value_type));
         return res;
+#else
+        value_type cur = load(memory_order_relaxed);
+        for (; !compare_exchange_weak(cur, v, order, memory_order_relaxed);)
+        {
+            BOOST_ATOMIC_X86_PAUSE();
+        }
+        return cur;
+#endif
     }
 
     bool
