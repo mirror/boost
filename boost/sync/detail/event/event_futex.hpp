@@ -1,6 +1,7 @@
 // event.hpp, futex-based event
 //
 // Copyright (C) 2013 Tim Blechmann
+// Copyright (C) 2013 Andrey Semashev
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -30,47 +31,101 @@ class auto_reset_event
     BOOST_DELETED_FUNCTION(auto_reset_event(auto_reset_event const&));
     BOOST_DELETED_FUNCTION(auto_reset_event& operator= (auto_reset_event const&));
 
+private:
+    // State bits are divided into post count and waiter count. Post counter is needed to wake
+    // the correct number of threads blocked on the event in case if multiple concurrent posts are made.
+    enum
+    {
+        post_count_lowest_bit = 22u,
+        post_count_one = 1u << post_count_lowest_bit,
+        post_count_mask = 0u - post_count_one,
+        wait_count_mask = (~0u) ^ post_count_mask
+    };
+
 public:
-    auto_reset_event() BOOST_NOEXCEPT :
-        m_state(0)
+    auto_reset_event() BOOST_NOEXCEPT : m_state(0)
     {
     }
 
     void post() BOOST_NOEXCEPT
     {
-        if (m_state.exchange(1, detail::atomic_ns::memory_order_release) == 0)
+        unsigned int old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+        unsigned int waiters, posts;
+        while (true)
         {
-            sync::detail::linux_::futex_signal(reinterpret_cast< int* >(&m_state));
+            waiters = old_state & wait_count_mask;
+            posts = old_state >> post_count_lowest_bit;
+            if (waiters >= posts)
+            {
+                if (m_state.compare_exchange_weak(old_state, old_state + post_count_one, detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                    break;
+
+                detail::pause();
+            }
+            else
+                return; // the event is already set (enough times so that all waiters are released and the event is still left signalled)
         }
+
+        if (waiters > 0)
+            sync::detail::linux_::futex_signal(reinterpret_cast< int* >(&m_state));
     }
 
     void wait() BOOST_NOEXCEPT
     {
-        while (m_state.exchange(0, detail::atomic_ns::memory_order_acq_rel) == 0)
+        // Try the fast path first
+        if (this->try_wait())
+            return;
+
+        // Add one waiter
+        unsigned int old_state = m_state.fetch_add(1, detail::atomic_ns::memory_order_acq_rel);
+        while (true)
         {
-        again:
-            const int status = sync::detail::linux_::futex_wait(reinterpret_cast< int* >(&m_state), 0);
-            if (status != 0)
+            unsigned int posts = old_state >> post_count_lowest_bit;
+            if (posts == 0)
             {
-                const int err = errno;
-                switch (err)
+            again:
+                const int status = sync::detail::linux_::futex_wait(reinterpret_cast< int* >(&m_state), old_state);
+                if (status != 0)
                 {
-                case EINTR:       // signal received
-                    goto again;   // skip xchg
+                    const int err = errno;
+                    switch (err)
+                    {
+                    case EINTR:       // signal received
+                        goto again;
 
-                case EWOULDBLOCK: // another thread changed the state, retry
-                    continue;
+                    case EWOULDBLOCK: // another thread changed the state
+                        break;
 
-                default:
-                    BOOST_ASSERT(false);
+                    default:
+                        BOOST_ASSERT(false);
+                    }
                 }
+
+                old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+                posts = old_state >> post_count_lowest_bit;
+                if (posts == 0)
+                    goto again;
             }
+
+            // Remove one post and one waiter from the counters
+            if (m_state.compare_exchange_strong(old_state, old_state - (post_count_one + 1u), detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                break;
         }
     }
 
     bool try_wait() BOOST_NOEXCEPT
     {
-        return m_state.exchange(0, detail::atomic_ns::memory_order_acq_rel) != 0;
+        unsigned int old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+
+        for (unsigned int posts = old_state >> post_count_lowest_bit; posts > 0; posts = old_state >> post_count_lowest_bit)
+        {
+            if (m_state.compare_exchange_weak(old_state, old_state - post_count_one, detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                return true;
+
+            detail::pause();
+        }
+
+        return false;
     }
 
     template <typename Duration>
@@ -89,36 +144,74 @@ public:
 private:
     bool do_wait_for(const struct timespec & timeout)
     {
-        while (m_state.exchange(0, detail::atomic_ns::memory_order_acq_rel) == 0)
+        // Try the fast path first
+        if (this->try_wait())
+            return true;
+
+        // Add one waiter
+        unsigned int old_state = m_state.fetch_add(1, detail::atomic_ns::memory_order_acq_rel);
+        while (true)
         {
-        again:
-            const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), 0, &timeout);
-            if (status != 0)
+            unsigned int posts = old_state >> post_count_lowest_bit;
+            if (posts == 0)
             {
-                const int err = errno;
-                switch (err)
+            again:
+                const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), old_state, &timeout);
+                if (status != 0)
                 {
-                case ETIMEDOUT:
-                    return false;
+                    const int err = errno;
+                    switch (err)
+                    {
+                    case ETIMEDOUT:
+                        old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+                        while (true)
+                        {
+                            posts = old_state >> post_count_lowest_bit;
+                            if (posts == 0)
+                            {
+                                // Remove one waiter
+                                if (m_state.compare_exchange_weak(old_state, old_state - 1u, detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                                    return false;
+                            }
+                            else
+                            {
+                                // Remove one post and one waiter from the counters
+                                if (m_state.compare_exchange_weak(old_state, old_state - (post_count_one + 1u), detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                                    return true;
+                            }
 
-                case EINTR: // signal received
-                    goto again; // skip xchg
+                            detail::pause();
+                        }
+                        break;
 
-                case EWOULDBLOCK: // another thread changed the state, retry
-                    continue;
+                    case EINTR:       // signal received
+                        goto again;
 
-                default:
-                    BOOST_ASSERT(false);
+                    case EWOULDBLOCK: // another thread changed the state
+                        break;
+
+                    default:
+                        BOOST_ASSERT(false);
+                    }
                 }
+
+                old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+                posts = old_state >> post_count_lowest_bit;
+                if (posts == 0)
+                    goto again;
             }
+
+            // Remove one post and one waiter from the counters
+            if (m_state.compare_exchange_strong(old_state, old_state - (post_count_one + 1u), detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                break;
         }
 
         return true;
     }
 
 private:
-    BOOST_STATIC_ASSERT_MSG(sizeof(detail::atomic_ns::atomic<int>) == sizeof(int), "Boost.Sync: unexpected size of atomic<int>");
-    detail::atomic_ns::atomic<int> m_state;
+    BOOST_STATIC_ASSERT_MSG(sizeof(detail::atomic_ns::atomic< unsigned int >) == sizeof(int), "Boost.Sync: unexpected size of atomic< unsigned int >");
+    detail::atomic_ns::atomic< unsigned int > m_state;
 };
 
 class manual_reset_event
@@ -209,8 +302,8 @@ private:
     }
 
 private:
-    BOOST_STATIC_ASSERT_MSG(sizeof(detail::atomic_ns::atomic<int>) == sizeof(int), "Boost.Sync: unexpected size of atomic<int>");
-    detail::atomic_ns::atomic<int> m_state;
+    BOOST_STATIC_ASSERT_MSG(sizeof(detail::atomic_ns::atomic< int >) == sizeof(int), "Boost.Sync: unexpected size of atomic< int >");
+    detail::atomic_ns::atomic< int > m_state;
 };
 
 }

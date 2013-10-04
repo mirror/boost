@@ -91,8 +91,8 @@ BOOST_FORCEINLINE int futex_broadcast(int* pval) BOOST_NOEXCEPT
     );
 }
 
-//! Wakes one thread waiting on the futex
-BOOST_FORCEINLINE int futex_signal(int* pval) BOOST_NOEXCEPT
+//! Wakes the specified number of threads waiting on the futex
+BOOST_FORCEINLINE int futex_signal(int* pval, int count = 1) BOOST_NOEXCEPT
 {
     return futex_invoke
     (
@@ -102,7 +102,7 @@ BOOST_FORCEINLINE int futex_signal(int* pval) BOOST_NOEXCEPT
 #else
         FUTEX_WAKE,
 #endif
-        1
+        count
     );
 }
 
