@@ -313,9 +313,9 @@ public: // visitor interfaces
 
     template <typename T>
         BOOST_VARIANT_AUX_RETURN_VOID_TYPE
-    internal_visit(T& operand, int) const
+    internal_visit(T& operand, int) const BOOST_NOEXCEPT
     {
-        operand.~T();
+        operand.~T(); // must be noexcept
 
 #if BOOST_WORKAROUND(__BORLANDC__, BOOST_TESTED_AT(0x0551)) || \
     BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1600))
@@ -1313,7 +1313,7 @@ private: // helpers, for structors (below)
     {
     };
 
-    void destroy_content()
+    void destroy_content() BOOST_NOEXCEPT
     {
         detail::variant::destroyer visitor;
         this->internal_apply_visitor(visitor);
@@ -1769,7 +1769,7 @@ private: // helpers, for modifiers (below)
             , mpl::true_ // has_nothrow_copy
             , B1 // is_nothrow_move_constructible
             , B2 // has_fallback_type
-            ) const
+            ) const BOOST_NOEXCEPT
         {
             // Destroy lhs's content...
             lhs_.destroy_content(); // nothrow
@@ -1915,7 +1915,7 @@ private: // helpers, for modifiers (below)
             , mpl::true_ // has_nothrow_copy
             , mpl::false_ // is_nothrow_move_constructible
             , B2 // has_fallback_type
-            ) const
+            ) const BOOST_NOEXCEPT
         {
             assigner::assign_impl(rhs_content, mpl::true_(), mpl::false_(), B2());
         }
@@ -1926,7 +1926,7 @@ private: // helpers, for modifiers (below)
             , B // has_nothrow_copy
             , mpl::true_ // is_nothrow_move_constructible
             , B2 // has_fallback_type
-            ) const
+            ) const BOOST_NOEXCEPT
         {
             // ...destroy lhs's content...
             assigner::lhs_.destroy_content(); // nothrow

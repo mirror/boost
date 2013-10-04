@@ -52,7 +52,7 @@ private: // representation
 
 public: // structors
 
-    apply_visitor_binary_invoke(Visitor& visitor, Value1& value1)
+    apply_visitor_binary_invoke(Visitor& visitor, Value1& value1) BOOST_NOEXCEPT
         : visitor_(visitor)
         , value1_(value1)
     {
@@ -87,7 +87,7 @@ private: // representation
 
 public: // structors
 
-    apply_visitor_binary_unwrap(Visitor& visitor, Visitable2& visitable2)
+    apply_visitor_binary_unwrap(Visitor& visitor, Visitable2& visitable2) BOOST_NOEXCEPT
         : visitor_(visitor)
         , visitable2_(visitable2)
     {

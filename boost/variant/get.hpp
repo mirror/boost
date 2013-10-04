@@ -72,13 +72,13 @@ public: // visitor typedefs
 
 public: // visitor interfaces
 
-    pointer operator()(reference operand) const
+    pointer operator()(reference operand) const BOOST_NOEXCEPT
     {
         return boost::addressof(operand);
     }
 
     template <typename U>
-    pointer operator()(const U&) const
+    pointer operator()(const U&) const BOOST_NOEXCEPT
     {
         return static_cast<pointer>(0);
     }
@@ -99,7 +99,7 @@ inline
 get(
       boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
       BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    )
+    ) BOOST_NOEXCEPT
 {
     typedef typename add_pointer<U>::type U_ptr;
     if (!operand) return static_cast<U_ptr>(0);
@@ -114,7 +114,7 @@ inline
 get(
       const boost::variant< BOOST_VARIANT_ENUM_PARAMS(T) >* operand
       BOOST_VARIANT_AUX_GET_EXPLICIT_TEMPLATE_TYPE(U)
-    )
+    ) BOOST_NOEXCEPT
 {
     typedef typename add_pointer<const U>::type U_ptr;
     if (!operand) return static_cast<U_ptr>(0);
