@@ -67,6 +67,7 @@ private:
             ar >> BOOST_SERIALIZATION_NVP(v);
             ar >> BOOST_SERIALIZATION_NVP(w);
             ar >> BOOST_SERIALIZATION_NVP(x);
+            break;
         default:
             break;
         }

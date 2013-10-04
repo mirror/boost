@@ -57,7 +57,7 @@ public:
     // serialization library
     typedef boost::mpl::bool_&lt;true&gt; is_saving; 
     typedef boost::mpl::bool_&lt;false&gt; is_loading;
-    template&lt;class T&gt; register_type(){}
+    template&lt;class T&gt; void register_type(){}
     template&lt;class T&gt; trivial_oarchive & operator&lt;&lt;(const T & t){
         return *this;
     }
@@ -140,7 +140,7 @@ to help render the archive in a particular form.
 
 <dl>
 
-<dt><h4><code>void save_start()</code></h4></dt>
+<dt><h4><code>void save_start(char const *)</code></h4></dt>
 <dd>
 <strong>Default</strong>:Does nothing.<br>
 <strong>Purpose</strong>:To inject/retrieve an object name into the archive.  Used
@@ -148,7 +148,7 @@ by XML archive to inject "&lt;name " before data.
 </dd>
 <p>
 
-<dt><h4><code>void save_end()</code></h4></dt>
+<dt><h4><code>void save_end(char const *)</code></h4></dt>
 <dd>
 <strong>Default</strong>:Does nothing.<br>
 <strong>Purpose</strong>:To inject/retrieve an object name into the archive. Used

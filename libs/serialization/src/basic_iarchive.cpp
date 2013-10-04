@@ -453,9 +453,9 @@ basic_iarchive_impl::load_pointer(
         }
         BOOST_ASSERT(NULL != bpis_ptr);
         class_id_type new_cid = register_type(bpis_ptr->get_basic_serializer());
+        BOOST_VERIFY(register_type(bpis_ptr->get_basic_serializer()) == cid);
         int i = cid;
         cobject_id_vector[i].bpis_ptr = bpis_ptr;
-        BOOST_ASSERT(new_cid == cid);
     }
     int i = cid;
     cobject_id & co = cobject_id_vector[i];
