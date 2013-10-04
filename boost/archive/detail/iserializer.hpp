@@ -238,21 +238,21 @@ struct heap_allocator
     // boost::has_new_operator< T > doesn't work on these compilers
     #if DONT_USE_HAS_NEW_OPERATOR
         // This doesn't handle operator new overload for class T
-        static T * invoke(){
+        static void * invoke(){
             return static_cast<T *>(operator new(sizeof(T)));
         }
     #else
         struct has_new_operator {
-            static T* invoke() {
+            static void * invoke() {
                 return static_cast<T *>((T::operator new)(sizeof(T)));
             }
         };
         struct doesnt_have_new_operator {
-            static T* invoke() {
+            static void * invoke() {
                 return static_cast<T *>(operator new(sizeof(T)));
             }
         };
-        static T * invoke() {
+        static void * invoke() {
             typedef BOOST_DEDUCED_TYPENAME
                 mpl::eval_if<
                     boost::has_new_operator< T >,
@@ -288,7 +288,7 @@ public:
 private:
     T* m_p;
 };
-
+#if 0
 // note: BOOST_DLLEXPORT is so that code for polymorphic class
 // serialized only through base class won't get optimized out
 template<class Archive, class T>
@@ -329,6 +329,49 @@ BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
 
     ar_impl >> boost::serialization::make_nvp(NULL, * t);
     ap.release();
+}
+#endif
+// note: BOOST_DLLEXPORT is so that code for polymorphic class
+// serialized only through base class won't get optimized out
+template<class Archive, class T>
+BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
+    basic_iarchive & ar, 
+    void * & t,
+    const unsigned int file_version
+) const
+{
+    Archive & ar_impl = 
+        boost::serialization::smart_cast_reference<Archive &>(ar);
+
+    t  = heap_allocator< T >::invoke();
+    if(NULL == t)
+        boost::serialization::throw_exception(std::bad_alloc()) ;
+
+    // catch exception during load_construct_data so that we don't
+    // automatically delete the t which is most likely not fully
+    // constructed
+    BOOST_TRY {
+        // this addresses an obscure situtation that occurs when 
+        // load_constructor de-serializes something through a pointer.
+        ar.next_object_pointer(t);
+        boost::serialization::load_construct_data_adl<Archive, T>(
+            ar_impl,
+            static_cast<T *>(t), 
+            file_version
+        );
+    }
+    BOOST_CATCH(...){
+        // don't destroy the object - because it was never really
+        // constructed.
+        //boost::serialization::access::destroy(t);
+        // just recover the memory
+        delete t;
+        t = NULL;   // don't leave junk in t
+        BOOST_RETHROW;
+    }
+    BOOST_CATCH_END
+
+    ar_impl >> boost::serialization::make_nvp(NULL, *static_cast<T *>(t));
 }
 
 template<class Archive, class T>

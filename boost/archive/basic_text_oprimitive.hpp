@@ -130,7 +130,13 @@ public:
             boost::serialization::throw_exception(
                 archive_exception(archive_exception::output_stream_error)
             );
-        os << std::setprecision(std::numeric_limits<float>::digits10 + 2);
+        // The formulae for the number of decimla digits required is given in
+        // http://www2.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1822.pdf
+        // which is derived from Kahan's paper:
+        // http://http.cs.berkley.edu/~wkahan/ieee754status/ieee754.ps
+        unsigned int digits = std::numeric_limits<float>::digits * 3010;
+        digits /= 10000;
+        os << std::setprecision(digits);
         os << t;
     }
     void save(const double t)
