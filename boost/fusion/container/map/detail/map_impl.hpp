@@ -82,14 +82,14 @@ namespace boost { namespace fusion { namespace detail
           : rest_type(rhs.get_base()), element(rhs.element)
         {}
 
-        map_impl(typename detail::call_param<Pair>::type element
+        map_impl(typename detail::call_param<Pair>::type element_
           , typename detail::call_param<T>::type... rest)
-          : rest_type(rest...), element(element)
+          : rest_type(rest...), element(element_)
         {}
 
-        map_impl(Pair&& element, T&&... rest)
+        map_impl(Pair&& element_, T&&... rest)
           : rest_type(std::forward<T>(rest)...)
-          , element(std::forward<Pair>(element))
+          , element(std::forward<Pair>(element_))
         {}
 
         template <typename Iterator>
