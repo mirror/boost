@@ -28,14 +28,17 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_OS_UNIX BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
-#if defined(unix) || defined(__unix) || \
-    defined(_XOPEN_SOURCE) || defined(_POSIX_SOURCE)
+#if !BOOST_PREDEF_DETAIL_OS_DETECTED && ( \
+    defined(unix) || defined(__unix) || \
+    defined(_XOPEN_SOURCE) || defined(_POSIX_SOURCE) \
+    )
 #   undef BOOST_OS_UNIX
 #   define BOOST_OS_UNIX BOOST_VERSION_NUMBER_AVAILABLE
 #endif
 
 #if BOOST_OS_UNIX
 #   define BOOST_OS_UNIX_AVAILABLE
+#   include <boost/predef/detail/os_detected.h>
 #endif
 
 #define BOOST_OS_UNIX_NAME "Unix Environment"

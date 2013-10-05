@@ -43,4 +43,6 @@ test-suite predef :
     [ run info_as_objc.m : : : <test-info>always_show_run_output ]
     [ run version.cpp ]
     [ run make.cpp ]
+    [ compile macos_endian.c ]
+    [ compile macos_vs_bsd.c ]
     ;

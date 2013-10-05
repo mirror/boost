@@ -31,7 +31,9 @@ version 4 is specifically detected.
 
 #define BOOST_OS_QNX BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
-#if defined(__QNX__) || defined(__QNXNTO__)
+#if !BOOST_PREDEF_DETAIL_OS_DETECTED && ( \
+    defined(__QNX__) || defined(__QNXNTO__) \
+    )
 #   undef BOOST_OS_QNX
 #   if !defined(BOOST_OS_QNX) && defined(_NTO_VERSION)
 #       define BOOST_OS_QNX BOOST_PREDEF_MAKE_10_VVRR(_NTO_VERSION)
@@ -46,6 +48,7 @@ version 4 is specifically detected.
 
 #if BOOST_OS_QNX
 #   define BOOST_OS_QNX_AVAILABLE
+#   include <boost/predef/detail/os_detected.h>
 #endif
 
 #define BOOST_OS_QNX_NAME "QNX"
