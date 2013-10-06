@@ -271,7 +271,7 @@ The rules when the iterator is still valid can be inferred from the code in
 [h3 Move emulation and rvalues]
 
 Since Boost 1.54.0 support for move semantics was implemented using 
-the [@boost:libs/move/doc/html/move.html Boost.Move] library. 
+the [@boost:libs/move/index.html Boost.Move] library.
 If rvalue references are available __cb will use them, but if not it uses a close,
 but imperfect emulation. On such compilers:
 
