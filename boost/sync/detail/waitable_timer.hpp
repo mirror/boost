@@ -154,13 +154,13 @@ struct waitable_timer_state
             if (half < 10)
                 sem_name[15 + i * 2] = '0' + half;
             else
-                sem_name[15 + i * 2] = 'a' + half;
+                sem_name[15 + i * 2] = 'a' - 10 + half;
 
             half = b & 0x0f;
             if (half < 10)
                 sem_name[16 + i * 2] = '0' + half;
             else
-                sem_name[16 + i * 2] = 'a' + half;
+                sem_name[16 + i * 2] = 'a' - 10 + half;
         }
         sem_name[23] = '\0';
 
