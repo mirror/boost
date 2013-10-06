@@ -34,7 +34,6 @@
 #include <boost/sync/detail/time_units.hpp>
 #include <boost/sync/detail/interlocked.hpp>
 #include <boost/sync/detail/auto_handle.hpp>
-#include <boost/sync/detail/windows_primitives.hpp>
 #include <boost/sync/locks/lock_guard.hpp>
 #include <boost/sync/mutexes/mutex.hpp>
 #include <boost/sync/condition_variables/cv_status.hpp>
@@ -63,7 +62,7 @@ private:
 
 public:
     explicit cv_list_entry(auto_handle const& wake_sem):
-        m_semaphore(create_anonymous_semaphore(0, LONG_MAX)),
+        m_semaphore(boost::detail::winapi::create_anonymous_semaphore(0, LONG_MAX)),
         m_wake_sem(wake_sem.duplicate()),
         m_waiters(1),
         m_notified(false)
@@ -72,7 +71,7 @@ public:
             BOOST_THROW_EXCEPTION(resource_error("boost::sync::condition_variable: failed to create a semaphore"));
     }
 
-    static bool no_waiters(boost::intrusive_ptr< cv_list_entry > const& entry)
+    static bool no_waiters(intrusive_ptr< cv_list_entry > const& entry)
     {
         return interlocked_read_acquire(&entry->m_waiters) == 0;
     }
@@ -307,7 +306,7 @@ private:
 
         if(!m_wake_sem)
         {
-            m_wake_sem = create_anonymous_semaphore(0, LONG_MAX);
+            m_wake_sem = boost::detail::winapi::create_anonymous_semaphore(0, LONG_MAX);
             BOOST_ASSERT(m_wake_sem);
         }
 

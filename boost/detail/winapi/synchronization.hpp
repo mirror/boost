@@ -74,56 +74,64 @@ extern "C" {
     #endif
     };
 
-     __declspec(dllimport) void __stdcall
+     __declspec(dllimport) void WINAPI
         InitializeCriticalSection(CRITICAL_SECTION_ *);
-    __declspec(dllimport) void __stdcall
+    __declspec(dllimport) void WINAPI
         EnterCriticalSection(CRITICAL_SECTION_ *);
-    __declspec(dllimport) bool __stdcall
+    __declspec(dllimport) bool WINAPI
         TryEnterCriticalSection(CRITICAL_SECTION_ *);
-    __declspec(dllimport) void __stdcall
+    __declspec(dllimport) void WINAPI
         LeaveCriticalSection(CRITICAL_SECTION_ *);
-    __declspec(dllimport) void __stdcall
+    __declspec(dllimport) void WINAPI
         DeleteCriticalSection(CRITICAL_SECTION_ *);
 
     struct _SECURITY_ATTRIBUTES;
 # ifdef BOOST_NO_ANSI_APIS
-    __declspec(dllimport) void* __stdcall
-        CreateMutexW(_SECURITY_ATTRIBUTES*,int,wchar_t const*);
-    __declspec(dllimport) void* __stdcall
-        CreateSemaphoreW(_SECURITY_ATTRIBUTES*,long,long,wchar_t const*);
-    __declspec(dllimport) void* __stdcall
-        CreateEventW(_SECURITY_ATTRIBUTES*,int,int,wchar_t const*);
-    __declspec(dllimport) void* __stdcall
-        OpenEventW(unsigned long,int,wchar_t const*);
+    __declspec(dllimport) HANDLE_ WINAPI
+        CreateMutexW(_SECURITY_ATTRIBUTES*, BOOL_, LPCWSTR_);
+    __declspec(dllimport) HANDLE_ WINAPI
+        OpenMutexW(DWORD_ dwDesiredAccess, BOOL_ bInheritHandle, LPCWSTR_ lpName);
+    __declspec(dllimport) HANDLE_ WINAPI
+        CreateSemaphoreW(_SECURITY_ATTRIBUTES*, LONG_, LONG_, LPCWSTR_);
+    __declspec(dllimport) HANDLE_ WINAPI
+        OpenSemaphoreW(DWORD_ dwDesiredAccess, BOOL_ bInheritHandle, LPCWSTR_ lpName);
+    __declspec(dllimport) HANDLE_ WINAPI
+        CreateEventW(_SECURITY_ATTRIBUTES*, BOOL_, BOOL_, LPCWSTR_);
+    __declspec(dllimport) HANDLE_ WINAPI
+        OpenEventW(DWORD_, BOOL_, LPCWSTR_);
 # else
-    __declspec(dllimport) void* __stdcall
-        CreateMutexA(_SECURITY_ATTRIBUTES*,int,char const*);
-    __declspec(dllimport) void* __stdcall
-        CreateSemaphoreA(_SECURITY_ATTRIBUTES*,long,long,char const*);
-    __declspec(dllimport) void* __stdcall
-        CreateEventA(_SECURITY_ATTRIBUTES*,int,int,char const*);
-    __declspec(dllimport) void* __stdcall
-        OpenEventA(unsigned long,int,char const*);
+    __declspec(dllimport) HANDLE_ WINAPI
+        CreateMutexA(_SECURITY_ATTRIBUTES*, BOOL_, LPCSTR_);
+    __declspec(dllimport) HANDLE_ WINAPI
+        OpenMutexA(DWORD_ dwDesiredAccess, BOOL_ bInheritHandle, LPCSTR_ lpName);
+    __declspec(dllimport) HANDLE_ WINAPI
+        CreateSemaphoreA(_SECURITY_ATTRIBUTES*, LONG_, LONG_, LPCSTR_);
+    __declspec(dllimport) HANDLE_ WINAPI
+        OpenSemaphoreA(DWORD_ dwDesiredAccess, BOOL_ bInheritHandle, LPCSTR_ lpName);
+    __declspec(dllimport) HANDLE_ WINAPI
+        CreateEventA(_SECURITY_ATTRIBUTES*, BOOL_, BOOL_, LPCSTR_);
+    __declspec(dllimport) HANDLE_ WINAPI
+        OpenEventA(DWORD_, BOOL_, LPCSTR_);
 # endif
-    __declspec(dllimport) int __stdcall
-        ReleaseMutex(void*);
-    __declspec(dllimport) unsigned long __stdcall
-        WaitForSingleObject(void*,unsigned long);
-    __declspec(dllimport) unsigned long __stdcall
-        WaitForMultipleObjects(unsigned long nCount,
-                void* const * lpHandles,
-                int bWaitAll,
-                unsigned long dwMilliseconds);
-    __declspec(dllimport) int __stdcall
-        ReleaseSemaphore(void*,long,long*);
+    __declspec(dllimport) BOOL_ WINAPI
+        ReleaseMutex(HANDLE_);
+    __declspec(dllimport) DWORD_ WINAPI
+        WaitForSingleObject(HANDLE_, DWORD_);
+    __declspec(dllimport) DWORD_ WINAPI
+        WaitForMultipleObjects(DWORD_ nCount,
+                HANDLE_ const * lpHandles,
+                BOOL_ bWaitAll,
+                DWORD_ dwMilliseconds);
+    __declspec(dllimport) BOOL_ WINAPI
+        ReleaseSemaphore(HANDLE_, LONG_, LONG_*);
     typedef void (__stdcall *PAPCFUNC8)(ULONG_PTR_);
-    __declspec(dllimport) unsigned long __stdcall
-        QueueUserAPC(PAPCFUNC8,void*,ULONG_PTR_);
+    __declspec(dllimport) DWORD_ WINAPI
+        QueueUserAPC(PAPCFUNC8, HANDLE_, ULONG_PTR_);
 # ifndef UNDER_CE
-    __declspec(dllimport) int __stdcall
-        SetEvent(void*);
-    __declspec(dllimport) int __stdcall
-        ResetEvent(void*);
+    __declspec(dllimport) BOOL_ WINAPI
+        SetEvent(HANDLE_);
+    __declspec(dllimport) BOOL_ WINAPI
+        ResetEvent(HANDLE_);
 # else
     using ::SetEvent;
     using ::ResetEvent;
@@ -131,13 +139,40 @@ extern "C" {
 
 } // extern "C"
 
-    const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
-    const DWORD_ wait_abandoned = 0x00000080L;
-    const DWORD_ wait_object_0  = 0x00000000L;
-    const DWORD_ wait_timeout   = 0x00000102L;
-    const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
+const DWORD_ infinite       = (DWORD_)0xFFFFFFFF;
+const DWORD_ wait_abandoned = 0x00000080L;
+const DWORD_ wait_object_0  = 0x00000000L;
+const DWORD_ wait_timeout   = 0x00000102L;
+const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
 
 #endif // defined( BOOST_USE_WINDOWS_H )
+
+BOOST_FORCEINLINE HANDLE_ create_anonymous_mutex(_SECURITY_ATTRIBUTES* lpAttributes, BOOL_ bInitialOwner)
+{
+#ifdef BOOST_NO_ANSI_APIS
+    return CreateMutexW(lpAttributes, bInitialOwner, 0);
+#else
+    return CreateMutexA(lpAttributes, bInitialOwner, 0);
+#endif
+}
+
+BOOST_FORCEINLINE HANDLE_ create_anonymous_semaphore(_SECURITY_ATTRIBUTES* lpAttributes, LONG_ lInitialCount, LONG_ lMaximumCount)
+{
+#ifdef BOOST_NO_ANSI_APIS
+    return CreateSemaphoreW(lpAttributes, lInitialCount, lMaximumCount, 0);
+#else
+    return CreateSemaphoreA(lpAttributes, lInitialCount, lMaximumCount, 0);
+#endif
+}
+
+BOOST_FORCEINLINE HANDLE_ create_anonymous_event(_SECURITY_ATTRIBUTES* lpAttributes, BOOL_ bManualReset, BOOL_ bInitialState)
+{
+#ifdef BOOST_NO_ANSI_APIS
+    return CreateEventW(lpAttributes, bManualReset, bInitialState, 0);
+#else
+    return CreateEventA(lpAttributes, bManualReset, bInitialState, 0);
+#endif
+}
 
 }
 }

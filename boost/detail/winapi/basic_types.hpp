@@ -31,6 +31,9 @@
 #    define WINAPI  __stdcall
 #  endif
 # endif
+# ifndef NTAPI
+#  define NTAPI __stdcall
+# endif
 #else
 # error "Win32 functions not available"
 #endif
@@ -44,11 +47,19 @@ namespace detail {
 namespace winapi {
 #if defined( BOOST_USE_WINDOWS_H )
     typedef ::BOOL BOOL_;
+    typedef ::BOOLEAN BOOLEAN_;
+    typedef ::PBOOLEAN PBOOLEAN_;
+    typedef ::BYTE BYTE_;
     typedef ::WORD WORD_;
     typedef ::DWORD DWORD_;
     typedef ::HANDLE HANDLE_;
+    typedef ::HMODULE HMODULE_;
     typedef ::LONG LONG_;
+    typedef ::ULONG ULONG_;
     typedef ::LONGLONG LONGLONG_;
+    typedef ::INT_PTR INT_PTR_;
+    typedef ::UINT_PTR UINT_PTR_;
+    typedef ::LONG_PTR LONG_PTR_;
     typedef ::ULONG_PTR ULONG_PTR_;
     typedef ::LARGE_INTEGER LARGE_INTEGER_;
     typedef ::PLARGE_INTEGER PLARGE_INTEGER_;
@@ -63,11 +74,16 @@ namespace winapi {
 #else
 extern "C" {
     typedef int BOOL_;
+    typedef unsigned char BYTE_;
+    typedef BYTE_ BOOLEAN_;
+    typedef BOOLEAN_* PBOOLEAN_;
     typedef unsigned short WORD_;
     typedef unsigned long DWORD_;
     typedef void* HANDLE_;
+    typedef void* HMODULE_;
 
     typedef long LONG_;
+    typedef unsigned long ULONG_;
 
 // @FIXME Which condition must be tested
 //~ #if !defined(_M_IX86)
@@ -84,11 +100,20 @@ extern "C" {
 // @FIXME Which condition must be tested
 # ifdef _WIN64
 #if defined(__CYGWIN__)
+    typedef long INT_PTR_;
+    typedef unsigned long INT_PTR_;
+    typedef long LONG_PTR_;
     typedef unsigned long ULONG_PTR_;
 #else
+    typedef __int64 INT_PTR_;
+    typedef unsigned __int64 UINT_PTR_;
+    typedef __int64 LONG_PTR_;
     typedef unsigned __int64 ULONG_PTR_;
 #endif
 # else
+    typedef int INT_PTR_;
+    typedef unsigned int INT_PTR_;
+    typedef long LONG_PTR_;
     typedef unsigned long ULONG_PTR_;
 # endif
 
