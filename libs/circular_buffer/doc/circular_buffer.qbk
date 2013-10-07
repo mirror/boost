@@ -307,7 +307,7 @@ This leads us to the following situation:
 * If `value` has a throwing move constructor and some copy constructor, then method may throw exceptions of copy constructor.
 * If `value` has no copy constructor, then method may throw exceptions of move constructor.
 
-`move_if_noexcept(T&)` uses [@boost:libs/move/doc/html/move.html Boost.Move], [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_copy_constructible.html `is_copy_constructible`], [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_assignable.html `is_nothrow_move_assignable`] and [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_constructible.html `is_nothrow_move_constructible`] type triats. 
+`move_if_noexcept(T&)` uses [@boost:libs/move/index.html Boost.Move], [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_copy_constructible.html `is_copy_constructible`], [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_assignable.html `is_nothrow_move_assignable`] and [@boost:libs/type_traits/doc/html/boost_typetraits/reference/is_nothrow_move_constructible.html `is_nothrow_move_constructible`] type triats. 
 
 
 [h3 Caveats]

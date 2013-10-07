@@ -217,12 +217,6 @@ namespace quickbook
                     << " is still under development and is "
                     "likely to change in the future." << std::endl;
             }
-            else if (new_version >= 106u)
-            {
-                detail::outwarn(state.current_file->path)
-                    << "Quickbook " << (new_version / 100) << "." << (new_version % 100)
-                    << " is in alpha." << std::endl;
-            }
         }
 
         if (new_version) {
