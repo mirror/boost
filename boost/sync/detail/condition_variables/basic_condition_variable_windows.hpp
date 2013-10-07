@@ -34,6 +34,7 @@
 #include <boost/sync/detail/time_units.hpp>
 #include <boost/sync/detail/interlocked.hpp>
 #include <boost/sync/detail/auto_handle.hpp>
+#include <boost/sync/detail/waitable_timer.hpp>
 #include <boost/sync/locks/lock_guard.hpp>
 #include <boost/sync/mutexes/mutex.hpp>
 #include <boost/sync/condition_variables/cv_status.hpp>
@@ -114,8 +115,8 @@ public:
         sync::detail::system_duration::native_type time_left = t.get();
         while (time_left > 0)
         {
-            const unsigned int dur = time_left > INT_MAX ?
-                static_cast< unsigned int >(INT_MAX) : static_cast< unsigned int >(time_left);
+            const unsigned int dur = time_left > static_cast< unsigned int >(boost::detail::winapi::max_non_infinite_wait) ?
+                static_cast< unsigned int >(boost::detail::winapi::max_non_infinite_wait) : static_cast< unsigned int >(time_left);
             const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForSingleObject(m_semaphore, dur);
             switch (res)
             {

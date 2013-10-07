@@ -102,7 +102,7 @@ struct waitable_timer_state
                 boost::detail::winapi::CloseHandle(waitable_timer);
         }
 
-        static void NTAPI destroy(PVOID_ p, BOOLEAN_ /*timed_out*/)
+        static void NTAPI destroy(boost::detail::winapi::PVOID_ p, boost::detail::winapi::BOOLEAN_ /*timed_out*/)
         {
             delete static_cast< thread_local_context* >(p);
         }
@@ -225,21 +225,22 @@ struct waitable_timer_state
         typedef NTSTATUS_ (__stdcall *NtQuerySemaphore_t)(boost::detail::winapi::HANDLE_ h, unsigned int info_class, semaphore_basic_information* pinfo, boost::detail::winapi::ULONG_ info_size, boost::detail::winapi::ULONG_* ret_len);
 
         // Retrieve the TLS key from the semaphore
-        NtQuerySemaphore_t nt_query_semaphore = (NtQuerySemaphore_t)boost::detail::winapi::GetProcAddress(boost::detail::winapi::GetModuleHandleA("ntdll.dll"), "NtQuerySemaphore");
+        const boost::detail::winapi::HMODULE_ ntdll =
+#ifndef BOOST_NO_ANSI_APIS
+            boost::detail::winapi::GetModuleHandleA("ntdll.dll");
+#else
+            boost::detail::winapi::GetModuleHandleW(L"ntdll.dll");
+#endif
+        NtQuerySemaphore_t nt_query_semaphore = (NtQuerySemaphore_t)boost::detail::winapi::GetProcAddress(ntdll, "NtQuerySemaphore");
         if (nt_query_semaphore)
         {
             semaphore_basic_information info = {};
             NTSTATUS_ err = nt_query_semaphore(tls_key_holder, 0 /* SemaphoreBasicInformation */, &info, sizeof(info), NULL);
             if (err == 0)
             {
-                tls_key = info.current_count;
+                tls_key = static_cast< boost::detail::winapi::DWORD_ >(info.current_count);
                 BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&initialized, st_initialized);
                 return;
-            }
-            else
-            {
-                BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&initialized, st_uninitialized);
-                BOOST_THROW_EXCEPTION(resource_error("Boost.Sync: unable to create a semaphore for TLS storage"));
             }
         }
 

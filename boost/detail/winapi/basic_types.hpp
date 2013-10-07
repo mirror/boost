@@ -101,7 +101,7 @@ extern "C" {
 # ifdef _WIN64
 #if defined(__CYGWIN__)
     typedef long INT_PTR_;
-    typedef unsigned long INT_PTR_;
+    typedef unsigned long UINT_PTR_;
     typedef long LONG_PTR_;
     typedef unsigned long ULONG_PTR_;
 #else
@@ -112,7 +112,7 @@ extern "C" {
 #endif
 # else
     typedef int INT_PTR_;
-    typedef unsigned int INT_PTR_;
+    typedef unsigned int UINT_PTR_;
     typedef long LONG_PTR_;
     typedef unsigned long ULONG_PTR_;
 # endif

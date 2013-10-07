@@ -40,8 +40,14 @@ struct time_traits< struct ::timespec >
 
     static system_time_point to_sync_unit(struct ::timespec const& point)
     {
-        BOOST_STATIC_ASSERT_MSG(system_time_point::subsecond_fraction == 1000000000u, "Boost.Sync: Unexpected system time point resolution");
-        return system_time_point(point.tv_sec, point.tv_nsec);
+        enum
+        {
+            nanoseconds_fraction = 1000000000u,
+            conversion_ratio = system_time_point::subsecond_fraction >= nanoseconds_fraction ?
+                system_time_point::subsecond_fraction / nanoseconds_fraction :
+                nanoseconds_fraction / system_time_point::subsecond_fraction
+        };
+        return system_time_point(point.tv_sec, (system_time_point::subsecond_fraction < nanoseconds_fraction ? point.tv_nsec / conversion_ratio : point.tv_nsec * conversion_ratio));
     }
 };
 

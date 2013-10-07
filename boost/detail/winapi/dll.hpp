@@ -27,26 +27,47 @@ namespace winapi
     typedef ::NEARPROC NEARPROC_;
     typedef ::PROC PROC_;
 
-    using ::LoadLibrary;
+# ifdef BOOST_NO_ANSI_APIS
+    using ::LoadLibraryW;
+    using ::GetModuleHandleW;
+# else
+    using ::LoadLibraryA;
+    using ::GetModuleHandleA;
+# endif
     using ::FreeLibrary;
     using ::GetProcAddress;
-    using ::GetModuleHandleA;
 #else
 extern "C" {
-#ifdef _WIN64
+# ifdef _WIN64
     typedef INT_PTR (WINAPI *FARPROC_)();
     typedef INT_PTR (WINAPI *NEARPROC_)();
     typedef INT_PTR (WINAPI *PROC_)();
-#else
+# else
     typedef int (WINAPI *FARPROC_)();
     typedef int (WINAPI *NEARPROC_)();
     typedef int (WINAPI *PROC_)();
-#endif  // _WIN64
+# endif // _WIN64
 
+# ifdef BOOST_NO_ANSI_APIS
     __declspec(dllimport) HMODULE_ WINAPI
-        LoadLibrary(
-            LPCTSTR_ lpFileName
+        LoadLibraryW(
+            LPCWSTR_ lpFileName
     );
+    __declspec(dllimport) HMODULE_ WINAPI
+        GetModuleHandleW(
+            LPCWSTR_ lpFileName
+    );
+# else
+    __declspec(dllimport) HMODULE_ WINAPI
+        LoadLibraryA(
+            LPCSTR_ lpFileName
+    );
+    __declspec(dllimport) HMODULE_ WINAPI
+        GetModuleHandleA(
+            LPCSTR_ lpFileName
+    );
+# endif
+
     __declspec(dllimport) BOOL_ WINAPI
         FreeLibrary(
             HMODULE_ hModule
@@ -55,10 +76,6 @@ extern "C" {
         GetProcAddress(
             HMODULE_ hModule,
             LPCSTR_ lpProcName
-    );
-    __declspec(dllimport) HMODULE_ WINAPI
-        GetModuleHandleA(
-            LPCSTR_ lpFileName
     );
 }
 #endif

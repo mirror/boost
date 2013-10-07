@@ -93,6 +93,7 @@ public:
     static BOOST_CONSTEXPR_OR_CONST uint64_t subsecond_fraction = system_duration::subsecond_fraction;
 
 private:
+    //! Time, since 1970-Jan-01
     native_type m_value;
 
 public:
@@ -102,6 +103,8 @@ public:
         m_value.tv_sec = t;
         m_value.tv_nsec = subsecond;
     }
+
+    //! Creates time point from duration since 1970-Jan-01
     explicit system_time_point(system_duration dur) BOOST_NOEXCEPT
     {
         m_value.tv_sec = dur.get() / subsecond_fraction;
@@ -165,18 +168,23 @@ class system_time_point
 {
 public:
     typedef uint64_t native_type;
-    // The native subsecond precision is milliseconds
-    static BOOST_CONSTEXPR_OR_CONST uint64_t subsecond_fraction = system_duration::subsecond_fraction;
+    // The native subsecond precision is 100 nanoseconds
+    static BOOST_CONSTEXPR_OR_CONST uint64_t subsecond_fraction = 10000000u;
 
 private:
-    native_type m_value;
+    //! 100 nanosecond units since 1601-Jan-01 (i.e. equivalent to FILETIME)
+    uint64_t m_value;
 
 public:
     BOOST_CONSTEXPR system_time_point() BOOST_NOEXCEPT : m_value(0) {}
-    explicit system_time_point(time_t t, unsigned int subsecond = 0) BOOST_NOEXCEPT : m_value(static_cast< uint64_t >(t) * subsecond_fraction + subsecond)
+    explicit system_time_point(time_t t, unsigned int subsecond = 0) BOOST_NOEXCEPT :
+        m_value(static_cast< uint64_t >(t) * subsecond_fraction + subsecond + 116444736000000000ull)
     {
     }
-    explicit system_time_point(system_duration dur) BOOST_NOEXCEPT : m_value(dur.get())
+
+    //! Creates time point from duration since 1970-Jan-01
+    explicit system_time_point(system_duration dur) BOOST_NOEXCEPT :
+        m_value(dur.get() * 10000u + 116444736000000000ull)
     {
     }
 
@@ -184,32 +192,19 @@ public:
 
     static system_time_point now() BOOST_NOEXCEPT
     {
-        union
-        {
-            uint64_t as_uint64;
-            boost::detail::winapi::FILETIME_ as_filetime;
-        }
-        caster;
-        boost::detail::winapi::GetSystemTimeAsFileTime(&caster.as_filetime);
-
-        // Compensate the difference between 1970-Jan-01 & 1601-Jan-01
-        // in 100-nanosecond intervals
-        caster.as_uint64 -= 116444736000000000ull; // (27111902 << 32) + 3577643008
-
-        // Convert to milliseconds
-        caster.as_uint64 /= 10000u;
-
-        return system_time_point(system_duration(caster.as_uint64));
+        system_time_point res;
+        boost::detail::winapi::GetSystemTimeAsFileTime(reinterpret_cast< boost::detail::winapi::FILETIME_* >(&res.m_value));
+        return res;
     }
 
     system_time_point& operator+= (system_duration const& dur) BOOST_NOEXCEPT
     {
-        m_value += dur.get();
+        m_value += dur.get() * 10000u;
         return *this;
     }
     system_time_point& operator-= (system_duration const& dur) BOOST_NOEXCEPT
     {
-        m_value -= dur.get();
+        m_value -= dur.get() * 10000u;
         return *this;
     }
 
@@ -226,7 +221,7 @@ public:
 
     friend system_duration operator- (system_time_point const& left, system_time_point const& right) BOOST_NOEXCEPT
     {
-        return system_duration(static_cast< system_duration::native_type >(left.m_value - right.m_value));
+        return system_duration(static_cast< system_duration::native_type >(left.m_value - right.m_value) / 10000u);
     }
 };
 

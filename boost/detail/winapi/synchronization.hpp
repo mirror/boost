@@ -147,6 +147,8 @@ const DWORD_ wait_failed    = (DWORD_)0xFFFFFFFF;
 
 #endif // defined( BOOST_USE_WINDOWS_H )
 
+const DWORD_ max_non_infinite_wait = (DWORD_)0xFFFFFFFE;
+
 BOOST_FORCEINLINE HANDLE_ create_anonymous_mutex(_SECURITY_ATTRIBUTES* lpAttributes, BOOL_ bInitialOwner)
 {
 #ifdef BOOST_NO_ANSI_APIS
