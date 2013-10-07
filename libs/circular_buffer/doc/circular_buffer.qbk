@@ -81,11 +81,11 @@ The __cb only allocates memory when created,
 when the capacity is adjusted explicitly,
 or as necessary to accommodate resizing or assign operations.
 
-[$images/circular_buffer.png]
+[$../../libs/circular_buffer/doc/images/circular_buffer.png]
 
 There is also a __cbso version available.
 
-[$images/space_optimized.png]
+[$../../libs/circular_buffer/doc/images/space_optimized.png]
 
 __cbso is an adaptation of the __cb
 which [*does not allocate memory all at once when created],
