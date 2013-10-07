@@ -288,49 +288,7 @@ public:
 private:
     T* m_p;
 };
-#if 0
-// note: BOOST_DLLEXPORT is so that code for polymorphic class
-// serialized only through base class won't get optimized out
-template<class Archive, class T>
-BOOST_DLLEXPORT void pointer_iserializer<Archive, T>::load_object_ptr(
-    basic_iarchive & ar, 
-    void * & x,
-    const unsigned int file_version
-) const
-{
-    Archive & ar_impl = 
-        boost::serialization::smart_cast_reference<Archive &>(ar);
 
-    auto_ptr_with_deleter< T > ap(heap_allocator< T >::invoke());
-    if(NULL == ap.get())
-        boost::serialization::throw_exception(std::bad_alloc()) ;
-
-    T * t = ap.get();
-    x = t;
-
-    // catch exception during load_construct_data so that we don't
-    // automatically delete the t which is most likely not fully
-    // constructed
-    BOOST_TRY {
-        // this addresses an obscure situtation that occurs when 
-        // load_constructor de-serializes something through a pointer.
-        ar.next_object_pointer(t);
-        boost::serialization::load_construct_data_adl<Archive, T>(
-            ar_impl,
-            t, 
-            file_version
-        );
-    }
-    BOOST_CATCH(...){
-        ap.release();
-        BOOST_RETHROW;
-    }
-    BOOST_CATCH_END
-
-    ar_impl >> boost::serialization::make_nvp(NULL, * t);
-    ap.release();
-}
-#endif
 // note: BOOST_DLLEXPORT is so that code for polymorphic class
 // serialized only through base class won't get optimized out
 template<class Archive, class T>
