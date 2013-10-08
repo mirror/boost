@@ -12,8 +12,8 @@
 #include <cstddef>
 #include <dispatch/dispatch.h>
 
-#include <boost/throw_exception.hpp>
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync_detail/throw_exception.hpp>
 #include <boost/sync/detail/system_error.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 
@@ -44,7 +44,7 @@ public:
     {
         m_sem = dispatch_semaphore_create(i);
         if (m_sem == NULL)
-            BOOST_THROW_EXCEPTION(resource_error(sync::detail::system_ns::errc::not_enough_memory, "boost::sync::semaphore constructor failed in dispatch_semaphore_create"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (sync::detail::system_ns::errc::not_enough_memory)("boost::sync::semaphore constructor failed in dispatch_semaphore_create"));
     }
 
     ~semaphore() BOOST_NOEXCEPT

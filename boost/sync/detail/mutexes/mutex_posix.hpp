@@ -19,10 +19,10 @@
 
 #include <cstddef>
 #include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
+#include <boost/sync/detail/config.hpp>
 #include <boost/sync/exceptions/lock_error.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
-#include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/detail/pthread.hpp>
 
 #include <boost/sync/detail/header.hpp>
@@ -72,7 +72,7 @@ public:
         int const res = pthread_mutex_init(&m_mutex, NULL);
         if (res)
         {
-            BOOST_THROW_EXCEPTION(resource_error(res, "boost:: mutex constructor failed in pthread_mutex_init"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (res)("boost:: mutex constructor failed in pthread_mutex_init"));
         }
     }
 #endif // defined(PTHREAD_MUTEX_INITIALIZER)
@@ -87,7 +87,7 @@ public:
         int const res = sync::detail::posix::pthread_mutex_lock(&m_mutex);
         if (res)
         {
-            BOOST_THROW_EXCEPTION(lock_error(res, "boost: mutex lock failed in pthread_mutex_lock"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (res)("boost: mutex lock failed in pthread_mutex_lock"));
         }
     }
 
@@ -103,7 +103,7 @@ public:
         if (res == 0)
             return true;
         else if (res != EBUSY)
-            BOOST_THROW_EXCEPTION(lock_error(res, "boost: mutex trylock failed in pthread_mutex_trylock"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (res)("boost: mutex trylock failed in pthread_mutex_trylock"));
         return false;
     }
 

@@ -11,12 +11,12 @@
 
 #include <cstddef>
 #include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/detail/winapi/GetLastError.hpp>
 #include <boost/detail/winapi/synchronization.hpp>
 #include <boost/detail/winapi/handles.hpp>
 
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/detail/header.hpp>
 
@@ -42,7 +42,7 @@ public:
         if (!handle_)
         {
             const DWORD_ err = boost::detail::winapi::GetLastError();
-            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event constructor failed in CreateEvent"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::event constructor failed in CreateEvent"));
         }
     }
 
@@ -57,7 +57,7 @@ public:
         if (status == 0)
         {
             const DWORD_ err = boost::detail::winapi::GetLastError();
-            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::post failed in ReleaseEvent"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::event::post failed in ReleaseEvent"));
         }
     }
 
@@ -67,7 +67,7 @@ public:
         if (status == 0)
         {
             const DWORD_ err = boost::detail::winapi::GetLastError();
-            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::reset failed in ResetEvent"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::event::reset failed in ResetEvent"));
         }
     }
 
@@ -83,7 +83,7 @@ public:
         case wait_failed:
             {
                 const DWORD_ err = boost::detail::winapi::GetLastError();
-                BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::wait failed in WaitForSingleObject"));
+                BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::event::wait failed in WaitForSingleObject"));
             }
 
         default:
@@ -126,7 +126,7 @@ private:
         case wait_failed:
             {
                 const DWORD_ err = boost::detail::winapi::GetLastError();
-                BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::event::do_try_wait_for failed in WaitForSingleObject"));
+                BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::event::do_try_wait_for failed in WaitForSingleObject"));
             }
 
         default:

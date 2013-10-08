@@ -22,7 +22,6 @@
 #include <vector>
 #include <algorithm>
 #include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/smart_ptr/intrusive_ptr.hpp>
 #include <boost/smart_ptr/intrusive_ref_counter.hpp>
 #include <boost/detail/winapi/synchronization.hpp>
@@ -30,6 +29,7 @@
 #include <boost/sync/locks/unique_lock_fwd.hpp>
 #include <boost/sync/exceptions/runtime_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/detail/time_traits.hpp>
 #include <boost/sync/detail/time_units.hpp>
 #include <boost/sync/detail/interlocked.hpp>
@@ -63,13 +63,22 @@ private:
 
 public:
     explicit cv_list_entry(auto_handle const& wake_sem):
-        m_semaphore(boost::detail::winapi::create_anonymous_semaphore(0, LONG_MAX)),
-        m_wake_sem(wake_sem.duplicate()),
         m_waiters(1),
         m_notified(false)
     {
+        m_semaphore.reset(boost::detail::winapi::create_anonymous_semaphore(0, LONG_MAX));
         if (!m_semaphore)
-            BOOST_THROW_EXCEPTION(resource_error("boost::sync::condition_variable: failed to create a semaphore"));
+        {
+            const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::condition_variable: failed to create a semaphore"));
+        }
+
+        m_wake_sem.reset(wake_sem.duplicate());
+        if (!m_wake_sem)
+        {
+            const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::condition_variable: failed to duplicate a semaphore handle"));
+        }
     }
 
     static bool no_waiters(intrusive_ptr< cv_list_entry > const& entry)
@@ -107,16 +116,24 @@ public:
     {
         const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForSingleObject(m_semaphore, boost::detail::winapi::infinite);
         if (res != boost::detail::winapi::wait_object_0)
-            BOOST_THROW_EXCEPTION(runtime_exception(res, "boost::sync::condition_variable wait failed in WaitForSingleObject"));
+        {
+            const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            BOOST_SYNC_DETAIL_THROW(runtime_exception, (err)("boost::sync::condition_variable wait failed in WaitForSingleObject"));
+        }
     }
 
-    bool timed_wait(system_duration t)
+    bool timed_wait(sync::detail::system_time_point const& t)
+    {
+
+    }
+
+    bool timed_wait(sync::detail::system_duration t)
     {
         sync::detail::system_duration::native_type time_left = t.get();
         while (time_left > 0)
         {
-            const unsigned int dur = time_left > static_cast< unsigned int >(boost::detail::winapi::max_non_infinite_wait) ?
-                static_cast< unsigned int >(boost::detail::winapi::max_non_infinite_wait) : static_cast< unsigned int >(time_left);
+            const boost::detail::winapi::DWORD_ dur = time_left > boost::detail::winapi::max_non_infinite_wait ?
+                boost::detail::winapi::max_non_infinite_wait : static_cast< boost::detail::winapi::DWORD_ >(time_left);
             const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForSingleObject(m_semaphore, dur);
             switch (res)
             {
@@ -128,7 +145,10 @@ public:
                 break;
 
             default:
-                BOOST_THROW_EXCEPTION(runtime_exception(res, "boost::sync::condition_variable timed_wait failed in WaitForSingleObject"));
+                {
+                    const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+                    BOOST_SYNC_DETAIL_THROW(runtime_exception, (res)("boost::sync::condition_variable timed_wait failed in WaitForSingleObject"));
+                }
             }
         }
         return false;

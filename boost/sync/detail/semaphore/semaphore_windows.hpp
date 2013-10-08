@@ -14,8 +14,8 @@
 #include <boost/detail/winapi/GetLastError.hpp>
 #include <boost/detail/winapi/synchronization.hpp>
 #include <boost/detail/winapi/handles.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/detail/header.hpp>
 
@@ -46,14 +46,13 @@ public:
         if (!m_sem)
         {
             const DWORD_ err = boost::detail::winapi::GetLastError();
-            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore constructor failed in CreateSemaphore"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore constructor failed in CreateSemaphore"));
         }
     }
 
     ~semaphore() BOOST_NOEXCEPT
     {
-        int status = boost::detail::winapi::CloseHandle(m_sem);
-        BOOST_VERIFY (status != 0);
+        BOOST_VERIFY(boost::detail::winapi::CloseHandle(m_sem) != 0);
     }
 
     void post()
@@ -62,7 +61,7 @@ public:
         if (status == 0)
         {
             const DWORD_ err = boost::detail::winapi::GetLastError();
-            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore::post failed in ReleaseSemaphore"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore::post failed in ReleaseSemaphore"));
         }
     }
 
@@ -77,7 +76,7 @@ public:
         case boost::detail::winapi::wait_failed:
             {
                 const DWORD_ err = boost::detail::winapi::GetLastError();
-                BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore::wait failed in WaitForSingleObject"));
+                BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore::wait failed in WaitForSingleObject"));
             }
 
         default:
@@ -122,7 +121,7 @@ private:
         case boost::detail::winapi::wait_failed:
             {
                 const DWORD_ err = boost::detail::winapi::GetLastError();
-                BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore::do_try_wait_for failed in WaitForSingleObject"));
+                BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore::do_try_wait_for failed in WaitForSingleObject"));
             }
 
         default:

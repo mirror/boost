@@ -19,7 +19,6 @@
 
 #include <cstddef>
 #include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/sync/exceptions/lock_error.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
@@ -27,6 +26,7 @@
 #include <boost/sync/detail/pthread.hpp>
 #include <boost/sync/detail/time_traits.hpp>
 #include <boost/sync/detail/time_units.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #if !defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
 #include <boost/sync/detail/pthread_mutex_locks.hpp>
 #endif
@@ -91,12 +91,12 @@ public:
     {
         int const res = pthread_mutex_init(&m_mutex, NULL);
         if (res)
-            BOOST_THROW_EXCEPTION(resource_error(res, "boost:: timed_mutex constructor failed in pthread_mutex_init"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (res)("boost:: timed_mutex constructor failed in pthread_mutex_init"));
 
 #if !defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
         int const res2 = pthread_cond_init(&m_cond, NULL);
         if (res2)
-            BOOST_THROW_EXCEPTION(resource_error(res2, "boost:: timed_mutex constructor failed in pthread_cond_init"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (res2)("boost:: timed_mutex constructor failed in pthread_cond_init"));
         m_is_locked = false;
 #endif
     }
@@ -116,7 +116,7 @@ public:
     {
         int const res = sync::detail::posix::pthread_mutex_lock(&m_mutex);
         if (res)
-            BOOST_THROW_EXCEPTION(lock_error(res, "boost: timed_mutex lock failed in pthread_mutex_lock"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (res)("boost: timed_mutex lock failed in pthread_mutex_lock"));
     }
 
     void unlock() BOOST_NOEXCEPT
@@ -131,7 +131,7 @@ public:
         if (res == 0)
             return true;
         else if (res != EBUSY)
-            BOOST_THROW_EXCEPTION(lock_error(res, "boost: timed_mutex trylock failed in pthread_mutex_trylock"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (res)("boost: timed_mutex trylock failed in pthread_mutex_trylock"));
         return false;
     }
 
@@ -206,7 +206,7 @@ private:
         if (res == 0)
             return true;
         else if (res != ETIMEDOUT)
-            BOOST_THROW_EXCEPTION(lock_error(res, "boost: timed_mutex timedlock failed in pthread_mutex_timedlock"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (res)("boost: timed_mutex timedlock failed in pthread_mutex_timedlock"));
         return false;
 
 #else // defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
@@ -218,7 +218,7 @@ private:
             if (cond_res == ETIMEDOUT)
                 return false;
             else if (cond_res != 0)
-                BOOST_THROW_EXCEPTION(lock_error(cond_res, "boost: timed_mutex timedlock failed in pthread_cond_timedwait"));
+                BOOST_SYNC_DETAIL_THROW(lock_error, (cond_res)("boost: timed_mutex timedlock failed in pthread_cond_timedwait"));
         }
         m_is_locked = true;
         return true;

@@ -11,8 +11,8 @@
 
 #include <cstddef>
 
-#include <boost/throw_exception.hpp>
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/detail/system_error.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 
@@ -48,7 +48,7 @@ public:
     {
         kern_return_t result = semaphore_create(mach_task_self(), &m_sem, SYNC_POLICY_FIFO, i);
         if (result != KERN_SUCCESS)
-            BOOST_THROW_EXCEPTION(resource_error(sync::detail::system_ns::errc::not_enough_memory, "boost::sync::semaphore constructor failed in semaphore_create"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (sync::detail::system_ns::errc::not_enough_memory)("boost::sync::semaphore constructor failed in semaphore_create"));
     }
 
     ~semaphore() BOOST_NOEXCEPT

@@ -19,7 +19,6 @@
 
 #include <cstddef>
 #include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/sync/detail/config.hpp>
@@ -30,6 +29,7 @@
 #include <boost/sync/detail/pthread.hpp>
 #include <boost/sync/detail/time_traits.hpp>
 #include <boost/sync/detail/time_units.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/condition_variables/cv_status.hpp>
 #include <boost/sync/detail/header.hpp>
 
@@ -75,7 +75,7 @@ public:
     {
         int const res = pthread_cond_init(&m_cond, NULL);
         if (res)
-            BOOST_THROW_EXCEPTION(resource_error(res, "boost::sync::condition_variable constructor failed in pthread_cond_init"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (res)("boost::sync::condition_variable constructor failed in pthread_cond_init"));
     }
 #endif // defined(PTHREAD_COND_INITIALIZER)
 
@@ -100,7 +100,7 @@ public:
         BOOST_ASSERT(lock.owns_lock());
         int const res = sync::detail::posix::pthread_cond_wait(&m_cond, lock.mutex()->native_handle());
         if (res != 0)
-            BOOST_THROW_EXCEPTION(runtime_exception(res, "boost::sync::condition_variable::wait failed in pthread_cond_wait"));
+            BOOST_SYNC_DETAIL_THROW(runtime_exception, (res)("boost::sync::condition_variable::wait failed in pthread_cond_wait"));
     }
 
     template< typename Mutex, typename Predicate >
@@ -214,7 +214,7 @@ private:
         if (res == ETIMEDOUT)
             return cv_status::timeout;
         else if (res != 0)
-            BOOST_THROW_EXCEPTION(runtime_exception(res, "boost::sync::condition_variable timedwait failed in pthread_cond_timedwait"));
+            BOOST_SYNC_DETAIL_THROW(runtime_exception, (res)("boost::sync::condition_variable timedwait failed in pthread_cond_timedwait"));
         return cv_status::no_timeout;
     }
 

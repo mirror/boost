@@ -14,8 +14,8 @@
 #include <semaphore.h>
 
 #include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 
 #ifdef BOOST_SYNC_USES_CHRONO
@@ -47,7 +47,7 @@ public:
         if (status)
         {
             const int err = errno;
-            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore constructor failed in sem_init"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore constructor failed in sem_init"));
         }
     }
 
@@ -66,7 +66,7 @@ public:
         switch (err)
         {
         case EOVERFLOW:
-            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync::semaphore post failed: maximum allowable value would be exceeded"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore post failed: maximum allowable value would be exceeded"));
             break;
 
         case EINVAL:

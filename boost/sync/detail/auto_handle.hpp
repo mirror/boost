@@ -21,11 +21,11 @@
 
 #include <cstddef>
 #include <boost/assert.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/detail/winapi/handles.hpp>
 #include <boost/detail/winapi/GetLastError.hpp>
 #include <boost/detail/winapi/GetCurrentProcess.hpp>
 #include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/detail/header.hpp>
 
@@ -94,7 +94,7 @@ public:
         if (boost::detail::winapi::DuplicateHandle(current_process, m_handle, current_process, &new_handle, 0, false, boost::detail::winapi::duplicate_same_access) == 0)
         {
             const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
-            BOOST_THROW_EXCEPTION(resource_error(err, "boost::sync: failed to duplicate a handle"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync: failed to duplicate a handle"));
         }
         return new_handle;
     }

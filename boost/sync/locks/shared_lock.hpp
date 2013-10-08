@@ -17,13 +17,13 @@
 #define BOOST_SYNC_LOCKS_SHARED_LOCK_HPP_INCLUDED_
 
 #include <cstddef>
-#include <boost/throw_exception.hpp>
 #include <boost/move/core.hpp>
 #include <boost/move/utility.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/utility/explicit_operator_bool.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/time_traits.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/detail/system_error.hpp>
 #include <boost/sync/exceptions/lock_error.hpp>
 #include <boost/sync/locks/lock_options.hpp>
@@ -148,10 +148,10 @@ public:
     void lock()
     {
         if (!m_mutex)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::operation_not_permitted, "boost shared_lock has no mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::operation_not_permitted)("boost shared_lock has no mutex"));
 
         if (m_is_locked)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::resource_deadlock_would_occur, "boost shared_lock already owns the mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::resource_deadlock_would_occur)("boost shared_lock already owns the mutex"));
 
         m_mutex->lock_shared();
         m_is_locked = true;
@@ -160,10 +160,10 @@ public:
     bool try_lock()
     {
         if (!m_mutex)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::operation_not_permitted, "boost shared_lock has no mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::operation_not_permitted)("boost shared_lock has no mutex"));
 
         if (m_is_locked)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::resource_deadlock_would_occur, "boost shared_lock already owns the mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::resource_deadlock_would_occur)("boost shared_lock already owns the mutex"));
 
         m_is_locked = m_mutex->try_lock_shared();
 
@@ -174,10 +174,10 @@ public:
     typename enable_if_c< detail::time_traits< Time >::is_specialized, bool >::type timed_lock(Time const& time)
     {
         if (!m_mutex)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::operation_not_permitted, "boost shared_lock has no mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::operation_not_permitted)("boost shared_lock has no mutex"));
 
         if (m_is_locked)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::resource_deadlock_would_occur, "boost shared_lock already owns the mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::resource_deadlock_would_occur)("boost shared_lock already owns the mutex"));
 
         m_is_locked = m_mutex->timed_lock_shared(time);
 
@@ -188,10 +188,10 @@ public:
     typename detail::enable_if_tag< Duration, detail::time_duration_tag, bool >::type try_lock_for(Duration const& rel_time)
     {
         if (!m_mutex)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::operation_not_permitted, "boost shared_lock has no mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::operation_not_permitted)("boost shared_lock has no mutex"));
 
         if (m_is_locked)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::resource_deadlock_would_occur, "boost shared_lock already owns the mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::resource_deadlock_would_occur)("boost shared_lock already owns the mutex"));
 
         m_is_locked = m_mutex->try_lock_shared_for(rel_time);
 
@@ -202,10 +202,10 @@ public:
     typename detail::enable_if_tag< TimePoint, detail::time_point_tag, bool >::type try_lock_until(TimePoint const& abs_time)
     {
         if (!m_mutex)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::operation_not_permitted, "boost shared_lock has no mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::operation_not_permitted)("boost shared_lock has no mutex"));
 
         if (m_is_locked)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::resource_deadlock_would_occur, "boost shared_lock already owns the mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::resource_deadlock_would_occur)("boost shared_lock already owns the mutex"));
 
         m_is_locked = m_mutex->try_lock_shared_until(abs_time);
 
@@ -215,10 +215,10 @@ public:
     void unlock()
     {
         if (!m_mutex)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::operation_not_permitted, "boost shared_lock has no mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::operation_not_permitted)("boost shared_lock has no mutex"));
 
         if (!m_is_locked)
-            BOOST_THROW_EXCEPTION(lock_error(detail::system_ns::errc::operation_not_permitted, "boost shared_lock doesn't own the mutex"));
+            BOOST_SYNC_DETAIL_THROW(lock_error, (detail::system_ns::errc::operation_not_permitted)("boost shared_lock doesn't own the mutex"));
 
         m_mutex->unlock_shared();
         m_is_locked = false;

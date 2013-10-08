@@ -22,7 +22,6 @@
 #include <stdexcept>
 #include <boost/cstdint.hpp>
 #include <boost/version.hpp>
-#include <boost/throw_exception.hpp>
 #include <boost/detail/winapi/dll.hpp>
 #include <boost/detail/winapi/tls.hpp>
 #include <boost/detail/winapi/process.hpp>
@@ -35,6 +34,7 @@
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/interlocked.hpp>
 #include <boost/sync/detail/weak_linkage.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/detail/header.hpp>
 
@@ -184,7 +184,7 @@ struct waitable_timer_state
             {
                 boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
                 BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&initialized, st_uninitialized);
-                BOOST_THROW_EXCEPTION(resource_error(err, "Boost.Sync: unable to allocate a TLS slot"));
+                BOOST_SYNC_DETAIL_THROW(resource_error, (err)("Boost.Sync: unable to allocate a TLS slot"));
             }
 
 #ifndef BOOST_NO_ANSI_APIS
@@ -250,7 +250,7 @@ struct waitable_timer_state
         {
             boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
             BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&initialized, st_uninitialized);
-            BOOST_THROW_EXCEPTION(resource_error(err, "Boost.Sync: unable to allocate a TLS slot"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("Boost.Sync: unable to allocate a TLS slot"));
         }
 
         tls_key = key;
@@ -297,7 +297,7 @@ struct waitable_timer_state
 
         boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
         delete ctx;
-        BOOST_THROW_EXCEPTION(resource_error(err, "Boost.Sync: failed to initialize a waitable timer"));
+        BOOST_SYNC_DETAIL_THROW(resource_error, (err)("Boost.Sync: failed to initialize a waitable timer"));
         return NULL; // unreachable; to avoid warnings about missing return statement
     }
 
@@ -328,7 +328,7 @@ inline boost::detail::winapi::HANDLE_ get_waitable_timer()
 
     // Check that the thread local context is ABI-compatible
     if (p->boost_version != BOOST_VERSION)
-        BOOST_THROW_EXCEPTION(std::logic_error("Boost.Sync: different Boost versions are used in the application"));
+        BOOST_SYNC_DETAIL_THROW(std::logic_error, ("Boost.Sync: different Boost versions are used in the application"));
 
     return p->waitable_timer;
 }
