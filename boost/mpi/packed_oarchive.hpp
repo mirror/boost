@@ -129,7 +129,11 @@ public:
     const boost::int_least16_t x = t;
     * this->This() << x;
   }
-  
+
+  void save_override(archive::version_type & t, int version){
+    const boost::int_least8_t x = t;
+    * this->This() << x;
+  }
 private:
   /// An internal buffer to be used when the user does not supply his
   /// own buffer.

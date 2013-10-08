@@ -127,6 +127,12 @@ public:
     t = boost::archive::class_id_type(x);
   }
 
+  void load_override(archive::version_type & t, int version){
+    int_least8_t x=0;
+    * this->This() >> x;
+    t = boost::archive::version_type(x);
+  }
+
   void load_override(archive::class_id_reference_type & t, int version){
     load_override(static_cast<archive::class_id_type &>(t), version);
   }
