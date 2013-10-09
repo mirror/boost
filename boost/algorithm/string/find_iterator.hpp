@@ -132,12 +132,7 @@ namespace boost {
             // increment
             void increment()
             {
-                if(m_Match.begin() == m_Match.end())
-                    m_Match=this->do_find(m_Match.end(),m_End);
-                else {
-                    input_iterator_type last = m_Match.begin();
-                    m_Match=this->do_find(++last,m_End);
-                    }
+                m_Match=this->do_find(m_Match.end(),m_End);
             }
 
             // comparison
