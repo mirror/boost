@@ -136,13 +136,13 @@ private:
 
                 switch (res)
                 {
-                case boost::detail::winapi::wait_object_0:
+                case boost::detail::winapi::wait_object_0: // event was notified
                     m_mutex.clear_waiting_and_try_lock(old_count);
                     if ((old_count & sync::detail::windows::basic_mutex::lock_flag_value) == 0)
                         return true;
                     break;
 
-                case boost::detail::winapi::wait_object_0 + 1:
+                case boost::detail::winapi::wait_object_0 + 1: // timeout has expired
                     BOOST_ATOMIC_INTERLOCKED_EXCHANGE_ADD(&m_mutex.m_active_count, -1);
                     return false;
 
@@ -158,7 +158,7 @@ private:
         }
     }
 
-    bool priv_timed_lock(sync::detail::system_duration const& t)
+    bool priv_timed_lock(sync::detail::system_duration t)
     {
         long old_count = m_mutex.m_active_count;
         m_mutex.mark_waiting_and_try_lock(old_count);

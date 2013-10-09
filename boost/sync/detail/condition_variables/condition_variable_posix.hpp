@@ -23,7 +23,7 @@
 #include <boost/mpl/and.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/locks/unique_lock_fwd.hpp>
-#include <boost/sync/exceptions/runtime_exception.hpp>
+#include <boost/sync/exceptions/wait_error.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/traits/is_condition_variable_compatible.hpp>
 #include <boost/sync/detail/pthread.hpp>
@@ -100,7 +100,7 @@ public:
         BOOST_ASSERT(lock.owns_lock());
         int const res = sync::detail::posix::pthread_cond_wait(&m_cond, lock.mutex()->native_handle());
         if (res != 0)
-            BOOST_SYNC_DETAIL_THROW(runtime_exception, (res)("boost::sync::condition_variable::wait failed in pthread_cond_wait"));
+            BOOST_SYNC_DETAIL_THROW(wait_error, (res)("boost::sync::condition_variable::wait failed in pthread_cond_wait"));
     }
 
     template< typename Mutex, typename Predicate >
@@ -148,7 +148,7 @@ public:
     }
 
     template< typename Mutex, typename TimePoint >
-    typename enable_if< mpl::and_< detail::is_time_tag_of< TimePoint, detail::time_point_tag >, is_condition_variable_compatible< Mutex > >, cv_status >::type
+    typename enable_if< mpl::and_< detail::is_time_tag_of< TimePoint, detail::time_point_tag >, is_condition_variable_compatible< Mutex > >, sync::cv_status >::type
     wait_until(unique_lock< Mutex >& lock, TimePoint const& abs_time)
     {
         BOOST_ASSERT(lock.owns_lock());
@@ -171,7 +171,7 @@ public:
     }
 
     template< typename Mutex, typename Duration >
-    typename enable_if< mpl::and_< detail::is_time_tag_of< Duration, detail::time_duration_tag >, is_condition_variable_compatible< Mutex > >, cv_status >::type
+    typename enable_if< mpl::and_< detail::is_time_tag_of< Duration, detail::time_duration_tag >, is_condition_variable_compatible< Mutex > >, sync::cv_status >::type
     wait_for(unique_lock< Mutex >& lock, Duration const& rel_time)
     {
         BOOST_ASSERT(lock.owns_lock());
@@ -202,24 +202,24 @@ public:
 
 private:
     template< typename Mutex >
-    cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::system_duration dur)
+    sync::cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::system_duration dur)
     {
         return priv_timed_wait(lock, sync::detail::system_time_point::now() + dur);
     }
 
     template< typename Mutex >
-    cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::system_time_point const& t)
+    sync::cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::system_time_point const& t)
     {
         int const res = sync::detail::posix::pthread_cond_timedwait(&m_cond, lock.mutex()->native_handle(), &t.get());
         if (res == ETIMEDOUT)
-            return cv_status::timeout;
+            return sync::cv_status::timeout;
         else if (res != 0)
-            BOOST_SYNC_DETAIL_THROW(runtime_exception, (res)("boost::sync::condition_variable timedwait failed in pthread_cond_timedwait"));
-        return cv_status::no_timeout;
+            BOOST_SYNC_DETAIL_THROW(wait_error, (res)("boost::sync::condition_variable timedwait failed in pthread_cond_timedwait"));
+        return sync::cv_status::no_timeout;
     }
 
     template< typename Mutex, typename TimePoint >
-    cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::chrono_time_point< TimePoint > const& t)
+    sync::cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::chrono_time_point< TimePoint > const& t)
     {
         typedef TimePoint time_point;
         typedef typename time_point::clock clock;
@@ -227,11 +227,11 @@ private:
         time_point now = clock::now();
         while (now < t.get())
         {
-            if (priv_timed_wait(lock, sync::detail::time_traits< duration >::to_sync_unit(t.get() - now)) == cv_status::no_timeout)
-                return cv_status::no_timeout;
+            if (priv_timed_wait(lock, sync::detail::time_traits< duration >::to_sync_unit(t.get() - now)) == sync::cv_status::no_timeout)
+                return sync::cv_status::no_timeout;
             now = clock::now();
         }
-        return cv_status::timeout;
+        return sync::cv_status::timeout;
     }
 };
 
