@@ -10,7 +10,7 @@
 
 #include <cstddef>
 #include <fstream>
-
+#include <algorithm> // equal
 #include <cstdio> // remove
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -18,7 +18,7 @@ namespace std{
     using ::remove;
 }
 #endif
-
+#include <boost/foreach.hpp>
 #include "test_tools.hpp"
 #include <boost/detail/no_exceptions_support.hpp>
 #include <boost/archive/archive_exception.hpp>
@@ -27,34 +27,13 @@ namespace std{
 #include "A.hpp"
 #include "A.ipp"
 
-struct array_equal_to //: public std::binary_function<T, T, bool>
-{
-template<class T, class U>
-    bool operator()(const T & _Left, const U & _Right) const
-    {
-        // consider alignment
-        int count_left = sizeof(_Left) /    (
-            static_cast<const char *>(static_cast<const void *>(&_Left[1])) 
-            - static_cast<const char *>(static_cast<const void *>(&_Left[0]))
-        );
-        int count_right = sizeof(_Right) /  (
-            static_cast<const char *>(static_cast<const void *>(&_Right[1])) 
-            - static_cast<const char *>(static_cast<const void *>(&_Right[0]))
-        );
-        if(count_right != count_left)
-            return false;
-        while(count_left-- > 0){
-            if(_Left[count_left] == _Right[count_left])
-                continue;
-            return false;
-        }
-        return true;
-    }
-};
+template<class T, unsigned int N>
+bool deep_compare(const T (& lhs)[N], const T (& rhs)[N]){
+    return std::equal(&lhs[0], &lhs[N], &rhs[0]);
+}
 
 template <class T>
-int test_array(T)
-{
+int test_array(){
     const char * testfile = boost::archive::tmpnam(NULL);
     BOOST_REQUIRE(NULL != testfile);
 
@@ -79,11 +58,10 @@ int test_array(T)
         ia >> boost::serialization::make_nvp("b_array", b_array1);
         ia >> boost::serialization::make_nvp("c_array", c_array1);
 
-        array_equal_to/*<A[10]>*/ Compare;
-        BOOST_CHECK(Compare(a_array, a_array1));
-        BOOST_CHECK(Compare(b_array[0], b_array1[0]));
-        BOOST_CHECK(Compare(b_array[1], b_array1[1]));
-        BOOST_CHECK(Compare(c_array, c_array1));
+        BOOST_CHECK(deep_compare(a_array,a_array1));
+        BOOST_CHECK(b_array[0][0] == b_array1[0][0]);
+        BOOST_CHECK(b_array[1][0] == b_array1[1][0]);
+        BOOST_CHECK(c_array == c_array1);
     }
     {
         T a_array1[9];
@@ -114,11 +92,11 @@ int test_array(T)
 
 int test_main( int /* argc */, char* /* argv */[] )
 {
-   int res = test_array(A());
+    int res = test_array<A>();
     // test an int array for which optimized versions should be available
-   if (res == EXIT_SUCCESS)
-     res = test_array(0);  
-   return res;
+    if (res == EXIT_SUCCESS)
+        res = test_array<int>();  
+    return res;
 }
 
 // EOF
