@@ -98,16 +98,16 @@ public:
     typename enable_if< is_condition_variable_compatible< Mutex >, void >::type wait(unique_lock< Mutex >& lock)
     {
         BOOST_ASSERT(lock.owns_lock());
-        int const res = sync::detail::posix::pthread_cond_wait(&m_cond, lock.mutex()->native_handle());
-        if (res != 0)
-            BOOST_SYNC_DETAIL_THROW(wait_error, (res)("boost::sync::condition_variable::wait failed in pthread_cond_wait"));
+        this->priv_wait(lock.mutex()->native_handle());
     }
 
     template< typename Mutex, typename Predicate >
     typename enable_if< is_condition_variable_compatible< Mutex >, void >::type wait(unique_lock< Mutex >& lock, Predicate pred)
     {
+        BOOST_ASSERT(lock.owns_lock());
+        pthread_mutex_t* const mtx = lock.mutex()->native_handle();
         while (!pred())
-            this->wait(lock);
+            this->priv_wait(mtx);
     }
 
     template< typename Mutex, typename Time >
@@ -115,7 +115,7 @@ public:
     timed_wait(unique_lock< Mutex >& lock, Time const& t)
     {
         BOOST_ASSERT(lock.owns_lock());
-        return priv_timed_wait(lock, sync::detail::time_traits< Time >::to_sync_unit(t)) == cv_status::no_timeout;
+        return priv_timed_wait(lock, sync::detail::time_traits< Time >::to_sync_unit(t)) == sync::cv_status::no_timeout;
     }
 
     template< typename Mutex, typename TimePoint, typename Predicate >
@@ -127,7 +127,7 @@ public:
         unit_type abs_timeout = sync::detail::time_traits< TimePoint >::to_sync_unit(t);
         while (!pred())
         {
-            if (this->priv_timed_wait(lock, abs_timeout) != cv_status::no_timeout)
+            if (this->priv_timed_wait(lock, abs_timeout) != sync::cv_status::no_timeout)
                 return pred();
         }
         return true;
@@ -141,7 +141,7 @@ public:
         sync::detail::system_time_point abs_timeout = sync::detail::system_time_point::now() + sync::detail::time_traits< Duration >::to_sync_unit(t);
         while (!pred())
         {
-            if (this->priv_timed_wait(lock, abs_timeout) != cv_status::no_timeout)
+            if (this->priv_timed_wait(lock, abs_timeout) != sync::cv_status::no_timeout)
                 return pred();
         }
         return true;
@@ -164,7 +164,7 @@ public:
         unit_type abs_timeout = sync::detail::time_traits< TimePoint >::to_sync_unit(abs_time);
         while (!pred())
         {
-            if (this->priv_timed_wait(lock, abs_timeout) != cv_status::no_timeout)
+            if (this->priv_timed_wait(lock, abs_timeout) != sync::cv_status::no_timeout)
                 return pred();
         }
         return true;
@@ -186,7 +186,7 @@ public:
         sync::detail::system_time_point abs_timeout = sync::detail::system_time_point::now() + sync::detail::time_traits< Duration >::to_sync_unit(rel_time);
         while (!pred())
         {
-            if (this->priv_timed_wait(lock, abs_timeout) != cv_status::no_timeout)
+            if (this->priv_timed_wait(lock, abs_timeout) != sync::cv_status::no_timeout)
                 return pred();
         }
         return true;
@@ -201,6 +201,13 @@ public:
     BOOST_DELETED_FUNCTION(condition_variable& operator= (condition_variable const&))
 
 private:
+    void priv_wait(pthread_mutex_t* mtx)
+    {
+        int const res = sync::detail::posix::pthread_cond_wait(&m_cond, mtx);
+        if (res != 0)
+            BOOST_SYNC_DETAIL_THROW(wait_error, (res)("boost::sync::condition_variable::wait failed in pthread_cond_wait"));
+    }
+
     template< typename Mutex >
     sync::cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::system_duration dur)
     {

@@ -17,18 +17,15 @@
 #ifndef BOOST_SYNC_DETAIL_CONDITION_VARIABLES_CONDITION_VARIABLE_WINDOWS_HPP_INCLUDED_
 #define BOOST_SYNC_DETAIL_CONDITION_VARIABLES_CONDITION_VARIABLE_WINDOWS_HPP_INCLUDED_
 
-#include <cstddef>
 #include <boost/assert.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/mpl/and.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/locks/unique_lock_fwd.hpp>
-#include <boost/sync/exceptions/runtime_exception.hpp>
-#include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/traits/is_condition_variable_compatible.hpp>
 #include <boost/sync/detail/time_traits.hpp>
 #include <boost/sync/detail/time_units.hpp>
-#include <boost/sync/detail/throw_exception.hpp>
+#include <boost/sync/detail/condition_variables/basic_condition_variable_windows.hpp>
 #include <boost/sync/condition_variables/cv_status.hpp>
 #include <boost/sync/detail/header.hpp>
 
@@ -45,63 +42,40 @@ BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 class condition_variable
 {
 private:
-    pthread_cond_t m_cond;
+    sync::detail::windows::basic_condition_variable m_cond;
 
 public:
-#if defined(PTHREAD_COND_INITIALIZER)
-#if !defined(BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX)
 #if !defined(BOOST_NO_CXX11_CONSTEXPR)
 #define BOOST_SYNC_DEFINES_CONDITION_VARIABLE_CONSTEXPR_CONSTRUCTOR
 #endif
 
-    BOOST_CONSTEXPR condition_variable() BOOST_NOEXCEPT : m_cond(PTHREAD_COND_INITIALIZER)
+    BOOST_CONSTEXPR condition_variable() BOOST_NOEXCEPT : m_cond()
     {
-    }
-#else
-    condition_variable() BOOST_NOEXCEPT
-    {
-        BOOST_CONSTEXPR_OR_CONST pthread_cond_t temp = PTHREAD_COND_INITIALIZER;
-        m_cond = temp;
-    }
-#endif
-#else // defined(PTHREAD_COND_INITIALIZER)
-    condition_variable()
-    {
-        int const res = pthread_cond_init(&m_cond, NULL);
-        if (res)
-            BOOST_SYNC_DETAIL_THROW(resource_error, (res)("boost::sync::condition_variable constructor failed in pthread_cond_init"));
-    }
-#endif // defined(PTHREAD_COND_INITIALIZER)
-
-    ~condition_variable()
-    {
-        BOOST_VERIFY(::pthread_cond_destroy(&m_cond) == 0);
     }
 
     void notify_one() BOOST_NOEXCEPT
     {
-        BOOST_VERIFY(::pthread_cond_signal(&m_cond) == 0);
+        m_cond.notify_one();
     }
 
     void notify_all() BOOST_NOEXCEPT
     {
-        BOOST_VERIFY(::pthread_cond_broadcast(&m_cond) == 0);
+        m_cond.notify_all();
     }
 
     template< typename Mutex >
     typename enable_if< is_condition_variable_compatible< Mutex >, void >::type wait(unique_lock< Mutex >& lock)
     {
         BOOST_ASSERT(lock.owns_lock());
-        int const res = sync::detail::posix::pthread_cond_wait(&m_cond, lock.mutex()->native_handle());
-        if (res != 0)
-            BOOST_SYNC_DETAIL_THROW(runtime_exception, (res)("boost::sync::condition_variable::wait failed in pthread_cond_wait"));
+        m_cond.wait(lock);
     }
 
     template< typename Mutex, typename Predicate >
     typename enable_if< is_condition_variable_compatible< Mutex >, void >::type wait(unique_lock< Mutex >& lock, Predicate pred)
     {
+        BOOST_ASSERT(lock.owns_lock());
         while (!pred())
-            this->wait(lock);
+            m_cond.wait(lock);
     }
 
     template< typename Mutex, typename Time >
@@ -109,7 +83,7 @@ public:
     timed_wait(unique_lock< Mutex >& lock, Time const& t)
     {
         BOOST_ASSERT(lock.owns_lock());
-        return priv_timed_wait(lock, sync::detail::time_traits< Time >::to_sync_unit(t)) == cv_status::no_timeout;
+        return m_cond.timed_wait(lock, sync::detail::time_traits< Time >::to_sync_unit(t)) == sync::cv_status::no_timeout;
     }
 
     template< typename Mutex, typename TimePoint, typename Predicate >
@@ -121,7 +95,7 @@ public:
         unit_type abs_timeout = sync::detail::time_traits< TimePoint >::to_sync_unit(t);
         while (!pred())
         {
-            if (this->priv_timed_wait(lock, abs_timeout) != cv_status::no_timeout)
+            if (m_cond.timed_wait(lock, abs_timeout) != sync::cv_status::no_timeout)
                 return pred();
         }
         return true;
@@ -135,18 +109,18 @@ public:
         sync::detail::system_time_point abs_timeout = sync::detail::system_time_point::now() + sync::detail::time_traits< Duration >::to_sync_unit(t);
         while (!pred())
         {
-            if (this->priv_timed_wait(lock, abs_timeout) != cv_status::no_timeout)
+            if (m_cond.timed_wait(lock, abs_timeout) != sync::cv_status::no_timeout)
                 return pred();
         }
         return true;
     }
 
     template< typename Mutex, typename TimePoint >
-    typename enable_if< mpl::and_< detail::is_time_tag_of< TimePoint, detail::time_point_tag >, is_condition_variable_compatible< Mutex > >, cv_status >::type
+    typename enable_if< mpl::and_< detail::is_time_tag_of< TimePoint, detail::time_point_tag >, is_condition_variable_compatible< Mutex > >, sync::cv_status >::type
     wait_until(unique_lock< Mutex >& lock, TimePoint const& abs_time)
     {
         BOOST_ASSERT(lock.owns_lock());
-        return priv_timed_wait(lock, sync::detail::time_traits< TimePoint >::to_sync_unit(abs_time));
+        return m_cond.timed_wait(lock, sync::detail::time_traits< TimePoint >::to_sync_unit(abs_time));
     }
 
     template< typename Mutex, typename TimePoint, typename Predicate >
@@ -158,18 +132,18 @@ public:
         unit_type abs_timeout = sync::detail::time_traits< TimePoint >::to_sync_unit(abs_time);
         while (!pred())
         {
-            if (this->priv_timed_wait(lock, abs_timeout) != cv_status::no_timeout)
+            if (m_cond.timed_wait(lock, abs_timeout) != sync::cv_status::no_timeout)
                 return pred();
         }
         return true;
     }
 
     template< typename Mutex, typename Duration >
-    typename enable_if< mpl::and_< detail::is_time_tag_of< Duration, detail::time_duration_tag >, is_condition_variable_compatible< Mutex > >, cv_status >::type
+    typename enable_if< mpl::and_< detail::is_time_tag_of< Duration, detail::time_duration_tag >, is_condition_variable_compatible< Mutex > >, sync::cv_status >::type
     wait_for(unique_lock< Mutex >& lock, Duration const& rel_time)
     {
         BOOST_ASSERT(lock.owns_lock());
-        return priv_timed_wait(lock, sync::detail::time_traits< Duration >::to_sync_unit(rel_time));
+        return m_cond.timed_wait(lock, sync::detail::time_traits< Duration >::to_sync_unit(rel_time));
     }
 
     template< typename Mutex, typename Duration, typename Predicate >
@@ -180,53 +154,14 @@ public:
         sync::detail::system_time_point abs_timeout = sync::detail::system_time_point::now() + sync::detail::time_traits< Duration >::to_sync_unit(rel_time);
         while (!pred())
         {
-            if (this->priv_timed_wait(lock, abs_timeout) != cv_status::no_timeout)
+            if (m_cond.timed_wait(lock, abs_timeout) != sync::cv_status::no_timeout)
                 return pred();
         }
         return true;
     }
 
-    native_handle_type native_handle() BOOST_NOEXCEPT
-    {
-        return &m_cond;
-    }
-
     BOOST_DELETED_FUNCTION(condition_variable(condition_variable const&))
     BOOST_DELETED_FUNCTION(condition_variable& operator= (condition_variable const&))
-
-private:
-    template< typename Mutex >
-    cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::system_duration dur)
-    {
-        return priv_timed_wait(lock, sync::detail::system_time_point::now() + dur);
-    }
-
-    template< typename Mutex >
-    cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::system_time_point const& t)
-    {
-        int const res = sync::detail::posix::pthread_cond_timedwait(&m_cond, lock.mutex()->native_handle(), &t.get());
-        if (res == ETIMEDOUT)
-            return cv_status::timeout;
-        else if (res != 0)
-            BOOST_SYNC_DETAIL_THROW(runtime_exception, (res)("boost::sync::condition_variable timedwait failed in pthread_cond_timedwait"));
-        return cv_status::no_timeout;
-    }
-
-    template< typename Mutex, typename TimePoint >
-    cv_status priv_timed_wait(unique_lock< Mutex >& lock, sync::detail::chrono_time_point< TimePoint > const& t)
-    {
-        typedef TimePoint time_point;
-        typedef typename time_point::clock clock;
-        typedef typename time_point::duration duration;
-        time_point now = clock::now();
-        while (now < t.get())
-        {
-            if (priv_timed_wait(lock, sync::detail::time_traits< duration >::to_sync_unit(t.get() - now)) == cv_status::no_timeout)
-                return cv_status::no_timeout;
-            now = clock::now();
-        }
-        return cv_status::timeout;
-    }
 };
 
 } // namespace posix

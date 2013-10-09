@@ -278,7 +278,7 @@ public:
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
 #include <boost/sync/detail/condition_variables/condition_variable_posix.hpp>
 #elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-//#include <boost/sync/detail/condition_variables/condition_variable_windows.hpp>
+#include <boost/sync/detail/condition_variables/condition_variable_windows.hpp>
 #else
 #error Boost.Sync: Unsupported threading API
 #endif
