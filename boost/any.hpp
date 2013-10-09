@@ -27,6 +27,7 @@
 #include <boost/static_assert.hpp>
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/is_same.hpp>
+#include <boost/type_traits/is_const.hpp>
 
 // See boost/python/type_id.hpp
 // TODO: add BOOST_TYPEID_COMPARE_BY_NAME to config.hpp
@@ -76,7 +77,9 @@ namespace boost
 
         // Perfect forwarding of ValueType
         template<typename ValueType>
-        any(ValueType&& value, typename boost::disable_if<boost::is_same<any&, ValueType> >::type* = 0)
+        any(ValueType&& value
+            , typename boost::disable_if<boost::is_same<any&, ValueType> >::type* = 0 // disable if value has type `any&`
+            , typename boost::disable_if<boost::is_const<ValueType> >::type* = 0) // disable if value has type `const ValueType&&`
           : content(new holder< typename decay<ValueType>::type >(static_cast<ValueType&&>(value)))
         {
         }
