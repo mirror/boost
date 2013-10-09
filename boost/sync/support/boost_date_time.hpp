@@ -43,11 +43,11 @@ struct time_traits< T, typename T::_is_boost_date_time_duration >
         typedef typename T::traits_type traits_type;
         enum
         {
-            conversion_ratio = traits_type::ticks_per_second >= system_duration::subsecond_fraction ?
+            conversion_ratio = static_cast< uint64_t >(traits_type::ticks_per_second) >= system_duration::subsecond_fraction ?
                 traits_type::ticks_per_second / system_duration::subsecond_fraction :
                 system_duration::subsecond_fraction / traits_type::ticks_per_second
         };
-        return system_duration(traits_type::ticks_per_second >= system_duration::subsecond_fraction ?
+        return system_duration(static_cast< uint64_t >(traits_type::ticks_per_second) >= system_duration::subsecond_fraction ?
             dur.ticks() / conversion_ratio : dur.ticks() * conversion_ratio);
     }
 };
