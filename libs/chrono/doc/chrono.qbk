@@ -4257,7 +4257,7 @@ __effects Set the stream's __timezone attribute associated to `ios` with the `tz
 [section:get_time_fmt Non Member Function `get_time_fmt(std::ios_base &)`]
 
         template<typename CharT>
-        std::basic_string<CharT> __get_time_fmt(std::ios_base & ios);
+        std::basic_string<CharT> get_time_fmt(std::ios_base & ios);
                        
 __returns The stream's time format attribute associated to `ios`.
         
@@ -4266,9 +4266,50 @@ __returns The stream's time format attribute associated to `ios`.
 [section:set_time_fmt Non Member Function `set_time_fmt(std::ios_base&, std::basic_string<CharT> const&)`]
 
         template<typename CharT>
-        void __set_time_fmt(std::ios_base& ios, std::basic_string<CharT> const& fmt);
+        void set_time_fmt(std::ios_base& ios, std::basic_string<CharT> const& fmt);
         
 __effects Set the stream's time format attribute associated to `ios` with the `fmt` parameter.
+
+The format is composed of zero or more directives. 
+Each directive is composed of one of the following: 
+
+ * one or more white-space characters (as specified by isspace()); 
+ * an ordinary character (neither '%' nor a white-space character); 
+ * or a conversion specification. 
+
+Each conversion specification is composed of a '%' character followed by a conversion character which specifies the replacement required. 
+The application shall ensure that there is white-space or other non-alphanumeric characters between any two conversion specifications. 
+The following conversion specifications are supported:
+
+[table Format tags
+    [[Format Specifier]        [Description ]  [Example]]
+    [[`%%`]        [Replaced by `%`.]  [.]]
+    [[`%a %A`]        [The day of the week, using the locale's weekday names; either the abbreviated or full name may be specified.]  ["Monday".]]
+    [[`%b %B %h`]        [The month, using the locale's month names; either the abbreviated or full name may be specified.]  ["February".]]
+    [[`%c`]        [Not supported.]  [.]]
+    [[`%d %e`]        [The day of the month `[01,31]`; leading zeros are permitted but not required..]  [.]]
+    [[`%D`]        [The date as `%m/%d/%y`.]  [.]]
+    [[`%F`]        [The date as `%Y/%m/%d`.]  [.]]
+    [[`%H`]        [The hour (24-hour clock) `[00,23]`; leading zeros are permitted but not required.]  [.]]
+    [[`%I`]        [The hour (12-hour clock) `[01,12]`; leading zeros are permitted but not required.]  [.]]
+    [[`%j`]        [The day number of the year `[001,366]`; leading zeros are permitted but not required.]  ["060" => Feb-29.]]
+    [[`%m`]        [The month number `[01,12]`; leading zeros are permitted but not required..]  ["01" => January.]]
+    [[`%M`]        [The minute `[00,59]`; leading zeros are permitted but not required.]  [.]]
+    [[`%n %t`]        [Any white space..]  [.]]
+    [[`%p`]        [Not supported.]  [.]]
+    [[`%r`]        [Not supported.]  [.]]
+    [[`%R`]        [The time as `%H:%M`.]  [.]]
+    [[`%S`]        [The seconds `[00,60]`; leading zeros are permitted but not required.]  [.]]
+    [[`%T`]        [The time as `%H:%M:%S`.]  [.]]
+    [[`%U`]        [Not supported.]  [.]]
+    [[`%w`]        [The weekday as a decimal number `[0,6]`, with 0 representing Sunday; leading zeros are permitted but not required..]  ["0" => Sunday.]]
+    [[`%W`]        [Not supported.]  [.]]
+    [[`%x`]        [The date, using the locale's date format..]  [.]]
+    [[`%X`]        [Not supported.]  [.]]
+    [[`%y`]        [Not supported.]  ["2005".]]
+    [[`%Y`]        [The year, including the century (for example, 1988).]  [.]]
+]
+
         
 [endsect]
 
