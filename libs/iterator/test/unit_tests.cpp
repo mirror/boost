@@ -13,7 +13,6 @@
 
 struct X { int a; };
 
-BOOST_TT_BROKEN_COMPILER_SPEC(X)
 
 struct Xiter : boost::iterator_adaptor<Xiter,X*>
 {

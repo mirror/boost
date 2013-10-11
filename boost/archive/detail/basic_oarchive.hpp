@@ -20,8 +20,6 @@
 #include <boost/config.hpp>
 #include <boost/noncopyable.hpp>
 
-#include <boost/type_traits/broken_compiler_spec.hpp>
-
 // can't use this - much as I'd like to as borland doesn't support it
 // #include <boost/scoped_ptr.hpp>
 
@@ -94,12 +92,6 @@ public:
 } // namespace detail
 } // namespace archive
 } // namespace boost
-
-// required by smart_cast for compilers not implementing 
-// partial template specialization
-BOOST_TT_BROKEN_COMPILER_SPEC(
-    boost::archive::detail::basic_oarchive
-)
 
 #include <boost/archive/detail/abi_suffix.hpp> // pops abi_suffix.hpp pragmas
 

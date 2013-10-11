@@ -11,7 +11,6 @@
 #ifndef BOOST_TT_REMOVE_CV_HPP_INCLUDED
 #define BOOST_TT_REMOVE_CV_HPP_INCLUDED
 
-#include <boost/type_traits/broken_compiler_spec.hpp>
 #include <boost/type_traits/detail/cv_traits_impl.hpp>
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>

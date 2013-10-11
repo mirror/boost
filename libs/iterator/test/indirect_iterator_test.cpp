@@ -53,7 +53,6 @@ template <int I> struct see_val;
 struct my_iterator_tag : public std::random_access_iterator_tag { };
 
 using boost::dummyT;
-BOOST_TT_BROKEN_COMPILER_SPEC(boost::shared_ptr<dummyT>)
     
 typedef std::vector<int> storage;
 typedef std::vector<int*> pointer_ra_container;

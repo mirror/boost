@@ -20,7 +20,6 @@ struct v
     ~v();
 };
 
-BOOST_TT_BROKEN_COMPILER_SPEC(v)
 
 struct value_iterator : boost::iterator<std::input_iterator_tag,v>
 {
@@ -83,8 +82,6 @@ struct constant_lvalue_iterator
     constant_lvalue_iterator operator++(int);
 };
 
-BOOST_TT_BROKEN_COMPILER_SPEC(proxy_iterator<v>::proxy)
-BOOST_TT_BROKEN_COMPILER_SPEC(proxy_iterator<int>::proxy)
 
 int main()
 {

@@ -20,7 +20,6 @@ struct v
     ~v();
 };
 
-BOOST_TT_BROKEN_COMPILER_SPEC(v)
 
 struct value_iterator : boost::iterator<std::input_iterator_tag,v>
 {
@@ -71,7 +70,6 @@ struct proxy_iterator2 : boost::iterator<std::output_iterator_tag,v>
     proxy operator*() const;
 };
 
-BOOST_TT_BROKEN_COMPILER_SPEC(proxy_iterator::proxy)
 
 int main()
 {

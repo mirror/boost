@@ -12,7 +12,6 @@
 #define BOOST_TT_REMOVE_CONST_HPP_INCLUDED
 
 #include <boost/type_traits/is_volatile.hpp>
-#include <boost/type_traits/broken_compiler_spec.hpp>
 #include <boost/type_traits/detail/cv_traits_impl.hpp>
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
