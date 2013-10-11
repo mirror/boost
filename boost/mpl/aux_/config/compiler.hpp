@@ -45,9 +45,6 @@
 #           define BOOST_MPL_CFG_COMPILER_DIR plain
 #       endif
 
-#   elif defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-#       define BOOST_MPL_CFG_COMPILER_DIR no_ctps
-
 #   elif defined(BOOST_MPL_CFG_NO_TEMPLATE_TEMPLATE_PARAMETERS)
 #       define BOOST_MPL_CFG_COMPILER_DIR no_ttp
 

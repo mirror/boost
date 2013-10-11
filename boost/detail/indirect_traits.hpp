@@ -26,9 +26,6 @@
 # include <boost/mpl/not.hpp>
 # include <boost/mpl/aux_/lambda_support.hpp>
 
-#  ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#   include <boost/detail/is_function_ref_tester.hpp>
-#  endif 
 
 namespace boost { namespace detail {
 

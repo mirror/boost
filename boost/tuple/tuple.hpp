@@ -23,16 +23,10 @@ namespace boost { namespace python { class tuple; }}
 #include "boost/config.hpp"
 #include "boost/static_assert.hpp"
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-// The MSVC version
-#include "boost/tuple/detail/tuple_basic_no_partial_spec.hpp"
-
-#else
 // other compilers
 #include "boost/ref.hpp"
 #include "boost/tuple/detail/tuple_basic.hpp"
 
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 namespace boost {    
 

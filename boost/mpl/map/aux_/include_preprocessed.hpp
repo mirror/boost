@@ -23,8 +23,6 @@
 
 #if defined(BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES)
 #   define AUX778076_INCLUDE_DIR typeof_based
-#elif defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-#   define AUX778076_INCLUDE_DIR no_ctps
 #else
 #   define AUX778076_INCLUDE_DIR plain
 #endif
