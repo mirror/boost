@@ -23,9 +23,6 @@
 # define BOOST_PROTO_FUSION_V2
 #endif
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-# error Sorry, xpressive requires a compiler that supports partial template specialization.
-#endif
 
 #if defined(BOOST_NO_STD_LOCALE) & !defined(BOOST_XPRESSIVE_USE_C_TRAITS)
 # define BOOST_XPRESSIVE_USE_C_TRAITS

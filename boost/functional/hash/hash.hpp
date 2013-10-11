@@ -19,9 +19,6 @@
 #include <boost/type_traits/is_integral.hpp>
 #include <boost/utility/enable_if.hpp>
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-#include <boost/type_traits/is_pointer.hpp>
-#endif
 
 #if !defined(BOOST_NO_CXX11_HDR_TYPEINDEX)
 #include <typeindex>

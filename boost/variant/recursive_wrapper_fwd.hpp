@@ -16,12 +16,6 @@
 #define BOOST_VARIANT_RECURSIVE_WRAPPER_FWD_HPP
 
 #include "boost/mpl/aux_/config/ctps.hpp"
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-#   include "boost/mpl/eval_if.hpp"
-#   include "boost/mpl/bool.hpp"
-#   include "boost/mpl/identity.hpp"
-#   include "boost/type.hpp"
-#endif
 
 #include "boost/mpl/aux_/lambda_support.hpp"
 

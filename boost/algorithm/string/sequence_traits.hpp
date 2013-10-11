@@ -36,47 +36,6 @@ namespace boost {
 
 //  sequence traits  -----------------------------------------------//
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-        //! Native replace tester
-        /*!
-            Declare an override of this tester function with return
-            type boost::string_algo::yes_type for a sequence with this property.
-
-            \return yes_type if the container has basic_string like native replace
-            method.
-        */
-        no_type has_native_replace_tester(...);
-
-        //! Stable iterators tester
-        /*!
-            Declare an override of this tester function with return
-            type boost::string_algo::yes_type for a sequence with this property.
-
-            \return yes_type if the sequence's insert/replace/erase methods do not invalidate
-            existing iterators.
-        */
-        no_type has_stable_iterators_tester(...);
-
-        //! const time insert tester
-        /*!
-            Declare an override of this tester function with return
-            type boost::string_algo::yes_type for a sequence with this property.
-
-            \return yes_type if the sequence's insert method is working in constant time
-        */
-        no_type has_const_time_insert_tester(...);
-
-        //! const time erase tester
-        /*!
-            Declare an override of this tester function with return
-            type boost::string_algo::yes_type for a sequence with this property.
-
-            \return yes_type if the sequence's erase method is working in constant time
-        */
-        no_type has_const_time_erase_tester(...);
-
-#endif //BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
         //! Native replace trait
         /*!

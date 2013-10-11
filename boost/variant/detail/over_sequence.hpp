@@ -16,12 +16,6 @@
 #define BOOST_VARIANT_DETAIL_OVER_SEQUENCE_HPP
 
 #include "boost/mpl/aux_/config/ctps.hpp"
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-#   include "boost/mpl/eval_if.hpp"
-#   include "boost/mpl/bool.hpp"
-#   include "boost/mpl/identity.hpp"
-#   include "boost/type.hpp"
-#endif
 
 
 namespace boost {

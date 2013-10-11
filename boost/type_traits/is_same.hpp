@@ -22,11 +22,6 @@
 #define BOOST_TT_IS_SAME_HPP_INCLUDED
 
 #include <boost/type_traits/config.hpp>
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#include <boost/type_traits/detail/yes_no_type.hpp>
-#include <boost/type_traits/detail/ice_and.hpp>
-#include <boost/type_traits/is_reference.hpp>
-#endif
 // should be the last #include
 #include <boost/type_traits/detail/bool_trait_def.hpp>
 

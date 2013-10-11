@@ -11,9 +11,6 @@
 
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#include <boost/type_traits/broken_compiler_spec.hpp>
-#endif
 
 #if defined(BOOST_MSVC)
 #include <boost/type_traits/remove_cv.hpp>

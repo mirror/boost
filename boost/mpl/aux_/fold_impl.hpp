@@ -19,10 +19,6 @@
 #   include <boost/mpl/apply.hpp>
 #   include <boost/mpl/deref.hpp>
 #   include <boost/mpl/aux_/config/ctps.hpp>
-#   if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-#       include <boost/mpl/if.hpp>
-#       include <boost/type_traits/is_same.hpp>
-#   endif
 #endif
 
 #include <boost/mpl/aux_/config/use_preprocessed.hpp>

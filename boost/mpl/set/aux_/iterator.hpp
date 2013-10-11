@@ -44,9 +44,6 @@ template< typename Set, typename Tail > struct s_iter_impl
     typedef forward_iterator_tag        category;
     typedef typename Tail::item_type_   type;
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-    typedef typename s_iter_get< Set,typename Tail::base >::type next;
-#endif
 };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)

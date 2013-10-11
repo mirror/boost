@@ -41,16 +41,6 @@ struct v_iter
     typedef Vector vector_;
     typedef mpl::long_<n_> pos;
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-    enum { 
-          next_ = n_ + 1
-        , prior_ = n_ - 1
-        , pos_ = n_
-    };
-    
-    typedef v_iter<Vector,next_> next;
-    typedef v_iter<Vector,prior_> prior;
-#endif
 
 };
 

@@ -33,10 +33,6 @@ template< typename N > struct r_iter
     typedef random_access_iterator_tag category;
     typedef N type;
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-    typedef r_iter< typename mpl::next<N>::type > next;
-    typedef r_iter< typename mpl::prior<N>::type > prior;
-#endif
 };
 
 #if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)

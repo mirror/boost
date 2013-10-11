@@ -163,47 +163,6 @@ struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser);
 #include BOOST_PP_ITERATE()
 
 // real C++ version is already taken care of
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-namespace aux {
-// ???_count_args
-#define AUX778076_COUNT_ARGS_PREFIX         AUX778076_SEQUENCE_NAME
-#define AUX778076_COUNT_ARGS_DEFAULT        AUX778076_SEQUENCE_DEFAULT
-#define AUX778076_COUNT_ARGS_PARAM_NAME     AUX778076_SEQUENCE_PARAM_NAME
-#define AUX778076_COUNT_ARGS_TEMPLATE_PARAM AUX778076_SEQUENCE_TEMPLATE_PARAM
-#define AUX778076_COUNT_ARGS_ARITY          AUX778076_SEQUENCE_LIMIT
-#define AUX778076_COUNT_ARGS_USE_STANDARD_PP_PRIMITIVES
-#include <boost/mpl/aux_/count_args.hpp>
-
-template<
-      AUX778076_SEQUENCE_PARAMS()
-    >
-struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_impl)
-{
-    typedef aux::BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_count_args)<
-          BOOST_PP_ENUM_PARAMS(AUX778076_SEQUENCE_LIMIT, AUX778076_SEQUENCE_PARAM_NAME)
-        > arg_num_;
-    
-    typedef typename aux::BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser)< arg_num_::value >
-        ::template result_< AUX778076_SEQUENCE_ARGS() >::type type;
-};
-
-} // namespace aux
-
-template<
-      AUX778076_SEQUENCE_DEFAULT_PARAMS()
-    >
-struct AUX778076_SEQUENCE_NAME
-    : aux::BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_impl)<
-          AUX778076_SEQUENCE_ARGS()
-        >::type
-{
-    typedef typename aux::BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_impl)<
-          AUX778076_SEQUENCE_ARGS()
-        >::type type;
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #   undef AUX778076_SEQUENCE_N_PARTIAL_SPEC_ARGS
 #   undef AUX778076_SEQUENCE_N_ARGS

@@ -94,28 +94,6 @@ namespace boost { namespace mpl {
 #include BOOST_PP_ITERATE()
 
 // real C++ version is already taken care of
-#   if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-namespace aux {
-// apply_count_args
-#define AUX778076_COUNT_ARGS_PREFIX apply
-#define AUX778076_COUNT_ARGS_DEFAULT na
-#define AUX778076_COUNT_ARGS_ARITY BOOST_MPL_LIMIT_METAFUNCTION_ARITY
-#include <boost/mpl/aux_/count_args.hpp>
-}
-
-
-template<
-      typename F, AUX778076_APPLY_DEF_PARAMS(typename T, na)
-    >
-struct apply
-    : aux::apply_chooser< 
-          aux::apply_count_args< AUX778076_APPLY_PARAMS(T) >::value
-        >::template result_< F, AUX778076_APPLY_PARAMS(T) >::type
-{
-};
-
-#   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #   undef AUX778076_APPLY_N_SPEC_PARAMS
 #   undef AUX778076_APPLY_N_PARTIAL_SPEC_PARAMS
