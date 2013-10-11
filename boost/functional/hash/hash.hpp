@@ -405,7 +405,6 @@ namespace boost
 
 // Specializing boost::hash for pointers.
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
     template <class T>
     struct hash<T*>
@@ -424,48 +423,6 @@ namespace boost
         }
     };
 
-#else
-
-    // For compilers without partial specialization, we define a
-    // boost::hash for all remaining types. But hash_impl is only defined
-    // for pointers in 'extensions.hpp' - so when BOOST_HASH_NO_EXTENSIONS
-    // is defined there will still be a compile error for types not supported
-    // in the standard.
-
-    namespace hash_detail
-    {
-        template <bool IsPointer>
-        struct hash_impl;
-
-        template <>
-        struct hash_impl<true>
-        {
-            template <class T>
-            struct inner
-                : public std::unary_function<T, std::size_t>
-            {
-                std::size_t operator()(T val) const
-                {
-#if !BOOST_WORKAROUND(__SUNPRO_CC, <= 590)
-                    return boost::hash_value(val);
-#else
-                    std::size_t x = static_cast<std::size_t>(
-                        reinterpret_cast<std::ptrdiff_t>(val));
-
-                    return x + (x >> 3);
-#endif
-                }
-            };
-        };
-    }
-
-    template <class T> struct hash
-        : public boost::hash_detail::hash_impl<boost::is_pointer<T>::value>
-            ::BOOST_NESTED_TEMPLATE inner<T>
-    {
-    };
-
-#endif
 }
 
 #if defined(BOOST_MSVC)

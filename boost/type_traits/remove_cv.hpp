@@ -23,7 +23,6 @@
 
 namespace boost {
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 namespace detail{
 
@@ -57,21 +56,6 @@ BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_cv,T vol
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_cv,T const volatile[N],T type[N])
 #endif
 
-#else
-
-namespace detail {
-template <typename T>
-struct remove_cv_impl
-{
-    typedef typename remove_volatile_impl< 
-          typename remove_const_impl<T>::type
-        >::type type;
-};
-}
-
-BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_cv,T,typename boost::detail::remove_cv_impl<T>::type)
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 } // namespace boost
 

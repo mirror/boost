@@ -45,7 +45,6 @@ struct is_not_na<na>
 {
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template< typename T, typename U > struct if_na
 {
     typedef T type;
@@ -55,28 +54,6 @@ template< typename U > struct if_na<na,U>
 {
     typedef U type;
 };
-#else
-template< typename T > struct if_na_impl
-{
-    template< typename U > struct apply
-    {
-        typedef T type;
-    };
-};
-
-template<> struct if_na_impl<na>
-{
-    template< typename U > struct apply
-    {
-        typedef U type;
-    };
-};
-
-template< typename T, typename U > struct if_na
-    : if_na_impl<T>::template apply<U>
-{
-};
-#endif
 
 }}
 

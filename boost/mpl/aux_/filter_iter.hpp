@@ -48,7 +48,6 @@ struct next_filter_iter
     typedef filter_iter<base_iter_,LastIterator,Predicate> type;
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template<
       typename Iterator
@@ -78,58 +77,6 @@ struct filter_iter< LastIterator,LastIterator,Predicate >
     typedef forward_iterator_tag category;
 };
 
-#else
-
-template< bool >
-struct filter_iter_impl
-{
-    template<
-          typename Iterator
-        , typename LastIterator
-        , typename Predicate
-        >
-    struct result_
-    {
-        typedef Iterator base;
-        typedef forward_iterator_tag category;
-        typedef typename next_filter_iter<
-              typename mpl::next<Iterator>::type
-            , LastIterator
-            , Predicate
-            >::type next;
-        
-        typedef typename deref<base>::type type;
-    };
-};
-
-template<>
-struct filter_iter_impl< true >
-{
-    template<
-          typename Iterator
-        , typename LastIterator
-        , typename Predicate
-        >
-    struct result_
-    {
-        typedef Iterator base;
-        typedef forward_iterator_tag category;
-    };
-};
-
-template<
-      typename Iterator
-    , typename LastIterator
-    , typename Predicate
-    >
-struct filter_iter
-    : filter_iter_impl<
-          ::boost::is_same<Iterator,LastIterator>::value
-        >::template result_< Iterator,LastIterator,Predicate >
-{
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 } // namespace aux
 

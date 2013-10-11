@@ -180,7 +180,6 @@ struct member_char_type { typedef typename T::char_type type; };
 
 } // End namespace detail.
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //---------------------------//
 # ifndef BOOST_IOSTREAMS_NO_STREAM_TEMPLATES //-------------------------------//
 
 template<typename T>
@@ -210,25 +209,6 @@ struct char_type_of< iterator_range<Iter> > {
     typedef typename iterator_value<Iter>::type type;
 };
 
-#else // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //------------------//
-
-template<typename T>
-struct char_type_of {
-    template<typename U>
-    struct get_value_type {
-        typedef typename range_value<U>::type type;
-    };
-    typedef typename 
-            mpl::eval_if<
-                is_iterator_range<T>,
-                get_value_type<T>,
-                detail::member_char_type<
-                    BOOST_DEDUCED_TYPENAME detail::unwrapped_type<T>::type
-                >
-            >::type type;
-};
-
-#endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
 
 //------------------Definitions of category_of--------------------------------//
 

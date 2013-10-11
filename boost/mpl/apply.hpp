@@ -134,7 +134,6 @@ struct BOOST_PP_CAT(apply,i_)
 
 
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 #if i_ == BOOST_MPL_LIMIT_METAFUNCTION_ARITY
 /// primary template (not a specialization!)
@@ -155,27 +154,6 @@ struct apply< F AUX778076_APPLY_N_PARTIAL_SPEC_PARAMS(i_, T, na) >
 };
 #endif
 
-#   else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-namespace aux {
-
-template<>
-struct apply_chooser<i_>
-{
-    template<
-          typename F, AUX778076_APPLY_PARAMS(typename T)
-        >
-    struct result_
-    {
-        typedef BOOST_PP_CAT(apply,i_)<
-              F AUX778076_APPLY_N_COMMA_PARAMS(i_, T)
-            > type;
-    };
-};
-
-} // namespace aux
-
-#   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #   undef i_
 

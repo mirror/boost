@@ -46,7 +46,6 @@ template< typename Set, typename Tail > struct s_iter_impl
 
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename Set, typename Tail > 
 struct next< s_iter<Set,Tail> >
@@ -70,25 +69,6 @@ template< typename Set > struct s_iter<Set, set0<> >
     typedef forward_iterator_tag category;
 };
 
-#else
-
-template< typename Set >
-struct s_end_iter
-{
-    typedef forward_iterator_tag    category;
-    typedef s_iter<Set,set0<> >     next;
-};
-
-template< typename Set, typename Tail > struct s_iter
-    : if_< 
-          is_same< Tail,set0<> >
-        , s_end_iter<Set>
-        , s_iter_impl<Set,Tail>
-        >::type
-{
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 }}
 

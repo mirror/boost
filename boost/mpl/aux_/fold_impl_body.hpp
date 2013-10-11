@@ -56,7 +56,6 @@ template<
     > 
 struct AUX778076_FOLD_IMPL_NAME;
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 #   if !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 
@@ -164,124 +163,6 @@ struct AUX778076_FOLD_IMPL_NAME<N,Last,Last,State,ForwardOp >
 
 #   endif // BOOST_WORKAROUND(__BORLANDC__, < 0x600)
  
-#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-template< int N >
-struct AUX778076_FOLD_CHUNK_NAME;
-
-#   define BOOST_PP_ITERATION_PARAMS_1 \
-    (3,(0, BOOST_MPL_LIMIT_UNROLLING, <boost/mpl/aux_/fold_impl_body.hpp>))
-#   include BOOST_PP_ITERATE()
-
-// implementation for N that exceeds BOOST_MPL_LIMIT_UNROLLING
-template< int N > 
-struct AUX778076_FOLD_CHUNK_NAME
-{
-    template<
-          typename First
-        , typename Last
-        , typename State
-        , typename ForwardOp
-        > 
-    struct result_
-    {
-        typedef AUX778076_FOLD_IMPL_NAME<
-              BOOST_MPL_LIMIT_UNROLLING
-            , First
-            , Last
-            , State
-            , ForwardOp
-            > chunk_;
-
-        typedef AUX778076_FOLD_IMPL_NAME<
-              ( (N - BOOST_MPL_LIMIT_UNROLLING) < 0 ? 0 : N - BOOST_MPL_LIMIT_UNROLLING )
-            , typename chunk_::iterator
-            , Last
-            , typename chunk_::state
-            , ForwardOp
-            > res_;
-
-        typedef typename res_::state state;
-        typedef typename res_::iterator iterator;
-    };
-};
-
-// fallback implementation for sequences of unknown size
-template<
-      typename First
-    , typename Last
-    , typename State
-    , typename ForwardOp
-    > 
-struct BOOST_PP_CAT(AUX778076_FOLD_IMPL_NAME_PREFIX,_step);
-
-template<
-      typename Last
-    , typename State
-    >
-struct BOOST_PP_CAT(AUX778076_FOLD_IMPL_NAME_PREFIX,_null_step)
-{
-    typedef Last iterator;
-    typedef State state;
-};
-
-template<> 
-struct AUX778076_FOLD_CHUNK_NAME<-1>
-{
-    template<
-          typename First
-        , typename Last
-        , typename State
-        , typename ForwardOp
-        > 
-    struct result_
-    {
-        typedef typename if_<
-              typename is_same<First,Last>::type
-            , BOOST_PP_CAT(AUX778076_FOLD_IMPL_NAME_PREFIX,_null_step)<Last,State>
-            , BOOST_PP_CAT(AUX778076_FOLD_IMPL_NAME_PREFIX,_step)<First,Last,State,ForwardOp>
-            >::type res_;
-
-        typedef typename res_::state state;
-        typedef typename res_::iterator iterator;
-    };
-
-};
-
-template<
-      typename First
-    , typename Last
-    , typename State
-    , typename ForwardOp
-    > 
-struct BOOST_PP_CAT(AUX778076_FOLD_IMPL_NAME_PREFIX,_step)
-{
-    // can't inherit here - it breaks MSVC 7.0
-    typedef AUX778076_FOLD_CHUNK_NAME<-1>::template result_<
-          typename mpl::next<First>::type
-        , Last
-        , typename apply2<ForwardOp,State,AUX778076_FOLD_IMPL_OP(First)>::type
-        , ForwardOp
-        > chunk_;
-
-    typedef typename chunk_::state state;
-    typedef typename chunk_::iterator iterator;
-};
-
-template<
-      int N
-    , typename First
-    , typename Last
-    , typename State
-    , typename ForwardOp
-    > 
-struct AUX778076_FOLD_IMPL_NAME
-    : AUX778076_FOLD_CHUNK_NAME<N>
-        ::template result_<First,Last,State,ForwardOp>
-{
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 }}}
 
@@ -298,7 +179,6 @@ struct AUX778076_FOLD_IMPL_NAME
 
 #   define n_ BOOST_PP_FRAME_ITERATION(1)
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template<
       typename First
@@ -317,30 +197,6 @@ struct AUX778076_FOLD_IMPL_NAME<n_,First,Last,State,ForwardOp>
     typedef BOOST_PP_CAT(iter,n_) iterator;
 };
 
-#else
-
-template<> struct AUX778076_FOLD_CHUNK_NAME<n_>
-{
-    template<
-          typename First
-        , typename Last
-        , typename State
-        , typename ForwardOp
-        >
-    struct result_
-    {
-        typedef First iter0;
-        typedef State state0;
-
-        BOOST_MPL_PP_REPEAT(n_, AUX778076_ITER_FOLD_STEP, unused)
-
-        typedef BOOST_PP_CAT(state,n_) state;
-        typedef BOOST_PP_CAT(iter,n_) iterator;
-    };
-
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #   undef n_
 

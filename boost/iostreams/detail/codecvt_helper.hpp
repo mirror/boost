@@ -162,7 +162,6 @@ protected:
 #if defined(BOOST_IOSTREAMS_NO_PRIMARY_CODECVT_DEFINITION) || \
     defined(BOOST_IOSTREAMS_EMPTY_PRIMARY_CODECVT_DEFINITION) \
     /**/
-# ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 #  define BOOST_IOSTREAMS_CODECVT_SPEC(state) \
     namespace std { \
         template<typename Intern, typename Extern> \
@@ -183,28 +182,6 @@ protected:
         std::locale::id codecvt<Intern, Extern, state>::id; \
     } \
     /**/
-# else
-#  define BOOST_IOSTREAMS_CODECVT_SPEC(state) \
-    namespace std { \
-        template<> \
-        class codecvt<wchar_t, char, state> \
-            : public ::boost::iostreams::detail::codecvt_impl< \
-                         wchar_t, char, state \
-                     > \
-        { \
-        public: \
-            codecvt(std::size_t refs = 0) \
-                : ::boost::iostreams::detail::codecvt_impl< \
-                      wchar_t, char, state \
-                  >(refs) \
-                { } \
-            static std::locale::id id; \
-        }; \
-        template<> \
-        std::locale::id codecvt<wchar_t, char, state>::id; \
-    } \
-    /**/
-# endif
 #else
 # define BOOST_IOSTREAMS_CODECVT_SPEC(state)
 #endif // no primary codecvt definition, or empty definition.

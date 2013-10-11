@@ -45,7 +45,6 @@ struct v_iter
 };
 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template<
       typename Vector
@@ -88,31 +87,6 @@ struct distance< v_iter<Vector,n_>, v_iter<Vector,m_> >
 {
 };
 
-#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-template<> struct advance_impl<aux::v_iter_tag>
-{
-    template< typename Iterator, typename N > struct apply
-    {
-        enum { pos_ = Iterator::pos_, n_ = N::value };
-        typedef v_iter<
-              typename Iterator::vector_
-            , (pos_ + n_)
-            > type;
-    };
-};
-
-template<> struct distance_impl<aux::v_iter_tag>
-{
-    template< typename Iter1, typename Iter2 > struct apply
-    {
-        enum { pos1_ = Iter1::pos_, pos2_ = Iter2::pos_ };
-        typedef long_<( pos2_ - pos1_ )> type;
-        BOOST_STATIC_CONSTANT(long, value = ( pos2_ - pos1_ ));
-    };
-};
-
-#endif
 
 }}
 

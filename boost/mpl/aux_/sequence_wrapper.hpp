@@ -145,18 +145,11 @@ namespace boost { namespace mpl {
 #endif // AUX778076_SEQUENCE_INTEGRAL_WRAPPER
 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 // forward declaration
 template<
       AUX778076_SEQUENCE_DEFAULT_PARAMS()
     >
 struct AUX778076_SEQUENCE_NAME;
-#else
-namespace aux {
-template< int N > 
-struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser);
-}
-#endif
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(0, AUX778076_SEQUENCE_LIMIT, <boost/mpl/aux_/sequence_wrapper.hpp>))
@@ -187,7 +180,6 @@ struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser);
 #else
 #define i_ BOOST_PP_FRAME_ITERATION(1)
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 #if i_ == AUX778076_SEQUENCE_LIMIT
 
@@ -218,33 +210,6 @@ struct AUX778076_SEQUENCE_NAME< AUX778076_SEQUENCE_N_PARTIAL_SPEC_ARGS(i_) >
 
 #endif // i_ == AUX778076_SEQUENCE_LIMIT
 
-#   else
-
-namespace aux {
-
-template<>
-struct BOOST_PP_CAT(AUX778076_SEQUENCE_NAME,_chooser)<i_>
-{
-    template<
-          AUX778076_SEQUENCE_PARAMS()
-        >
-    struct result_
-    {
-#if i_ > 0 || defined(AUX778076_SEQUENCE_INTEGRAL_WRAPPER)
-        typedef typename AUX778076_SEQUENCE_NAME_N(i_)<
-              AUX778076_SEQUENCE_N_ARGS(i_)
-            >::type type;
-#else
-        typedef AUX778076_SEQUENCE_NAME_N(i_)<
-              AUX778076_SEQUENCE_N_ARGS(i_)
-            >::type type;
-#endif
-    };
-};
-
-} // namespace aux
-
-#   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #undef i_
 #endif // BOOST_PP_IS_ITERATING

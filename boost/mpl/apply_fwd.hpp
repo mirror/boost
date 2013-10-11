@@ -57,17 +57,11 @@ namespace boost { namespace mpl {
     BOOST_MPL_PP_PARAMS(n, param) \
     /**/
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 // forward declaration
 template<
       typename F, AUX778076_APPLY_DEF_PARAMS(typename T, na)
     >
 struct apply;
-#else
-namespace aux {
-template< BOOST_AUX_NTTP_DECL(int, arity_) > struct apply_chooser;
-}
-#endif
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(0, BOOST_MPL_LIMIT_METAFUNCTION_ARITY, <boost/mpl/apply_fwd.hpp>))

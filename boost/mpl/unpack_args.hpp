@@ -57,15 +57,8 @@ namespace boost { namespace mpl {
 
 namespace aux {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template< int size, typename F, typename Args >
 struct unpack_args_impl;
-#else
-template< int size > struct unpack_args_impl
-{
-    template< typename F, typename Args > struct apply;
-};
-#endif
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(0, BOOST_MPL_LIMIT_METAFUNCTION_ARITY, <boost/mpl/unpack_args.hpp>))
@@ -80,12 +73,7 @@ struct unpack_args
 {
     template< typename Args > struct apply
 #if !defined(BOOST_MPL_CFG_NO_NESTED_FORWARDING)
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
         : aux::unpack_args_impl< size<Args>::value,F,Args >
-#   else
-        : aux::unpack_args_impl< size<Args>::value >
-            ::template apply< F,Args >
-#   endif
     {
 #else // BOOST_MPL_CFG_NO_NESTED_FORWARDING
     {
@@ -117,7 +105,6 @@ BOOST_MPL_AUX_PASS_THROUGH_LAMBDA_SPEC(1, unpack_args)
 
 #   define i_ BOOST_PP_FRAME_ITERATION(1)
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename F, typename Args >
 struct unpack_args_impl<i_,F,Args>
@@ -128,20 +115,6 @@ struct unpack_args_impl<i_,F,Args>
 {
 };
 
-#else
-
-template<> struct unpack_args_impl<i_>
-{
-    template< typename F, typename Args > struct apply
-        : BOOST_PP_CAT(apply,i_)<
-              F
-            AUX778076_UNPACKED_ARGS(i_, Args)
-            >
-    {
-    };
-};
-
-#endif
 
 #   undef i_
 

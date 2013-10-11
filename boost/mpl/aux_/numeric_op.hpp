@@ -92,7 +92,6 @@ template<> struct AUX778076_OP_IMPL_NAME<na,na>
     };
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template< typename Tag > struct AUX778076_OP_IMPL_NAME<na,Tag>
 {
     template< typename U1, typename U2 > struct apply 
@@ -110,25 +109,6 @@ template< typename Tag > struct AUX778076_OP_IMPL_NAME<Tag,na>
         BOOST_STATIC_CONSTANT(int, value = 0);
     };
 };
-#else
-template<> struct AUX778076_OP_IMPL_NAME<na,integral_c_tag>
-{
-    template< typename U1, typename U2 > struct apply 
-    {
-        typedef apply type;
-        BOOST_STATIC_CONSTANT(int, value = 0);
-    };
-};
-
-template<> struct AUX778076_OP_IMPL_NAME<integral_c_tag,na>
-{
-    template< typename U1, typename U2 > struct apply 
-    {
-        typedef apply type;
-        BOOST_STATIC_CONSTANT(int, value = 0);
-    };
-};
-#endif
 
 
 #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
@@ -147,7 +127,6 @@ template< typename T > struct AUX778076_OP_TAG_NAME
 
 #if AUX778076_OP_ARITY != 2
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 #   define AUX778076_OP_RIGHT_OPERAND(unused, i, N) , BOOST_PP_CAT(N, BOOST_MPL_PP_ADD(i, 2))>
 #   define AUX778076_OP_N_CALLS(i, N) \
@@ -177,44 +156,6 @@ struct AUX778076_OP_NAME
 #   undef AUX778076_OP_N_CALLS
 #   undef AUX778076_OP_RIGHT_OPERAND
 
-#   else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-/// forward declaration
-template< 
-      typename BOOST_MPL_AUX_NA_PARAM(N1)
-    , typename BOOST_MPL_AUX_NA_PARAM(N2)
-    >
-struct BOOST_PP_CAT(AUX778076_OP_NAME,2);
-
-template<
-      typename BOOST_MPL_AUX_NA_PARAM(N1)
-    , typename BOOST_MPL_AUX_NA_PARAM(N2)
-    BOOST_MPL_PP_DEF_PARAMS_TAIL(2, typename N, na)
-    >
-struct AUX778076_OP_NAME
-    : if_<
-          is_na<N3>
-        , BOOST_PP_CAT(AUX778076_OP_NAME,2)<N1,N2>
-        , AUX778076_OP_NAME<
-              BOOST_PP_CAT(AUX778076_OP_NAME,2)<N1,N2>
-            , BOOST_MPL_PP_EXT_PARAMS(3, BOOST_PP_INC(AUX778076_OP_ARITY), N)
-            >
-        >::type
-{
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(
-          AUX778076_OP_ARITY
-        , AUX778076_OP_NAME
-        , ( BOOST_MPL_PP_PARAMS(AUX778076_OP_ARITY, N) )
-        )
-};
-
-template< 
-      typename N1
-    , typename N2
-    >
-struct BOOST_PP_CAT(AUX778076_OP_NAME,2)
-
-#endif
 
 #else // AUX778076_OP_ARITY == 2
 
@@ -233,15 +174,11 @@ struct AUX778076_OP_NAME
 {
 #if AUX778076_OP_ARITY != 2
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(
           AUX778076_OP_ARITY
         , AUX778076_OP_NAME
         , ( BOOST_MPL_PP_PARTIAL_SPEC_PARAMS(2, N, na) )
         )
-#   else
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, BOOST_PP_CAT(AUX778076_OP_NAME,2), (N1, N2))
-#   endif
 
 #else
     BOOST_MPL_AUX_LAMBDA_SUPPORT(2, AUX778076_OP_NAME, (N1, N2))

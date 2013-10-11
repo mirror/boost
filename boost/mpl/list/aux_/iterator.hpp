@@ -24,7 +24,6 @@
 
 namespace boost { namespace mpl {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename Node >
 struct l_iter
@@ -45,18 +44,6 @@ struct next< l_iter<Node> >
     typedef l_iter< typename Node::next > type;
 };
 
-#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-template< typename Node >
-struct l_iter
-{
-    typedef aux::l_iter_tag tag;
-    typedef forward_iterator_tag category;
-    typedef typename Node::item type;
-    typedef l_iter< typename mpl::next<Node>::type > next;
-};
-
-#endif
 
 
 template<> struct l_iter<l_end>

@@ -250,7 +250,6 @@ namespace boost
     //
 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
     template <class T> struct hash
         : std::unary_function<T, std::size_t>
@@ -279,39 +278,6 @@ namespace boost
     };
 #endif
 
-#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-    // On compilers without partial specialization, boost::hash<T>
-    // has already been declared to deal with pointers, so just
-    // need to supply the non-pointer version of hash_impl.
-
-    namespace hash_detail
-    {
-        template <bool IsPointer>
-        struct hash_impl;
-
-        template <>
-        struct hash_impl<false>
-        {
-            template <class T>
-            struct inner
-                : std::unary_function<T, std::size_t>
-            {
-#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-                std::size_t operator()(T const& val) const
-                {
-                    return hash_value(val);
-                }
-#else
-                std::size_t operator()(T const& val) const
-                {
-                    return hash_detail::call_hash<T>::call(val);
-                }
-#endif
-            };
-        };
-    }
-#endif  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 }
 
 #endif

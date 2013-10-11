@@ -60,7 +60,6 @@ namespace boost { namespace mpl {
 //      inherit<her,empty_base,my>::type == struct unspecified : her, my {};
 //      inherit<empty_base,empty_base>::type == empty_base
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< 
       typename BOOST_MPL_AUX_NA_PARAM(T1)
@@ -96,66 +95,6 @@ struct inherit2<empty_base,empty_base>
     BOOST_MPL_AUX_LAMBDA_SUPPORT_SPEC(2, inherit2, (empty_base,empty_base))
 };
 
-#else
-
-namespace aux {
-
-template< bool C1, bool C2 >
-struct inherit2_impl
-{
-    template< typename Derived, typename T1, typename T2 > struct result_ 
-        : T1, T2
-    {
-        typedef Derived type_;
-    };
-};
-
-template<>
-struct inherit2_impl<false,true>
-{
-    template< typename Derived, typename T1, typename T2 > struct result_
-        : T1
-    {
-        typedef T1 type_;
-    };
-};
-
-template<>
-struct inherit2_impl<true,false>
-{
-    template< typename Derived, typename T1, typename T2 > struct result_
-        : T2 
-    {
-        typedef T2 type_;
-    };
-};
-
-template<>
-struct inherit2_impl<true,true>
-{
-    template< typename Derived, typename T1, typename T2 > struct result_
-    {
-        typedef T1 type_;
-    };
-};
-
-} // namespace aux
-
-template< 
-      typename BOOST_MPL_AUX_NA_PARAM(T1)
-    , typename BOOST_MPL_AUX_NA_PARAM(T2)
-    > 
-struct inherit2
-    : aux::inherit2_impl<
-          is_empty_base<T1>::value
-        , is_empty_base<T2>::value
-        >::template result_< inherit2<T1,T2>,T1,T2 >
-{
-    typedef typename inherit2::type_ type;
-    BOOST_MPL_AUX_LAMBDA_SUPPORT(2, inherit2, (T1,T2))
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 BOOST_MPL_AUX_NA_SPEC(2, inherit2)
 

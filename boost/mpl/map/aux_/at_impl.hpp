@@ -79,29 +79,12 @@ struct item_by_order
 
 #else // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename Map, long n > struct m_at
 {
     typedef void_ type;
 };
 
-#   else
-
-template< long n > struct m_at_impl
-{
-    template< typename Map > struct result_
-    {
-        typedef void_ type;
-    };
-};
-
-template< typename Map, long n > struct m_at
-{
-    typedef typename m_at_impl<n>::result_<Map>::type type;
-};
-
-#   endif
 
 
 template<>

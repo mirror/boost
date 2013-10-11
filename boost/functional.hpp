@@ -18,7 +18,6 @@
 
 namespace boost
 {
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     // --------------------------------------------------------------------------
     // The following traits classes allow us to avoid the need for ptr_fun
     // because the types of arguments and the result of a function can be 
@@ -116,31 +115,6 @@ namespace boost
         typedef A1 first_argument_type;
         typedef A2 second_argument_type;
     };
-#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-    // --------------------------------------------------------------------------
-    // If we have no partial specialisation available, decay to a situation
-    // that is no worse than in the Standard, i.e., ptr_fun will be required.
-    // --------------------------------------------------------------------------
-
-    template <class Operation>
-    struct unary_traits
-    {
-        typedef Operation                         function_type;
-        typedef const Operation&                  param_type;
-        typedef typename Operation::result_type   result_type;
-        typedef typename Operation::argument_type argument_type;
-    }; 
-    
-    template <class Operation>
-    struct binary_traits
-    {
-        typedef Operation                                function_type;
-        typedef const Operation &                        param_type;
-        typedef typename Operation::result_type          result_type;
-        typedef typename Operation::first_argument_type  first_argument_type;
-        typedef typename Operation::second_argument_type second_argument_type;
-    };    
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
     
     // --------------------------------------------------------------------------
     // unary_negate, not1

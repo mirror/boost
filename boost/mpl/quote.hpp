@@ -58,7 +58,6 @@
 
 namespace boost { namespace mpl {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename T, bool has_type_ >
 struct quote_impl
@@ -82,25 +81,6 @@ struct quote_impl<T,false>
     typedef T type;
 };
 
-#else // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-template< bool > struct quote_impl
-{
-    template< typename T > struct result_
-        : T
-    {
-    };
-};
-
-template<> struct quote_impl<false>
-{
-    template< typename T > struct result_
-    {
-        typedef T type;
-    };
-};
-
-#endif 
 
 #define BOOST_PP_ITERATION_PARAMS_1 \
     (3,(1, BOOST_MPL_LIMIT_METAFUNCTION_ARITY, <boost/mpl/quote.hpp>))

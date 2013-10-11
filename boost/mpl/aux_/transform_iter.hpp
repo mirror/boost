@@ -26,7 +26,6 @@ namespace boost { namespace mpl {
 
 namespace aux {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template<
       typename Iterator
@@ -55,64 +54,6 @@ struct transform_iter< LastIterator,LastIterator,F >
     typedef forward_iterator_tag category;
 };
 
-#else
-
-template<
-      typename Iterator
-    , typename LastIterator
-    , typename F
-    >
-struct transform_iter;
-
-template< bool >
-struct transform_iter_impl 
-{
-    template<
-          typename Iterator
-        , typename LastIterator
-        , typename F
-        >
-    struct result_
-    {
-        typedef Iterator base;
-        typedef forward_iterator_tag category;
-        typedef transform_iter< typename mpl::next<Iterator>::type,LastIterator,F > next;
-        
-        typedef typename apply1<
-              F
-            , typename deref<Iterator>::type
-            >::type type;
-    };
-};
-
-template<>
-struct transform_iter_impl<true>
-{
-    template<
-          typename Iterator
-        , typename LastIterator
-        , typename F
-        >
-    struct result_
-    {
-        typedef Iterator base;
-        typedef forward_iterator_tag category;
-    };
-};
-
-template<
-      typename Iterator
-    , typename LastIterator
-    , typename F
-    >
-struct transform_iter
-    : transform_iter_impl<
-          ::boost::is_same<Iterator,LastIterator>::value
-        >::template result_< Iterator,LastIterator,F >
-{
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 } // namespace aux
 

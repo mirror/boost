@@ -286,7 +286,6 @@ extract_and_check_delimiter(
 }
 
    
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template<class CharType, class CharTrait, class T1>
 inline  std::basic_istream<CharType, CharTrait> & 
 read (std::basic_istream<CharType, CharTrait> &is, cons<T1, null_type>& t1) {
@@ -295,12 +294,6 @@ read (std::basic_istream<CharType, CharTrait> &is, cons<T1, null_type>& t1) {
    
   return is >> t1.head; 
 }
-#else
-template<class CharType, class CharTrait>
-inline std::basic_istream<CharType, CharTrait>& 
-read(std::basic_istream<CharType, CharTrait>& i, const null_type&) { return i; }
-
-#endif // !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 template<class CharType, class CharTrait, class T1, class T2>
 inline std::basic_istream<CharType, CharTrait>& 

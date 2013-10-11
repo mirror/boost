@@ -23,7 +23,6 @@
 
 namespace boost { namespace mpl {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename T >
 struct is_placeholder
@@ -37,29 +36,6 @@ struct is_placeholder< arg<N> >
 {
 };
 
-#else
-
-namespace aux {
-
-aux::no_tag is_placeholder_helper(...);
-
-template< int N >
-aux::yes_tag is_placeholder_helper(aux::type_wrapper< arg<N> >*);
-
-} // namespace aux
-
-template< typename T >
-struct is_placeholder
-{
-    static aux::type_wrapper<T>* get();
-    BOOST_STATIC_CONSTANT(bool, value = 
-          sizeof(aux::is_placeholder_helper(get())) == sizeof(aux::yes_tag)
-        );
-    
-    typedef bool_<value> type;
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 }}
 

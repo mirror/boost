@@ -894,16 +894,10 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   void save(Archive& ar,const unsigned int version)const
   {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     const serialization::collection_size_type       s(size_());
     const detail::serialization_version<value_type> value_version;
     ar<<serialization::make_nvp("count",s);
     ar<<serialization::make_nvp("value_version",value_version);
-#else
-    const std::size_t  s=size_();
-    const unsigned int value_version=0;
-    ar<<serialization::make_nvp("count",s);
-#endif
 
     index_saver_type sm(bfm_allocator::member,s);
 
@@ -924,7 +918,6 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
     clear_(); 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     serialization::collection_size_type       s;
     detail::serialization_version<value_type> value_version;
     if(version<1){
@@ -941,11 +934,6 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     else{
       ar>>serialization::make_nvp("value_version",value_version);
     }
-#else
-    std::size_t  s;
-    unsigned int value_version=0;
-    ar>>serialization::make_nvp("count",s);
-#endif
 
     index_loader_type lm(bfm_allocator::member,s);
 

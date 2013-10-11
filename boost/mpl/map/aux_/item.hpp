@@ -73,28 +73,10 @@ struct m_mask
 #else // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES
 
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< long n, typename Key, typename T, typename Base >
 struct m_item;
 
-#   else
-
-template< long n >
-struct m_item_impl
-{
-    template< typename Key, typename T, typename Base >
-    struct result_;
-};
-
-template< long n, typename Key, typename T, typename Base >
-struct m_item
-    : m_item_impl<n>::result_<Key,T,Base>
-{
-};
-
-
-#   endif
 
 
 template< typename Key, typename T, typename Base >

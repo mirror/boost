@@ -25,7 +25,6 @@
 
 namespace boost { namespace mpl { 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 namespace aux {
 
@@ -68,49 +67,6 @@ struct distance< aux::sel_iter<T,l1>, aux::sel_iter<T,l2> >
 {
 };
 
-#else
-
-namespace aux {
-
-struct sel_iter_tag;
-
-template< typename T, int is_last_ >
-struct sel_iter
-{
-    enum { pos_ = is_last_ };
-    typedef aux::sel_iter_tag tag;
-    typedef random_access_iterator_tag category;
-
-    typedef sel_iter<T,(is_last_ + 1)> next;
-    typedef sel_iter<T,(is_last_ - 1)> prior;
-    typedef T type;
-};
-
-} // namespace aux
-
-template<> struct advance_impl<aux::sel_iter_tag>
-{
-    template< typename Iterator, typename N > struct apply
-    {
-        enum { pos_ = Iterator::pos_, n_ = N::value };
-        typedef aux::sel_iter<
-              typename Iterator::type
-            , (pos_ + n_)
-            > type;
-    };
-};
-
-template<> struct distance_impl<aux::sel_iter_tag>
-{
-    template< typename Iter1, typename Iter2 > struct apply
-    {
-        enum { pos1_ = Iter1::pos_, pos2_ = Iter2::pos_ };
-        typedef int_<( pos2_ - pos1_ )> type;
-        BOOST_STATIC_CONSTANT(int, value = ( pos2_ - pos1_ ));
-    };
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 }}
 

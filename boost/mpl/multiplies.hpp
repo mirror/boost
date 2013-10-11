@@ -25,11 +25,7 @@
 
 namespace boost { namespace mpl {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 #   define AUX778076_OP_ARITY BOOST_MPL_LIMIT_METAFUNCTION_ARITY
-#else
-#   define AUX778076_OP_ARITY 2
-#endif
 
 template<
       BOOST_MPL_PP_DEFAULT_PARAMS(AUX778076_OP_ARITY, typename N, na)

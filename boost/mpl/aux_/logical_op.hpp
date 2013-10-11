@@ -58,7 +58,6 @@ namespace boost { namespace mpl {
 
 namespace aux {
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< bool C_, AUX778076_PARAMS(typename T, 1) >
 struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)
@@ -85,34 +84,6 @@ struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<
 {
 };
 
-#else
-
-template< bool C_ > struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)
-{
-    template< AUX778076_PARAMS(typename T, 1) > struct result_
-        : BOOST_PP_CAT(AUX778076_OP_VALUE1,_)
-    {
-    };
-};
-
-template<> struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<AUX778076_OP_VALUE2>
-{
-    template< AUX778076_PARAMS(typename T, 1) > struct result_
-        : BOOST_PP_CAT(AUX778076_OP_NAME,impl)< 
-              BOOST_MPL_AUX_NESTED_TYPE_WKND(T1)::value
-            >::template result_< AUX778076_SHIFTED_PARAMS(T,1),BOOST_PP_CAT(AUX778076_OP_VALUE2,_) >
-    {
-    };
-};
-
-template<>
-struct BOOST_PP_CAT(AUX778076_OP_NAME,impl)<AUX778076_OP_VALUE2>
-    ::result_< AUX778076_SPEC_PARAMS(BOOST_PP_CAT(AUX778076_OP_VALUE2,_)) >
-        : BOOST_PP_CAT(AUX778076_OP_VALUE2,_)
-{
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 } // namespace aux
 
@@ -122,16 +93,10 @@ template<
     BOOST_MPL_PP_DEF_PARAMS_TAIL(2, typename T, BOOST_PP_CAT(AUX778076_OP_VALUE2,_))
     >
 struct AUX778076_OP_NAME
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     : aux::BOOST_PP_CAT(AUX778076_OP_NAME,impl)<
           BOOST_MPL_AUX_NESTED_TYPE_WKND(T1)::value
         , AUX778076_SHIFTED_PARAMS(T,0)
         >
-#else
-    : aux::BOOST_PP_CAT(AUX778076_OP_NAME,impl)< 
-          BOOST_MPL_AUX_NESTED_TYPE_WKND(T1)::value
-        >::template result_< AUX778076_SHIFTED_PARAMS(T,0) >
-#endif
 {
     BOOST_MPL_AUX_LAMBDA_SUPPORT(
           BOOST_MPL_LIMIT_METAFUNCTION_ARITY

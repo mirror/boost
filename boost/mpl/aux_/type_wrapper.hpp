@@ -24,7 +24,6 @@ template< typename T > struct type_wrapper
     typedef T type;
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 // agurt 08/may/03: a complicated way to extract the wrapped type; need it 
 // mostly for the sake of GCC (3.2.x), which ICEs if you try to extract the 
 // nested 'type' from 'type_wrapper<T>' when the latter was the result of a
@@ -35,12 +34,6 @@ template< typename T > struct wrapped_type< type_wrapper<T> >
 {
     typedef T type;
 };
-#else
-template< typename W > struct wrapped_type
-{
-    typedef typename W::type type;
-};
-#endif
 
 }}}
 
