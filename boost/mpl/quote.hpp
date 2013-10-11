@@ -112,16 +112,11 @@ struct BOOST_PP_CAT(quote,i_)
             , aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value
             >::type type;
     };
-#elif !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#else
         : quote_impl<
               F< BOOST_MPL_PP_PARAMS(i_, U) >
             , aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value
             >
-    {
-    };
-#else
-        : quote_impl< aux::has_type< F< BOOST_MPL_PP_PARAMS(i_, U) > >::value >
-            ::template result_< F< BOOST_MPL_PP_PARAMS(i_, U) > >
     {
     };
 #endif

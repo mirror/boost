@@ -41,7 +41,7 @@ namespace boost {
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_const,T,__is_const(T))
 
-#elif !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#else
 
 namespace detail{
 //
@@ -80,68 +80,7 @@ BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T& volatile,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_const,T& const volatile,false)
 #endif
 
-#else
-
-namespace detail {
-
-using ::boost::type_traits::yes_type;
-using ::boost::type_traits::no_type;
-
-yes_type is_const_tester(const volatile void*);
-no_type is_const_tester(volatile void *);
-
-template <bool is_ref, bool array>
-struct is_const_helper
-    : public ::boost::type_traits::false_result
-{
-};
-
-template <>
-struct is_const_helper<false,false>
-{
-    template <typename T> struct result_
-    {
-        static T* t;
-        BOOST_STATIC_CONSTANT(bool, value = (
-            sizeof(boost::detail::yes_type) == sizeof(boost::detail::is_const_tester(t))
-            ));
-    };
-};
-
-template <>
-struct is_const_helper<false,true>
-{
-    template <typename T> struct result_
-    {
-        static T t;
-        BOOST_STATIC_CONSTANT(bool, value = (
-            sizeof(boost::detail::yes_type) == sizeof(boost::detail::is_const_tester(&t))
-            ));
-    };
-};
-
-template <typename T>
-struct is_const_impl
-    : public is_const_helper<
-          is_reference<T>::value
-        , is_array<T>::value
-        >::template result_<T>
-{
-};
-
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void const,true)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_const,void const volatile,true)
 #endif
-
-} // namespace detail
-
-//* is a type T  declared const - is_const<T>
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_const,T,::boost::detail::is_const_impl<T>::value)
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 } // namespace boost
 

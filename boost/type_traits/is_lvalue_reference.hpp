@@ -31,7 +31,7 @@ namespace boost {
 
 #if defined( __CODEGEARC__ )
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_lvalue_reference,T,__is_reference(T))
-#elif !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#else
 
 BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_lvalue_reference,T,false)
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T&,true)
@@ -46,51 +46,7 @@ BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T& volati
 BOOST_TT_AUX_BOOL_TRAIT_PARTIAL_SPEC1_1(typename T,is_lvalue_reference,T& const volatile,true)
 #endif
 
-#else
-
-#ifdef BOOST_MSVC
-#   pragma warning(push)
-#   pragma warning(disable: 4181 4097)
 #endif
-
-namespace detail {
-
-using ::boost::type_traits::yes_type;
-using ::boost::type_traits::no_type;
-using ::boost::type_traits::wrap;
-
-template <class T> T&(* is_lvalue_reference_helper1(wrap<T>) )(wrap<T>);
-char is_lvalue_reference_helper1(...);
-
-template <class T> no_type is_lvalue_reference_helper2(T&(*)(wrap<T>));
-yes_type is_lvalue_reference_helper2(...);
-
-template <typename T>
-struct is_lvalue_reference_impl
-{
-    BOOST_STATIC_CONSTANT(
-        bool, value = sizeof(
-            ::boost::detail::is_lvalue_reference_helper2(
-                ::boost::detail::is_lvalue_reference_helper1(::boost::type_traits::wrap<T>()))) == 1
-        );
-};
-
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_lvalue_reference,void,false)
-#ifndef BOOST_NO_CV_VOID_SPECIALIZATIONS
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_lvalue_reference,void const,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_lvalue_reference,void volatile,false)
-BOOST_TT_AUX_BOOL_TRAIT_IMPL_SPEC1(is_lvalue_reference,void const volatile,false)
-#endif
-
-} // namespace detail
-
-BOOST_TT_AUX_BOOL_TRAIT_DEF1(is_lvalue_reference,T,::boost::detail::is_lvalue_reference_impl<T>::value)
-
-#ifdef BOOST_MSVC
-#   pragma warning(pop)
-#endif
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 } // namespace boost
 
