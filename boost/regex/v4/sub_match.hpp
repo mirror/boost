@@ -36,7 +36,7 @@ template <class BidiIterator>
 struct sub_match : public std::pair<BidiIterator, BidiIterator>
 {
    typedef typename re_detail::regex_iterator_traits<BidiIterator>::value_type       value_type;
-#if defined(BOOST_NO_STD_ITERATOR_TRAITS) || defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if defined(BOOST_NO_STD_ITERATOR_TRAITS)
    typedef          std::ptrdiff_t                                                   difference_type;
 #else
    typedef typename re_detail::regex_iterator_traits<BidiIterator>::difference_type  difference_type;

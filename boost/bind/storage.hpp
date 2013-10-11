@@ -49,7 +49,7 @@ template<class A1> struct storage1
     A1 a1_;
 };
 
-#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION ) && !defined( __BORLANDC__ )
+#if !defined( __BORLANDC__ )
 
 template<int I> struct storage1< boost::arg<I> >
 {

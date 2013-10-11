@@ -24,7 +24,7 @@
 #include <boost/type_traits/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
+#if !BOOST_WORKAROUND(__BORLANDC__, < 0x600)
 #   include <boost/type_traits/is_member_function_pointer.hpp>
 #else
 #   include <boost/type_traits/is_reference.hpp>

@@ -17,7 +17,7 @@
 #include "boost/variant/detail/generic_result_type.hpp"
 #include "boost/assert.hpp"
 
-#if !defined(BOOST_MSVC) && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_MSVC)
 #   include "boost/type_traits/remove_reference.hpp"
 #endif
 
@@ -32,7 +32,6 @@ namespace detail { namespace variant {
 //
 
 #if !defined(BOOST_MSVC)                                \
- && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)  \
  && !defined(BOOST_NO_VOID_RETURNS)
 
 // "standard" implementation:

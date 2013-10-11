@@ -226,7 +226,7 @@ inline void sp_enable_shared_from_this( ... )
 
 #endif // _MANAGED
 
-#if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION ) && !defined( BOOST_NO_AUTO_PTR )
+#if !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_AUTO_PTR )
 
 // rvalue auto_ptr support based on a technique by Dave Abrahams
 

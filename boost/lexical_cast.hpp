@@ -135,7 +135,7 @@ namespace boost
     }
 } // namespace boost
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(__SUNPRO_CC) && !defined(__PGIC__)
+#if !defined(__SUNPRO_CC) && !defined(__PGIC__)
 
 #include <cmath>
 #include <istream>
@@ -2322,7 +2322,7 @@ namespace boost {
 
 } // namespace boost
 
-#else // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#else
 
 namespace boost {
     namespace detail

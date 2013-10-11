@@ -20,7 +20,7 @@ namespace boost {
 
 BOOST_TT_AUX_TYPE_TRAIT_DEF1(remove_all_extents,T,T)
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
+#if !defined(BOOST_NO_ARRAY_TYPE_SPECIALIZATIONS)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_all_extents,T[N],typename boost::remove_all_extents<T>::type type)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_all_extents,T const[N],typename boost::remove_all_extents<T const>::type type)
 BOOST_TT_AUX_TYPE_TRAIT_PARTIAL_SPEC1_2(typename T,std::size_t N,remove_all_extents,T volatile[N],typename boost::remove_all_extents<T volatile>::type type)

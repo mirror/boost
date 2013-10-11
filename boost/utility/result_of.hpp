@@ -68,7 +68,7 @@ namespace boost {
 template<typename F> struct result_of;
 template<typename F> struct tr1_result_of; // a TR1-style implementation of result_of
 
-#if !defined(BOOST_NO_SFINAE) && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_NO_SFINAE)
 namespace detail {
 
 BOOST_MPL_HAS_XXX_TRAIT_DEF(result_type)

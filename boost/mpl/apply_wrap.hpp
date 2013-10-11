@@ -122,7 +122,7 @@ struct BOOST_PP_CAT(apply_wrap,i_)
 {
 };
 
-#if i_ == 0 && !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if i_ == 0
 template< typename F >
 struct BOOST_PP_CAT(apply_wrap,i_)<F,true_>
     : F::apply

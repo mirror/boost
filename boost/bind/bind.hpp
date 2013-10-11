@@ -60,7 +60,7 @@ template<class R, class F> struct result_traits
     typedef R type;
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
 struct unspecified {};
 
@@ -1432,7 +1432,7 @@ template<class R, class F, class A1, class A2, class A3, class A4, class A5, cla
     return _bi::bind_t<R, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
 }
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#if !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
 // adaptable function objects
 
@@ -1516,7 +1516,7 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
     return _bi::bind_t<_bi::unspecified, F, list_type>(f, list_type(a1, a2, a3, a4, a5, a6, a7, a8, a9));
 }
 
-#endif // !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
+#endif // !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
 
 // function pointers
 
