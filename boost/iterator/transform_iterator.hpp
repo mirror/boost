@@ -148,16 +148,6 @@ namespace boost
   {
       return transform_iterator<UnaryFunc, Iterator>(it, UnaryFunc());
   }
-
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION ) && !defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)
-  template <class Return, class Argument, class Iterator>
-  transform_iterator< Return (*)(Argument), Iterator, Return>
-  make_transform_iterator(Iterator it, Return (*fun)(Argument))
-  {
-    return transform_iterator<Return (*)(Argument), Iterator, Return>(it, fun);
-  }
-#endif
-
 } // namespace boost
 
 #include <boost/iterator/detail/config_undef.hpp>

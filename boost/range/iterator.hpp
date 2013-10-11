@@ -67,6 +67,4 @@ namespace boost
     
 } // namespace boost
 
-//#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
 #endif

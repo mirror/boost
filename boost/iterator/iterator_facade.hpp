@@ -101,10 +101,7 @@ namespace boost
           , add_pointer<value_type>
         >::type pointer;
 
-# if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)                          \
-    && (BOOST_WORKAROUND(_STLPORT_VERSION, BOOST_TESTED_AT(0x452))              \
-        || BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, BOOST_TESTED_AT(310)))     \
-    || BOOST_WORKAROUND(BOOST_RWSTD_VER, BOOST_TESTED_AT(0x20101))              \
+# if BOOST_WORKAROUND(BOOST_RWSTD_VER, BOOST_TESTED_AT(0x20101))              \
     || BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, <= 310)
 
         // To interoperate with some broken library/compiler

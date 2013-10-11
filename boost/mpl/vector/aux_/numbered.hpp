@@ -125,8 +125,7 @@ struct pop_back_impl< aux::vector_tag<i_> >
 
 #   endif // i_ > 0
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-    && !defined(BOOST_MPL_CFG_NO_NONTYPE_TEMPLATE_PARTIAL_SPEC)
+#   if !defined(BOOST_MPL_CFG_NO_NONTYPE_TEMPLATE_PARTIAL_SPEC)
 
 template< typename V >
 struct v_at<V,i_>
@@ -209,7 +208,7 @@ struct clear_impl< aux::vector_tag<i_> >
     };
 };
 
-#   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#   endif // BOOST_MPL_CFG_NO_NONTYPE_TEMPLATE_PARTIAL_SPEC
 
 #endif // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES
 

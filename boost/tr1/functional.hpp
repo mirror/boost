@@ -37,8 +37,7 @@ namespace std{ namespace tr1{
 #endif  // BOOST_HAS_TR1_REFERENCE_WRAPPER
 
 #if !defined(BOOST_HAS_TR1_RESULT_OF)\
-   && !defined(BOOST_NO_SFINAE) && \
-   !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+   && !defined(BOOST_NO_SFINAE)
 
 //
 // we can only actually include result_of.hpp if the compiler

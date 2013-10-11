@@ -55,8 +55,7 @@ struct at_impl< aux::vector_tag >
 
 #else
 
-#   if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-    && !defined(BOOST_MPL_CFG_NO_NONTYPE_TEMPLATE_PARTIAL_SPEC)
+#   if !defined(BOOST_MPL_CFG_NO_NONTYPE_TEMPLATE_PARTIAL_SPEC)
 
 template< typename Vector, long n_ > struct v_at;
 
@@ -106,7 +105,7 @@ struct v_at
 {
 };
 
-#   endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#   endif // BOOST_MPL_CFG_NO_NONTYPE_TEMPLATE_PARTIAL_SPEC
 
 #endif // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES
 

@@ -18,10 +18,6 @@
 #include <boost/range/config.hpp>
 #include <boost/range/iterator.hpp>
 
-//#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-//#include <boost/range/detail/value_type.hpp>
-//#else
-
 #include <boost/iterator/iterator_traits.hpp>
 
 namespace boost

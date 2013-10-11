@@ -452,7 +452,7 @@ public:
         boost::detail::sp_deleter_construct( this, tmp );
     }
 
-#elif !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+#elif !defined( BOOST_NO_SFINAE )
 
     template<class Ap>
     explicit shared_ptr( Ap r, typename boost::detail::sp_enable_if_auto_ptr<Ap, int>::type = 0 ): px( r.get() ), pn()
@@ -467,7 +467,7 @@ public:
         boost::detail::sp_deleter_construct( this, tmp );
     }
 
-#endif // BOOST_NO_SFINAE, BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#endif // BOOST_NO_SFINAE
 
 #endif // BOOST_NO_AUTO_PTR
 
@@ -523,7 +523,7 @@ public:
         return *this;
     }
 
-#elif !defined( BOOST_NO_SFINAE ) && !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
+#elif !defined( BOOST_NO_SFINAE )
 
     template<class Ap>
     typename boost::detail::sp_enable_if_auto_ptr< Ap, shared_ptr & >::type operator=( Ap r )
@@ -532,7 +532,7 @@ public:
         return *this;
     }
 
-#endif // BOOST_NO_SFINAE, BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
+#endif // BOOST_NO_SFINAE
 
 #endif // BOOST_NO_AUTO_PTR
 

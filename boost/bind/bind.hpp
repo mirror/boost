@@ -980,8 +980,6 @@ namespace _bi
 
 // add_value
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || (__SUNPRO_CC >= 0x530)
-
 #if defined( __BORLANDC__ ) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT(0x582) )
 
 template<class T> struct add_value
@@ -1032,45 +1030,6 @@ template<class R, class F, class L> struct add_value< bind_t<R, F, L> >
 {
     typedef bind_t<R, F, L> type;
 };
-
-#else
-
-template<int I> struct _avt_0;
-
-template<> struct _avt_0<1>
-{
-    template<class T> struct inner
-    {
-        typedef T type;
-    };
-};
-
-template<> struct _avt_0<2>
-{
-    template<class T> struct inner
-    {
-        typedef value<T> type;
-    };
-};
-
-typedef char (&_avt_r1) [1];
-typedef char (&_avt_r2) [2];
-
-template<class T> _avt_r1 _avt_f(value<T>);
-template<class T> _avt_r1 _avt_f(reference_wrapper<T>);
-template<int I> _avt_r1 _avt_f(arg<I>);
-template<int I> _avt_r1 _avt_f(arg<I> (*) ());
-template<class R, class F, class L> _avt_r1 _avt_f(bind_t<R, F, L>);
-
-_avt_r2 _avt_f(...);
-
-template<class T> struct add_value
-{
-    static T t();
-    typedef typename _avt_0<sizeof(_avt_f(t()))>::template inner<T>::type type;
-};
-
-#endif
 
 // list_av_N
 
@@ -1616,7 +1575,7 @@ template<class F, class A1, class A2, class A3, class A4, class A5, class A6, cl
 
 // data member pointers
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) || defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) \
+#if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING) \
     || ( defined(__BORLANDC__) && BOOST_WORKAROUND( __BORLANDC__, BOOST_TESTED_AT( 0x620 ) ) )
 
 template<class R, class T, class A1>

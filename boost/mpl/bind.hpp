@@ -174,8 +174,7 @@ struct resolve_bind_arg< bind<F,AUX778076_BIND_PARAMS(T)>,AUX778076_BIND_PARAMS(
     (3,(0, BOOST_MPL_LIMIT_METAFUNCTION_ARITY, <boost/mpl/bind.hpp>))
 #include BOOST_PP_ITERATE()
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-    && !defined(BOOST_MPL_CFG_NO_TEMPLATE_TEMPLATE_PARAMETERS)
+#if !defined(BOOST_MPL_CFG_NO_TEMPLATE_TEMPLATE_PARAMETERS)
 /// if_/eval_if specializations
 #   define AUX778076_SPEC_NAME if_
 #   define BOOST_PP_ITERATION_PARAMS_1 (3,(3, 3, <boost/mpl/bind.hpp>))
@@ -187,42 +186,6 @@ struct resolve_bind_arg< bind<F,AUX778076_BIND_PARAMS(T)>,AUX778076_BIND_PARAMS(
 #   include BOOST_PP_ITERATE()
 #endif
 #endif
-
-// real C++ version is already taken care of
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-    && !defined(BOOST_MPL_CFG_NO_BIND_TEMPLATE)
-
-namespace aux {
-// apply_count_args
-#define AUX778076_COUNT_ARGS_PREFIX bind
-#define AUX778076_COUNT_ARGS_DEFAULT na
-#define AUX778076_COUNT_ARGS_ARITY BOOST_MPL_LIMIT_METAFUNCTION_ARITY
-#include <boost/mpl/aux_/count_args.hpp>
-}
-
-// bind
-template<
-      typename F, AUX778076_BIND_PARAMS(typename T) AUX778076_DMC_PARAM()
-    >
-struct bind
-    : aux::bind_chooser<
-          aux::bind_count_args<AUX778076_BIND_PARAMS(T)>::value
-        >::template result_< F,AUX778076_BIND_PARAMS(T) >::type
-{
-};
-
-BOOST_MPL_AUX_ARITY_SPEC(
-      BOOST_PP_INC(BOOST_MPL_LIMIT_METAFUNCTION_ARITY)
-    , bind
-    )
-
-BOOST_MPL_AUX_TEMPLATE_ARITY_SPEC(
-      BOOST_PP_INC(BOOST_MPL_LIMIT_METAFUNCTION_ARITY)
-    , bind
-    )
-
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #   undef AUX778076_BIND_NESTED_DEFAULT_PARAMS
 #   undef AUX778076_BIND_N_SPEC_PARAMS

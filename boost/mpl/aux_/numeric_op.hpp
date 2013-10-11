@@ -110,20 +110,10 @@ template< typename Tag > struct AUX778076_OP_IMPL_NAME<Tag,na>
     };
 };
 
-
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) \
-    && defined(BOOST_MSVC)
-template< typename T > struct AUX778076_OP_TAG_NAME
-    : tag<T,na>
-{
-};
-#else
 template< typename T > struct AUX778076_OP_TAG_NAME
 {
     typedef typename T::tag type;
 };
-#endif
-
 
 #if AUX778076_OP_ARITY != 2
 

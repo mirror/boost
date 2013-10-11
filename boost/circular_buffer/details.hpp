@@ -423,24 +423,6 @@ operator + (typename Traits::difference_type n, const iterator<Buff, Traits>& it
     return it + n;
 }
 
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
-
-//! Iterator category.
-template <class Buff, class Traits>
-inline std::random_access_iterator_tag iterator_category(const iterator<Buff, Traits>&) {
-    return std::random_access_iterator_tag();
-}
-
-//! The type of the elements stored in the circular buffer.
-template <class Buff, class Traits>
-inline typename Traits::value_type* value_type(const iterator<Buff, Traits>&) { return 0; }
-
-//! Distance type.
-template <class Buff, class Traits>
-inline typename Traits::difference_type* distance_type(const iterator<Buff, Traits>&) { return 0; }
-
-#endif // #if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION) && !defined(BOOST_MSVC_STD_ITERATOR)
-
 /*!
     \fn ForwardIterator uninitialized_copy(InputIterator first, InputIterator last, ForwardIterator dest)
     \brief Equivalent of <code>std::uninitialized_copy</code> but with explicit specification of value type.
