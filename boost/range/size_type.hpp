@@ -18,9 +18,6 @@
 #include <boost/range/config.hpp>
 #include <boost/range/difference_type.hpp>
 #include <boost/range/concepts.hpp>
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-#include <boost/range/detail/size_type.hpp>
-#else
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/type_traits/make_unsigned.hpp>
@@ -96,7 +93,6 @@ namespace boost
 
 } // namespace boost
 
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 
 #endif

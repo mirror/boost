@@ -204,33 +204,6 @@ namespace boost
         Iterator stored_iterator;
     };
 
-# ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-
-    template <class Reference, class Value>
-    struct is_non_proxy_reference_impl
-    {
-        static Reference r;
-
-        template <class R>
-        static typename mpl::if_<
-            is_convertible<
-                R const volatile*
-              , Value const volatile*
-            >
-          , char[1]
-          , char[2]
-        >::type& helper(R const&);
-
-        BOOST_STATIC_CONSTANT(bool, value = sizeof(helper(r)) == 1);
-    };
-
-    template <class Reference, class Value>
-    struct is_non_proxy_reference
-      : mpl::bool_<
-            is_non_proxy_reference_impl<Reference, Value>::value
-        >
-    {};
-# else
     template <class Reference, class Value>
     struct is_non_proxy_reference
       : is_convertible<
@@ -239,7 +212,6 @@ namespace boost
           , Value const volatile*
         >
     {};
-# endif
 
     // A metafunction to choose the result type of postfix ++
     //

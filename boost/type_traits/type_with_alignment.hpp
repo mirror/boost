@@ -69,35 +69,6 @@ typedef int (alignment_dummy::*member_function_ptr)();
 // This template gets instantiated a lot, so use partial
 // specialization when available to reduce the compiler burden.
 //
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-template <bool found = true>
-struct lower_alignment_helper_impl
-{
-    template <std::size_t, class>
-    struct apply
-    {
-        typedef char type;
-        enum { value = true };
-    };
-};
-
-template <>
-struct lower_alignment_helper_impl<false>
-{
-    template <std::size_t target, class TestType>
-    struct apply
-      : public mpl::if_c<(alignment_of<TestType>::value == target), TestType, char>
-    {
-        enum { value = (alignment_of<TestType>::value == target) };
-    };
-};
-
-template <bool found, std::size_t target, class TestType>
-struct lower_alignment_helper
-  : public lower_alignment_helper_impl<found>::template apply<target,TestType>
-{
-};
-#else
 template <bool found, std::size_t target, class TestType>
 struct lower_alignment_helper
 {
@@ -111,7 +82,6 @@ struct lower_alignment_helper<false,target,TestType>
     enum { value = (alignment_of<TestType>::value == target) };
     typedef typename mpl::if_c<value, TestType, char>::type type;
 };
-#endif
 
 #define BOOST_TT_CHOOSE_MIN_ALIGNMENT(R,P,I,T)                                  \
         typename lower_alignment_helper<                                        \

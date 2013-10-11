@@ -105,17 +105,10 @@ public:
                              const char c = 0)
      : mt(m), f_c(c) {}
   
-#if defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-   template<class CharType2, class CharTrait>
-  void set(std::basic_ios<CharType2, CharTrait> &io) const {
-     detail::format_info::set_manipulator(io, mt, f_c);
-  }
-#else
    template<class CharTrait>
   void set(std::basic_ios<CharType, CharTrait> &io) const {
      detail::format_info::set_manipulator(io, mt, f_c);
   }
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 };
 
 

@@ -45,20 +45,12 @@ namespace boost {
         class has_native_replace
         {
 
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        private:
-            static T* t;
-        public:
-            BOOST_STATIC_CONSTANT(bool, value=(
-                sizeof(has_native_replace_tester(t))==sizeof(yes_type) ) );
-#else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         public:
 #    if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
             enum { value = false };
 #    else
             BOOST_STATIC_CONSTANT(bool, value=false);
 #    endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 
             typedef mpl::bool_<has_native_replace<T>::value> type;
@@ -73,20 +65,12 @@ namespace boost {
         template< typename T >
         class has_stable_iterators
         {
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        private:
-            static T* t;
-        public:
-            BOOST_STATIC_CONSTANT(bool, value=(
-                sizeof(has_stable_iterators_tester(t))==sizeof(yes_type) ) );
-#else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         public:
 #    if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
             enum { value = false };
 #    else
             BOOST_STATIC_CONSTANT(bool, value=false);
 #    endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
             typedef mpl::bool_<has_stable_iterators<T>::value> type;
         };
@@ -100,20 +84,12 @@ namespace boost {
         template< typename T >
         class has_const_time_insert
         {
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        private:
-            static T* t;
-        public:
-            BOOST_STATIC_CONSTANT(bool, value=(
-                sizeof(has_const_time_insert_tester(t))==sizeof(yes_type) ) );
-#else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         public:
 #    if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
             enum { value = false };
 #    else
             BOOST_STATIC_CONSTANT(bool, value=false);
 #    endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
             typedef mpl::bool_<has_const_time_insert<T>::value> type;
         };
@@ -127,20 +103,12 @@ namespace boost {
         template< typename T >
         class has_const_time_erase
         {
-#ifdef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
-        private:
-            static T* t;
-        public:
-            BOOST_STATIC_CONSTANT(bool, value=(
-                sizeof(has_const_time_erase_tester(t))==sizeof(yes_type) ) );
-#else  // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
         public:
 #    if BOOST_WORKAROUND( __IBMCPP__, <= 600 )
             enum { value = false };
 #    else
             BOOST_STATIC_CONSTANT(bool, value=false);
 #    endif // BOOST_WORKAROUND( __IBMCPP__, <= 600 )
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
             typedef mpl::bool_<has_const_time_erase<T>::value> type;
         };
