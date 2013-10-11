@@ -457,7 +457,6 @@ namespace boost {
     IndexMap index;
   };
 
-#if !defined BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
   template <class RAIter, class ID>
   inline safe_iterator_property_map<
     RAIter, ID,
@@ -471,7 +470,6 @@ namespace boost {
       typename boost::detail::iterator_traits<RAIter>::reference> PA;
     return PA(iter, n, id);
   }
-#endif
   template <class RAIter, class Value, class ID>
   inline safe_iterator_property_map<RAIter, ID, Value, Value&>
   make_safe_iterator_property_map(RAIter iter, std::size_t n, ID id, Value) {

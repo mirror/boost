@@ -124,7 +124,6 @@ public: // accessors
     }
 };
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 //
 // Make sure that is_pod recognises aligned_storage<>::type
 // as a POD (Note that aligned_storage<> itself is not a POD):
@@ -135,7 +134,6 @@ struct is_pod< ::boost::detail::aligned_storage::aligned_storage_imp<size_,align
 { 
     BOOST_TT_AUX_BOOL_TRAIT_VALUE_DECL(true)
 }; 
-#endif
 
 
 } // namespace boost

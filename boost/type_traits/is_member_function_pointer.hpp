@@ -92,10 +92,8 @@ struct is_member_function_pointer_impl
 {
 };
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template <typename T>
 struct is_member_function_pointer_impl<T&> : public false_type{};
-#endif
 
 #else // Borland C++
 

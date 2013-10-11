@@ -169,13 +169,11 @@ struct is_aligned
 
 } // namespace detail
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template<std::size_t Align>
 struct is_pod< ::boost::detail::lower_alignment<Align> >
 {
         BOOST_STATIC_CONSTANT(std::size_t, value = true);
 };
-#endif
 
 // This alignment method originally due to Brian Parker, implemented by David
 // Abrahams, and then ported here by Doug Gregor.

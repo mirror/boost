@@ -124,7 +124,6 @@ struct make_reference_content< mpl::void_ >
 // reference_content<T&> type traits specializations
 //
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename T>
 struct has_nothrow_copy<
@@ -134,7 +133,6 @@ struct has_nothrow_copy<
 {
 };
 
-#endif // !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 } // namespace boost
 

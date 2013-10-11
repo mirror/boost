@@ -100,7 +100,6 @@ nvp< T > make_nvp(const char * name, T & t){
 // Partial Template Specialization and doing so would mean that wrappers
 // wouldn't be treated the same on different platforms.  This would
 // break archive portability. Leave this here as reminder not to use it !!!
-#if 0 // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 template <class T>
 struct implementation_level<nvp< T > >
@@ -119,7 +118,6 @@ struct tracking_level<nvp< T > >
     BOOST_STATIC_CONSTANT(int, value = tracking_level::type::value);
 };
 
-#endif
 
 } // seralization
 } // boost

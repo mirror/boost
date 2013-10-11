@@ -43,7 +43,6 @@ template< int I > bool operator==( arg<I> const &, arg<I> const & )
     return true;
 }
 
-#if !defined( BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION )
 
 template< int I > struct is_placeholder< arg<I> >
 {
@@ -55,7 +54,6 @@ template< int I > struct is_placeholder< arg<I> (*) () >
     enum _vt { value = I };
 };
 
-#endif
 
 } // namespace boost
 

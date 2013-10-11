@@ -32,7 +32,6 @@ struct size_impl< aux::vector_tag >
 
 #else
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< long N >
 struct size_impl< aux::vector_tag<N> >
@@ -40,7 +39,6 @@ struct size_impl< aux::vector_tag<N> >
 {
 };
 
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #endif // BOOST_MPL_CFG_TYPEOF_BASED_SEQUENCES
 

@@ -49,7 +49,6 @@ struct pair_iter
 };
 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template< typename Iter1, typename Iter2, typename C >
 struct deref< pair_iter<Iter1,Iter2,C> >
@@ -76,7 +75,6 @@ struct prior< pair_iter<Iter1,Iter2,C> >
     typedef pair_iter<i1_,i2_,C> type;
 };
 
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 
 template<> struct advance_impl<aux::pair_iter_tag>

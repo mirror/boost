@@ -14,7 +14,6 @@
 #include <boost/config.hpp>
 #include <boost/detail/workaround.hpp>
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 // implementation helper:
 
@@ -59,6 +58,5 @@ struct cv_traits_imp<const volatile T*>
 } // namespace detail
 } // namespace boost 
 
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
 #endif // BOOST_TT_DETAIL_CV_TRAITS_IMPL_HPP_INCLUDED

@@ -32,7 +32,6 @@ struct ptr_helper
   static const T& ref(const T& r) { return r; }
 };
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 template<class T>
 struct ptr_helper<T&>
 {
@@ -52,7 +51,6 @@ struct ptr_helper<T*>
   static reference_type ref(T * p) { return *p; }
   static const T& ref(const T * p) { return *p; }
 };
-#endif
 
 } // namespace detail
 } // namespace random

@@ -164,13 +164,11 @@ namespace detail {
 // to let a conforming compiler  find and select the correct one.
 
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template<class CharType, class CharTrait, class T1>
 inline std::basic_ostream<CharType, CharTrait>& 
 print(std::basic_ostream<CharType, CharTrait>& o, const cons<T1, null_type>& t) {
   return o << t.head;
 }
-#endif  // !BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 
  
 template<class CharType, class CharTrait>

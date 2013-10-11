@@ -60,7 +60,6 @@ private:
 
 } /* namespace multi_index */
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 namespace serialization {
 template<typename T>
 struct version<boost::multi_index::detail::serialization_version<T> >
@@ -68,7 +67,6 @@ struct version<boost::multi_index::detail::serialization_version<T> >
   BOOST_STATIC_CONSTANT(int,value=version<T>::value);
 };
 } /* namespace serialization */
-#endif
 
 } /* namespace boost */
 

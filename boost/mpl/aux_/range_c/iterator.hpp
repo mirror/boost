@@ -35,7 +35,6 @@ template< typename N > struct r_iter
 
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template<
       typename N
@@ -53,7 +52,6 @@ struct prior< r_iter<N> >
     typedef r_iter< typename mpl::prior<N>::type > type;
 };
 
-#endif
 
 
 template<> struct advance_impl<aux::r_iter_tag>

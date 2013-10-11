@@ -76,9 +76,7 @@ struct add_reference_impl
     typedef typename add_reference_rvalue_layer<T>::type type;
 };
 
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION
 BOOST_TT_AUX_TYPE_TRAIT_IMPL_PARTIAL_SPEC1_1(typename T,add_reference,T&,T&)
-#endif
 
 #endif
 

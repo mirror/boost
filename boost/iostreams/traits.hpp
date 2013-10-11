@@ -271,14 +271,12 @@ struct category_of {
 };
 
 // Partial specialization for reference wrappers
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //---------------------------//
 
 template<typename T>
 struct category_of< reference_wrapper<T> >
     : category_of<T>
     { };
 
-#endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
 
 //------------------Definition of get_category--------------------------------//
 
@@ -336,14 +334,12 @@ template<typename T> // Borland 5.6.4 requires this circumlocution.
 struct mode_of : detail::io_mode_impl< detail::io_mode_id<T>::value > { };
 
 // Partial specialization for reference wrappers
-#ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //---------------------------//
 
 template<typename T>
 struct mode_of< reference_wrapper<T> >
     : mode_of<T>
     { };
 
-#endif // #ifndef BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION //-----------------//
                     
 //------------------Definition of is_device, is_filter and is_direct----------//
 

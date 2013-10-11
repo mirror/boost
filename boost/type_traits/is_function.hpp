@@ -79,7 +79,6 @@ struct is_function_impl
 #endif
 };
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 template <typename T>
 struct is_function_impl<T&> : public false_type
 {};
@@ -87,7 +86,6 @@ struct is_function_impl<T&> : public false_type
 template <typename T>
 struct is_function_impl<T&&> : public false_type
 {};
-#endif
 #endif
 
 #endif
