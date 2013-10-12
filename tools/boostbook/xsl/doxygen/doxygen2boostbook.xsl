@@ -1061,8 +1061,13 @@
 
   <xsl:template name="function.attributes">
 
+    <!-- argsstring = '(arguments) [= delete] [= default] [constexpt]' -->
+    <xsl:variable name="extra-qualifiers" select="concat(' ',
+        normalize-space(substring-after(argsstring/text(), ')')),
+        ' ')" />
+
     <!-- CV Qualifiers -->
-    <xsl:if test="@const='yes' or @volatile='yes' or contains(argsstring/text(),'=delete') or contains(argsstring/text(),'=default')">
+    <xsl:if test="@const='yes' or @volatile='yes' or contains($extra-qualifiers,' =delete ') or contains($extra-qualifiers,' =default ')">
       <xsl:attribute name="cv">
         <xsl:if test="@const='yes'">
           <xsl:text>const</xsl:text>
@@ -1074,13 +1079,13 @@
           <xsl:text>volatile</xsl:text>
         </xsl:if>
         <!-- Cheat and add deleted and defaulted function markers to the CV qualifiers -->
-        <xsl:if test="contains(argsstring/text(),'=delete')">
+        <xsl:if test="contains($extra-qualifiers,' =delete ')">
           <xsl:if test="@const='yes' or @volatile='yes'">
             <xsl:text> </xsl:text>
           </xsl:if>
           <xsl:text>= delete</xsl:text>
         </xsl:if>
-        <xsl:if test="contains(argsstring/text(),'=default')">
+        <xsl:if test="contains($extra-qualifiers,' =default ')">
           <xsl:if test="@const='yes' or @volatile='yes'">
             <xsl:text> </xsl:text>
           </xsl:if>

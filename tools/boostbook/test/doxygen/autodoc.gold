@@ -15,6 +15,7 @@
 <data-member name="static_const_integer" specifiers="static"><type>const int</type></data-member>
 <method-group name="public member functions">
 <method name="virtual_method"><type>virtual int</type></method>
+<method name="method_with_default_value"><type>int</type><parameter name=""><paramtype>int</paramtype><default>default_value</default></parameter></method>
 <method name="conversion-operator" specifiers="explicit"><type>int</type></method>
 </method-group>
 <constructor cv="= default"><parameter name=""><paramtype><classname>example</classname> const &amp;</paramtype></parameter></constructor>
