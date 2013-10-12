@@ -202,6 +202,7 @@
         <xsl:attribute name="name">
           <xsl:value-of select="$name"/>
         </xsl:attribute>
+        <xsl:text>&#10;</xsl:text><!-- Newline -->
         
         <xsl:apply-templates>
           <xsl:with-param name="with-namespace-refs" 
@@ -209,6 +210,7 @@
           <xsl:with-param name="in-file" select="$in-file"/>
         </xsl:apply-templates>
       </namespace>
+      <xsl:text>&#10;</xsl:text><!-- Newline -->
     </xsl:if>
   </xsl:template>
 
@@ -301,6 +303,7 @@
         <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
         <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
       </enum>
+      <xsl:text>&#10;</xsl:text><!-- Newline -->
     </xsl:if>
   </xsl:template>
 
@@ -387,6 +390,7 @@
             <xsl:with-param name="header" select="location/attribute::file"/>
           </xsl:call-template>
         </xsl:attribute>
+        <xsl:text>&#10;</xsl:text><!-- Newline -->
         
         <xsl:if test="briefdescription/*|detaileddescription/*|inbodydescription/*">
           <xsl:apply-templates select="briefdescription/*" mode="passthrough"/>
@@ -400,6 +404,7 @@
           <xsl:with-param name="in-file" select="location/attribute::file"/>
         </xsl:apply-templates>
       </header>
+      <xsl:text>&#10;</xsl:text><!-- Newline -->
     </xsl:if>
   </xsl:template>
 
@@ -518,6 +523,7 @@
           <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
           <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
         </macro>
+        <xsl:text>&#10;</xsl:text><!-- Newline -->
       </xsl:when>
 
       <xsl:when test="@kind='function'">
@@ -717,29 +723,35 @@
       <xsl:when test="@kind='public-static-func'">
         <!-- TBD: pass on the fact that these are static functions -->
         <method-group name="public static functions">
+          <xsl:text>&#10;</xsl:text><!-- Newline -->
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
             <xsl:with-param name="in-file" select="$in-file"/>
           </xsl:apply-templates>
         </method-group>
+        <xsl:text>&#10;</xsl:text><!-- Newline -->
       </xsl:when>
       <xsl:when test="@kind='protected-static-func'">
         <!-- TBD: pass on the fact that these are static functions -->
         <method-group name="protected static functions">
+          <xsl:text>&#10;</xsl:text><!-- Newline -->
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
             <xsl:with-param name="in-file" select="$in-file"/>
           </xsl:apply-templates>
         </method-group>
+        <xsl:text>&#10;</xsl:text><!-- Newline -->
       </xsl:when>
       <xsl:when test="@kind='private-static-func'">
         <!-- TBD: pass on the fact that these are static functions -->
         <method-group name="private static functions">
+          <xsl:text>&#10;</xsl:text><!-- Newline -->
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
             <xsl:with-param name="in-file" select="$in-file"/>
           </xsl:apply-templates>
         </method-group>
+        <xsl:text>&#10;</xsl:text><!-- Newline -->
       </xsl:when>
       <xsl:when test="@kind='public-func'">
         <xsl:variable name="members" select="./memberdef"/>
@@ -750,21 +762,25 @@
         </xsl:variable>
         <xsl:if test="$num-internal-only &lt; count($members)">
           <method-group name="public member functions">
+            <xsl:text>&#10;</xsl:text><!-- Newline -->
             <xsl:apply-templates>
               <xsl:with-param name="in-section" select="true()"/>
               <xsl:with-param name="in-file" select="$in-file"/>
             </xsl:apply-templates>
           </method-group>
+          <xsl:text>&#10;</xsl:text><!-- Newline -->
           <xsl:apply-templates/>
         </xsl:if>
       </xsl:when>
       <xsl:when test="@kind='protected-func'">
         <method-group name="protected member functions">
+          <xsl:text>&#10;</xsl:text><!-- Newline -->
           <xsl:apply-templates>
             <xsl:with-param name="in-section" select="true()"/>
             <xsl:with-param name="in-file" select="$in-file"/>
           </xsl:apply-templates>
         </method-group>
+        <xsl:text>&#10;</xsl:text><!-- Newline -->
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='private-func'">
@@ -776,22 +792,26 @@
         </xsl:variable>
         <xsl:if test="$num-internal-only &lt; count($members)">
           <method-group name="private member functions">
+            <xsl:text>&#10;</xsl:text><!-- Newline -->
             <xsl:apply-templates>
               <xsl:with-param name="in-section" select="true()"/>
               <xsl:with-param name="in-file" select="$in-file"/>
             </xsl:apply-templates>
           </method-group>
+          <xsl:text>&#10;</xsl:text><!-- Newline -->
         </xsl:if>
         <xsl:apply-templates/>
       </xsl:when>
       <xsl:when test="@kind='friend'">
         <xsl:if test="./memberdef/detaileddescription/para or ./memberdef/briefdescription/para">
           <method-group name="friend functions">
+            <xsl:text>&#10;</xsl:text><!-- Newline -->
             <xsl:apply-templates>
               <xsl:with-param name="in-section" select="true()"/>
               <xsl:with-param name="in-file" select="$in-file"/>
             </xsl:apply-templates>
           </method-group>
+          <xsl:text>&#10;</xsl:text><!-- Newline -->
         </xsl:if>
       </xsl:when>
       <xsl:when test="@kind='public-static-attrib' or @kind='public-attrib'">
@@ -968,6 +988,7 @@
         
         <type><xsl:apply-templates select="type"/></type>
       </typedef>
+      <xsl:text>&#10;</xsl:text><!-- Newline -->
     </xsl:if>
   </xsl:template>
 
@@ -1125,6 +1146,7 @@
         </xsl:otherwise>
       </xsl:choose>
     </xsl:if>
+    <xsl:text>&#10;</xsl:text><!-- Newline -->
   </xsl:template>
 
   <!-- Emit overload signatures -->
@@ -1178,6 +1200,7 @@
       </xsl:if>
       <xsl:call-template name="function.children"/>
     </constructor>
+    <xsl:text>&#10;</xsl:text><!-- Newline -->
   </xsl:template>
 
   <!-- Handle Destructors -->
@@ -1185,6 +1208,7 @@
     <destructor>
       <xsl:call-template name="function.children"/>
     </destructor>
+    <xsl:text>&#10;</xsl:text><!-- Newline -->
   </xsl:template>
 
   <!-- Handle Copy Assignment -->
@@ -1230,6 +1254,7 @@
 
       <xsl:call-template name="function.children"/>
     </copy-assignment>
+    <xsl:text>&#10;</xsl:text><!-- Newline -->
   </xsl:template>
 
   <!-- Handle conversion operator -->
@@ -1272,6 +1297,7 @@
 
       <xsl:call-template name="function.children"/>
     </method>
+    <xsl:text>&#10;</xsl:text><!-- Newline -->
   </xsl:template>
 
   <!-- Handle methods -->
@@ -1319,6 +1345,7 @@
 
       <xsl:call-template name="function.children"/>
     </method>
+    <xsl:text>&#10;</xsl:text><!-- Newline -->
   </xsl:template>
 
   <!-- Handle member variables -->
@@ -1346,6 +1373,7 @@
       <xsl:apply-templates select="detaileddescription" mode="passthrough"/>
       <xsl:apply-templates select="inbodydescription" mode="passthrough"/>
     </data-member>
+    <xsl:text>&#10;</xsl:text><!-- Newline -->
     </xsl:if>
   </xsl:template>
 
