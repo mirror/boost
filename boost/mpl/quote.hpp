@@ -61,19 +61,22 @@ namespace boost { namespace mpl {
 
 template< typename T, bool has_type_ >
 struct quote_impl
-// GCC has a problem with metafunction forwarding when T is a
-// specialization of a template called 'type'.
-# if BOOST_WORKAROUND(__GNUC__, BOOST_TESTED_AT(4)) \
-    && BOOST_WORKAROUND(__GNUC_MINOR__, BOOST_TESTED_AT(0)) \
-    && BOOST_WORKAROUND(__GNUC_PATCHLEVEL__, BOOST_TESTED_AT(2))
+// GCC had a problem with metafunction forwarding when T is a
+// specialization of a template called 'type'. It is unknown which release
+// fixed this, but it was previously tested to be broken with GCC 4.0.2.
+// It certainly works with 4.6.4 and has not been tested with intermediate
+// versions.
+# if BOOST_WORKAROUND(__GNUC__, <= 4) \
+    && BOOST_WORKAROUND(__GNUC_MINOR__, <= 6) \
+    && BOOST_WORKAROUND(__GNUC_PATCHLEVEL__, <= 4)
 {
     typedef typename T::type type;
 };
-# else 
+# else
     : T
 {
 };
-# endif 
+# endif
 
 template< typename T >
 struct quote_impl<T,false>
