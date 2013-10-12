@@ -15,6 +15,7 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/allocator_utilities.hpp>
+#include <boost/detail/no_exceptions_support.hpp>
 #include <boost/detail/workaround.hpp>
 #include <boost/move/core.hpp>
 #include <boost/move/utility.hpp>
@@ -61,9 +62,10 @@ protected:
     Value,IndexSpecifierList,Allocator>       final_type;
   typedef tuples::null_type                   ctor_args_list;
   typedef typename 
-    boost::detail::allocator::rebind_to<
-      Allocator,
-      typename Allocator::value_type>::type   final_allocator_type;
+  boost::detail::allocator::rebind_to<
+    Allocator,
+    typename Allocator::value_type
+  >::type                                     final_allocator_type;
   typedef mpl::vector0<>                      index_type_list;
   typedef mpl::vector0<>                      iterator_type_list;
   typedef mpl::vector0<>                      const_iterator_type_list;
@@ -96,43 +98,60 @@ protected:
     const index_base<Value,IndexSpecifierList,Allocator>&,const copy_map_type&)
   {}
 
-  node_type* insert_(const value_type& v,node_type* x,lvalue_tag)
+  final_node_type* insert_(const value_type& v,final_node_type*& x,lvalue_tag)
   {
-    boost::detail::allocator::construct(&x->value(),v);
+    x=final().allocate_node();
+    BOOST_TRY{
+      boost::detail::allocator::construct(&x->value(),v);
+    }
+    BOOST_CATCH(...){
+      final().deallocate_node(x);
+      BOOST_RETHROW;
+    }
+    BOOST_CATCH_END
     return x;
   }
 
-  node_type* insert_(const value_type& v,node_type* x,rvalue_tag)
+  final_node_type* insert_(const value_type& v,final_node_type*& x,rvalue_tag)
   {
-    /* This shoud have used a modified, T&&-compatible version of
-     * boost::detail::allocator::construct, but 
-     * <boost/detail/allocator_utilities.hpp> is too old and venerable to mess
-     * with; besides, it is a general internal utility and the imperfect
-     * perfect forwarding emulation of Boost.Move might break other libs.
-     */
+    x=final().allocate_node();
+    BOOST_TRY{
+      /* This shoud have used a modified, T&&-compatible version of
+       * boost::detail::allocator::construct, but 
+       * <boost/detail/allocator_utilities.hpp> is too old and venerable to
+       * mess with; besides, it is a general internal utility and the imperfect
+       * perfect forwarding emulation of Boost.Move might break other libs.
+       */
 
-    new (&x->value()) value_type(boost::move(const_cast<value_type&>(v)));
+      new (&x->value()) value_type(boost::move(const_cast<value_type&>(v)));
+    }
+    BOOST_CATCH(...){
+      final().deallocate_node(x);
+      BOOST_RETHROW;
+    }
+    BOOST_CATCH_END
     return x;
   }
 
-  node_type* insert_(const value_type&,node_type* x,emplaced_tag)
+  final_node_type* insert_(const value_type&,final_node_type*& x,emplaced_tag)
   {
     return x;
   }
 
-  node_type* insert_(const value_type& v,node_type*,node_type* x,lvalue_tag)
+  final_node_type* insert_(
+    const value_type& v,node_type*,final_node_type*& x,lvalue_tag)
   {
-    boost::detail::allocator::construct(&x->value(),v);
-    return x;
+    return insert_(v,x,lvalue_tag());
   }
 
-  node_type* insert_(const value_type& v,node_type*,node_type* x,rvalue_tag)
+  final_node_type* insert_(
+    const value_type& v,node_type*,final_node_type*& x,rvalue_tag)
   {
-    new (&x->value()) value_type(boost::move(const_cast<value_type&>(v)));
-    return x;
+    return insert_(v,x,rvalue_tag());
   }
 
-  node_type* insert_(const value_type&,node_type*,node_type* x,emplaced_tag)
+  final_node_type* insert_(
+    const value_type&,node_type*,final_node_type*& x,emplaced_tag)
   {
     return x;
   }

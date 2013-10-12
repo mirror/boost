@@ -90,9 +90,9 @@ class multi_index_container:
     >::type>,
   BOOST_MULTI_INDEX_PRIVATE_IF_MEMBER_TEMPLATE_FRIENDS detail::header_holder<
     typename boost::detail::allocator::rebind_to<
-        Allocator,
-        typename detail::multi_index_node_type<
-          Value,IndexSpecifierList,Allocator>::type
+      Allocator,
+      typename detail::multi_index_node_type<
+        Value,IndexSpecifierList,Allocator>::type
     >::type::pointer,
     multi_index_container<Value,IndexSpecifierList,Allocator> >,
   public detail::multi_index_base_type<
@@ -121,8 +121,8 @@ private:
       Value,IndexSpecifierList,Allocator>::type   super;
   typedef typename
   boost::detail::allocator::rebind_to<
-      Allocator,
-      typename super::node_type
+    Allocator,
+    typename super::node_type
   >::type                                         node_allocator;
   typedef ::boost::base_from_member<
     node_allocator>                               bfm_allocator;
@@ -136,8 +136,8 @@ public:
    * brought forward here to save us some typename's.
    */
 
-  typedef typename super::ctor_args_list          ctor_args_list;
-  typedef IndexSpecifierList                      index_specifier_type_list;
+  typedef typename super::ctor_args_list           ctor_args_list;
+  typedef IndexSpecifierList                       index_specifier_type_list;
  
   typedef typename super::index_type_list          index_type_list;
 
@@ -344,7 +344,7 @@ public:
   }
 #endif
 
-  allocator_type get_allocator()const
+  allocator_type get_allocator()const BOOST_NOEXCEPT
   {
     return allocator_type(bfm_allocator::member);
   }
@@ -360,14 +360,14 @@ public:
   };
 
   template<int N>
-  typename nth_index<N>::type& get()
+  typename nth_index<N>::type& get()BOOST_NOEXCEPT
   {
     BOOST_STATIC_ASSERT(N>=0&&N<mpl::size<index_type_list>::type::value);
     return *this;
   }
 
   template<int N>
-  const typename nth_index<N>::type& get()const
+  const typename nth_index<N>::type& get()const BOOST_NOEXCEPT
   {
     BOOST_STATIC_ASSERT(N>=0&&N<mpl::size<index_type_list>::type::value);
     return *this;
@@ -393,13 +393,13 @@ public:
   };
 
   template<typename Tag>
-  typename index<Tag>::type& get()
+  typename index<Tag>::type& get()BOOST_NOEXCEPT
   {
     return *this;
   }
 
   template<typename Tag>
-  const typename index<Tag>::type& get()const
+  const typename index<Tag>::type& get()const BOOST_NOEXCEPT
   {
     return *this;
   }
@@ -554,23 +554,15 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   template<typename Variant>
   std::pair<node_type*,bool> insert_(const Value& v,Variant variant)
   {
-    node_type* x=allocate_node();
-    BOOST_TRY{
-      node_type* res=super::insert_(v,x,variant);
-      if(res==x){
-        ++node_count;
-        return std::pair<node_type*,bool>(res,true);
-      }
-      else{
-        deallocate_node(x);
-        return std::pair<node_type*,bool>(res,false);
-      }
+    node_type* x=0;
+    node_type* res=super::insert_(v,x,variant);
+    if(res==x){
+      ++node_count;
+      return std::pair<node_type*,bool>(res,true);
     }
-    BOOST_CATCH(...){
-      deallocate_node(x);
-      BOOST_RETHROW;
+    else{
+      return std::pair<node_type*,bool>(res,false);
     }
-    BOOST_CATCH_END
   }
 
   std::pair<node_type*,bool> insert_(const Value& v)
@@ -661,23 +653,15 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   std::pair<node_type*,bool> insert_(
     const Value& v,node_type* position,Variant variant)
   {
-    node_type* x=allocate_node();
-    BOOST_TRY{
-      node_type* res=super::insert_(v,position,x,variant);
-      if(res==x){
-        ++node_count;
-        return std::pair<node_type*,bool>(res,true);
-      }
-      else{
-        deallocate_node(x);
-        return std::pair<node_type*,bool>(res,false);
-      }
+    node_type* x=0;
+    node_type* res=super::insert_(v,position,x,variant);
+    if(res==x){
+      ++node_count;
+      return std::pair<node_type*,bool>(res,true);
     }
-    BOOST_CATCH(...){
-      deallocate_node(x);
-      BOOST_RETHROW;
+    else{
+      return std::pair<node_type*,bool>(res,false);
     }
-    BOOST_CATCH_END
   }
 
   std::pair<node_type*,bool> insert_(const Value& v,node_type* position)
@@ -894,10 +878,16 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   void save(Archive& ar,const unsigned int version)const
   {
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     const serialization::collection_size_type       s(size_());
     const detail::serialization_version<value_type> value_version;
     ar<<serialization::make_nvp("count",s);
     ar<<serialization::make_nvp("value_version",value_version);
+#else
+    const std::size_t  s=size_();
+    const unsigned int value_version=0;
+    ar<<serialization::make_nvp("count",s);
+#endif
 
     index_saver_type sm(bfm_allocator::member,s);
 
@@ -918,6 +908,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
     clear_(); 
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
     serialization::collection_size_type       s;
     detail::serialization_version<value_type> value_version;
     if(version<1){
@@ -934,6 +925,11 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     else{
       ar>>serialization::make_nvp("value_version",value_version);
     }
+#else
+    std::size_t  s;
+    unsigned int value_version=0;
+    ar>>serialization::make_nvp("count",s);
+#endif
 
     index_loader_type lm(bfm_allocator::member,s);
 
@@ -996,7 +992,8 @@ struct nth_index
 template<int N,typename Value,typename IndexSpecifierList,typename Allocator>
 typename nth_index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,N>::type&
-get(multi_index_container<Value,IndexSpecifierList,Allocator>& m)
+get(
+  multi_index_container<Value,IndexSpecifierList,Allocator>& m)BOOST_NOEXCEPT
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>    multi_index_type;
@@ -1018,7 +1015,9 @@ get(multi_index_container<Value,IndexSpecifierList,Allocator>& m)
 template<int N,typename Value,typename IndexSpecifierList,typename Allocator>
 const typename nth_index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,N>::type&
-get(const multi_index_container<Value,IndexSpecifierList,Allocator>& m)
+get(
+  const multi_index_container<Value,IndexSpecifierList,Allocator>& m
+)BOOST_NOEXCEPT
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>    multi_index_type;
@@ -1061,7 +1060,8 @@ template<
 >
 typename ::boost::multi_index::index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,Tag>::type&
-get(multi_index_container<Value,IndexSpecifierList,Allocator>& m)
+get(
+  multi_index_container<Value,IndexSpecifierList,Allocator>& m)BOOST_NOEXCEPT
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>         multi_index_type;
@@ -1079,7 +1079,9 @@ template<
 >
 const typename ::boost::multi_index::index<
   multi_index_container<Value,IndexSpecifierList,Allocator>,Tag>::type&
-get(const multi_index_container<Value,IndexSpecifierList,Allocator>& m)
+get(
+  const multi_index_container<Value,IndexSpecifierList,Allocator>& m
+)BOOST_NOEXCEPT
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>         multi_index_type;
@@ -1342,7 +1344,8 @@ void swap(
 
 } /* namespace multi_index */
 
-#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)&&\
+    !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 /* class version = 1 : we now serialize the size through
  * boost::serialization::collection_size_type.
  * class version = 2 : proper use of {save|load}_construct_data.

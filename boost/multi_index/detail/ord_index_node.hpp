@@ -1,4 +1,4 @@
-/* Copyright 2003-2008 Joaquin M Lopez Munoz.
+/* Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -69,16 +69,18 @@ struct ordered_index_node_impl; /* fwd decl. */
 template<typename Allocator>
 struct ordered_index_node_std_base
 {
-  typedef typename boost::detail::allocator::rebind_to<
-      Allocator,
-      ordered_index_node_impl<Allocator>
-  >::type::pointer                                pointer;
-  typedef typename boost::detail::allocator::rebind_to<
-      Allocator,
-      ordered_index_node_impl<Allocator>
-  >::type::const_pointer                          const_pointer;
-  typedef ordered_index_color&                    color_ref;
-  typedef pointer&                                parent_ref;
+  typedef typename
+  boost::detail::allocator::rebind_to<
+    Allocator,
+    ordered_index_node_impl<Allocator>
+  >::type::pointer                     pointer;
+  typedef typename
+  boost::detail::allocator::rebind_to<
+    Allocator,
+    ordered_index_node_impl<Allocator>
+  >::type::const_pointer               const_pointer;
+  typedef ordered_index_color&         color_ref;
+  typedef pointer&                     parent_ref;
 
   ordered_index_color& color(){return color_;}
   ordered_index_color  color()const{return color_;}
@@ -210,8 +212,8 @@ struct ordered_index_node_impl_base:
     (alignment_of<ordered_index_node_compressed_base<Allocator> >::value%2)||
     !(is_same<
       typename boost::detail::allocator::rebind_to<
-          Allocator,
-          ordered_index_node_impl<Allocator>
+        Allocator,
+        ordered_index_node_impl<Allocator>
       >::type::pointer,
       ordered_index_node_impl<Allocator>*>::value),
     ordered_index_node_std_base<Allocator>,
@@ -548,18 +550,18 @@ public:
 template<typename Super>
 struct ordered_index_node_trampoline:
   ordered_index_node_impl<
-      typename boost::detail::allocator::rebind_to<
-        typename Super::allocator_type,
-        char
-      >::type
-    >
+    typename boost::detail::allocator::rebind_to<
+      typename Super::allocator_type,
+      char
+    >::type
+  >
 {
   typedef ordered_index_node_impl<
-      typename boost::detail::allocator::rebind_to<
-        typename Super::allocator_type,
-        char
-      >::type
-    > impl_type;
+    typename boost::detail::allocator::rebind_to<
+      typename Super::allocator_type,
+      char
+    >::type
+  > impl_type;
 };
 
 template<typename Super>

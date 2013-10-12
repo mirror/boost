@@ -1,4 +1,4 @@
-/* Copyright 2003-2008 Joaquin M Lopez Munoz.
+/* Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -152,6 +152,9 @@ namespace detail{
  * Surprisingly enough, other compilers, like Intel C++ 7.0/7.1 and
  * Visual Age 6.0, have similar bugs. This replacement of member<>
  * can be used for them too.
+ *
+ * Support for such old compilers is dropped and
+ * [non_]const_member_offset_base is deprecated.
  */
 
 template<class Class,typename Type,std::size_t OffsetOfMember>

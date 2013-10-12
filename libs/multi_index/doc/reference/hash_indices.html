@@ -238,20 +238,20 @@ requirements.
   <b>index class name</b><span class=special>&amp;</span> <span class=keyword>operator</span><span class=special>=(</span><span class=keyword>const</span> <b>index class name</b><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
   <b>index class name</b><span class=special>&amp;</span> <span class=keyword>operator</span><span class=special>=(</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>initializer_list</span><span class=special>&lt;</span><span class=identifier>value_type</span><span class=special>&gt;</span> <span class=identifier>list</span><span class=special>);</span>
 
-  <span class=identifier>allocator_type</span> <span class=identifier>get_allocator</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>allocator_type</span> <span class=identifier>get_allocator</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
 
   <span class=comment>// size and capacity:</span>
 
-  <span class=keyword>bool</span>      <span class=identifier>empty</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
-  <span class=identifier>size_type</span> <span class=identifier>size</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
-  <span class=identifier>size_type</span> <span class=identifier>max_size</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=keyword>bool</span>      <span class=identifier>empty</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
+  <span class=identifier>size_type</span> <span class=identifier>size</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
+  <span class=identifier>size_type</span> <span class=identifier>max_size</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
 
   <span class=comment>// iterators:</span>
 
-  <span class=identifier>iterator</span>       <span class=identifier>begin</span><span class=special>();</span>
-  <span class=identifier>const_iterator</span> <span class=identifier>begin</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
-  <span class=identifier>iterator</span>       <span class=identifier>end</span><span class=special>();</span>
-  <span class=identifier>const_iterator</span> <span class=identifier>end</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>iterator</span>       <span class=identifier>begin</span><span class=special>()</span><span class=keyword>noexcept</span><span class=special>;</span>
+  <span class=identifier>const_iterator</span> <span class=identifier>begin</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
+  <span class=identifier>iterator</span>       <span class=identifier>end</span><span class=special>()</span><span class=keyword>noexcept</span><span class=special>;</span>
+  <span class=identifier>const_iterator</span> <span class=identifier>end</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
   <span class=identifier>const_iterator</span> <span class=identifier>cbegin</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
   <span class=identifier>const_iterator</span> <span class=identifier>cend</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
  
@@ -286,7 +286,7 @@ requirements.
   <span class=keyword>template</span><span class=special>&lt;</span><span class=keyword>typename</span> <span class=identifier>Modifier</span><span class=special>,</span><span class=keyword>typename</span> <span class=identifier>Rollback</span><span class=special>&gt;</span>
   <span class=keyword>bool</span> <span class=identifier>modify_key</span><span class=special>(</span><span class=identifier>iterator</span> <span class=identifier>position</span><span class=special>,</span><span class=identifier>Modifier</span> <span class=identifier>mod</span><span class=special>,</span><span class=identifier>Rollback</span> <span class=identifier>back</span><span class=special>);</span>
   
-  <span class=keyword>void</span> <span class=identifier>clear</span><span class=special>();</span>
+  <span class=keyword>void</span> <span class=identifier>clear</span><span class=special>()</span><span class=keyword>noexcept</span><span class=special>;</span>
   <span class=keyword>void</span> <span class=identifier>swap</span><span class=special>(</span><b>index class name</b><span class=special>&amp;</span> <span class=identifier>x</span><span class=special>);</span>
 
   <span class=comment>// observers:</span>
@@ -326,8 +326,8 @@ requirements.
 
   <span class=comment>// bucket interface:</span>
 
-  <span class=identifier>size_type</span> <span class=identifier>bucket_count</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
-  <span class=identifier>size_type</span> <span class=identifier>max_bucket_count</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=identifier>size_type</span> <span class=identifier>bucket_count</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
+  <span class=identifier>size_type</span> <span class=identifier>max_bucket_count</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
   <span class=identifier>size_type</span> <span class=identifier>bucket_size</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>n</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
   <span class=identifier>size_type</span> <span class=identifier>bucket</span><span class=special>(</span><span class=keyword>const</span> <span class=identifier>key_type</span><span class=special>&amp;</span> <span class=identifier>k</span><span class=special>)</span><span class=keyword>const</span><span class=special>;</span>
 
@@ -343,10 +343,11 @@ requirements.
 
   <span class=comment>// hash policy:</span>
 
-  <span class=keyword>float</span> <span class=identifier>load_factor</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
-  <span class=keyword>float</span> <span class=identifier>max_load_factor</span><span class=special>()</span><span class=keyword>const</span><span class=special>;</span>
+  <span class=keyword>float</span> <span class=identifier>load_factor</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
+  <span class=keyword>float</span> <span class=identifier>max_load_factor</span><span class=special>()</span><span class=keyword>const</span> <span class=keyword>noexcept</span><span class=special>;</span>
   <span class=keyword>void</span>  <span class=identifier>max_load_factor</span><span class=special>(</span><span class=keyword>float</span> <span class=identifier>z</span><span class=special>);</span>
   <span class=keyword>void</span>  <span class=identifier>rehash</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>n</span><span class=special>);</span>
+  <span class=keyword>void</span>  <span class=identifier>reserve</span><span class=special>(</span><span class=identifier>size_type</span> <span class=identifier>n</span><span class=special>);</span>
 <span class=special>};</span>
 
 <span class=comment>// index specialized algorithms:</span>
@@ -370,21 +371,22 @@ scheme outlined in the
 section</a>. The complexity signature of hashed indices is:
 <ul>
   <li>copying: <code>c(n)=n*log(n)</code>,</li>
-  <li>insertion: average case <code>i(n)=1</code> (constant),
-    worst case <code>i(n)=n</code>,</li>
-  <li>hinted insertion: average case <code>h(n)=1</code> (constant),
-    worst case <code>h(n)=n</code>,</li>
-  <li>deletion: average case <code>d(n)=1</code> (constant),
-    worst case <code>d(n)=n</code>,</li>
+  <li>insertion: average case <code>i(n)=1</code> (amortized constant),
+    worst case <code>i(n)=n<sub>dist</sub></code>,</li>
+  <li>hinted insertion: average case <code>h(n)=1</code> (amortized constant),
+    worst case <code>h(n)=n<sub>dist</sub></code>,</li>
+  <li>deletion: <code>d(n)=1</code> (constant),</li>
   <li>replacement:
     <ul>
       <li>if the new element key is equivalent to the original, <code>r(n)=1</code> (constant),</li>
       <li>otherwise, average case <code>r(n)=1</code> (constant),
-        worst case <code>r(n)=n</code>,</li>
+        worst case <code>r(n)=n<sub>dist</sub></code>,</li>
     </ul></li>
   <li>modifying: average case <code>m(n)=1</code> (constant),
-    worst case <code>m(n)=n</code>.</li>
+    worst case <code>m(n)=n<sub>dist</sub></code>,</li>
 </ul>
+where <code>n<sub>dist</sub></code> is the number of non-equivalent elements out of
+the total <code>n</code>.
 </p>
 
 <h4><a name="instantiation_types">Instantiation types</a></h4>
@@ -618,7 +620,7 @@ to which this index belongs if
 <blockquote>
 <b>Effects:</b>
 <blockquote><pre>
-<span class=identifier>insert</span><span class=special>(</span><span class=identifier>list</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(),</span><span class=identifier>list</span><span class=special>.</span><span class=identifier>end</span><span class=special>())</span>
+<span class=identifier>insert</span><span class=special>(</span><span class=identifier>list</span><span class=special>.</span><span class=identifier>begin</span><span class=special>(),</span><span class=identifier>list</span><span class=special>.</span><span class=identifier>end</span><span class=special>())</span><span class=special>;</span>
 </pre></blockquote>
 </blockquote>
     
@@ -641,7 +643,7 @@ if no such element exists.<br>
 <b>Effects:</b> Deletes the elements with key equivalent to <code>x</code>.<br>
 <b>Returns:</b> Number of elements deleted.<br>
 <b>Complexity:</b> Average case, <code>O(1 + m*D(n))</code>, worst case
-<code>O(n + m*D(n))</code>, where <code>m</code> is
+<code>O(n<sub>dist</sub> + m*D(n))</code>, where <code>m</code> is
 the number of elements deleted.<br>
 <b>Exception safety:</b> Basic.<br>
 </blockquote>
@@ -870,7 +872,7 @@ In the context of a compatible extension or a compatible key, the expression
 <b>Effects:</b> Returns a pointer to an element whose key is equivalent to
 <code>x</code>, or <code>end()</code> if such an element does not exist.<br>
 <b>Complexity:</b> Average case <code>O(1)</code> (constant), worst case
-<code>O(n)</code>.<br>
+<code>O(n<sub>dist</sub>)</code>.<br>
 </blockquote>
 
 <code>template&lt;<br>
@@ -888,7 +890,7 @@ iterator find(<br>
 <b>Effects:</b> Returns a pointer to an element whose key is equivalent to
 <code>x</code>, or <code>end()</code> if such an element does not exist.<br>
 <b>Complexity:</b> Average case <code>O(1)</code> (constant), worst case
-<code>O(n)</code>.<br>
+<code>O(n<sub>dist</sub>)</code>.<br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey><br>
@@ -900,7 +902,7 @@ size_type count(const CompatibleKey&amp; x)const;
 (<code>hasher</code>, <code>key_equal</code>).<br>
 <b>Effects:</b> Returns the number of elements with key equivalent to <code>x</code>.<br>
 <b>Complexity:</b> Average case <code>O(count(x))</code>, worst case
-<code>O(n)</code>.<br>
+<code>O(count(x)+n<sub>dist</sub>)</code>.<br>
 </blockquote>
 
 <code>template&lt;<br>
@@ -917,7 +919,7 @@ size_type count(<br>
 (<code>hasher</code>, <code>key_equal</code>).<br>
 <b>Effects:</b> Returns the number of elements with key equivalent to <code>x</code>.<br>
 <b>Complexity:</b> Average case <code>O(count(x,hash,eq))</code>, worst case
-<code>O(n)</code>.<br>
+<code>O(count(x,hash,eq)+n<sub>dist</sub>)</code>.<br>
 </blockquote>
 
 <code>template&lt;typename CompatibleKey><br>
@@ -930,8 +932,8 @@ std::pair&lt;iterator,iterator> equal_range(const CompatibleKey&amp; x)const;
 <b>Effects:</b> Returns a range containing all elements with keys equivalent
 to <code>x</code> (and only those), or (<code>end()</code>,<code>end()</code>)
 if no such elements exist.<br>
-<b>Complexity:</b> Average case <code>O(count(x))</code>, worst case
-<code>O(n)</code>.<br>
+<b>Complexity:</b> Average case <code>O(1)</code> (constant), worst case
+<code>O(n<sub>dist</sub>)</code>.<br>
 </blockquote>
 
 <code>template&lt;<br>
@@ -949,8 +951,8 @@ std::pair&lt;iterator,iterator> equal_range(<br>
 <b>Effects:</b> Returns a range containing all elements with keys equivalent
 to <code>x</code> (and only those), or (<code>end()</code>,<code>end()</code>)
 if no such elements exist.<br>
-<b>Complexity:</b> Average case <code>O(count(x,hash,eq))</code>, worst case
-<code>O(n)</code>.<br>
+<b>Complexity:</b> Average case <code>O(1)</code> (constant), worst case
+<code>O(n<sub>dist</sub>)</code>.<br>
 </blockquote>
 
 <h4><a name="bucket_interface">Bucket interface</a></h4>
@@ -976,9 +978,18 @@ so that <code>size()/bucket_count()</code> does not exceed the maximum
 load factor, and <code>bucket_count()>=n</code>.<br>
 <b>Postconditions:</b> Validity of iterators and references to the
 elements contained is preserved.<br>
-<b>Complexity:</b> Average case <code>O(size())</code>, worst case
-<code>O(size(n)<sup>2</sup>)</code>.<br>
+<b>Complexity:</b> <code>O(m)</code>, where <code>m</code> is the number of
+non-equivalent elements in the index.<br>
 <b>Exception safety:</b> Strong.
+</blockquote>
+
+<code>void reserve(size_type n);</code>
+
+<blockquote>
+<b>Effects:</b>
+<blockquote><pre>
+<span class=identifier>rehash</span><span class=special>(</span><span class=identifier>std</span><span class=special>::</span><span class=identifier>ceil</span><span class=special>(</span><span class=identifier>n</span><span class=special>/</span><span class=identifier>max_load_factor</span><span class=special>()));</span>
+</pre></blockquote>
 </blockquote>
 
 <h4><a name="serialization">Serialization</a></h4>
@@ -1069,7 +1080,7 @@ Sequenced indices
 
 <br>
 
-<p>Revised July 6th 2013</p>
+<p>Revised October 12th 2013</p>
 
 <p>&copy; Copyright 2003-2013 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 

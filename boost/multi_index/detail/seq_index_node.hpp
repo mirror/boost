@@ -1,4 +1,4 @@
-/* Copyright 2003-2008 Joaquin M Lopez Munoz.
+/* Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -28,12 +28,14 @@ namespace detail{
 template<typename Allocator>
 struct sequenced_index_node_impl
 {
-  typedef typename boost::detail::allocator::rebind_to<
-      Allocator,sequenced_index_node_impl
-  >::type::pointer                                pointer;
-  typedef typename boost::detail::allocator::rebind_to<
-      Allocator,sequenced_index_node_impl
-  >::type::const_pointer                          const_pointer;
+  typedef typename
+  boost::detail::allocator::rebind_to<
+    Allocator,sequenced_index_node_impl
+  >::type::pointer                      pointer;
+  typedef typename
+  boost::detail::allocator::rebind_to<
+    Allocator,sequenced_index_node_impl
+  >::type::const_pointer                const_pointer;
 
   pointer& prior(){return prior_;}
   pointer  prior()const{return prior_;}
@@ -130,18 +132,18 @@ private:
 template<typename Super>
 struct sequenced_index_node_trampoline:
   sequenced_index_node_impl<
-      typename boost::detail::allocator::rebind_to<
-        typename Super::allocator_type,
-        char
-      >::type
-    >
+    typename boost::detail::allocator::rebind_to<
+      typename Super::allocator_type,
+      char
+    >::type
+  >
 {
   typedef sequenced_index_node_impl<
-      typename boost::detail::allocator::rebind_to<
-        typename Super::allocator_type,
-        char
-      >::type
-    > impl_type;
+    typename boost::detail::allocator::rebind_to<
+      typename Super::allocator_type,
+      char
+    >::type
+  > impl_type;
 };
 
 template<typename Super>

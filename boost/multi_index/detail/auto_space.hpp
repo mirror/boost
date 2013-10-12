@@ -1,4 +1,4 @@
-/* Copyright 2003-2008 Joaquin M Lopez Munoz.
+/* Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -46,8 +46,8 @@ template<typename T,typename Allocator=std::allocator<T> >
 struct auto_space:private noncopyable
 {
   typedef typename boost::detail::allocator::rebind_to<
-      Allocator,T
-    >::type::pointer pointer;
+    Allocator,T
+  >::type::pointer pointer;
 
   explicit auto_space(const Allocator& al=Allocator(),std::size_t n=1):
   al_(al),n_(n),data_(n_?al_.allocate(n_):pointer(0))

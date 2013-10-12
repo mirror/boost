@@ -1,4 +1,4 @@
-/* Copyright 2003-2008 Joaquin M Lopez Munoz.
+/* Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -293,9 +293,9 @@ template<class Derived,class Base>
 struct iter_adaptor_base
 {
   typedef iter_adaptor_selector<
-    typename Base::iterator_category>        selector;
+    typename Base::iterator_category> selector;
   typedef typename mpl::apply2<
-      selector,Derived,Base>::type           type;
+    selector,Derived,Base>::type      type;
 };
 
 template<class Derived,class Base>

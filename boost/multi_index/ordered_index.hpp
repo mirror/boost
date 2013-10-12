@@ -235,25 +235,37 @@ public:
   }
 #endif
 
-  allocator_type get_allocator()const
+  allocator_type get_allocator()const BOOST_NOEXCEPT
   {
     return this->final().get_allocator();
   }
 
   /* iterators */
 
-  iterator               begin(){return make_iterator(leftmost());}
-  const_iterator         begin()const{return make_iterator(leftmost());}
-  iterator               end(){return make_iterator(header());}
-  const_iterator         end()const{return make_iterator(header());}
-  reverse_iterator       rbegin(){return make_reverse_iterator(end());}
-  const_reverse_iterator rbegin()const{return make_reverse_iterator(end());}
-  reverse_iterator       rend(){return make_reverse_iterator(begin());}
-  const_reverse_iterator rend()const{return make_reverse_iterator(begin());}
-  const_iterator         cbegin()const{return begin();}
-  const_iterator         cend()const{return end();}
-  const_reverse_iterator crbegin()const{return rbegin();}
-  const_reverse_iterator crend()const{return rend();}
+  iterator
+    begin()BOOST_NOEXCEPT{return make_iterator(leftmost());}
+  const_iterator
+    begin()const BOOST_NOEXCEPT{return make_iterator(leftmost());}
+  iterator
+    end()BOOST_NOEXCEPT{return make_iterator(header());}
+  const_iterator
+    end()const BOOST_NOEXCEPT{return make_iterator(header());}
+  reverse_iterator
+    rbegin()BOOST_NOEXCEPT{return make_reverse_iterator(end());}
+  const_reverse_iterator
+    rbegin()const BOOST_NOEXCEPT{return make_reverse_iterator(end());}
+  reverse_iterator
+    rend()BOOST_NOEXCEPT{return make_reverse_iterator(begin());}
+  const_reverse_iterator
+    rend()const BOOST_NOEXCEPT{return make_reverse_iterator(begin());}
+  const_iterator
+    cbegin()const BOOST_NOEXCEPT{return begin();}
+  const_iterator
+    cend()const BOOST_NOEXCEPT{return end();}
+  const_reverse_iterator
+    crbegin()const BOOST_NOEXCEPT{return rbegin();}
+  const_reverse_iterator
+    crend()const BOOST_NOEXCEPT{return rend();}
  
   iterator iterator_to(const value_type& x)
   {
@@ -267,9 +279,9 @@ public:
 
   /* capacity */
 
-  bool      empty()const{return this->final_empty_();}
-  size_type size()const{return this->final_size_();}
-  size_type max_size()const{return this->final_max_size_();}
+  bool      empty()const BOOST_NOEXCEPT{return this->final_empty_();}
+  size_type size()const BOOST_NOEXCEPT{return this->final_size_();}
+  size_type max_size()const BOOST_NOEXCEPT{return this->final_max_size_();}
 
   /* modifiers */
 
@@ -461,7 +473,7 @@ public:
     this->final_swap_(x.final());
   }
 
-  void clear()
+  void clear()BOOST_NOEXCEPT
   {
     BOOST_MULTI_INDEX_ORD_INDEX_CHECK_INVARIANT;
     this->final_clear_();
@@ -688,32 +700,35 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   }
 
   template<typename Variant>
-  node_type* insert_(value_param_type v,node_type* x,Variant variant)
+  final_node_type* insert_(
+    value_param_type v,final_node_type*& x,Variant variant)
   {
     link_info inf;
     if(!link_point(key(v),inf,Category())){
-      return node_type::from_impl(inf.pos);
+      return static_cast<final_node_type*>(node_type::from_impl(inf.pos));
     }
 
-    node_type* res=static_cast<node_type*>(super::insert_(v,x,variant));
+    final_node_type* res=super::insert_(v,x,variant);
     if(res==x){
-      node_impl_type::link(x->impl(),inf.side,inf.pos,header()->impl());
+      node_impl_type::link(
+        static_cast<node_type*>(x)->impl(),inf.side,inf.pos,header()->impl());
     }
     return res;
   }
 
   template<typename Variant>
-  node_type* insert_(
-    value_param_type v,node_type* position,node_type* x,Variant variant)
+  final_node_type* insert_(
+    value_param_type v,node_type* position,final_node_type*& x,Variant variant)
   {
     link_info inf;
     if(!hinted_link_point(key(v),position,inf,Category())){
-      return node_type::from_impl(inf.pos);
+      return static_cast<final_node_type*>(node_type::from_impl(inf.pos));
     }
 
-    node_type* res=static_cast<node_type*>(super::insert_(v,position,x,variant));
+    final_node_type* res=super::insert_(v,position,x,variant);
     if(res==x){
-      node_impl_type::link(x->impl(),inf.side,inf.pos,header()->impl());
+      node_impl_type::link(
+        static_cast<node_type*>(x)->impl(),inf.side,inf.pos,header()->impl());
     }
     return res;
   }

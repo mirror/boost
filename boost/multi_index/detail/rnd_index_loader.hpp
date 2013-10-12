@@ -1,4 +1,4 @@
-/* Copyright 2003-2008 Joaquin M Lopez Munoz.
+/* Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -45,11 +45,11 @@ class random_access_index_loader_base:private noncopyable
 {
 protected:
   typedef random_access_index_node_impl<
-      typename boost::detail::allocator::rebind_to<
-        Allocator,
-        char
-      >::type
-    >                                           node_impl_type;
+    typename boost::detail::allocator::rebind_to<
+      Allocator,
+      char
+    >::type
+  >                                                 node_impl_type;
   typedef typename node_impl_type::pointer          node_impl_pointer;
   typedef random_access_index_ptr_array<Allocator>  ptr_array;
 

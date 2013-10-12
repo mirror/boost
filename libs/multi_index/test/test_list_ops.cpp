@@ -73,7 +73,7 @@ bool is_sorted(
 #endif
 
 template<typename Sequence>
-static void test_list_ops_unique_seq(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
+static void test_list_ops_unique_seq()
 {
   typedef typename nth_index<Sequence,1>::type sequenced_index;
 
@@ -158,8 +158,7 @@ static void test_list_ops_unique_seq(BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
 }
 
 template<typename Sequence>
-static void test_list_ops_non_unique_seq(
-  BOOST_EXPLICIT_TEMPLATE_TYPE(Sequence))
+static void test_list_ops_non_unique_seq()
 {
   typedef typename Sequence::iterator iterator;
 
@@ -247,10 +246,6 @@ void test_list_ops()
     >
   > sequenced_set;
   
-  /* MSVC++ 6.0 chokes on test_list_ops_unique_seq without this
-   * explicit instantiation
-   */
-  sequenced_set ss;
   test_list_ops_unique_seq<sequenced_set>();
 
 
@@ -262,7 +257,6 @@ void test_list_ops()
     >
   > random_access_set;
   
-  random_access_set rs;
   test_list_ops_unique_seq<random_access_set>();
 
   typedef multi_index_container<
@@ -270,7 +264,6 @@ void test_list_ops()
     indexed_by<sequenced<> >
   > int_list;
 
-  int_list il;
   test_list_ops_non_unique_seq<int_list>();
 
   typedef multi_index_container<
@@ -278,6 +271,5 @@ void test_list_ops()
     indexed_by<random_access<> >
   > int_vector;
 
-  int_vector iv;
   test_list_ops_non_unique_seq<int_vector>();
 }

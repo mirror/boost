@@ -116,6 +116,7 @@
 
 #if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
 #include <boost/serialization/split_member.hpp>
+#include <boost/serialization/version.hpp>
 #endif
 
 #if defined(BOOST_HAS_THREADS)
@@ -566,6 +567,20 @@ public:
 } /* namespace multi_index::safe_mode */
 
 } /* namespace multi_index */
+
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)&&\
+    !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+namespace serialization{
+template<typename Iterator,typename Container>
+struct version<
+  boost::multi_index::safe_mode::safe_iterator<Iterator,Container>
+>
+{
+  BOOST_STATIC_CONSTANT(
+    int,value=boost::serialization::version<Iterator>::value);
+};
+} /* namespace serialization */
+#endif
 
 } /* namespace boost */
 

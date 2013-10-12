@@ -1,4 +1,4 @@
-/* Copyright 2003-2008 Joaquin M Lopez Munoz.
+/* Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -110,16 +110,17 @@ public:
 
 private:
   typedef typename boost::detail::allocator::rebind_to<
-      Allocator,Node>::type                       allocator_type;
-  typedef typename allocator_type::pointer        allocator_pointer;
+    Allocator,Node
+  >::type                                               allocator_type;
+  typedef typename allocator_type::pointer              allocator_pointer;
 
-  allocator_type                                  al_;
-  std::size_t                                     size_;
-  auto_space<copy_map_entry<Node>,Allocator>      spc;
-  std::size_t                                     n;
-  Node*                                           header_org_;
-  Node*                                           header_cpy_;
-  bool                                            released;
+  allocator_type                                        al_;
+  std::size_t                                           size_;
+  auto_space<copy_map_entry<Node>,Allocator>            spc;
+  std::size_t                                           n;
+  Node*                                                 header_org_;
+  Node*                                                 header_cpy_;
+  bool                                                  released;
 
   void deallocate(Node* node)
   {

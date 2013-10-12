@@ -1,4 +1,4 @@
-/* Copyright 2003-2011 Joaquin M Lopez Munoz.
+/* Copyright 2003-2013 Joaquin M Lopez Munoz.
  * Distributed under the Boost Software License, Version 1.0.
  * (See accompanying file LICENSE_1_0.txt or copy at
  * http://www.boost.org/LICENSE_1_0.txt)
@@ -20,7 +20,6 @@
 #include <boost/mpl/identity.hpp>
 #include <boost/mpl/if.hpp>
 #include <boost/mpl/or.hpp>
-#include <boost/mpl/aux_/nttp_decl.hpp>
 #include <boost/preprocessor/cat.hpp>
 #include <boost/preprocessor/control/expr_if.hpp>
 #include <boost/preprocessor/list/at.hpp>
@@ -109,15 +108,15 @@ namespace detail{
 
 /* n-th key extractor of a composite key */
 
-template<typename CompositeKey,BOOST_MPL_AUX_NTTP_DECL(int, N)>
+template<typename CompositeKey,int N>
 struct nth_key_from_value
 {
   typedef typename CompositeKey::key_extractor_tuple key_extractor_tuple;
-  typedef     typename mpl::eval_if_c<
-      N<tuples::length<key_extractor_tuple>::value,
-      tuples::element<N,key_extractor_tuple>,
-      mpl::identity<tuples::null_type>
-    >::type                                            type;
+  typedef typename mpl::eval_if_c<
+    N<tuples::length<key_extractor_tuple>::value,
+    tuples::element<N,key_extractor_tuple>,
+    mpl::identity<tuples::null_type>
+  >::type                                            type;
 };
 
 /* nth_composite_key_##name<CompositeKey,N>::type yields
@@ -138,7 +137,7 @@ struct BOOST_PP_CAT(key_,name)<tuples::null_type>                            \
   typedef tuples::null_type type;                                            \
 };                                                                           \
                                                                              \
-template<typename CompositeKey,BOOST_MPL_AUX_NTTP_DECL(int, N)>              \
+template<typename CompositeKey,int  N>                                       \
 struct BOOST_PP_CAT(nth_composite_key_,name)                                 \
 {                                                                            \
   typedef typename nth_key_from_value<CompositeKey,N>::type key_from_value;  \
@@ -1230,6 +1229,7 @@ public:
  * for composite_key_results enabling interoperation with tuples of values.
  */
 
+#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 namespace std{
 
 template<typename CompositeKey>
@@ -1269,6 +1269,34 @@ struct hash<boost::multi_index::composite_key_result<CompositeKey> >:
 };
 
 } /* namespace boost */
+#else
+/* Lacking template partial specialization, std::equal_to, std::less and
+ * std::greater will still work for composite_key_results although without
+ * tuple interoperability. To achieve the same graceful degrading with
+ * boost::hash, we define the appropriate hash_value overload.
+ */
+
+namespace boost{
+
+#if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+namespace multi_index{
+#endif
+
+template<typename CompositeKey>
+inline std::size_t hash_value(
+  const boost::multi_index::composite_key_result<CompositeKey>& x)
+{
+  boost::multi_index::composite_key_result_hash<
+    boost::multi_index::composite_key_result<CompositeKey> > h;
+  return h(x);
+}
+
+#if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
+} /* namespace multi_index */
+#endif
+
+} /* namespace boost */
+#endif
 
 #undef BOOST_MULTI_INDEX_CK_RESULT_HASH_SUPER
 #undef BOOST_MULTI_INDEX_CK_RESULT_GREATER_SUPER

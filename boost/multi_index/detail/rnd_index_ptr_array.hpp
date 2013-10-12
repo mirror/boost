@@ -33,17 +33,17 @@ template<typename Allocator>
 class random_access_index_ptr_array:private noncopyable
 {
   typedef random_access_index_node_impl<
-      typename boost::detail::allocator::rebind_to<
-        Allocator,
-        char
-      >::type
-    >                                               node_impl_type;
+    typename boost::detail::allocator::rebind_to<
+      Allocator,
+      char
+    >::type
+  >                                                     node_impl_type;
 
 public:
-  typedef typename node_impl_type::pointer          value_type;
+  typedef typename node_impl_type::pointer              value_type;
   typedef typename boost::detail::allocator::rebind_to<
-      Allocator,value_type
-  >::type::pointer                                  pointer;
+    Allocator,value_type
+  >::type::pointer                                      pointer;
 
   random_access_index_ptr_array(
     const Allocator& al,value_type end_,std::size_t size):
