@@ -1067,33 +1067,23 @@
         ' ')" />
 
     <!-- CV Qualifiers -->
-    <xsl:if test="@const='yes' or @volatile='yes' or contains($extra-qualifiers,' =delete ') or contains($extra-qualifiers,' =default ')">
+    <!-- Plus deleted and defaulted function markers as they're not properly
+         supported in boostbook -->
+    <!-- The 'substring' trick includes the string if the condition is true -->
+    <xsl:variable name="cv-qualifiers" select="normalize-space(concat(
+        substring('const ', 1, 999 * (@const=yes)),
+        substring('volatile ', 1, 999 * (@volatile=yes)),
+        substring('= delete ', 1, 999 * contains($extra-qualifiers, ' =delete ')),
+        substring('= default ', 1, 999 * contains($extra-qualifiers, ' =default ')),
+        ''))" />
+
+    <xsl:if test="$cv-qualifiers">
       <xsl:attribute name="cv">
-        <xsl:if test="@const='yes'">
-          <xsl:text>const</xsl:text>
-        </xsl:if>
-        <xsl:if test="@volatile='yes'">
-          <xsl:if test="@const='yes'">
-            <xsl:text> </xsl:text>
-          </xsl:if>
-          <xsl:text>volatile</xsl:text>
-        </xsl:if>
-        <!-- Cheat and add deleted and defaulted function markers to the CV qualifiers -->
-        <xsl:if test="contains($extra-qualifiers,' =delete ')">
-          <xsl:if test="@const='yes' or @volatile='yes'">
-            <xsl:text> </xsl:text>
-          </xsl:if>
-          <xsl:text>= delete</xsl:text>
-        </xsl:if>
-        <xsl:if test="contains($extra-qualifiers,' =default ')">
-          <xsl:if test="@const='yes' or @volatile='yes'">
-            <xsl:text> </xsl:text>
-          </xsl:if>
-          <xsl:text>= default</xsl:text>
-        </xsl:if>
+        <xsl:value-of select="$cv-qualifiers" />
       </xsl:attribute>
     </xsl:if>
 
+    <!-- Specifiers -->
     <xsl:if test="@explicit = 'yes'">
       <xsl:attribute name="specifiers">explicit</xsl:attribute>
     </xsl:if>
