@@ -149,7 +149,7 @@ namespace example
         /** A destructor. */
         ~specialization_test();
         /** An assignment operator. */
-        specialization_test& operator=(const specialization_test&);
+        detail::unspecified& operator=(const specialization_test&);
     };
 }
 

@@ -1218,6 +1218,11 @@
         </xsl:attribute>
       </xsl:if>
 
+      <!-- Return type -->
+      <xsl:element name="type">
+        <xsl:apply-templates select="type"/>
+      </xsl:element>
+
       <xsl:call-template name="function.children"/>
     </copy-assignment>
   </xsl:template>
