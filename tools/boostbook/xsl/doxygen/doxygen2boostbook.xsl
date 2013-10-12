@@ -1220,6 +1220,11 @@
 
       <!-- Return type -->
       <xsl:element name="type">
+        <!-- Cheat on virtual and static by dropping them into the type -->
+        <xsl:if test="@virtual='yes' or @virt='virtual'">
+          <xsl:text>virtual </xsl:text>
+        </xsl:if>
+
         <xsl:apply-templates select="type"/>
       </xsl:element>
 
@@ -1305,7 +1310,7 @@
           <xsl:text>static </xsl:text>
         </xsl:if>
 
-        <xsl:if test="@virtual='yes'">
+        <xsl:if test="@virtual='yes' or @virt='virtual'">
           <xsl:text>virtual </xsl:text>
         </xsl:if>
 

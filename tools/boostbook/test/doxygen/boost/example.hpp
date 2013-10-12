@@ -34,6 +34,7 @@ namespace example
     public:
         example(example const&) = default;
         example& operator=(example const&) = delete;
+        virtual int virtual_method();
 
         int integer;
         static int static_integer;
