@@ -41,16 +41,6 @@ namespace detail{
  * arbitrary combinations of these (vg. T** or auto_ptr<T*>.)
  */
 
-/* NB. Some overloads of operator() have an extra dummy parameter int=0.
- * This disambiguator serves several purposes:
- *  - Without it, MSVC++ 6.0 incorrectly regards some overloads as
- *    specializations of a previous member function template.
- *  - MSVC++ 6.0/7.0 seem to incorrectly treat some different memfuns
- *    as if they have the same signature.
- *  - If remove_const is broken due to lack of PTS, int=0 avoids the
- *    declaration of memfuns with identical signature.
- */
-
 template<class Class,typename Type,Type Class::*PtrToMember>
 struct const_member_base
 {
@@ -80,7 +70,7 @@ struct const_member_base
     return operator()(x.get());
   }
 
-  Type& operator()(const reference_wrapper<Class>& x,int=0)const
+  Type& operator()(const reference_wrapper<Class>& x)const
   { 
     return operator()(x.get());
   }
@@ -105,7 +95,7 @@ struct non_const_member_base
     return operator()(*x);
   }
 
-  const Type& operator()(const Class& x,int=0)const
+  const Type& operator()(const Class& x)const
   {
     return x.*PtrToMember;
   }
@@ -115,7 +105,7 @@ struct non_const_member_base
     return x.*PtrToMember;
   }
 
-  const Type& operator()(const reference_wrapper<const Class>& x,int=0)const
+  const Type& operator()(const reference_wrapper<const Class>& x)const
   {
     return operator()(x.get());
   }
@@ -189,7 +179,7 @@ struct const_member_offset_base
     return operator()(x.get());
   }
 
-  Type& operator()(const reference_wrapper<Class>& x,int=0)const
+  Type& operator()(const reference_wrapper<Class>& x)const
   {
     return operator()(x.get());
   }
@@ -214,7 +204,7 @@ struct non_const_member_offset_base
     return operator()(*x);
   }
 
-  const Type& operator()(const Class& x,int=0)const
+  const Type& operator()(const Class& x)const
   {
     return *static_cast<const Type*>(
       static_cast<const void*>(
@@ -229,7 +219,7 @@ struct non_const_member_offset_base
         static_cast<char*>(static_cast<void *>(&x))+OffsetOfMember));
   }
 
-  const Type& operator()(const reference_wrapper<const Class>& x,int=0)const
+  const Type& operator()(const reference_wrapper<const Class>& x)const
   {
     return operator()(x.get());
   }

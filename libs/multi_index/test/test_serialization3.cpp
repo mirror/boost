@@ -35,9 +35,7 @@ template<class Archive>
 void save_construct_data(
   Archive& ar,const non_default_ctble* p,const unsigned int version)
 {
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   if(version<3)return;
-#endif
 
   ar<<boost::serialization::make_nvp("n",p->n);
 }
@@ -46,9 +44,7 @@ template<class Archive>
 void load_construct_data(
   Archive& ar,non_default_ctble* p,const unsigned int version)
 {
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
   if(version<3)return;
-#endif
 
   int n=0;
   ar>>boost::serialization::make_nvp("n",n);

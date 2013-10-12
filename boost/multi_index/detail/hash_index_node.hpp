@@ -15,8 +15,6 @@
 
 #include <boost/config.hpp> /* keep it first to prevent nasty warns in MSVC */
 #include <boost/detail/allocator_utilities.hpp>
-#include <boost/mpl/if.hpp>
-#include <boost/type_traits/is_same.hpp>
 
 namespace boost{
 
@@ -220,8 +218,11 @@ struct unlink_undo
 struct hashed_unique_tag{};
 struct hashed_non_unique_tag{};
 
+template<typename Node,typename Category>
+struct hashed_index_node_alg;
+
 template<typename Node>
-struct hashed_unique_index_node_alg
+struct hashed_index_node_alg<Node,hashed_unique_tag>
 {
   typedef typename Node::base_pointer       base_pointer;
   typedef typename Node::const_base_pointer const_base_pointer;
@@ -310,7 +311,7 @@ private:
 };
 
 template<typename Node>
-struct hashed_non_unique_index_node_alg
+struct hashed_index_node_alg<Node,hashed_non_unique_tag>
 {
   typedef typename Node::base_pointer       base_pointer;
   typedef typename Node::const_base_pointer const_base_pointer;
@@ -631,11 +632,8 @@ private:
 
 public:
   typedef typename trampoline::impl_type          impl_type;
-  typedef typename mpl::if_<
-    is_same<Category,hashed_unique_tag>,
-    hashed_unique_index_node_alg<impl_type>,
-    hashed_non_unique_index_node_alg<impl_type>
-  >::type                                         node_alg;
+  typedef hashed_index_node_alg<
+    impl_type,Category>                           node_alg;
   typedef typename trampoline::base_pointer       impl_base_pointer;
   typedef typename trampoline::const_base_pointer const_impl_base_pointer;
   typedef typename trampoline::pointer            impl_pointer;

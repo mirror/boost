@@ -580,16 +580,6 @@ struct composite_key_result
 
 /* composite_key */
 
-/* NB. Some overloads of operator() have an extra dummy parameter int=0.
- * This disambiguator serves several purposes:
- *  - Without it, MSVC++ 6.0 incorrectly regards some overloads as
- *    specializations of a previous member function template.
- *  - MSVC++ 6.0/7.0 seem to incorrectly treat some different memfuns
- *    as if they have the same signature.
- *  - If remove_const is broken due to lack of PTS, int=0 avoids the
- *    declaration of memfuns with identical signature.
- */
-
 template<
   typename Value,
   BOOST_MULTI_INDEX_CK_ENUM(BOOST_MULTI_INDEX_CK_TEMPLATE_PARM,KeyFromValue)
@@ -639,7 +629,7 @@ public:
     return result_type(*this,x.get());
   }
 
-  result_type operator()(const reference_wrapper<value_type>& x,int=0)const
+  result_type operator()(const reference_wrapper<value_type>& x)const
   {
     return result_type(*this,x.get());
   }
@@ -1229,7 +1219,6 @@ public:
  * for composite_key_results enabling interoperation with tuples of values.
  */
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 namespace std{
 
 template<typename CompositeKey>
@@ -1269,34 +1258,6 @@ struct hash<boost::multi_index::composite_key_result<CompositeKey> >:
 };
 
 } /* namespace boost */
-#else
-/* Lacking template partial specialization, std::equal_to, std::less and
- * std::greater will still work for composite_key_results although without
- * tuple interoperability. To achieve the same graceful degrading with
- * boost::hash, we define the appropriate hash_value overload.
- */
-
-namespace boost{
-
-#if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-namespace multi_index{
-#endif
-
-template<typename CompositeKey>
-inline std::size_t hash_value(
-  const boost::multi_index::composite_key_result<CompositeKey>& x)
-{
-  boost::multi_index::composite_key_result_hash<
-    boost::multi_index::composite_key_result<CompositeKey> > h;
-  return h(x);
-}
-
-#if !defined(BOOST_NO_ARGUMENT_DEPENDENT_LOOKUP)
-} /* namespace multi_index */
-#endif
-
-} /* namespace boost */
-#endif
 
 #undef BOOST_MULTI_INDEX_CK_RESULT_HASH_SUPER
 #undef BOOST_MULTI_INDEX_CK_RESULT_GREATER_SUPER

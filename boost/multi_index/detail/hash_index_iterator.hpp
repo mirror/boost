@@ -68,15 +68,10 @@ public:
   typedef typename Node::base_type node_base_type;
 
   template<class Archive>
-  void save(Archive& ar,const unsigned int version)const
+  void save(Archive& ar,const unsigned int)const
   {
     node_base_type* bnode=node;
     ar<<serialization::make_nvp("pointer",bnode);
-    if(version<1){ /* class versioning unavailable */
-      /* save anything for backwards compatibility */
-      BucketArray* dummy=0;
-      ar<<serialization::make_nvp("pointer",dummy);
-    }
   }
 
   template<class Archive>
@@ -149,8 +144,7 @@ bool operator==(
 
 } /* namespace multi_index */
 
-#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)&&\
-    !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
 /* class version = 1 : hashed_index_iterator does no longer serialize a bucket
  * array pointer.
  */

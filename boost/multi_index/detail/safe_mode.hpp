@@ -568,8 +568,7 @@ public:
 
 } /* namespace multi_index */
 
-#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)&&\
-    !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
+#if !defined(BOOST_MULTI_INDEX_DISABLE_SERIALIZATION)
 namespace serialization{
 template<typename Iterator,typename Container>
 struct version<
