@@ -18,7 +18,7 @@
 
 #if !defined(BOOST_MPL_CFG_HAS_TYPEOF) \
     && !defined(BOOST_MPL_PREPROCESSING_MODE) \
-    && (   defined(BOOST_MPL_CFG_GCC) \
+    && (   defined(BOOST_MPL_CFG_GCC) && BOOST_MPL_CFG_GCC > 0 \
         || defined(__MWERKS__) && __MWERKS__ >= 0x3000 \
         )
 
