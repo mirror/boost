@@ -13,7 +13,7 @@
 #include <dispatch/dispatch.h>
 
 #include <boost/sync/detail/config.hpp>
-#include <boost/sync_detail/throw_exception.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/detail/system_error.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
 
