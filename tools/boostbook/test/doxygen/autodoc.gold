@@ -16,6 +16,12 @@
 <method-group name="public member functions">
 <method name="virtual_method"><type>virtual int</type></method>
 <method name="method_with_default_value"><type>int</type><parameter name=""><paramtype>int</paramtype><default>default_value</default></parameter></method>
+<method name="trad_noexcept" cv="noexcept"><type>void</type></method>
+<method name="boost_noexcept" cv="noexcept"><type>void</type></method>
+<method name="trad_constexpr" cv="constexpr"><type>void</type></method>
+<method name="boost_constexpr" cv="constexpr"><type>void</type></method>
+<method name="boost_constexpr_or_const" cv="constexpr"><type>void</type></method>
+<method name="constexpr_noexcept" cv="constexpr noexcept"><type>void</type></method>
 <method name="conversion-operator" specifiers="explicit"><type>int</type></method>
 </method-group>
 <constructor cv="= default"><parameter name=""><paramtype><classname>example</classname> const &amp;</paramtype></parameter></constructor>

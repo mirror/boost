@@ -1071,8 +1071,15 @@
          supported in boostbook -->
     <!-- The 'substring' trick includes the string if the condition is true -->
     <xsl:variable name="cv-qualifiers" select="normalize-space(concat(
+        substring('constexpr ', 1, 999 * (
+            contains($extra-qualifiers, ' const expr ') or
+            contains($extra-qualifiers, ' BOOST_CONSTEXPR ') or
+            contains($extra-qualifiers, ' BOOST_CONSTEXPR_OR_CONST '))),
         substring('const ', 1, 999 * (@const=yes)),
         substring('volatile ', 1, 999 * (@volatile=yes)),
+        substring('noexcept ', 1, 999 * (
+            contains($extra-qualifiers, ' noexcept ') or
+            contains($extra-qualifiers, ' BOOST_NOEXCEPT '))),
         substring('= delete ', 1, 999 * contains($extra-qualifiers, ' =delete ')),
         substring('= default ', 1, 999 * contains($extra-qualifiers, ' =default ')),
         ''))" />

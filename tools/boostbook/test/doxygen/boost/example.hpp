@@ -37,6 +37,15 @@ namespace example
         virtual int virtual_method();
         int method_with_default_value(int = default_value);
 
+        void trad_noexcept() noexcept;
+        void boost_noexcept() BOOST_NOEXCEPT;
+
+        void trad_constexpr() constexpr;
+        void boost_constexpr() BOOST_CONSTEXPR;
+        void boost_constexpr_or_const() BOOST_CONSTEXPR_OR_CONST;
+
+        void constexpr_noexcept() constexpr noexcept;
+
         int integer;
         static int static_integer;
         mutable int mutable_integer;
