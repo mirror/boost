@@ -14,8 +14,8 @@
 <data-member name="static_integer" specifiers="static"><type>int</type></data-member>
 <data-member name="static_const_integer" specifiers="static"><type>const int</type></data-member>
 <method-group name="public member functions">
-<method name="virtual_method" cv=""><type>virtual int</type></method>
-<method name="conversion-operator" cv="" specifiers="explicit"><type>int</type></method>
+<method name="virtual_method"><type>virtual int</type></method>
+<method name="conversion-operator" specifiers="explicit"><type>int</type></method>
 </method-group>
 <constructor cv="= default"><parameter name=""><paramtype><classname>example</classname> const &amp;</paramtype></parameter></constructor>
 <copy-assignment cv="= delete"><type><classname>example</classname> &amp;</type><parameter name=""><paramtype><classname>example</classname> const &amp;</paramtype></parameter></copy-assignment>
@@ -45,7 +45,7 @@ Line 1<sbr/>
 </method-group>
 <constructor><description><para>A constructor. </para></description></constructor>
 <destructor><description><para>A destructor. </para></description></destructor>
-<copy-assignment cv=""><type><emphasis>unspecified</emphasis></type><parameter name=""><paramtype>const <classname>specialization_test</classname> &amp;</paramtype></parameter><description><para>An assignment operator. </para></description></copy-assignment>
+<copy-assignment><type><emphasis>unspecified</emphasis></type><parameter name=""><paramtype>const <classname>specialization_test</classname> &amp;</paramtype></parameter><description><para>An assignment operator. </para></description></copy-assignment>
 </struct-specialization><enum name="namespace_enum"><enumvalue name="enumerator"/></enum>
 <data-member name="namespace_integer"><type>int</type></data-member>
 <data-member name="namespace_static_integer" specifiers="static"><type>int</type></data-member>

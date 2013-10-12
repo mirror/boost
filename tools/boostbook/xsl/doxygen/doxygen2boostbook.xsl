@@ -1059,6 +1059,42 @@
     </xsl:if>
   </xsl:template>
 
+  <xsl:template name="function.attributes">
+
+    <!-- CV Qualifiers -->
+    <xsl:if test="@const='yes' or @volatile='yes' or contains(argsstring/text(),'=delete') or contains(argsstring/text(),'=default')">
+      <xsl:attribute name="cv">
+        <xsl:if test="@const='yes'">
+          <xsl:text>const</xsl:text>
+        </xsl:if>
+        <xsl:if test="@volatile='yes'">
+          <xsl:if test="@const='yes'">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+          <xsl:text>volatile</xsl:text>
+        </xsl:if>
+        <!-- Cheat and add deleted and defaulted function markers to the CV qualifiers -->
+        <xsl:if test="contains(argsstring/text(),'=delete')">
+          <xsl:if test="@const='yes' or @volatile='yes'">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+          <xsl:text>= delete</xsl:text>
+        </xsl:if>
+        <xsl:if test="contains(argsstring/text(),'=default')">
+          <xsl:if test="@const='yes' or @volatile='yes'">
+            <xsl:text> </xsl:text>
+          </xsl:if>
+          <xsl:text>= default</xsl:text>
+        </xsl:if>
+      </xsl:attribute>
+    </xsl:if>
+
+    <xsl:if test="@explicit = 'yes'">
+      <xsl:attribute name="specifiers">explicit</xsl:attribute>
+    </xsl:if>
+
+  </xsl:template>
+
   <!-- Handle function children -->
   <xsl:template name="function.children">
     <xsl:param name="is-overloaded" select="false()"/>
@@ -1186,18 +1222,7 @@
       <xsl:if test="@explicit = 'yes'">
         <xsl:attribute name="specifiers">explicit</xsl:attribute>
       </xsl:if>
-      <!-- CV Qualifiers -->
-      <xsl:if test="contains(argsstring/text(),'=delete') or contains(argsstring/text(),'=default')">
-        <xsl:attribute name="cv">
-          <!-- Cheat and add deleted and defaulted function markers to the CV qualifiers -->
-          <xsl:if test="contains(argsstring/text(),'=delete')">
-            <xsl:text>= delete</xsl:text>
-          </xsl:if>
-          <xsl:if test="contains(argsstring/text(),'=default')">
-            <xsl:text>= default</xsl:text>
-          </xsl:if>
-        </xsl:attribute>
-      </xsl:if>
+      <xsl:call-template name="function.attributes"/>
       <xsl:call-template name="function.children"/>
     </constructor>
     <xsl:text>&#10;</xsl:text><!-- Newline -->
@@ -1214,34 +1239,7 @@
   <!-- Handle Copy Assignment -->
   <xsl:template name="copy-assignment">
     <copy-assignment>
-      <!-- CV Qualifiers -->
-      <xsl:if test="not (@const='no' and @volatile='no')">
-        <xsl:attribute name="cv">
-          <xsl:if test="@const='yes'">
-            <xsl:text>const</xsl:text>
-          </xsl:if>
-          <xsl:if test="@volatile='yes'">
-            <xsl:if test="@const='yes'">
-              <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:text>volatile</xsl:text>
-          </xsl:if>
-          <!-- Cheat and add deleted and defaulted function markers to the CV qualifiers -->
-          <xsl:if test="contains(argsstring/text(),'=delete')">
-            <xsl:if test="@const='yes' or @volatile='yes'">
-              <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:text>= delete</xsl:text>
-          </xsl:if>
-          <xsl:if test="contains(argsstring/text(),'=default')">
-            <xsl:if test="@const='yes' or @volatile='yes'">
-              <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:text>= default</xsl:text>
-          </xsl:if>
-        </xsl:attribute>
-      </xsl:if>
-
+      <xsl:call-template name="function.attributes"/>
       <!-- Return type -->
       <xsl:element name="type">
         <!-- Cheat on virtual and static by dropping them into the type -->
@@ -1263,32 +1261,7 @@
       <xsl:attribute name="name">
         <xsl:text>conversion-operator</xsl:text>
       </xsl:attribute>
-
-      <!-- CV Qualifiers -->
-      <xsl:if test="not (@const='no' and @volatile='no') or contains(argsstring/text(),'=delete')">
-        <xsl:attribute name="cv">
-          <xsl:if test="@const='yes'">
-            <xsl:text>const</xsl:text>
-          </xsl:if>
-          <xsl:if test="@volatile='yes'">
-            <xsl:if test="@const='yes'">
-              <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:text>volatile</xsl:text>
-          </xsl:if>
-          <!-- Cheat and add deleted function markers to the CV qualifiers -->
-          <xsl:if test="contains(argsstring/text(),'=delete')">
-            <xsl:if test="@const='yes' or @volatile='yes'">
-              <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:text>= delete</xsl:text>
-          </xsl:if>
-        </xsl:attribute>
-      </xsl:if>
-
-      <xsl:if test="@explicit = 'yes'">
-        <xsl:attribute name="specifiers">explicit</xsl:attribute>
-      </xsl:if>
+      <xsl:call-template name="function.attributes"/>
 
       <!-- Conversion type -->
       <type>
@@ -1306,28 +1279,7 @@
       <xsl:attribute name="name">
         <xsl:value-of select="name/text()"/>
       </xsl:attribute>
-
-      <!-- CV Qualifiers -->
-      <xsl:if test="not (@const='no' and @volatile='no') or contains(argsstring/text(),'=delete')">
-        <xsl:attribute name="cv">
-          <xsl:if test="@const='yes'">
-            <xsl:text>const</xsl:text>
-          </xsl:if>
-          <xsl:if test="@volatile='yes'">
-            <xsl:if test="@const='yes'">
-              <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:text>volatile</xsl:text>
-          </xsl:if>
-          <!-- Cheat and add deleted function markers to the CV qualifiers -->
-          <xsl:if test="contains(argsstring/text(),'=default')">
-            <xsl:if test="@const='yes' or @volatile='yes'">
-              <xsl:text> </xsl:text>
-            </xsl:if>
-            <xsl:text>= default</xsl:text>
-          </xsl:if>
-        </xsl:attribute>
-      </xsl:if>
+      <xsl:call-template name="function.attributes"/>
 
       <!-- Return type -->
       <xsl:element name="type">
