@@ -1087,15 +1087,24 @@
         substring('= 0 ', 1, 999 * (@virt = 'pure-virtual')),
         ''))" />
 
+    <!-- Specifiers -->
+    <xsl:variable name="specifiers" select="normalize-space(concat(
+        substring('explicit ', 1, 999 * (@explicit = 'yes')),
+        substring('virtual ', 1, 999 * (
+            @virtual='yes' or @virt='virtual' or @virt='pure-virtual')),
+        substring('static ', 1, 999 * (@static = 'yes')),
+        ''))" />
+
     <xsl:if test="$cv-qualifiers">
       <xsl:attribute name="cv">
         <xsl:value-of select="$cv-qualifiers" />
       </xsl:attribute>
     </xsl:if>
 
-    <!-- Specifiers -->
-    <xsl:if test="@explicit = 'yes'">
-      <xsl:attribute name="specifiers">explicit</xsl:attribute>
+    <xsl:if test="$specifiers">
+      <xsl:attribute name="specifiers">
+        <xsl:value-of select="$specifiers" />
+      </xsl:attribute>
     </xsl:if>
 
   </xsl:template>
@@ -1247,11 +1256,6 @@
       <xsl:call-template name="function.attributes"/>
       <!-- Return type -->
       <xsl:element name="type">
-        <!-- Cheat on virtual and static by dropping them into the type -->
-        <xsl:if test="@virtual='yes' or @virt='virtual' or @virt='pure-virtual'">
-          <xsl:text>virtual </xsl:text>
-        </xsl:if>
-
         <xsl:apply-templates select="type"/>
       </xsl:element>
 
@@ -1288,15 +1292,6 @@
 
       <!-- Return type -->
       <xsl:element name="type">
-        <!-- Cheat on virtual and static by dropping them into the type -->
-        <xsl:if test="@static='yes'">
-          <xsl:text>static </xsl:text>
-        </xsl:if>
-
-        <xsl:if test="@virtual='yes' or @virt='virtual' or @virt='pure-virtual'">
-          <xsl:text>virtual </xsl:text>
-        </xsl:if>
-
         <xsl:apply-templates select="type"/>
       </xsl:element>
 

@@ -51,6 +51,9 @@ namespace example
 
         void constexpr_noexcept() constexpr noexcept;
 
+        static int static_method();
+        static int static_constexpr() constexpr;
+
         int integer;
         static int static_integer;
         mutable int mutable_integer;
