@@ -1070,18 +1070,21 @@
     <!-- Plus deleted and defaulted function markers as they're not properly
          supported in boostbook -->
     <!-- The 'substring' trick includes the string if the condition is true -->
+    <xsl:variable name="constexpr" select="
+        contains($extra-qualifiers, ' const expr ') or
+        contains($extra-qualifiers, ' BOOST_CONSTEXPR ') or
+        contains($extra-qualifiers, ' BOOST_CONSTEXPR_OR_CONST ')" />
+
     <xsl:variable name="cv-qualifiers" select="normalize-space(concat(
-        substring('constexpr ', 1, 999 * (
-            contains($extra-qualifiers, ' const expr ') or
-            contains($extra-qualifiers, ' BOOST_CONSTEXPR ') or
-            contains($extra-qualifiers, ' BOOST_CONSTEXPR_OR_CONST '))),
-        substring('const ', 1, 999 * (@const=yes)),
-        substring('volatile ', 1, 999 * (@volatile=yes)),
+        substring('constexpr ', 1, 999 * $constexpr),
+        substring('const ', 1, 999 * (not($constexpr) and @const='yes')),
+        substring('volatile ', 1, 999 * (@volatile='yes' or contains($extra-qualifiers, ' volatile '))),
         substring('noexcept ', 1, 999 * (
             contains($extra-qualifiers, ' noexcept ') or
             contains($extra-qualifiers, ' BOOST_NOEXCEPT '))),
         substring('= delete ', 1, 999 * contains($extra-qualifiers, ' =delete ')),
         substring('= default ', 1, 999 * contains($extra-qualifiers, ' =default ')),
+        substring('= 0 ', 1, 999 * (@virt = 'pure-virtual')),
         ''))" />
 
     <xsl:if test="$cv-qualifiers">
@@ -1245,7 +1248,7 @@
       <!-- Return type -->
       <xsl:element name="type">
         <!-- Cheat on virtual and static by dropping them into the type -->
-        <xsl:if test="@virtual='yes' or @virt='virtual'">
+        <xsl:if test="@virtual='yes' or @virt='virtual' or @virt='pure-virtual'">
           <xsl:text>virtual </xsl:text>
         </xsl:if>
 
@@ -1290,7 +1293,7 @@
           <xsl:text>static </xsl:text>
         </xsl:if>
 
-        <xsl:if test="@virtual='yes' or @virt='virtual'">
+        <xsl:if test="@virtual='yes' or @virt='virtual' or @virt='pure-virtual'">
           <xsl:text>virtual </xsl:text>
         </xsl:if>
 

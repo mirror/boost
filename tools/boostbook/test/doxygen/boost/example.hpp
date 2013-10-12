@@ -35,7 +35,12 @@ namespace example
         example(example const&) = default;
         example& operator=(example const&) = delete;
         virtual int virtual_method();
+        virtual int virtual_abstract_method() = 0;
+        virtual int virtual_const_method() const;
         int method_with_default_value(int = default_value);
+
+        void const_method() const;
+        void volatile_method() volatile;
 
         void trad_noexcept() noexcept;
         void boost_noexcept() BOOST_NOEXCEPT;
