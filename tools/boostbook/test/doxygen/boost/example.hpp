@@ -55,7 +55,9 @@ namespace example
         void volatile_method() volatile;
 
         void trad_noexcept() noexcept;
+        void trad_noexcept_if() noexcept(a == b && (c || d));
         void boost_noexcept() BOOST_NOEXCEPT;
+        void boost_noexcept_if() BOOST_NOEXCEPT_IF(a == b && (c || d));
 
         void trad_constexpr() constexpr;
         void boost_constexpr() BOOST_CONSTEXPR;

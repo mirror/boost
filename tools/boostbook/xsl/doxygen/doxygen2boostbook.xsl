@@ -1078,19 +1078,43 @@
     <!-- CV Qualifiers -->
     <!-- Plus deleted and defaulted function markers as they're not properly
          supported in boostbook -->
-    <!-- The 'substring' trick includes the string if the condition is true -->
+
+    <!-- noexcept is complicated because is can have parameters.
+         TODO: should really remove the noexcept parameters before doing
+               anything else. -->
+    <xsl:variable name="noexcept">
+      <xsl:choose>
+        <xsl:when test="contains($extra-qualifiers, ' noexcept(')">
+          <xsl:call-template name="noexcept-if">
+            <xsl:with-param name="condition" select="substring-after($extra-qualifiers, ' noexcept(')" />
+          </xsl:call-template>
+        </xsl:when>
+
+        <xsl:when test="contains($extra-qualifiers, ' BOOST_NOEXCEPT_IF(')">
+          <xsl:call-template name="noexcept-if">
+            <xsl:with-param name="condition" select="substring-after($extra-qualifiers, ' BOOST_NOEXCEPT_IF(')" />
+          </xsl:call-template>
+        </xsl:when>
+
+        <xsl:when test="contains($extra-qualifiers, ' noexcept ') or contains($extra-qualifiers, ' BOOST_NOEXCEPT ')">
+          <xsl:value-of select="'noexcept '" />
+        </xsl:when>
+      </xsl:choose>
+    </xsl:variable>
+
+    <!-- Calculate constexpr now, so that we can avoid it getting confused
+         with const -->
     <xsl:variable name="constexpr" select="
         contains($extra-qualifiers, ' const expr ') or
         contains($extra-qualifiers, ' BOOST_CONSTEXPR ') or
         contains($extra-qualifiers, ' BOOST_CONSTEXPR_OR_CONST ')" />
 
+    <!-- The 'substring' trick includes the string if the condition is true -->
     <xsl:variable name="cv-qualifiers" select="normalize-space(concat(
         substring('constexpr ', 1, 999 * $constexpr),
         substring('const ', 1, 999 * (not($constexpr) and @const='yes')),
         substring('volatile ', 1, 999 * (@volatile='yes' or contains($extra-qualifiers, ' volatile '))),
-        substring('noexcept ', 1, 999 * (
-            contains($extra-qualifiers, ' noexcept ') or
-            contains($extra-qualifiers, ' BOOST_NOEXCEPT '))),
+        $noexcept,
         substring('= delete ', 1, 999 * contains($extra-qualifiers, ' =delete ')),
         substring('= default ', 1, 999 * contains($extra-qualifiers, ' =default ')),
         substring('= 0 ', 1, 999 * (@virt = 'pure-virtual')),
@@ -1116,6 +1140,30 @@
       </xsl:attribute>
     </xsl:if>
 
+  </xsl:template>
+
+  <!-- $condition = string after the opening bracket of the condition -->
+  <xsl:template name="noexcept-if">
+    <xsl:param name="condition"/>
+
+    <xsl:variable name="trailing">
+      <xsl:call-template name="strip-brackets">
+        <xsl:with-param name="text" select="$condition" />
+      </xsl:call-template>
+    </xsl:variable>
+
+    <xsl:choose>
+      <xsl:when test="string-length($trailing)">
+        <xsl:value-of select="concat(
+            'noexcept(',
+            substring($condition, 1, string-length($condition) - string-length($trailing)),
+            ') ')" />
+      </xsl:when>
+      <xsl:otherwise>
+        <!-- Something has gone wrong so: -->
+        <xsl:value-of select="'noexcept(condition) '" />
+      </xsl:otherwise>
+    </xsl:choose>
   </xsl:template>
 
   <!-- $text = substring after the opening bracket -->

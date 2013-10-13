@@ -31,7 +31,9 @@
 <method name="const_method" cv="const"><type>void</type></method>
 <method name="volatile_method" cv="volatile"><type>void</type></method>
 <method name="trad_noexcept" cv="noexcept"><type>void</type></method>
+<method name="trad_noexcept_if" cv="noexcept(a==b &amp;&amp;(c||d)))"><type>void</type></method>
 <method name="boost_noexcept" cv="noexcept"><type>void</type></method>
+<method name="boost_noexcept_if" cv="noexcept(condition)"><type>void</type></method>
 <method name="trad_constexpr" cv="constexpr"><type>void</type></method>
 <method name="boost_constexpr" cv="constexpr"><type>void</type></method>
 <method name="boost_constexpr_or_const" cv="constexpr"><type>void</type></method>
