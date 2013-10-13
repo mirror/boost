@@ -22,7 +22,7 @@
 
 namespace boost { namespace function_types { namespace detail {
 
-#if BOOST_WORKAROUND(__BORLANDC__, <= 0x582))
+#if !BOOST_WORKAROUND(__BORLANDC__, <= 0x582)
 
 template<typename T> struct cv_traits 
 { typedef non_cv tag; typedef T type; };
