@@ -164,12 +164,12 @@ struct default_assigner
 };
 
 template<typename Node>
-struct unlink_undo
+struct unlink_undo_assigner
 {
   typedef typename Node::base_pointer base_pointer;
   typedef typename Node::pointer      pointer;
 
-  unlink_undo():pointer_track_count(0),base_pointer_track_count(0){}
+  unlink_undo_assigner():pointer_track_count(0),base_pointer_track_count(0){}
 
   void operator()(pointer& x,pointer val)
   {
@@ -272,7 +272,7 @@ struct hashed_index_node_alg<Node,hashed_unique_tag>
     unlink(x,assign);
   }
 
-  typedef unlink_undo<Node> unlink_undo;
+  typedef unlink_undo_assigner<Node> unlink_undo;
 
   template<typename Assigner>
   static void unlink(pointer x,Assigner& assign)
@@ -439,7 +439,7 @@ struct hashed_index_node_alg<Node,hashed_non_unique_tag>
     unlink(x,assign);
   }
 
-  typedef unlink_undo<Node> unlink_undo;
+  typedef unlink_undo_assigner<Node> unlink_undo;
 
   template<typename Assigner>
   static void unlink(pointer x,Assigner& assign)
@@ -618,9 +618,7 @@ struct hashed_index_node_trampoline:
     typename Super::allocator_type,
     char
   >::type                                               impl_allocator_type;
-  typedef typename hashed_index_node_impl<
-    impl_allocator_type
-  >                                                     impl_type;
+  typedef hashed_index_node_impl<impl_allocator_type>   impl_type;
 };
 
 template<typename Super,typename Category>
