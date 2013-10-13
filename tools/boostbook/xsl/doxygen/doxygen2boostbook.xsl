@@ -1062,9 +1062,18 @@
   <xsl:template name="function.attributes">
 
     <!-- argsstring = '(arguments) [= delete] [= default] [constexpt]' -->
-    <xsl:variable name="extra-qualifiers" select="concat(' ',
-        normalize-space(substring-after(argsstring/text(), ')')),
-        ' ')" />
+    <xsl:variable name="extra-qualifiers-a">
+      <xsl:if test="contains(argsstring/text(), '(')">
+        <xsl:call-template name="strip-brackets">
+          <xsl:with-param name="text" select="substring-after(argsstring/text(), '(')" />
+        </xsl:call-template>
+      </xsl:if>
+    </xsl:variable>
+    <xsl:variable name="extra-qualifiers">
+      <xsl:if test="$extra-qualifiers-a">
+        <xsl:value-of select="concat(' ', normalize-space($extra-qualifiers-a), ' ')" />
+      </xsl:if>
+    </xsl:variable>
 
     <!-- CV Qualifiers -->
     <!-- Plus deleted and defaulted function markers as they're not properly
@@ -1107,6 +1116,55 @@
       </xsl:attribute>
     </xsl:if>
 
+  </xsl:template>
+
+  <!-- $text = substring after the opening bracket -->
+  <xsl:template name="strip-brackets">
+    <xsl:param name="text"/>
+
+    <xsl:if test="contains($text, ')')">
+      <xsl:variable name="prefix1" select="substring-before($text, ')')" />
+      <xsl:variable name="prefix2" select="substring($prefix1, 1,
+          string-length(substring-before($prefix1, '(')) +
+          999 * not(contains($prefix1, '(')))" />
+      <xsl:variable name="prefix3" select="substring($prefix2, 1,
+          string-length(substring-before($prefix2, '&quot;')) +
+          999 * not(contains($prefix2, '&quot;')))" />
+      <xsl:variable name="prefix" select="substring($prefix3, 1,
+          string-length(substring-before($prefix3, &quot;'&quot;)) +
+          999 * not(contains($prefix3, &quot;'&quot;)))" />
+
+      <xsl:variable name="prefix-length" select="string-length($prefix)" />
+      <xsl:variable name="char" select="substring($text, $prefix-length + 1, 1)" />
+
+      <xsl:choose>
+        <xsl:when test="$char=')'">
+          <xsl:value-of select="substring($text, $prefix-length + 2)" />
+        </xsl:when>
+        <xsl:when test="$char='('">
+          <xsl:variable name="text2">
+            <xsl:call-template name="strip-brackets">
+              <xsl:with-param name="text" select="substring($text, $prefix-length + 2)" />
+            </xsl:call-template>
+          </xsl:variable>
+          <xsl:call-template name="strip-brackets">
+            <xsl:with-param name="text" select="$text2" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$char=&quot;'&quot;">
+          <!-- Not bothering with escapes, because this is crazy enough as it is -->
+          <xsl:call-template name="strip-brackets">
+            <xsl:with-param name="text" select="substring-after(substring($text, $prefix-length + 2), &quot;'&quot;)" />
+          </xsl:call-template>
+        </xsl:when>
+        <xsl:when test="$char='&quot;'">
+          <!-- Not bothering with escapes, because this is crazy enough as it is -->
+          <xsl:call-template name="strip-brackets">
+            <xsl:with-param name="text" select="substring-after(substring($text, $prefix-length + 2), '&quot;')" />
+          </xsl:call-template>
+        </xsl:when>
+      </xsl:choose>
+    </xsl:if>
   </xsl:template>
 
   <!-- Handle function children -->

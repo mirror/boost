@@ -39,6 +39,18 @@ namespace example
         virtual int virtual_const_method() const;
         int method_with_default_value(int = default_value);
 
+        int method_with_fp(int (*fp)(), volatile char);
+        int method_with_string_default1(char* = ")", volatile char);
+        int method_with_string_default2(char* = "(", volatile char);
+        int method_with_char_default1(char = '(', volatile char);
+        int method_with_char_default2(char = ')', volatile char);
+
+        int volatile_method_with_fp(int (*fp)(), volatile char) volatile;
+        int volatile_method_with_string_default1(char* = ")", volatile char) volatile;
+        int volatile_method_with_string_default2(char* = "(", volatile char) volatile;
+        int volatile_method_with_char_default1(char = '(', volatile char) volatile;
+        int volatile_method_with_char_default2(char = ')', volatile char) volatile;
+
         void const_method() const;
         void volatile_method() volatile;
 

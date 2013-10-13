@@ -18,6 +18,16 @@
 <method name="virtual_abstract_method" cv="= 0" specifiers="virtual"><type>int</type></method>
 <method name="virtual_const_method" cv="const" specifiers="virtual"><type>int</type></method>
 <method name="method_with_default_value"><type>int</type><parameter name=""><paramtype>int</paramtype><default>default_value</default></parameter></method>
+<method name="method_with_fp"><type>int</type><parameter name="fp"><paramtype>int(*)()</paramtype></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="method_with_string_default1"><type>int</type><parameter name=""><paramtype>char *</paramtype><default>")"</default></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="method_with_string_default2"><type>int</type><parameter name=""><paramtype>char *</paramtype><default>"("</default></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="method_with_char_default1"><type>int</type><parameter name=""><paramtype>char</paramtype><default>'('</default></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="method_with_char_default2"><type>int</type><parameter name=""><paramtype>char</paramtype><default>')'</default></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="volatile_method_with_fp" cv="volatile"><type>int</type><parameter name="fp"><paramtype>int(*)()</paramtype></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="volatile_method_with_string_default1" cv="volatile"><type>int</type><parameter name=""><paramtype>char *</paramtype><default>")"</default></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="volatile_method_with_string_default2" cv="volatile"><type>int</type><parameter name=""><paramtype>char *</paramtype><default>"("</default></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="volatile_method_with_char_default1" cv="volatile"><type>int</type><parameter name=""><paramtype>char</paramtype><default>'('</default></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
+<method name="volatile_method_with_char_default2" cv="volatile"><type>int</type><parameter name=""><paramtype>char</paramtype><default>')'</default></parameter><parameter name=""><paramtype>volatile char</paramtype></parameter></method>
 <method name="const_method" cv="const"><type>void</type></method>
 <method name="volatile_method" cv="volatile"><type>void</type></method>
 <method name="trad_noexcept" cv="noexcept"><type>void</type></method>
