@@ -2,11 +2,11 @@
 #define ITERATOR_TEST_H
 
 /* 
-	A set of iterator adapters for constructing test cases
-	From an iterator (or a pointer), you can make any class of iterator.
-	Assuming you want to degrade the capabilities.
-	
-	Modeled closely on work that Howard Hinnant did for libc++.
+    A set of iterator adapters for constructing test cases
+    From an iterator (or a pointer), you can make any class of iterator.
+    Assuming you want to degrade the capabilities.
+    
+    Modeled closely on work that Howard Hinnant did for libc++.
 */
 
 #include <iterator>
@@ -269,10 +269,10 @@ public:
 private:
     It it_;
     template <typename U> friend class output_iterator;
-	};
-	
-//	No comparison operators for output iterators
-	
+    };
+    
+//  No comparison operators for output iterators
+    
 
 // == Get the base of an iterator; used for comparisons ==
 template <typename Iter>
@@ -290,7 +290,7 @@ inline Iter base(bidirectional_iterator<Iter> i) { return i.base(); }
 template <typename Iter>
 inline Iter base(random_access_iterator<Iter> i) { return i.base(); }
 
-template <typename Iter>	// everything else
+template <typename Iter>    // everything else
 inline Iter base(Iter i) { return i; }
 
 #endif  // ITERATORS_H

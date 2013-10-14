@@ -32,12 +32,11 @@ BOOST_AUTO_TEST_CASE( test_main )
     constexpr int three = arr.at (3);
     int whatever [ arr.at(4) ];
     (void)three;
-	(void) whatever;
+    (void) whatever;
 }
 
-#else	// no constexpr means no constexpr tests!
+#else   // no constexpr means no constexpr tests!
 BOOST_AUTO_TEST_CASE( test_main )
 {
 }
 #endif
-

@@ -29,7 +29,7 @@ namespace {
         typedef T arr[5];
         test_type           test_case; //   =   { 1, 1, 2, 3, 5 };
     
-        T &aRef = std::get<5> ( test_case );	// should fail to compile
+        T &aRef = std::get<5> ( test_case );    // should fail to compile
         BOOST_CHECK ( &*test_case.begin () == &aRef );
     }
     #endif
@@ -44,7 +44,6 @@ BOOST_AUTO_TEST_CASE( test_main )
     RunStdTests< long double >();
     RunStdTests< std::string >();
 #else
-	BOOST_STATIC_ASSERT ( false );	// fail on C++03 systems.
+    BOOST_STATIC_ASSERT ( false );  // fail on C++03 systems.
 #endif
 }
-

@@ -181,20 +181,20 @@ void find_test()
         ( (cv_result.begin()-str1.begin()) == 3) &&
         ( (cv_result.end()-str1.begin()) == 6) );
 
-	string s1("abc def ghi jkl");
-	find_iterator<string::iterator> fEnd;
+    string s1("abc def ghi jkl");
+    find_iterator<string::iterator> fEnd;
 
-	find_iterator<string::iterator> fxIt = make_find_iterator(s1,
-			token_finder(is_alnum(), token_compress_on));
-	BOOST_CHECK((fxIt != fEnd) && (*fxIt == string("abc")));
-	++fxIt;
-	BOOST_CHECK((fxIt != fEnd) && (*fxIt == string("def")));
-	++fxIt;
-	BOOST_CHECK((fxIt != fEnd) && (*fxIt == string("ghi")));
-	++fxIt;
-	BOOST_CHECK((fxIt != fEnd) && (*fxIt == string("jkl")));
-	++fxIt;
-	BOOST_CHECK(fxIt == fEnd);
+    find_iterator<string::iterator> fxIt = make_find_iterator(s1,
+            token_finder(is_alnum(), token_compress_on));
+    BOOST_CHECK((fxIt != fEnd) && (*fxIt == string("abc")));
+    ++fxIt;
+    BOOST_CHECK((fxIt != fEnd) && (*fxIt == string("def")));
+    ++fxIt;
+    BOOST_CHECK((fxIt != fEnd) && (*fxIt == string("ghi")));
+    ++fxIt;
+    BOOST_CHECK((fxIt != fEnd) && (*fxIt == string("jkl")));
+    ++fxIt;
+    BOOST_CHECK(fxIt == fEnd);
 
     nc_result=find_token( str1, is_any_of("abc"), token_compress_off );
     BOOST_CHECK( 
