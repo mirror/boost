@@ -18,18 +18,17 @@
 
 #include <boost/config.hpp>
 
+#if defined(BOOST_WINDOWS)
+#include <boost/detail/winapi/config.hpp>
+#endif
+
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
 // BOOST_SYNC_USE_PTHREAD and BOOST_SYNC_USE_WINAPI_VERSION are user-configurable macros
 #if defined(BOOST_WINDOWS) && !defined(BOOST_SYNC_USE_WINAPI_VERSION)
-#if defined(_WIN32_WINNT)
-#define BOOST_SYNC_USE_WINAPI_VERSION _WIN32_WINNT
-#else
-// By default use Windows 2000 API: _WIN32_WINNT_WIN2K
-#define BOOST_SYNC_USE_WINAPI_VERSION 0x0500
-#endif
+#define BOOST_SYNC_USE_WINAPI_VERSION BOOST_USE_WINAPI_VERSION
 #endif
 
 #if defined(BOOST_SYNC_USE_WINAPI_VERSION) && !defined(BOOST_SYNC_USE_PTHREAD)
@@ -41,7 +40,7 @@
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
 #define BOOST_SYNC_DETAIL_ABI_NAMESPACE posix
 #elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-#if BOOST_SYNC_USE_WINAPI_VERSION >= 0x0600
+#if BOOST_SYNC_USE_WINAPI_VERSION >= BOOST_WINAPI_VERSION_WIN6
 #define BOOST_SYNC_DETAIL_ABI_NAMESPACE winnt6
 #else
 #define BOOST_SYNC_DETAIL_ABI_NAMESPACE winnt5
@@ -61,7 +60,7 @@ namespace sync {
 BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {}
 
 using namespace BOOST_SYNC_DETAIL_ABI_NAMESPACE
-#if defined(__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4))
+#if defined(__GNUC__) && (__GNUC__ >= 4 || (__GNUC__ == 3 && __GNUC_MINOR__ >= 4)) && !defined(__clang__)
 __attribute__((__strong__))
 #endif
 ;

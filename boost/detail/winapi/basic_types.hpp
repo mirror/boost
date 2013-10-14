@@ -9,9 +9,9 @@
 #ifndef BOOST_DETAIL_WINAPI_BASIC_TYPES_HPP
 #define BOOST_DETAIL_WINAPI_BASIC_TYPES_HPP
 
-#include <boost/config.hpp>
 #include <cstdarg>
 #include <boost/cstdint.hpp>
+#include <boost/detail/winapi/config.hpp>
 
 #if defined( BOOST_USE_WINDOWS_H )
 # include <windows.h>
@@ -57,6 +57,7 @@ namespace winapi {
     typedef ::LONG LONG_;
     typedef ::ULONG ULONG_;
     typedef ::LONGLONG LONGLONG_;
+    typedef ::ULONGLONG ULONGLONG_;
     typedef ::INT_PTR INT_PTR_;
     typedef ::UINT_PTR UINT_PTR_;
     typedef ::LONG_PTR LONG_PTR_;
@@ -85,17 +86,8 @@ extern "C" {
     typedef long LONG_;
     typedef unsigned long ULONG_;
 
-// @FIXME Which condition must be tested
-//~ #if !defined(_M_IX86)
-//~ #if defined(BOOST_NO_INT64_T)
-    //~ typedef double LONGLONG_;
-//~ #else
-    //~ typedef __int64 LONGLONG_;
-//~ #endif
-//~ #else
-    //~ typedef double LONGLONG_;
-//~ #endif
     typedef boost::int64_t LONGLONG_;
+    typedef boost::uint64_t ULONGLONG_;
 
 // @FIXME Which condition must be tested
 # ifdef _WIN64
@@ -138,4 +130,5 @@ extern "C" {
 }
 }
 }
-#endif // BOOST_DETAIL_WINAPI_TIME_HPP
+
+#endif // BOOST_DETAIL_WINAPI_BASIC_TYPES_HPP
