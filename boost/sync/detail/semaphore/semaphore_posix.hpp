@@ -1,6 +1,7 @@
 // semaphore.hpp, posix implementation
 //
 // Copyright (C) 2013 Tim Blechmann
+// Copyright (C) 2013 Andrey Semashev
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
@@ -14,15 +15,13 @@
 #include <semaphore.h>
 
 #include <boost/assert.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/sync/detail/config.hpp>
-#include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
-
-#ifdef BOOST_SYNC_USES_CHRONO
-#include <boost/chrono/system_clocks.hpp>
-#include <boost/chrono/ceil.hpp>
-#endif
-
+#include <boost/sync/exceptions/overflow_error.hpp>
+#include <boost/sync/detail/throw_exception.hpp>
+#include <boost/sync/detail/time_traits.hpp>
+#include <boost/sync/detail/time_units.hpp>
 #include <boost/sync/detail/header.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
@@ -66,7 +65,7 @@ public:
         switch (err)
         {
         case EOVERFLOW:
-            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore post failed: maximum allowable value would be exceeded"));
+            BOOST_SYNC_DETAIL_THROW(overflow_error, (err)("semaphore post failed: semaphore counter overflow"));
             break;
 
         case EINVAL:
@@ -77,7 +76,7 @@ public:
         }
     }
 
-    void wait(void) BOOST_NOEXCEPT
+    void wait()
     {
         for (;;)
         {
@@ -99,7 +98,7 @@ public:
         }
     }
 
-    bool try_wait(void) BOOST_NOEXCEPT
+    bool try_wait()
     {
         const int status = sem_trywait(&m_sem);
         if (status == 0)
@@ -107,54 +106,46 @@ public:
 
         switch (errno)
         {
-        case EINVAL:
-            BOOST_ASSERT(false);
-
+        case EINTR:
         case EAGAIN:
             return false;
 
+        case EINVAL:
         default:
+            BOOST_ASSERT(false);
             return false;
         }
     }
 
-#ifdef BOOST_SYNC_USES_CHRONO
-    template <class Rep, class Period>
-    bool try_wait_for(const chrono::duration<Rep, Period> & duration) BOOST_NOEXCEPT
+    template< typename Time >
+    typename enable_if_c< sync::detail::time_traits< Time >::is_specialized, bool >::type timed_wait(Time const& t)
     {
-        return try_wait_until(chrono::steady_clock::now() + duration);
+        return priv_timed_wait(sync::detail::time_traits< Time >::to_sync_unit(t));
     }
 
-    template <class Clock, class Duration>
-    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout ) BOOST_NOEXCEPT
+    template< typename Duration >
+    typename enable_if< detail::is_time_tag_of< Duration, detail::time_duration_tag >, bool >::type wait_for(Duration const& duration)
     {
-        using namespace chrono;
-        system_clock::time_point    s_now = system_clock::now();
-        typename Clock::time_point  c_now = Clock::now();
-        return try_wait_until(s_now + ceil<nanoseconds>(timeout - c_now));
+        return priv_timed_wait(sync::detail::time_traits< Duration >::to_sync_unit(duration));
     }
 
-    template <class Duration>
-    bool try_wait_until(const chrono::time_point<chrono::system_clock, Duration>& t) BOOST_NOEXCEPT
+    template< typename TimePoint >
+    typename enable_if< detail::is_time_tag_of< TimePoint, detail::time_point_tag >, bool >::type wait_until(TimePoint const& abs_time)
     {
-        using namespace chrono;
-        typedef time_point<system_clock, nanoseconds> nano_sys_tmpt;
-        return try_wait_until(nano_sys_tmpt(ceil<nanoseconds>(t.time_since_epoch())));
-    }
-
-    bool try_wait_until(const chrono::time_point<chrono::system_clock, chrono::nanoseconds>& tp) BOOST_NOEXCEPT
-    {
-        chrono::nanoseconds d = tp.time_since_epoch();
-        timespec ts = boost::detail::to_timespec(d);
-        return do_wait_lock_until(ts);
+        return priv_timed_wait(sync::detail::time_traits< TimePoint >::to_sync_unit(abs_time));
     }
 
 private:
-    bool do_wait_lock_until(struct timespec const & timeout) BOOST_NOEXCEPT
+    bool priv_timed_wait(sync::detail::system_duration dur)
+    {
+        return priv_timed_wait(sync::detail::system_time_point::now() + dur);
+    }
+
+    bool priv_timed_wait(sync::detail::system_time_point const& t)
     {
         for (;;)
         {
-            const int status = sem_timedwait(&m_sem, &timeout);
+            const int status = sem_timedwait(&m_sem, &t.get());
             if (status == 0)
                 return true;
 
@@ -175,7 +166,21 @@ private:
         }
     }
 
-#endif // BOOST_SYNC_USES_CHRONO
+    template< typename TimePoint >
+    bool priv_timed_wait(sync::detail::chrono_time_point< TimePoint > const& t)
+    {
+        typedef TimePoint time_point;
+        typedef typename time_point::clock clock;
+        typedef typename time_point::duration duration;
+        time_point now = clock::now();
+        while (now < t.get())
+        {
+            if (priv_timed_wait(sync::detail::time_traits< duration >::to_sync_unit(t.get() - now)))
+                return true;
+            now = clock::now();
+        }
+        return false;
+    }
 
 private:
     sem_t m_sem;

@@ -9,14 +9,21 @@
 #ifndef BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_WINDOWS_HPP_INCLUDED_
 #define BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_WINDOWS_HPP_INCLUDED_
 
+#include <limits.h>
 #include <cstddef>
-#include <limits>
+#include <boost/assert.hpp>
+#include <boost/utility/enable_if.hpp>
 #include <boost/detail/winapi/GetLastError.hpp>
 #include <boost/detail/winapi/synchronization.hpp>
 #include <boost/detail/winapi/handles.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/throw_exception.hpp>
 #include <boost/sync/exceptions/resource_error.hpp>
+#include <boost/sync/exceptions/overflow_error.hpp>
+#include <boost/sync/exceptions/wait_error.hpp>
+#include <boost/sync/detail/time_traits.hpp>
+#include <boost/sync/detail/time_units.hpp>
+#include <boost/sync/detail/waitable_timer.hpp>
 #include <boost/sync/detail/header.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
@@ -34,19 +41,14 @@ class semaphore
     BOOST_DELETED_FUNCTION(semaphore(semaphore const&))
     BOOST_DELETED_FUNCTION(semaphore& operator=(semaphore const&))
 
-    typedef boost::detail::winapi::HANDLE_ HANDLE_;
-    typedef boost::detail::winapi::DWORD_  DWORD_;
-    typedef boost::detail::winapi::LONG_   LONG_;
-    typedef boost::detail::winapi::BOOL_   BOOL_;
-
 public:
     explicit semaphore(unsigned int i = 0)
     {
-        m_sem = boost::detail::winapi::CreateSemaphoreA(NULL, i, (std::numeric_limits<LONG_>::max)(), NULL);
+        m_sem = boost::detail::winapi::create_anonymous_semaphore(NULL, i, LONG_MAX);
         if (!m_sem)
         {
-            const DWORD_ err = boost::detail::winapi::GetLastError();
-            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore constructor failed in CreateSemaphore"));
+            const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("semaphore constructor failed in CreateSemaphore"));
         }
     }
 
@@ -57,81 +59,136 @@ public:
 
     void post()
     {
-        const BOOL_ status = boost::detail::winapi::ReleaseSemaphore(m_sem, 1, NULL);
+        const boost::detail::winapi::BOOL_ status = boost::detail::winapi::ReleaseSemaphore(m_sem, 1, NULL);
         if (status == 0)
         {
-            const DWORD_ err = boost::detail::winapi::GetLastError();
-            BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore::post failed in ReleaseSemaphore"));
+            const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            BOOST_SYNC_DETAIL_THROW(overflow_error, (err)("semaphore::post failed in ReleaseSemaphore"));
         }
     }
 
-
-    bool wait()
+    void wait()
     {
-        switch (boost::detail::winapi::WaitForSingleObject(m_sem, boost::detail::winapi::infinite))
+        if (boost::detail::winapi::WaitForSingleObject(m_sem, boost::detail::winapi::infinite) != boost::detail::winapi::wait_object_0)
         {
-        case boost::detail::winapi::wait_object_0:
-            return true;
-
-        case boost::detail::winapi::wait_failed:
-            {
-                const DWORD_ err = boost::detail::winapi::GetLastError();
-                BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore::wait failed in WaitForSingleObject"));
-            }
-
-        default:
-            BOOST_ASSERT(false);
-            return false;
+            const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            BOOST_SYNC_DETAIL_THROW(wait_error, (err)("semaphore::wait failed in WaitForSingleObject"));
         }
     }
 
 
     bool try_wait()
     {
-        return do_try_wait_for( 0L );
+        const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForSingleObject(m_sem, 0);
+        if (res == boost::detail::winapi::wait_failed)
+        {
+            const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            BOOST_SYNC_DETAIL_THROW(wait_error, (err)("semaphore::try_wait failed in WaitForSingleObject"));
+        }
+
+        return res == boost::detail::winapi::wait_object_0;
     }
 
-#ifdef BOOST_SYNC_USES_CHRONO
-    template <class Rep, class Period>
-    bool try_wait_for(const chrono::duration<Rep, Period> & rel_time)
+    template< typename Time >
+    typename enable_if_c< sync::detail::time_traits< Time >::is_specialized, bool >::type timed_wait(Time const& t)
     {
-        return do_try_wait_for(static_cast< DWORD_ >(chrono::duration_cast<chrono::milliseconds>( rel_time ).count()));
+        return priv_timed_wait(sync::detail::time_traits< Time >::to_sync_unit(t));
     }
 
-    template <class Clock, class Duration>
-    bool try_wait_until(const chrono::time_point<Clock, Duration> & timeout )
+    template< typename Duration >
+    typename enable_if< detail::is_time_tag_of< Duration, detail::time_duration_tag >, bool >::type wait_for(Duration const& duration)
     {
-        typename Clock::time_point  c_now = Clock::now();
-        return try_wait_for( timeout - c_now );
+        return priv_timed_wait(sync::detail::time_traits< Duration >::to_sync_unit(duration));
     }
-#endif
+
+    template< typename TimePoint >
+    typename enable_if< detail::is_time_tag_of< TimePoint, detail::time_point_tag >, bool >::type wait_until(TimePoint const& abs_time)
+    {
+        return priv_timed_wait(sync::detail::time_traits< TimePoint >::to_sync_unit(abs_time));
+    }
 
 private:
-#ifdef BOOST_SYNC_USES_CHRONO
-    bool do_try_wait_for( long milliseconds )
+    bool priv_timed_wait(sync::detail::system_duration t)
     {
-        switch (boost::detail::winapi::WaitForSingleObject(m_sem, milliseconds))
-        {
-        case boost::detail::winapi::wait_object_0:
+        if (try_wait())
             return true;
 
-        case boost::detail::winapi::wait_timeout:
+        sync::detail::system_duration::native_type time_left = t.get();
+        while (time_left > 0)
+        {
+            const boost::detail::winapi::DWORD_ dur = time_left > boost::detail::winapi::max_non_infinite_wait ?
+                boost::detail::winapi::max_non_infinite_wait : static_cast< boost::detail::winapi::DWORD_ >(time_left);
+            const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForSingleObject(m_sem, dur);
+            switch (res)
+            {
+            case boost::detail::winapi::wait_object_0:
+                return true;
+
+            case boost::detail::winapi::wait_timeout:
+                time_left -= dur;
+                break;
+
+            default:
+                {
+                    const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+                    BOOST_SYNC_DETAIL_THROW(wait_error, (err)("semaphore::timed_wait failed in WaitForSingleObject"));
+                }
+            }
+        }
+
+        return false;
+    }
+
+    bool priv_timed_wait(sync::detail::system_time_point const& t)
+    {
+        boost::detail::winapi::HANDLE_ handles[2];
+        handles[0] = m_sem;
+        handles[1] = sync::detail::windows::get_waitable_timer();
+
+        if (!boost::detail::winapi::SetWaitableTimer(handles[1], reinterpret_cast< const boost::detail::winapi::LARGE_INTEGER_* >(&t.get()), 0, NULL, NULL, false))
+        {
+            const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+            BOOST_SYNC_DETAIL_THROW(wait_error, (err)("semaphore::timed_wait failed to set a timeout"));
+        }
+
+        const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForMultipleObjects(sizeof(handles) / sizeof(*handles), handles, false, boost::detail::winapi::infinite);
+        switch (res)
+        {
+        case boost::detail::winapi::wait_object_0: // semaphore was signalled
+            return true;
+
+        default:
+            BOOST_ASSERT(false);
+
+        case boost::detail::winapi::wait_object_0 + 1: // timeout has expired
             return false;
 
         case boost::detail::winapi::wait_failed:
             {
-                const DWORD_ err = boost::detail::winapi::GetLastError();
-                BOOST_SYNC_DETAIL_THROW(resource_error, (err)("boost::sync::semaphore::do_try_wait_for failed in WaitForSingleObject"));
+                const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
+                BOOST_SYNC_DETAIL_THROW(lock_error, (err)("semaphore::timed_wait failed in WaitForMultipleObjects"));
             }
-
-        default:
-            BOOST_ASSERT(false);
-            return false;
         }
     }
-#endif
 
-    HANDLE_ m_sem;
+    template< typename TimePoint >
+    bool priv_timed_wait(sync::detail::chrono_time_point< TimePoint > const& t)
+    {
+        typedef TimePoint time_point;
+        typedef typename time_point::clock clock;
+        typedef typename time_point::duration duration;
+        time_point now = clock::now();
+        while (now < t.get())
+        {
+            if (priv_timed_wait(sync::detail::time_traits< duration >::to_sync_unit(t.get() - now)))
+                return true;
+            now = clock::now();
+        }
+        return false;
+    }
+
+private:
+    boost::detail::winapi::HANDLE_ m_sem;
 };
 
 } // namespace winnt

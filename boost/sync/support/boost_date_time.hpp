@@ -13,6 +13,7 @@
 #ifndef BOOST_SYNC_SUPPORT_BOOST_DATE_TIME_HPP_INCLUDED_
 #define BOOST_SYNC_SUPPORT_BOOST_DATE_TIME_HPP_INCLUDED_
 
+#include <boost/assert.hpp>
 #include <boost/cstdint.hpp>
 #include <boost/date_time/posix_time/posix_time_types.hpp>
 #include <boost/sync/detail/config.hpp>
@@ -40,6 +41,8 @@ struct time_traits< T, typename T::_is_boost_date_time_duration >
 
     static system_duration to_sync_unit(T const& dur)
     {
+        BOOST_ASSERT(!dur.is_special());
+
         typedef typename T::traits_type traits_type;
         enum
         {
@@ -62,6 +65,8 @@ struct time_traits< T, typename T::_is_boost_date_time_time_point >
 
     static system_time_point to_sync_unit(T const& point)
     {
+        BOOST_ASSERT(!point.is_special());
+
         typedef typename T::date_type date_type;
         typedef typename T::time_duration_type time_duration_type;
         time_duration_type dur = point - T(date_type(1970, 1, 1));

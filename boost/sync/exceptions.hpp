@@ -24,5 +24,6 @@
 #include <boost/sync/exceptions/resource_error.hpp>
 #include <boost/sync/exceptions/lock_error.hpp>
 #include <boost/sync/exceptions/wait_error.hpp>
+#include <boost/sync/exceptions/overflow_error.hpp>
 
 #endif // BOOST_SYNC_EXCEPTIONS_HPP_INCLUDED_
