@@ -271,7 +271,8 @@ class format_date_parser
     const_itr itr(format_str.begin());
     while (itr != format_str.end() && (sitr != stream_end)) {
       if (*itr == '%') {
-        itr++;
+        if ( ++itr == format_str.end())
+        	break;
         if (*itr != '%') {
           switch(*itr) {
           case 'a': 
@@ -476,7 +477,8 @@ class format_date_parser
     const_itr itr(format_str.begin());
     while (itr != format_str.end() && (sitr != stream_end)) {
       if (*itr == '%') {
-        itr++;
+        if ( ++itr == format_str.end())
+        	break;
         if (*itr != '%') {
           switch(*itr) {
           case 'b': 
@@ -577,7 +579,8 @@ class format_date_parser
     const_itr itr(format_str.begin());
     while (itr != format_str.end() && (sitr != stream_end)) {
       if (*itr == '%') {
-        itr++;
+        if ( ++itr == format_str.end())
+        	break;
         if (*itr != '%') {
           switch(*itr) {
           case 'a': 
@@ -666,7 +669,8 @@ class format_date_parser
     const_itr itr(format_str.begin());
     while (itr != format_str.end() && (sitr != stream_end)) {
       if (*itr == '%') {
-        itr++;
+        if ( ++itr == format_str.end())
+        	break;
         if (*itr != '%') {
           //match_results mr;
           switch(*itr) {

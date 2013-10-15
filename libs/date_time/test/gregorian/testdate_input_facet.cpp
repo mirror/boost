@@ -212,6 +212,11 @@ int main(){
     ss.str("%2005");
     ss >> y;
     check_equal("Multiple literal '%'s in year format", y, greg_year(2005));
+
+    f->year_format("%Y%");
+    ss.str("2005%");
+    ss >> y;
+    check_equal("Trailing'%'s in year format", y, greg_year(2005));
   }
 
   // All days, month, weekday, day, and year formats have been tested
