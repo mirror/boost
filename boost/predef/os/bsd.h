@@ -48,7 +48,9 @@ of BSD. If the above variants is detected the corresponding macro is also set.]
 #include <boost/predef/os/bsd/open.h>
 #include <boost/predef/os/bsd/net.h>
 
+#ifndef BOOST_OS_BSD
 #define BOOST_OS_BSD BOOST_VERSION_NUMBER_NOT_AVAILABLE
+#endif
 
 #if !BOOST_PREDEF_DETAIL_OS_DETECTED && ( \
     defined(BSD) || \
