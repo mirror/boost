@@ -55,9 +55,12 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #define BOOST_OS_BSD_OPEN BOOST_VERSION_NUMBER_NOT_AVAILABLE
 
-#if defined(__OpenBSD__)
-#   ifndef BOOST_OS_BSD
+#if !BOOST_PREDEF_DETAIL_OS_DETECTED && ( \
+    defined(__OpenBSD__) \
+    )
+#   ifndef BOOST_OS_BSD_AVAILABLE
 #       define BOOST_OS_BSD BOOST_VERSION_NUMBER_AVAILABLE
+#       define BOOST_OS_BSD_AVAILABLE
 #   endif
 #   undef BOOST_OS_BSD_OPEN
 #   if !defined(BOOST_OS_BSD_OPEN) && defined(OpenBSD2_0)
@@ -157,6 +160,7 @@ http://www.boost.org/LICENSE_1_0.txt)
 
 #if BOOST_OS_BSD_OPEN
 #   define BOOST_OS_BSD_OPEN_AVAILABLE
+#   include <boost/predef/detail/os_detected.h>
 #endif
 
 #define BOOST_OS_BSD_OPEN_NAME "OpenBSD"

@@ -398,9 +398,9 @@ By including:
 #include <boost/predef/make.h>
 ``
 
-One will get a set of utlity macros to decompose common version
+One will get a set of utility macros to decompose common version
 macros as defined by compilers. For example the EDG compiler
-uses a simple 3-digit version macro (M,N,P). It can be decomesed
+uses a simple 3-digit version macro (M,N,P). It can be decomposed
 and defined as:
 
 ``
@@ -457,7 +457,7 @@ and "Y", "M", "D" for dates.
 [section Acknoledgements]
 
 The comprehensiveness of this library would not be
-possible without the existance of the indispensible
+possible without the existence of the indispensable
 resource that is the
 [@http://sourceforge.net/p/predef/ Pre-defined C/C++ Compiler Macros]
 Project. It was, and continues to be, the primary source
