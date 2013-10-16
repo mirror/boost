@@ -1,6 +1,7 @@
 // semaphore.hpp, osx/ios dispatch semaphores
 //
 // Copyright (C) 2013 Tim Blechmann
+// Copyright (C) 2013 Andrey Semashev
 //
 // Distributed under the Boost Software License, Version 1.0. (See
 // accompanying file LICENSE_1_0.txt or copy at
