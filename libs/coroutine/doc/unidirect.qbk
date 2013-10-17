@@ -28,8 +28,8 @@ context; it transfers no data.
 __pull_coro__ provides input iterators (__pull_coro_it__) and __begin__/__end__
 are overloaded. The increment-operation switches the context and transfers data.
 
-        std::coroutine<int>::pull_type source(
-            [&](std::coroutine<int>::push_type& sink){
+        boost::coroutines::coroutine<int>::pull_type source(
+            [&](boost::coroutines::coroutine<int>::push_type& sink){
                 int first=1,second=1;
                 sink(first);
                 sink(second);
@@ -90,8 +90,8 @@ and transfers data.
         };
 
         const int num=5, width=15;
-        std::coroutine<std::string>::push_type writer(
-            [&](std::coroutine<std::string>::pull_type& in){
+        boost::coroutines::coroutine<std::string>::push_type writer(
+            [&](boost::coroutines::coroutine<std::string>::pull_type& in){
                 // finish the last line when we leave by whatever means
                 FinalEOL eol;
                 // pull values from upstream, lay them out 'num' to a line
@@ -114,7 +114,7 @@ and transfers data.
             "in", "the", "pot", "nine",
             "days", "old" };
 
-        std::copy(std::begin(words),std::end(words),std::begin(writer));
+        std::copy(boost::begin(words),boost::end(words),boost::begin(writer));
 
         output:
                    peas       porridge            hot           peas       porridge
@@ -237,8 +237,8 @@ still valid and a data value is available or __coro_fn__ has terminated
 (__pull_coro__ is invalid; no data value available). Access to the transferred
 data value is given by __pull_coro_get__.
 
-        std::coroutine<int>::pull_type source( // constructor enters coroutine-function
-            [&](std::coroutine<int>::push_type& sink){
+        boost::coroutines::coroutine<int>::pull_type source( // constructor enters coroutine-function
+            [&](boost::coroutines::coroutine<int>::push_type& sink){
                 sink(1); // push {1} back to main-context
                 sink(1); // push {1} back to main-context
                 sink(2); // push {2} back to main-context
@@ -261,8 +261,8 @@ The main-context must call this __push_coro_op__ in order to transfer each data
 value into the __coro_fn__.
 Access to the transferred data value is given by __pull_coro_get__.
 
-        std::coroutine<int>::push_type sink( // constructor does NOT enter coroutine-function
-            [&](std::coroutine<int>::pull_type& source){
+        boost::coroutines::coroutine<int>::push_type sink( // constructor does NOT enter coroutine-function
+            [&](boost::coroutines::coroutine<int>::pull_type& source){
                 for (int i:source) {
                     std::cout << i <<  " ";
                 }
@@ -282,8 +282,8 @@ Splitting-up the access of parameters from context switch function enables to
 check if __pull_coro__ is valid after return from __pull_coro_op__, e.g.
 __pull_coro__ has values and __coro_fn__ has not terminated.
 
-        std::coroutine<std::tuple<int,int>>::push_type sink(
-            [&](std::coroutine<std::tuple<int,int>>::pull_type& source){
+        boost::coroutines::coroutine<std::tuple<int,int>>::push_type sink(
+            [&](boost::coroutines::coroutine<std::tuple<int,int>>::pull_type& source){
                 // access tuple {7,11}; x==7 y==1
                 int x,y;
                 std::tie(x,y)=source.get();
@@ -402,8 +402,8 @@ __pull_coro__ can be used via input-iterators using __begin__ and __end__.
 
 Output-iterators can be created from __push_coro__.
 
-        std::coroutine<int>::push_type sink(
-            [&](std::coroutine<int>::pull_type& source){
+        boost::coroutines::coroutine<int>::push_type sink(
+            [&](boost::coroutines::coroutine<int>::pull_type& source){
                 while(source){
                     std::cout << source.get() <<  " ";
                     source();
@@ -411,7 +411,7 @@ Output-iterators can be created from __push_coro__.
             });
 
         std::vector<int> v{1,1,2,3,5,8,13,21,34,55};
-        std::copy(std::begin(v),std::end(v),std::begin(sink));
+        std::copy(boost::begin(v),boost::end(v),boost::begin(sink));
 
 
 [heading Exit a __coro_fn__]
