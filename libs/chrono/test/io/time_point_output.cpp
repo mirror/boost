@@ -173,12 +173,12 @@ void check_all_system_clock()
 
   test_good_utc_fmt_system_clock("1970-01-01 02:00:00", "%Y-%m-%d %H:%M:%S", hours(2));
   test_good_utc_fmt_system_clock("1970-01-01 02", "%Y-%m-%d %H", hours(2));
-
+#if ! defined(BOOST_CHRONO_WINDOWS_API)
   test_good_utc_fmt_system_clock ("1970-01-01 02:00:00", "%Y-%m-%d %T", hours(2));
   test_good_utc_fmt_system_clock ("1970-01-01 02:00", "%Y-%m-%d %R", hours(2));
   test_good_utc_fmt_system_clock ("% 1970-01-01 02:00", "%% %Y-%m-%d %R", hours(2));
   test_good_utc_fmt_system_clock ("1970-01-01 02:00 Thursday January", "%Y-%m-%d %R %A %B", hours(2));
-
+#endif
 }
 
 void test_gmtime(std::time_t t)
