@@ -96,12 +96,12 @@ private:
             enum
             {
                 nanoseconds_fraction = 1000000000u,
-                conversion_ratio = static_cast< uint64_t >(nanoseconds_fraction) >= system_duration::subsecond_fraction ?
-                    nanoseconds_fraction / system_duration::subsecond_fraction :
-                    system_duration::subsecond_fraction / nanoseconds_fraction
+                conversion_ratio = static_cast< uint64_t >(nanoseconds_fraction) >= sync::detail::system_duration::subsecond_fraction ?
+                    nanoseconds_fraction / sync::detail::system_duration::subsecond_fraction :
+                    sync::detail::system_duration::subsecond_fraction / nanoseconds_fraction
             };
 
-            const int64_t nanoseconds_left = static_cast< uint64_t >(nanoseconds_fraction) >= system_duration::subsecond_fraction ?
+            const int64_t nanoseconds_left = static_cast< uint64_t >(nanoseconds_fraction) >= sync::detail::system_duration::subsecond_fraction ?
                 time_left / conversion_ratio : time_left * conversion_ratio;
 
             timeout = dispatch_time(DISPATCH_TIME_NOW, nanoseconds_left);
