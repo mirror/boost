@@ -155,7 +155,6 @@ private:
 
 } } // end namespace boost::mpi
 
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(boost::mpi::packed_iarchive)
 BOOST_SERIALIZATION_REGISTER_ARCHIVE(boost::mpi::packed_iarchive)
 BOOST_SERIALIZATION_USE_ARRAY_OPTIMIZATION(boost::mpi::packed_iarchive)
 
