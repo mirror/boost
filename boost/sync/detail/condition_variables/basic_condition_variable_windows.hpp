@@ -321,7 +321,7 @@ private:
         while (true)
         {
             const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForSingleObject(state->m_semaphore, boost::detail::winapi::infinite);
-            if (res != boost::detail::winapi::wait_object_0)
+            if (BOOST_UNLIKELY(res != boost::detail::winapi::wait_object_0))
             {
                 const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
                 {
@@ -382,7 +382,7 @@ private:
                             --state->m_notify_count;
                         interlocked_write_release(&m_total_waiter_count, m_total_waiter_count - 1);
                     }
-                    BOOST_SYNC_DETAIL_THROW(wait_error, (err)("condition_variable wait failed in WaitForSingleObject"));
+                    BOOST_SYNC_DETAIL_THROW(wait_error, (err)("condition_variable timed_wait failed in WaitForSingleObject"));
                 }
             }
         }
@@ -407,7 +407,7 @@ private:
         while (true)
         {
             const boost::detail::winapi::DWORD_ res = boost::detail::winapi::WaitForMultipleObjects(sizeof(handles) / sizeof(*handles), handles, false, boost::detail::winapi::infinite);
-            if (res == boost::detail::winapi::wait_failed)
+            if (BOOST_UNLIKELY(res == boost::detail::winapi::wait_failed))
             {
                 const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
                 {

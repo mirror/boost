@@ -111,11 +111,11 @@ public:
 private:
     bool priv_timed_wait(sync::detail::system_duration t)
     {
-        if (try_wait())
-            return true;
-
         sync::detail::system_duration::native_type time_left = t.get();
-        while (time_left > 0)
+        if (time_left < 0)
+            time_left = 0;
+
+        do
         {
             const boost::detail::winapi::DWORD_ dur = time_left > boost::detail::winapi::max_non_infinite_wait ?
                 boost::detail::winapi::max_non_infinite_wait : static_cast< boost::detail::winapi::DWORD_ >(time_left);
@@ -136,6 +136,7 @@ private:
                 }
             }
         }
+        while (time_left > 0);
 
         return false;
     }
@@ -179,12 +180,14 @@ private:
         typedef typename time_point::clock clock;
         typedef typename time_point::duration duration;
         time_point now = clock::now();
-        while (now < t.get())
+        do
         {
             if (priv_timed_wait(sync::detail::time_traits< duration >::to_sync_unit(t.get() - now)))
                 return true;
             now = clock::now();
         }
+        while (now < t.get());
+
         return false;
     }
 

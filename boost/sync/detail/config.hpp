@@ -18,29 +18,47 @@
 
 #include <boost/config.hpp>
 
-#if defined(BOOST_WINDOWS)
-#include <boost/detail/winapi/config.hpp>
-#endif
-
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
 // BOOST_SYNC_USE_PTHREAD is a user-configurable macro
-#if defined(BOOST_WINDOWS) && !defined(BOOST_SYNC_USE_PTHREAD)
+#if defined(BOOST_SYNC_USE_PTHREAD)
+
+#define BOOST_SYNC_DETAIL_PLATFORM_POSIX
+
+#elif defined(BOOST_WINDOWS)
+
+#include <boost/detail/winapi/config.hpp>
 #define BOOST_SYNC_DETAIL_PLATFORM_WINAPI
+
+#elif defined(__linux__) || defined(__linux) || defined(linux)
+
+#define BOOST_SYNC_DETAIL_PLATFORM_LINUX
+
+#elif defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+
+#include <Availability.h>
+#define BOOST_SYNC_DETAIL_PLATFORM_MACH
+
 #else
-#define BOOST_SYNC_DETAIL_PLATFORM_PTHREAD
+
+#define BOOST_SYNC_DETAIL_PLATFORM_POSIX
+
 #endif
 
-#if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
+#if defined(BOOST_SYNC_DETAIL_PLATFORM_POSIX)
 #define BOOST_SYNC_DETAIL_ABI_NAMESPACE posix
+#elif defined(BOOST_SYNC_DETAIL_PLATFORM_LINUX)
+#define BOOST_SYNC_DETAIL_ABI_NAMESPACE linux_
 #elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
 #if BOOST_USE_WINAPI_VERSION >= BOOST_WINAPI_VERSION_WIN6
 #define BOOST_SYNC_DETAIL_ABI_NAMESPACE winnt6
 #else
 #define BOOST_SYNC_DETAIL_ABI_NAMESPACE winnt5
 #endif
+#elif defined(BOOST_SYNC_DETAIL_PLATFORM_MACH)
+#define BOOST_SYNC_DETAIL_ABI_NAMESPACE mach
 #else
 #error Boost.Sync: Internal configuration error: unknown base threading API
 #endif
@@ -64,12 +82,5 @@ __attribute__((__strong__))
 }
 }
 #endif // !defined(BOOST_NO_CXX11_INLINE_NAMESPACES)
-
-#if ! defined BOOST_SYNC_DONT_USE_CHRONO \
-  && ! defined BOOST_SYNC_USES_CHRONO
-#define BOOST_SYNC_USES_CHRONO
-#endif
-
-#define BOOST_SYNC_USES_CHRONO
 
 #endif // BOOST_SYNC_DETAIL_CONFIG_HPP_INCLUDED_

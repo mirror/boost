@@ -1,5 +1,5 @@
 /*
- *          Copyright Andrey Semashev 2013.
+ *             Copyright Andrey Semashev 2013.
  * Distributed under the Boost Software License, Version 1.0.
  *    (See accompanying file LICENSE_1_0.txt or copy at
  *          http://www.boost.org/LICENSE_1_0.txt)
@@ -39,12 +39,12 @@ class system_duration
 public:
     typedef int64_t native_type;
 
-#if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
-    // The native duration is in nanoseconds
-    static BOOST_CONSTEXPR_OR_CONST uint64_t subsecond_fraction = 1000000000u;
-#elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
+#if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
     // The native duration is in milliseconds
     static BOOST_CONSTEXPR_OR_CONST uint64_t subsecond_fraction = 1000u;
+#else
+    // The native duration is in nanoseconds
+    static BOOST_CONSTEXPR_OR_CONST uint64_t subsecond_fraction = 1000000000u;
 #endif
 
 private:
@@ -83,7 +83,70 @@ public:
     }
 };
 
-#if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
+#if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
+
+class system_time_point
+{
+public:
+    typedef uint64_t native_type;
+    // The native subsecond precision is 100 nanoseconds
+    static BOOST_CONSTEXPR_OR_CONST uint64_t subsecond_fraction = 10000000u;
+
+private:
+    //! 100 nanosecond units since 1601-Jan-01 (i.e. equivalent to FILETIME)
+    uint64_t m_value;
+
+public:
+    BOOST_CONSTEXPR system_time_point() BOOST_NOEXCEPT : m_value(0) {}
+    explicit system_time_point(time_t t, unsigned int subsecond = 0) BOOST_NOEXCEPT :
+        m_value(static_cast< uint64_t >(t) * subsecond_fraction + subsecond + 116444736000000000ull)
+    {
+    }
+
+    //! Creates time point from duration since 1970-Jan-01
+    explicit system_time_point(system_duration dur) BOOST_NOEXCEPT :
+        m_value(dur.get() * 10000u + 116444736000000000ull)
+    {
+    }
+
+    native_type const& get() const BOOST_NOEXCEPT { return m_value; }
+
+    static system_time_point now() BOOST_NOEXCEPT
+    {
+        system_time_point res;
+        boost::detail::winapi::GetSystemTimeAsFileTime(reinterpret_cast< boost::detail::winapi::FILETIME_* >(&res.m_value));
+        return res;
+    }
+
+    system_time_point& operator+= (system_duration const& dur) BOOST_NOEXCEPT
+    {
+        m_value += dur.get() * 10000u;
+        return *this;
+    }
+    system_time_point& operator-= (system_duration const& dur) BOOST_NOEXCEPT
+    {
+        m_value -= dur.get() * 10000u;
+        return *this;
+    }
+
+    friend system_time_point operator+ (system_time_point left, system_duration const& right) BOOST_NOEXCEPT
+    {
+        left += right;
+        return left;
+    }
+    friend system_time_point operator- (system_time_point left, system_duration const& right) BOOST_NOEXCEPT
+    {
+        left -= right;
+        return left;
+    }
+
+    friend system_duration operator- (system_time_point const& left, system_time_point const& right) BOOST_NOEXCEPT
+    {
+        return system_duration(static_cast< system_duration::native_type >(left.m_value - right.m_value) / 10000u);
+    }
+};
+
+#else
 
 class system_time_point
 {
@@ -159,69 +222,6 @@ public:
         int64_t seconds = static_cast< int64_t >(left.m_value.tv_sec) - static_cast< int64_t >(right.m_value.tv_sec);
         int64_t nseconds = static_cast< int64_t >(left.m_value.tv_nsec) - static_cast< int64_t >(right.m_value.tv_nsec);
         return system_duration(seconds * system_duration::subsecond_fraction + nseconds);
-    }
-};
-
-#elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
-
-class system_time_point
-{
-public:
-    typedef uint64_t native_type;
-    // The native subsecond precision is 100 nanoseconds
-    static BOOST_CONSTEXPR_OR_CONST uint64_t subsecond_fraction = 10000000u;
-
-private:
-    //! 100 nanosecond units since 1601-Jan-01 (i.e. equivalent to FILETIME)
-    uint64_t m_value;
-
-public:
-    BOOST_CONSTEXPR system_time_point() BOOST_NOEXCEPT : m_value(0) {}
-    explicit system_time_point(time_t t, unsigned int subsecond = 0) BOOST_NOEXCEPT :
-        m_value(static_cast< uint64_t >(t) * subsecond_fraction + subsecond + 116444736000000000ull)
-    {
-    }
-
-    //! Creates time point from duration since 1970-Jan-01
-    explicit system_time_point(system_duration dur) BOOST_NOEXCEPT :
-        m_value(dur.get() * 10000u + 116444736000000000ull)
-    {
-    }
-
-    native_type const& get() const BOOST_NOEXCEPT { return m_value; }
-
-    static system_time_point now() BOOST_NOEXCEPT
-    {
-        system_time_point res;
-        boost::detail::winapi::GetSystemTimeAsFileTime(reinterpret_cast< boost::detail::winapi::FILETIME_* >(&res.m_value));
-        return res;
-    }
-
-    system_time_point& operator+= (system_duration const& dur) BOOST_NOEXCEPT
-    {
-        m_value += dur.get() * 10000u;
-        return *this;
-    }
-    system_time_point& operator-= (system_duration const& dur) BOOST_NOEXCEPT
-    {
-        m_value -= dur.get() * 10000u;
-        return *this;
-    }
-
-    friend system_time_point operator+ (system_time_point left, system_duration const& right) BOOST_NOEXCEPT
-    {
-        left += right;
-        return left;
-    }
-    friend system_time_point operator- (system_time_point left, system_duration const& right) BOOST_NOEXCEPT
-    {
-        left -= right;
-        return left;
-    }
-
-    friend system_duration operator- (system_time_point const& left, system_time_point const& right) BOOST_NOEXCEPT
-    {
-        return system_duration(static_cast< system_duration::native_type >(left.m_value - right.m_value) / 10000u);
     }
 };
 

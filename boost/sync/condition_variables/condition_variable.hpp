@@ -275,12 +275,10 @@ public:
 #pragma once
 #endif
 
-#if defined(BOOST_SYNC_DETAIL_PLATFORM_PTHREAD)
-#include <boost/sync/detail/condition_variables/condition_variable_posix.hpp>
-#elif defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
+#if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
 #include <boost/sync/detail/condition_variables/condition_variable_windows.hpp>
 #else
-#error Boost.Sync: Unsupported threading API
+#include <boost/sync/detail/condition_variables/condition_variable_posix.hpp>
 #endif
 
 #endif // defined(BOOST_SYNC_DETAIL_DOXYGEN)

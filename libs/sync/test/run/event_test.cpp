@@ -5,8 +5,11 @@
 
 #include <boost/test/unit_test.hpp>
 
-#include <boost/thread.hpp>
-#include <boost/sync/event.hpp>
+#include <boost/bind.hpp>
+#include <boost/chrono.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/sync/events.hpp>
+#include <boost/sync/support/boost_chrono.hpp>
 
 #include <boost/typeof/typeof.hpp>
 
@@ -14,7 +17,7 @@ BOOST_AUTO_TEST_CASE(test_event_post_wait)
 {
     boost::sync::manual_reset_event ev;
 
-    ev.post();
+    ev.set();
     ev.wait();
 
     BOOST_REQUIRE( ev.try_wait() == true );
@@ -31,7 +34,7 @@ BOOST_AUTO_TEST_CASE(test_event_post_try_wait)
 
     BOOST_REQUIRE( ev.try_wait() == false );
 
-    ev.post();
+    ev.set();
 
     BOOST_REQUIRE( ev.try_wait() == true );
 }
@@ -51,10 +54,20 @@ BOOST_AUTO_TEST_CASE(test_event_reset)
     boost::sync::manual_reset_event ev;
 
     BOOST_REQUIRE( ev.try_wait() == false );
-    ev.post();
+    ev.set();
     BOOST_REQUIRE( ev.try_wait() == true );
     ev.reset();
     BOOST_REQUIRE( ev.try_wait() == false );
+}
+
+inline void post_event(boost::sync::manual_reset_event& evt)
+{
+    evt.set();
+}
+
+inline void post_event(boost::sync::auto_reset_event& evt)
+{
+    evt.post();
 }
 
 template <typename EventType>
@@ -69,7 +82,7 @@ struct event_wait_and_post_test
     void wait_and_post()
     {
         boost::this_thread::sleep_for(boost::chrono::seconds(1));
-        ev_.post();
+        (post_event)(ev_);
     }
 
     EventType ev_;
@@ -98,7 +111,7 @@ BOOST_AUTO_TEST_CASE(test_event_wait_for)
 
     BOOST_REQUIRE( ev.try_wait() == false );
 
-    BOOST_REQUIRE(!ev.try_wait_for(chrono::milliseconds(500)));
+    BOOST_REQUIRE(!ev.wait_for(chrono::milliseconds(500)));
 
     BOOST_REQUIRE( ev.try_wait() == false );
 
@@ -110,9 +123,9 @@ BOOST_AUTO_TEST_CASE(test_event_wait_for)
     BOOST_REQUIRE( wait_time > chrono::milliseconds(450) );
     BOOST_REQUIRE( wait_time < chrono::milliseconds(1000) );
 
-    ev.post();
+    ev.set();
 
-    BOOST_REQUIRE(ev.try_wait_for(chrono::milliseconds(500)));
+    BOOST_REQUIRE(ev.wait_for(chrono::milliseconds(500)));
 }
 
 BOOST_AUTO_TEST_CASE(test_event_wait_until)
@@ -124,7 +137,7 @@ BOOST_AUTO_TEST_CASE(test_event_wait_until)
         BOOST_AUTO(now, chrono::system_clock::now());
         BOOST_AUTO(timeout, now + chrono::milliseconds(500));
 
-        BOOST_REQUIRE(!ev.try_wait_until(timeout));
+        BOOST_REQUIRE(!ev.wait_until(timeout));
 
         BOOST_AUTO(end, chrono::system_clock::now());
         BOOST_AUTO(timeout_delta, end - timeout);
@@ -134,13 +147,13 @@ BOOST_AUTO_TEST_CASE(test_event_wait_until)
         BOOST_REQUIRE( timeout_delta < chrono::milliseconds(400) );
     }
 
-    ev.post();
+    ev.set();
 
     {
         BOOST_AUTO(start,   chrono::system_clock::now());
         BOOST_AUTO(timeout, start + chrono::milliseconds(500));
 
-        BOOST_REQUIRE(ev.try_wait_until(timeout));
+        BOOST_REQUIRE(ev.wait_until(timeout));
 
         BOOST_AUTO(end, chrono::system_clock::now());
 

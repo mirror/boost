@@ -12,135 +12,137 @@
 #ifdef BOOST_SYNC_DETAIL_DOXYGEN
 
 namespace boost {
+
 namespace sync  {
 
 class semaphore
 {
 public:
     /**
-     * \b Effects: Constructs a semaphore object. The semaphore is initialized to `initial_count`, which is expected to be non-negative.
+     * Constructs a semaphore object.
+     *
+     * \param initial_count The initial value of the semaphore. There may be an implementation-defined upper limit for the counter value,
+     *                      but it is safe to assume that values up to \c INT_MAX are supported.
      *
      * \b Throws: if an error occurs.
-     *
-     * */
+     */
     explicit semaphore(unsigned int initial_count = 0);
 
     /**
-     * \b Precondition: No thread is waiting on the semaphore
+     * Destroys the object
      *
-     * \b Effects: Destroys the object
-     *
-     * */
+     * \pre No thread is waiting on the semaphore
+     */
     ~semaphore();
 
     semaphore(semaphore const&) = delete;
     semaphore& operator= (semaphore const&) = delete;
 
     /**
-     * \b Effects: Increments the semaphore count. If there are processes/threads blocked waiting for the semaphore, then one of these processes will return successfully from its wait function.
+     * Increments the semaphore counter. If one or multiple threads are blocked waiting for the semaphore, then one of these threads returns successfully
+     * from its wait function. It is unspecified which thread is released from the wait function.
      *
      * \b Memory Ordering: release
      *
+     * \note The implementation may have an upper limit for the semaphore counter, upon exceeding which the behavior is unspecified. It is safe to assume
+     *       that values up to \c INT_MAX are supported.
+     *
      * \b Throws: if an error occurs.
-     * */
+     */
     void post();
 
     /**
-     * \b Effects: Decrements the semaphore. If the semaphore value is not greater than zero, then the calling process/thread blocks until it can decrement the counter.
+     * If the semaphore counter is greater than zero, decrements the counter and returns. If the semaphore value is not greater than zero,
+     * then the calling thread blocks until it can decrement the counter.
      *
      * \b Memory Ordering: acquire
      *
      * \b Throws: if an error occurs.
-     * */
+     */
     void wait();
 
     /**
-     * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. If the value is not greater than zero returns false.
+     * If the semaphore counter is greater than zero, decrements the counter and returns \c true. If the semaphore value is not greater than zero, returns \c false.
      *
      * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
      * \b Throws: if an error occurs.
-     * */
+     */
     bool try_wait();
 
     /**
-     * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. Otherwise, waits for the semaphore to the posted or the timeout expires. If the timeout expires, the function returns false. If the semaphore is posted the function returns true.
+     * If the semaphore counter is greater than zero, decrements the counter and returns \c true. If the semaphore value is not greater than zero,
+     * then the calling thread blocks until it can decrement the counter or the specified timeout expires.
      *
      * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
+     * \param timeout The timeout for the operation to complete. The timeout can be specified either as an absolute time point or as a duration.
+     *                In the latter case the time is measured according to the system clock.
+     *
+     * \returns If the timeout expires, the function returns \c false. If the semaphore counter is decremented, the function returns \c true.
+     *
      * \b Throws: if an error occurs.
-     * */
-    template <class Duration>
-    bool try_wait_for(const Duration & duration);
+     *
+     * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
+     */
+    template <class Time>
+    bool timed_wait(const Time & timeout);
 
     /**
-     * \b Effects: Decrements the semaphore if the semaphore's value is greater than zero and returns true. Otherwise, waits for the semaphore to the posted or the timeout expires. If the timeout expires, the function returns false. If the semaphore is posted the function returns true.
+     * If the semaphore counter is greater than zero, decrements the counter and returns \c true. If the semaphore value is not greater than zero,
+     * then the calling thread blocks until it can decrement the counter or the specified timeout expires.
      *
      * \b Memory Ordering: acquire, if successful, relaxed otherwise
      *
+     * \param duration The timeout for the operation to complete. The timeout should be a duration, which is measured according to the system clock.
+     *
+     * \returns If the timeout expires, the function returns \c false. If the semaphore counter is decremented, the function returns \c true.
+     *
      * \b Throws: if an error occurs.
-     * */
+     *
+     * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
+     */
+    template <class Duration>
+    bool wait_for(const Duration & duration);
+
+    /**
+     * If the semaphore counter is greater than zero, decrements the counter and returns \c true. If the semaphore value is not greater than zero,
+     * then the calling thread blocks until it can decrement the counter or the specified timeout expires.
+     *
+     * \b Memory Ordering: acquire, if successful, relaxed otherwise
+     *
+     * \param timeout The timeout for the operation to complete. The timeout should be an absolute time point.
+     *
+     * \returns If the timeout expires, the function returns \c false. If the semaphore counter is decremented, the function returns \c true.
+     *
+     * \b Throws: if an error occurs.
+     *
+     * \note In order to use this method, a supplementary header must be included from boost/sync/support to enable support for particular time units.
+     */
     template <class TimePoint>
-    bool try_wait_until(const TimePoint & timeout);
+    bool wait_until(const TimePoint & timeout);
 };
 
-}
-}
+} // namespace sync
+
+} // namespace boost
 
 #else // BOOST_SYNC_DETAIL_DOXYGEN
 
-#include <boost/sync/detail/config.hpp>
+#include <boost/sync/detail/semaphore_config.hpp>
 
 #ifdef BOOST_HAS_PRAGMA_ONCE
 #pragma once
 #endif
 
-#ifdef BOOST_HAS_UNISTD_H
-#include <unistd.h>
-
-#if (_POSIX_SEMAPHORES - 0) >= 200112L
-#define BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES
-#endif
-
-#endif // BOOST_HAS_UNISTD_H
-
-#if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
-#include <Availability.h>
-
-// OSX
-#ifdef __MAC_OS_X_VERSION_MIN_REQUIRED
-
-#if __MAC_OS_X_VERSION_MIN_REQUIRED >= __MAC_10_6
-#define BOOST_SYNC_DETAIL_USE_DISPATCH_SEMAPHORES
-#endif
-
-#endif // __MAC_OS_X_VERSION_MIN_REQUIRED
-
-// iOS
-#ifdef __IPHONE_OS_VERSION_MIN_REQUIRED
-
-// untested!
-#if __IPHONE_OS_VERSION_MIN_REQUIRED >= __IPHONE_4_0
-#define BOOST_SYNC_DETAIL_USE_DISPATCH_SEMAPHORES
-#endif
-
-#endif // __IPHONE_OS_VERSION_MIN_REQUIRED
-
-#endif // !defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES) && defined(__APPLE__)
-
-
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
 #include <boost/sync/detail/semaphore/semaphore_windows.hpp>
-
 #elif defined(BOOST_SYNC_DETAIL_USE_DISPATCH_SEMAPHORES)
 #include <boost/sync/detail/semaphore/semaphore_dispatch.hpp>
-
 #elif defined(BOOST_SYNC_DETAIL_USE_POSIX_SEMAPHORES)
 #include <boost/sync/detail/semaphore/semaphore_posix.hpp>
-
 #else
 #include <boost/sync/detail/semaphore/semaphore_emulation.hpp>
-
 #endif
 
 #endif // BOOST_SYNC_DETAIL_DOXYGEN

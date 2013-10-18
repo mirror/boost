@@ -1,4 +1,4 @@
-// semaphore.hpp, mutex/condition_varibale emulation
+// event.hpp, condition variable emulation
 //
 // Copyright (C) 2013 Tim Blechmann
 // Copyright (C) 2013 Andrey Semashev
@@ -7,8 +7,8 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_EMULATION_HPP_INCLUDED_
-#define BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_EMULATION_HPP_INCLUDED_
+#ifndef BOOST_SYNC_DETAIL_EVENTS_AUTO_RESET_EVENT_EMULATION_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_EVENTS_AUTO_RESET_EVENT_EMULATION_HPP_INCLUDED_
 
 #include <boost/utility/enable_if.hpp>
 #include <boost/sync/detail/config.hpp>
@@ -23,66 +23,68 @@
 #pragma once
 #endif
 
-#define BOOST_SYNC_SEMAPHORE_EMULATED
+#define BOOST_SYNC_EVENT_EMULATED
 
 namespace boost {
 
-namespace sync  {
+namespace sync {
 
 BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 
-class semaphore
+class auto_reset_event
 {
-    BOOST_DELETED_FUNCTION(semaphore(semaphore const&))
-    BOOST_DELETED_FUNCTION(semaphore& operator=(semaphore const&))
+    BOOST_DELETED_FUNCTION(auto_reset_event(auto_reset_event const&));
+    BOOST_DELETED_FUNCTION(auto_reset_event& operator=(auto_reset_event const&));
 
 public:
-    explicit semaphore(unsigned int i = 0) : m_count(i)
+    auto_reset_event() BOOST_NOEXCEPT : m_is_set(false)
     {
     }
 
     void post()
     {
         sync::lock_guard< sync::mutex > lock(m_mutex);
-        ++m_count;
-        m_cond.notify_one();
+        bool already_signaled = m_is_set;
+        m_is_set = true;
+        if (!already_signaled)
+            m_cond.notify_one();
     }
 
     void wait()
     {
         sync::unique_lock< sync::mutex > lock(m_mutex);
-        while (m_count == 0)
+
+        while (!m_is_set)
             m_cond.wait(lock);
 
-        --m_count;
+        m_is_set = false;
     }
 
     bool try_wait()
     {
         sync::lock_guard< sync::mutex > lock(m_mutex);
-        if (m_count == 0)
-            return false;
-
-        --m_count;
-        return true;
+        const bool res = m_is_set;
+        if (res)
+            m_is_set = false;
+        return res;
     }
 
     template< typename Time >
     typename enable_if_c< sync::detail::time_traits< Time >::is_specialized, bool >::type timed_wait(Time const& timeout)
     {
         sync::unique_lock< sync::mutex > lock(m_mutex);
-        while (m_count == 0)
+        while (!m_is_set)
         {
             if (!m_cond.timed_wait(lock, timeout))
             {
-                if (m_count == 0)
+                if (!m_is_set)
                     return false;
                 else
                     break;
             }
         }
 
-        --m_count;
+        m_is_set = false;
         return true;
     }
 
@@ -101,7 +103,7 @@ public:
 private:
     sync::mutex m_mutex;
     sync::condition_variable m_cond;
-    unsigned int m_count;
+    bool m_is_set;
 };
 
 } // namespace abi
@@ -112,4 +114,4 @@ private:
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_DETAIL_SEMAPHORE_SEMAPHORE_EMULATION_HPP_INCLUDED_
+#endif // BOOST_SYNC_DETAIL_EVENTS_AUTO_RESET_EVENT_EMULATION_HPP_INCLUDED_

@@ -7,18 +7,22 @@
 // accompanying file LICENSE_1_0.txt or copy at
 // http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_SYNC_DETAIL_EVENT_EVENT_AUTORESET_SEMAPHORE_HPP
-#define BOOST_SYNC_DETAIL_EVENT_EVENT_AUTORESET_SEMAPHORE_HPP
+#ifndef BOOST_SYNC_DETAIL_EVENTS_AUTO_RESET_EVENT_SEMAPHORE_HPP_INCLUDED_
+#define BOOST_SYNC_DETAIL_EVENTS_AUTO_RESET_EVENT_SEMAPHORE_HPP_INCLUDED_
 
 #include <cstddef>
 #include <boost/cstdint.hpp>
-
+#include <boost/utility/enable_if.hpp>
 #include <boost/sync/detail/config.hpp>
 #include <boost/sync/detail/atomic.hpp>
 #include <boost/sync/detail/pause.hpp>
+#include <boost/sync/detail/time_traits.hpp>
 #include <boost/sync/semaphore.hpp>
-
 #include <boost/sync/detail/header.hpp>
+
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
 
 namespace boost {
 
@@ -32,8 +36,7 @@ class auto_reset_event
     BOOST_DELETED_FUNCTION(auto_reset_event& operator= (auto_reset_event const&));
 
 public:
-    auto_reset_event() :
-        m_state(0)
+    auto_reset_event() : m_state(0)
     {
     }
 
@@ -78,12 +81,12 @@ public:
         return false;
     }
 
-    template <typename Duration>
-    bool try_wait_for(const Duration & duration)
+    template< typename Time >
+    typename enable_if_c< sync::detail::time_traits< Time >::is_specialized, bool >::type timed_wait(Time const& timeout)
     {
         m_state.fetch_add(1, detail::atomic_ns::memory_order_acquire);
 
-        const bool wait_successful = m_sem.try_wait_for(duration);
+        const bool wait_successful = m_sem.timed_wait(timeout);
         if (wait_successful)
             return true;
 
@@ -91,22 +94,21 @@ public:
         return false;
     }
 
-    template <typename Timepoint>
-    bool try_wait_until(const Timepoint & timeout )
+    template< typename Duration >
+    typename enable_if< detail::is_time_tag_of< Duration, detail::time_duration_tag >, bool >::type wait_for(Duration const& duration)
     {
-        m_state.fetch_add(1, detail::atomic_ns::memory_order_acquire);
+        return timed_wait(duration);
+    }
 
-        const bool wait_successful = m_sem.try_wait_until(timeout);
-        if (wait_successful)
-            return true;
-
-        m_state.fetch_add(-1, detail::atomic_ns::memory_order_relaxed);
-        return false;
+    template< typename TimePoint >
+    typename enable_if< detail::is_time_tag_of< TimePoint, detail::time_point_tag >, bool >::type wait_until(TimePoint const& abs_time)
+    {
+        return timed_wait(abs_time);
     }
 
 private:
     semaphore m_sem;
-    detail::atomic_ns::atomic<int32_t> m_state;
+    detail::atomic_ns::atomic< int32_t > m_state;
 };
 
 } // namespace abi
@@ -117,4 +119,4 @@ private:
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_DETAIL_EVENT_EVENT_AUTORESET_SEMAPHORE_HPP
+#endif // BOOST_SYNC_DETAIL_EVENTS_AUTO_RESET_EVENT_SEMAPHORE_HPP_INCLUDED_
