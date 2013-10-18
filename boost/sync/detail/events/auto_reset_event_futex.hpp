@@ -155,7 +155,7 @@ public:
     }
 
 private:
-    bool priv_timed_wait(sync::detail::system_time_point const& timeout)
+    bool priv_timed_wait(sync::detail::system_time_point const& abs_timeout)
     {
         // Try the fast path first
         if (this->try_wait())
@@ -169,7 +169,83 @@ private:
             if (posts == 0)
             {
             again:
-                const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), old_state, &timeout.get());
+                sync::detail::system_duration::native_type time_left = (abs_timeout - sync::detail::system_time_point::now()).get();
+                if (time_left <= 0)
+                    goto timeout;
+                const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), old_state, time_left);
+                if (status != 0)
+                {
+                    const int err = errno;
+                    switch (err)
+                    {
+                    case ETIMEDOUT:
+                        old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+                        goto timeout;
+
+                    case EINTR:       // signal received
+                        goto again;
+
+                    case EWOULDBLOCK: // another thread changed the state
+                        break;
+
+                    default:
+                        BOOST_ASSERT(false);
+                    }
+                }
+
+                old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+                posts = old_state >> post_count_lowest_bit;
+                if (posts == 0)
+                    goto again;
+            }
+
+            // Remove one post and one waiter from the counters
+            if (m_state.compare_exchange_strong(old_state, old_state - (post_count_one + 1u), detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                break;
+        }
+
+        return true;
+
+    timeout:
+        while (true)
+        {
+            const unsigned int posts = old_state >> post_count_lowest_bit;
+            if (posts == 0)
+            {
+                // Remove one waiter
+                if (m_state.compare_exchange_weak(old_state, old_state - 1u, detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                    return false;
+            }
+            else
+            {
+                // Remove one post and one waiter from the counters
+                if (m_state.compare_exchange_weak(old_state, old_state - (post_count_one + 1u), detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                    return true;
+            }
+
+            detail::pause();
+        }
+    }
+
+    bool priv_timed_wait(sync::detail::system_duration dur)
+    {
+        // Try the fast path first
+        if (this->try_wait())
+            return true;
+
+        sync::detail::system_duration::native_type time_left = dur.get();
+        if (time_left <= 0)
+            return false;
+
+        // Add one waiter
+        unsigned int old_state = m_state.fetch_add(1, detail::atomic_ns::memory_order_acq_rel);
+        while (true)
+        {
+            unsigned int posts = old_state >> post_count_lowest_bit;
+            if (posts == 0)
+            {
+            again:
+                const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), old_state, time_left);
                 if (status != 0)
                 {
                     const int err = errno;
@@ -220,11 +296,6 @@ private:
         }
 
         return true;
-    }
-
-    bool priv_timed_wait(sync::detail::system_duration dur)
-    {
-        return priv_timed_wait(sync::detail::system_time_point::now() + dur);
     }
 
     template< typename TimePoint >

@@ -60,9 +60,12 @@ BOOST_FORCEINLINE int futex_wait(int* pval, int expected) BOOST_NOEXCEPT
     );
 }
 
-//! Checks that the value \c pval is \c expected and blocks until \c timeout
-BOOST_FORCEINLINE int futex_timedwait(int* pval, int expected, const struct ::timespec* timeout) BOOST_NOEXCEPT
+//! Checks that the value \c pval is \c expected and blocks until \c timeout_nsec expires
+BOOST_FORCEINLINE int futex_timedwait(int* pval, int expected, uint64_t timeout_nsec) BOOST_NOEXCEPT
 {
+    struct ::timespec timeout;
+    timeout.tv_sec = timeout_nsec / 1000000000u;
+    timeout.tv_nsec = timeout_nsec % 1000000000u;
     return futex_invoke
     (
         pval,
@@ -72,7 +75,7 @@ BOOST_FORCEINLINE int futex_timedwait(int* pval, int expected, const struct ::ti
         FUTEX_WAIT,
 #endif
         expected,
-        timeout
+        &timeout
     );
 }
 
