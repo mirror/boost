@@ -42,9 +42,15 @@ class semaphore
 public:
     explicit semaphore(unsigned int i = 0)
     {
-        m_sem = dispatch_semaphore_create(i);
+        // Note that dispatch_release requires the semaphore counter to be equal to the one specified for dispatch_semaphore_create.
+        // Otherwise dispatch_release just crashes. This is probably a bug in libdispatch, but in order to work around it, we have to
+        // set the counter manually in a loop, after creating the semaphore.
+        m_sem = dispatch_semaphore_create(0);
         if (m_sem == NULL)
-            BOOST_SYNC_DETAIL_THROW(resource_error, (sync::detail::system_ns::errc::not_enough_memory)("boost::sync::semaphore constructor failed in dispatch_semaphore_create"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (sync::detail::system_ns::errc::not_enough_memory)("semaphore constructor failed in dispatch_semaphore_create"));
+
+        for (; i > 0; --i)
+            dispatch_semaphore_signal(m_sem);
     }
 
     ~semaphore()
@@ -112,7 +118,7 @@ private:
 
     bool priv_timed_wait(sync::detail::system_time_point const& t)
     {
-        return dispatch_semaphore_wait(m_sem, dispatch_walltime(const_cast< struct ::timespec* >(&t.get()), 0)) == 0;
+        return priv_timed_wait(t - sync::detail::system_time_point::now());
     }
 
     template< typename TimePoint >
