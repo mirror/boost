@@ -28,9 +28,35 @@ of BoostBook XSL parameters, if you wish to look into them in more detail,
 the best source of information is the XSL source code at
 [@boost:tools/boostbook/xsl/ `tools/boostbook/xsl/`].
 
+[/TODO:
+    use.id.as.filename
+    boost.include.libraries
+    Look at fo.xsl
+    caramel
+    boost.section.class.add.id
+    boost.max.id.part.length
+    boost.syntax.highlight
+]
+
 [heading:toc Table of Contents settings]
 
 [/TODO: Quick description of docbook parameters?]
+
+[/ Variables used by Boost.Math:]
+[variablelist
+    [[chunk.section.depth]
+        [???]]
+    [[chunk.first.sections]
+        [???]]
+    [[toc.section.depth]
+        [???]]
+    [[toc.max.dpeth]
+        [???]]
+    [[generate.section.toc.level]
+        [???]]
+    [[index.on.type]
+        [???]]
+]
 
 BoostBook adds an extra parameter, `boost.noexpand.chapter.toc`, to the DocBook
 parameters for generating the table of contents for a book. This adjusts a
@@ -41,6 +67,69 @@ This is mainly used in the Boost.Math documentation but could be useful in
 large books so that the top level table of contents aren't overwhelmed by
 the individual chapeter contents.
 
+[heading:link_locations Link Locations]
+
+[variablelist
+    [[boost.root]
+        [Path to root of boost (or module) from destination directory]]
+    [[boost.url.prefix]
+        [???]]
+    [[boost.header.root]
+        [???]]
+]
+
+[variablelist
+    [[img.src.path]
+        [(Docbook parameter) Path that image links are relative to, from the
+        destination directory]]
+    [[boost.graphics.root]
+        [???]]
+    [/ Not sure if it's worth mentioning these docbook parameters:
+    [[admon.graphics.path]
+        [???]]
+    [[navig.graphics.path]
+        [???]]
+    [[callout.graphics.path]
+        [???]]
+    ]
+]
+
+[heading:style Style Parameters]
+
+[variablelist
+    [[boost.defaults]
+        [???]]
+    [[html.stylesheet]
+        [??? (should it be under directory locations?)]]
+    [[admon.style]
+        [???]]
+    [[admon.graphics]
+        [???]]
+    [[navig.graphics]
+        [???]]
+    [[navig.graphics.extension]
+        [???]]
+]
+
+[heading:reference Reference Documentation Parameters]
+
+[variablelist
+    [[boostbook.verbose]
+        [???]]
+    [[boost.compact.function]
+        [???]]
+    [[boost.short.result.type]
+        [???]]
+    [[boost.compact.enum]
+        [???]]
+    [[boost.compact.typedef]
+        [???]]
+    [[max-columns]
+        [???]]
+    [[tempalte.param.brief]
+        [???]]
+]
+
 [heading:mathjax MathJax parameters]
 
 BoostBook has experimental support for MathJax, an open source JavaScript
@@ -48,3 +137,25 @@ script that is used to display mathematics in the browser. This is activated
 by setting the `boost.mathjax` parameter to 1, and the location can be set
 using `boost.mathjax.script`.
 
+[heading:navbar Navbar]
+
+[variablelist
+    [[nav.layout]
+        [???]]
+    [[nav.border]
+        [???]]
+    [[nav.flow]
+        [???]]
+    [[boost.website]
+        [???]]
+    [[boost.image.src]
+        [???]]
+    [[boost.image.alt]
+        [???]]
+    [[boost.image.w]
+        [???]]
+    [[boost.image.h]
+        [???]]
+    [[boost.libraries]
+        [???]]
+]
