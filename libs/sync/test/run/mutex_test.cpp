@@ -6,12 +6,14 @@
 
 #include <boost/test/unit_test.hpp>
 
+#include <boost/bind.hpp>
 #include <boost/sync/mutexes.hpp>
 #include <boost/sync/locks.hpp>
+#include <boost/sync/condition_variables/condition_variable.hpp>
 #include <boost/sync/support/boost_date_time.hpp>
-//#include <boost/thread/recursive_mutex.hpp>
-//#include <boost/thread/thread_time.hpp>
-//#include <boost/thread/condition.hpp>
+#include <boost/thread/thread.hpp>
+#include <boost/thread/thread_time.hpp>
+#include <boost/date_time/posix_time/posix_time_types.hpp>
 
 #include "utils.hpp"
 
@@ -24,7 +26,7 @@ struct test_lock
     void operator()() const
     {
         mutex_type mutex;
-//        boost::condition condition;
+        boost::sync::condition_variable condition;
 
         // Test the lock's constructors.
         {
@@ -33,16 +35,16 @@ struct test_lock
         }
         lock_type lock(mutex);
         BOOST_CHECK(lock ? true : false);
-/*
+
         // Construct and initialize an xtime for a fast time out.
-        boost::xtime xt = delay(0, 100);
+        boost::system_time timeout = boost::get_system_time() + boost::posix_time::milliseconds(100);
 
         // Test the lock and the mutex with condition variables.
         // No one is going to notify this condition variable.  We expect to
         // time out.
-        BOOST_CHECK(!condition.timed_wait(lock, xt));
+        BOOST_CHECK(!condition.timed_wait(lock, timeout));
         BOOST_CHECK(lock ? true : false);
-*/
+
         // Test the lock and unlock methods.
         lock.unlock();
         BOOST_CHECK(!lock);
@@ -60,7 +62,7 @@ struct test_trylock
     void operator()()
     {
         mutex_type mutex;
-//        boost::condition condition;
+        boost::sync::condition_variable condition;
 
         // Test the lock's constructors.
         {
@@ -73,16 +75,16 @@ struct test_trylock
         }
         lock_type lock(mutex, boost::sync::try_to_lock);
         BOOST_CHECK(lock ? true : false);
-/*
+
         // Construct and initialize an xtime for a fast time out.
-        boost::xtime xt = delay(0, 100);
+        boost::system_time timeout = boost::get_system_time() + boost::posix_time::milliseconds(100);
 
         // Test the lock and the mutex with condition variables.
         // No one is going to notify this condition variable.  We expect to
         // time out.
-        BOOST_CHECK(!condition.timed_wait(lock, xt));
+        BOOST_CHECK(!condition.timed_wait(lock, timeout));
         BOOST_CHECK(lock ? true : false);
-*/
+
         // Test the lock, unlock and trylock methods.
         lock.unlock();
         BOOST_CHECK(!lock);
@@ -94,40 +96,42 @@ struct test_trylock
         BOOST_CHECK(lock ? true : false);
     }
 };
-/*
+
 template<typename Mutex>
 struct test_lock_times_out_if_other_thread_has_lock
 {
-    typedef boost::unique_lock<Mutex> Lock;
+    typedef boost::sync::unique_lock<Mutex> Lock;
+    typedef boost::sync::mutex done_mutex_type;
 
     Mutex m;
-    boost::mutex done_mutex;
+    done_mutex_type done_mutex;
     bool done;
     bool locked;
-    boost::condition_variable done_cond;
+    boost::sync::condition_variable done_cond;
 
-    test_lock_times_out_if_other_thread_has_lock():
+    test_lock_times_out_if_other_thread_has_lock() :
         done(false),locked(false)
-    {}
+    {
+    }
 
     void locking_thread()
     {
-        Lock lock(m,boost::defer_lock);
+        Lock lock(m, boost::sync::defer_lock);
         lock.timed_lock(boost::posix_time::milliseconds(50));
 
-        boost::lock_guard<boost::mutex> lk(done_mutex);
-        locked=lock.owns_lock();
-        done=true;
+        boost::sync::lock_guard< done_mutex_type > lk(done_mutex);
+        locked = lock.owns_lock();
+        done = true;
         done_cond.notify_one();
     }
 
     void locking_thread_through_constructor()
     {
-        Lock lock(m,boost::posix_time::milliseconds(50));
+        Lock lock(m, boost::posix_time::milliseconds(50));
 
-        boost::lock_guard<boost::mutex> lk(done_mutex);
-        locked=lock.owns_lock();
-        done=true;
+        boost::sync::lock_guard< done_mutex_type > lk(done_mutex);
+        locked = lock.owns_lock();
+        done = true;
         done_cond.notify_one();
     }
 
@@ -142,24 +146,23 @@ struct test_lock_times_out_if_other_thread_has_lock
     {
         Lock lock(m);
 
-        locked=false;
-        done=false;
+        locked = false;
+        done = false;
 
-        boost::thread t(test_func,this);
+        boost::thread t(test_func, this);
 
         try
         {
             {
-                boost::unique_lock<boost::mutex> lk(done_mutex);
-                BOOST_CHECK(done_cond.timed_wait(lk,boost::posix_time::seconds(2),
-                                                 boost::bind(&this_type::is_done,this)));
+                boost::sync::unique_lock< done_mutex_type > lk(done_mutex);
+                BOOST_CHECK(done_cond.timed_wait(lk, boost::posix_time::seconds(2), boost::bind(&this_type::is_done, this)));
                 BOOST_CHECK(!locked);
             }
 
             lock.unlock();
             t.join();
         }
-        catch(...)
+        catch (...)
         {
             lock.unlock();
             t.join();
@@ -180,6 +183,7 @@ struct test_timedlock
 {
     typedef M mutex_type;
     typedef boost::sync::unique_lock< mutex_type > lock_type;
+    typedef boost::sync::unique_lock< mutex_type > timed_lock_type;
 
     static bool fake_predicate()
     {
@@ -191,25 +195,25 @@ struct test_timedlock
         test_lock_times_out_if_other_thread_has_lock<mutex_type>()();
 
         mutex_type mutex;
-        boost::condition condition;
+        boost::sync::condition_variable condition;
 
         // Test the lock's constructors.
         {
             // Construct and initialize an xtime for a fast time out.
-            boost::system_time xt = boost::get_system_time()+boost::posix_time::milliseconds(100);
+            boost::system_time xt = boost::get_system_time() + boost::posix_time::milliseconds(100);
 
             timed_lock_type lock(mutex, xt);
             BOOST_CHECK(lock ? true : false);
         }
         {
-            timed_lock_type lock(mutex, boost::defer_lock);
+            timed_lock_type lock(mutex, boost::sync::defer_lock);
             BOOST_CHECK(!lock);
         }
         timed_lock_type lock(mutex);
         BOOST_CHECK(lock ? true : false);
 
         // Construct and initialize an xtime for a fast time out.
-        boost::system_time timeout = boost::get_system_time()+boost::posix_time::milliseconds(100);
+        boost::system_time timeout = boost::get_system_time() + boost::posix_time::milliseconds(100);
 
         // Test the lock and the mutex with condition variables.
         // No one is going to notify this condition variable.  We expect to
@@ -217,9 +221,9 @@ struct test_timedlock
         BOOST_CHECK(!condition.timed_wait(lock, timeout, fake_predicate));
         BOOST_CHECK(lock ? true : false);
 
-        boost::system_time now=boost::get_system_time();
+        boost::system_time now = boost::get_system_time();
         boost::posix_time::milliseconds const timeout_resolution(20);
-        BOOST_CHECK((timeout-timeout_resolution)<now);
+        BOOST_CHECK((timeout - timeout_resolution) < now);
 
         // Test the lock, unlock and timedlock methods.
         lock.unlock();
@@ -228,7 +232,7 @@ struct test_timedlock
         BOOST_CHECK(lock ? true : false);
         lock.unlock();
         BOOST_CHECK(!lock);
-        boost::system_time target = boost::get_system_time()+boost::posix_time::milliseconds(100);
+        boost::system_time target = boost::get_system_time() + boost::posix_time::milliseconds(100);
         BOOST_CHECK(lock.timed_lock(target));
         BOOST_CHECK(lock ? true : false);
         lock.unlock();
@@ -248,7 +252,7 @@ template <typename M>
 struct test_recursive_lock
 {
     typedef M mutex_type;
-    typedef sync::unique_lock< mutex_type > lock_type;
+    typedef boost::sync::unique_lock< mutex_type > lock_type;
 
     void operator()()
     {
@@ -257,7 +261,7 @@ struct test_recursive_lock
         lock_type lock2(mx);
     }
 };
-*/
+
 
 
 void do_test_mutex()
@@ -274,17 +278,17 @@ void do_test_try_mutex()
 {
     test_trylock<boost::sync::mutex>()();
 }
+
 BOOST_AUTO_TEST_CASE(test_try_mutex)
 {
     timed_test(&do_test_try_mutex, 3);
 }
 
-/*
 void do_test_timed_mutex()
 {
-    test_lock<sync::timed_mutex>()();
-    test_trylock<sync::timed_mutex>()();
-    test_timedlock<sync::timed_mutex>()();
+    test_lock<boost::sync::timed_mutex>()();
+    test_trylock<boost::sync::timed_mutex>()();
+    test_timedlock<boost::sync::timed_mutex>()();
 }
 
 BOOST_AUTO_TEST_CASE(test_timed_mutex)
@@ -292,6 +296,7 @@ BOOST_AUTO_TEST_CASE(test_timed_mutex)
     timed_test(&do_test_timed_mutex, 3);
 }
 
+/*
 void do_test_recursive_mutex()
 {
     test_lock<boost::recursive_mutex>()();
