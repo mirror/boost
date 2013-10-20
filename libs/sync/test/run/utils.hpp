@@ -2,7 +2,7 @@
 // William E. Kempf
 // Copyright (C) 2007-8 Anthony Williams
 //
-//  Distributed under the Boost Software License, Version 1.0. (See accompanying 
+//  Distributed under the Boost Software License, Version 1.0. (See accompanying
 //  file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt)
 
 #ifndef BOOST_SYNC_LIBS_TEST_UTILS_HPP_INCLUDED_
@@ -150,7 +150,7 @@ private:
 
 }
 // boostinspect:nounnamed
-namespace 
+namespace
 {
 
 template <typename F>
@@ -191,7 +191,7 @@ private:
 }
 
 // boostinspect:nounnamed
-namespace 
+namespace
 {
 template <typename F, typename T>
 inline thread_detail_anon::thread_binder<F, T> bind(const F& func, const T& param)
@@ -226,7 +226,7 @@ private:
 }
 
 // boostinspect:nounnamed
-namespace 
+namespace
 {
 template <typename R, typename T>
 inline thread_detail_anon::thread_member_binder<R, T> bind(R (T::*func)(), T& param)

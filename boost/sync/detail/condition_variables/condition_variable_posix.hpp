@@ -75,13 +75,13 @@ public:
     {
         int const res = pthread_cond_init(&m_cond, NULL);
         if (res)
-            BOOST_SYNC_DETAIL_THROW(resource_error, (res)("boost::sync::condition_variable constructor failed in pthread_cond_init"));
+            BOOST_SYNC_DETAIL_THROW(resource_error, (res)("condition_variable constructor failed in pthread_cond_init"));
     }
 #endif // defined(PTHREAD_COND_INITIALIZER)
 
     ~condition_variable()
     {
-        BOOST_VERIFY(::pthread_cond_destroy(&m_cond) == 0);
+        BOOST_VERIFY(sync::detail::posix::pthread_cond_destroy(&m_cond) == 0);
     }
 
     void notify_one() BOOST_NOEXCEPT
@@ -205,7 +205,7 @@ private:
     {
         int const res = sync::detail::posix::pthread_cond_wait(&m_cond, mtx);
         if (res != 0)
-            BOOST_SYNC_DETAIL_THROW(wait_error, (res)("boost::sync::condition_variable::wait failed in pthread_cond_wait"));
+            BOOST_SYNC_DETAIL_THROW(wait_error, (res)("condition_variable::wait failed in pthread_cond_wait"));
     }
 
     template< typename Mutex >
@@ -221,7 +221,7 @@ private:
         if (res == ETIMEDOUT)
             return sync::cv_status::timeout;
         else if (res != 0)
-            BOOST_SYNC_DETAIL_THROW(wait_error, (res)("boost::sync::condition_variable timedwait failed in pthread_cond_timedwait"));
+            BOOST_SYNC_DETAIL_THROW(wait_error, (res)("condition_variable::timed_wait failed in pthread_cond_timedwait"));
         return sync::cv_status::no_timeout;
     }
 

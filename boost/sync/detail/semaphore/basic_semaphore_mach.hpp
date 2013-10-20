@@ -97,21 +97,21 @@ public:
         sync::detail::system_duration::native_type time_left = dur.get();
         if (time_left < 0)
             time_left = 0;
-        sync::detail::system_duration::native_type time_left_sec = time_left / system_duration::subsecond_fraction;
-        sync::detail::system_duration::native_type time_left_subsec = time_left % system_duration::subsecond_fraction;
+        sync::detail::system_duration::native_type time_left_sec = time_left / sync::detail::system_duration::subsecond_fraction;
+        sync::detail::system_duration::native_type time_left_subsec = time_left % sync::detail::system_duration::subsecond_fraction;
 
         enum
         {
             nanoseconds_fraction = 1000000000u,
-            conversion_ratio = static_cast< uint64_t >(nanoseconds_fraction) >= system_duration::subsecond_fraction ?
-                nanoseconds_fraction / system_duration::subsecond_fraction :
-                system_duration::subsecond_fraction / nanoseconds_fraction
+            conversion_ratio = static_cast< uint64_t >(nanoseconds_fraction) >= sync::detail::system_duration::subsecond_fraction ?
+                nanoseconds_fraction / sync::detail::system_duration::subsecond_fraction :
+                sync::detail::system_duration::subsecond_fraction / nanoseconds_fraction
         };
 
         const mach_timespec_t wait_time =
         {
             time_left_sec,
-            static_cast< uint64_t >(nanoseconds_fraction) >= system_duration::subsecond_fraction ?
+            static_cast< uint64_t >(nanoseconds_fraction) >= sync::detail::system_duration::subsecond_fraction ?
                 time_left_subsec / conversion_ratio : time_left_subsec * conversion_ratio
         };
 

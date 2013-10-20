@@ -111,7 +111,6 @@ private:
             // Check that system time resolution is nanoseconds
             BOOST_STATIC_ASSERT(sync::detail::system_duration::subsecond_fraction == 1000000000u);
 
-            // Note that futex timeout must be relative
             const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), 0, time_left);
             if (status == 0)
                 break;
@@ -145,7 +144,6 @@ private:
             BOOST_STATIC_ASSERT(sync::detail::system_duration::subsecond_fraction == 1000000000u);
             do
             {
-                // Note that futex timeout must be relative
                 const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), 0, time_left);
                 if (status == 0)
                     break;

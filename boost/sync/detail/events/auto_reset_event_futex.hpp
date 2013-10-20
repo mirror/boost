@@ -171,7 +171,7 @@ private:
             again:
                 sync::detail::system_duration::native_type time_left = (abs_timeout - sync::detail::system_time_point::now()).get();
                 if (time_left <= 0)
-                    goto timeout;
+                    return on_wait_timed_out();
                 const int status = sync::detail::linux_::futex_timedwait(reinterpret_cast< int* >(&m_state), old_state, time_left);
                 if (status != 0)
                 {
@@ -179,8 +179,7 @@ private:
                     switch (err)
                     {
                     case ETIMEDOUT:
-                        old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
-                        goto timeout;
+                        return on_wait_timed_out();
 
                     case EINTR:       // signal received
                         goto again;
@@ -205,26 +204,6 @@ private:
         }
 
         return true;
-
-    timeout:
-        while (true)
-        {
-            const unsigned int posts = old_state >> post_count_lowest_bit;
-            if (posts == 0)
-            {
-                // Remove one waiter
-                if (m_state.compare_exchange_weak(old_state, old_state - 1u, detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
-                    return false;
-            }
-            else
-            {
-                // Remove one post and one waiter from the counters
-                if (m_state.compare_exchange_weak(old_state, old_state - (post_count_one + 1u), detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
-                    return true;
-            }
-
-            detail::pause();
-        }
     }
 
     bool priv_timed_wait(sync::detail::system_duration dur)
@@ -252,26 +231,7 @@ private:
                     switch (err)
                     {
                     case ETIMEDOUT:
-                        old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
-                        while (true)
-                        {
-                            posts = old_state >> post_count_lowest_bit;
-                            if (posts == 0)
-                            {
-                                // Remove one waiter
-                                if (m_state.compare_exchange_weak(old_state, old_state - 1u, detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
-                                    return false;
-                            }
-                            else
-                            {
-                                // Remove one post and one waiter from the counters
-                                if (m_state.compare_exchange_weak(old_state, old_state - (post_count_one + 1u), detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
-                                    return true;
-                            }
-
-                            detail::pause();
-                        }
-                        break;
+                        return on_wait_timed_out();
 
                     case EINTR:       // signal received
                         goto again;
@@ -314,6 +274,29 @@ private:
         while (now < t.get());
 
         return false;
+    }
+
+    bool on_wait_timed_out()
+    {
+        unsigned int old_state = m_state.load(detail::atomic_ns::memory_order_acquire);
+        while (true)
+        {
+            unsigned int posts = old_state >> post_count_lowest_bit;
+            if (posts == 0)
+            {
+                // Remove one waiter
+                if (m_state.compare_exchange_weak(old_state, old_state - 1u, detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                    return false;
+            }
+            else
+            {
+                // Remove one post and one waiter from the counters
+                if (m_state.compare_exchange_weak(old_state, old_state - (post_count_one + 1u), detail::atomic_ns::memory_order_acquire, detail::atomic_ns::memory_order_release))
+                    return true;
+            }
+
+            detail::pause();
+        }
     }
 
 private:

@@ -122,7 +122,7 @@ private:
             if (!boost::detail::winapi::SetWaitableTimer(handles[1], reinterpret_cast< const boost::detail::winapi::LARGE_INTEGER_* >(&t.get()), 0, NULL, NULL, false))
             {
                 const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
-                BOOST_SYNC_DETAIL_THROW(lock_error, (err)("timed_mutex::timedlock failed to set a timeout"));
+                BOOST_SYNC_DETAIL_THROW(lock_error, (err)("timed_mutex::timed_lock failed to set a timeout"));
             }
 
             while (true)
@@ -131,7 +131,7 @@ private:
                 if (res == boost::detail::winapi::wait_failed)
                 {
                     const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
-                    BOOST_SYNC_DETAIL_THROW(lock_error, (err)("timed_mutex::timedlock failed in WaitForMultipleObjects"));
+                    BOOST_SYNC_DETAIL_THROW(lock_error, (err)("timed_mutex::timed_lock failed in WaitForMultipleObjects"));
                 }
 
                 switch (res)
@@ -189,7 +189,7 @@ private:
                 default:
                     {
                         const boost::detail::winapi::DWORD_ err = boost::detail::winapi::GetLastError();
-                        BOOST_SYNC_DETAIL_THROW(lock_error, (err)("timed_mutex::timedlock failed in WaitForSingleObject"));
+                        BOOST_SYNC_DETAIL_THROW(lock_error, (err)("timed_mutex::timed_lock failed in WaitForSingleObject"));
                     }
                 }
             }

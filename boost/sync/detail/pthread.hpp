@@ -53,6 +53,7 @@ using ::pthread_mutex_trylock;
 using ::pthread_mutex_timedlock;
 #endif
 using ::pthread_mutex_unlock;
+using ::pthread_cond_destroy;
 using ::pthread_cond_wait;
 using ::pthread_cond_timedwait;
 
@@ -60,7 +61,7 @@ using ::pthread_cond_timedwait;
 
 // Workaround for https://svn.boost.org/trac/boost/ticket/6200
 
-BOOST_FORCEINLINE int pthread_mutex_destroy(pthread_mutex_t* m)
+BOOST_FORCEINLINE int pthread_mutex_destroy(pthread_mutex_t* m) BOOST_NOEXCEPT
 {
     int ret;
     do
@@ -71,7 +72,7 @@ BOOST_FORCEINLINE int pthread_mutex_destroy(pthread_mutex_t* m)
     return ret;
 }
 
-BOOST_FORCEINLINE int pthread_mutex_lock(pthread_mutex_t* m)
+BOOST_FORCEINLINE int pthread_mutex_lock(pthread_mutex_t* m) BOOST_NOEXCEPT
 {
     int ret;
     do
@@ -82,7 +83,7 @@ BOOST_FORCEINLINE int pthread_mutex_lock(pthread_mutex_t* m)
     return ret;
 }
 
-BOOST_FORCEINLINE int pthread_mutex_trylock(pthread_mutex_t* m)
+BOOST_FORCEINLINE int pthread_mutex_trylock(pthread_mutex_t* m) BOOST_NOEXCEPT
 {
     int ret;
     do
@@ -94,7 +95,7 @@ BOOST_FORCEINLINE int pthread_mutex_trylock(pthread_mutex_t* m)
 }
 
 #if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
-BOOST_FORCEINLINE int pthread_mutex_timedlock(pthread_mutex_t* m, const struct ::timespec* t)
+BOOST_FORCEINLINE int pthread_mutex_timedlock(pthread_mutex_t* m, const struct ::timespec* t) BOOST_NOEXCEPT
 {
     int ret;
     do
@@ -106,7 +107,7 @@ BOOST_FORCEINLINE int pthread_mutex_timedlock(pthread_mutex_t* m, const struct :
 }
 #endif
 
-BOOST_FORCEINLINE int pthread_mutex_unlock(pthread_mutex_t* m)
+BOOST_FORCEINLINE int pthread_mutex_unlock(pthread_mutex_t* m) BOOST_NOEXCEPT
 {
     int ret;
     do
@@ -117,7 +118,18 @@ BOOST_FORCEINLINE int pthread_mutex_unlock(pthread_mutex_t* m)
     return ret;
 }
 
-BOOST_FORCEINLINE int pthread_cond_wait(pthread_cond_t* c, pthread_mutex_t* m)
+BOOST_FORCEINLINE int pthread_cond_destroy(pthread_cond_t* c) BOOST_NOEXCEPT
+{
+    int ret;
+    do
+    {
+        ret = ::pthread_cond_destroy(c);
+    }
+    while (ret == EINTR);
+    return ret;
+}
+
+BOOST_FORCEINLINE int pthread_cond_wait(pthread_cond_t* c, pthread_mutex_t* m) BOOST_NOEXCEPT
 {
     int ret;
     do
@@ -128,7 +140,7 @@ BOOST_FORCEINLINE int pthread_cond_wait(pthread_cond_t* c, pthread_mutex_t* m)
     return ret;
 }
 
-BOOST_FORCEINLINE int pthread_cond_timedwait(pthread_cond_t* c, pthread_mutex_t* m, const struct ::timespec* t)
+BOOST_FORCEINLINE int pthread_cond_timedwait(pthread_cond_t* c, pthread_mutex_t* m, const struct ::timespec* t) BOOST_NOEXCEPT
 {
     int ret;
     do

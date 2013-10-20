@@ -284,6 +284,7 @@ BOOST_AUTO_TEST_CASE(test_try_mutex)
     timed_test(&do_test_try_mutex, 3);
 }
 
+/*
 void do_test_timed_mutex()
 {
     test_lock<boost::sync::timed_mutex>()();
@@ -296,7 +297,6 @@ BOOST_AUTO_TEST_CASE(test_timed_mutex)
     timed_test(&do_test_timed_mutex, 3);
 }
 
-/*
 void do_test_recursive_mutex()
 {
     test_lock<boost::recursive_mutex>()();

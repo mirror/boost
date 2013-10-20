@@ -40,12 +40,12 @@ class pthread_mutex_lock_guard
 public:
     explicit pthread_mutex_lock_guard(pthread_mutex_t& m) BOOST_NOEXCEPT : m_mutex(&m)
     {
-        BOOST_VERIFY(pthread_mutex_lock(m_mutex) == 0);
+        BOOST_VERIFY(sync::detail::posix::pthread_mutex_lock(m_mutex) == 0);
     }
 
     ~pthread_mutex_lock_guard()
     {
-        BOOST_VERIFY(pthread_mutex_unlock(m_mutex) == 0);
+        BOOST_VERIFY(sync::detail::posix::pthread_mutex_unlock(m_mutex) == 0);
     }
 
     BOOST_DELETED_FUNCTION(pthread_mutex_lock_guard(pthread_mutex_lock_guard const&))
@@ -59,12 +59,12 @@ class pthread_mutex_unlock_guard
 public:
     explicit pthread_mutex_unlock_guard(pthread_mutex_t& m) BOOST_NOEXCEPT : m_mutex(&m)
     {
-        BOOST_VERIFY(pthread_mutex_unlock(m_mutex) == 0);
+        BOOST_VERIFY(sync::detail::posix::pthread_mutex_unlock(m_mutex) == 0);
     }
 
     ~pthread_mutex_unlock_guard()
     {
-        BOOST_VERIFY(pthread_mutex_lock(m_mutex) == 0);
+        BOOST_VERIFY(sync::detail::posix::pthread_mutex_lock(m_mutex) == 0);
     }
 
     BOOST_DELETED_FUNCTION(pthread_mutex_unlock_guard(pthread_mutex_unlock_guard const&))
