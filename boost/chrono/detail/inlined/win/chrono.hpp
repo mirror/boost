@@ -94,7 +94,8 @@ namespace chrono_detail
     return system_clock::time_point(
       system_clock::duration(
         ((static_cast<__int64>( ft.dwHighDateTime ) << 32) | ft.dwLowDateTime)
-       -116444736000000000LL
+       //- 116444736000000000LL
+       - (134775LL*864000000000LL)
       )
     );
   }
@@ -109,8 +110,11 @@ namespace chrono_detail
     {
         ec.clear();
     }
-    return time_point(duration(
-      (static_cast<__int64>( ft.dwHighDateTime ) << 32) | ft.dwLowDateTime));
+    return system_clock::time_point(
+      system_clock::duration(
+       ((static_cast<__int64>( ft.dwHighDateTime ) << 32) | ft.dwLowDateTime)
+       - (134775LL*864000000000LL)
+       ));
   }
 #endif
 

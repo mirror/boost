@@ -46,8 +46,10 @@ namespace boost
 {
   namespace chrono
   {
+      typedef double fractional_seconds;
     namespace detail
     {
+
 
       template <class CharT, class InputIterator = std::istreambuf_iterator<CharT> >
       struct time_get
@@ -760,6 +762,7 @@ namespace boost
         { 0,31,59,90,120,151,181,212,243,273,304,334},
         { 0,31,60,91,121,152,182,213,244,274,305,335}
       };
+
       return days[is_leap(year)][month-1] + day - 1;
     }
 
@@ -781,7 +784,7 @@ namespace boost
       month++;
       int day = t->tm_mday;
       int day_of_year = days_from_1jan(year,month,day);
-      int days_since_epoch = days_from_1970(year) + day_of_year;
+      int days_since_epoch = days_from_1970(year) + day_of_year ;
 
       time_t seconds_in_day = 3600 * 24;
       time_t result = seconds_in_day * days_since_epoch + 3600 * t->tm_hour + 60 * t->tm_min + t->tm_sec;
@@ -846,10 +849,9 @@ namespace boost
        //y -= 32767 + 2;
        y += 70;
        tm->tm_year=y;
-       const bool leap = is_leap(y);
+       const bool leap = (is_leap(y)==1);
        tm->tm_mon = day_of_year_month[leap][doy]-1;
-       tm->tm_mday = doy - days_in_year_before[leap][day_of_year_month[leap][doy] - 1];
-
+       tm->tm_mday = doy - days_in_year_before[leap][tm->tm_mon] ;
 
      tm->tm_hour = hms / 3600;
      const int ms = hms % 3600;
@@ -925,7 +927,7 @@ namespace boost
               failed = tpf.put(os, os, os.fill(), &tm, pb, pe).failed();
               if (!failed)
               {
-                duration<double> d = tp - system_clock::from_time_t(t) + seconds(tm.tm_sec);
+                duration<fractional_seconds> d = tp - system_clock::from_time_t(t) + seconds(tm.tm_sec);
                 if (d.count() < 10) os << CharT('0');
                 //if (! os.good()) {
                 //  throw "exception";
@@ -1061,12 +1063,8 @@ namespace boost
           const std::time_get<CharT>& tg = std::use_facet<std::time_get<CharT> >(loc);
           const std::ctype<CharT>& ct = std::use_facet<std::ctype<CharT> >(loc);
           tm tm; // {0}
-          tm.tm_year=0;
-          tm.tm_mon=0;
-          tm.tm_mday=0;
-          tm.tm_hour=0;
-          tm.tm_min=0;
-          tm.tm_sec=0;
+          std::memset(&tm, 0, sizeof(std::tm));
+
           typedef std::istreambuf_iterator<CharT, Traits> It;
           if (pb == pe)
           {
@@ -1082,7 +1080,7 @@ namespace boost
             tg.get(is, 0, is, err, &tm, pb, pe);
 #endif
             if (err & std::ios_base::failbit) goto exit;
-            double sec;
+            fractional_seconds sec;
             CharT c = CharT();
             is >> sec;
             if (is.fail())
@@ -1102,13 +1100,14 @@ namespace boost
 
             if (err & std::ios_base::failbit) goto exit;
             time_t t;
+
 #if BOOST_CHRONO_INTERNAL_TIMEGM
             t = detail::internal_timegm(&tm);
 #else
             t = timegm(&tm);
 #endif
             tp = time_point_cast<Duration>(
-                system_clock::from_time_t(t) - min + round<microseconds> (duration<double> (sec))
+                system_clock::from_time_t(t) - min + round<system_clock::duration> (duration<fractional_seconds> (sec))
                 );
           }
           else
