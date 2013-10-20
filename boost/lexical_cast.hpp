@@ -159,6 +159,7 @@ namespace boost
 #include <boost/container/container_fwd.hpp>
 #include <boost/integer.hpp>
 #include <boost/detail/basic_pointerbuf.hpp>
+#include <boost/noncopyable.hpp>
 #ifndef BOOST_NO_CWCHAR
 #   include <cwchar>
 #endif
@@ -642,7 +643,7 @@ namespace boost {
     namespace detail // lcast_put_unsigned
     {
         template <class Traits, class T, class CharT>
-        class lcast_put_unsigned {
+        class lcast_put_unsigned: boost::noncopyable {
             typedef BOOST_DEDUCED_TYPENAME Traits::int_type int_type;
             BOOST_DEDUCED_TYPENAME boost::mpl::if_c<
                     (sizeof(int_type) > sizeof(T))
@@ -729,7 +730,7 @@ namespace boost {
     namespace detail // lcast_ret_unsigned
     {
         template <class Traits, class T, class CharT>
-        class lcast_ret_unsigned {
+        class lcast_ret_unsigned: boost::noncopyable {
             bool m_multiplier_overflowed;
             T m_multiplier;
             T& m_value;
@@ -1310,7 +1311,7 @@ namespace boost {
                 , bool RequiresStringbuffer
                 , std::size_t CharacterBufferSize
                 >
-        class lexical_istream_limited_src {
+        class lexical_istream_limited_src: boost::noncopyable {
             typedef BOOST_DEDUCED_TYPENAME out_stream_helper_trait<CharT, Traits>::buffer_t
                 buffer_t;
 
@@ -1676,7 +1677,7 @@ namespace boost {
 
 
         template <class CharT, class Traits>
-        class lexical_ostream_limited_src {
+        class lexical_ostream_limited_src: boost::noncopyable {
             //`[start, finish)` is the range to output by `operator >>` 
             const CharT*        start;
             const CharT* const  finish;
