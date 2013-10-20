@@ -506,7 +506,7 @@ is <code>true</code> if and only if insertion took place. On successful insertio
 points to an element that caused the insertion to be banned. Note that more than
 one element can be causing insertion not to be allowed.<br>
 <b>Complexity:</b> <code>O(I(n))</code>.<br>
-<b>Exception safety:</b> Strong.<br>
+<b>Exception safety:</b> Strong, except that rehashing may occur even if the operation fails.<br>
 </blockquote>
 
 <code>template&lt;typename... Args&gt;<br>
@@ -532,7 +532,7 @@ element. Otherwise, an iterator to an element that caused the insertion to be
 banned. Note that more than one element can be causing insertion not to be
 allowed.<br>
 <b>Complexity:</b> <code>O(H(n))</code>.<br>
-<b>Exception safety:</b> Strong.<br>
+<b>Exception safety:</b> Strong, except that rehashing may occur even if the operation fails.<br>
 </blockquote>
 
 <code>std::pair&lt;iterator,bool> insert(const value_type&amp; x);</code><br>
@@ -557,7 +557,7 @@ is <code>true</code> if and only if insertion took place. On successful insertio
 points to an element that caused the insertion to be banned. Note that more than
 one element can be causing insertion not to be allowed.<br>
 <b>Complexity:</b> <code>O(I(n))</code>.<br>
-<b>Exception safety:</b> Strong.<br>
+<b>Exception safety:</b> Strong, except that rehashing may occur even if the operation fails.<br>
 </blockquote>
 
 <code>iterator insert(iterator position,const value_type&amp; x);</code><br>
@@ -585,7 +585,7 @@ element. Otherwise, an iterator to an element that caused the insertion to be
 banned. Note that more than one element can be causing insertion not to be
 allowed.<br>
 <b>Complexity:</b> <code>O(H(n))</code>.<br>
-<b>Exception safety:</b> Strong.<br>
+<b>Exception safety:</b> Strong, except that rehashing may occur even if the operation fails.<br>
 </blockquote>
 
 <code>template&lt;typename InputIterator><br>
@@ -1080,7 +1080,7 @@ Sequenced indices
 
 <br>
 
-<p>Revised October 12th 2013</p>
+<p>Revised October 20th 2013</p>
 
 <p>&copy; Copyright 2003-2013 Joaqu&iacute;n M L&oacute;pez Mu&ntilde;oz.
 Distributed under the Boost Software 
