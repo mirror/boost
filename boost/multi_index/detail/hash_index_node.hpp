@@ -249,6 +249,13 @@ struct hashed_index_node_alg<Node,hashed_unique_tag>
     return is_last_of_bucket(x)?pointer(0):after(x);
   }
 
+  static pointer next_to_inspect(pointer x)
+  {
+    pointer y=x->next();
+    if(y->prior()==base_pointer_from(x))return y;
+    else return pointer(0); /* x last of bucket, bucket finished */
+  }
+
   static void link(pointer x,base_pointer buc,pointer end)
   {
     if(buc->next()==pointer(0)){ /* empty bucket */
@@ -349,6 +356,17 @@ struct hashed_index_node_alg<Node,hashed_non_unique_tag>
   static pointer after_local(pointer x)
   {
     return is_last_of_bucket(x)?pointer(0):after(x);
+  }
+
+  static pointer next_to_inspect(pointer x)
+  {
+    pointer y=x->next();
+    if(y->prior()==base_pointer_from(x))return y;
+    pointer z=y->prior()->next();
+    if(z==x||                      /* x last of bucket */
+       z->prior()->next()!=z)      /* group(x) last of bucket */
+      return pointer(0);           /* bucket finished */
+    else return z;
   }
 
   static void link(pointer x,base_pointer buc,pointer end)

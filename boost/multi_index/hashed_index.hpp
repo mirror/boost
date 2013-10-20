@@ -314,14 +314,14 @@ public:
   {
     BOOST_MULTI_INDEX_HASHED_INDEX_CHECK_INVARIANT;
 
-    size_type         s=0;
     std::size_t       buc=buckets.position(hash_(k));
     node_impl_pointer x=buckets.at(buc)->next();
     if(x!=node_impl_pointer(0)){
       x=x->next();
       do{
-        node_impl_pointer y=end_of_range(x);
         if(eq_(k,key(node_type::from_impl(x)->value()))){
+          node_impl_pointer y=end_of_range(x);
+          size_type         s=0;
           do{
             node_impl_pointer z=node_alg::after(x);
             this->final_erase_(
@@ -329,12 +329,12 @@ public:
             x=z;
             ++s;
           }while(x!=y);
-          break;
+          return s;
         }
-        x=y;
-      }while(!node_alg::is_first_of_bucket(x));
+        x=node_alg::next_to_inspect(x);
+      }while(x!=node_impl_pointer(0));
     }
-    return s;
+    return 0;
   }
 
   iterator erase(iterator first,iterator last)
@@ -483,8 +483,8 @@ public:
         if(eq(k,key(node_type::from_impl(x)->value()))){
           return make_iterator(node_type::from_impl(x));
         }
-        x=end_of_range(x);
-      }while(!node_alg::is_first_of_bucket(x));
+        x=node_alg::next_to_inspect(x);
+      }while(x!=node_impl_pointer(0));
     }
     return end();
   }
@@ -502,24 +502,24 @@ public:
     const CompatibleKey& k,
     const CompatibleHash& hash,const CompatiblePred& eq)const
   {
-    size_type         res=0;
     std::size_t       buc=buckets.position(hash(k));
     node_impl_pointer x=buckets.at(buc)->next();
     if(x!=node_impl_pointer(0)){
       x=x->next();
       do{
-        node_impl_pointer y=end_of_range(x);
         if(eq(k,key(node_type::from_impl(x)->value()))){
+          size_type         res=0;
+          node_impl_pointer y=end_of_range(x);
           do{
             ++res;
             x=node_alg::after(x);
           }while(x!=y);
-          break;
+          return res;
         }
-        x=y;
-      }while(!node_alg::is_first_of_bucket(x));
+        x=node_alg::next_to_inspect(x);
+      }while(x!=node_impl_pointer(0));
     }
-    return res;
+    return 0;
   }
 
   template<typename CompatibleKey>
@@ -540,14 +540,13 @@ public:
     if(x!=node_impl_pointer(0)){
       x=x->next();
       do{
-        node_impl_pointer y=end_of_range(x);
         if(eq(k,key(node_type::from_impl(x)->value()))){
           return std::pair<iterator,iterator>(
             make_iterator(node_type::from_impl(x)),
-            make_iterator(node_type::from_impl(y)));
+            make_iterator(node_type::from_impl(end_of_range(x))));
         }
-        x=y;
-      }while(!node_alg::is_first_of_bucket(x));
+        x=node_alg::next_to_inspect(x);
+      }while(x!=node_impl_pointer(0));
     }
     return std::pair<iterator,iterator>(end(),end());
   }
@@ -1142,8 +1141,8 @@ private:
           pos=node_impl_type::base_pointer_from(x);
           return false;
         }
-        x=x->next();
-      }while(!node_alg::is_first_of_bucket(x));
+        x=node_alg::next_to_inspect(x);
+      }while(x!=node_impl_pointer(0));
     }
     return true;
   }
@@ -1159,8 +1158,8 @@ private:
           pos.last=node_impl_type::base_pointer_from(last_of_range(x));
           return true;
         }
-        x=end_of_range(x);
-      }while(!node_alg::is_first_of_bucket(x));
+        x=node_alg::next_to_inspect(x);
+      }while(x!=node_impl_pointer(0));
     }
     return true;
   }
