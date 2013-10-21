@@ -24,6 +24,7 @@
 namespace boost { namespace detail {
 
 #ifdef BOOST_MSVC
+#pragma warning(push) 
 // VC mistakenly assumes that `setbuf` and other functions are not referenced.
 #pragma warning(disable: 4505) //Unreferenced local function has been removed
 #endif
