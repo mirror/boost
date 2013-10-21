@@ -804,7 +804,7 @@ BGL_NAMED_GRAPH::lazy_add_edge_with_property::commit() const
 /// Construct the named_graph with a particular process group
 template<BGL_NAMED_GRAPH_PARAMS>
 BGL_NAMED_GRAPH::named_graph(const process_group_type& pg)
-  : process_group_(pg, parallel::attach_distributed_object()),
+  : process_group_(pg, boost::parallel::attach_distributed_object()),
     distribution_(pg)
 {
   setup_triggers();
@@ -815,7 +815,7 @@ BGL_NAMED_GRAPH::named_graph(const process_group_type& pg)
 template<BGL_NAMED_GRAPH_PARAMS>
 BGL_NAMED_GRAPH::named_graph(const process_group_type& pg,
                              const base_distribution_type& distribution)
-  : process_group_(pg, parallel::attach_distributed_object()),
+  : process_group_(pg, boost::parallel::attach_distributed_object()),
     distribution_(pg, distribution)
 {
   setup_triggers();
