@@ -46,7 +46,7 @@ namespace boost
 {
   namespace chrono
   {
-      typedef double fractional_seconds;
+    typedef double fractional_seconds;
     namespace detail
     {
 
@@ -937,6 +937,7 @@ namespace boost
                 //if (! os.good()) {
                 //throw "exception";
                 //}
+                os.precision(9);
                 os << d.count();
                 //if (! os.good()) {
                 //throw "exception";
@@ -1082,7 +1083,11 @@ namespace boost
             if (err & std::ios_base::failbit) goto exit;
             fractional_seconds sec;
             CharT c = CharT();
+            std::ios::fmtflags flgs = is.flags();
+            is.setf(std::ios::fixed, std::ios::floatfield);
+            is.precision(9);
             is >> sec;
+            is.flags(flgs);
             if (is.fail())
             {
               err |= std::ios_base::failbit;
