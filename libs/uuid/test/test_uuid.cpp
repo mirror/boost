@@ -9,6 +9,7 @@
 
 //  libs/uuid/test/test_uuid.cpp  -------------------------------//
 
+#include <iostream>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/detail/lightweight_test.hpp>

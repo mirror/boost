@@ -15,9 +15,34 @@
 
 #define BOOST_UUID_NO_SIMD
 
+#include <iostream>
 #include <boost/uuid/uuid.hpp>
 #include <boost/uuid/uuid_io.hpp>
 #include <boost/detail/lightweight_test.hpp>
+#include <boost/current_function.hpp>
+
+void test_uuid_equal_array(char const * file, int line, char const * function,
+                           boost::uuids::uuid const& lhs, const unsigned char (&rhs)[16])
+{
+    for (size_t i=0; i<16; i++) {
+        if ( *(lhs.begin()+i) != rhs[i]) {
+            std::cerr << file << "(" << line << "): uuid " << lhs << " not equal " << "{";
+            for (size_t j=0; j<16; j++) {
+                if (j != 0) {
+                    std::cerr << " ";
+                }
+                std::cerr << std::hex << (int)rhs[j];
+            }
+            std::cerr << "} in function '" << function << "'" << std::endl;
+            ++boost::detail::test_errors();
+            return;
+        }
+    }
+}
+
+
+#define BOOST_TEST_UUID(lhs, rhs) ( test_uuid_equal_array(__FILE__, __LINE__, BOOST_CURRENT_FUNCTION, lhs, rhs) )
+
 
 int main(int, char*[])
 {
