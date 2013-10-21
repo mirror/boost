@@ -23,6 +23,11 @@
 
 namespace boost { namespace detail {
 
+#ifdef BOOST_MSVC
+// VC mistakenly assumes that `setbuf` and other functions are not referenced.
+#pragma warning(disable: 4505) //Unreferenced local function has been removed
+#endif
+
 //
 // class basic_pointerbuf:
 // acts as a stream buffer which wraps around a pair of pointers:
@@ -129,6 +134,9 @@ basic_pointerbuf<charT, BufferT>::seekpos(pos_type sp, ::std::ios_base::openmode
    return pos_type(off_type(-1));
 }
 
+#ifdef BOOST_MSVC
+#pragma warning(pop)
+#endif
 
 }} // namespace boost::detail
 
