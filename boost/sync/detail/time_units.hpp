@@ -20,6 +20,8 @@
 
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI)
 #include <boost/detail/winapi/time.hpp>
+#elif defined(BOOST_SYNC_DETAIL_PLATFORM_MACH)
+#include <sys/time.h> // gettimeofday, timeval
 #endif
 
 #include <boost/sync/detail/header.hpp>
@@ -182,6 +184,10 @@ public:
         system_time_point t;
         ::clock_gettime(CLOCK_REALTIME, &t.m_value);
         return t;
+#elif defined(BOOST_SYNC_DETAIL_PLATFORM_MACH)
+        ::timeval tv;
+        ::gettimeofday(&tv, 0);
+        return system_time_point(tv.tv_sec, tv.tv_usec * (subsecond_fraction / 1000000u));
 #else
         return system_time_point(::time(0));
 #endif
