@@ -47,6 +47,23 @@
 
 #endif
 
+#if !defined(BOOST_SYNC_USE_COMPILER_TLS)
+#if defined(BOOST_SYNC_DETAIL_PLATFORM_WINAPI) && BOOST_USE_WINAPI_VERSION >= BOOST_WINAPI_VERSION_WIN6
+// Compiler-based TLS are safe to use in DLLs only since Windows Vista
+#define BOOST_SYNC_USE_COMPILER_TLS
+#endif
+#endif // !defined(BOOST_SYNC_USE_COMPILER_TLS)
+
+#if defined(BOOST_SYNC_USE_COMPILER_TLS)
+#if defined(__GNUC__) || defined(__SUNPRO_CC)
+#define BOOST_SYNC_DETAIL_TLS __thread
+#elif defined(BOOST_MSVC)
+#define BOOST_SYNC_DETAIL_TLS __declspec(thread)
+#else
+#undef BOOST_SYNC_USE_COMPILER_TLS
+#endif
+#endif // defined(BOOST_SYNC_USE_COMPILER_TLS)
+
 #if defined(BOOST_SYNC_DETAIL_PLATFORM_POSIX)
 #define BOOST_SYNC_DETAIL_ABI_NAMESPACE posix
 #elif defined(BOOST_SYNC_DETAIL_PLATFORM_LINUX)

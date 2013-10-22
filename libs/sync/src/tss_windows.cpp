@@ -40,7 +40,11 @@ static INIT_ONCE init_tss_once_flag = INIT_ONCE_STATIC_INIT;
 static long init_tss_once_flag = 0;
 #endif
 static tss_manager* tss_mgr = NULL;
+#if defined(BOOST_SYNC_DETAIL_TLS)
+static BOOST_SYNC_DETAIL_TLS tss_manager::thread_context* tss_context = NULL;
+#else
 static DWORD tss_key = TLS_OUT_OF_INDEXES;
+#endif
 
 extern "C" {
 
@@ -57,9 +61,11 @@ static BOOL WINAPI init_tss(void*, void*, void**)
         std::abort();
     }
 
+#if !defined(BOOST_SYNC_DETAIL_TLS)
     tss_key = TlsAlloc();
     if (tss_key == TLS_OUT_OF_INDEXES)
         std::abort();
+#endif
 
     return TRUE;
 }
@@ -75,7 +81,7 @@ BOOST_FORCEINLINE void init_tss_once()
 
 #else // BOOST_USE_WINAPI_VERSION >= BOOST_WINAPI_VERSION_WIN6
 
-BOOST_FORCEINLINE void init_tss_once()
+BOOST_FORCEINLINE void init_tss_once() BOOST_NOEXCEPT
 {
     if (const_cast< long volatile& >(init_tss_once_flag) != 2)
     {
@@ -98,6 +104,30 @@ BOOST_FORCEINLINE void init_tss_once()
 
 #endif // BOOST_USE_WINAPI_VERSION >= BOOST_WINAPI_VERSION_WIN6
 
+#if defined(BOOST_SYNC_DETAIL_TLS)
+
+BOOST_FORCEINLINE tss_manager::thread_context* get_thread_context() BOOST_NOEXCEPT
+{
+    return tss_context;
+}
+BOOST_FORCEINLINE void set_thread_context(tss_manager::thread_context* p) BOOST_NOEXCEPT
+{
+    tss_context = p;
+}
+
+#else // defined(BOOST_SYNC_DETAIL_TLS)
+
+BOOST_FORCEINLINE tss_manager::thread_context* get_thread_context() BOOST_NOEXCEPT
+{
+    return static_cast< tss_manager::thread_context* >(TlsGetValue(tss_key));
+}
+BOOST_FORCEINLINE void set_thread_context(tss_manager::thread_context* p) BOOST_NOEXCEPT
+{
+    TlsSetValue(tss_key, p);
+}
+
+#endif // defined(BOOST_SYNC_DETAIL_TLS)
+
 } // namespace
 
 namespace windows {
@@ -112,8 +142,10 @@ void on_process_exit()
     tss_mgr = NULL;
     delete p;
 
+#if !defined(BOOST_SYNC_DETAIL_TLS)
     TlsFree(tss_key);
     tss_key = TLS_OUT_OF_INDEXES;
+#endif
 }
 
 void on_thread_enter()
@@ -124,9 +156,10 @@ void on_thread_exit()
 {
     // This callback may be called before tss manager is initialized
     init_tss_once();
-    if (tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(TlsGetValue(tss_key)))
+    if (tss_manager::thread_context* ctx = get_thread_context())
     {
         tss_mgr->destroy_thread_context(ctx);
+        set_thread_context(NULL);
     }
 }
 
@@ -135,12 +168,12 @@ void on_thread_exit()
 BOOST_SYNC_API void add_thread_exit_callback(at_thread_exit_callback callback, void* context)
 {
     init_tss_once();
-    tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(TlsGetValue(tss_key));
+    tss_manager::thread_context* ctx = get_thread_context();
 
     if (!ctx)
     {
         ctx = tss_mgr->create_thread_context();
-        TlsSetValue(tss_key, ctx);
+        set_thread_context(ctx);
     }
 
     ctx->add_at_exit_entry(callback, context);
@@ -166,7 +199,7 @@ BOOST_SYNC_API void delete_thread_specific_key(thread_specific_key key) BOOST_NO
 
 BOOST_SYNC_API void* get_thread_specific(thread_specific_key key)
 {
-    tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(TlsGetValue(tss_key));
+    tss_manager::thread_context* ctx = get_thread_context();
     if (ctx)
         return ctx->get_value(key);
     return NULL;
@@ -174,12 +207,12 @@ BOOST_SYNC_API void* get_thread_specific(thread_specific_key key)
 
 BOOST_SYNC_API void set_thread_specific(thread_specific_key key, void* p)
 {
-    tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(TlsGetValue(tss_key));
+    tss_manager::thread_context* ctx = get_thread_context();
 
     if (!ctx)
     {
         ctx = tss_mgr->create_thread_context();
-        TlsSetValue(tss_key, ctx);
+        set_thread_context(ctx);
     }
 
     ctx->set_value(key, p);
