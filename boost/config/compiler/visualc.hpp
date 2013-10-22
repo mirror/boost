@@ -230,8 +230,10 @@
 #     define BOOST_COMPILER_VERSION evc9
 #   elif _MSC_VER < 1700
 #     define BOOST_COMPILER_VERSION evc10
-#   elif _MSC_VER < 1800
-#     define BOOST_COMPILER_VERSION evc11
+#   elif _MSC_VER < 1800 
+#     define BOOST_COMPILER_VERSION evc11 
+#   elif _MSC_VER < 1900 
+#     define BOOST_COMPILER_VERSION evc12
 #   else
 #      if defined(BOOST_ASSERT_CONFIG)
 #         error "Unknown EVC++ compiler version - please run the configure tests and report the results"
