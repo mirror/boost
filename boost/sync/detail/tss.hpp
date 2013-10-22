@@ -30,7 +30,7 @@ namespace sync {
 namespace detail {
 
 typedef unsigned int thread_specific_key;
-typedef void (*at_thread_exit_callback)(void*) BOOST_NOEXCEPT;
+typedef void (*at_thread_exit_callback)(void*);
 
 /*!
  * \brief Adds a callback to be invoked when the current thread terminates
@@ -47,10 +47,13 @@ BOOST_SYNC_API void add_thread_exit_callback(at_thread_exit_callback callback, v
  * \brief Creates a thread-specific key
  *
  * \param callback The callback to be called when a thread that used the key terminates. The callback will also be called when the key is deleted.
+ * \param cleanup_at_delete If \c true, The \a callback will be called for all non-NULL thread-specific values associated with this key at the point
+ *        of \c delete_thread_specific_key call. The user's code should be prepared that the cleanup function can be called not only in the context of the
+ *        thread that initialized the specific value.
  *
  * \returns The created key.
  */
-BOOST_SYNC_API thread_specific_key new_thread_specific_key(at_thread_exit_callback callback);
+BOOST_SYNC_API thread_specific_key new_thread_specific_key(at_thread_exit_callback callback, bool cleanup_at_delete);
 /*!
  * \brief Destroys the thread-specific key and all associated values.
  *
