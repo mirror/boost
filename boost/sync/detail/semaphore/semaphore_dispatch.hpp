@@ -118,7 +118,9 @@ private:
 
     bool priv_timed_wait(sync::detail::system_time_point const& t)
     {
-        return priv_timed_wait(t - sync::detail::system_time_point::now());
+        struct timespec timespec_timeout = t.get();
+        dispatch_time_t timeout = dispatch_walltime( &timespec_timeout, 0 );
+        return dispatch_semaphore_wait(m_sem, timeout) == 0;
     }
 
     template< typename TimePoint >
