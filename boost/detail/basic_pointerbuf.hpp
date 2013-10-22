@@ -23,12 +23,6 @@
 
 namespace boost { namespace detail {
 
-#ifdef BOOST_MSVC
-#pragma warning(push) 
-// VC mistakenly assumes that `setbuf` and other functions are not referenced.
-#pragma warning(disable: 4505) //Unreferenced local function has been removed
-#endif
-
 //
 // class basic_pointerbuf:
 // acts as a stream buffer which wraps around a pair of pointers:
@@ -57,9 +51,13 @@ public:
 #endif
 
 protected:
-   base_type* setbuf(char_type* s, streamsize n);
-   typename this_type::pos_type seekpos(pos_type sp, ::std::ios_base::openmode which);
-   typename this_type::pos_type seekoff(off_type off, ::std::ios_base::seekdir way, ::std::ios_base::openmode which);
+   // VC mistakenly assumes that `setbuf` and other functions are not referenced.
+   // Marking those functions with `inline` suppresses the warnings.
+   // There must be no harm from marking virtual functions as inline: inline virtual
+   // call can be inlined ONLY when the compiler knows the "exact class".
+   inline base_type* setbuf(char_type* s, streamsize n);
+   inline typename this_type::pos_type seekpos(pos_type sp, ::std::ios_base::openmode which);
+   inline typename this_type::pos_type seekoff(off_type off, ::std::ios_base::seekdir way, ::std::ios_base::openmode which);
 
 private:
    basic_pointerbuf& operator=(const basic_pointerbuf&);
@@ -134,10 +132,6 @@ basic_pointerbuf<charT, BufferT>::seekpos(pos_type sp, ::std::ios_base::openmode
    }
    return pos_type(off_type(-1));
 }
-
-#ifdef BOOST_MSVC
-#pragma warning(pop)
-#endif
 
 }} // namespace boost::detail
 
