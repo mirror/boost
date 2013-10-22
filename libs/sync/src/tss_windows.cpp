@@ -108,6 +108,12 @@ void on_process_enter()
 
 void on_process_exit()
 {
+    tss_manager* p = tss_mgr;
+    tss_mgr = NULL;
+    delete p;
+
+    TlsFree(tss_key);
+    tss_key = TLS_OUT_OF_INDEXES;
 }
 
 void on_thread_enter()
