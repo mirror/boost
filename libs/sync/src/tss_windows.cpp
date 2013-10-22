@@ -127,12 +127,12 @@ void on_thread_exit()
 BOOST_SYNC_API void add_thread_exit_callback(at_thread_exit_callback callback, void* context)
 {
     init_tss_once();
-    tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(pthread_getspecific(tss_key));
+    tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(TlsGetValue(tss_key));
 
     if (!ctx)
     {
         ctx = tss_mgr->create_thread_context();
-        pthread_setspecific(tss_key, ctx);
+        TlsSetValue(tss_key, ctx);
     }
 
     ctx->add_at_exit_entry(callback, context);

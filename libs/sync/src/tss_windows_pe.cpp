@@ -44,7 +44,7 @@ void NTAPI on_tls_callback(void*, DWORD dwReason, PVOID)
     {
     case DLL_THREAD_DETACH:
         {
-            boost::on_thread_exit();
+            boost::sync::detail::windows::on_thread_exit();
             break;
         }
     }
@@ -61,9 +61,9 @@ extern "C"
 #else
 extern "C" {
 
-    void (* after_ctors )() __attribute__((section(".ctors")))     = boost::on_process_enter;
-    void (* before_dtors)() __attribute__((section(".dtors")))     = boost::on_thread_exit;
-    void (* after_dtors )() __attribute__((section(".dtors.zzz"))) = boost::on_process_exit;
+    void (* after_ctors )() __attribute__((section(".ctors")))     = boost::sync::detail::windows::on_process_enter;
+    void (* before_dtors)() __attribute__((section(".dtors")))     = boost::sync::detail::windows::on_thread_exit;
+    void (* after_dtors )() __attribute__((section(".dtors.zzz"))) = boost::sync::detail::windows::on_process_exit;
 
     ULONG __tls_index__ = 0;
     char __tls_end__ __attribute__((section(".tls$zzz"))) = 0;
@@ -253,18 +253,18 @@ PVAPI on_process_init()
     //for destructors of global objects, so that
     //shouldn't be a problem.
 
-    atexit(boost::on_thread_exit);
+    atexit(boost::sync::detail::windows::on_thread_exit);
 
     //Call Boost process entry callback here
 
-    boost::on_process_enter();
+    boost::sync::detail::windows::on_process_enter();
 
     return INIRETSUCCESS;
 }
 
 PVAPI on_process_term()
 {
-    boost::on_process_exit();
+    boost::sync::detail::windows::on_process_exit();
     return INIRETSUCCESS;
 }
 
@@ -273,7 +273,7 @@ void NTAPI on_tls_callback(HINSTANCE /*h*/, DWORD dwReason, PVOID /*pv*/)
     switch (dwReason)
     {
     case DLL_THREAD_DETACH:
-        boost::on_thread_exit();
+        boost::sync::detail::windows::on_thread_exit();
         break;
     }
 }
@@ -287,10 +287,10 @@ BOOL WINAPI dll_callback(HANDLE, DWORD dwReason, LPVOID)
     switch (dwReason)
     {
     case DLL_THREAD_DETACH:
-        boost::on_thread_exit();
+        boost::sync::detail::windows::on_thread_exit();
         break;
     case DLL_PROCESS_DETACH:
-        boost::on_process_exit();
+        boost::sync::detail::windows::on_process_exit();
         break;
     }
 

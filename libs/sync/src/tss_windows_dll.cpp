@@ -22,27 +22,27 @@ extern "C" BOOL WINAPI DllMain(HINSTANCE /*hInstance*/, DWORD dwReason, LPVOID /
     {
     case DLL_PROCESS_ATTACH:
         {
-            boost::on_process_enter();
-            boost::on_thread_enter();
+            boost::sync::detail::windows::on_process_enter();
+            boost::sync::detail::windows::on_thread_enter();
             break;
         }
 
     case DLL_THREAD_ATTACH:
         {
-            boost::on_thread_enter();
+            boost::sync::detail::windows::on_thread_enter();
             break;
         }
 
     case DLL_THREAD_DETACH:
         {
-            boost::on_thread_exit();
+            boost::sync::detail::windows::on_thread_exit();
             break;
         }
 
     case DLL_PROCESS_DETACH:
         {
-            boost::on_thread_exit();
-            boost::on_process_exit();
+            boost::sync::detail::windows::on_thread_exit();
+            boost::sync::detail::windows::on_process_exit();
             break;
         }
     }

@@ -150,7 +150,7 @@ public:
         {
             std::vector< void* > storage;
             storage.swap(p->m_storage);
-            for (thread_specific_key key = 0, n = storage.size(); key < n; ++key)
+            for (thread_specific_key key = 0, n = static_cast< thread_specific_key >(storage.size()); key < n; ++key)
             {
                 void* const value = storage[key];
                 if (value)
