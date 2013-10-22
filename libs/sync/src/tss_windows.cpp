@@ -46,6 +46,8 @@ extern "C" {
 
 static BOOL WINAPI init_tss(void*, void*, void**)
 {
+    windows::tss_cleanup_implemented(); // make sure the TSS cleanup hooks are linked into the executable
+
     try
     {
         tss_mgr = new tss_manager();
