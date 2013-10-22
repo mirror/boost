@@ -110,9 +110,10 @@ public:
 
         const mach_timespec_t wait_time =
         {
-            time_left_sec,
-            static_cast< uint64_t >(nanoseconds_fraction) >= sync::detail::system_duration::subsecond_fraction ?
-                time_left_subsec / conversion_ratio : time_left_subsec * conversion_ratio
+            static_cast< unsigned int >( time_left_sec ),
+            static_cast< uint64_t >( nanoseconds_fraction ) >= sync::detail::system_duration::subsecond_fraction ?
+                static_cast< clock_res_t >( time_left_subsec / conversion_ratio)
+              : static_cast< clock_res_t >( time_left_subsec * conversion_ratio)
         };
 
         return priv_timed_wait(wait_time);
