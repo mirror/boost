@@ -94,7 +94,7 @@ BOOST_FORCEINLINE void init_tss_once() BOOST_NOEXCEPT
                 SwitchToThread();
             else
             {
-                init_tss(NUll, NULL, NULL);
+                init_tss(NULL, NULL, NULL);
                 BOOST_ATOMIC_INTERLOCKED_EXCHANGE(&init_tss_once_flag, 2);
                 break;
             }
