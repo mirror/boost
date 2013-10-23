@@ -28,6 +28,7 @@
 #include <boost/chrono/clock_string.hpp>
 #include <boost/chrono/round.hpp>
 #include <boost/chrono/detail/scan_keyword.hpp>
+#include <boost/static_assert.hpp>
 #include <boost/detail/no_exceptions_support.hpp>
 #include <cstring>
 #include <locale>
@@ -807,11 +808,36 @@ namespace boost
      return y * 365 + y / 4 - y / 100 + y / 400;
    }
 
+    // Returns year/month/day triple in civil calendar
+    // Preconditions:  z is number of days since 1970-01-01 and is in the range:
+    //                   [numeric_limits<Int>::min(), numeric_limits<Int>::max()-719468].
+    template <class Int>
+    //constexpr
+    void
+    inline civil_from_days(Int z, Int& y, unsigned& m, unsigned& d) BOOST_NOEXCEPT
+    {
+        BOOST_STATIC_ASSERT_MSG(std::numeric_limits<unsigned>::digits >= 18,
+                 "This algorithm has not been ported to a 16 bit unsigned integer");
+        BOOST_STATIC_ASSERT_MSG(std::numeric_limits<Int>::digits >= 20,
+                 "This algorithm has not been ported to a 16 bit signed integer");
+        z += 719468;
+        const Int era = (z >= 0 ? z : z - 146096) / 146097;
+        const unsigned doe = static_cast<unsigned>(z - era * 146097);          // [0, 146096]
+        const unsigned yoe = (doe - doe/1460 + doe/36524 - doe/146096) / 365;  // [0, 399]
+        y = static_cast<Int>(yoe) + era * 400;
+        const unsigned doy = doe - (365*yoe + yoe/4 - yoe/100);                // [0, 365]
+        const unsigned mp = (5*doy + 2)/153;                                   // [0, 11]
+        d = doy - (153*mp+2)/5 + 1;                             // [1, 31]
+        m = mp + (mp < 10 ? 3 : -9);                            // [1, 12]
+        y += (m <= 2);
+        --m;
+    }
    inline std::tm * internal_gmtime(std::time_t const* t, std::tm *tm)
    {
       if (t==0) return 0;
       if (tm==0) return 0;
 
+#if 0
       static  const unsigned char
         day_of_year_month[2][366] =
            {
@@ -826,6 +852,7 @@ namespace boost
        { -1, 30, 58, 89, 119, 150, 180, 211, 242, 272, 303, 333, 364 },
        { -1, 30, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365 }
      };
+#endif
 
      const time_t seconds_in_day = 3600 * 24;
      int32_t days_since_epoch = static_cast<int32_t>(*t / seconds_in_day);
@@ -835,6 +862,7 @@ namespace boost
        hms = seconds_in_day+hms;
      }
 
+#if 0
      int32_t x = days_since_epoch;
      int32_t y = static_cast<int32_t> (static_cast<long long> (x + 2) * 400
            / 146097);
@@ -849,15 +877,23 @@ namespace boost
        //y -= 32767 + 2;
        y += 70;
        tm->tm_year=y;
-       const bool leap = (is_leap(y)==1);
+       const int32_t leap = is_leap(y);
        tm->tm_mon = day_of_year_month[leap][doy]-1;
        tm->tm_mday = doy - days_in_year_before[leap][tm->tm_mon] ;
+#else
+       int32_t y;
+       unsigned m, d;
+       civil_from_days(days_since_epoch, y, m, d);
+       tm->tm_year=y-1900; tm->tm_mon=m; tm->tm_mday=d;
+#endif
 
      tm->tm_hour = hms / 3600;
      const int ms = hms % 3600;
      tm->tm_min = ms / 60;
      tm->tm_sec = ms % 60;
 
+     tm->tm_isdst = -1;
+     (void)mktime(tm);
      return tm;
    }
 
@@ -912,6 +948,9 @@ namespace boost
               tm = *tmp;
 #else
             if (gmtime_r(&t, &tm) == 0) failed = true;
+            tm.tm_isdst = -1;
+            (void)mktime(&tm);
+
 #endif
 
           }

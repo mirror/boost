@@ -181,34 +181,68 @@ void check_all_system_clock()
 #endif
 }
 
+
+#endif
+#if BOOST_CHRONO_VERSION == 2
 void test_gmtime(std::time_t t)
 {
   std::cout << "t    " << t << std::endl;
+  puts(ctime(&t));
   std::tm tm;
+  std::memset(&tm, 0, sizeof(std::tm));
   if (boost::chrono::detail::internal_gmtime(&t, &tm))
   {
-    std::cout << "year  " << tm.tm_year << std::endl;
-    std::cout << "month " << tm.tm_mon << std::endl;
-    std::cout << "day   " << tm.tm_mday << std::endl;
-    std::cout << "hour  " << tm.tm_hour << std::endl;
-    std::cout << "min   " << tm.tm_min << std::endl;
-    std::cout << "sec   " << tm.tm_sec << std::endl;
+    tm.tm_isdst = -1;
+    (void)mktime(&tm);
+    std::tm tm2;
+    std::memset(&tm2, 0, sizeof(std::tm));
+    if (gmtime_r(&t, &tm2))
+    {
+      tm2.tm_isdst = -1;
+      (void)mktime(&tm2);
+
+      BOOST_TEST_EQ( tm.tm_year , tm2.tm_year );
+      BOOST_TEST_EQ( tm.tm_mon , tm2.tm_mon );
+      BOOST_TEST_EQ( tm.tm_mday , tm2.tm_mday );
+      BOOST_TEST_EQ( tm.tm_hour , tm2.tm_hour);
+      BOOST_TEST_EQ( tm.tm_min , tm2.tm_min );
+      BOOST_TEST_EQ( tm.tm_sec , tm2.tm_sec );
+      BOOST_TEST_EQ( tm.tm_wday , tm2.tm_wday );
+      BOOST_TEST_EQ( tm.tm_yday , tm2.tm_yday );
+      BOOST_TEST_EQ( tm.tm_isdst , tm2.tm_isdst );
+    }
   }
+
 }
 #endif
 
+
 int main()
 {
-//  test_gmtime(  0 );
-//  test_gmtime( -1  );
-//  test_gmtime( +1  );
-//  test_gmtime(  0 - (3600 * 24) );
-//  test_gmtime( -1 - (3600 * 24) );
-//  test_gmtime( +1 - (3600 * 24) );
-//  test_gmtime(  0 + (3600 * 24) );
-//  test_gmtime( -1 + (3600 * 24) );
-//  test_gmtime( +1 + (3600 * 24) );
+#if BOOST_CHRONO_VERSION == 2
+  test_gmtime(  0 );
+  test_gmtime( -1  );
+  test_gmtime( +1  );
+  test_gmtime(  0 - (3600 * 24) );
+  test_gmtime( -1 - (3600 * 24) );
+  test_gmtime( +1 - (3600 * 24) );
+  test_gmtime(  0 + (3600 * 24) );
+  test_gmtime( -1 + (3600 * 24) );
+  test_gmtime( +1 + (3600 * 24) );
+  test_gmtime(  0 + 365*(3600 * 24) );
+  test_gmtime(  0 + 10LL*365*(3600 * 24) );
+  test_gmtime(  0 + 15LL*365*(3600 * 24) );
+  test_gmtime(  0 + 17LL*365*(3600 * 24) );
+  test_gmtime(  0 + 18LL*365*(3600 * 24) );
+  test_gmtime(  0 + 19LL*365*(3600 * 24) );
+  test_gmtime(  0 + 19LL*365*(3600 * 24)+ (3600 * 24));
+  test_gmtime(  0 + 19LL*365*(3600 * 24)+ 3*(3600 * 24));
+  test_gmtime(  0 + 19LL*365*(3600 * 24)+ 4*(3600 * 24));
+  test_gmtime(  0 + 20LL*365*(3600 * 24) );
+  test_gmtime(  0 + 40LL*365*(3600 * 24) );
 
+
+#endif
 
   std::cout << "high_resolution_clock=" << std::endl;
   check_all<boost::chrono::high_resolution_clock> ();
@@ -237,6 +271,13 @@ int main()
   check_all<boost::chrono::process_system_cpu_clock> ();
   std::cout << "process_cpu_clock=" << std::endl;
   check_all<boost::chrono::process_cpu_clock> ();
+#endif
+
+#if BOOST_CHRONO_VERSION == 2
+  boost::chrono::system_clock::time_point tp = boost::chrono::system_clock::now();
+  std::cout << tp << std::endl;
+  time_t t = boost::chrono::system_clock::to_time_t(tp);
+  test_gmtime(  t );
 #endif
 
   return boost::report_errors();
