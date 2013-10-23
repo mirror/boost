@@ -178,13 +178,9 @@
 #  define BOOST_NO_CXX11_RAW_LITERALS
 #  define BOOST_NO_CXX11_TEMPLATE_ALIASES
 #  define BOOST_NO_CXX11_TRAILING_RESULT_TYPES
+#  define BOOST_NO_CXX11_VARIADIC_TEMPLATES
 #  define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
 #endif
-
-// variadic templates are supposed to be supported by VC++ 12
-// but VC++ 12 RC variadic support is causing boost regression
-// test failures for signals2 and several of its dependencies.
-#define BOOST_NO_CXX11_VARIADIC_TEMPLATES
 
 // C++11 features not supported by any versions
 #define BOOST_NO_CXX11_CHAR16_T
