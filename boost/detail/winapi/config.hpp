@@ -34,8 +34,8 @@
 #elif defined(WINVER)
 #define BOOST_USE_WINAPI_VERSION WINVER
 #else
-// By default use Windows Vista API
-#define BOOST_USE_WINAPI_VERSION BOOST_WINAPI_VERSION_WIN6
+// By default use Windows XP API
+#define BOOST_USE_WINAPI_VERSION BOOST_WINAPI_VERSION_WINXP
 #endif
 #endif
 
