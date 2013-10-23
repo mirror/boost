@@ -39,7 +39,7 @@ a new data value is available, or tree traversal is finished (iterator is
 invalidated).
 
         struct node{
-            typedef std::shared_ptr<node> ptr_t;
+            typedef boost::shared_ptr<node> ptr_t;
 
             // Each tree node has an optional left subtree,
             // an optional right subtree and a value of its own.
@@ -124,9 +124,9 @@ invalidated).
 
             std::cout << "left tree from d == right tree from b? "
                       << std::boolalpha
-                      << std::equal(std::begin(left_d_reader),
-                                    std::end(left_d_reader),
-                                    std::begin(right_b_reader))
+                      << std::equal(boost::begin(left_d_reader),
+                                    boost::end(left_d_reader),
+                                    boost::begin(right_b_reader))
                       << std::endl;
         }
         {
@@ -144,9 +144,9 @@ invalidated).
 
             std::cout << "left tree from d == right tree from x? "
                       << std::boolalpha
-                      << std::equal(std::begin(left_d_reader),
-                                    std::end(left_d_reader),
-                                    std::begin(right_x_reader))
+                      << std::equal(boost::begin(left_d_reader),
+                                    boost::end(left_d_reader),
+                                    boost::begin(right_x_reader))
                       << std::endl;
         }
         std::cout << "Done" << std::endl;

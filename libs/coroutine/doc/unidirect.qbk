@@ -282,14 +282,14 @@ Splitting-up the access of parameters from context switch function enables to
 check if __pull_coro__ is valid after return from __pull_coro_op__, e.g.
 __pull_coro__ has values and __coro_fn__ has not terminated.
 
-        boost::coroutines::coroutine<std::tuple<int,int>>::push_type sink(
-            [&](boost::coroutines::coroutine<std::tuple<int,int>>::pull_type& source){
+        boost::coroutines::coroutine<boost::tuple<int,int>>::push_type sink(
+            [&](boost::coroutines::coroutine<boost::tuple<int,int>>::pull_type& source){
                 // access tuple {7,11}; x==7 y==1
                 int x,y;
-                std::tie(x,y)=source.get();
+                boost::tie(x,y)=source.get();
             });
 
-        sink(std::make_tuple(7,11));
+        sink(boost::make_tuple(7,11));
 
 
 [heading exceptions]
