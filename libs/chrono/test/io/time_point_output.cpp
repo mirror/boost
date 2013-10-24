@@ -183,7 +183,8 @@ void check_all_system_clock()
 
 
 #endif
-#if BOOST_CHRONO_VERSION == 2
+#if BOOST_CHRONO_INTERNAL_GMTIME
+#elif BOOST_CHRONO_VERSION == 2
 void test_gmtime(std::time_t t)
 {
   std::cout << "t    " << t << std::endl;
@@ -219,7 +220,8 @@ void test_gmtime(std::time_t t)
 
 int main()
 {
-#if BOOST_CHRONO_VERSION == 2
+#if BOOST_CHRONO_INTERNAL_GMTIME
+#elif BOOST_CHRONO_VERSION == 2
   test_gmtime(  0 );
   test_gmtime( -1  );
   test_gmtime( +1  );
@@ -240,8 +242,6 @@ int main()
   test_gmtime(  0 + 19LL*365*(3600 * 24)+ 4*(3600 * 24));
   test_gmtime(  0 + 20LL*365*(3600 * 24) );
   test_gmtime(  0 + 40LL*365*(3600 * 24) );
-
-
 #endif
 
   std::cout << "high_resolution_clock=" << std::endl;
