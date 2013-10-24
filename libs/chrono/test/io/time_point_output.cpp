@@ -10,6 +10,7 @@
 #include <boost/chrono/process_cpu_clocks.hpp>
 #include <locale>
 #include <ctime>
+#include <cstdio>
 
 template <typename Clock, typename D>
 void test_good_prefix(const char* str, D d)
