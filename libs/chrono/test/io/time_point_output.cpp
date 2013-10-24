@@ -274,7 +274,8 @@ int main()
   check_all<boost::chrono::process_cpu_clock> ();
 #endif
 
-#if BOOST_CHRONO_VERSION == 2
+#if BOOST_CHRONO_INTERNAL_GMTIME
+#elif BOOST_CHRONO_VERSION == 2
   boost::chrono::system_clock::time_point tp = boost::chrono::system_clock::now();
   std::cout << tp << std::endl;
   time_t t = boost::chrono::system_clock::to_time_t(tp);
