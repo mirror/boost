@@ -32,7 +32,7 @@ namespace sync {
 namespace detail {
 
 //! Adds a notification entry at thread termination
-BOOST_SYNC_API void add_thread_exit_notify_entry(sync::mutex* mtx, sync::condition_variable* cond);
+BOOST_SYNC_API void add_thread_exit_notify_entry(sync::mutex& mtx, sync::condition_variable& cond);
 
 } // namespace detail
 
@@ -53,7 +53,7 @@ BOOST_SYNC_API void add_thread_exit_notify_entry(sync::mutex* mtx, sync::conditi
 inline void notify_all_at_thread_exit(sync::condition_variable& cond, sync::unique_lock< sync::mutex > lock)
 {
     BOOST_ASSERT(lock.owns_lock());
-    sync::detail::add_thread_exit_notify_entry(lock.mutex(), &cond);
+    sync::detail::add_thread_exit_notify_entry(*lock.mutex(), cond);
     lock.release();
 }
 

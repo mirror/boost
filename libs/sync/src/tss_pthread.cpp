@@ -96,7 +96,7 @@ BOOST_FORCEINLINE void set_thread_context(tss_manager::thread_context* p) BOOST_
 
 } // namespace
 
-BOOST_SYNC_API void add_thread_exit_notify_entry(sync::mutex* mtx, sync::condition_variable* cond)
+BOOST_SYNC_API void add_thread_exit_notify_entry(sync::mutex& mtx, sync::condition_variable& cond)
 {
     pthread_once(&init_tss_once_flag, &init_tss);
     tss_manager::thread_context* ctx = get_thread_context();
@@ -107,7 +107,7 @@ BOOST_SYNC_API void add_thread_exit_notify_entry(sync::mutex* mtx, sync::conditi
         set_thread_context(ctx);
     }
 
-    ctx->add_notify_at_exit_entry(mtx, cond);
+    ctx->add_notify_at_exit_entry(&mtx, &cond);
 }
 
 BOOST_SYNC_API void add_thread_exit_callback(at_thread_exit_callback callback, void* context)
