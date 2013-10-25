@@ -43,7 +43,7 @@
 #  error "Compiler not supported or configured - please reconfigure"
 #endif
 
-#if _MSC_VER < 1800
+#if _MSC_FULL_VER < 180020827
 #  define BOOST_NO_FENV_H
 #endif
 
@@ -170,7 +170,7 @@
 
 // C++11 features supported by VC++ 12 (aka 2013).
 //
-#if _MSC_VER < 1800
+#if _MSC_FULL_VER < 180020827
 #  define BOOST_NO_CXX11_DEFAULTED_FUNCTIONS
 #  define BOOST_NO_CXX11_DELETED_FUNCTIONS
 #  define BOOST_NO_CXX11_EXPLICIT_CONVERSION_OPERATORS
@@ -178,8 +178,8 @@
 #  define BOOST_NO_CXX11_RAW_LITERALS
 #  define BOOST_NO_CXX11_TEMPLATE_ALIASES
 #  define BOOST_NO_CXX11_TRAILING_RESULT_TYPES
-#  define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
 #  define BOOST_NO_CXX11_VARIADIC_TEMPLATES
+#  define BOOST_NO_CXX11_UNIFIED_INITIALIZATION_SYNTAX
 #endif
 
 // C++11 features not supported by any versions
@@ -226,8 +226,10 @@
 #     define BOOST_COMPILER_VERSION evc9
 #   elif _MSC_VER < 1700
 #     define BOOST_COMPILER_VERSION evc10
-#   elif _MSC_VER < 1800
-#     define BOOST_COMPILER_VERSION evc11
+#   elif _MSC_VER < 1800 
+#     define BOOST_COMPILER_VERSION evc11 
+#   elif _MSC_VER < 1900 
+#     define BOOST_COMPILER_VERSION evc12
 #   else
 #      if defined(BOOST_ASSERT_CONFIG)
 #         error "Unknown EVC++ compiler version - please run the configure tests and report the results"
