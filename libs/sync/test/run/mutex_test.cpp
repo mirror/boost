@@ -7,9 +7,12 @@
 #include <boost/test/unit_test.hpp>
 
 #include <boost/bind.hpp>
+#include <boost/mpl/if.hpp>
 #include <boost/sync/mutexes.hpp>
 #include <boost/sync/locks.hpp>
 #include <boost/sync/condition_variables/condition_variable.hpp>
+#include <boost/sync/condition_variables/condition_variable_any.hpp>
+#include <boost/sync/traits/is_condition_variable_compatible.hpp>
 #include <boost/sync/support/boost_date_time.hpp>
 #include <boost/thread/thread.hpp>
 #include <boost/thread/thread_time.hpp>
@@ -21,12 +24,17 @@ template <typename M>
 struct test_lock
 {
     typedef M mutex_type;
+    typedef typename boost::mpl::if_<
+        boost::sync::is_condition_variable_compatible< mutex_type >,
+        boost::sync::condition_variable,
+        boost::sync::condition_variable_any
+    >::type condition_variable_type;
     typedef boost::sync::unique_lock< mutex_type > lock_type;
 
     void operator()() const
     {
         mutex_type mutex;
-        boost::sync::condition_variable condition;
+        condition_variable_type condition;
 
         // Test the lock's constructors.
         {
@@ -57,12 +65,17 @@ template <typename M>
 struct test_trylock
 {
     typedef M mutex_type;
+    typedef typename boost::mpl::if_<
+        boost::sync::is_condition_variable_compatible< mutex_type >,
+        boost::sync::condition_variable,
+        boost::sync::condition_variable_any
+    >::type condition_variable_type;
     typedef boost::sync::unique_lock< mutex_type > lock_type;
 
     void operator()()
     {
         mutex_type mutex;
-        boost::sync::condition_variable condition;
+        condition_variable_type condition;
 
         // Test the lock's constructors.
         {
@@ -182,6 +195,11 @@ template <typename M>
 struct test_timedlock
 {
     typedef M mutex_type;
+    typedef typename boost::mpl::if_<
+        boost::sync::is_condition_variable_compatible< mutex_type >,
+        boost::sync::condition_variable,
+        boost::sync::condition_variable_any
+    >::type condition_variable_type;
     typedef boost::sync::unique_lock< mutex_type > lock_type;
     typedef boost::sync::unique_lock< mutex_type > timed_lock_type;
 
@@ -195,7 +213,7 @@ struct test_timedlock
         test_lock_times_out_if_other_thread_has_lock<mutex_type>()();
 
         mutex_type mutex;
-        boost::sync::condition_variable condition;
+        condition_variable_type condition;
 
         // Test the lock's constructors.
         {
@@ -284,7 +302,7 @@ BOOST_AUTO_TEST_CASE(test_try_mutex)
     timed_test(&do_test_try_mutex, 3);
 }
 
-/*
+
 void do_test_timed_mutex()
 {
     test_lock<boost::sync::timed_mutex>()();
@@ -297,6 +315,7 @@ BOOST_AUTO_TEST_CASE(test_timed_mutex)
     timed_test(&do_test_timed_mutex, 3);
 }
 
+/*
 void do_test_recursive_mutex()
 {
     test_lock<boost::recursive_mutex>()();

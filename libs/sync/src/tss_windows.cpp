@@ -21,6 +21,7 @@
 #include <cstdlib>
 #include <boost/sync/detail/interlocked.hpp>
 #include <boost/sync/detail/tss.hpp>
+#include <boost/sync/condition_variables/notify_all_at_thread_exit.hpp>
 #include "tss_manager.hpp"
 #include "tss_windows_hooks.hpp"
 #include <windows.h>
@@ -164,6 +165,20 @@ void on_thread_exit()
 }
 
 } // namespace windows
+
+BOOST_SYNC_API void add_thread_exit_notify_entry(sync::mutex* mtx, sync::condition_variable* cond)
+{
+    init_tss_once();
+    tss_manager::thread_context* ctx = get_thread_context();
+
+    if (!ctx)
+    {
+        ctx = tss_mgr->create_thread_context();
+        set_thread_context(ctx);
+    }
+
+    ctx->add_notify_at_exit_entry(mtx, cond);
+}
 
 BOOST_SYNC_API void add_thread_exit_callback(at_thread_exit_callback callback, void* context)
 {

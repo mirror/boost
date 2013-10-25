@@ -164,7 +164,7 @@ public:
     BOOST_DELETED_FUNCTION(condition_variable& operator= (condition_variable const&))
 };
 
-} // namespace posix
+} // namespace abi
 
 } // namespace sync
 

@@ -1,4 +1,4 @@
-// event.hpp, condition variable emulation
+// auto_reset_event_emulation.hpp, event emulation
 //
 // Copyright (C) 2013 Tim Blechmann
 // Copyright (C) 2013 Andrey Semashev
@@ -23,7 +23,7 @@
 #pragma once
 #endif
 
-#define BOOST_SYNC_EVENT_EMULATED
+#define BOOST_SYNC_AUTO_RESET_EVENT_EMULATED
 
 namespace boost {
 
@@ -34,20 +34,22 @@ BOOST_SYNC_DETAIL_OPEN_ABI_NAMESPACE {
 class auto_reset_event
 {
     BOOST_DELETED_FUNCTION(auto_reset_event(auto_reset_event const&));
-    BOOST_DELETED_FUNCTION(auto_reset_event& operator=(auto_reset_event const&));
+    BOOST_DELETED_FUNCTION(auto_reset_event& operator= (auto_reset_event const&));
 
 public:
-    auto_reset_event() BOOST_NOEXCEPT : m_is_set(false)
+    auto_reset_event() : m_is_set(false)
     {
     }
 
     void post()
     {
         sync::lock_guard< sync::mutex > lock(m_mutex);
-        bool already_signaled = m_is_set;
-        m_is_set = true;
+        const bool already_signaled = m_is_set;
         if (!already_signaled)
+        {
+            m_is_set = true;
             m_cond.notify_one();
+        }
     }
 
     void wait()

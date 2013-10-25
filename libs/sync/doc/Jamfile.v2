@@ -44,6 +44,7 @@ local doxygen_params =
 #        <doxygen:param>"INCLUDE_PATH=../../.."
 #        <doxygen:param>EXCLUDE_SYMBOLS="aux aux::*"
         <doxygen:param>"PREDEFINED=BOOST_SYNC_DETAIL_DOXYGEN \\
+                        BOOST_SYNC_API= \\
                         BOOST_SYMBOL_VISIBLE= \\
                         BOOST_FORCEINLINE=inline \\
                         BOOST_STATIC_ASSERT(x)= \\

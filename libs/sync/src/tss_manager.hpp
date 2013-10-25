@@ -25,6 +25,7 @@
 #include <boost/sync/locks/lock_guard.hpp>
 #include <boost/sync/locks/unique_lock.hpp>
 #include <boost/sync/mutexes/mutex.hpp>
+#include <boost/sync/condition_variables/condition_variable.hpp>
 #include <boost/sync/detail/tss.hpp>
 #include <boost/sync/detail/header.hpp>
 
@@ -58,9 +59,16 @@ public:
             void* context;
         };
 
+        struct notify_at_exit_entry
+        {
+            sync::mutex* mtx;
+            sync::condition_variable* cond;
+        };
+
     private:
         std::vector< void* > m_storage;
         std::vector< at_exit_entry > m_at_exit_functions;
+        std::vector< notify_at_exit_entry > m_notify_at_exit;
 
     public:
         void* get_value(thread_specific_key key) const BOOST_NOEXCEPT
@@ -84,6 +92,14 @@ public:
             entry.callback = callback;
             entry.context = context;
             m_at_exit_functions.push_back(entry);
+        }
+
+        void add_notify_at_exit_entry(sync::mutex* mtx, sync::condition_variable* cond)
+        {
+            notify_at_exit_entry entry;
+            entry.mtx = mtx;
+            entry.cond = cond;
+            m_notify_at_exit.push_back(entry);
         }
     };
 
@@ -160,6 +176,13 @@ public:
                         cleanup(value);
                 }
             }
+        }
+
+        // Notify about thread termination. This must be performed last, after all TLS variables are destroyed.
+        for (std::vector< thread_context::notify_at_exit_entry >::const_iterator it = p->m_notify_at_exit.begin(), end = p->m_notify_at_exit.end(); it != end; ++it)
+        {
+            it->mtx->unlock();
+            it->cond->notify_all();
         }
 
         // Destroy the context

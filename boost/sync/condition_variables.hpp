@@ -21,5 +21,7 @@
 #endif
 
 #include <boost/sync/condition_variables/condition_variable.hpp>
+#include <boost/sync/condition_variables/condition_variable_any.hpp>
+#include <boost/sync/condition_variables/notify_all_at_thread_exit.hpp>
 
 #endif // BOOST_SYNC_CONDITION_VARIABLES_HPP_INCLUDED_

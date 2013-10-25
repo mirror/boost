@@ -37,7 +37,9 @@
 #pragma once
 #endif
 
+#if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
 #define BOOST_SYNC_DEFINES_TIMED_MUTEX_NATIVE_HANDLE
+#endif
 
 namespace boost {
 
@@ -51,8 +53,9 @@ public:
 #if defined(BOOST_SYNC_DETAIL_PTHREAD_HAS_TIMEDLOCK)
     typedef void _is_condition_variable_compatible;
 #endif
-
+#if defined(BOOST_SYNC_DEFINES_TIMED_MUTEX_NATIVE_HANDLE)
     typedef pthread_mutex_t* native_handle_type;
+#endif
 
 private:
     pthread_mutex_t m_mutex;
@@ -186,10 +189,12 @@ public:
         return priv_timed_lock(sync::detail::time_traits< TimePoint >::to_sync_unit(abs_time));
     }
 
+#if defined(BOOST_SYNC_DEFINES_TIMED_MUTEX_NATIVE_HANDLE)
     native_handle_type native_handle() BOOST_NOEXCEPT
     {
         return &m_mutex;
     }
+#endif
 
     BOOST_DELETED_FUNCTION(timed_mutex(timed_mutex const&))
     BOOST_DELETED_FUNCTION(timed_mutex& operator= (timed_mutex const&))

@@ -21,6 +21,7 @@
 #include <cstdlib>
 #include <pthread.h>
 #include <boost/sync/detail/tss.hpp>
+#include <boost/sync/condition_variables/notify_all_at_thread_exit.hpp>
 #include "tss_manager.hpp"
 #include <boost/sync/detail/header.hpp>
 
@@ -34,7 +35,11 @@ namespace {
 
 static pthread_once_t init_tss_once_flag = PTHREAD_ONCE_INIT;
 static tss_manager* tss_mgr = NULL;
+#if defined(BOOST_SYNC_DETAIL_TLS)
+static BOOST_SYNC_DETAIL_TLS tss_manager::thread_context* tss_context = NULL;
+#else
 static pthread_key_t tss_key;
+#endif
 
 extern "C" {
 
@@ -57,23 +62,63 @@ static void init_tss()
         std::abort();
     }
 
+#if !defined(BOOST_SYNC_DETAIL_TLS)
     if (pthread_key_create(&tss_key, &tss_cleanup) != 0)
         std::abort();
+#endif
 }
 
 } // extern "C"
 
+#if defined(BOOST_SYNC_DETAIL_TLS)
+
+BOOST_FORCEINLINE tss_manager::thread_context* get_thread_context() BOOST_NOEXCEPT
+{
+    return tss_context;
+}
+BOOST_FORCEINLINE void set_thread_context(tss_manager::thread_context* p) BOOST_NOEXCEPT
+{
+    tss_context = p;
+}
+
+#else // defined(BOOST_SYNC_DETAIL_TLS)
+
+BOOST_FORCEINLINE tss_manager::thread_context* get_thread_context() BOOST_NOEXCEPT
+{
+    return static_cast< tss_manager::thread_context* >(pthread_getspecific(tss_key));
+}
+BOOST_FORCEINLINE void set_thread_context(tss_manager::thread_context* p) BOOST_NOEXCEPT
+{
+    pthread_setspecific(tss_key, p);
+}
+
+#endif // defined(BOOST_SYNC_DETAIL_TLS)
+
 } // namespace
 
-BOOST_SYNC_API void add_thread_exit_callback(at_thread_exit_callback callback, void* context)
+BOOST_SYNC_API void add_thread_exit_notify_entry(sync::mutex* mtx, sync::condition_variable* cond)
 {
     pthread_once(&init_tss_once_flag, &init_tss);
-    tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(pthread_getspecific(tss_key));
+    tss_manager::thread_context* ctx = get_thread_context();
 
     if (!ctx)
     {
         ctx = tss_mgr->create_thread_context();
-        pthread_setspecific(tss_key, ctx);
+        set_thread_context(ctx);
+    }
+
+    ctx->add_notify_at_exit_entry(mtx, cond);
+}
+
+BOOST_SYNC_API void add_thread_exit_callback(at_thread_exit_callback callback, void* context)
+{
+    pthread_once(&init_tss_once_flag, &init_tss);
+    tss_manager::thread_context* ctx = get_thread_context();
+
+    if (!ctx)
+    {
+        ctx = tss_mgr->create_thread_context();
+        set_thread_context(ctx);
     }
 
     ctx->add_at_exit_entry(callback, context);
@@ -99,7 +144,7 @@ BOOST_SYNC_API void delete_thread_specific_key(thread_specific_key key) BOOST_NO
 
 BOOST_SYNC_API void* get_thread_specific(thread_specific_key key)
 {
-    tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(pthread_getspecific(tss_key));
+    tss_manager::thread_context* ctx = get_thread_context();
     if (ctx)
         return ctx->get_value(key);
     return NULL;
@@ -107,12 +152,12 @@ BOOST_SYNC_API void* get_thread_specific(thread_specific_key key)
 
 BOOST_SYNC_API void set_thread_specific(thread_specific_key key, void* p)
 {
-    tss_manager::thread_context* ctx = static_cast< tss_manager::thread_context* >(pthread_getspecific(tss_key));
+    tss_manager::thread_context* ctx = get_thread_context();
 
     if (!ctx)
     {
         ctx = tss_mgr->create_thread_context();
-        pthread_setspecific(tss_key, ctx);
+        set_thread_context(ctx);
     }
 
     ctx->set_value(key, p);
