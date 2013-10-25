@@ -32,16 +32,19 @@
 #include <boost/detail/no_exceptions_support.hpp>
 #include <cstring>
 #include <locale>
-#include <string.h>
+#include <ctime>
 
 #define  BOOST_CHRONO_INTERNAL_TIMEGM \
-  ( defined BOOST_WINDOWS && ! defined(__CYGWIN__) ) || \
-  ( (defined(sun) || defined(__sun)) && defined __GNUC__)
+     ( defined BOOST_WINDOWS && ! defined(__CYGWIN__) )  \
+  || ( (defined(sun) || defined(__sun)) && defined __GNUC__) \
+  || (defined __IBMCPP__)
 
-#define  BOOST_CHRONO_INTERNAL_GMTIME defined BOOST_WINDOWS && ! defined(__CYGWIN__)
+#define  BOOST_CHRONO_INTERNAL_GMTIME \
+     (defined BOOST_WINDOWS && ! defined(__CYGWIN__)) \
+  || ( (defined(sun) || defined(__sun)) && defined __GNUC__) \
+  || (defined __IBMCPP__)
 
 #define  BOOST_CHRONO_USES_INTERNAL_TIME_GET
-
 
 namespace boost
 {

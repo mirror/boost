@@ -7371,6 +7371,8 @@ All the units are given using the suffix "s" following the System International 
 * [@http://svn.boost.org/trac/boost/ticket/7868 #7868] chrono_io parses time incorrectly (1.53 and 1.52)   
 * [@http://svn.boost.org/trac/boost/ticket/9028 #9028] Typo in boost/chrono/stopwatches/formatters/base_formatter.hpp  
 * [@http://svn.boost.org/trac/boost/ticket/9147 #9147] uninitialized std::tm
+* [@http://svn.boost.org/trac/boost/ticket/9274 #9274] lost of precission on system_clock input.
+* [@http://svn.boost.org/trac/boost/ticket/9276 #9276] output from a system_clock::time_point get a time_point that is one day later than expected.
 
 [endsect] [/section [*Version 2.0.3] ]
 

@@ -13,6 +13,7 @@
 #include <boost/chrono/round.hpp>
 #include <boost/chrono/ceil.hpp>
 #include <boost/detail/lightweight_test.hpp>
+#include <cstdio>
 
 int main()
 {
