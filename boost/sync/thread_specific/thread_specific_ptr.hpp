@@ -21,6 +21,10 @@
 #include <boost/sync/detail/tss.hpp>
 #include <boost/sync/detail/header.hpp>
 
+#ifdef BOOST_HAS_PRAGMA_ONCE
+#pragma once
+#endif
+
 namespace boost {
 
 namespace sync {
