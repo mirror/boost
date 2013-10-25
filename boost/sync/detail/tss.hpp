@@ -68,7 +68,7 @@ BOOST_SYNC_API void delete_thread_specific_key(thread_specific_key key) BOOST_NO
  *
  * \returns The thread-specific value. Upon the first call, when the thread has not yet set the value, the function returns \c NULL.
  */
-BOOST_SYNC_API void* get_thread_specific(thread_specific_key key);
+BOOST_SYNC_API void* get_thread_specific(thread_specific_key key) BOOST_NOEXCEPT;
 /*!
  * \brief Installs a value for the key and the current thread.
  *

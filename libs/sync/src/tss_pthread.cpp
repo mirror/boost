@@ -142,7 +142,7 @@ BOOST_SYNC_API void delete_thread_specific_key(thread_specific_key key) BOOST_NO
     }
 }
 
-BOOST_SYNC_API void* get_thread_specific(thread_specific_key key)
+BOOST_SYNC_API void* get_thread_specific(thread_specific_key key) BOOST_NOEXCEPT
 {
     tss_manager::thread_context* ctx = get_thread_context();
     if (ctx)
