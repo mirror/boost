@@ -408,9 +408,9 @@ namespace unordered
         void insert(std::initializer_list<value_type>);
 
 #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1800))
-        template <typename T>
+        template <typename T1>
         typename boost::enable_if_c<
-            boost::is_convertible<T, value_type>::value,
+            boost::is_convertible<T1, value_type>::value,
             void>::type insert(std::initializer_list<T> list)
         {
             table_.insert_range(list.begin(), list.end());
@@ -888,9 +888,9 @@ namespace unordered
         void insert(std::initializer_list<value_type>);
 
 #if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1800))
-        template <typename T>
+        template <typename T1>
         typename boost::enable_if_c<
-            boost::is_convertible<T, value_type>::value,
+            boost::is_convertible<T1, value_type>::value,
             void>::type insert(std::initializer_list<T> list)
         {
             table_.insert_range(list.begin(), list.end());

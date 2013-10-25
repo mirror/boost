@@ -582,10 +582,10 @@ struct initialize_from_two_ints
 
     friend std::size_t hash_value(initialize_from_two_ints const& x)
     {
-        return a + b;
+        return x.a + x.b;
     }
 
-    bool operator==(initialize_from_two_ints const& x)
+    bool operator==(initialize_from_two_ints const& x) const
     {
         return a == x.a && b == x.b;
     }
@@ -604,7 +604,7 @@ UNORDERED_AUTO_TEST(insert_initializer_list_set)
     set2.insert({1, 2});
     BOOST_TEST(set2.size() == 1);
     BOOST_TEST(set2.find({1,2}) != set2.end());
-    BOOST_TEST(set2.find({2,1}) != set2.end());
+    BOOST_TEST(set2.find({2,1}) == set2.end());
 
     set2.insert({{3,4},{5,6},{7,8}});
     BOOST_TEST(set2.size() == 4);
@@ -612,7 +612,7 @@ UNORDERED_AUTO_TEST(insert_initializer_list_set)
     BOOST_TEST(set2.find({3,4}) != set2.end());
     BOOST_TEST(set2.find({5,6}) != set2.end());
     BOOST_TEST(set2.find({7,8}) != set2.end());
-    BOOST_TEST(set2.find({8,7}) != set2.end());
+    BOOST_TEST(set2.find({8,7}) == set2.end());
 
     set2.insert({{2, 1}, {3,4}});
     BOOST_TEST(set2.size() == 5);
@@ -621,7 +621,7 @@ UNORDERED_AUTO_TEST(insert_initializer_list_set)
     BOOST_TEST(set2.find({3,4}) != set2.end());
     BOOST_TEST(set2.find({5,6}) != set2.end());
     BOOST_TEST(set2.find({7,8}) != set2.end());
-    BOOST_TEST(set2.find({8,7}) != set2.end());
+    BOOST_TEST(set2.find({8,7}) == set2.end());
 }
 
 UNORDERED_AUTO_TEST(insert_initializer_list_multiset)
