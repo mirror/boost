@@ -26,7 +26,7 @@
 
 # if defined( BOOST_WINDOWS_API )
 #   include <windows.h>
-#   if !defined(WINAPI_FAMILY) || ((WINAPI_FAMILY & WINAPI_PARTITION_APP) == 0)
+#   if !defined(WINAPI_FAMILY) || ((WINAPI_FAMILY & WINAPI_PARTITION_DESKTOP) != 0)
 #     include "local_free_on_destruction.hpp"
 #   endif
 #   ifndef ERROR_INCORRECT_SIZE
@@ -372,7 +372,7 @@ namespace
 
   std::string system_error_category::message( int ev ) const
   {
-# if defined(WINAPI_FAMILY) && ((WINAPI_FAMILY & WINAPI_PARTITION_APP) != 0)
+# if defined(WINAPI_FAMILY) && ((WINAPI_FAMILY & WINAPI_PARTITION_DESKTOP) == 0)
     std::string str( 128, char() );
     for (;;)
     {
