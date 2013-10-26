@@ -52,12 +52,14 @@ namespace winapi
 
 # ifdef BOOST_NO_ANSI_APIS
     using ::CreateMutexW;
+    using ::OpenMutexW;
     using ::CreateEventW;
     using ::OpenEventW;
     using ::CreateSemaphoreW;
     using ::OpenSemaphoreW;
 # else
     using ::CreateMutexA;
+    using ::OpenMutexA;
     using ::CreateEventA;
     using ::OpenEventA;
     using ::CreateSemaphoreA;
