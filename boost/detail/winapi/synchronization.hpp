@@ -55,11 +55,13 @@ namespace winapi
     using ::CreateEventW;
     using ::OpenEventW;
     using ::CreateSemaphoreW;
+    using ::OpenSemaphoreW;
 # else
     using ::CreateMutexA;
     using ::CreateEventA;
     using ::OpenEventA;
     using ::CreateSemaphoreA;
+    using ::OpenSemaphoreA;
 # endif
     using ::ReleaseMutex;
     using ::ReleaseSemaphore;
