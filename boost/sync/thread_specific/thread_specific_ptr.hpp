@@ -12,8 +12,8 @@
  * \brief  This header defines \c thread_specific_ptr smart-pointer.
  */
 
-#ifndef BOOST_SYNC_THREAD_SPECIFIC_THREAD_SPECIFIC_PTR_H_INCLUDED_
-#define BOOST_SYNC_THREAD_SPECIFIC_THREAD_SPECIFIC_PTR_H_INCLUDED_
+#ifndef BOOST_SYNC_THREAD_SPECIFIC_THREAD_SPECIFIC_PTR_HPP_INCLUDED_
+#define BOOST_SYNC_THREAD_SPECIFIC_THREAD_SPECIFIC_PTR_HPP_INCLUDED_
 
 #include <boost/assert.hpp>
 #include <boost/utility/explicit_operator_bool.hpp>
@@ -40,14 +40,14 @@ private:
     const sync::detail::at_thread_exit_callback m_cleanup;
 
 public:
-    thread_specific_ptr() :
-        m_key(sync::detail::new_thread_specific_key(&thread_specific_ptr< T >::default_cleanup, false)),
+    explicit thread_specific_ptr(bool cleanup_on_destroy = false) :
+        m_key(sync::detail::new_thread_specific_key(&thread_specific_ptr< T >::default_cleanup, cleanup_on_destroy)),
         m_cleanup(&thread_specific_ptr< T >::default_cleanup)
     {
     }
 
-    explicit thread_specific_ptr(void (*cleanup)(T*)) :
-        m_key(sync::detail::new_thread_specific_key((sync::detail::at_thread_exit_callback)cleanup, false)),
+    explicit thread_specific_ptr(void (*cleanup)(T*), bool cleanup_on_destroy = false) :
+        m_key(sync::detail::new_thread_specific_key((sync::detail::at_thread_exit_callback)cleanup, cleanup_on_destroy)),
         m_cleanup((sync::detail::at_thread_exit_callback)cleanup)
     {
     }
@@ -124,4 +124,4 @@ inline T* get_pointer(thread_specific_ptr< T > const& ptr)
 
 #include <boost/sync/detail/footer.hpp>
 
-#endif // BOOST_SYNC_THREAD_SPECIFIC_THREAD_SPECIFIC_PTR_H_INCLUDED_
+#endif // BOOST_SYNC_THREAD_SPECIFIC_THREAD_SPECIFIC_PTR_HPP_INCLUDED_
