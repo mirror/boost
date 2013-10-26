@@ -27,8 +27,6 @@
 
 #include <boost/mpl/has_xxx.hpp>
 
-#include <boost/type_traits/broken_compiler_spec.hpp>
-
 #include <boost/detail/lightweight_test.hpp>
 
 #include <vector>

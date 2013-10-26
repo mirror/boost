@@ -30,7 +30,6 @@ namespace std{
 
 #include <boost/serialization/nvp.hpp>
 #include <boost/serialization/export.hpp>
-#include <boost/type_traits/broken_compiler_spec.hpp>
 
 // This is a simple class.  It contains a counter of the number
 // of objects of this class which have been instantiated.

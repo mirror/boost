@@ -7,8 +7,6 @@
 
 #include "static_assert_same.hpp"
 
-#include <boost/type_traits/broken_compiler_spec.hpp>
-
 #include <boost/iterator/detail/minimum_category.hpp>
 
 struct X { int a; };

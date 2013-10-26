@@ -18,7 +18,6 @@ namespace std{
     using ::remove;
 }
 #endif
-#include <boost/type_traits/broken_compiler_spec.hpp>
 
 #include <boost/serialization/shared_ptr.hpp>
 #include <boost/serialization/weak_ptr.hpp>

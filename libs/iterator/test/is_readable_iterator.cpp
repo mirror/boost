@@ -7,7 +7,6 @@
 #include <iostream>
 #include <boost/static_assert.hpp>
 #include <boost/noncopyable.hpp>
-#include <boost/type_traits/broken_compiler_spec.hpp>
 #include <boost/iterator/is_readable_iterator.hpp>
 #include <boost/iterator.hpp>
 
