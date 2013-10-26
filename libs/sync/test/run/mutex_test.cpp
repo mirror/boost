@@ -287,9 +287,15 @@ void do_test_mutex()
     test_lock<boost::sync::mutex>()();
 }
 
+void do_test_spin_mutex()
+{
+    test_lock<boost::sync::spin_mutex>()();
+}
+
 BOOST_AUTO_TEST_CASE(test_mutex)
 {
     timed_test(&do_test_mutex, 3);
+    timed_test(&do_test_spin_mutex, 3);
 }
 
 void do_test_try_mutex()

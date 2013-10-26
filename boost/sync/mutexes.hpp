@@ -21,6 +21,7 @@
 #endif
 
 #include <boost/sync/mutexes/mutex.hpp>
+#include <boost/sync/mutexes/spin_mutex.hpp>
 #include <boost/sync/mutexes/timed_mutex.hpp>
 
 #endif // BOOST_SYNC_MUTEXES_HPP_INCLUDED_
