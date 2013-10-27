@@ -15,6 +15,8 @@
 #pragma once
 #endif
 
+#if BOOST_USE_WINAPI_VERSION >= BOOST_WINAPI_VERSION_WIN2K
+
 namespace boost
 {
 namespace detail
@@ -27,7 +29,6 @@ typedef ::WAITORTIMERCALLBACKFUNC WAITORTIMERCALLBACKFUNC_;
 typedef ::WAITORTIMERCALLBACK WAITORTIMERCALLBACK_;
 
 using ::RegisterWaitForSingleObject;
-using ::RegisterWaitForSingleObjectEx;
 using ::UnregisterWait;
 using ::UnregisterWaitEx;
 
@@ -64,15 +65,6 @@ __declspec(dllimport) BOOL_ WINAPI RegisterWaitForSingleObject
     ULONG_ dwFlags
 );
 
-__declspec(dllimport) HANDLE_ WINAPI RegisterWaitForSingleObjectEx
-(
-    HANDLE_ hObject,
-    WAITORTIMERCALLBACK_ Callback,
-    PVOID_ Context,
-    ULONG_ dwMilliseconds,
-    ULONG_ dwFlags
-);
-
 __declspec(dllimport) BOOL_ WINAPI UnregisterWait(HANDLE_ WaitHandle);
 __declspec(dllimport) BOOL_ WINAPI UnregisterWaitEx(HANDLE_ WaitHandle, HANDLE_ CompletionEvent);
 
@@ -98,5 +90,7 @@ inline ULONG_ wt_set_max_threadpool_threads(ULONG_ flags, ULONG_ limit)
 }
 }
 }
+
+#endif // BOOST_USE_WINAPI_VERSION >= BOOST_WINAPI_VERSION_WIN2K
 
 #endif // BOOST_DETAIL_WINAPI_THREAD_POOL_HPP
