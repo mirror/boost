@@ -30,7 +30,7 @@ __ ../../../../index.htm
   can be deduced from their types.
 
 .. @jam_prefix.append('''
-        project test : requirements <include>. <source>/boost//headers ;''')
+        project test : requirements <include>. <implicit-dependency>/boost//headers ;''')
 
 .. @example.prepend('''
    #include <boost/parameter.hpp>
