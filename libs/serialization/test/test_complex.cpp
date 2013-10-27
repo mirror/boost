@@ -68,8 +68,8 @@ int test_main( int /* argc */, char* /* argv */[] )
         ia >> boost::serialization::make_nvp("adoublecomplex", b1);
     }
 
-    BOOST_CHECK(std::abs(a-a1) <= 2.*std::numeric_limits<float>::round_error());
-    BOOST_CHECK(std::abs(b-b1) <= 2.*std::numeric_limits<double>::round_error());
+    BOOST_CHECK(std::abs(a-a1) <= (2 * std::numeric_limits<float>::round_error()));
+    BOOST_CHECK(std::abs(b-b1) <= (2 * std::numeric_limits<double>::round_error()));
 
     std::remove(testfile);
     return EXIT_SUCCESS;

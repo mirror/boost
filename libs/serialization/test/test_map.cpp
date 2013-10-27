@@ -8,7 +8,7 @@
 
 // should pass compilation and execution
 
-#include <algorithm>
+#include <algorithm> // std::copy
 #include <vector>
 #include <fstream>
 #include <cstddef> // size_t, NULL

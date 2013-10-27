@@ -12,7 +12,7 @@
 #include <cstdio> // remove
 #include <fstream>
 
-#include <algorithm>
+#include <algorithm> // std::copy
 #include <vector>
 
 #include <boost/config.hpp>

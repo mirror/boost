@@ -52,16 +52,16 @@ bool A::check_equal(const A &rhs) const
     BOOST_CHECK_EQUAL(l, rhs.l);
     BOOST_CHECK(!(
         w == 0 
-        && std::fabs(rhs.w) > std::numeric_limits<float>::epsilon()
+        && std::fabs(rhs.w) > std::numeric_limits<float>::round_error()
     ));
     BOOST_CHECK(!(
-        std::fabs(rhs.w/w - 1.0) > std::numeric_limits<float>::epsilon()
+        std::fabs(rhs.w/w - 1.0) > 2.0 * std::numeric_limits<float>::round_error()
     ));
     BOOST_CHECK(!(
-        x == 0 && std::fabs(rhs.x - x) > std::numeric_limits<float>::epsilon()
+        x == 0 && std::fabs(rhs.x - x) > 2.0 * std::numeric_limits<double>::round_error()
     ));
     BOOST_CHECK(!(
-        std::fabs(rhs.x/x - 1.0) > std::numeric_limits<float>::epsilon()
+        std::fabs(rhs.x/x - 1.0) > 2.0 * std::numeric_limits<double>::round_error()
     ));
     BOOST_CHECK(!(0 != y.compare(rhs.y)));
     #ifndef BOOST_NO_STD_WSTRING
