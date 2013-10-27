@@ -33,9 +33,57 @@ BOOST_AUTO_TEST_CASE(std_chrono_system_clock_time_t_mismatch)
 {
     BOOST_SYNC_DETAIL_CHECK_CLOCK(std::chrono::system_clock::to_time_t(std::chrono::system_clock::time_point()));
 }
+
+BOOST_AUTO_TEST_CASE(std_chrono_system_clock_time_t_now_mismatch)
+{
+    std::time_t t1, t3;
+    std::chrono::system_clock::time_point chrono_t2;
+    do
+    {
+        t1 = std::time(0);
+        chrono_t2 = std::chrono::system_clock::now();
+        t3 = std::time(0);
+    }
+    while (t1 != t3);
+    std::time_t t2 = std::chrono::system_clock::to_time_t(chrono_t2);
+
+    // to_time_t is allowed to perform arithmetic rounding to seconds
+    if (t2 > t1)
+    {
+        BOOST_CHECK_EQUAL((t2 - t1), 1);
+    }
+    else
+    {
+        BOOST_CHECK_EQUAL(t1, t2);
+    }
+}
 #endif
 
 BOOST_AUTO_TEST_CASE(boost_chrono_system_clock_time_t_mismatch)
 {
     BOOST_CHECK_EQUAL(boost::chrono::system_clock::to_time_t(boost::chrono::system_clock::time_point()), (std::time_t)0);
+}
+
+BOOST_AUTO_TEST_CASE(boost_chrono_system_clock_time_t_now_mismatch)
+{
+    std::time_t t1, t3;
+    boost::chrono::system_clock::time_point chrono_t2;
+    do
+    {
+        t1 = std::time(0);
+        chrono_t2 = boost::chrono::system_clock::now();
+        t3 = std::time(0);
+    }
+    while (t1 != t3);
+    std::time_t t2 = boost::chrono::system_clock::to_time_t(chrono_t2);
+
+    // to_time_t is allowed to perform arithmetic rounding to seconds
+    if (t2 > t1)
+    {
+        BOOST_CHECK_EQUAL((t2 - t1), 1);
+    }
+    else
+    {
+        BOOST_CHECK_EQUAL(t1, t2);
+    }
 }

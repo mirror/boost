@@ -40,14 +40,14 @@ private:
     const sync::detail::at_thread_exit_callback m_cleanup;
 
 public:
-    explicit thread_specific_ptr(bool cleanup_on_destroy = false) :
-        m_key(sync::detail::new_thread_specific_key(&thread_specific_ptr< T >::default_cleanup, cleanup_on_destroy)),
+    explicit thread_specific_ptr() :
+        m_key(sync::detail::new_thread_specific_key(&thread_specific_ptr< T >::default_cleanup, true)),
         m_cleanup(&thread_specific_ptr< T >::default_cleanup)
     {
     }
 
-    explicit thread_specific_ptr(void (*cleanup)(T*), bool cleanup_on_destroy = false) :
-        m_key(sync::detail::new_thread_specific_key((sync::detail::at_thread_exit_callback)cleanup, cleanup_on_destroy)),
+    explicit thread_specific_ptr(void (*cleanup)(T*)) :
+        m_key(sync::detail::new_thread_specific_key((sync::detail::at_thread_exit_callback)cleanup, true)),
         m_cleanup((sync::detail::at_thread_exit_callback)cleanup)
     {
     }
