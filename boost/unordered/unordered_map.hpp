@@ -22,10 +22,6 @@
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 #include <initializer_list>
-
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1800))
-#include <boost/type_traits/is_convertible.hpp>
-#endif
 #endif
 
 #if defined(BOOST_MSVC)
@@ -407,16 +403,6 @@ namespace unordered
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         void insert(std::initializer_list<value_type>);
-
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1800))
-        template <typename T1>
-        typename boost::enable_if_c<
-            boost::is_convertible<T1, value_type>::value,
-            void>::type insert(std::initializer_list<T> list)
-        {
-            table_.insert_range(list.begin(), list.end());
-        }
-#endif
 #endif
 
         iterator erase(const_iterator);
@@ -901,16 +887,6 @@ namespace unordered
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
         void insert(std::initializer_list<value_type>);
-
-#if BOOST_WORKAROUND(BOOST_MSVC, BOOST_TESTED_AT(1800))
-        template <typename T1>
-        typename boost::enable_if_c<
-            boost::is_convertible<T1, value_type>::value,
-            void>::type insert(std::initializer_list<T> list)
-        {
-            table_.insert_range(list.begin(), list.end());
-        }
-#endif
 #endif
 
         iterator erase(const_iterator);
