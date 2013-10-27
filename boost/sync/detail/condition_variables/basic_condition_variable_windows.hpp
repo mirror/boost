@@ -329,7 +329,8 @@ private:
                     --state->m_waiter_count;
                     if (state->m_notify_count > 0)
                         --state->m_notify_count;
-                    update_total_waiter_count();
+                    else
+                        interlocked_write_release(&m_total_waiter_count, m_total_waiter_count - 1);
                 }
                 BOOST_SYNC_DETAIL_THROW(wait_error, (err)("condition_variable wait failed in WaitForSingleObject"));
             }
@@ -380,7 +381,8 @@ private:
                         --state->m_waiter_count;
                         if (state->m_notify_count > 0)
                             --state->m_notify_count;
-                        update_total_waiter_count();
+                        else
+                            interlocked_write_release(&m_total_waiter_count, m_total_waiter_count - 1);
                     }
                     BOOST_SYNC_DETAIL_THROW(wait_error, (err)("condition_variable timed_wait failed in WaitForSingleObject"));
                 }
@@ -395,7 +397,7 @@ private:
             --state->m_notify_count;
             return sync::cv_status::no_timeout;
         }
-        update_total_waiter_count();
+        interlocked_write_release(&m_total_waiter_count, m_total_waiter_count - 1);
         return sync::cv_status::timeout;
     }
 
@@ -416,7 +418,8 @@ private:
                     --state->m_waiter_count;
                     if (state->m_notify_count > 0)
                         --state->m_notify_count;
-                    update_total_waiter_count();
+                    else
+                        interlocked_write_release(&m_total_waiter_count, m_total_waiter_count - 1);
                 }
                 BOOST_SYNC_DETAIL_THROW(wait_error, (err)("condition_variable timed_wait failed in WaitForMultipleObjects"));
             }
@@ -446,7 +449,7 @@ private:
                         --state->m_notify_count;
                         return sync::cv_status::no_timeout;
                     }
-                    update_total_waiter_count();
+                    interlocked_write_release(&m_total_waiter_count, m_total_waiter_count - 1);
                     return sync::cv_status::timeout;
                 }
                 break;
@@ -455,22 +458,6 @@ private:
                 BOOST_ASSERT(false);
             }
         }
-    }
-
-    void update_total_waiter_count() BOOST_NOEXCEPT
-    {
-        long total_waiter_count = 0;
-        if (waiter_state* p = m_notify_state)
-        {
-            waiter_state* const end = p;
-            do
-            {
-                total_waiter_count += p->m_waiter_count;
-                p = p->m_next;
-            }
-            while (p != end);
-        }
-        interlocked_write_release(&m_total_waiter_count, total_waiter_count);
     }
 };
 
