@@ -26,7 +26,7 @@
 
 #include <iomanip>
 #include <locale>
-#include <boost/config/no_tr1/cmath.hpp> // isnan
+//#include <boost/config/no_tr1/cmath.hpp> // isnan
 #include <boost/assert.hpp>
 #include <cstddef> // size_t
 
@@ -46,6 +46,8 @@ namespace std{
 } // namespace std
 #endif
 
+#include <boost/type_traits/is_floating_point.hpp>
+#include <boost/mpl/bool.hpp>
 #include <boost/limits.hpp>
 #include <boost/integer.hpp>
 #include <boost/io/ios_state.hpp>
@@ -82,16 +84,6 @@ public:
     > locale_saver;
     #endif
 
-    // default saving of primitives.
-    template<class T>
-    void save(const T &t){
-        if(os.fail())
-            boost::serialization::throw_exception(
-                archive_exception(archive_exception::output_stream_error)
-            );
-        os << t;
-    }
-
     /////////////////////////////////////////////////////////
     // fundamental types that need special treatment
     void save(const bool t){
@@ -123,8 +115,42 @@ public:
         save(static_cast<int>(t));
     }
     #endif
-    void save(const float t)
-    {
+
+    /////////////////////////////////////////////////////////
+    // saving of any types not listed above
+
+    template<class T>
+    void save_impl(const T &t, boost::mpl::bool_<false> &){
+        if(os.fail())
+            boost::serialization::throw_exception(
+                archive_exception(archive_exception::output_stream_error)
+            );
+        os << t;
+    }
+
+    /////////////////////////////////////////////////////////
+    // floating point types need even more special treatment
+    // the following determines whether the type T is some sort
+    // of floating point type.  Note that we then assume that
+    // the stream << operator is defined on that type - if not
+    // we'll get a compile time error. This is meant to automatically
+    // support synthesized types which support floating point
+    // operations. Also it should handle compiler dependent types
+    // such long double.  Due to John Maddoc.
+
+    template<class T>
+    struct is_float {
+        typedef BOOST_DEDUCED_TYPENAME mpl::bool_< 
+            boost::is_floating_point<T>::value 
+            || (std::numeric_limits<T>::is_specialized
+            && !std::numeric_limits<T>::is_integer
+            && !std::numeric_limits<T>::is_exact
+            && std::numeric_limits<T>::max_exponent) 
+        >::type type;
+    };
+
+    template<class T>
+    void save_impl(const T &t, boost::mpl::bool_<true> &){
         // must be a user mistake - can't serialize un-initialized data
         if(os.fail())
             boost::serialization::throw_exception(
@@ -134,21 +160,17 @@ public:
         // http://www2.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1822.pdf
         // which is derived from Kahan's paper:
         // http://http.cs.berkley.edu/~wkahan/ieee754status/ieee754.ps
-        unsigned int digits = std::numeric_limits<float>::digits * 3010;
-        digits /= 10000;
+        const unsigned int digits = (std::numeric_limits<float>::digits * 3010) / 10000;
         os << std::setprecision(digits);
         os << t;
     }
-    void save(const double t)
-    {
-        // must be a user mistake - can't serialize un-initialized data
-        if(os.fail())
-            boost::serialization::throw_exception(
-                archive_exception(archive_exception::output_stream_error)
-            );
-        os << std::setprecision(std::numeric_limits<double>::digits10 + 2);
-        os << t;
+
+    template<class T>
+    void save(const T & t){
+        BOOST_DEDUCED_TYPENAME is_float<T>::type tf;
+        save_impl(t, tf);
     }
+
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY())
     basic_text_oprimitive(OStream & os, bool no_codecvt);
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(BOOST_PP_EMPTY()) 
