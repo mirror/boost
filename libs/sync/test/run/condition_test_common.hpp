@@ -22,8 +22,11 @@ struct wait_for_flag
     {
         bool const& flag;
 
-        check_flag(bool const& flag_):
-            flag(flag_)
+        explicit check_flag(bool const& flag_) : flag(flag_)
+        {
+        }
+
+        check_flag(check_flag const& that) : flag(that.flag)
         {
         }
 
@@ -32,7 +35,6 @@ struct wait_for_flag
             return flag;
         }
 
-        BOOST_DELETED_FUNCTION(check_flag(check_flag const&))
         BOOST_DELETED_FUNCTION(check_flag& operator=(check_flag const&))
     };
 
