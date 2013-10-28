@@ -164,8 +164,8 @@
             Implementation of the hash function.
         </simpara><para>
           Generally shouldn't be called directly by users, instead they should use
-          <link linkend="boost.hash">boost::hash</link>, <link linkend="boost.hash_range">boost::hash_range</link>
-          or <link linkend="boost.hash_combine">boost::hash_combine</link> which
+          <computeroutput><link linkend="boost.hash">boost::hash</link></computeroutput>, <computeroutput><link linkend="boost.hash_range">boost::hash_range</link></computeroutput>
+          or <computeroutput><link linkend="boost.hash_combine">boost::hash_combine</link></computeroutput> which
           call <computeroutput>hash_value</computeroutput> without namespace qualification so that overloads
           for custom types are found via ADL.
         </para><variablelist spacing="compact"><?dbhtml 
