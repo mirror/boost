@@ -26,13 +26,14 @@
 
 #include <iomanip>
 #include <locale>
-//#include <boost/config/no_tr1/cmath.hpp> // isnan
 #include <boost/assert.hpp>
 #include <cstddef> // size_t
 
 #include <boost/config.hpp>
 #include <boost/static_assert.hpp>
 #include <boost/detail/workaround.hpp>
+#include <boost/io/ios_state.hpp>
+
 #if BOOST_WORKAROUND(BOOST_DINKUMWARE_STDLIB, == 1)
 #include <boost/archive/dinkumware.hpp>
 #endif
@@ -136,7 +137,7 @@ public:
     // we'll get a compile time error. This is meant to automatically
     // support synthesized types which support floating point
     // operations. Also it should handle compiler dependent types
-    // such long double.  Due to John Maddoc.
+    // such long double.  Due to John Maddock.
 
     template<class T>
     struct is_float {
@@ -159,16 +160,22 @@ public:
         // The formulae for the number of decimla digits required is given in
         // http://www2.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1822.pdf
         // which is derived from Kahan's paper:
-        // http://http.cs.berkley.edu/~wkahan/ieee754status/ieee754.ps
+        // www.eecs.berkeley.edu/~wkahan/ieee754status/ieee754.ps
         // const unsigned int digits = (std::numeric_limits<T>::digits * 3010) / 10000;
         // note: I've commented out the above because I didn't get good results.  e.g.
         // in one case I got a difference of 19 units.
-        const unsigned int digits = std::numeric_limits<T>::digits10 + 2;
+        #ifndef BOOST_NO_CXX11_NUMERIC_LIMITS
+            const unsigned int digits = std::numeric_limits<T>::max_digits10;
+        #else
+            const unsigned int digits = std::numeric_limits<T>::digits10 + 2;
+        #endif
         os << std::setprecision(digits) << std::scientific << t;
     }
 
     template<class T>
     void save(const T & t){
+        boost::io::ios_flags_saver fs(os);
+        boost::io::ios_precision_saver ps(os);
         BOOST_DEDUCED_TYPENAME is_float<T>::type tf;
         save_impl(t, tf);
     }
