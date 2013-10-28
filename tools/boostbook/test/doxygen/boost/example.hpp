@@ -7,6 +7,12 @@
     \class example::example
     
     \brief Documentation for class example
+
+    Detailed documentation
+
+    \code{.cpp}
+    void class_code_sample();
+    \endcode
  */
 
 /*!
@@ -23,6 +29,16 @@ enum global_enum { enumerator1 = 1, enumerator2 };
 
 namespace example
 {
+    /*!
+
+    \param x Parameter description.
+
+    \code{.cpp}
+    void function_code_sample();
+    \endcode
+     */
+    void free_function(int x);
+
     int namespace_integer;
     static int namespace_static_integer;
     const int namespace_const_integer = 1;

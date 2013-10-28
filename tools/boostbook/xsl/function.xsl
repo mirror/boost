@@ -800,7 +800,7 @@
       <xsl:apply-templates select="purpose/*|purpose/text()"/>
     </xsl:if>
 
-    <xsl:apply-templates select="description/*"/>
+    <xsl:apply-templates select="description"/>
 
     <xsl:if test="parameter/description|signature/parameter/description|
                   template/template-type-parameter/purpose|
@@ -831,7 +831,7 @@
                         </xsl:call-template>
                       </term>
                       <listitem>
-                        <xsl:apply-templates select="description/*"/>
+                        <xsl:apply-templates select="description"/>
                       </listitem>
                     </varlistentry>
                   </xsl:if>
