@@ -9,7 +9,7 @@
 /*!
  * \file   sync/mutexes/spin_mutex.hpp
  *
- * \brief  This header defines a basic mutex primitive.
+ * \brief  This header defines a spin mutex primitive.
  */
 
 #ifndef BOOST_SYNC_MUTEXES_SPIN_MUTEX_HPP_INCLUDED_

@@ -67,7 +67,7 @@ public:
 
     bool try_lock() BOOST_NOEXCEPT
     {
-        return state.exchange( locked_state, detail::atomic_ns::memory_order_acquire) == (bool)unlocked_state;
+        return state.exchange( locked_state, detail::atomic_ns::memory_order_acquire ) == (bool)unlocked_state;
     }
 
     void unlock() BOOST_NOEXCEPT
