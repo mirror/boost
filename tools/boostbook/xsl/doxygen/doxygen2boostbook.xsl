@@ -1708,7 +1708,7 @@
 
   <!-- Handle program listings -->
   <xsl:template match="programlisting" mode="passthrough">
-    <programlisting>
+    <programlisting language="c++">
       <xsl:apply-templates mode="programlisting"/>
     </programlisting>
   </xsl:template>

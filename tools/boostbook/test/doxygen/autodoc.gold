@@ -1,7 +1,7 @@
 <?xml version="1.0" standalone="yes"?>
 <library-reference id="example_reference"><title>Example Reference</title><header name="boost/example.hpp">
 <namespace name="example">
-<class name="example"><purpose>Documentation for class example. </purpose><description><para>Detailed documentation</para><para><programlisting>void class_code_sample();
+<class name="example"><purpose>Documentation for class example. </purpose><description><para>Detailed documentation</para><para><programlisting language="c++">void class_code_sample();
 </programlisting> </para></description><class name="inner_class"><data-member name="x"><type>int</type></data-member>
 </class><enum name="class_enum"><enumvalue name="enumerator"/></enum>
 <typedef name="documented_type1"><description><para>This type has documentation. </para></description><type>int</type></typedef>
@@ -63,7 +63,7 @@ Embedded docbook list:</para><para>
 <listitem><para>Second list item</para></listitem>
 </itemizedlist>
 Line 1<sbr/>
- Line 2</para><para><programlisting>void foo() {}
+ Line 2</para><para><programlisting language="c++">void foo() {}
 </programlisting></para><para>
 </para></description></struct><struct name="specialization_test"><template>
       <template-type-parameter name="T"/>
@@ -80,7 +80,7 @@ Line 1<sbr/>
 <data-member name="namespace_const_integer"><type>const int</type></data-member>
 <data-member name="namespace_static_const_integer" specifiers="static"><type>const int</type></data-member>
 <function name="free_function"><type>void</type><parameter name="x"><paramtype>int</paramtype><description><para>Parameter description.</para></description></parameter><description><para>
-<programlisting>void function_code_sample();
+<programlisting language="c++">void function_code_sample();
 </programlisting> </para></description></function>
 <function name="namespace_func"><type>int</type><parameter name="i"><paramtype>int</paramtype><description><para>A function parameter </para></description></parameter><parameter name="j"><paramtype>int</paramtype><description><para>Another </para></description></parameter><description><para>
 
