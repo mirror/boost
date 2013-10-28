@@ -160,9 +160,11 @@ public:
         // http://www2.open-std.org/JTC1/SC22/WG21/docs/papers/2005/n1822.pdf
         // which is derived from Kahan's paper:
         // http://http.cs.berkley.edu/~wkahan/ieee754status/ieee754.ps
-        const unsigned int digits = (std::numeric_limits<float>::digits * 3010) / 10000;
-        os << std::setprecision(digits);
-        os << t;
+        // const unsigned int digits = (std::numeric_limits<T>::digits * 3010) / 10000;
+        // note: I've commented out the above because I didn't get good results.  e.g.
+        // in one case I got a difference of 19 units.
+        const unsigned int digits = std::numeric_limits<T>::digits10 + 2;
+        os << std::setprecision(digits) << std::scientific << t;
     }
 
     template<class T>
