@@ -104,8 +104,8 @@ inline bool B::operator==(const B &rhs) const
         && t == rhs.t 
         && u == rhs.u 
         && v == rhs.v 
-        && std::fabs(w - rhs.w) <= std::numeric_limits<float>::round_error()
-        && std::fabs(x - rhs.x) <= std::numeric_limits<float>::round_error()
+        && std::abs( boost::math::float_distance(w, rhs.w)) < 2
+        && std::abs( boost::math::float_distance(x, rhs.x)) < 2
     ;
 }
 
