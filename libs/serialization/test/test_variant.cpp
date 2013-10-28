@@ -18,8 +18,9 @@
 #include <cstddef> // NULL
 #include <cstdio> // remove
 #include <fstream>
-#include <cmath> // for fabs()
 #include <boost/config.hpp>
+#include <cmath> // for fabs()
+#include <boost/math/special_functions/next.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
 namespace std{ 
     using ::remove;
@@ -77,11 +78,11 @@ public:
 
     bool operator()( const float & lhs, const float & rhs ) const
     {
-        return std::fabs(lhs- rhs) < std::numeric_limits<float>::round_error();
+        return std::abs( boost::math::float_distance(lhs, rhs)) < 2;
     }
     bool operator()( const double & lhs, const double & rhs ) const
     {
-        return std::fabs(lhs - rhs) < std::numeric_limits<float>::round_error();
+        return std::abs( boost::math::float_distance(lhs, rhs)) < 2;
     }
 };
 

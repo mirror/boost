@@ -12,6 +12,7 @@
 #include <cstdlib> // rand()
 #include <cmath>   // fabs()
 #include <cstddef> // size_t
+#include <boost/math/special_functions/next.hpp>
 
 #include <boost/config.hpp>
 #if defined(BOOST_NO_STDC_NAMESPACE)
@@ -148,13 +149,9 @@ bool A::operator==(const A &rhs) const
         return false; 
     if(v != rhs.v)
         return false; 
-    if(w == 0 && std::fabs(rhs.w) > 2 * std::numeric_limits<float>::round_error())
+    if(std::abs( boost::math::float_distance(w, rhs.w)) > 1)
         return false;
-    if(std::fabs(rhs.w/w - 1.0) > 2 * std::numeric_limits<float>::round_error())
-        return false;
-    if(x == 0 && std::fabs(rhs.x - x) > 2 * std::numeric_limits<double>::round_error())
-        return false;
-    if(std::fabs(rhs.x/x - 1.0) > 2 * std::numeric_limits<double>::round_error())
+    if(std::abs( boost::math::float_distance(x, rhs.x)) > 1)
         return false;
     if(0 != y.compare(rhs.y))
         return false;
