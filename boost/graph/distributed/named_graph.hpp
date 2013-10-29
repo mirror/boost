@@ -344,7 +344,7 @@ struct BGL_NAMED_GRAPH::lazy_add_vertex
   /// Transfer responsibility for adding the vertex from the source of
   /// the copy to the newly-constructed opbject.
   lazy_add_vertex(const lazy_add_vertex& other)
-    : self(self), name(other.name), committed(other.committed)
+    : self(other.self), name(other.name), committed(other.committed)
   {
     other.committed = true;
   }
