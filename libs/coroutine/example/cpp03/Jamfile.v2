@@ -75,3 +75,7 @@ exe layout
 exe chaining
     : chaining.cpp
     ;
+
+exe exception
+    : exception.cpp
+    ;

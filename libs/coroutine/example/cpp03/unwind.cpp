@@ -10,7 +10,6 @@
 #include <boost/bind.hpp>
 #include <boost/coroutine/all.hpp>
 
-#ifdef BOOST_COROUTINES_UNIDIRECT
 struct X : private boost::noncopyable
 {
     X() { std::cout << "X()" << std::endl; }
@@ -43,39 +42,3 @@ int main( int argc, char * argv[])
 
     return EXIT_SUCCESS;
 }
-#else
-typedef boost::coroutines::coroutine< void() >   coro_t;
-
-struct X : private boost::noncopyable
-{
-    X() { std::cout << "X()" << std::endl; }
-    ~X() { std::cout << "~X()" << std::endl; }
-};
-
-void fn( coro_t & ca)
-{
-    X x;
-    int i = 0;
-    while ( true)
-    {
-        std::cout << "fn() : " << ++i << std::endl;
-        ca();
-    }
-}
-
-int main( int argc, char * argv[])
-{
-    {
-        coro_t c( fn);
-        for ( int k = 0; k < 3; ++k)
-        {
-            c();
-        }
-        std::cout << "destroying coroutine and unwinding stack" << std::endl;
-    }
-
-    std::cout << "\nDone" << std::endl;
-
-    return EXIT_SUCCESS;
-}
-#endif

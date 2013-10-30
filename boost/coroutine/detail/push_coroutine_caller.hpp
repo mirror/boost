@@ -3,14 +3,14 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_COROUTINES_UNIDIRECT_DETAIL_PUSH_COROUTINE_CALLER_H
-#define BOOST_COROUTINES_UNIDIRECT_DETAIL_PUSH_COROUTINE_CALLER_H
+#ifndef BOOST_COROUTINES_DETAIL_PUSH_COROUTINE_CALLER_H
+#define BOOST_COROUTINES_DETAIL_PUSH_COROUTINE_CALLER_H
 
 #include <boost/config.hpp>
 #include <boost/context/fcontext.hpp>
 
 #include <boost/coroutine/detail/config.hpp>
-#include <boost/coroutine/v2/detail/push_coroutine_base.hpp>
+#include <boost/coroutine/detail/push_coroutine_base.hpp>
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_PREFIX
@@ -53,4 +53,4 @@ private:
 #  include BOOST_ABI_SUFFIX
 #endif
 
-#endif // BOOST_COROUTINES_UNIDIRECT_DETAIL_PUSH_COROUTINE_CALLER_H
+#endif // BOOST_COROUTINES_DETAIL_PUSH_COROUTINE_CALLER_H

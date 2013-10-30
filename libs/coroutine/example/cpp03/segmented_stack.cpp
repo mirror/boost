@@ -35,7 +35,6 @@ void bar( int i)
     }
 }
 
-#ifdef BOOST_COROUTINES_UNIDIRECT
 void foo( boost::coroutines::coroutine< void >::pull_type & source)
 {
     bar( count);
@@ -49,23 +48,6 @@ void thread_fn()
         sink();
     }
 }
-#else
-typedef boost::coroutines::coroutine< void() >   coro_t;
-
-void foo( coro_t & c)
-{
-    bar( count);
-    c();
-}
-
-void thread_fn()
-{
-    {
-        coro_t c( foo);
-        c();
-    }
-}
-#endif
 
 int main( int argc, char * argv[])
 {

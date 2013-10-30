@@ -4,8 +4,8 @@
 //    (See accompanying file LICENSE_1_0.txt or copy at
 //          http://www.boost.org/LICENSE_1_0.txt)
 
-#ifndef BOOST_COROUTINES_UNIDIRECT_DETAIL_PUSH_COROUTINE_OBJECT_H
-#define BOOST_COROUTINES_UNIDIRECT_DETAIL_PUSH_COROUTINE_OBJECT_H
+#ifndef BOOST_COROUTINES_DETAIL_PUSH_COROUTINE_OBJECT_H
+#define BOOST_COROUTINES_DETAIL_PUSH_COROUTINE_OBJECT_H
 
 #include <cstddef>
 
@@ -29,7 +29,7 @@
 #include <boost/coroutine/detail/trampoline.hpp>
 #include <boost/coroutine/flags.hpp>
 #include <boost/coroutine/stack_context.hpp>
-#include <boost/coroutine/v2/detail/push_coroutine_base.hpp>
+#include <boost/coroutine/detail/push_coroutine_base.hpp>
 
 #ifdef BOOST_MSVC
  #pragma warning (push)
@@ -1205,4 +1205,4 @@ public:
  #pragma warning (pop)
 #endif
 
-#endif // BOOST_COROUTINES_UNIDIRECT_DETAIL_PUSH_COROUTINE_OBJECT_H
+#endif // BOOST_COROUTINES_DETAIL_PUSH_COROUTINE_OBJECT_H
