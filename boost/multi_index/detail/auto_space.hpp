@@ -39,7 +39,7 @@ namespace detail{
  *    "of zero length", http://gcc.gnu.org/bugzilla/show_bug.cgi?id=14176
  *   C++ Standard Library Defect Report List (Revision 28), issue 199
  *     "What does allocate(0) return?",
- *     http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/lwg-defects.html#199
+ *     http://www.open-std.org/jtc1/sc22/wg21/docs/lwg-defects.html#199
  */
 
 template<typename T,typename Allocator=std::allocator<T> >

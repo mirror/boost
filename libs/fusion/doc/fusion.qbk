@@ -30,7 +30,7 @@
 [def __mpl__                    [@http://www.boost.org/libs/mpl/index.html MPL]]
 [def __stl__                    [@http://en.wikipedia.org/wiki/Standard_Template_Library STL]]
 [def __tuple__                  [@http://www.boost.org/libs/tuple/doc/tuple_users_guide.html Boost.Tuple]]
-[def __tr1__tuple__             [@http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1403.pdf TR1 Tuple]]
+[def __tr1__tuple__             [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1403.pdf TR1 Tuple]]
 [def __boost_tools__            [@http://www.boost.org/tools/index.html Boost Tools]]
 [def __spirit_list__            [@https://lists.sourceforge.net/lists/listinfo/spirit-general Spirit Mailing List]]
 [def __spirit_general__         [@news://news.gmane.org/gmane.comp.spirit.general Spirit General NNTP news portal]]

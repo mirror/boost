@@ -171,7 +171,7 @@
 [def __metafunctions__          [@boost:/libs/mpl/doc/refmanual/metafunction.html metafunctions]]
 [def __concept_check__          [@boost:/libs/concept_check/index.html Boost Concept Check library]]
 [def __boost_array__            [@boost:/libs/array/index.html boost::array]]
-[def __the_forwarding_problem__ [@http://std.dkuug.dk/jtc1/sc22/wg21/docs/papers/2002/n1385.htm The Forwarding Problem]]
+[def __the_forwarding_problem__ [@http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2002/n1385.htm The Forwarding Problem]]
 
 [def __sgi_inner_product__      [@http://www.sgi.com/tech/stl/inner_product.html inner_product]]
 [def __sgi_partial_sum__        [@http://www.sgi.com/tech/stl/partial_sum.html partial_sum]]
