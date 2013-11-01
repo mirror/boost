@@ -58,7 +58,7 @@ public:
     boost::detail::winapi::HANDLE_ m_event;
 
 public:
-    BOOST_CONSTEXPR basic_mutex() BOOST_NOEXCEPT : m_event(NULL), m_active_count(0)
+    BOOST_CONSTEXPR basic_mutex() BOOST_NOEXCEPT : m_active_count(0), m_event(NULL)
     {
     }
 
