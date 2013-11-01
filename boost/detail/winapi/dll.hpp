@@ -39,9 +39,9 @@ namespace winapi
 #else
 extern "C" {
 # ifdef _WIN64
-    typedef INT_PTR (WINAPI *FARPROC_)();
-    typedef INT_PTR (WINAPI *NEARPROC_)();
-    typedef INT_PTR (WINAPI *PROC_)();
+    typedef INT_PTR_ (WINAPI *FARPROC_)();
+    typedef INT_PTR_ (WINAPI *NEARPROC_)();
+    typedef INT_PTR_ (WINAPI *PROC_)();
 # else
     typedef int (WINAPI *FARPROC_)();
     typedef int (WINAPI *NEARPROC_)();
