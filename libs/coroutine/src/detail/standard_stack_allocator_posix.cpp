@@ -71,7 +71,7 @@ rlimit stacksize_limit()
 std::size_t page_count( std::size_t stacksize)
 {
     return static_cast< std::size_t >( 
-        std::ceil(
+        std::floor(
             static_cast< float >( stacksize) / pagesize() ) );
 }
 
@@ -108,9 +108,11 @@ standard_stack_allocator::allocate( stack_context & ctx, std::size_t size)
     BOOST_ASSERT( minimum_stacksize() <= size);
     BOOST_ASSERT( is_stack_unbound() || ( maximum_stacksize() >= size) );
 
-    const std::size_t pages( detail::page_count( size) + 1); // add one guard page
+    const std::size_t pages( detail::page_count( size) ); // page at bottom will be used as guard-page
+    BOOST_ASSERT_MSG( 2 <= pages, "at least two pages must fit into stack (one page is guard-page)");
     const std::size_t size_( pages * detail::pagesize() );
     BOOST_ASSERT( 0 < size && 0 < size_);
+    BOOST_ASSERT( size_ <= size);
 
     const int fd( ::open("/dev/zero", O_RDONLY) );
     BOOST_ASSERT( -1 != fd);

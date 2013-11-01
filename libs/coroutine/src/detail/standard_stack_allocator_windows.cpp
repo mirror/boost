@@ -7,40 +7,31 @@
 #include "boost/coroutine/detail/standard_stack_allocator.hpp"
 
 extern "C" {
-#include <windows.h>
+#include <fcntl.h>
+#include <signal.h>
+#include <sys/mman.h>
+#include <sys/resource.h>
+#include <sys/stat.h>
+#include <sys/time.h>
+#include <sys/types.h>
+#include <unistd.h>
 }
 
-//#if defined (BOOST_WINDOWS) || _POSIX_C_SOURCE >= 200112L
+//#if _POSIX_C_SOURCE >= 200112L
 
 #include <algorithm>
 #include <cmath>
-#include <cstddef>
 #include <cstring>
 #include <stdexcept>
 
 #include <boost/assert.hpp>
-#include <boost/context/detail/config.hpp>
 #include <boost/context/fcontext.hpp>
 
 #include <boost/coroutine/stack_context.hpp>
 
-# if defined(BOOST_MSVC)
-# pragma warning(push)
-# pragma warning(disable:4244 4267)
-# endif
-
-// x86_64
-// test x86_64 before i386 because icc might
-// define __i686__ for x86_64 too
-#if defined(__x86_64__) || defined(__x86_64) \
-    || defined(__amd64__) || defined(__amd64) \
-    || defined(_M_X64) || defined(_M_AMD64)
-
-// Windows seams not to provide a constant or function
-// telling the minimal stacksize
-# define MIN_STACKSIZE  8 * 1024
-#else
-# define MIN_STACKSIZE  4 * 1024
+#if !defined (SIGSTKSZ)
+# define SIGSTKSZ (8 * 1024)
+# define UDEF_SIGSTKSZ
 #endif
 
 #ifdef BOOST_HAS_ABI_HEADERS
@@ -51,59 +42,64 @@ namespace boost {
 namespace coroutines {
 namespace detail {
 
-SYSTEM_INFO system_info_()
-{
-    SYSTEM_INFO si;
-    ::GetSystemInfo( & si);
-    return si;
-}
-
-SYSTEM_INFO system_info()
-{
-    static SYSTEM_INFO si = system_info_();
-    return si;
-}
-
 std::size_t pagesize()
-{ return static_cast< std::size_t >( system_info().dwPageSize); }
+{
+    // conform to POSIX.1-2001
+    static std::size_t size = ::sysconf( _SC_PAGESIZE);
+    return size;
+}
+
+rlimit stacksize_limit_()
+{
+    rlimit limit;
+    // conforming to POSIX.1-2001
+#if defined(BOOST_DISABLE_ASSERTS)
+    ::getrlimit( RLIMIT_STACK, & limit);
+#else
+    const int result = ::getrlimit( RLIMIT_STACK, & limit);
+    BOOST_ASSERT( 0 == result);
+#endif
+    return limit;
+}
+
+rlimit stacksize_limit()
+{
+    static rlimit limit = stacksize_limit_();
+    return limit;
+}
 
 std::size_t page_count( std::size_t stacksize)
 {
-    return static_cast< std::size_t >(
-        std::ceil(
+    return static_cast< std::size_t >( 
+        std::floor(
             static_cast< float >( stacksize) / pagesize() ) );
 }
 
-// Windows seams not to provide a limit for the stacksize
 bool
 standard_stack_allocator::is_stack_unbound()
-{ return true; }
+{ return RLIM_INFINITY == detail::stacksize_limit().rlim_max; }
 
 std::size_t
 standard_stack_allocator::default_stacksize()
 {
-    std::size_t size = 64 * 1024; // 64 kB
-    if ( is_stack_unbound() )
-        return (std::max)( size, minimum_stacksize() );
+    std::size_t size = 8 * minimum_stacksize();
+    if ( is_stack_unbound() ) return size;
 
     BOOST_ASSERT( maximum_stacksize() >= minimum_stacksize() );
-    return maximum_stacksize() == minimum_stacksize()
-        ? minimum_stacksize()
-        : ( std::min)( size, maximum_stacksize() );
+    return maximum_stacksize() == size
+        ? size
+        : (std::min)( size, maximum_stacksize() );
 }
 
-// because Windows seams not to provide a limit for minimum stacksize
 std::size_t
 standard_stack_allocator::minimum_stacksize()
-{ return MIN_STACKSIZE; }
+{ return SIGSTKSZ + sizeof( context::fcontext_t) + 15; }
 
-// because Windows seams not to provide a limit for maximum stacksize
-// maximum_stacksize() can never be called (pre-condition ! is_stack_unbound() )
 std::size_t
 standard_stack_allocator::maximum_stacksize()
 {
     BOOST_ASSERT( ! is_stack_unbound() );
-    return  1 * 1024 * 1024 * 1024; // 1GB
+    return static_cast< std::size_t >( detail::stacksize_limit().rlim_max);
 }
 
 void
@@ -112,23 +108,32 @@ standard_stack_allocator::allocate( stack_context & ctx, std::size_t size)
     BOOST_ASSERT( minimum_stacksize() <= size);
     BOOST_ASSERT( is_stack_unbound() || ( maximum_stacksize() >= size) );
 
-    const std::size_t pages( detail::page_count( size) + 1); // add one guard page
-    const std::size_t size_ = pages * detail::pagesize();
+    const std::size_t pages( detail::page_count( size) ); // page at bottom will be used as guard-page
+    BOOST_ASSERT_MSG( 2 <= pages, "at least two pages must fit into stack (one page is guard-page)");
+    const std::size_t size_( pages * detail::pagesize() );
     BOOST_ASSERT( 0 < size && 0 < size_);
+    BOOST_ASSERT( size_ <= size);
 
-    void * limit = ::VirtualAlloc( 0, size_, MEM_COMMIT, PAGE_READWRITE);
+    const int fd( ::open("/dev/zero", O_RDONLY) );
+    BOOST_ASSERT( -1 != fd);
+    // conform to POSIX.4 (POSIX.1b-1993, _POSIX_C_SOURCE=199309L)
+    void * limit =
+# if defined(macintosh) || defined(__APPLE__) || defined(__APPLE_CC__)
+    ::mmap( 0, size_, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANON, -1, 0);
+# else
+    ::mmap( 0, size_, PROT_READ | PROT_WRITE, MAP_PRIVATE, fd, 0);
+# endif
+    ::close( fd);
     if ( ! limit) throw std::bad_alloc();
 
     std::memset( limit, '\0', size_);
 
-    DWORD old_options;
+    // conforming to POSIX.1-2001
 #if defined(BOOST_DISABLE_ASSERTS)
-    ::VirtualProtect(
-        limit, detail::pagesize(), PAGE_READWRITE | PAGE_GUARD /*PAGE_NOACCESS*/, & old_options);
+    ::mprotect( limit, detail::pagesize(), PROT_NONE);
 #else
-    const BOOL result = ::VirtualProtect(
-        limit, detail::pagesize(), PAGE_READWRITE | PAGE_GUARD /*PAGE_NOACCESS*/, & old_options);
-    BOOST_ASSERT( FALSE != result);
+    const int result( ::mprotect( limit, detail::pagesize(), PROT_NONE) );
+    BOOST_ASSERT( 0 == result);
 #endif
 
     ctx.size = size_;
@@ -143,11 +148,16 @@ standard_stack_allocator::deallocate( stack_context & ctx)
     BOOST_ASSERT( is_stack_unbound() || ( maximum_stacksize() >= ctx.size) );
 
     void * limit = static_cast< char * >( ctx.sp) - ctx.size;
-    ::VirtualFree( limit, 0, MEM_RELEASE);
+    // conform to POSIX.4 (POSIX.1b-1993, _POSIX_C_SOURCE=199309L)
+    ::munmap( limit, ctx.size);
 }
 
 }}}
 
 #ifdef BOOST_HAS_ABI_HEADERS
 #  include BOOST_ABI_SUFFIX
+#endif
+
+#ifdef UDEF_SIGSTKSZ
+# undef SIGSTKSZ
 #endif
