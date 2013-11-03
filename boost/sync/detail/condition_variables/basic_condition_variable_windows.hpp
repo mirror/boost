@@ -257,9 +257,10 @@ private:
         {
             while (true)
             {
-                const long n = m_notify_state->m_waiter_count - m_notify_state->m_notify_count;
+                long n = m_notify_state->m_waiter_count - m_notify_state->m_notify_count;
                 if (n > 0)
                 {
+                    n = n > count_to_wake ? count_to_wake : n;
                     m_notify_state->m_notify_count += n;
                     boost::detail::winapi::ReleaseSemaphore(m_notify_state->m_semaphore, n, NULL);
                     count_to_wake -= n;
