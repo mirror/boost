@@ -117,9 +117,6 @@ void run_test_cases( BOOST_EXPLICIT_TEMPLATE_TYPE(Block) )
   //=====================================================================
   // Test construction from unsigned long
   {
-    typedef typename bitset_type::size_type size_type;
-
-
     // NOTE:
     //
     // 1. keep this in sync with the numeric types supported
