@@ -519,5 +519,6 @@ rule chrono-compile2 ( sources : name )
     test-suite ts_
         :
         #[ chrono-run test_7868.cpp  ]
+        [ chrono-run test_9337.cpp  ]
         ;
 
