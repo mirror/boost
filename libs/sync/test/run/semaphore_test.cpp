@@ -71,7 +71,7 @@ BOOST_AUTO_TEST_CASE(test_semaphore_wait_for)
 {
     using namespace boost;
 
-    sync::semaphore sem;
+    boost::sync::semaphore sem;
 
     BOOST_AUTO(start, chrono::system_clock::now());
 
@@ -93,7 +93,7 @@ BOOST_AUTO_TEST_CASE(test_semaphore_wait_until)
 {
     using namespace boost;
 
-    sync::semaphore sem;
+    boost::sync::semaphore sem;
     {
         BOOST_AUTO(now, chrono::system_clock::now());
         BOOST_AUTO(timeout, now + chrono::milliseconds(500));
@@ -127,7 +127,7 @@ BOOST_AUTO_TEST_CASE(test_semaphore_timed_wait)
 {
     using namespace boost;
 
-    sync::semaphore sem;
+    boost::sync::semaphore sem;
 
     // Relative timeouts
     {

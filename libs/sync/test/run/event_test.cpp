@@ -105,7 +105,7 @@ BOOST_AUTO_TEST_CASE(test_event_wait_for)
 {
     using namespace boost;
 
-    sync::manual_reset_event ev;
+    boost::sync::manual_reset_event ev;
 
     BOOST_AUTO(start, chrono::system_clock::now());
 
@@ -132,7 +132,7 @@ BOOST_AUTO_TEST_CASE(test_event_wait_until)
 {
     using namespace boost;
 
-    sync::manual_reset_event ev;
+    boost::sync::manual_reset_event ev;
     {
         BOOST_AUTO(now, chrono::system_clock::now());
         BOOST_AUTO(timeout, now + chrono::milliseconds(500));
