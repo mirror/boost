@@ -199,6 +199,10 @@ namespace program_options {
         */
         options_description& add(const options_description& desc);
 
+        /** Find the maximum width of the option column, including options 
+            in groups. */
+        unsigned get_option_column_width() const;
+
     public:
         /** Returns an object of implementation-defined type suitable for adding
             options to options_description. The returned object will
@@ -229,7 +233,7 @@ namespace program_options {
 
         /** Outputs 'desc' to the specified stream, calling 'f' to output each
             option_description element. */
-        void print(std::ostream& os) const;
+        void print(std::ostream& os, unsigned width = 0) const;
 
     private:
         typedef std::map<std::string, int>::const_iterator name2index_iterator;
