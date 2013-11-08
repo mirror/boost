@@ -18,6 +18,13 @@
 
 #include <boost/archive/xml_oarchive.hpp>
 
+namespace boost {
+namespace archive {
+    namespace detail {
+        template<class Archive> class interface_oarchive;
+    } // namespace detail
+} // namespace archive
+
 /////////////////////////////////////////////////////////////////////////
 // log data to an output stream.  This illustrates a simpler implemenation
 // of text output which is useful for getting a formatted display of

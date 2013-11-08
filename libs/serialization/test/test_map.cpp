@@ -57,8 +57,6 @@ struct random_key {
     }
 };  
 
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(random_key)
-
 void
 test_map(){
     const char * testfile = boost::archive::tmpnam(NULL);

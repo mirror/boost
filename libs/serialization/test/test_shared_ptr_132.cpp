@@ -56,7 +56,6 @@ public:
     virtual ~A(){--count;}   // default destructor
 };
 
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(A)
 BOOST_SERIALIZATION_SHARED_PTR(A)
 
 // B is a subclass of A
@@ -82,7 +81,6 @@ public:
 
 // B needs to be exported because its serialized via a base class pointer
 BOOST_SHARED_POINTER_EXPORT(B)
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(B)
 BOOST_SERIALIZATION_SHARED_PTR(B)
 
 int A::count = 0;
