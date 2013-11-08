@@ -37,6 +37,10 @@
 namespace boost {
 namespace archive {
 
+namespace detail {
+    template<class Archive> class interface_iarchive;
+} // namespace detail
+
 /////////////////////////////////////////////////////////////////////////
 // class xml_iarchive - read serialized objects from a input text stream
 template<class Archive>
@@ -44,7 +48,7 @@ class basic_xml_iarchive :
     public detail::common_iarchive<Archive>
 {
 protected:
-    friend class detail::interface_oarchive<Archive>;
+    friend class detail::interface_iarchive<Archive>;
     unsigned int depth;
     BOOST_ARCHIVE_OR_WARCHIVE_DECL(void)
     load_start(const char *name);

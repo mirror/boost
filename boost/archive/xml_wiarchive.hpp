@@ -40,6 +40,10 @@
 namespace boost { 
 namespace archive {
 
+namespace detail {
+    template<class Archive> class interface_iarchive;
+} // namespace detail
+
 template<class CharType>
 class basic_xml_grammar;
 typedef basic_xml_grammar<wchar_t> xml_wgrammar;

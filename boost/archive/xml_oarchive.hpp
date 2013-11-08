@@ -42,6 +42,10 @@ namespace std{
 namespace boost {
 namespace archive {
 
+namespace detail {
+    template<class Archive> class interface_oarchive;
+} // namespace detail
+
 template<class Archive>
 class xml_oarchive_impl : 
     public basic_text_oprimitive<std::ostream>,

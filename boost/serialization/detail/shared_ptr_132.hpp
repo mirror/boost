@@ -208,6 +208,8 @@ public:
 
 #endif
 
+#if !defined(BOOST_MSVC) || (BOOST_MSVC > 1200)
+
     template<class Y>
     shared_ptr & operator=(shared_ptr<Y> const & r) // never throws
     {
@@ -215,6 +217,8 @@ public:
         pn = r.pn; // shared_count::op= doesn't throw
         return *this;
     }
+
+#endif
 
 #ifndef BOOST_NO_AUTO_PTR
 

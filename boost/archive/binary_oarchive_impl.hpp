@@ -30,6 +30,10 @@
 namespace boost { 
 namespace archive {
 
+namespace detail {
+    template<class Archive> class interface_oarchive;
+} // namespace detail
+
 template<class Archive, class Elem, class Tr>
 class binary_oarchive_impl : 
     public basic_binary_oprimitive<Archive, Elem, Tr>,

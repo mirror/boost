@@ -39,6 +39,10 @@
 namespace boost { 
 namespace archive {
 
+namespace detail {
+    template<class Archive> class interface_iarchive;
+} // namespace detail
+
 template<class Archive>
 class text_wiarchive_impl : 
     public basic_text_iprimitive<std::wistream>,

@@ -46,6 +46,10 @@
 namespace boost {
 namespace archive {
 
+namespace detail {
+    template<class Archive> class interface_oarchive;
+} // namespace detail
+
 //////////////////////////////////////////////////////////////////////
 // class basic_binary_oarchive - write serialized objects to a binary output stream
 // note: this archive has no pretensions to portability.  Archive format

@@ -29,6 +29,10 @@
 namespace boost { 
 namespace archive {
 
+namespace detail {
+    template<class Archive> class interface_iarchive;
+} // namespace detail
+
 template<class Archive, class Elem, class Tr>
 class binary_iarchive_impl : 
     public basic_binary_iprimitive<Archive, Elem, Tr>,
