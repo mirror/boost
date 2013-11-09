@@ -486,14 +486,14 @@ namespace boost {
   //=========================================================================
   // A property map that always returns the same object by value.
   //
-  template <typename ValueType>
+  template <typename ValueType, typename KeyType = void>
   class static_property_map :
       public
   boost::put_get_helper<ValueType,static_property_map<ValueType> >
   { 
     ValueType value;
   public:
-    typedef void key_type;
+    typedef KeyType key_type;
     typedef ValueType value_type;
     typedef ValueType reference;
     typedef readable_property_map_tag category;
@@ -502,6 +502,12 @@ namespace boost {
     template<typename T>
     inline reference operator[](T) const { return value; }
   };
+
+  template <typename KeyType, typename ValueType>
+  static_property_map<ValueType, KeyType>
+  make_static_property_map(const ValueType& v) {
+    return static_property_map<ValueType, KeyType>(v);
+  }
 
   //=========================================================================
   // A property map that always returns a reference to the same object.
