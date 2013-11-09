@@ -128,7 +128,7 @@ const    boost::intmax_t ratio<N, D>::den;
 
 //----------------------------------------------------------------------------//
 //                                                                            //
-//                20.6.2 Arithmetic on ratio types [ratio.arithmetic]                   //
+//                20.6.2 Arithmetic on ratio types [ratio.arithmetic]         //
 //                                                                            //
 //----------------------------------------------------------------------------//
 
@@ -158,7 +158,7 @@ struct ratio_divide
 
 //----------------------------------------------------------------------------//
 //                                                                            //
-//                20.6.3 Comparasion of ratio types [ratio.comparison]                   //
+//                20.6.3 Comparision of ratio types [ratio.comparison]        //
 //                                                                            //
 //----------------------------------------------------------------------------//
 
@@ -203,6 +203,12 @@ struct ratio_gcd :
         mpl::lcm_c<boost::intmax_t, R1::den, R2::den>::value>::type
 {
 };
+
+    //----------------------------------------------------------------------------//
+    //                                                                            //
+    //                More arithmetic on ratio types [ratio.arithmetic]           //
+    //                                                                            //
+    //----------------------------------------------------------------------------//
 
 #ifdef BOOST_RATIO_EXTENSIONS
 template <class R>
