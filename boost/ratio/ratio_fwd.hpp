@@ -78,6 +78,18 @@ typedef ratio<      BOOST_RATIO_INTMAX_C(1000000000000), BOOST_RATIO_INTMAX_C(1)
 typedef ratio<   BOOST_RATIO_INTMAX_C(1000000000000000), BOOST_RATIO_INTMAX_C(1)> peta;
 typedef ratio<BOOST_RATIO_INTMAX_C(1000000000000000000), BOOST_RATIO_INTMAX_C(1)> exa;
 
+#ifdef BOOST_RATIO_EXTENSIONS
+
+#define BOOST_RATIO_1024 BOOST_RATIO_INTMAX_C(1024)
+
+typedef ratio<                                                                                     BOOST_RATIO_1024> kibi;
+typedef ratio<                                                                    BOOST_RATIO_1024*BOOST_RATIO_1024> mebi;
+typedef ratio<                                                   BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024> gibi;
+typedef ratio<                                  BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024> tebi;
+typedef ratio<                 BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024> pebi;
+typedef ratio<BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024*BOOST_RATIO_1024> exbi;
+
+#endif
 }  // namespace boost
 
 

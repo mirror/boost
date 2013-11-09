@@ -226,6 +226,24 @@ struct ratio_lcm :
         mpl::gcd_c<boost::intmax_t, R1::den, R2::den>::value>::type
 {
 };
+
+template<typename R, int p>
+struct ratio_power :
+  ratio_multiply<
+    typename ratio_power<R, p%2>::type,
+    typename ratio_power<typename ratio_multiply<R, R>::type, p/2>::type
+  >::type
+{};
+
+template<typename R>
+struct ratio_power<R, 0> : ratio<1>::type {};
+
+template<typename R>
+struct ratio_power<R, 1> : R {};
+
+template<typename R>
+struct ratio_power<R, -1> : ratio_divide<ratio<1>, R>::type {};
+
 #endif
 }  // namespace boost
 

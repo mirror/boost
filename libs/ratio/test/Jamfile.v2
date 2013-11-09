@@ -82,6 +82,7 @@ project
         [ compile-fail ratio_arithmetic/ratio_subtract_fail.cpp  ]
         [ compile-fail ratio_arithmetic/ratio_multiply_fail.cpp  ]
         [ compile-fail ratio_arithmetic/ratio_divide_fail.cpp  ]
+        [ compile ratio_arithmetic/ratio_power_pass.cpp  ]
         ;
 
     test-suite "ratio.comparison"
