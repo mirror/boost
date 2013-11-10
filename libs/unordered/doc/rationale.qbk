@@ -3,7 +3,7 @@
  / file LICENSE_1_0.txt or copy at http://www.boost.org/LICENSE_1_0.txt) ]
 
 [def __wang__
-    [@http://www.concentric.net/~Ttwang/tech/inthash.htm
+    [@http://web.archive.org/web/20121102023700/http://www.concentric.net/~Ttwang/tech/inthash.htm
     Thomas Wang's article on integer hash functions]]
 
 [section:rationale Implementation Rationale]
