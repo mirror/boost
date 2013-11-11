@@ -42,7 +42,15 @@ namespace std{
 #include "test_tools.hpp"
 
 #include <boost/archive/add_facet.hpp>
-#include <boost/archive/detail/utf8_codecvt_facet.hpp>
+
+#ifndef BOOST_NO_CXX11_HDR_CODECVT
+    #include <codecvt>
+    namespace boost { namespace archive { namespace detail {
+        typedef std::codecvt_utf8 utf8_codecvt_facet;
+    } } }
+#else
+    #include <boost/archive/detail/utf8_codecvt_facet.hpp>
+#endif
 
 template<std::size_t s>
 struct test_data
