@@ -34,9 +34,16 @@ namespace std{
 
 #include <boost/serialization/string.hpp>
 #include <boost/archive/add_facet.hpp>
-#include <boost/archive/xml_archive_exception.hpp>
-#include <boost/archive/detail/utf8_codecvt_facet.hpp>
+#ifndef BOOST_NO_CXX11_HDR_CODECVT
+    #include <codecvt>
+    namespace boost { namespace archive { namespace detail {
+        typedef std::codecvt_utf8 utf8_codecvt_facet;
+    } } }
+#else
+    #include <boost/archive/detail/utf8_codecvt_facet.hpp>
+#endif
 
+#include <boost/archive/xml_archive_exception.hpp>
 #include <boost/archive/iterators/mb_from_wchar.hpp>
 
 #include <boost/archive/basic_xml_archive.hpp>
