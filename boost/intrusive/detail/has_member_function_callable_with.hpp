@@ -195,6 +195,8 @@
             static const bool value = false;
          };
 
+         #ifdef BOOST_NO_CXX11_DECLTYPE
+
          //Special case for 0 args
          template< class F
                , std::size_t N =
@@ -215,14 +217,21 @@
             BOOST_PP_CAT(zeroarg_checker_, BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME)(int);
          };
 
+         #endif   //#ifdef BOOST_NO_CXX11_DECLTYPE
+
          template<typename Fun>
          struct BOOST_PP_CAT(BOOST_PP_CAT(has_member_function_callable_with_, BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME),_impl)
             <Fun, true>
          {
+            #ifndef BOOST_NO_CXX11_DECLTYPE
+            template<class U, class V = decltype(boost::move_detail::declval<Fun>().BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME()) >
+            static boost_intrusive_has_member_function_callable_with::yes_type Test(Fun*);
+            #else
             template<class U>
-            static BOOST_PP_CAT(zeroarg_checker_, BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME)
+               static BOOST_PP_CAT(zeroarg_checker_, BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME)
                <U> Test(BOOST_PP_CAT(zeroarg_checker_, BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME)<U>*);
-
+            #endif
+   
             template <class U>
             static boost_intrusive_has_member_function_callable_with::no_type Test(...);
 
