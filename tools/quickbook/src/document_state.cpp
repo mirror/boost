@@ -20,7 +20,6 @@ namespace quickbook
         boost::shared_ptr<file_info> const parent;
         boost::shared_ptr<doc_info> const document;
 
-        bool const document_root; // !parent || document != parent->document
         unsigned const compatibility_version;
         unsigned const depth;
         unsigned const override_depth;
@@ -36,7 +35,7 @@ namespace quickbook
                 unsigned compatibility_version,
                 boost::string_ref doc_id_1_1,
                 id_placeholder const* override_id) :
-            parent(parent), document(parent->document), document_root(false),
+            parent(parent), document(parent->document),
             compatibility_version(compatibility_version),
             depth(parent->depth + 1),
             override_depth(override_id ? depth : parent->override_depth),
@@ -49,7 +48,7 @@ namespace quickbook
                 boost::shared_ptr<doc_info> const& document,
                 unsigned compatibility_version,
                 boost::string_ref doc_id_1_1) :
-            parent(parent), document(document), document_root(true),
+            parent(parent), document(document),
             compatibility_version(compatibility_version),
             depth(0), override_depth(0), override_id(0),
             doc_id_1_1(detail::to_s(doc_id_1_1))
