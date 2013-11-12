@@ -17,7 +17,7 @@
 #include "phrase_tags.hpp"
 #include "parsers.hpp"
 #include "scoped.hpp"
-#include "input_path.hpp"
+#include "native_text.hpp"
 #include <boost/spirit/include/classic_core.hpp>
 #include <boost/spirit/include/classic_chset.hpp>
 #include <boost/spirit/include/classic_if.hpp>

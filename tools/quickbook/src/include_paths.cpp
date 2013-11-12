@@ -9,7 +9,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include "input_path.hpp"
+#include "native_text.hpp"
 #include "include_paths.hpp"
 #include "state.hpp"
 #include "utils.hpp"

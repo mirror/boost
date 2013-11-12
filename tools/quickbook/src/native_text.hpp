@@ -6,6 +6,8 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
+// For handling native strings and streams.
+
 #if !defined(BOOST_QUICKBOOK_DETAIL_INPUT_PATH_HPP)
 #define BOOST_QUICKBOOK_DETAIL_INPUT_PATH_HPP
 

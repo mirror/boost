@@ -29,7 +29,7 @@
 #include "state.hpp"
 #include "state_save.hpp"
 #include "grammar.hpp"
-#include "input_path.hpp"
+#include "native_text.hpp"
 #include "block_tags.hpp"
 #include "phrase_tags.hpp"
 #include "document_state.hpp"

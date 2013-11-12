@@ -12,7 +12,7 @@
 #include "state_save.hpp"
 #include "quickbook.hpp"
 #include "grammar.hpp"
-#include "input_path.hpp"
+#include "native_text.hpp"
 #include "utils.hpp"
 #include "phrase_tags.hpp"
 

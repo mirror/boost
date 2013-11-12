@@ -7,7 +7,7 @@
 =============================================================================*/
 
 #include "dependency_tracker.hpp"
-#include "input_path.hpp"
+#include "native_text.hpp"
 #include <boost/filesystem/operations.hpp>
 #include <boost/filesystem/fstream.hpp>
 #include <boost/foreach.hpp>

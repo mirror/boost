@@ -8,7 +8,7 @@
 
 #include <boost/program_options.hpp>
 #include <iostream>
-#include "input_path.hpp"
+#include "native_text.hpp"
 #include "utils.hpp"
 #include "files.hpp"
 

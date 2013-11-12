@@ -30,7 +30,7 @@ exe quickbook
     dependency_tracker.cpp
     utils.cpp
     files.cpp
-    input_path.cpp
+    native_text.cpp
     include_paths.cpp
     values.cpp
     document_state.cpp
