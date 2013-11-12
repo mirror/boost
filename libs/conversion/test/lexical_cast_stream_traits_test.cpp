@@ -40,7 +40,7 @@ static void test_optimized_types_to_string_const()
     BOOST_CHECK((boost::is_same<BOOST_DEDUCED_TYPENAME trait_3::target_char_t, wchar_t>::value));
     BOOST_CHECK((boost::is_same<BOOST_DEDUCED_TYPENAME trait_3::char_type, wchar_t>::value));
 
-    BOOST_CHECK((boost::detail::is_char_or_wchar<BOOST_DEDUCED_TYPENAME trait_3::no_cv_src>::value != trait_3::is_string_widening_required_t::value));
+    BOOST_CHECK((boost::detail::is_character<BOOST_DEDUCED_TYPENAME trait_3::no_cv_src>::value != trait_3::is_string_widening_required_t::value));
 
     BOOST_CHECK(!trait_3::is_source_input_not_optimized_t::value);
 }    
