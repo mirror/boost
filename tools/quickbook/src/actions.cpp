@@ -710,7 +710,7 @@ namespace quickbook
         bool block = code_tag != code_tags::inline_code;
 
         source_mode_type source_mode = state.source_mode_next ?
-            state.source_mode_next : state.source_mode.source_mode;
+            state.source_mode_next : state.current_source_mode().source_mode;
         state.source_mode_next = 0;
 
         if (inline_code) {

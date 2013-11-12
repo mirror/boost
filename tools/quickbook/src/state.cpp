@@ -15,6 +15,7 @@
 #include "native_text.hpp"
 #include "utils.hpp"
 #include "phrase_tags.hpp"
+#include <boost/foreach.hpp>
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -102,8 +103,28 @@ namespace quickbook
         in_list_save.pop();
     }
 
+    source_mode_info state::current_source_mode() const {
+        source_mode_info result = source_mode;
+
+        BOOST_FOREACH(source_mode_info const& s, tagged_source_mode_stack) {
+            result.update(s);
+        }
+
+        return result;
+    }
+
     void state::change_source_mode(source_mode_type s) {
         source_mode = source_mode_info(s, get_new_order_pos());
+    }
+
+    void state::push_tagged_source_mode(source_mode_type s) {
+        tagged_source_mode_stack.push_back(
+            source_mode_info(s, get_new_order_pos()));
+    }
+
+    void state::pop_tagged_source_mode() {
+        assert(!tagged_source_mode_stack.empty());
+        tagged_source_mode_stack.pop_back();
     }
 
     state_save::state_save(quickbook::state& state, scope_flags scope)

@@ -62,6 +62,8 @@ namespace quickbook
         source_mode_info        source_mode;
         source_mode_type        source_mode_next;
         value                   source_mode_next_pos;
+        std::vector<source_mode_info>
+                                tagged_source_mode_stack;
         file_ptr                current_file;
 
         // A machine independent representation of the current file's
@@ -104,7 +106,10 @@ namespace quickbook
         std::string add_callout(value);
         std::string end_callouts();
 
+        source_mode_info current_source_mode() const;
         void change_source_mode(source_mode_type);
+        void push_tagged_source_mode(source_mode_type);
+        void pop_tagged_source_mode();
     };
 
     extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version
