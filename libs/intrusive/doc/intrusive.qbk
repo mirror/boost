@@ -3884,6 +3884,13 @@ to be inserted in intrusive containers are allocated using `std::vector` or `std
 
 [section:release_notes Release Notes]
 
+[section:release_notes_boost_1_56_00 Boost 1.56 Release]
+
+*  Fixed bugs:
+   *  [@https://svn.boost.org/trac/boost/ticket/9332 #9332: ['"has_member_function_callable_with.hpp compile error on msvc-12.0"]].
+
+[endsect]
+
 [section:release_notes_boost_1_55_00 Boost 1.55 Release]
 
 *  [*Source breaking]: Deprecated `xxx_dont_splay` functions from splay containers.
