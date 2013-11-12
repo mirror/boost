@@ -58,7 +58,6 @@ namespace quickbook
         //              possibly other sources in the future. Wide strings on
         //              normal windows, UTF-8 for cygwin and other platforms
         //              (hopefully).
-        // 'stream':    Strings to be written to a stream.
         // 'path':      Stored as a boost::filesystem::path. Since
         //              Boost.Filesystem doesn't support cygwin, this
         //              is always wide on windows. UTF-8 on other
