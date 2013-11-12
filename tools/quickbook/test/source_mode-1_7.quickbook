@@ -17,3 +17,8 @@
 [!teletype]`int main() {}` shouldn't be, but `int main() {}` should.
 
 [!c++] `int main() {}`. Not highlighted: `int main() {}`.
+
+[!c++]
+[section:cpp C++ section]
+``int main() {}``
+[endsect]

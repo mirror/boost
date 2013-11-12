@@ -10,6 +10,7 @@
 =============================================================================*/
 #include "state.hpp"
 #include "state_save.hpp"
+#include "document_state.hpp"
 #include "quickbook.hpp"
 #include "grammar.hpp"
 #include "native_text.hpp"
@@ -103,8 +104,20 @@ namespace quickbook
         in_list_save.pop();
     }
 
+    source_mode_info state::tagged_source_mode() const {
+        source_mode_info result;
+
+        BOOST_FOREACH(source_mode_info const& s, tagged_source_mode_stack) {
+            result.update(s);
+        }
+
+        return result;
+    }
+
     source_mode_info state::current_source_mode() const {
         source_mode_info result = source_mode;
+
+        result.update(document.section_source_mode());
 
         BOOST_FOREACH(source_mode_info const& s, tagged_source_mode_stack) {
             result.update(s);

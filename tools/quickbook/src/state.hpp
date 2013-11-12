@@ -107,6 +107,7 @@ namespace quickbook
         std::string end_callouts();
 
         source_mode_info current_source_mode() const;
+        source_mode_info tagged_source_mode() const;
         void change_source_mode(source_mode_type);
         void push_tagged_source_mode(source_mode_type);
         void pop_tagged_source_mode();

@@ -74,16 +74,19 @@ namespace quickbook
         unsigned const level;
         std::string const id_1_1;
         id_placeholder const* const placeholder_1_6;
+        source_mode_info const source_mode;
 
         section_info(boost::shared_ptr<section_info> const& parent,
                 file_info const* current_file, boost::string_ref id,
-                boost::string_ref id_1_1, id_placeholder const* placeholder_1_6) :
+                boost::string_ref id_1_1, id_placeholder const* placeholder_1_6,
+                source_mode_info const& source_mode) :
             parent(parent),
             compatibility_version(current_file->compatibility_version),
             file_depth(current_file->depth),
             level(parent ? parent->level + 1 : 1),
             id_1_1(detail::to_s(id_1_1)),
-            placeholder_1_6(placeholder_1_6) {}
+            placeholder_1_6(placeholder_1_6),
+            source_mode(source_mode) {}
     };
 
     //
@@ -122,9 +125,9 @@ namespace quickbook
     }
 
     std::string document_state::begin_section(boost::string_ref id,
-            id_category category)
+            id_category category, source_mode_info const& source_mode)
     {
-        return state->begin_section(id, category)->to_string();
+        return state->begin_section(id, category, source_mode)->to_string();
     }
 
     void document_state::end_section()
@@ -135,6 +138,13 @@ namespace quickbook
     int document_state::section_level() const
     {
         return state->current_file->document->current_section->level;
+    }
+
+    source_mode_info document_state::section_source_mode() const
+    {
+        return state->current_file ?
+            state->current_file->document->current_section->source_mode :
+            source_mode_info();
     }
 
     std::string document_state::old_style_id(boost::string_ref id, id_category category)
@@ -283,19 +293,23 @@ namespace quickbook
 
             // Create a section for the new document.
 
+            source_mode_info default_source_mode;
+
             if (!initial_doc_id.empty()) {
-                return create_new_section(id, id_category::explicit_section_id);
+                return create_new_section(id, id_category::explicit_section_id,
+                    default_source_mode);
             }
             else if (!title.empty()) {
                 return create_new_section(
                     detail::make_identifier(title.get_quickbook()),
-                    id_category::generated_doc);
+                    id_category::generated_doc,
+                    default_source_mode);
             }
             else if (compatibility_version >= 106u) {
-                return create_new_section("doc", id_category::numbered);
+                return create_new_section("doc", id_category::numbered, default_source_mode);
             }
             else {
-                return create_new_section("", id_category::generated_doc);
+                return create_new_section("", id_category::generated_doc, default_source_mode);
             }
         }
         else {
@@ -388,15 +402,17 @@ namespace quickbook
 
     id_placeholder const* document_state_impl::begin_section(
             boost::string_ref id,
-            id_category category)
+            id_category category,
+            source_mode_info const& source_mode)
     {
         current_file->document->section_id_1_1 = detail::to_s(id);
-        return create_new_section(id, category);
+        return create_new_section(id, category, source_mode);
     }
 
     id_placeholder const* document_state_impl::create_new_section(
             boost::string_ref id,
-            id_category category)
+            id_category category,
+            source_mode_info const& source_mode)
     {
         boost::shared_ptr<section_info> parent =
             current_file->document->current_section;
@@ -442,7 +458,8 @@ namespace quickbook
 
         current_file->document->current_section =
             boost::make_shared<section_info>(parent,
-                current_file.get(), id, id_1_1, placeholder_1_6);
+                current_file.get(), id, id_1_1, placeholder_1_6,
+                source_mode);
 
         return p;
     }

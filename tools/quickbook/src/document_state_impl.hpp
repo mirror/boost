@@ -96,7 +96,8 @@ namespace quickbook
             id_category category);
         id_placeholder const* begin_section(
                 boost::string_ref id,
-                id_category category);
+                id_category category,
+                source_mode_info const&);
         void end_section();
 
     private:
@@ -106,7 +107,8 @@ namespace quickbook
                 boost::shared_ptr<section_info> const& section);
         id_placeholder const* create_new_section(
                 boost::string_ref id,
-                id_category category);
+                id_category category,
+                source_mode_info const&);
     };
 
     std::string replace_ids(document_state_impl const& state, boost::string_ref xml,

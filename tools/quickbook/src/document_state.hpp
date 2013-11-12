@@ -13,6 +13,7 @@
 #include <boost/utility/string_ref.hpp>
 #include <string>
 #include "values.hpp"
+#include "syntax_highlight.hpp"
 
 namespace quickbook
 {
@@ -65,9 +66,11 @@ namespace quickbook
 
         void end_file();
 
-        std::string begin_section(boost::string_ref, id_category);
+        std::string begin_section(boost::string_ref, id_category,
+            source_mode_info const&);
         void end_section();
         int section_level() const;
+        source_mode_info section_source_mode() const;
 
         std::string old_style_id(boost::string_ref, id_category);
         std::string add_id(boost::string_ref, id_category);

@@ -1652,7 +1652,8 @@ namespace quickbook
                 detail::make_identifier(content.get_quickbook()),
             !element_id.empty() ?
                 id_category::explicit_section_id :
-                id_category::generated_section);
+                id_category::generated_section,
+            state.current_source_mode());
 
         state.out << "\n<section id=\"" << full_id << "\">\n";
         state.out << "<title>";

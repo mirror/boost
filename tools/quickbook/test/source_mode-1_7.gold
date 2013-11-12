@@ -56,4 +56,8 @@
     role="special">()</phrase> <phrase role="special">{}</phrase></code>. Not highlighted:
     <code>int main() {}</code>.
   </para>
+  <section id="source_mode_test.cpp">
+    <title><link linkend="source_mode_test.cpp">C++ section</link></title>
+<programlisting><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase role="special">{}</phrase></programlisting>
+  </section>
 </article>
