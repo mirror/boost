@@ -61,11 +61,11 @@ namespace quickbook
     // Search include path
     //
 
-    std::set<include_search_return> include_search(
+    std::set<quickbook_path> include_search(
             path_parameter const& parameter,
             quickbook::state& state, string_iterator pos)
     {
-        std::set<include_search_return> result;
+        std::set<quickbook_path> result;
 
         fs::path path = detail::generic_to_path(parameter.value);
 
@@ -78,9 +78,9 @@ namespace quickbook
             // See if it can be found locally first.
             if (state.dependencies.add_dependency(local_path))
             {
-                result.insert(include_search_return(
+                result.insert(quickbook_path(
                     local_path,
-                    state.filename_relative.parent_path() / path));
+                    state.abstract_file_path.parent_path() / path));
                 return result;
             }
 
@@ -90,7 +90,7 @@ namespace quickbook
 
                 if (state.dependencies.add_dependency(full))
                 {
-                    result.insert(include_search_return(full, path));
+                    result.insert(quickbook_path(full, path));
                     return result;
                 }
             }
@@ -98,7 +98,7 @@ namespace quickbook
         else
         {
             if (state.dependencies.add_dependency(path)) {
-                result.insert(include_search_return(path, path));
+                result.insert(quickbook_path(path, path));
                 return result;
             }
         }
@@ -113,13 +113,13 @@ namespace quickbook
     }
 
     //
-    // include_search_return
+    // quickbook_path
     //
 
-    bool include_search_return::operator<(include_search_return const& other) const
+    bool quickbook_path::operator<(quickbook_path const& other) const
     {
-        if (filename_relative < other.filename_relative) return true;
-        else if (other.filename_relative < filename_relative) return false;
-        else return filename < other.filename;
+        if (abstract_file_path < other.abstract_file_path) return true;
+        else if (other.abstract_file_path < abstract_file_path) return false;
+        else return file_path < other.file_path;
     }
 }

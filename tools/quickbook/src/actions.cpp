@@ -1801,7 +1801,7 @@ namespace quickbook
     }
 
     void load_quickbook(quickbook::state& state,
-            include_search_return const& paths,
+            quickbook_path const& path,
             value::tag_type load_type,
             value const& include_doc_id = value())
     {
@@ -1824,8 +1824,8 @@ namespace quickbook
                 qbk_version_n >= 106u ? state_save::scope_callables :
                 state_save::scope_macros);
 
-            state.current_file = load(paths.filename); // Throws load_error
-            state.filename_relative = paths.filename_relative;
+            state.current_file = load(path.file_path); // Throws load_error
+            state.abstract_file_path = path.abstract_file_path;
             state.imported = (load_type == block_tags::import);
 
             // update the __FILENAME__ macro
@@ -1843,7 +1843,7 @@ namespace quickbook
     }
 
     void load_source_file(quickbook::state& state,
-            include_search_return const& paths,
+            quickbook_path const& path,
             value::tag_type load_type,
             string_iterator first,
             value const& include_doc_id = value())
@@ -1851,11 +1851,11 @@ namespace quickbook
         assert(load_type == block_tags::include ||
             load_type == block_tags::import);
 
-        std::string ext = paths.filename.extension().generic_string();
+        std::string ext = path.file_path.extension().generic_string();
         std::vector<template_symbol> storage;
         // Throws load_error
         state.error_count +=
-            load_snippets(paths.filename, storage, ext, load_type);
+            load_snippets(path.file_path, storage, ext, load_type);
 
         if (load_type == block_tags::include)
         {
@@ -1903,39 +1903,39 @@ namespace quickbook
         path_parameter parameter = check_path(values.consume(), state);
         values.finish();
 
-        std::set<include_search_return> search =
+        std::set<quickbook_path> search =
             include_search(parameter, state, first);
-        std::set<include_search_return>::iterator i = search.begin();
-        std::set<include_search_return>::iterator e = search.end();
+        std::set<quickbook_path>::iterator i = search.begin();
+        std::set<quickbook_path>::iterator e = search.end();
         for (; i != e; ++i)
         {
-            include_search_return const & paths = *i;
+            quickbook_path const & path = *i;
             try {
                 if (qbk_version_n >= 106)
                 {
                     if (state.imported && include.get_tag() == block_tags::include)
                         return;
 
-                    std::string ext = paths.filename.extension().generic_string();
+                    std::string ext = path.file_path.extension().generic_string();
 
                     if (ext == ".qbk" || ext == ".quickbook")
                     {
-                        load_quickbook(state, paths, include.get_tag(), include_doc_id);
+                        load_quickbook(state, path, include.get_tag(), include_doc_id);
                     }
                     else
                     {
-                        load_source_file(state, paths, include.get_tag(), first, include_doc_id);
+                        load_source_file(state, path, include.get_tag(), first, include_doc_id);
                     }
                 }
                 else
                 {
                     if (include.get_tag() == block_tags::include)
                     {
-                        load_quickbook(state, paths, include.get_tag(), include_doc_id);
+                        load_quickbook(state, path, include.get_tag(), include_doc_id);
                     }
                     else
                     {
-                        load_source_file(state, paths, include.get_tag(), first, include_doc_id);
+                        load_source_file(state, path, include.get_tag(), first, include_doc_id);
                     }
                 }
             }
@@ -1944,7 +1944,7 @@ namespace quickbook
 
                 detail::outerr(state.current_file, first)
                     << "Loading file "
-                    << paths.filename
+                    << path.file_path
                     << ": "
                     << e.what()
                     << std::endl;

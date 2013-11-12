@@ -38,7 +38,7 @@ namespace quickbook
         bool imported;
         std::string doc_type;
         file_ptr current_file;
-        fs::path filename_relative;
+        fs::path abstract_file_path;
         fs::path xinclude_base;
         source_mode_type source_mode;
         string_symbols macro;

@@ -61,9 +61,10 @@ namespace quickbook
         source_mode_type        source_mode_next;
         value                   source_mode_next_pos;
         file_ptr                current_file;
-        fs::path                filename_relative;  // for the __FILENAME__ macro.
-                                                    // (relative to the original file
-                                                    //  or include path).
+
+        // A machine independent representation of the current file's
+        // path - not unique per-file.
+        fs::path                abstract_file_path;
 
     // state saved for templates.
         int                     template_depth;

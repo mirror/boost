@@ -36,18 +36,22 @@ namespace quickbook
 
     path_parameter check_path(value const& path, quickbook::state& state);
 
-    struct include_search_return
+    struct quickbook_path
     {
-        include_search_return(fs::path const& x, fs::path const& y)
-            : filename(x), filename_relative(y) {}
+        quickbook_path(fs::path const& x, fs::path const& y)
+            : file_path(x), abstract_file_path(y) {}
 
-        fs::path filename;
-        fs::path filename_relative;
+        // The actual location of the file.
+        fs::path file_path;
 
-        bool operator<(include_search_return const& other) const;
+        // A machine independent representation of the file's
+        // path - not unique per-file
+        fs::path abstract_file_path;
+
+        bool operator<(quickbook_path const& other) const;
     };
 
-    std::set<include_search_return> include_search(path_parameter const&,
+    std::set<quickbook_path> include_search(path_parameter const&,
             quickbook::state& state, string_iterator pos);
 }
 
