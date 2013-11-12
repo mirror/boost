@@ -253,7 +253,7 @@ namespace quickbook
 
     // member_action
     //
-    // Action for calling a nullary member function.
+    // Action for calling a member function taking two parse iterators.
 
     template <typename T>
     struct member_action
@@ -272,8 +272,7 @@ namespace quickbook
 
     // member_action1
     //
-    // Action for calling a unary member function with given
-    // argument.
+    // Action for calling a member function taking two parse iterators and a value.
 
     template <typename T, typename Arg1>
     struct member_action1
@@ -306,7 +305,7 @@ namespace quickbook
 
     // member_action_value
     //
-    // Action for calling a nullary member function object.
+    // Action for calling a unary member function.
 
     template <typename T, typename Value>
     struct member_action_value
