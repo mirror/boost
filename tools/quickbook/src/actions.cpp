@@ -506,25 +506,6 @@ namespace quickbook
         state.conditional = saved_conditional;
     }
 
-    namespace {
-        int indent_length(std::string const& indent)
-        {
-            int length = 0;
-            for(std::string::const_iterator
-                first = indent.begin(), end = indent.end(); first != end; ++first)
-            {
-                switch(*first) {
-                    case ' ': ++length; break;
-                    // hardcoded tab to 4 for now
-                    case '\t': length = ((length + 4) / 4) * 4; break;
-                    default: BOOST_ASSERT(false);
-                }
-            }
-            
-            return length;
-        }
-    }
-
     void state::start_list(char mark)
     {
         write_anchors(*this, (in_list ? phrase : out));
