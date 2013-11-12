@@ -68,21 +68,6 @@ namespace quickbook
         };
     };
 
-    template <typename T>
-    struct member_action
-    {
-        typedef void(T::*member_function)(parse_iterator, parse_iterator);
-
-        T& l;
-        member_function mf;
-
-        member_action(T& l, member_function mf) : l(l), mf(mf) {}
-
-        void operator()(parse_iterator first, parse_iterator last) const {
-            (l.*mf)(first, last);
-        }
-    };
-
     struct main_grammar_local
     {
         ////////////////////////////////////////////////////////////////////////

@@ -23,65 +23,6 @@ namespace quickbook
 {    
     namespace cl = boost::spirit::classic;
 
-    template <typename T, typename Value>
-    struct member_action_value
-    {
-        typedef void(T::*member_function)(Value);
-
-        T& l;
-        member_function mf;
-
-        member_action_value(T& l, member_function mf) : l(l), mf(mf) {}
-
-        void operator()(Value v) const {
-            (l.*mf)(v);
-        }
-    };
-
-    template <typename T>
-    struct member_action
-    {
-        typedef void(T::*member_function)(parse_iterator, parse_iterator);
-
-        T& l;
-        member_function mf;
-
-        member_action(T& l, member_function mf) : l(l), mf(mf) {}
-
-        void operator()(parse_iterator first, parse_iterator last) const {
-            (l.*mf)(first, last);
-        }
-    };
-
-    template <typename T, typename Arg1>
-    struct member_action1
-    {
-        typedef void(T::*member_function)(parse_iterator, parse_iterator, Arg1);
-
-        T& l;
-        member_function mf;
-
-        member_action1(T& l, member_function mf) : l(l), mf(mf) {}
-
-        struct impl
-        {
-            member_action1 a;
-            Arg1 value;
-
-            impl(member_action1& a, Arg1 value) :
-                a(a), value(value)
-            {}
-
-            void operator()(parse_iterator first, parse_iterator last) const {
-                (a.l.*a.mf)(first, last, value);
-            }
-        };
-
-        impl operator()(Arg1 a1) {
-            return impl(*this, a1);
-        }
-    };
-
     // Syntax Highlight Actions
 
     struct syntax_highlight_actions
