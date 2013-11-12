@@ -110,7 +110,7 @@ namespace quickbook
         {
             // Mask used to determine whether or not an element is a block
             // element.
-            member1 is_block;
+            member1 is_block_mask;
         };
 
         cl::rule<scanner> simple_markup, simple_markup_end;
@@ -494,7 +494,7 @@ namespace quickbook
             >>  !(  cl::eps_p(in_list) >> qbk_ver(106u)
                 |   cl::eps_p
                     (
-                        ph::static_cast_<int>(local.syntactic_block_item.is_block) &
+                        ph::static_cast_<int>(local.syntactic_block_item.is_block_mask) &
                         ph::static_cast_<int>(ph::var(local.element_type))
                     )
                 >>  eol                         [ph::var(local.still_in_block) = false]
