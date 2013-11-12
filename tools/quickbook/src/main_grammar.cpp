@@ -488,10 +488,12 @@ namespace quickbook
                 // If the element is a block, then a newline will end the
                 // current syntactic block.
                 //
-                // Note that we don't do this for lists from 1.6 onwards to
-                // avoid messing up nested block elements. TODO: This is a bit
-                // iffy.
-            >>  !(  cl::eps_p(in_list) >> qbk_ver(106u)
+                // Note that we don't do this for lists in 1.6, as it causes
+                // the list block to end. The support for nested syntactic
+                // blocks in 1.7 will fix that. Although it does mean the
+                // following line will need to be indented. TODO: Flag that
+                // the indentation check shouldn't be made?
+            >>  !(  cl::eps_p(in_list) >> qbk_ver(106u, 107u)
                 |   cl::eps_p
                     (
                         ph::static_cast_<int>(local.syntactic_block_item.is_block_mask) &
