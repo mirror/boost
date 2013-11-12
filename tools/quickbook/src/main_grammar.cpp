@@ -233,6 +233,26 @@ namespace quickbook
         bool element_context_error_;
     };
 
+    struct scoped_paragraph : scoped_action_base
+    {
+        scoped_paragraph(quickbook::state& state) :
+            state(state), pushed(false) {}
+
+        bool start() {
+            state.push_tagged_source_mode(state.source_mode_next);
+            pushed = true;
+            state.source_mode_next = 0;
+            return true;
+        }
+
+        void cleanup() {
+            if (pushed) state.pop_tagged_source_mode();
+        }
+
+        quickbook::state& state;
+        bool pushed;
+    };
+
     struct in_list_impl {
         main_grammar_local& l;
 
@@ -304,6 +324,7 @@ namespace quickbook
         element_id_warning_action element_id_warning(state);
 
         scoped_parser<to_value_scoped_action> to_value(state);
+        scoped_parser<scoped_paragraph> scope_paragraph(state);
 
         // Local Actions
         scoped_parser<process_element_impl> process_element(local);
@@ -456,12 +477,15 @@ namespace quickbook
                                                 // Usually superfluous call
                                                 // for paragraphs in lists.
             cl::eps_p                           [paragraph_action]
-        >>  scoped_context(element_info::in_top_level)
-            [   scoped_still_in_block(true)
-                [   local.syntactic_block_item(element_info::is_contextual_block)
-                >>  *(  cl::eps_p(ph::var(local.still_in_block))
-                    >>  local.syntactic_block_item(element_info::is_block)
-                    )
+        >>  scope_paragraph()
+            [
+                scoped_context(element_info::in_top_level)
+                [   scoped_still_in_block(true)
+                    [   local.syntactic_block_item(element_info::is_contextual_block)
+                    >>  *(  cl::eps_p(ph::var(local.still_in_block))
+                        >>  local.syntactic_block_item(element_info::is_block)
+                        )
+                    ]
                 ]
             ]                                   [paragraph_action]
             ;

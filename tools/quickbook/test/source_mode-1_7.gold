@@ -42,4 +42,18 @@
       </simpara>
     </listitem>
   </itemizedlist>
+  <para>
+    <code><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase
+    role="special">()</phrase> <phrase role="special">{}</phrase></code> and <code><phrase
+    role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase role="special">()</phrase>
+    <phrase role="special">{}</phrase></code> should both be C++ highlighted. <code>int
+    main() {}</code> shouldn't be, but <code><phrase role="keyword">int</phrase>
+    <phrase role="identifier">main</phrase><phrase role="special">()</phrase> <phrase
+    role="special">{}</phrase></code> should.
+  </para>
+  <para>
+    <code><phrase role="keyword">int</phrase> <phrase role="identifier">main</phrase><phrase
+    role="special">()</phrase> <phrase role="special">{}</phrase></code>. Not highlighted:
+    <code>int main() {}</code>.
+  </para>
 </article>
