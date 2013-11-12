@@ -1769,9 +1769,9 @@ namespace quickbook
 
     xinclude_path calculate_xinclude_path(value const& p, quickbook::state& state)
     {
-        path_details details = check_path(p, state);
+        path_parameter parameter = check_path(p, state);
 
-        fs::path path = detail::generic_to_path(details.value);
+        fs::path path = detail::generic_to_path(parameter.value);
         fs::path full_path = path;
 
         // If the path is relative
@@ -1900,10 +1900,11 @@ namespace quickbook
 
         value_consumer values = include;
         value include_doc_id = values.optional_consume(general_tags::include_id);
-        path_details details = check_path(values.consume(), state);
+        path_parameter parameter = check_path(values.consume(), state);
         values.finish();
 
-        std::set<include_search_return> search = include_search(details, state, first);
+        std::set<include_search_return> search =
+            include_search(parameter, state, first);
         std::set<include_search_return>::iterator i = search.begin();
         std::set<include_search_return>::iterator e = search.end();
         for (; i != e; ++i)

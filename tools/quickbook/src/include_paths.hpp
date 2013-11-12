@@ -23,18 +23,18 @@
 
 namespace quickbook
 {
-    struct path_details {
+    struct path_parameter {
         // Will possibly add 'url' and 'glob' to this list later:
         enum path_type { path };
 
         std::string value;
         path_type type;
 
-        path_details(std::string const& value, path_type type) :
+        path_parameter(std::string const& value, path_type type) :
             value(value), type(type) {}
     };
 
-    path_details check_path(value const& path, quickbook::state& state);
+    path_parameter check_path(value const& path, quickbook::state& state);
 
     struct include_search_return
     {
@@ -47,7 +47,7 @@ namespace quickbook
         bool operator<(include_search_return const& other) const;
     };
 
-    std::set<include_search_return> include_search(path_details const& details,
+    std::set<include_search_return> include_search(path_parameter const&,
             quickbook::state& state, string_iterator pos);
 }
 

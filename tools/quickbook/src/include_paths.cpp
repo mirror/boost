@@ -23,7 +23,7 @@ namespace quickbook
     // check_path
     //
 
-    path_details check_path(value const& path, quickbook::state& state)
+    path_parameter check_path(value const& path, quickbook::state& state)
     {
         // Paths are encoded for quickbook 1.6+ and also xmlbase
         // values (technically xmlbase is a 1.6 feature, but that
@@ -54,19 +54,20 @@ namespace quickbook
             boost::replace(path_text, '\\', '/');
         }
 
-        return path_details(path_text, path_details::path);
+        return path_parameter(path_text, path_parameter::path);
     }
 
     //
     // Search include path
     //
 
-    std::set<include_search_return> include_search(path_details const& details,
+    std::set<include_search_return> include_search(
+            path_parameter const& parameter,
             quickbook::state& state, string_iterator pos)
     {
         std::set<include_search_return> result;
 
-        fs::path path = detail::generic_to_path(details.value);
+        fs::path path = detail::generic_to_path(parameter.value);
 
         // If the path is relative, try and resolve it.
         if (!path.has_root_directory() && !path.has_root_name())
@@ -104,7 +105,7 @@ namespace quickbook
 
         detail::outerr(state.current_file, pos)
             << "Unable to find file: "
-            << details.value
+            << parameter.value
             << std::endl;
         ++state.error_count;
 
