@@ -67,7 +67,6 @@ struct apply_visitor_unrolled {};
 // "Never ending" iterator range facilitates visitation_impl unrolling.
 //
 
-#if !defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
 
 template <typename Iter, typename LastIter>
 struct visitation_impl_step
@@ -87,29 +86,6 @@ struct visitation_impl_step< LastIter,LastIter >
     typedef visitation_impl_step next;
 };
 
-#else // defined(BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION)
-
-template <typename Iter, typename LastIter>
-struct visitation_impl_step
-{
-    typedef typename mpl::eval_if<
-          is_same<Iter, LastIter>
-        , mpl::identity<apply_visitor_unrolled>
-        , Iter
-        >::type type;
-
-    typedef typename mpl::eval_if<
-          is_same<type, apply_visitor_unrolled> //is_same<Iter, LastIter>
-        , mpl::identity<LastIter>
-        , mpl::next<Iter>
-        >::type next_iter;
-
-    typedef visitation_impl_step<
-          next_iter, LastIter
-        > next;
-};
-
-#endif // BOOST_NO_TEMPLATE_PARTIAL_SPECIALIZATION workaround
 
 ///////////////////////////////////////////////////////////////////////////////
 // (detail) function template visitation_impl_invoke
