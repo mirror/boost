@@ -268,8 +268,8 @@ public:
   
   boost::signals2::signal<void(void)> *sig;
   bool b_has_run;
+  boost::signals2::connection connection0;
   boost::signals2::connection connection1;
-  boost::signals2::connection connection2;
 }; 
 
 // If a signal is deleted mid-invocation, the invocation in progress
