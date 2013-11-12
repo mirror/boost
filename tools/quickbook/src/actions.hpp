@@ -46,12 +46,6 @@ namespace quickbook
     int load_snippets(fs::path const& file, std::vector<template_symbol>& storage,
         std::string const& extension, value::tag_type load_type);
 
-    void syntax_highlight(
-        parse_iterator first, parse_iterator last,
-        quickbook::state& state,
-        source_mode_type source_mode,
-        bool is_block);
-
     struct xinclude_path {
         xinclude_path(fs::path const& path, std::string const& uri) :
             path(path), uri(uri) {}

@@ -23,6 +23,7 @@
 #include <boost/foreach.hpp>
 #include "quickbook.hpp"
 #include "actions.hpp"
+#include "syntax_highlight.hpp"
 #include "utils.hpp"
 #include "files.hpp"
 #include "markups.hpp"

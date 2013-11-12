@@ -15,6 +15,7 @@
 #include "grammar.hpp"
 #include "state.hpp"
 #include "actions.hpp"
+#include "syntax_highlight.hpp"
 #include "utils.hpp"
 #include "files.hpp"
 #include "native_text.hpp"
