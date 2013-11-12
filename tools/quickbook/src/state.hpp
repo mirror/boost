@@ -18,6 +18,7 @@
 #include "template_stack.hpp"
 #include "symbols.hpp"
 #include "dependency_tracker.hpp"
+#include "syntax_highlight.hpp"
 
 namespace quickbook
 {
@@ -42,6 +43,7 @@ namespace quickbook
         static int const max_template_depth = 100;
 
     // global state
+        unsigned                order_pos;
         fs::path                xinclude_base;
         template_stack          templates;
         int                     error_count;
@@ -57,7 +59,7 @@ namespace quickbook
     // state saved for files and templates.
         bool                    imported;
         string_symbols          macro;
-        source_mode_type        source_mode;
+        source_mode_info        source_mode;
         source_mode_type        source_mode_next;
         value                   source_mode_next_pos;
         file_ptr                current_file;
@@ -88,6 +90,8 @@ namespace quickbook
 
         void update_filename_macro();
 
+        unsigned get_new_order_pos();
+
         void push_output();
         void pop_output();
 
@@ -99,6 +103,8 @@ namespace quickbook
         void start_callouts();
         std::string add_callout(value);
         std::string end_callouts();
+
+        void change_source_mode(source_mode_type);
     };
 
     extern unsigned qbk_version_n; // qbk_major_version * 100 + qbk_minor_version

@@ -31,6 +31,7 @@ namespace quickbook
             string_stream& out_, document_state& document)
         : grammar_()
 
+        , order_pos(0)
         , xinclude_base(xinclude_base_)
 
         , templates()
@@ -46,7 +47,7 @@ namespace quickbook
 
         , imported(false)
         , macro()
-        , source_mode(source_mode_tags::cpp)
+        , source_mode()
         , source_mode_next()
         , source_mode_next_pos()
         , current_file(0)
@@ -84,6 +85,10 @@ namespace quickbook
             = detail::encode_string(detail::path_to_generic(abstract_file_path));
     }
     
+    unsigned state::get_new_order_pos() {
+        return ++order_pos;
+    }
+
     void state::push_output() {
         out.push();
         phrase.push();
@@ -95,6 +100,10 @@ namespace quickbook
         out.pop();
         in_list = in_list_save.top();
         in_list_save.pop();
+    }
+
+    void state::change_source_mode(source_mode_type s) {
+        source_mode = source_mode_info(s, get_new_order_pos());
     }
 
     state_save::state_save(quickbook::state& state, scope_flags scope)

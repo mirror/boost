@@ -686,7 +686,7 @@ namespace quickbook
 
     void source_mode_action(quickbook::state& state, value source_mode)
     {
-        state.source_mode = source_mode.get_tag();
+        state.change_source_mode(source_mode.get_tag());
     }
 
     void next_source_mode_action(quickbook::state& state, value source_mode)
@@ -710,7 +710,7 @@ namespace quickbook
         bool block = code_tag != code_tags::inline_code;
 
         source_mode_type source_mode = state.source_mode_next ?
-            state.source_mode_next : state.source_mode;
+            state.source_mode_next : state.source_mode.source_mode;
         state.source_mode_next = 0;
 
         if (inline_code) {

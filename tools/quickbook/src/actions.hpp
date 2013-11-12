@@ -315,6 +315,30 @@ namespace quickbook
             (l.*mf)(v);
         }
     };
+
+    // member_action_value
+    //
+    // Action for calling a unary member function with a fixed value.
+
+    template <typename T, typename Value>
+    struct member_action_fixed_value
+    {
+        typedef void(T::*member_function)(Value);
+
+        T& l;
+        member_function mf;
+        Value v;
+
+        member_action_fixed_value(T& l, member_function mf, Value v) : l(l), mf(mf), v(v) {}
+
+        void operator()() const {
+            (l.*mf)(v);
+        }
+
+        void operator()(parse_iterator first, parse_iterator last) const {
+            (l.*mf)(v);
+        }
+    };
 }
 
 #endif // BOOST_SPIRIT_QUICKBOOK_ACTIONS_HPP
