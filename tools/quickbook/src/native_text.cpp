@@ -70,12 +70,12 @@ namespace detail {
 #endif
 
 #if QUICKBOOK_WIDE_PATHS
-    std::string input_to_utf8(input_string const& x)
+    std::string command_line_to_utf8(command_line_string const& x)
     {
         return to_utf8(x);
     }
 #else
-    std::string input_to_utf8(input_string const& x)
+    std::string command_line_to_utf8(command_line_string const& x)
     {
         return x;
     }
@@ -105,7 +105,7 @@ namespace detail {
 #endif
 
 #if QUICKBOOK_CYGWIN_PATHS
-    fs::path input_to_path(input_string const& path)
+    fs::path command_line_to_path(command_line_string const& path)
     {
         cygwin_conv_path_t flags = CCP_POSIX_TO_WIN_W | CCP_RELATIVE;
 
@@ -140,7 +140,7 @@ namespace detail {
         return std::string(result.get());
     }
 #else
-    fs::path input_to_path(input_string const& path)
+    fs::path command_line_to_path(command_line_string const& path)
     {
         return fs::path(path);
     }
