@@ -481,4 +481,10 @@ rule chrono-compile2 ( sources : name )
         [ chrono-run win32_test.cpp  ]
         ;
 
+    explicit ts_ ;
+    test-suite ts_
+        :
+        #[ chrono-run test_7868.cpp  ]
+        [ chrono-run test_9337.cpp  ]
+        ;
 
