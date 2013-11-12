@@ -119,7 +119,7 @@ namespace quickbook
 
     void state::push_tagged_source_mode(source_mode_type s) {
         tagged_source_mode_stack.push_back(
-            source_mode_info(s, get_new_order_pos()));
+            source_mode_info(s, s ? get_new_order_pos() : 0));
     }
 
     void state::pop_tagged_source_mode() {

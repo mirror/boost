@@ -510,6 +510,9 @@ namespace quickbook
 
     void state::start_list(char mark)
     {
+        push_tagged_source_mode(source_mode_next);
+        source_mode_next = 0;
+
         write_anchors(*this, (in_list ? phrase : out));
         assert(mark == '*' || mark == '#');
         push_output();
@@ -529,6 +532,8 @@ namespace quickbook
         pop_output();
 
         (in_list ? phrase : out) << list_output;
+
+        pop_tagged_source_mode();
     }
 
     void state::start_list_item()

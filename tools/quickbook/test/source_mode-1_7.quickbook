@@ -8,5 +8,6 @@
 [!c++]`int main() {}` but `plain text`.
 
 [!c++]
-* Sadly this doesn't work.
 * `int main() {}`
+* `int main() {}`
+* [teletype] `int main() {}` [/ shouldn't be highlighted]
