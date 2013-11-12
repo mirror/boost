@@ -108,13 +108,13 @@ private:
   static const std::size_t sizes_length;
 };
 
-template<>
-const std::size_t bucket_array_base<true>::sizes[]={
+template<bool _>
+const std::size_t bucket_array_base<_>::sizes[]={
   BOOST_PP_SEQ_ENUM(BOOST_MULTI_INDEX_BA_SIZES)
 };
 
-template<>
-const std::size_t bucket_array_base<true>::sizes_length=
+template<bool _>
+const std::size_t bucket_array_base<_>::sizes_length=
   sizeof(bucket_array_base<true>::sizes)/
   sizeof(bucket_array_base<true>::sizes[0]);
 
