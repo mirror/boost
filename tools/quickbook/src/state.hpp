@@ -57,8 +57,9 @@ namespace quickbook
     // state saved for files and templates.
         bool                    imported;
         string_symbols          macro;
-        std::string             source_mode;
-        value                   source_mode_next;
+        source_mode_type        source_mode;
+        source_mode_type        source_mode_next;
+        value                   source_mode_next_pos;
         file_ptr                current_file;
         fs::path                filename_relative;  // for the __FILENAME__ macro.
                                                     // (relative to the original file

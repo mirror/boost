@@ -146,6 +146,9 @@ namespace quickbook
 
         // Element Symbols       
         cl::symbols<element_info> elements;
+
+        // Source mode
+        cl::symbols<source_mode_type> source_modes;
         
         // Doc Info
         cl::rule<scanner> doc_info_details;

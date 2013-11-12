@@ -10,6 +10,7 @@
 #define BOOST_QUICKBOOK_DOCUMENT_STATE_IMPL_HPP
 
 #include "document_state.hpp"
+#include "phrase_tags.hpp"
 #include "utils.hpp"
 #include <boost/utility/string_ref.hpp>
 #include <boost/shared_ptr.hpp>

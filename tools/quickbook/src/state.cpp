@@ -14,6 +14,7 @@
 #include "grammar.hpp"
 #include "input_path.hpp"
 #include "utils.hpp"
+#include "phrase_tags.hpp"
 
 #if (defined(BOOST_MSVC) && (BOOST_MSVC <= 1310))
 #pragma warning(disable:4355)
@@ -45,8 +46,9 @@ namespace quickbook
 
         , imported(false)
         , macro()
-        , source_mode("c++")
+        , source_mode(source_mode_tags::cpp)
         , source_mode_next()
+        , source_mode_next_pos()
         , current_file(0)
         , filename_relative(filein_.filename())
 

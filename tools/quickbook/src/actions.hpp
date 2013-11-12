@@ -49,7 +49,7 @@ namespace quickbook
     void syntax_highlight(
         parse_iterator first, parse_iterator last,
         quickbook::state& state,
-        std::string const& source_mode,
+        source_mode_type source_mode,
         bool is_block);
 
     struct xinclude_path {

@@ -40,7 +40,7 @@ namespace quickbook
         file_ptr current_file;
         fs::path filename_relative;
         fs::path xinclude_base;
-        std::string source_mode;
+        source_mode_type source_mode;
         string_symbols macro;
         int template_depth;
         int min_section_level;

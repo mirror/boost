@@ -41,12 +41,12 @@ namespace quickbook
         {
             // TODO: This works but is a bit of an odd place to put it.
             // Might need to redefine the purpose of this function.
-            if (!state.source_mode_next.empty()) {
-                detail::outwarn(state.source_mode_next.get_file(),
-                    state.source_mode_next.get_position())
+            if (state.source_mode_next) {
+                detail::outwarn(state.source_mode_next_pos.get_file(),
+                    state.source_mode_next_pos.get_position())
                     << "Temporary source mode unsupported here."
                     << std::endl;
-                state.source_mode_next = value();
+                state.source_mode_next = 0;
             }
 
             for(quickbook::state::string_list::iterator
@@ -703,13 +703,14 @@ namespace quickbook
 
     void source_mode_action(quickbook::state& state, value source_mode)
     {
-        state.source_mode = source_mode_tags::name(source_mode.get_tag());
+        state.source_mode = source_mode.get_tag();
     }
 
     void next_source_mode_action(quickbook::state& state, value source_mode)
     {
         value_consumer values = source_mode;
-        state.source_mode_next = values.consume();
+        state.source_mode_next_pos = values.consume();
+        state.source_mode_next = values.consume().get_int();
         values.finish();
     }
 
@@ -725,9 +726,9 @@ namespace quickbook
             (code_tag == code_tags::inline_code_block && qbk_version_n < 106u);
         bool block = code_tag != code_tags::inline_code;
 
-        std::string source_mode = state.source_mode_next.empty() ?
-            state.source_mode : detail::to_s(state.source_mode_next.get_quickbook());
-        state.source_mode_next = value();
+        source_mode_type source_mode = state.source_mode_next ?
+            state.source_mode_next : state.source_mode;
+        state.source_mode_next = 0;
 
         if (inline_code) {
             write_anchors(state, state.phrase);

@@ -19,6 +19,7 @@
 #include <boost/spirit/include/classic_if.hpp>
 #include <boost/spirit/include/phoenix1_primitives.hpp>
 #include <boost/spirit/include/phoenix1_casts.hpp>
+#include <boost/foreach.hpp>
 
 namespace quickbook
 {
@@ -171,16 +172,14 @@ namespace quickbook
             ;
 
         local.source_mode =
-            (   cl::str_p("c++")
-            |   "python"
-            |   "teletype"
-            )                                       [state.values.entry(ph::arg1, ph::arg2)];
+                cl::eps_p                           [state.values.entry(ph::arg1, ph::arg2)]
+            >>  source_modes                        [state.values.entry(ph::arg1)];
 
-        elements.add
-            ("c++", element_info(element_info::phrase, &local.empty, source_mode_tags::cpp))
-            ("python", element_info(element_info::phrase, &local.empty, source_mode_tags::python))
-            ("teletype", element_info(element_info::phrase, &local.empty, source_mode_tags::teletype))
-            ;
+        BOOST_FOREACH(int tag, source_mode_tags::tags()) {
+            source_modes.add(source_mode_tags::name(tag), tag);
+            elements.add(source_mode_tags::name(tag),
+                element_info(element_info::phrase, &local.empty, tag));
+        }
 
         elements.add
             ("role", element_info(element_info::phrase, &local.role, phrase_tags::role, 106u))

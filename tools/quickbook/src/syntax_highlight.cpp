@@ -18,6 +18,7 @@
 #include "utils.hpp"
 #include "files.hpp"
 #include "input_path.hpp"
+#include "phrase_tags.hpp"
 
 namespace quickbook
 {    
@@ -564,30 +565,31 @@ namespace quickbook
         parse_iterator first,
         parse_iterator last,
         quickbook::state& state,
-        std::string const& source_mode,
+        source_mode_type source_mode,
         bool is_block)
     {
         syntax_highlight_actions syn_actions(state, is_block);
 
         // print the code with syntax coloring
-        if (source_mode == "c++")
+        switch(source_mode)
         {
-            cpp_highlight cpp_p(syn_actions);
-            boost::spirit::classic::parse(first, last, cpp_p);
-        }
-        else if (source_mode == "python")
-        {
-            python_highlight python_p(syn_actions);
-            boost::spirit::classic::parse(first, last, python_p);
-        }
-        else if (source_mode == "teletype")
-        {
-            teletype_highlight teletype_p(syn_actions);
-            boost::spirit::classic::parse(first, last, teletype_p);
-        }
-        else
-        {
-            BOOST_ASSERT(0);
+            case source_mode_tags::cpp: {
+                cpp_highlight cpp_p(syn_actions);
+                boost::spirit::classic::parse(first, last, cpp_p);
+                break;
+            }
+            case source_mode_tags::python: {
+                python_highlight python_p(syn_actions);
+                boost::spirit::classic::parse(first, last, python_p);
+                break;
+            }
+            case source_mode_tags::teletype: {
+                teletype_highlight teletype_p(syn_actions);
+                boost::spirit::classic::parse(first, last, teletype_p);
+                break;
+            }
+            default:
+                BOOST_ASSERT(0);
         }
     }
 }

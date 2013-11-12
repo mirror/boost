@@ -152,7 +152,7 @@ namespace quickbook
 
     struct process_element_impl : scoped_action_base {
         process_element_impl(main_grammar_local& l)
-            : l(l), element_context_error_(false) {}
+            : l(l), saved_source_mode_(0), element_context_error_(false) {}
 
         bool start()
         {
@@ -182,12 +182,12 @@ namespace quickbook
 
             assert(l.state_.values.builder.empty());
 
-            if (!l.state_.source_mode_next.empty() &&
+            if (l.state_.source_mode_next &&
                 info_.type != element_info::maybe_block)
             {
-                l.state_.source_mode.swap(saved_source_mode_);
-                l.state_.source_mode = detail::to_s(l.state_.source_mode_next.get_quickbook());
-                l.state_.source_mode_next = value();
+                boost::swap(l.state_.source_mode, saved_source_mode_);
+                l.state_.source_mode = l.state_.source_mode_next;
+                l.state_.source_mode_next = 0;
             }
 
             return true;
@@ -223,13 +223,13 @@ namespace quickbook
         void failure() { l.element_type = element_info::nothing; }
 
         void cleanup() {
-            if (!saved_source_mode_.empty())
-                l.state_.source_mode.swap(saved_source_mode_);
+            if (saved_source_mode_)
+                boost::swap(l.state_.source_mode, saved_source_mode_);
         }
 
         main_grammar_local& l;
         element_info info_;
-        std::string saved_source_mode_;
+        source_mode_type saved_source_mode_;
         bool element_context_error_;
     };
 

@@ -25,6 +25,7 @@ namespace quickbook
     struct file;
     struct template_symbol;
     typedef boost::intrusive_ptr<file> file_ptr;
+    typedef unsigned source_mode_type;
 
     typedef boost::string_ref::const_iterator string_iterator;
     typedef lookback_iterator<string_iterator> parse_iterator;
