@@ -27,7 +27,7 @@ namespace quickbook
     unsigned qbk_version_n = 0; // qbk_major_version * 100 + qbk_minor_version
 
     state::state(fs::path const& filein_, fs::path const& xinclude_base_,
-            string_stream& out_, id_manager& ids)
+            string_stream& out_, document_state& document)
         : grammar_()
 
         , xinclude_base(xinclude_base_)
@@ -37,7 +37,7 @@ namespace quickbook
         , anchors()
         , warned_about_breaks(false)
         , conditional(true)
-        , ids(ids)
+        , document(document)
         , callouts()
         , callout_depth(0)
         , dependencies()

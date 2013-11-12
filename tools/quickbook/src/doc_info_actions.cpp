@@ -20,7 +20,7 @@
 #include "state.hpp"
 #include "actions.hpp"
 #include "doc_info_tags.hpp"
-#include "id_manager.hpp"
+#include "document_state.hpp"
 
 namespace quickbook
 {
@@ -239,20 +239,20 @@ namespace quickbook
 
         if (!compatibility_version) {
             compatibility_version = use_doc_info ?
-                qbk_version_n : state.ids.compatibility_version();
+                qbk_version_n : state.document.compatibility_version();
         }
 
         // Start file, finish here if not generating document info.
 
         if (!use_doc_info)
         {
-            state.ids.start_file(compatibility_version, include_doc_id_, id_,
+            state.document.start_file(compatibility_version, include_doc_id_, id_,
                     doc_title);
             return "";
         }
 
         std::string id_placeholder =
-            state.ids.start_file_with_docinfo(
+            state.document.start_file_with_docinfo(
                 compatibility_version, include_doc_id_, id_, doc_title);
 
         // Make sure we really did have a document info block.
@@ -463,7 +463,7 @@ namespace quickbook
         if (!license.empty())
         {
             tmp << "    <legalnotice id=\""
-                << state.ids.add_id("legal", id_category::generated)
+                << state.document.add_id("legal", id_category::generated)
                 << "\">\n"
                 << "      <para>\n"
                 << "        " << doc_info_output(license, 103) << "\n"
@@ -544,18 +544,18 @@ namespace quickbook
         // *after* everything else.
 
         // Close any open sections.
-        if (!doc_type.empty() && state.ids.section_level() > 1) {
+        if (!doc_type.empty() && state.document.section_level() > 1) {
             detail::outwarn(state.current_file->path)
                 << "Missing [endsect] detected at end of file."
                 << std::endl;
 
-            while(state.ids.section_level() > 1) {
+            while(state.document.section_level() > 1) {
                 state.out << "</section>";
-                state.ids.end_section();
+                state.document.end_section();
             }
         }
 
-        state.ids.end_file();
+        state.document.end_file();
         if (!doc_type.empty()) state.out << "\n</" << doc_type << ">\n\n";
     }
 

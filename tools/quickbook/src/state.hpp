@@ -27,7 +27,7 @@ namespace quickbook
     struct state
     {
         state(fs::path const& filein_, fs::path const& xinclude_base, string_stream& out_,
-                id_manager&);
+                document_state&);
 
     private:
         boost::scoped_ptr<quickbook_grammar> grammar_;
@@ -48,7 +48,7 @@ namespace quickbook
         string_list             anchors;
         bool                    warned_about_breaks;
         bool                    conditional;
-        id_manager&             ids;
+        document_state&         document;
         value_builder           callouts;           // callouts are global as
         int                     callout_depth;      // they don't nest.
         dependency_tracker      dependencies;

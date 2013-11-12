@@ -32,7 +32,7 @@ exe quickbook
     files.cpp
     input_path.cpp
     values.cpp
-    id_manager.cpp
+    document_state.cpp
     id_generation.cpp
     id_xml.cpp
     post_process.cpp

@@ -6,10 +6,10 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#if !defined(BOOST_QUICKBOOK_ID_MANAGER_IMPL_HPP)
-#define BOOST_QUICKBOOK_ID_MANAGER_IMPL_HPP
+#if !defined(BOOST_QUICKBOOK_DOCUMENT_STATE_IMPL_HPP)
+#define BOOST_QUICKBOOK_DOCUMENT_STATE_IMPL_HPP
 
-#include "id_manager.hpp"
+#include "document_state.hpp"
 #include "utils.hpp"
 #include <boost/utility/string_ref.hpp>
 #include <boost/shared_ptr.hpp>
@@ -29,7 +29,7 @@ namespace quickbook
 
     struct id_placeholder
     {
-        unsigned index;         // The index in id_state::placeholders.
+        unsigned index;         // The index in document_state_impl::placeholders.
                                 // Use for the dollar identifiers in
                                 // intermediate xml.
         std::string unresolved_id;
@@ -52,16 +52,16 @@ namespace quickbook
     };
 
     //
-    // id_state
+    // document_state_impl
     //
-    // Contains all the data tracked by the id_manager.
+    // Contains all the data tracked by document_state.
     //
 
     struct file_info;
     struct doc_info;
     struct section_info;
 
-    struct id_state
+    struct document_state_impl
     {
         boost::shared_ptr<file_info> current_file;
         std::deque<id_placeholder> placeholders;
@@ -108,9 +108,9 @@ namespace quickbook
                 id_category category);
     };
 
-    std::string replace_ids(id_state const& state, boost::string_ref xml,
+    std::string replace_ids(document_state_impl const& state, boost::string_ref xml,
             std::vector<std::string> const* = 0);
-    std::vector<std::string> generate_ids(id_state const&, boost::string_ref);
+    std::vector<std::string> generate_ids(document_state_impl const&, boost::string_ref);
 
     std::string normalize_id(boost::string_ref src_id);
     std::string normalize_id(boost::string_ref src_id, std::size_t);

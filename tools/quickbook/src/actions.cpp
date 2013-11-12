@@ -32,7 +32,7 @@
 #include "input_path.hpp"
 #include "block_tags.hpp"
 #include "phrase_tags.hpp"
-#include "id_manager.hpp"
+#include "document_state.hpp"
 
 namespace quickbook
 {
@@ -67,7 +67,7 @@ namespace quickbook
                 id_category::categories category =
                     id_category::explicit_anchor_id)
         {
-            std::string placeholder = state.ids.add_anchor(id, category);
+            std::string placeholder = state.document.add_anchor(id, category);
             state.anchors.push_back(placeholder);
             return placeholder;
         }
@@ -295,7 +295,7 @@ namespace quickbook
         value_consumer values = phrase;
         state.phrase
             << "<footnote id=\""
-            << state.ids.add_id("f", id_category::numbered)
+            << state.document.add_id("f", id_category::numbered)
             << "\"><para>"
             << values.consume().get_encoded()
             << "</para></footnote>";
@@ -349,7 +349,7 @@ namespace quickbook
             {
                 state.out << "<bridgehead renderas=\"sect" << level << "\"";
                 state.out << " id=\"";
-                state.out << state.ids.add_id("h", id_category::numbered);
+                state.out << state.document.add_id("h", id_category::numbered);
                 state.out << "\">";
                 state.out << "<phrase id=\"" << id << "\"/>";
                 state.out << "<link linkend=\"" << id << "\">";
@@ -381,7 +381,7 @@ namespace quickbook
 
         if (generic)
         {
-            level = state.ids.section_level() + 1;
+            level = state.document.section_level() + 1;
                                             // We need to use a heading which is one greater
                                             // than the current.
             if (level > 6 )                 // The max is h6, clip it if it goes
@@ -398,18 +398,18 @@ namespace quickbook
         {
             // Use an explicit id.
 
-            std::string anchor = state.ids.add_id(
+            std::string anchor = state.document.add_id(
                 element_id.get_quickbook(),
                 id_category::explicit_id);
 
             write_bridgehead(state, level,
                 content.get_encoded(), anchor, self_linked_headers);
         }
-        else if (state.ids.compatibility_version() >= 106u)
+        else if (state.document.compatibility_version() >= 106u)
         {
             // Generate ids for 1.6+
 
-            std::string anchor = state.ids.add_id(
+            std::string anchor = state.document.add_id(
                 detail::make_identifier(content.get_quickbook()),
                 id_category::generated_heading);
 
@@ -430,19 +430,19 @@ namespace quickbook
             // the content, it's just used to generate this id.
 
             std::string id = detail::make_identifier(
-                    state.ids.replace_placeholders_with_unresolved_ids(
+                    state.document.replace_placeholders_with_unresolved_ids(
                         content.get_encoded()));
 
-            if (generic || state.ids.compatibility_version() >= 103) {
+            if (generic || state.document.compatibility_version() >= 103) {
                 std::string anchor =
-                    state.ids.add_id(id, id_category::generated_heading);
+                    state.document.add_id(id, id_category::generated_heading);
 
                 write_bridgehead(state, level,
                     content.get_encoded(), anchor, self_linked_headers);
             }
             else {
                 std::string anchor =
-                    state.ids.old_style_id(id, id_category::generated_heading);
+                    state.document.old_style_id(id, id_category::generated_heading);
 
                 write_bridgehead(state, level,
                     content.get_encoded(), anchor, false);
@@ -574,8 +574,8 @@ namespace quickbook
 
     std::string state::add_callout(value v)
     {
-        std::string callout_id1 = ids.add_id("c", id_category::numbered);
-        std::string callout_id2 = ids.add_id("c", id_category::numbered);
+        std::string callout_id1 = document.add_id("c", id_category::numbered);
+        std::string callout_id2 = document.add_id("c", id_category::numbered);
 
         callouts.insert(encoded_value(callout_id1));
         callouts.insert(encoded_value(callout_id2));
@@ -1288,7 +1288,7 @@ namespace quickbook
 
             // Store the current section level so that we can ensure that
             // [section] and [endsect] tags in the template are balanced.
-            state.min_section_level = state.ids.section_level();
+            state.min_section_level = state.document.section_level();
 
             ///////////////////////////////////
             // Prepare the arguments as local templates
@@ -1325,7 +1325,7 @@ namespace quickbook
                 return;
             }
 
-            if (state.ids.section_level() != state.min_section_level)
+            if (state.document.section_level() != state.min_section_level)
             {
                 detail::outerr(state.current_file, first)
                     << "Mismatched sections in template "
@@ -1567,14 +1567,14 @@ namespace quickbook
         std::string table_id;
 
         if (!element_id.empty()) {
-            table_id = state.ids.add_id(element_id, id_category::explicit_id);
+            table_id = state.document.add_id(element_id, id_category::explicit_id);
         }
         else if (has_title) {
-            if (state.ids.compatibility_version() >= 105) {
-                table_id = state.ids.add_id(detail::make_identifier(title.get_quickbook()), id_category::generated);
+            if (state.document.compatibility_version() >= 105) {
+                table_id = state.document.add_id(detail::make_identifier(title.get_quickbook()), id_category::generated);
             }
             else {
-                table_id = state.ids.add_id("t", id_category::numbered);
+                table_id = state.document.add_id("t", id_category::numbered);
             }
         }
 
@@ -1657,7 +1657,7 @@ namespace quickbook
         value content = values.consume();
         values.finish();
 
-        std::string full_id = state.ids.begin_section(
+        std::string full_id = state.document.begin_section(
             !element_id.empty() ?
                 element_id.get_quickbook() :
                 detail::make_identifier(content.get_quickbook()),
@@ -1670,7 +1670,7 @@ namespace quickbook
 
         write_anchors(state, state.out);
 
-        if (self_linked_headers && state.ids.compatibility_version() >= 103)
+        if (self_linked_headers && state.document.compatibility_version() >= 103)
         {
             state.out << "<link linkend=\"" << full_id << "\">"
                 << content.get_encoded()
@@ -1689,7 +1689,7 @@ namespace quickbook
     {
         write_anchors(state, state.out);
 
-        if (state.ids.section_level() <= state.min_section_level)
+        if (state.document.section_level() <= state.min_section_level)
         {
             file_position const pos = state.current_file->position_of(first);
 
@@ -1701,7 +1701,7 @@ namespace quickbook
         }
 
         state.out << "</section>";
-        state.ids.end_section();
+        state.document.end_section();
     }
     
     void element_id_warning_action::operator()(parse_iterator first, parse_iterator) const

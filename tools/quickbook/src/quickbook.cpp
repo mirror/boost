@@ -15,7 +15,7 @@
 #include "utils.hpp"
 #include "files.hpp"
 #include "input_path.hpp"
-#include "id_manager.hpp"
+#include "document_state.hpp"
 #include <boost/program_options.hpp>
 #include <boost/filesystem/path.hpp>
 #include <boost/filesystem/operations.hpp>
@@ -138,12 +138,12 @@ namespace quickbook
       , parse_document_options const& options_)
     {
         string_stream buffer;
-        id_manager ids;
+        document_state output;
 
         int result = 0;
 
         try {
-            quickbook::state state(filein_, options_.xinclude_base, buffer, ids);
+            quickbook::state state(filein_, options_.xinclude_base, buffer, output);
             set_macros(state);
 
             if (state.error_count == 0) {
@@ -184,7 +184,7 @@ namespace quickbook
 
         if (!fileout_.empty() && result == 0)
         {
-            std::string stage2 = ids.replace_placeholders(buffer.str());
+            std::string stage2 = output.replace_placeholders(buffer.str());
 
             fs::ofstream fileout(fileout_);
 

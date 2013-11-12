@@ -20,7 +20,7 @@ namespace quickbook
     struct state;
     struct quickbook_grammar;
     struct collector;
-    struct id_manager;
+    struct document_state;
     struct section_info;
     struct file;
     struct template_symbol;

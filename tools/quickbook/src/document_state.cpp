@@ -6,7 +6,7 @@
     http://www.boost.org/LICENSE_1_0.txt)
 =============================================================================*/
 
-#include "id_manager_impl.hpp"
+#include "document_state_impl.hpp"
 #include "utils.hpp"
 #include <boost/make_shared.hpp>
 #include <boost/lexical_cast.hpp>
@@ -88,17 +88,17 @@ namespace quickbook
     };
 
     //
-    // id_manager
+    // document_state
     //
 
-    id_manager::id_manager()
-      : state(new id_state)
+    document_state::document_state()
+      : state(new document_state_impl)
     {
     }
 
-    id_manager::~id_manager() {}
+    document_state::~document_state() {}
 
-    void id_manager::start_file(
+    void document_state::start_file(
             unsigned compatibility_version,
             boost::string_ref include_doc_id,
             boost::string_ref id,
@@ -107,7 +107,7 @@ namespace quickbook
         state->start_file(compatibility_version, false, include_doc_id, id, title);
     }
 
-    std::string id_manager::start_file_with_docinfo(
+    std::string document_state::start_file_with_docinfo(
             unsigned compatibility_version,
             boost::string_ref include_doc_id,
             boost::string_ref id,
@@ -117,56 +117,56 @@ namespace quickbook
             id, title)->to_string();
     }
 
-    void id_manager::end_file()
+    void document_state::end_file()
     {
         state->end_file();
     }
 
-    std::string id_manager::begin_section(boost::string_ref id,
+    std::string document_state::begin_section(boost::string_ref id,
             id_category category)
     {
         return state->begin_section(id, category)->to_string();
     }
 
-    void id_manager::end_section()
+    void document_state::end_section()
     {
         return state->end_section();
     }
 
-    int id_manager::section_level() const
+    int document_state::section_level() const
     {
         return state->current_file->document->current_section->level;
     }
 
-    std::string id_manager::old_style_id(boost::string_ref id, id_category category)
+    std::string document_state::old_style_id(boost::string_ref id, id_category category)
     {
         return state->old_style_id(id, category)->to_string();
     }
 
-    std::string id_manager::add_id(boost::string_ref id, id_category category)
+    std::string document_state::add_id(boost::string_ref id, id_category category)
     {
         return state->add_id(id, category)->to_string();
     }
 
-    std::string id_manager::add_anchor(boost::string_ref id, id_category category)
+    std::string document_state::add_anchor(boost::string_ref id, id_category category)
     {
         return state->add_placeholder(id, category)->to_string();
     }
 
-    std::string id_manager::replace_placeholders_with_unresolved_ids(
+    std::string document_state::replace_placeholders_with_unresolved_ids(
             boost::string_ref xml) const
     {
         return replace_ids(*state, xml);
     }
 
-    std::string id_manager::replace_placeholders(boost::string_ref xml) const
+    std::string document_state::replace_placeholders(boost::string_ref xml) const
     {
         assert(!state->current_file);
         std::vector<std::string> ids = generate_ids(*state, xml);
         return replace_ids(*state, xml, &ids);
     }
 
-    unsigned id_manager::compatibility_version() const
+    unsigned document_state::compatibility_version() const
     {
         return state->current_file->compatibility_version;
     }
@@ -198,10 +198,10 @@ namespace quickbook
     }
 
     //
-    // id_state
+    // document_state_impl
     //
 
-    id_placeholder const* id_state::add_placeholder(
+    id_placeholder const* document_state_impl::add_placeholder(
             boost::string_ref id, id_category category,
             id_placeholder const* parent)
     {
@@ -210,7 +210,7 @@ namespace quickbook
         return &placeholders.back();
     }
 
-    id_placeholder const* id_state::get_placeholder(boost::string_ref value) const
+    id_placeholder const* document_state_impl::get_placeholder(boost::string_ref value) const
     {
         // If this isn't a placeholder id.
         if (value.size() <= 1 || *value.begin() != '$')
@@ -222,7 +222,7 @@ namespace quickbook
         return &placeholders.at(index);
     }
 
-    id_placeholder const* id_state::get_id_placeholder(
+    id_placeholder const* document_state_impl::get_id_placeholder(
             boost::shared_ptr<section_info> const& section) const
     {
         return !section ? 0 :
@@ -230,7 +230,7 @@ namespace quickbook
                 current_file->override_id : section->placeholder_1_6;
     }
 
-    id_placeholder const* id_state::start_file(
+    id_placeholder const* document_state_impl::start_file(
             unsigned compatibility_version,
             bool document_root,
             boost::string_ref include_doc_id,
@@ -329,12 +329,12 @@ namespace quickbook
         }
     }
 
-    void id_state::end_file()
+    void document_state_impl::end_file()
     {
         current_file = current_file->parent;
     }
 
-    id_placeholder const* id_state::add_id(
+    id_placeholder const* document_state_impl::add_id(
             boost::string_ref id,
             id_category category)
     {
@@ -342,7 +342,7 @@ namespace quickbook
             current_file->document->current_section);
     }
 
-    id_placeholder const* id_state::add_id_to_section(
+    id_placeholder const* document_state_impl::add_id_to_section(
             boost::string_ref id,
             id_category category,
             boost::shared_ptr<section_info> const& section)
@@ -377,7 +377,7 @@ namespace quickbook
         }
     }
 
-    id_placeholder const* id_state::old_style_id(
+    id_placeholder const* document_state_impl::old_style_id(
         boost::string_ref id,
         id_category category)
     {
@@ -387,7 +387,7 @@ namespace quickbook
                 add_id(id, category);
     }
 
-    id_placeholder const* id_state::begin_section(
+    id_placeholder const* document_state_impl::begin_section(
             boost::string_ref id,
             id_category category)
     {
@@ -395,7 +395,7 @@ namespace quickbook
         return create_new_section(id, category);
     }
 
-    id_placeholder const* id_state::create_new_section(
+    id_placeholder const* document_state_impl::create_new_section(
             boost::string_ref id,
             id_category category)
     {
@@ -444,11 +444,11 @@ namespace quickbook
         current_file->document->current_section =
             boost::make_shared<section_info>(parent,
                 current_file.get(), id, id_1_1, placeholder_1_6);
-        
+
         return p;
     }
 
-    void id_state::end_section()
+    void document_state_impl::end_section()
     {
         current_file->document->current_section =
             current_file->document->current_section->parent;
