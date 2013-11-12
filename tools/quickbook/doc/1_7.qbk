@@ -46,12 +46,15 @@ It can also be used to set the source mode for elements:
 ]
 ```
 
-When used before a section, it sets the source mode for the section element,
-not the whole section.
+When used before a section, it sets the source mode for the whole section.
 
-Currently it does not support other syntactic entities such as paragraphs
-and lists. It will currently be used to the next code block or element.
-This is a bit messy, but I'm not sure what would be a good idea.
+If it appears at the beginning of a paragraph, it will be used for the
+whole paragraph only if there's a newline, eg.
+
+```
+[!c++]
+A declaration `void foo();` and a definition `void foo() {}`.
+```
 
 [endsect]
 

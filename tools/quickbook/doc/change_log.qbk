@@ -317,3 +317,12 @@ Boost 1.46.1:
     in a phrase template.
 * Internal changes:
   * Clean up the id manager implementation.
+
+[heading Version 1.6.1]
+
+* 1.7 changes:
+  * Improved source mode tagging:
+    * Works for lists and paragraphs.
+    * If the source mode is changed inside a tagged element, that change
+      will now persist after the element.
+    * Tagged sections will now use the source mode for the whole section.
