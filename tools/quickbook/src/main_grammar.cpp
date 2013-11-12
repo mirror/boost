@@ -108,6 +108,8 @@ namespace quickbook
         struct block_context_closure : cl::closure<block_context_closure,
             element_info::context>
         {
+            // Mask used to determine whether or not an element is a block
+            // element.
             member1 is_block;
         };
 
@@ -482,10 +484,13 @@ namespace quickbook
             |   (cl::eps_p(~cl::ch_p(']')) | qbk_ver(0, 107u))
                                                 [ph::var(local.element_type) = element_info::nothing]
             >>  local.common
+
                 // If the element is a block, then a newline will end the
                 // current syntactic block.
-                // Note that we don't do this for lists in 1.6 to avoid messing
-                // up on nested block elements.
+                //
+                // Note that we don't do this for lists from 1.6 onwards to
+                // avoid messing up nested block elements. TODO: This is a bit
+                // iffy.
             >>  !(  cl::eps_p(in_list) >> qbk_ver(106u)
                 |   cl::eps_p
                     (
