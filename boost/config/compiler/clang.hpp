@@ -68,7 +68,10 @@
 #  define BOOST_NO_CXX11_AUTO_MULTIDECLARATIONS
 #endif
 
-#if !(defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L)
+//
+// Currently clang on Windows using VC++ RTL does not support C++11's char16_t or char32_t
+//
+#if defined(_MSC_VER) || !(defined(__GXX_EXPERIMENTAL_CXX0X__) || __cplusplus >= 201103L)
 #  define BOOST_NO_CXX11_CHAR16_T
 #  define BOOST_NO_CXX11_CHAR32_T
 #endif
