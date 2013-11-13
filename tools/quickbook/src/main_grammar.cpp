@@ -972,7 +972,7 @@ namespace quickbook
 
 
         attribute_value_1_7 =
-            *(  ~cl::eps_p(']' | cl::space_p | comment)
+            +(  ~cl::eps_p(']' | cl::space_p | comment)
             >>  (   cl::eps_p
                     (   cl::ch_p('[')
                     >>  space
