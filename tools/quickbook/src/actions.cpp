@@ -74,12 +74,28 @@ namespace quickbook
             return placeholder;
         }
 
+        std::string get_attribute_value(quickbook::state& state,
+                quickbook::value const& value)
+        {
+            std::string x = value.is_encoded() ?
+                value.get_encoded() : detail::to_s(value.get_quickbook());
+
+            if (x.empty()) {
+                detail::outerr(value.get_file(), value.get_position())
+                    << "Empty attribute value."
+                    << std::endl;
+                ++state.error_count;
+                x = "xxx";
+            }
+
+            return x;
+        }
+
         std::string validate_id(quickbook::state& state,
                 quickbook::value const& id_value)
         {
             bool valid = true;
-            std::string id = id_value.is_encoded() ?
-                id_value.get_encoded() : detail::to_s(id_value.get_quickbook());
+            std::string id = get_attribute_value(state, id_value);
 
             // Special case since I use dollar ids for id placeholders.
             if (id[0] == '$') { valid = false; id[0] = '_'; }
@@ -319,9 +335,7 @@ namespace quickbook
 
         state.phrase
             << "<phrase role=\"";
-        // TODO: Validate role?
-        detail::print_string(role.is_encoded() ?
-                    role.get_encoded() : detail::to_s(role.get_quickbook()),
+        detail::print_string(get_attribute_value(state, role),
                 state.phrase.get());
         state.phrase
             << "\">"
@@ -1554,9 +1568,7 @@ namespace quickbook
             dst = validate_id(state, dst_value);
         }
         else {
-            dst = dst_value.is_encoded() ?
-                dst_value.get_encoded() :
-                detail::to_s(dst_value.get_quickbook());
+            dst = get_attribute_value(state, dst_value);
 
             // TODO: Might be better to have an error for some invalid urls.
             if (link.get_tag() == phrase_tags::url) {
