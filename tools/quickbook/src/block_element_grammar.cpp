@@ -35,7 +35,7 @@ namespace quickbook
                         xinclude, include, include_filename,
                         template_, template_id, template_formal_arg,
                         template_body, identifier, import,
-                        element_id, element_id_1_5, element_id_1_6,
+                        element_id,
                         same_line;
     };
 
@@ -60,12 +60,6 @@ namespace quickbook
             )
             ;
         
-        local.element_id_1_5 =
-                !(qbk_ver(105u) >> local.element_id);
-
-        local.element_id_1_6 =
-                !(qbk_ver(106u) >> local.element_id);
-
         elements.add
             ("section", element_info(element_info::section_block, &local.begin_section, block_tags::begin_section))
             ("endsect", element_info(element_info::section_block, &local.end_section, block_tags::end_section))
@@ -84,7 +78,7 @@ namespace quickbook
 
         local.heading
             =   space
-            >>  local.element_id_1_6
+            >>  !(qbk_ver(106u) >> local.element_id)
             >>  space
             >>  local.inner_phrase
             ;
@@ -223,7 +217,7 @@ namespace quickbook
 
         local.table =
                 local.same_line
-            >>  local.element_id_1_5
+            >>  !(qbk_ver(105u) >> local.element_id)
             >>  local.same_line
             >>  local.table_title
             >>  *local.table_row
