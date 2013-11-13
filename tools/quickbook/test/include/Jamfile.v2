@@ -41,4 +41,5 @@ test-suite quickbook.test :
     [ quickbook-test source_mode-1_6 ]
     [ quickbook-test nested_compatibility-1_5 ]
     [ quickbook-test nested_compatibility-1_6 ]
+    [ quickbook-test template_include-1_7 ]
     ;

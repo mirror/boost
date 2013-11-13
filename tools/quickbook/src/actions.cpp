@@ -308,19 +308,25 @@ namespace quickbook
         values.finish();
     }
 
-    void role_action(quickbook::state& state, value role)
+    void role_action(quickbook::state& state, value role_list)
     {
         write_anchors(state, state.phrase);
 
-        value_consumer values = role;
+        value_consumer values = role_list;
+        value role = values.consume();
+        value phrase = values.consume();
+        values.finish();
+
         state.phrase
             << "<phrase role=\"";
-        detail::print_string(values.consume().get_quickbook(), state.phrase.get());
+        // TODO: Validate role?
+        detail::print_string(role.is_encoded() ?
+                    role.get_encoded() : detail::to_s(role.get_quickbook()),
+                state.phrase.get());
         state.phrase
             << "\">"
-            << values.consume().get_encoded()
+            << phrase.get_encoded()
             << "</phrase>";
-        values.finish();
     }
 
     void footnote_action(quickbook::state& state, value phrase)
@@ -685,8 +691,7 @@ namespace quickbook
         value anchor_id = values.consume();
         // Note: anchor_id is never encoded as boostbook. If it
         // is encoded, it's just things like escapes.
-        add_anchor(state, anchor_id.is_encoded() ?
-            anchor_id.get_encoded() : anchor_id.get_quickbook());
+        add_anchor(state, validate_id(state, anchor_id));
         values.finish();
     }
 

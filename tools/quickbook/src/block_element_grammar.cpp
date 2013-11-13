@@ -309,13 +309,15 @@ namespace quickbook
         local.include_filename =
                 qbk_ver(0, 106u)
             >>  (*(cl::anychar_p - phrase_end)) [state.values.entry(ph::arg1, ph::arg2)]
-            |   qbk_ver(106u)
+            |   qbk_ver(106u, 107u)
             >>  to_value()
                 [   *(  raw_escape
                     |   (cl::anychar_p - phrase_end)
                                                 [raw_char]
                     )
                 ]
+            |   qbk_ver(107u)
+            >>  to_value() [ attribute_value_1_7 ]
             ;
 
         local.inner_block =

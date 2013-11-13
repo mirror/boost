@@ -24,6 +24,7 @@ import quickbook-testing : quickbook-test quickbook-error-test ;
 test-suite quickbook.test :
     [ quickbook-test anchor-1_1 ]
     [ quickbook-test anchor-1_6 ]
+    [ quickbook-test anchor-1_7 ]
     [ quickbook-test blocks-1_5 ]
     [ quickbook-test callouts-1_5 ]
     [ quickbook-test callouts-1_7 ]
@@ -63,6 +64,7 @@ test-suite quickbook.test :
     [ quickbook-error-test include-1_1-fail ]
     [ quickbook-test include-1_5 ]
     [ quickbook-test include-1_6 ]
+    [ quickbook-test include-1_7 ]
     [ quickbook-test include2-1_6 ]
     [ quickbook-error-test include_win_path-1_6-fail ]
     [ quickbook-test link-1_1 ]

@@ -147,13 +147,15 @@ namespace quickbook
                 blank
             >>  (   qbk_ver(0, 106u)
                 >>  (*(cl::anychar_p - phrase_end)) [state.values.entry(ph::arg1, ph::arg2)]
-                |   qbk_ver(106u)
+                |   qbk_ver(106u, 107u)
                 >>  to_value()
                     [   *(  raw_escape
                         |   (cl::anychar_p - phrase_end)
                                                     [raw_char]
                         )
                     ]
+                |   qbk_ver(107u)
+                >>  to_value() [attribute_value_1_7]
                 )
             ;
 
@@ -187,7 +189,11 @@ namespace quickbook
 
         local.role
             =   space
-            >>  (+(cl::alnum_p | '_'))              [state.values.entry(ph::arg1, ph::arg2)]
+            >>  (   qbk_ver(0, 107u)
+                >>  (+(cl::alnum_p | '_'))          [state.values.entry(ph::arg1, ph::arg2)]
+                |   qbk_ver(107u)
+                >>  to_value() [attribute_value_1_7]
+                )
             >>  hard_space
             >>  local.inner_phrase
             ;
