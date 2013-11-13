@@ -440,7 +440,7 @@ namespace quickbook
             // Use an explicit id.
 
             std::string anchor = state.document.add_id(
-                element_id.get_quickbook(),
+                validate_id(state, element_id),
                 id_category::explicit_id);
 
             write_bridgehead(state, level,
@@ -1619,8 +1619,9 @@ namespace quickbook
         value_consumer values = table;
 
         std::string element_id;
-        if(values.check(general_tags::element_id))
-            element_id = detail::to_s(values.consume().get_quickbook());
+        if(values.check(general_tags::element_id)) {
+            element_id = validate_id(state, values.consume());
+        }
 
         value title = values.consume(table_tags::title);
         bool has_title = !title.empty();
@@ -1719,12 +1720,12 @@ namespace quickbook
         values.finish();
 
         std::string full_id = state.document.begin_section(
-            !element_id.empty() ?
-                element_id.get_quickbook() :
-                detail::make_identifier(content.get_quickbook()),
-            !element_id.empty() ?
-                id_category::explicit_section_id :
-                id_category::generated_section,
+            element_id.empty() ?
+                detail::make_identifier(content.get_quickbook()) :
+                validate_id(state, element_id),
+            element_id.empty() ?
+                id_category::generated_section :
+                id_category::explicit_section_id,
             state.current_source_mode());
 
         state.out << "\n<section id=\"" << full_id << "\">\n";

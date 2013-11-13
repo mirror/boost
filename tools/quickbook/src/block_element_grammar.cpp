@@ -53,7 +53,10 @@ namespace quickbook
 
         local.element_id =
             !(  ':'
-            >>  (   !(qbk_ver(105u) >> space)
+            >>  (   qbk_ver(107u)
+                >>  to_value(general_tags::element_id) [attribute_value_1_7]
+                |   qbk_ver(0, 107u)
+                >>  !(qbk_ver(105u) >> space)
                 >>  (+(cl::alnum_p | '_'))      [state.values.entry(ph::arg1, ph::arg2, general_tags::element_id)]
                 |   cl::eps_p                   [element_id_warning]
                 )
