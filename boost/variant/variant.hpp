@@ -360,37 +360,6 @@ public: // visitor interface
 #if defined BOOST_MSVC 
 # pragma warning( pop ) 
 #endif
-
-#else // MSVC6
-
-private: // helpers, for visitor interface (below)
-
-    T& execute(T& operand, mpl::true_) const
-    {
-        return operand;
-    }
-
-    template <typename U>
-    T& execute(U& operand, mpl::false_) const
-    {
-        // logical error to be here: see precondition above
-        BOOST_ASSERT(false);
-        return ::boost::detail::variant::forced_return< T& >();
-    }
-
-public: // visitor interface
-
-    template <typename U>
-    T& operator()(U& operand) const
-    {
-        typedef typename is_same< U,T >::type
-            U_is_T;
-
-        return execute(operand, U_is_T());
-    }
-
-#endif // MSVC6 workaround
-
 };
 
 ///////////////////////////////////////////////////////////////////////////////
