@@ -122,20 +122,15 @@ generates:
 
 [endsect]
 
-[section:templates_in_link_values Templates in link values]
+[section:templates_in_attributes Templates in some attributes]
 
-There's very premilinary support for calling templates in link values. A lot
-more work needs to be done, including:
+There's support for calling templates in link values, anchors, roles and
+includes. This is sometimes a bit of a change, especially in places where
+spaces are currently allowed, so I might try using a slightly different
+grammar where required. I think I also need to add some validation, since
+the parser can allow more symbols than some of the old ones.
 
-* Considering other places where templates could be called (e.g. images are
-  quite tricky, as templates could get confused with attributes, should
-  templates be callable from something like an element's id?).
-* Trimming spaces from the body of the template (which can cause surprising
-  results).
-* Checking that the contents of the template are appropriate for the context.
-  Possibly even using a different grammar.
-
-[endsect] [/templates_in_link_values]
+[endsect] [/templates_in_attributes]
 
 [section:list_markup_in_tables List Markup in Nested Blocks]
 
