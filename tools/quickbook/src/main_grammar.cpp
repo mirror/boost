@@ -972,24 +972,26 @@ namespace quickbook
 
 
         attribute_value_1_7 =
-            +(  ~cl::eps_p(']' | cl::space_p | comment)
-            >>  (   cl::eps_p
-                    (   cl::ch_p('[')
-                    >>  space
-                    >>  (   cl::eps_p(cl::punct_p)
-                        >>  elements
-                        |   elements
-                        >>  (cl::eps_p - (cl::alnum_p | '_'))
-                        )
-                    )                           [error("Elements not allowed in attribute values.")]
-                >>  local.square_brackets
-                |   local.attribute_template
-                |   cl::eps_p(cl::ch_p('['))    [error("Unmatched template in attribute value.")]
-                >>  local.square_brackets
-                |   raw_escape
-                |   cl::anychar_p               [raw_char]
+            state.values.save() [
+                +(  ~cl::eps_p(']' | cl::space_p | comment)
+                >>  (   cl::eps_p
+                        (   cl::ch_p('[')
+                        >>  space
+                        >>  (   cl::eps_p(cl::punct_p)
+                            >>  elements
+                            |   elements
+                            >>  (cl::eps_p - (cl::alnum_p | '_'))
+                            )
+                        )                       [error("Elements not allowed in attribute values.")]
+                    >>  local.square_brackets
+                    |   local.attribute_template
+                    |   cl::eps_p(cl::ch_p('['))[error("Unmatched template in attribute value.")]
+                    >>  local.square_brackets
+                    |   raw_escape
+                    |   cl::anychar_p           [raw_char]
+                    )
                 )
-            )
+            ]
             ;
 
         //
