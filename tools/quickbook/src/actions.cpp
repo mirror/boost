@@ -73,6 +73,38 @@ namespace quickbook
             state.anchors.push_back(placeholder);
             return placeholder;
         }
+
+        std::string validate_id(quickbook::state& state,
+                quickbook::value const& id_value)
+        {
+            bool valid = true;
+            std::string id = id_value.is_encoded() ?
+                id_value.get_encoded() : detail::to_s(id_value.get_quickbook());
+
+            // Special case since I use dollar ids for id placeholders.
+            if (id[0] == '$') { valid = false; id[0] = '_'; }
+
+            if (qbk_version_n >= 107u) {
+                char const* allowed_punctuation = "_.-";
+
+                BOOST_FOREACH(char c, id) {
+                    if (!std::isalnum(c) &&
+                            !std::strchr(allowed_punctuation, c))
+                        valid = false;
+                }
+            }
+
+            if (!valid) {
+                detail::outerr(id_value.get_file(), id_value.get_position())
+                    << "Invalid id: "
+                    << (id_value.is_encoded() ? id_value.get_encoded() :
+                        detail::to_s(id_value.get_quickbook()))
+                    << std::endl;
+                ++state.error_count;
+            }
+
+            return id;
+        }
     }
 
     bool quickbook_range::in_range() const {
@@ -1511,10 +1543,21 @@ namespace quickbook
         value content = values.consume();
         values.finish();
 
-        // Note: dst is never actually encoded as boostbook, which
-        // is why the result is called with 'print_string' later.
-        std::string dst = dst_value.is_encoded() ?
-            dst_value.get_encoded() : detail::to_s(dst_value.get_quickbook());
+        std::string dst;
+
+        if (link.get_tag() == phrase_tags::link) {
+            dst = validate_id(state, dst_value);
+        }
+        else {
+            dst = dst_value.is_encoded() ?
+                dst_value.get_encoded() :
+                detail::to_s(dst_value.get_quickbook());
+
+            // TODO: Might be better to have an error for some invalid urls.
+            if (link.get_tag() == phrase_tags::url) {
+                dst = detail::partially_escape_uri(dst);
+            }
+        } 
         
         state.phrase << markup.pre;
         detail::print_string(dst, state.phrase.get());
