@@ -113,6 +113,7 @@ test-suite quickbook.test :
     [ quickbook-error-test templates-1_6-fail1 ]
     [ quickbook-test templates-1_7 ]
     [ quickbook-error-test templates-1_7-fail1 ]
+    [ quickbook-error-test templates-1_7-fail2 ]
     [ quickbook-test unicode_escape-1_5 ]
     [ quickbook-test unmatched_element-1_5 ]
     [ quickbook-test unmatched_element-1_6 ]

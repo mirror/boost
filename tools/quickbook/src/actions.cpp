@@ -191,6 +191,7 @@ namespace quickbook
         case code_tags::inline_code_block:
         case code_tags::inline_code:
             return code_action(state, v);
+        case template_tags::attribute_template:
         case template_tags::template_:
             return do_template_action(state, v, first.base());
         default:
@@ -1367,6 +1368,9 @@ namespace quickbook
     void do_template_action(quickbook::state& state, value template_list,
             string_iterator first)
     {
+        bool const is_attribute_template =
+            template_list.get_tag() == template_tags::attribute_template;
+
         // Get the arguments
         value_consumer values = template_list;
 
@@ -1425,6 +1429,20 @@ namespace quickbook
                 */
             }
 
+            return;
+        }
+
+        ///////////////////////////////////
+        // Check that attribute templates are phrase templates
+
+        if (is_attribute_template &&
+                symbol->content.get_tag() != template_tags::phrase)
+        {
+            detail::outerr(state.current_file, first)
+                << "Only phrase templates can be used in attribute values."
+                << std::endl;
+
+            ++state.error_count;
             return;
         }
 

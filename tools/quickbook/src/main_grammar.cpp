@@ -91,7 +91,7 @@ namespace quickbook
                         paragraph_separator, inside_paragraph,
                         code, code_line, blank_line, hr,
                         inline_code, skip_inline_code,
-                        template_,
+                        template_, attribute_template, template_body,
                         code_block, skip_code_block, macro,
                         template_args,
                         template_args_1_4, template_arg_1_4,
@@ -653,7 +653,24 @@ namespace quickbook
             (   '['
             >>  space
             >>  state.values.list(template_tags::template_)
-                [   (   cl::str_p('`')
+                [   local.template_body
+                >>  ']'
+                ]
+            )                                   [element_action]
+            ;
+
+        local.attribute_template =
+            (   '['
+            >>  space
+            >>  state.values.list(template_tags::attribute_template)
+                [   local.template_body
+                >>  ']'
+                ]
+            )                                   [element_action]
+            ;
+
+        local.template_body =
+                    (   cl::str_p('`')
                     >>  cl::eps_p(cl::punct_p)
                     >>  state.templates.scope
                             [state.values.entry(ph::arg1, ph::arg2, template_tags::escape)]
@@ -675,9 +692,6 @@ namespace quickbook
                     )
                 >>  space
                 >>  !local.template_args
-                >>  ']'
-                ]
-            )                                   [element_action]
             ;
 
         local.template_args =
@@ -945,7 +959,7 @@ namespace quickbook
                         )
                     )                           [error("Elements not allowed in attribute values.")]
                 >>  local.square_brackets
-                |   local.template_
+                |   local.attribute_template
                 |   cl::eps_p(cl::ch_p('['))    [error("Unmatched template in attribute value.")]
                 >>  local.square_brackets
                 |   raw_escape
