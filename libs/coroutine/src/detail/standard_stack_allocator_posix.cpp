@@ -42,12 +42,9 @@ namespace boost {
 namespace coroutines {
 namespace detail {
 
+// conform to POSIX.1-2001
 std::size_t pagesize()
-{
-    // conform to POSIX.1-2001
-    static std::size_t size = ::sysconf( _SC_PAGESIZE);
-    return size;
-}
+{ return ::sysconf( _SC_PAGESIZE); }
 
 rlimit stacksize_limit_()
 {
@@ -63,10 +60,7 @@ rlimit stacksize_limit_()
 }
 
 rlimit stacksize_limit()
-{
-    static rlimit limit = stacksize_limit_();
-    return limit;
-}
+{ return stacksize_limit_(); }
 
 std::size_t page_count( std::size_t stacksize)
 {

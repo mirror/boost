@@ -59,10 +59,7 @@ SYSTEM_INFO system_info_()
 }
 
 SYSTEM_INFO system_info()
-{
-    static SYSTEM_INFO si = system_info_();
-    return si;
-}
+{ return system_info_(); }
 
 std::size_t pagesize()
 { return static_cast< std::size_t >( system_info().dwPageSize); }
