@@ -40,5 +40,9 @@
     <para>
       <link linkend="blah.x2">Templated link?</link>
     </para>
+    <para>
+      <link linkend="something-one-two">something-one-two</link> <link linkend="something-one-two">something-one-two</link>
+      <link linkend="something-one-two">something-one-two</link>
+    </para>
   </section>
 </article>

@@ -553,7 +553,8 @@ namespace quickbook
 
     namespace
     {
-        bool parse_template(value const&, quickbook::state& state);
+        bool parse_template(value const&, quickbook::state& state,
+                bool is_attribute_template = false);
     }
 
     void state::start_callouts()
@@ -1209,6 +1210,7 @@ namespace quickbook
         bool parse_template(
             value const& content
           , quickbook::state& state
+          , bool is_attribute_template
         )
         {
             file_ptr saved_current_file = state.current_file;
@@ -1220,6 +1222,8 @@ namespace quickbook
             parse_iterator last(source.end());
 
             bool r = cl::parse(first, last,
+                    is_attribute_template ?
+                        state.grammar().attribute_template_body :
                     content.get_tag() == template_tags::phrase ?
                         state.grammar().inline_phrase :
                         state.grammar().block_start
@@ -1234,9 +1238,12 @@ namespace quickbook
     void call_template(quickbook::state& state,
             template_symbol const* symbol,
             std::vector<value> const& args,
-            string_iterator first)
+            string_iterator first,
+            bool is_attribute_template = false)
     {
         bool is_block = symbol->content.get_tag() != template_tags::phrase;
+        assert(!(is_attribute_template && is_block));
+
         quickbook::paragraph_action paragraph_action(state);
 
         // Finish off any existing paragraphs.
@@ -1300,16 +1307,15 @@ namespace quickbook
                 state.phrase.swap(save_phrase);
             }
 
-            if (!parse_template(symbol->content, state))
+            if (!parse_template(symbol->content, state, is_attribute_template))
             {
                 detail::outerr(state.current_file, first)
                     << "Expanding "
                     << (is_block ? "block" : "phrase")
-                    << " template: " << symbol->identifier << std::endl
-                    << std::endl
-                    << "------------------begin------------------" << std::endl
+                    << " template: " << symbol->identifier << "\n\n"
+                    << "------------------begin------------------\n"
                     << symbol->content.get_quickbook()
-                    << "------------------end--------------------" << std::endl
+                    << "------------------end--------------------\n"
                     << std::endl;
                 ++state.error_count;
                 return;
@@ -1471,7 +1477,7 @@ namespace quickbook
                 return;
             }
 
-            call_template(state, symbol, args, first);
+            call_template(state, symbol, args, first, is_attribute_template);
             break;
 
         case template_tags::snippet:

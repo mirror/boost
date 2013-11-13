@@ -49,4 +49,9 @@ as well.
 [template thing[]x]
 [link blah.[thing]2 Templated link?]
 
+[template link_in_template[x y] [link something-[x]-[y]]]
+[link_in_template one two]
+[link_in_template one..two]
+[link_in_template one .. two ]
+
 [endsect]

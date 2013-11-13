@@ -129,6 +129,7 @@ namespace quickbook
         cl::rule<scanner> inside_preformatted;
         cl::rule<scanner> inside_paragraph;
         cl::rule<scanner> command_line;
+        cl::rule<scanner> attribute_template_body;
         cl::rule<scanner> attribute_value_1_7;
         cl::rule<scanner> escape;
         cl::rule<scanner> raw_escape;
