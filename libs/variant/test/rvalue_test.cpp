@@ -92,46 +92,6 @@ void run_const_rvalues()
 #else 
 
 
-#ifdef BOOST_NO_CXX11_RVALUE_REFERENCES
-
-void run()
-{
-    // Making sure that internals of Boost.Move do not interfere with
-    // internals of Boost.Variant and in case of C++03 or C++98 compilation 
-    // is still possible.
-    typedef boost::variant<int, move_copy_conting_class> variant_I_type;
-    variant_I_type v1, v2;
-    v1 = move_copy_conting_class();
-    v2 = v1; 
-    v2 = boost::move(v1);
-    v1.swap(v2);
-
-    move_copy_conting_class val;
-    v2 = boost::move(val);
-    v2 = 10;
-
-    variant_I_type v3(boost::move(val));
-    variant_I_type v4(boost::move(v1));
-}
-
-void run1()
-{
-    BOOST_CHECK(true);
-}
-
-void run_move_only()
-{
-    BOOST_CHECK(true);
-}
-
-void run_moves_are_noexcept()
-{
-    BOOST_CHECK(true);
-}
-
-#else 
-
-
 void run()
 {
     typedef boost::variant<int, move_copy_conting_class> variant_I_type;
