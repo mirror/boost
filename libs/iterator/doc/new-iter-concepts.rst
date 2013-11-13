@@ -38,10 +38,10 @@
           
 .. contents:: Table of Contents
 
-.. _n1297: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2001/n1297.html
-.. _n1477: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1477.html
-.. _n1531: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1531.html
-.. _n1550: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1550.html
+.. _n1297: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2001/n1297.html
+.. _n1477: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1477.html
+.. _n1531: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1531.html
+.. _n1550: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1550.htm
 
 ============
  Motivation
@@ -76,8 +76,8 @@ requirements in the iterator categories.
 |                        |is resolved)                                         |
 +------------------------+-----------------------------------------------------+
 
-.. _issue 200: http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/lwg-active.html#200
-.. _issue 299: http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/lwg-active.html#299
+.. _issue 200: http://www.open-std.org/JTC1/SC22/WG21/docs/lwg-active.html#200
+.. _issue 299: http://www.open-std.org/JTC1/SC22/WG21/docs/lwg-active.html#299
 
 
 Because iterator traversal and value access are mixed together in a
@@ -91,7 +91,7 @@ nonintuitive that the C++ standard contradicts itself on this point.
 In paragraph 23.2.4/1 it says that a ``vector`` is a sequence that
 supports random access iterators.
 
-.. _issue 96: http://anubis.dkuug.dk/JTC1/SC22/WG21/docs/lwg-active.html#96
+.. _issue 96: http://www.open-std.org/JTC1/SC22/WG21/docs/lwg-active.html#96
 
 Another difficult-to-categorize iterator is the transform iterator, an
 adaptor which applies a unary function object to the dereferenced
@@ -791,7 +791,7 @@ The UnaryTypeTrait concept is defined in n1519_; the LWG is
 considering adding the requirement that specializations are derived
 from their nested ``::type``.
 
-.. _n1519: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1519.htm
+.. _n1519: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1519.htm
 
 ..
  LocalWords:  Abrahams Siek Witt const bool Sutter's WG int UL LI href Lvalue

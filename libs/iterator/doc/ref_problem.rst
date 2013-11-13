@@ -3,7 +3,7 @@
 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 
 .. _N1550: http://www.boost-consulting.com/writing/n1550.html
-.. _N1530: http://anubis.dkuug.dk/jtc1/sc22/wg21/docs/papers/2003/n1530.html
+.. _N1530: http://www.open-std.org/jtc1/sc22/wg21/docs/papers/2003/n1530.html
 
 :Author: David Abrahams and Jeremy Siek
 :Contact: dave@boost-consulting.com, jsiek@osl.iu.edu
