@@ -31,21 +31,19 @@ namespace quickbook
         if (qbk_version_n >= 107u) {
             std::string path_text = path.get_encoded();
 
-            if (path_text.find("\\\\") != std::string::npos ||
-                    path_text.find("\\/") != std::string::npos)
-            {
+            try {
+                bool is_glob = check_glob(path_text);
+
+                return path_parameter(path_text,
+                    is_glob ? path_parameter::glob : path_parameter::path);
+            } catch(glob_error& e) {
                 detail::outerr(path.get_file(), path.get_position())
-                    << "Invalid path (contains escaped slash): "
+                    << "Invalid path (" << e.what() << "): "
                     << path_text
-                   << std::endl;
+                    << std::endl;
                 ++state.error_count;
                 return path_parameter(path_text, path_parameter::invalid);
             }
-
-            bool is_glob = path_text.find_first_of("[]?*") != std::string::npos;
-
-            return path_parameter(path_text,
-                is_glob ? path_parameter::glob : path_parameter::path);
         }
         else {
             // Paths are encoded for quickbook 1.6+ and also xmlbase

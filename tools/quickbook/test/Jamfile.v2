@@ -70,6 +70,7 @@ test-suite quickbook.test :
     [ quickbook-error-test include_win_path-1_6-fail ]
     [ quickbook-error-test include_invalid_path1-1_7-fail ]
     [ quickbook-error-test include_invalid_path2-1_7-fail ]
+    [ quickbook-error-test include_invalid_path3-1_7-fail ]
     [ quickbook-test link-1_1 ]
     [ quickbook-test link-1_6 ]
     [ quickbook-test link-1_7 ]
