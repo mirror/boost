@@ -1,0 +1,9 @@
+[article Filename Test
+[quickbook 1.7]
+]
+
+__FILENAME__
+
+[include sub/*.quickbook]
+
+[include filename_include?.quickbook]

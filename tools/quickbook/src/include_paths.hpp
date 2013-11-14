@@ -49,6 +49,8 @@ namespace quickbook
         fs::path abstract_file_path;
 
         bool operator<(quickbook_path const& other) const;
+        quickbook_path operator/(boost::string_ref) const;
+        quickbook_path& operator/=(boost::string_ref);
     };
 
     std::set<quickbook_path> include_search(path_parameter const&,

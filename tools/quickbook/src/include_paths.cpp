@@ -69,7 +69,8 @@ namespace quickbook
     //
 
     void include_search_glob(std::set<quickbook_path> & result,
-        fs::path dir, std::string path, quickbook::state& state)
+        quickbook_path const& location,
+        std::string path, quickbook::state& state)
     {
         // Search for the first part of the path that contains glob
         // characters. (TODO: Account for escapes?)
@@ -78,11 +79,11 @@ namespace quickbook
 
         if (glob_pos == std::string::npos)
         {
-            if (state.dependencies.add_dependency(dir / path))
+            quickbook_path complete_path = location / path;
+
+            if (state.dependencies.add_dependency(complete_path.file_path))
             {
-                result.insert(quickbook_path(
-                    dir / path,
-                    state.abstract_file_path.parent_path() / path));
+                result.insert(complete_path);
             }
             return;
         }
@@ -93,8 +94,11 @@ namespace quickbook
         std::size_t glob_begin = prev == std::string::npos ? 0 : prev + 1;
         std::size_t glob_end = next == std::string::npos ? path.size() : next;
 
-        if (prev != std::string::npos)
-            dir /= fs::path(path.substr(0, prev));
+        quickbook_path new_location = location;
+
+        if (prev != std::string::npos) {
+            new_location /= path.substr(0, prev);
+        }
 
         if (next != std::string::npos) ++next;
 
@@ -102,7 +106,8 @@ namespace quickbook
                 path.data() + glob_begin,
                 glob_end - glob_begin);
 
-        fs::path base_dir = dir.empty() ? fs::path(".") : dir;
+        fs::path base_dir = new_location.file_path.empty() ?
+            fs::path(".") : new_location.file_path;
         if (!fs::is_directory(base_dir)) return;
 
         // Walk through the dir for matches.
@@ -110,19 +115,17 @@ namespace quickbook
                 dir_i != dir_e; ++dir_i)
         {
             fs::path f = dir_i->path().filename();
+            std::string generic_path = detail::path_to_generic(f);
 
             // Skip if the dir item doesn't match.
-            if (!quickbook::glob(glob, detail::path_to_generic(f))) continue;
+            if (!quickbook::glob(glob, generic_path)) continue;
 
             // If it's a file we add it to the results.
             if (next == std::string::npos)
             {
                 if (fs::is_regular_file(dir_i->status()))
                 {
-                    result.insert(quickbook_path(
-                        dir/f,
-                        state.abstract_file_path.parent_path()/dir/f
-                        ));
+                    result.insert(new_location / generic_path);
                 }
             }
             // If it's a matching dir, we recurse looking for more files.
@@ -130,7 +133,7 @@ namespace quickbook
             {
                 if (!fs::is_regular_file(dir_i->status()))
                 {
-                    include_search_glob(result, dir/f,
+                    include_search_glob(result, new_location / generic_path,
                             path.substr(next), state);
                 }
             }
@@ -149,12 +152,16 @@ namespace quickbook
             fs::path current = state.current_file->path.parent_path();
 
             // Search for the current dir accumulating to the result.
-            include_search_glob(result, current, parameter.value, state);
+            include_search_glob(result,
+                    quickbook_path(current,
+                        state.abstract_file_path.parent_path()),
+                    parameter.value, state);
 
             // Search the include path dirs accumulating to the result.
             BOOST_FOREACH(fs::path dir, include_path)
             {
-                include_search_glob(result, dir, parameter.value, state);
+                include_search_glob(result, quickbook_path(dir, fs::path()),
+                        parameter.value, state);
             }
 
             // Done.
@@ -218,5 +225,17 @@ namespace quickbook
         if (abstract_file_path < other.abstract_file_path) return true;
         else if (other.abstract_file_path < abstract_file_path) return false;
         else return file_path < other.file_path;
+    }
+
+    quickbook_path quickbook_path::operator/(boost::string_ref x) const
+    {
+        return quickbook_path(*this) /= x;
+    }
+
+    quickbook_path& quickbook_path::operator/=(boost::string_ref x)
+    {
+        file_path.append(x.begin(), x.end());
+        abstract_file_path.append(x.begin(), x.end());
+        return *this;
     }
 }
