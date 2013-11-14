@@ -42,4 +42,5 @@ test-suite quickbook.test :
     [ quickbook-test nested_compatibility-1_5 ]
     [ quickbook-test nested_compatibility-1_6 ]
     [ quickbook-test template_include-1_7 ]
+    [ quickbook-test glob-1_7 ]
     ;

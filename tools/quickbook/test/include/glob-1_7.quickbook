@@ -1,0 +1,27 @@
+[article Glob Test
+[quickbook 1.7]
+]
+
+[section:t1_1 Test 1.1]
+
+[include glob1/*]
+
+[endsect] [/t1_1]
+
+[section:t1_2 Test 1.2]
+
+[include glob1/*/*]
+
+[endsect] [/t1_2]
+
+[section:t2_1 Test 2.1]
+
+[include glob2/*]
+
+[endsect] [/t2_1]
+
+[section:t2_2 Test 2.2]
+
+[include glob2/*/*]
+
+[endsect] [/t2_2]

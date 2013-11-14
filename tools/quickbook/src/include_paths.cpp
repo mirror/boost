@@ -96,8 +96,7 @@ namespace quickbook
         if (prev != std::string::npos)
             dir /= fs::path(path.substr(0, prev));
 
-        if (next == std::string::npos) next = path.size();
-        else ++next;
+        if (next != std::string::npos) ++next;
 
         boost::string_ref glob(
                 path.data() + glob_begin,
@@ -114,18 +113,24 @@ namespace quickbook
             if (!quickbook::glob(glob, detail::path_to_generic(f))) continue;
 
             // If it's a file we add it to the results.
-            if (fs::is_regular_file(dir_i->status()))
+            if (next == std::string::npos)
             {
-                result.insert(quickbook_path(
-                    dir/f,
-                    state.abstract_file_path.parent_path()/dir/f
-                    ));
+                if (fs::is_regular_file(dir_i->status()))
+                {
+                    result.insert(quickbook_path(
+                        dir/f,
+                        state.abstract_file_path.parent_path()/dir/f
+                        ));
+                }
             }
             // If it's a matching dir, we recurse looking for more files.
             else
             {
-                include_search_glob(result, dir/f,
-                        path.substr(next), state);
+                if (!fs::is_regular_file(dir_i->status()))
+                {
+                    include_search_glob(result, dir/f,
+                            path.substr(next), state);
+                }
             }
         }
     }
