@@ -172,16 +172,17 @@ namespace quickbook
 
                 // Search for the current dir accumulating to the result.
                 state.dependencies.add_glob(current / parameter.value);
-                include_search_glob(result,
-                        quickbook_path(current,
-                            state.abstract_file_path.parent_path()),
+                include_search_glob(result, state.current_path.parent_path(),
                         parameter.value, state);
 
                 // Search the include path dirs accumulating to the result.
+                unsigned count = 0;
                 BOOST_FOREACH(fs::path dir, include_path)
                 {
+                    ++count;
                     state.dependencies.add_glob(dir / parameter.value);
-                    include_search_glob(result, quickbook_path(dir, fs::path()),
+                    include_search_glob(result,
+                            quickbook_path(dir, count, fs::path()),
                             parameter.value, state);
                 }
 
@@ -196,26 +197,26 @@ namespace quickbook
                 // If the path is relative, try and resolve it.
                 if (!path.has_root_directory() && !path.has_root_name())
                 {
-                    fs::path local_path =
-                        state.current_file->path.parent_path() / path;
+                    quickbook_path path2 =
+                        state.current_path.parent_path() / parameter.value;
 
                     // See if it can be found locally first.
-                    if (state.dependencies.add_dependency(local_path))
+                    if (state.dependencies.add_dependency(path2.file_path))
                     {
-                        result.insert(quickbook_path(
-                                    local_path,
-                                    state.abstract_file_path.parent_path() / path));
+                        result.insert(path2);
                         return result;
                     }
 
                     // Search in each of the include path locations.
+                    unsigned count = 0;
                     BOOST_FOREACH(fs::path full, include_path)
                     {
+                        ++count;
                         full /= path;
 
                         if (state.dependencies.add_dependency(full))
                         {
-                            result.insert(quickbook_path(full, path));
+                            result.insert(quickbook_path(full, count, path));
                             return result;
                         }
                     }
@@ -223,7 +224,7 @@ namespace quickbook
                 else
                 {
                     if (state.dependencies.add_dependency(path)) {
-                        result.insert(quickbook_path(path, path));
+                        result.insert(quickbook_path(path, 0, path));
                         return result;
                     }
                 }
@@ -250,11 +251,23 @@ namespace quickbook
     // quickbook_path
     //
 
+    void swap(quickbook_path& x, quickbook_path& y) {
+        boost::swap(x.file_path, y.file_path);
+        boost::swap(x.include_path_offset, y.include_path_offset);
+        boost::swap(x.abstract_file_path, y.abstract_file_path);
+    }
+
     bool quickbook_path::operator<(quickbook_path const& other) const
     {
-        if (abstract_file_path < other.abstract_file_path) return true;
-        else if (other.abstract_file_path < abstract_file_path) return false;
-        else return file_path < other.file_path;
+        // TODO: Is comparing file_path redundant? Surely if quickbook_path
+        // and abstract_file_path are equal, it must also be.
+        // (but not vice-versa)
+        return
+            abstract_file_path != other.abstract_file_path ?
+                abstract_file_path < other.abstract_file_path :
+            include_path_offset != other.include_path_offset ?
+                include_path_offset < other.include_path_offset :
+                file_path < other.file_path;
     }
 
     quickbook_path quickbook_path::operator/(boost::string_ref x) const
@@ -264,8 +277,15 @@ namespace quickbook
 
     quickbook_path& quickbook_path::operator/=(boost::string_ref x)
     {
-        file_path.append(x.begin(), x.end());
-        abstract_file_path.append(x.begin(), x.end());
+        fs::path x2 = detail::generic_to_path(x);
+        file_path /= x2;
+        abstract_file_path /= x2;
         return *this;
+    }
+
+    quickbook_path quickbook_path::parent_path() const
+    {
+        return quickbook_path(file_path.parent_path(), include_path_offset,
+                abstract_file_path.parent_path());
     }
 }

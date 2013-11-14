@@ -1942,7 +1942,7 @@ namespace quickbook
                 state_save::scope_macros);
 
             state.current_file = load(path.file_path); // Throws load_error
-            state.abstract_file_path = path.abstract_file_path;
+            state.current_path = path;
             state.imported = (load_type == block_tags::import);
 
             // update the __FILENAME__ macro

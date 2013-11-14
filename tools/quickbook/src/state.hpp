@@ -19,6 +19,7 @@
 #include "symbols.hpp"
 #include "dependency_tracker.hpp"
 #include "syntax_highlight.hpp"
+#include "include_paths.hpp"
 
 namespace quickbook
 {
@@ -65,10 +66,7 @@ namespace quickbook
         std::vector<source_mode_info>
                                 tagged_source_mode_stack;
         file_ptr                current_file;
-
-        // A machine independent representation of the current file's
-        // path - not unique per-file.
-        fs::path                abstract_file_path;
+        quickbook_path          current_path;
 
     // state saved for templates.
         int                     template_depth;

@@ -38,19 +38,27 @@ namespace quickbook
 
     struct quickbook_path
     {
-        quickbook_path(fs::path const& x, fs::path const& y)
-            : file_path(x), abstract_file_path(y) {}
+        quickbook_path(fs::path const& x, unsigned offset, fs::path const& y)
+            : file_path(x), include_path_offset(offset), abstract_file_path(y) {}
 
-        // The actual location of the file.
-        fs::path file_path;
+        friend void swap(quickbook_path&, quickbook_path&);
 
-        // A machine independent representation of the file's
-        // path - not unique per-file
-        fs::path abstract_file_path;
+        quickbook_path parent_path() const;
 
         bool operator<(quickbook_path const& other) const;
         quickbook_path operator/(boost::string_ref) const;
         quickbook_path& operator/=(boost::string_ref);
+
+        // The actual location of the file.
+        fs::path file_path;
+
+        // The member of the include path that this file is relative to.
+        // (1-indexed, 0 == original quickbook file)
+        unsigned include_path_offset;
+
+        // A machine independent representation of the file's
+        // path - not unique per-file
+        fs::path abstract_file_path;
     };
 
     std::set<quickbook_path> include_search(path_parameter const&,

@@ -53,7 +53,7 @@ namespace quickbook
         , source_mode_next()
         , source_mode_next_pos()
         , current_file(0)
-        , abstract_file_path(filein_.filename())
+        , current_path(filein_, 0, filein_.filename())
 
         , template_depth(0)
         , min_section_level(1)
@@ -84,7 +84,8 @@ namespace quickbook
 
     void state::update_filename_macro() {
         *boost::spirit::classic::find(macro, "__FILENAME__")
-            = detail::encode_string(detail::path_to_generic(abstract_file_path));
+            = detail::encode_string(
+                    detail::path_to_generic(current_path.abstract_file_path));
     }
     
     unsigned state::get_new_order_pos() {
@@ -146,7 +147,7 @@ namespace quickbook
         , qbk_version(qbk_version_n)
         , imported(state.imported)
         , current_file(state.current_file)
-        , abstract_file_path(state.abstract_file_path)
+        , current_path(state.current_path)
         , xinclude_base(state.xinclude_base)
         , source_mode(state.source_mode)
         , macro()
@@ -167,7 +168,7 @@ namespace quickbook
         boost::swap(qbk_version_n, qbk_version);
         boost::swap(state.imported, imported);
         boost::swap(state.current_file, current_file);
-        boost::swap(state.abstract_file_path, abstract_file_path);
+        boost::swap(state.current_path, current_path);
         boost::swap(state.xinclude_base, xinclude_base);
         boost::swap(state.source_mode, source_mode);
         if (scope & scope_output) {
