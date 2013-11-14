@@ -251,4 +251,43 @@ namespace quickbook
 
         return invert_match != matched;
     }
+
+    std::size_t find_glob_char(boost::string_ref pattern,
+            std::size_t pos)
+    {
+        // Weird style is because boost::string_ref's find_first_of
+        // doesn't take a position argument.
+        std::size_t removed = 0;
+
+        while (true) {
+            pos = pattern.find_first_of("[]?*\\");
+            if (pos == boost::string_ref::npos) return pos;
+            if (pattern[pos] != '\\') return pos + removed;
+            pattern.remove_prefix(pos + 2);
+            removed += pos + 2;
+        }
+    }
+
+    std::string glob_unescape(boost::string_ref pattern)
+    {
+        std::string result;
+
+        while (true) {
+            std::size_t pos = pattern.find("\\");
+            if (pos == boost::string_ref::npos) {
+                result.append(pattern.data(), pattern.size());
+                break;
+            }
+
+            result.append(pattern.data(), pos);
+            ++pos;
+            if (pos < pattern.size()) {
+                result += pattern[pos];
+                ++pos;
+            }
+            pattern.remove_prefix(pos);
+        }
+
+        return result;
+    }
 }

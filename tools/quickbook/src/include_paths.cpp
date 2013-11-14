@@ -32,10 +32,13 @@ namespace quickbook
             std::string path_text = path.get_encoded();
 
             try {
-                bool is_glob = check_glob(path_text);
-
-                return path_parameter(path_text,
-                    is_glob ? path_parameter::glob : path_parameter::path);
+                if (check_glob(path_text)) {
+                    return path_parameter(path_text, path_parameter::glob);
+                }
+                else {
+                    return path_parameter(glob_unescape(path_text),
+                            path_parameter::path);
+                }
             } catch(glob_error& e) {
                 detail::outerr(path.get_file(), path.get_position())
                     << "Invalid path (" << e.what() << "): "
@@ -87,14 +90,11 @@ namespace quickbook
         quickbook_path const& location,
         std::string path, quickbook::state& state)
     {
-        // Search for the first part of the path that contains glob
-        // characters. (TODO: Account for escapes?)
-
-        std::size_t glob_pos = path.find_first_of("[]?*");
+        std::size_t glob_pos = find_glob_char(path);
 
         if (glob_pos == std::string::npos)
         {
-            quickbook_path complete_path = location / path;
+            quickbook_path complete_path = location / glob_unescape(path);
 
             if (fs::exists(complete_path.file_path))
             {
@@ -113,7 +113,7 @@ namespace quickbook
         quickbook_path new_location = location;
 
         if (prev != std::string::npos) {
-            new_location /= path.substr(0, prev);
+            new_location /= glob_unescape(path.substr(0, prev));
         }
 
         if (next != std::string::npos) ++next;

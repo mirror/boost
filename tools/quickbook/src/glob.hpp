@@ -23,4 +23,8 @@ namespace quickbook
     // pre: glob is valid (call check_glob first on user data).
     bool glob(boost::string_ref const& pattern,
             boost::string_ref const& filename);
+
+    std::size_t find_glob_char(boost::string_ref,
+            std::size_t start = 0);
+    std::string glob_unescape(boost::string_ref);
 }
