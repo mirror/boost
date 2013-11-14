@@ -81,8 +81,9 @@ namespace quickbook
         {
             quickbook_path complete_path = location / path;
 
-            if (state.dependencies.add_dependency(complete_path.file_path))
+            if (fs::exists(complete_path.file_path))
             {
+                state.dependencies.add_glob_match(complete_path.file_path);
                 result.insert(complete_path);
             }
             return;
@@ -125,7 +126,9 @@ namespace quickbook
             {
                 if (fs::is_regular_file(dir_i->status()))
                 {
-                    result.insert(new_location / generic_path);
+                    quickbook_path r = new_location / generic_path;
+                    state.dependencies.add_glob_match(r.file_path);
+                    result.insert(r);
                 }
             }
             // If it's a matching dir, we recurse looking for more files.
@@ -152,6 +155,7 @@ namespace quickbook
             fs::path current = state.current_file->path.parent_path();
 
             // Search for the current dir accumulating to the result.
+            state.dependencies.add_glob(current / parameter.value);
             include_search_glob(result,
                     quickbook_path(current,
                         state.abstract_file_path.parent_path()),
@@ -160,6 +164,7 @@ namespace quickbook
             // Search the include path dirs accumulating to the result.
             BOOST_FOREACH(fs::path dir, include_path)
             {
+                state.dependencies.add_glob(dir / parameter.value);
                 include_search_glob(result, quickbook_path(dir, fs::path()),
                         parameter.value, state);
             }
