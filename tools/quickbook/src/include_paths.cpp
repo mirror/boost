@@ -102,10 +102,12 @@ namespace quickbook
                 path.data() + glob_begin,
                 glob_end - glob_begin);
 
+        fs::path base_dir = dir.empty() ? fs::path(".") : dir;
+        if (!fs::is_directory(base_dir)) return;
+
         // Walk through the dir for matches.
-        fs::directory_iterator dir_i(dir.empty() ? fs::path(".") : dir);
-        fs::directory_iterator dir_e;
-        for (; dir_i != dir_e; ++dir_i)
+        for (fs::directory_iterator dir_i(base_dir), dir_e;
+                dir_i != dir_e; ++dir_i)
         {
             fs::path f = dir_i->path().filename();
 

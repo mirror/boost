@@ -2,6 +2,12 @@
 [quickbook 1.7]
 ]
 
+[section:t1_0 Test 1.0]
+
+[include glob0/*]
+
+[endsect] [/t1_0]
+
 [section:t1_1 Test 1.1]
 
 [include glob1/*]
@@ -13,6 +19,12 @@
 [include glob1/*/*]
 
 [endsect] [/t1_2]
+
+[section:t1_3 Test 1.3]
+
+[include glob1/*/b.qbk]
+
+[endsect] [/t1_3]
 
 [section:t2_1 Test 2.1]
 
