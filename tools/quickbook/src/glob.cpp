@@ -24,11 +24,15 @@ namespace quickbook
     bool check_glob(boost::string_ref pattern)
     {
         bool is_glob = false;
+        bool is_ascii = true;
 
         glob_iterator begin = pattern.begin();
         glob_iterator end = pattern.end();
 
         while (begin != end) {
+            if (*begin < 32 || *begin > 127)
+                is_ascii = false;
+
             switch(*begin) {
                 case '\\':
                     check_glob_escape(begin, end);
@@ -60,6 +64,9 @@ namespace quickbook
                     ++begin;
             }
         }
+
+        if (is_glob && !is_ascii)
+            throw glob_error("invalid character, globs are ascii only");
 
         return is_glob;
     }
@@ -137,6 +144,7 @@ namespace quickbook
         while (pattern_it != pattern_end) {
             assert(*pattern_it == '*');
             ++pattern_it;
+
             if (pattern_it == pattern_end) return true;
 
             // TODO: Error?
