@@ -28,40 +28,57 @@ namespace quickbook
 
     path_parameter check_path(value const& path, quickbook::state& state)
     {
-        // Paths are encoded for quickbook 1.6+ and also xmlbase
-        // values (technically xmlbase is a 1.6 feature, but that
-        // isn't enforced as it's backwards compatible).
-        //
-        // Counter-intuitively: encoded == plain text here.
+        if (qbk_version_n >= 107u) {
+            std::string path_text = path.get_encoded();
 
-        std::string path_text = qbk_version_n >= 106u || path.is_encoded() ?
-                path.get_encoded() : detail::to_s(path.get_quickbook());
-
-        bool is_glob = qbk_version_n >= 107u &&
-            path_text.find_first_of("[]?*") != std::string::npos;
-
-        if(!is_glob && path_text.find('\\') != std::string::npos)
-        {
-            quickbook::detail::ostream* err;
-
-            if (qbk_version_n >= 106u) {
-                err = &detail::outerr(path.get_file(), path.get_position());
+            if (path_text.find("\\\\") != std::string::npos ||
+                    path_text.find("\\/") != std::string::npos)
+            {
+                detail::outerr(path.get_file(), path.get_position())
+                    << "Invalid path (contains escaped slash): "
+                    << path_text
+                   << std::endl;
                 ++state.error_count;
-            }
-            else {
-                err = &detail::outwarn(path.get_file(), path.get_position());
+                return path_parameter(path_text, path_parameter::invalid);
             }
 
-            *err << "Path isn't portable: '"
-                << path_text
-                << "'"
-                << std::endl;
+            bool is_glob = path_text.find_first_of("[]?*") != std::string::npos;
 
-            boost::replace(path_text, '\\', '/');
+            return path_parameter(path_text,
+                is_glob ? path_parameter::glob : path_parameter::path);
         }
+        else {
+            // Paths are encoded for quickbook 1.6+ and also xmlbase
+            // values (technically xmlbase is a 1.6 feature, but that
+            // isn't enforced as it's backwards compatible).
+            //
+            // Counter-intuitively: encoded == plain text here.
 
-        return path_parameter(path_text,
-            is_glob ? path_parameter::glob : path_parameter::path);
+            std::string path_text = qbk_version_n >= 106u || path.is_encoded() ?
+                    path.get_encoded() : detail::to_s(path.get_quickbook());
+
+            if (path_text.find('\\') != std::string::npos)
+            {
+                quickbook::detail::ostream* err;
+
+                if (qbk_version_n >= 106u) {
+                    err = &detail::outerr(path.get_file(), path.get_position());
+                    ++state.error_count;
+                }
+                else {
+                    err = &detail::outwarn(path.get_file(), path.get_position());
+                }
+
+                *err << "Path isn't portable: '"
+                    << path_text
+                    << "'"
+                    << std::endl;
+
+                boost::replace(path_text, '\\', '/');
+            }
+
+            return path_parameter(path_text, path_parameter::path);
+        }
     }
 
     //
@@ -148,76 +165,86 @@ namespace quickbook
     {
         std::set<quickbook_path> result;
 
-        // If the path has some glob match characters
-        // we do a discovery of all the matches..
-        if (parameter.type == path_parameter::glob)
-        {
-            fs::path current = state.current_file->path.parent_path();
-
-            // Search for the current dir accumulating to the result.
-            state.dependencies.add_glob(current / parameter.value);
-            include_search_glob(result,
-                    quickbook_path(current,
-                        state.abstract_file_path.parent_path()),
-                    parameter.value, state);
-
-            // Search the include path dirs accumulating to the result.
-            BOOST_FOREACH(fs::path dir, include_path)
+        switch (parameter.type) {
+            case path_parameter::glob:
+            // If the path has some glob match characters
+            // we do a discovery of all the matches..
             {
-                state.dependencies.add_glob(dir / parameter.value);
-                include_search_glob(result, quickbook_path(dir, fs::path()),
+                fs::path current = state.current_file->path.parent_path();
+
+                // Search for the current dir accumulating to the result.
+                state.dependencies.add_glob(current / parameter.value);
+                include_search_glob(result,
+                        quickbook_path(current,
+                            state.abstract_file_path.parent_path()),
                         parameter.value, state);
-            }
 
-            // Done.
-            return result;
-        }
-        else
-        {
-            fs::path path = detail::generic_to_path(parameter.value);
-
-            // If the path is relative, try and resolve it.
-            if (!path.has_root_directory() && !path.has_root_name())
-            {
-                fs::path local_path =
-                   state.current_file->path.parent_path() / path;
-
-                // See if it can be found locally first.
-                if (state.dependencies.add_dependency(local_path))
+                // Search the include path dirs accumulating to the result.
+                BOOST_FOREACH(fs::path dir, include_path)
                 {
-                    result.insert(quickbook_path(
-                        local_path,
-                        state.abstract_file_path.parent_path() / path));
-                    return result;
+                    state.dependencies.add_glob(dir / parameter.value);
+                    include_search_glob(result, quickbook_path(dir, fs::path()),
+                            parameter.value, state);
                 }
 
-                // Search in each of the include path locations.
-                BOOST_FOREACH(fs::path full, include_path)
-                {
-                    full /= path;
+                // Done.
+                return result;
+            }
 
-                    if (state.dependencies.add_dependency(full))
+            case path_parameter::path:
+            {
+                fs::path path = detail::generic_to_path(parameter.value);
+
+                // If the path is relative, try and resolve it.
+                if (!path.has_root_directory() && !path.has_root_name())
+                {
+                    fs::path local_path =
+                        state.current_file->path.parent_path() / path;
+
+                    // See if it can be found locally first.
+                    if (state.dependencies.add_dependency(local_path))
                     {
-                        result.insert(quickbook_path(full, path));
+                        result.insert(quickbook_path(
+                                    local_path,
+                                    state.abstract_file_path.parent_path() / path));
+                        return result;
+                    }
+
+                    // Search in each of the include path locations.
+                    BOOST_FOREACH(fs::path full, include_path)
+                    {
+                        full /= path;
+
+                        if (state.dependencies.add_dependency(full))
+                        {
+                            result.insert(quickbook_path(full, path));
+                            return result;
+                        }
+                    }
+                }
+                else
+                {
+                    if (state.dependencies.add_dependency(path)) {
+                        result.insert(quickbook_path(path, path));
                         return result;
                     }
                 }
-            }
-            else
-            {
-                if (state.dependencies.add_dependency(path)) {
-                    result.insert(quickbook_path(path, path));
-                    return result;
-                }
+
+                detail::outerr(state.current_file, pos)
+                    << "Unable to find file: "
+                    << parameter.value
+                    << std::endl;
+                ++state.error_count;
+
+                return result;
             }
 
-            detail::outerr(state.current_file, pos)
-                << "Unable to find file: "
-                << parameter.value
-                << std::endl;
-            ++state.error_count;
+            case path_parameter::invalid:
+                return result;
 
-            return result;
+            default:
+                assert(0);
+                return result;
         }
     }
 
