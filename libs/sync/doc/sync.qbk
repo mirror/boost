@@ -61,7 +61,7 @@ The following compilers/platforms are not supported and will likely fail to comp
 * Borland C++ 5.5.1 (free version). Newer versions might or might not work.
 * Windows 9x, ME, NT4 and older are not supported.
 
-Boost.Log should be compatible with all hardware architectures supported by Boost. However, in case of 32 bit x86 architecture the library requires at least i586 class CPU to run.
+Boost.Sync should be compatible with all hardware architectures supported by Boost. However, in case of 32 bit x86 architecture the library requires at least i586 class CPU to run.
 
 [endsect]
 
