@@ -10,12 +10,15 @@
 =============================================================================*/
 
 #include "native_text.hpp"
+#include "glob.hpp"
 #include "include_paths.hpp"
 #include "state.hpp"
 #include "utils.hpp"
 #include "quickbook.hpp" // For the include_path global (yuck)
 #include <boost/foreach.hpp>
 #include <boost/range/algorithm/replace.hpp>
+#include <boost/filesystem/operations.hpp>
+#include <cassert>
 
 namespace quickbook
 {
@@ -34,7 +37,10 @@ namespace quickbook
         std::string path_text = qbk_version_n >= 106u || path.is_encoded() ?
                 path.get_encoded() : detail::to_s(path.get_quickbook());
 
-        if(path_text.find('\\') != std::string::npos)
+        bool is_glob = qbk_version_n >= 107u &&
+            path_text.find_first_of("[]?*") != std::string::npos;
+
+        if(!is_glob && path_text.find('\\') != std::string::npos)
         {
             quickbook::detail::ostream* err;
 
@@ -54,62 +60,146 @@ namespace quickbook
             boost::replace(path_text, '\\', '/');
         }
 
-        return path_parameter(path_text, path_parameter::path);
+        return path_parameter(path_text,
+            is_glob ? path_parameter::glob : path_parameter::path);
     }
 
     //
     // Search include path
     //
 
-    std::set<quickbook_path> include_search(
-            path_parameter const& parameter,
+    void include_search_glob(std::set<quickbook_path> & result,
+        fs::path dir, std::string path, quickbook::state& state)
+    {
+        // Search for the first part of the path that contains glob
+        // characters. (TODO: Account for escapes?)
+
+        std::size_t glob_pos = path.find_first_of("[]?*");
+
+        if (glob_pos == std::string::npos)
+        {
+            if (state.dependencies.add_dependency(dir / path))
+            {
+                result.insert(quickbook_path(
+                    dir / path,
+                    state.abstract_file_path.parent_path() / path));
+            }
+            return;
+        }
+
+        std::size_t prev = path.rfind('/', glob_pos);
+        std::size_t next = path.find('/', glob_pos);
+
+        std::size_t glob_begin = prev == std::string::npos ? 0 : prev + 1;
+        std::size_t glob_end = next == std::string::npos ? path.size() : next;
+
+        if (prev != std::string::npos)
+            dir /= fs::path(path.substr(0, prev));
+
+        if (next == std::string::npos) next = path.size();
+        else ++next;
+
+        boost::string_ref glob(
+                path.data() + glob_begin,
+                glob_end - glob_begin);
+
+        // Walk through the dir for matches.
+        fs::directory_iterator dir_i(dir.empty() ? fs::path(".") : dir);
+        fs::directory_iterator dir_e;
+        for (; dir_i != dir_e; ++dir_i)
+        {
+            fs::path f = dir_i->path().filename();
+
+            // Skip if the dir item doesn't match.
+            if (!quickbook::glob(glob, detail::path_to_generic(f))) continue;
+
+            // If it's a file we add it to the results.
+            if (fs::is_regular_file(dir_i->status()))
+            {
+                result.insert(quickbook_path(
+                    dir/f,
+                    state.abstract_file_path.parent_path()/dir/f
+                    ));
+            }
+            // If it's a matching dir, we recurse looking for more files.
+            else
+            {
+                include_search_glob(result, dir/f,
+                        path.substr(next), state);
+            }
+        }
+    }
+
+    std::set<quickbook_path> include_search(path_parameter const& parameter,
             quickbook::state& state, string_iterator pos)
     {
         std::set<quickbook_path> result;
 
-        fs::path path = detail::generic_to_path(parameter.value);
-
-        // If the path is relative, try and resolve it.
-        if (!path.has_root_directory() && !path.has_root_name())
+        // If the path has some glob match characters
+        // we do a discovery of all the matches..
+        if (parameter.type == path_parameter::glob)
         {
-            fs::path local_path =
-                state.current_file->path.parent_path() / path;
+            fs::path current = state.current_file->path.parent_path();
 
-            // See if it can be found locally first.
-            if (state.dependencies.add_dependency(local_path))
+            // Search for the current dir accumulating to the result.
+            include_search_glob(result, current, parameter.value, state);
+
+            // Search the include path dirs accumulating to the result.
+            BOOST_FOREACH(fs::path dir, include_path)
             {
-                result.insert(quickbook_path(
-                    local_path,
-                    state.abstract_file_path.parent_path() / path));
-                return result;
+                include_search_glob(result, dir, parameter.value, state);
             }
 
-            BOOST_FOREACH(fs::path full, include_path)
-            {
-                full /= path;
-
-                if (state.dependencies.add_dependency(full))
-                {
-                    result.insert(quickbook_path(full, path));
-                    return result;
-                }
-            }
+            // Done.
+            return result;
         }
         else
         {
-            if (state.dependencies.add_dependency(path)) {
-                result.insert(quickbook_path(path, path));
-                return result;
+            fs::path path = detail::generic_to_path(parameter.value);
+
+            // If the path is relative, try and resolve it.
+            if (!path.has_root_directory() && !path.has_root_name())
+            {
+                fs::path local_path =
+                   state.current_file->path.parent_path() / path;
+
+                // See if it can be found locally first.
+                if (state.dependencies.add_dependency(local_path))
+                {
+                    result.insert(quickbook_path(
+                        local_path,
+                        state.abstract_file_path.parent_path() / path));
+                    return result;
+                }
+
+                // Search in each of the include path locations.
+                BOOST_FOREACH(fs::path full, include_path)
+                {
+                    full /= path;
+
+                    if (state.dependencies.add_dependency(full))
+                    {
+                        result.insert(quickbook_path(full, path));
+                        return result;
+                    }
+                }
             }
+            else
+            {
+                if (state.dependencies.add_dependency(path)) {
+                    result.insert(quickbook_path(path, path));
+                    return result;
+                }
+            }
+
+            detail::outerr(state.current_file, pos)
+                << "Unable to find file: "
+                << parameter.value
+                << std::endl;
+            ++state.error_count;
+
+            return result;
         }
-
-        detail::outerr(state.current_file, pos)
-            << "Unable to find file: "
-            << parameter.value
-            << std::endl;
-        ++state.error_count;
-
-        return result;
     }
 
     //

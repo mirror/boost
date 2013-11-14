@@ -1863,6 +1863,16 @@ namespace quickbook
     {
         path_parameter parameter = check_path(p, state);
 
+        if (parameter.type == path_parameter::glob) {
+            // TODO: Should know if this is an xinclude or an xmlbase.
+            // Would also help with implementation of 'check_path'.
+            detail::outerr(p.get_file(), p.get_position())
+                << "Glob used in xinclude/xmlbase."
+                << std::endl;
+            ++state.error_count;
+            return xinclude_path(state.current_file->path.parent_path(), "");
+        }
+
         fs::path path = detail::generic_to_path(parameter.value);
         fs::path full_path = path;
 

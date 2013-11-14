@@ -24,8 +24,8 @@
 namespace quickbook
 {
     struct path_parameter {
-        // Will possibly add 'url' and 'glob' to this list later:
-        enum path_type { path };
+        // Will possibly add 'url' to this list later:
+        enum path_type { path, glob };
 
         std::string value;
         path_type type;
