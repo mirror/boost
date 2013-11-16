@@ -8,7 +8,7 @@
 
 // should pass compilation and execution
 
-#include <algorithm>
+#include <algorithm> // std::copy
 #include <vector>
 #include <fstream>
 #include <cstddef> // size_t, NULL
@@ -56,8 +56,6 @@ struct random_key {
         return m_i;
     }
 };  
-
-BOOST_BROKEN_COMPILER_TYPE_TRAITS_SPECIALIZATION(random_key)
 
 void
 test_map(){

@@ -453,9 +453,9 @@ basic_iarchive_impl::load_pointer(
         }
         BOOST_ASSERT(NULL != bpis_ptr);
         class_id_type new_cid = register_type(bpis_ptr->get_basic_serializer());
+        BOOST_VERIFY(register_type(bpis_ptr->get_basic_serializer()) == cid);
         int i = cid;
         cobject_id_vector[i].bpis_ptr = bpis_ptr;
-        BOOST_ASSERT(new_cid == cid);
     }
     int i = cid;
     cobject_id & co = cobject_id_vector[i];
@@ -495,14 +495,16 @@ basic_iarchive_impl::load_pointer(
         // cyclic strucures
         object_id_vector.push_back(aobject(t, cid));
 
+        // remember that that the address of these elements could change
+        // when we make another call so don't use the address
         bpis_ptr->load_object_ptr(
-            ar, 
-            object_id_vector[ui].address, 
-            co.file_version
+            ar,
+            t,
+            m_pending.version
         );
-        t = object_id_vector[ui].address;
-        object_id_vector[ui].loaded_as_pointer = true;
         BOOST_ASSERT(NULL != t);
+        object_id_vector[ui].address = t;
+        object_id_vector[ui].loaded_as_pointer = true;
     }
 
     return bpis_ptr;

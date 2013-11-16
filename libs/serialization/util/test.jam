@@ -46,6 +46,7 @@ rule run-template ( test-name : sources * : requirements * ) {
             <toolset>msvc:<cxxflags>"-wd4996"
             # toolset optimizations
             <toolset>gcc:<cxxflags>"-ftemplate-depth-255"
+            <toolset>clang:<cxxflags>"-ftemplate-depth-255"
             <toolset>msvc:<cxxflags>"-Gy"
             $(requirements)
         : # test name
