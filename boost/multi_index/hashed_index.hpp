@@ -393,7 +393,7 @@ public:
   }
 
   template<typename Modifier,typename Rollback>
-  bool modify(iterator position,Modifier mod,Rollback back)
+  bool modify(iterator position,Modifier mod,Rollback back_)
   {
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(position);
     BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(position);
@@ -410,7 +410,7 @@ public:
 #endif
 
     return this->final_modify_(
-      mod,back,static_cast<final_node_type*>(position.get_node()));
+      mod,back_,static_cast<final_node_type*>(position.get_node()));
   }
 
   template<typename Modifier>
@@ -425,7 +425,7 @@ public:
   }
 
   template<typename Modifier,typename Rollback>
-  bool modify_key(iterator position,Modifier mod,Rollback back)
+  bool modify_key(iterator position,Modifier mod,Rollback back_)
   {
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(position);
     BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(position);
@@ -434,7 +434,7 @@ public:
     return modify(
       position,
       modify_key_adaptor<Modifier,value_type,KeyFromValue>(mod,key),
-      modify_key_adaptor<Rollback,value_type,KeyFromValue>(back,key));
+      modify_key_adaptor<Rollback,value_type,KeyFromValue>(back_,key));
   }
 
   void clear()BOOST_NOEXCEPT

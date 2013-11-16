@@ -456,7 +456,7 @@ public:
   }
 
   template<typename Modifier,typename Rollback>
-  bool modify(iterator position,Modifier mod,Rollback back)
+  bool modify(iterator position,Modifier mod,Rollback back_)
   {
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(position);
     BOOST_MULTI_INDEX_CHECK_DEREFERENCEABLE_ITERATOR(position);
@@ -473,7 +473,7 @@ public:
 #endif
 
     return this->final_modify_(
-      mod,back,static_cast<final_node_type*>(position.get_node()));
+      mod,back_,static_cast<final_node_type*>(position.get_node()));
   }
 
   void swap(random_access_index<SuperMeta,TagList>& x)

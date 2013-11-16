@@ -176,16 +176,16 @@ void test_update()
     BOOST_TEST(!iis.modify_key(iis.begin(),increment_int));
     BOOST_TEST(iis.size()==2);
 
-    nth_index_iterator<int_int_set,1>::type it=ii1.find(5);
-    BOOST_TEST(ii1.modify_key(it,increment_int));
-    BOOST_TEST(ii1.modify_key(it,increment_int));
-    BOOST_TEST(ii1.modify_key(it,increment_int,decrement_int));
-    BOOST_TEST(ii1.modify_key(it,increment_int));
+    nth_index_iterator<int_int_set,1>::type it_=ii1.find(5);
+    BOOST_TEST(ii1.modify_key(it_,increment_int));
+    BOOST_TEST(ii1.modify_key(it_,increment_int));
+    BOOST_TEST(ii1.modify_key(it_,increment_int,decrement_int));
+    BOOST_TEST(ii1.modify_key(it_,increment_int));
 
-    BOOST_TEST(!ii1.modify_key(it,increment_int,decrement_int));
+    BOOST_TEST(!ii1.modify_key(it_,increment_int,decrement_int));
     BOOST_TEST(ii1.size()==2);
 
-    BOOST_TEST(!ii1.modify_key(it,increment_int));
+    BOOST_TEST(!ii1.modify_key(it_,increment_int));
     BOOST_TEST(ii1.size()==1);
   }
   {

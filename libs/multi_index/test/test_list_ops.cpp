@@ -198,37 +198,37 @@ static void test_list_ops_non_unique_seq()
    * http://lists.boost.org/boost-users/2006/09/22604.php
    */
   {
-    Sequence ss,ss2;
-    ss.push_back(0);
-    ss2.push_back(0);
-    ss.splice(ss.end(),ss2,ss2.begin());
-    CHECK_EQUAL(ss,(0)(0));
-    BOOST_TEST(ss2.empty());
+    Sequence ss_,ss2_;
+    ss_.push_back(0);
+    ss2_.push_back(0);
+    ss_.splice(ss_.end(),ss2_,ss2_.begin());
+    CHECK_EQUAL(ss_,(0)(0));
+    BOOST_TEST(ss2_.empty());
 
-    ss.clear();
-    ss2.clear();
-    ss.push_back(0);
-    ss2.push_back(0);
-    ss.splice(ss.end(),ss2,ss2.begin(),ss2.end());
-    CHECK_EQUAL(ss,(0)(0));
-    BOOST_TEST(ss2.empty());
+    ss_.clear();
+    ss2_.clear();
+    ss_.push_back(0);
+    ss2_.push_back(0);
+    ss_.splice(ss_.end(),ss2_,ss2_.begin(),ss2_.end());
+    CHECK_EQUAL(ss_,(0)(0));
+    BOOST_TEST(ss2_.empty());
 
-    ss.clear();
-    ss2.clear();
-    ss.push_back(0);
-    ss2.push_back(0);
-    ss.merge(ss2);
-    CHECK_EQUAL(ss,(0)(0));
-    BOOST_TEST(ss2.empty());
+    ss_.clear();
+    ss2_.clear();
+    ss_.push_back(0);
+    ss2_.push_back(0);
+    ss_.merge(ss2_);
+    CHECK_EQUAL(ss_,(0)(0));
+    BOOST_TEST(ss2_.empty());
 
     typedef typename Sequence::value_type value_type;
-    ss.clear();
-    ss2.clear();
-    ss.push_back(0);
-    ss2.push_back(0);
-    ss.merge(ss2,std::less<value_type>());
-    CHECK_EQUAL(ss,(0)(0));
-    BOOST_TEST(ss2.empty());
+    ss_.clear();
+    ss2_.clear();
+    ss_.push_back(0);
+    ss2_.push_back(0);
+    ss_.merge(ss2_,std::less<value_type>());
+    CHECK_EQUAL(ss_,(0)(0));
+    BOOST_TEST(ss2_.empty());
   }
 }
 

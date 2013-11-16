@@ -46,9 +46,9 @@ public:
   >::type::pointer                                      pointer;
 
   random_access_index_ptr_array(
-    const Allocator& al,value_type end_,std::size_t size):
-    size_(size),
-    capacity_(size),
+    const Allocator& al,value_type end_,std::size_t sz):
+    size_(sz),
+    capacity_(sz),
     spc(al,capacity_+1)
   {
     *end()=end_;

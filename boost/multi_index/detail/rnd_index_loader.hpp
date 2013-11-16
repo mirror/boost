@@ -82,14 +82,14 @@ protected:
     }
   }
 
-  void rearrange(node_impl_pointer position,node_impl_pointer x)
+  void rearrange(node_impl_pointer position_,node_impl_pointer x)
   {
     preprocess(); /* only incur this penalty if rearrange() is ever called */
-    if(position==node_impl_pointer(0))position=header;
+    if(position_==node_impl_pointer(0))position_=header;
     next(prev(x))=next(x);
     prev(next(x))=prev(x);
-    prev(x)=position;
-    next(x)=next(position);
+    prev(x)=position_;
+    next(x)=next(position_);
     next(prev(x))=prev(next(x))=x;
   }
 
@@ -157,9 +157,10 @@ public:
     super(al_,ptrs_)
   {}
 
-  void rearrange(Node* position,Node *x)
+  void rearrange(Node* position_,Node *x)
   {
-    super::rearrange(position?position->impl():node_impl_pointer(0),x->impl());
+    super::rearrange(
+      position_?position_->impl():node_impl_pointer(0),x->impl());
   }
 };
 

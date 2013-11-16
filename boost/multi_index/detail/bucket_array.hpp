@@ -137,8 +137,8 @@ public:
   typedef typename base_node_impl_type::base_pointer base_pointer;
   typedef typename base_node_impl_type::pointer      pointer;
 
-  bucket_array(const Allocator& al,pointer end_,std::size_t size):
-    size_index_(super::size_index(size)),
+  bucket_array(const Allocator& al,pointer end_,std::size_t size_):
+    size_index_(super::size_index(size_)),
     spc(al,super::sizes[size_index_]+1)
   {
     clear(end_);

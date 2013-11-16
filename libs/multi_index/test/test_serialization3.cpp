@@ -141,10 +141,10 @@ void test_serialization3()
   for(std::size_t buc=0;buc<hs2.bucket_count();++buc){
     for(std::size_t k=0;k<hs2.bucket_size(buc);++k){
       int n;
-      local_iterator it;
+      local_iterator it_;
       ia>>n;
-      ia>>it;
-      BOOST_TEST(*it==n);
+      ia>>it_;
+      BOOST_TEST(*it_==n);
     }
     local_iterator it2;
     ia>>it2;

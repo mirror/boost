@@ -423,7 +423,7 @@ public:
   template<int N,typename IteratorType>
   typename nth_index_iterator<N>::type project(IteratorType it)
   {
-    typedef typename nth_index<N>::type index;
+    typedef typename nth_index<N>::type index_type;
 
 #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* fails in Sun C++ 5.7 */
     BOOST_STATIC_ASSERT(
@@ -434,13 +434,13 @@ public:
     BOOST_MULTI_INDEX_CHECK_IS_OWNER(
       it,static_cast<typename IteratorType::container_type&>(*this));
 
-    return index::make_iterator(static_cast<node_type*>(it.get_node()));
+    return index_type::make_iterator(static_cast<node_type*>(it.get_node()));
   }
 
   template<int N,typename IteratorType>
   typename nth_index_const_iterator<N>::type project(IteratorType it)const
   {
-    typedef typename nth_index<N>::type index;
+    typedef typename nth_index<N>::type index_type;
 
 #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* fails in Sun C++ 5.7 */
     BOOST_STATIC_ASSERT((
@@ -451,7 +451,7 @@ public:
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(it);
     BOOST_MULTI_INDEX_CHECK_IS_OWNER(
       it,static_cast<const typename IteratorType::container_type&>(*this));
-    return index::make_iterator(static_cast<node_type*>(it.get_node()));
+    return index_type::make_iterator(static_cast<node_type*>(it.get_node()));
   }
 #endif
 
@@ -473,7 +473,7 @@ public:
   template<typename Tag,typename IteratorType>
   typename index_iterator<Tag>::type project(IteratorType it)
   {
-    typedef typename index<Tag>::type index;
+    typedef typename index<Tag>::type index_type;
 
 #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* fails in Sun C++ 5.7 */
     BOOST_STATIC_ASSERT(
@@ -483,13 +483,13 @@ public:
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(it);
     BOOST_MULTI_INDEX_CHECK_IS_OWNER(
       it,static_cast<typename IteratorType::container_type&>(*this));
-    return index::make_iterator(static_cast<node_type*>(it.get_node()));
+    return index_type::make_iterator(static_cast<node_type*>(it.get_node()));
   }
 
   template<typename Tag,typename IteratorType>
   typename index_const_iterator<Tag>::type project(IteratorType it)const
   {
-    typedef typename index<Tag>::type index;
+    typedef typename index<Tag>::type index_type;
 
 #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* fails in Sun C++ 5.7 */
     BOOST_STATIC_ASSERT((
@@ -500,7 +500,7 @@ public:
     BOOST_MULTI_INDEX_CHECK_VALID_ITERATOR(it);
     BOOST_MULTI_INDEX_CHECK_IS_OWNER(
       it,static_cast<const typename IteratorType::container_type&>(*this));
-    return index::make_iterator(static_cast<node_type*>(it.get_node()));
+    return index_type::make_iterator(static_cast<node_type*>(it.get_node()));
   }
 #endif
 
@@ -829,7 +829,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
   }
 
   template<typename Modifier,typename Rollback>
-  bool modify_(Modifier& mod,Rollback& back,node_type* x)
+  bool modify_(Modifier& mod,Rollback& back_,node_type* x)
   {
     mod(const_cast<value_type&>(x->value()));
 
@@ -839,7 +839,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
     }
     BOOST_CATCH(...){
       BOOST_TRY{
-        back(const_cast<value_type&>(x->value()));
+        back_(const_cast<value_type&>(x->value()));
         BOOST_RETHROW;
       }
       BOOST_CATCH(...){
@@ -852,7 +852,7 @@ BOOST_MULTI_INDEX_PROTECTED_IF_MEMBER_TEMPLATE_FRIENDS:
 
     BOOST_TRY{
       if(!b){
-        back(const_cast<value_type&>(x->value()));
+        back_(const_cast<value_type&>(x->value()));
         return false;
       }
       else return true;
@@ -987,7 +987,7 @@ get(
     multi_index_container<
       Value,IndexSpecifierList,Allocator>,
     N
-  >::type                                  index;
+  >::type                                  index_type;
 
   BOOST_STATIC_ASSERT(N>=0&&
     N<
@@ -995,7 +995,7 @@ get(
       BOOST_DEDUCED_TYPENAME multi_index_type::index_type_list
     >::type::value);
 
-  return detail::converter<multi_index_type,index>::index(m);
+  return detail::converter<multi_index_type,index_type>::index(m);
 }
 
 template<int N,typename Value,typename IndexSpecifierList,typename Allocator>
@@ -1011,7 +1011,7 @@ get(
     multi_index_container<
       Value,IndexSpecifierList,Allocator>,
     N
-  >::type                                  index;
+  >::type                                  index_type;
 
   BOOST_STATIC_ASSERT(N>=0&&
     N<
@@ -1019,7 +1019,7 @@ get(
       BOOST_DEDUCED_TYPENAME multi_index_type::index_type_list
     >::type::value);
 
-  return detail::converter<multi_index_type,index>::index(m);
+  return detail::converter<multi_index_type,index_type>::index(m);
 }
 
 /* retrieval of indices by tag */
@@ -1055,9 +1055,9 @@ get(
     multi_index_container<
       Value,IndexSpecifierList,Allocator>,
     Tag
-  >::type                                       index;
+  >::type                                       index_type;
 
-  return detail::converter<multi_index_type,index>::index(m);
+  return detail::converter<multi_index_type,index_type>::index(m);
 }
 
 template<
@@ -1075,9 +1075,9 @@ get(
     multi_index_container<
       Value,IndexSpecifierList,Allocator>,
     Tag
-  >::type                                       index;
+  >::type                                       index_type;
 
-  return detail::converter<multi_index_type,index>::index(m);
+  return detail::converter<multi_index_type,index_type>::index(m);
 }
 
 /* projection of iterators by number */
@@ -1105,7 +1105,7 @@ project(
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>                multi_index_type;
-  typedef typename nth_index<multi_index_type,N>::type index;
+  typedef typename nth_index<multi_index_type,N>::type index_type;
 
 #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* Sun C++ 5.7 fails */
   BOOST_STATIC_ASSERT((
@@ -1123,7 +1123,7 @@ project(
   BOOST_MULTI_INDEX_CHECK_IS_OWNER(it,converter::index(m));
 #endif
 
-  return detail::converter<multi_index_type,index>::iterator(
+  return detail::converter<multi_index_type,index_type>::iterator(
     m,static_cast<typename multi_index_type::node_type*>(it.get_node()));
 }
 
@@ -1138,7 +1138,7 @@ project(
 {
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>                multi_index_type;
-  typedef typename nth_index<multi_index_type,N>::type index;
+  typedef typename nth_index<multi_index_type,N>::type index_type;
 
 #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* Sun C++ 5.7 fails */
   BOOST_STATIC_ASSERT((
@@ -1159,7 +1159,7 @@ project(
   BOOST_MULTI_INDEX_CHECK_IS_OWNER(it,converter::index(m));
 #endif
 
-  return detail::converter<multi_index_type,index>::const_iterator(
+  return detail::converter<multi_index_type,index_type>::const_iterator(
     m,static_cast<typename multi_index_type::node_type*>(it.get_node()));
 }
 
@@ -1191,7 +1191,7 @@ project(
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>         multi_index_type;
   typedef typename ::boost::multi_index::index<
-    multi_index_type,Tag>::type                 index;
+    multi_index_type,Tag>::type                 index_type;
 
 #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* Sun C++ 5.7 fails */
   BOOST_STATIC_ASSERT((
@@ -1209,7 +1209,7 @@ project(
   BOOST_MULTI_INDEX_CHECK_IS_OWNER(it,converter::index(m));
 #endif
 
-  return detail::converter<multi_index_type,index>::iterator(
+  return detail::converter<multi_index_type,index_type>::iterator(
     m,static_cast<typename multi_index_type::node_type*>(it.get_node()));
 }
 
@@ -1225,7 +1225,7 @@ project(
   typedef multi_index_container<
     Value,IndexSpecifierList,Allocator>         multi_index_type;
   typedef typename ::boost::multi_index::index<
-    multi_index_type,Tag>::type                 index;
+    multi_index_type,Tag>::type                 index_type;
 
 #if !defined(__SUNPRO_CC)||!(__SUNPRO_CC<0x580) /* Sun C++ 5.7 fails */
   BOOST_STATIC_ASSERT((
@@ -1246,7 +1246,7 @@ project(
   BOOST_MULTI_INDEX_CHECK_IS_OWNER(it,converter::index(m));
 #endif
 
-  return detail::converter<multi_index_type,index>::const_iterator(
+  return detail::converter<multi_index_type,index_type>::const_iterator(
     m,static_cast<typename multi_index_type::node_type*>(it.get_node()));
 }
 
