@@ -234,11 +234,6 @@ struct hashed_index_node_alg<Node,hashed_unique_tag>
     return x->prior()->next()!=x;
   }
 
-  static bool is_last_of_bucket(pointer x)
-  {
-    return x->next()->prior()!=base_pointer_from(x);
-  }
-
   static pointer after(pointer x)
   {
     return x->next();
@@ -315,6 +310,11 @@ private:
   {
     return Node::base_pointer_from(x);
   }
+
+  static bool is_last_of_bucket(pointer x)
+  {
+    return x->next()->prior()!=base_pointer_from(x);
+  }
 };
 
 template<typename Node>
@@ -328,11 +328,6 @@ struct hashed_index_node_alg<Node,hashed_non_unique_tag>
   static bool is_first_of_bucket(pointer x)
   {
     return x->prior()->next()->next()==x;
-  }
-
-  static bool is_last_of_bucket(pointer x)
-  {
-    return x->next()->prior()->next()==x;
   }
 
   static bool is_first_of_group(pointer x)
@@ -388,54 +383,34 @@ struct hashed_index_node_alg<Node,hashed_non_unique_tag>
 
   static void link(pointer x,pointer first,pointer last)
   {
-    x->next()=last->next();
-    x->prior()=base_pointer_from(last);
-    if(is_last_of_bucket(last)){
-      x->next()->prior()->next()=x;
+    x->prior()=first->prior();
+    x->next()=first;
+    if(is_first_of_bucket(first)){
+      x->prior()->next()->next()=x;
     }
     else{
-      x->next()->prior()=base_pointer_from(x);
+      x->prior()->next()=x;
     }
 
     if(first==last){
-      last->next()=x;
+      last->prior()=base_pointer_from(x);
     }
     else if(first->next()==last){
-      last->next()=first;
-      last->prior()=base_pointer_from(x);
+      first->prior()=base_pointer_from(last);
+      first->next()=x;
     }
     else{
       pointer second=first->next(),
               lastbutone=pointer_from(last->prior());
-      lastbutone->next()=last;
-      last->next()=first;
-      second->prior()=base_pointer_from(x);
+      second->prior()=base_pointer_from(first);
+      first->prior()=base_pointer_from(last);
+      lastbutone->next()=x;
     }
   }
 
-  static void splice_range(
+  static void link_range(
     pointer first,pointer last,base_pointer buc,pointer cend)
   {
-    if(is_first_of_bucket(first)){
-      if(is_last_of_bucket(last)){
-        first->prior()->next()->next()=last->next();
-        last->next()->prior()->next()=first->prior()->next();
-        first->prior()->next()=pointer(0);
-      }
-      else{
-        first->prior()->next()->next()=last->next();
-        last->next()->prior()=first->prior();
-      }
-    }
-    else if(is_last_of_bucket(last)){
-      first->prior()->next()=last->next();
-      last->next()->prior()->next()=pointer_from(first->prior());
-    } 
-    else{
-      first->prior()->next()=last->next();
-      last->next()->prior()=first->prior();
-    }
-
     if(buc->next()==pointer(0)){ /* empty bucket */
       last->next()=cend->next();
       last->next()->prior()->next()=last;
@@ -522,6 +497,11 @@ private:
   static base_pointer base_pointer_from(pointer x)
   {
     return Node::base_pointer_from(x);
+  }
+
+  static bool is_last_of_bucket(pointer x)
+  {
+    return x->next()->prior()->next()==x;
   }
 
   static bool is_last_but_one_of_group(pointer x)

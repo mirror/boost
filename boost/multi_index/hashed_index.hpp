@@ -1177,15 +1177,18 @@ private:
   node_impl_pointer last_of_range(
     node_impl_pointer x,hashed_non_unique_tag)const
   {
-    if(node_alg::is_last_of_bucket(x))return x;
-    node_impl_pointer y=x->next();
-    if(y->prior()!=node_impl_type::base_pointer_from(x)){
-      return node_impl_type::pointer_from(y->prior());
+    node_impl_pointer      y=x->next();
+    node_impl_base_pointer z=y->prior();
+    if(z->next()==x)return x;                       /* last of bucket */
+    else if(z!=node_impl_type::base_pointer_from(x)){
+      return node_impl_type::pointer_from(z);      /* group of size>2 */
     }
-    else if(eq_(
-             key(node_type::from_impl(x)->value()),
-             key(node_type::from_impl(y)->value())))return y;
-    else return x;
+    else{
+      return                                  /* range of size 1 or 2 */
+        eq_(
+          key(node_type::from_impl(x)->value()),
+          key(node_type::from_impl(y)->value()))?y:x;
+    }
   }
 
   node_impl_pointer end_of_range(node_impl_pointer x)const
@@ -1292,10 +1295,10 @@ private:
 
     if(size()!=0){
       auto_space<
-        std::size_t,allocator_type> hashes(get_allocator(),size()+1);
+        std::size_t,allocator_type> hashes(get_allocator(),size());
       auto_space<
         node_impl_pointer,
-        allocator_type>             range_lasts(get_allocator(),size()+1);
+        allocator_type>             range_lasts(get_allocator(),size());
 
       std::size_t       i=0;
       node_impl_pointer x=begin_;
@@ -1312,7 +1315,7 @@ private:
         std::size_t       h=hashes.data()[i];
         node_impl_pointer last=range_lasts.data()[i++],
                           y=last->next();
-        node_alg::splice_range(
+        node_alg::link_range(
           x,last,buckets_cpy.at(buckets_cpy.position(h)),cpy_end);
         x=y;
       }
