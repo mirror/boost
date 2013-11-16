@@ -367,7 +367,17 @@ void test_conversion_from_to_integral_for_locale()
         BOOST_CHECK( lexical_cast<T>("30000") == static_cast<T>(30000) );
     }
 
+
     test_conversion_from_integral_to_integral<T>();
+
+    // This is a part of test_conversion_from_integral_to_string<T>('0') method,
+    // but with BOOST_CHECK_EQUAL instead of BOOST_CHECK. It is required to see 
+    // what is produced by the to_str<char>(t) method in situations when result 
+    // is different. BOOST_CHECK does not work with wchat_t.
+    typedef std::numeric_limits<T> limits;
+    T t = (limits::min)();
+    BOOST_CHECK_EQUAL(lexical_cast<std::string>(t), to_str<char>(t));
+
     test_conversion_from_integral_to_string<T>('0');
     test_conversion_from_string_to_integral<T>('0');
 #if !defined(BOOST_LCAST_NO_WCHAR_T)
