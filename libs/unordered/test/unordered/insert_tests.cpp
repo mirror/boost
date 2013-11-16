@@ -576,6 +576,21 @@ UNORDERED_TEST(map_insert_range_test2,
 
 #if !defined(BOOST_NO_CXX11_HDR_INITIALIZER_LIST)
 
+struct initialize_from_two_ints
+{
+    int a, b;
+
+    friend std::size_t hash_value(initialize_from_two_ints const& x)
+    {
+        return x.a + x.b;
+    }
+
+    bool operator==(initialize_from_two_ints const& x) const
+    {
+        return a == x.a && b == x.b;
+    }
+};
+
 UNORDERED_AUTO_TEST(insert_initializer_list_set)
 {
     boost::unordered_set<int> set;
@@ -583,6 +598,30 @@ UNORDERED_AUTO_TEST(insert_initializer_list_set)
     BOOST_TEST_EQ(set.size(), 3u);
     BOOST_TEST(set.find(1) != set.end());
     BOOST_TEST(set.find(4) == set.end());
+
+    boost::unordered_set<initialize_from_two_ints> set2;
+
+    set2.insert({1, 2});
+    BOOST_TEST(set2.size() == 1);
+    BOOST_TEST(set2.find({1,2}) != set2.end());
+    BOOST_TEST(set2.find({2,1}) == set2.end());
+
+    set2.insert({{3,4},{5,6},{7,8}});
+    BOOST_TEST(set2.size() == 4);
+    BOOST_TEST(set2.find({1,2}) != set2.end());
+    BOOST_TEST(set2.find({3,4}) != set2.end());
+    BOOST_TEST(set2.find({5,6}) != set2.end());
+    BOOST_TEST(set2.find({7,8}) != set2.end());
+    BOOST_TEST(set2.find({8,7}) == set2.end());
+
+    set2.insert({{2, 1}, {3,4}});
+    BOOST_TEST(set2.size() == 5);
+    BOOST_TEST(set2.find({1,2}) != set2.end());
+    BOOST_TEST(set2.find({2,1}) != set2.end());
+    BOOST_TEST(set2.find({3,4}) != set2.end());
+    BOOST_TEST(set2.find({5,6}) != set2.end());
+    BOOST_TEST(set2.find({7,8}) != set2.end());
+    BOOST_TEST(set2.find({8,7}) == set2.end());
 }
 
 UNORDERED_AUTO_TEST(insert_initializer_list_multiset)
