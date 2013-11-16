@@ -9,8 +9,9 @@
 #ifndef BOOST_UNORDERED_ALLOCATE_HPP
 #define BOOST_UNORDERED_ALLOCATE_HPP
 
-#if defined(_MSC_VER)
-# pragma once
+#include <boost/config.hpp>
+#if defined(BOOST_HAS_PRAGMA_ONCE)
+#pragma once
 #endif
 
 #include <boost/unordered/detail/fwd.hpp>

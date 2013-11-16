@@ -7,8 +7,9 @@
 #ifndef BOOST_UNORDERED_DETAIL_EQUIVALENT_HPP_INCLUDED
 #define BOOST_UNORDERED_DETAIL_EQUIVALENT_HPP_INCLUDED
 
-#if defined(_MSC_VER)
-# pragma once
+#include <boost/config.hpp>
+#if defined(BOOST_HAS_PRAGMA_ONCE)
+#pragma once
 #endif
 
 #include <boost/unordered/detail/table.hpp>

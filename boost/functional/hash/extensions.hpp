@@ -13,6 +13,11 @@
 #if !defined(BOOST_FUNCTIONAL_HASH_EXTENSIONS_HPP)
 #define BOOST_FUNCTIONAL_HASH_EXTENSIONS_HPP
 
+#include <boost/config.hpp>
+#if defined(BOOST_HAS_PRAGMA_ONCE)
+#pragma once
+#endif
+
 #include <boost/functional/hash/hash.hpp>
 #include <boost/detail/container_fwd.hpp>
 #include <boost/utility/enable_if.hpp>
@@ -30,10 +35,6 @@
 
 #if !defined(BOOST_NO_CXX11_HDR_MEMORY)
 #   include <memory>
-#endif
-
-#if defined(_MSC_VER)
-# pragma once
 #endif
 
 #if defined(BOOST_NO_FUNCTION_TEMPLATE_ORDERING)

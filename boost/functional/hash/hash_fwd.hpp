@@ -10,11 +10,11 @@
 #if !defined(BOOST_FUNCTIONAL_HASH_FWD_HPP)
 #define BOOST_FUNCTIONAL_HASH_FWD_HPP
 
-#if defined(_MSC_VER)
-# pragma once
+#include <boost/config.hpp>
+#if defined(BOOST_HAS_PRAGMA_ONCE)
+#pragma once
 #endif
 
-#include <boost/config.hpp>
 #include <cstddef>
 #include <boost/detail/workaround.hpp>
 
