@@ -115,8 +115,8 @@ const std::size_t bucket_array_base<_>::sizes[]={
 
 template<bool _>
 const std::size_t bucket_array_base<_>::sizes_length=
-  sizeof(bucket_array_base<true>::sizes)/
-  sizeof(bucket_array_base<true>::sizes[0]);
+  sizeof(bucket_array_base<_>::sizes)/
+  sizeof(bucket_array_base<_>::sizes[0]);
 
 #undef BOOST_MULTI_INDEX_BA_POSITION_CASE
 #undef BOOST_MULTI_INDEX_BA_SIZES
