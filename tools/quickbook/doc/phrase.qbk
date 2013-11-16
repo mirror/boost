@@ -174,8 +174,8 @@ covered elsewhere. The docbook `role` will generate a html class, which can
 be used to style text. And the xsl stylesheets can be customized to treat
 certain roles specially when generating pdfs.
 
-From boost 1.56 onwards, the boostbook css stylesheets, and xsl stylesheets
-will contain support for a limited number of colours that can be used with
+The boostbook css stylesheets, and xsl stylesheets
+contain support for a limited number of colours that can be used with
 `role`. For example if you write:
 
     [role red Text content]
