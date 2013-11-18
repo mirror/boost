@@ -437,54 +437,58 @@ struct hashed_index_node_alg<Node,hashed_non_unique_tag>
   template<typename Assigner>
   static void unlink(pointer x,Assigner& assign)
   {
-    if(is_first_of_bucket(x)){
-      if(is_last_of_bucket(x)){
+    if(x->prior()->next()==x){
+      if(x->next()->prior()==base_pointer_from(x)){
+        left_unlink(x,assign);
+        right_unlink(x,assign);
+      }
+      else if(x->next()->prior()->next()==x){            /* last of bucket */
+        left_unlink(x,assign);
+        right_unlink_last_of_bucket(x,assign);
+      }
+      else if(x->next()->next()==x){             /* first of group size==3 */
+        left_unlink(x,assign);
+        assign(x->next()->next(),pointer_from(x->next()->prior()));
+        right_unlink(x,assign);
+      }
+      else if(
+        x->next()->next()->prior()==
+          base_pointer_from(x->next())){          /* first of group size>3 */
+        left_unlink(x,assign);
+        right_unlink_first_of_group_gt_3(x,assign);
+      }
+      else{                                         /* n-1 of group size>3 */
+        unlink_last_but_one_of_group_gt_3(x,assign);
+      }
+    }
+    else if(x->prior()->next()->next()==x){             /* first of bucket */
+      if(x->next()->prior()==base_pointer_from(x)){
+        left_unlink_first_of_bucket(x,assign);
+        right_unlink(x,assign);
+      }
+      else if(x->next()->prior()->next()==x){            /* last of bucket */
         left_unlink_first_of_bucket(x,assign);
         assign(x->next()->prior()->next(),x->prior()->next());
         assign(x->prior()->next(),pointer(0));
       }
-      else if(x->next()->prior()!=base_pointer_from(x)){ /* first of group */
+      else{                                              /* first of group */
         left_unlink_first_of_bucket(x,assign);
         right_unlink_first_of_group(x,assign);
       }
-      else{
-        left_unlink_first_of_bucket(x,assign);
-        right_unlink(x,assign);
-      }
     }
-    else if(is_last_of_bucket(x)){ 
-      if(x->prior()->next()!=x){                          /* last of group */
-        left_unlink_last_of_group(x,assign);
-        right_unlink_last_of_bucket(x,assign);
-      }
-      else{
-        left_unlink(x,assign);
-        right_unlink_last_of_bucket(x,assign);
-      }
-    }
-    else if(x->next()->prior()!=base_pointer_from(x)){       /* 1st or n-1 */
-      if(!is_first_of_bucket(x->next())&&
-         pointer_from(x->next()->prior())->prior()->next()==x){     /* 1st */
-        left_unlink(x,assign);
-        right_unlink_first_of_group(x,assign);
-      }
-      else{                                                         /* n-1 */
-        unlink_last_but_one_of_group(x,assign);
-      }
-    }
-    else if(x->prior()->next()!=x){                         /* last or 2nd */
-      if(x->prior()->next()->next()->prior()==
-         base_pointer_from(x)){                                    /* last */
+    else if(x->prior()->next()->next()->prior()==
+            base_pointer_from(x)){                        /* last of group */
+      if(x->next()->prior()==base_pointer_from(x)){ 
         left_unlink_last_of_group(x,assign);
         right_unlink(x,assign);
       }
-      else{                                                         /* 2nd */
-        unlink_second_of_group(x,assign);
+      else{                                              /* last of bucket */
+        left_unlink_last_of_group(x,assign);
+        right_unlink_last_of_bucket(x,assign);
       }
     }
-    else{
-      left_unlink(x,assign);
-      right_unlink(x,assign);
+    else{                                               /* second of group */
+      unlink_second_of_group(x,assign);
     }
   }
 
@@ -508,7 +512,7 @@ private:
   {
     return
       x->next()->prior()!=base_pointer_from(x)&&
-      !is_first_of_bucket(x->next()->next())&&
+      !is_last_of_bucket(x->next())&&
       pointer_from(x->next()->next()->prior())->prior()==base_pointer_from(x);
   }
 
@@ -554,6 +558,17 @@ private:
   }
 
   template<typename Assigner>
+  static void right_unlink_first_of_group_gt_3(pointer x,Assigner& assign)
+  {
+    pointer second=x->next(),
+            last=pointer_from(second->prior()),
+            lastbutone=pointer_from(last->prior());
+    assign(lastbutone->next(),second);
+    assign(second->next()->prior(),base_pointer_from(last));
+    assign(second->prior(),x->prior());
+  }
+
+  template<typename Assigner>
   static void left_unlink_last_of_group(pointer x,Assigner& assign)
   {
     pointer lastbutone=pointer_from(x->prior()),
@@ -571,19 +586,13 @@ private:
   }
 
   template<typename Assigner>
-  static void unlink_last_but_one_of_group(pointer x,Assigner& assign)
+  static void unlink_last_but_one_of_group_gt_3(pointer x,Assigner& assign)
   {
     pointer first=x->next(),
             second=first->next(),
             last=pointer_from(second->prior());
-    if(second==x){
-      assign(first->next(),last);
-      assign(last->prior(),base_pointer_from(first));
-    }
-    else{
-      assign(last->prior(),x->prior());
-      assign(x->prior()->next(),first);
-    }
+    assign(last->prior(),x->prior());
+    assign(x->prior()->next(),first);
   }
 
   template<typename Assigner>
