@@ -631,12 +631,11 @@ namespace boost {
     {
         template<class T>
         inline
-        BOOST_DEDUCED_TYPENAME boost::make_unsigned<T>::type lcast_to_unsigned(const T value) BOOST_NOEXCEPT
-        {
+        BOOST_DEDUCED_TYPENAME boost::make_unsigned<T>::type lcast_to_unsigned(const T value) BOOST_NOEXCEPT {
             typedef BOOST_DEDUCED_TYPENAME boost::make_unsigned<T>::type result_type;
-            return static_cast<result_type>(
-                value < 0 ? 0u - static_cast<result_type>(value) : value
-            );
+            return value < 0 
+                ? static_cast<result_type>(0u - static_cast<result_type>(value)) 
+                : static_cast<result_type>(value);
         }
     }
 
@@ -1063,9 +1062,6 @@ namespace boost {
             CharT const plus = lcast_char_constants<CharT>::plus;
             CharT const capital_e = lcast_char_constants<CharT>::capital_e;
             CharT const lowercase_e = lcast_char_constants<CharT>::lowercase_e;
-
-            typedef BOOST_DEDUCED_TYPENAME Traits::int_type int_type;
-            int_type const zero = Traits::to_int_type(czero);
             
             /* Getting the plus/minus sign */
             bool const has_minus = Traits::eq(*begin, minus);
@@ -1106,7 +1102,7 @@ namespace boost {
                 if (found_decimal) {
                     /* We allow no thousand_separators after decimal point */
 
-                    const mantissa_type tmp_sub_value = static_cast<mantissa_type>(*begin - zero);
+                    const mantissa_type tmp_sub_value = static_cast<mantissa_type>(*begin - czero);
                     if (Traits::eq(*begin, lowercase_e) || Traits::eq(*begin, capital_e)) break;
                     if ( *begin < czero || *begin >= czero + 10 ) return false;
                     if (    is_mantissa_full
@@ -1128,7 +1124,7 @@ namespace boost {
                         /* Checking for mantissa overflow. If overflow will
                          * occur, them we only increase multiplyer
                          */
-                        const mantissa_type tmp_sub_value = static_cast<mantissa_type>(*begin - zero);
+                        const mantissa_type tmp_sub_value = static_cast<mantissa_type>(*begin - czero);
                         if(     is_mantissa_full
                                 || ((std::numeric_limits<mantissa_type>::max)() - tmp_sub_value) / 10u  < mantissa
                             )
@@ -1224,7 +1220,7 @@ namespace boost {
 
                 pow_of_10_t exp_pow_of_10 = 0;
                 while (begin != end) {
-                    pow_of_10_t const sub_value = *begin - zero;
+                    pow_of_10_t const sub_value = *begin - czero;
 
                     if ( *begin < czero || *begin >= czero + 10
                          || ((std::numeric_limits<pow_of_10_t>::max)() - sub_value) / 10 < exp_pow_of_10)
@@ -1733,7 +1729,7 @@ namespace boost {
                 } else {
                     utype const comp_val = static_cast<utype>((std::numeric_limits<Type>::max)());
                     succeed = succeed && out_tmp<=comp_val;
-                    output = out_tmp;
+                    output = static_cast<Type>(out_tmp);
                 }
                 return succeed;
             }
@@ -1804,7 +1800,7 @@ namespace boost {
             template <std::size_t N, class ArrayT>
             bool shr_std_array(ArrayT& output) BOOST_NOEXCEPT {
                 using namespace std;
-                const std::size_t size = finish - start;
+                const std::size_t size = static_cast<std::size_t>(finish - start);
                 if (size > N - 1) { // `-1` because we need to store \0 at the end 
                     return false;
                 }
