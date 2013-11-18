@@ -147,7 +147,7 @@ class has_member_function_named_func
             <Fun, true , void , void , void>
          {
             template<class U>
-            static decltype(boost::move_detail::declval<Fun>().func(), has_member_function_callable_with::yes_type()) Test(Fun* f);
+            static decltype(boost::move_detail::declval<U>().func(), has_member_function_callable_with::yes_type()) Test(U* f);
 
             template<class U>
             static has_member_function_callable_with::no_type Test(...);
@@ -307,7 +307,7 @@ class has_member_function_named_func
       <Fun, true>
    {
       #ifndef BOOST_NO_CXX11_DECLTYPE
-      template<class U, class V = decltype(boost::move_detail::declval<Fun>().func()) >
+      template<class U, class V = decltype(boost::move_detail::declval<U>().func()) >
          static boost_intrusive_has_member_function_callable_with::yes_type Test(U*);
       #else
          template<class U>

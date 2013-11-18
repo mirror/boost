@@ -118,25 +118,25 @@ struct LowPriorityConversion
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME pointer_to
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_NS_BEGIN namespace boost { namespace intrusive { namespace detail {
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_NS_END   }}}
-#define BOOST_PP_ITERATION_PARAMS_1 (3, (0, 1, <boost/intrusive/detail/has_member_function_callable_with.hpp>))
+#define BOOST_PP_ITERATION_PARAMS_1 (3, (1, 1, <boost/intrusive/detail/has_member_function_callable_with.hpp>))
 #include BOOST_PP_ITERATE()
 
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME static_cast_from
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_NS_BEGIN namespace boost { namespace intrusive { namespace detail {
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_NS_END   }}}
-#define BOOST_PP_ITERATION_PARAMS_1 (3, (0, 1, <boost/intrusive/detail/has_member_function_callable_with.hpp>))
+#define BOOST_PP_ITERATION_PARAMS_1 (3, (1, 1, <boost/intrusive/detail/has_member_function_callable_with.hpp>))
 #include BOOST_PP_ITERATE()
 
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME const_cast_from
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_NS_BEGIN namespace boost { namespace intrusive { namespace detail {
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_NS_END   }}}
-#define BOOST_PP_ITERATION_PARAMS_1 (3, (0, 1, <boost/intrusive/detail/has_member_function_callable_with.hpp>))
+#define BOOST_PP_ITERATION_PARAMS_1 (3, (1, 1, <boost/intrusive/detail/has_member_function_callable_with.hpp>))
 #include BOOST_PP_ITERATE()
 
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_FUNCNAME dynamic_cast_from
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_NS_BEGIN namespace boost { namespace intrusive { namespace detail {
 #define BOOST_INTRUSIVE_HAS_MEMBER_FUNCTION_CALLABLE_WITH_NS_END   }}}
-#define BOOST_PP_ITERATION_PARAMS_1 (3, (0, 1, <boost/intrusive/detail/has_member_function_callable_with.hpp>))
+#define BOOST_PP_ITERATION_PARAMS_1 (3, (1, 1, <boost/intrusive/detail/has_member_function_callable_with.hpp>))
 #include BOOST_PP_ITERATE()
 
 namespace boost {
