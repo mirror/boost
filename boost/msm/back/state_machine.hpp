@@ -2599,6 +2599,9 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         direct_event_start_helper(this)(incomingEvent,fsm);
         // handle messages which were generated and blocked in the init calls
         m_event_processing = false;
+        // look for deferred events waiting
+        handle_defer_helper<library_sm> defer_helper(m_deferred_events_queue);
+        defer_helper.do_post_handle_deferred(HANDLED_TRUE);
         process_message_queue(this);
      }
      template <class Event,class FsmType>
