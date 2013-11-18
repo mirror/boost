@@ -373,7 +373,7 @@ void test_conversion_from_to_integral_for_locale()
     // This is a part of test_conversion_from_integral_to_string<T>('0') method,
     // but with BOOST_CHECK_EQUAL instead of BOOST_CHECK. It is required to see 
     // what is produced by the to_str<char>(t) method in situations when result 
-    // is different. BOOST_CHECK does not work with wchat_t.
+    // is different. BOOST_CHECK does not work with wchar_t.
     typedef std::numeric_limits<T> limits;
     T t = (limits::min)();
     BOOST_CHECK_EQUAL(lexical_cast<std::string>(t), to_str<char>(t));
@@ -381,6 +381,22 @@ void test_conversion_from_to_integral_for_locale()
     test_conversion_from_integral_to_string<T>('0');
     test_conversion_from_string_to_integral<T>('0');
 #if !defined(BOOST_LCAST_NO_WCHAR_T)
+    if (lexical_cast<std::wstring>(t) != to_str<wchar_t>(t)) {
+        // Something went wrong, and now we are attempting to find and print the 
+        // difference.
+        std::wstring wstr = to_str<wchar_t>(t);
+        std::string lcast_str = lexical_cast<std::string>(t);
+        std::string str;
+        str.reserve(wstr.size());
+        for (std::size_t i = 0; i < wstr.size(); ++i) {
+            str.push_back(static_cast<char>(wstr[i]));
+        }
+        
+        BOOST_CHECK_EQUAL(lcast_str.length(), lexical_cast<std::wstring>(t).length());
+        BOOST_CHECK_EQUAL(to_str<char>(t), str);
+        BOOST_CHECK_EQUAL(lcast_str, str);
+    }
+
     test_conversion_from_integral_to_string<T>(L'0');
     test_conversion_from_string_to_integral<T>(L'0');
 #endif
