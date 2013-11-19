@@ -1420,18 +1420,6 @@ namespace boost { namespace polygon{
 
   template <typename T1, typename T2>
   typename enable_if<
-    typename gtl_and< typename is_mutable_point_concept<typename geometry_concept<T1>::type>::type,
-                      typename is_polygon_with_holes_type<T2>::type>::type,
-    bool>::type
-  center(T1& center_point, const T2& polygon) {
-    typedef typename polygon_traits<T2>::coordinate_type coordinate_type;
-    rectangle_data<coordinate_type> bbox;
-    extents(bbox, polygon);
-    return center(center_point, bbox);
-  }
-
-  template <typename T1, typename T2>
-  typename enable_if<
     typename gtl_and< typename is_mutable_rectangle_concept<typename geometry_concept<T1>::type>::type,
                       typename is_polygon_with_holes_type<T2>::type>::type,
     bool>::type
@@ -1449,6 +1437,18 @@ namespace boost { namespace polygon{
     }
     if(first_iteration) return false;
     return true;
+  }
+
+  template <typename T1, typename T2>
+  typename enable_if<
+    typename gtl_and< typename is_mutable_point_concept<typename geometry_concept<T1>::type>::type,
+                      typename is_polygon_with_holes_type<T2>::type>::type,
+    bool>::type
+  center(T1& center_point, const T2& polygon) {
+    typedef typename polygon_traits<T2>::coordinate_type coordinate_type;
+    rectangle_data<coordinate_type> bbox;
+    extents(bbox, polygon);
+    return center(center_point, bbox);
   }
 
   template <class T>
