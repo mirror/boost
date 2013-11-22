@@ -312,6 +312,39 @@
   </fo:inline>
 </xsl:template>
 
+<!-- alignment -->
+
+<xsl:template match="phrase[@role='aligncenter']">
+  <fo:inline>
+    <fo:block text-align="center">
+      <xsl:apply-templates/>
+    </fo:block>
+  </fo:inline>
+</xsl:template>
+
+<xsl:template match="phrase[@role='alignleft']">
+  <fo:inline>
+    <fo:block text-align="left">
+      <xsl:apply-templates/>
+    </fo:block>
+  </fo:inline>
+</xsl:template>
+
+<xsl:template match="phrase[@role='alignright']">
+  <fo:inline>
+    <fo:block text-align="right">
+     <xsl:apply-templates/>
+    </fo:block>
+  </fo:inline>
+</xsl:template>
+
+<xsl:template match="phrase[@role='alignjustify']">
+  <fo:inline>
+    <fo:block text-align="justify">
+     <xsl:apply-templates/>
+    </fo:block>
+  </fo:inline>
+</xsl:template>
 
   <!-- 
 
