@@ -432,6 +432,7 @@ rule chrono-compile2 ( sources : name )
         [ compile-fail duration/nonmember/times_rep2_lhs_fail.cpp ]
         [ compile-fail duration/nonmember/times_rep2_rhs_fail.cpp ]
         [ chrono-run-header duration/duration_values_pass.cpp ]
+        [ chrono-run-header duration/rounding_pass.cpp  ]
         ;
 
     test-suite "time_point"
@@ -519,6 +520,6 @@ rule chrono-compile2 ( sources : name )
     test-suite ts_
         :
         #[ chrono-run test_7868.cpp  ]
-        [ chrono-run test_9337.cpp  ]
+        #[ chrono-run test_9337.cpp  ]
         ;
 
