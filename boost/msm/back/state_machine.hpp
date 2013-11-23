@@ -2614,6 +2614,11 @@ BOOST_PP_REPEAT(BOOST_PP_ADD(BOOST_MSM_VISITOR_ARG_SIZE,1), MSM_VISITOR_ARGS_EXE
         (static_cast<Derived*>(this))->on_exit(incomingEvent,fsm);
         // give the history a chance to handle this (or not).
         m_history.history_exit(this->m_states);
+        // history decides what happens with deferred events
+        if (!m_history.process_deferred_events(incomingEvent))
+        {
+            get_deferred_queue().clear();
+        }
      }
 
     // the IBM and VC<8 compilers seem to have problems with the friend declaration of dispatch_table
