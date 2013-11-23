@@ -880,7 +880,7 @@ namespace boost { namespace unordered { namespace detail { namespace func {
 #   define BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(n, namespace_)              \
     template<typename Alloc, typename T>                                    \
     void construct_from_tuple_impl(                                         \
-            boost::unordered::detail::length<0>, Alloc&, T* ptr,            \
+            boost::unordered::detail::func::length<0>, Alloc&, T* ptr,      \
             namespace_ tuple<>)                                             \
     {                                                                       \
         new ((void*) ptr) T();                                              \
@@ -893,7 +893,7 @@ namespace boost { namespace unordered { namespace detail { namespace func {
     template<typename Alloc, typename T,                                    \
         BOOST_PP_ENUM_PARAMS_Z(z, n, typename A)>                           \
     void construct_from_tuple_impl(                                         \
-            boost::unordered::detail::length<n>, Alloc&, T* ptr,            \
+            boost::unordered::detail::func::length<n>, Alloc&, T* ptr,      \
             namespace_ tuple<BOOST_PP_ENUM_PARAMS_Z(z, n, A)> const& x)     \
     {                                                                       \
         new ((void*) ptr) T(                                                \
@@ -922,7 +922,7 @@ BOOST_UNORDERED_CONSTRUCT_FROM_TUPLE(10, boost::)
     void construct_from_tuple(Alloc& alloc, T* ptr, Tuple const& x)
     {
         construct_from_tuple_impl(
-            boost::unordered::detail::length<
+            boost::unordered::detail::func::length<
                 boost::tuples::length<Tuple>::value>(),
             alloc, ptr, x);
     }
