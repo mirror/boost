@@ -9,7 +9,8 @@
       pops an element from the end of an <i>tuple</i>.&nbsp; It reenters <b>BOOST_PP_REPEAT</b>
       with maximum efficiency. </div>
     <h4>Usage</h4>
-    <div class="code"> <b>BOOST_PP_TUPLE_POP_BACK_Z</b>(<i>z</i>, <i>tuple</i>)</div>
+    <div class="code"> <b>BOOST_PP_TUPLE_POP_BACK_Z</b>(<i>z</i>, <i>tuple</i>)
+      <a href="../topics/variadic_macros.html#VNotation"><sup>(v)</sup></a></div>
     <h4>Arguments</h4>
     <dl>
       <dt>z</dt>
@@ -19,9 +20,8 @@
     </dl>
     <h4>Remarks</h4>
     <div> This macro returns <i>tuple</i> after removing the last
-      element.&nbsp;
-      If <i>tuple</i> has only a single element, it remains unchanged since
-      a&nbsp;<i>tuple </i>must have at least one element.</div>
+      element.&nbsp; If <i>tuple</i> has only a single element, it remains
+      unchanged since a&nbsp;<i>tuple </i>must have at least one element.</div>
     <h4>See Also</h4>
     <ul>
       <li><a href="tuple_pop_back.html">BOOST_PP_TUPLE_POP_BACK</a></li>
